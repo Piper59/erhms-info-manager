@@ -3,16 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Build", "ERHMS.Build\ERHMS.Build.csproj", "{61F99A4B-0B04-4182-849B-7BB7F76F38B9}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Sandbox", "ERHMS.Sandbox\ERHMS.Sandbox.csproj", "{82C5A344-BE5D-4EFD-B81E-0A4144490782}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
+		Prebuild|x86 = Prebuild|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61F99A4B-0B04-4182-849B-7BB7F76F38B9}.Debug|x86.ActiveCfg = Prebuild|x86
+		{61F99A4B-0B04-4182-849B-7BB7F76F38B9}.Prebuild|x86.ActiveCfg = Prebuild|x86
+		{61F99A4B-0B04-4182-849B-7BB7F76F38B9}.Prebuild|x86.Build.0 = Prebuild|x86
+		{61F99A4B-0B04-4182-849B-7BB7F76F38B9}.Release|x86.ActiveCfg = Prebuild|x86
 		{82C5A344-BE5D-4EFD-B81E-0A4144490782}.Debug|x86.ActiveCfg = Debug|x86
 		{82C5A344-BE5D-4EFD-B81E-0A4144490782}.Debug|x86.Build.0 = Debug|x86
+		{82C5A344-BE5D-4EFD-B81E-0A4144490782}.Prebuild|x86.ActiveCfg = Release|x86
 		{82C5A344-BE5D-4EFD-B81E-0A4144490782}.Release|x86.ActiveCfg = Release|x86
 		{82C5A344-BE5D-4EFD-B81E-0A4144490782}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
