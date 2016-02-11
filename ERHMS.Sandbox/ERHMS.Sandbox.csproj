@@ -129,7 +129,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\ERHMS.pfx">
+    <None Include="..\Certificates\ERHMS.pfx">
       <Link>ERHMS.pfx</Link>
     </None>
   </ItemGroup>
