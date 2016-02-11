@@ -29,7 +29,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>ERHMS Info Manager</ProductName>
-    <PublisherName>The National Institute for Occupational Safety and Health %28NIOSH%29</PublisherName>
+    <PublisherName>NIOSH</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
