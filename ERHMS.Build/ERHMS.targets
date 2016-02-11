@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="ERHMS.Build.FindFilesInList" AssemblyFile="$(SolutionDir)ERHMS.Build\publish\ERHMS.Build.dll" />
+  <Target Name="RemoveReferencedContent" AfterTargets="ResolveAssemblyReferences">
+    <FindFilesInList Items="@(Content)" ItemsToFind="@(ReferencePath)">
+      <Output TaskParameter="FoundItems" ItemName="FoundReferences" />
+    </FindFilesInList>
+    <FindFilesInList Items="@(Content)" ItemsToFind="@(ReferenceDependencyPaths)">
+      <Output TaskParameter="FoundItems" ItemName="FoundReferenceDependencies" />
+    </FindFilesInList>
+    <ItemGroup>
+      <Content Remove="@(FoundReferences)" />
+      <Content Remove="@(FoundReferenceDependencies)" />
+    </ItemGroup>
+  </Target>
+</Project>
