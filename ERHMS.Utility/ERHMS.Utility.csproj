@@ -42,6 +42,10 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="AttributeExtensions.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="Iterator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
