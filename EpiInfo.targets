@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Content Include="$(SolutionDir)Epi Info 7\**">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
+  <Target Name="RemoveReferencedContent" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <Content Remove="@(ReferencePath)" />
+      <Content Remove="@(ReferenceDependencyPaths)" />
+    </ItemGroup>
+  </Target>
+</Project>
