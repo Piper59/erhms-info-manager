@@ -13,4 +13,12 @@
       <Content Remove="@(ReferenceDependencyPaths)" />
     </ItemGroup>
   </Target>
+  <Target Name="RemoveEpiInfoGeneratedDirectories" AfterTargets="Clean">
+    <RemoveDir Directories="$(OutDir)Configuration\" />
+    <RemoveDir Directories="$(OutDir)Logs\" />
+    <RemoveDir Directories="$(OutDir)Output\" />
+    <RemoveDir Directories="$(OutDir)Projects\" />
+    <RemoveDir Directories="$(OutDir)Resources\" />
+    <RemoveDir Directories="$(OutDir)Templates\" />
+  </Target>
 </Project>
