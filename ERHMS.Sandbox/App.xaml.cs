@@ -1,5 +1,4 @@
-﻿using Epi;
-using System.IO;
+﻿using ERHMS.EpiInfo;
 using System.ServiceModel;
 using System.Windows;
 
@@ -12,14 +11,9 @@ namespace ERHMS.Sandbox
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            ConfigurationExtensions.LoadDefaultConfiguration();
             host = new ServiceHost(typeof(Service));
             host.Open();
-            if (!File.Exists(Configuration.DefaultConfigurationPath))
-            {
-                Configuration configuration = Configuration.CreateDefaultConfiguration();
-                Configuration.Save(configuration);
-            }
-            Configuration.Load(Configuration.DefaultConfigurationPath);
         }
 
         protected override void OnExit(ExitEventArgs e)

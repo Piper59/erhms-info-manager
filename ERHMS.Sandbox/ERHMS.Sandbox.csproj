@@ -75,6 +75,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
+      <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
+      <Name>ERHMS.EpiInfo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
