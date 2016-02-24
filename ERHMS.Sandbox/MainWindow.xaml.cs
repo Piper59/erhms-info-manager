@@ -1,12 +1,21 @@
 ﻿using Epi;
+using Epi.Data;
+using ERHMS.EpiInfo.Data;
 using Microsoft.Win32;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Controls;
 
 namespace ERHMS.Sandbox
 {
     public partial class MainWindow : Window
     {
+        private Project Project { get; set; }
+
+        private IDbDriver Driver
+        {
+            get { return Project.CollectedData.GetDbDriver(); }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -18,14 +27,15 @@ namespace ERHMS.Sandbox
             dialog.Filter = "Epi Info 7 Project Files (*.prj)|*.prj";
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                Views.Inlines.Clear();
-                using (Project project = new Project(dialog.FileName))
+                Views.Items.Clear();
+                if (Project != null)
                 {
-                    foreach (View view in project.Views)
-                    {
-                        Views.Inlines.Add(new Run(view.Name));
-                        Views.Inlines.Add(new LineBreak());
-                    }
+                    Project.Dispose();
+                }
+                Project = new Project(dialog.FileName);
+                foreach (View view in Project.Views)
+                {
+                    Views.Items.Add(view.Name);
                 }
             }
         }
@@ -33,6 +43,12 @@ namespace ERHMS.Sandbox
         private void FileExit_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Views_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            View view = Project.GetViewByName((string)Views.SelectedItem);
+            ViewData.ItemsSource = Driver.GetUndeletedViewData(view).DefaultView;
         }
     }
 }
