@@ -28,6 +28,14 @@ namespace ERHMS.Utility
             }
         }
 
+        public static void AddRange<T>(this ICollection<T> @this, IEnumerable<T> items)
+        {
+            foreach (T item in items)
+            {
+                @this.Add(item);
+            }
+        }
+
         public static IEnumerable<Iterator<T>> Iterate<T>(this IEnumerable<T> @this)
         {
             return @this.Select((value, index) => new Iterator<T>(value, index));
