@@ -36,8 +36,8 @@ namespace ERHMS.EpiInfo
             return Process.Start(new ProcessStartInfo
                 {
                     UseShellExecute = false,
-                    FileName = executable.FullName,
                     WorkingDirectory = executable.DirectoryName,
+                    FileName = executable.FullName,
                     Arguments = args
                 });
         }
