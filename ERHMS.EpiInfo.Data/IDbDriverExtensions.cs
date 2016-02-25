@@ -34,15 +34,19 @@ namespace ERHMS.EpiInfo.Data
             return @this.InsertInEscape(identifier);
         }
 
+        private static Query CreateQuery(this IDbDriver @this, string sql, QueryPredicate predicate)
+        {
+            string sqlWithPredicate = string.Format("{0} WHERE {1}", sql, predicate.Sql);
+            Query query = @this.CreateQuery(sqlWithPredicate);
+            query.Parameters.AddRange(predicate.Parameters);
+            return query;
+        }
+
         private static Query CreateQuery(this IDbDriver @this, string sql, IEnumerable<QueryPredicate> predicates)
         {
             if (predicates.Any())
             {
-                QueryPredicate predicate = QueryPredicate.Combine(predicates);
-                string sqlWithPredicate = string.Format("{0} WHERE {1}", sql, predicate.Sql);
-                Query query = @this.CreateQuery(sqlWithPredicate);
-                query.Parameters.AddRange(predicate.Parameters);
-                return query;
+                return @this.CreateQuery(sql, QueryPredicate.Combine(predicates));
             }
             else
             {
@@ -101,15 +105,16 @@ namespace ERHMS.EpiInfo.Data
             int queryColumnCount = data.Columns.Count + view.Pages.Count;  // Accounts for duplicate global record ID column in each page table
             if (@this is OleDbDatabase && queryColumnCount > QueryColumnCountMax)
             {
+                QueryPredicate predicate = QueryPredicate.Combine(predicates);
                 {
                     string sql = string.Format("SELECT t.* {0}", view.FromViewSQL);
-                    Query query = @this.CreateQuery(sql, predicates);
+                    Query query = @this.CreateQuery(sql, predicate);
                     @this.Select(query).CopyRowsTo(data);
                 }
                 foreach (Page page in view.Pages)
                 {
                     string sql = string.Format("SELECT {0}.* {1}", @this.Escape(page.TableName), view.FromViewSQL);
-                    Query query = @this.CreateQuery(sql, predicates);
+                    Query query = @this.CreateQuery(sql, predicate);
                     @this.Select(query).CopyDataTo(data);
                 }
             }
