@@ -16,7 +16,7 @@
         </Menu>
         <ComboBox DockPanel.Dock="Top" Name="Views" SelectionChanged="Views_SelectionChanged" />
         <ScrollViewer>
-            <DataGrid Name="ViewData" AutoGenerateColumns="True" IsReadOnly="True" />
+            <TextBlock Name="Output" />
         </ScrollViewer>
     </DockPanel>
 </Window>

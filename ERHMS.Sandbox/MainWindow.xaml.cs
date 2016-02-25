@@ -1,9 +1,14 @@
 ﻿using Epi;
+using Epi.Collections;
 using Epi.Data;
+using Epi.Fields;
 using ERHMS.EpiInfo.Data;
 using Microsoft.Win32;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace ERHMS.Sandbox
 {
@@ -47,8 +52,35 @@ namespace ERHMS.Sandbox
 
         private void Views_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            View view = Project.GetViewByName((string)Views.SelectedItem);
-            ViewData.ItemsSource = Driver.GetUndeletedViewData(view).DefaultView;
+            View view = Project.Views[(string)Views.SelectedItem];
+            IDictionary<string, ICollection> fieldCollections = new Dictionary<string, ICollection>
+            {
+                { "All fields", view.Fields },
+                { "Text fields", view.Fields.TextFields },
+                { "Mirror fields", view.Fields.MirrorFields },
+                { "Input fields", view.Fields.InputFields },
+                { "Data fields", view.Fields.DataFields },
+                { "Table column fields", view.Fields.TableColumnFields },
+                { "Related fields", view.Fields.RelatedFields },
+                { "Grid fields", view.Fields.GridFields }
+            };
+            Output.Inlines.Clear();
+            foreach (KeyValuePair<string, ICollection> fieldCollection in fieldCollections)
+            {
+                Output.Inlines.AddRange(GetFieldInlines(fieldCollection.Key, fieldCollection.Value));
+                Output.Inlines.Add(new LineBreak());
+            }
+        }
+
+        private IEnumerable<Inline> GetFieldInlines(string title, ICollection fields)
+        {
+            yield return new Bold(new Run(string.Format("{0} ({1})", title, fields.Count)));
+            yield return new LineBreak();
+            foreach (IField field in fields)
+            {
+                yield return new Run(field.Name);
+                yield return new LineBreak();
+            }
         }
     }
 }
