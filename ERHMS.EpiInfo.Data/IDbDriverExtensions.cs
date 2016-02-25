@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.Data;
+using Epi.Data.Office;
 using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data;
@@ -97,14 +98,8 @@ namespace ERHMS.EpiInfo.Data
         public static DataTable GetViewData(this IDbDriver @this, View view, params QueryPredicate[] predicates)
         {
             DataTable data = @this.GetViewSchema(view);
-            if (data.Columns.Count + view.Pages.Count <= QueryColumnCountMax)  // Accounts for duplicate global record ID column in each page table
-            {
-                string sql = string.Format("SELECT * {0}", view.FromViewSQL);
-                Query query = @this.CreateQuery(sql, predicates);
-                data = @this.Select(query);
-                SetPrimaryKey(data);
-            }
-            else
+            int queryColumnCount = data.Columns.Count + view.Pages.Count;  // Accounts for duplicate global record ID column in each page table
+            if (@this is OleDbDatabase && queryColumnCount > QueryColumnCountMax)
             {
                 {
                     string sql = string.Format("SELECT t.* {0}", view.FromViewSQL);
@@ -117,6 +112,13 @@ namespace ERHMS.EpiInfo.Data
                     Query query = @this.CreateQuery(sql, predicates);
                     @this.Select(query).CopyDataTo(data);
                 }
+            }
+            else
+            {
+                string sql = string.Format("SELECT * {0}", view.FromViewSQL);
+                Query query = @this.CreateQuery(sql, predicates);
+                data = @this.Select(query);
+                SetPrimaryKey(data);
             }
             return data;
         }
