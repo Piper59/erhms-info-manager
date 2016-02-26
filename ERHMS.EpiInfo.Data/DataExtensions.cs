@@ -9,7 +9,10 @@ namespace ERHMS.EpiInfo.Data
         {
             foreach (DataColumn column in @this.Table.Columns)
             {
-                target[column.ColumnName] = @this[column];
+                if (target.Table.Columns.Contains(column.ColumnName))
+                {
+                    target[column.ColumnName] = @this[column];
+                }
             }
         }
 
