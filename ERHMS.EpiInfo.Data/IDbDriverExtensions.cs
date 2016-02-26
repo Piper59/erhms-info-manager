@@ -99,6 +99,7 @@ namespace ERHMS.EpiInfo.Data
                 }
             }
             SetPrimaryKey(schema);
+            schema.TableName = view.TableName;
             return schema;
         }
 
@@ -128,6 +129,7 @@ namespace ERHMS.EpiInfo.Data
                 data = @this.Select(query);
                 SetPrimaryKey(data);
             }
+            data.TableName = view.TableName;
             return data;
         }
 
