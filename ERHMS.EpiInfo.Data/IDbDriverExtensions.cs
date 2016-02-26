@@ -93,5 +93,32 @@ namespace ERHMS.EpiInfo.Data
             predicate.AddParameter("@ForeignKey", DbType.String, foreignKey);
             return @this.GetViewData(view, predicate);
         }
+
+        public static DataTable GetGridSchema(this IDbDriver @this, GridField field)
+        {
+            DataTable schema = new DataTable();
+            DbDataAdapter adapter = @this.GetDbAdapter(@this.GetSelectSql(field.TableName));
+            adapter.FillSchema(schema, SchemaType.Source);
+            return schema;
+        }
+
+        public static DataTable GetGridData(this IDbDriver @this, GridField field, QueryPredicate predicate = null)
+        {
+            Query query = @this.CreateQuery(@this.GetSelectSql(field.TableName), predicate);
+            return @this.Select(query);
+        }
+
+        public static DataTable GetGridData(this IDbDriver @this, GridField field, IEnumerable<QueryPredicate> predicates)
+        {
+            return @this.GetGridData(field, QueryPredicate.Combine(predicates));
+        }
+
+        public static DataTable GetGridDataByForeignKey(this IDbDriver @this, GridField field, string foreignKey)
+        {
+            string sql = string.Format("{0} = @ForeignKey", @this.Escape(ColumnNames.FOREIGN_KEY));
+            QueryPredicate predicate = new QueryPredicate(sql);
+            predicate.AddParameter("@ForeignKey", DbType.String, foreignKey);
+            return @this.GetGridData(field, predicate);
+        }
     }
 }
