@@ -54,6 +54,11 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
+        private static string GetSelectSql(this IDbDriver @this, string tableName)
+        {
+            return string.Format("SELECT * FROM {0}", @this.Escape(tableName));
+        }
+
         private static IEnumerable<DataColumn> GetIdColumns(DataTable table)
         {
             return table.Columns
@@ -82,16 +87,14 @@ namespace ERHMS.EpiInfo.Data
         public static DataTable GetViewSchema(this IDbDriver @this, View view)
         {
             DataTable schema = new DataTable();
-            string sql = string.Format("SELECT * FROM {0}", @this.Escape(view.TableName));
-            DbDataAdapter adapter = @this.GetDbAdapter(sql);
+            DbDataAdapter adapter = @this.GetDbAdapter(@this.GetSelectSql(view.TableName));
             using (DbConnection connection = adapter.SelectCommand.Connection)
             {
                 connection.Open();
                 adapter.FillSchema(schema, SchemaType.Source);
                 foreach (Page page in view.Pages)
                 {
-                    sql = string.Format("SELECT * FROM {0}", @this.Escape(page.TableName));
-                    adapter.SelectCommand.CommandText = sql;
+                    adapter.SelectCommand.CommandText = @this.GetSelectSql(page.TableName);
                     adapter.FillSchema(schema, SchemaType.Source);
                 }
             }
