@@ -5,6 +5,11 @@ namespace ERHMS.EpiInfo.Data
 {
     internal static class DataExtensions
     {
+        public static void SetPrimaryKey(this DataTable @this, string columnName)
+        {
+            @this.PrimaryKey = new DataColumn[] { @this.Columns[columnName] };
+        }
+
         public static void CopyDataTo(this DataRow @this, DataRow target)
         {
             foreach (DataColumn column in @this.Table.Columns)

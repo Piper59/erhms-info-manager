@@ -45,12 +45,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ERHMS.Utility\ERHMS.Utility.csproj">
-      <Project>{f8e50f50-057d-4666-9555-16a773b925e9}</Project>
-      <Name>ERHMS.Utility</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>

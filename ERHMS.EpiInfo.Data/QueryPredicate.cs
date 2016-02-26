@@ -1,5 +1,4 @@
 ﻿using Epi.Data;
-using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,10 +9,18 @@ namespace ERHMS.EpiInfo.Data
     {
         public static QueryPredicate Combine(IEnumerable<QueryPredicate> predicates)
         {
-            IEnumerable<string> sqls = predicates.Select(predicate => string.Format("({0})", predicate.Sql));
-            IEnumerable<QueryParameter> parameters = predicates.SelectMany(predicate => predicate.Parameters);
+            ICollection<QueryPredicate> predicateCollection = predicates.ToList();
+            if (!predicateCollection.Any())
+            {
+                return null;
+            }
+            IEnumerable<string> sqls = predicateCollection.Select(predicate => string.Format("({0})", predicate.Sql));
+            IEnumerable<QueryParameter> parameters = predicateCollection.SelectMany(predicate => predicate.Parameters);
             QueryPredicate combined = new QueryPredicate(string.Join(" AND ", sqls));
-            combined.Parameters.AddRange(parameters);
+            foreach (QueryParameter parameter in parameters)
+            {
+                combined.Parameters.Add(parameter);
+            }
             return combined;
         }
 
