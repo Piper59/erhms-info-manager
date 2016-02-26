@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo.Data
 {
     public static class IDbDriverExtensions
     {
-        private const int QueryColumnCountMax = 255;
+        private const int OleDbQueryColumnCountMax = 255;
 
         /// <summary>
         /// Matches a (potentially duplicate) global record ID column name.
@@ -103,7 +103,7 @@ namespace ERHMS.EpiInfo.Data
         {
             DataTable data = @this.GetViewSchema(view);
             int queryColumnCount = data.Columns.Count + view.Pages.Count;  // Accounts for duplicate global record ID column in each page table
-            if (@this is OleDbDatabase && queryColumnCount > QueryColumnCountMax)
+            if (@this is OleDbDatabase && queryColumnCount > OleDbQueryColumnCountMax)
             {
                 QueryPredicate predicate = QueryPredicate.Combine(predicates);
                 {
