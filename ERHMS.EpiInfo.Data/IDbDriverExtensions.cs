@@ -138,19 +138,6 @@ namespace ERHMS.EpiInfo.Data
             return @this.GetViewData(view, predicates.ToArray());
         }
 
-        public static DataTable GetUndeletedViewData(this IDbDriver @this, View view, params QueryPredicate[] predicates)
-        {
-            string sql = string.Format("t.{0} > @RECSTATUS", @this.Escape(ColumnNames.REC_STATUS));
-            QueryPredicate predicate = new QueryPredicate(sql);
-            predicate.AddParameter("@RECSTATUS", DbType.Int16, 0);
-            return @this.GetViewData(view, predicates.Prepend(predicate));
-        }
-
-        public static DataTable GetUndeletedViewData(this IDbDriver @this, View view, IEnumerable<QueryPredicate> predicates)
-        {
-            return @this.GetUndeletedViewData(view, predicates.ToArray());
-        }
-
         public static DataRow GetViewDataById(this IDbDriver @this, View view, string globalRecordId)
         {
             string sql = string.Format("t.{0} = @GlobalRecordId", @this.Escape(ColumnNames.GLOBAL_RECORD_ID));
