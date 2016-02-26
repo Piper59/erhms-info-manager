@@ -138,16 +138,6 @@ namespace ERHMS.EpiInfo.Data
             return @this.GetViewData(view, predicates.ToArray());
         }
 
-        public static DataRow GetViewDataById(this IDbDriver @this, View view, string globalRecordId)
-        {
-            string sql = string.Format("t.{0} = @GlobalRecordId", @this.Escape(ColumnNames.GLOBAL_RECORD_ID));
-            QueryPredicate predicate = new QueryPredicate(sql);
-            predicate.AddParameter("@GlobalRecordId", DbType.String, globalRecordId);
-            return @this.GetViewData(view, predicate)
-                .AsEnumerable()
-                .SingleOrDefault();
-        }
-
         public static DataTable GetUndeletedViewData(this IDbDriver @this, View view, params QueryPredicate[] predicates)
         {
             string sql = string.Format("t.{0} > @RECSTATUS", @this.Escape(ColumnNames.REC_STATUS));
@@ -159,6 +149,16 @@ namespace ERHMS.EpiInfo.Data
         public static DataTable GetUndeletedViewData(this IDbDriver @this, View view, IEnumerable<QueryPredicate> predicates)
         {
             return @this.GetUndeletedViewData(view, predicates.ToArray());
+        }
+
+        public static DataRow GetViewDataById(this IDbDriver @this, View view, string globalRecordId)
+        {
+            string sql = string.Format("t.{0} = @GlobalRecordId", @this.Escape(ColumnNames.GLOBAL_RECORD_ID));
+            QueryPredicate predicate = new QueryPredicate(sql);
+            predicate.AddParameter("@GlobalRecordId", DbType.String, globalRecordId);
+            return @this.GetViewData(view, predicate)
+                .AsEnumerable()
+                .SingleOrDefault();
         }
     }
 }
