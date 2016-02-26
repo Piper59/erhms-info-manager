@@ -52,6 +52,10 @@ namespace ERHMS.Sandbox
 
         private void Views_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (Views.SelectedItem == null)
+            {
+                return;
+            }
             View view = Project.Views[(string)Views.SelectedItem];
             IDictionary<string, ICollection> fieldCollections = new Dictionary<string, ICollection>
             {
