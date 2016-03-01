@@ -120,5 +120,15 @@ namespace ERHMS.EpiInfo.Data
             predicate.AddParameter("@ForeignKey", DbType.String, foreignKey);
             return @this.GetGridData(field, predicate);
         }
+
+        public static DataRow GetGridDataById(this IDbDriver @this, GridField field, string uniqueRowId)
+        {
+            string sql = string.Format("{0} = @UniqueRowId", @this.Escape(ColumnNames.UNIQUE_ROW_ID));
+            QueryPredicate predicate = new QueryPredicate(sql);
+            predicate.AddParameter("@UniqueRowId", DbType.String, uniqueRowId);
+            return @this.GetGridData(field, predicate)
+                .AsEnumerable()
+                .SingleOrDefault();
+        }
     }
 }
