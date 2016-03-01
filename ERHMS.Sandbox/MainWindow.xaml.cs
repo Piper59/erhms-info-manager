@@ -82,7 +82,7 @@ namespace ERHMS.Sandbox
             yield return new LineBreak();
             foreach (IField field in fields)
             {
-                yield return new Run(field.Name);
+                yield return new Run(string.Format("{0} ({1})", field.Name, field.GetType().Name));
                 yield return new LineBreak();
             }
         }
