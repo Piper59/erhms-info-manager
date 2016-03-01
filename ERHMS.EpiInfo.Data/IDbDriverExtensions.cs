@@ -76,6 +76,14 @@ namespace ERHMS.EpiInfo.Data
             return @this.GetViewData(view, QueryPredicate.Combine(predicates));
         }
 
+        public static DataTable GetViewDataByForeignKey(this IDbDriver @this, View view, string foreignKey)
+        {
+            string sql = string.Format("{0} = @ForeignKey", @this.Escape(ColumnNames.FOREIGN_KEY));
+            QueryPredicate predicate = new QueryPredicate(sql);
+            predicate.AddParameter("@ForeignKey", DbType.String, foreignKey);
+            return @this.GetViewData(view, predicate);
+        }
+
         public static DataRow GetViewDataById(this IDbDriver @this, View view, string globalRecordId)
         {
             string sql = string.Format("t.{0} = @GlobalRecordId", @this.Escape(ColumnNames.GLOBAL_RECORD_ID));
@@ -84,14 +92,6 @@ namespace ERHMS.EpiInfo.Data
             return @this.GetViewData(view, predicate)
                 .AsEnumerable()
                 .SingleOrDefault();
-        }
-
-        public static DataTable GetViewDataByForeignKey(this IDbDriver @this, View view, string foreignKey)
-        {
-            string sql = string.Format("{0} = @ForeignKey", @this.Escape(ColumnNames.FOREIGN_KEY));
-            QueryPredicate predicate = new QueryPredicate(sql);
-            predicate.AddParameter("@ForeignKey", DbType.String, foreignKey);
-            return @this.GetViewData(view, predicate);
         }
 
         public static DataTable GetGridSchema(this IDbDriver @this, GridField field)
