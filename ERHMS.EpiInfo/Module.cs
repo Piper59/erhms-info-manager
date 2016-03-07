@@ -34,12 +34,12 @@ namespace ERHMS.EpiInfo
         {
             FileInfo executable = @this.GetExecutable();
             return Process.Start(new ProcessStartInfo
-                {
-                    UseShellExecute = false,
-                    WorkingDirectory = executable.DirectoryName,
-                    FileName = executable.FullName,
-                    Arguments = args
-                });
+            {
+                UseShellExecute = false,
+                WorkingDirectory = executable.DirectoryName,
+                FileName = executable.FullName,
+                Arguments = args
+            });
         }
 
         public static Process Execute(this Module @this, IEnumerable<string> args)
