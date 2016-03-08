@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace ERHMS.EpiInfo.Data
+namespace ERHMS.EpiInfo.DataAccess
 {
     public interface IDataDriver : IDisposable
     {

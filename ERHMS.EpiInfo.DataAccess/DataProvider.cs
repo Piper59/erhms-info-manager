@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel;
 
-namespace ERHMS.EpiInfo.Data
+namespace ERHMS.EpiInfo.DataAccess
 {
     public enum DataProvider
     {

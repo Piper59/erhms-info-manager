@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 
-namespace ERHMS.EpiInfo.Data
+namespace ERHMS.EpiInfo.DataAccess
 {
     public class DataTransaction : IDisposable
     {

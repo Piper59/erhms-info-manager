@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 
-namespace ERHMS.EpiInfo.Data
+namespace ERHMS.EpiInfo.DataAccess
 {
     public class ViewRepository<TEntity> : RepositoryBase<TEntity> where TEntity : ViewEntity, new()
     {

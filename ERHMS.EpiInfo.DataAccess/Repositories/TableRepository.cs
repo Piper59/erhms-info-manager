@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace ERHMS.EpiInfo.Data
+namespace ERHMS.EpiInfo.DataAccess
 {
     public class TableRepository<TEntity> : RepositoryBase<TEntity> where TEntity : TableEntity, new()
     {

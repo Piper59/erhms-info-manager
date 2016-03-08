@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ERHMS.EpiInfo.Data
+namespace ERHMS.EpiInfo.DataAccess
 {
     public class AccessDriver : DataDriverBase
     {

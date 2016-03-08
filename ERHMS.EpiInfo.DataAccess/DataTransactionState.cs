@@ -1,4 +1,4 @@
-﻿namespace ERHMS.EpiInfo.Data
+﻿namespace ERHMS.EpiInfo.DataAccess
 {
     public enum DataTransactionState
     {
