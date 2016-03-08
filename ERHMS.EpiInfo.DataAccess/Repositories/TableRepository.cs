@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public class TableRepository<TEntity> : RepositoryBase<TEntity> where TEntity : TableEntity, new()
+    public class TableRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : TableEntity, new()
     {
         protected DataTable Schema { get; private set; }
         public string TableName { get; private set; }

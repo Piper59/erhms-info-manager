@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public class ViewRepository<TEntity> : RepositoryBase<TEntity> where TEntity : ViewEntity, new()
+    public class ViewRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : ViewEntity, new()
     {
         protected DataTable BaseSchema { get; private set; }
         protected DataSet PageSchemas { get; private set; }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public abstract class RepositoryBase<TEntity> where TEntity : EntityBase, new()
+    public abstract class EntityRepositoryBase<TEntity> where TEntity : EntityBase, new()
     {
         protected static class Mapper
         {
@@ -73,7 +73,7 @@ namespace ERHMS.EpiInfo.DataAccess
             get { return Driver.Project; }
         }
 
-        protected RepositoryBase(IDataDriver driver)
+        protected EntityRepositoryBase(IDataDriver driver)
         {
             Driver = driver;
         }
