@@ -121,7 +121,7 @@ namespace ERHMS.EpiInfo.Data
                 case 1:
                     return Select(predicateCollection.First());
                 default:
-                    return Select(DataPredicate.Combine(predicateCollection));
+                    return Select(predicateCollection.Combine());
             }
         }
 
