@@ -67,7 +67,9 @@
     <Compile Include="Drivers\IDataDriver.cs" />
     <Compile Include="Drivers\SqlServerDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\CodeRepository.cs" />
     <Compile Include="Repositories\EntityRepositoryBase.cs" />
+    <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\TableRepository.cs" />
     <Compile Include="Repositories\ViewRepository.cs" />
   </ItemGroup>

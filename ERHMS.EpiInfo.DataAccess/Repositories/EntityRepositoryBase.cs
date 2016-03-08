@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.EpiInfo.Domain;
+﻿using ERHMS.EpiInfo.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +6,7 @@ using System.Linq;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public abstract class EntityRepositoryBase<TEntity> where TEntity : EntityBase, new()
+    public abstract class EntityRepositoryBase<TEntity> : RepositoryBase where TEntity : EntityBase, new()
     {
         protected static class Mapper
         {
@@ -66,17 +65,9 @@ namespace ERHMS.EpiInfo.DataAccess
             return !column.AutoIncrement && !column.ReadOnly;
         }
 
-        public IDataDriver Driver { get; private set; }
-
-        public Project Project
-        {
-            get { return Driver.Project; }
-        }
-
         protected EntityRepositoryBase(IDataDriver driver)
-        {
-            Driver = driver;
-        }
+            : base(driver)
+        { }
 
         protected DataTable GetSchema(string tableName)
         {
