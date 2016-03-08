@@ -6,20 +6,16 @@ namespace ERHMS.EpiInfo.Data
     {
         private const string Provider = "Microsoft.Jet.OLEDB.4.0";
 
-        public static AccessDriver Create(string dataSource, string userId = null, string password = null)
+        public static AccessDriver Create(string dataSource, string password = null)
         {
             IDictionary<string, object> connectionProperties = new Dictionary<string, object>
             {
                 { "Provider", Provider },
                 { "Data Source", dataSource }
             };
-            if (userId != null)
-            {
-                connectionProperties["User ID"] = userId;
-            }
             if (password != null)
             {
-                connectionProperties["Password"] = password;
+                connectionProperties["Jet OLEDB:Database Password"] = password;
             }
             return new AccessDriver(connectionProperties);
         }
