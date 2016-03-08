@@ -47,6 +47,7 @@
     </Compile>
     <Compile Include="Arguments.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
+    <Compile Include="InMemoryProject.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
