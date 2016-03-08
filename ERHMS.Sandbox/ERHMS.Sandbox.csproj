@@ -79,6 +79,10 @@
       <Project>{af729d69-3971-45ee-b351-1fc9bfd6ed7d}</Project>
       <Name>ERHMS.EpiInfo.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
+      <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
+      <Name>ERHMS.EpiInfo.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
       <Name>ERHMS.EpiInfo</Name>

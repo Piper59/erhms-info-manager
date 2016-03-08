@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ERHMS.EpiInfo.DataAccess
+namespace ERHMS.EpiInfo.Domain
 {
     public abstract class TableEntity : EntityBase
     {

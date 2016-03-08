@@ -2,7 +2,7 @@
 using System;
 using System.Security.Principal;
 
-namespace ERHMS.EpiInfo.DataAccess
+namespace ERHMS.EpiInfo.Domain
 {
     public class ViewEntity : EntityBase
     {

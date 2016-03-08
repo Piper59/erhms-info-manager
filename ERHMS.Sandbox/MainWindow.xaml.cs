@@ -1,4 +1,5 @@
 ﻿using ERHMS.EpiInfo.DataAccess;
+using ERHMS.EpiInfo.Domain;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;

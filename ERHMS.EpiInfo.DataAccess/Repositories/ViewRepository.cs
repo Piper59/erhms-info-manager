@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.EpiInfo.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;

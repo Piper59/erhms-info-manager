@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
 
-namespace ERHMS.EpiInfo.DataAccess
+namespace ERHMS.EpiInfo.Domain
 {
     public class EntityBase : DynamicObject, INotifyPropertyChanged, ICloneable
     {
