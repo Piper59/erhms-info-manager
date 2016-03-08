@@ -53,6 +53,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="DataParameter.cs" />
+    <Compile Include="DataParameterCollection.cs" />
     <Compile Include="DataPredicate.cs" />
     <Compile Include="DataProvider.cs" />
     <Compile Include="DataTransaction.cs" />
