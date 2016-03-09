@@ -17,7 +17,6 @@ namespace ERHMS.EpiInfo
         MakeView,
         Mapping,
         Menu,
-        Updater,
         WebSurveyExporter
     }
 
