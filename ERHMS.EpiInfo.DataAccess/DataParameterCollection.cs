@@ -15,12 +15,6 @@ namespace ERHMS.EpiInfo.DataAccess
             parameters = new List<DataParameter>();
         }
 
-        public void Add(DataParameter parameter)
-        {
-            parameter.Name = driver.GetParameterName(parameters.Count);
-            parameters.Add(parameter);
-        }
-
         public DataParameter AddByValue(object value)
         {
             DataParameter parameter = new DataParameter(driver.GetParameterName(parameters.Count), value);
