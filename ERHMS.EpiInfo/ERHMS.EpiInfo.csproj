@@ -51,7 +51,6 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Arguments.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="InMemoryProject.cs" />
     <Compile Include="Module.cs" />
