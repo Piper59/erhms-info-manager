@@ -1,4 +1,7 @@
-﻿using ERHMS.EpiInfo;
+﻿using Epi;
+using ERHMS.EpiInfo;
+using System;
+using System.IO;
 using System.ServiceModel;
 using System.Windows;
 
@@ -11,7 +14,13 @@ namespace ERHMS.Sandbox
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            ConfigurationExtensions.LoadDefaultConfiguration();
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            DirectoryInfo root = new DirectoryInfo(Path.Combine(desktopPath, "ERHMS.Sandbox"));
+            if (!ConfigurationExtensions.TryLoad(root))
+            {
+                Configuration.Save(ConfigurationExtensions.Create(root));
+                ConfigurationExtensions.Load(root);
+            }
             host = new ServiceHost(typeof(Service));
             host.Open();
         }

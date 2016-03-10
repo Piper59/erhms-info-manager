@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ERHMS.Utility;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 
 namespace ERHMS.EpiInfo
 {
@@ -24,9 +24,8 @@ namespace ERHMS.EpiInfo
     {
         private static FileInfo GetExecutable(this Module @this)
         {
-            string directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string fileName = string.Format("{0}.exe", @this);
-            return new FileInfo(Path.Combine(directoryName, fileName));
+            return ConfigurationExtensions.GetApplicationRoot().GetFile(fileName);
         }
 
         public static Process Execute(this Module @this, string args = "")

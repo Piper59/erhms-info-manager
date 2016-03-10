@@ -46,6 +46,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="IOExtensions.cs" />
     <Compile Include="Iterator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
