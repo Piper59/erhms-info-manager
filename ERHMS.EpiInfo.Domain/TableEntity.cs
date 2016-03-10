@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace ERHMS.EpiInfo.Domain
+﻿namespace ERHMS.EpiInfo.Domain
 {
     public abstract class TableEntity : EntityBase
     {
-        public abstract Guid? Id { get; set; }
+        public abstract string Guid { get; set; }
     }
 }

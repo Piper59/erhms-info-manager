@@ -40,19 +40,19 @@ namespace ERHMS.EpiInfo.DataAccess
             return Mapper.GetEntities(Driver.ExecuteQuery(sql, predicate.Parameters));
         }
 
-        public virtual TEntity SelectById(Guid id)
+        public virtual TEntity SelectById(string guid)
         {
             DataParameter parameter;
-            string sql = GetEqualitySql(GetIdColumn(Schema), id, out parameter);
+            string sql = GetEqualitySql(GetIdColumn(Schema), guid, out parameter);
             DataPredicate predicate = new DataPredicate(sql, parameter);
             return Select(predicate).SingleOrDefault();
         }
 
         public virtual void Insert(TEntity entity)
         {
-            if (!entity.Id.HasValue)
+            if (entity.Guid == null)
             {
-                entity.Id = Guid.NewGuid();
+                entity.Guid = Guid.NewGuid().ToString();
             }
             Insert(entity, Schema);
             entity.IsNew = false;
@@ -78,7 +78,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public virtual void Delete(TEntity entity)
         {
             DataParameter parameter;
-            string predicate = GetEqualitySql(GetIdColumn(Schema), entity.Id, out parameter);
+            string predicate = GetEqualitySql(GetIdColumn(Schema), entity.Guid, out parameter);
             string sql = string.Format("DELETE FROM {0} WHERE {1}", Driver.Escape(TableName), predicate);
             Driver.ExecuteNonQuery(sql, parameter);
         }
