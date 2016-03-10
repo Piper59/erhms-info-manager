@@ -69,12 +69,6 @@ namespace ERHMS.EpiInfo.DataAccess
             : base(driver)
         { }
 
-        protected DataTable GetSchema(string tableName)
-        {
-            string sql = string.Format("SELECT * FROM {0}", Driver.Escape(tableName));
-            return Driver.GetSchema(sql);
-        }
-
         protected DataParameter GetParameter(DataColumn column, object value)
         {
             return new DataParameter(Driver.GetParameterName(column.Ordinal), value);
@@ -98,6 +92,12 @@ namespace ERHMS.EpiInfo.DataAccess
         protected string GetEqualitySql(DataColumn column, TEntity entity, out DataParameter parameter)
         {
             return GetEqualitySql(column, entity.GetProperty(column.ColumnName), out parameter);
+        }
+
+        protected DataTable GetSchema(string tableName)
+        {
+            string sql = string.Format("SELECT * FROM {0}", Driver.Escape(tableName));
+            return Driver.GetSchema(sql);
         }
 
         public abstract IEnumerable<TEntity> Select();

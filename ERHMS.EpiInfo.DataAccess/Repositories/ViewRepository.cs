@@ -31,6 +31,22 @@ namespace ERHMS.EpiInfo.DataAccess
             }
         }
 
+        protected string GetJoinSql()
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append(Driver.Escape(View.TableName));
+            foreach (Page page in View.Pages)
+            {
+                sql.Insert(0, "(");
+                sql.Append(string.Format(
+                    ") INNER JOIN {1} ON {0}.{2} = {1}.{2}",
+                    Driver.Escape(View.TableName),
+                    Driver.Escape(page.TableName),
+                    ColumnNames.GLOBAL_RECORD_ID));
+            }
+            return sql.ToString();
+        }
+
         public virtual TEntity Create()
         {
             TEntity entity = new TEntity();
@@ -62,22 +78,6 @@ namespace ERHMS.EpiInfo.DataAccess
                 Mapper.SetEntities(data, data.Columns[ColumnNames.GLOBAL_RECORD_ID], entities, StringComparison.OrdinalIgnoreCase);
             }
             return entities;
-        }
-
-        protected string GetJoinSql()
-        {
-            StringBuilder sql = new StringBuilder();
-            sql.Append(Driver.Escape(View.TableName));
-            foreach (Page page in View.Pages)
-            {
-                sql.Insert(0, "(");
-                sql.Append(string.Format(
-                    ") INNER JOIN {1} ON {0}.{2} = {1}.{2}",
-                    Driver.Escape(View.TableName),
-                    Driver.Escape(page.TableName),
-                    ColumnNames.GLOBAL_RECORD_ID));
-            }
-            return sql.ToString();
         }
 
         public override IEnumerable<TEntity> Select(DataPredicate predicate)
