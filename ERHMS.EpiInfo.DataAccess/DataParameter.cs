@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 
@@ -8,11 +9,6 @@ namespace ERHMS.EpiInfo.DataAccess
     {
         public string Name { get; set; }
         public object Value { get; set; }
-
-        private static DateTime RemoveMilliseconds(DateTime value)
-        {
-            return new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, value.Second, value.Kind);
-        }
 
         public DataParameter(string name, object value)
         {
@@ -28,7 +24,7 @@ namespace ERHMS.EpiInfo.DataAccess
             }
             else if (Value is DateTime)
             {
-                return RemoveMilliseconds((DateTime)Value);
+                return ((DateTime)Value).RemoveMilliseconds();
             }
             else
             {
