@@ -55,7 +55,7 @@ namespace ERHMS.EpiInfo.DataAccess
             }
         }
 
-        protected static DataColumn GetIdColumn(DataTable schema)
+        protected static DataColumn GetKeyColumn(DataTable schema)
         {
             return schema.PrimaryKey.Single();
         }
@@ -152,12 +152,12 @@ namespace ERHMS.EpiInfo.DataAccess
 
         protected void Update(TEntity entity, DataTable schema, DataTransaction transaction = null)
         {
-            DataColumn idColumn = GetIdColumn(schema);
+            DataColumn keyColumn = GetKeyColumn(schema);
             ICollection<string> assignments = new List<string>();
             ICollection<DataParameter> parameters = new List<DataParameter>();
             foreach (DataColumn column in schema.Columns)
             {
-                if (column == idColumn || !IsEditable(column))
+                if (column == keyColumn || !IsEditable(column))
                 {
                     continue;
                 }
@@ -168,7 +168,7 @@ namespace ERHMS.EpiInfo.DataAccess
             string predicate;
             {
                 DataParameter parameter;
-                predicate = GetEqualitySql(idColumn, entity, out parameter);
+                predicate = GetEqualitySql(keyColumn, entity, out parameter);
                 parameters.Add(parameter);
             }
             string sql = string.Format(

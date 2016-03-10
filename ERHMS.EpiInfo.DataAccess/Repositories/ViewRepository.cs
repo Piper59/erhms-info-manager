@@ -97,7 +97,7 @@ namespace ERHMS.EpiInfo.DataAccess
             return entities;
         }
 
-        public virtual TEntity SelectById(string globalRecordId)
+        public virtual TEntity SelectByGlobalRecordId(string globalRecordId)
         {
             DataParameter parameter;
             string sql = GetEqualitySql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], globalRecordId, out parameter);
@@ -125,7 +125,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 }
                 transaction.Commit();
             }
-            entity.UniqueKey = SelectById(entity.GlobalRecordId).UniqueKey;
+            entity.UniqueKey = SelectByGlobalRecordId(entity.GlobalRecordId).UniqueKey;
             entity.IsNew = false;
         }
 
