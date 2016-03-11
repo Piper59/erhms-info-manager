@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v14.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="TransformConfig" AfterTargets="Build" Condition="Exists('App.config') AND Exists('App.$(Configuration).config')">
+    <TransformXml Source="App.config" Transform="App.$(Configuration).config" Destination="@(AppConfigFileDestination)" />
+  </Target>
+</Project>
