@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="InMemoryProject.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

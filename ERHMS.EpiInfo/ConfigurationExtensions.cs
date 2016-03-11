@@ -71,9 +71,16 @@ namespace ERHMS.EpiInfo
             settings.CheckForUpdates = false;
         }
 
+        public static void Load(string path)
+        {
+            Configuration.Load(path);
+            Log.Configure(Configuration.GetNewInstance());
+            Log.Current.DebugFormat("Loaded configuration: {0}", path);
+        }
+
         public static void Load(DirectoryInfo root)
         {
-            Configuration.Load(GetConfigurationFilePath(root));
+            Load(GetConfigurationFilePath(root));
         }
 
         public static bool TryLoad(DirectoryInfo root)
@@ -81,7 +88,7 @@ namespace ERHMS.EpiInfo
             string path = GetConfigurationFilePath(root);
             if (File.Exists(path))
             {
-                Configuration.Load(path);
+                Load(path);
                 return true;
             }
             else

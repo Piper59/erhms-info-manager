@@ -65,6 +65,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public DataTable ExecuteQuery(DataTransaction transaction, string sql, IEnumerable<DataParameter> parameters)
         {
+            Log.Current.DebugFormat("Executing SQL: {0}", sql);
             using (DbCommand command = transaction.CreateCommand())
             {
                 command.CommandText = sql;
@@ -101,6 +102,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public int ExecuteNonQuery(DataTransaction transaction, string sql, IEnumerable<DataParameter> parameters)
         {
+            Log.Current.DebugFormat("Executing SQL: {0}", sql);
             using (DbCommand command = transaction.CreateCommand())
             {
                 command.CommandText = sql;

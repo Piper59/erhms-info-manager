@@ -21,12 +21,14 @@ namespace ERHMS.Sandbox
                 Configuration.Save(ConfigurationExtensions.Create(root));
                 ConfigurationExtensions.Load(root);
             }
+            Log.Current.Debug("Starting up");
             host = new ServiceHost(typeof(Service));
             host.Open();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            Log.Current.Debug("Exiting");
             host.Close();
             base.OnExit(e);
         }
