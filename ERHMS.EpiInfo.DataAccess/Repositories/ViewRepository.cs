@@ -125,7 +125,15 @@ namespace ERHMS.EpiInfo.DataAccess
                 }
                 transaction.Commit();
             }
-            entity.UniqueKey = SelectByGlobalRecordId(entity.GlobalRecordId).UniqueKey;
+            DataParameter parameter;
+            string sql = string.Format(
+                "SELECT {0} FROM {1} WHERE {2}",
+                Driver.Escape(ColumnNames.UNIQUE_KEY),
+                Driver.Escape(View.TableName),
+                GetEqualitySql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], entity.GlobalRecordId, out parameter));
+            entity.UniqueKey = Driver.ExecuteQuery(sql, parameter).AsEnumerable()
+                .Single()
+                .Field<int>(ColumnNames.UNIQUE_KEY);
             entity.IsNew = false;
         }
 
