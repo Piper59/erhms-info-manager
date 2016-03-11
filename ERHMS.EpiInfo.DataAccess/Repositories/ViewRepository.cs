@@ -42,7 +42,7 @@ namespace ERHMS.EpiInfo.DataAccess
                     ") INNER JOIN {1} ON {0}.{2} = {1}.{2}",
                     Driver.Escape(View.TableName),
                     Driver.Escape(page.TableName),
-                    ColumnNames.GLOBAL_RECORD_ID));
+                    Driver.Escape(ColumnNames.GLOBAL_RECORD_ID)));
             }
             return sql.ToString();
         }
