@@ -73,6 +73,7 @@ namespace ERHMS.EpiInfo
 
         public static void Load(string path)
         {
+            Log.Current.DebugFormat("Loading configuration: {0}", path);
             Configuration.Load(path);
             Log.Configure(Configuration.GetNewInstance());
             Log.Current.DebugFormat("Loaded configuration: {0}", path);

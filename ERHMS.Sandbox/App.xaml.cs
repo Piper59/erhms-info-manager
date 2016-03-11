@@ -14,6 +14,7 @@ namespace ERHMS.Sandbox
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            Log.Current.Debug("Starting up");
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             DirectoryInfo root = new DirectoryInfo(Path.Combine(desktopPath, "ERHMS.Sandbox"));
             if (!ConfigurationExtensions.TryLoad(root))
@@ -21,7 +22,6 @@ namespace ERHMS.Sandbox
                 Configuration.Save(ConfigurationExtensions.Create(root));
                 ConfigurationExtensions.Load(root);
             }
-            Log.Current.Debug("Starting up");
             host = new ServiceHost(typeof(Service));
             host.Open();
         }
