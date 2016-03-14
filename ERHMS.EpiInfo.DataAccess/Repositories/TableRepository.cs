@@ -43,7 +43,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public virtual TEntity SelectByGuid(string guid)
         {
             DataParameter parameter;
-            string sql = GetEqualitySql(GetKeyColumn(Schema), guid, out parameter);
+            string sql = GetConditionalSql(GetKeyColumn(Schema), guid, out parameter);
             DataPredicate predicate = new DataPredicate(sql, parameter);
             return Select(predicate).SingleOrDefault();
         }
@@ -78,7 +78,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public virtual void Delete(TEntity entity)
         {
             DataParameter parameter;
-            string predicate = GetEqualitySql(GetKeyColumn(Schema), entity.Guid, out parameter);
+            string predicate = GetConditionalSql(GetKeyColumn(Schema), entity, out parameter);
             string sql = string.Format("DELETE FROM {0} WHERE {1}", Driver.Escape(TableName), predicate);
             Driver.ExecuteNonQuery(sql, parameter);
         }

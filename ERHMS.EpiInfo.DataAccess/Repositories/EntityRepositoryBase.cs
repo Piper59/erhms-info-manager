@@ -79,19 +79,20 @@ namespace ERHMS.EpiInfo.DataAccess
             return GetParameter(column, entity.GetProperty(column.ColumnName));
         }
 
-        protected string GetEqualitySql(DataColumn column, object value, out DataParameter parameter)
+        protected string GetConditionalSql(DataColumn column, object value, out DataParameter parameter, string @operator = "=")
         {
             parameter = GetParameter(column, value);
             return string.Format(
-                "{0}.{1} = {2}",
+                "{0}.{1} {2} {3}",
                 Driver.Escape(column.Table.TableName),
                 Driver.Escape(column.ColumnName),
+                @operator,
                 parameter.Name);
         }
 
-        protected string GetEqualitySql(DataColumn column, TEntity entity, out DataParameter parameter)
+        protected string GetConditionalSql(DataColumn column, TEntity entity, out DataParameter parameter, string @operator = "=")
         {
-            return GetEqualitySql(column, entity.GetProperty(column.ColumnName), out parameter);
+            return GetConditionalSql(column, entity.GetProperty(column.ColumnName), out parameter, @operator);
         }
 
         protected DataTable GetSchema(string tableName)
@@ -162,13 +163,13 @@ namespace ERHMS.EpiInfo.DataAccess
                     continue;
                 }
                 DataParameter parameter;
-                assignments.Add(GetEqualitySql(column, entity, out parameter));
+                assignments.Add(GetConditionalSql(column, entity, out parameter));
                 parameters.Add(parameter);
             }
             string predicate;
             {
                 DataParameter parameter;
-                predicate = GetEqualitySql(keyColumn, entity, out parameter);
+                predicate = GetConditionalSql(keyColumn, entity, out parameter);
                 parameters.Add(parameter);
             }
             string sql = string.Format(

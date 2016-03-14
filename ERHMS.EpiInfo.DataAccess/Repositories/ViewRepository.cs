@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.EpiInfo.Domain;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -45,6 +46,13 @@ namespace ERHMS.EpiInfo.DataAccess
                     Driver.Escape(ColumnNames.GLOBAL_RECORD_ID)));
             }
             return sql.ToString();
+        }
+
+        protected DataPredicate GetDeletedPredicate(bool deleted)
+        {
+            DataParameter parameter;
+            string sql = GetConditionalSql(BaseSchema.Columns[ColumnNames.REC_STATUS], (short)0, out parameter, deleted ? "=" : ">");
+            return new DataPredicate(sql, parameter);
         }
 
         public virtual TEntity Create()
@@ -97,10 +105,30 @@ namespace ERHMS.EpiInfo.DataAccess
             return entities;
         }
 
+        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted)
+        {
+            return Select(GetDeletedPredicate(deleted));
+        }
+
+        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted, DataPredicate predicate)
+        {
+            return Select(GetDeletedPredicate(deleted), predicate);
+        }
+
+        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted, IEnumerable<DataPredicate> predicates)
+        {
+            return Select(predicates.Prepend(GetDeletedPredicate(deleted)));
+        }
+
+        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted, params DataPredicate[] predicates)
+        {
+            return Select(predicates.Prepend(GetDeletedPredicate(deleted)));
+        }
+
         public virtual TEntity SelectByGlobalRecordId(string globalRecordId)
         {
             DataParameter parameter;
-            string sql = GetEqualitySql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], globalRecordId, out parameter);
+            string sql = GetConditionalSql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], globalRecordId, out parameter);
             DataPredicate predicate = new DataPredicate(sql, parameter);
             return Select(predicate).SingleOrDefault();
         }
@@ -130,7 +158,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 "SELECT {0} FROM {1} WHERE {2}",
                 Driver.Escape(ColumnNames.UNIQUE_KEY),
                 Driver.Escape(View.TableName),
-                GetEqualitySql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], entity.GlobalRecordId, out parameter));
+                GetConditionalSql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], entity, out parameter));
             entity.UniqueKey = Driver.ExecuteQuery(sql, parameter).AsEnumerable()
                 .Single()
                 .Field<int>(ColumnNames.UNIQUE_KEY);
