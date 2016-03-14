@@ -134,7 +134,7 @@ namespace ERHMS.EpiInfo.DataAccess
             entity.UniqueKey = Driver.ExecuteQuery(sql, parameter).AsEnumerable()
                 .Single()
                 .Field<int>(ColumnNames.UNIQUE_KEY);
-            entity.IsNew = false;
+            entity.New = false;
         }
 
         public virtual void Update(TEntity entity, IIdentity user = null)
@@ -153,7 +153,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public virtual void Save(TEntity entity, IIdentity user = null)
         {
-            if (entity.IsNew)
+            if (entity.New)
             {
                 Insert(entity, user);
             }

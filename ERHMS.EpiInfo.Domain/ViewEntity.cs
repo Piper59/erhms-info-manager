@@ -54,7 +54,7 @@ namespace ERHMS.EpiInfo.Domain
             set { SetProperty(ColumnNames.RECORD_LAST_SAVE_TIME, value); }
         }
 
-        public bool IsDeleted
+        public bool Deleted
         {
             get
             {

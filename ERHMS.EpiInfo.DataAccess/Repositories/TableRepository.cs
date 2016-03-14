@@ -55,7 +55,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 entity.Guid = Guid.NewGuid().ToString();
             }
             Insert(entity, Schema);
-            entity.IsNew = false;
+            entity.New = false;
         }
 
         public virtual void Update(TEntity entity)
@@ -65,7 +65,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public virtual void Save(TEntity entity)
         {
-            if (entity.IsNew)
+            if (entity.New)
             {
                 Insert(entity);
             }

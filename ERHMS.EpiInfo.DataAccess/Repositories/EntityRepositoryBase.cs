@@ -23,7 +23,7 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 TEntity entity = new TEntity();
                 SetEntity(row, entity);
-                entity.IsNew = false;
+                entity.New = false;
                 return entity;
             }
 
