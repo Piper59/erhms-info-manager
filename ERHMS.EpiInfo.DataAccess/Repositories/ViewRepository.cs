@@ -20,10 +20,6 @@ namespace ERHMS.EpiInfo.DataAccess
             : base(driver)
         {
             View = Project.Views[viewName];
-            if (!Project.CollectedData.TableExists(View.TableName))
-            {
-                Project.CollectedData.CreateDataTableForView(View, 1);
-            }
             BaseSchema = GetSchema(View.TableName);
             PageSchemas = new DataSet();
             foreach (Page page in View.Pages)
