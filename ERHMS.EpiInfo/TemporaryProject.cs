@@ -5,14 +5,11 @@ namespace ERHMS.EpiInfo
 {
     public class TemporaryProject : ProjectBase
     {
-        public FileInfo File { get; private set; }
-
-        public TemporaryProject(FileInfo file, string driver, string connectionString)
+        public TemporaryProject(string name, string location, string driver, string connectionString)
             : base(driver, connectionString)
         {
-            File = file;
-            Name = Path.GetFileNameWithoutExtension(file.Name);
-            Location = file.DirectoryName;
+            Name = name;
+            Location = location;
             Save();
         }
 
@@ -29,7 +26,7 @@ namespace ERHMS.EpiInfo
             }
             try
             {
-                File.Delete();
+                File.Delete(FilePath);
             }
             catch { }
         }

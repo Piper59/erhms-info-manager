@@ -24,6 +24,8 @@ namespace ERHMS.EpiInfo.DataAccess
             : base(DataProvider.Access, builder.ConnectionString)
         {
             this.builder = builder;
+            Project.Name = Path.GetFileNameWithoutExtension(builder.DataSource);
+            Project.Location = Path.GetDirectoryName(builder.DataSource);
         }
 
         public override string GetParameterName(int index)
