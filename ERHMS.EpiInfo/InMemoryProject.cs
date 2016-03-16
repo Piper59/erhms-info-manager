@@ -2,7 +2,7 @@
 
 namespace ERHMS.EpiInfo
 {
-    public class InMemoryProject : ProjectBase
+    public class InMemoryProject : Project
     {
         public InMemoryProject(string driver, DbConnectionStringBuilder builder)
             : base(driver, builder)

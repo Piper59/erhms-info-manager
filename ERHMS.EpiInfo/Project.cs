@@ -1,20 +1,14 @@
 ﻿using Epi;
-using Epi.Data;
 using ERHMS.Utility;
 using System.Data.Common;
 
 namespace ERHMS.EpiInfo
 {
-    public class ProjectBase : Project
+    public class Project : Epi.Project
     {
-        public IDbDriver Driver
+        public Project(string driver, DbConnectionStringBuilder builder)
         {
-            get { return CollectedData.GetDbDriver(); }
-        }
-
-        protected ProjectBase(string driver, DbConnectionStringBuilder builder)
-        {
-            Log.Current.DebugFormat("Creating project: {0}", builder.ToSafeString());
+            Log.Current.DebugFormat("Opening project: {0}, {1}", driver, builder.ToSafeString());
             CollectedDataDriver = driver;
             CollectedDataConnectionString = builder.ConnectionString;
             CollectedDataDbInfo.DBCnnStringBuilder.ConnectionString = builder.ConnectionString;
