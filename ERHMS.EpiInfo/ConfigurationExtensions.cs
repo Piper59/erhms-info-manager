@@ -22,6 +22,8 @@ namespace ERHMS.EpiInfo
 
         public static Configuration Create(DirectoryInfo root)
         {
+            string path = GetConfigurationFilePath(root);
+            Log.Current.DebugFormat("Creating configuration: {0}", path);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
             InitializeDirectories(config, root);
             config.RecentView.Clear();
@@ -29,7 +31,7 @@ namespace ERHMS.EpiInfo
             config.Database.Clear();
             config.File.Clear();
             InitializeSettings(config);
-            return new Configuration(GetConfigurationFilePath(root), config);
+            return new Configuration(path, config);
         }
 
         private static void InitializeDirectories(Config config, DirectoryInfo root)

@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder)
         {
-            Log.Current.DebugFormat("Creating data driver: {0}", builder.ToSafeString());
+            Log.Current.DebugFormat("Creating data driver: {0}, {1}", provider.GetInvariantName(), builder.ToSafeString());
             factory = DbProviderFactories.GetFactory(provider.GetInvariantName());
             connectionString = builder.ConnectionString;
             Project = new InMemoryProject(provider.GetEpiInfoName(), builder);
@@ -50,6 +50,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public DataTable GetSchema(string sql)
         {
+            Log.Current.DebugFormat("Getting schema: {0}", sql);
             using (DbConnection connection = GetConnection())
             using (DbDataAdapter adapter = factory.CreateDataAdapter())
             using (DbCommand command = connection.CreateCommand())

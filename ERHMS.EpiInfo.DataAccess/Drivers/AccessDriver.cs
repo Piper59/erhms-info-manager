@@ -41,7 +41,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public override void CreateDatabase()
         {
-            Log.Current.DebugFormat("Creating Access database: {0}", builder.ToSafeString());
+            Log.Current.DebugFormat("Creating database: {0}", builder.ToSafeString());
             Catalog catalog = new Catalog();
             catalog.Create(builder.ConnectionString);
         }
