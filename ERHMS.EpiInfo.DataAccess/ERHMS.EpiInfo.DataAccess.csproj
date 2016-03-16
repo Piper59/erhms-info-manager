@@ -84,7 +84,6 @@
     <Compile Include="Drivers\AccessDriver.cs" />
     <Compile Include="Drivers\DataDriverBase.cs" />
     <Compile Include="Drivers\IDataDriver.cs" />
-    <Compile Include="Drivers\OleDbProvider.cs" />
     <Compile Include="Drivers\SqlServerDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CodeRepository.cs" />

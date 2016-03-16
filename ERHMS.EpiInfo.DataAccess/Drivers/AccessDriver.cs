@@ -6,10 +6,10 @@ namespace ERHMS.EpiInfo.DataAccess
 {
     public class AccessDriver : DataDriverBase
     {
-        public static AccessDriver Create(OleDbProvider provider, string dataSource, string password = null)
+        public static AccessDriver Create(string dataSource, string password = null)
         {
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
-            builder.Provider = provider.GetName();
+            builder.Provider = "Microsoft.Jet.OLEDB.4.0";
             builder.DataSource = dataSource;
             if (password != null)
             {
