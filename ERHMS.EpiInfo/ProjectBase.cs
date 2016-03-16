@@ -23,15 +23,15 @@ namespace ERHMS.EpiInfo
 
         private void InitializeCollectedData()
         {
-            DbConnectionStringBuilder connectionStringBuilder = new DbConnectionStringBuilder
+            DbConnectionStringBuilder builder = new DbConnectionStringBuilder
             {
                 ConnectionString = CollectedDataConnectionString
             };
-            Log.Current.DebugFormat("Opening project: {0}", string.Join(", ", connectionStringBuilder
+            Log.Current.DebugFormat("Opening project: {0}", string.Join(", ", builder
                 .Cast<KeyValuePair<string, object>>()
-                .Where(connectionProperty => !connectionProperty.Key.ToLower().Contains("password"))
-                .Select(connectionProperty => string.Format("{0} = {1}", connectionProperty.Key, connectionProperty.Value))));
-            CollectedDataDbInfo.DBCnnStringBuilder = connectionStringBuilder;
+                .Where(property => !property.Key.ToLower().Contains("password"))
+                .Select(property => string.Format("{0} = {1}", property.Key, property.Value))));
+            CollectedDataDbInfo.DBCnnStringBuilder = builder;
             CollectedData.Initialize(CollectedDataDbInfo, CollectedDataDriver, false);
         }
 
