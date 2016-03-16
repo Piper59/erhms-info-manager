@@ -1,3 +1,4 @@
+﻿using ADOX;
 using System.Data.OleDb;
 using System.IO;
 
@@ -28,6 +29,17 @@ namespace ERHMS.EpiInfo.DataAccess
         public override string GetParameterName(int index)
         {
             return "?";
+        }
+
+        public override bool DatabaseExists()
+        {
+            return File.Exists(builder.DataSource);
+        }
+
+        public override void CreateDatabase()
+        {
+            Catalog catalog = new Catalog();
+            catalog.Create(builder.ConnectionString);
         }
     }
 }
