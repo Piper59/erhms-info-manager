@@ -2,6 +2,7 @@
 using ERHMS.EpiInfo.Domain;
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Windows;
 
@@ -9,6 +10,45 @@ namespace ERHMS.Sandbox
 {
     public partial class MainWindow : Window
     {
+        private class Addict : TableEntity
+        {
+            public override string Guid
+            {
+                get { throw new NotSupportedException(); }
+                set { throw new NotSupportedException(); }
+            }
+
+            public double? Clinic
+            {
+                get { return GetProperty<double?>("Clinic"); }
+                set { SetProperty("Clinic", value); }
+            }
+
+            public double? Status
+            {
+                get { return GetProperty<double?>("Status"); }
+                set { SetProperty("Status", value); }
+            }
+
+            public double? SurvivalTimeInDays
+            {
+                get { return GetProperty<double?>("Survival_Time_Days"); }
+                set { SetProperty("Survival_Time_Days", value); }
+            }
+
+            public double? PrisonRecord
+            {
+                get { return GetProperty<double?>("Prison_Record"); }
+                set { SetProperty("Prison_Record", value); }
+            }
+
+            public double? MethadoneDoseInMgPerDay
+            {
+                get { return GetProperty<double?>("Methadone_dose__mg_day_"); }
+                set { SetProperty("Methadone_dose__mg_day_", value); }
+            }
+        }
+
         private class Surveillance : ViewEntity
         {
             public string FirstName
@@ -49,6 +89,8 @@ namespace ERHMS.Sandbox
         }
 
         private IDataDriver driver;
+        private CodeRepository sexes;
+        private TableRepository<Addict> addicts;
         private ViewRepository<Surveillance> surveillances;
 
         public MainWindow()
@@ -63,6 +105,8 @@ namespace ERHMS.Sandbox
             if (dialog.ShowDialog().GetValueOrDefault())
             {
                 driver = AccessDriver.Create(dialog.FileName);
+                sexes = new CodeRepository(driver, "codeSex", "Sex", false);
+                addicts = new TableRepository<Addict>(driver, "Addicts");
                 surveillances = new ViewRepository<Surveillance>(driver, "Surveillance");
             }
         }
@@ -72,9 +116,24 @@ namespace ERHMS.Sandbox
             Close();
         }
 
+        private IEnumerable GetDataSource(string tableName)
+        {
+            switch (tableName)
+            {
+                case "codeSex":
+                    return sexes.Select();
+                case "Addicts":
+                    return addicts.Select();
+                case "Surveillance":
+                    return surveillances.Select();
+                default:
+                    return null;
+            }
+        }
+
         private void Select_Click(object sender, RoutedEventArgs e)
         {
-            Data.ItemsSource = surveillances.Select();
+            Data.ItemsSource = GetDataSource((string)TableName.SelectedValue);
         }
 
         private void Insert_Click(object sender, RoutedEventArgs e)

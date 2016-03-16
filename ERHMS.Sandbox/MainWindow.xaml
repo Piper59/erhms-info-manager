@@ -14,6 +14,11 @@
                 <MenuItem Header="E_xit" Click="FileExit_Click" />
             </MenuItem>
         </Menu>
+        <ComboBox Name="TableName" DockPanel.Dock="Top" SelectedValuePath="Content">
+            <ComboBoxItem>codeSex</ComboBoxItem>
+            <ComboBoxItem>Addicts</ComboBoxItem>
+            <ComboBoxItem>Surveillance</ComboBoxItem>
+        </ComboBox>
         <WrapPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
             <Button Click="Select_Click">Select</Button>
             <Button Click="Insert_Click">Insert</Button>
