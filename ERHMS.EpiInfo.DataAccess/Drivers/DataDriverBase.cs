@@ -20,7 +20,7 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 connectionStringBuilder[connectionProperty.Key] = connectionProperty.Value;
             }
-            Project = new InMemoryProject(connectionStringBuilder.ConnectionString, provider.GetEpiInfoName());
+            Project = new InMemoryProject(provider.GetEpiInfoName(), connectionStringBuilder.ConnectionString);
         }
 
         public string Escape(string identifier)

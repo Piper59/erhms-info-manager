@@ -59,7 +59,9 @@
     <Compile Include="InMemoryProject.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="ProjectBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TemporaryProject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
