@@ -13,6 +13,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public CodeRepository(IDataDriver driver, string tableName, string columnName, bool sorted)
             : base(driver)
         {
+            Log.Current.DebugFormat("Creating code repository: {0}", tableName);
             TableName = tableName;
             ColumnName = columnName;
             Sorted = sorted;

@@ -1,9 +1,11 @@
-﻿namespace ERHMS.EpiInfo
+﻿using System.Data.Common;
+
+namespace ERHMS.EpiInfo
 {
     public class InMemoryProject : ProjectBase
     {
-        public InMemoryProject(string driver, string connectionString)
-            : base(driver, connectionString)
+        public InMemoryProject(string driver, DbConnectionStringBuilder builder)
+            : base(driver, builder)
         { }
 
         public override void Save() { }

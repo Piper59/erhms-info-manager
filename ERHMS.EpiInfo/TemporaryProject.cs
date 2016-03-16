@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Data.Common;
 using System.IO;
 
 namespace ERHMS.EpiInfo
 {
     public class TemporaryProject : ProjectBase
     {
-        public TemporaryProject(string name, string location, string driver, string connectionString)
-            : base(driver, connectionString)
+        public TemporaryProject(string name, string location, string driver, DbConnectionStringBuilder builder)
+            : base(driver, builder)
         {
             Name = name;
             Location = location;

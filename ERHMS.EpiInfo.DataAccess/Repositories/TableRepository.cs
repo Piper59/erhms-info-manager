@@ -14,6 +14,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public TableRepository(IDataDriver driver, string tableName)
             : base(driver)
         {
+            Log.Current.DebugFormat("Creating table repository: {0}", tableName);
             TableName = tableName;
             Schema = GetSchema(tableName);
         }

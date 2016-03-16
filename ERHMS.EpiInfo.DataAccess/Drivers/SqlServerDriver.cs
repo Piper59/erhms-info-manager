@@ -30,26 +30,29 @@ namespace ERHMS.EpiInfo.DataAccess
         private SqlConnectionStringBuilder builder;
 
         private SqlServerDriver(SqlConnectionStringBuilder builder)
-            : base(DataProvider.SqlServer, builder.ConnectionString)
+            : base(DataProvider.SqlServer, builder)
         {
             this.builder = builder;
         }
 
         public override string GetParameterName(int index)
         {
-            return string.Format("@P{0}", index);
+            return string.Format("@p{0}", index);
         }
 
         private SqlConnection GetMasterConnection()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(this.builder.ConnectionString);
             builder.InitialCatalog = "master";
-            return new SqlConnection(builder.ConnectionString);
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            connection.Open();
+            return connection;
         }
 
         public override bool DatabaseExists()
         {
             string sql = "SELECT 1 FROM sys.databases WHERE name = @name";
+            Log.Current.DebugFormat("Executing SQL: {0}", sql);
             using (SqlConnection connection = GetMasterConnection())
             using (SqlCommand command = new SqlCommand(sql, connection))
             {
@@ -61,6 +64,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public override void CreateDatabase()
         {
             string sql = string.Format("CREATE DATABASE {0}", Escape(builder.InitialCatalog));
+            Log.Current.DebugFormat("Executing SQL: {0}", sql);
             using (SqlConnection connection = GetMasterConnection())
             using (SqlCommand command = new SqlCommand(sql, connection))
             {

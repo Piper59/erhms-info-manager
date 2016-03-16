@@ -19,6 +19,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public ViewRepository(IDataDriver driver, string viewName)
             : base(driver)
         {
+            Log.Current.DebugFormat("Creating view repository: {0}", viewName);
             View = Project.Views[viewName];
             BaseSchema = GetSchema(View.TableName);
             PageSchemas = new DataSet();

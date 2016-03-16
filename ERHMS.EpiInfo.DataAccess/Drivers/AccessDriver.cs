@@ -1,4 +1,5 @@
 ﻿using ADOX;
+using ERHMS.Utility;
 using System.Data.OleDb;
 using System.IO;
 
@@ -21,7 +22,7 @@ namespace ERHMS.EpiInfo.DataAccess
         private OleDbConnectionStringBuilder builder;
 
         private AccessDriver(OleDbConnectionStringBuilder builder)
-            : base(DataProvider.Access, builder.ConnectionString)
+            : base(DataProvider.Access, builder)
         {
             this.builder = builder;
             Project.Name = Path.GetFileNameWithoutExtension(builder.DataSource);
@@ -40,6 +41,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public override void CreateDatabase()
         {
+            Log.Current.DebugFormat("Creating Access database: {0}", builder.ToSafeString());
             Catalog catalog = new Catalog();
             catalog.Create(builder.ConnectionString);
         }

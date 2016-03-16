@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -12,11 +13,12 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public Project Project { get; private set; }
 
-        protected DataDriverBase(DataProvider provider, string connectionString)
+        protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder)
         {
+            Log.Current.DebugFormat("Creating data driver: {0}", builder.ToSafeString());
             factory = DbProviderFactories.GetFactory(provider.GetInvariantName());
-            this.connectionString = connectionString;
-            Project = new InMemoryProject(provider.GetEpiInfoName(), connectionString);
+            connectionString = builder.ConnectionString;
+            Project = new InMemoryProject(provider.GetEpiInfoName(), builder);
         }
 
         public string Escape(string identifier)
