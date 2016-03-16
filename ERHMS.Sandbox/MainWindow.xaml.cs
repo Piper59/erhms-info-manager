@@ -62,7 +62,7 @@ namespace ERHMS.Sandbox
             dialog.Filter = "Epi Info 7 Sample Database (Sample.mdb)|Sample.mdb";
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                driver = AccessDriver.Create(dialog.FileName);
+                driver = AccessDriver.Create(OleDbProvider.Jet, dialog.FileName);
                 surveillances = new ViewRepository<Surveillance>(driver, "Surveillance");
             }
         }

@@ -1,37 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System.Data.SqlClient;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
     public class SqlServerDriver : DataDriverBase
     {
-        public static SqlServerDriver Create(string server, string database, string userId = null, string password = null)
+        public static SqlServerDriver Create(string dataSource, string initialCatalog, string userId = null, string password = null)
         {
-            IDictionary<string, object> connectionProperties = new Dictionary<string, object>
-            {
-                { "Server", server },
-                { "Database", database }
-            };
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = dataSource;
+            builder.InitialCatalog = initialCatalog;
             if (userId == null && password == null)
             {
-                connectionProperties["Integrated Security"] = "true";
+                builder.IntegratedSecurity = true;
             }
             else
             {
                 if (userId != null)
                 {
-                    connectionProperties["User ID"] = userId;
+                    builder.UserID = userId;
                 }
                 if (password != null)
                 {
-                    connectionProperties["Password"] = password;
+                    builder.Password = password;
                 }
             }
-            return new SqlServerDriver(connectionProperties);
+            return new SqlServerDriver(builder);
         }
 
-        private SqlServerDriver(IDictionary<string, object> connectionProperties)
-            : base(DataProvider.SqlServer, connectionProperties)
-        { }
+        private SqlConnectionStringBuilder builder;
+
+        private SqlServerDriver(SqlConnectionStringBuilder builder)
+            : base(DataProvider.SqlServer, builder.ConnectionString)
+        {
+            this.builder = builder;
+        }
 
         public override string GetParameterName(int index)
         {

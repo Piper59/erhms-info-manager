@@ -1,33 +1,29 @@
-﻿using System.Collections.Generic;
+using System.Data.OleDb;
 using System.IO;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
     public class AccessDriver : DataDriverBase
     {
-        private static readonly IDictionary<string, string> Providers = new Dictionary<string, string>
+        public static AccessDriver Create(OleDbProvider provider, string dataSource, string password = null)
         {
-            { ".mdb", "Microsoft.Jet.OLEDB.4.0" },
-            { ".accdb", "Microsoft.ACE.OLEDB.12.0" }
-        };
-
-        public static AccessDriver Create(string dataSource, string password = null)
-        {
-            IDictionary<string, object> connectionProperties = new Dictionary<string, object>
-            {
-                { "Provider", Providers[Path.GetExtension(dataSource).ToLower()] },
-                { "Data Source", dataSource }
-            };
+            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
+            builder.Provider = provider.GetName();
+            builder.DataSource = dataSource;
             if (password != null)
             {
-                connectionProperties["Jet OLEDB:Database Password"] = password;
+                builder["Jet OLEDB:Database Password"] = password;
             }
-            return new AccessDriver(connectionProperties);
+            return new AccessDriver(builder);
         }
 
-        private AccessDriver(IDictionary<string, object> connectionProperties)
-            : base(DataProvider.Access, connectionProperties)
-        { }
+        private OleDbConnectionStringBuilder builder;
+
+        private AccessDriver(OleDbConnectionStringBuilder builder)
+            : base(DataProvider.Access, builder.ConnectionString)
+        {
+            this.builder = builder;
+        }
 
         public override string GetParameterName(int index)
         {

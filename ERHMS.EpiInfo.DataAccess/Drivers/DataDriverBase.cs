@@ -8,19 +8,15 @@ namespace ERHMS.EpiInfo.DataAccess
     public abstract class DataDriverBase : IDataDriver
     {
         private DbProviderFactory factory;
-        private DbConnectionStringBuilder connectionStringBuilder;
+        private string connectionString;
 
         public Project Project { get; private set; }
 
-        protected DataDriverBase(DataProvider provider, IDictionary<string, object> connectionProperties)
+        protected DataDriverBase(DataProvider provider, string connectionString)
         {
             factory = DbProviderFactories.GetFactory(provider.GetInvariantName());
-            connectionStringBuilder = factory.CreateConnectionStringBuilder();
-            foreach (KeyValuePair<string, object> connectionProperty in connectionProperties)
-            {
-                connectionStringBuilder[connectionProperty.Key] = connectionProperty.Value;
-            }
-            Project = new InMemoryProject(provider.GetEpiInfoName(), connectionStringBuilder.ConnectionString);
+            this.connectionString = connectionString;
+            Project = new InMemoryProject(provider.GetEpiInfoName(), connectionString);
         }
 
         public string Escape(string identifier)
@@ -33,7 +29,7 @@ namespace ERHMS.EpiInfo.DataAccess
         private DbConnection GetConnection()
         {
             DbConnection connection = factory.CreateConnection();
-            connection.ConnectionString = connectionStringBuilder.ConnectionString;
+            connection.ConnectionString = connectionString;
             connection.Open();
             return connection;
         }
