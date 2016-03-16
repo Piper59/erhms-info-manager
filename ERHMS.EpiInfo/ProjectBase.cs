@@ -17,22 +17,22 @@ namespace ERHMS.EpiInfo
         {
             CollectedDataDriver = driver;
             CollectedDataConnectionString = connectionString;
-            InitializeCollectedData();
+            InitializeCollectedData(driver, connectionString);
             InitializeMetadata();
         }
 
-        private void InitializeCollectedData()
+        private void InitializeCollectedData(string driver, string connectionString)
         {
             DbConnectionStringBuilder builder = new DbConnectionStringBuilder
             {
-                ConnectionString = CollectedDataConnectionString
+                ConnectionString = connectionString
             };
             Log.Current.DebugFormat("Opening project: {0}", string.Join(", ", builder
                 .Cast<KeyValuePair<string, object>>()
                 .Where(property => !property.Key.ToLower().Contains("password"))
                 .Select(property => string.Format("{0} = {1}", property.Key, property.Value))));
             CollectedDataDbInfo.DBCnnStringBuilder = builder;
-            CollectedData.Initialize(CollectedDataDbInfo, CollectedDataDriver, false);
+            CollectedData.Initialize(CollectedDataDbInfo, driver, false);
         }
 
         private void InitializeMetadata()
