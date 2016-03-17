@@ -3,6 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5347F15F-DD38-474A-A8F4-D1EC7D91EB94}"
+	ProjectSection(SolutionItems) = preProject
+		EpiInfo.targets = EpiInfo.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Epi Info", "Epi Info", "{1EC6CC07-F180-413C-B171-0EE16DD7E785}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Utility", "ERHMS.Utility\ERHMS.Utility.csproj", "{F8E50F50-057D-4666-9555-16A773B925E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo", "ERHMS.EpiInfo\ERHMS.EpiInfo.csproj", "{3C13EECD-CAF7-4DE2-A93D-65F791318BAA}"
@@ -18,11 +25,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.DataAccess", "ERHMS.DataAccess\ERHMS.DataAccess.csproj", "{66FD6304-C5E0-4502-9EA2-DC326C470154}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Sandbox", "ERHMS.Sandbox\ERHMS.Sandbox.csproj", "{82C5A344-BE5D-4EFD-B81E-0A4144490782}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5347F15F-DD38-474A-A8F4-D1EC7D91EB94}"
-	ProjectSection(SolutionItems) = preProject
-		EpiInfo.targets = EpiInfo.targets
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,5 +67,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3C13EECD-CAF7-4DE2-A93D-65F791318BAA} = {1EC6CC07-F180-413C-B171-0EE16DD7E785}
+		{0D41B95E-CF48-40A9-B7C5-71A6E5BB9924} = {1EC6CC07-F180-413C-B171-0EE16DD7E785}
+		{AF729D69-3971-45EE-B351-1FC9BFD6ED7D} = {1EC6CC07-F180-413C-B171-0EE16DD7E785}
+		{4FEB8705-98BB-431C-9878-004B0C4D7D41} = {1EC6CC07-F180-413C-B171-0EE16DD7E785}
 	EndGlobalSection
 EndGlobal
