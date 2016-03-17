@@ -99,5 +99,14 @@ namespace ERHMS.EpiInfo
                 return false;
             }
         }
+
+        public static void CreateAndOrLoad(DirectoryInfo root)
+        {
+            if (!TryLoad(root))
+            {
+                Configuration.Save(Create(root));
+                Load(root);
+            }
+        }
     }
 }

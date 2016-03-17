@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.EpiInfo;
+﻿using ERHMS.EpiInfo;
 using System;
 using System.IO;
 using System.Reflection;
@@ -42,11 +41,7 @@ namespace ERHMS.Sandbox
             Log.Current.Debug("Starting up");
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             DirectoryInfo root = new DirectoryInfo(Path.Combine(desktopPath, Name));
-            if (!ConfigurationExtensions.TryLoad(root))
-            {
-                Epi.Configuration.Save(ConfigurationExtensions.Create(root));
-                ConfigurationExtensions.Load(root);
-            }
+            ConfigurationExtensions.CreateAndOrLoad(root);
             service = new Service();
             service.SayingHello += (sender, _e) =>
             {
