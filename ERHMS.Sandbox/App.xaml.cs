@@ -44,7 +44,7 @@ namespace ERHMS.Sandbox
             DirectoryInfo root = new DirectoryInfo(Path.Combine(desktopPath, Name));
             if (!ConfigurationExtensions.TryLoad(root))
             {
-                Configuration.Save(ConfigurationExtensions.Create(root));
+                Epi.Configuration.Save(ConfigurationExtensions.Create(root));
                 ConfigurationExtensions.Load(root);
             }
             service = new Service();

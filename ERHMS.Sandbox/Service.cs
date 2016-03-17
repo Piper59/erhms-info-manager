@@ -37,8 +37,7 @@ namespace ERHMS.Sandbox
 
         public ServiceHost OpenHost()
         {
-            Uri address = new Uri(string.Format("net.pipe://localhost/{0}", App.Name));
-            ServiceHost host = new ServiceHost(this, address);
+            ServiceHost host = new ServiceHost(this, new Uri(Configuration.ServiceAddress));
 #if DEBUG
             host.Description.Behaviors.Add(new ServiceMetadataBehavior());
             host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), "mex");
