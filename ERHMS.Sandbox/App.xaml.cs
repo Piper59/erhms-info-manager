@@ -27,8 +27,8 @@ namespace ERHMS.Sandbox
                     return;
                 }
                 App app = new App();
-                MainWindow window = new MainWindow();
-                app.Run(window);
+                app.InitializeComponent();
+                app.Run(new MainWindow());
             }
         }
 
