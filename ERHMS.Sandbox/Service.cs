@@ -1,4 +1,5 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.Sandbox.Properties;
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
@@ -37,7 +38,7 @@ namespace ERHMS.Sandbox
 
         public ServiceHost OpenHost()
         {
-            ServiceHost host = new ServiceHost(this, new Uri(Configuration.ServiceAddress));
+            ServiceHost host = new ServiceHost(this, new Uri(Settings.Default.ServiceAddress));
 #if DEBUG
             host.Description.Behaviors.Add(new ServiceMetadataBehavior());
             host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), "mex");
