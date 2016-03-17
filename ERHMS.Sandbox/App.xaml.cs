@@ -33,7 +33,8 @@ namespace ERHMS.Sandbox
             }
         }
 
-        private ServiceHost host;
+        private Service service;
+        private ServiceHost host = null;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -46,14 +47,25 @@ namespace ERHMS.Sandbox
                 Configuration.Save(ConfigurationExtensions.Create(root));
                 ConfigurationExtensions.Load(root);
             }
-            host = new ServiceHost(typeof(Service));
-            host.Open();
+            service = new Service();
+            service.SayingHello += (sender, _e) =>
+            {
+                MessageBox.Show(string.Format("Hello, {0}", _e.Name));
+            };
+            try
+            {
+                host = service.OpenHost();
+            }
+            catch { }
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             Log.Current.Debug("Exiting");
-            host.Close();
+            if (host != null)
+            {
+                host.Close();
+            }
             base.OnExit(e);
         }
     }
