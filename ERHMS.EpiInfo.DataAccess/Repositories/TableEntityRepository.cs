@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public class TableRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : TableEntity, new()
+    public class TableEntityRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : TableEntity, new()
     {
         protected DataTable Schema { get; private set; }
         public string TableName { get; private set; }
 
-        public TableRepository(IDataDriver driver, string tableName)
+        public TableEntityRepository(IDataDriver driver, string tableName)
             : base(driver)
         {
             Log.Current.DebugFormat("Creating table repository: {0}", tableName);

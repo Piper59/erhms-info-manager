@@ -89,8 +89,8 @@
     <Compile Include="Repositories\CodeRepository.cs" />
     <Compile Include="Repositories\EntityRepositoryBase.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
-    <Compile Include="Repositories\TableRepository.cs" />
-    <Compile Include="Repositories\ViewRepository.cs" />
+    <Compile Include="Repositories\TableEntityRepository.cs" />
+    <Compile Include="Repositories\ViewEntityRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

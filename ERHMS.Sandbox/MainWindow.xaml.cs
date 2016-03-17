@@ -90,8 +90,8 @@ namespace ERHMS.Sandbox
 
         private IDataDriver driver;
         private CodeRepository sexes;
-        private TableRepository<Addict> addicts;
-        private ViewRepository<Surveillance> surveillances;
+        private TableEntityRepository<Addict> addicts;
+        private ViewEntityRepository<Surveillance> surveillances;
 
         public MainWindow()
         {
@@ -106,8 +106,8 @@ namespace ERHMS.Sandbox
             {
                 driver = AccessDriver.Create(dialog.FileName);
                 sexes = new CodeRepository(driver, "codeSex", "Sex", false);
-                addicts = new TableRepository<Addict>(driver, "Addicts");
-                surveillances = new ViewRepository<Surveillance>(driver, "Surveillance");
+                addicts = new TableEntityRepository<Addict>(driver, "Addicts");
+                surveillances = new ViewEntityRepository<Surveillance>(driver, "Surveillance");
             }
         }
 

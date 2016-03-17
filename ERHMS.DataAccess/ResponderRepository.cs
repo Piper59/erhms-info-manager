@@ -3,7 +3,7 @@ using ERHMS.EpiInfo.DataAccess;
 
 namespace ERHMS.DataAccess
 {
-    public class ResponderRepository : ViewRepository<Responder>
+    public class ResponderRepository : ViewEntityRepository<Responder>
     {
         public ResponderRepository(IDataDriver driver)
             : base(driver, "Responders")

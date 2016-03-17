@@ -10,13 +10,13 @@ using System.Text;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public class ViewRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : ViewEntity, new()
+    public class ViewEntityRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : ViewEntity, new()
     {
         protected DataTable BaseSchema { get; private set; }
         protected DataSet PageSchemas { get; private set; }
         public View View { get; private set; }
 
-        public ViewRepository(IDataDriver driver, string viewName)
+        public ViewEntityRepository(IDataDriver driver, string viewName)
             : base(driver)
         {
             Log.Current.DebugFormat("Creating view repository: {0}", viewName);

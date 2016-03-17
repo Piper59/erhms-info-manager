@@ -1,6 +1,4 @@
-﻿using Epi;
-
-namespace ERHMS.EpiInfo.DataAccess
+﻿namespace ERHMS.EpiInfo.DataAccess
 {
     public class RepositoryBase
     {

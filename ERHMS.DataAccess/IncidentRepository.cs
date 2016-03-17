@@ -3,7 +3,7 @@ using ERHMS.EpiInfo.DataAccess;
 
 namespace ERHMS.DataAccess
 {
-    public class IncidentRepository : TableRepository<Incident>
+    public class IncidentRepository : TableEntityRepository<Incident>
     {
         public IncidentRepository(IDataDriver driver)
             : base(driver, "ERHMS_Incidents")
