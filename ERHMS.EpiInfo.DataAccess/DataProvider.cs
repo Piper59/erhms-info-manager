@@ -1,6 +1,5 @@
 ﻿using Epi;
 using System;
-using System.ComponentModel;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
@@ -21,7 +20,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 case DataProvider.SqlServer:
                     return "System.Data.SqlClient";
                 default:
-                    throw new InvalidEnumArgumentException("this", Convert.ToInt32(@this), typeof(DataProvider));
+                    throw new NotSupportedException();
             }
         }
 
@@ -34,7 +33,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 case DataProvider.SqlServer:
                     return Configuration.SqlDriver;
                 default:
-                    throw new InvalidEnumArgumentException("this", Convert.ToInt32(@this), typeof(DataProvider));
+                    throw new NotSupportedException();
             }
         }
     }
