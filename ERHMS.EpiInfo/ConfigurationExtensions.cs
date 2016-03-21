@@ -52,6 +52,7 @@ namespace ERHMS.EpiInfo
             directories.Templates = templateDirectory.FullName;
             templateDirectory.CreateSubdirectory("Fields");
             templateDirectory.CreateSubdirectory("Forms");
+            templateDirectory.CreateSubdirectory("Pages");
             templateDirectory.CreateSubdirectory("Projects");
             directories.Working = Path.GetTempPath();
             DirectoryInfo applicationRoot = GetApplicationRoot();

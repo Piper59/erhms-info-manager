@@ -1,6 +1,5 @@
 ﻿using Epi;
 using ERHMS.Utility;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,7 +34,7 @@ namespace ERHMS.EpiInfo
                     }
                 }
                 TemplateLevel level;
-                if (!Enum.TryParse(levelString, out level))
+                if (!TemplateLevelExtensions.TryParse(levelString, out level))
                 {
                     continue;
                 }
