@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.VisualBasic.FileIO;
+using System.IO;
 
 namespace ERHMS.Utility
 {
@@ -31,6 +32,16 @@ namespace ERHMS.Utility
                 DirectoryInfo subtarget = target.GetSubdirectory(subsource.Name);
                 Copy(subsource, subtarget);
             }
+        }
+
+        public static void Recycle(this DirectoryInfo @this)
+        {
+            FileSystem.DeleteDirectory(@this.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+        }
+
+        public static void Recycle(this FileInfo @this)
+        {
+            FileSystem.DeleteFile(@this.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
         }
     }
 }
