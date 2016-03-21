@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ERHMS.EpiInfo", "ERHMS.EpiInfo", "{1EC6CC07-F180-413C-B171-0EE16DD7E785}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Epi Info", "Epi Info", "{1EC6CC07-F180-413C-B171-0EE16DD7E785}"
 	ProjectSection(SolutionItems) = preProject
 		ERHMS.EpiInfo.targets = ERHMS.EpiInfo.targets
 	EndProjectSection
