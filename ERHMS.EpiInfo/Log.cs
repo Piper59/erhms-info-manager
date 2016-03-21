@@ -35,7 +35,7 @@ namespace ERHMS.EpiInfo
             {
                 File = Path.Combine("Logs", fileName),
                 RollingStyle = RollingFileAppender.RollingMode.Date,
-                DatePattern = ".yyyyMM",
+                DatePattern = ".yyyy-MM",
                 MaxSizeRollBackups = -1,
                 Layout = layout
             };
