@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Data;
 using ERHMS.Utility;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.IO;
@@ -34,6 +35,11 @@ namespace ERHMS.EpiInfo
         {
             string sql = "SELECT * FROM metaFields";
             return Driver.Select(Driver.CreateQuery(sql));
+        }
+
+        public IEnumerable<View> GetViews()
+        {
+            return Metadata.GetViews().Cast<View>();
         }
 
         private void DeleteField(int fieldId)

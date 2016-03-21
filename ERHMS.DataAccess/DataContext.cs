@@ -2,7 +2,6 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
-using System.Linq;
 using Project = ERHMS.EpiInfo.Project;
 using Template = ERHMS.EpiInfo.Template;
 
@@ -39,7 +38,7 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<View> GetViews()
         {
-            return Project.Metadata.GetViews().Cast<View>();
+            return Project.GetViews();
         }
 
         public IEnumerable<Template> GetTemplates(TemplateLevel? level = null)
