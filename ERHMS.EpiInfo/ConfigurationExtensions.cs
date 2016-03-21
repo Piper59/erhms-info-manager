@@ -113,5 +113,16 @@ namespace ERHMS.EpiInfo
                 Load(root);
             }
         }
+
+        public static void Refresh()
+        {
+            Configuration configuration = Configuration.GetNewInstance();
+            Load(configuration.ConfigFilePath);
+        }
+
+        public static DirectoryInfo GetRoot(this Configuration @this)
+        {
+            return new DirectoryInfo(@this.Directories.Configuration).Parent;
+        }
     }
 }
