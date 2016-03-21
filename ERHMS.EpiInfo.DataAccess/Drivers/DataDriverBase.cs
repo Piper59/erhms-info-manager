@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.IO;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
@@ -12,12 +13,12 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public Project Project { get; private set; }
 
-        protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder)
+        protected DataDriverBase(string name, DirectoryInfo location, DataProvider provider, DbConnectionStringBuilder builder)
         {
             Log.Current.DebugFormat("Creating data driver: {0}, {1}", provider.GetInvariantName(), builder.ToSafeString());
             factory = DbProviderFactories.GetFactory(provider.GetInvariantName());
             connectionString = builder.ConnectionString;
-            Project = new InMemoryProject(provider.GetEpiInfoName(), builder);
+            Project = new InMemoryProject(name, location, provider.GetEpiInfoName(), builder);
         }
 
         public string Escape(string identifier)

@@ -9,6 +9,8 @@ namespace ERHMS.EpiInfo.DataAccess
     {
         public static AccessDriver Create(string dataSource, string password = null)
         {
+            string name = Path.GetFileNameWithoutExtension(dataSource);
+            DirectoryInfo location = new DirectoryInfo(Path.GetDirectoryName(dataSource));
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
             builder.Provider = "Microsoft.Jet.OLEDB.4.0";
             builder.DataSource = dataSource;
@@ -16,17 +18,15 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 builder["Jet OLEDB:Database Password"] = password;
             }
-            return new AccessDriver(builder);
+            return new AccessDriver(name, location, builder);
         }
 
         private OleDbConnectionStringBuilder builder;
 
-        private AccessDriver(OleDbConnectionStringBuilder builder)
-            : base(DataProvider.Access, builder)
+        private AccessDriver(string name, DirectoryInfo location, OleDbConnectionStringBuilder builder)
+            : base(name, location, DataProvider.Access, builder)
         {
             this.builder = builder;
-            Project.Name = Path.GetFileNameWithoutExtension(builder.DataSource);
-            Project.Location = Path.GetDirectoryName(builder.DataSource);
         }
 
         public override string GetParameterName(int index)

@@ -1,10 +1,11 @@
 ﻿using System.Data.SqlClient;
+using System.IO;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
     public class SqlServerDriver : DataDriverBase
     {
-        public static SqlServerDriver Create(string dataSource, string initialCatalog, string userId = null, string password = null)
+        public static SqlServerDriver Create(DirectoryInfo location, string dataSource, string initialCatalog, string userId = null, string password = null)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
             builder.DataSource = dataSource;
@@ -24,13 +25,13 @@ namespace ERHMS.EpiInfo.DataAccess
                     builder.Password = password;
                 }
             }
-            return new SqlServerDriver(builder);
+            return new SqlServerDriver(initialCatalog, location, builder);
         }
 
         private SqlConnectionStringBuilder builder;
 
-        private SqlServerDriver(SqlConnectionStringBuilder builder)
-            : base(DataProvider.SqlServer, builder)
+        private SqlServerDriver(string name, DirectoryInfo location, SqlConnectionStringBuilder builder)
+            : base(name, location, DataProvider.SqlServer, builder)
         {
             this.builder = builder;
         }
