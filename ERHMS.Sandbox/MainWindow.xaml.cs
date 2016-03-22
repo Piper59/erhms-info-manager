@@ -146,7 +146,7 @@ namespace ERHMS.Sandbox
             surveillance.Week = new Random().Next(1, 52);
             surveillance.Pregnant = false;
             surveillances.Save(surveillance);
-            MessageBox.Show(surveillance.UniqueKey.ToString());
+            MessageBox.Show(surveillance.UniqueKey.ToString(), Title);
         }
 
         private Surveillance GetSurveillanceByName(string firstName, string lastName)

@@ -1,9 +1,9 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.Utility;
 using System;
 using System.IO;
 using System.Reflection;
 using System.ServiceModel;
-using System.Threading;
 using System.Windows;
 
 namespace ERHMS.Sandbox
@@ -15,20 +15,26 @@ namespace ERHMS.Sandbox
             get { return Assembly.GetExecutingAssembly().GetName().Name; }
         }
 
+        public static string Title
+        {
+            get { return "ERHMS Info Manager"; }
+        }
+
         [STAThread]
         public static void Main(string[] args)
         {
-            bool created;
-            using (Mutex mutex = new Mutex(true, string.Format("Global\\{0}", Name), out created))
+            try
             {
-                if (!created)
+                new SingleInstanceApplication(() =>
                 {
-                    MessageBox.Show("An instance of this application is already running.");
-                    return;
-                }
-                App app = new App();
-                app.InitializeComponent();
-                app.Run(new MainWindow());
+                    App app = new App();
+                    app.InitializeComponent();
+                    app.Run(new MainWindow());
+                }).Execute();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(string.Format("An instance of {0} is already running.", Title), Title);
             }
         }
 
@@ -45,7 +51,7 @@ namespace ERHMS.Sandbox
             service = new Service();
             service.SayingHello += (sender, _e) =>
             {
-                MessageBox.Show(string.Format("Hello, {0}", _e.Name));
+                MessageBox.Show(string.Format("Hello, {0}", _e.Name), Title);
             };
             try
             {
