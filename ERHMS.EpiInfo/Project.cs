@@ -11,6 +11,16 @@ namespace ERHMS.EpiInfo
 {
     public class Project : Epi.Project
     {
+        public new const string FileExtension = ".prj";
+
+        public static IEnumerable<FileInfo> GetAll()
+        {
+            Configuration configuration = Configuration.GetNewInstance();
+            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Project);
+            string pattern = string.Format("*{0}", FileExtension);
+            return directory.EnumerateFiles(pattern, SearchOption.AllDirectories);
+        }
+
         public new DirectoryInfo Location { get; private set; }
 
         public IDbDriver Driver
