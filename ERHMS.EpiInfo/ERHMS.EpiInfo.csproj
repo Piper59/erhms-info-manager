@@ -30,8 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Enter">
+      <HintPath>..\Epi Info 7\Enter.exe</HintPath>
+    </Reference>
     <Reference Include="Epi.Core">
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Epi.ImportExport">
+      <HintPath>..\Epi Info 7\Epi.ImportExport.dll</HintPath>
+    </Reference>
+    <Reference Include="Epi.Windows.ImportExport">
+      <HintPath>..\Epi Info 7\Epi.Windows.ImportExport.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
@@ -42,6 +51,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -59,6 +69,7 @@
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="Modules\ImportExport.cs" />
     <Compile Include="Pgm.cs" />
     <Compile Include="PgmSource.cs" />
     <Compile Include="Project.cs" />
