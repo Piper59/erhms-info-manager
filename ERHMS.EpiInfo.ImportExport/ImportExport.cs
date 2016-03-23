@@ -2,9 +2,9 @@
 using Epi.Enter.Forms;
 using Epi.Windows.ImportExport.Dialogs;
 
-namespace ERHMS.EpiInfo.Modules
+namespace ERHMS.EpiInfo.ImportExport
 {
-    public static class ImportExport
+    public class ImportExport
     {
         public static void ImportFromView(View view)
         {
