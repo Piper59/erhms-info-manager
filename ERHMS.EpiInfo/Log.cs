@@ -7,6 +7,7 @@ using log4net.Repository.Hierarchy;
 using System;
 using System.IO;
 using System.Reflection;
+using Settings = ERHMS.Utility.Properties.Settings;
 
 namespace ERHMS.EpiInfo
 {
@@ -42,13 +43,26 @@ namespace ERHMS.EpiInfo
             appender.ActivateOptions();
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             hierarchy.Root.AddAppender(appender);
-#if DEBUG
-            hierarchy.Root.Level = Level.Debug;
-#else
-            hierarchy.Root.Level = Level.Warn;
-#endif
+            hierarchy.Root.Level = GetInitialLevel(hierarchy.LevelMap);
             hierarchy.Configured = true;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private static Level GetInitialLevel(LevelMap map)
+        {
+            Level level = map[Settings.Default.LogLevel];
+            if (level == null)
+            {
+#if DEBUG
+                return Level.Debug;
+#else
+                return Level.Warn;
+#endif
+            }
+            else
+            {
+                return level;
+            }
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
