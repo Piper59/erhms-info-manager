@@ -7,7 +7,7 @@ using log4net.Repository.Hierarchy;
 using System;
 using System.IO;
 using System.Reflection;
-using Settings = ERHMS.Utility.Properties.Settings;
+using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo
 {

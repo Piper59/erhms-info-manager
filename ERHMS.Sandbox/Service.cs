@@ -1,5 +1,5 @@
 ﻿using ERHMS.EpiInfo;
-using ERHMS.Utility.Properties;
+using ERHMS.Utility;
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ERHMS.Utility.Properties {
+namespace ERHMS.Utility {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -41,6 +41,18 @@ namespace ERHMS.Utility.Properties {
             }
             set {
                 this["LogLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%USERPROFILE%\\Desktop\\ERHMS Info Manager")]
+        public string RootDirectory {
+            get {
+                return ((string)(this["RootDirectory"]));
+            }
+            set {
+                this["RootDirectory"] = value;
             }
         }
     }

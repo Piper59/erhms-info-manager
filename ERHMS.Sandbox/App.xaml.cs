@@ -45,8 +45,7 @@ namespace ERHMS.Sandbox
         {
             base.OnStartup(e);
             Log.Current.Debug("Starting up");
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            DirectoryInfo root = new DirectoryInfo(Path.Combine(desktopPath, Name));
+            DirectoryInfo root = new DirectoryInfo(Environment.ExpandEnvironmentVariables(Settings.Default.RootDirectory));
             ConfigurationExtensions.CreateAndOrLoad(root);
             service = new Service();
             service.SayingHello += (sender, _e) =>
