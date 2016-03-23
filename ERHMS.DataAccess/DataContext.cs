@@ -9,12 +9,8 @@ namespace ERHMS.DataAccess
 {
     public class DataContext
     {
+        public Project Project { get; private set; }
         public IDataDriver Driver { get; private set; }
-
-        public Project Project
-        {
-            get { return Driver.Project; }
-        }
 
         public CodeRepository Prefixes { get; private set; }
         public CodeRepository Suffixes { get; private set; }
@@ -24,16 +20,17 @@ namespace ERHMS.DataAccess
         public IncidentRepository Incidents { get; private set; }
         public LocationRepository Locations { get; private set; }
 
-        public DataContext(IDataDriver driver)
+        public DataContext(Project project)
         {
-            Driver = driver;
-            Prefixes = new CodeRepository(driver, "codeprefix1", "prefix", false);
-            Suffixes = new CodeRepository(driver, "codesuffix1", "suffix", false);
-            Genders = new CodeRepository(driver, "codegender1", "gender", false);
-            States = new CodeRepository(driver, "codestate1", "state", true);
-            Responders = new ResponderRepository(driver);
-            Incidents = new IncidentRepository(driver);
-            Locations = new LocationRepository(driver);
+            Project = project;
+            Driver = DataDriverFactory.CreateDataDriver(project);
+            Prefixes = new CodeRepository(Driver, "codeprefix1", "prefix", false);
+            Suffixes = new CodeRepository(Driver, "codesuffix1", "suffix", false);
+            Genders = new CodeRepository(Driver, "codegender1", "gender", false);
+            States = new CodeRepository(Driver, "codestate1", "state", true);
+            Responders = new ResponderRepository(Driver, project);
+            Incidents = new IncidentRepository(Driver);
+            Locations = new LocationRepository(Driver);
         }
 
         public IEnumerable<View> GetViews()

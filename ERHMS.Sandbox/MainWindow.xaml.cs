@@ -1,8 +1,10 @@
-﻿using ERHMS.EpiInfo.DataAccess;
+﻿using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using Microsoft.Win32;
 using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
 using System.Windows;
 
@@ -88,6 +90,7 @@ namespace ERHMS.Sandbox
             }
         }
 
+        private Project project;
         private IDataDriver driver;
         private CodeRepository sexes;
         private TableEntityRepository<Addict> addicts;
@@ -101,13 +104,14 @@ namespace ERHMS.Sandbox
         private void FileOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Epi Info 7 Sample Database (Sample.mdb)|Sample.mdb";
+            dialog.Filter = "Epi Info 7 Sample Project (Sample.prj)|Sample.prj";
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                driver = AccessDriver.Create(dialog.FileName);
+                project = new Project(new FileInfo(dialog.FileName));
+                driver = DataDriverFactory.CreateDataDriver(project);
                 sexes = new CodeRepository(driver, "codeSex", "Sex", false);
                 addicts = new TableEntityRepository<Addict>(driver, "Addicts");
-                surveillances = new ViewEntityRepository<Surveillance>(driver, "Surveillance");
+                surveillances = new ViewEntityRepository<Surveillance>(driver, project.Views["Surveillance"]);
             }
         }
 

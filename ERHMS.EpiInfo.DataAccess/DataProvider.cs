@@ -1,5 +1,6 @@
 ﻿using Epi;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
@@ -11,30 +12,35 @@ namespace ERHMS.EpiInfo.DataAccess
 
     public static class DataProviderExtensions
     {
-        public static string GetInvariantName(this DataProvider @this)
+        private static readonly IDictionary<DataProvider, string> InvariantNames = new Dictionary<DataProvider, string>
         {
-            switch (@this)
-            {
-                case DataProvider.Access:
-                    return "System.Data.OleDb";
-                case DataProvider.SqlServer:
-                    return "System.Data.SqlClient";
-                default:
-                    throw new NotSupportedException();
-            }
+            { DataProvider.Access, "System.Data.OleDb" },
+            { DataProvider.SqlServer, "System.Data.SqlClient" }
+        };
+        private static readonly IDictionary<DataProvider, string> EpiInfoNames = new Dictionary<DataProvider, string>
+        {
+            { DataProvider.Access, Configuration.AccessDriver },
+            { DataProvider.SqlServer, Configuration.SqlDriver }
+        };
+
+        public static string ToInvariantName(this DataProvider @this)
+        {
+            return InvariantNames.Single(pair => pair.Key == @this).Value;
         }
 
-        public static string GetEpiInfoName(this DataProvider @this)
+        public static DataProvider FromInvariantName(string invariantName)
         {
-            switch (@this)
-            {
-                case DataProvider.Access:
-                    return Configuration.AccessDriver;
-                case DataProvider.SqlServer:
-                    return Configuration.SqlDriver;
-                default:
-                    throw new NotSupportedException();
-            }
+            return InvariantNames.Single(pair => pair.Value == invariantName).Key;
+        }
+
+        public static string ToEpiInfoName(this DataProvider @this)
+        {
+            return EpiInfoNames.Single(pair => pair.Key == @this).Value;
+        }
+
+        public static DataProvider FromEpiInfoName(string epiInfoName)
+        {
+            return EpiInfoNames.Single(pair => pair.Value == epiInfoName).Key;
         }
     }
 }

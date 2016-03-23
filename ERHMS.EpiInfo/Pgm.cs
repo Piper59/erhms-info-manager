@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo
 
         public static IEnumerable<Pgm> GetByProject(Project project)
         {
-            foreach (DataRow row in project.GetPgms().Rows)
+            foreach (DataRow row in project.GetPgmsAsDataTable().Rows)
             {
                 yield return new Pgm(project, row);
             }

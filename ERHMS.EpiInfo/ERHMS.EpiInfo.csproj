@@ -57,15 +57,16 @@
     </Compile>
     <Compile Include="Canvas.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
-    <Compile Include="InMemoryProject.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Pgm.cs" />
     <Compile Include="PgmSource.cs" />
     <Compile Include="Project.cs" />
+    <Compile Include="ProjectMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="TemplateLevel.cs" />
+    <Compile Include="ViewDeleter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

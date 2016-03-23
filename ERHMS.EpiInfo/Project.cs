@@ -3,7 +3,6 @@ using Epi.Data;
 using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.IO;
 using System.Linq;
 
@@ -13,32 +12,54 @@ namespace ERHMS.EpiInfo
     {
         public new const string FileExtension = ".prj";
 
-        public static IEnumerable<FileInfo> GetAll()
+        public static Project Create(string name, string description, DirectoryInfo location, string driver, string connectionString)
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Project);
-            string pattern = string.Format("*{0}", FileExtension);
-            return directory.EnumerateFiles(pattern, SearchOption.AllDirectories);
+            string safeConnectionString = DataExtensions.ToSafeString(connectionString);
+            Log.Current.DebugFormat("Creating project: {0}, {1}, {2}, {3}", name, location.FullName, driver, safeConnectionString);
+            Project project = new Project
+            {
+                Name = name,
+                Description = description,
+                Location = location,
+                CollectedDataDriver = driver,
+                CollectedDataConnectionString = connectionString
+            };
+            project.CollectedDataDbInfo.DBCnnStringBuilder.ConnectionString = connectionString;
+            project.CollectedData.Initialize(project.CollectedDataDbInfo, driver, true);
+            project.MetadataSource = MetadataSource.SameDb;
+            project.Metadata.AttachDbDriver(project.CollectedData.GetDbDriver());
+            project.Save();
+            return project;
         }
 
-        public new DirectoryInfo Location { get; private set; }
+        public new DirectoryInfo Location
+        {
+            get { return new DirectoryInfo(base.Location); }
+            set { base.Location = value.FullName; }
+        }
+
+        public FileInfo File
+        {
+            get { return new FileInfo(FilePath); }
+        }
 
         public IDbDriver Driver
         {
             get { return CollectedData.GetDbDriver(); }
         }
 
-        public Project(string name, DirectoryInfo location, string driver, DbConnectionStringBuilder builder)
+        private Project() { }
+
+        public Project(FileInfo file)
+            : base(file.FullName)
         {
-            Log.Current.DebugFormat("Opening project: {0}, {1}, {2}, {3}", name, location.FullName, driver, builder.ToSafeString());
-            Name = name;
-            base.Location = location.FullName;
-            CollectedDataDriver = driver;
-            CollectedDataConnectionString = builder.ConnectionString;
-            CollectedDataDbInfo.DBCnnStringBuilder.ConnectionString = builder.ConnectionString;
-            CollectedData.Initialize(CollectedDataDbInfo, driver, false);
-            MetadataSource = MetadataSource.SameDb;
-            Metadata.AttachDbDriver(CollectedData.GetDbDriver());
+            Log.Current.DebugFormat("Opening project: {0}", file.FullName);
+        }
+
+        public override void Save()
+        {
+            Log.Current.DebugFormat("Saving project: {0}", File.FullName);
+            base.Save();
         }
 
         public DataTable GetFieldsAsDataTable()
@@ -52,61 +73,15 @@ namespace ERHMS.EpiInfo
             return Metadata.GetViews().Cast<View>();
         }
 
-        private void DeleteField(int fieldId)
+        public DataTable GetPgmsAsDataTable()
         {
-            string sql = "DELETE FROM metaFields WHERE FieldId = @FieldId";
-            Query query = Driver.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, fieldId));
-            Driver.ExecuteNonQuery(query);
+            return Metadata.GetPgms();
         }
 
-        private void DeleteFieldsByView(int viewId)
+        public void DeleteView(int viewId)
         {
-            string sql = "DELETE FROM metaFields WHERE ViewId = @ViewId";
-            Query query = Driver.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
-            Driver.ExecuteNonQuery(query);
-        }
-
-        private void DeletePagesByView(int viewId)
-        {
-            DeleteFieldsByView(viewId);
-            string sql = "DELETE FROM metaPages WHERE ViewId = @ViewId";
-            Query query = Driver.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
-            Driver.ExecuteNonQuery(query);
-        }
-
-        private void DeleteView(int viewId)
-        {
-            DeletePagesByView(viewId);
-            string sql = "DELETE FROM metaViews WHERE ViewId = @ViewId";
-            Query query = Driver.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
-            Driver.ExecuteNonQuery(query);
-        }
-
-        private void DeleteViewAndDescendants(int viewId, DataTable views, DataTable fields)
-        {
-            DataRow[] relatedFields = fields.Select(string.Format("RelatedViewId = {0:d}", (int)MetaFieldType.Relate));
-            foreach (DataRow field in relatedFields.Where(field => field.Field<int>("ViewId") == viewId))
-            {
-                int? relatedViewId = field.Field<int?>("RelatedViewId");
-                if (relatedViewId.HasValue)
-                {
-                    DeleteViewAndDescendants(relatedViewId.Value, views, fields);
-                }
-            }
-            foreach (DataRow field in relatedFields.Where(field => field.Field<int?>("RelatedViewId") == viewId))
-            {
-                DeleteField(field.Field<int>("FieldId"));
-            }
-            DeleteView(viewId);
-        }
-
-        public void DeleteViewAndDescendants(int viewId)
-        {
-            DeleteViewAndDescendants(viewId, GetViewsAsDataTable(), GetFieldsAsDataTable());
+            ViewDeleter deleter = new ViewDeleter(this);
+            deleter.DeleteViewAndDescendants(viewId);
         }
 
         public void DeletePgm(int pgmId)

@@ -2,12 +2,7 @@
 {
     public class RepositoryBase
     {
-        public IDataDriver Driver { get; private set; }
-
-        public Project Project
-        {
-            get { return Driver.Project; }
-        }
+        protected IDataDriver Driver { get; private set; }
 
         protected RepositoryBase(IDataDriver driver)
         {

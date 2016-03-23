@@ -12,18 +12,33 @@ namespace ERHMS.EpiInfo.DataAccess
 {
     public class ViewEntityRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : ViewEntity, new()
     {
+        public string ViewName { get; private set; }
         protected DataTable BaseSchema { get; private set; }
         protected DataSet PageSchemas { get; private set; }
-        public View View { get; private set; }
 
-        public ViewEntityRepository(IDataDriver driver, string viewName)
+        protected string BaseTableName
+        {
+            get { return BaseSchema.TableName; }
+        }
+
+        protected IEnumerable<string> PageTableNames
+        {
+            get
+            {
+                return PageSchemas.Tables
+                    .Cast<DataTable>()
+                    .Select(schema => schema.TableName);
+            }
+        }
+
+        public ViewEntityRepository(IDataDriver driver, View view)
             : base(driver)
         {
-            Log.Current.DebugFormat("Creating view repository: {0}", viewName);
-            View = Project.Views[viewName];
-            BaseSchema = GetSchema(View.TableName);
+            Log.Current.DebugFormat("Creating view repository: {0}", view.Name);
+            ViewName = view.Name;
+            BaseSchema = GetSchema(view.TableName);
             PageSchemas = new DataSet();
-            foreach (Page page in View.Pages)
+            foreach (Page page in view.Pages)
             {
                 PageSchemas.Tables.Add(GetSchema(page.TableName));
             }
@@ -32,14 +47,14 @@ namespace ERHMS.EpiInfo.DataAccess
         protected string GetJoinSql()
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append(Driver.Escape(View.TableName));
-            foreach (Page page in View.Pages)
+            sql.Append(Driver.Escape(BaseTableName));
+            foreach (string pageTableName in PageTableNames)
             {
                 sql.Insert(0, "(");
                 sql.Append(string.Format(
                     ") INNER JOIN {1} ON {0}.{2} = {1}.{2}",
-                    Driver.Escape(View.TableName),
-                    Driver.Escape(page.TableName),
+                    Driver.Escape(BaseTableName),
+                    Driver.Escape(pageTableName),
                     Driver.Escape(ColumnNames.GLOBAL_RECORD_ID)));
             }
             return sql.ToString();
@@ -59,9 +74,9 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 entity.SetProperty(column.ColumnName, null);
             }
-            foreach (Page page in View.Pages)
+            foreach (DataTable pageSchema in PageSchemas.Tables)
             {
-                foreach (DataColumn column in PageSchemas.Tables[page.TableName].Columns)
+                foreach (DataColumn column in pageSchema.Columns)
                 {
                     entity.SetProperty(column.ColumnName, null);
                 }
@@ -73,12 +88,12 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             ICollection<TEntity> entities;
             {
-                string sql = string.Format("SELECT * FROM {0}", Driver.Escape(View.TableName));
+                string sql = string.Format("SELECT * FROM {0}", Driver.Escape(BaseTableName));
                 entities = Mapper.GetEntities(Driver.ExecuteQuery(sql)).ToList();
             }
-            foreach (Page page in View.Pages)
+            foreach (string pageTableName in PageTableNames)
             {
-                string sql = string.Format("SELECT * FROM {0}", Driver.Escape(page.TableName));
+                string sql = string.Format("SELECT * FROM {0}", Driver.Escape(pageTableName));
                 DataTable data = Driver.ExecuteQuery(sql);
                 Mapper.SetEntities(data, data.Columns[ColumnNames.GLOBAL_RECORD_ID], entities, StringComparison.OrdinalIgnoreCase);
             }
@@ -90,12 +105,12 @@ namespace ERHMS.EpiInfo.DataAccess
             ICollection<TEntity> entities;
             string sqlFormat = string.Format("SELECT {{0}}.* FROM {0} WHERE {{1}}", GetJoinSql());
             {
-                string sql = string.Format(sqlFormat, Driver.Escape(View.TableName), predicate.Sql);
+                string sql = string.Format(sqlFormat, Driver.Escape(BaseTableName), predicate.Sql);
                 entities = Mapper.GetEntities(Driver.ExecuteQuery(sql, predicate.Parameters)).ToList();
             }
-            foreach (Page page in View.Pages)
+            foreach (string pageTableName in PageTableNames)
             {
-                string sql = string.Format(sqlFormat, Driver.Escape(page.TableName), predicate.Sql);
+                string sql = string.Format(sqlFormat, Driver.Escape(pageTableName), predicate.Sql);
                 DataTable data = Driver.ExecuteQuery(sql, predicate.Parameters);
                 Mapper.SetEntities(data, data.Columns[ColumnNames.GLOBAL_RECORD_ID], entities, StringComparison.OrdinalIgnoreCase);
             }
@@ -144,9 +159,9 @@ namespace ERHMS.EpiInfo.DataAccess
             using (DataTransaction transaction = Driver.BeginTransaction())
             {
                 Insert(entity, BaseSchema, transaction);
-                foreach (Page page in View.Pages)
+                foreach (DataTable pageSchema in PageSchemas.Tables)
                 {
-                    Insert(entity, PageSchemas.Tables[page.TableName], transaction);
+                    Insert(entity, pageSchema, transaction);
                 }
                 transaction.Commit();
             }
@@ -154,7 +169,7 @@ namespace ERHMS.EpiInfo.DataAccess
             string sql = string.Format(
                 "SELECT {0} FROM {1} WHERE {2}",
                 Driver.Escape(ColumnNames.UNIQUE_KEY),
-                Driver.Escape(View.TableName),
+                Driver.Escape(BaseTableName),
                 GetConditionalSql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], entity, out parameter));
             entity.UniqueKey = Driver.ExecuteQuery(sql, parameter).AsEnumerable()
                 .Single()
@@ -168,9 +183,9 @@ namespace ERHMS.EpiInfo.DataAccess
             using (DataTransaction transaction = Driver.BeginTransaction())
             {
                 Update(entity, BaseSchema, transaction);
-                foreach (Page page in View.Pages)
+                foreach (DataTable pageSchema in PageSchemas.Tables)
                 {
-                    Update(entity, PageSchemas.Tables[page.TableName], transaction);
+                    Update(entity, pageSchema, transaction);
                 }
                 transaction.Commit();
             }
