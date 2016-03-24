@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.IO;
 
 namespace ERHMS.Utility
@@ -13,6 +14,20 @@ namespace ERHMS.Utility
         public static DirectoryInfo GetSubdirectory(this DirectoryInfo @this, string path)
         {
             return new DirectoryInfo(Path.Combine(@this.FullName, path));
+        }
+
+        public static FileInfo GetTemporaryFile(string prefix = "ERHMS_", string extension = null)
+        {
+            FileInfo file;
+            do
+            {
+                string fileName = string.Format("{0}{1:N}", prefix, Guid.NewGuid());
+                fileName = Path.ChangeExtension(fileName, extension);
+                file = new FileInfo(Path.Combine(Path.GetTempPath(), fileName));
+            } while (file.Exists);
+            using (file.OpenWrite())
+            { }
+            return file;
         }
 
         public static void Copy(DirectoryInfo source, DirectoryInfo target, bool overwrite = false)

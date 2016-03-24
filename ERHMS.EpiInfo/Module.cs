@@ -56,13 +56,7 @@ namespace ERHMS.EpiInfo
         {
             Log.Current.DebugFormat("Executing module: {0} {1}", @this, args);
             FileInfo executable = @this.GetExecutable();
-            return Process.Start(new ProcessStartInfo
-            {
-                UseShellExecute = false,
-                WorkingDirectory = executable.DirectoryName,
-                FileName = executable.FullName,
-                Arguments = args
-            });
+            return ProcessExtensions.Start(executable, args);
         }
 
         public static Process Execute(this Module @this, IEnumerable<string> args)
