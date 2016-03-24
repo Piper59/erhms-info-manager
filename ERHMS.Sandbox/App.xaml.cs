@@ -1,7 +1,6 @@
 ﻿using ERHMS.EpiInfo;
 using ERHMS.Utility;
 using System;
-using System.IO;
 using System.Reflection;
 using System.ServiceModel;
 using System.Windows;
@@ -45,8 +44,7 @@ namespace ERHMS.Sandbox
         {
             base.OnStartup(e);
             Log.Current.Debug("Starting up");
-            DirectoryInfo root = new DirectoryInfo(Environment.ExpandEnvironmentVariables(Settings.Default.RootDirectory));
-            ConfigurationExtensions.CreateAndOrLoad(root);
+            ConfigurationExtensions.CreateAndOrLoad();
             service = new Service();
             service.SayingHello += (sender, _e) =>
             {

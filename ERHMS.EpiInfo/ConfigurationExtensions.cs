@@ -4,6 +4,7 @@ using ERHMS.Utility;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo
 {
@@ -14,18 +15,23 @@ namespace ERHMS.EpiInfo
             return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
         }
 
-        public static string GetConfigurationFilePath(DirectoryInfo root)
+        public static DirectoryInfo GetConfigurationRoot()
         {
-            string fileName = Path.GetFileName(Configuration.DefaultConfigurationPath);
-            return Path.Combine(root.FullName, "Configuration", fileName);
+            return new DirectoryInfo(Settings.Default.ExpandedRootDirectory);
         }
 
-        public static Configuration Create(DirectoryInfo root)
+        public static string GetConfigurationFilePath()
         {
-            string path = GetConfigurationFilePath(root);
+            string fileName = Path.GetFileName(Configuration.DefaultConfigurationPath);
+            return Path.Combine(GetConfigurationRoot().FullName, "Configuration", fileName);
+        }
+
+        public static Configuration Create()
+        {
+            string path = GetConfigurationFilePath();
             Log.Current.DebugFormat("Creating configuration: {0}", path);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
-            InitializeDirectories(config, root);
+            InitializeDirectories(config);
             config.RecentView.Clear();
             config.RecentProject.Clear();
             config.Database.Clear();
@@ -34,8 +40,9 @@ namespace ERHMS.EpiInfo
             return new Configuration(path, config);
         }
 
-        private static void InitializeDirectories(Config config, DirectoryInfo root)
+        private static void InitializeDirectories(Config config)
         {
+            DirectoryInfo root = GetConfigurationRoot();
             Config.DirectoriesRow directories = config.Directories.Single();
             directories.Archive = root.CreateSubdirectory("Archive").FullName;
             directories.Configuration = root.CreateSubdirectory("Configuration").FullName;
@@ -83,18 +90,19 @@ namespace ERHMS.EpiInfo
         {
             Log.Current.DebugFormat("Loading configuration: {0}", path);
             Configuration.Load(path);
+            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
             Log.Configure(Configuration.GetNewInstance());
             Log.Current.DebugFormat("Loaded configuration: {0}", path);
         }
 
-        public static void Load(DirectoryInfo root)
+        public static void Load()
         {
-            Load(GetConfigurationFilePath(root));
+            Load(GetConfigurationFilePath());
         }
 
-        public static bool TryLoad(DirectoryInfo root)
+        public static bool TryLoad()
         {
-            string path = GetConfigurationFilePath(root);
+            string path = GetConfigurationFilePath();
             if (File.Exists(path))
             {
                 Load(path);
@@ -106,12 +114,12 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static void CreateAndOrLoad(DirectoryInfo root)
+        public static void CreateAndOrLoad()
         {
-            if (!TryLoad(root))
+            if (!TryLoad())
             {
-                Configuration.Save(Create(root));
-                Load(root);
+                Configuration.Save(Create());
+                Load();
             }
         }
 
