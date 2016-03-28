@@ -12,11 +12,20 @@ namespace ERHMS.EpiInfo.Analysis
         {
             get
             {
+                if (!ContainsNonEmptyKeyTarget())
+                {
+                    yield return GetKeyTarget();
+                }
                 foreach (Mapping mapping in this)
                 {
                     yield return mapping.Target;
                 }
             }
+        }
+
+        public IEnumerable<string> EscapedTargets
+        {
+            get { return Targets.Select(target => string.Format("[{0}]", target)); }
         }
 
         public void Add(string source, string target)
@@ -29,9 +38,14 @@ namespace ERHMS.EpiInfo.Analysis
             return this.Any(mapping => mapping.Target.Equals(target, StringComparison.OrdinalIgnoreCase));
         }
 
+        public bool ContainsNonEmptyKeyTarget()
+        {
+            return ContainsTarget(ColumnNames.GLOBAL_RECORD_ID);
+        }
+
         public string GetKeyTarget()
         {
-            if (ContainsTarget(ColumnNames.GLOBAL_RECORD_ID))
+            if (ContainsNonEmptyKeyTarget())
             {
                 return ColumnNames.GLOBAL_RECORD_ID;
             }
@@ -56,10 +70,9 @@ namespace ERHMS.EpiInfo.Analysis
         public string GetCommands()
         {
             StringBuilder commands = new StringBuilder();
-            string keyTarget = GetKeyTarget();
-            if (!keyTarget.Equals(ColumnNames.GLOBAL_RECORD_ID, StringComparison.OrdinalIgnoreCase))
+            if (!ContainsNonEmptyKeyTarget())
             {
-                commands.AppendLine(Mapping.GetDefineCommand(keyTarget));
+                commands.AppendLine(Mapping.GetDefineCommand(GetKeyTarget()));
             }
             foreach (Mapping mapping in this)
             {

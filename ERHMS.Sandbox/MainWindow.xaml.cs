@@ -1,56 +1,17 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Analysis;
+using ERHMS.EpiInfo.Communication;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using Microsoft.Win32;
 using System;
-using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Windows;
 
 namespace ERHMS.Sandbox
 {
     public partial class MainWindow : Window
     {
-        private class Addict : TableEntity
-        {
-            public override string Guid
-            {
-                get { throw new NotSupportedException(); }
-                set { throw new NotSupportedException(); }
-            }
-
-            public double? Clinic
-            {
-                get { return GetProperty<double?>("Clinic"); }
-                set { SetProperty("Clinic", value); }
-            }
-
-            public double? Status
-            {
-                get { return GetProperty<double?>("Status"); }
-                set { SetProperty("Status", value); }
-            }
-
-            public double? SurvivalTimeInDays
-            {
-                get { return GetProperty<double?>("Survival_Time_Days"); }
-                set { SetProperty("Survival_Time_Days", value); }
-            }
-
-            public double? PrisonRecord
-            {
-                get { return GetProperty<double?>("Prison_Record"); }
-                set { SetProperty("Prison_Record", value); }
-            }
-
-            public double? MethadoneDoseInMgPerDay
-            {
-                get { return GetProperty<double?>("Methadone_dose__mg_day_"); }
-                set { SetProperty("Methadone_dose__mg_day_", value); }
-            }
-        }
-
         private class Surveillance : ViewEntity
         {
             public string FirstName
@@ -92,13 +53,35 @@ namespace ERHMS.Sandbox
 
         private Project project;
         private IDataDriver driver;
-        private CodeRepository sexes;
-        private TableEntityRepository<Addict> addicts;
         private ViewEntityRepository<Surveillance> surveillances;
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+            App.Current.Service.RefreshingView += Service_RefreshingView;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            App.Current.Service.RefreshingView -= Service_RefreshingView;
+        }
+
+        private void Service_RefreshingView(object sender, ViewEventArgs e)
+        {
+            if (project == null || project.FilePath != e.ProjectPath || e.ViewName != "Surveillance")
+            {
+                return;
+            }
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                Data.ItemsSource = surveillances.Select();
+            }));
         }
 
         private void FileOpen_Click(object sender, RoutedEventArgs e)
@@ -109,9 +92,8 @@ namespace ERHMS.Sandbox
             {
                 project = new Project(new FileInfo(dialog.FileName));
                 driver = DataDriverFactory.CreateDataDriver(project);
-                sexes = new CodeRepository(driver, "codeSex", "Sex", false);
-                addicts = new TableEntityRepository<Addict>(driver, "Addicts");
                 surveillances = new ViewEntityRepository<Surveillance>(driver, project.Views["Surveillance"]);
+                Buttons.IsEnabled = true;
             }
         }
 
@@ -120,24 +102,9 @@ namespace ERHMS.Sandbox
             Close();
         }
 
-        private IEnumerable GetDataSource(string tableName)
-        {
-            switch (tableName)
-            {
-                case "codeSex":
-                    return sexes.Select();
-                case "Addicts":
-                    return addicts.Select();
-                case "Surveillance":
-                    return surveillances.Select();
-                default:
-                    return null;
-            }
-        }
-
         private void Select_Click(object sender, RoutedEventArgs e)
         {
-            Data.ItemsSource = GetDataSource((string)TableName.SelectedValue);
+            Data.ItemsSource = surveillances.Select();
         }
 
         private void Insert_Click(object sender, RoutedEventArgs e)
@@ -151,34 +118,46 @@ namespace ERHMS.Sandbox
             surveillance.Pregnant = false;
             surveillances.Save(surveillance);
             MessageBox.Show(surveillance.UniqueKey.ToString(), Title);
-        }
-
-        private Surveillance GetSurveillanceByName(string firstName, string lastName)
-        {
-            DataParameterCollection parameters = new DataParameterCollection(driver);
-            parameters.AddByValue(firstName);
-            parameters.AddByValue(lastName);
-            string sql = parameters.Format("FirstName = {0} AND LastName = {1}");
-            return surveillances.Select(new DataPredicate(sql, parameters)).Single();
+            Data.ItemsSource = surveillances.Select();
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
         {
-            Surveillance surveillance = GetSurveillanceByName("John", "Smith");
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
             surveillance.Week = new Random().Next(1, 52);
             surveillances.Save(surveillance);
+            Data.ItemsSource = surveillances.Select();
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            Surveillance surveillance = GetSurveillanceByName("John", "Smith");
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
             surveillances.Delete(surveillance);
+            Data.ItemsSource = surveillances.Select();
         }
 
         private void Undelete_Click(object sender, RoutedEventArgs e)
         {
-            Surveillance surveillance = GetSurveillanceByName("John", "Smith");
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
             surveillances.Undelete(surveillance);
+            Data.ItemsSource = surveillances.Select();
+        }
+
+        private void Import_Click(object sender, RoutedEventArgs e)
+        {
+            Analysis.ImportFromFile(surveillances.View);
         }
     }
 }

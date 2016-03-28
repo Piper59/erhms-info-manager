@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.Windows.Analysis.Dialogs;
+using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
 using System.Data;
@@ -44,7 +45,7 @@ namespace ERHMS.EpiInfo.Analysis
             return Execute(args => Main_ImportFromFile(args), view.Project.FilePath, view.Name);
         }
 
-        internal static void Main_ImportFromFile(string[] args)
+        private static void Main_ImportFromFile(string[] args)
         {
             string projectPath = args[0];
             string viewName = args[1];
@@ -55,41 +56,54 @@ namespace ERHMS.EpiInfo.Analysis
                 {
                     form.Load += (sender, e) =>
                     {
+                        string command;
                         using (ReadDialog dialog = new ReadDialog(form))
                         {
                             if (dialog.ShowDialog() != DialogResult.OK)
                             {
                                 return;
                             }
-                            form.AddAndExecuteCommand(dialog.CommandText);
+                            command = dialog.CommandText;
                         }
-                        DataTable input = form.GetCurrentReadOutput();
-                        MappingCollection mappings;
-                        using (MappingDialog dialog = new MappingDialog(form, input, view))
+                        form.AddCommand(command);
+                        form.ExecuteCommand(command, () =>
                         {
-                            if (dialog.ShowDialog() != DialogResult.OK)
+                            DataTable input = form.GetOutput();
+                            MappingCollection mappings;
+                            using (MappingDialog dialog = new MappingDialog(form, input, view))
                             {
-                                return;
+                                if (dialog.ShowDialog() != DialogResult.OK)
+                                {
+                                    return;
+                                }
+                                mappings = dialog.GetMappings();
                             }
-                            mappings = dialog.GetMappings();
-                        }
-                        form.AddCommand(mappings.GetCommands());
-                        FileInfo csv = IOExtensions.GetTemporaryFile(extension: ".csv");
-                        string csvConnectionString = GetCsvConnectionString(csv);
-                        string csvFileName = Path.ChangeExtension(csv.Name, "#csv");
-                        form.AddCommand(string.Format(
-                            "WRITE APPEND \"TEXT\" {{{0}}} : [{1}] {2}",
-                            csvConnectionString,
-                            csvFileName,
-                            string.Join(" ", mappings.Targets)));
-                        form.AddCommand(GetReadCommand(projectPath, viewName));
-                        form.AddCommand(string.Format(
-                            "MERGE {{{0}}}:{1} {2} :: {3}",
-                            csvConnectionString,
-                            csvFileName,
-                            ColumnNames.GLOBAL_RECORD_ID,
-                            mappings.GetKeyTarget()));
-                        form.ExecuteCommands();
+                            form.AddCommand(mappings.GetCommands());
+                            FileInfo csv = IOExtensions.GetTemporaryFile(extension: ".csv");
+                            string csvConnectionString = GetCsvConnectionString(csv);
+                            string csvFileName = csv.Name.Replace(".", "#");
+                            form.AddCommand(string.Format(
+                                "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}",
+                                csvConnectionString,
+                                csvFileName,
+                                string.Join(" ", mappings.EscapedTargets)));
+                            form.AddCommand(GetReadCommand(projectPath, viewName));
+                            form.AddCommand(string.Format(
+                                "MERGE {{{0}}}:{1} {2} :: {3}",
+                                csvConnectionString,
+                                csvFileName,
+                                ColumnNames.GLOBAL_RECORD_ID,
+                                mappings.GetKeyTarget()));
+                            form.ExecuteCommands(() =>
+                            {
+                                IService service = Service.GetService();
+                                if (service == null)
+                                {
+                                    return;
+                                }
+                                service.RefreshView(projectPath, viewName);
+                            });
+                        });
                     };
                     Application.Run(form);
                 }

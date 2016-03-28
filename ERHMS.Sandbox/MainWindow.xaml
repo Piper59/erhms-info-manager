@@ -14,17 +14,13 @@
                 <MenuItem Header="E_xit" Click="FileExit_Click" />
             </MenuItem>
         </Menu>
-        <ComboBox Name="TableName" DockPanel.Dock="Top" SelectedValuePath="Content">
-            <ComboBoxItem>codeSex</ComboBoxItem>
-            <ComboBoxItem>Addicts</ComboBoxItem>
-            <ComboBoxItem>Surveillance</ComboBoxItem>
-        </ComboBox>
-        <WrapPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+        <WrapPanel Name="Buttons" DockPanel.Dock="Top" HorizontalAlignment="Center" IsEnabled="False">
             <Button Click="Select_Click">Select</Button>
             <Button Click="Insert_Click">Insert</Button>
             <Button Click="Update_Click">Update</Button>
             <Button Click="Delete_Click">Delete</Button>
             <Button Click="Undelete_Click">Undelete</Button>
+            <Button Click="Import_Click">Import</Button>
         </WrapPanel>
         <ScrollViewer>
             <DataGrid Name="Data" IsReadOnly="True" />

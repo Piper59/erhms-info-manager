@@ -1,5 +1,6 @@
 ﻿using Epi.Windows.Analysis.Forms;
 using System;
+using System.ComponentModel;
 using System.Data;
 
 namespace ERHMS.EpiInfo.Analysis
@@ -33,30 +34,57 @@ namespace ERHMS.EpiInfo.Analysis
             ProgramEditor.AddCommand(command);
         }
 
-        public void ExecuteCommand(string command)
+        public void ExecuteCommand(string command, Action callback = null)
         {
-            if (string.IsNullOrEmpty(command))
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
             {
-                return;
-            }
-            EpiInterpreter.Execute(command);
+                BeginInvoke(new Action(() =>
+                {
+                    ProgramEditor.txtTextArea.Enabled = false;
+                    ProgramEditor.btnRun.Enabled = false;
+                    ProgramEditor.ShowErrorMessage("");
+                    UpdateStatus("Running PGM...", false);
+                }));
+                try
+                {
+                    EpiInterpreter.Context.ClearState();
+                    if (string.IsNullOrEmpty(command))
+                    {
+                        return;
+                    }
+                    EpiInterpreter.Execute(command);
+                }
+                catch (Exception ex)
+                {
+                    BeginInvoke(new Action(() =>
+                    {
+                        ProgramEditor.ShowErrorMessage(ex.ToString());
+                    }));
+                }
+            };
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                ProgramEditor.txtTextArea.Enabled = true;
+                ProgramEditor.btnRun.Enabled = true;
+                UpdateStatus("Ready", false);
+                if (callback != null)
+                {
+                    callback();
+                }
+            };
+            worker.RunWorkerAsync();
         }
 
-        public void AddAndExecuteCommand(string command)
+        public void ExecuteCommands(Action callback = null)
         {
-            AddCommand(command);
-            ExecuteCommand(command);
+            ExecuteCommand(Commands, callback);
         }
 
-        public void ExecuteCommands()
-        {
-            ExecuteCommand(Commands);
-        }
-
-        public DataTable GetCurrentReadOutput()
+        public DataTable GetOutput()
         {
             EpiInterpreter.Context.GetOutput();
-            return EpiInterpreter.Context.DataSet.Tables["Output"];
+            return EpiInterpreter.Context.DataSet.Tables["Output"].Clone();
         }
     }
 }

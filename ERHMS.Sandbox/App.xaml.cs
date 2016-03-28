@@ -1,4 +1,5 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using log4net.Core;
 using System;
@@ -10,6 +11,11 @@ namespace ERHMS.Sandbox
 {
     public partial class App : Application
     {
+        public new static App Current
+        {
+            get { return (App)Application.Current; }
+        }
+
         public static string Name
         {
             get { return Assembly.GetExecutingAssembly().GetName().Name; }
@@ -38,35 +44,27 @@ namespace ERHMS.Sandbox
             }
         }
 
-        private Service service;
-        private ServiceHost host = null;
+        private ServiceHost host;
 
-        protected override void OnStartup(StartupEventArgs e)
+        public Service Service { get; private set; }
+
+        public App()
         {
-            base.OnStartup(e);
             Log.Level = Level.Debug;
             Log.Current.Debug("Starting up");
             ConfigurationExtensions.CreateAndOrLoad();
-            service = new Service();
-            service.SayingHello += (sender, _e) =>
-            {
-                MessageBox.Show(string.Format("Hello, {0}", _e.Name), Title);
-            };
-            try
-            {
-                host = service.OpenHost();
-            }
-            catch { }
+            Service = new Service();
+            host = Service.OpenHost();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            base.OnExit(e);
             Log.Current.Debug("Exiting");
             if (host != null)
             {
                 host.Close();
             }
-            base.OnExit(e);
         }
     }
 }

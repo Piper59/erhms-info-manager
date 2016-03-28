@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo.DataAccess
 {
     public class ViewEntityRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : ViewEntity, new()
     {
-        public string ViewName { get; private set; }
+        public View View { get; private set; }
         protected DataTable BaseSchema { get; private set; }
         protected DataSet PageSchemas { get; private set; }
 
@@ -35,7 +35,7 @@ namespace ERHMS.EpiInfo.DataAccess
             : base(driver)
         {
             Log.Current.DebugFormat("Creating view repository: {0}", view.Name);
-            ViewName = view.Name;
+            View = view;
             BaseSchema = GetSchema(view.TableName);
             PageSchemas = new DataSet();
             foreach (Page page in view.Pages)

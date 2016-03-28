@@ -6,7 +6,7 @@ namespace ERHMS.EpiInfo.Analysis
     {
         public static string GetDefineCommand(string target)
         {
-            return string.Format("DEFINE \"{0}\"", target);
+            return string.Format("DEFINE {0}", target);
         }
 
         public string Source { get; set; }
@@ -32,7 +32,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public string GetAssignCommand()
         {
-            return string.Format("ASSIGN {0} = \"{1}\"", Source, Target);
+            return string.Format("ASSIGN {0} = [{1}]", Target, Source);
         }
     }
 }
