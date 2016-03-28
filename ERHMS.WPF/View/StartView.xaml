@@ -1,0 +1,197 @@
+﻿<UserControl x:Class="ERHMS.WPF.View.StartView"
+      DataContext="{Binding StartViewModel, Source={StaticResource Locator}}"
+      xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:l="clr-namespace:ERHMS.WPF.Converters"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <l:DateToShortDateConverter x:Key="ShortDateConverter"/>
+        <l:ObjectNullToVisibilityConverter x:Key="IsNullVisibilityConverter"/>
+        <l:ObjectNullOrEmptyToEnabledConverter x:Key="IsNullOrEmptyEnabledConverter"/>
+        <l:ObjectNullToEnabledOpacityConverter x:Key="IsNullEnabledOpacityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock>Start Page</TextBlock>
+        <!--<WrapPanel Grid.Row="0" HorizontalAlignment="Center">-->
+            <!--<mah:Tile 
+                Style="{StaticResource WideTileStyle}" 
+                Command="{Binding NewResponderCommand}"
+                Background="Blue"
+                Title="Responders">
+                <mah:Tile.Content>
+                    <Grid HorizontalAlignment="Stretch" Width="280" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle DockPanel.Dock="Left" Width="75" Height="75" Grid.Row="0" Grid.Column="0" Fill="White" Margin="0,0,0,12" >
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{DynamicResource appbar_user_add}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1" 
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" 
+                                   FontSize="28" 
+                                   TextWrapping="Wrap" 
+                                   Margin="12,0,0,0"
+                                   Text="Add Responder"/>
+                    </Grid>
+                </mah:Tile.Content>
+            </mah:Tile>
+            <mah:Tile 
+                Style="{StaticResource WideTileStyle}" 
+                Command="{Binding NewIncidentCommand}"
+                Background="Red"
+                Title="Incidents">
+                <mah:Tile.Content>
+                    <Grid HorizontalAlignment="Stretch" Width="280" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle DockPanel.Dock="Left"  Height="75" Grid.Row="0" Grid.Column="0" Fill="White" Margin="0,0,0,12" >
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{DynamicResource appbar_incident}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1" 
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" 
+                                   FontSize="28" 
+                                   TextWrapping="Wrap" 
+                                   Margin="12,0,0,0"
+                                   Text="Create New Incident"/>
+                    </Grid>
+                </mah:Tile.Content>
+            </mah:Tile>
+            <mah:Tile 
+                Style="{StaticResource WideTileStyle}" 
+                Command="{Binding ShowTabCommand}"
+                CommandParameter="Forms"
+                Background="DarkViolet"
+                Title="Forms">
+                <mah:Tile.Content>
+                    <Grid HorizontalAlignment="Stretch" Width="280" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle DockPanel.Dock="Left" Width="75" Height="75" Grid.Row="0" Grid.Column="0" Fill="White" Margin="0,0,0,12" >
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{DynamicResource appbar_form_basic}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1" 
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" 
+                                   FontSize="28" 
+                                   TextWrapping="Wrap"
+                                   Margin="12,0,0,0"
+                                   Text="Add Pre-Deployment Form"/>
+                    </Grid>
+                </mah:Tile.Content>
+            </mah:Tile>
+            <mah:Tile 
+                Style="{StaticResource WideTileStyle}" 
+                Command="{Binding ShowTabCommand}"
+                CommandParameter="Settings"
+                Background="ForestGreen"
+                Title="Settings">
+                <mah:Tile.Content>
+                    <Grid HorizontalAlignment="Stretch" Width="280" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle DockPanel.Dock="Left" Width="75" Height="75" Grid.Row="0" Grid.Column="0" Fill="White" Margin="0,0,0,12" >
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{DynamicResource appbar_cogs}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1" 
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" 
+                                   FontSize="28" 
+                                   TextWrapping="Wrap" 
+                                   Margin="12,0,0,0"
+                                   Text="Settings"/>
+                    </Grid>
+                </mah:Tile.Content>
+            </mah:Tile>
+            <mah:Tile 
+                Style="{StaticResource WideTileStyle}" 
+                Command="{Binding ShowTabCommand}"
+                CommandParameter="Help"
+                Background="DarkGreen"
+                Title="Help">
+                <mah:Tile.Content>
+                    <Grid HorizontalAlignment="Stretch" Width="280" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle DockPanel.Dock="Left" Width="75" Height="75" Grid.Row="0" Grid.Column="0" Fill="White" Margin="0,0,0,12" >
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{DynamicResource appbar_question}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1" 
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" 
+                                   FontSize="28" 
+                                   TextWrapping="Wrap" 
+                                   Margin="12,0,0,0"
+                                   Text="Help"/>
+                    </Grid>
+                </mah:Tile.Content>
+            </mah:Tile>
+            <mah:Tile Title="Statistics" Style="{StaticResource WideTileStyle}" Background="Teal" IsEnabled="False">
+                <mah:Tile.Content>
+                    <Grid HorizontalAlignment="Stretch" Width="280" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle DockPanel.Dock="Left" Width="75" Height="75" Grid.Row="0" Grid.Column="0" Fill="White" >
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{DynamicResource appbar_pie}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+
+                        <Grid Grid.Row="0" Grid.Column="1" Margin="10,0,0,0"  >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" FontSize="16" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Text="Active Responders:"/>
+                            <TextBlock Grid.Row="0" FontSize="16" Grid.Column="2" VerticalAlignment="Center" Text="{Binding MainProject.Responders.Entities.Undeleted.Count,FallbackValue='0'}"/>
+                            <TextBlock Grid.Row="1" FontSize="16" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Text="Active Incidents:"/>
+                            <TextBlock Grid.Row="1" FontSize="16" Grid.Column="2" VerticalAlignment="Center" Text="{Binding MainProject.Incidents.Count, FallbackValue='0'}"/>
+                        </Grid>
+                    </Grid>
+                </mah:Tile.Content>
+            </mah:Tile>-->
+        <!--</WrapPanel>-->
+    </Grid>
+</UserControl>

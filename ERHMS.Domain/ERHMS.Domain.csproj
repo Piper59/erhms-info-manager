@@ -48,10 +48,13 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Form.cs" />
+    <Compile Include="Assignment.cs" />
     <Compile Include="Incident.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Phase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registration.cs" />
     <Compile Include="Responder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
