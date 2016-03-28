@@ -22,10 +22,22 @@ namespace ERHMS.EpiInfo
             get { return LogManager.GetLogger(name); }
         }
 
+        private static Hierarchy Hierarchy
+        {
+            get { return (Hierarchy)LogManager.GetRepository(); }
+        }
+
         public static Level Level
         {
-            get { return Current.Logger.Repository.Threshold; }
-            set { Current.Logger.Repository.Threshold = value; }
+            get
+            {
+                return Hierarchy.Root.Level;
+            }
+            set
+            {
+                Hierarchy.Root.Level = value;
+                Hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
+            }
         }
 
         static Log()
@@ -41,10 +53,9 @@ namespace ERHMS.EpiInfo
                 Layout = layout
             };
             appender.ActivateOptions();
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
-            hierarchy.Root.AddAppender(appender);
-            hierarchy.Root.Level = GetInitialLevel(hierarchy.LevelMap);
-            hierarchy.Configured = true;
+            Hierarchy.Root.AddAppender(appender);
+            Hierarchy.Root.Level = GetInitialLevel(Hierarchy.LevelMap);
+            Hierarchy.Configured = true;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 

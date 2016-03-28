@@ -1,5 +1,6 @@
 ﻿using ERHMS.EpiInfo;
 using ERHMS.Utility;
+using log4net.Core;
 using System;
 using System.Reflection;
 using System.ServiceModel;
@@ -43,6 +44,7 @@ namespace ERHMS.Sandbox
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            Log.Level = Level.Debug;
             Log.Current.Debug("Starting up");
             ConfigurationExtensions.CreateAndOrLoad();
             service = new Service();
