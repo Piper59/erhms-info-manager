@@ -157,7 +157,12 @@ namespace ERHMS.Sandbox
 
         private void Import_Click(object sender, RoutedEventArgs e)
         {
-            Analysis.ImportFromFile(surveillances.View);
+            Analysis.Import(surveillances.View);
+        }
+
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+            Analysis.Export(surveillances.View);
         }
     }
 }

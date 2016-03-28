@@ -21,6 +21,7 @@
             <Button Click="Delete_Click">Delete</Button>
             <Button Click="Undelete_Click">Undelete</Button>
             <Button Click="Import_Click">Import</Button>
+            <Button Click="Export_Click">Export</Button>
         </WrapPanel>
         <ScrollViewer>
             <DataGrid Name="Data" IsReadOnly="True" />

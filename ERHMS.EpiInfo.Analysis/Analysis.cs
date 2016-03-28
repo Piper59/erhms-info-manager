@@ -43,12 +43,58 @@ namespace ERHMS.EpiInfo.Analysis
             MainBase(typeof(Analysis), args);
         }
 
-        public static Process ImportFromFile(View target)
+        public static Process Execute()
         {
-            return Execute(args => Main_ImportFromFile(args), target.Project.FilePath, target.Name);
+            return Module.Analysis.Execute();
         }
 
-        private static void Main_ImportFromFile(string[] args)
+        public static Process OpenPgm(Pgm pgm)
+        {
+            FileInfo file = IOExtensions.GetTemporaryFile(extension: Pgm.FileExtension);
+            File.WriteAllText(file.FullName, pgm.Content);
+            return Execute(args => Main_OpenPgm(args), file.FullName);
+        }
+
+        private static void Main_OpenPgm(string[] args)
+        {
+            string pgmPath = args[0];
+            using (MainForm form = new MainForm())
+            {
+                form.Load += (sender, e) =>
+                {
+                    form.Commands = File.ReadAllText(pgmPath);
+                };
+                Application.Run(form);
+            }
+        }
+
+        public static Process ReadView(View view)
+        {
+            return Execute(args => Main_ReadView(args), view.Project.FilePath, view.Name);
+        }
+
+        private static void Main_ReadView(string[] args)
+        {
+            string projectPath = args[0];
+            string viewName = args[1];
+            using (MainForm form = new MainForm())
+            {
+                form.Load += (sender, e) =>
+                {
+                    string command = GetReadCommand(projectPath, viewName);
+                    form.AddCommand(command);
+                    form.ExecuteCommand(command);
+                };
+                Application.Run(form);
+            }
+        }
+
+        public static Process Import(View target)
+        {
+            return Execute(args => Main_Import(args), target.Project.FilePath, target.Name);
+        }
+
+        private static void Main_Import(string[] args)
         {
             string projectPath = args[0];
             string viewName = args[1];
@@ -115,6 +161,40 @@ namespace ERHMS.EpiInfo.Analysis
                     };
                     Application.Run(form);
                 }
+            }
+        }
+
+        public static Process Export(View source)
+        {
+            return Execute(args => Main_Export(args), source.Project.FilePath, source.Name);
+        }
+
+        private static void Main_Export(string[] args)
+        {
+            string projectPath = args[0];
+            string viewName = args[1];
+            using (MainForm form = new MainForm())
+            {
+                form.Load += (sender, e) =>
+                {
+                    string command = GetReadCommand(projectPath, viewName);
+                    form.AddCommand(command);
+                    form.ExecuteCommand(command, () =>
+                    {
+                        using (WriteDialog dialog = new WriteDialog(form))
+                        {
+                            if (dialog.ShowDialog() == DialogResult.OK)
+                            {
+                                form.AddCommand(dialog.CommandText);
+                                if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)
+                                {
+                                    form.ExecuteCommand(dialog.CommandText);
+                                }
+                            }
+                        }
+                    });
+                };
+                Application.Run(form);
             }
         }
     }
