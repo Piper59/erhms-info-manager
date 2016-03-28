@@ -1,12 +1,9 @@
-﻿using Epi.Fields;
-using Epi.Windows.Analysis.Dialogs;
+﻿using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using View = Epi.View;
 
 namespace ERHMS.EpiInfo.Analysis
 {
@@ -14,15 +11,25 @@ namespace ERHMS.EpiInfo.Analysis
     {
         public const string EmptyTarget = "";
 
-        public DataTable Input { get; private set; }
-        public View Output { get; private set; }
+        private ICollection<string> sources;
+        private ICollection<string> targets;
 
-        public MappingDialog(AnalysisMainForm form, DataTable input, View output)
+        public IEnumerable<string> Sources
+        {
+            get { return sources; }
+        }
+
+        public IEnumerable<string> Targets
+        {
+            get { return targets; }
+        }
+
+        public MappingDialog(AnalysisMainForm form, IEnumerable<string> sources, IEnumerable<string> targets)
             : base(form)
         {
             InitializeComponent();
-            Input = input;
-            Output = output;
+            this.sources = sources.ToList();
+            this.targets = targets.ToList();
             BindMappings();
         }
 
@@ -38,14 +45,6 @@ namespace ERHMS.EpiInfo.Analysis
 
         private void BindMappings()
         {
-            ICollection<string> sources = Input.Columns
-                .Cast<DataColumn>()
-                .Select(column => column.ColumnName)
-                .ToList();
-            ICollection<string> targets = Output.Fields.TableColumnFields
-                .Cast<Field>()
-                .Select(field => field.Name)
-                .ToList();
             colTarget.Items.Clear();
             colTarget.Items.Add(EmptyTarget);
             foreach (string target in targets)

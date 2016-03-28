@@ -1,12 +1,15 @@
 ﻿using Epi;
+using Epi.Fields;
 using Epi.Windows.Analysis.Dialogs;
 using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
 using View = Epi.View;
@@ -40,9 +43,9 @@ namespace ERHMS.EpiInfo.Analysis
             MainBase(typeof(Analysis), args);
         }
 
-        public static Process ImportFromFile(View view)
+        public static Process ImportFromFile(View target)
         {
-            return Execute(args => Main_ImportFromFile(args), view.Project.FilePath, view.Name);
+            return Execute(args => Main_ImportFromFile(args), target.Project.FilePath, target.Name);
         }
 
         private static void Main_ImportFromFile(string[] args)
@@ -68,9 +71,14 @@ namespace ERHMS.EpiInfo.Analysis
                         form.AddCommand(command);
                         form.ExecuteCommand(command, () =>
                         {
-                            DataTable input = form.GetOutput();
+                            IEnumerable<string> sources = form.GetOutput().Columns
+                                .Cast<DataColumn>()
+                                .Select(column => column.ColumnName);
+                            IEnumerable<string> targets = view.Fields.TableColumnFields
+                                .Cast<Field>()
+                                .Select(field => field.Name);
                             MappingCollection mappings;
-                            using (MappingDialog dialog = new MappingDialog(form, input, view))
+                            using (MappingDialog dialog = new MappingDialog(form, sources, targets))
                             {
                                 if (dialog.ShowDialog() != DialogResult.OK)
                                 {
