@@ -6,33 +6,33 @@ namespace ERHMS.EpiInfo.ImportExport
 {
     public class ImportExport
     {
-        public static void ImportFromView(View view)
+        public static void ImportFromView(View target)
         {
-            using (ImportDataForm form = new ImportDataForm(view))
+            using (ImportDataForm form = new ImportDataForm(target))
             {
                 form.ShowDialog();
             }
         }
 
-        public static void ImportFromPackage(View view)
+        public static void ImportFromPackage(View target)
         {
-            using (ImportEncryptedDataPackageDialog dialog = new ImportEncryptedDataPackageDialog(view))
+            using (ImportEncryptedDataPackageDialog dialog = new ImportEncryptedDataPackageDialog(target))
             {
                 dialog.ShowDialog();
             }
         }
 
-        public static void ImportFromWeb(View view)
+        public static void ExportToPackage(View source)
+        {
+            using (PackageForTransportDialog dialog = new PackageForTransportDialog(source.Project.FilePath, source))
+            {
+                dialog.ShowDialog();
+            }
+        }
+
+        public static void ImportFromWeb(View target)
         {
             // TODO
-        }
-
-        public static void ExportToPackage(View view)
-        {
-            using (PackageForTransportDialog dialog = new PackageForTransportDialog(view.Project.FilePath, view))
-            {
-                dialog.ShowDialog();
-            }
         }
     }
 }
