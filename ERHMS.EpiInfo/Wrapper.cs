@@ -11,18 +11,18 @@ namespace ERHMS.EpiInfo
 {
     public class Wrapper
     {
-        protected static FileInfo GetExecutable(Module module)
+        protected static FileInfo GetExecutable()
         {
-            string fileName = string.Format("ERHMS.EpiInfo.{0}.exe", module);
+            string fileName = string.Format("{0}.exe", Assembly.GetCallingAssembly().GetCustomAttribute<AssemblyTitleAttribute>().Title);
             return ConfigurationExtensions.GetApplicationRoot().GetFile(fileName);
         }
 
-        protected static Process Execute(Module module, Expression<Action<string[]>> expression, params string[] args)
+        protected static Process Execute(Expression<Action<string[]>> expression, params string[] args)
         {
-            Log.Current.DebugFormat("Executing wrapper: {0} {1}", module, args);
-            FileInfo executable = GetExecutable(module);
+            FileInfo executable = GetExecutable();
             string methodName = ((MethodCallExpression)expression.Body).Method.Name;
-            return ProcessExtensions.Start(executable, ModuleExtensions.Arguments.Format(args.Prepend(methodName)));
+            Log.Current.DebugFormat("Executing wrapper: {0} {1} {2}", executable.FullName, methodName, args);
+            return ProcessExtensions.Start(executable, Arguments.Format(args.Prepend(methodName)));
         }
 
         protected static void MainBase(Type type, string[] args)

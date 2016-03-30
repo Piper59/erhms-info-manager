@@ -10,7 +10,6 @@ using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Windows.Forms;
 using View = Epi.View;
 
@@ -18,11 +17,6 @@ namespace ERHMS.EpiInfo.Analysis
 {
     public class Analysis : Wrapper
     {
-        private static Process Execute(Expression<Action<string[]>> expression, params string[] args)
-        {
-            return Execute(Module.Analysis, expression, args);
-        }
-
         private static string GetReadCommand(string projectPath, string viewName)
         {
             return string.Format("READ {{{0}}}:{1}", projectPath, viewName);
@@ -45,7 +39,15 @@ namespace ERHMS.EpiInfo.Analysis
 
         public static Process Execute()
         {
-            return Module.Analysis.Execute();
+            return Execute(args => Main_Execute(args));
+        }
+
+        private static void Main_Execute(string[] args)
+        {
+            using (MainForm form = new MainForm())
+            {
+                Application.Run(form);
+            }
         }
 
         public static Process OpenPgm(Pgm pgm)
