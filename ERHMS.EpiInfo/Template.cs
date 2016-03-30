@@ -11,14 +11,11 @@ namespace ERHMS.EpiInfo
     {
         public const string FileExtension = ".xml";
 
-        public static IEnumerable<Template> GetAll()
+        public static bool TryRead(FileInfo file, out Template template)
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Templates);
-            string pattern = string.Format("*{0}", FileExtension);
-            foreach (FileInfo file in directory.EnumerateFiles(pattern, SearchOption.AllDirectories))
+            string levelString = null;
+            try
             {
-                string levelString = null;
                 using (XmlReader reader = XmlReader.Create(file.FullName))
                 {
                     while (reader.Read())
@@ -33,12 +30,34 @@ namespace ERHMS.EpiInfo
                         }
                     }
                 }
-                TemplateLevel level;
-                if (!TemplateLevelExtensions.TryParse(levelString, out level))
+            }
+            catch
+            {
+                template = null;
+                return false;
+            }
+            TemplateLevel level;
+            if (!TemplateLevelExtensions.TryParse(levelString, out level))
+            {
+                template = null;
+                return false;
+            }
+            template = new Template(file, level);
+            return true;
+        }
+
+        public static IEnumerable<Template> GetAll()
+        {
+            Configuration configuration = Configuration.GetNewInstance();
+            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Templates);
+            string pattern = string.Format("*{0}", FileExtension);
+            foreach (FileInfo file in directory.EnumerateFiles(pattern, SearchOption.AllDirectories))
+            {
+                Template template;
+                if (TryRead(file, out template))
                 {
-                    continue;
+                    yield return template;
                 }
-                yield return new Template(file, level);
             }
         }
 

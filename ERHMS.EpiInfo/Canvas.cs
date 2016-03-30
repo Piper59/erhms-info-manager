@@ -2,6 +2,7 @@
 using ERHMS.Utility;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
@@ -9,12 +10,45 @@ namespace ERHMS.EpiInfo
     {
         public const string FileExtension = ".cvs7";
 
+        public static bool TryRead(FileInfo file, out Canvas canvas)
+        {
+            try
+            {
+                using (XmlReader reader = XmlReader.Create(file.FullName))
+                {
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element)
+                        {
+                            if (reader.Name != "DashboardCanvas")
+                            {
+                                canvas = null;
+                                return false;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                canvas = null;
+                return false;
+            }
+            canvas = new Canvas(file);
+            return true;
+        }
+
         public static IEnumerable<Canvas> GetByProject(Project project)
         {
             string pattern = string.Format("*{0}", FileExtension);
             foreach (FileInfo file in project.Location.EnumerateFiles(pattern, SearchOption.AllDirectories))
             {
-                yield return new Canvas(file);
+                Canvas canvas;
+                if (TryRead(file, out canvas))
+                {
+                    yield return canvas;
+                }
             }
         }
 
