@@ -1,4 +1,5 @@
 ﻿using Epi.Windows.AnalysisDashboard;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -6,6 +7,12 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
 {
     public class AnalysisDashboard : Wrapper
     {
+        [STAThread]
+        internal static void Main(string[] args)
+        {
+            MainBase(typeof(AnalysisDashboard), args);
+        }
+
         public static Process Execute()
         {
             return Execute(args => Main_Execute(args));
