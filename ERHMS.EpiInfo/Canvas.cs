@@ -1,4 +1,5 @@
-﻿using ERHMS.Utility;
+﻿using Epi;
+using ERHMS.Utility;
 using System.Collections.Generic;
 using System.IO;
 
@@ -15,6 +16,13 @@ namespace ERHMS.EpiInfo
             {
                 yield return new Canvas(file);
             }
+        }
+
+        public static Canvas CreateForView(View view, FileInfo file)
+        {
+            Templates.Canvas template = new Templates.Canvas(view.Project.FilePath, view.Name);
+            System.IO.File.WriteAllText(file.FullName, template.TransformText());
+            return new Canvas(file);
         }
 
         public FileInfo File { get; private set; }
