@@ -1,5 +1,6 @@
 ﻿using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analysis;
+using ERHMS.EpiInfo.AnalysisDashboard;
 using ERHMS.EpiInfo.Communication;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
@@ -86,8 +87,10 @@ namespace ERHMS.Sandbox
 
         private void FileOpen_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Epi Info 7 Sample Project (Sample.prj)|Sample.prj";
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Epi Info 7 Sample Project (Sample.prj)|Sample.prj"
+            };
             if (dialog.ShowDialog().GetValueOrDefault())
             {
                 project = new Project(new FileInfo(dialog.FileName));
@@ -163,6 +166,33 @@ namespace ERHMS.Sandbox
         private void Export_Click(object sender, RoutedEventArgs e)
         {
             Analysis.Export(surveillances.View);
+        }
+
+        private void Dashboard_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Epi Info 7 Dashboard Canvas File (*.cvs7)|*.cvs7",
+                CheckFileExists = false
+            };
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                FileInfo file = new FileInfo(dialog.FileName);
+                if (file.Exists)
+                {
+                    Canvas canvas;
+                    if (!Canvas.TryRead(file, out canvas))
+                    {
+                        return;
+                    }
+                    AnalysisDashboard.OpenCanvas(canvas);
+                }
+                else
+                {
+                    Canvas canvas = Canvas.CreateForView(surveillances.View, file);
+                    AnalysisDashboard.OpenCanvas(canvas);
+                }
+            }
         }
     }
 }
