@@ -95,7 +95,7 @@
                         </Grid.ColumnDefinitions>
 
                         <controls:AppBarButton
-                Grid.Column="1" HorizontalAlignment="Center"
+                Grid.Column="2" HorizontalAlignment="Center"
                 Command="{Binding SaveIncidentDetailsCommand}"
                 ToolTip="Save Incident Details"
                 Content="Save"                
@@ -104,13 +104,15 @@
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="History" 
-                              Style="{StaticResource SideTabItem}">
+                              Style="{StaticResource SideTabItem}"
+                              IsEnabled="{Binding !CurrentIncident.New}">
                 <ScrollViewer Margin="0,0,0,10" >
 
                 </ScrollViewer>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Roster" 
-                              Style="{StaticResource SideTabItem}">
+                              Style="{StaticResource SideTabItem}"
+                              IsEnabled="{Binding !CurrentIncident.New}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -223,7 +225,8 @@
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Locations" 
-                              Style="{StaticResource SideTabItem}">
+                              Style="{StaticResource SideTabItem}"
+                              IsEnabled="{Binding !CurrentIncident.New}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -307,7 +310,8 @@
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Form/Survey Management" 
-                              Style="{StaticResource SideTabItem}">
+                              Style="{StaticResource SideTabItem}"
+                              IsEnabled="{Binding !CurrentIncident.New}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -364,15 +368,20 @@
                         <WrapPanel Grid.Column="0">
                             <controls:AppBarButton
                     Command="{Binding AddFormCommand}"
-                    ToolTip="New Responder"
+                    ToolTip="New Form"
                     Content="New"                    
                     Visual="{DynamicResource appbar_add}"/>
+                            <controls:AppBarButton
+                    Command="{Binding AddFormFromTemplateCommand}"
+                    ToolTip="Copy Form from Template"
+                    Content="New from Template"                    
+                    Visual="{DynamicResource appbar_page_copy}"/>
                         </WrapPanel>
                         <WrapPanel Grid.Column="1"
                        HorizontalAlignment="Center">
                             <controls:AppBarButton
                     Command="{Binding EditFormCommand}"
-                    ToolTip="Edit Responder"
+                    ToolTip="Edit Form"
                     Content="Edit"                    
                     Visual="{DynamicResource appbar_edit}"/>
                             <controls:AppBarButton
@@ -457,7 +466,8 @@
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Analysis" 
-                              Style="{StaticResource SideTabItem}">
+                              Style="{StaticResource SideTabItem}"
+                              IsEnabled="{Binding !CurrentIncident.New}">
                 <ScrollViewer Margin="0,0,0,10" >
 
                 </ScrollViewer>

@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using ERHMS.WPF.Model;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.CommandWpf;
 
@@ -13,30 +12,20 @@ namespace ERHMS.WPF.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        private readonly IDataService _dataService;
-
         public RelayCommand NewResponderCommand { get; private set; }
         public RelayCommand NewIncidentCommand { get; private set; }
         public RelayCommand SearchRespondersCommand { get; private set; }
         public RelayCommand ViewFormListCommand { get; private set; }
         public RelayCommand ViewTemplateListCommand { get; private set; }
+        public RelayCommand ViewHelpCommand { get; private set; }
+        public RelayCommand ViewAboutCommand { get; private set; }
+        public RelayCommand ExitApplicationCommand { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService)
+        public MainViewModel()
         {
-            _dataService = dataService;
-            _dataService.GetData(
-                (item, error) =>
-                {
-                    if (error != null)
-                    {
-                        // Report error here
-                        return;
-                    }
-                });
-
             NewResponderCommand = new RelayCommand(() =>
             {
                 Messenger.Default.Send(new NotificationMessage("ShowNewResponder"));
@@ -57,13 +46,18 @@ namespace ERHMS.WPF.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage("ShowTemplateList"));
             });
+            ViewHelpCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage("ShowHelp"));
+            });
+            ViewAboutCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage("ShowAbout"));
+            });
+            ExitApplicationCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage("ExitApplication"));
+            });
         }
-
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
-
-        ////    base.Cleanup();
-        ////}
     }
 }

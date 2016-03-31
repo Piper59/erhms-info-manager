@@ -1,5 +1,4 @@
 ﻿<UserControl x:Class="ERHMS.WPF.View.ResponderSearchView"
-             DataContext="{Binding ResponderSearchViewModel, Source={StaticResource Locator}}"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -45,7 +44,7 @@
         </TextBox>
         <controls:MultiSelectDataGrid Grid.Row="5"
                   cmd:Commands.DataGridDoubleClickCommand="{Binding EditCommand}"
-                  ItemsSource="{Binding ResponderListStoreView}" 
+                  ItemsSource="{Binding ResponderList}" 
                   SelectionMode="Extended"
                   SelectionUnit="FullRow"
                   AutoGenerateColumns="False"
@@ -96,11 +95,6 @@
                     Visual="{DynamicResource appbar_email}"/>
             </WrapPanel>
             <WrapPanel Grid.Column="2">
-                <controls:AppBarButton
-                    Command="{Binding RefreshCommand}"
-                    ToolTip="Refresh List"
-                    Content="Refresh"
-                    Visual="{DynamicResource appbar_refresh}"/>
             </WrapPanel>
         </Grid>
     </Grid>

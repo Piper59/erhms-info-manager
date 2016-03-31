@@ -8,7 +8,6 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections;
 using ERHMS.Domain;
-using ERHMS.EpiInfo.Domain;
 
 namespace ERHMS.WPF
 {
@@ -23,6 +22,8 @@ namespace ERHMS.WPF
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainViewModel();
             
             this.Closing += (s, e) => ViewModelLocator.Cleanup();
             this.Closing += MetroNavigationWindow_Closing;
@@ -46,14 +47,29 @@ namespace ERHMS.WPF
                             OpenWindow("New Location", new LocationView());
                             break;
                         }
-                    case "ShowFormList":
+                    case "ShowNewIncident":
                         {
-                            OpenWindow("Forms/Surveys", new FormListView());
+                            OpenWindow("New Incident", new IncidentView());
                             break;
                         }
                     case "ShowTemplateList":
                         {
                             OpenWindow("Templates", new TemplateListView());
+                            break;
+                        }
+                    case "ShowHelp":
+                        {
+                            OpenWindow("Help", new HelpView());
+                            break;
+                        }
+                    case "ShowAbout":
+                        {
+                            OpenWindow("About", new AboutView());
+                            break;
+                        }
+                    case "ExitApplication":
+                        {
+                            this.Close();
                             break;
                         }
                 }
@@ -85,16 +101,11 @@ namespace ERHMS.WPF
                 }
             });
 
-            //used for creating or editing a responder
+            //used for editing an incident
             Messenger.Default.Register<NotificationMessage<Incident>>(this, (msg) =>
             {
                 switch (msg.Notification)
                 {
-                    case "ShowNewIncident":
-                        {
-                            OpenWindow("New Incident", new IncidentView(msg.Content));
-                            break;
-                        }
                     case "ShowEditIncident":
                         {
                             OpenWindow("Edit Incident", new IncidentView(msg.Content));
@@ -103,16 +114,25 @@ namespace ERHMS.WPF
                 }
             });
 
+            //used for sending emails to responders
+            Messenger.Default.Register<NotificationMessage<Tuple<IList, string, string>>>(this, (msg) =>
+            {
+                if (msg.Notification == "ComposeEmail")
+                {
+                    OpenWindow("Edit Responder", new EmailView(msg.Content.Item1, msg.Content.Item2, msg.Content.Item3));
+                }
+            });
+
             //used for showing a message
             Messenger.Default.Register<NotificationMessage<string>>(this, (msg) =>
             {
                 if (msg.Notification == "ShowSuccessMessage")
                 {
-                    ShowSuccessDialog(msg.Content);
+                    SuccessToaster.Toast(msg.Content, netoaster.ToasterPosition.ApplicationBottomRight, netoaster.ToasterAnimation.FadeIn);                    
                 }
                 else if (msg.Notification == "ShowErrorMessage")
                 {
-                    ShowErrorDialog(msg.Content);
+                    ErrorToaster.Toast(msg.Content, netoaster.ToasterPosition.ApplicationBottomRight, netoaster.ToasterAnimation.FadeIn);
                 }
             });
 
@@ -150,15 +170,6 @@ namespace ERHMS.WPF
                         break;
                 }
             });
-
-            //used for sending emails to responders
-            Messenger.Default.Register<NotificationMessage<Tuple<IList, string, string>>>(this, (msg) =>
-            {
-                if (msg.Notification == "ComposeEmail")
-                {
-                    OpenWindow("Edit Responder", new EmailView(msg.Content.Item1, msg.Content.Item2, msg.Content.Item3));
-                }
-            });
         }
 
         private void OpenWindow(string title, object content)
@@ -168,43 +179,7 @@ namespace ERHMS.WPF
             newDoc.Content = content;
             layoutDocumentPane.Children.Add(newDoc);
             layoutDocumentPane.SelectedContentIndex = layoutDocumentPane.ChildrenCount - 1;
-        }        
-
-        private async void ShowSuccessDialog(string message, Action onClose = null)
-        {
-            var dialogSettings = new MetroDialogSettings()
-            {
-                AffirmativeButtonText = "Ok",
-                AnimateShow = true,
-                AnimateHide = false
-            };
-
-            MessageDialogResult result = await this.ShowMessageAsync("Success", message,
-                MessageDialogStyle.Affirmative, dialogSettings);
-            if (result == MessageDialogResult.Affirmative)
-            {
-                if (onClose != null)
-                    onClose();
-            }
-        }
-
-        private async void ShowErrorDialog(string message, Action onClose = null)
-        {
-            var dialogSettings = new MetroDialogSettings()
-            {
-                AffirmativeButtonText = "Ok",
-                AnimateShow = true,
-                AnimateHide = false
-            };
-
-            MessageDialogResult result = await this.ShowMessageAsync("Error", message,
-                MessageDialogStyle.Affirmative, dialogSettings);
-            if (result == MessageDialogResult.Affirmative)
-            {
-                if (onClose != null)
-                    onClose();
-            }
-        }
+        }                
 
         private async void ShowConfirmDialog(string message, Action onConfirm = null)
         {

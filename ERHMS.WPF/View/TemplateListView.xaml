@@ -44,7 +44,7 @@
             </TextBox.Text>
         </TextBox>
         <DataGrid Grid.Row="5"
-                  ItemsSource="{Binding TemplateListStoreView}"
+                  ItemsSource="{Binding TemplateList}"
                   SelectedItem="{Binding SelectedTemplate}"
                   SelectionMode="Single"
                   AutoGenerateColumns="False" 
@@ -67,23 +67,13 @@
             <WrapPanel Grid.Column="1"
                        Grid.ColumnSpan="3"
                        HorizontalAlignment="Center">
-                <controls:AppBarButton
-                    Command="{Binding InstantiateCommand}"
-                    ToolTip="Add to Forms"
-                    Content="Add to Forms"
-                    Visual="{DynamicResource appbar_page_copy}"/>
+            </WrapPanel>
+            <WrapPanel Grid.Column="2">
                 <controls:AppBarButton
                     Command="{Binding DeleteCommand}"
                     ToolTip="Delete Template"
                     Content="Delete"
                     Visual="{DynamicResource appbar_delete}"/>
-            </WrapPanel>
-            <WrapPanel Grid.Column="2">
-            <controls:AppBarButton
-                    Command="{Binding RefreshCommand}"
-                    ToolTip="Refresh List"
-                    Content="Refresh"                    
-                    Visual="{DynamicResource appbar_refresh}"/>
             </WrapPanel>
         </Grid>
     </Grid>

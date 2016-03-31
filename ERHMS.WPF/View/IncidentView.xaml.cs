@@ -1,4 +1,5 @@
-﻿using ERHMS.Domain;
+﻿using ERHMS.DataAccess;
+using ERHMS.Domain;
 using ERHMS.WPF.ViewModel;
 using System.Diagnostics;
 using System.IO;
@@ -16,8 +17,15 @@ namespace ERHMS.WPF.View
         public IncidentView(Incident incident)
         {
             InitializeComponent();
-            //can either be a new responder or an existing record
+
             DataContext = new IncidentViewModel(incident);
+        }
+
+        public IncidentView()
+        {
+            InitializeComponent();
+            
+            DataContext = new IncidentViewModel();
         }
 
         private void btnPublish_Click(object sender, RoutedEventArgs e)

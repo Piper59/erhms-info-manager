@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.WPF.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace ERHMS.WPF.View
         public StartView()
         {
             InitializeComponent();
+            
+            DataContext = new StartViewModel();
         }
     }
 }

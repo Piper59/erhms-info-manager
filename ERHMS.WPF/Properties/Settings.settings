@@ -26,5 +26,8 @@
     <Setting Name="EmailSender" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="BingMapsLicenseKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Am2Kmtkt9FKkcW1k9o0NS6NnySTT9JtrAZWeZxwpPP0Ki21n2kyLpIohVd224-uy</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

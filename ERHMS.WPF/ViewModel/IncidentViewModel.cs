@@ -20,6 +20,9 @@ namespace ERHMS.WPF.ViewModel
             set;
         }
 
+        public RelayCommand SaveIncidentDetailsCommand { get; private set; }
+
+
         #region Roster
         //Commands
         public RelayCommand AddToRosterCommand { get; private set; }
@@ -181,6 +184,7 @@ namespace ERHMS.WPF.ViewModel
         }
 
         public RelayCommand AddFormCommand { get; private set; }
+        public RelayCommand AddFormFromTemplateCommand { get; private set; }
         public RelayCommand EditFormCommand { get; private set; }
         public RelayCommand DeleteFormCommand { get; private set; }
         public RelayCommand EnterFormDataCommand { get; private set; }
@@ -201,13 +205,25 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand AnalyzeFormVisualCommand { get; private set; }
         #endregion
 
+        public IncidentViewModel()
+        {
+            DataContext dbContext = new DataContext();
+            CurrentIncident = dbContext.Incidents.Create();
+            
+            Initialize();
+        }
 
         public IncidentViewModel(Incident incident)
         {
-            DataContext dbContext = new DataContext();
-
             CurrentIncident = incident;
 
+            Initialize();
+        }
+
+        private void Initialize()
+        { 
+            DataContext dbContext = new DataContext();
+            
             LocationList = CollectionViewSource.GetDefaultView(dbContext.Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
             FormList = CollectionViewSource.GetDefaultView(dbContext.Forms.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
 
@@ -216,6 +232,11 @@ namespace ERHMS.WPF.ViewModel
 
             rosteredResponders = new CollectionViewSource();
             //rosteredResponders.Source = 
+
+            SaveIncidentDetailsCommand = new RelayCommand(() =>
+            {
+                dbContext.Incidents.Save(CurrentIncident);
+            });
 
             AddLocationCommand = new RelayCommand(() =>
             {

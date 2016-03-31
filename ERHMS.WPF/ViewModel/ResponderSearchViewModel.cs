@@ -18,19 +18,21 @@ namespace ERHMS.WPF.ViewModel
         public IList SelectedResponders
         {
             get { return selectedResponders; }
-            set { 
+            set
+            { 
                 Set(ref selectedResponders, value);
+
                 EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
                 EmailCommand.RaiseCanExecuteChanged(); 
             }
         }
 
-        private ICollectionView responderListStoreView;
-        public ICollectionView ResponderListStoreView
+        private ICollectionView responderList;
+        public ICollectionView ResponderList
         {
-            get { return responderListStoreView; }
-            private set { Set(ref responderListStoreView, value); }
+            get { return responderList; }
+            private set { Set(ref responderList, value); }
         }
 
         private string filter;
@@ -40,7 +42,7 @@ namespace ERHMS.WPF.ViewModel
             set
             {
                 Set(ref filter, value);
-                ResponderListStoreView.Filter = ListFilterFunc;
+                ResponderList.Filter = ListFilterFunc;
             }
         }
 
@@ -65,13 +67,12 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand EditCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
 
         public ResponderSearchViewModel()
         {
             DataContext dbContext = new DataContext();
 
-            ResponderListStoreView = CollectionViewSource.GetDefaultView(dbContext.Responders.Select());
+            ResponderList = CollectionViewSource.GetDefaultView(dbContext.Responders.Select());
 
             AddCommand = new RelayCommand(() =>
                 {

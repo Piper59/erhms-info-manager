@@ -17,11 +17,11 @@ namespace ERHMS.WPF.ViewModel
             set { Set(ref selectedTemplate, value); }
         }
 
-        private ICollectionView templateListStoreView;
-        public ICollectionView TemplateListStoreView
+        private ICollectionView templateList;
+        public ICollectionView TemplateList
         {
-            get { return templateListStoreView; }
-            private set { Set(ref templateListStoreView, value); }
+            get { return templateList; }
+            private set { Set(ref templateList, value); }
         }
 
         private string filter;
@@ -31,11 +31,11 @@ namespace ERHMS.WPF.ViewModel
             set
             {
                 Set(ref filter, value);
-                TemplateListStoreView.Filter = ListFilter;
+                TemplateList.Filter = ListFilterFunc;
             }
         }
 
-        private bool ListFilter(object item)
+        private bool ListFilterFunc(object item)
         {
             dynamic t = item as FileInfo;
 
@@ -43,8 +43,7 @@ namespace ERHMS.WPF.ViewModel
                 Filter.Equals("") ||
                 (t.Name != null && t.Name.ToLower().Contains(Filter.ToLower()));
         }
-
-        public ICommand InstantiateCommand { get; private set; }
+        
         public ICommand DeleteCommand { get; private set; }
 
         public TemplateListViewModel()
@@ -52,14 +51,6 @@ namespace ERHMS.WPF.ViewModel
             //TemplateListStoreView = CollectionViewSource.GetDefaultView(Project.Templates);
 
             
-            InstantiateCommand = new RelayCommand(() =>
-                {
-                    //Project.InstantiateViewTemplate(SelectedTemplate.FullName);
-                   // Project.Views.Refresh();
-                    Messenger.Default.Send(new NotificationMessage<string>("The template has been copied. You may view these under the Forms tab.", "ShowSuccessMessage"));
-
-                },
-                HasSelectedTemplate);
             DeleteCommand = new RelayCommand(() =>
                 {
                     //Messenger.Default.Send(new NotificationMessage<System.Action>(() => Project.Templates.Delete(SelectedTemplate), "ConfirmDeleteTemplate"));

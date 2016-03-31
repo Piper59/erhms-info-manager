@@ -124,7 +124,11 @@ namespace ERHMS.WPF.ViewModel
                             //check for required fields
                             List<string> missingData = new List<string>();
                             dynamic responder = SelectedResponder;
-                            if(string.IsNullOrEmpty(responder.Username))
+                            if (string.IsNullOrEmpty(responder.ResponderId))
+                            {
+                                missingData.Add("ResponderId");
+                            }
+                            if (string.IsNullOrEmpty(responder.Username))
                             {
                                 missingData.Add("Username");
                             }
@@ -177,16 +181,9 @@ namespace ERHMS.WPF.ViewModel
         /// </summary>
         public ResponderViewModel(Responder responder)
         {
-            DataContext dbContext = new DataContext();
-
             SelectedResponder = responder;
 
-            HeightOptions = new List<string>(){"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-
-            Prefixes = new ObservableCollection<string>(dbContext.Prefixes.Select());
-            Suffixes = new ObservableCollection<string>(dbContext.Suffixes.Select());
-            Genders = new ObservableCollection<string>(dbContext.Genders.Select());
-            States = new ObservableCollection<string>(dbContext.States.Select());
+            Initialize();
         }
 
         public ResponderViewModel()
@@ -194,6 +191,13 @@ namespace ERHMS.WPF.ViewModel
             DataContext dbContext = new DataContext();
 
             SelectedResponder = dbContext.Responders.Create();
+
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            DataContext dbContext = new DataContext();
 
             HeightOptions = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" };
 
