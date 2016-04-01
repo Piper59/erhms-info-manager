@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
+  </PropertyGroup>
   <ItemGroup>
-    <Content Include="$(SolutionDir)Epi Info 7\**">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <Content Include="$(EpiInfoDir)**">
+      <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
   </ItemGroup>
-  <Target Name="RemoveReferencedContent" AfterTargets="ResolveAssemblyReferences">
+  <Target Name="RemoveReferencedEpiInfoContent" AfterTargets="ResolveAssemblyReferences">
     <ItemGroup>
-      <Content Remove="@(ReferencePath)" />
-      <Content Remove="@(ReferenceDependencyPaths)" />
+      <Content Remove="@(ReferencePath->'$(EpiInfoDir)%(FileName)%(Extension)')" />
+      <Content Remove="@(ReferenceDependencyPaths->'$(EpiInfoDir)%(FileName)%(Extension)')" />
     </ItemGroup>
   </Target>
   <Target Name="RemoveEpiInfoGeneratedDirectories" AfterTargets="Clean">
