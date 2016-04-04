@@ -2,7 +2,6 @@
 using Epi.Windows.MakeView.PresentationLogic;
 using ERHMS.Utility;
 using System;
-using System.IO;
 using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.MakeView
