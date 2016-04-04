@@ -50,11 +50,15 @@ namespace ERHMS.EpiInfo
 
         private Project() { }
 
-        public Project(FileInfo file)
-            : base(file.FullName)
+        public Project(string path)
+            : base(path)
         {
-            Log.Current.DebugFormat("Opening project: {0}", file.FullName);
+            Log.Current.DebugFormat("Opening project: {0}", path);
         }
+
+        public Project(FileInfo file)
+            : this(file.FullName)
+        { }
 
         public override void Save()
         {

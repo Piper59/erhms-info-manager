@@ -51,12 +51,26 @@ namespace ERHMS.EpiInfo.Communication
 
         public void Ping() { }
 
-        public event EventHandler<ViewEventArgs> RefreshingView;
-
-        private void OnRefreshingView(ViewEventArgs e)
+        private void OnEvent(EventHandler handler, string message)
         {
-            Log.Current.DebugFormat("Refreshing view: {0}, {1}", e.ProjectPath, e.ViewName);
-            EventHandler<ViewEventArgs> handler = RefreshingView;
+            Log.Current.Debug(message);
+            if (handler == null)
+            {
+                return;
+            }
+            try
+            {
+                handler(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                Log.Current.Warn(message, ex);
+            }
+        }
+
+        private void OnEvent<TEventArgs>(EventHandler<TEventArgs> handler, TEventArgs e, string message) where TEventArgs : EventArgs
+        {
+            Log.Current.DebugFormat("{0}: {1}", message, e);
             if (handler == null)
             {
                 return;
@@ -67,18 +81,29 @@ namespace ERHMS.EpiInfo.Communication
             }
             catch (Exception ex)
             {
-                Log.Current.Warn(string.Format("Failed to refresh view: {0}, {1}", e.ProjectPath, e.ViewName), ex);
+                Log.Current.Warn(string.Format("{0} failed: {1}", message, e), ex);
             }
         }
 
-        private void OnRefreshingView(string projectPath, string viewName)
+        public event EventHandler<ProjectEventArgs> RefreshingViews;
+
+        public void RefreshViews(string projectPath)
         {
-            OnRefreshingView(new ViewEventArgs(projectPath, viewName));
+            OnEvent(RefreshingViews, new ProjectEventArgs(projectPath), "Refreshing views");
         }
 
-        public void RefreshView(string projectPath, string viewName)
+        public event EventHandler RefreshingTemplates;
+
+        public void RefreshTemplates()
         {
-            OnRefreshingView(projectPath, viewName);
+            OnEvent(RefreshingTemplates, "Refreshing templates");
+        }
+
+        public event EventHandler<ViewEventArgs> RefreshingViewData;
+
+        public void RefreshViewData(string projectPath, string viewName)
+        {
+            OnEvent(RefreshingViewData, new ViewEventArgs(projectPath, viewName), "Refreshing view data");
         }
     }
 }

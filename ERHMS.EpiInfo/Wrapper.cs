@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,19 @@ namespace ERHMS.EpiInfo
 {
     public class Wrapper
     {
+        private static class Arguments
+        {
+            public static string Escape(string arg)
+            {
+                return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
+            }
+
+            public static string Format(IEnumerable<string> args)
+            {
+                return string.Join(" ", args.Select(arg => Escape(arg)));
+            }
+        }
+
         protected static FileInfo GetExecutable(Assembly assembly)
         {
             string fileName = string.Format("{0}.exe", assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title);
@@ -21,9 +35,9 @@ namespace ERHMS.EpiInfo
         {
             FileInfo executable = GetExecutable(Assembly.GetCallingAssembly());
             string methodName = ((MethodCallExpression)expression.Body).Method.Name;
-            string _args = Arguments.Format(args.Prepend(methodName));
-            Log.Current.DebugFormat("Executing wrapper: {0} {1}", executable.FullName, _args);
-            return ProcessExtensions.Start(executable, _args);
+            string argString = Arguments.Format(args.Prepend(methodName));
+            Log.Current.DebugFormat("Executing wrapper: {0} {1}", executable.FullName, argString);
+            return ProcessExtensions.Start(executable, argString);
         }
 
         protected static void MainBase(Type type, string[] args)
@@ -31,9 +45,7 @@ namespace ERHMS.EpiInfo
             Application.EnableVisualStyles();
             Log.Current.Debug("Starting up");
             ConfigurationExtensions.Load();
-            BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-            MethodInfo method = type.GetMethod(args.First(), bindingFlags, null, new Type[] { typeof(string[]) }, null);
-            method.Invoke(null, new object[] { args.Skip(1).ToArray() });
+            ReflectionExtensions.Invoke(type, args.First(), new Type[] { typeof(string[]) }, args.Skip(1).ToArray());
             Log.Current.Debug("Exiting");
         }
     }

@@ -58,6 +58,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="SingleInstanceApplication.cs" />
   </ItemGroup>
   <ItemGroup>

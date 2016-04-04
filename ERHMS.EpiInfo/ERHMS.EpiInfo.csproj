@@ -56,7 +56,6 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Arguments.cs" />
     <Compile Include="Canvas.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Log.cs" />
@@ -73,6 +72,7 @@
       <DependentUpon>Canvas.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewDeleter.cs" />
+    <Compile Include="ViewExtensions.cs" />
     <Compile Include="Wrapper.cs" />
   </ItemGroup>
   <ItemGroup>

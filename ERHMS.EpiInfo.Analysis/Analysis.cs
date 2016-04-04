@@ -100,7 +100,7 @@ namespace ERHMS.EpiInfo.Analysis
         {
             string projectPath = args[0];
             string viewName = args[1];
-            using (Project project = new Project(new FileInfo(projectPath)))
+            using (Project project = new Project(projectPath))
             {
                 View view = project.Views[viewName];
                 using (MainForm form = new MainForm())
@@ -157,7 +157,7 @@ namespace ERHMS.EpiInfo.Analysis
                                 {
                                     return;
                                 }
-                                service.RefreshView(projectPath, viewName);
+                                service.RefreshViewData(projectPath, viewName);
                             });
                         });
                     };

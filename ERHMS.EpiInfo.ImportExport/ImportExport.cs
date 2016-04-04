@@ -29,10 +29,5 @@ namespace ERHMS.EpiInfo.ImportExport
                 dialog.ShowDialog();
             }
         }
-
-        public static void ImportFromWeb(View target)
-        {
-            // TODO
-        }
     }
 }

@@ -64,16 +64,16 @@ namespace ERHMS.Sandbox
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-            App.Current.Service.RefreshingView += Service_RefreshingView;
+            App.Current.Service.RefreshingViewData += Service_RefreshingViewData;
         }
 
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            App.Current.Service.RefreshingView -= Service_RefreshingView;
+            App.Current.Service.RefreshingViewData -= Service_RefreshingViewData;
         }
 
-        private void Service_RefreshingView(object sender, ViewEventArgs e)
+        private void Service_RefreshingViewData(object sender, ViewEventArgs e)
         {
             if (project == null || project.FilePath != e.ProjectPath || e.ViewName != "Surveillance")
             {
@@ -93,7 +93,7 @@ namespace ERHMS.Sandbox
             };
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                project = new Project(new FileInfo(dialog.FileName));
+                project = new Project(dialog.FileName);
                 driver = DataDriverFactory.CreateDataDriver(project);
                 surveillances = new ViewEntityRepository<Surveillance>(driver, project.Views["Surveillance"]);
                 Buttons.IsEnabled = true;
