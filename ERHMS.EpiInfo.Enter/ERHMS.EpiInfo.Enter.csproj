@@ -30,17 +30,44 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Enter">
+      <HintPath>..\Epi Info 7\Enter.exe</HintPath>
+    </Reference>
+    <Reference Include="Epi.Core">
+      <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Epi.Windows">
+      <HintPath>..\Epi Info 7\Epi.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="EpiInfo.Plugin">
+      <HintPath>..\Epi Info 7\EpiInfo.Plugin.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Communication\ERHMS.EpiInfo.Communication.csproj">
+      <Project>{4feb8705-98bb-431c-9878-004b0c4d7d41}</Project>
+      <Name>ERHMS.EpiInfo.Communication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
+      <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
+      <Name>ERHMS.EpiInfo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Enter.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -105,5 +105,12 @@ namespace ERHMS.EpiInfo.Communication
         {
             OnEvent(RefreshingViewData, new ViewEventArgs(projectPath, viewName), "Refreshing view data");
         }
+
+        public event EventHandler<RecordEventArgs> RefreshingRecordData;
+
+        public void RefreshRecordData(string projectPath, string viewName, string globalRecordId)
+        {
+            OnEvent(RefreshingRecordData, new RecordEventArgs(projectPath, viewName, globalRecordId), "Refreshing record data");
+        }
     }
 }

@@ -16,5 +16,8 @@ namespace ERHMS.EpiInfo.Communication
 
         [OperationContract]
         void RefreshViewData(string projectPath, string viewName);
+
+        [OperationContract]
+        void RefreshRecordData(string projectPath, string viewName, string globalRecordId);
     }
 }
