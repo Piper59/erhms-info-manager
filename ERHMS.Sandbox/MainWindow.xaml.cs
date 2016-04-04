@@ -6,9 +6,9 @@ using ERHMS.EpiInfo.Communication;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Enter;
+using ERHMS.EpiInfo.MakeView;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using Action = System.Action;
@@ -227,6 +227,39 @@ namespace ERHMS.Sandbox
                 return;
             }
             Enter.OpenRecord(view, surveillance.UniqueKey.Value);
+        }
+
+        private void MakeViewOpen_Click(object sender, RoutedEventArgs e)
+        {
+            MakeView.OpenView(view);
+        }
+
+        private void MakeViewAdd_Click(object sender, RoutedEventArgs e)
+        {
+            MakeView.AddView(project);
+        }
+
+        private void MakeViewAddFromTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Epi Info 7 Template (*.xml)|*.xml",
+            };
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                FileInfo file = new FileInfo(dialog.FileName);
+                EpiInfo.Template template;
+                if (!EpiInfo.Template.TryRead(file, out template))
+                {
+                    return;
+                }
+                MakeView.AddFromTemplate(project, template);
+            }
+        }
+
+        private void MakeViewCreateTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            MakeView.CreateTemplate(view);
         }
     }
 }

@@ -30,6 +30,12 @@
                 <MenuItem Header="_Insert" Click="EnterInsert_Click" />
                 <MenuItem Header="_Update" Click="EnterUpdate_Click" />
             </MenuItem>
+            <MenuItem Header="_MakeView">
+                <MenuItem Header="_Open" Click="MakeViewOpen_Click" />
+                <MenuItem Header="_Add" Click="MakeViewAdd_Click" />
+                <MenuItem Header="Add from _Template" Click="MakeViewAddFromTemplate_Click" />
+                <MenuItem Header="_Create Template" Click="MakeViewCreateTemplate_Click" />
+            </MenuItem>
         </Menu>
         <ScrollViewer>
             <DataGrid Name="Data" IsReadOnly="True" />

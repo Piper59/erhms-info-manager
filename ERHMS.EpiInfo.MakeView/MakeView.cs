@@ -88,40 +88,6 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
-        public static Process CreateTemplate(View view)
-        {
-            return Execute(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
-        }
-
-        private static void Main_CreateTemplate(string[] args)
-        {
-            string projectPath = args[0];
-            string viewName = args[1];
-            using (MainForm form = new MainForm())
-            {
-                Project project = new Project(projectPath);
-                form.OpenProject(projectPath);
-                form.Load += (sender, e) =>
-                {
-                    using (AddTemplateDialog dialog = new AddTemplateDialog(form))
-                    {
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                        {
-                            Template template = new Template(form.Mediator);
-                            template.CreateTemplate(project.Views[viewName], dialog.TemplateName);
-                            IService service = Service.GetService();
-                            if (service == null)
-                            {
-                                return;
-                            }
-                            service.RefreshTemplates();
-                        }
-                    }
-                };
-                Application.Run(form);
-            }
-        }
-
         public static Process AddFromTemplate(Project project, EpiInfo.Template template)
         {
             return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName);
@@ -182,6 +148,40 @@ namespace ERHMS.EpiInfo.MakeView
             else
             {
                 throw new ArgumentException("Template level is not project or view.");
+            }
+        }
+
+        public static Process CreateTemplate(View view)
+        {
+            return Execute(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
+        }
+
+        private static void Main_CreateTemplate(string[] args)
+        {
+            string projectPath = args[0];
+            string viewName = args[1];
+            using (MainForm form = new MainForm(false))
+            {
+                Project project = new Project(projectPath);
+                form.OpenProject(projectPath);
+                form.Load += (sender, e) =>
+                {
+                    using (AddTemplateDialog dialog = new AddTemplateDialog(form))
+                    {
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            Template template = new Template(form.Mediator);
+                            template.CreateTemplate(project.Views[viewName], dialog.TemplateName);
+                            IService service = Service.GetService();
+                            if (service == null)
+                            {
+                                return;
+                            }
+                            service.RefreshTemplates();
+                        }
+                    }
+                };
+                Application.Run(form);
             }
         }
     }

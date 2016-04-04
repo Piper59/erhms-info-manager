@@ -47,9 +47,9 @@ namespace ERHMS.EpiInfo.MakeView
                 {
                     return;
                 }
-                this.Invoke("CloseCurrentProject", Type.EmptyTypes, null);
+                this.Invoke(typeof(MakeViewMainForm), "CloseCurrentProject", Type.EmptyTypes, null);
             }
-            this.Invoke("OpenProject", new Type[] { typeof(Epi.Project) }, new object[] { project });
+            this.Invoke(typeof(MakeViewMainForm), "OpenProject", new Type[] { typeof(Epi.Project) }, new object[] { project });
         }
 
         public void OpenProject(string projectPath)
