@@ -45,7 +45,7 @@ namespace ERHMS.EpiInfo
             Application.EnableVisualStyles();
             Log.Current.Debug("Starting up");
             ConfigurationExtensions.Load();
-            ReflectionExtensions.Invoke(type, args.First(), new Type[] { typeof(string[]) }, args.Skip(1).ToArray());
+            ReflectionExtensions.Invoke(type, args.First(), new Type[] { typeof(string[]) }, new object[] { args.Skip(1).ToArray() });
             Log.Current.Debug("Exiting");
         }
     }

@@ -20,16 +20,16 @@ namespace ERHMS.EpiInfo.Enter
             };
         }
 
-        public MainForm(View view)
+        public MainForm(string projectPath, string viewName)
             : this()
         {
-            CurrentProject = view.Project;
-            View = view;
+            CurrentProject = new Project(projectPath);
+            View = CurrentProject.Views[viewName];
         }
 
-        public void SetValue(string fieldName, object value)
+        public void SetValue(string fieldName, string value)
         {
-            View.Fields.DataFields[fieldName].CurrentRecordValueObject = value;
+            View.Fields.DataFields[fieldName].CurrentRecordValueString = value;
         }
 
         public new void Refresh()

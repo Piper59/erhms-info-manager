@@ -9,21 +9,28 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open..." Click="FileOpen_Click" />
-                <Separator />
+                <MenuItem Header="_Open" Click="FileOpen_Click" />
                 <MenuItem Header="E_xit" Click="FileExit_Click" />
             </MenuItem>
+            <MenuItem Header="_Data">
+                <MenuItem Header="_Select" Click="DataSelect_Click" />
+                <MenuItem Header="_Insert" Click="DataInsert_Click" />
+                <MenuItem Header="_Update" Click="DataUpdate_Click" />
+                <MenuItem Header="_Delete" Click="DataDelete_Click" />
+                <MenuItem Header="_Undelete" Click="DataUndelete_Click" />
+            </MenuItem>
+            <MenuItem Header="_Analysis">
+                <MenuItem Header="_Import" Click="AnalysisImport_Click" />
+                <MenuItem Header="_Export" Click="AnalysisExport_Click" />
+            </MenuItem>
+            <MenuItem Header="Dash_board">
+                <MenuItem Header="_Open" Click="DashboardOpen_Click" />
+            </MenuItem>
+            <MenuItem Header="_Enter">
+                <MenuItem Header="_Insert" Click="EnterInsert_Click" />
+                <MenuItem Header="_Update" Click="EnterUpdate_Click" />
+            </MenuItem>
         </Menu>
-        <WrapPanel Name="Buttons" DockPanel.Dock="Top" HorizontalAlignment="Center" IsEnabled="False">
-            <Button Click="Select_Click">Select</Button>
-            <Button Click="Insert_Click">Insert</Button>
-            <Button Click="Update_Click">Update</Button>
-            <Button Click="Delete_Click">Delete</Button>
-            <Button Click="Undelete_Click">Undelete</Button>
-            <Button Click="Import_Click">Import</Button>
-            <Button Click="Export_Click">Export</Button>
-            <Button Click="Dashboard_Click">Dashboard</Button>
-        </WrapPanel>
         <ScrollViewer>
             <DataGrid Name="Data" IsReadOnly="True" />
         </ScrollViewer>

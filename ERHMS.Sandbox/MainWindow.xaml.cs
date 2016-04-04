@@ -1,13 +1,18 @@
-﻿using ERHMS.EpiInfo;
+﻿using Epi;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analysis;
 using ERHMS.EpiInfo.AnalysisDashboard;
 using ERHMS.EpiInfo.Communication;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
+using ERHMS.EpiInfo.Enter;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using Action = System.Action;
+using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Sandbox
 {
@@ -53,6 +58,7 @@ namespace ERHMS.Sandbox
         }
 
         private Project project;
+        private View view;
         private IDataDriver driver;
         private ViewEntityRepository<Surveillance> surveillances;
 
@@ -64,16 +70,18 @@ namespace ERHMS.Sandbox
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-            App.Current.Service.RefreshingViewData += Service_RefreshingViewData;
+            App.Current.Service.RefreshingViewData += Service_RefreshingData;
+            App.Current.Service.RefreshingRecordData += Service_RefreshingData;
         }
 
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            App.Current.Service.RefreshingViewData -= Service_RefreshingViewData;
+            App.Current.Service.RefreshingViewData -= Service_RefreshingData;
+            App.Current.Service.RefreshingRecordData -= Service_RefreshingData;
         }
 
-        private void Service_RefreshingViewData(object sender, ViewEventArgs e)
+        private void Service_RefreshingData(object sender, ViewEventArgs e)
         {
             if (project == null || project.FilePath != e.ProjectPath || e.ViewName != "Surveillance")
             {
@@ -81,7 +89,7 @@ namespace ERHMS.Sandbox
             }
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                Data.ItemsSource = surveillances.Select();
+                Refresh();
             }));
         }
 
@@ -94,9 +102,9 @@ namespace ERHMS.Sandbox
             if (dialog.ShowDialog().GetValueOrDefault())
             {
                 project = new Project(dialog.FileName);
+                view = project.Views["Surveillance"];
                 driver = DataDriverFactory.CreateDataDriver(project);
-                surveillances = new ViewEntityRepository<Surveillance>(driver, project.Views["Surveillance"]);
-                Buttons.IsEnabled = true;
+                surveillances = new ViewEntityRepository<Surveillance>(driver, view);
             }
         }
 
@@ -105,12 +113,19 @@ namespace ERHMS.Sandbox
             Close();
         }
 
-        private void Select_Click(object sender, RoutedEventArgs e)
+        private void Refresh()
         {
+            int selectedIndex = Data.SelectedIndex;
             Data.ItemsSource = surveillances.Select();
+            Data.SelectedIndex = selectedIndex;
         }
 
-        private void Insert_Click(object sender, RoutedEventArgs e)
+        private void DataSelect_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        private void DataInsert_Click(object sender, RoutedEventArgs e)
         {
             Surveillance surveillance = surveillances.Create();
             surveillance.FirstName = "Steven";
@@ -121,10 +136,10 @@ namespace ERHMS.Sandbox
             surveillance.Pregnant = false;
             surveillances.Save(surveillance);
             MessageBox.Show(surveillance.UniqueKey.ToString(), Title);
-            Data.ItemsSource = surveillances.Select();
+            Refresh();
         }
 
-        private void Update_Click(object sender, RoutedEventArgs e)
+        private void DataUpdate_Click(object sender, RoutedEventArgs e)
         {
             Surveillance surveillance = (Surveillance)Data.SelectedItem;
             if (surveillance == null)
@@ -133,10 +148,10 @@ namespace ERHMS.Sandbox
             }
             surveillance.Week = new Random().Next(1, 52);
             surveillances.Save(surveillance);
-            Data.ItemsSource = surveillances.Select();
+            Refresh();
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void DataDelete_Click(object sender, RoutedEventArgs e)
         {
             Surveillance surveillance = (Surveillance)Data.SelectedItem;
             if (surveillance == null)
@@ -144,10 +159,10 @@ namespace ERHMS.Sandbox
                 return;
             }
             surveillances.Delete(surveillance);
-            Data.ItemsSource = surveillances.Select();
+            Refresh();
         }
 
-        private void Undelete_Click(object sender, RoutedEventArgs e)
+        private void DataUndelete_Click(object sender, RoutedEventArgs e)
         {
             Surveillance surveillance = (Surveillance)Data.SelectedItem;
             if (surveillance == null)
@@ -155,20 +170,20 @@ namespace ERHMS.Sandbox
                 return;
             }
             surveillances.Undelete(surveillance);
-            Data.ItemsSource = surveillances.Select();
+            Refresh();
         }
 
-        private void Import_Click(object sender, RoutedEventArgs e)
+        private void AnalysisImport_Click(object sender, RoutedEventArgs e)
         {
-            Analysis.Import(surveillances.View);
+            Analysis.Import(view);
         }
 
-        private void Export_Click(object sender, RoutedEventArgs e)
+        private void AnalysisExport_Click(object sender, RoutedEventArgs e)
         {
-            Analysis.Export(surveillances.View);
+            Analysis.Export(view);
         }
 
-        private void Dashboard_Click(object sender, RoutedEventArgs e)
+        private void DashboardOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
@@ -189,10 +204,29 @@ namespace ERHMS.Sandbox
                 }
                 else
                 {
-                    Canvas canvas = Canvas.CreateForView(surveillances.View, file);
+                    Canvas canvas = Canvas.CreateForView(view, file);
                     AnalysisDashboard.OpenCanvas(canvas);
                 }
             }
+        }
+
+        private void EnterInsert_Click(object sender, RoutedEventArgs e)
+        {
+            Enter.OpenView(view, new
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            });
+        }
+
+        private void EnterUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
+            Enter.OpenRecord(view, surveillance.UniqueKey.Value);
         }
     }
 }

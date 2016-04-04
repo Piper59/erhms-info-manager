@@ -11,6 +11,9 @@ namespace ERHMS.Utility
             {
                 UseShellExecute = false,
                 WorkingDirectory = executable.DirectoryName,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 FileName = executable.FullName,
                 Arguments = args
             });

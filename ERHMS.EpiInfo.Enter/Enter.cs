@@ -1,39 +1,94 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using View = Epi.View;
 
 namespace ERHMS.EpiInfo.Enter
 {
-    public class Enter
+    public class Enter : Wrapper
     {
-        public static MainForm Execute()
+        private static readonly Regex Field = new Regex(@"^(?<name>\S+) = (?<value>.*)$");
+
+        [STAThread]
+        internal static void Main(string[] args)
         {
-            MainForm form = new MainForm();
-            form.Show();
-            return form;
+            MainBase(typeof(Enter), args);
         }
 
-        public static MainForm OpenView(View view, IDictionary<string, object> values = null)
+        public static Process Execute()
         {
-            MainForm form = new MainForm(view);
-            form.Show();
-            form.FireOpenViewEvent(view, "+");
-            if (values != null)
+            return Execute(args => Main_Execute(args));
+        }
+
+        private static void Main_Execute(string[] args)
+        {
+            using (MainForm form = new MainForm())
             {
-                foreach (KeyValuePair<string, object> value in values)
-                {
-                    form.SetValue(value.Key, value.Value);
-                }
-                form.Refresh();
+                Application.Run(form);
             }
-            return form;
         }
 
-        public static MainForm OpenRecord(View view, int uniqueKey)
+        public static Process OpenView(View view, object record = null)
         {
-            MainForm form = new MainForm(view);
-            form.Show();
-            form.LoadRecord(uniqueKey);
-            return form;
+            Process process = Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
+            foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                process.StandardInput.WriteLine("{0} = {1}", property.Name, property.GetValue(record, null));
+            }
+            process.StandardInput.Close();
+            return process;
+        }
+
+        private static void Main_OpenView(string[] args)
+        {
+            string projectPath = args[0];
+            string viewName = args[1];
+            using (MainForm form = new MainForm(projectPath, viewName))
+            {
+                form.Show();
+                form.FireOpenViewEvent(form.View, "+");
+                bool refresh = false;
+                while (true)
+                {
+                    string line = Console.ReadLine();
+                    if (line == null)
+                    {
+                        break;
+                    }
+                    refresh = true;
+                    Match match = Field.Match(line);
+                    if (!match.Success)
+                    {
+                        throw new ArgumentException("Failed to read field.");
+                    }
+                    form.SetValue(match.Groups["name"].Value, match.Groups["value"].Value);
+                }
+                if (refresh)
+                {
+                    form.Refresh();
+                }
+                Application.Run(form);
+            }
+        }
+
+        public static Process OpenRecord(View view, int uniqueKey)
+        {
+            return Execute(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
+        }
+
+        private static void Main_OpenRecord(string[] args)
+        {
+            string projectPath = args[0];
+            string viewName = args[1];
+            string uniqueKey = args[2];
+            using (MainForm form = new MainForm(projectPath, viewName))
+            {
+                form.Show();
+                form.FireOpenViewEvent(form.View, uniqueKey);
+                Application.Run(form);
+            }
         }
     }
 }
