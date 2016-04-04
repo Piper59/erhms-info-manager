@@ -1,4 +1,5 @@
 ﻿using Epi.Windows.MakeView.Dialogs;
+using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
 using System.Diagnostics;
@@ -76,6 +77,12 @@ namespace ERHMS.EpiInfo.MakeView
                 form.Load += (sender, e) =>
                 {
                     form.ProjectExplorer.AddView();
+                    IService service = Service.GetService();
+                    if (service == null)
+                    {
+                        return;
+                    }
+                    service.RefreshViews(projectPath);
                 };
                 Application.Run(form);
             }
@@ -102,6 +109,12 @@ namespace ERHMS.EpiInfo.MakeView
                         {
                             Template template = new Template(form.Mediator);
                             template.CreateTemplate(project.Views[viewName], dialog.TemplateName);
+                            IService service = Service.GetService();
+                            if (service == null)
+                            {
+                                return;
+                            }
+                            service.RefreshTemplates();
                         }
                     }
                 };
@@ -154,6 +167,12 @@ namespace ERHMS.EpiInfo.MakeView
                                 document.Save(renamedTemplateFile.FullName);
                                 Template _template = new Template(form.Mediator);
                                 _template.AddFromTemplate(renamedTemplateFile.FullName);
+                                IService service = Service.GetService();
+                                if (service == null)
+                                {
+                                    return;
+                                }
+                                service.RefreshViews(projectPath);
                             }
                         }
                     };
