@@ -21,11 +21,6 @@ namespace ERHMS.DataAccess
         public LocationRepository Locations { get; private set; }
         public FormRepository Forms { get; private set; }
 
-        public DataContext()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public DataContext(Project project)
         {
             Project = project;

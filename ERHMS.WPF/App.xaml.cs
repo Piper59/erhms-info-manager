@@ -21,7 +21,7 @@ namespace ERHMS.WPF
 
         public static DataContext GetDataContext()
         {
-            return new DataContext();
+            throw new NotImplementedException();
         }
 
         protected override void OnStartup(StartupEventArgs e)
