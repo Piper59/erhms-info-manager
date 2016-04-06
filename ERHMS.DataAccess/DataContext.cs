@@ -19,6 +19,12 @@ namespace ERHMS.DataAccess
         public ResponderRepository Responders { get; private set; }
         public IncidentRepository Incidents { get; private set; }
         public LocationRepository Locations { get; private set; }
+        public FormRepository Forms { get; private set; }
+
+        public DataContext()
+        {
+            throw new System.NotImplementedException();
+        }
 
         public DataContext(Project project)
         {

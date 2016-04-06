@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="ERHMS.WPF.View.TemplateListView"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cmd="clr-namespace:ERHMS.WPF.Commands"
+             xmlns:c="http://www.galasoft.ch/mvvmlight"
+             xmlns:controls="clr-namespace:ERHMS.WPF.Controls"
+             mc:Ignorable="d" 
+             xmlns:converter="clr-namespace:ERHMS.WPF.Converters"
+             Margin="10"
+             d:DesignWidth="1096"
+             d:DesignHeight="549.907">
+    <UserControl.Resources>
+        <converter:FileInfoToExtensionlessNameConverter x:Key="FileInfoToExtensionlessNameConverter" />
+        <converter:DateToShortDateConverter x:Key="ShortDateConverter"/>
+        <converter:ObjectNullToVisibilityConverter x:Key="IsNullVisibilityConverter"/>
+        <converter:ObjectNullOrEmptyToEnabledConverter x:Key="IsNullOrEmptyEnabledConverter"/>
+        <converter:ObjectNullToEnabledOpacityConverter x:Key="IsNullEnabledOpacityConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{StaticResource Title}" Text="Template Management"/>
+        <TextBlock Grid.Row="1" TextWrapping="Wrap" Style="{StaticResource PageIntroduction}">
+            Create a form by copying a template to the Forms tab. The new form can be edited. Modified versions of the standard templates should be named differently.
+        </TextBlock>
+        <TextBlock Grid.Row="2" Style="{StaticResource Subtitle}" Text="Template List"/>
+        <Label Grid.Row="3">Quick Filter:</Label>
+        <TextBox Grid.Row="4" Style="{StaticResource QuickFilter}">
+            <TextBox.Text>
+                <Binding Path="Filter" 
+                         UpdateSourceTrigger="PropertyChanged"/>
+            </TextBox.Text>
+        </TextBox>
+        <DataGrid Grid.Row="5"
+                  ItemsSource="{Binding TemplateList}"
+                  SelectedItem="{Binding SelectedTemplate}"
+                  SelectionMode="Single"
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Converter={StaticResource FileInfoToExtensionlessNameConverter}}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="6" 
+              Margin="-10,10,-10,-10"
+              Style="{StaticResource AppBar}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <WrapPanel Grid.Column="0">
+
+            </WrapPanel>
+            <WrapPanel Grid.Column="1"
+                       Grid.ColumnSpan="3"
+                       HorizontalAlignment="Center">
+            </WrapPanel>
+            <WrapPanel Grid.Column="2">
+                <controls:AppBarButton
+                    Command="{Binding DeleteCommand}"
+                    ToolTip="Delete Template"
+                    Content="Delete"
+                    Visual="{DynamicResource appbar_delete}"/>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+</UserControl>

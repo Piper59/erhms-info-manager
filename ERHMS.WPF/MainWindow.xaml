@@ -1,0 +1,77 @@
+﻿<mah:MetroWindow x:Class="ERHMS.WPF.MainWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:uc="clr-namespace:ERHMS.WPF.View"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:p="clr-namespace:ERHMS.WPF.Properties"
+
+                    xmlns:ignore="http://www.ignore.com"
+                    mc:Ignorable="d ignore"
+                    xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
+                    ShowTitleBar="True"
+                    GlowBrush="{DynamicResource AccentColorBrush}"
+                    ResizeMode="CanResizeWithGrip"
+                    EnableDWMDropShadow="True"
+                    WindowStartupLocation="CenterScreen"
+                    ShowIconOnTitleBar="True"
+                    Title="ERHMS Info Manager"
+                    Height="{Binding Source={x:Static p:Settings.Default}, Path=Height, Mode=TwoWay}"
+                    Width="{Binding Source={x:Static p:Settings.Default}, Path=Width, Mode=TwoWay}"
+                    Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
+                    Top="{Binding Source={x:Static p:Settings.Default}, Path=Top, Mode=TwoWay}"
+                    WindowState="{Binding Source={x:Static p:Settings.Default}, Path=WindowState, Mode=OneWay}"
+                    Icon="ERHMS.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Change Data Source" />
+                <MenuItem Header="_Exit" Command="{Binding ExitApplicationCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Responders">
+                <MenuItem Header="_Add Responder" Command="{Binding NewResponderCommand}" />
+                <MenuItem Header="_Search Responders" Command="{Binding SearchRespondersCommand}" />
+                
+            </MenuItem>
+            <MenuItem Header="_Incidents">
+                <MenuItem Header="_Create Incident" Command="{Binding NewIncidentCommand}"/>
+                <MenuItem Header="_Open Incident" />
+                <MenuItem Header="_Recent Incidents">
+                    <MenuItem Header="No Recent Incidents" IsEnabled="False"/>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="_Forms">
+                <MenuItem Header="View _Pre-Deployment Forms" Command="{Binding ViewFormListCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Templates">
+                <MenuItem Header="_View" Command="{Binding ViewTemplateListCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Help" Command="{Binding ViewHelpCommand}" />
+                <MenuItem Header="_About" Command="{Binding ViewAboutCommand}" />
+            </MenuItem>
+        </Menu>
+        <ad:DockingManager x:Name="dockingManager"
+                           Grid.Row="1">
+            <ad:LayoutRoot>
+                <ad:LayoutPanel Orientation="Horizontal">
+                    <ad:LayoutDocumentPaneGroup>
+                        <ad:LayoutDocumentPane x:Name="layoutDocumentPane">
+                            <ad:LayoutDocument Title="Start">
+                                <uc:StartView/>
+                            </ad:LayoutDocument>
+                        </ad:LayoutDocumentPane>
+                    </ad:LayoutDocumentPaneGroup>
+                </ad:LayoutPanel>
+            </ad:LayoutRoot>
+        </ad:DockingManager>
+    </Grid>
+</mah:MetroWindow>
