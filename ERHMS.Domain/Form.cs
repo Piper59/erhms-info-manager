@@ -1,5 +1,4 @@
 ﻿using ERHMS.EpiInfo.Domain;
-using System;
 
 namespace ERHMS.Domain
 {
@@ -16,6 +15,13 @@ namespace ERHMS.Domain
             get { return GetProperty<string>("FormId"); }
             set { SetProperty("FormId", value); }
         }
+
+        public int ViewId
+        {
+            get { return GetProperty<int>("ViewId"); }
+            set { SetProperty("ViewId", value); }
+        }
+
         public string IncidentId
         {
             get { return GetProperty<string>("IncidentId"); }

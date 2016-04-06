@@ -11,7 +11,6 @@ namespace ERHMS.DataAccess
     {
         public Project Project { get; private set; }
         public IDataDriver Driver { get; private set; }
-
         public CodeRepository Prefixes { get; private set; }
         public CodeRepository Suffixes { get; private set; }
         public CodeRepository Genders { get; private set; }
@@ -32,6 +31,7 @@ namespace ERHMS.DataAccess
             Responders = new ResponderRepository(Driver, project);
             Incidents = new IncidentRepository(Driver);
             Locations = new LocationRepository(Driver);
+            Forms = new FormRepository(Driver);
         }
 
         public IEnumerable<View> GetViews()
