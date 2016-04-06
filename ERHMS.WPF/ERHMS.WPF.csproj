@@ -476,16 +476,5 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <BuildDir>$(SolutionDir)build\ERHMS\</BuildDir>
-    <StartAction>Program</StartAction>
-    <StartProgram>$(BuildDir)$(TargetFileName)</StartProgram>
-    <StartWorkingDirectory>$(BuildDir)</StartWorkingDirectory>
-  </PropertyGroup>
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <BuildFile Include="$(TargetDir)**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(BuildFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" />
-  </Target>
+  <Import Project="..\EpiInfo.targets" />
 </Project>
