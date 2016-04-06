@@ -17,15 +17,15 @@ namespace ERHMS.WPF.ViewModel
             set { Set(ref title, value); }
         }
         
-        private Domain.Location currentLocation;
-        public Domain.Location CurrentLocation
+        private Domain.Location selectedLocation;
+        public Domain.Location SelectedLocation
         {
-            get { return currentLocation; }
+            get { return selectedLocation; }
             private set
             {
-                Set(ref currentLocation, value);
-                Latitude = currentLocation.Latitude != null ? (double)currentLocation.Latitude : 0;
-                Longitude = currentLocation.Longitude != null ? (double)currentLocation.Longitude : 0;
+                Set(ref selectedLocation, value);
+                Latitude = selectedLocation.Latitude != null ? (double)selectedLocation.Latitude : 0;
+                Longitude = selectedLocation.Longitude != null ? (double)selectedLocation.Longitude : 0;
             }
         }
 
@@ -33,21 +33,18 @@ namespace ERHMS.WPF.ViewModel
 
         public LocationViewModel()
         {
-            DataContext dbContext = new DataContext();
-
-            CurrentLocation = dbContext.Locations.Create();
+            SelectedLocation = App.GetDataContext().Locations.Create();
         }
 
         public LocationViewModel(Domain.Location location)
         {
-            CurrentLocation = location;
+            SelectedLocation = location;
 
             Messenger.Default.Send(new NotificationMessage<Tuple<double, double>>(new Tuple<double, double>(Latitude, Longitude), "CenterMap"));
 
             SaveCommand = new RelayCommand(() =>
             {
-                DataContext dbContext = new DataContext();
-                dbContext.Locations.Save(CurrentLocation);
+                App.GetDataContext().Locations.Save(SelectedLocation);
                 
                 Messenger.Default.Send(new NotificationMessage<string>("Location has been saved.", "ShowSuccessMessage"));
 
@@ -61,7 +58,7 @@ namespace ERHMS.WPF.ViewModel
             set
             {
                 Set(ref latitude, value);
-                CurrentLocation.Latitude = value;
+                SelectedLocation.Latitude = value;
                 RaisePropertyChanged("Latitude");
                 RaisePropertyChanged("MapLocations");
             }
@@ -73,7 +70,7 @@ namespace ERHMS.WPF.ViewModel
             set
             {
                 Set(ref longitude, value);
-                CurrentLocation.Longitude = value;
+                SelectedLocation.Longitude = value;
                 RaisePropertyChanged("Longitude");
                 RaisePropertyChanged("MapLocations");
             }

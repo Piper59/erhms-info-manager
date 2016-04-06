@@ -12,15 +12,15 @@
          <Members>
           <Member Name="#.ctor()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2016-03-31 13:22:33Z" FixCategory="NonBreaking">
-             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Development\TFS\ERHMS Info Manager\ERHMS.WPF\ViewModel" File="ResponderViewModel.cs" Line="185">'ResponderViewModel.ResponderViewModel()' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;ResponderViewModel..ctor()&#xD;&#xA;ResponderViewModel.set_SelectedResponder(Responder):Void&#xD;&#xA;ViewModelBase.Set&lt;T&gt;(T&amp;, T, Boolean, String):Boolean&#xD;&#xA;ObservableObject.RaisePropertyChanged(String):Void</Issue>
+            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2016-04-06 16:59:39Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Development\TFS\ERHMS Info Manager\ERHMS.WPF\ViewModel" File="ResponderViewModel.cs" Line="189">'ResponderViewModel.ResponderViewModel()' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;ResponderViewModel..ctor()&#xD;&#xA;ResponderViewModel.set_SelectedResponder(Responder):Void&#xD;&#xA;ViewModelBase.Set&lt;T&gt;(T&amp;, T, Boolean, String):Boolean&#xD;&#xA;ObservableObject.RaisePropertyChanged(String):Void</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#.ctor(ERHMS.Domain.Responder)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2016-03-31 13:22:33Z" FixCategory="NonBreaking">
-             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Development\TFS\ERHMS Info Manager\ERHMS.WPF\ViewModel" File="ResponderViewModel.cs" Line="178">'ResponderViewModel.ResponderViewModel(Responder)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;ResponderViewModel..ctor(Responder)&#xD;&#xA;ResponderViewModel.set_SelectedResponder(Responder):Void&#xD;&#xA;ViewModelBase.Set&lt;T&gt;(T&amp;, T, Boolean, String):Boolean&#xD;&#xA;ObservableObject.RaisePropertyChanged(String):Void</Issue>
+            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2016-04-06 16:59:39Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Development\TFS\ERHMS Info Manager\ERHMS.WPF\ViewModel" File="ResponderViewModel.cs" Line="182">'ResponderViewModel.ResponderViewModel(Responder)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;ResponderViewModel..ctor(Responder)&#xD;&#xA;ResponderViewModel.set_SelectedResponder(Responder):Void&#xD;&#xA;ViewModelBase.Set&lt;T&gt;(T&amp;, T, Boolean, String):Boolean&#xD;&#xA;ObservableObject.RaisePropertyChanged(String):Void</Issue>
             </Message>
            </Messages>
           </Member>

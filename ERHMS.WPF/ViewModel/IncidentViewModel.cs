@@ -207,8 +207,7 @@ namespace ERHMS.WPF.ViewModel
 
         public IncidentViewModel()
         {
-            DataContext dbContext = new DataContext();
-            CurrentIncident = dbContext.Incidents.Create();
+            CurrentIncident = App.GetDataContext().Incidents.Create();
             
             Initialize();
         }
@@ -222,20 +221,18 @@ namespace ERHMS.WPF.ViewModel
 
         private void Initialize()
         { 
-            DataContext dbContext = new DataContext();
-            
-            LocationList = CollectionViewSource.GetDefaultView(dbContext.Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
-            FormList = CollectionViewSource.GetDefaultView(dbContext.Forms.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
+            LocationList = CollectionViewSource.GetDefaultView(App.GetDataContext().Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
+            FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().Forms.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
 
             availableResponders = new CollectionViewSource();
-            availableResponders.Source = dbContext.Responders.Select();
+            availableResponders.Source = App.GetDataContext().Responders.Select();
 
             rosteredResponders = new CollectionViewSource();
             //rosteredResponders.Source = 
 
             SaveIncidentDetailsCommand = new RelayCommand(() =>
             {
-                dbContext.Incidents.Save(CurrentIncident);
+                App.GetDataContext().Incidents.Save(CurrentIncident);
             });
 
             AddLocationCommand = new RelayCommand(() =>
@@ -250,7 +247,7 @@ namespace ERHMS.WPF.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
                 {
-                    dbContext.Locations.Delete(SelectedLocation);
+                    App.GetDataContext().Locations.Delete(SelectedLocation);
                 }, "ConfirmDeleteLocation"));
             }, HasSelectedLocation);
         }

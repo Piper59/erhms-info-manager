@@ -5,6 +5,7 @@ using ERHMS.EpiInfo;
 using Epi;
 using System.Windows.Threading;
 using System;
+using ERHMS.DataAccess;
 
 namespace ERHMS.WPF
 {
@@ -16,6 +17,11 @@ namespace ERHMS.WPF
         static App()
         {
             DispatcherHelper.Initialize();
+        }
+
+        public static DataContext GetDataContext()
+        {
+            return new DataContext();
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -159,8 +159,7 @@ namespace ERHMS.WPF.ViewModel
                             }
                             else
                             {
-                                DataContext dbContext = new DataContext();
-                                dbContext.Responders.Save(SelectedResponder);
+                                App.GetDataContext().Responders.Save(SelectedResponder);
 
                                 Messenger.Default.Send(new NotificationMessage<string>("Responder has been saved.", "ShowSuccessMessage"));
                             }
@@ -188,23 +187,19 @@ namespace ERHMS.WPF.ViewModel
 
         public ResponderViewModel()
         {
-            DataContext dbContext = new DataContext();
-
-            SelectedResponder = dbContext.Responders.Create();
+            SelectedResponder = App.GetDataContext().Responders.Create();
 
             Initialize();
         }
 
         private void Initialize()
         {
-            DataContext dbContext = new DataContext();
-
             HeightOptions = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" };
 
-            Prefixes = new ObservableCollection<string>(dbContext.Prefixes.Select());
-            Suffixes = new ObservableCollection<string>(dbContext.Suffixes.Select());
-            Genders = new ObservableCollection<string>(dbContext.Genders.Select());
-            States = new ObservableCollection<string>(dbContext.States.Select());
+            Prefixes = new ObservableCollection<string>(App.GetDataContext().Prefixes.Select());
+            Suffixes = new ObservableCollection<string>(App.GetDataContext().Suffixes.Select());
+            Genders = new ObservableCollection<string>(App.GetDataContext().Genders.Select());
+            States = new ObservableCollection<string>(App.GetDataContext().States.Select());
         }
     }
 }

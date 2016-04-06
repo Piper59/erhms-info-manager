@@ -67,10 +67,8 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand AnalyzeFormVisualCommand { get; private set; }
 
         public FormListViewModel()
-        {
-            DataContext dbContext = new DataContext();
-
-            FormList = CollectionViewSource.GetDefaultView(dbContext.Forms.Select());
+        {       
+            FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().Forms.Select());
         }
 
         private bool HasSelectedTemplate()

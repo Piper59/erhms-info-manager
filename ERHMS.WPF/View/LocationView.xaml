@@ -7,7 +7,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:controls="clr-namespace:ERHMS.WPF.Controls"
-      xmlns:utility="clr-namespace:ERHMS.Utility"
       xmlns:cmd="clr-namespace:ERHMS.WPF.Commands"
       mc:Ignorable="d"       
       xmlns:converter="clr-namespace:ERHMS.WPF.Converters"
@@ -54,16 +53,16 @@
                     Use the map or type in the Latitude and Longitude. Double click the map to add pin and update latitude and longitude. The map can be zoomed using the mouse wheel.
                 </TextBlock>
                 <Label Grid.Row="1">Location Name</Label>
-                <TextBox Grid.Row="2" Grid.ColumnSpan="3" Text="{Binding Location.LocationName}" />
+                <TextBox Grid.Row="2" Grid.ColumnSpan="3" Text="{Binding SelectedLocation.LocationName}" />
                 <Label Grid.Row="3">Description</Label>
-                <TextBox Grid.Row="4" Grid.ColumnSpan="3" Grid.RowSpan="2" Height="75" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Location.Description}" />
+                <TextBox Grid.Row="4" Grid.ColumnSpan="3" Grid.RowSpan="2" Height="75" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding SelectedLocation.Description}" />
                 <Label Grid.Row="6">Address</Label>
-                <TextBox Grid.Row="7" Grid.ColumnSpan="2" x:Name="txtAddress" Text="{Binding Location.Address}" />
+                <TextBox Grid.Row="7" Grid.ColumnSpan="2" x:Name="txtAddress" Text="{Binding SelectedLocation.Address}" />
                 <Button Grid.Row="7" Grid.Column="3" Margin="5,0,0,0" Style="{DynamicResource  AccentedSquareButtonStyle}" Content="Map Address" Click="btnGeocode_Click"/>
                 <Label Grid.Row="8">Latitude</Label>
-                <TextBox Grid.Row="9" Grid.ColumnSpan="1" Margin="0,0,5,0" x:Name="txtLatitude" Text="{Binding Location.Latitude}" />
+                <TextBox Grid.Row="9" Grid.ColumnSpan="1" Margin="0,0,5,0" x:Name="txtLatitude" Text="{Binding SelectedLocation.Latitude}" />
                 <Label Grid.Row="8" Grid.Column="1">Longitude</Label>
-                <TextBox Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,5,0" x:Name="txtLongitude" Text="{Binding Location.Longitude}" />
+                <TextBox Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,5,0" x:Name="txtLongitude" Text="{Binding SelectedLocation.Longitude}" />
                 <Button Grid.Row="9" Grid.Column="3" Margin="5,0,0,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="Update Map" Click="btnUpdateMap_Click"/>
 
                 <Label Grid.Row="12">Map:</Label>

@@ -70,9 +70,7 @@ namespace ERHMS.WPF.ViewModel
 
         public ResponderSearchViewModel()
         {
-            DataContext dbContext = new DataContext();
-
-            ResponderList = CollectionViewSource.GetDefaultView(dbContext.Responders.Select());
+            ResponderList = CollectionViewSource.GetDefaultView(App.GetDataContext().Responders.Select());
 
             AddCommand = new RelayCommand(() =>
                 {
@@ -89,7 +87,7 @@ namespace ERHMS.WPF.ViewModel
                         {
                             for(int i = SelectedResponders.Count-1; i >= 0; i--)
                             {
-                                dbContext.Responders.Delete((Responder)SelectedResponders[i]);
+                                App.GetDataContext().Responders.Delete((Responder)SelectedResponders[i]);
                             }
                         }, "ConfirmDeleteResponder"));
                 }, HasSelectedResponders);
