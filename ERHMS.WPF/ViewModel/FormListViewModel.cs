@@ -15,14 +15,14 @@ namespace ERHMS.WPF.ViewModel
         public FileInfo SelectedForm
         {
             get { return selectedForm; }
-            set { Set(ref selectedForm, value); }
+            set { Set(() => selectedForm, ref selectedForm, value); }
         }
 
         private ICollectionView formList;
         public ICollectionView FormList
         {
             get { return formList; }
-            private set { Set(ref formList, value); }
+            private set { Set(() => formList, ref formList, value); }
         }
 
         private string filter;
@@ -31,7 +31,7 @@ namespace ERHMS.WPF.ViewModel
             get { return filter; }
             set
             {
-                Set(ref filter, value);
+                Set(() => filter, ref filter, value);
                 FormList.Filter = ListFilterFunc;
             }
         }

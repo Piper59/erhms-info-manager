@@ -14,7 +14,7 @@ namespace ERHMS.WPF.ViewModel
         public string Title
         {
             get { return title; }
-            set { Set(ref title, value); }
+            set { Set(() => title, ref title, value); }
         }
         
         private Domain.Location selectedLocation;
@@ -23,7 +23,7 @@ namespace ERHMS.WPF.ViewModel
             get { return selectedLocation; }
             private set
             {
-                Set(ref selectedLocation, value);
+                Set(() => selectedLocation, ref selectedLocation, value);
                 Latitude = selectedLocation.Latitude != null ? (double)selectedLocation.Latitude : 0;
                 Longitude = selectedLocation.Longitude != null ? (double)selectedLocation.Longitude : 0;
             }
@@ -57,7 +57,7 @@ namespace ERHMS.WPF.ViewModel
             get { return latitude; }
             set
             {
-                Set(ref latitude, value);
+                Set(() => latitude, ref latitude, value);
                 SelectedLocation.Latitude = value;
                 RaisePropertyChanged("Latitude");
                 RaisePropertyChanged("MapLocations");
@@ -69,7 +69,7 @@ namespace ERHMS.WPF.ViewModel
             get { return longitude; }
             set
             {
-                Set(ref longitude, value);
+                Set(() => longitude, ref longitude, value);
                 SelectedLocation.Longitude = value;
                 RaisePropertyChanged("Longitude");
                 RaisePropertyChanged("MapLocations");

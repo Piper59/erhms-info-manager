@@ -39,7 +39,7 @@ namespace ERHMS.WPF.ViewModel
         public IList SelectedAvailableResponders
         {
             get { return selectedAvailableResponders; }
-            set { Set(ref selectedAvailableResponders, value); }
+            set { Set(() => selectedAvailableResponders, ref selectedAvailableResponders, value); }
         }
         private string availableResponderFilter;
         public string AvailableResponderFilter
@@ -47,7 +47,7 @@ namespace ERHMS.WPF.ViewModel
             get { return availableResponderFilter; }
             set
             {
-                Set(ref availableResponderFilter, value);
+                Set(() => availableResponderFilter, ref availableResponderFilter, value);
                 AvailableResponders.Filter = AvailableRespondersFilterFunc;
             }
         }
@@ -80,7 +80,7 @@ namespace ERHMS.WPF.ViewModel
         public IList SelectedRosteredResponders
         {
             get { return selectedRosteredResponders; }
-            set { Set(ref selectedRosteredResponders, value); }
+            set { Set(() => selectedRosteredResponders, ref selectedRosteredResponders, value); }
         }
         private string rosteredResponderFilter;
         public string RosteredResponderFilter
@@ -88,7 +88,7 @@ namespace ERHMS.WPF.ViewModel
             get { return rosteredResponderFilter; }
             set
             {
-                Set(ref rosteredResponderFilter, value);
+                Set(() => rosteredResponderFilter, ref rosteredResponderFilter, value);
                 RosteredResponders.Filter = RosteredRespondersFilterFunc;
             }
         }
@@ -118,7 +118,7 @@ namespace ERHMS.WPF.ViewModel
         public ICollectionView LocationList
         {
             get { return locationList; }
-            private set { Set(ref locationList, value); }
+            private set { Set(() => locationList, ref locationList, value); }
         }
         private string locationListFilter;
         public string LocationListFilter
@@ -126,7 +126,7 @@ namespace ERHMS.WPF.ViewModel
             get { return locationListFilter; }
             set
             {
-                Set(ref locationListFilter, value);
+                Set(() => locationListFilter, ref locationListFilter, value);
                 LocationList.Filter = LocationListFilterFunc;
             }
         }
@@ -160,7 +160,7 @@ namespace ERHMS.WPF.ViewModel
         public ICollectionView FormList
         {
             get { return formList; }
-            private set { Set(ref formList, value); }
+            private set { Set(() => formList, ref formList, value); }
         }
         private string formListFilter;
         public string FormListFilter
@@ -168,7 +168,7 @@ namespace ERHMS.WPF.ViewModel
             get { return formListFilter; }
             set
             {
-                Set(ref formListFilter, value);
+                Set(() => formListFilter, ref formListFilter, value);
                 FormList.Filter = FormListFilterFunc;
             }
         }

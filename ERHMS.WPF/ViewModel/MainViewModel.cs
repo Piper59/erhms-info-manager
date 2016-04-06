@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ERHMS.WPF.ViewModel
 {

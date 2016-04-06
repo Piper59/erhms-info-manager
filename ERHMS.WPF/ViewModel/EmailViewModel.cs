@@ -16,35 +16,35 @@ namespace ERHMS.WPF.ViewModel
         public string Title
         {
             get { return title; }
-            set { Set(ref title, value); }
+            set { Set(() => title, ref title, value); }
         }
 
         private ObservableCollection<ViewEntity> recipients;
         public ObservableCollection<ViewEntity> Recipients
         {
             get { return recipients; }
-            private set { Set(ref recipients, value); }
+            private set { Set(() => recipients, ref recipients, value); }
         }
 
         private ObservableCollection<Assignment> assignments;
         public ObservableCollection<Assignment> Assignments
         {
             get { return assignments; }
-            private set { Set(ref assignments, value); }
+            private set { Set(() => assignments, ref assignments, value); }
         }
 
         private string subject;
         public string Subject
         {
             get { return subject; }
-            set { Set(ref subject, value); }
+            set { Set(() => subject, ref subject, value); }
         }
 
         private string body;
         public string Body
         {
             get { return body; }
-            set { Set(ref body, value); }
+            set { Set(() => body, ref body, value); }
         }
 
         public RelayCommand SendCommand { get; private set; }
