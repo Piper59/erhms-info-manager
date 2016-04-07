@@ -69,7 +69,7 @@ namespace ERHMS.WPF
                         }
                     case "SelectDataSource":
                         {
-                            winSelectProject.IsOpen = true;
+                            //winSelectProject.IsOpen = true;
                             break;
                         }
                     case "ExitApplication":

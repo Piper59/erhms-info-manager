@@ -7,7 +7,7 @@
                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:controls="clr-namespace:ERHMS.WPF.Controls"
                     xmlns:p="clr-namespace:ERHMS.WPF.Properties"
-                    xmlns:simpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
+                    
                     xmlns:ignore="http://www.ignore.com"
                     mc:Ignorable="d ignore"
                     xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
@@ -76,7 +76,7 @@
                 </ad:LayoutRoot>
             </ad:DockingManager>
         </Grid>
-
+<!--
         <simpleChildWindow:ChildWindow x:Name="winSelectProject"
 									   ChildWindowWidth="600"
 									   EnableDropShadow="False"
@@ -120,5 +120,6 @@
                 </Grid>
             </Grid>
         </simpleChildWindow:ChildWindow>
+        -->
     </Grid>
 </mah:MetroWindow>
