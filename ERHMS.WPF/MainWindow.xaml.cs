@@ -67,6 +67,11 @@ namespace ERHMS.WPF
                             OpenWindow("About", new AboutView());
                             break;
                         }
+                    case "SelectDataSource":
+                        {
+                            winSelectProject.IsOpen = true;
+                            break;
+                        }
                     case "ExitApplication":
                         {
                             this.Close();

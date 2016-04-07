@@ -20,6 +20,7 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand ViewHelpCommand { get; private set; }
         public RelayCommand ViewAboutCommand { get; private set; }
         public RelayCommand ExitApplicationCommand { get; private set; }
+        public RelayCommand SelectDataSourceCommand { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -57,6 +58,10 @@ namespace ERHMS.WPF.ViewModel
             ExitApplicationCommand = new RelayCommand(() =>
             {
                 Messenger.Default.Send(new NotificationMessage("ExitApplication"));
+            });
+            SelectDataSourceCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage("SelectDataSource"));
             });
         }
     }
