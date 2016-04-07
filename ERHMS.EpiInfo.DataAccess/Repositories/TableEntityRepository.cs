@@ -8,8 +8,8 @@ namespace ERHMS.EpiInfo.DataAccess
 {
     public class TableEntityRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : TableEntity, new()
     {
-        protected DataTable Schema { get; private set; }
         public string TableName { get; private set; }
+        protected DataTable Schema { get; private set; }
 
         public TableEntityRepository(IDataDriver driver, string tableName)
             : base(driver)

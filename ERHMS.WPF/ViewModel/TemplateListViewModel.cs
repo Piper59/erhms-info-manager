@@ -14,14 +14,14 @@ namespace ERHMS.WPF.ViewModel
         public FileInfo SelectedTemplate
         {
             get { return selectedTemplate; }
-            set { Set(ref selectedTemplate, value); }
+            set { Set(() => selectedTemplate, ref selectedTemplate, value); }
         }
 
         private ICollectionView templateList;
         public ICollectionView TemplateList
         {
             get { return templateList; }
-            private set { Set(ref templateList, value); }
+            private set { Set(() => templateList, ref templateList, value); }
         }
 
         private string filter;
@@ -30,7 +30,7 @@ namespace ERHMS.WPF.ViewModel
             get { return filter; }
             set
             {
-                Set(ref filter, value);
+                Set(() => filter, ref filter, value);
                 TemplateList.Filter = ListFilterFunc;
             }
         }

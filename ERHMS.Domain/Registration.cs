@@ -1,5 +1,4 @@
 ﻿using ERHMS.EpiInfo.Domain;
-using System;
 
 namespace ERHMS.Domain
 {

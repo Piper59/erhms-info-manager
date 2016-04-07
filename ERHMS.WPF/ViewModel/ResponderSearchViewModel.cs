@@ -20,7 +20,7 @@ namespace ERHMS.WPF.ViewModel
             get { return selectedResponders; }
             set
             { 
-                Set(ref selectedResponders, value);
+                Set(() => selectedResponders, ref selectedResponders, value);
 
                 EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
@@ -32,7 +32,7 @@ namespace ERHMS.WPF.ViewModel
         public ICollectionView ResponderList
         {
             get { return responderList; }
-            private set { Set(ref responderList, value); }
+            private set { Set(() => responderList, ref responderList, value); }
         }
 
         private string filter;
@@ -41,7 +41,7 @@ namespace ERHMS.WPF.ViewModel
             get { return filter; }
             set
             {
-                Set(ref filter, value);
+                Set(() => filter, ref filter, value);
                 ResponderList.Filter = ListFilterFunc;
             }
         }

@@ -22,31 +22,31 @@ namespace ERHMS.WPF.ViewModel
         public ObservableCollection<string> Prefixes
         {
             get { return prefixes; }
-            set { Set(ref prefixes, value); }
+            set { Set(() => prefixes, ref prefixes, value); }
         }
         private ObservableCollection<string> suffixes;
         public ObservableCollection<string> Suffixes
         {
             get { return suffixes; }
-            set { Set(ref suffixes, value); }
+            set { Set(() => suffixes, ref suffixes, value); }
         }
         private ObservableCollection<string> genders;
         public ObservableCollection<string> Genders
         {
             get { return genders; }
-            set { Set(ref genders, value); }
+            set { Set(() => genders, ref genders, value); }
         }
         private ObservableCollection<string> states;
         public ObservableCollection<string> States
         {
             get { return states; }
-            set { Set(ref states, value); }
+            set { Set(() => states, ref states, value); }
         }
         //private IEnumerable<ViewEntity> roles;
         //public IEnumerable<ViewEntity> Roles
         //{
         //    get { return roles; }
-        //    set { Set(ref roles, value); }
+        //    set { Set(() => roles, ref roles, value); }
         //}
 
         public string SelectedHeightFeet
@@ -97,7 +97,7 @@ namespace ERHMS.WPF.ViewModel
             get { return selectedResponder; }
             set
             {
-                Set(ref selectedResponder, value);
+                Set(() => selectedResponder, ref selectedResponder, value);
 
                 RaisePropertyChanged("SelectedPrefix");
                 RaisePropertyChanged("SelectedSuffix");

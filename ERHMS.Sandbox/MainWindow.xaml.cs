@@ -1,54 +1,23 @@
-﻿using ERHMS.EpiInfo.DataAccess;
+﻿using Epi;
+using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Analysis;
+using ERHMS.EpiInfo.AnalysisDashboard;
+using ERHMS.EpiInfo.Communication;
+using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
+using ERHMS.EpiInfo.Enter;
+using ERHMS.EpiInfo.MakeView;
 using Microsoft.Win32;
 using System;
-using System.Collections;
-using System.Linq;
+using System.IO;
 using System.Windows;
+using Action = System.Action;
+using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Sandbox
 {
     public partial class MainWindow : Window
     {
-        private class Addict : TableEntity
-        {
-            public override string Guid
-            {
-                get { throw new NotSupportedException(); }
-                set { throw new NotSupportedException(); }
-            }
-
-            public double? Clinic
-            {
-                get { return GetProperty<double?>("Clinic"); }
-                set { SetProperty("Clinic", value); }
-            }
-
-            public double? Status
-            {
-                get { return GetProperty<double?>("Status"); }
-                set { SetProperty("Status", value); }
-            }
-
-            public double? SurvivalTimeInDays
-            {
-                get { return GetProperty<double?>("Survival_Time_Days"); }
-                set { SetProperty("Survival_Time_Days", value); }
-            }
-
-            public double? PrisonRecord
-            {
-                get { return GetProperty<double?>("Prison_Record"); }
-                set { SetProperty("Prison_Record", value); }
-            }
-
-            public double? MethadoneDoseInMgPerDay
-            {
-                get { return GetProperty<double?>("Methadone_dose__mg_day_"); }
-                set { SetProperty("Methadone_dose__mg_day_", value); }
-            }
-        }
-
         private class Surveillance : ViewEntity
         {
             public string FirstName
@@ -88,9 +57,9 @@ namespace ERHMS.Sandbox
             }
         }
 
+        private Project project;
+        private View view;
         private IDataDriver driver;
-        private CodeRepository sexes;
-        private TableEntityRepository<Addict> addicts;
         private ViewEntityRepository<Surveillance> surveillances;
 
         public MainWindow()
@@ -98,16 +67,44 @@ namespace ERHMS.Sandbox
             InitializeComponent();
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+            App.Current.Service.RefreshingViewData += Service_RefreshingData;
+            App.Current.Service.RefreshingRecordData += Service_RefreshingData;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            App.Current.Service.RefreshingViewData -= Service_RefreshingData;
+            App.Current.Service.RefreshingRecordData -= Service_RefreshingData;
+        }
+
+        private void Service_RefreshingData(object sender, ViewEventArgs e)
+        {
+            if (project == null || project.FilePath != e.ProjectPath || e.ViewName != "Surveillance")
+            {
+                return;
+            }
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                Refresh();
+            }));
+        }
+
         private void FileOpen_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Epi Info 7 Sample Database (Sample.mdb)|Sample.mdb";
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Epi Info 7 Sample Project (Sample.prj)|Sample.prj"
+            };
             if (dialog.ShowDialog().GetValueOrDefault())
             {
-                driver = AccessDriver.Create(dialog.FileName);
-                sexes = new CodeRepository(driver, "codeSex", "Sex", false);
-                addicts = new TableEntityRepository<Addict>(driver, "Addicts");
-                surveillances = new ViewEntityRepository<Surveillance>(driver, "Surveillance");
+                project = new Project(dialog.FileName);
+                view = project.Views["Surveillance"];
+                driver = DataDriverFactory.CreateDataDriver(project);
+                surveillances = new ViewEntityRepository<Surveillance>(driver, view);
             }
         }
 
@@ -116,27 +113,19 @@ namespace ERHMS.Sandbox
             Close();
         }
 
-        private IEnumerable GetDataSource(string tableName)
+        private void Refresh()
         {
-            switch (tableName)
-            {
-                case "codeSex":
-                    return sexes.Select();
-                case "Addicts":
-                    return addicts.Select();
-                case "Surveillance":
-                    return surveillances.Select();
-                default:
-                    return null;
-            }
+            int selectedIndex = Data.SelectedIndex;
+            Data.ItemsSource = surveillances.Select();
+            Data.SelectedIndex = selectedIndex;
         }
 
-        private void Select_Click(object sender, RoutedEventArgs e)
+        private void DataSelect_Click(object sender, RoutedEventArgs e)
         {
-            Data.ItemsSource = GetDataSource((string)TableName.SelectedValue);
+            Refresh();
         }
 
-        private void Insert_Click(object sender, RoutedEventArgs e)
+        private void DataInsert_Click(object sender, RoutedEventArgs e)
         {
             Surveillance surveillance = surveillances.Create();
             surveillance.FirstName = "Steven";
@@ -146,35 +135,131 @@ namespace ERHMS.Sandbox
             surveillance.Week = new Random().Next(1, 52);
             surveillance.Pregnant = false;
             surveillances.Save(surveillance);
-            MessageBox.Show(surveillance.UniqueKey.ToString());
+            MessageBox.Show(surveillance.UniqueKey.ToString(), Title);
+            Refresh();
         }
 
-        private Surveillance GetSurveillanceByName(string firstName, string lastName)
+        private void DataUpdate_Click(object sender, RoutedEventArgs e)
         {
-            DataParameterCollection parameters = new DataParameterCollection(driver);
-            parameters.AddByValue(firstName);
-            parameters.AddByValue(lastName);
-            string sql = parameters.Format("FirstName = {0} AND LastName = {1}");
-            return surveillances.Select(new DataPredicate(sql, parameters)).Single();
-        }
-
-        private void Update_Click(object sender, RoutedEventArgs e)
-        {
-            Surveillance surveillance = GetSurveillanceByName("John", "Smith");
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
             surveillance.Week = new Random().Next(1, 52);
             surveillances.Save(surveillance);
+            Refresh();
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void DataDelete_Click(object sender, RoutedEventArgs e)
         {
-            Surveillance surveillance = GetSurveillanceByName("John", "Smith");
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
             surveillances.Delete(surveillance);
+            Refresh();
         }
 
-        private void Undelete_Click(object sender, RoutedEventArgs e)
+        private void DataUndelete_Click(object sender, RoutedEventArgs e)
         {
-            Surveillance surveillance = GetSurveillanceByName("John", "Smith");
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
             surveillances.Undelete(surveillance);
+            Refresh();
+        }
+
+        private void AnalysisImport_Click(object sender, RoutedEventArgs e)
+        {
+            Analysis.Import(view);
+        }
+
+        private void AnalysisExport_Click(object sender, RoutedEventArgs e)
+        {
+            Analysis.Export(view);
+        }
+
+        private void DashboardOpen_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Epi Info 7 Dashboard Canvas File (*.cvs7)|*.cvs7",
+                CheckFileExists = false
+            };
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                FileInfo file = new FileInfo(dialog.FileName);
+                if (file.Exists)
+                {
+                    Canvas canvas;
+                    if (!Canvas.TryRead(file, out canvas))
+                    {
+                        return;
+                    }
+                    AnalysisDashboard.OpenCanvas(canvas);
+                }
+                else
+                {
+                    Canvas canvas = Canvas.CreateForView(view, file);
+                    AnalysisDashboard.OpenCanvas(canvas);
+                }
+            }
+        }
+
+        private void EnterInsert_Click(object sender, RoutedEventArgs e)
+        {
+            Enter.OpenView(view, new
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            });
+        }
+
+        private void EnterUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            Surveillance surveillance = (Surveillance)Data.SelectedItem;
+            if (surveillance == null)
+            {
+                return;
+            }
+            Enter.OpenRecord(view, surveillance.UniqueKey.Value);
+        }
+
+        private void MakeViewOpen_Click(object sender, RoutedEventArgs e)
+        {
+            MakeView.OpenView(view);
+        }
+
+        private void MakeViewAdd_Click(object sender, RoutedEventArgs e)
+        {
+            MakeView.AddView(project);
+        }
+
+        private void MakeViewAddFromTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Epi Info 7 Template (*.xml)|*.xml",
+            };
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                FileInfo file = new FileInfo(dialog.FileName);
+                EpiInfo.Template template;
+                if (!EpiInfo.Template.TryRead(file, out template))
+                {
+                    return;
+                }
+                MakeView.AddFromTemplate(project, template);
+            }
+        }
+
+        private void MakeViewCreateTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            MakeView.CreateTemplate(view);
         }
     }
 }

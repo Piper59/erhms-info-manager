@@ -1,7 +1,4 @@
-﻿using ADOX;
-using ERHMS.Utility;
-using System.Data.OleDb;
-using System.IO;
+﻿using System.Data.OleDb;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
@@ -19,31 +16,18 @@ namespace ERHMS.EpiInfo.DataAccess
             return new AccessDriver(builder);
         }
 
-        private OleDbConnectionStringBuilder builder;
+        public static AccessDriver Create(Project project)
+        {
+            return new AccessDriver(new OleDbConnectionStringBuilder(project.CollectedDataConnectionString));
+        }
 
         private AccessDriver(OleDbConnectionStringBuilder builder)
             : base(DataProvider.Access, builder)
-        {
-            this.builder = builder;
-            Project.Name = Path.GetFileNameWithoutExtension(builder.DataSource);
-            Project.Location = Path.GetDirectoryName(builder.DataSource);
-        }
+        { }
 
         public override string GetParameterName(int index)
         {
             return "?";
-        }
-
-        public override bool DatabaseExists()
-        {
-            return File.Exists(builder.DataSource);
-        }
-
-        public override void CreateDatabase()
-        {
-            Log.Current.DebugFormat("Creating database: {0}", builder.ToSafeString());
-            Catalog catalog = new Catalog();
-            catalog.Create(builder.ConnectionString);
         }
     }
 }

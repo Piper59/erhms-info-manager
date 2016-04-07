@@ -10,14 +10,11 @@ namespace ERHMS.EpiInfo.DataAccess
         private DbProviderFactory factory;
         private string connectionString;
 
-        public Project Project { get; private set; }
-
         protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder)
         {
-            Log.Current.DebugFormat("Creating data driver: {0}, {1}", provider.GetInvariantName(), builder.ToSafeString());
-            factory = DbProviderFactories.GetFactory(provider.GetInvariantName());
+            Log.Current.DebugFormat("Creating data driver: {0}, {1}", provider.ToInvariantName(), builder.ToSafeString());
+            factory = DbProviderFactories.GetFactory(provider.ToInvariantName());
             connectionString = builder.ConnectionString;
-            Project = new InMemoryProject(provider.GetEpiInfoName(), builder);
         }
 
         public string Escape(string identifier)
@@ -26,8 +23,6 @@ namespace ERHMS.EpiInfo.DataAccess
         }
 
         public abstract string GetParameterName(int index);
-        public abstract bool DatabaseExists();
-        public abstract void CreateDatabase();
 
         private DbConnection GetConnection()
         {
@@ -132,9 +127,6 @@ namespace ERHMS.EpiInfo.DataAccess
             }
         }
 
-        public void Dispose()
-        {
-            Project.Dispose();
-        }
+        public void Dispose() { }
     }
 }

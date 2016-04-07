@@ -1,67 +1,70 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Communication;
+using ERHMS.Utility;
+using log4net.Core;
 using System;
-using System.IO;
 using System.Reflection;
 using System.ServiceModel;
-using System.Threading;
 using System.Windows;
 
 namespace ERHMS.Sandbox
 {
     public partial class App : Application
     {
+        public new static App Current
+        {
+            get { return (App)Application.Current; }
+        }
+
         public static string Name
         {
             get { return Assembly.GetExecutingAssembly().GetName().Name; }
         }
 
+        public static string Title
+        {
+            get { return "ERHMS Info Manager"; }
+        }
+
         [STAThread]
         public static void Main(string[] args)
         {
-            bool created;
-            using (Mutex mutex = new Mutex(true, string.Format("Global\\{0}", Name), out created))
+            try
             {
-                if (!created)
+                new SingleInstanceApplication(() =>
                 {
-                    MessageBox.Show("An instance of this application is already running.");
-                    return;
-                }
-                App app = new App();
-                app.InitializeComponent();
-                app.Run(new MainWindow());
+                    App app = new App();
+                    app.InitializeComponent();
+                    app.Run(new MainWindow());
+                }).Execute();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(string.Format("An instance of {0} is already running.", Title), Title);
             }
         }
 
-        private Service service;
-        private ServiceHost host = null;
+        private ServiceHost host;
 
-        protected override void OnStartup(StartupEventArgs e)
+        public Service Service { get; private set; }
+
+        public App()
         {
-            base.OnStartup(e);
+            Log.Level = Level.Debug;
             Log.Current.Debug("Starting up");
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            DirectoryInfo root = new DirectoryInfo(Path.Combine(desktopPath, Name));
-            ConfigurationExtensions.CreateAndOrLoad(root);
-            service = new Service();
-            service.SayingHello += (sender, _e) =>
-            {
-                MessageBox.Show(string.Format("Hello, {0}", _e.Name));
-            };
-            try
-            {
-                host = service.OpenHost();
-            }
-            catch { }
+            ConfigurationExtensions.CreateAndOrLoad();
+            Service = new Service();
+            host = Service.OpenHost();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            base.OnExit(e);
             Log.Current.Debug("Exiting");
             if (host != null)
             {
                 host.Close();
             }
-            base.OnExit(e);
         }
     }
 }

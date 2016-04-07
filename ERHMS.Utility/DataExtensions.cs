@@ -15,5 +15,13 @@ namespace ERHMS.Utility
             }
             return string.Join(", ", properties);
         }
+
+        public static string ToSafeString(string connectionString)
+        {
+            return new DbConnectionStringBuilder
+            {
+                ConnectionString = connectionString
+            }.ToSafeString();
+        }
     }
 }
