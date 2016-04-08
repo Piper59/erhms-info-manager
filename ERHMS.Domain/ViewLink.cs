@@ -2,18 +2,18 @@
 
 namespace ERHMS.Domain
 {
-    public class Form : TableEntity
+    public class ViewLink : TableEntity
     {
         public override string Guid
         {
-            get { return FormId; }
-            set { FormId = value; }
+            get { return ViewLinkId; }
+            set { ViewLinkId = value; }
         }
 
-        public string FormId
+        public string ViewLinkId
         {
-            get { return GetProperty<string>("FormId"); }
-            set { SetProperty("FormId", value); }
+            get { return GetProperty<string>("ViewLinkId"); }
+            set { SetProperty("ViewLinkId", value); }
         }
 
         public int ViewId

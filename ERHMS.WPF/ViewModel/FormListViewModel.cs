@@ -68,7 +68,7 @@ namespace ERHMS.WPF.ViewModel
 
         public FormListViewModel()
         {       
-            FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().Forms.Select());
+            FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().ViewLinks.Select());
         }
 
         private bool HasSelectedTemplate()

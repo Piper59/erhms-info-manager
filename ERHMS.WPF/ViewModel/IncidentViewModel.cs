@@ -222,7 +222,7 @@ namespace ERHMS.WPF.ViewModel
         private void Initialize()
         { 
             LocationList = CollectionViewSource.GetDefaultView(App.GetDataContext().Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
-            FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().Forms.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
+            FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().ViewLinks.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
 
             availableResponders = new CollectionViewSource();
             availableResponders.Source = App.GetDataContext().Responders.Select();
