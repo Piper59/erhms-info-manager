@@ -19,6 +19,8 @@ namespace ERHMS.DataAccess
         public IncidentRepository Incidents { get; private set; }
         public LocationRepository Locations { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
+        public RegistrationRepository Registrations { get; private set; }
+        public AssignmentRepository Assignments { get; private set; }
 
         public DataContext(Project project)
         {
@@ -32,6 +34,8 @@ namespace ERHMS.DataAccess
             Incidents = new IncidentRepository(Driver);
             Locations = new LocationRepository(Driver);
             ViewLinks = new ViewLinkRepository(Driver);
+            Registrations = new RegistrationRepository(Driver);
+            Assignments = new AssignmentRepository(Driver);
         }
 
         public IEnumerable<View> GetViews()
