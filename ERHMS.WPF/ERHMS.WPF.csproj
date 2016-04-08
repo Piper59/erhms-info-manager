@@ -135,6 +135,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
     <Compile Include="Commands\Commands.cs" />
     <Compile Include="Controls\AppBarButton.cs" />
     <Compile Include="Controls\DataGridExtension.cs" />
