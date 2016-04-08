@@ -15,5 +15,17 @@ namespace ERHMS.Domain
             get { return GetProperty<string>("RegistrationId"); }
             set { SetProperty("RegistrationId", value); }
         }
+
+        public string ResponderId
+        {
+            get { return GetProperty<string>("ResponderId"); }
+            set { SetProperty("ResponderId", value); }
+        }
+
+        public string IncidentId
+        {
+            get { return GetProperty<string>("IncidentId"); }
+            set { SetProperty("IncidentId", value); }
+        }
     }
 }
