@@ -9,15 +9,20 @@ using ERHMS.DataAccess;
 using ERHMS.Domain;
 using System.Linq;
 using ERHMS.EpiInfo.Domain;
+using System.Collections.Generic;
 
 namespace ERHMS.WPF.ViewModel
 {
     public class IncidentViewModel : ViewModelBase
     {
+        private Incident currentIncident;
         public Incident CurrentIncident
         {
-            get;
-            set;
+            get { return currentIncident; }
+            set
+            {
+                Set(() => CurrentIncident, ref currentIncident, value);
+            }
         }
 
         public RelayCommand SaveIncidentDetailsCommand { get; private set; }
@@ -39,7 +44,14 @@ namespace ERHMS.WPF.ViewModel
         public IList SelectedAvailableResponders
         {
             get { return selectedAvailableResponders; }
-            set { Set(() => selectedAvailableResponders, ref selectedAvailableResponders, value); }
+            set
+            {
+                Set(() => SelectedAvailableResponders, ref selectedAvailableResponders, value);
+
+                AddToRosterCommand.RaiseCanExecuteChanged();
+                RemoveFromRosterCommand.RaiseCanExecuteChanged();
+                ViewResponderDetailsCommand.RaiseCanExecuteChanged();
+            }
         }
         private string availableResponderFilter;
         public string AvailableResponderFilter
@@ -47,7 +59,7 @@ namespace ERHMS.WPF.ViewModel
             get { return availableResponderFilter; }
             set
             {
-                Set(() => availableResponderFilter, ref availableResponderFilter, value);
+                Set(() => AvailableResponderFilter, ref availableResponderFilter, value);
                 AvailableResponders.Filter = AvailableRespondersFilterFunc;
             }
         }
@@ -80,7 +92,14 @@ namespace ERHMS.WPF.ViewModel
         public IList SelectedRosteredResponders
         {
             get { return selectedRosteredResponders; }
-            set { Set(() => selectedRosteredResponders, ref selectedRosteredResponders, value); }
+            set
+            {
+                Set(() => SelectedRosteredResponders, ref selectedRosteredResponders, value);
+
+                AddToRosterCommand.RaiseCanExecuteChanged();
+                RemoveFromRosterCommand.RaiseCanExecuteChanged();
+                ViewResponderDetailsCommand.RaiseCanExecuteChanged();
+            }
         }
         private string rosteredResponderFilter;
         public string RosteredResponderFilter
@@ -88,7 +107,7 @@ namespace ERHMS.WPF.ViewModel
             get { return rosteredResponderFilter; }
             set
             {
-                Set(() => rosteredResponderFilter, ref rosteredResponderFilter, value);
+                Set(() => RosteredResponderFilter, ref rosteredResponderFilter, value);
                 RosteredResponders.Filter = RosteredRespondersFilterFunc;
             }
         }
@@ -108,6 +127,29 @@ namespace ERHMS.WPF.ViewModel
                 //(r.EmailAddress != null && r.EmailAddress.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
                 (r.OrganizationName != null && r.OrganizationName.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
                 (r.Occupation != null && r.Occupation.ToLower().Contains(AvailableResponderFilter.ToLower())));
+        }
+
+        private bool HasSelectedAvailableResponder()
+        {
+            if (SelectedAvailableResponders == null)
+                return false;
+            return SelectedAvailableResponders.Count > 0;
+        }
+
+        private bool HasSelectedRosteredResponder()
+        {
+            if (SelectedRosteredResponders == null)
+                return false;
+            return SelectedRosteredResponders.Count > 0;
+        }
+        private bool HasSelectedRoster()
+        {
+            if (SelectedAvailableResponders != null && SelectedAvailableResponders.Count > 0)
+                return true;
+            if (SelectedRosteredResponders != null && SelectedRosteredResponders.Count > 0)
+                return true;
+
+            return false;
         }
         #endregion
 
@@ -208,7 +250,7 @@ namespace ERHMS.WPF.ViewModel
         public IncidentViewModel()
         {
             CurrentIncident = App.GetDataContext().Incidents.Create();
-            
+
             Initialize();
         }
 
@@ -220,19 +262,41 @@ namespace ERHMS.WPF.ViewModel
         }
 
         private void Initialize()
-        { 
+        {
             LocationList = CollectionViewSource.GetDefaultView(App.GetDataContext().Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
             FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().ViewLinks.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
-
-            availableResponders = new CollectionViewSource();
-            availableResponders.Source = App.GetDataContext().Responders.Select();
-
-            rosteredResponders = new CollectionViewSource();
-            //rosteredResponders.Source = 
-
+            
             SaveIncidentDetailsCommand = new RelayCommand(() =>
             {
-                App.GetDataContext().Incidents.Save(CurrentIncident);
+                try
+                {
+                    //check for required fields
+                    List<string> missingData = new List<string>();
+
+                    if (string.IsNullOrEmpty(CurrentIncident.Name))
+                    {
+                        missingData.Add("Incident Name");
+                    }
+                    if (string.IsNullOrEmpty(CurrentIncident.Phase.ToString()))
+                    {
+                        missingData.Add("Incident Phase");
+                    }
+
+                    if (missingData.Count() > 0)
+                    {
+                        Messenger.Default.Send(new NotificationMessage<string>("The following fields are required:\n\n" + string.Join("\n", missingData), "ShowErrorMessage"));
+                    }
+                    else
+                    {
+                        App.GetDataContext().Incidents.Save(CurrentIncident);
+
+                        Messenger.Default.Send(new NotificationMessage<string>("Incident has been saved.", "ShowSuccessMessage"));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Messenger.Default.Send(new NotificationMessage<string>("Error while saving the incident information.  Details: " + e.Message + ".", "ShowErrorMessage"));
+                }
             });
 
             AddLocationCommand = new RelayCommand(() =>
@@ -250,6 +314,57 @@ namespace ERHMS.WPF.ViewModel
                     App.GetDataContext().Locations.Delete(SelectedLocation);
                 }, "ConfirmDeleteLocation"));
             }, HasSelectedLocation);
+
+            AddToRosterCommand = new RelayCommand(() =>
+            {
+                for (int i = SelectedAvailableResponders.Count - 1; i >= 0; i--)
+                {
+                    Responder responder = (Responder)SelectedAvailableResponders[i];
+
+                    Registration registration = App.GetDataContext().Registrations.Create();
+                    registration.ResponderId = responder.GlobalRecordId;
+                    registration.IncidentId = CurrentIncident.IncidentId;
+
+                    App.GetDataContext().Registrations.Save(registration);
+                }
+            },
+                HasSelectedAvailableResponder);
+
+            RemoveFromRosterCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage<System.Action>(() =>
+                {
+                    Responder responder = (Responder)SelectedRosteredResponders[0];
+                    Registration registration = App.GetDataContext().Registrations.Select().Where(q => q.ResponderId == responder.GlobalRecordId && q.IncidentId == CurrentIncident.IncidentId).FirstOrDefault();
+
+                    App.GetDataContext().Registrations.Delete(registration);
+
+                }, "ConfirmDeleteRegistration"));
+            },
+                HasSelectedRosteredResponder);
+
+            ViewResponderDetailsCommand = new RelayCommand(() =>
+            {
+                Responder selectedResponder;
+
+                if (SelectedAvailableResponders.Count > 0)
+                    selectedResponder = (Responder)SelectedAvailableResponders[0];
+                else
+                    selectedResponder = (Responder)SelectedRosteredResponders[0];
+
+                Messenger.Default.Send(new NotificationMessage<Responder>((Responder)selectedResponder.Clone(), "ShowEditResponder"));
+            },
+                HasSelectedRoster);
+
+            List<string> rosterIds = App.GetDataContext().Registrations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId).Select(q => q.ResponderId).ToList();
+
+            availableResponders = new CollectionViewSource();
+            availableResponders.Source = App.GetDataContext().Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == false);
+            SelectedAvailableResponders = null;
+
+            rosteredResponders = new CollectionViewSource();
+            rosteredResponders.Source = App.GetDataContext().Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == true);
+            SelectedRosteredResponders = null;
         }
     }
 }

@@ -5,6 +5,16 @@ namespace ERHMS.Domain
 {
     public class Responder : ViewEntity
     {
+        public string ResponderId
+        {
+            get { return GetProperty<string>("ResponderId"); }
+            set { SetProperty("ResponderId", value); }
+        }
+        public string Username
+        {
+            get { return GetProperty<string>("Username"); }
+            set { SetProperty("Username", value); }
+        }
         public string Prefix
         {
             get { return GetProperty<string>("Prefix"); }
