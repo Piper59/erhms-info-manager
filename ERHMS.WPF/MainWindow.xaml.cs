@@ -47,6 +47,11 @@ namespace ERHMS.WPF
                             OpenWindow("New Incident", new IncidentView());
                             break;
                         }
+                    case "ShowIncidentList":
+                        {
+                            OpenWindow("Incident List", new IncidentListView());
+                            break;
+                        }
                     case "ShowTemplateList":
                         {
                             OpenWindow("Templates", new TemplateListView());

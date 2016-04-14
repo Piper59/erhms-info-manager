@@ -198,6 +198,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\IncidentListViewModel.cs" />
     <Compile Include="ViewModel\LocationViewModel.cs" />
     <Compile Include="ViewModel\IncidentViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -211,6 +212,9 @@
     <Compile Include="ViewModel\EmailViewModel.cs" />
     <Compile Include="View\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IncidentListView.xaml.cs">
+      <DependentUpon>IncidentListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\IncidentView.xaml.cs">
       <DependentUpon>IncidentView.xaml</DependentUpon>
@@ -272,6 +276,10 @@
     <Page Include="View\AboutView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\IncidentListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\IncidentView.xaml">
       <Generator>MSBuild:Compile</Generator>
