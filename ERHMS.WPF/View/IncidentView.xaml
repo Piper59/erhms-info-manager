@@ -251,7 +251,7 @@
                             <Label Grid.Row="3">Quick Filter:</Label>
                             <TextBox Grid.Row="4" Style="{StaticResource QuickFilter}">
                                 <TextBox.Text>
-                                    <Binding Path="FormListFilter" 
+                                    <Binding Path="LocationListFilter" 
                          UpdateSourceTrigger="PropertyChanged"/>
                                 </TextBox.Text>
                             </TextBox>
@@ -291,6 +291,9 @@
 
                         <WrapPanel Grid.Column="1"
                        HorizontalAlignment="Center">
+                            
+                        </WrapPanel>
+                        <WrapPanel Grid.Column="2">
                             <controls:AppBarButton
                     Grid.Column="0"
                     Command="{Binding ViewLocationDetailsCommand}"
@@ -303,8 +306,6 @@
                     ToolTip="Delete Location"
                     Content="Delete"
                     Visual="{DynamicResource appbar_delete}"/>
-                        </WrapPanel>
-                        <WrapPanel Grid.Column="2">
                         </WrapPanel>
                     </Grid>
                 </Grid>
@@ -351,8 +352,7 @@
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
-                                    <DataGridTextColumn Header="Description" Width="3*" Binding="{Binding Description}" />
+                                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding ViewId}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ERHMS.DataAccess;
-
+using ERHMS.Domain;
 
 namespace ERHMS.WPF.ViewModel
 {
@@ -14,40 +14,67 @@ namespace ERHMS.WPF.ViewModel
         public string Title
         {
             get { return title; }
-            set { Set(() => title, ref title, value); }
+            set { Set(() => Title, ref title, value); }
         }
         
-        private Domain.Location selectedLocation;
-        public Domain.Location SelectedLocation
+        private Domain.Location currentLocation;
+        public Domain.Location CurrentLocation
         {
-            get { return selectedLocation; }
+            get { return currentLocation; }
             private set
             {
-                Set(() => selectedLocation, ref selectedLocation, value);
-                Latitude = selectedLocation.Latitude != null ? (double)selectedLocation.Latitude : 0;
-                Longitude = selectedLocation.Longitude != null ? (double)selectedLocation.Longitude : 0;
+                Set(() => CurrentLocation, ref currentLocation, value);
+                Latitude = currentLocation.Latitude != null ? (double)currentLocation.Latitude : 0;
+                Longitude = currentLocation.Longitude != null ? (double)currentLocation.Longitude : 0;
             }
         }
 
         public RelayCommand SaveCommand { get; private set; }
 
-        public LocationViewModel()
+        public LocationViewModel(Incident incident)
         {
-            SelectedLocation = App.GetDataContext().Locations.Create();
+            CurrentLocation = App.GetDataContext().Locations.Create();
+            CurrentLocation.IncidentId = incident.IncidentId;
+
+            SaveCommand = new RelayCommand(() =>
+            {
+                App.GetDataContext().Locations.Save(CurrentLocation);
+
+                Messenger.Default.Send(new NotificationMessage<string>("Location has been saved.", "ShowSuccessMessage"));
+            });
+
+            //used for updating the location on the map
+            Messenger.Default.Register<NotificationMessage<Microsoft.Maps.MapControl.WPF.Location>>(this, (msg) =>
+            {
+                if (msg.Notification == "UpdateMapLocation")
+                {
+                    //update the latitude and longitude
+                    Latitude = msg.Content.Latitude;
+                    Longitude = msg.Content.Longitude;
+                }
+            });
         }
 
         public LocationViewModel(Domain.Location location)
         {
-            SelectedLocation = location;
-
-            Messenger.Default.Send(new NotificationMessage<Tuple<double, double>>(new Tuple<double, double>(Latitude, Longitude), "CenterMap"));
-
+            CurrentLocation = location;
+            
             SaveCommand = new RelayCommand(() =>
             {
-                App.GetDataContext().Locations.Save(SelectedLocation);
+                App.GetDataContext().Locations.Save(CurrentLocation);
                 
                 Messenger.Default.Send(new NotificationMessage<string>("Location has been saved.", "ShowSuccessMessage"));
+            });
 
+            //used for updating the location on the map
+            Messenger.Default.Register<NotificationMessage<Microsoft.Maps.MapControl.WPF.Location>>(this, (msg) =>
+            {
+                if (msg.Notification == "UpdateMapLocation")
+                {
+                    //update the latitude and longitude
+                    Latitude = msg.Content.Latitude;
+                    Longitude = msg.Content.Longitude;
+                }
             });
         }
 
@@ -57,8 +84,8 @@ namespace ERHMS.WPF.ViewModel
             get { return latitude; }
             set
             {
-                Set(() => latitude, ref latitude, value);
-                SelectedLocation.Latitude = value;
+                Set(() => Latitude, ref latitude, value);
+                CurrentLocation.Latitude = value;
                 RaisePropertyChanged("Latitude");
                 RaisePropertyChanged("MapLocations");
             }
@@ -69,8 +96,8 @@ namespace ERHMS.WPF.ViewModel
             get { return longitude; }
             set
             {
-                Set(() => longitude, ref longitude, value);
-                SelectedLocation.Longitude = value;
+                Set(() => Longitude, ref longitude, value);
+                CurrentLocation.Longitude = value;
                 RaisePropertyChanged("Longitude");
                 RaisePropertyChanged("MapLocations");
             }

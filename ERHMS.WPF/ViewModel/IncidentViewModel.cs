@@ -53,32 +53,30 @@ namespace ERHMS.WPF.ViewModel
                 ViewResponderDetailsCommand.RaiseCanExecuteChanged();
             }
         }
-        private string availableResponderFilter;
-        public string AvailableResponderFilter
+        private string availableRespondersFilter;
+        public string AvailableRespondersFilter
         {
-            get { return availableResponderFilter; }
+            get { return availableRespondersFilter; }
             set
             {
-                Set(() => AvailableResponderFilter, ref availableResponderFilter, value);
+                Set(() => AvailableRespondersFilter, ref availableRespondersFilter, value);
                 AvailableResponders.Filter = AvailableRespondersFilterFunc;
             }
         }
         private bool AvailableRespondersFilterFunc(object item)
         {
-            dynamic r = item as ViewEntity;
+            Responder r = item as Responder;
 
-            return r.IsDeleted() == false &&
-                //HasRegistration(r) == false &&
-                (AvailableResponderFilter == null ||
-                AvailableResponderFilter.Equals("") ||
-                //(r.Username != null && r.Username.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.FirstName != null && r.FirstName.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.LastName != null && r.LastName.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.City != null && r.City.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.State != null && r.State.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                //(r.EmailAddress != null && r.EmailAddress.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.OrganizationName != null && r.OrganizationName.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.Occupation != null && r.Occupation.ToLower().Contains(AvailableResponderFilter.ToLower())));
+            return (AvailableRespondersFilter == null ||
+                AvailableRespondersFilter.Equals("") ||
+                (r.Username != null && r.Username.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
+                (r.FirstName != null && r.FirstName.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
+                (r.LastName != null && r.LastName.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
+                (r.City != null && r.City.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
+                (r.State != null && r.State.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
+                (r.EmailAddress != null && r.EmailAddress.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
+                (r.OrganizationName != null && r.OrganizationName.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
+                (r.Occupation != null && r.Occupation.ToLower().Contains(AvailableRespondersFilter.ToLower())));
         }
 
         //responders currently on the roster
@@ -101,32 +99,30 @@ namespace ERHMS.WPF.ViewModel
                 ViewResponderDetailsCommand.RaiseCanExecuteChanged();
             }
         }
-        private string rosteredResponderFilter;
-        public string RosteredResponderFilter
+        private string rosteredRespondersFilter;
+        public string RosteredRespondersFilter
         {
-            get { return rosteredResponderFilter; }
+            get { return rosteredRespondersFilter; }
             set
             {
-                Set(() => RosteredResponderFilter, ref rosteredResponderFilter, value);
+                Set(() => RosteredRespondersFilter, ref rosteredRespondersFilter, value);
                 RosteredResponders.Filter = RosteredRespondersFilterFunc;
             }
         }
         private bool RosteredRespondersFilterFunc(object item)
         {
-            dynamic r = item as ViewEntity;
+            Responder r = item as Responder;
 
-            return r.IsDeleted() == false &&
-                //HasRegistration(r) == false &&
-                (AvailableResponderFilter == null ||
-                AvailableResponderFilter.Equals("") ||
-                //(r.Username != null && r.Username.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.FirstName != null && r.FirstName.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.LastName != null && r.LastName.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.City != null && r.City.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.State != null && r.State.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                //(r.EmailAddress != null && r.EmailAddress.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.OrganizationName != null && r.OrganizationName.ToLower().Contains(AvailableResponderFilter.ToLower())) ||
-                (r.Occupation != null && r.Occupation.ToLower().Contains(AvailableResponderFilter.ToLower())));
+            return (RosteredRespondersFilter == null ||
+                RosteredRespondersFilter.Equals("") ||
+                (r.Username != null && r.Username.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
+                (r.FirstName != null && r.FirstName.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
+                (r.LastName != null && r.LastName.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
+                (r.City != null && r.City.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
+                (r.State != null && r.State.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
+                (r.EmailAddress != null && r.EmailAddress.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
+                (r.OrganizationName != null && r.OrganizationName.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
+                (r.Occupation != null && r.Occupation.ToLower().Contains(RosteredRespondersFilter.ToLower())));
         }
 
         private bool HasSelectedAvailableResponder()
@@ -156,11 +152,10 @@ namespace ERHMS.WPF.ViewModel
         #region Locations
         public Location SelectedLocation;
 
-        private ICollectionView locationList;
+        private CollectionViewSource locationList;
         public ICollectionView LocationList
         {
-            get { return locationList; }
-            private set { Set(() => locationList, ref locationList, value); }
+            get { return locationList != null ? locationList.View : null; }
         }
         private string locationListFilter;
         public string LocationListFilter
@@ -168,14 +163,14 @@ namespace ERHMS.WPF.ViewModel
             get { return locationListFilter; }
             set
             {
-                Set(() => locationListFilter, ref locationListFilter, value);
+                Set(() => LocationListFilter, ref locationListFilter, value);
                 LocationList.Filter = LocationListFilterFunc;
             }
         }
 
         private bool LocationListFilterFunc(object item)
         {
-            dynamic l = item as ViewEntity;
+            Location l = item as Location;
 
             return
                 LocationListFilter.Equals("") ||
@@ -184,10 +179,9 @@ namespace ERHMS.WPF.ViewModel
                 (l.Address != null && l.Address.ToLower().Contains(LocationListFilter.ToLower()));
         }
 
-        public RelayCommand ViewLocationDetailsCommand;
-        public RelayCommand AddLocationCommand;
-        public RelayCommand DeleteLocationCommand;
-
+        public RelayCommand ViewLocationDetailsCommand { get; private set; }
+        public RelayCommand AddLocationCommand { get; private set; }
+        public RelayCommand DeleteLocationCommand { get; private set; }
 
         private bool HasSelectedLocation()
         {
@@ -196,33 +190,33 @@ namespace ERHMS.WPF.ViewModel
         #endregion
 
         #region Forms
-        public ViewEntity SelectedForm;
+        public ViewLink SelectedForm;
 
-        private ICollectionView formList;
+        private CollectionViewSource formList;
         public ICollectionView FormList
         {
-            get { return formList; }
-            private set { Set(() => formList, ref formList, value); }
+            get { return formList != null ? formList.View : null; }
         }
+        
         private string formListFilter;
         public string FormListFilter
         {
             get { return formListFilter; }
             set
             {
-                Set(() => formListFilter, ref formListFilter, value);
+                Set(() => FormListFilter, ref formListFilter, value);
                 FormList.Filter = FormListFilterFunc;
             }
         }
 
         private bool FormListFilterFunc(object item)
         {
-            dynamic f = item as ViewEntity;
-
+            ViewLink vl = item as ViewLink;
+            Epi.View v = App.GetDataContext().GetViews().Where(q => q.Id == vl.ViewId).First();
+            
             return
                 FormListFilter.Equals("") ||
-                (f.Name != null && f.Name.ToLower().Contains(FormListFilter.ToLower())) ||
-                (f.Description != null && f.Description.ToLower().Contains(FormListFilter.ToLower()));
+                (v.Name != null && v.Name.ToLower().Contains(FormListFilter.ToLower()));
         }
 
         public RelayCommand AddFormCommand { get; private set; }
@@ -263,9 +257,6 @@ namespace ERHMS.WPF.ViewModel
 
         private void Initialize()
         {
-            LocationList = CollectionViewSource.GetDefaultView(App.GetDataContext().Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
-            FormList = CollectionViewSource.GetDefaultView(App.GetDataContext().ViewLinks.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId));
-            
             SaveIncidentDetailsCommand = new RelayCommand(() =>
             {
                 try
@@ -299,14 +290,15 @@ namespace ERHMS.WPF.ViewModel
                 }
             });
 
+
             AddLocationCommand = new RelayCommand(() =>
             {
-                Messenger.Default.Send(new NotificationMessage<Location>(SelectedLocation, "ShowEditLocation"));
+                Messenger.Default.Send(new NotificationMessage<Incident>(CurrentIncident, "ShowNewLocation"));
             });
             ViewLocationDetailsCommand = new RelayCommand(() =>
             {
-                Messenger.Default.Send(new NotificationMessage("ShowNewLocation"));
-            });
+                Messenger.Default.Send(new NotificationMessage<Location>((Location)SelectedLocation.Clone(), "ShowEditLocation"));
+            }, HasSelectedLocation);            
             DeleteLocationCommand = new RelayCommand(() =>
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
@@ -314,6 +306,8 @@ namespace ERHMS.WPF.ViewModel
                     App.GetDataContext().Locations.Delete(SelectedLocation);
                 }, "ConfirmDeleteLocation"));
             }, HasSelectedLocation);
+
+
 
             AddToRosterCommand = new RelayCommand(() =>
             {
@@ -327,6 +321,8 @@ namespace ERHMS.WPF.ViewModel
 
                     App.GetDataContext().Registrations.Save(registration);
                 }
+                RefreshRosterData();
+
             },
                 HasSelectedAvailableResponder);
 
@@ -339,31 +335,55 @@ namespace ERHMS.WPF.ViewModel
 
                     App.GetDataContext().Registrations.Delete(registration);
 
+                    RefreshRosterData();
                 }, "ConfirmDeleteRegistration"));
             },
                 HasSelectedRosteredResponder);
 
             ViewResponderDetailsCommand = new RelayCommand(() =>
             {
-                Responder selectedResponder;
-
-                if (SelectedAvailableResponders.Count > 0)
-                    selectedResponder = (Responder)SelectedAvailableResponders[0];
-                else
-                    selectedResponder = (Responder)SelectedRosteredResponders[0];
-
-                Messenger.Default.Send(new NotificationMessage<Responder>((Responder)selectedResponder.Clone(), "ShowEditResponder"));
+                if (SelectedAvailableResponders != null && SelectedAvailableResponders.Count > 0)
+                    Messenger.Default.Send(new NotificationMessage<Responder>((Responder)((Responder)SelectedAvailableResponders[0]).Clone(), "ShowEditResponder"));
+                else if (SelectedRosteredResponders != null && SelectedRosteredResponders.Count > 0)
+                    Messenger.Default.Send(new NotificationMessage<Responder>((Responder)((Responder)SelectedRosteredResponders[0]).Clone(), "ShowEditResponder"));
             },
                 HasSelectedRoster);
 
-            List<string> rosterIds = App.GetDataContext().Registrations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId).Select(q => q.ResponderId).ToList();
+            RefreshRosterData();
+            RefreshLocationData();
+            RefreshFormData();
+        }
+
+        private void RefreshLocationData()
+        {
+            locationList = new CollectionViewSource();
+            locationList.Source = App.GetDataContext().Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId);
+            LocationList.Refresh();
+            RaisePropertyChanged("LocationList");
+            SelectedLocation = null;
+        }
+        private void RefreshFormData()
+        {
+            formList = new CollectionViewSource();
+            formList.Source = App.GetDataContext().ViewLinks.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId);
+            FormList.Refresh();
+            RaisePropertyChanged("FormList");
+            SelectedForm = null;
+        }
+        private void RefreshRosterData()
+        {
+            List<string> rosterIds = App.GetDataContext().Registrations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId).Select(q => q.ResponderId).Distinct().ToList();
 
             availableResponders = new CollectionViewSource();
             availableResponders.Source = App.GetDataContext().Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == false);
+            AvailableResponders.Refresh();
+            RaisePropertyChanged("AvailableResponders");
             SelectedAvailableResponders = null;
 
             rosteredResponders = new CollectionViewSource();
             rosteredResponders.Source = App.GetDataContext().Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == true);
+            RosteredResponders.Refresh();
+            RaisePropertyChanged("RosteredResponders");
             SelectedRosteredResponders = null;
         }
     }

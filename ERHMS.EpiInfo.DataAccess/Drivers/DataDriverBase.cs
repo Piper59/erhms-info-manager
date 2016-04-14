@@ -115,7 +115,9 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             using (DataTransaction transaction = BeginTransaction())
             {
-                return ExecuteNonQuery(transaction, sql, parameters);
+                int result = ExecuteNonQuery(transaction, sql, parameters);
+                transaction.Commit();
+                return result;
             }
         }
 
@@ -123,7 +125,9 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             using (DataTransaction transaction = BeginTransaction())
             {
-                return ExecuteNonQuery(transaction, sql, (IEnumerable<DataParameter>)parameters);
+                int result = ExecuteNonQuery(transaction, sql, (IEnumerable<DataParameter>)parameters);
+                transaction.Commit();
+                return result;
             }
         }
 

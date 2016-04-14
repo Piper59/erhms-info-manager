@@ -50,7 +50,7 @@
                   AutoGenerateColumns="False" 
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Converter={StaticResource FileInfoToExtensionlessNameConverter}}" />
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding File.Name}" />
             </DataGrid.Columns>
         </DataGrid>
         <Grid Grid.Row="6" 
@@ -69,11 +69,6 @@
                        HorizontalAlignment="Center">
             </WrapPanel>
             <WrapPanel Grid.Column="2">
-                <controls:AppBarButton
-                    Command="{Binding DeleteCommand}"
-                    ToolTip="Delete Template"
-                    Content="Delete"
-                    Visual="{DynamicResource appbar_delete}"/>
             </WrapPanel>
         </Grid>
     </Grid>

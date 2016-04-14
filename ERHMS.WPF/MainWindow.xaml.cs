@@ -24,7 +24,7 @@ namespace ERHMS.WPF
             InitializeComponent();
 
             DataContext = new MainViewModel();
-            
+
             this.Closing += (s, e) => ViewModelLocator.Cleanup();
             this.Closing += MetroNavigationWindow_Closing;
 
@@ -40,11 +40,6 @@ namespace ERHMS.WPF
                     case "ShowNewResponder":
                         {
                             OpenWindow("New Responder", new ResponderView());
-                            break;
-                        }
-                    case "ShowNewLocation":
-                        {
-                            OpenWindow("New Location", new LocationView());
                             break;
                         }
                     case "ShowNewIncident":
@@ -75,6 +70,19 @@ namespace ERHMS.WPF
                     case "ExitApplication":
                         {
                             this.Close();
+                            break;
+                        }
+                }
+            });
+
+            //used for adding a location
+            Messenger.Default.Register<NotificationMessage<Incident>>(this, (msg) =>
+            {
+                switch (msg.Notification)
+                {
+                    case "ShowNewLocation":
+                        {
+                            OpenWindow("New Location", new LocationView(msg.Content));
                             break;
                         }
                 }
@@ -133,7 +141,7 @@ namespace ERHMS.WPF
             {
                 if (msg.Notification == "ShowSuccessMessage")
                 {
-                    SuccessToaster.Toast(msg.Content, netoaster.ToasterPosition.ApplicationBottomRight, netoaster.ToasterAnimation.FadeIn);                    
+                    SuccessToaster.Toast(msg.Content, netoaster.ToasterPosition.ApplicationBottomRight, netoaster.ToasterAnimation.FadeIn);
                 }
                 else if (msg.Notification == "ShowErrorMessage")
                 {
@@ -184,7 +192,7 @@ namespace ERHMS.WPF
             newDoc.Content = content;
             layoutDocumentPane.Children.Add(newDoc);
             layoutDocumentPane.SelectedContentIndex = layoutDocumentPane.ChildrenCount - 1;
-        }                
+        }
 
         private async void ShowConfirmDialog(string message, Action onConfirm = null)
         {
