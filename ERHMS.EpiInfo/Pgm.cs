@@ -24,18 +24,18 @@ namespace ERHMS.EpiInfo
         }
 
         private Project project;
-        private int? id;
-        private FileInfo file;
 
         public PgmSource Source { get; private set; }
+        public int? Id { get; private set; }
+        public FileInfo File { get; private set; }
         public string Name { get; private set; }
         public string Content { get; private set; }
 
         private Pgm(Project project, DataRow row)
         {
             this.project = project;
-            id = row.Field<int>("ProgramId");
             Source = PgmSource.Database;
+            Id = row.Field<int>("ProgramId");
             Name = row.Field<string>("Name");
             Content = row.Field<string>("Content");
         }
@@ -43,10 +43,10 @@ namespace ERHMS.EpiInfo
         private Pgm(Project project, FileInfo file)
         {
             this.project = project;
-            this.file = file;
             Source = PgmSource.File;
+            File = file;
             Name = Path.GetFileNameWithoutExtension(file.Name);
-            Content = File.ReadAllText(file.FullName);
+            Content = System.IO.File.ReadAllText(file.FullName);
         }
 
         public void Delete()
@@ -54,10 +54,10 @@ namespace ERHMS.EpiInfo
             switch (Source)
             {
                 case PgmSource.Database:
-                    project.DeletePgm(id.Value);
+                    project.DeletePgm(Id.Value);
                     break;
                 case PgmSource.File:
-                    file.Recycle();
+                    File.Recycle();
                     break;
                 default:
                     throw new NotSupportedException();
