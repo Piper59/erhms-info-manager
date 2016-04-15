@@ -13,9 +13,9 @@ namespace ERHMS.EpiInfo
 
         public static bool TryRead(FileInfo file, out Template template)
         {
-            string levelString = null;
             try
             {
+                string levelString = null;
                 using (XmlReader reader = XmlReader.Create(file.FullName))
                 {
                     while (reader.Read())
@@ -30,20 +30,20 @@ namespace ERHMS.EpiInfo
                         }
                     }
                 }
+                TemplateLevel level;
+                if (!TemplateLevelExtensions.TryParse(levelString, out level))
+                {
+                    template = null;
+                    return false;
+                }
+                template = new Template(file, level);
+                return true;
             }
             catch
             {
                 template = null;
                 return false;
             }
-            TemplateLevel level;
-            if (!TemplateLevelExtensions.TryParse(levelString, out level))
-            {
-                template = null;
-                return false;
-            }
-            template = new Template(file, level);
-            return true;
         }
 
         public static IEnumerable<Template> GetAll()
