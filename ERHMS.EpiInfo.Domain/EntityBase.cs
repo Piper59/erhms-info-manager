@@ -9,12 +9,23 @@ namespace ERHMS.EpiInfo.Domain
     {
         private IDictionary<string, object> properties;
 
+        private bool @new;
         public bool New
         {
-            get { return GetProperty<bool>("New"); }
-            set { SetProperty("New", value); }
+            get
+            {
+                return @new;
+            }
+            set
+            {
+                if (value == @new)
+                {
+                    return;
+                }
+                @new = value;
+                OnPropertyChanged("New");
+            }
         }
-
 
         protected EntityBase()
         {
