@@ -15,9 +15,9 @@ namespace ERHMS.EpiInfo.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\Canvas.tt"
+    #line 1 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    internal partial class Canvas : CanvasBase
+    internal partial class ViewCanvas : ViewCanvasBase
     {
 #line hidden
         /// <summary>
@@ -27,22 +27,22 @@ namespace ERHMS.EpiInfo.Templates
         {
             this.Write("<DashboardCanvas>\r\n  <dashboardHelper>\r\n    <projectPath>");
             
-            #line 4 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\Canvas.tt"
+            #line 4 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ProjectPath));
             
             #line default
             #line hidden
             this.Write("</projectPath>\r\n    <viewName>");
             
-            #line 5 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\Canvas.tt"
+            #line 5 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ViewName));
             
             #line default
             #line hidden
             this.Write(@"</viewName>
+    <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
     <advancedDataFilterCondition>
     </advancedDataFilterCondition>
-    <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
     <relatedDataConnections />
     <dataFilters recordProcessScope=""undeleted"" />
     <dashboardRules />
@@ -53,6 +53,8 @@ namespace ERHMS.EpiInfo.Templates
     <showGadgetHeadings>True</showGadgetHeadings>
     <showGadgetSettings>True</showGadgetSettings>
     <useAlternatingColors>False</useAlternatingColors>
+    <defaultChartWidth>800</defaultChartWidth>
+    <defaultChartHeight>500</defaultChartHeight>
     <tableFontSize>13</tableFontSize>
     <customHeading>
     </customHeading>
@@ -74,12 +76,12 @@ namespace ERHMS.EpiInfo.Templates
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 36 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\Canvas.tt"
+        #line 38 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
 
     public string ProjectPath { get; private set; }
     public string ViewName { get; private set; }
 
-    public Canvas(string projectPath, string viewName)
+    public ViewCanvas(string projectPath, string viewName)
     {
         ProjectPath = projectPath;
         ViewName = viewName;
@@ -97,7 +99,7 @@ namespace ERHMS.EpiInfo.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    internal class CanvasBase
+    internal class ViewCanvasBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

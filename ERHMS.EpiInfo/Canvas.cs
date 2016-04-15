@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.EpiInfo.Templates;
 using ERHMS.Utility;
 using System.Collections.Generic;
 using System.IO;
@@ -29,14 +30,14 @@ namespace ERHMS.EpiInfo
                         }
                     }
                 }
+                canvas = new Canvas(file);
+                return true;
             }
             catch
             {
                 canvas = null;
                 return false;
             }
-            canvas = new Canvas(file);
-            return true;
         }
 
         public static IEnumerable<Canvas> GetByProject(Project project)
@@ -54,7 +55,14 @@ namespace ERHMS.EpiInfo
 
         public static Canvas CreateForView(View view, FileInfo file)
         {
-            Templates.Canvas template = new Templates.Canvas(view.Project.FilePath, view.Name);
+            ViewCanvas template = new ViewCanvas(view.Project.FilePath, view.Name);
+            System.IO.File.WriteAllText(file.FullName, template.TransformText());
+            return new Canvas(file);
+        }
+
+        public static Canvas CreateForTable(string connectionString, string tableName, FileInfo file)
+        {
+            TableCanvas template = new TableCanvas(connectionString, tableName);
             System.IO.File.WriteAllText(file.FullName, template.TransformText());
             return new Canvas(file);
         }
