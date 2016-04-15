@@ -22,10 +22,22 @@ namespace ERHMS.Domain
             set { SetProperty("IncidentId", value); }
         }
 
+        public string Name
+        {
+            get { return GetProperty<string>("Name"); }
+            set { SetProperty("Name", value); }
+        }
+
         public string Description
         {
             get { return GetProperty<string>("Description"); }
             set { SetProperty("Description", value); }
+        }
+
+        public string Address
+        {
+            get { return GetProperty<string>("Address"); }
+            set { SetProperty("Address", value); }
         }
 
         public double? Latitude

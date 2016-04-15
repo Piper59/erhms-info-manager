@@ -14,6 +14,7 @@ namespace ERHMS.WPF.ViewModel
     {
         public RelayCommand NewResponderCommand { get; private set; }
         public RelayCommand NewIncidentCommand { get; private set; }
+        public RelayCommand ViewIncidentListCommand { get; private set; }
         public RelayCommand SearchRespondersCommand { get; private set; }
         public RelayCommand ViewFormListCommand { get; private set; }
         public RelayCommand ViewTemplateListCommand { get; private set; }
@@ -34,6 +35,10 @@ namespace ERHMS.WPF.ViewModel
             NewIncidentCommand = new RelayCommand(() =>
             {
                 Messenger.Default.Send(new NotificationMessage("ShowNewIncident"));
+            });
+            ViewIncidentListCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage("ShowIncidentList"));
             });
             SearchRespondersCommand = new RelayCommand(() =>
             {

@@ -14,7 +14,9 @@ CREATE TABLE ERHMS_Incidents (
 CREATE TABLE ERHMS_Locations (
 	LocationId VARCHAR(255) NOT NULL PRIMARY KEY,
 	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId),
+	Name VARCHAR(255) NOT NULL,
 	Description TEXT NOT NULL,
+	Address TEXT NOT NULL,
 	Latitude FLOAT,
 	Longitude FLOAT
 );

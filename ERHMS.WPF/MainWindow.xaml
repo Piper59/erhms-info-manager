@@ -42,7 +42,7 @@
                 </MenuItem>
                 <MenuItem Header="_Incidents">
                     <MenuItem Header="_Create Incident" Command="{Binding NewIncidentCommand}"/>
-                    <MenuItem Header="_Open Incident" />
+                    <MenuItem Header="_Open Incident" Command="{Binding ViewIncidentListCommand}"/>
                     <MenuItem Header="_Recent Incidents">
                         <MenuItem Header="No Recent Incidents" IsEnabled="False"/>
                     </MenuItem>

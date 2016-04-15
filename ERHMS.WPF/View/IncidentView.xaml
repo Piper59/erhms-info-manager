@@ -19,7 +19,7 @@
         <l:ObjectNullOrEmptyToEnabledConverter x:Key="IsNullOrEmptyEnabledConverter"/>
         <l:ObjectNullToEnabledOpacityConverter x:Key="IsNullEnabledOpacityConverter"/>
         <l:ToStringConverter x:Key="ToStringConverter"/>
-
+        <l:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <l:ResponderToNameConverter x:Key="ResponderToNameConverter" />
         <l:RegistrationToResponderNameConverter x:Key="RegistrationToResponderNameConverter" />
     </UserControl.Resources>
@@ -62,7 +62,7 @@
                                 Use the Incident tabs on the left of the page for more information.
                             </TextBlock>
                             <Label Grid.Row="2">Name</Label>
-                            <TextBox Grid.Row="3" IsEnabled="False" Text="{Binding CurrentIncident.Name, Mode=OneWay, FallbackValue='Incident Name'}" />
+                            <TextBox Grid.Row="3" Text="{Binding CurrentIncident.Name, Mode=TwoWay, FallbackValue='Incident Name'}" />
                             <Label Grid.Row="4">Description</Label>
                             <TextBox Grid.Row="5" AcceptsReturn="True" TextWrapping="Wrap" Height="100" Text="{Binding CurrentIncident.Description}" />
                             <Label Grid.Row="6">Phase</Label>
@@ -105,14 +105,14 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="History" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding !CurrentIncident.New}">
+                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
                 <ScrollViewer Margin="0,0,0,10" >
 
                 </ScrollViewer>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Roster" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding !CurrentIncident.New}">
+                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -226,7 +226,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Locations" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding !CurrentIncident.New}">
+                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -251,7 +251,7 @@
                             <Label Grid.Row="3">Quick Filter:</Label>
                             <TextBox Grid.Row="4" Style="{StaticResource QuickFilter}">
                                 <TextBox.Text>
-                                    <Binding Path="FormListFilter" 
+                                    <Binding Path="LocationListFilter" 
                          UpdateSourceTrigger="PropertyChanged"/>
                                 </TextBox.Text>
                             </TextBox>
@@ -291,6 +291,9 @@
 
                         <WrapPanel Grid.Column="1"
                        HorizontalAlignment="Center">
+                            
+                        </WrapPanel>
+                        <WrapPanel Grid.Column="2">
                             <controls:AppBarButton
                     Grid.Column="0"
                     Command="{Binding ViewLocationDetailsCommand}"
@@ -304,14 +307,12 @@
                     Content="Delete"
                     Visual="{DynamicResource appbar_delete}"/>
                         </WrapPanel>
-                        <WrapPanel Grid.Column="2">
-                        </WrapPanel>
                     </Grid>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Form/Survey Management" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding !CurrentIncident.New}">
+                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -351,8 +352,7 @@
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
-                                    <DataGridTextColumn Header="Description" Width="3*" Binding="{Binding Description}" />
+                                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding ViewId}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
@@ -467,7 +467,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Analysis" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding !CurrentIncident.New}">
+                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
                 <ScrollViewer Margin="0,0,0,10" >
 
                 </ScrollViewer>

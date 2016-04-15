@@ -9,6 +9,7 @@ using ERHMS.WPF.SearchService;
 using ERHMS.WPF.ImageryService;
 using ERHMS.WPF.RouteService;
 using ERHMS.WPF.ViewModel;
+using ERHMS.Domain;
 
 namespace ERHMS.WPF.View
 {
@@ -17,13 +18,13 @@ namespace ERHMS.WPF.View
     /// </summary>
     public partial class LocationView : UserControl
     {
-        public LocationView()
+        public LocationView(Incident incident)
         {
             InitializeComponent();
 
             LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Properties.Settings.Default.BingMapsLicenseKey);
 
-            DataContext = new LocationViewModel();
+            DataContext = new LocationViewModel(incident);
         }
 
         public LocationView(Domain.Location location)
@@ -33,6 +34,8 @@ namespace ERHMS.WPF.View
             LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Properties.Settings.Default.BingMapsLicenseKey);
 
             DataContext = new LocationViewModel(location);
+
+            CenterMap(new Microsoft.Maps.MapControl.WPF.Location((double)location.Longitude, (double)location.Latitude));
         }
 
         private void MapWithPushpins_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -165,19 +168,25 @@ namespace ERHMS.WPF.View
             geocodeRequest.Options = geocodeOptions;
 
             // Make the geocode request
-            GeocodeServiceClient geocodeService = new GeocodeServiceClient("BasicHttpBinding_IGeocodeService");
-            GeocodeResponse geocodeResponse = geocodeService.Geocode(geocodeRequest);
-
-            if (geocodeResponse.Results.Length > 0)
+            try
             {
-                results[0] = geocodeResponse.Results[0].Locations[0].Latitude;
-                results[1] = geocodeResponse.Results[0].Locations[0].Longitude;
-            }
-            else
-            {
-                return null;
-            }
+                GeocodeServiceClient geocodeService = new GeocodeServiceClient("BasicHttpBinding_IGeocodeService");
+                GeocodeResponse geocodeResponse = geocodeService.Geocode(geocodeRequest);
 
+                if (geocodeResponse.Results.Length > 0)
+                {
+                    results[0] = geocodeResponse.Results[0].Locations[0].Latitude;
+                    results[1] = geocodeResponse.Results[0].Locations[0].Longitude;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception e)
+            {
+                Messenger.Default.Send(new NotificationMessage<string>("Error while searching address.  Please check criteria.  Details: " + e.Message + ".", "ShowErrorMessage"));
+            }
             return results;
         }
     }

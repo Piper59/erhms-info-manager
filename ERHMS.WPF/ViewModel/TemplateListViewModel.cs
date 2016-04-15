@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ERHMS.EpiInfo;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.ComponentModel;
@@ -10,18 +11,17 @@ namespace ERHMS.WPF.ViewModel
 {
     public class TemplateListViewModel : ViewModelBase
     {
-        private FileInfo selectedTemplate;
-        public FileInfo SelectedTemplate
+        private Template selectedTemplate;
+        public Template SelectedTemplate
         {
             get { return selectedTemplate; }
-            set { Set(() => selectedTemplate, ref selectedTemplate, value); }
+            set { Set(() => SelectedTemplate, ref selectedTemplate, value); }
         }
 
-        private ICollectionView templateList;
+        private CollectionViewSource templateList;
         public ICollectionView TemplateList
         {
-            get { return templateList; }
-            private set { Set(() => templateList, ref templateList, value); }
+            get { return templateList != null ? templateList.View : null; }
         }
 
         private string filter;
@@ -30,32 +30,33 @@ namespace ERHMS.WPF.ViewModel
             get { return filter; }
             set
             {
-                Set(() => filter, ref filter, value);
+                Set(() => Filter, ref filter, value);
                 TemplateList.Filter = ListFilterFunc;
             }
         }
 
         private bool ListFilterFunc(object item)
         {
-            dynamic t = item as FileInfo;
+            Template t = item as Template;
 
             return Filter == null ||
                 Filter.Equals("") ||
-                (t.Name != null && t.Name.ToLower().Contains(Filter.ToLower()));
+                (t.File.Name != null && t.File.Name.ToLower().Contains(Filter.ToLower()));
         }
         
-        public ICommand DeleteCommand { get; private set; }
 
         public TemplateListViewModel()
         {
-            //TemplateListStoreView = CollectionViewSource.GetDefaultView(Project.Templates);
+            RefreshTemplateData();
+        }
 
-            
-            DeleteCommand = new RelayCommand(() =>
-                {
-                    //Messenger.Default.Send(new NotificationMessage<System.Action>(() => Project.Templates.Delete(SelectedTemplate), "ConfirmDeleteTemplate"));
-                },
-                HasSelectedTemplate);
+        private void RefreshTemplateData()
+        {
+            templateList = new CollectionViewSource();
+            templateList.Source = App.GetDataContext().GetTemplates();
+            TemplateList.Refresh();
+            RaisePropertyChanged("TemplateList");
+            SelectedTemplate = null;
         }
 
         private bool HasSelectedTemplate()

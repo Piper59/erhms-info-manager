@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 
@@ -20,7 +21,7 @@ namespace ERHMS.WPF.ViewModel
             get { return selectedResponders; }
             set
             { 
-                Set(() => selectedResponders, ref selectedResponders, value);
+                Set(() => SelectedResponders, ref selectedResponders, value);
 
                 EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
@@ -32,7 +33,7 @@ namespace ERHMS.WPF.ViewModel
         public ICollectionView ResponderList
         {
             get { return responderList; }
-            private set { Set(() => responderList, ref responderList, value); }
+            private set { Set(() => ResponderList, ref responderList, value); }
         }
 
         private string filter;
@@ -41,16 +42,16 @@ namespace ERHMS.WPF.ViewModel
             get { return filter; }
             set
             {
-                Set(() => filter, ref filter, value);
+                Set(() => Filter, ref filter, value);
                 ResponderList.Filter = ListFilterFunc;
             }
         }
 
         private bool ListFilterFunc(object item)
         {
-            dynamic r = item as ViewEntity;
+            Responder r = item as Responder;
 
-            return r.IsDeleted() == false && (filter == null ||
+            return r.Deleted == false && (filter == null ||
                 Filter.Equals("") ||
                 (r.ResponderId != null && r.ResponderId.ToLower().Contains(Filter.ToLower())) ||
                 (r.Username != null && r.Username.ToLower().Contains(Filter.ToLower())) ||
@@ -68,18 +69,23 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
 
+        private void RefreshData()
+        {
+            ResponderList = CollectionViewSource.GetDefaultView(App.GetDataContext().Responders.SelectByDeleted(false));
+            SelectedResponders = new ObservableCollection<Responder>();
+        }
+
         public ResponderSearchViewModel()
         {
-            ResponderList = CollectionViewSource.GetDefaultView(App.GetDataContext().Responders.Select());
-
             AddCommand = new RelayCommand(() =>
                 {
                     Messenger.Default.Send(new NotificationMessage("ShowNewResponder"));
                 });
             EditCommand = new RelayCommand(() => 
                 {
-                    ViewEntity selectedResponder = (ViewEntity)SelectedResponders[0];
-                    Messenger.Default.Send(new NotificationMessage<ViewEntity>((ViewEntity)selectedResponder.Clone(), "ShowEditResponder"));
+                    Responder selectedResponder = ((Responder)((Responder)SelectedResponders[0]).Clone());
+                    selectedResponder.New = false;
+                    Messenger.Default.Send(new NotificationMessage<Responder>(selectedResponder, "ShowEditResponder"));
                 }, HasSelectedSingleResponder);
             DeleteCommand = new RelayCommand(() =>
                 {
@@ -96,15 +102,19 @@ namespace ERHMS.WPF.ViewModel
                     Messenger.Default.Send(new NotificationMessage<Tuple<IList, string, string>>(new Tuple<IList, string, string>(SelectedResponders, "", ""), "ComposeEmail"));
                 }, HasSelectedResponders);
 
-            SelectedResponders = new List<ViewEntity>();
+            RefreshData();
         }
 
         public bool HasSelectedSingleResponder()
         {
+            if (SelectedResponders == null)
+                return false;
             return SelectedResponders.Count == 1;
         }
         public bool HasSelectedResponders()
         {
+            if (SelectedResponders == null)
+                return false;
             return SelectedResponders.Count > 0;
         }
     }
