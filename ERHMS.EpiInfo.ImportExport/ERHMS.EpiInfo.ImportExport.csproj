@@ -39,6 +39,9 @@
     <Reference Include="Epi.ImportExport">
       <HintPath>..\Epi Info 7\Epi.ImportExport.dll</HintPath>
     </Reference>
+    <Reference Include="Epi.Windows">
+      <HintPath>..\Epi Info 7\Epi.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="Epi.Windows.ImportExport">
       <HintPath>..\Epi Info 7\Epi.Windows.ImportExport.dll</HintPath>
     </Reference>
