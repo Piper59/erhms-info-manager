@@ -122,7 +122,7 @@ namespace ERHMS.EpiInfo.Domain
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler == null)
@@ -132,7 +132,7 @@ namespace ERHMS.EpiInfo.Domain
             handler(this, e);
         }
 
-        private void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
             OnPropertyChanged(new PropertyChangedEventArgs(name));
         }

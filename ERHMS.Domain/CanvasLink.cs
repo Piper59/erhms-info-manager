@@ -6,8 +6,18 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get { return CanvasLinkId; }
-            set { CanvasLinkId = value; }
+            get
+            {
+                return GetProperty<string>("CanvasLinkId");
+            }
+            set
+            {
+                if (!SetProperty("CanvasLinkId", value))
+                {
+                    return;
+                }
+                OnPropertyChanged("Guid");
+            }
         }
 
         public string CanvasLinkId

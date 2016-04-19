@@ -6,8 +6,18 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get { return AssignmentId; }
-            set { AssignmentId = value; }
+            get
+            {
+                return GetProperty<string>("AssignmentId");
+            }
+            set
+            {
+                if (!SetProperty("AssignmentId", value))
+                {
+                    return;
+                }
+                OnPropertyChanged("Guid");
+            }
         }
 
         public string AssignmentId
