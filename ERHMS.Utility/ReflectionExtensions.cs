@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace ERHMS.Utility
@@ -25,6 +26,15 @@ namespace ERHMS.Utility
         public static object Invoke(this object @this, string methodName, Type[] types, object[] parameters)
         {
             return @this.Invoke(@this.GetType(), methodName, types, parameters);
+        }
+
+        public static string GetManifestResourceText(this Assembly @this, string resourceName)
+        {
+            using (Stream stream = @this.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
         }
     }
 }

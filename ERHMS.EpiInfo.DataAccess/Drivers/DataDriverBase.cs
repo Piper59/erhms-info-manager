@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
     public abstract class DataDriverBase : IDataDriver
     {
+        private static readonly Regex Comment = new Regex(@"/\*.*?\*/", RegexOptions.Singleline);
+
         private DbProviderFactory factory;
-        private string connectionString;
+
+        public DataProvider Provider { get; private set; }
+        public string ConnectionString { get; private set; }
 
         protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder)
         {
             Log.Current.DebugFormat("Creating data driver: {0}, {1}", provider.ToInvariantName(), builder.ToSafeString());
             factory = DbProviderFactories.GetFactory(provider.ToInvariantName());
-            connectionString = builder.ConnectionString;
+            Provider = provider;
+            ConnectionString = builder.ConnectionString;
         }
 
         public string Escape(string identifier)
@@ -27,7 +33,7 @@ namespace ERHMS.EpiInfo.DataAccess
         private DbConnection GetConnection()
         {
             DbConnection connection = factory.CreateConnection();
-            connection.ConnectionString = connectionString;
+            connection.ConnectionString = ConnectionString;
             connection.Open();
             return connection;
         }
@@ -132,6 +138,22 @@ namespace ERHMS.EpiInfo.DataAccess
                 int result = ExecuteNonQuery(transaction, sql, (IEnumerable<DataParameter>)parameters);
                 transaction.Commit();
                 return result;
+            }
+        }
+
+        public void ExecuteScript(string script)
+        {
+            using (DataTransaction transaction = BeginTransaction())
+            {
+                foreach (string sql in Comment.Replace(script, "").Split(';'))
+                {
+                    if (string.IsNullOrWhiteSpace(sql))
+                    {
+                        continue;
+                    }
+                    ExecuteNonQuery(transaction, sql);
+                }
+                transaction.Commit();
             }
         }
 
