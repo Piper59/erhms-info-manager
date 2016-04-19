@@ -28,6 +28,7 @@ namespace ERHMS.DataAccess
 
         public DataContext(Project project)
         {
+            Log.Current.DebugFormat("Opening data context: {0}", project.FilePath);
             Project = project;
             Driver = DataDriverFactory.CreateDataDriver(project);
             Prefixes = new CodeRepository(Driver, "codeprefix1", "prefix", false);
