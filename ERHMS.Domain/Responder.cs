@@ -1,4 +1,5 @@
-﻿using ERHMS.EpiInfo.Domain;
+﻿using Epi;
+using ERHMS.EpiInfo.Domain;
 using System;
 
 namespace ERHMS.Domain
@@ -7,14 +8,26 @@ namespace ERHMS.Domain
     {
         public string ResponderId
         {
-            get { return GetProperty<string>("ResponderId"); }
-            set { SetProperty("ResponderId", value); }
+            get
+            {
+                return GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID);
+            }
+            set
+            {
+                if (!SetProperty(ColumnNames.GLOBAL_RECORD_ID, value))
+                {
+                    return;
+                }
+                OnPropertyChanged("ResponderId");
+            }
         }
+
         public string Username
         {
             get { return GetProperty<string>("Username"); }
             set { SetProperty("Username", value); }
         }
+
         public string Prefix
         {
             get { return GetProperty<string>("Prefix"); }

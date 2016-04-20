@@ -18,12 +18,13 @@ namespace ERHMS.Utility
 
         public static FileInfo GetTemporaryFile(string prefix = "ERHMS_", string extension = null)
         {
+            string path = Path.GetTempPath();
             FileInfo file;
             do
             {
                 string fileName = string.Format("{0}{1:N}", prefix, Guid.NewGuid());
                 fileName = Path.ChangeExtension(fileName, extension);
-                file = new FileInfo(Path.Combine(Path.GetTempPath(), fileName));
+                file = new FileInfo(Path.Combine(path, fileName));
             } while (file.Exists);
             using (file.OpenWrite())
             { }

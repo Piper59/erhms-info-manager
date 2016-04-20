@@ -34,6 +34,18 @@ namespace ERHMS.Utility {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DoFirstTimeSetup {
+            get {
+                return ((bool)(this["DoFirstTimeSetup"]));
+            }
+            set {
+                this["DoFirstTimeSetup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("WARN")]
         public string LogLevel {
             get {
@@ -46,7 +58,7 @@ namespace ERHMS.Utility {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("%USERPROFILE%\\Desktop\\ERHMS Info Manager")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string RootDirectory {
             get {
                 return ((string)(this["RootDirectory"]));

@@ -1,11 +1,12 @@
 ﻿<#@ template visibility="internal" #>
+<#@ import namespace="Epi" #>
 <DashboardCanvas>
   <dashboardHelper>
-    <projectPath><#= ProjectPath #></projectPath>
-    <viewName><#= ViewName #></viewName>
+    <connectionString><#= EncryptedConnectionString #></connectionString>
+    <tableName><#= TableName #></tableName>
+    <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
     <advancedDataFilterCondition>
     </advancedDataFilterCondition>
-    <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
     <relatedDataConnections />
     <dataFilters recordProcessScope="undeleted" />
     <dashboardRules />
@@ -16,6 +17,8 @@
     <showGadgetHeadings>True</showGadgetHeadings>
     <showGadgetSettings>True</showGadgetSettings>
     <useAlternatingColors>False</useAlternatingColors>
+    <defaultChartWidth>800</defaultChartWidth>
+    <defaultChartHeight>500</defaultChartHeight>
     <tableFontSize>13</tableFontSize>
     <customHeading>
     </customHeading>
@@ -34,12 +37,18 @@
   </CanvasSettings>
 </DashboardCanvas>
 <#+
-    public string ProjectPath { get; private set; }
-    public string ViewName { get; private set; }
+    public string ConnectionString { get; private set; }
 
-    public Canvas(string projectPath, string viewName)
+    public string EncryptedConnectionString
     {
-        ProjectPath = projectPath;
-        ViewName = viewName;
+        get { return Configuration.Encrypt(ConnectionString); }
+    }
+
+    public string TableName { get; private set; }
+
+    public TableCanvas(string connectionString, string tableName)
+    {
+        ConnectionString = connectionString;
+        TableName = tableName;
     }
 #>

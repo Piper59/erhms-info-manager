@@ -17,7 +17,7 @@ namespace ERHMS.EpiInfo
 
         public static DirectoryInfo GetConfigurationRoot()
         {
-            return new DirectoryInfo(Settings.Default.ExpandedRootDirectory);
+            return new DirectoryInfo(Settings.Default.RootDirectory);
         }
 
         public static string GetConfigurationFilePath()
@@ -123,9 +123,13 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static void Refresh()
+        public static void Refresh(bool save)
         {
             Configuration configuration = Configuration.GetNewInstance();
+            if (save)
+            {
+                Configuration.Save(configuration);
+            }
             Load(configuration.ConfigFilePath);
         }
 

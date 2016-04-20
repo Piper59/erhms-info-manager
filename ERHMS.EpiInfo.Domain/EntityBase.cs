@@ -9,12 +9,23 @@ namespace ERHMS.EpiInfo.Domain
     {
         private IDictionary<string, object> properties;
 
+        private bool @new;
         public bool New
         {
-            get { return GetProperty<bool>("New"); }
-            set { SetProperty("New", value); }
+            get
+            {
+                return @new;
+            }
+            set
+            {
+                if (value == @new)
+                {
+                    return;
+                }
+                @new = value;
+                OnPropertyChanged("New");
+            }
         }
-
 
         protected EntityBase()
         {
@@ -111,7 +122,7 @@ namespace ERHMS.EpiInfo.Domain
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler == null)
@@ -121,7 +132,7 @@ namespace ERHMS.EpiInfo.Domain
             handler(this, e);
         }
 
-        private void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
             OnPropertyChanged(new PropertyChangedEventArgs(name));
         }
