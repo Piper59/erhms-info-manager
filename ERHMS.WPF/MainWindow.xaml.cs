@@ -80,6 +80,19 @@ namespace ERHMS.WPF
                 }
             });
 
+            //used for viewing reponses to a form
+            Messenger.Default.Register<NotificationMessage<Epi.View>>(this, (msg) =>
+            {
+                switch (msg.Notification)
+                {
+                    case "ShowResponseList":
+                        {
+                            OpenWindow("View Responses", new FormResponseListView(msg.Content));
+                            break;
+                        }
+                }
+            });
+
             //used for adding a location
             Messenger.Default.Register<NotificationMessage<Incident>>(this, (msg) =>
             {

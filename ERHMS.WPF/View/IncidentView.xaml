@@ -403,62 +403,40 @@
                     x:Name="btnPublish" Click="btnPublish_Click"
                     ToolTip="Publish to..."
                     Content="Publish"
-                    IsEnabled="{Binding SelectedView, Converter={StaticResource IsNullOrEmptyEnabledConverter}}"
+                    IsEnabled="{Binding SelectedForm, Converter={StaticResource IsNullOrEmptyEnabledConverter}}"
                     Visual="{DynamicResource appbar_cloud_upload}">
                                 <controls:AppBarButton.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="To project">
-                                            <MenuItem Header="New" Command="{Binding PublishFormToNewProjectCommand}" />
-                                            <MenuItem Header="Existing" Command="{Binding PublishFormToExistingProjectCommand}" />
-                                        </MenuItem>
                                         <MenuItem Header="To template" Command="{Binding PublishFormToTemplateCommand}" />
                                         <MenuItem Header="To web" Command="{Binding PublishFormToWebCommand}" />
-                                        <MenuItem Header="To Android" Command="{Binding PublishFormToAndroidCommand}" />
                                     </ContextMenu>
                                 </controls:AppBarButton.ContextMenu>
                             </controls:AppBarButton>
                             <controls:AppBarButton
                     x:Name="btnExport" Click="btnExport_Click"
-                    Command="{Binding ExportFormCommand}"
+                    IsEnabled="{Binding SelectedForm, Converter={StaticResource IsNullOrEmptyEnabledConverter}}"
                     ToolTip="Export to..."
                     Content="Export"                    
                     Visual="{DynamicResource appbar_door_leave}">
                                 <controls:AppBarButton.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="To package" Command="{Binding ExportFormToPackageCommand}" />
-                                        <MenuItem Header="To file" Command="{Binding ExportFormToFileCommand}" />
                                     </ContextMenu>
                                 </controls:AppBarButton.ContextMenu>
                             </controls:AppBarButton>
                             <controls:AppBarButton
                     x:Name="btnImport" Click="btnImport_Click"
-                    Command="{Binding ImportCommand}"
+                    IsEnabled="{Binding SelectedForm, Converter={StaticResource IsNullOrEmptyEnabledConverter}}"
                     ToolTip="Import from..."
                     Content="Import"                    
                     Visual="{DynamicResource appbar_door_enter}">
                                 <controls:AppBarButton.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="From Epi Info" Command="{Binding ImportFormFromEpiInfoCommand}" />
                                         <MenuItem Header="From web" Command="{Binding ImportFormFromWebCommand}" />
-                                        <MenuItem Header="From Android" Command="{Binding ImportFormFromAndroidCommand}" />
                                         <MenuItem Header="From package" Command="{Binding ImportFormFromPackageCommand}" />
-                                        <MenuItem Header="From file" Command="{Binding ImportFormFromFileCommand}" />
                                     </ContextMenu>
                                 </controls:AppBarButton.ContextMenu>
-                            </controls:AppBarButton>
-                            <controls:AppBarButton
-                    Style="{StaticResource AppBarButtonContext}"
-                    Command="{Binding AnalyzeCommand}"
-                    ToolTip="Analyze"
-                    Content="Analyze"                    
-                    Visual="{DynamicResource appbar_graph_bar}">
-                                <controls:AppBarButton.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Classic" Command="{Binding AnalyzeFormClassicCommand}" />
-                                        <MenuItem Header="Visual" Command="{Binding AnalyzeFormVisualCommand}" />
-                                    </ContextMenu>
-                                </controls:AppBarButton.ContextMenu>
-                            </controls:AppBarButton>
+                            </controls:AppBarButton>                            
                         </WrapPanel>
                         <WrapPanel Grid.Column="2">
                         </WrapPanel>

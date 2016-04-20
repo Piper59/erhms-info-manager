@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
+using ERHMS.EpiInfo.Domain;
 using System.Collections.Generic;
 using Project = ERHMS.EpiInfo.Project;
 using Template = ERHMS.EpiInfo.Template;
@@ -42,6 +43,16 @@ namespace ERHMS.DataAccess
         {
             return Project.GetViews();
         }
+
+        public View GetViewById(int viewId)
+        {
+            return Project.GetViewById(viewId);
+        }
+
+        public void DeleteView(int viewId)
+        {
+            Project.DeleteView(viewId);
+        }    
 
         public IEnumerable<Template> GetTemplates(TemplateLevel? level = null)
         {

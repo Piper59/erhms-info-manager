@@ -10,6 +10,12 @@ using ERHMS.Domain;
 using System.Linq;
 using ERHMS.EpiInfo.Domain;
 using System.Collections.Generic;
+using ERHMS.EpiInfo.MakeView;
+using ERHMS.EpiInfo.Enter;
+using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.ImportExport;
+using ERHMS.EpiInfo.Analysis;
+using ERHMS.EpiInfo.AnalysisDashboard;
 
 namespace ERHMS.WPF.ViewModel
 {
@@ -225,13 +231,16 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand DeleteFormCommand { get; private set; }
         public RelayCommand EnterFormDataCommand { get; private set; }
         public RelayCommand OpenFormResponsesCommand { get; private set; }
+        public RelayCommand PublishFormCommand { get; private set; }
         public RelayCommand PublishFormToNewProjectCommand { get; private set; }
         public RelayCommand PublishFormToExistingProjectCommand { get; private set; }
         public RelayCommand PublishFormToTemplateCommand { get; private set; }
         public RelayCommand PublishFormToWebCommand { get; private set; }
         public RelayCommand PublishFormToAndroidCommand { get; private set; }
+        public RelayCommand ExportFormCommand { get; private set; }
         public RelayCommand ExportFormToPackageCommand { get; private set; }
         public RelayCommand ExportFormToFileCommand { get; private set; }
+        public RelayCommand ImportFormCommand { get; private set; }
         public RelayCommand ImportFormFromEpiInfoCommand { get; private set; }
         public RelayCommand ImportFormFromWebCommand { get; private set; }
         public RelayCommand ImportFormFromAndroidCommand { get; private set; }
@@ -239,6 +248,16 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand ImportFormFromFileCommand { get; private set; }
         public RelayCommand AnalyzeFormClassicCommand { get; private set; }
         public RelayCommand AnalyzeFormVisualCommand { get; private set; }
+
+        private bool HasSelectedForm()
+        {
+            return SelectedForm != null;
+        }
+
+        private bool CanDeleteForm()
+        {
+            return HasSelectedForm();// && !Project.GetSystemViewNames().Contains(SelectedForm.Name);
+        }
         #endregion
 
         public IncidentViewModel()
@@ -348,6 +367,34 @@ namespace ERHMS.WPF.ViewModel
                     Messenger.Default.Send(new NotificationMessage<Responder>((Responder)((Responder)SelectedRosteredResponders[0]).Clone(), "ShowEditResponder"));
             },
                 HasSelectedRoster);
+
+//            AddFormCommand = new RelayCommand(() => );
+//            AddFormFromTemplateCommand = new RelayCommand(() => );
+            EditFormCommand = new RelayCommand(() => MakeView.OpenView(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
+            EnterFormDataCommand = new RelayCommand(() => Enter.OpenView(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
+            DeleteFormCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage<Action>(() =>
+                {
+                    App.GetDataContext().DeleteView(SelectedForm.ViewId);
+                }, "ConfirmDeleteForm"));
+            },
+                CanDeleteForm);
+            OpenFormResponsesCommand = new RelayCommand(() => {
+                Messenger.Default.Send(new NotificationMessage<Epi.View>(App.GetDataContext().GetViewById(SelectedForm.ViewId), "ShowResponseList"));
+            }, HasSelectedForm);
+            //PublishFormToNewProjectCommand = new RelayCommand(() => Project.PublishToNewProject(SelectedForm), HasSelectedForm);
+            //PublishFormToExistingProjectCommand = new RelayCommand(() => Project.PublishToExistingProject(SelectedForm), HasSelectedForm);
+            PublishFormToTemplateCommand = new RelayCommand(() => MakeView.CreateTemplate(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
+            //PublishFormToWebCommand = new RelayCommand(() => WebSurvey. Project.PublishToWeb(SelectedForm), HasSelectedForm);
+            //PublishFormToAndroidCommand = new RelayCommand(() => Project.PublishToAndroid(SelectedForm), HasSelectedForm);
+            //ImportFormFromEpiInfoCommand = new RelayCommand(() => ImportExport.ImportFromView( Project.ImportFromEpiInfo(SelectedForm), HasSelectedForm);
+            //ImportFormFromWebCommand = new RelayCommand(() => Project.ImportFromWeb(SelectedForm), HasSelectedForm);
+            //ImportFormFromAndroidCommand = new RelayCommand(() => Project.ImportFromAndroid(SelectedForm), HasSelectedForm);
+            ImportFormFromPackageCommand = new RelayCommand(() => ImportExport.ImportFromPackage(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
+            //ImportFormFromFileCommand = new RelayCommand(() => Project.ImportFromFile(SelectedForm), HasSelectedForm);
+            ExportFormToPackageCommand = new RelayCommand(() => ImportExport.ExportToPackage(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
+            //ExportFormToFileCommand = new RelayCommand(() => Project.ExportToFile(SelectedForm), HasSelectedForm);
 
             RefreshRosterData();
             RefreshLocationData();

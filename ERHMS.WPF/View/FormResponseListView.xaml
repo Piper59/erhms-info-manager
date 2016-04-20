@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="ERHMS.WPF.View.FormResponseListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:ERHMS.WPF.Controls"
+             xmlns:local="clr-namespace:ERHMS.WPF.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid  Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" TextWrapping="Wrap" Style="{StaticResource PageIntroduction}">
+            Below is the list of responses for the requested form. Entries can be edited or they can be marked as deleted to exclude them from analysis.
+        </TextBlock>
+        <TextBlock Grid.Row="2" Style="{StaticResource Subtitle}" Text="Responses"/>
+        <DataGrid Grid.Row="3"
+                      Name="dgResponses" 
+                      ItemsSource="{Binding Responses.Entities}" 
+                      SelectionMode="Single"
+                      SelectedItem="{Binding SelectedResponse}"
+                      controls:DataGridExtension.BindableColumns="{Binding ColumnCollection}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True" />
+        <Grid Grid.Row="4" 
+              Margin="-10,10,-10,-10"
+              Style="{StaticResource AppBar}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <WrapPanel Grid.Column="1" 
+                       Grid.ColumnSpan="3"
+                       HorizontalAlignment="Center">
+                <controls:AppBarButton
+                    Command="{Binding EditCommand}"
+                    ToolTip="Edit Record"
+                    Content="Edit"
+                    Visual="{DynamicResource appbar_edit}"/>
+                <controls:AppBarButton
+                    Command="{Binding DeleteCommand}"
+                    ToolTip="Delete Record"
+                    Content="Delete"
+                    Visual="{DynamicResource appbar_delete}"/>
+                <controls:AppBarButton
+                    Command="{Binding UndeleteCommand}"
+                    ToolTip="Undelete Record"
+                    Content="Undelete"
+                    Visual="{DynamicResource appbar_question}"/>
+            </WrapPanel>
+            <WrapPanel Grid.Column="2">
+                <controls:AppBarButton
+                    Command="{Binding RefreshCommand}"
+                    ToolTip="Refresh Records"
+                    Content="Refresh"
+                    Visual="{DynamicResource appbar_refresh}"/>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+</UserControl>
