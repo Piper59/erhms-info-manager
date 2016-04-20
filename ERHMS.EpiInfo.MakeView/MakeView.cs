@@ -63,40 +63,50 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
-        public static Process AddView(Project project)
+        public static Process AddView(Project project, string tag = null)
         {
-            return Execute(args => Main_AddView(args), project.FilePath);
+            return Execute(args => Main_AddView(args), project.FilePath, tag ?? "");
         }
 
         private static void Main_AddView(string[] args)
         {
             string projectPath = args[0];
+            string tag = args[1] == "" ? null : args[1];
+            Project project = new Project(projectPath);
             using (MainForm form = new MainForm())
             {
-                form.OpenProject(projectPath);
+                form.OpenProject(project);
                 form.Load += (sender, e) =>
                 {
-                    form.ProjectExplorer.AddView();
-                    IService service = Service.GetService();
-                    if (service == null)
+                    using (CreateViewDialog dialog = new CreateViewDialog(form, project))
                     {
-                        return;
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            View view = project.CreateView(dialog.ViewName);
+                            view.CreatePage("Page 1", 0);
+                            IService service = Service.GetService();
+                            if (service == null)
+                            {
+                                return;
+                            }
+                            service.RefreshViews(projectPath, dialog.ViewName, tag);
+                        }
                     }
-                    service.RefreshViews(projectPath);
                 };
                 Application.Run(form);
             }
         }
 
-        public static Process AddFromTemplate(Project project, EpiInfo.Template template)
+        public static Process AddFromTemplate(Project project, EpiInfo.Template template, string tag = null)
         {
-            return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName);
+            return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName, tag ?? "");
         }
 
         private static void Main_AddFromTemplate(string[] args)
         {
             string projectPath = args[0];
             string templatePath = args[1];
+            string tag = args[2] == "" ? null : args[2];
             EpiInfo.Template template;
             if (!EpiInfo.Template.TryRead(new FileInfo(templatePath), out template))
             {
@@ -138,7 +148,7 @@ namespace ERHMS.EpiInfo.MakeView
                                 {
                                     return;
                                 }
-                                service.RefreshViews(projectPath);
+                                service.RefreshViews(projectPath, dialog.ViewName, tag);
                             }
                         }
                     };

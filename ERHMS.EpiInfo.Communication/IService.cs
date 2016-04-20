@@ -9,7 +9,7 @@ namespace ERHMS.EpiInfo.Communication
         void Ping();
 
         [OperationContract]
-        void RefreshViews(string projectPath);
+        void RefreshViews(string projectPath, string viewName, string tag);
 
         [OperationContract]
         void RefreshTemplates();

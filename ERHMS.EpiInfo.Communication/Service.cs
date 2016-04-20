@@ -87,9 +87,9 @@ namespace ERHMS.EpiInfo.Communication
 
         public event EventHandler<ProjectEventArgs> RefreshingViews;
 
-        public void RefreshViews(string projectPath)
+        public void RefreshViews(string projectPath, string viewName, string tag)
         {
-            OnEvent(RefreshingViews, new ProjectEventArgs(projectPath), "Refreshing views");
+            OnEvent(RefreshingViews, new ViewEventArgs(projectPath, viewName, tag), "Refreshing views");
         }
 
         public event EventHandler RefreshingTemplates;
