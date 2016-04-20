@@ -58,6 +58,16 @@ namespace ERHMS.DataAccess
             return Project.GetViews();
         }
 
+        public View GetViewById(int viewId)
+        {
+            return Project.GetViewById(viewId);
+        }
+
+        public void DeleteView(int viewId)
+        {
+            Project.DeleteView(viewId);
+        }
+
         public IEnumerable<View> GetLinkedViews(string incidentId)
         {
             ICollection<int> viewIds = ViewLinks.Select(GetLinkPredicate(incidentId))

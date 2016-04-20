@@ -368,7 +368,7 @@ namespace ERHMS.WPF.ViewModel
             },
                 HasSelectedRoster);
 
-//            AddFormCommand = new RelayCommand(() => );
+            AddFormCommand = new RelayCommand(() => MakeView.AddView(App.GetDataContext().Project, CurrentIncident.IncidentId));
 //            AddFormFromTemplateCommand = new RelayCommand(() => );
             EditFormCommand = new RelayCommand(() => MakeView.OpenView(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
             EnterFormDataCommand = new RelayCommand(() => Enter.OpenView(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
@@ -412,7 +412,7 @@ namespace ERHMS.WPF.ViewModel
         private void RefreshFormData()
         {
             formList = new CollectionViewSource();
-            formList.Source = App.GetDataContext().ViewLinks.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId);
+            formList.Source = App.GetDataContext().GetLinkedViews(CurrentIncident.IncidentId);
             FormList.Refresh();
             RaisePropertyChanged("FormList");
             SelectedForm = null;
