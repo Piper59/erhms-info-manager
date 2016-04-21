@@ -1,4 +1,5 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Communication;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -43,9 +44,26 @@ namespace ERHMS.WPF.ViewModel
                 Filter.Equals("") ||
                 (t.File.Name != null && t.File.Name.ToLower().Contains(Filter.ToLower()));
         }
-        
+
+        public RelayCommand DeleteCommand { get; private set; }
 
         public TemplateListViewModel()
+        {
+            App.Current.Service.RefreshingTemplates += Service_RefreshingTemplates;
+
+            DeleteCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage<System.Action>(() =>
+                {
+                    SelectedTemplate.Delete();
+                    RefreshTemplateData();
+                }, "ConfirmDeleteTemplate"));
+            }, HasSelectedTemplate);
+
+            RefreshTemplateData();
+        }
+        
+        private void Service_RefreshingTemplates(object sender, System.EventArgs e)
         {
             RefreshTemplateData();
         }

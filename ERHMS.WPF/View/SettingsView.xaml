@@ -1,22 +1,23 @@
-﻿<UserControl x:Class="ERHMS.WPF.View.Settings"
+﻿<UserControl x:Class="ERHMS.WPF.View.SettingsView"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"             
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:p="clr-namespace:ERHMS.WPF.Properties" 
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:ERHMS.WPF.Controls"             
              mc:Ignorable="d" 
              d:DesignHeight="600" 
              d:DesignWidth="600">
-    <Grid
-              Margin="10">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Application Settings"/>
-        <TabControl Grid.Row="1" Margin="0,0,0,3">
-            <TabItem Header="Organization">
+        <mah:MetroAnimatedTabControl Grid.Row="1" Margin="0,0,0,0" Style="{StaticResource SideTabControl}">
+            <mah:MetroTabItem Header="Organization"
+                              Style="{StaticResource SideTabItem}">
                 <ScrollViewer Margin="0,0,0,10" >
                     <StackPanel Orientation="Vertical">
                         <Label>Organization Name:</Label>
@@ -25,8 +26,9 @@
                         <TextBox Text="{Binding OrganizationWebSurveyKey, Mode=TwoWay}"/>
                     </StackPanel>
                 </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Email Settings">
+            </mah:MetroTabItem>
+            <mah:MetroTabItem Header="Email Settings"
+                              Style="{StaticResource SideTabItem}">
                 <ScrollViewer Margin="0,0,0,10" >
                     <StackPanel Orientation="Vertical">
                         <Label>SMTP Host:</Label>
@@ -37,33 +39,33 @@
                         <TextBox Text="{Binding Path=EmailSender, Mode=TwoWay}"/>
                     </StackPanel>
                 </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Bing Maps Settings">
+            </mah:MetroTabItem>
+            <mah:MetroTabItem Header="Bing Map Settings"
+                              Style="{StaticResource SideTabItem}">
                 <ScrollViewer Margin="0,0,0,10">
                     <StackPanel Orientation="Vertical">
                         <Label>Bing Maps License Key:</Label>
                         <TextBox Text="{Binding BingMapsLicenseKey, Mode=TwoWay}"/>                        
                     </StackPanel>
                 </ScrollViewer>
-            </TabItem>
-        </TabControl>
-        
+            </mah:MetroTabItem>
+        </mah:MetroAnimatedTabControl>
+
         <Grid Grid.Row="2"
-              Margin="-3">
+              Style="{StaticResource AppBar}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!--<controls:AppBarButton
-                Grid.Column="1"
+            <controls:AppBarButton
+                Grid.Column="2"
                 HorizontalAlignment="Center"
                 Command="{Binding SaveCommand}"
                 ToolTip="Save Responder"
                 Content="Save"                
-                Visual="{DynamicResource appbar_save}"/>-->
+                Visual="{DynamicResource appbar_save}"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -65,6 +65,10 @@ namespace ERHMS.DataAccess
 
         public void DeleteView(int viewId)
         {
+            foreach(var vl in ViewLinks.Select().Where(q => q.ViewId == viewId))
+            {
+                ViewLinks.Delete(vl);
+            }
             Project.DeleteView(viewId);
         }
 
@@ -74,6 +78,15 @@ namespace ERHMS.DataAccess
                 .Select(viewLink => viewLink.ViewId)
                 .ToList();
             return GetViews().Where(view => viewIds.Contains(view.Id));
+        }
+
+        //used for pre-deployment forms
+        public IEnumerable<View> GetUnlinkedViews()
+        {
+            ICollection<int> viewIds = ViewLinks.Select()
+                .Select(viewLink => viewLink.ViewId)
+                .ToList();
+            return GetViews().Where(view => viewIds.Contains(view.Id) == false);
         }
 
         public IEnumerable<Template> GetTemplates(TemplateLevel? level = null)

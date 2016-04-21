@@ -21,7 +21,7 @@
         <TextBlock Grid.Row="2" Style="{StaticResource Subtitle}" Text="Responses"/>
         <DataGrid Grid.Row="3"
                       Name="dgResponses" 
-                      ItemsSource="{Binding Responses.Entities}" 
+                      ItemsSource="{Binding Responses}" 
                       SelectionMode="Single"
                       SelectedItem="{Binding SelectedResponse}"
                       controls:DataGridExtension.BindableColumns="{Binding ColumnCollection}"
@@ -55,11 +55,6 @@
                     Visual="{DynamicResource appbar_question}"/>
             </WrapPanel>
             <WrapPanel Grid.Column="2">
-                <controls:AppBarButton
-                    Command="{Binding RefreshCommand}"
-                    ToolTip="Refresh Records"
-                    Content="Refresh"
-                    Visual="{DynamicResource appbar_refresh}"/>
             </WrapPanel>
         </Grid>
     </Grid>

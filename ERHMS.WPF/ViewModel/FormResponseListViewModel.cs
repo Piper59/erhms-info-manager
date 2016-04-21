@@ -11,6 +11,7 @@ using ERHMS.Domain;
 using System.Windows.Controls;
 using ERHMS.EpiInfo.DataAccess;
 using System.Windows.Data;
+using ERHMS.EpiInfo.Enter;
 
 namespace ERHMS.WPF.ViewModel
 {
@@ -35,26 +36,20 @@ namespace ERHMS.WPF.ViewModel
             get { return selectedResponse; }
             set { Set(() => SelectedResponse, ref selectedResponse, value); }
         }
-
-        public RelayCommand AddCommand { get; private set; }
+        
         public RelayCommand EditCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand UndeleteCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
 
         public FormResponseListViewModel(Epi.View view)
         {
             ViewEntityRepository<ViewEntity> viewEntityRepository = new ViewEntityRepository<ViewEntity>(App.GetDataContext().Driver, view);
 
             ColumnCollection = new ObservableCollection<DataGridColumn>();
-
-            /*
-            AddCommand = new RelayCommand(() => Responses.InsertViaEnter());
-            EditCommand = new RelayCommand(() => Responses.UpdateViaEnter(SelectedResponse), HasSelectedResponse);
-            DeleteCommand = new RelayCommand(() => Responses.Delete(SelectedResponse), HasDeletableSelectedResponse);
-            UndeleteCommand = new RelayCommand(() => Responses.Undelete(SelectedResponse), HasUndeletableSelectedResponse);
-            RefreshCommand = new RelayCommand(() => Responses.Refresh());
-            */
+            
+            EditCommand = new RelayCommand(() => Enter.OpenRecord(view, (int)SelectedResponse.UniqueKey), HasSelectedResponse);
+            //DeleteCommand = new RelayCommand(() => Responses.Delete(SelectedResponse), HasDeletableSelectedResponse);
+            //UndeleteCommand = new RelayCommand(() => Responses.Undelete(SelectedResponse), HasUndeletableSelectedResponse);
 
             CurrentView = view;
 

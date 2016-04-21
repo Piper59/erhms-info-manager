@@ -33,9 +33,12 @@ namespace ERHMS.EpiInfo.Enter
         public static Process OpenView(View view, object record = null)
         {
             Process process = Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
-            foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            if (record != null)
             {
-                process.StandardInput.WriteLine("{0} = {1}", property.Name, property.GetValue(record, null));
+                foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                {
+                    process.StandardInput.WriteLine("{0} = {1}", property.Name, property.GetValue(record, null));
+                }
             }
             process.StandardInput.Close();
             return process;

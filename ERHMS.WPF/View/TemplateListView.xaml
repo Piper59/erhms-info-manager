@@ -69,6 +69,11 @@
                        HorizontalAlignment="Center">
             </WrapPanel>
             <WrapPanel Grid.Column="2">
+                <controls:AppBarButton
+                    Command="{Binding DeleteCommand}"
+                    ToolTip="Delete Template"
+                    Content="Delete"
+                    Visual="{DynamicResource appbar_delete}"/>
             </WrapPanel>
         </Grid>
     </Grid>

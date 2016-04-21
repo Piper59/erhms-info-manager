@@ -325,11 +325,10 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <controls:AppBarButton
-                Grid.Column="1" HorizontalAlignment="Center"
+                Grid.Column="2" HorizontalAlignment="Center"
                 Command="{Binding SaveResponderCommand}"
                 ToolTip="Save Responder"
                 Content="Save"                

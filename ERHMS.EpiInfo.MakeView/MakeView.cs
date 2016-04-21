@@ -63,9 +63,26 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
-        public static Process AddView(Project project, string tag = null)
+        //public static Process AddView(Project project, string tag = null)
+        //{
+        //    return Execute(args => Main_AddView(args), project.FilePath, tag ?? "");
+        //}
+
+        public static View AddView(Project project)
         {
-            return Execute(args => Main_AddView(args), project.FilePath, tag ?? "");
+            using (CreateViewDialog dialog = new CreateViewDialog(null, project))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    View view = project.CreateView(dialog.ViewName);
+                    view.CreatePage("Page 1", 0);
+                    return view;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         private static void Main_AddView(string[] args)

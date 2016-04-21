@@ -78,6 +78,8 @@
             </WrapPanel>
             <WrapPanel Grid.Column="1"
                        HorizontalAlignment="Center">
+            </WrapPanel>
+            <WrapPanel Grid.Column="2">
                 <controls:AppBarButton
                     Command="{Binding EditCommand}"
                     ToolTip="Edit Responder"
@@ -93,8 +95,6 @@
                     ToolTip="Email Responder"
                     Content="Email"                    
                     Visual="{DynamicResource appbar_email}"/>
-            </WrapPanel>
-            <WrapPanel Grid.Column="2">
             </WrapPanel>
         </Grid>
     </Grid>

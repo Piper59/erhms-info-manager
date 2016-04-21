@@ -63,7 +63,9 @@ namespace ERHMS.WPF.ViewModel
 
             OpenCommand = new RelayCommand(() =>
             {
-                Messenger.Default.Send(new NotificationMessage<Incident>((Incident)SelectedIncident.Clone(), "ShowEditIncident"));
+                Incident incident = (Incident)SelectedIncident.Clone();
+                incident.New = false;
+                Messenger.Default.Send(new NotificationMessage<Incident>(incident, "ShowEditIncident"));
             },
                 HasSelectedIncident);
             DeleteCommand = new RelayCommand(() =>

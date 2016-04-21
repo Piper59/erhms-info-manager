@@ -162,9 +162,7 @@
     <Compile Include="Controls\AppBarButton.cs" />
     <Compile Include="Controls\DataGridExtension.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
-    <Compile Include="Converters\AssignmentToResponderFirstNameConverter.cs" />
-    <Compile Include="Converters\AssignmentToResponderLastNameConverter.cs" />
-    <Compile Include="Converters\AssignmentToViewNameConverter.cs" />
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\DateToShortDateConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
@@ -205,6 +203,7 @@
     <Compile Include="ViewModel\ResponderSearchViewModel.cs" />
     <Compile Include="ViewModel\FormResponseListViewModel.cs" />
     <Compile Include="ViewModel\ResponderViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\StartViewModel.cs" />
     <Compile Include="ViewModel\FormListViewModel.cs" />
     <Compile Include="View\EmailView.xaml.cs">
@@ -246,8 +245,8 @@
     <Compile Include="View\StartView.xaml.cs">
       <DependentUpon>StartView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
+    <Compile Include="View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -321,7 +320,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Settings.xaml">
+    <Page Include="View\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

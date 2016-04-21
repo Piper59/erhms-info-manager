@@ -17,7 +17,7 @@ namespace ERHMS.EpiInfo
 
         public static DirectoryInfo GetConfigurationRoot()
         {
-            return new DirectoryInfo(Settings.Default.RootDirectory);
+            return GetApplicationRoot();
         }
 
         public static string GetConfigurationFilePath()

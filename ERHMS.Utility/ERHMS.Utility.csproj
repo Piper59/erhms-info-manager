@@ -46,6 +46,7 @@
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="DataExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Email.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="IOExtensions.cs" />

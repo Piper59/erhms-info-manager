@@ -22,6 +22,7 @@
         <l:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <l:ResponderToNameConverter x:Key="ResponderToNameConverter" />
         <l:RegistrationToResponderNameConverter x:Key="RegistrationToResponderNameConverter" />
+        <l:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -104,15 +105,15 @@
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="History" 
-                              Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
+                              Style="{StaticResource SideTabItem}" 
+                              Visibility="{Binding CurrentIncident.New, Converter={StaticResource  InverseBooleanToVisibilityConverter}}">
                 <ScrollViewer Margin="0,0,0,10" >
 
                 </ScrollViewer>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Roster" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
+                              Visibility="{Binding CurrentIncident.New, Converter={StaticResource  InverseBooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -226,7 +227,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Locations" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
+                              Visibility="{Binding CurrentIncident.New, Converter={StaticResource  InverseBooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -312,7 +313,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Form/Survey Management" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
+                              Visibility="{Binding CurrentIncident.New, Converter={StaticResource  InverseBooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -347,12 +348,12 @@
                             </TextBox>
                             <DataGrid Grid.Row="5"
                                       ItemsSource="{Binding FormList}"
-                                      SelectedItem="{Binding SelectedForm}"
+                                      SelectedItem="{Binding SelectedForm, Mode=TwoWay}"
                                       SelectionMode="Single"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding ViewId}" />
+                                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
@@ -445,7 +446,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Analysis" 
                               Style="{StaticResource SideTabItem}"
-                              IsEnabled="{Binding CurrentIncident.New, Converter={StaticResource InverseBooleanConverter}}">
+                              Visibility="{Binding CurrentIncident.New, Converter={StaticResource  InverseBooleanToVisibilityConverter}}">
                 <ScrollViewer Margin="0,0,0,10" >
 
                 </ScrollViewer>

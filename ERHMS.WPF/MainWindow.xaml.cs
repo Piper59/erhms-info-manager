@@ -52,6 +52,11 @@ namespace ERHMS.WPF
                             OpenWindow("Incident List", new IncidentListView());
                             break;
                         }
+                    case "ShowFormList":
+                        {
+                            OpenWindow("Pre-Deployment Forms", new FormListView());
+                            break;
+                        }
                     case "ShowTemplateList":
                         {
                             OpenWindow("Templates", new TemplateListView());
@@ -75,6 +80,11 @@ namespace ERHMS.WPF
                     case "ExitApplication":
                         {
                             this.Close();
+                            break;
+                        }
+                    case "ShowSettings":
+                        {
+                            OpenWindow("Settings", new SettingsView());
                             break;
                         }
                 }

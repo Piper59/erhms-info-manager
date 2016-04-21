@@ -16,6 +16,10 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.ImportExport;
 using ERHMS.EpiInfo.Analysis;
 using ERHMS.EpiInfo.AnalysisDashboard;
+using ERHMS.EpiInfo.Communication;
+using Action = System.Action;
+using Project = ERHMS.EpiInfo.Project;
+using System.Windows.Threading;
 
 namespace ERHMS.WPF.ViewModel
 {
@@ -196,14 +200,44 @@ namespace ERHMS.WPF.ViewModel
         #endregion
 
         #region Forms
-        public ViewLink SelectedForm;
+        private Epi.View selectedForm;
+        public Epi.View SelectedForm
+        {
+            get { return selectedForm; }
+            set
+            {
+                Set(() => SelectedForm, ref selectedForm, value);
+                
+                AddFormCommand.RaiseCanExecuteChanged();
+                AddFormFromTemplateCommand.RaiseCanExecuteChanged();
+                EditFormCommand.RaiseCanExecuteChanged();
+                DeleteFormCommand.RaiseCanExecuteChanged();
+                EnterFormDataCommand.RaiseCanExecuteChanged();
+                OpenFormResponsesCommand.RaiseCanExecuteChanged();
+                PublishFormCommand.RaiseCanExecuteChanged();
+                PublishFormToNewProjectCommand.RaiseCanExecuteChanged();
+                PublishFormToExistingProjectCommand.RaiseCanExecuteChanged();
+                PublishFormToTemplateCommand.RaiseCanExecuteChanged();
+                PublishFormToWebCommand.RaiseCanExecuteChanged();
+                PublishFormToAndroidCommand.RaiseCanExecuteChanged();
+                ExportFormCommand.RaiseCanExecuteChanged();
+                ExportFormToPackageCommand.RaiseCanExecuteChanged();
+                ExportFormToFileCommand.RaiseCanExecuteChanged();
+                ImportFormCommand.RaiseCanExecuteChanged();
+                ImportFormFromEpiInfoCommand.RaiseCanExecuteChanged();
+                ImportFormFromWebCommand.RaiseCanExecuteChanged();
+                ImportFormFromAndroidCommand.RaiseCanExecuteChanged();
+                ImportFormFromPackageCommand.RaiseCanExecuteChanged();
+                ImportFormFromFileCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         private CollectionViewSource formList;
         public ICollectionView FormList
         {
             get { return formList != null ? formList.View : null; }
         }
-        
+
         private string formListFilter;
         public string FormListFilter
         {
@@ -219,7 +253,7 @@ namespace ERHMS.WPF.ViewModel
         {
             ViewLink vl = item as ViewLink;
             Epi.View v = App.GetDataContext().GetViews().Where(q => q.Id == vl.ViewId).First();
-            
+
             return
                 FormListFilter.Equals("") ||
                 (v.Name != null && v.Name.ToLower().Contains(FormListFilter.ToLower()));
@@ -246,8 +280,6 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand ImportFormFromAndroidCommand { get; private set; }
         public RelayCommand ImportFormFromPackageCommand { get; private set; }
         public RelayCommand ImportFormFromFileCommand { get; private set; }
-        public RelayCommand AnalyzeFormClassicCommand { get; private set; }
-        public RelayCommand AnalyzeFormVisualCommand { get; private set; }
 
         private bool HasSelectedForm()
         {
@@ -317,7 +349,7 @@ namespace ERHMS.WPF.ViewModel
             ViewLocationDetailsCommand = new RelayCommand(() =>
             {
                 Messenger.Default.Send(new NotificationMessage<Location>((Location)SelectedLocation.Clone(), "ShowEditLocation"));
-            }, HasSelectedLocation);            
+            }, HasSelectedLocation);
             DeleteLocationCommand = new RelayCommand(() =>
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
@@ -356,8 +388,7 @@ namespace ERHMS.WPF.ViewModel
 
                     RefreshRosterData();
                 }, "ConfirmDeleteRegistration"));
-            },
-                HasSelectedRosteredResponder);
+            }, HasSelectedRosteredResponder);
 
             ViewResponderDetailsCommand = new RelayCommand(() =>
             {
@@ -365,40 +396,77 @@ namespace ERHMS.WPF.ViewModel
                     Messenger.Default.Send(new NotificationMessage<Responder>((Responder)((Responder)SelectedAvailableResponders[0]).Clone(), "ShowEditResponder"));
                 else if (SelectedRosteredResponders != null && SelectedRosteredResponders.Count > 0)
                     Messenger.Default.Send(new NotificationMessage<Responder>((Responder)((Responder)SelectedRosteredResponders[0]).Clone(), "ShowEditResponder"));
-            },
-                HasSelectedRoster);
+            }, HasSelectedRoster);
 
-            AddFormCommand = new RelayCommand(() => MakeView.AddView(App.GetDataContext().Project, CurrentIncident.IncidentId));
-//            AddFormFromTemplateCommand = new RelayCommand(() => );
-            EditFormCommand = new RelayCommand(() => MakeView.OpenView(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
-            EnterFormDataCommand = new RelayCommand(() => Enter.OpenView(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
+            AddFormCommand = new RelayCommand(() =>
+            {
+                Epi.View view = MakeView.AddView(App.GetDataContext().Project);
+                MakeView.OpenView(view);
+
+                ViewLink vl = App.GetDataContext().ViewLinks.Create();
+                vl.IncidentId = CurrentIncident.IncidentId;
+                vl.ViewId = view.Id;
+
+                App.GetDataContext().ViewLinks.Save(vl);
+
+                RefreshFormData();
+            });
+            AddFormFromTemplateCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")));
+            EditFormCommand = new RelayCommand(() => MakeView.OpenView(SelectedForm), HasSelectedForm);
+            EnterFormDataCommand = new RelayCommand(() => Enter.OpenView(SelectedForm), HasSelectedForm);
             DeleteFormCommand = new RelayCommand(() =>
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
                 {
-                    App.GetDataContext().DeleteView(SelectedForm.ViewId);
+                    App.GetDataContext().DeleteView(SelectedForm.Id);
                 }, "ConfirmDeleteForm"));
             },
                 CanDeleteForm);
-            OpenFormResponsesCommand = new RelayCommand(() => {
-                Messenger.Default.Send(new NotificationMessage<Epi.View>(App.GetDataContext().GetViewById(SelectedForm.ViewId), "ShowResponseList"));
+            OpenFormResponsesCommand = new RelayCommand(() =>
+            {
+                Messenger.Default.Send(new NotificationMessage<Epi.View>(SelectedForm, "ShowResponseList"));
             }, HasSelectedForm);
-            //PublishFormToNewProjectCommand = new RelayCommand(() => Project.PublishToNewProject(SelectedForm), HasSelectedForm);
-            //PublishFormToExistingProjectCommand = new RelayCommand(() => Project.PublishToExistingProject(SelectedForm), HasSelectedForm);
-            PublishFormToTemplateCommand = new RelayCommand(() => MakeView.CreateTemplate(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
-            //PublishFormToWebCommand = new RelayCommand(() => WebSurvey. Project.PublishToWeb(SelectedForm), HasSelectedForm);
-            //PublishFormToAndroidCommand = new RelayCommand(() => Project.PublishToAndroid(SelectedForm), HasSelectedForm);
-            //ImportFormFromEpiInfoCommand = new RelayCommand(() => ImportExport.ImportFromView( Project.ImportFromEpiInfo(SelectedForm), HasSelectedForm);
-            //ImportFormFromWebCommand = new RelayCommand(() => Project.ImportFromWeb(SelectedForm), HasSelectedForm);
-            //ImportFormFromAndroidCommand = new RelayCommand(() => Project.ImportFromAndroid(SelectedForm), HasSelectedForm);
-            ImportFormFromPackageCommand = new RelayCommand(() => ImportExport.ImportFromPackage(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
-            //ImportFormFromFileCommand = new RelayCommand(() => Project.ImportFromFile(SelectedForm), HasSelectedForm);
-            ExportFormToPackageCommand = new RelayCommand(() => ImportExport.ExportToPackage(App.GetDataContext().GetViewById(SelectedForm.ViewId)), HasSelectedForm);
-            //ExportFormToFileCommand = new RelayCommand(() => Project.ExportToFile(SelectedForm), HasSelectedForm);
+            PublishFormCommand = new RelayCommand(() => { }, HasSelectedForm);
+            PublishFormToNewProjectCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            PublishFormToExistingProjectCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            PublishFormToTemplateCommand = new RelayCommand(() => MakeView.CreateTemplate(SelectedForm), HasSelectedForm);
+            PublishFormToWebCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            PublishFormToAndroidCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            ImportFormCommand = new RelayCommand(() => { }, HasSelectedForm);
+            ImportFormFromEpiInfoCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            ImportFormFromWebCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            ImportFormFromAndroidCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            ImportFormFromPackageCommand = new RelayCommand(() => ImportExport.ImportFromPackage(SelectedForm), HasSelectedForm);
+            ImportFormFromFileCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+            ExportFormCommand = new RelayCommand(() => { }, HasSelectedForm);
+            ExportFormToPackageCommand = new RelayCommand(() => ImportExport.ExportToPackage(SelectedForm), HasSelectedForm);
+            ExportFormToFileCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
+
+            App.Current.Service.RefreshingViews += Service_RefreshingViews;
+            App.Current.Service.RefreshingRecordData += Service_RefreshingData;
+
 
             RefreshRosterData();
             RefreshLocationData();
             RefreshFormData();
+        }
+
+        private void Service_RefreshingViews(object sender, ViewEventArgs e)
+        {
+            if(e.Tag == CurrentIncident.IncidentId)
+                RefreshFormData();
+        }
+
+        private void Service_RefreshingData(object sender, ViewEventArgs e)
+        {
+            if (e.ViewName == "ERHMS_Locations")
+            {
+                RefreshLocationData();
+            }
+            if (e.ViewName == "ERHMS_Registrations")
+            {
+                RefreshRosterData();
+            }
         }
 
         private void RefreshLocationData()

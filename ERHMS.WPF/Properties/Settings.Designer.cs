@@ -130,5 +130,29 @@ namespace ERHMS.WPF.Properties {
                 this["BingMapsLicenseKey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OrganizationName {
+            get {
+                return ((string)(this["OrganizationName"]));
+            }
+            set {
+                this["OrganizationName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OrganizationWebSurveyKey {
+            get {
+                return ((string)(this["OrganizationWebSurveyKey"]));
+            }
+            set {
+                this["OrganizationWebSurveyKey"] = value;
+            }
+        }
     }
 }

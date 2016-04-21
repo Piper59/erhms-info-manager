@@ -6,13 +6,13 @@ namespace ERHMS.WPF.View
     /// <summary>
     /// Interaction logic for Help.xaml
     /// </summary>
-    public partial class Settings : UserControl
+    public partial class SettingsView : UserControl
     {
-        public Settings()
+        public SettingsView()
         {
             InitializeComponent();
 
-            //DataContext = new SettingsViewModel();
+            DataContext = new SettingsViewModel();
         }
     }
 }
