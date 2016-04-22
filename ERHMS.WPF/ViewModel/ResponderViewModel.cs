@@ -161,6 +161,8 @@ namespace ERHMS.WPF.ViewModel
                             {
                                 App.GetDataContext().Responders.Save(SelectedResponder);
 
+                                Messenger.Default.Send(new NotificationMessage("RefreshResponders"));
+
                                 Messenger.Default.Send(new NotificationMessage<string>("Responder has been saved.", "ShowSuccessMessage"));
                             }
                         }

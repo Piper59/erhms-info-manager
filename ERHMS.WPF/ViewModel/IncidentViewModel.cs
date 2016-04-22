@@ -207,7 +207,7 @@ namespace ERHMS.WPF.ViewModel
             set
             {
                 Set(() => SelectedForm, ref selectedForm, value);
-                
+
                 AddFormCommand.RaiseCanExecuteChanged();
                 AddFormFromTemplateCommand.RaiseCanExecuteChanged();
                 EditFormCommand.RaiseCanExecuteChanged();
@@ -280,6 +280,7 @@ namespace ERHMS.WPF.ViewModel
         public RelayCommand ImportFormFromAndroidCommand { get; private set; }
         public RelayCommand ImportFormFromPackageCommand { get; private set; }
         public RelayCommand ImportFormFromFileCommand { get; private set; }
+        public RelayCommand CopyTemplateCommand { get; private set; }
 
         private bool HasSelectedForm()
         {
@@ -357,9 +358,7 @@ namespace ERHMS.WPF.ViewModel
                     App.GetDataContext().Locations.Delete(SelectedLocation);
                 }, "ConfirmDeleteLocation"));
             }, HasSelectedLocation);
-
-
-
+            
             AddToRosterCommand = new RelayCommand(() =>
             {
                 for (int i = SelectedAvailableResponders.Count - 1; i >= 0; i--)
@@ -372,10 +371,10 @@ namespace ERHMS.WPF.ViewModel
 
                     App.GetDataContext().Registrations.Save(registration);
                 }
-                RefreshRosterData();
 
-            },
-                HasSelectedAvailableResponder);
+                RefreshRosterData();
+                
+            }, HasSelectedAvailableResponder);
 
             RemoveFromRosterCommand = new RelayCommand(() =>
             {
@@ -442,31 +441,38 @@ namespace ERHMS.WPF.ViewModel
             ExportFormToPackageCommand = new RelayCommand(() => ImportExport.ExportToPackage(SelectedForm), HasSelectedForm);
             ExportFormToFileCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
 
-            App.Current.Service.RefreshingViews += Service_RefreshingViews;
-            App.Current.Service.RefreshingRecordData += Service_RefreshingData;
-
+            SetupListeners();
 
             RefreshRosterData();
             RefreshLocationData();
             RefreshFormData();
         }
 
-        private void Service_RefreshingViews(object sender, ViewEventArgs e)
+        private void SetupListeners()
         {
-            if(e.Tag == CurrentIncident.IncidentId)
-                RefreshFormData();
+            App.Current.Service.RefreshingViews += Service_RefreshingViews;
+
+            Messenger.Default.Register<NotificationMessage>(this, (msg) =>
+            {
+                if (msg.Notification == "RefreshResponders")
+                {
+                    RefreshRosterData();
+                }
+            });
+
+            Messenger.Default.Register<NotificationMessage<string>>(this, (msg) =>
+            {
+                if (msg.Notification == "RefreshLocations" && msg.Content == CurrentIncident.IncidentId)
+                {
+                    RefreshLocationData();
+                }
+            });
         }
 
-        private void Service_RefreshingData(object sender, ViewEventArgs e)
+        private void Service_RefreshingViews(object sender, ViewEventArgs e)
         {
-            if (e.ViewName == "ERHMS_Locations")
-            {
-                RefreshLocationData();
-            }
-            if (e.ViewName == "ERHMS_Registrations")
-            {
-                RefreshRosterData();
-            }
+            if (e.Tag == CurrentIncident.IncidentId)
+                RefreshFormData();
         }
 
         private void RefreshLocationData()

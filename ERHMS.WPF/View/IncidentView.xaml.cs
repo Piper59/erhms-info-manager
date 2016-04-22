@@ -59,5 +59,10 @@ namespace ERHMS.WPF.View
             Process.Start(path);
             e.Handled = true;
         }
+
+        private void btnAddFormFromTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            winTemplateList.IsOpen = true;
+        }
     }
 }

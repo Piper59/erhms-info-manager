@@ -40,6 +40,8 @@ namespace ERHMS.WPF.ViewModel
             {
                 App.GetDataContext().Locations.Save(CurrentLocation);
 
+                Messenger.Default.Send(new NotificationMessage<string>(CurrentLocation.IncidentId, "RefreshLocations"));
+                
                 Messenger.Default.Send(new NotificationMessage<string>("Location has been saved.", "ShowSuccessMessage"));
             });
 
@@ -62,7 +64,9 @@ namespace ERHMS.WPF.ViewModel
             SaveCommand = new RelayCommand(() =>
             {
                 App.GetDataContext().Locations.Save(CurrentLocation);
-                
+
+                Messenger.Default.Send(new NotificationMessage<string>(CurrentLocation.IncidentId, "RefreshLocations"));
+
                 Messenger.Default.Send(new NotificationMessage<string>("Location has been saved.", "ShowSuccessMessage"));
             });
 

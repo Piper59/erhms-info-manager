@@ -102,6 +102,14 @@ namespace ERHMS.WPF.ViewModel
                     Messenger.Default.Send(new NotificationMessage<Tuple<IList, string, string>>(new Tuple<IList, string, string>(SelectedResponders, "", ""), "ComposeEmail"));
                 }, HasSelectedResponders);
 
+            Messenger.Default.Register<NotificationMessage>(this, (msg) =>
+            {
+                if (msg.Notification == "RefreshResponders")
+                {
+                    RefreshData();
+                }
+            });
+
             RefreshData();
         }
 
@@ -111,6 +119,7 @@ namespace ERHMS.WPF.ViewModel
                 return false;
             return SelectedResponders.Count == 1;
         }
+
         public bool HasSelectedResponders()
         {
             if (SelectedResponders == null)
