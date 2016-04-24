@@ -170,5 +170,5 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\EpiInfo.targets" />
+  <Import Project="..\ERHMS.targets" />
 </Project>
