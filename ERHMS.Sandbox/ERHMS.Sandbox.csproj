@@ -13,28 +13,6 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <SignManifests>true</SignManifests>
-    <ManifestCertificateThumbprint>4D6DC7ED8964D314BA9C76F1312B998D2DF22B76</ManifestCertificateThumbprint>
-    <ManifestKeyFile>ERHMS.pfx</ManifestKeyFile>
-    <GenerateManifests>true</GenerateManifests>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>ERHMS Info Manager</ProductName>
-    <PublisherName>NIOSH</PublisherName>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -56,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Epi.Core">
-      <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -80,33 +55,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ERHMS.EpiInfo.AnalysisDashboard\ERHMS.EpiInfo.AnalysisDashboard.csproj">
-      <Project>{0545c649-4922-4c42-89b1-518c056fb483}</Project>
-      <Name>ERHMS.EpiInfo.AnalysisDashboard</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.Analysis\ERHMS.EpiInfo.Analysis.csproj">
-      <Project>{02554b6e-557d-4c58-ae39-4ac674755d71}</Project>
-      <Name>ERHMS.EpiInfo.Analysis</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Communication\ERHMS.EpiInfo.Communication.csproj">
       <Project>{4feb8705-98bb-431c-9878-004b0c4d7d41}</Project>
       <Name>ERHMS.EpiInfo.Communication</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.DataAccess\ERHMS.EpiInfo.DataAccess.csproj">
-      <Project>{af729d69-3971-45ee-b351-1fc9bfd6ed7d}</Project>
-      <Name>ERHMS.EpiInfo.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
-      <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
-      <Name>ERHMS.EpiInfo.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.Enter\ERHMS.EpiInfo.Enter.csproj">
-      <Project>{1f323f8b-ac7b-4dba-94cc-9b9c2e7d7652}</Project>
-      <Name>ERHMS.EpiInfo.Enter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.MakeView\ERHMS.EpiInfo.MakeView.csproj">
-      <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
-      <Name>ERHMS.EpiInfo.MakeView</Name>
     </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
@@ -119,23 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 4.5</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
@@ -164,9 +98,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Certificates\ERHMS.pfx">
-      <Link>ERHMS.pfx</Link>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

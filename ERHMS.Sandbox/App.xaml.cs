@@ -3,7 +3,7 @@ using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using log4net.Core;
 using System;
-using System.Reflection;
+using System.IO;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Forms;
@@ -19,11 +19,6 @@ namespace ERHMS.Sandbox
             get { return (App)Application.Current; }
         }
 
-        public static string Name
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().Name; }
-        }
-
         public static string Title
         {
             get { return "ERHMS Info Manager"; }
@@ -32,42 +27,44 @@ namespace ERHMS.Sandbox
         [STAThread]
         public static void Main(string[] args)
         {
-            try
+            SingleInstanceExecuter executer = new SingleInstanceExecuter();
+            executer.Executing += (sender, e) =>
             {
-                new SingleInstanceApplication(() =>
+                Log.Level = Level.Debug;
+                Log.Current.Debug("Starting up");
+                if (string.IsNullOrEmpty(Settings.Instance.RootDirectory))
                 {
-                    Log.Level = Level.Debug;
-                    Log.Current.Debug("Starting up");
-                    if (Settings.Default.DoFirstTimeSetup)
+                    Log.Current.Debug("Prompting for root directory");
+                    using (FolderBrowserDialog dialog = new FolderBrowserDialog())
                     {
-                        Log.Current.Debug("Doing first-time setup");
-                        using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+                        dialog.Description = string.Format("Choose a location for your documents.  We'll create a folder named {0} in that location.", Title);
+                        if (dialog.ShowDialog() == DialogResult.OK)
                         {
-                            dialog.Description = "Choose a location for your ERHMS documents.";
-                            if (dialog.ShowDialog() == DialogResult.OK)
-                            {
-                                Log.Current.DebugFormat("Setting root directory: {0}", dialog.SelectedPath);
-                                Settings.Default.RootDirectory = dialog.SelectedPath;
-                                Settings.Default.DoFirstTimeSetup = false;
-                                Settings.Default.Save();
-                            }
-                            else
-                            {
-                                Log.Current.Fatal("First-time setup failed");
-                                return;
-                            }
+                            string path = Path.Combine(dialog.SelectedPath, Title);
+                            Log.Current.DebugFormat("Setting root directory: {0}", path);
+                            Settings.Instance.RootDirectory = path;
+                            Settings.Instance.Save();
+                        }
+                        else
+                        {
+                            Log.Current.Fatal("Cancelled setting root directory");
+                            return;
                         }
                     }
-                    ConfigurationExtensions.CreateAndOrLoad();
-                    App app = new App();
-                    app.InitializeComponent();
-                    app.Run(new MainWindow());
-                    Log.Current.Debug("Exiting");
-                }).Execute();
+                }
+                ConfigurationExtensions.CreateAndOrLoad();
+                App app = new App();
+                app.InitializeComponent();
+                app.Run(new MainWindow());
+                Log.Current.Debug("Exiting");
+            };
+            try
+            {
+                executer.Execute();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(string.Format("An instance of {0} is already running.", Title), Title);
+                MessageBox.Show(string.Format("An instance of {0} is already running.", Title), Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -83,11 +80,11 @@ namespace ERHMS.Sandbox
 
         protected override void OnExit(ExitEventArgs e)
         {
-            base.OnExit(e);
             if (host != null)
             {
                 host.Close();
             }
+            base.OnExit(e);
         }
     }
 }

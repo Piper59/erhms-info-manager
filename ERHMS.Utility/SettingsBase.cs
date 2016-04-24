@@ -51,6 +51,11 @@ namespace ERHMS.Utility
             {
                 file.Directory.Create();
             }
+            if (!file.Exists)
+            {
+                using (file.Create())
+                { }
+            }
             using (Stream stream = new FileStream(file.FullName, FileMode.Truncate, FileAccess.Write))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(TSettings));

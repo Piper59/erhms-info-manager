@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace ERHMS.Utility
 {
-    public class SingleInstanceApplication
+    public class SingleInstanceExecuter
     {
         private static Mutex GetMutex()
         {
@@ -22,7 +22,7 @@ namespace ERHMS.Utility
 
         public int Timeout { get; set; }
 
-        public SingleInstanceApplication(int timeout = 0)
+        public SingleInstanceExecuter(int timeout = 0)
         {
             Timeout = timeout;
         }
@@ -54,7 +54,7 @@ namespace ERHMS.Utility
                         owned = mutex.WaitOne(Timeout);
                         if (!owned)
                         {
-                            throw new TimeoutException("Timed out waiting to execute single-instance application.");
+                            throw new TimeoutException("Timed out while waiting to execute.");
                         }
                     }
                     catch (AbandonedMutexException)

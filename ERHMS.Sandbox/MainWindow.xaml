@@ -7,38 +7,5 @@
         mc:Ignorable="d"
         Title="{x:Static local:App.Title}" Width="800" Height="600">
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Open" Click="FileOpen_Click" />
-                <MenuItem Header="E_xit" Click="FileExit_Click" />
-            </MenuItem>
-            <MenuItem Header="_Data">
-                <MenuItem Header="_Select" Click="DataSelect_Click" />
-                <MenuItem Header="_Insert" Click="DataInsert_Click" />
-                <MenuItem Header="_Update" Click="DataUpdate_Click" />
-                <MenuItem Header="_Delete" Click="DataDelete_Click" />
-                <MenuItem Header="_Undelete" Click="DataUndelete_Click" />
-            </MenuItem>
-            <MenuItem Header="_Analysis">
-                <MenuItem Header="_Import" Click="AnalysisImport_Click" />
-                <MenuItem Header="_Export" Click="AnalysisExport_Click" />
-            </MenuItem>
-            <MenuItem Header="Dash_board">
-                <MenuItem Header="_Open" Click="DashboardOpen_Click" />
-            </MenuItem>
-            <MenuItem Header="_Enter">
-                <MenuItem Header="_Insert" Click="EnterInsert_Click" />
-                <MenuItem Header="_Update" Click="EnterUpdate_Click" />
-            </MenuItem>
-            <MenuItem Header="_MakeView">
-                <MenuItem Header="_Open" Click="MakeViewOpen_Click" />
-                <MenuItem Header="_Add" Click="MakeViewAdd_Click" />
-                <MenuItem Header="Add from _Template" Click="MakeViewAddFromTemplate_Click" />
-                <MenuItem Header="_Create Template" Click="MakeViewCreateTemplate_Click" />
-            </MenuItem>
-        </Menu>
-        <ScrollViewer>
-            <DataGrid Name="Data" IsReadOnly="True" />
-        </ScrollViewer>
     </DockPanel>
 </Window>
