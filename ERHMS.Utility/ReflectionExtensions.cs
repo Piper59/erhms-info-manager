@@ -1,40 +1,30 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 
 namespace ERHMS.Utility
 {
     public static class ReflectionExtensions
     {
-        private static MethodInfo GetMethod(Type type, bool instance, string methodName, Type[] types)
+        private static MethodInfo GetMethod(Type type, bool instance, string methodName, Type[] parameterTypes)
         {
             BindingFlags bindingFlags = instance ? BindingFlags.Instance : BindingFlags.Static;
             bindingFlags |= BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy;
-            return type.GetMethod(methodName, bindingFlags, null, types, null);
+            return type.GetMethod(methodName, bindingFlags, null, parameterTypes, null);
         }
 
-        public static object Invoke(Type type, string methodName, Type[] types, object[] parameters)
+        public static object Invoke(Type type, string methodName, Type[] parameterTypes, object[] parameters)
         {
-            return GetMethod(type, false, methodName, types).Invoke(null, parameters);
+            return GetMethod(type, false, methodName, parameterTypes).Invoke(null, parameters);
         }
 
-        public static object Invoke(this object @this, Type type, string methodName, Type[] types, object[] parameters)
+        public static object Invoke(object obj, Type type, string methodName, Type[] parameterTypes, object[] parameters)
         {
-            return GetMethod(type, true, methodName, types).Invoke(@this, parameters);
+            return GetMethod(type, true, methodName, parameterTypes).Invoke(obj, parameters);
         }
 
-        public static object Invoke(this object @this, string methodName, Type[] types, object[] parameters)
+        public static object Invoke(object obj, string methodName, Type[] parameterTypes, object[] parameters)
         {
-            return @this.Invoke(@this.GetType(), methodName, types, parameters);
-        }
-
-        public static string GetManifestResourceText(this Assembly @this, string resourceName)
-        {
-            using (Stream stream = @this.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+            return Invoke(obj, obj.GetType(), methodName, parameterTypes, parameters);
         }
     }
 }

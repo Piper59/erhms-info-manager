@@ -9,6 +9,7 @@
 // ------------------------------------------------------------------------------
 namespace ERHMS.EpiInfo.Templates
 {
+    using Epi;
     using System;
     
     /// <summary>
@@ -27,15 +28,15 @@ namespace ERHMS.EpiInfo.Templates
         {
             this.Write("<DashboardCanvas>\r\n  <dashboardHelper>\r\n    <projectPath>");
             
-            #line 4 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ProjectPath));
+            #line 5 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(View.Project.FilePath));
             
             #line default
             #line hidden
             this.Write("</projectPath>\r\n    <viewName>");
             
-            #line 5 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ViewName));
+            #line 6 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(View.Name));
             
             #line default
             #line hidden
@@ -76,15 +77,13 @@ namespace ERHMS.EpiInfo.Templates
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 38 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
+        #line 39 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
 
-    public string ProjectPath { get; private set; }
-    public string ViewName { get; private set; }
+    public View View { get; set; }
 
-    public ViewCanvas(string projectPath, string viewName)
+    public ViewCanvas(View view)
     {
-        ProjectPath = projectPath;
-        ViewName = viewName;
+        View = view;
     }
 
         

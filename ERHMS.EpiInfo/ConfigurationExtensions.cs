@@ -17,10 +17,10 @@ namespace ERHMS.EpiInfo
 
         public static DirectoryInfo GetConfigurationRoot()
         {
-            return new DirectoryInfo(Settings.Default.RootDirectory);
+            return new DirectoryInfo(Settings.Instance.RootDirectory);
         }
 
-        public static string GetConfigurationFilePath()
+        private static string GetConfigurationFilePath()
         {
             string fileName = Path.GetFileName(Configuration.DefaultConfigurationPath);
             return Path.Combine(GetConfigurationRoot().FullName, "Configuration", fileName);
@@ -32,6 +32,7 @@ namespace ERHMS.EpiInfo
             Log.Current.DebugFormat("Creating configuration: {0}", path);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
             InitializeDirectories(config);
+            CopyAssets();
             config.RecentView.Clear();
             config.RecentProject.Clear();
             config.Database.Clear();
@@ -49,23 +50,24 @@ namespace ERHMS.EpiInfo
             directories.LogDir = root.CreateSubdirectory("Logs").FullName;
             directories.Output = root.CreateSubdirectory("Output").FullName;
             directories.Project = root.CreateSubdirectory("Projects").FullName;
-            directories.Samples = root.CreateSubdirectory("Resources\\Samples").FullName;
-            DirectoryInfo phinDirectory = root.GetSubdirectory("Resources\\PHIN");
-            if (phinDirectory.Exists)
-            {
-                phinDirectory.Delete(true);
-            }
-            DirectoryInfo templateDirectory = root.CreateSubdirectory("Templates");
-            directories.Templates = templateDirectory.FullName;
-            templateDirectory.CreateSubdirectory("Fields");
-            templateDirectory.CreateSubdirectory("Forms");
-            templateDirectory.CreateSubdirectory("Pages");
-            templateDirectory.CreateSubdirectory("Projects");
+            directories.Samples = root.CreateSubdirectory(Path.Combine("Resources", "Samples")).FullName;
+            DeleteIfExists(root.GetSubdirectory(Path.Combine("Resources", "PHIN")));
+            DirectoryInfo templates = root.CreateSubdirectory("Templates");
+            directories.Templates = templates.FullName;
+            templates.CreateSubdirectory("Fields");
+            templates.CreateSubdirectory("Forms");
+            templates.CreateSubdirectory("Pages");
+            templates.CreateSubdirectory("Projects");
             directories.Working = Path.GetTempPath();
-            DirectoryInfo applicationRoot = GetApplicationRoot();
-            CopyIfExists(applicationRoot, root, "Projects");
-            CopyIfExists(applicationRoot, root, "Resources");
-            CopyIfExists(applicationRoot, root, "Templates");
+        }
+
+        private static void DeleteIfExists(DirectoryInfo directory)
+        {
+            if (!directory.Exists)
+            {
+                return;
+            }
+            directory.Delete();
         }
 
         private static void CopyIfExists(DirectoryInfo source, DirectoryInfo target, string subdirectoryName)
@@ -79,10 +81,18 @@ namespace ERHMS.EpiInfo
             IOExtensions.Copy(subsource, subtarget);
         }
 
+        private static void CopyAssets()
+        {
+            DirectoryInfo applicationRoot = GetApplicationRoot();
+            DirectoryInfo configurationRoot = GetConfigurationRoot();
+            CopyIfExists(applicationRoot, configurationRoot, "Projects");
+            CopyIfExists(applicationRoot, configurationRoot, "Resources");
+            CopyIfExists(applicationRoot, configurationRoot, "Templates");
+        }
+
         private static void InitializeSettings(Config config)
         {
             Config.SettingsRow settings = config.Settings.Single();
-            settings.DefaultDataDriver = Configuration.SqlDriver;
             settings.CheckForUpdates = false;
         }
 
@@ -123,19 +133,13 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static void Refresh(bool save)
+        public static void Refresh(this Configuration @this, bool save)
         {
-            Configuration configuration = Configuration.GetNewInstance();
             if (save)
             {
-                Configuration.Save(configuration);
+                Configuration.Save(@this);
             }
-            Load(configuration.ConfigFilePath);
-        }
-
-        public static DirectoryInfo GetRoot(this Configuration @this)
-        {
-            return new DirectoryInfo(@this.Directories.Configuration).Parent;
+            Load(@this.ConfigFilePath);
         }
     }
 }

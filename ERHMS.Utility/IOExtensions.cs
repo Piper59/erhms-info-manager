@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using SearchOption = System.IO.SearchOption;
 
 namespace ERHMS.Utility
 {
@@ -16,19 +19,11 @@ namespace ERHMS.Utility
             return new DirectoryInfo(Path.Combine(@this.FullName, path));
         }
 
-        public static FileInfo GetTemporaryFile(string prefix = "ERHMS_", string extension = null)
+        public static IEnumerable<FileInfo> SearchByExtension(this DirectoryInfo @this, string extension, bool recurse = true)
         {
-            string path = Path.GetTempPath();
-            FileInfo file;
-            do
-            {
-                string fileName = string.Format("{0}{1:N}", prefix, Guid.NewGuid());
-                fileName = Path.ChangeExtension(fileName, extension);
-                file = new FileInfo(Path.Combine(path, fileName));
-            } while (file.Exists);
-            using (file.OpenWrite())
-            { }
-            return file;
+            return @this.EnumerateFiles(
+                string.Format("*{0}", extension),
+                recurse ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
         public static void Copy(DirectoryInfo source, DirectoryInfo target, bool overwrite = false)
@@ -50,14 +45,33 @@ namespace ERHMS.Utility
             }
         }
 
-        public static void Recycle(this DirectoryInfo @this)
+        public static FileInfo GetTemporaryFile(string prefix = null, string extension = null)
         {
-            FileSystem.DeleteDirectory(@this.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            if (prefix == null)
+            {
+                prefix = string.Format("{0}_", Assembly.GetCallingAssembly().GetName().Name);
+            }
+            string path = Path.GetTempPath();
+            FileInfo file;
+            do
+            {
+                string extensionlessFileName = string.Format("{0}{1:N}", prefix, Guid.NewGuid());
+                string fileName = Path.ChangeExtension(extensionlessFileName, extension);
+                file = new FileInfo(Path.Combine(path, fileName));
+            } while (file.Exists);
+            using (file.OpenWrite())
+            { }
+            return file;
         }
 
         public static void Recycle(this FileInfo @this)
         {
             FileSystem.DeleteFile(@this.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+        }
+
+        public static void Recycle(this DirectoryInfo @this)
+        {
+            FileSystem.DeleteDirectory(@this.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
         }
     }
 }

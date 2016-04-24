@@ -15,14 +15,14 @@ CREATE TABLE ERHMS_Locations (
 	LocationId VARCHAR(255) NOT NULL PRIMARY KEY,
 	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId),
 	Name TEXT NOT NULL,
-	Description TEXT NOT NULL,
-	Address TEXT NOT NULL,
+	Description TEXT,
+	Address TEXT,
 	Latitude FLOAT,
 	Longitude FLOAT
 );
 
-CREATE TABLE ERHMS_Registrations (
-	RegistrationId VARCHAR(255) NOT NULL PRIMARY KEY,
+CREATE TABLE ERHMS_Rosters (
+	RosterId VARCHAR(255) NOT NULL PRIMARY KEY,
 	ResponderId VARCHAR(255) NOT NULL REFERENCES Responders (GlobalRecordId),
 	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId)
 );
@@ -41,13 +41,12 @@ CREATE TABLE ERHMS_ViewLinks (
 
 CREATE TABLE ERHMS_PgmLinks (
 	PgmLinkId VARCHAR(255) NOT NULL PRIMARY KEY,
-	PgmId INTEGER REFERENCES metaPrograms (ProgramId),
-	Path TEXT,
+	PgmId INTEGER NOT NULL REFERENCES metaPrograms (ProgramId),
 	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId)
 );
 
 CREATE TABLE ERHMS_CanvasLinks (
 	CanvasLinkId VARCHAR(255) NOT NULL PRIMARY KEY,
-	Path TEXT NOT NULL,
+	CanvasId INTEGER NOT NULL REFERENCES metaCanvases (CanvasId),
 	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId)
 );

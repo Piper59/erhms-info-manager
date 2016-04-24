@@ -12,32 +12,29 @@ namespace ERHMS.EpiInfo
 {
     public class Wrapper
     {
-        private static class Arguments
-        {
-            public static string Escape(string arg)
-            {
-                return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
-            }
-
-            public static string Format(IEnumerable<string> args)
-            {
-                return string.Join(" ", args.Select(arg => Escape(arg)));
-            }
-        }
-
         protected static FileInfo GetExecutable(Assembly assembly)
         {
-            string fileName = string.Format("{0}.exe", assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title);
+            string fileName = string.Format("{0}.exe", assembly.GetTitle());
             return ConfigurationExtensions.GetApplicationRoot().GetFile(fileName);
+        }
+
+        public static string EscapeArg(string arg)
+        {
+            return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
+        }
+
+        public static string FormatArgs(IEnumerable<string> args)
+        {
+            return string.Join(" ", args.Select(arg => EscapeArg(arg ?? "")));
         }
 
         protected static Process Execute(Expression<Action<string[]>> expression, params string[] args)
         {
             FileInfo executable = GetExecutable(Assembly.GetCallingAssembly());
             string methodName = ((MethodCallExpression)expression.Body).Method.Name;
-            string argString = Arguments.Format(args.Prepend(methodName));
-            Log.Current.DebugFormat("Executing wrapper: {0} {1}", executable.FullName, argString);
-            return ProcessExtensions.Start(executable, argString);
+            string formattedArgs = FormatArgs(args.Prepend(methodName));
+            Log.Current.DebugFormat("Executing wrapper: {0} {1}", executable.FullName, formattedArgs);
+            return ProcessExtensions.Start(executable, formattedArgs);
         }
 
         protected static void MainBase(Type type, string[] args)

@@ -11,10 +11,13 @@ namespace ERHMS.EpiInfo
     {
         public const string FileExtension = ".xml";
 
-        public static bool TryRead(FileInfo file, out Template template)
+        public static bool TryRead(FileInfo file, out Template result)
         {
+            result = null;
             try
             {
+                string name = null;
+                string description = null;
                 string levelString = null;
                 using (XmlReader reader = XmlReader.Create(file.FullName))
                 {
@@ -22,26 +25,43 @@ namespace ERHMS.EpiInfo
                     {
                         if (reader.NodeType == XmlNodeType.Element)
                         {
-                            if (reader.Name == "Template" && reader.MoveToAttribute("Level"))
+                            if (reader.Name != "Template")
                             {
-                                levelString = reader.Value;
+                                return false;
+                            }
+                            while (reader.MoveToNextAttribute())
+                            {
+                                switch (reader.Name)
+                                {
+                                    case "Name":
+                                        name = reader.Value;
+                                        break;
+                                    case "Description":
+                                        description = reader.Value;
+                                        break;
+                                    case "Level":
+                                        levelString = reader.Value;
+                                        break;
+                                }
                             }
                             break;
                         }
                     }
                 }
+                if (name == null || description == null || levelString == null)
+                {
+                    return false;
+                }
                 TemplateLevel level;
                 if (!TemplateLevelExtensions.TryParse(levelString, out level))
                 {
-                    template = null;
                     return false;
                 }
-                template = new Template(file, level);
+                result = new Template(file, name, description, level);
                 return true;
             }
             catch
             {
-                template = null;
                 return false;
             }
         }
@@ -50,8 +70,7 @@ namespace ERHMS.EpiInfo
         {
             Configuration configuration = Configuration.GetNewInstance();
             DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Templates);
-            string pattern = string.Format("*{0}", FileExtension);
-            foreach (FileInfo file in directory.EnumerateFiles(pattern, SearchOption.AllDirectories))
+            foreach (FileInfo file in directory.SearchByExtension(FileExtension))
             {
                 Template template;
                 if (TryRead(file, out template))
@@ -67,11 +86,15 @@ namespace ERHMS.EpiInfo
         }
 
         public FileInfo File { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
         public TemplateLevel Level { get; private set; }
 
-        private Template(FileInfo file, TemplateLevel level)
+        private Template(FileInfo file, string name, string description, TemplateLevel level)
         {
             File = file;
+            Name = name;
+            Description = description;
             Level = level;
         }
 

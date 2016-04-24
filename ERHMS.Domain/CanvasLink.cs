@@ -26,10 +26,10 @@ namespace ERHMS.Domain
             set { SetProperty("CanvasLinkId", value); }
         }
 
-        public string Path
+        public int CanvasId
         {
-            get { return GetProperty<string>("Path"); }
-            set { SetProperty("Path", value); }
+            get { return GetProperty<int>("CanvasId"); }
+            set { SetProperty("CanvasId", value); }
         }
 
         public string IncidentId

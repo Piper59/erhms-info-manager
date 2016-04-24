@@ -1,5 +1,4 @@
-﻿using Epi.Windows.MakeView.Dialogs;
-using ERHMS.EpiInfo.Communication;
+﻿using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
 using System.Diagnostics;
@@ -22,7 +21,6 @@ namespace ERHMS.EpiInfo.MakeView
         {
             return Execute(args => Main_Execute(args));
         }
-
         private static void Main_Execute(string[] args)
         {
             using (MainForm form = new MainForm())
@@ -35,7 +33,6 @@ namespace ERHMS.EpiInfo.MakeView
         {
             return Execute(args => Main_OpenProject(args), project.FilePath);
         }
-
         private static void Main_OpenProject(string[] args)
         {
             string projectPath = args[0];
@@ -50,7 +47,6 @@ namespace ERHMS.EpiInfo.MakeView
         {
             return Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
         }
-
         private static void Main_OpenView(string[] args)
         {
             string projectPath = args[0];
@@ -65,31 +61,36 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process AddView(Project project, string tag = null)
         {
-            return Execute(args => Main_AddView(args), project.FilePath, tag ?? "");
+            return Execute(args => Main_AddView(args), project.FilePath, tag);
         }
-
         private static void Main_AddView(string[] args)
         {
             string projectPath = args[0];
-            string tag = args[1] == "" ? null : args[1];
+            string tag = args[1];
+            if (tag == "")
+            {
+                tag = null;
+            }
             Project project = new Project(projectPath);
+            string viewName = Project.SanitizeViewName(string.Format("{0}_", project.Name));
             using (MainForm form = new MainForm())
             {
                 form.OpenProject(project);
                 form.Load += (sender, e) =>
                 {
-                    using (CreateViewDialog dialog = new CreateViewDialog(form, project))
+                    using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                     {
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
-                            View view = project.CreateView(dialog.ViewName);
+                            viewName = dialog.ViewName;
+                            View view = project.CreateView(viewName);
                             view.CreatePage("Page 1", 0);
-                            IService service = Service.GetService();
+                            IService service = Service.Connect();
                             if (service == null)
                             {
                                 return;
                             }
-                            service.RefreshViews(projectPath, dialog.ViewName, tag);
+                            service.OnViewAdded(projectPath, viewName, tag);
                         }
                     }
                 };
@@ -99,20 +100,23 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process AddFromTemplate(Project project, EpiInfo.Template template, string tag = null)
         {
-            return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName, tag ?? "");
+            return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName, tag);
         }
-
         private static void Main_AddFromTemplate(string[] args)
         {
             string projectPath = args[0];
             string templatePath = args[1];
-            string tag = args[2] == "" ? null : args[2];
+            string tag = args[2];
+            if (tag == "")
+            {
+                tag = null;
+            }
+            Project project = new Project(projectPath);
             EpiInfo.Template template;
             if (!EpiInfo.Template.TryRead(new FileInfo(templatePath), out template))
             {
                 throw new ArgumentException("Failed to read template.");
             }
-            Project project = new Project(projectPath);
             if (template.Level == TemplateLevel.Project)
             {
                 using (MainForm form = new MainForm(false))
@@ -130,25 +134,25 @@ namespace ERHMS.EpiInfo.MakeView
                     XmlDocument document = new XmlDocument();
                     document.Load(templatePath);
                     XmlNode viewNode = document.SelectSingleNode("/Template/Project/View");
-                    string viewName = string.Format("{0}{1}", project.Name, viewNode.Attributes["Name"].Value);
-                    string sanitizedViewName = ViewExtensions.SanitizeName(viewName);
+                    string viewName = Project.SanitizeViewName(string.Format("{0}_{1}", project.Name, viewNode.Attributes["Name"].Value));
                     form.Load += (sender, e) =>
                     {
-                        using (CreateViewDialog dialog = new CreateViewDialog(form, project, viewName))
+                        using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                         {
                             if (dialog.ShowDialog() == DialogResult.OK)
                             {
-                                viewNode.Attributes["Name"].Value = dialog.ViewName;
-                                FileInfo renamedTemplateFile = IOExtensions.GetTemporaryFile(extension: ".xml");
-                                document.Save(renamedTemplateFile.FullName);
+                                viewName = dialog.ViewName;
+                                viewNode.Attributes["Name"].Value = viewName;
+                                FileInfo templateFile = IOExtensions.GetTemporaryFile(extension: EpiInfo.Template.FileExtension);
+                                document.Save(templateFile.FullName);
                                 Template _template = new Template(form.Mediator);
-                                _template.AddFromTemplate(renamedTemplateFile.FullName);
-                                IService service = Service.GetService();
+                                _template.AddFromTemplate(templateFile.FullName);
+                                IService service = Service.Connect();
                                 if (service == null)
                                 {
                                     return;
                                 }
-                                service.RefreshViews(projectPath, dialog.ViewName, tag);
+                                service.OnViewAdded(projectPath, dialog.ViewName, tag);
                             }
                         }
                     };
@@ -165,7 +169,6 @@ namespace ERHMS.EpiInfo.MakeView
         {
             return Execute(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
         }
-
         private static void Main_CreateTemplate(string[] args)
         {
             string projectPath = args[0];
@@ -176,18 +179,18 @@ namespace ERHMS.EpiInfo.MakeView
                 form.OpenProject(projectPath);
                 form.Load += (sender, e) =>
                 {
-                    using (AddTemplateDialog dialog = new AddTemplateDialog(form))
+                    using (CreateTemplateDialog dialog = new CreateTemplateDialog(project, viewName))
                     {
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
                             Template template = new Template(form.Mediator);
                             template.CreateTemplate(project.Views[viewName], dialog.TemplateName);
-                            IService service = Service.GetService();
+                            IService service = Service.Connect();
                             if (service == null)
                             {
                                 return;
                             }
-                            service.RefreshTemplates();
+                            service.OnTemplateAdded(dialog.TemplatePath);
                         }
                     }
                 };

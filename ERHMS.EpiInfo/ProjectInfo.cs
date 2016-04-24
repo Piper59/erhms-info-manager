@@ -1,14 +1,16 @@
 ﻿using Epi;
+using ERHMS.Utility;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
-    public class ProjectMetadata
+    public class ProjectInfo
     {
-        public static bool TryRead(FileInfo file, out ProjectMetadata metadata)
+        public static bool TryRead(FileInfo file, out ProjectInfo result)
         {
+            result = null;
             try
             {
                 string name = null;
@@ -21,7 +23,6 @@ namespace ERHMS.EpiInfo
                         {
                             if (reader.Name != "Project")
                             {
-                                metadata = null;
                                 return false;
                             }
                             while (reader.MoveToNextAttribute())
@@ -40,27 +41,29 @@ namespace ERHMS.EpiInfo
                         }
                     }
                 }
-                metadata = new ProjectMetadata(file, name, description);
+                if (name == null || description == null)
+                {
+                    return false;
+                }
+                result = new ProjectInfo(file, name, description);
                 return true;
             }
             catch
             {
-                metadata = null;
                 return false;
             }
         }
 
-        public static IEnumerable<ProjectMetadata> GetAll()
+        public static IEnumerable<ProjectInfo> GetAll()
         {
             Configuration configuration = Configuration.GetNewInstance();
             DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Project);
-            string pattern = string.Format("*{0}", Project.FileExtension);
-            foreach (FileInfo file in directory.EnumerateFiles(pattern, SearchOption.AllDirectories))
+            foreach (FileInfo file in directory.SearchByExtension(Project.FileExtension))
             {
-                ProjectMetadata metadata;
-                if (TryRead(file, out metadata))
+                ProjectInfo projectInfo;
+                if (TryRead(file, out projectInfo))
                 {
-                    yield return metadata;
+                    yield return projectInfo;
                 }
             }
         }
@@ -69,7 +72,7 @@ namespace ERHMS.EpiInfo
         public string Name { get; private set; }
         public string Description { get; private set; }
 
-        private ProjectMetadata(FileInfo file, string name, string description)
+        private ProjectInfo(FileInfo file, string name, string description)
         {
             File = file;
             Name = name;

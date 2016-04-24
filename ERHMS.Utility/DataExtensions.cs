@@ -18,10 +18,11 @@ namespace ERHMS.Utility
 
         public static string ToSafeString(string connectionString)
         {
-            return new DbConnectionStringBuilder
+            DbConnectionStringBuilder builder = new DbConnectionStringBuilder
             {
                 ConnectionString = connectionString
-            }.ToSafeString();
+            };
+            return builder.ToSafeString();
         }
     }
 }

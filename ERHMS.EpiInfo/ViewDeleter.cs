@@ -50,7 +50,7 @@ namespace ERHMS.EpiInfo
         {
             string sql = "DELETE FROM metaFields WHERE FieldId = @FieldId";
             Query query = Driver.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, fieldId));
+            query.Parameters.Add(new QueryParameter("@FieldId", DbType.Int32, fieldId));
             Driver.ExecuteNonQuery(query);
         }
 

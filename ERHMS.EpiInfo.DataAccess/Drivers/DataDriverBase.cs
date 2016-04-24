@@ -8,8 +8,6 @@ namespace ERHMS.EpiInfo.DataAccess
 {
     public abstract class DataDriverBase : IDataDriver
     {
-        private static readonly Regex Comment = new Regex(@"/\*.*?\*/", RegexOptions.Singleline);
-
         private DbProviderFactory factory;
 
         public DataProvider Provider { get; private set; }
@@ -17,7 +15,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder)
         {
-            Log.Current.DebugFormat("Creating data driver: {0}, {1}", provider.ToInvariantName(), builder.ToSafeString());
+            Log.Current.DebugFormat("Opening data driver: {0}, {1}", provider.ToInvariantName(), builder.ToSafeString());
             factory = DbProviderFactories.GetFactory(provider.ToInvariantName());
             Provider = provider;
             ConnectionString = builder.ConnectionString;
@@ -89,9 +87,9 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             using (DataTransaction transaction = BeginTransaction())
             {
-                DataTable result = ExecuteQuery(transaction, sql, parameters);
+                DataTable table = ExecuteQuery(transaction, sql, parameters);
                 transaction.Commit();
-                return result;
+                return table;
             }
         }
 
@@ -99,9 +97,9 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             using (DataTransaction transaction = BeginTransaction())
             {
-                DataTable result = ExecuteQuery(transaction, sql, (IEnumerable<DataParameter>)parameters);
+                DataTable table = ExecuteQuery(transaction, sql, (IEnumerable<DataParameter>)parameters);
                 transaction.Commit();
-                return result;
+                return table;
             }
         }
 
@@ -125,9 +123,9 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             using (DataTransaction transaction = BeginTransaction())
             {
-                int result = ExecuteNonQuery(transaction, sql, parameters);
+                int rowCount = ExecuteNonQuery(transaction, sql, parameters);
                 transaction.Commit();
-                return result;
+                return rowCount;
             }
         }
 
@@ -135,17 +133,19 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             using (DataTransaction transaction = BeginTransaction())
             {
-                int result = ExecuteNonQuery(transaction, sql, (IEnumerable<DataParameter>)parameters);
+                int rowCount = ExecuteNonQuery(transaction, sql, (IEnumerable<DataParameter>)parameters);
                 transaction.Commit();
-                return result;
+                return rowCount;
             }
         }
 
         public void ExecuteScript(string script)
         {
+            Regex comment = new Regex(@"/\*.*?\*/", RegexOptions.Singleline);
+            IEnumerable<string> sqls = comment.Replace(script, "").Split(';');
             using (DataTransaction transaction = BeginTransaction())
             {
-                foreach (string sql in Comment.Replace(script, "").Split(';'))
+                foreach (string sql in sqls)
                 {
                     if (string.IsNullOrWhiteSpace(sql))
                     {
@@ -156,7 +156,5 @@ namespace ERHMS.EpiInfo.DataAccess
                 transaction.Commit();
             }
         }
-
-        public void Dispose() { }
     }
 }

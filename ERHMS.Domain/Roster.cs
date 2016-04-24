@@ -2,17 +2,17 @@
 
 namespace ERHMS.Domain
 {
-    public class Registration : TableEntity
+    public class Roster : TableEntity
     {
         public override string Guid
         {
             get
             {
-                return GetProperty<string>("RegistrationId");
+                return GetProperty<string>("RosterId");
             }
             set
             {
-                if (!SetProperty("RegistrationId", value))
+                if (!SetProperty("RosterId", value))
                 {
                     return;
                 }
@@ -20,10 +20,10 @@ namespace ERHMS.Domain
             }
         }
 
-        public string RegistrationId
+        public string RosterId
         {
-            get { return GetProperty<string>("RegistrationId"); }
-            set { SetProperty("RegistrationId", value); }
+            get { return GetProperty<string>("RosterId"); }
+            set { SetProperty("RosterId", value); }
         }
 
         public string ResponderId

@@ -1,16 +1,21 @@
 ﻿using Epi;
 using Epi.Data;
 using ERHMS.Utility;
-using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo
 {
-    public class Project : Epi.Project
+    public partial class Project : Epi.Project
     {
         public new const string FileExtension = ".prj";
+        private static readonly Regex InvalidViewNameCharacter = new Regex(@"[^a-zA-Z0-9_]");
+
+        public static string SanitizeViewName(string viewName)
+        {
+            return InvalidViewNameCharacter.Replace(viewName, "");
+        }
 
         public static Project Create(string name, string description, DirectoryInfo location, string driver, string connectionString)
         {
@@ -26,8 +31,9 @@ namespace ERHMS.EpiInfo
             };
             project.CollectedDataDbInfo.DBCnnStringBuilder.ConnectionString = connectionString;
             project.CollectedData.Initialize(project.CollectedDataDbInfo, driver, true);
+            project.CreateCanvasesTable();
             project.MetadataSource = MetadataSource.SameDb;
-            project.Metadata.AttachDbDriver(project.CollectedData.GetDbDriver());
+            project.Metadata.AttachDbDriver(project.Driver);
             project.Save();
             return project;
         }
@@ -60,37 +66,59 @@ namespace ERHMS.EpiInfo
             : this(file.FullName)
         { }
 
+        public bool IsValidViewName(string viewName, out InvalidViewNameReason reason)
+        {
+            if (string.IsNullOrWhiteSpace(viewName))
+            {
+                reason = InvalidViewNameReason.Empty;
+                return false;
+            }
+            else if (InvalidViewNameCharacter.IsMatch(viewName))
+            {
+                reason = InvalidViewNameReason.InvalidCharacter;
+                return false;
+            }
+            else if (!char.IsLetter(viewName.First()))
+            {
+                reason = InvalidViewNameReason.InvalidFirstCharacter;
+                return false;
+            }
+            else if (Views.Names.Contains(viewName))
+            {
+                reason = InvalidViewNameReason.Duplicate;
+                return false;
+            }
+            else
+            {
+                reason = InvalidViewNameReason.None;
+                return true;
+            }
+        }
+
+        public string SuggestViewName(string viewName)
+        {
+            string baseViewName = SanitizeViewName(viewName);
+            if (!Views.Names.Contains(baseViewName))
+            {
+                return baseViewName;
+            }
+            else
+            {
+                for (int copy = 2; ; copy++)
+                {
+                    string copyViewName = string.Format("{0}_{1}", baseViewName, copy);
+                    if (!Views.Names.Contains(copyViewName))
+                    {
+                        return copyViewName;
+                    }
+                }
+            }
+        }
+
         public override void Save()
         {
             Log.Current.DebugFormat("Saving project: {0}", File.FullName);
             base.Save();
-        }
-
-        public DataTable GetFieldsAsDataTable()
-        {
-            string sql = "SELECT * FROM metaFields";
-            return Driver.Select(Driver.CreateQuery(sql));
-        }
-
-        public IEnumerable<View> GetViews()
-        {
-            return Metadata.GetViews().Cast<View>();
-        }
-
-        public DataTable GetPgmsAsDataTable()
-        {
-            return Metadata.GetPgms();
-        }
-
-        public void DeleteView(int viewId)
-        {
-            ViewDeleter deleter = new ViewDeleter(this);
-            deleter.DeleteViewAndDescendants(viewId);
-        }
-
-        public void DeletePgm(int pgmId)
-        {
-            Metadata.DeletePgm(pgmId);
         }
     }
 }

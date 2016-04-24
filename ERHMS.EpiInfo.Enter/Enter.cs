@@ -9,8 +9,6 @@ namespace ERHMS.EpiInfo.Enter
 {
     public class Enter : Wrapper
     {
-        private static readonly Regex Field = new Regex(@"^(?<name>\S+) = (?<value>.*)$");
-
         [STAThread]
         internal static void Main(string[] args)
         {
@@ -21,7 +19,6 @@ namespace ERHMS.EpiInfo.Enter
         {
             return Execute(args => Main_Execute(args));
         }
-
         private static void Main_Execute(string[] args)
         {
             using (MainForm form = new MainForm())
@@ -40,7 +37,6 @@ namespace ERHMS.EpiInfo.Enter
             process.StandardInput.Close();
             return process;
         }
-
         private static void Main_OpenView(string[] args)
         {
             string projectPath = args[0];
@@ -50,6 +46,7 @@ namespace ERHMS.EpiInfo.Enter
                 form.Show();
                 form.FireOpenViewEvent(form.View, "+");
                 bool refresh = false;
+                Regex field = new Regex(@"^(?<name>\S+) = (?<value>.*)$");
                 while (true)
                 {
                     string line = Console.ReadLine();
@@ -58,7 +55,7 @@ namespace ERHMS.EpiInfo.Enter
                         break;
                     }
                     refresh = true;
-                    Match match = Field.Match(line);
+                    Match match = field.Match(line);
                     if (!match.Success)
                     {
                         throw new ArgumentException("Failed to read field.");
@@ -77,7 +74,6 @@ namespace ERHMS.EpiInfo.Enter
         {
             return Execute(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
         }
-
         private static void Main_OpenRecord(string[] args)
         {
             string projectPath = args[0];

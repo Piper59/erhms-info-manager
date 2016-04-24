@@ -13,7 +13,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public CodeRepository(IDataDriver driver, string tableName, string columnName, bool sorted)
             : base(driver)
         {
-            Log.Current.DebugFormat("Creating code repository: {0}", tableName);
+            Log.Current.DebugFormat("Opening code repository: {0}", tableName);
             TableName = tableName;
             ColumnName = columnName;
             Sorted = sorted;
@@ -27,7 +27,8 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 sql.AppendFormat(" ORDER BY {0}", Driver.Escape(ColumnName));
             }
-            foreach (DataRow row in Driver.ExecuteQuery(sql.ToString()).Rows)
+            DataTable table = Driver.ExecuteQuery(sql.ToString());
+            foreach (DataRow row in table.Rows)
             {
                 yield return row.Field<string>(ColumnName);
             }

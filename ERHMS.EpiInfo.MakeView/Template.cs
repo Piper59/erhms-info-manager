@@ -20,7 +20,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public void AddFromTemplate(string path)
         {
-            @base.Invoke("CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
+            ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
         public void AddFromTemplate(EpiInfo.Template template)
@@ -30,7 +30,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public void CreateTemplate(View view, string templateName)
         {
-            @base.Invoke("CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { templateName, view });
+            ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { templateName, view });
         }
     }
 }

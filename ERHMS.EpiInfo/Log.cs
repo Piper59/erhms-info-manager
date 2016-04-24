@@ -13,13 +13,21 @@ namespace ERHMS.EpiInfo
 {
     public static class Log
     {
-        private static string name = Assembly.GetEntryAssembly().GetName().Name;
-        private static string fileName = string.Format("{0}.txt", name);
         private static RollingFileAppender appender;
+
+        public static string Name
+        {
+            get { return Assembly.GetEntryAssembly().GetName().Name; }
+        }
+
+        private static string FileName
+        {
+            get { return string.Format("{0}.txt", Name); }
+        }
 
         public static ILog Current
         {
-            get { return LogManager.GetLogger(name); }
+            get { return LogManager.GetLogger(Name); }
         }
 
         private static Hierarchy Hierarchy
@@ -46,7 +54,7 @@ namespace ERHMS.EpiInfo
             layout.ActivateOptions();
             appender = new RollingFileAppender
             {
-                File = Path.Combine("Logs", fileName),
+                File = Path.Combine("Logs", FileName),
                 RollingStyle = RollingFileAppender.RollingMode.Date,
                 DatePattern = ".yyyy-MM",
                 MaxSizeRollBackups = -1,
@@ -54,14 +62,14 @@ namespace ERHMS.EpiInfo
             };
             appender.ActivateOptions();
             Hierarchy.Root.AddAppender(appender);
-            Hierarchy.Root.Level = GetInitialLevel(Hierarchy.LevelMap);
+            Hierarchy.Root.Level = GetInitialLevel();
             Hierarchy.Configured = true;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
-        private static Level GetInitialLevel(LevelMap map)
+        private static Level GetInitialLevel()
         {
-            Level level = map[Settings.Default.LogLevel];
+            Level level = Hierarchy.LevelMap[Settings.Instance.LogLevel];
             if (level == null)
             {
 #if DEBUG
@@ -92,7 +100,7 @@ namespace ERHMS.EpiInfo
 
         public static void Configure(Configuration configuration)
         {
-            appender.File = Path.Combine(configuration.Directories.LogDir, fileName);
+            appender.File = Path.Combine(configuration.Directories.LogDir, FileName);
             appender.ActivateOptions();
         }
     }

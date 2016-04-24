@@ -26,16 +26,10 @@ namespace ERHMS.Domain
             set { SetProperty("PgmLinkId", value); }
         }
 
-        public int? PgmId
+        public int PgmId
         {
-            get { return GetProperty<int?>("PgmId"); }
+            get { return GetProperty<int>("PgmId"); }
             set { SetProperty("PgmId", value); }
-        }
-
-        public string Path
-        {
-            get { return GetProperty<string>("Path"); }
-            set { SetProperty("Path", value); }
         }
 
         public string IncidentId

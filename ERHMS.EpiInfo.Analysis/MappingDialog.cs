@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.Analysis
 {
-    internal partial class MappingDialog : DialogBase
+    internal partial class MappingDialog : CommandDesignDialog
     {
         public const string EmptyTarget = "";
 
@@ -38,7 +38,7 @@ namespace ERHMS.EpiInfo.Analysis
             DialogResult = DialogResult.OK;
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private new void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }

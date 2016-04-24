@@ -56,12 +56,12 @@ namespace ERHMS.EpiInfo.Analysis
                 {
                     return baseTarget;
                 }
-                for (int index = 2; ; index++)
+                for (int copy = 2; ; copy++)
                 {
-                    string candidateTarget = string.Format("{0}{1}", baseTarget, index);
-                    if (!ContainsTarget(candidateTarget))
+                    string copyTarget = string.Format("{0}{1}", baseTarget, copy);
+                    if (!ContainsTarget(copyTarget))
                     {
-                        return candidateTarget;
+                        return copyTarget;
                     }
                 }
             }

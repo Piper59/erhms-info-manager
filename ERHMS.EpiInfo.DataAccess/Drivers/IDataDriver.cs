@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public interface IDataDriver : IDisposable
+    public interface IDataDriver
     {
         DataProvider Provider { get; }
         string ConnectionString { get; }

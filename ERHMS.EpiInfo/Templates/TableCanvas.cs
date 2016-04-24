@@ -79,14 +79,14 @@ namespace ERHMS.EpiInfo.Templates
         
         #line 39 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\TableCanvas.tt"
 
-    public string ConnectionString { get; private set; }
+    public string ConnectionString { get; set; }
 
     public string EncryptedConnectionString
     {
         get { return Configuration.Encrypt(ConnectionString); }
     }
 
-    public string TableName { get; private set; }
+    public string TableName { get; set; }
 
     public TableCanvas(string connectionString, string tableName)
     {

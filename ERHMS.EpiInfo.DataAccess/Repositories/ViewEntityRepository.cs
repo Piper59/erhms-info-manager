@@ -34,7 +34,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public ViewEntityRepository(IDataDriver driver, View view)
             : base(driver)
         {
-            Log.Current.DebugFormat("Creating view repository: {0}", view.Name);
+            Log.Current.DebugFormat("Opening view repository: {0}", view.Name);
             View = view;
             BaseSchema = GetSchema(view.TableName);
             PageSchemas = new DataSet();

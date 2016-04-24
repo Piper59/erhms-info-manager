@@ -38,10 +38,6 @@
     <Reference Include="Epi.Windows">
       <HintPath>..\Epi Info 7\Epi.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MakeView">
       <HintPath>..\Epi Info 7\MakeView.exe</HintPath>
     </Reference>
@@ -74,6 +70,18 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="CreateTemplateDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateTemplateDialog.Designer.cs">
+      <DependentUpon>CreateTemplateDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateViewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateViewDialog.Designer.cs">
+      <DependentUpon>CreateViewDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,7 +90,12 @@
     <Compile Include="Template.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <EmbeddedResource Include="CreateTemplateDialog.resx">
+      <DependentUpon>CreateTemplateDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateViewDialog.resx">
+      <DependentUpon>CreateViewDialog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,8 +1,4 @@
-﻿using ERHMS.Utility;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
+﻿using Epi;
 
 namespace ERHMS.EpiInfo
 {
@@ -10,58 +6,25 @@ namespace ERHMS.EpiInfo
     {
         public const string FileExtension = ".pgm7";
 
-        public static IEnumerable<Pgm> GetByProject(Project project)
+        private static string GetContent(string location, string source)
         {
-            foreach (DataRow row in project.GetPgmsAsDataTable().Rows)
-            {
-                yield return new Pgm(project, row);
-            }
-            string pattern = string.Format("*{0}", FileExtension);
-            foreach (FileInfo file in project.Location.EnumerateFiles(pattern, SearchOption.AllDirectories))
-            {
-                yield return new Pgm(project, file);
-            }
+            return string.Format("READ {{{0}}}:[{1}]", location, source);
         }
 
-        private Project project;
-
-        public PgmSource Source { get; private set; }
-        public int? Id { get; private set; }
-        public FileInfo File { get; private set; }
-        public string Name { get; private set; }
-        public string Content { get; private set; }
-
-        private Pgm(Project project, DataRow row)
+        public static string GetContentForView(View view)
         {
-            this.project = project;
-            Source = PgmSource.Database;
-            Id = row.Field<int>("ProgramId");
-            Name = row.Field<string>("Name");
-            Content = row.Field<string>("Content");
+            return GetContent(view.Project.FilePath, view.Name);
         }
 
-        private Pgm(Project project, FileInfo file)
+        public static string GetContentForTable(string connectionString, string tableName)
         {
-            this.project = project;
-            Source = PgmSource.File;
-            File = file;
-            Name = Path.GetFileNameWithoutExtension(file.Name);
-            Content = System.IO.File.ReadAllText(file.FullName);
+            return GetContent(connectionString, tableName);
         }
 
-        public void Delete()
-        {
-            switch (Source)
-            {
-                case PgmSource.Database:
-                    project.DeletePgm(Id.Value);
-                    break;
-                case PgmSource.File:
-                    File.Recycle();
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
+        public int PgmId { get; set; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public string Comment { get; set; }
+        public string Author { get; set; }
     }
 }

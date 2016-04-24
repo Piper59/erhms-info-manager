@@ -41,7 +41,6 @@ namespace ERHMS.EpiInfo.Analysis
         {
             return Execute(args => Main_Execute(args));
         }
-
         private static void Main_Execute(string[] args)
         {
             using (MainForm form = new MainForm())
@@ -56,7 +55,6 @@ namespace ERHMS.EpiInfo.Analysis
             File.WriteAllText(file.FullName, pgm.Content);
             return Execute(args => Main_OpenPgm(args), file.FullName);
         }
-
         private static void Main_OpenPgm(string[] args)
         {
             string pgmPath = args[0];
@@ -70,32 +68,10 @@ namespace ERHMS.EpiInfo.Analysis
             }
         }
 
-        public static Process ReadView(View view)
-        {
-            return Execute(args => Main_ReadView(args), view.Project.FilePath, view.Name);
-        }
-
-        private static void Main_ReadView(string[] args)
-        {
-            string projectPath = args[0];
-            string viewName = args[1];
-            using (MainForm form = new MainForm())
-            {
-                form.Load += (sender, e) =>
-                {
-                    string command = GetReadCommand(projectPath, viewName);
-                    form.AddCommand(command);
-                    form.ExecuteCommand(command);
-                };
-                Application.Run(form);
-            }
-        }
-
         public static Process Import(View target)
         {
             return Execute(args => Main_Import(args), target.Project.FilePath, target.Name);
         }
-
         private static void Main_Import(string[] args)
         {
             string projectPath = args[0];
@@ -152,12 +128,12 @@ namespace ERHMS.EpiInfo.Analysis
                                 mappings.GetKeyTarget()));
                             form.ExecuteCommands(() =>
                             {
-                                IService service = Service.GetService();
+                                IService service = Service.Connect();
                                 if (service == null)
                                 {
                                     return;
                                 }
-                                service.RefreshViewData(projectPath, viewName);
+                                service.OnViewDataImported(projectPath, viewName);
                             });
                         });
                     };
@@ -170,7 +146,6 @@ namespace ERHMS.EpiInfo.Analysis
         {
             return Execute(args => Main_Export(args), source.Project.FilePath, source.Name);
         }
-
         private static void Main_Export(string[] args)
         {
             string projectPath = args[0];

@@ -33,6 +33,21 @@ namespace ERHMS.EpiInfo.Domain
             New = true;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler == null)
+            {
+                return;
+            }
+            handler(this, e);
+        }
+        protected void OnPropertyChanged(string name)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(name));
+        }
+
         public bool HasProperty(string name)
         {
             return properties.ContainsKey(name);
@@ -73,17 +88,6 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        public bool SetProperty(string name, object value)
-        {
-            if (PropertyEquals(name, value))
-            {
-                return false;
-            }
-            properties[name] = value;
-            OnPropertyChanged(name);
-            return true;
-        }
-
         public bool PropertyEquals(string name, object value, StringComparison comparisonType = StringComparison.Ordinal)
         {
             object currentValue;
@@ -106,7 +110,17 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        #region DynamicObject
+        public bool SetProperty(string name, object value)
+        {
+            if (PropertyEquals(name, value))
+            {
+                return false;
+            }
+            properties[name] = value;
+            OnPropertyChanged(name);
+            return true;
+        }
+
         public sealed override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return TryGetProperty(binder.Name, out result);
@@ -117,28 +131,7 @@ namespace ERHMS.EpiInfo.Domain
             SetProperty(binder.Name, value);
             return true;
         }
-        #endregion
 
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler == null)
-            {
-                return;
-            }
-            handler(this, e);
-        }
-
-        protected void OnPropertyChanged(string name)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(name));
-        }
-        #endregion
-
-        #region ICloneable
         public object Clone()
         {
             EntityBase clone = (EntityBase)Activator.CreateInstance(GetType());
@@ -157,6 +150,5 @@ namespace ERHMS.EpiInfo.Domain
             }
             return clone;
         }
-        #endregion
     }
 }

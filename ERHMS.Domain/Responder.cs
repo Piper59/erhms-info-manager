@@ -22,12 +22,6 @@ namespace ERHMS.Domain
             }
         }
 
-        public string Username
-        {
-            get { return GetProperty<string>("Username"); }
-            set { SetProperty("Username", value); }
-        }
-
         public string Prefix
         {
             get { return GetProperty<string>("Prefix"); }

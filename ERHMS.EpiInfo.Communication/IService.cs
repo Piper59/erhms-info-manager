@@ -9,15 +9,18 @@ namespace ERHMS.EpiInfo.Communication
         void Ping();
 
         [OperationContract]
-        void RefreshViews(string projectPath, string viewName, string tag);
+        void OnViewAdded(string projectPath, string viewName, string tag = null);
 
         [OperationContract]
-        void RefreshTemplates();
+        void OnViewDataImported(string projectPath, string viewName, string tag = null);
 
         [OperationContract]
-        void RefreshViewData(string projectPath, string viewName);
+        void OnRecordSaved(string projectPath, string viewName, string globalRecordId, string tag = null);
 
         [OperationContract]
-        void RefreshRecordData(string projectPath, string viewName, string globalRecordId);
+        void OnTemplateAdded(string templatePath, string tag = null);
+
+        [OperationContract]
+        void OnCanvasClosed(string projectPath, int canvasId, string canvasPath, string tag = null);
     }
 }

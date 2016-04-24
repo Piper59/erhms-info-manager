@@ -10,7 +10,7 @@ namespace ERHMS.Utility
     {
         private static Mutex GetMutex()
         {
-            string name = string.Format("Global\\{0}", Assembly.GetEntryAssembly().GetName().Name);
+            string name = string.Format(@"Global\{0}", Assembly.GetEntryAssembly().GetName().Name);
             bool created;
             MutexSecurity security = new MutexSecurity();
             security.AddAccessRule(new MutexAccessRule(
@@ -20,18 +20,27 @@ namespace ERHMS.Utility
             return new Mutex(false, name, out created, security);
         }
 
-        public Action Action { get; private set; }
         public int Timeout { get; set; }
 
-        public SingleInstanceApplication(Action action, int timeout)
+        public SingleInstanceApplication(int timeout = 0)
         {
-            Action = action;
             Timeout = timeout;
         }
 
-        public SingleInstanceApplication(Action action)
-            : this(action, 0)
-        { }
+        public event EventHandler Executing;
+        private void OnExecuting(EventArgs e)
+        {
+            EventHandler handler = Executing;
+            if (handler == null)
+            {
+                return;
+            }
+            handler(this, e);
+        }
+        private void OnExecuting()
+        {
+            OnExecuting(EventArgs.Empty);
+        }
 
         public void Execute()
         {
@@ -52,7 +61,7 @@ namespace ERHMS.Utility
                     {
                         owned = true;
                     }
-                    Action();
+                    OnExecuting();
                 }
                 finally
                 {

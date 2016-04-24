@@ -1,15 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace ERHMS.Utility
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<T> Yield<T>(T item)
-        {
-            yield return item;
-        }
-
         public static IEnumerable<T> Append<T>(this IEnumerable<T> @this, T item)
         {
             foreach (T t in @this)
@@ -26,19 +20,6 @@ namespace ERHMS.Utility
             {
                 yield return t;
             }
-        }
-
-        public static void AddRange<T>(this ICollection<T> @this, IEnumerable<T> items)
-        {
-            foreach (T item in items)
-            {
-                @this.Add(item);
-            }
-        }
-
-        public static IEnumerable<Iterator<T>> Iterate<T>(this IEnumerable<T> @this)
-        {
-            return @this.Select((value, index) => new Iterator<T>(value, index));
         }
     }
 }

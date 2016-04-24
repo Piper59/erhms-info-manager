@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace ERHMS.DataAccess
         public ResponderRepository Responders { get; private set; }
         public IncidentRepository Incidents { get; private set; }
         public LocationRepository Locations { get; private set; }
-        public RegistrationRepository Registrations { get; private set; }
+        public RosterRepository Rosters { get; private set; }
         public AssignmentRepository Assignments { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
         public PgmLinkRepository PgmLinks { get; private set; }
@@ -38,7 +37,7 @@ namespace ERHMS.DataAccess
             Responders = new ResponderRepository(Driver, project);
             Incidents = new IncidentRepository(Driver);
             Locations = new LocationRepository(Driver);
-            Registrations = new RegistrationRepository(Driver);
+            Rosters = new RosterRepository(Driver);
             Assignments = new AssignmentRepository(Driver);
             ViewLinks = new ViewLinkRepository(Driver);
             PgmLinks = new PgmLinkRepository(Driver);
@@ -58,14 +57,6 @@ namespace ERHMS.DataAccess
             return Project.GetViews();
         }
 
-        public IEnumerable<View> GetLinkedViews(string incidentId)
-        {
-            ICollection<int> viewIds = ViewLinks.Select(GetLinkPredicate(incidentId))
-                .Select(viewLink => viewLink.ViewId)
-                .ToList();
-            return GetViews().Where(view => viewIds.Contains(view.Id));
-        }
-
         public IEnumerable<Template> GetTemplates(TemplateLevel? level = null)
         {
             if (level.HasValue)
@@ -80,32 +71,60 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Pgm> GetPgms()
         {
-            return Pgm.GetByProject(Project);
-        }
-
-        public IEnumerable<Pgm> GetLinkedPgms(string incidentId)
-        {
-            ICollection<PgmLink> pgmLinks = PgmLinks.Select(GetLinkPredicate(incidentId)).ToList();
-            ICollection<int> pgmIds = pgmLinks.Where(pgmLink => pgmLink.PgmId.HasValue)
-                .Select(pgmLink => pgmLink.PgmId.Value)
-                .ToList();
-            ICollection<string> paths = pgmLinks.Where(pgmLink => pgmLink.Path != null)
-                .Select(pgmLink => pgmLink.Path.ToLower())
-                .ToList();
-            return GetPgms().Where(pgm => pgm.Id.HasValue && pgmIds.Contains(pgm.Id.Value) || paths.Contains(pgm.File.FullName.ToLower()));
+            return Project.GetPgms();
         }
 
         public IEnumerable<Canvas> GetCanvases()
         {
-            return Canvas.GetByProject(Project);
+            return Project.GetCanvases();
+        }
+
+        public IEnumerable<View> GetLinkedViews(string incidentId)
+        {
+            ICollection<int> viewIds = ViewLinks.Select(GetLinkPredicate(incidentId))
+                .Select(viewLink => viewLink.ViewId)
+                .ToList();
+            return GetViews().Where(view => viewIds.Contains(view.Id));
+        }
+
+        public IEnumerable<Pgm> GetLinkedPgms(string incidentId)
+        {
+            ICollection<int> pgmIds = PgmLinks.Select(GetLinkPredicate(incidentId))
+                .Select(pgmLink => pgmLink.PgmId)
+                .ToList();
+            return GetPgms().Where(pgm => pgmIds.Contains(pgm.PgmId));
         }
 
         public IEnumerable<Canvas> GetLinkedCanvases(string incidentId)
         {
-            ICollection<string> paths = CanvasLinks.Select(GetLinkPredicate(incidentId))
-                .Select(canvasLink => canvasLink.Path.ToLower())
+            ICollection<int> canvasIds = CanvasLinks.Select(GetLinkPredicate(incidentId))
+                .Select(canvasLink => canvasLink.CanvasId)
                 .ToList();
-            return GetCanvases().Where(canvas => paths.Contains(canvas.File.FullName.ToLower()));
+            return GetCanvases().Where(canvas => canvasIds.Contains(canvas.CanvasId));
+        }
+
+        public IEnumerable<View> GetUnlinkedViews()
+        {
+            ICollection<int> viewIds = ViewLinks.Select()
+                .Select(viewLink => viewLink.ViewId)
+                .ToList();
+            return GetViews().Where(view => !viewIds.Contains(view.Id));
+        }
+
+        public IEnumerable<Pgm> GetUnlinkedPgms()
+        {
+            ICollection<int> pgmIds = PgmLinks.Select()
+                .Select(pgmLink => pgmLink.PgmId)
+                .ToList();
+            return GetPgms().Where(pgm => !pgmIds.Contains(pgm.PgmId));
+        }
+
+        public IEnumerable<Canvas> GetUnlinkedCanvases()
+        {
+            ICollection<int> canvasIds = CanvasLinks.Select()
+                .Select(canvasLink => canvasLink.CanvasId)
+                .ToList();
+            return GetCanvases().Where(canvas => !canvasIds.Contains(canvas.CanvasId));
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 
 namespace ERHMS.Utility
 {
@@ -9,9 +8,10 @@ namespace ERHMS.Utility
     {
         public static string ToDescription(Enum value)
         {
-            FieldInfo field = value.GetType().GetField(value.ToString());
-            DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
-            return attribute.Description;
+            return value.GetType()
+                .GetField(value.ToString())
+                .GetCustomAttribute<DescriptionAttribute>()
+                .Description;
         }
 
         public static TEnum FromDescription<TEnum>(string description)

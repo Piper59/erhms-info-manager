@@ -1,8 +1,9 @@
-﻿<#@ template visibility="internal" #>
+﻿<#@ import namespace="Epi" #>
+<#@ template visibility="internal" #>
 <DashboardCanvas>
   <dashboardHelper>
-    <projectPath><#= ProjectPath #></projectPath>
-    <viewName><#= ViewName #></viewName>
+    <projectPath><#= View.Project.FilePath #></projectPath>
+    <viewName><#= View.Name #></viewName>
     <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
     <advancedDataFilterCondition>
     </advancedDataFilterCondition>
@@ -36,12 +37,10 @@
   </CanvasSettings>
 </DashboardCanvas>
 <#+
-    public string ProjectPath { get; private set; }
-    public string ViewName { get; private set; }
+    public View View { get; set; }
 
-    public ViewCanvas(string projectPath, string viewName)
+    public ViewCanvas(View view)
     {
-        ProjectPath = projectPath;
-        ViewName = viewName;
+        View = view;
     }
 #>

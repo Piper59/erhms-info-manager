@@ -1,5 +1,5 @@
-﻿<#@ template visibility="internal" #>
-<#@ import namespace="Epi" #>
+﻿<#@ import namespace="Epi" #>
+<#@ template visibility="internal" #>
 <DashboardCanvas>
   <dashboardHelper>
     <connectionString><#= EncryptedConnectionString #></connectionString>
@@ -37,14 +37,14 @@
   </CanvasSettings>
 </DashboardCanvas>
 <#+
-    public string ConnectionString { get; private set; }
+    public string ConnectionString { get; set; }
 
     public string EncryptedConnectionString
     {
         get { return Configuration.Encrypt(ConnectionString); }
     }
 
-    public string TableName { get; private set; }
+    public string TableName { get; set; }
 
     public TableCanvas(string connectionString, string tableName)
     {

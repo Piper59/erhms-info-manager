@@ -43,19 +43,14 @@ namespace ERHMS.EpiInfo.MakeView
         {
             if (ProjectExplorer.IsProjectLoaded)
             {
-                if (Mediator.Project == project)
-                {
-                    return;
-                }
-                this.Invoke(typeof(MakeViewMainForm), "CloseCurrentProject", Type.EmptyTypes, null);
+                ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "CloseCurrentProject", Type.EmptyTypes, null);
             }
-            this.Invoke(typeof(MakeViewMainForm), "OpenProject", new Type[] { typeof(Epi.Project) }, new object[] { project });
+            ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "OpenProject", new Type[] { typeof(Epi.Project) }, new object[] { project });
         }
 
         public void OpenProject(string projectPath)
         {
-            Project project = new Project(projectPath);
-            OpenProject(project);
+            OpenProject(new Project(projectPath));
         }
     }
 }
