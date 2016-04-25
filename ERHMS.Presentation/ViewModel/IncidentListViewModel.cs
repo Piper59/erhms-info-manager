@@ -72,7 +72,7 @@ namespace ERHMS.Presentation.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage<System.Action>(() =>
                 {
-                    App.GetDataContext().Incidents.Delete(SelectedIncident);
+                    App.Current.DataContext.Incidents.Delete(SelectedIncident);
                 }, "ConfirmDeleteIncident"));
             },
                 HasSelectedIncident);
@@ -86,7 +86,7 @@ namespace ERHMS.Presentation.ViewModel
         private void RefreshIncidentData()
         {
             incidentList = new CollectionViewSource();
-            incidentList.Source = App.GetDataContext().Incidents.Select();
+            incidentList.Source = App.Current.DataContext.Incidents.Select();
             IncidentList.Refresh();
             RaisePropertyChanged("IncidentList");
             SelectedIncident = null;

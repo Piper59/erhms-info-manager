@@ -70,7 +70,7 @@ namespace ERHMS.Presentation.ViewModel
         private bool FormListFilterFunc(object item)
         {
             ViewLink vl = item as ViewLink;
-            Epi.View v = App.GetDataContext().GetViews().Where(q => q.Id == vl.ViewId).First();
+            Epi.View v = App.Current.DataContext.GetViews().Where(q => q.Id == vl.ViewId).First();
 
             return
                 FormListFilter.Equals("") ||
@@ -113,7 +113,7 @@ namespace ERHMS.Presentation.ViewModel
         {
             AddFormCommand = new RelayCommand(() =>
             {
-                //Epi.View view = MakeView.AddView(App.GetDataContext().Project);
+                //Epi.View view = MakeView.AddView(App.Current.DataContext.Project);
                 //MakeView.OpenView(view);
 
                 //RefreshFormData();
@@ -125,7 +125,7 @@ namespace ERHMS.Presentation.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
                 {
-                    App.GetDataContext().Project.DeleteView(SelectedForm.Id);
+                    App.Current.DataContext.Project.DeleteView(SelectedForm.Id);
                 }, "ConfirmDeleteForm"));
             },
                 CanDeleteForm);
@@ -163,7 +163,7 @@ namespace ERHMS.Presentation.ViewModel
         private void RefreshFormData()
         {
             formList = new CollectionViewSource();
-            formList.Source = App.GetDataContext().GetUnlinkedViews();
+            formList.Source = App.Current.DataContext.GetUnlinkedViews();
             FormList.Refresh();
             RaisePropertyChanged("FormList");
             SelectedForm = null;

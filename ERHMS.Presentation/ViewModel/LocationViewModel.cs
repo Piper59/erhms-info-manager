@@ -33,12 +33,12 @@ namespace ERHMS.Presentation.ViewModel
 
         public LocationViewModel(Incident incident)
         {
-            CurrentLocation = App.GetDataContext().Locations.Create();
+            CurrentLocation = App.Current.DataContext.Locations.Create();
             CurrentLocation.IncidentId = incident.IncidentId;
 
             SaveCommand = new RelayCommand(() =>
             {
-                App.GetDataContext().Locations.Save(CurrentLocation);
+                App.Current.DataContext.Locations.Save(CurrentLocation);
 
                 Messenger.Default.Send(new NotificationMessage<string>(CurrentLocation.IncidentId, "RefreshLocations"));
                 
@@ -63,7 +63,7 @@ namespace ERHMS.Presentation.ViewModel
             
             SaveCommand = new RelayCommand(() =>
             {
-                App.GetDataContext().Locations.Save(CurrentLocation);
+                App.Current.DataContext.Locations.Save(CurrentLocation);
 
                 Messenger.Default.Send(new NotificationMessage<string>(CurrentLocation.IncidentId, "RefreshLocations"));
 

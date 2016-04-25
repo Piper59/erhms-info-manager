@@ -250,7 +250,7 @@ namespace ERHMS.Presentation.ViewModel
         private bool FormListFilterFunc(object item)
         {
             ViewLink vl = item as ViewLink;
-            Epi.View v = App.GetDataContext().GetViews().Where(q => q.Id == vl.ViewId).First();
+            Epi.View v = App.Current.DataContext.GetViews().Where(q => q.Id == vl.ViewId).First();
 
             return
                 FormListFilter.Equals("") ||
@@ -293,7 +293,7 @@ namespace ERHMS.Presentation.ViewModel
 
         public IncidentViewModel()
         {
-            CurrentIncident = App.GetDataContext().Incidents.Create();
+            CurrentIncident = App.Current.DataContext.Incidents.Create();
 
             Initialize();
         }
@@ -329,7 +329,7 @@ namespace ERHMS.Presentation.ViewModel
                     }
                     else
                     {
-                        App.GetDataContext().Incidents.Save(CurrentIncident);
+                        App.Current.DataContext.Incidents.Save(CurrentIncident);
 
                         Messenger.Default.Send(new NotificationMessage<string>("Incident has been saved.", "ShowSuccessMessage"));
                     }
@@ -353,7 +353,7 @@ namespace ERHMS.Presentation.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
                 {
-                    App.GetDataContext().Locations.Delete(SelectedLocation);
+                    App.Current.DataContext.Locations.Delete(SelectedLocation);
                 }, "ConfirmDeleteLocation"));
             }, HasSelectedLocation);
             
@@ -363,11 +363,11 @@ namespace ERHMS.Presentation.ViewModel
                 {
                     Responder responder = (Responder)SelectedAvailableResponders[i];
 
-                    Roster roster = App.GetDataContext().Rosters.Create();
+                    Roster roster = App.Current.DataContext.Rosters.Create();
                     roster.ResponderId = responder.GlobalRecordId;
                     roster.IncidentId = CurrentIncident.IncidentId;
 
-                    App.GetDataContext().Rosters.Save(roster);
+                    App.Current.DataContext.Rosters.Save(roster);
                 }
 
                 RefreshRosterData();
@@ -379,9 +379,9 @@ namespace ERHMS.Presentation.ViewModel
                 Messenger.Default.Send(new NotificationMessage<System.Action>(() =>
                 {
                     Responder responder = (Responder)SelectedRosteredResponders[0];
-                    Roster roster = App.GetDataContext().Rosters.Select().Where(q => q.ResponderId == responder.GlobalRecordId && q.IncidentId == CurrentIncident.IncidentId).FirstOrDefault();
+                    Roster roster = App.Current.DataContext.Rosters.Select().Where(q => q.ResponderId == responder.GlobalRecordId && q.IncidentId == CurrentIncident.IncidentId).FirstOrDefault();
 
-                    App.GetDataContext().Rosters.Delete(roster);
+                    App.Current.DataContext.Rosters.Delete(roster);
 
                     RefreshRosterData();
                 }, "ConfirmDeleteRegistration"));
@@ -397,14 +397,14 @@ namespace ERHMS.Presentation.ViewModel
 
             AddFormCommand = new RelayCommand(() =>
             {
-                //Epi.View view = MakeView.AddView(App.GetDataContext().Project);
+                //Epi.View view = MakeView.AddView(App.Current.DataContext.Project);
                 //MakeView.OpenView(view);
 
-                //ViewLink vl = App.GetDataContext().ViewLinks.Create();
+                //ViewLink vl = App.Current.DataContext.ViewLinks.Create();
                 //vl.IncidentId = CurrentIncident.IncidentId;
                 //vl.ViewId = view.Id;
 
-                //App.GetDataContext().ViewLinks.Save(vl);
+                //App.Current.DataContext.ViewLinks.Save(vl);
 
                 //RefreshFormData();
             });
@@ -415,7 +415,7 @@ namespace ERHMS.Presentation.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
                 {
-                    App.GetDataContext().Project.DeleteView(SelectedForm.Id);
+                    App.Current.DataContext.Project.DeleteView(SelectedForm.Id);
                 }, "ConfirmDeleteForm"));
             },
                 CanDeleteForm);
@@ -476,7 +476,7 @@ namespace ERHMS.Presentation.ViewModel
         private void RefreshLocationData()
         {
             locationList = new CollectionViewSource();
-            locationList.Source = App.GetDataContext().Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId);
+            locationList.Source = App.Current.DataContext.Locations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId);
             LocationList.Refresh();
             RaisePropertyChanged("LocationList");
             SelectedLocation = null;
@@ -484,23 +484,23 @@ namespace ERHMS.Presentation.ViewModel
         private void RefreshFormData()
         {
             formList = new CollectionViewSource();
-            formList.Source = App.GetDataContext().GetLinkedViews(CurrentIncident.IncidentId);
+            formList.Source = App.Current.DataContext.GetLinkedViews(CurrentIncident.IncidentId);
             FormList.Refresh();
             RaisePropertyChanged("FormList");
             SelectedForm = null;
         }
         private void RefreshRosterData()
         {
-            List<string> rosterIds = App.GetDataContext().Rosters.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId).Select(q => q.ResponderId).Distinct().ToList();
+            List<string> rosterIds = App.Current.DataContext.Rosters.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId).Select(q => q.ResponderId).Distinct().ToList();
 
             availableResponders = new CollectionViewSource();
-            availableResponders.Source = App.GetDataContext().Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == false);
+            availableResponders.Source = App.Current.DataContext.Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == false);
             AvailableResponders.Refresh();
             RaisePropertyChanged("AvailableResponders");
             SelectedAvailableResponders = null;
 
             rosteredResponders = new CollectionViewSource();
-            rosteredResponders.Source = App.GetDataContext().Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == true);
+            rosteredResponders.Source = App.Current.DataContext.Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == true);
             RosteredResponders.Refresh();
             RaisePropertyChanged("RosteredResponders");
             SelectedRosteredResponders = null;

@@ -70,7 +70,7 @@ namespace ERHMS.Presentation.ViewModel
 
         private void RefreshData()
         {
-            ResponderList = CollectionViewSource.GetDefaultView(App.GetDataContext().Responders.SelectByDeleted(false));
+            ResponderList = CollectionViewSource.GetDefaultView(App.Current.DataContext.Responders.SelectByDeleted(false));
             SelectedResponders = new ObservableCollection<Responder>();
         }
 
@@ -92,7 +92,7 @@ namespace ERHMS.Presentation.ViewModel
                         {
                             for(int i = SelectedResponders.Count-1; i >= 0; i--)
                             {
-                                App.GetDataContext().Responders.Delete((Responder)SelectedResponders[i]);
+                                App.Current.DataContext.Responders.Delete((Responder)SelectedResponders[i]);
                             }
                         }, "ConfirmDeleteResponder"));
                 }, HasSelectedResponders);

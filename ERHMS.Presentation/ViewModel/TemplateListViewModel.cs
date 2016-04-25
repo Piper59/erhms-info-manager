@@ -71,7 +71,7 @@ namespace ERHMS.Presentation.ViewModel
         private void RefreshTemplateData()
         {
             templateList = new CollectionViewSource();
-            templateList.Source = App.GetDataContext().GetTemplates();
+            templateList.Source = App.Current.DataContext.GetTemplates();
             TemplateList.Refresh();
             RaisePropertyChanged("TemplateList");
             SelectedTemplate = null;

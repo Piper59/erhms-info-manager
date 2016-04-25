@@ -43,7 +43,7 @@ namespace ERHMS.Presentation.ViewModel
 
         public FormResponseListViewModel(Epi.View view)
         {
-            ViewEntityRepository<ViewEntity> viewEntityRepository = new ViewEntityRepository<ViewEntity>(App.GetDataContext().Driver, view);
+            ViewEntityRepository<ViewEntity> viewEntityRepository = new ViewEntityRepository<ViewEntity>(App.Current.DataContext.Driver, view);
 
             ColumnCollection = new ObservableCollection<DataGridColumn>();
             
