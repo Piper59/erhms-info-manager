@@ -1,8 +1,11 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
+using ERHMS.EpiInfo.MakeView;
+using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
 using Template = ERHMS.EpiInfo.Template;
 
@@ -10,6 +13,20 @@ namespace ERHMS.DataAccess
 {
     public class DataContext
     {
+        public static DataContext Create(Project project)
+        {
+            Log.Current.DebugFormat("Creating data context: {0}", project.FilePath);
+            Template template = Template.Get(TemplateLevel.Project, "ERHMS");
+            MakeView.AddFromTemplate(project, template).WaitForExit();
+            foreach (View view in project.Views)
+            {
+                project.CollectedData.CreateDataTableForView(view, 1);
+            }
+            IDataDriver driver = DataDriverFactory.CreateDataDriver(project);
+            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.DataAccess.Scripts.Create.sql"));
+            return new DataContext(project);
+        }
+
         public Project Project { get; private set; }
         public IDataDriver Driver { get; private set; }
         public CodeRepository Prefixes { get; private set; }

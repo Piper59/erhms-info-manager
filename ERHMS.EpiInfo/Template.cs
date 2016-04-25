@@ -66,6 +66,23 @@ namespace ERHMS.EpiInfo
             }
         }
 
+        public static Template Get(FileInfo file)
+        {
+            Template template;
+            TryRead(file, out template);
+            return template;
+        }
+
+        public static Template Get(TemplateLevel level, string name)
+        {
+            Configuration configuration = Configuration.GetNewInstance();
+            FileInfo file = new FileInfo(Path.Combine(
+                configuration.Directories.Templates,
+                EnumExtensions.ToDescription(level),
+                string.Format("{0}{1}", name, FileExtension)));
+            return Get(file);
+        }
+
         public static IEnumerable<Template> GetAll()
         {
             Configuration configuration = Configuration.GetNewInstance();

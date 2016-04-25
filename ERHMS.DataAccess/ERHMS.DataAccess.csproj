@@ -58,9 +58,17 @@
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.MakeView\ERHMS.EpiInfo.MakeView.csproj">
+      <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
+      <Name>ERHMS.EpiInfo.MakeView</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
       <Name>ERHMS.EpiInfo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Utility\ERHMS.Utility.csproj">
+      <Project>{f8e50f50-057d-4666-9555-16a773b925e9}</Project>
+      <Name>ERHMS.Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

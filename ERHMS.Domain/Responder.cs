@@ -136,6 +136,12 @@ namespace ERHMS.Domain
             set { SetProperty("PhoneNumber", value); }
         }
 
+        public string ContactRelationship
+        {
+            get { return GetProperty<string>("ContactRelationship"); }
+            set { SetProperty("ContactRelationship", value); }
+        }
+
         public string ContactPrefix
         {
             get { return GetProperty<string>("ContactPrefix"); }
@@ -214,16 +220,16 @@ namespace ERHMS.Domain
             set { SetProperty("ContactPhoneNumber", value); }
         }
 
-        public string ContactRelationship
-        {
-            get { return GetProperty<string>("ContactRelationship"); }
-            set { SetProperty("ContactRelationship", value); }
-        }
-
         public string OrganizationName
         {
             get { return GetProperty<string>("OrganizationName"); }
             set { SetProperty("OrganizationName", value); }
+        }
+
+        public string OrganizationContactName
+        {
+            get { return GetProperty<string>("OrganizationContactName"); }
+            set { SetProperty("OrganizationContactName", value); }
         }
 
         public string OrganizationAddressLine1
@@ -254,18 +260,6 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>("OrganizationZipCode"); }
             set { SetProperty("OrganizationZipCode", value); }
-        }
-
-        public string OrganizationContactFirstName
-        {
-            get { return GetProperty<string>("OrganizationContactFirstName"); }
-            set { SetProperty("OrganizationContactFirstName", value); }
-        }
-
-        public string OrganizationContactLastName
-        {
-            get { return GetProperty<string>("OrganizationContactLastName"); }
-            set { SetProperty("OrganizationContactLastName", value); }
         }
 
         public string OrganizationEmailAddress

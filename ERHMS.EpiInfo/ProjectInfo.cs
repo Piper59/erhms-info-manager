@@ -54,6 +54,13 @@ namespace ERHMS.EpiInfo
             }
         }
 
+        public static ProjectInfo Get(FileInfo file)
+        {
+            ProjectInfo projectInfo;
+            TryRead(file, out projectInfo);
+            return projectInfo;
+        }
+
         public static IEnumerable<ProjectInfo> GetAll()
         {
             Configuration configuration = Configuration.GetNewInstance();
