@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="ERHMS.Presentation.View.HelpView"
+      xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:cmd="clr-namespace:ERHMS.Presentation.Commands"      
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:controls="clr-namespace:ERHMS.Presentation.Controls"
+      xmlns:l="clr-namespace:ERHMS.Presentation.Converters"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{StaticResource Title}" Text="Help and Resources"/>
+        <TextBlock Grid.Row="1" Style="{StaticResource Subtitle}" Text="About ERHMS Info Manager"/>
+
+        <TextBlock Grid.Row="2" TextWrapping="Wrap" xml:space="preserve">Using the ERHMS Info Manager you will be able to:
+            
+<Bold>Pre-deployment</Bold>
+    &#x2022; Enter responder data including contacts and parent organization information
+    &#x2022; Use existing form templates or create new forms for collecting data
+    &#x2022; Import responder data files
+    &#x2022; Track forms and surveys assigned to responders
+
+<Bold>Deployment</Bold>
+    &#x2022; Enter incident and incident location information
+    &#x2022; Create rosters and assign responders from the responder pool
+    &#x2022; Use templates or custom-made forms to record site-specific information, responder activities and exposure assessments
+    &#x2022; Use dashboards to analyze collected data
+
+<Bold>Post-deployment</Bold>
+    &#x2022; Record out-processing assessments 
+    &#x2022; Send follow-up health surveys at regular intervals and track responses
+        </TextBlock>
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Style="{StaticResource Subtitle}" Text="ERHMS Info Manager Documentation"/>
+            <TextBlock Grid.Row="1">
+                <Hyperlink NavigateUri="Resources/ERHMSInfoManager_UserManual.pdf" RequestNavigate="RelativeHyperlink_RequestNavigate">
+                    ERHMS Info Manager User Guide
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Style="{StaticResource Subtitle}" Text="Epi Info 7 Documentation"/>
+            <TextBlock Grid.Row="1">
+                <Hyperlink NavigateUri="http://wwwn.cdc.gov/Epiinfo/user-guide/index.htm" RequestNavigate="Hyperlink_RequestNavigate">
+                    Epi Info User Guide
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Style="{StaticResource Subtitle}" Text="Other Resources"/>
+            <TextBlock Grid.Row="1">
+                <Hyperlink NavigateUri="Resources/ICSInstructions" RequestNavigate="RelativeHyperlink_RequestNavigate">
+                    ICS Form Instructions
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>
