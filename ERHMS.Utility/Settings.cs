@@ -12,7 +12,11 @@
 
         public Settings()
         {
+#if DEBUG
+            LogLevel = "DEBUG";
+#else
             LogLevel = "WARN";
+#endif
             RootDirectory = "";
             ServiceAddress = "net.pipe://localhost/erhms-info-manager";
             EmailHost = "";
