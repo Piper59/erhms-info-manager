@@ -209,7 +209,7 @@
     <Compile Include="Converters\ObjectNullToEnabledOpacityConverter.cs" />
     <Compile Include="Converters\ObjectNullToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
-    <Compile Include="Converters\RegistrationToResponderNameConverter.cs" />
+    <Compile Include="Converters\RosterToResponderNameConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />
     <Compile Include="Converters\ToStringConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">

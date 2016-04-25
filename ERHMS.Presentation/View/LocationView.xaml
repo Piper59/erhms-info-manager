@@ -1,5 +1,4 @@
 ﻿<UserControl x:Class="ERHMS.Presentation.View.LocationView"
-      xmlns:p="clr-namespace:ERHMS.Presentation.Properties"
       xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
       xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

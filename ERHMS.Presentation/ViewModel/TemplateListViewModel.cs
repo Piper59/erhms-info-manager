@@ -49,7 +49,7 @@ namespace ERHMS.Presentation.ViewModel
 
         public TemplateListViewModel()
         {
-            App.Current.Service.RefreshingTemplates += Service_RefreshingTemplates;
+            //App.Current.Service.RefreshingTemplates += Service_RefreshingTemplates;
 
             DeleteCommand = new RelayCommand(() =>
             {

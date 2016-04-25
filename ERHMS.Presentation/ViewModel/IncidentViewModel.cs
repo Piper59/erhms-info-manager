@@ -79,7 +79,6 @@ namespace ERHMS.Presentation.ViewModel
 
             return (AvailableRespondersFilter == null ||
                 AvailableRespondersFilter.Equals("") ||
-                (r.Username != null && r.Username.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
                 (r.FirstName != null && r.FirstName.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
                 (r.LastName != null && r.LastName.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
                 (r.City != null && r.City.ToLower().Contains(AvailableRespondersFilter.ToLower())) ||
@@ -125,7 +124,6 @@ namespace ERHMS.Presentation.ViewModel
 
             return (RosteredRespondersFilter == null ||
                 RosteredRespondersFilter.Equals("") ||
-                (r.Username != null && r.Username.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
                 (r.FirstName != null && r.FirstName.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
                 (r.LastName != null && r.LastName.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
                 (r.City != null && r.City.ToLower().Contains(RosteredRespondersFilter.ToLower())) ||
@@ -365,11 +363,11 @@ namespace ERHMS.Presentation.ViewModel
                 {
                     Responder responder = (Responder)SelectedAvailableResponders[i];
 
-                    Registration registration = App.GetDataContext().Registrations.Create();
-                    registration.ResponderId = responder.GlobalRecordId;
-                    registration.IncidentId = CurrentIncident.IncidentId;
+                    Roster roster = App.GetDataContext().Rosters.Create();
+                    roster.ResponderId = responder.GlobalRecordId;
+                    roster.IncidentId = CurrentIncident.IncidentId;
 
-                    App.GetDataContext().Registrations.Save(registration);
+                    App.GetDataContext().Rosters.Save(roster);
                 }
 
                 RefreshRosterData();
@@ -381,9 +379,9 @@ namespace ERHMS.Presentation.ViewModel
                 Messenger.Default.Send(new NotificationMessage<System.Action>(() =>
                 {
                     Responder responder = (Responder)SelectedRosteredResponders[0];
-                    Registration registration = App.GetDataContext().Registrations.Select().Where(q => q.ResponderId == responder.GlobalRecordId && q.IncidentId == CurrentIncident.IncidentId).FirstOrDefault();
+                    Roster roster = App.GetDataContext().Rosters.Select().Where(q => q.ResponderId == responder.GlobalRecordId && q.IncidentId == CurrentIncident.IncidentId).FirstOrDefault();
 
-                    App.GetDataContext().Registrations.Delete(registration);
+                    App.GetDataContext().Rosters.Delete(roster);
 
                     RefreshRosterData();
                 }, "ConfirmDeleteRegistration"));
@@ -399,16 +397,16 @@ namespace ERHMS.Presentation.ViewModel
 
             AddFormCommand = new RelayCommand(() =>
             {
-                Epi.View view = MakeView.AddView(App.GetDataContext().Project);
-                MakeView.OpenView(view);
+                //Epi.View view = MakeView.AddView(App.GetDataContext().Project);
+                //MakeView.OpenView(view);
 
-                ViewLink vl = App.GetDataContext().ViewLinks.Create();
-                vl.IncidentId = CurrentIncident.IncidentId;
-                vl.ViewId = view.Id;
+                //ViewLink vl = App.GetDataContext().ViewLinks.Create();
+                //vl.IncidentId = CurrentIncident.IncidentId;
+                //vl.ViewId = view.Id;
 
-                App.GetDataContext().ViewLinks.Save(vl);
+                //App.GetDataContext().ViewLinks.Save(vl);
 
-                RefreshFormData();
+                //RefreshFormData();
             });
             AddFormFromTemplateCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")));
             EditFormCommand = new RelayCommand(() => MakeView.OpenView(SelectedForm), HasSelectedForm);
@@ -417,7 +415,7 @@ namespace ERHMS.Presentation.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
                 {
-                    App.GetDataContext().DeleteView(SelectedForm.Id);
+                    App.GetDataContext().Project.DeleteView(SelectedForm.Id);
                 }, "ConfirmDeleteForm"));
             },
                 CanDeleteForm);
@@ -450,7 +448,7 @@ namespace ERHMS.Presentation.ViewModel
 
         private void SetupListeners()
         {
-            App.Current.Service.RefreshingViews += Service_RefreshingViews;
+            //App.Current.Service.RefreshingViews += Service_RefreshingViews;
 
             Messenger.Default.Register<NotificationMessage>(this, (msg) =>
             {
@@ -493,7 +491,7 @@ namespace ERHMS.Presentation.ViewModel
         }
         private void RefreshRosterData()
         {
-            List<string> rosterIds = App.GetDataContext().Registrations.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId).Select(q => q.ResponderId).Distinct().ToList();
+            List<string> rosterIds = App.GetDataContext().Rosters.Select().Where(q => q.IncidentId == CurrentIncident.IncidentId).Select(q => q.ResponderId).Distinct().ToList();
 
             availableResponders = new CollectionViewSource();
             availableResponders.Source = App.GetDataContext().Responders.SelectByDeleted(false).Where(q => rosterIds.Contains(q.GlobalRecordId) == false);

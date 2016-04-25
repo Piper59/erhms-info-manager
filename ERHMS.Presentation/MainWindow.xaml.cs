@@ -262,9 +262,6 @@ namespace ERHMS.Presentation
             {
                 this.Closing -= MetroNavigationWindow_Closing;
 
-                Properties.Settings.Default.WindowState = this.WindowState == System.Windows.WindowState.Maximized ? "Maximized" : "Normal";
-                Properties.Settings.Default.Save();
-
                 Application.Current.Shutdown();
             }
             else

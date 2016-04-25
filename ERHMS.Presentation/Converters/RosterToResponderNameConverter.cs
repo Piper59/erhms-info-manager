@@ -5,12 +5,12 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.Converters
 {
-    public class RegistrationToResponderNameConverter : IValueConverter
+    public class RosterToResponderNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Registration registration = (Registration)value;
-//            dynamic responder = App.MainProject.Responders.GetById(registration.ResponderId);
+            Roster roster = (Roster)value;
+//            dynamic responder = App.MainProject.Responders.GetById(roster.ResponderId);
             //return string.Format("{0}, {1}", responder.LastName, responder.FirstName);
             return null;
         }

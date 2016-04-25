@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ERHMS.Utility;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -40,41 +41,25 @@ namespace ERHMS.Presentation.ViewModel
             get { return bingMapsLicenseKey; }
             set { Set(() => BingMapsLicenseKey, ref bingMapsLicenseKey, value); }
         }
-        private string organizationName;
-        public string OrganizationName
-        {
-            get { return organizationName; }
-            set { Set(() => OrganizationName, ref organizationName, value); }
-        }
-        private string organizationWebSurveyKey;
-        public string OrganizationWebSurveyKey
-        {
-            get { return organizationWebSurveyKey; }
-            set { Set(() => OrganizationWebSurveyKey, ref organizationWebSurveyKey, value); }
-        }
         public RelayCommand SaveCommand { get; private set; }
 
         public SettingsViewModel()
         {
-            SmtpHost = Properties.Settings.Default.SmtpHost;
-            smtpPort = Properties.Settings.Default.SmtpPort;
-            EmailSender = Properties.Settings.Default.EmailSender;
-            BingMapsLicenseKey = Properties.Settings.Default.BingMapsLicenseKey;
-            OrganizationName = Properties.Settings.Default.OrganizationName;
-            OrganizationWebSurveyKey = Properties.Settings.Default.OrganizationWebSurveyKey;
+            SmtpHost = Settings.Instance.EmailHost;
+            smtpPort = Settings.Instance.EmailPort;
+            EmailSender = Settings.Instance.EmailFromAddress;
+            BingMapsLicenseKey = Settings.Instance.MapLicenseKey;
 
             SaveCommand = new RelayCommand(() =>
             {
                 try
                 {
-                    Properties.Settings.Default.SmtpHost = SmtpHost;
-                    Properties.Settings.Default.SmtpPort = SmtpPort;
-                    Properties.Settings.Default.EmailSender = EmailSender;
-                    Properties.Settings.Default.BingMapsLicenseKey = BingMapsLicenseKey;
-                    Properties.Settings.Default.OrganizationName = OrganizationName;
-                    Properties.Settings.Default.OrganizationWebSurveyKey = OrganizationWebSurveyKey;
+                    Settings.Instance.EmailHost = SmtpHost;
+                    Settings.Instance.EmailPort = SmtpPort;
+                    Settings.Instance.EmailFromAddress = EmailSender;
+                    Settings.Instance.MapLicenseKey = BingMapsLicenseKey;
 
-                    Properties.Settings.Default.Save();
+                    Settings.Instance.Save();
 
                     Messenger.Default.Send(new NotificationMessage<string>("Application settings were successfully saved.", "ShowSuccessMessage"));
                 }

@@ -113,10 +113,10 @@ namespace ERHMS.Presentation.ViewModel
         {
             AddFormCommand = new RelayCommand(() =>
             {
-                Epi.View view = MakeView.AddView(App.GetDataContext().Project);
-                MakeView.OpenView(view);
+                //Epi.View view = MakeView.AddView(App.GetDataContext().Project);
+                //MakeView.OpenView(view);
 
-                RefreshFormData();
+                //RefreshFormData();
             });
             AddFormFromTemplateCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")));
             EditFormCommand = new RelayCommand(() => MakeView.OpenView(SelectedForm), HasSelectedForm);
@@ -125,7 +125,7 @@ namespace ERHMS.Presentation.ViewModel
             {
                 Messenger.Default.Send(new NotificationMessage<Action>(() =>
                 {
-                    App.GetDataContext().DeleteView(SelectedForm.Id);
+                    App.GetDataContext().Project.DeleteView(SelectedForm.Id);
                 }, "ConfirmDeleteForm"));
             },
                 CanDeleteForm);
@@ -149,7 +149,7 @@ namespace ERHMS.Presentation.ViewModel
             ExportFormToPackageCommand = new RelayCommand(() => ImportExport.ExportToPackage(SelectedForm), HasSelectedForm);
             ExportFormToFileCommand = new RelayCommand(() => Messenger.Default.Send(new NotificationMessage<string>("Not implemented.", "ShowErrorMessage")), HasSelectedForm);
 
-            App.Current.Service.RefreshingViews += Service_RefreshingViews;
+            //App.Current.Service.RefreshingViews += Service_RefreshingViews;
 
             RefreshFormData();
         }

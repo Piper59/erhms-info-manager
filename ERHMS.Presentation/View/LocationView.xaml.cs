@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using ERHMS.Utility;
+using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Windows;
@@ -22,7 +23,7 @@ namespace ERHMS.Presentation.View
         {
             InitializeComponent();
 
-            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Properties.Settings.Default.BingMapsLicenseKey);
+            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Instance.MapLicenseKey);
 
             DataContext = new LocationViewModel(incident);
         }
@@ -31,7 +32,7 @@ namespace ERHMS.Presentation.View
         {
             InitializeComponent();
 
-            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Properties.Settings.Default.BingMapsLicenseKey);
+            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Instance.MapLicenseKey);
 
             DataContext = new LocationViewModel(location);
 
@@ -147,7 +148,7 @@ namespace ERHMS.Presentation.View
         private double[] GeocodeAddress(string address)
         {
             double[] results = { 0.0, 0.0 };
-            string key = Properties.Settings.Default.BingMapsLicenseKey;
+            string key = Settings.Instance.MapLicenseKey;
             GeocodeRequest geocodeRequest = new GeocodeRequest();
 
             // Set the credentials using a valid Bing Maps key

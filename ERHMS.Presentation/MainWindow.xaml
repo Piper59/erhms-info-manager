@@ -6,7 +6,6 @@
                     xmlns:uc="clr-namespace:ERHMS.Presentation.View"
                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:controls="clr-namespace:ERHMS.Presentation.Controls"
-                    xmlns:p="clr-namespace:ERHMS.Presentation.Properties"
                     
                     xmlns:ignore="http://www.ignore.com"
                     mc:Ignorable="d ignore"
@@ -18,11 +17,8 @@
                     WindowStartupLocation="CenterScreen"
                     ShowIconOnTitleBar="True"
                     Title="ERHMS Info Manager"
-                    Height="{Binding Source={x:Static p:Settings.Default}, Path=Height, Mode=TwoWay}"
-                    Width="{Binding Source={x:Static p:Settings.Default}, Path=Width, Mode=TwoWay}"
-                    Left="{Binding Source={x:Static p:Settings.Default}, Path=Left, Mode=TwoWay}"
-                    Top="{Binding Source={x:Static p:Settings.Default}, Path=Top, Mode=TwoWay}"
-                    WindowState="{Binding Source={x:Static p:Settings.Default}, Path=WindowState, Mode=OneWay}"
+                    Height="768"
+                    Width="1024"
                     Icon="ERHMS.ico">
     <Grid>
         <Grid>

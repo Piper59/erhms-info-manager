@@ -22,7 +22,7 @@
         <l:ToStringConverter x:Key="ToStringConverter"/>
         <l:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <l:ResponderToNameConverter x:Key="ResponderToNameConverter" />
-        <l:RegistrationToResponderNameConverter x:Key="RegistrationToResponderNameConverter" />
+        <l:RosterToResponderNameConverter x:Key="RegistrationToResponderNameConverter" />
         <l:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
     </UserControl.Resources>
 

@@ -54,7 +54,6 @@ namespace ERHMS.Presentation.ViewModel
             return r.Deleted == false && (filter == null ||
                 Filter.Equals("") ||
                 (r.ResponderId != null && r.ResponderId.ToLower().Contains(Filter.ToLower())) ||
-                (r.Username != null && r.Username.ToLower().Contains(Filter.ToLower())) ||
                 (r.FirstName != null && r.FirstName.ToLower().Contains(Filter.ToLower())) ||
                 (r.LastName != null && r.LastName.ToLower().Contains(Filter.ToLower())) ||
                 (r.City != null && r.City.ToLower().Contains(Filter.ToLower())) ||

@@ -66,13 +66,13 @@ namespace ERHMS.Presentation.ViewModel
                     {
                         var emails = from q in Recipients
                                      select q.GetProperty("EmailAddress").ToString();
-                        
-                        Email.Send(Properties.Settings.Default.SmtpHost,
-                            Properties.Settings.Default.SmtpPort,
-                            emails.ToList(),
-                            Properties.Settings.Default.EmailSender,
-                            Subject,
-                            Body);
+
+                        //Email.Send(Properties.Settings.Default.SmtpHost,
+                        //    Properties.Settings.Default.SmtpPort,
+                        //    emails.ToList(),
+                        //    Properties.Settings.Default.EmailSender,
+                        //    Subject,
+                        //    Body);
 
                         Messenger.Default.Send(new NotificationMessage<string>("Email(s) were successfully sent.", "ShowSuccessMessage"));
                     }

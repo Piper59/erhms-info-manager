@@ -37,13 +37,15 @@ namespace ERHMS.Presentation
         {
             try
             {
-                new SingleInstanceApplication(() =>
+                SingleInstanceExecuter executer = new SingleInstanceExecuter();
+                executer.Executing += (sender, e) =>
                 {
                     App app = new App();
                     app.InitializeComponent();
                     dbContext = new DataContext(new EpiInfo.Project("Projects/ERHMS.prj"));
                     app.Run(new MainWindow());
-                }).Execute();
+                };
+                executer.Execute();
             }
             catch (TimeoutException)
             {
