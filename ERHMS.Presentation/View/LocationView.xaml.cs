@@ -23,7 +23,7 @@ namespace ERHMS.Presentation.View
         {
             InitializeComponent();
 
-            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Instance.MapLicenseKey);
+            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
 
             DataContext = new LocationViewModel(incident);
         }
@@ -32,7 +32,7 @@ namespace ERHMS.Presentation.View
         {
             InitializeComponent();
 
-            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Instance.MapLicenseKey);
+            LocationMap.CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
 
             DataContext = new LocationViewModel(location);
 
@@ -148,7 +148,7 @@ namespace ERHMS.Presentation.View
         private double[] GeocodeAddress(string address)
         {
             double[] results = { 0.0, 0.0 };
-            string key = Settings.Instance.MapLicenseKey;
+            string key = Settings.Default.MapLicenseKey;
             GeocodeRequest geocodeRequest = new GeocodeRequest();
 
             // Set the credentials using a valid Bing Maps key

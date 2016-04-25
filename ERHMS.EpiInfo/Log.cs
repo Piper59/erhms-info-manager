@@ -69,7 +69,7 @@ namespace ERHMS.EpiInfo
 
         private static Level GetInitialLevel()
         {
-            Level level = Hierarchy.LevelMap[Settings.Instance.LogLevel];
+            Level level = Hierarchy.LevelMap[Settings.Default.LogLevel];
             if (level == null)
             {
 #if DEBUG

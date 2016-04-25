@@ -45,21 +45,21 @@ namespace ERHMS.Presentation.ViewModel
 
         public SettingsViewModel()
         {
-            SmtpHost = Settings.Instance.EmailHost;
-            smtpPort = Settings.Instance.EmailPort;
-            EmailSender = Settings.Instance.EmailFromAddress;
-            BingMapsLicenseKey = Settings.Instance.MapLicenseKey;
+            SmtpHost = Settings.Default.EmailHost;
+            smtpPort = Settings.Default.EmailPort;
+            EmailSender = Settings.Default.EmailFromAddress;
+            BingMapsLicenseKey = Settings.Default.MapLicenseKey;
 
             SaveCommand = new RelayCommand(() =>
             {
                 try
                 {
-                    Settings.Instance.EmailHost = SmtpHost;
-                    Settings.Instance.EmailPort = SmtpPort;
-                    Settings.Instance.EmailFromAddress = EmailSender;
-                    Settings.Instance.MapLicenseKey = BingMapsLicenseKey;
+                    Settings.Default.EmailHost = SmtpHost;
+                    Settings.Default.EmailPort = SmtpPort;
+                    Settings.Default.EmailFromAddress = EmailSender;
+                    Settings.Default.MapLicenseKey = BingMapsLicenseKey;
 
-                    Settings.Instance.Save();
+                    Settings.Default.Save();
 
                     Messenger.Default.Send(new NotificationMessage<string>("Application settings were successfully saved.", "ShowSuccessMessage"));
                 }

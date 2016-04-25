@@ -9,7 +9,7 @@ namespace ERHMS.Utility
     {
         private static FileInfo file;
 
-        public static TSettings Instance { get; private set; }
+        public static TSettings Default { get; private set; }
 
         static SettingsBase()
         {
@@ -25,7 +25,7 @@ namespace ERHMS.Utility
             }
             catch
             {
-                Instance = new TSettings();
+                Default = new TSettings();
             }
         }
 
@@ -33,14 +33,14 @@ namespace ERHMS.Utility
         {
             if (!file.Exists)
             {
-                Instance = new TSettings();
+                Default = new TSettings();
             }
             else
             {
                 using (Stream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
-                    Instance = (TSettings)serializer.Deserialize(stream);
+                    Default = (TSettings)serializer.Deserialize(stream);
                 }
             }
         }
