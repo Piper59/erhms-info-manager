@@ -70,6 +70,7 @@
     <Compile Include="AssignmentRepository.cs" />
     <Compile Include="CanvasLinkRepository.cs" />
     <Compile Include="DataContext.cs" />
+    <Compile Include="IncidentNoteRepository.cs" />
     <Compile Include="IncidentRepository.cs" />
     <Compile Include="LocationRepository.cs" />
     <Compile Include="PgmLinkRepository.cs" />

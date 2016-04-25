@@ -18,6 +18,7 @@ namespace ERHMS.DataAccess
         public CodeRepository States { get; private set; }
         public ResponderRepository Responders { get; private set; }
         public IncidentRepository Incidents { get; private set; }
+        public IncidentNoteRepository IncidentNotes { get; private set; }
         public LocationRepository Locations { get; private set; }
         public RosterRepository Rosters { get; private set; }
         public AssignmentRepository Assignments { get; private set; }
@@ -36,6 +37,7 @@ namespace ERHMS.DataAccess
             States = new CodeRepository(Driver, "codestate1", "state", true);
             Responders = new ResponderRepository(Driver, project);
             Incidents = new IncidentRepository(Driver);
+            IncidentNotes = new IncidentNoteRepository(Driver);
             Locations = new LocationRepository(Driver);
             Rosters = new RosterRepository(Driver);
             Assignments = new AssignmentRepository(Driver);
