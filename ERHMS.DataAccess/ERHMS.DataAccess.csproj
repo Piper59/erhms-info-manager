@@ -94,5 +94,5 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\ERHMS.targets" />
+  <Import Project="..\ERHMS.Build.targets" />
 </Project>
