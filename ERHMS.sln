@@ -37,6 +37,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Presentation", "ERHMS.Presentation\ERHMS.Presentation.csproj", "{F64FCDD4-6E5F-4E8E-9626-1B1A025D8C61}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS", "ERHMS\ERHMS.csproj", "{5AB92A6D-4845-4AC0-A8AC-2C79EEF212DF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F64FCDD4-6E5F-4E8E-9626-1B1A025D8C61} = {F64FCDD4-6E5F-4E8E-9626-1B1A025D8C61}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
