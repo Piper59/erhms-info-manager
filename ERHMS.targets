@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Rebuilding>false</Rebuilding>
     <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
-    <BuildDir>$(SolutionDir)Build\ERHMS Info Manager\</BuildDir>
+    <BuildDir>$(SolutionDir)Build\</BuildDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(OutputType)' == 'Exe' Or '$(OutputType)' == 'WinExe'">
     <StartAction>Program</StartAction>
