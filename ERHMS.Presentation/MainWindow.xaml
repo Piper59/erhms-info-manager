@@ -5,5 +5,5 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ERHMS.Presentation"
         mc:Ignorable="d"
-        Title="ERHMS Info Manager" Width="1024" Height="768">
+        Title="{x:Static local:App.Title}" Icon="ERHMS.ico" Width="1024" Height="768">
 </Window>

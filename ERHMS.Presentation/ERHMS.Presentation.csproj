@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -42,6 +46,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -50,13 +56,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <AppDesigner Include="Properties\" />
+    <ProjectReference Include="..\ERHMS.DataAccess\ERHMS.DataAccess.csproj">
+      <Project>{66fd6304-c5e0-4502-9ea2-dc326c470154}</Project>
+      <Name>ERHMS.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Communication\ERHMS.EpiInfo.Communication.csproj">
+      <Project>{4feb8705-98bb-431c-9878-004b0c4d7d41}</Project>
+      <Name>ERHMS.EpiInfo.Communication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
+      <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
+      <Name>ERHMS.EpiInfo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Utility\ERHMS.Utility.csproj">
+      <Project>{f8e50f50-057d-4666-9555-16a773b925e9}</Project>
+      <Name>ERHMS.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
@@ -76,6 +94,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
