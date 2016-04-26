@@ -2,10 +2,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="ERHMS.Common.targets" />
   <ItemGroup>
-    <Content Include="$(BuildDir)**">
+    <Content Include="$(BuildDir)**" Exclude="$(BuildDir)**\*.pdb">
       <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Visible>false</Visible>
     </Content>
   </ItemGroup>
 </Project>
