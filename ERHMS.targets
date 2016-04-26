@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="ERHMS.Common.targets" />
   <PropertyGroup>
     <Rebuilding>false</Rebuilding>
-    <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
-    <BuildDir>$(SolutionDir)Build\</BuildDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(OutputType)' == 'Exe' Or '$(OutputType)' == 'WinExe'">
     <StartAction>Program</StartAction>
