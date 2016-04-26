@@ -18,6 +18,12 @@ CREATE TABLE ERHMS_IncidentNotes (
 	[Date] DATETIME NOT NULL
 );
 
+CREATE TABLE ERHMS_Rosters (
+	RosterId VARCHAR(255) NOT NULL PRIMARY KEY,
+	ResponderId VARCHAR(255) NOT NULL REFERENCES Responders (GlobalRecordId),
+	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId)
+);
+
 CREATE TABLE ERHMS_Locations (
 	LocationId VARCHAR(255) NOT NULL PRIMARY KEY,
 	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId),
@@ -26,12 +32,6 @@ CREATE TABLE ERHMS_Locations (
 	Address TEXT,
 	Latitude FLOAT,
 	Longitude FLOAT
-);
-
-CREATE TABLE ERHMS_Rosters (
-	RosterId VARCHAR(255) NOT NULL PRIMARY KEY,
-	ResponderId VARCHAR(255) NOT NULL REFERENCES Responders (GlobalRecordId),
-	IncidentId VARCHAR(255) NOT NULL REFERENCES ERHMS_Incidents (IncidentId)
 );
 
 CREATE TABLE ERHMS_Assignments (
