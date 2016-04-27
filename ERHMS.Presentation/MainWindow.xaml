@@ -22,7 +22,7 @@
                 <MenuItem Header="_Open Data Source" />
                 <MenuItem Header="_Close Data Source" />
                 <Separator />
-                <MenuItem Header="E_xit" />
+                <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="_Responders">
                 <MenuItem Header="Show _All" />

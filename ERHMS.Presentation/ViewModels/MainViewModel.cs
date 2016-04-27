@@ -1,8 +1,12 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ERHMS.Presentation.Messages;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -16,12 +20,14 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         public ObservableCollection<DocumentViewModel> Documents { get; private set; }
+        public ICommand ExitCommand { get; private set; }
 
         public MainViewModel()
         {
             Documents = new ObservableCollection<DocumentViewModel>();
             Documents.CollectionChanged += Documents_CollectionChanged;
             cachedDocuments = new List<DocumentViewModel>(Documents);
+            ExitCommand = new RelayCommand(Exit);
         }
 
         private void Documents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -70,6 +76,11 @@ namespace ERHMS.Presentation.ViewModels
                     }
                     break;
             }
+        }
+
+        public void Exit()
+        {
+            Messenger.Default.Send(new ExitMessage());
         }
     }
 }
