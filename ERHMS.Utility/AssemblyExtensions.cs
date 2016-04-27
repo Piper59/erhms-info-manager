@@ -20,6 +20,16 @@ namespace ERHMS.Utility
             return @this.GetCustomAttribute<AssemblyTitleAttribute>().Title;
         }
 
+        public static string GetVersion(this Assembly @this)
+        {
+            return @this.GetName().Version.ToString();
+        }
+
+        public static string GetInformationalVersion(this Assembly @this)
+        {
+            return @this.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        }
+
         public static string GetManifestResourceText(this Assembly @this, string resourceName)
         {
             using (Stream stream = @this.GetManifestResourceStream(resourceName))

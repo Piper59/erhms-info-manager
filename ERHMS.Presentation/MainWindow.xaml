@@ -43,10 +43,15 @@
                 <MenuItem Header="_Settings" />
                 <MenuItem Header="_Help" />
                 <Separator />
-                <MenuItem Header="_About" />
+                <MenuItem Header="_About" Command="{Binding OpenAboutCommand}" />
             </MenuItem>
         </Menu>
-        <dock:DockingManager DocumentsSource="{Binding Documents}">
+        <dock:DockingManager DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
+            <dock:DockingManager.Resources>
+                <DataTemplate DataType="{x:Type vm:AboutViewModel}">
+                    <v:AboutView />
+                </DataTemplate>
+            </dock:DockingManager.Resources>
             <dock:DockingManager.Theme>
                 <dock:MetroTheme />
             </dock:DockingManager.Theme>

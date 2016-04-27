@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             mc:Ignorable="d" 
+             d:DesignWidth="640" d:DesignHeight="480">
+    <TabControl>
+        <TabItem Header="About">
+            <ScrollViewer>
+                <TextBlock TextWrapping="Wrap">
+                    ERHMS Info Manager<LineBreak />
+                    Version <Run Text="{Binding Version, Mode=OneTime}" /><LineBreak />
+                    <Run Text="{Binding InformationalVersion, Mode=OneTime}" />
+                </TextBlock>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Disclaimer">
+            <ScrollViewer>
+                <TextBlock TextWrapping="Wrap">
+                    THE MATERIAL EMBODIED IN THIS SOFTWARE IS PROVIDED TO YOU "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.
+                    IN NO EVENT SHALL THE CENTERS FOR DISEASE CONTROL AND PREVENTION (CDC) OR THE UNITED STATES (U.S.) GOVERNMENT BE LIABLE TO YOU OR ANYONE ELSE FOR ANY DIRECT, SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION, LOSS OF PROFIT, LOSS OF USE, SAVINGS OR REVENUE, OR THE CLAIMS OF THIRD PARTIES, WHETHER OR NOT CDC OR THE U.S. GOVERNMENT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH LOSS, HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE POSSESSION, USE OR PERFORMANCE OF THIS SOFTWARE.
+                </TextBlock>
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
+</UserControl>

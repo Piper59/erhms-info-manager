@@ -20,6 +20,15 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         public ObservableCollection<DocumentViewModel> Documents { get; private set; }
+
+        private DocumentViewModel activeDocument;
+        public DocumentViewModel ActiveDocument
+        {
+            get { return activeDocument; }
+            set { Set(() => ActiveDocument, ref activeDocument, value); }
+        }
+
+        public ICommand OpenAboutCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
 
         public MainViewModel()
@@ -27,6 +36,7 @@ namespace ERHMS.Presentation.ViewModels
             Documents = new ObservableCollection<DocumentViewModel>();
             Documents.CollectionChanged += Documents_CollectionChanged;
             cachedDocuments = new List<DocumentViewModel>(Documents);
+            OpenAboutCommand = new RelayCommand(OpenAbout);
             ExitCommand = new RelayCommand(Exit);
         }
 
@@ -58,6 +68,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
             }
             cachedDocuments = new List<DocumentViewModel>(Documents);
+            // TODO: Activate last document
         }
 
         private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -76,6 +87,12 @@ namespace ERHMS.Presentation.ViewModels
                     }
                     break;
             }
+        }
+
+        public void OpenAbout()
+        {
+            // TODO: Activate existing document if exists
+            Documents.Add(new AboutViewModel());
         }
 
         public void Exit()
