@@ -66,8 +66,8 @@ namespace ERHMS.Presentation
 
         private ServiceHost host;
 
-        public DataContext DataContext { get; set; }
         public Service Service { get; private set; }
+        public DataContext DataContext { get; set; }
 
         public App()
         {

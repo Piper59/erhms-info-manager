@@ -1,9 +1,10 @@
 ﻿<Application x:Class="ERHMS.Presentation.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ERHMS.Presentation">
+             xmlns:vm="clr-namespace:ERHMS.Presentation.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
+            <vm:ViewModelLocator x:Key="ViewModelLocator" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
