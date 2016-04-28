@@ -135,6 +135,7 @@ namespace ERHMS.EpiInfo.Domain
         public object Clone()
         {
             EntityBase clone = (EntityBase)Activator.CreateInstance(GetType());
+            clone.New = New;
             foreach (KeyValuePair<string, object> property in properties)
             {
                 object value = property.Value;
