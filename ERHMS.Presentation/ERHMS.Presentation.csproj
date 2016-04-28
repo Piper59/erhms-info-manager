@@ -133,9 +133,21 @@
       <Project>{66fd6304-c5e0-4502-9ea2-dc326c470154}</Project>
       <Name>ERHMS.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
+      <Project>{f979d2bb-289f-443f-bfe4-ab3cb877c521}</Project>
+      <Name>ERHMS.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Communication\ERHMS.EpiInfo.Communication.csproj">
       <Project>{4feb8705-98bb-431c-9878-004b0c4d7d41}</Project>
       <Name>ERHMS.EpiInfo.Communication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.DataAccess\ERHMS.EpiInfo.DataAccess.csproj">
+      <Project>{af729d69-3971-45ee-b351-1fc9bfd6ed7d}</Project>
+      <Name>ERHMS.EpiInfo.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
+      <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
+      <Name>ERHMS.EpiInfo.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
@@ -158,20 +170,33 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\DataGridExtensions.cs" />
+    <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Messages\ConfirmMessage.cs" />
     <Compile Include="Messages\ExitMessage.cs" />
+    <Compile Include="Messages\RefreshMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
+    <Compile Include="ViewModels\ResponderListViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ResponderDetailView.xaml.cs">
+      <DependentUpon>ResponderDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ResponderListView.xaml.cs">
+      <DependentUpon>ResponderListView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +221,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResponderDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResponderListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

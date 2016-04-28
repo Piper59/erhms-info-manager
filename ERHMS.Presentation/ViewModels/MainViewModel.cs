@@ -1,12 +1,11 @@
-﻿using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight;
+﻿using ERHMS.Domain;
+using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -14,11 +13,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         private ICollection<DocumentViewModel> cachedDocuments;
 
-        public string Title
-        {
-            get { return App.Title; }
-        }
-
+        public string Title { get; private set; }
         public ObservableCollection<DocumentViewModel> Documents { get; private set; }
 
         private DocumentViewModel activeDocument;
@@ -28,14 +23,19 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => ActiveDocument, ref activeDocument, value); }
         }
 
-        public ICommand OpenAboutCommand { get; private set; }
-        public ICommand ExitCommand { get; private set; }
+        public RelayCommand OpenAboutCommand { get; private set; }
+        public RelayCommand OpenResponderListCommand { get; private set; }
+        public RelayCommand OpenResponderDetailCommand { get; private set; }
+        public RelayCommand ExitCommand { get; private set; }
 
         public MainViewModel()
         {
+            Title = App.Title;
             Documents = new ObservableCollection<DocumentViewModel>();
             Documents.CollectionChanged += Documents_CollectionChanged;
             cachedDocuments = new List<DocumentViewModel>(Documents);
+            OpenResponderListCommand = new RelayCommand(OpenResponderList);
+            OpenResponderDetailCommand = new RelayCommand(() => { OpenResponderDetail(DataContext.Responders.Create()); });
             OpenAboutCommand = new RelayCommand(OpenAbout);
             ExitCommand = new RelayCommand(Exit);
         }
@@ -68,7 +68,6 @@ namespace ERHMS.Presentation.ViewModels
                 }
             }
             cachedDocuments = new List<DocumentViewModel>(Documents);
-            // TODO: Activate last document
         }
 
         private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -89,10 +88,27 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        // TODO: Use existing document if applicable
+
+        private void OpenDocument(DocumentViewModel document)
+        {
+            Documents.Add(document);
+            ActiveDocument = document;
+        }
+
+        public void OpenResponderList()
+        {
+            OpenDocument(new ResponderListViewModel());
+        }
+
+        public void OpenResponderDetail(Responder responder)
+        {
+            OpenDocument(new ResponderDetailViewModel(responder));
+        }
+
         public void OpenAbout()
         {
-            // TODO: Activate existing document if exists
-            Documents.Add(new AboutViewModel());
+            OpenDocument(new AboutViewModel());
         }
 
         public void Exit()

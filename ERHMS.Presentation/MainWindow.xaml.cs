@@ -13,33 +13,53 @@ namespace ERHMS.Presentation
         public MainWindow()
         {
             Closing += MainWindow_Closing;
+            Messenger.Default.Register<ConfirmMessage>(this, OnConfirmMessage);
             Messenger.Default.Register<ExitMessage>(this, OnExitMessage);
             InitializeComponent();
         }
 
-        private async void MainWindow_Closing(object sender, CancelEventArgs e)
+        private async void ConfirmAsync(ConfirmMessage msg)
+        {
+            MessageDialogResult result = await this.ShowMessageAsync(
+                msg.Title,
+                msg.Message,
+                MessageDialogStyle.AffirmativeAndNegative,
+                new MetroDialogSettings
+                {
+                    AffirmativeButtonText = msg.AffirmativeButtonText,
+                    NegativeButtonText = msg.NegativeButtonText,
+                    AnimateHide = false
+                });
+            if (result == MessageDialogResult.Affirmative)
+            {
+                msg.OnConfirmed();
+            }
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             if (closing)
             {
                 return;
             }
             e.Cancel = true;
-            MessageDialogResult result = await this.ShowMessageAsync(
+            ConfirmMessage msg = new ConfirmMessage(
                 "Exit?",
                 string.Format("Are you sure you want to exit {0}?", App.Title),
-                MessageDialogStyle.AffirmativeAndNegative,
-                new MetroDialogSettings
-                {
-                    AffirmativeButtonText = "Exit",
-                    NegativeButtonText = "Don't Exit",
-                    AnimateHide = false
-                });
-            if (result == MessageDialogResult.Affirmative)
+                "Exit",
+                "Don't Exit");
+            msg.Confirmed += (_sender, _e) =>
             {
                 closing = true;
                 Close();
                 closing = false;
-            }
+            };
+            ConfirmAsync(msg);
+        }
+
+        private void OnConfirmMessage(ConfirmMessage msg)
+        {
+            ConfirmAsync(msg);
         }
 
         private void OnExitMessage(ExitMessage msg)

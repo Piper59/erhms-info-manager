@@ -5,21 +5,15 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class AboutViewModel : DocumentViewModel
     {
-        private Assembly assembly = Assembly.GetExecutingAssembly();
+        public string Version { get; private set; }
+        public string InformationalVersion { get; private set; }
 
-        public override string Title
+        public AboutViewModel()
         {
-            get { return "About"; }
-        }
-
-        public string Version
-        {
-            get { return assembly.GetVersion(); }
-        }
-
-        public string InformationalVersion
-        {
-            get { return assembly.GetInformationalVersion(); }
+            Title = "About";
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Version = assembly.GetVersion();
+            InformationalVersion = assembly.GetInformationalVersion();
         }
     }
 }

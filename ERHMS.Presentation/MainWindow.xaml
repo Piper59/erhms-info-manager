@@ -5,7 +5,6 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 xmlns:local="clr-namespace:ERHMS.Presentation"
                  xmlns:v="clr-namespace:ERHMS.Presentation.Views"
                  xmlns:vm="clr-namespace:ERHMS.Presentation.ViewModels"
                  mc:Ignorable="d"
@@ -25,8 +24,8 @@
                 <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="_Responders">
-                <MenuItem Header="Show _All" />
-                <MenuItem Header="Create _New" />
+                <MenuItem Header="Show _All" Command="{Binding OpenResponderListCommand}" />
+                <MenuItem Header="Create _New" Command="{Binding OpenResponderDetailCommand}" />
             </MenuItem>
             <MenuItem Header="_Incidents">
                 <MenuItem Header="Show _All" />
@@ -48,6 +47,12 @@
         </Menu>
         <dock:DockingManager DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
             <dock:DockingManager.Resources>
+                <DataTemplate DataType="{x:Type vm:ResponderListViewModel}">
+                    <v:ResponderListView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ResponderDetailViewModel}">
+                    <v:ResponderDetailView />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AboutViewModel}">
                     <v:AboutView />
                 </DataTemplate>

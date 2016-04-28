@@ -1,21 +1,24 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System.Windows.Input;
+﻿using GalaSoft.MvvmLight.Command;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public abstract class DocumentViewModel : ViewModelBase
     {
-        public abstract string Title { get; }
+        private string title;
+        public string Title
+        {
+            get { return title; }
+            protected set { Set(() => Title, ref title, value); }
+        }
 
         private bool closed;
         public bool Closed
         {
             get { return closed; }
-            set { Set(() => Closed, ref closed, value); }
+            private set { Set(() => Closed, ref closed, value); }
         }
 
-        public ICommand CloseCommand { get; private set; }
+        public RelayCommand CloseCommand { get; private set; }
 
         public DocumentViewModel()
         {
