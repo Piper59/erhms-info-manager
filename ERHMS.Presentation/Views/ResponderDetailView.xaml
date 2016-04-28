@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
@@ -24,11 +23,11 @@
             <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
             <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding ResponderId}" />
             <Label Grid.Row="1" Grid.Column="0">First Name:</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding FirstName}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FirstName}" />
             <Label Grid.Row="2" Grid.Column="0">Last Name:</Label>
-            <TextBox Grid.Row="2" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding LastName}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}" />
             <Label Grid.Row="3" Grid.Column="0">Email Address:</Label>
-            <TextBox Grid.Row="3" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding EmailAddress}" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding EmailAddress}" />
             <!-- TODO: Add remaining fields -->
         </Grid>
     </DockPanel>

@@ -23,9 +23,11 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => ActiveDocument, ref activeDocument, value); }
         }
 
-        public RelayCommand OpenAboutCommand { get; private set; }
-        public RelayCommand OpenResponderListCommand { get; private set; }
-        public RelayCommand OpenResponderDetailCommand { get; private set; }
+        public RelayCommand ShowRespondersCommand { get; private set; }
+        public RelayCommand CreateResponderCommand { get; private set; }
+        public RelayCommand ShowIncidentsCommand { get; private set; }
+        public RelayCommand CreateIncidentCommand { get; private set; }
+        public RelayCommand AboutCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
 
         public MainViewModel()
@@ -34,9 +36,11 @@ namespace ERHMS.Presentation.ViewModels
             Documents = new ObservableCollection<DocumentViewModel>();
             Documents.CollectionChanged += Documents_CollectionChanged;
             cachedDocuments = new List<DocumentViewModel>(Documents);
-            OpenResponderListCommand = new RelayCommand(OpenResponderList);
-            OpenResponderDetailCommand = new RelayCommand(() => { OpenResponderDetail(DataContext.Responders.Create()); });
-            OpenAboutCommand = new RelayCommand(OpenAbout);
+            ShowRespondersCommand = new RelayCommand(OpenResponderListView);
+            CreateResponderCommand = new RelayCommand(() => { OpenResponderDetailView(DataContext.Responders.Create()); });
+            ShowIncidentsCommand = new RelayCommand(OpenIncidentListView);
+            CreateIncidentCommand = new RelayCommand(() => { OpenIncidentView(DataContext.Incidents.Create()); });
+            AboutCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
         }
 
@@ -96,17 +100,27 @@ namespace ERHMS.Presentation.ViewModels
             ActiveDocument = document;
         }
 
-        public void OpenResponderList()
+        public void OpenResponderListView()
         {
             OpenDocument(new ResponderListViewModel());
         }
 
-        public void OpenResponderDetail(Responder responder)
+        public void OpenResponderDetailView(Responder responder)
         {
             OpenDocument(new ResponderDetailViewModel(responder));
         }
 
-        public void OpenAbout()
+        public void OpenIncidentListView()
+        {
+            OpenDocument(new IncidentListViewModel());
+        }
+
+        public void OpenIncidentView(Incident incident)
+        {
+            OpenDocument(new IncidentViewModel(incident));
+        }
+
+        public void OpenAboutView()
         {
             OpenDocument(new AboutViewModel());
         }

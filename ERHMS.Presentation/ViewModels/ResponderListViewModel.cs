@@ -113,12 +113,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Locator.Main.OpenResponderDetail(DataContext.Responders.Create());
+            Locator.Main.OpenResponderDetailView(DataContext.Responders.Create());
         }
 
         public void Edit()
         {
-            Locator.Main.OpenResponderDetail((Responder)SelectedResponder.Clone());
+            Locator.Main.OpenResponderDetailView((Responder)SelectedResponder.Clone());
         }
 
         public void Delete()

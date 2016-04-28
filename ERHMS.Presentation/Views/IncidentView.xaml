@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.IncidentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:v="clr-namespace:ERHMS.Presentation.Views"
+             mc:Ignorable="d"
+             d:DesignWidth="640" d:DesignHeight="480">
+    <UserControl.Resources>
+        <conv:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
+    </UserControl.Resources>
+    <TabControl>
+        <TabItem Header="Details">
+            <v:IncidentDetailView DataContext="{Binding Detail}" />
+        </TabItem>
+        <TabItem Header="Notes" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Roster" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Locations" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Forms" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Templates" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Assignments" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Analysis" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Dashboards" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+    </TabControl>
+</UserControl>

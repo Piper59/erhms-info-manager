@@ -24,12 +24,12 @@
                 <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="_Responders">
-                <MenuItem Header="Show _All" Command="{Binding OpenResponderListCommand}" />
-                <MenuItem Header="Create _New" Command="{Binding OpenResponderDetailCommand}" />
+                <MenuItem Header="Show _All" Command="{Binding ShowRespondersCommand}" />
+                <MenuItem Header="Create _New" Command="{Binding CreateResponderCommand}" />
             </MenuItem>
             <MenuItem Header="_Incidents">
-                <MenuItem Header="Show _All" />
-                <MenuItem Header="Create _New" />
+                <MenuItem Header="Show _All" Command="{Binding ShowIncidentsCommand}" />
+                <MenuItem Header="Create _New" Command="{Binding CreateIncidentCommand}" />
             </MenuItem>
             <MenuItem Header="_Pre-Deployment">
                 <MenuItem Header="_Forms" />
@@ -42,7 +42,7 @@
                 <MenuItem Header="_Settings" />
                 <MenuItem Header="_Help" />
                 <Separator />
-                <MenuItem Header="_About" Command="{Binding OpenAboutCommand}" />
+                <MenuItem Header="_About" Command="{Binding AboutCommand}" />
             </MenuItem>
         </Menu>
         <dock:DockingManager DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
@@ -52,6 +52,12 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ResponderDetailViewModel}">
                     <v:ResponderDetailView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:IncidentListViewModel}">
+                    <v:IncidentListView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:IncidentViewModel}">
+                    <v:IncidentView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AboutViewModel}">
                     <v:AboutView />

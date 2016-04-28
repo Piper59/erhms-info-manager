@@ -32,7 +32,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Save()
         {
-            // TODO: Check required fields
+            // TODO: Validate fields
             DataContext.Responders.Save(Responder);
             UpdateTitle();
             Messenger.Default.Send(new RefreshMessage<Responder>());
