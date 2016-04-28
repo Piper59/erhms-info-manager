@@ -121,6 +121,17 @@ namespace ERHMS.EpiInfo.Domain
             return true;
         }
 
+        protected void LinkProperties(string sourceName, string targetName)
+        {
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == sourceName)
+                {
+                    OnPropertyChanged(targetName);
+                }
+            };
+        }
+
         public sealed override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return TryGetProperty(binder.Name, out result);

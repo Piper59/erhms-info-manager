@@ -7,18 +7,8 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get
-            {
-                return GetProperty<string>("IncidentId");
-            }
-            set
-            {
-                if (!SetProperty("IncidentId", value))
-                {
-                    return;
-                }
-                OnPropertyChanged("Guid");
-            }
+            get { return IncidentId; }
+            set { IncidentId = value; }
         }
 
         public string IncidentId
@@ -67,6 +57,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<bool>("Deleted"); }
             set { SetProperty("Deleted", value); }
+        }
+
+        public Incident()
+        {
+            LinkProperties("IncidentId", "Guid");
         }
     }
 }

@@ -6,18 +6,8 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get
-            {
-                return GetProperty<string>("CanvasLinkId");
-            }
-            set
-            {
-                if (!SetProperty("CanvasLinkId", value))
-                {
-                    return;
-                }
-                OnPropertyChanged("Guid");
-            }
+            get { return CanvasLinkId; }
+            set { CanvasLinkId = value; }
         }
 
         public string CanvasLinkId
@@ -36,6 +26,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>("IncidentId"); }
             set { SetProperty("IncidentId", value); }
+        }
+
+        public CanvasLink()
+        {
+            LinkProperties("CanvasLinkId", "Guid");
         }
     }
 }

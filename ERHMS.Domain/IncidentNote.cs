@@ -7,18 +7,8 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get
-            {
-                return GetProperty<string>("IncidentNoteId");
-            }
-            set
-            {
-                if (!SetProperty("IncidentNoteId", value))
-                {
-                    return;
-                }
-                OnPropertyChanged("Guid");
-            }
+            get { return IncidentNoteId; }
+            set { IncidentNoteId = value; }
         }
 
         public string IncidentNoteId
@@ -43,6 +33,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<DateTime>("Date"); }
             set { SetProperty("Date", value); }
+        }
+
+        public IncidentNote()
+        {
+            LinkProperties("IncidentNoteId", "Guid");
         }
     }
 }

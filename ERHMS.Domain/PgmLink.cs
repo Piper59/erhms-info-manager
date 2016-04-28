@@ -6,18 +6,8 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get
-            {
-                return GetProperty<string>("PgmLinkId");
-            }
-            set
-            {
-                if (!SetProperty("PgmLinkId", value))
-                {
-                    return;
-                }
-                OnPropertyChanged("Guid");
-            }
+            get { return PgmLinkId; }
+            set { PgmLinkId = value; }
         }
 
         public string PgmLinkId
@@ -36,6 +26,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>("IncidentId"); }
             set { SetProperty("IncidentId", value); }
+        }
+
+        public PgmLink()
+        {
+            LinkProperties("PgmLinkId", "Guid");
         }
     }
 }

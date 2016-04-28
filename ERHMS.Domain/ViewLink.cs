@@ -6,18 +6,8 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get
-            {
-                return GetProperty<string>("ViewLinkId");
-            }
-            set
-            {
-                if (!SetProperty("ViewLinkId", value))
-                {
-                    return;
-                }
-                OnPropertyChanged("Guid");
-            }
+            get { return ViewLinkId; }
+            set { ViewLinkId = value; }
         }
 
         public string ViewLinkId
@@ -36,6 +26,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>("IncidentId"); }
             set { SetProperty("IncidentId", value); }
+        }
+
+        public ViewLink()
+        {
+            LinkProperties("ViewLinkId", "Guid");
         }
     }
 }

@@ -8,18 +8,8 @@ namespace ERHMS.Domain
     {
         public string ResponderId
         {
-            get
-            {
-                return GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID);
-            }
-            set
-            {
-                if (!SetProperty(ColumnNames.GLOBAL_RECORD_ID, value))
-                {
-                    return;
-                }
-                OnPropertyChanged("ResponderId");
-            }
+            get { return GlobalRecordId; }
+            set { GlobalRecordId = value; }
         }
 
         public string Prefix
@@ -296,6 +286,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>("UnionLocalNumber"); }
             set { SetProperty("UnionLocalNumber", value); }
+        }
+
+        public Responder()
+        {
+            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, "ResponderId");
         }
     }
 }

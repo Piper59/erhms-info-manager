@@ -6,18 +6,8 @@ namespace ERHMS.Domain
     {
         public override string Guid
         {
-            get
-            {
-                return GetProperty<string>("RosterId");
-            }
-            set
-            {
-                if (!SetProperty("RosterId", value))
-                {
-                    return;
-                }
-                OnPropertyChanged("Guid");
-            }
+            get { return RosterId; }
+            set { RosterId = value; }
         }
 
         public string RosterId
@@ -36,6 +26,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>("IncidentId"); }
             set { SetProperty("IncidentId", value); }
+        }
+
+        public Roster()
+        {
+            LinkProperties("RosterId", "Guid");
         }
     }
 }
