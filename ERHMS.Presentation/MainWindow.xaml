@@ -8,13 +8,12 @@
                  xmlns:v="clr-namespace:ERHMS.Presentation.Views"
                  xmlns:vm="clr-namespace:ERHMS.Presentation.ViewModels"
                  mc:Ignorable="d"
-                 DataContext="{Binding Main, Source={StaticResource ViewModelLocator}}"
-                 Title="{Binding Title}"
                  Icon="ERHMS.ico"
-                 Width="1024"
-                 Height="768"
+                 Width="1024" Height="768"
                  WindowStartupLocation="CenterScreen"
-                 EnableDWMDropShadow="True">
+                 EnableDWMDropShadow="True"
+                 DataContext="{Binding Main, Source={StaticResource ViewModelLocator}}"
+                 Title="{Binding Title}">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">

@@ -25,12 +25,10 @@
             <Button Command="{Binding EmailCommand}">Email</Button>
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
-        <ctrl:MultiSelectDataGrid
-            ItemsSource="{Binding Responders}"
-            MultiSelectedItems="{Binding SelectedResponders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}"
-            AutoGenerateColumns="False"
-            IsReadOnly="True">
+        <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
+                                  ItemsSource="{Binding Responders}"
+                                  MultiSelectedItems="{Binding SelectedResponders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding ResponderId}" />
                 <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding LastName}" />
