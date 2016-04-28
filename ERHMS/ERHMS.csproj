@@ -12,29 +12,32 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>ERHMS.ico</ApplicationIcon>
+    <PublisherName>NIOSH</PublisherName>
+    <ProductName>ERHMS Info Manager</ProductName>
+    <ApplicationVersion>0.1.0.0</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <UseApplicationTrust>false</UseApplicationTrust>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <ManifestCertificateThumbprint>4D6DC7ED8964D314BA9C76F1312B998D2DF22B76</ManifestCertificateThumbprint>
     <ManifestKeyFile>ERHMS.pfx</ManifestKeyFile>
-    <GenerateManifests>true</GenerateManifests>
     <PublishUrl>publish\</PublishUrl>
+    <MapFileExtensions>true</MapFileExtensions>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <InstallFrom>Web</InstallFrom>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <InstallUrl>http://erhmsdev.cdc.gov/</InstallUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>Default.html</WebPage>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>ERHMS Info Manager</ProductName>
-    <PublisherName>NIOSH</PublisherName>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.1.0.0</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
