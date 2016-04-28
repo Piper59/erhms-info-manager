@@ -8,7 +8,8 @@ CREATE TABLE ERHMS_Incidents (
 	Phase VARCHAR(255) NOT NULL,
 	StartDate DATETIME,
 	EndDateEstimate DATETIME,
-	EndDateActual DATETIME
+	EndDateActual DATETIME,
+	Deleted BIT NOT NULL
 );
 
 CREATE TABLE ERHMS_IncidentNotes (

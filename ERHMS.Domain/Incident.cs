@@ -62,5 +62,11 @@ namespace ERHMS.Domain
             get { return GetProperty<DateTime?>("EndDateActual"); }
             set { SetProperty("EndDateActual", value); }
         }
+
+        public bool Deleted
+        {
+            get { return GetProperty<bool>("Deleted"); }
+            set { SetProperty("Deleted", value); }
+        }
     }
 }
