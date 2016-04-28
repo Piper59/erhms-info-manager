@@ -95,7 +95,7 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasOneSelectedResponder);
-            DeleteCommand = new RelayCommand(Delete, HasAnySelectedResponders);
+            DeleteCommand = new RelayCommand(Delete, HasOneSelectedResponder);
             EmailCommand = new RelayCommand(Email, HasAnySelectedResponders);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Responder>>(this, OnRefreshMessage);
@@ -125,15 +125,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             ConfirmMessage msg = new ConfirmMessage(
                 "Delete?",
-                string.Format("Are you sure you want to delete {0}?", SelectedResponders.Count == 1 ? "this responder" : "these responders"),
+                "Are you sure you want to delete this responder?",
                 "Delete",
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
             {
-                foreach (Responder responder in SelectedResponders)
-                {
-                    DataContext.Responders.Delete(responder);
-                }
+                DataContext.Responders.Delete(SelectedResponder);
                 Messenger.Default.Send(new RefreshMessage<Responder>());
             };
             Messenger.Default.Send(msg);
