@@ -27,11 +27,11 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Name:</Label>
+            <Label Grid.Row="0" Grid.Column="0">Name</Label>
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" />
-            <Label Grid.Row="1" Grid.Column="0">Description:</Label>
+            <Label Grid.Row="1" Grid.Column="0">Description</Label>
             <TextBox Grid.Row="1" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" Height="100" Text="{Binding Description}" />
-            <Label Grid.Row="2" Grid.Column="0">Phase:</Label>
+            <Label Grid.Row="2" Grid.Column="0">Phase</Label>
             <ComboBox Grid.Row="2" Grid.Column="1"
                         ItemsSource="{Binding DataContext.Phases, ElementName=Root}"
                         SelectedItem="{Binding Phase}">
@@ -41,11 +41,11 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <Label Grid.Row="3" Grid.Column="0">Start Date:</Label>
+            <Label Grid.Row="3" Grid.Column="0">Start Date</Label>
             <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
-            <Label Grid.Row="4" Grid.Column="0">End Date (Estimate):</Label>
+            <Label Grid.Row="4" Grid.Column="0">End Date (Estimate)</Label>
             <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding EndDateEstimate, Mode=TwoWay}" />
-            <Label Grid.Row="5" Grid.Column="0">End Date (Actual):</Label>
+            <Label Grid.Row="5" Grid.Column="0">End Date (Actual)</Label>
             <DatePicker Grid.Row="5" Grid.Column="1" SelectedDate="{Binding EndDateActual, Mode=TwoWay}" />
         </Grid>
     </DockPanel>

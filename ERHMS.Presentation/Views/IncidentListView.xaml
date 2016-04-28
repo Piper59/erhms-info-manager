@@ -20,7 +20,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Filter:</Label>
+            <Label Grid.Row="0" Grid.Column="0">Filter</Label>
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
