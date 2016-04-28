@@ -7,6 +7,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
         public IncidentDetailViewModel Detail { get; private set; }
+        public IncidentNotesViewModel Notes { get; private set; }
 
         public IncidentViewModel(Incident incident)
         {
@@ -14,6 +15,7 @@ namespace ERHMS.Presentation.ViewModels
             Incident.PropertyChanged += Incident_PropertyChanged;
             UpdateTitle();
             Detail = new IncidentDetailViewModel(incident);
+            Notes = new IncidentNotesViewModel(incident);
         }
 
         private void Incident_PropertyChanged(object sender, PropertyChangedEventArgs e)

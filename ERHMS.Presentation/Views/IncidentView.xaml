@@ -14,7 +14,9 @@
         <TabItem Header="Details">
             <v:IncidentDetailView DataContext="{Binding Detail}" />
         </TabItem>
-        <TabItem Header="Notes" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Notes" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+            <v:IncidentNotesView DataContext="{Binding Notes}" />
+        </TabItem>
         <TabItem Header="Roster" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
         <TabItem Header="Locations" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
         <TabItem Header="Forms" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />

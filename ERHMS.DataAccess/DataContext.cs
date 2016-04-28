@@ -63,7 +63,7 @@ namespace ERHMS.DataAccess
             CanvasLinks = new CanvasLinkRepository(Driver);
         }
 
-        private DataPredicate GetLinkPredicate(string incidentId)
+        public DataPredicate GetIncidentPredicate(string incidentId)
         {
             DataParameterCollection parameters = new DataParameterCollection(Driver);
             parameters.AddByValue(incidentId);
@@ -100,7 +100,7 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<View> GetLinkedViews(string incidentId)
         {
-            ICollection<int> viewIds = ViewLinks.Select(GetLinkPredicate(incidentId))
+            ICollection<int> viewIds = ViewLinks.Select(GetIncidentPredicate(incidentId))
                 .Select(viewLink => viewLink.ViewId)
                 .ToList();
             return GetViews().Where(view => viewIds.Contains(view.Id));
@@ -108,7 +108,7 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Pgm> GetLinkedPgms(string incidentId)
         {
-            ICollection<int> pgmIds = PgmLinks.Select(GetLinkPredicate(incidentId))
+            ICollection<int> pgmIds = PgmLinks.Select(GetIncidentPredicate(incidentId))
                 .Select(pgmLink => pgmLink.PgmId)
                 .ToList();
             return GetPgms().Where(pgm => pgmIds.Contains(pgm.PgmId));
@@ -116,7 +116,7 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Canvas> GetLinkedCanvases(string incidentId)
         {
-            ICollection<int> canvasIds = CanvasLinks.Select(GetLinkPredicate(incidentId))
+            ICollection<int> canvasIds = CanvasLinks.Select(GetIncidentPredicate(incidentId))
                 .Select(canvasLink => canvasLink.CanvasId)
                 .ToList();
             return GetCanvases().Where(canvas => canvasIds.Contains(canvas.CanvasId));

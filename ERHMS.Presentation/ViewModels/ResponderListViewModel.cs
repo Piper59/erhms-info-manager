@@ -95,13 +95,13 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasOneSelectedResponder);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedResponders);
-            EmailCommand = new RelayCommand(Email, HasSelectedResponders);
+            DeleteCommand = new RelayCommand(Delete, HasAnySelectedResponders);
+            EmailCommand = new RelayCommand(Email, HasAnySelectedResponders);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Responder>>(this, OnRefreshMessage);
         }
 
-        public bool HasSelectedResponders()
+        public bool HasAnySelectedResponders()
         {
             return SelectedResponders != null && SelectedResponders.Count > 0;
         }
