@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ctl="clr-namespace:ERHMS.Presentation.Controls">
+                    xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
@@ -10,7 +10,7 @@
         <ResourceDictionary Source="../Resources/Icons.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="{x:Type ctl:MultiSelectDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
+    <Style TargetType="{x:Type ctrl:MultiSelectDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
 
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="TabStripPlacement" Value="Left" />

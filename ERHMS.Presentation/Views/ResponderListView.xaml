@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ctl="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
@@ -25,10 +25,10 @@
             <Button Command="{Binding EmailCommand}">Email</Button>
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
-        <ctl:MultiSelectDataGrid
+        <ctrl:MultiSelectDataGrid
             ItemsSource="{Binding Responders}"
             MultiSelectedItems="{Binding SelectedResponders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            ctl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}"
+            ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}"
             AutoGenerateColumns="False"
             IsReadOnly="True">
             <DataGrid.Columns>
@@ -41,6 +41,6 @@
                 <DataGridTextColumn Header="Organization" Width="2*" Binding="{Binding OrganizationName}" />
                 <DataGridTextColumn Header="Occupation" Width="2*" Binding="{Binding Occupation}" />
             </DataGrid.Columns>
-        </ctl:MultiSelectDataGrid>
+        </ctrl:MultiSelectDataGrid>
     </DockPanel>
 </UserControl>
