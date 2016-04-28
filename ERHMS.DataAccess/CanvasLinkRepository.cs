@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
+using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
@@ -8,5 +9,10 @@ namespace ERHMS.DataAccess
         public CanvasLinkRepository(IDataDriver driver)
             : base(driver, "ERHMS_CanvasLinks")
         { }
+
+        public IEnumerable<CanvasLink> SelectByIncident(string incidentId)
+        {
+            return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
+        }
     }
 }

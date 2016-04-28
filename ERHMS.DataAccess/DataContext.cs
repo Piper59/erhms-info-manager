@@ -27,6 +27,14 @@ namespace ERHMS.DataAccess
             return new DataContext(project);
         }
 
+        internal static DataPredicate GetIncidentPredicate(IDataDriver driver, string incidentId)
+        {
+            DataParameterCollection parameters = new DataParameterCollection(driver);
+            parameters.AddByValue(incidentId);
+            string sql = parameters.Format("IncidentId = {0}");
+            return new DataPredicate(sql, parameters);
+        }
+
         public Project Project { get; private set; }
         public IDataDriver Driver { get; private set; }
         public CodeRepository Prefixes { get; private set; }
@@ -63,12 +71,9 @@ namespace ERHMS.DataAccess
             CanvasLinks = new CanvasLinkRepository(Driver);
         }
 
-        public DataPredicate GetIncidentPredicate(string incidentId)
+        private DataPredicate GetIncidentPredicate(string incidentId)
         {
-            DataParameterCollection parameters = new DataParameterCollection(Driver);
-            parameters.AddByValue(incidentId);
-            string sql = parameters.Format("IncidentId = {0}");
-            return new DataPredicate(sql, parameters);
+            return GetIncidentPredicate(Driver, incidentId);
         }
 
         public IEnumerable<View> GetViews()
