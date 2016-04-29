@@ -64,7 +64,9 @@
     <Compile Include="ViewLink.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Templates\Projects\ERHMS.xml" />
+    <Content Include="Templates\Projects\ERHMS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\ERHMS.Build.targets" />
