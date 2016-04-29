@@ -27,6 +27,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand CreateResponderCommand { get; private set; }
         public RelayCommand ShowIncidentsCommand { get; private set; }
         public RelayCommand CreateIncidentCommand { get; private set; }
+        public RelayCommand LogCommand { get; private set; }
         public RelayCommand AboutCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
 
@@ -40,6 +41,7 @@ namespace ERHMS.Presentation.ViewModels
             CreateResponderCommand = new RelayCommand(() => { OpenResponderDetailView(DataContext.Responders.Create()); });
             ShowIncidentsCommand = new RelayCommand(OpenIncidentListView);
             CreateIncidentCommand = new RelayCommand(() => { OpenIncidentView(DataContext.Incidents.Create()); });
+            LogCommand = new RelayCommand(OpenLogView);
             AboutCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
         }
@@ -123,6 +125,11 @@ namespace ERHMS.Presentation.ViewModels
         public void OpenLocationDetailView(Location location)
         {
             OpenDocument(new LocationDetailViewModel(location));
+        }
+
+        public void OpenLogView()
+        {
+            OpenDocument(new LogViewModel());
         }
 
         public void OpenAboutView()

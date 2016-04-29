@@ -103,5 +103,10 @@ namespace ERHMS.EpiInfo
             appender.File = Path.Combine(configuration.Directories.LogDir, FileName);
             appender.ActivateOptions();
         }
+
+        public static Stream Read()
+        {
+            return new FileStream(appender.File, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        }
     }
 }

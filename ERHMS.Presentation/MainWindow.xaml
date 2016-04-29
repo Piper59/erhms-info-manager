@@ -39,6 +39,7 @@
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Settings" />
+                <MenuItem Header="_Log" Command="{Binding LogCommand}" />
                 <MenuItem Header="_Help" />
                 <Separator />
                 <MenuItem Header="_About" Command="{Binding AboutCommand}" />
@@ -60,6 +61,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LocationDetailViewModel}">
                     <v:LocationDetailView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:LogViewModel}">
+                    <v:LogView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AboutViewModel}">
                     <v:AboutView />
