@@ -151,12 +151,14 @@ namespace ERHMS.Presentation.ViewModels
         // TODO: Make this more robust
         private void Service_CanvasClosed(object sender, CanvasEventArgs e)
         {
+            string incidentId = e.Tag;
             if (DataContext.Project.FilePath == e.ProjectPath)
             {
                 Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
                 canvas.Content = File.ReadAllText(e.CanvasPath);
                 DataContext.Project.UpdateCanvas(canvas);
             }
+            Messenger.Default.Send(new RefreshMessage<Canvas>(incidentId));
         }
 
         public void OpenDataSource()
@@ -224,7 +226,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenDashboardListView()
         {
-            // TODO: Implement
+            OpenDocument(new CanvasListViewModel(null));
         }
 
         public void OpenSettingsView()

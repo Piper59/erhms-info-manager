@@ -28,17 +28,22 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
             }
         }
 
-        public static Process OpenCanvas(Project project, Canvas canvas)
+        public static Process OpenCanvas(Project project, Canvas canvas, string tag = null)
         {
             FileInfo file = IOExtensions.GetTemporaryFile(extension: Canvas.FileExtension);
             File.WriteAllText(file.FullName, canvas.Content);
-            return Execute(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName);
+            return Execute(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
         }
         private static void Main_OpenCanvas(string[] args)
         {
             string projectPath = args[0];
             int canvasId = int.Parse(args[1]);
             string canvasPath = args[2];
+            string tag = args[3];
+            if (tag == "")
+            {
+                tag = null;
+            }
             try
             {
                 using (DashboardMainForm form = new DashboardMainForm())
@@ -55,7 +60,7 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
                 IService service = Service.Connect();
                 if (service != null)
                 {
-                    service.OnCanvasClosed(projectPath, canvasId, canvasPath);
+                    service.OnCanvasClosed(projectPath, canvasId, canvasPath, tag);
                 }
             }
         }

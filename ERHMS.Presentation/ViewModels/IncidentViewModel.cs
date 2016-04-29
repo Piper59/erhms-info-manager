@@ -11,6 +11,7 @@ namespace ERHMS.Presentation.ViewModels
         public FormListViewModel Forms { get; private set; }
         public TemplateListViewModel Templates { get; private set; }
         public PgmListViewModel Pgms { get; private set; }
+        public CanvasListViewModel Canvases { get; private set; }
 
         public IncidentViewModel(Incident incident)
         {
@@ -29,6 +30,7 @@ namespace ERHMS.Presentation.ViewModels
             Forms = new FormListViewModel(incident);
             Templates = new TemplateListViewModel(incident);
             Pgms = new PgmListViewModel(incident);
+            Canvases = new CanvasListViewModel(incident);
         }
 
         private void UpdateTitle()

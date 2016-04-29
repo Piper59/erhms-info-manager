@@ -31,6 +31,8 @@
         <TabItem Header="Analysis" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:PgmListView DataContext="{Binding Pgms}" />
         </TabItem>
-        <TabItem Header="Dashboards" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" />
+        <TabItem Header="Dashboards" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+            <v:CanvasListView DataContext="{Binding Canvases}" />
+        </TabItem>
     </TabControl>
 </UserControl>

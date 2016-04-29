@@ -123,7 +123,7 @@
                   ItemsSource="{Binding Views}"
                   SelectedItem="{Binding SelectedView}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

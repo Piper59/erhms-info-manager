@@ -353,7 +353,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshMessage<Canvas>(IncidentId));
             CreatingCanvas = false;
             CanvasName = "";
-            AnalysisDashboard.OpenCanvas(DataContext.Project, canvas);
+            AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, IncidentId);
         }
 
         public void CancelCanvas()

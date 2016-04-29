@@ -228,6 +228,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\FormListViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
@@ -246,6 +247,9 @@
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CanvasListView.xaml.cs">
+      <DependentUpon>CanvasListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FormListView.xaml.cs">
       <DependentUpon>FormListView.xaml</DependentUpon>
@@ -336,6 +340,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CanvasListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
