@@ -59,20 +59,25 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
-        public static Process AddView(Project project, string tag = null)
+        public static Process AddView(Project project, string prefix = null, string tag = null)
         {
-            return Execute(args => Main_AddView(args), project.FilePath, tag);
+            return Execute(args => Main_AddView(args), project.FilePath, prefix, tag);
         }
         private static void Main_AddView(string[] args)
         {
             string projectPath = args[0];
-            string tag = args[1];
+            string prefix = args[1];
+            if (prefix != "" && !prefix.EndsWith("_"))
+            {
+                prefix = string.Format("{0}_", prefix);
+            }
+            string tag = args[2];
             if (tag == "")
             {
                 tag = null;
             }
             Project project = new Project(projectPath);
-            string viewName = Project.SanitizeViewName(string.Format("{0}_", project.Name));
+            string viewName = Project.SanitizeViewName(prefix);
             using (MainForm form = new MainForm())
             {
                 form.OpenProject(project);
@@ -85,6 +90,7 @@ namespace ERHMS.EpiInfo.MakeView
                             viewName = dialog.ViewName;
                             View view = project.CreateView(viewName);
                             view.CreatePage("Page 1", 0);
+                            form.ProjectExplorer.AddView(view);
                             IService service = Service.Connect();
                             if (service != null)
                             {
@@ -97,15 +103,20 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
-        public static Process AddFromTemplate(Project project, EpiInfo.Template template, string tag = null)
+        public static Process AddFromTemplate(Project project, EpiInfo.Template template, string prefix = null, string tag = null)
         {
-            return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName, tag);
+            return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
         }
         private static void Main_AddFromTemplate(string[] args)
         {
             string projectPath = args[0];
             string templatePath = args[1];
-            string tag = args[2];
+            string prefix = args[2];
+            if (prefix != "" && !prefix.EndsWith("_"))
+            {
+                prefix = string.Format("{0}_", prefix);
+            }
+            string tag = args[3];
             if (tag == "")
             {
                 tag = null;
@@ -133,7 +144,7 @@ namespace ERHMS.EpiInfo.MakeView
                     XmlDocument document = new XmlDocument();
                     document.Load(templatePath);
                     XmlNode viewNode = document.SelectSingleNode("/Template/Project/View");
-                    string viewName = Project.SanitizeViewName(string.Format("{0}_{1}", project.Name, viewNode.Attributes["Name"].Value));
+                    string viewName = Project.SanitizeViewName(string.Format("{0}{1}", prefix, viewNode.Attributes["Name"].Value));
                     form.Load += (sender, e) =>
                     {
                         using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
@@ -171,7 +182,7 @@ namespace ERHMS.EpiInfo.MakeView
         {
             string projectPath = args[0];
             string viewName = args[1];
-            using (MainForm form = new MainForm(false))
+            using (MainForm form = new MainForm())
             {
                 Project project = new Project(projectPath);
                 form.OpenProject(projectPath);
@@ -190,6 +201,7 @@ namespace ERHMS.EpiInfo.MakeView
                             }
                         }
                     }
+                    form.Close();
                 };
                 Application.Run(form);
             }

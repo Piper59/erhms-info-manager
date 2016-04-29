@@ -23,7 +23,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         private void CreateViewDialog_Load(object sender, EventArgs e)
         {
-            txtViewName.Focus();
+            txtViewName.Select(ViewName.Length, 0);
         }
 
         private void btnOk_Click(object sender, EventArgs e)
