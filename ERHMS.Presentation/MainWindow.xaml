@@ -65,6 +65,9 @@
                 <DataTemplate DataType="{x:Type vm:FormListViewModel}">
                     <v:FormListView />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:TemplateListViewModel}">
+                    <v:TemplateListView />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LogViewModel}">
                     <v:LogView />
                 </DataTemplate>

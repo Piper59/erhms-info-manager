@@ -1,4 +1,5 @@
-﻿using ERHMS.EpiInfo;
+﻿using Epi;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
 using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
+using Template = ERHMS.EpiInfo.Template;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -65,10 +67,10 @@ namespace ERHMS.Presentation.ViewModels
             HelpCommand = new RelayCommand(OpenHelpView);
             AboutCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
-            App.Current.Service.ViewAdded += (sender, e) => { Messenger.Default.Send(new ServiceMessage<ViewEventArgs>("ViewAdded", e)); };
+            App.Current.Service.ViewAdded += Service_ViewAdded;
             App.Current.Service.ViewDataImported += (sender, e) => { Messenger.Default.Send(new ServiceMessage<ViewEventArgs>("ViewDataImported", e)); };
             App.Current.Service.RecordSaved += (sender, e) => { Messenger.Default.Send(new ServiceMessage<RecordEventArgs>("RecordSaved", e)); };
-            App.Current.Service.TemplateAdded += (sender, e) => { Messenger.Default.Send(new ServiceMessage<TemplateEventArgs>("TemplateAdded", e)); };
+            App.Current.Service.TemplateAdded += Service_TemplateAdded;
             App.Current.Service.CanvasClosed += Service_CanvasClosed;
         }
 
@@ -118,6 +120,32 @@ namespace ERHMS.Presentation.ViewModels
                     }
                     break;
             }
+        }
+
+        private void Service_ViewAdded(object sender, ViewEventArgs e)
+        {
+            string incidentId = e.Tag;
+            if (e.ProjectPath == DataContext.Project.FilePath && incidentId != null)
+            {
+                View view = DataContext.Project.GetViewByName(e.ViewName);
+                if (view == null)
+                {
+                    Log.Current.WarnFormat("View not found: {0}", e);
+                }
+                else
+                {
+                    ViewLink viewLink = DataContext.ViewLinks.Create();
+                    viewLink.ViewId = view.Id;
+                    viewLink.IncidentId = incidentId;
+                    DataContext.ViewLinks.Save(viewLink);
+                }
+            }
+            Messenger.Default.Send(new RefreshMessage<View>(incidentId));
+        }
+
+        private void Service_TemplateAdded(object sender, TemplateEventArgs e)
+        {
+            Messenger.Default.Send(new RefreshMessage<Template>());
         }
 
         // TODO: Make this more robust
@@ -181,7 +209,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenTemplateListView()
         {
-            // TODO: Implement
+            OpenDocument(new TemplateListViewModel(null));
         }
 
         public void OpenAssignmentListView()

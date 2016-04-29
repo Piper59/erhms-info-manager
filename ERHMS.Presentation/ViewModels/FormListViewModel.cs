@@ -3,7 +3,6 @@ using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analysis;
 using ERHMS.EpiInfo.AnalysisDashboard;
-using ERHMS.EpiInfo.Communication;
 using ERHMS.EpiInfo.Enter;
 using ERHMS.EpiInfo.ImportExport;
 using ERHMS.EpiInfo.MakeView;
@@ -185,7 +184,6 @@ namespace ERHMS.Presentation.ViewModels
             CreateCanvasCommand = new RelayCommand(CreateCanvas, HasCanvasName);
             CancelCanvasCommand = new RelayCommand(CancelCanvas);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<ServiceMessage<ViewEventArgs>>(this, OnViewServiceMessage);
             Messenger.Default.Register<RefreshMessage<View>>(this, OnRefreshMessage);
         }
 
@@ -381,32 +379,6 @@ namespace ERHMS.Presentation.ViewModels
                 }
             }
             return false;
-        }
-
-        private void OnViewServiceMessage(ServiceMessage<ViewEventArgs> msg)
-        {
-            if (msg.EventName == "ViewAdded")
-            {
-                if (msg.Args.ProjectPath == DataContext.Project.FilePath && msg.Args.Tag == IncidentId)
-                {
-                    if (Incident != null)
-                    {
-                        View view = DataContext.Project.GetViewByName(msg.Args.ViewName);
-                        if (view == null)
-                        {
-                            Log.Current.WarnFormat("View not found: {0}", msg.Args);
-                        }
-                        else
-                        {
-                            ViewLink viewLink = DataContext.ViewLinks.Create();
-                            viewLink.ViewId = view.Id;
-                            viewLink.IncidentId = IncidentId;
-                            DataContext.ViewLinks.Save(viewLink);
-                        }
-                    }
-                    Messenger.Default.Send(new RefreshMessage<View>(IncidentId));
-                }
-            }
         }
 
         private void OnRefreshMessage(RefreshMessage<View> msg)
