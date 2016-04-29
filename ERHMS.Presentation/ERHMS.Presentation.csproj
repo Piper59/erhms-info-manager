@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Epi.Core, Version=7.2.5927.18892, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19038, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
@@ -143,6 +147,14 @@
       <Project>{f979d2bb-289f-443f-bfe4-ab3cb877c521}</Project>
       <Name>ERHMS.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.AnalysisDashboard\ERHMS.EpiInfo.AnalysisDashboard.csproj">
+      <Project>{0545c649-4922-4c42-89b1-518c056fb483}</Project>
+      <Name>ERHMS.EpiInfo.AnalysisDashboard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Analysis\ERHMS.EpiInfo.Analysis.csproj">
+      <Project>{02554b6e-557d-4c58-ae39-4ac674755d71}</Project>
+      <Name>ERHMS.EpiInfo.Analysis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Communication\ERHMS.EpiInfo.Communication.csproj">
       <Project>{4feb8705-98bb-431c-9878-004b0c4d7d41}</Project>
       <Name>ERHMS.EpiInfo.Communication</Name>
@@ -154,6 +166,18 @@
     <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Enter\ERHMS.EpiInfo.Enter.csproj">
+      <Project>{1f323f8b-ac7b-4dba-94cc-9b9c2e7d7652}</Project>
+      <Name>ERHMS.EpiInfo.Enter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.ImportExport\ERHMS.EpiInfo.ImportExport.csproj">
+      <Project>{e55468b5-c9b9-4ac4-84da-dedb30f28dce}</Project>
+      <Name>ERHMS.EpiInfo.ImportExport</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.MakeView\ERHMS.EpiInfo.MakeView.csproj">
+      <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
+      <Name>ERHMS.EpiInfo.MakeView</Name>
     </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
@@ -176,6 +200,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\ButtonExtensions.cs" />
     <Compile Include="Controls\DataGridExtensions.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
@@ -183,6 +208,7 @@
     <Compile Include="Converters\DateTimeToShortDateTimeConverter.cs" />
     <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
+    <Compile Include="Converters\NullToBooleanConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -192,6 +218,7 @@
     <Compile Include="Messages\ExitMessage.cs" />
     <Compile Include="Messages\LocateMessage.cs" />
     <Compile Include="Messages\RefreshMessage.cs" />
+    <Compile Include="Messages\ServiceMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -202,6 +229,7 @@
     </Compile>
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
+    <Compile Include="ViewModels\FormListViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
     <Compile Include="ViewModels\IncidentNotesViewModel.cs" />
@@ -216,6 +244,9 @@
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FormListView.xaml.cs">
+      <DependentUpon>FormListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\IncidentDetailView.xaml.cs">
       <DependentUpon>IncidentDetailView.xaml</DependentUpon>
@@ -297,6 +328,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FormListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

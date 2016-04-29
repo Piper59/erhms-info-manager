@@ -1,5 +1,4 @@
 ﻿using ERHMS.Domain;
-using System.ComponentModel;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -9,6 +8,7 @@ namespace ERHMS.Presentation.ViewModels
         public IncidentDetailViewModel Detail { get; private set; }
         public IncidentNotesViewModel Notes { get; private set; }
         public LocationListViewModel Locations { get; private set; }
+        public FormListViewModel Forms { get; private set; }
 
         public IncidentViewModel(Incident incident)
         {
@@ -24,6 +24,7 @@ namespace ERHMS.Presentation.ViewModels
             Detail = new IncidentDetailViewModel(incident);
             Notes = new IncidentNotesViewModel(incident);
             Locations = new LocationListViewModel(incident);
+            Forms = new FormListViewModel(incident);
         }
 
         private void UpdateTitle()

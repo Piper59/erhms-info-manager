@@ -2,6 +2,11 @@
 {
     public class RefreshMessage<T>
     {
-        public RefreshMessage() { }
+        public string IncidentId { get; private set; }
+
+        public RefreshMessage(string incidentId = null)
+        {
+            IncidentId = incidentId;
+        }
     }
 }

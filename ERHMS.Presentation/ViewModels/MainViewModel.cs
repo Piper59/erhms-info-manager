@@ -1,4 +1,6 @@
-﻿using ERHMS.Domain;
+﻿using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Communication;
+using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -23,11 +26,20 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => ActiveDocument, ref activeDocument, value); }
         }
 
+        public RelayCommand OpenDataSourceCommand { get; private set; }
+        public RelayCommand CloseDataSourceCommand { get; private set; }
         public RelayCommand ShowRespondersCommand { get; private set; }
         public RelayCommand CreateResponderCommand { get; private set; }
         public RelayCommand ShowIncidentsCommand { get; private set; }
         public RelayCommand CreateIncidentCommand { get; private set; }
+        public RelayCommand FormsCommand { get; private set; }
+        public RelayCommand TemplatesCommand { get; private set; }
+        public RelayCommand AssignmentsCommand { get; private set; }
+        public RelayCommand AnalysisCommand { get; private set; }
+        public RelayCommand DashboardsCommand { get; private set; }
+        public RelayCommand SettingsCommand { get; private set; }
         public RelayCommand LogCommand { get; private set; }
+        public RelayCommand HelpCommand { get; private set; }
         public RelayCommand AboutCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
 
@@ -37,13 +49,27 @@ namespace ERHMS.Presentation.ViewModels
             Documents = new ObservableCollection<DocumentViewModel>();
             Documents.CollectionChanged += Documents_CollectionChanged;
             cachedDocuments = new List<DocumentViewModel>(Documents);
+            OpenDataSourceCommand = new RelayCommand(OpenDataSource);
+            CloseDataSourceCommand = new RelayCommand(CloseDataSource);
             ShowRespondersCommand = new RelayCommand(OpenResponderListView);
             CreateResponderCommand = new RelayCommand(() => { OpenResponderDetailView(DataContext.Responders.Create()); });
             ShowIncidentsCommand = new RelayCommand(OpenIncidentListView);
             CreateIncidentCommand = new RelayCommand(() => { OpenIncidentView(DataContext.Incidents.Create()); });
+            FormsCommand = new RelayCommand(OpenFormListView);
+            TemplatesCommand = new RelayCommand(OpenTemplateListView);
+            AssignmentsCommand = new RelayCommand(OpenAssignmentListView);
+            AnalysisCommand = new RelayCommand(OpenAnalysisListView);
+            DashboardsCommand = new RelayCommand(OpenDashboardListView);
+            SettingsCommand = new RelayCommand(OpenSettingsView);
             LogCommand = new RelayCommand(OpenLogView);
+            HelpCommand = new RelayCommand(OpenHelpView);
             AboutCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
+            App.Current.Service.ViewAdded += (sender, e) => { Messenger.Default.Send(new ServiceMessage<ViewEventArgs>("ViewAdded", e)); };
+            App.Current.Service.ViewDataImported += (sender, e) => { Messenger.Default.Send(new ServiceMessage<ViewEventArgs>("ViewDataImported", e)); };
+            App.Current.Service.RecordSaved += (sender, e) => { Messenger.Default.Send(new ServiceMessage<RecordEventArgs>("RecordSaved", e)); };
+            App.Current.Service.TemplateAdded += (sender, e) => { Messenger.Default.Send(new ServiceMessage<TemplateEventArgs>("TemplateAdded", e)); };
+            App.Current.Service.CanvasClosed += Service_CanvasClosed;
         }
 
         private void Documents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -94,6 +120,27 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        // TODO: Make this more robust
+        private void Service_CanvasClosed(object sender, CanvasEventArgs e)
+        {
+            if (DataContext.Project.FilePath == e.ProjectPath)
+            {
+                Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
+                canvas.Content = File.ReadAllText(e.CanvasPath);
+                DataContext.Project.UpdateCanvas(canvas);
+            }
+        }
+
+        public void OpenDataSource()
+        {
+            // TODO: Implement
+        }
+
+        public void CloseDataSource()
+        {
+            // TODO: Implement
+        }
+
         // TODO: Use existing document if applicable
 
         private void OpenDocument(DocumentViewModel document)
@@ -127,9 +174,44 @@ namespace ERHMS.Presentation.ViewModels
             OpenDocument(new LocationDetailViewModel(location));
         }
 
+        public void OpenFormListView()
+        {
+            OpenDocument(new FormListViewModel(null));
+        }
+
+        public void OpenTemplateListView()
+        {
+            // TODO: Implement
+        }
+
+        public void OpenAssignmentListView()
+        {
+            // TODO: Implement
+        }
+
+        public void OpenAnalysisListView()
+        {
+            // TODO: Implement
+        }
+
+        public void OpenDashboardListView()
+        {
+            // TODO: Implement
+        }
+
+        public void OpenSettingsView()
+        {
+            // TODO: Implement
+        }
+
         public void OpenLogView()
         {
             OpenDocument(new LogViewModel());
+        }
+
+        public void OpenHelpView()
+        {
+            // TODO: Implement
         }
 
         public void OpenAboutView()

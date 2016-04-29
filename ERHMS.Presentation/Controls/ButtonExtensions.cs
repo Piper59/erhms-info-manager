@@ -37,6 +37,7 @@ namespace ERHMS.Presentation.Controls
             Button target = (Button)sender;
             if (target.ContextMenu != null)
             {
+                target.ContextMenu.DataContext = target.DataContext;
                 target.ContextMenu.IsOpen = true;
             }
         }

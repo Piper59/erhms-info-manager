@@ -15,9 +15,9 @@ namespace ERHMS.Presentation.Views
 
         private void Map_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            e.Handled = true;
             Location location = Map.ViewportPointToLocation(e.GetPosition(Map));
             Messenger.Default.Send(new LocateMessage(location));
+            e.Handled = true;
         }
     }
 }

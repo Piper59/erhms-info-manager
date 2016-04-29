@@ -17,8 +17,8 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open Data Source" />
-                <MenuItem Header="_Close Data Source" />
+                <MenuItem Header="_Open Data Source" Command="{Binding OpenDataSourceCommand}" IsEnabled="False" />
+                <MenuItem Header="_Close Data Source" Command="{Binding CloseDataSourceCommand}" IsEnabled="False" />
                 <Separator />
                 <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
@@ -31,16 +31,16 @@
                 <MenuItem Header="Create _New" Command="{Binding CreateIncidentCommand}" />
             </MenuItem>
             <MenuItem Header="_Pre-Deployment">
-                <MenuItem Header="_Forms" />
-                <MenuItem Header="_Templates" />
-                <MenuItem Header="A_ssignments" />
-                <MenuItem Header="A_nalysis" />
-                <MenuItem Header="_Dashboards" />
+                <MenuItem Header="_Forms" Command="{Binding FormsCommand}" />
+                <MenuItem Header="_Templates" Command="{Binding TemplatesCommand}" />
+                <MenuItem Header="A_ssignments" Command="{Binding AssignmentsCommand}" />
+                <MenuItem Header="A_nalysis" Command="{Binding AnalysisCommand}" />
+                <MenuItem Header="_Dashboards" Command="{Binding DashboardsCommand}" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="_Settings" />
+                <MenuItem Header="_Settings" Command="{Binding SettingsCommand}" />
                 <MenuItem Header="_Log" Command="{Binding LogCommand}" />
-                <MenuItem Header="_Help" />
+                <MenuItem Header="_Help" Command="{Binding HelpCommand}" />
                 <Separator />
                 <MenuItem Header="_About" Command="{Binding AboutCommand}" />
             </MenuItem>
@@ -61,6 +61,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LocationDetailViewModel}">
                     <v:LocationDetailView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:FormListViewModel}">
+                    <v:FormListView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LogViewModel}">
                     <v:LogView />

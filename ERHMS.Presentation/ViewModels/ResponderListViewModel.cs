@@ -139,7 +139,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Email()
         {
-            // TODO: Locator.Main.OpenEmail
+            // TODO: Implement
         }
 
         public void Refresh()

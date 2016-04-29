@@ -45,18 +45,17 @@ namespace ERHMS.Utility
             }
         }
 
-        public static FileInfo GetTemporaryFile(string prefix = null, string extension = null)
+        public static FileInfo GetTemporaryFile(string prefix = "ERHMS_", string extension = null)
         {
-            if (prefix == null)
+            if (!extension.StartsWith("."))
             {
-                prefix = string.Format("{0}_", Assembly.GetCallingAssembly().GetName().Name);
+                extension = string.Format(".{0}", extension);
             }
             string path = Path.GetTempPath();
             FileInfo file;
             do
             {
-                string extensionlessFileName = string.Format("{0}{1:N}", prefix, Guid.NewGuid());
-                string fileName = Path.ChangeExtension(extensionlessFileName, extension);
+                string fileName = string.Format("{0}{1:N}{2}", prefix, Guid.NewGuid(), extension);
                 file = new FileInfo(Path.Combine(path, fileName));
             } while (file.Exists);
             using (file.OpenWrite())

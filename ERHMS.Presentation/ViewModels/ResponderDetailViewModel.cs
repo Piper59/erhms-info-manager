@@ -34,8 +34,8 @@ namespace ERHMS.Presentation.ViewModels
         {
             // TODO: Validate fields
             DataContext.Responders.Save(Responder);
-            UpdateTitle();
             Messenger.Default.Send(new RefreshMessage<Responder>());
+            UpdateTitle();
         }
     }
 }

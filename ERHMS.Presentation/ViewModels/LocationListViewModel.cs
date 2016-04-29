@@ -109,7 +109,7 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.Locations.Delete(SelectedLocation);
-                Messenger.Default.Send(new RefreshMessage<Location>());
+                Messenger.Default.Send(new RefreshMessage<Location>(Incident.IncidentId));
             };
             Messenger.Default.Send(msg);
         }
@@ -142,7 +142,10 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshMessage(RefreshMessage<Location> msg)
         {
-            Refresh();
+            if (msg.IncidentId == Incident.IncidentId)
+            {
+                Refresh();
+            }
         }
     }
 }

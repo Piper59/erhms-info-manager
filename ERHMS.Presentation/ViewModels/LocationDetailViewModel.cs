@@ -140,8 +140,8 @@ namespace ERHMS.Presentation.ViewModels
         {
             // TODO: Validate fields
             DataContext.Locations.Save(Location);
+            Messenger.Default.Send(new RefreshMessage<Location>(Location.IncidentId));
             UpdateTitle();
-            Messenger.Default.Send(new RefreshMessage<Location>());
         }
 
         private void OnMapMessage(LocateMessage msg)
