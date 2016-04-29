@@ -88,7 +88,7 @@
     <Compile Include="ViewLinkRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\Create.sql" />
+    <EmbeddedResource Include="Scripts\Create.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
