@@ -1,4 +1,5 @@
 ﻿using Epi;
+using System;
 
 namespace ERHMS.EpiInfo
 {
@@ -8,7 +9,7 @@ namespace ERHMS.EpiInfo
 
         private static string GetContent(string location, string source)
         {
-            return string.Format("READ {{{0}}}:[{1}]", location, source);
+            return string.Format("READ {{{0}}}:[{1}]{2}", location, source, Environment.NewLine);
         }
 
         public static string GetContentForView(View view)
