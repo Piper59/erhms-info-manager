@@ -1,4 +1,5 @@
-﻿using ERHMS.Presentation.Messages;
+﻿using ERHMS.Presentation.GeocodeService;
+using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -15,8 +16,6 @@ namespace ERHMS.Presentation.ViewModels
     {
         private const double UnpinnedZoomLevel = 6.0;
         private const double PinnedZoomLevel = 12.0;
-
-        private bool updating;
 
         public Location Location { get; private set; }
         public CredentialsProvider CredentialsProvider { get; private set; }
@@ -71,13 +70,11 @@ namespace ERHMS.Presentation.ViewModels
                     break;
                 case "Latitude":
                 case "Longitude":
-                    if (!updating && Location.Latitude.HasValue && Location.Longitude.HasValue)
+                    Pins.Clear();
+                    if (Location.Latitude.HasValue && Location.Longitude.HasValue)
                     {
-                        updating = true;
                         Center = new Coordinates(Location.Latitude.Value, Location.Longitude.Value);
-                        Pins.Clear();
                         Pins.Add(new Coordinates(Center));
-                        updating = false;
                     }
                     break;
             }
@@ -102,7 +99,39 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Locate()
         {
-            // TODO: Geocode, pan, and pin
+            GeocodeRequest request = new GeocodeRequest
+            {
+                Credentials = new Credentials
+                {
+                    ApplicationId = Settings.Default.MapLicenseKey
+                },
+                Query = Location.Address,
+                Options = new GeocodeOptions
+                {
+                    Filters = new ConfidenceFilter[]
+                    {
+                        new ConfidenceFilter
+                        {
+                            MinimumConfidence = Confidence.High
+                        }
+                    }
+                }
+            };
+            GeocodeServiceClient client = new GeocodeServiceClient();
+            GeocodeResponse response = client.Geocode(request);
+            if (response.Results.Length > 0)
+            {
+                GeocodeLocation result = response.Results[0].Locations[0];
+                Location.Latitude = null;
+                Location.Longitude = null;
+                Location.Latitude = result.Latitude;
+                Location.Longitude = result.Longitude;
+                ZoomLevel = PinnedZoomLevel;
+            }
+            else
+            {
+                // TODO: Display failure notification
+            }
         }
 
         public void Save()
