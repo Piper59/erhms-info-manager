@@ -219,7 +219,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenAnalysisListView()
         {
-            // TODO: Implement
+            OpenDocument(new PgmListViewModel(null));
         }
 
         public void OpenDashboardListView()

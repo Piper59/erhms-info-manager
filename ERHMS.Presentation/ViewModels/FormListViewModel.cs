@@ -221,6 +221,11 @@ namespace ERHMS.Presentation.ViewModels
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
             {
+                ViewLink viewLink = DataContext.ViewLinks.SelectByViewId(SelectedView.Id);
+                if (viewLink != null)
+                {
+                    DataContext.ViewLinks.Delete(viewLink);
+                }
                 DataContext.Project.DeleteView(SelectedView.Id);
                 Messenger.Default.Send(new RefreshMessage<View>(IncidentId));
             };
