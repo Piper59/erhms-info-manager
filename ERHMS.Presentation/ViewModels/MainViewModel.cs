@@ -241,7 +241,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenHelpView()
         {
-            // TODO: Implement
+            OpenDocument(new HelpViewModel());
         }
 
         public void OpenAboutView()

@@ -77,6 +77,9 @@
                 <DataTemplate DataType="{x:Type vm:LogViewModel}">
                     <v:LogView />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HelpViewModel}">
+                    <v:HelpView />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AboutViewModel}">
                     <v:AboutView />
                 </DataTemplate>
