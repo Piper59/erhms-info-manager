@@ -18,12 +18,11 @@ namespace ERHMS.EpiInfo.Domain
             }
             set
             {
-                if (value == @new)
+                if (value != @new)
                 {
-                    return;
+                    @new = value;
+                    OnPropertyChanged("New");
                 }
-                @new = value;
-                OnPropertyChanged("New");
             }
         }
 
@@ -37,11 +36,10 @@ namespace ERHMS.EpiInfo.Domain
         protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler == null)
+            if (handler != null)
             {
-                return;
+                handler(this, e);
             }
-            handler(this, e);
         }
         protected void OnPropertyChanged(string name)
         {
@@ -116,9 +114,12 @@ namespace ERHMS.EpiInfo.Domain
             {
                 return false;
             }
-            properties[name] = value;
-            OnPropertyChanged(name);
-            return true;
+            else
+            {
+                properties[name] = value;
+                OnPropertyChanged(name);
+                return true;
+            }
         }
 
         protected void LinkProperties(string sourceName, string targetName)

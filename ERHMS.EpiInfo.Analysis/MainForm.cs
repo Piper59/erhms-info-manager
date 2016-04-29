@@ -27,11 +27,10 @@ namespace ERHMS.EpiInfo.Analysis
 
         public void AddCommand(string command)
         {
-            if (string.IsNullOrEmpty(command))
+            if (!string.IsNullOrWhiteSpace(command))
             {
-                return;
+                ProgramEditor.AddCommand(command);
             }
-            ProgramEditor.AddCommand(command);
         }
 
         public void ExecuteCommand(string command, Action callback = null)
@@ -49,11 +48,10 @@ namespace ERHMS.EpiInfo.Analysis
                 try
                 {
                     EpiInterpreter.Context.ClearState();
-                    if (string.IsNullOrEmpty(command))
+                    if (!string.IsNullOrWhiteSpace(command))
                     {
-                        return;
+                        EpiInterpreter.Execute(command);
                     }
-                    EpiInterpreter.Execute(command);
                 }
                 catch (Exception ex)
                 {

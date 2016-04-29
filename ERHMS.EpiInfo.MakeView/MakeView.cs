@@ -86,11 +86,10 @@ namespace ERHMS.EpiInfo.MakeView
                             View view = project.CreateView(viewName);
                             view.CreatePage("Page 1", 0);
                             IService service = Service.Connect();
-                            if (service == null)
+                            if (service != null)
                             {
-                                return;
+                                service.OnViewAdded(projectPath, viewName, tag);
                             }
-                            service.OnViewAdded(projectPath, viewName, tag);
                         }
                     }
                 };
@@ -148,11 +147,10 @@ namespace ERHMS.EpiInfo.MakeView
                                 Template _template = new Template(form.Mediator);
                                 _template.AddFromTemplate(templateFile.FullName);
                                 IService service = Service.Connect();
-                                if (service == null)
+                                if (service != null)
                                 {
-                                    return;
+                                    service.OnViewAdded(projectPath, dialog.ViewName, tag);
                                 }
-                                service.OnViewAdded(projectPath, dialog.ViewName, tag);
                             }
                         }
                     };
@@ -186,11 +184,10 @@ namespace ERHMS.EpiInfo.MakeView
                             Template template = new Template(form.Mediator);
                             template.CreateTemplate(project.Views[viewName], dialog.TemplateName);
                             IService service = Service.Connect();
-                            if (service == null)
+                            if (service != null)
                             {
-                                return;
+                                service.OnTemplateAdded(dialog.TemplatePath);
                             }
-                            service.OnTemplateAdded(dialog.TemplatePath);
                         }
                     }
                 };

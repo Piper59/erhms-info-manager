@@ -31,11 +31,10 @@ namespace ERHMS.Utility
         private void OnExecuting(EventArgs e)
         {
             EventHandler handler = Executing;
-            if (handler == null)
+            if (handler != null)
             {
-                return;
+                handler(this, e);
             }
-            handler(this, e);
         }
         private void OnExecuting()
         {

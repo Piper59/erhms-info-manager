@@ -63,22 +63,20 @@ namespace ERHMS.EpiInfo
 
         private static void DeleteIfExists(DirectoryInfo directory)
         {
-            if (!directory.Exists)
+            if (directory.Exists)
             {
-                return;
+                directory.Delete();
             }
-            directory.Delete();
         }
 
         private static void CopyIfExists(DirectoryInfo source, DirectoryInfo target, string subdirectoryName)
         {
             DirectoryInfo subsource = source.GetSubdirectory(subdirectoryName);
-            if (!subsource.Exists)
+            if (subsource.Exists)
             {
-                return;
+                DirectoryInfo subtarget = target.GetSubdirectory(subdirectoryName);
+                IOExtensions.Copy(subsource, subtarget);
             }
-            DirectoryInfo subtarget = target.GetSubdirectory(subdirectoryName);
-            IOExtensions.Copy(subsource, subtarget);
         }
 
         private static void CopyAssets()

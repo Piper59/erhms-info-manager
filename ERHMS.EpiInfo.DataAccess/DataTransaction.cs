@@ -19,11 +19,10 @@ namespace ERHMS.EpiInfo.DataAccess
         private void OnCompleted(EventArgs e)
         {
             EventHandler handler = Completed;
-            if (handler == null)
+            if (handler != null)
             {
-                return;
+                handler(this, e);
             }
-            handler(this, e);
         }
         private void OnCompleted()
         {

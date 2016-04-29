@@ -13,11 +13,10 @@ namespace ERHMS.EpiInfo.Enter
             RecordSaved += (sender, e) =>
             {
                 IService service = Service.Connect();
-                if (service == null)
+                if (service != null)
                 {
-                    return;
+                    service.OnRecordSaved(e.Form.Project.FilePath, e.Form.Name, e.RecordGuid, tag);
                 }
-                service.OnRecordSaved(e.Form.Project.FilePath, e.Form.Name, e.RecordGuid, tag);
             };
         }
 

@@ -129,11 +129,10 @@ namespace ERHMS.EpiInfo.Analysis
                             form.ExecuteCommands(() =>
                             {
                                 IService service = Service.Connect();
-                                if (service == null)
+                                if (service != null)
                                 {
-                                    return;
+                                    service.OnViewDataImported(projectPath, viewName);
                                 }
-                                service.OnViewDataImported(projectPath, viewName);
                             });
                         });
                     };
