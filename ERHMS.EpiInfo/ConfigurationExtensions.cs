@@ -126,16 +126,22 @@ namespace ERHMS.EpiInfo
         {
             if (!TryLoad())
             {
-                Configuration.Save(Create());
+                Save(Create());
                 Load();
             }
+        }
+
+        public static void Save(this Configuration @this)
+        {
+            Configuration.Save(@this);
+            File.Copy(GetConfigurationFilePath(), Configuration.DefaultConfigurationPath, true);
         }
 
         public static void Refresh(this Configuration @this, bool save)
         {
             if (save)
             {
-                Configuration.Save(@this);
+                @this.Save();
             }
             Load(@this.ConfigFilePath);
         }
