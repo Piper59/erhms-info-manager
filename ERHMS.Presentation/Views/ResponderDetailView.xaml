@@ -9,26 +9,217 @@
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>
-        <Grid DataContext="{Binding Responder}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="False" Text="{Binding ResponderId}" />
-            <Label Grid.Row="1" Grid.Column="0">First Name</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FirstName}" />
-            <Label Grid.Row="2" Grid.Column="0">Last Name</Label>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}" />
-            <Label Grid.Row="3" Grid.Column="0">Email Address</Label>
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding EmailAddress}" />
-            <!-- TODO: Add remaining fields -->
-        </Grid>
+        <!-- TODO: Add missing fields -->
+        <TabControl DataContext="{Binding Responder}">
+            <TabItem Header="Personal">
+                <StackPanel>
+                    <GroupBox Header="Identity">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="False" Text="{Binding ResponderId}" />
+                            <Label Grid.Row="1" Grid.Column="0">First Name</Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FirstName}" />
+                            <Label Grid.Row="2" Grid.Column="0">Last Name</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}" />
+                            <Label Grid.Row="3" Grid.Column="0">Alias</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Alias}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Personal">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Birth Date</Label>
+                            <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
+                            <Label Grid.Row="1" Grid.Column="0">Height (Feet)</Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding HeightFeet}" />
+                            <Label Grid.Row="2" Grid.Column="0">Height (Inches)</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightInches}" />
+                            <Label Grid.Row="3" Grid.Column="0">Weight (Pounds)</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding WeightPounds}" />
+                            <Label Grid.Row="4" Grid.Column="0">Passport Number</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PassportNumber}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Contact">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Address</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressLine1}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AddressLine2}" />
+                            <Label Grid.Row="2" Grid.Column="0">City</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding City}" />
+                            <Label Grid.Row="3" Grid.Column="0">State</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding State}" />
+                            <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ZipCode}" />
+                            <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding EmailAddress}" />
+                            <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding PhoneNumber}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Emergency Contact">
+                <StackPanel>
+                    <GroupBox Header="Name">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Relationship</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactRelationship}" />
+                            <Label Grid.Row="1" Grid.Column="0">First Name</Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ContactFirstName}" />
+                            <Label Grid.Row="2" Grid.Column="0">Last Name</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactLastName}" />
+                            <Label Grid.Row="3" Grid.Column="0">Alias</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactAlias}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Contact">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Address</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactAddressLine1}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ContactAddressLine2}" />
+                            <Label Grid.Row="2" Grid.Column="0">City</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactCity}" />
+                            <Label Grid.Row="3" Grid.Column="0">State</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactState}" />
+                            <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactZipCode}" />
+                            <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ContactEmailAddress}" />
+                            <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactPhoneNumber}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Organization">
+                <StackPanel>
+                    <GroupBox Header="Contact">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Organization Name</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding OrganizationName}" />
+                            <Label Grid.Row="1" Grid.Column="0">Contact Person Name</Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OrganizationContactName}" />
+                            <Label Grid.Row="2" Grid.Column="0">Address</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding OrganizationAddressLine1}" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationAddressLine2}" />
+                            <Label Grid.Row="4" Grid.Column="0">City</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationCity}" />
+                            <Label Grid.Row="5" Grid.Column="0">State</Label>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding OrganizationState}" />
+                            <Label Grid.Row="6" Grid.Column="0">ZIP Code</Label>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding OrganizationZipCode}" />
+                            <Label Grid.Row="7" Grid.Column="0">Email Address</Label>
+                            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding OrganizationEmailAddress}" />
+                            <Label Grid.Row="8" Grid.Column="0">Phone Number</Label>
+                            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding OrganizationPhoneNumber}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Role">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Occupation</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Occupation}" />
+                            <Label Grid.Row="1" Grid.Column="0">Volunteer?</Label>
+                            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsVolunteer}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Union">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Union Name</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding UnionName}" />
+                            <Label Grid.Row="1" Grid.Column="0">Local Number</Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding UnionLocalNumber}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </DockPanel>
 </UserControl>
