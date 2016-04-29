@@ -29,6 +29,11 @@ namespace ERHMS.EpiInfo
             return Metadata.GetViews().Cast<View>();
         }
 
+        public new View GetViewByName(string viewName)
+        {
+            return GetViews().SingleOrDefault(view => view.Name == viewName);
+        }
+
         public new IEnumerable<Pgm> GetPgms()
         {
             foreach (DataRow row in Metadata.GetPgms().Rows)
@@ -42,6 +47,11 @@ namespace ERHMS.EpiInfo
                     Author = row.Field<string>("Author")
                 };
             }
+        }
+
+        public Pgm GetPgmById(int pgmId)
+        {
+            return GetPgms().SingleOrDefault(pgm => pgm.PgmId == pgmId);
         }
 
         public IEnumerable<Canvas> GetCanvases()
@@ -58,9 +68,14 @@ namespace ERHMS.EpiInfo
             }
         }
 
+        public Canvas GetCanvasById(int canvasId)
+        {
+            return GetCanvases().SingleOrDefault(canvas => canvas.CanvasId == canvasId);
+        }
+
         public void InsertPgm(Pgm pgm)
         {
-            Metadata.InsertPgm(pgm.Name, pgm.Content, pgm.Comment, pgm.Author);
+            Metadata.InsertPgm(pgm.Name, pgm.Content ?? "", pgm.Comment ?? "", pgm.Author ?? "");
             string sql = "SELECT MAX(ProgramId) FROM metaPrograms";
             pgm.PgmId = (int)Driver.ExecuteScalar(Driver.CreateQuery(sql));
         }
@@ -71,7 +86,7 @@ namespace ERHMS.EpiInfo
                 string sql = "INSERT INTO metaCanvases (Name, Content) VALUES (@Name, @Content)";
                 Query query = Driver.CreateQuery(sql);
                 query.Parameters.Add(new QueryParameter("@Name", DbType.String, canvas.Name));
-                query.Parameters.Add(new QueryParameter("@Content", DbType.String, canvas.Content));
+                query.Parameters.Add(new QueryParameter("@Content", DbType.String, canvas.Content ?? ""));
                 Driver.ExecuteNonQuery(query);
             }
             {
