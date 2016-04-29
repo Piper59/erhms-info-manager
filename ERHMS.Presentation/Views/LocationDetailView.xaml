@@ -36,7 +36,11 @@
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>
-        <bing:Map CredentialsProvider="{Binding CredentialsProvider}" Center="{Binding Center, Mode=TwoWay}" ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}">
+        <bing:Map Name="Map"
+                  MouseDoubleClick="Map_MouseDoubleClick"
+                  CredentialsProvider="{Binding CredentialsProvider}"
+                  Center="{Binding Center, Mode=TwoWay}"
+                  ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}">
             <bing:MapItemsControl ItemsSource="{Binding Pins}">
                 <bing:MapItemsControl.ItemTemplate>
                     <DataTemplate>

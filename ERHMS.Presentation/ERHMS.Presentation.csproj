@@ -189,6 +189,7 @@
     </Compile>
     <Compile Include="Messages\ConfirmMessage.cs" />
     <Compile Include="Messages\ExitMessage.cs" />
+    <Compile Include="Messages\LocateMessage.cs" />
     <Compile Include="Messages\RefreshMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

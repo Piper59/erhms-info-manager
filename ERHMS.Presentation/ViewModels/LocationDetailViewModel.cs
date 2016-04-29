@@ -20,14 +20,14 @@ namespace ERHMS.Presentation.ViewModels
         public Location Location { get; private set; }
         public CredentialsProvider CredentialsProvider { get; private set; }
 
+        public ObservableCollection<Coordinates> Pins { get; private set; }
+
         private Coordinates center;
         public Coordinates Center
         {
             get { return center; }
             set { Set(() => Center, ref center, value); }
         }
-
-        public ObservableCollection<Coordinates> Pins { get; private set; }
 
         private double zoomLevel;
         public double ZoomLevel
@@ -48,8 +48,9 @@ namespace ERHMS.Presentation.ViewModels
             Pins = new ObservableCollection<Coordinates>();
             if (location.Latitude.HasValue && location.Longitude.HasValue)
             {
-                Center = new Coordinates(location.Latitude.Value, location.Longitude.Value);
-                Pins.Add(new Coordinates(Center));
+                Coordinates pin = new Coordinates(location.Latitude.Value, location.Longitude.Value);
+                Pins.Add(pin);
+                Center = new Coordinates(pin);
                 ZoomLevel = PinnedZoomLevel;
             }
             else
@@ -59,6 +60,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             SaveCommand = new RelayCommand(Save);
             LocateCommand = new RelayCommand(Locate, HasAddress);
+            Messenger.Default.Register<LocateMessage>(this, OnMapMessage);
         }
 
         private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -73,8 +75,7 @@ namespace ERHMS.Presentation.ViewModels
                     Pins.Clear();
                     if (Location.Latitude.HasValue && Location.Longitude.HasValue)
                     {
-                        Center = new Coordinates(Location.Latitude.Value, Location.Longitude.Value);
-                        Pins.Add(new Coordinates(Center));
+                        Pins.Add(new Coordinates(Location.Latitude.Value, Location.Longitude.Value));
                     }
                     break;
             }
@@ -126,6 +127,7 @@ namespace ERHMS.Presentation.ViewModels
                 Location.Longitude = null;
                 Location.Latitude = result.Latitude;
                 Location.Longitude = result.Longitude;
+                Center = new Coordinates(Location.Latitude.Value, Location.Longitude.Value);
                 ZoomLevel = PinnedZoomLevel;
             }
             else
@@ -140,6 +142,14 @@ namespace ERHMS.Presentation.ViewModels
             DataContext.Locations.Save(Location);
             UpdateTitle();
             Messenger.Default.Send(new RefreshMessage<Location>());
+        }
+
+        private void OnMapMessage(LocateMessage msg)
+        {
+            Location.Latitude = null;
+            Location.Longitude = null;
+            Location.Latitude = msg.Location.Latitude;
+            Location.Longitude = msg.Location.Longitude;
         }
     }
 }
