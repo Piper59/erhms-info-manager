@@ -120,6 +120,11 @@ namespace ERHMS.Presentation.ViewModels
             OpenDocument(new IncidentViewModel(incident));
         }
 
+        public void OpenLocationDetailView(Location location)
+        {
+            OpenDocument(new LocationDetailViewModel(location));
+        }
+
         public void OpenAboutView()
         {
             OpenDocument(new AboutViewModel());

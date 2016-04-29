@@ -4,7 +4,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
@@ -49,33 +48,27 @@ namespace ERHMS.Presentation.ViewModels
         {
             IncidentNote note = DataContext.IncidentNotes.Create();
             note.IncidentId = Incident.IncidentId;
-            note.PropertyChanged += Note_PropertyChanged;
-            return note;
-        }
-
-        private void Note_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            IncidentNote note = (IncidentNote)sender;
-            switch (e.PropertyName)
+            note.PropertyChanged += (sender, e) =>
             {
-                case "Content":
+                if (e.PropertyName != "Content")
+                {
                     SaveCommand.RaiseCanExecuteChanged();
-                    break;
-            }
+                }
+            };
+            return note;
         }
 
         public void Save()
         {
             Note.Date = DateTime.Now;
             DataContext.IncidentNotes.Save(Note);
-            Messenger.Default.Send(new RefreshMessage<IncidentNote>());
-            Note.PropertyChanged -= Note_PropertyChanged;
             Note = CreateNote();
+            Messenger.Default.Send(new RefreshMessage<IncidentNote>());
         }
 
         public void Refresh()
         {
-            Notes = DataContext.IncidentNotes.Select(DataContext.GetIncidentPredicate(Incident.IncidentId))
+            Notes = DataContext.IncidentNotes.SelectByIncident(Incident.IncidentId)
                 .OrderByDescending(note => note.Date)
                 .ToList();
         }

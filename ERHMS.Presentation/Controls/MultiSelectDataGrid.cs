@@ -19,12 +19,10 @@ namespace ERHMS.Presentation.Controls
 
         public MultiSelectDataGrid()
         {
-            SelectionChanged += MultiSelectDataGrid_SelectionChanged;
-        }
-
-        private void MultiSelectDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            MultiSelectedItems = SelectedItems;
+            SelectionChanged += (sender, e) =>
+            {
+                MultiSelectedItems = SelectedItems;
+            };
         }
     }
 }

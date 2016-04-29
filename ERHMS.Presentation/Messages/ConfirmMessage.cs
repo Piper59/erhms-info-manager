@@ -21,11 +21,10 @@ namespace ERHMS.Presentation.Messages
         public void OnConfirmed(EventArgs e)
         {
             EventHandler handler = Confirmed;
-            if (handler == null)
+            if (handler != null)
             {
-                return;
+                handler(this, e);
             }
-            handler(this, e);
         }
         public void OnConfirmed()
         {

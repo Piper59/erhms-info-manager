@@ -58,6 +58,9 @@
                 <DataTemplate DataType="{x:Type vm:IncidentViewModel}">
                     <v:IncidentView />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:LocationDetailViewModel}">
+                    <v:LocationDetailView />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AboutViewModel}">
                     <v:AboutView />
                 </DataTemplate>

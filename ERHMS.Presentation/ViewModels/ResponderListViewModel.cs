@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
@@ -143,11 +144,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Refresh()
         {
-            Responders = CollectionViewSource.GetDefaultView(DataContext.Responders.SelectByDeleted(false));
-            Responders.Filter = FilterResponder;
+            Responders = CollectionViewSource.GetDefaultView(DataContext.Responders
+                .SelectByDeleted(false)
+                .OrderBy(responder => responder.LastName)
+                .ThenBy(responder => responder.FirstName));
+            Responders.Filter = MatchesFilter;
         }
 
-        private bool FilterResponder(object item)
+        private bool MatchesFilter(object item)
         {
             if (string.IsNullOrWhiteSpace(Filter))
             {

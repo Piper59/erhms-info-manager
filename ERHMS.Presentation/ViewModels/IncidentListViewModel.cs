@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
@@ -111,11 +112,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Refresh()
         {
-            Incidents = CollectionViewSource.GetDefaultView(DataContext.Incidents.SelectByDeleted(false));
-            Incidents.Filter = FilterIncident;
+            Incidents = CollectionViewSource.GetDefaultView(DataContext.Incidents
+                .SelectByDeleted(false)
+                .OrderBy(incident => incident.Name));
+            Incidents.Filter = MatchesFilter;
         }
 
-        private bool FilterIncident(object item)
+        private bool MatchesFilter(object item)
         {
             if (string.IsNullOrWhiteSpace(Filter))
             {
