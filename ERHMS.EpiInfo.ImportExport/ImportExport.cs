@@ -1,32 +1,33 @@
-﻿using Epi;
-using Epi.Enter.Forms;
+﻿using Epi.Enter.Forms;
 using Epi.Windows.ImportExport.Dialogs;
+using System.Windows.Forms;
+using View = Epi.View;
 
 namespace ERHMS.EpiInfo.ImportExport
 {
     public class ImportExport
     {
-        public static void ImportFromView(View target)
+        public static bool ImportFromView(View target)
         {
             using (ImportDataForm form = new ImportDataForm(target))
             {
-                form.ShowDialog();
+                return form.ShowDialog() == DialogResult.OK;
             }
         }
 
-        public static void ImportFromPackage(View target)
+        public static bool ImportFromPackage(View target)
         {
             using (ImportEncryptedDataPackageDialog dialog = new ImportEncryptedDataPackageDialog(target))
             {
-                dialog.ShowDialog();
+                return dialog.ShowDialog() == DialogResult.OK;
             }
         }
 
-        public static void ExportToPackage(View source)
+        public static bool ExportToPackage(View source)
         {
             using (PackageForTransportDialog dialog = new PackageForTransportDialog(source.Project.FilePath, source))
             {
-                dialog.ShowDialog();
+                return dialog.ShowDialog() == DialogResult.OK;
             }
         }
     }
