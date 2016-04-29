@@ -10,7 +10,7 @@ namespace ERHMS.Presentation.Controls
             "DoubleClickCommand",
             typeof(ICommand),
             typeof(DataGridExtensions),
-            new FrameworkPropertyMetadata(RefreshDoubleClickCommand));
+            new FrameworkPropertyMetadata(Target_PropertyChanged));
         public static ICommand GetDoubleClickCommand(DataGrid target)
         {
             return (ICommand)target.GetValue(DoubleClickCommandProperty);
@@ -20,9 +20,9 @@ namespace ERHMS.Presentation.Controls
             target.SetValue(DoubleClickCommandProperty, value);
         }
 
-        private static void RefreshDoubleClickCommand(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        private static void Target_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            DataGrid target = (DataGrid)obj;
+            DataGrid target = (DataGrid)sender;
             if (e.OldValue == null && e.NewValue != null)
             {
                 target.MouseDoubleClick += Target_MouseDoubleClick;
