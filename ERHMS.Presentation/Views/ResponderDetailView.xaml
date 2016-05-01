@@ -94,7 +94,7 @@
             </TabItem>
             <TabItem Header="Emergency Contact">
                 <StackPanel>
-                    <GroupBox Header="Name">
+                    <GroupBox Header="Identity">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -198,7 +198,7 @@
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">Occupation</Label>
                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Occupation}" />
-                            <Label Grid.Row="1" Grid.Column="0">Volunteer?</Label>
+                            <Label Grid.Row="1" Grid.Column="0">Volunteer</Label>
                             <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsVolunteer}" />
                         </Grid>
                     </GroupBox>
