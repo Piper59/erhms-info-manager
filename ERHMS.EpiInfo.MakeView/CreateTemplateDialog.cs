@@ -79,7 +79,7 @@ namespace ERHMS.EpiInfo.MakeView
             }
             else if (File.Exists(TemplatePath))
             {
-                message = "This template name is already in use.  Please enter a different template name.";
+                message = "This template name is already in use. Please enter a different template name.";
                 return false;
             }
             else

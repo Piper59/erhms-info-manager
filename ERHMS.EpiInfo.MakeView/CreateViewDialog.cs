@@ -48,7 +48,7 @@ namespace ERHMS.EpiInfo.MakeView
                         message = "Please enter a form name that begins with a letter.";
                         break;
                     case InvalidViewNameReason.Duplicate:
-                        message = "This form name is already in use.  Please enter a different form name.";
+                        message = "This form name is already in use. Please enter a different form name.";
                         break;
                     default:
                         throw new NotSupportedException();

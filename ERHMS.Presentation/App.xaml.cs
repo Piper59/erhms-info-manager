@@ -35,7 +35,7 @@ namespace ERHMS.Presentation
                     Log.Current.Debug("Prompting for root directory");
                     using (FolderBrowserDialog dialog = new FolderBrowserDialog())
                     {
-                        dialog.Description = string.Format("Choose a location for your documents.  We'll create a folder named {0} in that location.", Title);
+                        dialog.Description = string.Format("Choose a location for your documents. We'll create a folder named {0} in that location.", Title);
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
                             string path = Path.Combine(dialog.SelectedPath, Title);
