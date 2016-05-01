@@ -51,11 +51,11 @@
                             <Label Grid.Row="0" Grid.Column="0">Birth Date</Label>
                             <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
                             <Label Grid.Row="1" Grid.Column="0">Height (Feet)</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding HeightFeet}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding HeightFeet, TargetNullValue=''}" />
                             <Label Grid.Row="2" Grid.Column="0">Height (Inches)</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightInches}" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightInches, TargetNullValue=''}" />
                             <Label Grid.Row="3" Grid.Column="0">Weight (Pounds)</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding WeightPounds}" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding WeightPounds, TargetNullValue=''}" />
                             <Label Grid.Row="4" Grid.Column="0">Passport Number</Label>
                             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PassportNumber}" />
                         </Grid>
