@@ -49,20 +49,25 @@ namespace ERHMS.EpiInfo.Analysis
             }
         }
 
-        public static Process OpenPgm(Pgm pgm)
+        public static Process OpenPgm(Pgm pgm, bool execute)
         {
             FileInfo file = IOExtensions.GetTemporaryFile(extension: Pgm.FileExtension);
             File.WriteAllText(file.FullName, pgm.Content);
-            return Execute(args => Main_OpenPgm(args), file.FullName);
+            return Execute(args => Main_OpenPgm(args), file.FullName, execute.ToString());
         }
         private static void Main_OpenPgm(string[] args)
         {
             string pgmPath = args[0];
+            bool execute = bool.Parse(args[1]);
             using (MainForm form = new MainForm())
             {
                 form.Load += (sender, e) =>
                 {
                     form.Commands = File.ReadAllText(pgmPath);
+                    if (execute)
+                    {
+                        form.ExecuteCommands();
+                    }
                 };
                 Application.Run(form);
             }

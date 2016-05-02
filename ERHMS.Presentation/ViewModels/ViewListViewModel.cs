@@ -328,7 +328,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshMessage<Pgm>(IncidentId));
             CreatingPgm = false;
             PgmName = "";
-            Analysis.OpenPgm(pgm);
+            Analysis.OpenPgm(pgm, true);
         }
 
         public void CancelPgm()
