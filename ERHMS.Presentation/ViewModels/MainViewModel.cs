@@ -57,7 +57,7 @@ namespace ERHMS.Presentation.ViewModels
             CreateResponderCommand = new RelayCommand(() => { OpenResponderDetailView(DataContext.Responders.Create()); });
             ShowIncidentsCommand = new RelayCommand(OpenIncidentListView);
             CreateIncidentCommand = new RelayCommand(() => { OpenIncidentView(DataContext.Incidents.Create()); });
-            FormsCommand = new RelayCommand(OpenFormListView);
+            FormsCommand = new RelayCommand(OpenViewListView);
             TemplatesCommand = new RelayCommand(OpenTemplateListView);
             AssignmentsCommand = new RelayCommand(OpenAssignmentListView);
             AnalysesCommand = new RelayCommand(OpenPgmListView);
@@ -204,9 +204,9 @@ namespace ERHMS.Presentation.ViewModels
             OpenDocument(new LocationDetailViewModel(location));
         }
 
-        public void OpenFormListView()
+        public void OpenViewListView()
         {
-            OpenDocument(new FormListViewModel(null));
+            OpenDocument(new ViewListViewModel(null));
         }
 
         public void OpenTemplateListView()

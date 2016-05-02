@@ -18,7 +18,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class FormListViewModel : DocumentViewModel
+    public class ViewListViewModel : DocumentViewModel
     {
         private static readonly ICollection<Func<View, string>> FilterPropertyAccessors = new Func<View, string>[]
         {
@@ -157,7 +157,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand CancelCanvasCommand { get; private set; }
         public RelayCommand RefreshCommand { get; private set; }
 
-        public FormListViewModel(Incident incident)
+        public ViewListViewModel(Incident incident)
         {
             if (incident == null)
             {

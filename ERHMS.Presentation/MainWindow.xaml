@@ -62,8 +62,8 @@
                 <DataTemplate DataType="{x:Type vm:LocationDetailViewModel}">
                     <v:LocationDetailView />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:FormListViewModel}">
-                    <v:FormListView />
+                <DataTemplate DataType="{x:Type vm:ViewListViewModel}">
+                    <v:ViewListView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:TemplateListViewModel}">
                     <v:TemplateListView />

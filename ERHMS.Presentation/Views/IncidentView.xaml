@@ -22,7 +22,7 @@
             <v:LocationListView DataContext="{Binding Locations}" />
         </TabItem>
         <TabItem Header="Forms" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
-            <v:FormListView DataContext="{Binding Forms}" />
+            <v:ViewListView DataContext="{Binding Views}" />
         </TabItem>
         <TabItem Header="Templates" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:TemplateListView DataContext="{Binding Templates}" />

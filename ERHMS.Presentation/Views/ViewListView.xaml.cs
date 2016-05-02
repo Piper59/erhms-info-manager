@@ -2,9 +2,9 @@
 
 namespace ERHMS.Presentation.Views
 {
-    public partial class FormListView : UserControl
+    public partial class ViewListView : UserControl
     {
-        public FormListView()
+        public ViewListView()
         {
             InitializeComponent();
         }

@@ -8,7 +8,7 @@ namespace ERHMS.Presentation.ViewModels
         public IncidentDetailViewModel Detail { get; private set; }
         public IncidentNotesViewModel Notes { get; private set; }
         public LocationListViewModel Locations { get; private set; }
-        public FormListViewModel Forms { get; private set; }
+        public ViewListViewModel Views { get; private set; }
         public TemplateListViewModel Templates { get; private set; }
         public PgmListViewModel Pgms { get; private set; }
         public CanvasListViewModel Canvases { get; private set; }
@@ -27,7 +27,7 @@ namespace ERHMS.Presentation.ViewModels
             Detail = new IncidentDetailViewModel(incident);
             Notes = new IncidentNotesViewModel(incident);
             Locations = new LocationListViewModel(incident);
-            Forms = new FormListViewModel(incident);
+            Views = new ViewListViewModel(incident);
             Templates = new TemplateListViewModel(incident);
             Pgms = new PgmListViewModel(incident);
             Canvases = new CanvasListViewModel(incident);
