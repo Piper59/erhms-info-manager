@@ -60,6 +60,10 @@
       <HintPath>..\packages\MahApps.Metro.SimpleChildWindow.1.3.0\lib\net40\MahApps.Metro.SimpleChildWindow.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Mantin.Controls.Wpf.Notification, Version=2.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mantin.Controls.Wpf.Notification.2.8.1.0\lib\net40\Mantin.Controls.Wpf.Notification.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Maps.MapControl.WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Maps.MapControl.WPF.1.0.0.3\lib\net40-Client\Microsoft.Maps.MapControl.WPF.dll</HintPath>
@@ -87,6 +91,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
       <Private>True</Private>
@@ -219,6 +224,7 @@
     <Compile Include="Messages\LocateMessage.cs" />
     <Compile Include="Messages\RefreshMessage.cs" />
     <Compile Include="Messages\ServiceMessage.cs" />
+    <Compile Include="Messages\ToastMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

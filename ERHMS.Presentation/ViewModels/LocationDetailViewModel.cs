@@ -3,6 +3,7 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Mantin.Controls.Wpf.Notification;
 using Microsoft.Maps.MapControl.WPF;
 using Microsoft.Maps.MapControl.WPF.Core;
 using System.Collections.ObjectModel;
@@ -132,7 +133,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                // TODO: Display failure notification
+                Messenger.Default.Send(new ToastMessage(NotificationType.Error, "Address could not be found."));
             }
         }
 
@@ -140,6 +141,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             // TODO: Validate fields
             DataContext.Locations.Save(Location);
+            Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Location has been saved."));
             Messenger.Default.Send(new RefreshMessage<Location>(Location.IncidentId));
             UpdateTitle();
         }

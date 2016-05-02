@@ -2,7 +2,10 @@
 using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using Mantin.Controls.Wpf.Notification;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Media;
 
 namespace ERHMS.Presentation
 {
@@ -14,6 +17,7 @@ namespace ERHMS.Presentation
         {
             Closing += MainWindow_Closing;
             Messenger.Default.Register<ConfirmMessage>(this, OnConfirmMessage);
+            Messenger.Default.Register<ToastMessage>(this, OnToastMessage);
             Messenger.Default.Register<ExitMessage>(this, OnExitMessage);
             InitializeComponent();
         }
@@ -60,6 +64,16 @@ namespace ERHMS.Presentation
         private void OnConfirmMessage(ConfirmMessage msg)
         {
             ConfirmAsync(msg);
+        }
+
+        private void OnToastMessage(ToastMessage msg)
+        {
+            ToastPopUp popup = new ToastPopUp(App.Title, msg.Message, msg.NotificationType)
+            {
+                Background = Brushes.White,
+                BorderBrush = Brushes.Black
+            };
+            popup.Show();
         }
 
         private void OnExitMessage(ExitMessage msg)

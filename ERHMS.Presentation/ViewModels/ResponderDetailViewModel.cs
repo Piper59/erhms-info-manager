@@ -3,6 +3,7 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Mantin.Controls.Wpf.Notification;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,6 +58,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             // TODO: Validate fields
             DataContext.Responders.Save(Responder);
+            Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Responder has been saved."));
             Messenger.Default.Send(new RefreshMessage<Responder>());
             UpdateTitle();
         }
