@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.Converters
 {
-    public class NullToBooleanConverter : IValueConverter
+    public class NullToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

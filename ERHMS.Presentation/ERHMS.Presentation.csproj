@@ -208,7 +208,7 @@
     <Compile Include="Converters\DateTimeToShortDateTimeConverter.cs" />
     <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
-    <Compile Include="Converters\NullToBooleanConverter.cs" />
+    <Compile Include="Converters\NullToBoolConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
