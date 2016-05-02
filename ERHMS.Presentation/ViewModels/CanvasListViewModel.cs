@@ -98,7 +98,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Open()
         {
-            AnalysisDashboard.OpenCanvas(DataContext.Project, SelectedCanvas, IncidentId);
+            AnalysisDashboard.OpenCanvas(DataContext.Project, DataContext.Project.GetCanvasById(SelectedCanvas.CanvasId), IncidentId);
         }
 
         public void Delete()
