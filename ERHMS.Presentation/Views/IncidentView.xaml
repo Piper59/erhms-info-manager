@@ -28,7 +28,7 @@
             <v:TemplateListView DataContext="{Binding Templates}" />
         </TabItem>
         <TabItem Header="Assignments" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" IsEnabled="False" />
-        <TabItem Header="Analysis" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <TabItem Header="Analyses" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:PgmListView DataContext="{Binding Pgms}" />
         </TabItem>
         <TabItem Header="Dashboards" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">

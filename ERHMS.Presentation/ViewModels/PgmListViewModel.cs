@@ -77,7 +77,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public PgmListViewModel(Incident incident)
         {
-            Title = string.Format("{0} PGMs", incident == null ? "Pre-Deployment" : incident.Name);
+            if (incident == null)
+            {
+                Title = "Analyses";
+            }
+            else
+            {
+                Title = string.Format("{0} Analyses", incident.Name);
+            }
             Incident = incident;
             Refresh();
             OpenCommand = new RelayCommand(Open, HasSelectedPgm);
@@ -100,7 +107,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             ConfirmMessage msg = new ConfirmMessage(
                 "Delete?",
-                "Are you sure you want to delete this PGM?",
+                "Are you sure you want to delete this analysis?",
                 "Delete",
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>

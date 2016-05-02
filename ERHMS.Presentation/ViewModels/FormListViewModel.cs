@@ -159,7 +159,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public FormListViewModel(Incident incident)
         {
-            Title = string.Format("{0} Forms", incident == null ? "Pre-Deployment" : incident.Name);
+            if (incident == null)
+            {
+                Title = "Forms";
+            }
+            else
+            {
+                Title = string.Format("{0} Forms", incident.Name);
+            }
             Incident = incident;
             Refresh();
             CreateCommand = new RelayCommand(Create);

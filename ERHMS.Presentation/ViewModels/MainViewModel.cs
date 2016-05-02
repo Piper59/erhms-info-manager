@@ -37,7 +37,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand FormsCommand { get; private set; }
         public RelayCommand TemplatesCommand { get; private set; }
         public RelayCommand AssignmentsCommand { get; private set; }
-        public RelayCommand AnalysisCommand { get; private set; }
+        public RelayCommand AnalysesCommand { get; private set; }
         public RelayCommand DashboardsCommand { get; private set; }
         public RelayCommand SettingsCommand { get; private set; }
         public RelayCommand LogCommand { get; private set; }
@@ -60,8 +60,8 @@ namespace ERHMS.Presentation.ViewModels
             FormsCommand = new RelayCommand(OpenFormListView);
             TemplatesCommand = new RelayCommand(OpenTemplateListView);
             AssignmentsCommand = new RelayCommand(OpenAssignmentListView);
-            AnalysisCommand = new RelayCommand(OpenAnalysisListView);
-            DashboardsCommand = new RelayCommand(OpenDashboardListView);
+            AnalysesCommand = new RelayCommand(OpenPgmListView);
+            DashboardsCommand = new RelayCommand(OpenCanvasListView);
             SettingsCommand = new RelayCommand(OpenSettingsView);
             LogCommand = new RelayCommand(OpenLogView);
             HelpCommand = new RelayCommand(OpenHelpView);
@@ -219,12 +219,12 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Implement
         }
 
-        public void OpenAnalysisListView()
+        public void OpenPgmListView()
         {
             OpenDocument(new PgmListViewModel(null));
         }
 
-        public void OpenDashboardListView()
+        public void OpenCanvasListView()
         {
             OpenDocument(new CanvasListViewModel(null));
         }

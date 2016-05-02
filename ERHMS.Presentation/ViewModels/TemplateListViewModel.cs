@@ -77,7 +77,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public TemplateListViewModel(Incident incident)
         {
-            Title = string.Format("{0} Templates", incident == null ? "Pre-Deployment" : incident.Name);
+            if (incident == null)
+            {
+                Title = "Templates";
+            }
+            else
+            {
+                Title = string.Format("{0} Templates", incident.Name);
+            }
             Incident = incident;
             Refresh();
             CreateCommand = new RelayCommand(Create, HasSelectedTemplate);

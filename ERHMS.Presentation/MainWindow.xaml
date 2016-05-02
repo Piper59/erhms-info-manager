@@ -30,11 +30,11 @@
                 <MenuItem Header="Show _All" Command="{Binding ShowIncidentsCommand}" />
                 <MenuItem Header="Create _New" Command="{Binding CreateIncidentCommand}" />
             </MenuItem>
-            <MenuItem Header="_Pre-Deployment">
+            <MenuItem Header="_Data">
                 <MenuItem Header="_Forms" Command="{Binding FormsCommand}" />
                 <MenuItem Header="_Templates" Command="{Binding TemplatesCommand}" />
                 <MenuItem Header="A_ssignments" Command="{Binding AssignmentsCommand}" IsEnabled="False" />
-                <MenuItem Header="A_nalysis" Command="{Binding AnalysisCommand}" />
+                <MenuItem Header="A_nalyses" Command="{Binding AnalysesCommand}" />
                 <MenuItem Header="_Dashboards" Command="{Binding DashboardsCommand}" />
             </MenuItem>
             <MenuItem Header="_Tools">

@@ -15,7 +15,7 @@
         <TabItem Header="Forms" />
         <TabItem Header="Templates" />
         <TabItem Header="Assignments" />
-        <TabItem Header="Analysis" />
+        <TabItem Header="Analyses" />
         <TabItem Header="Dashboards" />
     </TabControl>
 </UserControl>

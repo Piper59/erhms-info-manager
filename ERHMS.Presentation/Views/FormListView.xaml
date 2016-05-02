@@ -80,7 +80,7 @@
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-            <scw:ChildWindow Title="Create a New PGM" ShowCloseButton="True" IsOpen="{Binding CreatingPgm}">
+            <scw:ChildWindow Title="Create a New Analysis" ShowCloseButton="True" IsOpen="{Binding CreatingPgm}">
                 <DockPanel>
                     <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                         <Button Command="{Binding CreatePgmCommand}">Create</Button>
@@ -94,12 +94,12 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0">PGM Name</Label>
+                        <Label Grid.Row="0" Grid.Column="0">Name</Label>
                         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PgmName, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                 </DockPanel>
             </scw:ChildWindow>
-            <scw:ChildWindow Title="Create a New Canvas" ShowCloseButton="True" IsOpen="{Binding CreatingCanvas}">
+            <scw:ChildWindow Title="Create a New Dashboard" ShowCloseButton="True" IsOpen="{Binding CreatingCanvas}">
                 <DockPanel>
                     <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                         <Button Command="{Binding CreateCanvasCommand}">Create</Button>
@@ -113,7 +113,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0">Canvas Name</Label>
+                        <Label Grid.Row="0" Grid.Column="0">Name</Label>
                         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CanvasName, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                 </DockPanel>

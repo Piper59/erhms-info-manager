@@ -75,7 +75,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public CanvasListViewModel(Incident incident)
         {
-            Title = string.Format("{0} Canvases", incident == null ? "Pre-Deployment" : incident.Name);
+            if (incident == null)
+            {
+                Title = "Dashboards";
+            }
+            else
+            {
+                Title = string.Format("{0} Dashboards", incident.Name);
+            }
             Incident = incident;
             Refresh();
             OpenCommand = new RelayCommand(Open, HasSelectedCanvas);
@@ -98,7 +105,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             ConfirmMessage msg = new ConfirmMessage(
                 "Delete?",
-                "Are you sure you want to delete this canvas?",
+                "Are you sure you want to delete this dashboard?",
                 "Delete",
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
