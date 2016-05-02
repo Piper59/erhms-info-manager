@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignWidth="640" d:DesignHeight="480">
+             d:DesignWidth="640" d:DesignHeight="480"
+             x:Name="Root">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>
-        <!-- TODO: Add missing fields -->
         <TabControl DataContext="{Binding Responder}">
             <TabItem Header="Personal">
                 <StackPanel>
@@ -24,15 +24,28 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
                             <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="False" Text="{Binding ResponderId}" />
-                            <Label Grid.Row="1" Grid.Column="0">First Name</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FirstName}" />
-                            <Label Grid.Row="2" Grid.Column="0">Last Name</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}" />
-                            <Label Grid.Row="3" Grid.Column="0">Alias</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Alias}" />
+                            <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
+                            <ComboBox Grid.Row="1" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
+                                      SelectedItem="{Binding Prefix, TargetNullValue=''}" />
+                            <Label Grid.Row="2" Grid.Column="0">First Name</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FirstName}" />
+                            <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MiddleInitial}" />
+                            <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding LastName}" />
+                            <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
+                            <ComboBox Grid.Row="5" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
+                                      SelectedItem="{Binding Suffix, TargetNullValue=''}" />
+                            <Label Grid.Row="6" Grid.Column="0">Alias</Label>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Alias}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Personal">
@@ -47,17 +60,22 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">Birth Date</Label>
                             <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
-                            <Label Grid.Row="1" Grid.Column="0">Height (Feet)</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding HeightFeet, TargetNullValue=''}" />
-                            <Label Grid.Row="2" Grid.Column="0">Height (Inches)</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightInches, TargetNullValue=''}" />
-                            <Label Grid.Row="3" Grid.Column="0">Weight (Pounds)</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding WeightPounds, TargetNullValue=''}" />
-                            <Label Grid.Row="4" Grid.Column="0">Passport Number</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PassportNumber}" />
+                            <Label Grid.Row="1" Grid.Column="0">Gender</Label>
+                            <ComboBox Grid.Row="1" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.Genders, ElementName=Root}"
+                                      SelectedItem="{Binding Gender, TargetNullValue=''}" />
+                            <Label Grid.Row="2" Grid.Column="0">Height (Feet)</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightFeet, TargetNullValue=''}" />
+                            <Label Grid.Row="3" Grid.Column="0">Height (Inches)</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding HeightInches, TargetNullValue=''}" />
+                            <Label Grid.Row="4" Grid.Column="0">Weight (Pounds)</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding WeightPounds, TargetNullValue=''}" />
+                            <Label Grid.Row="5" Grid.Column="0">Passport Number</Label>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding PassportNumber}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Contact">
@@ -81,7 +99,9 @@
                             <Label Grid.Row="2" Grid.Column="0">City</Label>
                             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding City}" />
                             <Label Grid.Row="3" Grid.Column="0">State</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding State}" />
+                            <ComboBox Grid.Row="3" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.States, ElementName=Root}"
+                                      SelectedItem="{Binding State, TargetNullValue=''}" />
                             <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
                             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ZipCode}" />
                             <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
@@ -105,15 +125,28 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">Relationship</Label>
                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactRelationship}" />
-                            <Label Grid.Row="1" Grid.Column="0">First Name</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ContactFirstName}" />
-                            <Label Grid.Row="2" Grid.Column="0">Last Name</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactLastName}" />
-                            <Label Grid.Row="3" Grid.Column="0">Alias</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactAlias}" />
+                            <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
+                            <ComboBox Grid.Row="1" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
+                                      SelectedItem="{Binding ContactPrefix, TargetNullValue=''}" />
+                            <Label Grid.Row="2" Grid.Column="0">First Name</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactFirstName}" />
+                            <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactMiddleInitial}" />
+                            <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactLastName}" />
+                            <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
+                            <ComboBox Grid.Row="5" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
+                                      SelectedItem="{Binding ContactSuffix, TargetNullValue=''}" />
+                            <Label Grid.Row="6" Grid.Column="0">Alias</Label>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactAlias}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Contact">
@@ -137,7 +170,9 @@
                             <Label Grid.Row="2" Grid.Column="0">City</Label>
                             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactCity}" />
                             <Label Grid.Row="3" Grid.Column="0">State</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactState}" />
+                            <ComboBox Grid.Row="3" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.States, ElementName=Root}"
+                                      SelectedItem="{Binding ContactState, TargetNullValue=''}" />
                             <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
                             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactZipCode}" />
                             <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
@@ -177,7 +212,9 @@
                             <Label Grid.Row="4" Grid.Column="0">City</Label>
                             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationCity}" />
                             <Label Grid.Row="5" Grid.Column="0">State</Label>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding OrganizationState}" />
+                            <ComboBox Grid.Row="5" Grid.Column="1"
+                                      ItemsSource="{Binding DataContext.States, ElementName=Root}"
+                                      SelectedItem="{Binding OrganizationState, TargetNullValue=''}" />
                             <Label Grid.Row="6" Grid.Column="0">ZIP Code</Label>
                             <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding OrganizationZipCode}" />
                             <Label Grid.Row="7" Grid.Column="0">Email Address</Label>
