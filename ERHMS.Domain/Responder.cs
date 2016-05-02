@@ -60,21 +60,21 @@ namespace ERHMS.Domain
             set { SetProperty("Gender", value); }
         }
 
-        public int? HeightFeet
+        public double? HeightFeet
         {
-            get { return GetProperty<int?>("HeightFeet"); }
+            get { return GetProperty<double?>("HeightFeet"); }
             set { SetProperty("HeightFeet", value); }
         }
 
-        public int? HeightInches
+        public double? HeightInches
         {
-            get { return GetProperty<int?>("HeightInches"); }
+            get { return GetProperty<double?>("HeightInches"); }
             set { SetProperty("HeightInches", value); }
         }
 
-        public int? WeightPounds
+        public double? WeightPounds
         {
-            get { return GetProperty<int?>("WeightPounds"); }
+            get { return GetProperty<double?>("WeightPounds"); }
             set { SetProperty("WeightPounds", value); }
         }
 
