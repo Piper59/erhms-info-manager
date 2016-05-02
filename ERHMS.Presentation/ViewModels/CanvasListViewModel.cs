@@ -123,7 +123,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Refresh()
         {
-            Canvases = CollectionViewSource.GetDefaultView(DataContext.GetLinkedCanvases(IncidentId).OrderBy(canvas => canvas.Name));
+            IEnumerable<Canvas> canvases;
+            if (Incident == null)
+            {
+                canvases = DataContext.GetUnlinkedCanvases();
+            }
+            else
+            {
+                canvases = DataContext.GetLinkedCanvases(IncidentId);
+            }
+            Canvases = CollectionViewSource.GetDefaultView(canvases.OrderBy(canvas => canvas.Name));
             Canvases.Filter = MatchesFilter;
         }
 

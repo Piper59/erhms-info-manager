@@ -371,7 +371,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Refresh()
         {
-            Views = CollectionViewSource.GetDefaultView(DataContext.GetLinkedViews(IncidentId).OrderBy(view => view.Name));
+            IEnumerable<View> views;
+            if (Incident == null)
+            {
+                views = DataContext.GetUnlinkedViews();
+            }
+            else
+            {
+                views = DataContext.GetLinkedViews(IncidentId);
+            }
+            Views = CollectionViewSource.GetDefaultView(views.OrderBy(view => view.Name));
             Views.Filter = MatchesFilter;
         }
 

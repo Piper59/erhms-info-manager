@@ -125,7 +125,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Refresh()
         {
-            Pgms = CollectionViewSource.GetDefaultView(DataContext.GetLinkedPgms(IncidentId).OrderBy(pgm => pgm.Name));
+            IEnumerable<Pgm> pgms;
+            if (Incident == null)
+            {
+                pgms = DataContext.GetUnlinkedPgms();
+            }
+            else
+            {
+                pgms = DataContext.GetLinkedPgms(IncidentId);
+            }
+            Pgms = CollectionViewSource.GetDefaultView(pgms.OrderBy(pgm => pgm.Name));
             Pgms.Filter = MatchesFilter;
         }
 

@@ -105,47 +105,26 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<View> GetLinkedViews(string incidentId)
         {
-            if (incidentId == null)
-            {
-                return GetUnlinkedViews();
-            }
-            else
-            {
-                ICollection<int> viewIds = ViewLinks.Select(GetIncidentPredicate(incidentId))
-                    .Select(viewLink => viewLink.ViewId)
-                    .ToList();
-                return GetViews().Where(view => viewIds.Contains(view.Id));
-            }
+            ICollection<int> viewIds = ViewLinks.Select(GetIncidentPredicate(incidentId))
+                .Select(viewLink => viewLink.ViewId)
+                .ToList();
+            return GetViews().Where(view => viewIds.Contains(view.Id));
         }
 
         public IEnumerable<Pgm> GetLinkedPgms(string incidentId)
         {
-            if (incidentId == null)
-            {
-                return GetUnlinkedPgms();
-            }
-            else
-            {
-                ICollection<int> pgmIds = PgmLinks.Select(GetIncidentPredicate(incidentId))
-                    .Select(pgmLink => pgmLink.PgmId)
-                    .ToList();
-                return GetPgms().Where(pgm => pgmIds.Contains(pgm.PgmId));
-            }
+            ICollection<int> pgmIds = PgmLinks.Select(GetIncidentPredicate(incidentId))
+                .Select(pgmLink => pgmLink.PgmId)
+                .ToList();
+            return GetPgms().Where(pgm => pgmIds.Contains(pgm.PgmId));
         }
 
         public IEnumerable<Canvas> GetLinkedCanvases(string incidentId)
         {
-            if (incidentId == null)
-            {
-                return GetUnlinkedCanvases();
-            }
-            else
-            {
-                ICollection<int> canvasIds = CanvasLinks.Select(GetIncidentPredicate(incidentId))
-                    .Select(canvasLink => canvasLink.CanvasId)
-                    .ToList();
-                return GetCanvases().Where(canvas => canvasIds.Contains(canvas.CanvasId));
-            }
+            ICollection<int> canvasIds = CanvasLinks.Select(GetIncidentPredicate(incidentId))
+                .Select(canvasLink => canvasLink.CanvasId)
+                .ToList();
+            return GetCanvases().Where(canvas => canvasIds.Contains(canvas.CanvasId));
         }
 
         public IEnumerable<View> GetUnlinkedViews()
