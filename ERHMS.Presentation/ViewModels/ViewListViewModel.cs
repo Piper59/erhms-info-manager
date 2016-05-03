@@ -7,7 +7,6 @@ using ERHMS.EpiInfo.Enter;
 using ERHMS.EpiInfo.ImportExport;
 using ERHMS.EpiInfo.MakeView;
 using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -18,13 +17,8 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class ViewListViewModel : DocumentViewModel
+    public class ViewListViewModel : ListViewModelBase<View>
     {
-        private static readonly ICollection<Func<View, string>> FilterPropertyAccessors = new Func<View, string>[]
-        {
-            view => view.Name
-        };
-
         public Incident Incident { get; private set; }
 
         public string IncidentId
@@ -32,60 +26,18 @@ namespace ERHMS.Presentation.ViewModels
             get { return Incident == null ? null : Incident.IncidentId; }
         }
 
-        private string filter;
-        public string Filter
+        private bool creatingPgm;
+        public bool CreatingPgm
         {
-            get
-            {
-                return filter;
-            }
-            set
-            {
-                if (!Set(() => Filter, ref filter, value))
-                {
-                    return;
-                }
-                Views.Refresh();
-            }
+            get { return creatingPgm; }
+            set { Set(() => CreatingPgm, ref creatingPgm, value); }
         }
 
-        private ICollectionView views;
-        public ICollectionView Views
+        private bool creatingCanvas;
+        public bool CreatingCanvas
         {
-            get { return views; }
-            set { Set(() => Views, ref views, value); }
-        }
-
-        private View selectedView;
-        public View SelectedView
-        {
-            get
-            {
-                return selectedView;
-            }
-            set
-            {
-                if (!Set(() => SelectedView, ref selectedView, value))
-                {
-                    return;
-                }
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                EnterDataCommand.RaiseCanExecuteChanged();
-                ViewDataCommand.RaiseCanExecuteChanged();
-                PublishToTemplateCommand.RaiseCanExecuteChanged();
-                PublishToWebCommand.RaiseCanExecuteChanged();
-                PublishToMobileCommand.RaiseCanExecuteChanged();
-                ImportFromProjectCommand.RaiseCanExecuteChanged();
-                ImportFromPackageCommand.RaiseCanExecuteChanged();
-                ImportFromFileCommand.RaiseCanExecuteChanged();
-                ImportFromWebCommand.RaiseCanExecuteChanged();
-                ImportFromMobileCommand.RaiseCanExecuteChanged();
-                ExportToPackageCommand.RaiseCanExecuteChanged();
-                ExportToFileCommand.RaiseCanExecuteChanged();
-                AnalyzeClassicCommand.RaiseCanExecuteChanged();
-                AnalyzeVisualCommand.RaiseCanExecuteChanged();
-            }
+            get { return creatingCanvas; }
+            set { Set(() => CreatingCanvas, ref creatingCanvas, value); }
         }
 
         private string pgmName;
@@ -118,20 +70,6 @@ namespace ERHMS.Presentation.ViewModels
                     CreateCanvasCommand.RaiseCanExecuteChanged();
                 }
             }
-        }
-
-        private bool creatingPgm;
-        public bool CreatingPgm
-        {
-            get { return creatingPgm; }
-            set { Set(() => CreatingPgm, ref creatingPgm, value); }
-        }
-
-        private bool creatingCanvas;
-        public bool CreatingCanvas
-        {
-            get { return creatingCanvas; }
-            set { Set(() => CreatingCanvas, ref creatingCanvas, value); }
         }
 
         public RelayCommand CreateCommand { get; private set; }
@@ -168,35 +106,68 @@ namespace ERHMS.Presentation.ViewModels
                 Title = string.Format("{0} Forms", incident.Name);
             }
             Incident = incident;
+            Selecting += (sender, e) =>
+            {
+                EditCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                EnterDataCommand.RaiseCanExecuteChanged();
+                ViewDataCommand.RaiseCanExecuteChanged();
+                PublishToTemplateCommand.RaiseCanExecuteChanged();
+                PublishToWebCommand.RaiseCanExecuteChanged();
+                PublishToMobileCommand.RaiseCanExecuteChanged();
+                ImportFromProjectCommand.RaiseCanExecuteChanged();
+                ImportFromPackageCommand.RaiseCanExecuteChanged();
+                ImportFromFileCommand.RaiseCanExecuteChanged();
+                ImportFromWebCommand.RaiseCanExecuteChanged();
+                ImportFromMobileCommand.RaiseCanExecuteChanged();
+                ExportToPackageCommand.RaiseCanExecuteChanged();
+                ExportToFileCommand.RaiseCanExecuteChanged();
+                AnalyzeClassicCommand.RaiseCanExecuteChanged();
+                AnalyzeVisualCommand.RaiseCanExecuteChanged();
+            };
             Refresh();
             CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasSelectedView);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedView);
-            EnterDataCommand = new RelayCommand(EnterData, HasSelectedView);
-            ViewDataCommand = new RelayCommand(ViewData, HasSelectedView);
-            PublishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedView);
-            PublishToWebCommand = new RelayCommand(PublishToWeb, HasSelectedView);
-            PublishToMobileCommand = new RelayCommand(PublishToMobile, HasSelectedView);
-            ImportFromProjectCommand = new RelayCommand(ImportFromProject, HasSelectedView);
-            ImportFromPackageCommand = new RelayCommand(ImportFromPackage, HasSelectedView);
-            ImportFromFileCommand = new RelayCommand(ImportFromFile, HasSelectedView);
-            ImportFromWebCommand = new RelayCommand(ImportFromWeb, HasSelectedView);
-            ImportFromMobileCommand = new RelayCommand(ImportFromMobile, HasSelectedView);
-            ExportToPackageCommand = new RelayCommand(ExportToPackage, HasSelectedView);
-            ExportToFileCommand = new RelayCommand(ExportToFile, HasSelectedView);
-            AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasSelectedView);
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
+            EnterDataCommand = new RelayCommand(EnterData, HasSelectedItem);
+            ViewDataCommand = new RelayCommand(ViewData, HasSelectedItem);
+            PublishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedItem);
+            PublishToWebCommand = new RelayCommand(PublishToWeb, HasSelectedItem);
+            PublishToMobileCommand = new RelayCommand(PublishToMobile, HasSelectedItem);
+            ImportFromProjectCommand = new RelayCommand(ImportFromProject, HasSelectedItem);
+            ImportFromPackageCommand = new RelayCommand(ImportFromPackage, HasSelectedItem);
+            ImportFromFileCommand = new RelayCommand(ImportFromFile, HasSelectedItem);
+            ImportFromWebCommand = new RelayCommand(ImportFromWeb, HasSelectedItem);
+            ImportFromMobileCommand = new RelayCommand(ImportFromMobile, HasSelectedItem);
+            ExportToPackageCommand = new RelayCommand(ExportToPackage, HasSelectedItem);
+            ExportToFileCommand = new RelayCommand(ExportToFile, HasSelectedItem);
+            AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasSelectedItem);
             CreatePgmCommand = new RelayCommand(CreatePgm, HasPgmName);
             CancelPgmCommand = new RelayCommand(CancelPgm);
-            AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasSelectedView);
+            AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasSelectedItem);
             CreateCanvasCommand = new RelayCommand(CreateCanvas, HasCanvasName);
             CancelCanvasCommand = new RelayCommand(CancelCanvas);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<View>>(this, OnRefreshMessage);
         }
 
-        public bool HasSelectedView()
+        protected override ICollectionView GetItems()
         {
-            return SelectedView != null;
+            IEnumerable<View> views;
+            if (Incident == null)
+            {
+                views = DataContext.GetUnlinkedViews();
+            }
+            else
+            {
+                views = DataContext.GetLinkedViews(IncidentId);
+            }
+            return CollectionViewSource.GetDefaultView(views.OrderBy(view => view.Name));
+        }
+
+        protected override IEnumerable<string> GetFilteredValues(View item)
+        {
+            yield return item.Name;
         }
 
         public bool HasPgmName()
@@ -216,7 +187,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Edit()
         {
-            MakeView.OpenView(SelectedView);
+            MakeView.OpenView(SelectedItem);
         }
 
         public void Delete()
@@ -228,12 +199,12 @@ namespace ERHMS.Presentation.ViewModels
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
             {
-                ViewLink viewLink = DataContext.ViewLinks.SelectByViewId(SelectedView.Id);
+                ViewLink viewLink = DataContext.ViewLinks.SelectByViewId(SelectedItem.Id);
                 if (viewLink != null)
                 {
                     DataContext.ViewLinks.Delete(viewLink);
                 }
-                DataContext.Project.DeleteView(SelectedView.Id);
+                DataContext.Project.DeleteView(SelectedItem.Id);
                 Messenger.Default.Send(new RefreshMessage<View>(IncidentId));
             };
             Messenger.Default.Send(msg);
@@ -241,7 +212,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void EnterData()
         {
-            Enter.OpenView(SelectedView);
+            Enter.OpenView(SelectedItem);
         }
 
         public void ViewData()
@@ -251,7 +222,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToTemplate()
         {
-            MakeView.CreateTemplate(SelectedView);
+            MakeView.CreateTemplate(SelectedItem);
         }
 
         public void PublishToWeb()
@@ -266,23 +237,23 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromProject()
         {
-            if (ImportExport.ImportFromView(SelectedView))
+            if (ImportExport.ImportFromView(SelectedItem))
             {
-                App.Current.Service.OnViewDataImported(SelectedView.Project.FilePath, SelectedView.Name);
+                App.Current.Service.OnViewDataImported(SelectedItem.Project.FilePath, SelectedItem.Name);
             }
         }
 
         public void ImportFromPackage()
         {
-            if (ImportExport.ImportFromPackage(SelectedView))
+            if (ImportExport.ImportFromPackage(SelectedItem))
             {
-                App.Current.Service.OnViewDataImported(SelectedView.Project.FilePath, SelectedView.Name);
+                App.Current.Service.OnViewDataImported(SelectedItem.Project.FilePath, SelectedItem.Name);
             }
         }
 
         public void ImportFromFile()
         {
-            Analysis.Import(SelectedView);
+            Analysis.Import(SelectedItem);
         }
 
         public void ImportFromWeb()
@@ -297,12 +268,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ExportToPackage()
         {
-            ImportExport.ExportToPackage(SelectedView);
+            ImportExport.ExportToPackage(SelectedItem);
         }
 
         public void ExportToFile()
         {
-            Analysis.Export(SelectedView);
+            Analysis.Export(SelectedItem);
         }
 
         public void AnalyzeClassic()
@@ -310,12 +281,17 @@ namespace ERHMS.Presentation.ViewModels
             CreatingPgm = true;
         }
 
+        public void AnalyzeVisual()
+        {
+            CreatingCanvas = true;
+        }
+
         public void CreatePgm()
         {
             Pgm pgm = new Pgm
             {
                 Name = PgmName,
-                Content = Pgm.GetContentForView(SelectedView)
+                Content = Pgm.GetContentForView(SelectedItem)
             };
             DataContext.Project.InsertPgm(pgm);
             if (Incident != null)
@@ -331,23 +307,12 @@ namespace ERHMS.Presentation.ViewModels
             Analysis.OpenPgm(pgm, true);
         }
 
-        public void CancelPgm()
-        {
-            CreatingPgm = false;
-            PgmName = "";
-        }
-
-        public void AnalyzeVisual()
-        {
-            CreatingCanvas = true;
-        }
-
         public void CreateCanvas()
         {
             Canvas canvas = new Canvas
             {
                 Name = CanvasName,
-                Content = Canvas.GetContentForView(SelectedView)
+                Content = Canvas.GetContentForView(SelectedItem)
             };
             DataContext.Project.InsertCanvas(canvas);
             if (Incident != null)
@@ -363,43 +328,16 @@ namespace ERHMS.Presentation.ViewModels
             AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, IncidentId);
         }
 
+        public void CancelPgm()
+        {
+            CreatingPgm = false;
+            PgmName = "";
+        }
+
         public void CancelCanvas()
         {
             CreatingCanvas = false;
             CanvasName = "";
-        }
-
-        public void Refresh()
-        {
-            IEnumerable<View> views;
-            if (Incident == null)
-            {
-                views = DataContext.GetUnlinkedViews();
-            }
-            else
-            {
-                views = DataContext.GetLinkedViews(IncidentId);
-            }
-            Views = CollectionViewSource.GetDefaultView(views.OrderBy(view => view.Name));
-            Views.Filter = MatchesFilter;
-        }
-
-        private bool MatchesFilter(object item)
-        {
-            if (string.IsNullOrWhiteSpace(Filter))
-            {
-                return true;
-            }
-            View view = (View)item;
-            foreach (Func<View, string> accessor in FilterPropertyAccessors)
-            {
-                string property = accessor(view);
-                if (property != null && property.ContainsIgnoreCase(Filter))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private void OnRefreshMessage(RefreshMessage<View> msg)

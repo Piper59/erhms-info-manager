@@ -26,8 +26,9 @@
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
         <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                                  ItemsSource="{Binding Responders}"
-                                  MultiSelectedItems="{Binding SelectedResponders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding Items}"
+                                  SelectedItem="{Binding SelectedItem}"
+                                  MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding ResponderId}" />

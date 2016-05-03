@@ -18,6 +18,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public IncidentDetailViewModel(Incident incident)
         {
+            Title = incident.Name;
             Incident = incident;
             Phases = EnumExtensions.GetValues<Phase>().ToList();
             SaveCommand = new RelayCommand(Save);

@@ -13,15 +13,13 @@ using Location = ERHMS.Domain.Location;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class LocationDetailViewModel : DocumentViewModel
+    public class LocationDetailViewModel : ViewModelBase
     {
         private const double UnpinnedZoomLevel = 6.0;
         private const double PinnedZoomLevel = 12.0;
 
         public Location Location { get; private set; }
         public CredentialsProvider CredentialsProvider { get; private set; }
-
-        public ObservableCollection<Coordinates> Pins { get; private set; }
 
         private Coordinates center;
         public Coordinates Center
@@ -37,6 +35,8 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => ZoomLevel, ref zoomLevel, value); }
         }
 
+        public ObservableCollection<Coordinates> Pins { get; private set; }
+
         public RelayCommand LocateCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
@@ -47,12 +47,11 @@ namespace ERHMS.Presentation.ViewModels
             UpdateTitle();
             CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
             Pins = new ObservableCollection<Coordinates>();
-            if (location.Latitude.HasValue && location.Longitude.HasValue)
+            if (HasCoordinates())
             {
-                Coordinates pin = new Coordinates(location.Latitude.Value, location.Longitude.Value);
-                Pins.Add(pin);
-                Center = new Coordinates(pin);
+                Center = GetCoordinates();
                 ZoomLevel = PinnedZoomLevel;
+                Pins.Add(GetCoordinates());
             }
             else
             {
@@ -74,17 +73,12 @@ namespace ERHMS.Presentation.ViewModels
                 case "Latitude":
                 case "Longitude":
                     Pins.Clear();
-                    if (Location.Latitude.HasValue && Location.Longitude.HasValue)
+                    if (HasCoordinates())
                     {
-                        Pins.Add(new Coordinates(Location.Latitude.Value, Location.Longitude.Value));
+                        Pins.Add(GetCoordinates());
                     }
                     break;
             }
-        }
-
-        public bool HasAddress()
-        {
-            return !string.IsNullOrEmpty(Location.Address);
         }
 
         private void UpdateTitle()
@@ -97,6 +91,29 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Title = Location.Name;
             }
+        }
+
+        public bool HasAddress()
+        {
+            return !string.IsNullOrEmpty(Location.Address);
+        }
+
+        public bool HasCoordinates()
+        {
+            return Location.Latitude.HasValue && Location.Longitude.HasValue;
+        }
+
+        public Coordinates GetCoordinates()
+        {
+            return new Coordinates(Location.Latitude.Value, Location.Longitude.Value);
+        }
+
+        public void SetCoordinates(double latitude, double longitude)
+        {
+            Location.Latitude = null;
+            Location.Longitude = null;
+            Location.Latitude = latitude;
+            Location.Longitude = longitude;
         }
 
         public void Locate()
@@ -124,11 +141,8 @@ namespace ERHMS.Presentation.ViewModels
             if (response.Results.Length > 0)
             {
                 GeocodeLocation result = response.Results[0].Locations[0];
-                Location.Latitude = null;
-                Location.Longitude = null;
-                Location.Latitude = result.Latitude;
-                Location.Longitude = result.Longitude;
-                Center = new Coordinates(Location.Latitude.Value, Location.Longitude.Value);
+                SetCoordinates(result.Latitude, result.Longitude);
+                Center = GetCoordinates();
                 ZoomLevel = PinnedZoomLevel;
             }
             else
@@ -148,10 +162,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnMapMessage(LocateMessage msg)
         {
-            Location.Latitude = null;
-            Location.Longitude = null;
-            Location.Latitude = msg.Location.Latitude;
-            Location.Longitude = msg.Location.Longitude;
+            SetCoordinates(msg.Location.Latitude, msg.Location.Longitude);
         }
     }
 }

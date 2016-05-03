@@ -16,13 +16,12 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private ICollection<DocumentViewModel> cachedDocuments;
+        private ICollection<ViewModelBase> cachedDocuments;
 
-        public string Title { get; private set; }
-        public ObservableCollection<DocumentViewModel> Documents { get; private set; }
+        public ObservableCollection<ViewModelBase> Documents { get; private set; }
 
-        private DocumentViewModel activeDocument;
-        public DocumentViewModel ActiveDocument
+        private ViewModelBase activeDocument;
+        public ViewModelBase ActiveDocument
         {
             get { return activeDocument; }
             set { Set(() => ActiveDocument, ref activeDocument, value); }
@@ -48,9 +47,9 @@ namespace ERHMS.Presentation.ViewModels
         public MainViewModel()
         {
             Title = App.Title;
-            Documents = new ObservableCollection<DocumentViewModel>();
+            Documents = new ObservableCollection<ViewModelBase>();
             Documents.CollectionChanged += Documents_CollectionChanged;
-            cachedDocuments = new List<DocumentViewModel>(Documents);
+            cachedDocuments = new List<ViewModelBase>(Documents);
             OpenDataSourceCommand = new RelayCommand(OpenDataSource);
             CloseDataSourceCommand = new RelayCommand(CloseDataSource);
             ShowRespondersCommand = new RelayCommand(OpenResponderListView);
@@ -68,8 +67,8 @@ namespace ERHMS.Presentation.ViewModels
             AboutCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
             App.Current.Service.ViewAdded += Service_ViewAdded;
-            App.Current.Service.ViewDataImported += (sender, e) => { Messenger.Default.Send(new ServiceMessage<ViewEventArgs>("ViewDataImported", e)); };
-            App.Current.Service.RecordSaved += (sender, e) => { Messenger.Default.Send(new ServiceMessage<RecordEventArgs>("RecordSaved", e)); };
+            App.Current.Service.ViewDataImported += Service_ViewDataImported;
+            App.Current.Service.RecordSaved += Service_RecordSaved;
             App.Current.Service.TemplateAdded += Service_TemplateAdded;
             App.Current.Service.CanvasClosed += Service_CanvasClosed;
         }
@@ -78,35 +77,35 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
-                foreach (DocumentViewModel document in e.NewItems)
+                foreach (ViewModelBase document in e.NewItems)
                 {
                     document.PropertyChanged += Document_PropertyChanged;
                 }
             }
             if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
             {
-                foreach (DocumentViewModel document in e.OldItems)
+                foreach (ViewModelBase document in e.OldItems)
                 {
                     document.PropertyChanged -= Document_PropertyChanged;
                 }
             }
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                foreach (DocumentViewModel document in cachedDocuments)
+                foreach (ViewModelBase document in cachedDocuments)
                 {
                     document.PropertyChanged -= Document_PropertyChanged;
                 }
-                foreach (DocumentViewModel document in Documents)
+                foreach (ViewModelBase document in Documents)
                 {
                     document.PropertyChanged += Document_PropertyChanged;
                 }
             }
-            cachedDocuments = new List<DocumentViewModel>(Documents);
+            cachedDocuments = new List<ViewModelBase>(Documents);
         }
 
         private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            DocumentViewModel document = (DocumentViewModel)sender;
+            ViewModelBase document = (ViewModelBase)sender;
             switch (e.PropertyName)
             {
                 case "Closed":
@@ -122,44 +121,7 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        private void Service_ViewAdded(object sender, ViewEventArgs e)
-        {
-            string incidentId = e.Tag;
-            if (e.ProjectPath == DataContext.Project.FilePath && incidentId != null)
-            {
-                View view = DataContext.Project.GetViewByName(e.ViewName);
-                if (view == null)
-                {
-                    Log.Current.WarnFormat("View not found: {0}", e);
-                }
-                else
-                {
-                    ViewLink viewLink = DataContext.ViewLinks.Create();
-                    viewLink.ViewId = view.Id;
-                    viewLink.IncidentId = incidentId;
-                    DataContext.ViewLinks.Save(viewLink);
-                }
-            }
-            Messenger.Default.Send(new RefreshMessage<View>(incidentId));
-        }
-
-        private void Service_TemplateAdded(object sender, TemplateEventArgs e)
-        {
-            Messenger.Default.Send(new RefreshMessage<Template>());
-        }
-
-        // TODO: Make this more robust
-        private void Service_CanvasClosed(object sender, CanvasEventArgs e)
-        {
-            string incidentId = e.Tag;
-            if (DataContext.Project.FilePath == e.ProjectPath)
-            {
-                Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
-                canvas.Content = File.ReadAllText(e.CanvasPath);
-                DataContext.Project.UpdateCanvas(canvas);
-            }
-            Messenger.Default.Send(new RefreshMessage<Canvas>(incidentId));
-        }
+        // TODO: Use existing document if applicable
 
         public void OpenDataSource()
         {
@@ -171,9 +133,7 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Implement
         }
 
-        // TODO: Use existing document if applicable
-
-        private void OpenDocument(DocumentViewModel document)
+        private void OpenDocument(ViewModelBase document)
         {
             Documents.Add(document);
             ActiveDocument = document;
@@ -252,6 +212,55 @@ namespace ERHMS.Presentation.ViewModels
         public void Exit()
         {
             Messenger.Default.Send(new ExitMessage());
+        }
+
+        private void Service_ViewAdded(object sender, ViewEventArgs e)
+        {
+            string incidentId = e.Tag;
+            if (e.ProjectPath == DataContext.Project.FilePath && incidentId != null)
+            {
+                View view = DataContext.Project.GetViewByName(e.ViewName);
+                if (view == null)
+                {
+                    Log.Current.WarnFormat("View not found: {0}", e);
+                }
+                else
+                {
+                    ViewLink viewLink = DataContext.ViewLinks.Create();
+                    viewLink.ViewId = view.Id;
+                    viewLink.IncidentId = incidentId;
+                    DataContext.ViewLinks.Save(viewLink);
+                }
+            }
+            Messenger.Default.Send(new RefreshMessage<View>(incidentId));
+        }
+
+        private void Service_ViewDataImported(object sender, ViewEventArgs e)
+        {
+            Messenger.Default.Send(new ServiceMessage<ViewEventArgs>("ViewDataImported", e));
+        }
+
+        private void Service_RecordSaved(object sender, RecordEventArgs e)
+        {
+            Messenger.Default.Send(new ServiceMessage<RecordEventArgs>("RecordSaved", e));
+        }
+
+        private void Service_TemplateAdded(object sender, TemplateEventArgs e)
+        {
+            Messenger.Default.Send(new RefreshMessage<Template>());
+        }
+
+        // TODO: Make this more robust
+        private void Service_CanvasClosed(object sender, CanvasEventArgs e)
+        {
+            string incidentId = e.Tag;
+            if (DataContext.Project.FilePath == e.ProjectPath)
+            {
+                Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
+                canvas.Content = File.ReadAllText(e.CanvasPath);
+                DataContext.Project.UpdateCanvas(canvas);
+            }
+            Messenger.Default.Send(new RefreshMessage<Canvas>(incidentId));
         }
     }
 }

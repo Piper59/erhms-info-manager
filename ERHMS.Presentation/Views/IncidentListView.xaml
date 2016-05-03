@@ -30,8 +30,8 @@
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
         <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                  ItemsSource="{Binding Incidents}"
-                  SelectedItem="{Binding SelectedIncident}"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}"
                   ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />

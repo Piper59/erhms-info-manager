@@ -1,6 +1,5 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -11,60 +10,9 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class LocationListViewModel : ViewModelBase
+    public class LocationListViewModel : ListViewModelBase<Location>
     {
-        private static readonly ICollection<Func<Location, string>> FilterPropertyAccessors = new Func<Location, string>[]
-        {
-            location => location.Name,
-            location => location.Description,
-            location => location.Address,
-            location => location.Latitude.ToString(),
-            location => location.Longitude.ToString()
-        };
-
         public Incident Incident { get; private set; }
-
-        private string filter;
-        public string Filter
-        {
-            get
-            {
-                return filter;
-            }
-            set
-            {
-                if (!Set(() => Filter, ref filter, value))
-                {
-                    return;
-                }
-                Locations.Refresh();
-            }
-        }
-
-        private ICollectionView locations;
-        public ICollectionView Locations
-        {
-            get { return locations; }
-            set { Set(() => Locations, ref locations, value); }
-        }
-
-        private Location selectedLocation;
-        public Location SelectedLocation
-        {
-            get
-            {
-                return selectedLocation;
-            }
-            set
-            {
-                if (!Set(() => SelectedLocation, ref selectedLocation, value))
-                {
-                    return;
-                }
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-            }
-        }
 
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
@@ -73,18 +21,35 @@ namespace ERHMS.Presentation.ViewModels
 
         public LocationListViewModel(Incident incident)
         {
+            Title = string.Format("{0} Locations", incident.Name);
             Incident = incident;
+            Selecting += (sender, e) =>
+            {
+                EditCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+            };
             Refresh();
             CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasSelectedLocation);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedLocation);
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Location>>(this, OnRefreshMessage);
         }
 
-        public bool HasSelectedLocation()
+        protected override ICollectionView GetItems()
         {
-            return SelectedLocation != null;
+            return CollectionViewSource.GetDefaultView(DataContext.Locations
+                .SelectByIncident(Incident.IncidentId)
+                .OrderBy(location => location.Name));
+        }
+
+        protected override IEnumerable<string> GetFilteredValues(Location item)
+        {
+            yield return item.Name;
+            yield return item.Description;
+            yield return item.Address;
+            yield return item.Latitude.ToString();
+            yield return item.Longitude.ToString();
         }
 
         public void Create()
@@ -96,7 +61,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Edit()
         {
-            Locator.Main.OpenLocationDetailView((Location)SelectedLocation.Clone());
+            Locator.Main.OpenLocationDetailView((Location)SelectedItem.Clone());
         }
 
         public void Delete()
@@ -108,36 +73,10 @@ namespace ERHMS.Presentation.ViewModels
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
             {
-                DataContext.Locations.Delete(SelectedLocation);
+                DataContext.Locations.Delete(SelectedItem);
                 Messenger.Default.Send(new RefreshMessage<Location>(Incident.IncidentId));
             };
             Messenger.Default.Send(msg);
-        }
-
-        public void Refresh()
-        {
-            Locations = CollectionViewSource.GetDefaultView(DataContext.Locations
-                .SelectByIncident(Incident.IncidentId)
-                .OrderBy(location => location.Name));
-            Locations.Filter = MatchesFilter;
-        }
-
-        private bool MatchesFilter(object item)
-        {
-            if (string.IsNullOrWhiteSpace(Filter))
-            {
-                return true;
-            }
-            Location location = (Location)item;
-            foreach (Func<Location, string> accessor in FilterPropertyAccessors)
-            {
-                string property = accessor(location);
-                if (property != null && property.ContainsIgnoreCase(Filter))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private void OnRefreshMessage(RefreshMessage<Location> msg)

@@ -25,8 +25,8 @@
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
         <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                  ItemsSource="{Binding Locations}"
-                  SelectedItem="{Binding SelectedLocation}"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}"
                   ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />

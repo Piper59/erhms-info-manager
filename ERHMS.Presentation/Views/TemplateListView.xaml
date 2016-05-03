@@ -23,8 +23,8 @@
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
         <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                  ItemsSource="{Binding Templates}"
-                  SelectedItem="{Binding SelectedTemplate}">
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Description" Width="3*" Binding="{Binding Description}" />

@@ -11,58 +11,8 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentListViewModel : DocumentViewModel
+    public class IncidentListViewModel : ListViewModelBase<Incident>
     {
-        private static readonly ICollection<Func<Incident, string>> FilterPropertyAccessors = new Func<Incident, string>[]
-        {
-            incident => incident.Name,
-            incident => incident.Description,
-            incident => EnumExtensions.ToDescription(incident.Phase),
-            incident => incident.StartDate.HasValue ? incident.StartDate.Value.ToShortDateString() : null
-        };
-
-        private string filter;
-        public string Filter
-        {
-            get
-            {
-                return filter;
-            }
-            set
-            {
-                if (!Set(() => Filter, ref filter, value))
-                {
-                    return;
-                }
-                Incidents.Refresh();
-            }
-        }
-
-        private ICollectionView incidents;
-        public ICollectionView Incidents
-        {
-            get { return incidents; }
-            set { Set(() => Incidents, ref incidents, value); }
-        }
-
-        private Incident selectedIncident;
-        public Incident SelectedIncident
-        {
-            get
-            {
-                return selectedIncident;
-            }
-            set
-            {
-                if (!Set(() => SelectedIncident, ref selectedIncident, value))
-                {
-                    return;
-                }
-                OpenCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-            }
-        }
-
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand OpenCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
@@ -71,17 +21,32 @@ namespace ERHMS.Presentation.ViewModels
         public IncidentListViewModel()
         {
             Title = "Incidents";
+            Selecting += (sender, e) =>
+            {
+                OpenCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+            };
             Refresh();
             CreateCommand = new RelayCommand(Create);
-            OpenCommand = new RelayCommand(Open, HasSelectedIncident);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedIncident);
+            OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshMessage);
         }
 
-        public bool HasSelectedIncident()
+        protected override ICollectionView GetItems()
         {
-            return SelectedIncident != null;
+            return CollectionViewSource.GetDefaultView(DataContext.Incidents
+                .SelectByDeleted(false)
+                .OrderBy(incident => incident.Name));
+        }
+
+        protected override IEnumerable<string> GetFilteredValues(Incident item)
+        {
+            yield return item.Name;
+            yield return item.Description;
+            yield return EnumExtensions.ToDescription(item.Phase);
+            yield return item.StartDate.HasValue ? item.StartDate.Value.ToShortDateString() : null;
         }
 
         public void Create()
@@ -91,7 +56,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Open()
         {
-            Locator.Main.OpenIncidentView((Incident)SelectedIncident.Clone());
+            Locator.Main.OpenIncidentView((Incident)SelectedItem.Clone());
         }
 
         public void Delete()
@@ -103,37 +68,11 @@ namespace ERHMS.Presentation.ViewModels
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
             {
-                SelectedIncident.Deleted = true;
-                DataContext.Incidents.Save(SelectedIncident);
+                SelectedItem.Deleted = true;
+                DataContext.Incidents.Save(SelectedItem);
                 Messenger.Default.Send(new RefreshMessage<Incident>());
             };
             Messenger.Default.Send(msg);
-        }
-
-        public void Refresh()
-        {
-            Incidents = CollectionViewSource.GetDefaultView(DataContext.Incidents
-                .SelectByDeleted(false)
-                .OrderBy(incident => incident.Name));
-            Incidents.Filter = MatchesFilter;
-        }
-
-        private bool MatchesFilter(object item)
-        {
-            if (string.IsNullOrWhiteSpace(Filter))
-            {
-                return true;
-            }
-            Incident incident = (Incident)item;
-            foreach (Func<Incident, string> accessor in FilterPropertyAccessors)
-            {
-                string property = accessor(incident);
-                if (property != null && property.ContainsIgnoreCase(Filter))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private void OnRefreshMessage(RefreshMessage<Incident> msg)

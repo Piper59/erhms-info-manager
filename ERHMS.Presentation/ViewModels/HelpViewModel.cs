@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Presentation.ViewModels
 {
-    public class HelpViewModel : DocumentViewModel
+    public class HelpViewModel : ViewModelBase
     {
         public HelpViewModel()
         {

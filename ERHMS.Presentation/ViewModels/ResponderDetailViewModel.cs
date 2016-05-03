@@ -1,4 +1,5 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -9,7 +10,7 @@ using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class ResponderDetailViewModel : DocumentViewModel
+    public class ResponderDetailViewModel : ViewModelBase
     {
         public Responder Responder { get; private set; }
         public ICollection<string> Prefixes { get; private set; }
@@ -23,23 +24,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             Responder = responder;
             UpdateTitle();
-            Prefixes = DataContext.Prefixes
-                .Select()
-                .Prepend("")
-                .ToList();
-            Suffixes = DataContext.Suffixes
-                .Select()
-                .Prepend("")
-                .ToList();
-            Genders = DataContext.Genders
-                .Select()
-                .Prepend("")
-                .ToList();
-            States = DataContext.States
-                .Select()
-                .Prepend("")
-                .ToList();
+            Prefixes = GetCodes(DataContext.Prefixes);
+            Suffixes = GetCodes(DataContext.Suffixes);
+            Genders = GetCodes(DataContext.Genders);
+            States = GetCodes(DataContext.States);
             SaveCommand = new RelayCommand(Save);
+            // TODO: Handle ServiceMessage<RecordEventArgs>
         }
 
         private void UpdateTitle()
@@ -52,6 +42,13 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Title = string.Format("{0}, {1}", Responder.LastName, Responder.FirstName);
             }
+        }
+
+        private ICollection<string> GetCodes(CodeRepository codes)
+        {
+            return codes.Select()
+                .Prepend("")
+                .ToList();
         }
 
         public void Save()

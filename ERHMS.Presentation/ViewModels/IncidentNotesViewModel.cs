@@ -31,6 +31,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public IncidentNotesViewModel(Incident incident)
         {
+            Title = string.Format("{0} Notes", incident.Name);
             Incident = incident;
             Refresh();
             Note = CreateNote();
@@ -39,9 +40,11 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Register<RefreshMessage<IncidentNote>>(this, OnRefreshMessage);
         }
 
-        public bool HasContent()
+        public void Refresh()
         {
-            return !string.IsNullOrWhiteSpace(Note.Content);
+            Notes = DataContext.IncidentNotes.SelectByIncident(Incident.IncidentId)
+                .OrderByDescending(note => note.Date)
+                .ToList();
         }
 
         private IncidentNote CreateNote()
@@ -57,6 +60,11 @@ namespace ERHMS.Presentation.ViewModels
             return note;
         }
 
+        public bool HasContent()
+        {
+            return !string.IsNullOrWhiteSpace(Note.Content);
+        }
+
         public void Save()
         {
             Note.IncidentId = Incident.IncidentId;
@@ -64,13 +72,6 @@ namespace ERHMS.Presentation.ViewModels
             DataContext.IncidentNotes.Save(Note);
             Messenger.Default.Send(new RefreshMessage<IncidentNote>(Incident.IncidentId));
             Note = CreateNote();
-        }
-
-        public void Refresh()
-        {
-            Notes = DataContext.IncidentNotes.SelectByIncident(Incident.IncidentId)
-                .OrderByDescending(note => note.Date)
-                .ToList();
         }
 
         private void OnRefreshMessage(RefreshMessage<IncidentNote> msg)

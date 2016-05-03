@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class AboutViewModel : DocumentViewModel
+    public class AboutViewModel : ViewModelBase
     {
         public string Version { get; private set; }
         public string InformationalVersion { get; private set; }

@@ -2,7 +2,7 @@
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentViewModel : DocumentViewModel
+    public class IncidentViewModel : ViewModelBase
     {
         public Incident Incident { get; private set; }
         public IncidentDetailViewModel Detail { get; private set; }

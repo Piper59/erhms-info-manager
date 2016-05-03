@@ -3,7 +3,7 @@ using System.IO;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class LogViewModel : DocumentViewModel
+    public class LogViewModel : ViewModelBase
     {
         public string Content { get; private set; }
 

@@ -29,7 +29,7 @@
             <Button Command="{Binding EditCommand}">Edit</Button>
             <Button Command="{Binding DeleteCommand}">Delete</Button>
             <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Data"
-                    IsEnabled="{Binding SelectedView, Converter={StaticResource NullToBoolConverter}}">
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Enter" Command="{Binding EnterDataCommand}" />
@@ -38,7 +38,7 @@
                 </Button.ContextMenu>
             </Button>
             <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Publish"
-                    IsEnabled="{Binding SelectedView, Converter={StaticResource NullToBoolConverter}}">
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="To Template" Command="{Binding PublishToTemplateCommand}" />
@@ -48,7 +48,7 @@
                 </Button.ContextMenu>
             </Button>
             <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Import"
-                    IsEnabled="{Binding SelectedView, Converter={StaticResource NullToBoolConverter}}">
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="From Project" Command="{Binding ImportFromProjectCommand}" />
@@ -60,7 +60,7 @@
                 </Button.ContextMenu>
             </Button>
             <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Export"
-                    IsEnabled="{Binding SelectedView, Converter={StaticResource NullToBoolConverter}}">
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="To Package" Command="{Binding ExportToPackageCommand}" />
@@ -69,7 +69,7 @@
                 </Button.ContextMenu>
             </Button>
             <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Analyze"
-                    IsEnabled="{Binding SelectedView, Converter={StaticResource NullToBoolConverter}}">
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Classic" Command="{Binding AnalyzeClassicCommand}" />
@@ -120,8 +120,8 @@
             </scw:ChildWindow>
         </WrapPanel>
         <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                  ItemsSource="{Binding Views}"
-                  SelectedItem="{Binding SelectedView}">
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
             </DataGrid.Columns>

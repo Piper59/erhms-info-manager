@@ -2,7 +2,6 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.AnalysisDashboard;
 using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -13,60 +12,13 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class CanvasListViewModel : DocumentViewModel
+    public class CanvasListViewModel : ListViewModelBase<Canvas>
     {
-        private static readonly ICollection<Func<Canvas, string>> FilterPropertyAccessors = new Func<Canvas, string>[]
-        {
-            canvas => canvas.Name
-        };
-
         public Incident Incident { get; private set; }
 
         public string IncidentId
         {
             get { return Incident == null ? null : Incident.IncidentId; }
-        }
-
-        private string filter;
-        public string Filter
-        {
-            get
-            {
-                return filter;
-            }
-            set
-            {
-                if (!Set(() => Filter, ref filter, value))
-                {
-                    return;
-                }
-                Canvases.Refresh();
-            }
-        }
-
-        private ICollectionView canvases;
-        public ICollectionView Canvases
-        {
-            get { return canvases; }
-            set { Set(() => Canvases, ref canvases, value); }
-        }
-
-        private Canvas selectedCanvas;
-        public Canvas SelectedCanvas
-        {
-            get
-            {
-                return selectedCanvas;
-            }
-            set
-            {
-                if (!Set(() => SelectedCanvas, ref selectedCanvas, value))
-                {
-                    return;
-                }
-                OpenCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-            }
         }
 
         public RelayCommand OpenCommand { get; private set; }
@@ -84,21 +36,40 @@ namespace ERHMS.Presentation.ViewModels
                 Title = string.Format("{0} Dashboards", incident.Name);
             }
             Incident = incident;
+            Selecting += (sender, e) =>
+            {
+                OpenCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+            };
             Refresh();
-            OpenCommand = new RelayCommand(Open, HasSelectedCanvas);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedCanvas);
+            OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Canvas>>(this, OnRefreshMessage);
         }
 
-        public bool HasSelectedCanvas()
+        protected override ICollectionView GetItems()
         {
-            return SelectedCanvas != null;
+            IEnumerable<Canvas> canvases;
+            if (Incident == null)
+            {
+                canvases = DataContext.GetUnlinkedCanvases();
+            }
+            else
+            {
+                canvases = DataContext.GetLinkedCanvases(IncidentId);
+            }
+            return CollectionViewSource.GetDefaultView(canvases.OrderBy(canvas => canvas.Name));
+        }
+
+        protected override IEnumerable<string> GetFilteredValues(Canvas item)
+        {
+            yield return item.Name;
         }
 
         public void Open()
         {
-            AnalysisDashboard.OpenCanvas(DataContext.Project, DataContext.Project.GetCanvasById(SelectedCanvas.CanvasId), IncidentId);
+            AnalysisDashboard.OpenCanvas(DataContext.Project, DataContext.Project.GetCanvasById(SelectedItem.CanvasId), IncidentId);
         }
 
         public void Delete()
@@ -110,48 +81,15 @@ namespace ERHMS.Presentation.ViewModels
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
             {
-                CanvasLink canvasLink = DataContext.CanvasLinks.SelectByCanvasId(SelectedCanvas.CanvasId);
+                CanvasLink canvasLink = DataContext.CanvasLinks.SelectByCanvasId(SelectedItem.CanvasId);
                 if (canvasLink != null)
                 {
                     DataContext.CanvasLinks.Delete(canvasLink);
                 }
-                DataContext.Project.DeleteCanvas(SelectedCanvas.CanvasId);
+                DataContext.Project.DeleteCanvas(SelectedItem.CanvasId);
                 Messenger.Default.Send(new RefreshMessage<Canvas>(IncidentId));
             };
             Messenger.Default.Send(msg);
-        }
-
-        public void Refresh()
-        {
-            IEnumerable<Canvas> canvases;
-            if (Incident == null)
-            {
-                canvases = DataContext.GetUnlinkedCanvases();
-            }
-            else
-            {
-                canvases = DataContext.GetLinkedCanvases(IncidentId);
-            }
-            Canvases = CollectionViewSource.GetDefaultView(canvases.OrderBy(canvas => canvas.Name));
-            Canvases.Filter = MatchesFilter;
-        }
-
-        private bool MatchesFilter(object item)
-        {
-            if (string.IsNullOrWhiteSpace(Filter))
-            {
-                return true;
-            }
-            Canvas canvas = (Canvas)item;
-            foreach (Func<Canvas, string> accessor in FilterPropertyAccessors)
-            {
-                string property = accessor(canvas);
-                if (property != null && property.ContainsIgnoreCase(Filter))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private void OnRefreshMessage(RefreshMessage<Canvas> msg)
