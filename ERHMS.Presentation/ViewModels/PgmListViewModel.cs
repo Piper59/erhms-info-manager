@@ -4,7 +4,6 @@ using ERHMS.EpiInfo.Analysis;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -27,25 +26,32 @@ namespace ERHMS.Presentation.ViewModels
 
         public PgmListViewModel(Incident incident)
         {
-            if (incident == null)
-            {
-                Title = "Analyses";
-            }
-            else
-            {
-                Title = string.Format("{0} Analyses", incident.Name);
-            }
             Incident = incident;
+            UpdateTitle();
+            Refresh();
             Selecting += (sender, e) =>
             {
                 OpenCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
             OpenCommand = new RelayCommand(Open, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<Pgm>>(this, OnRefreshListMessage);
+            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
+            Messenger.Default.Register<RefreshListMessage<Pgm>>(this, OnRefreshPgmListMessage);
+        }
+
+        private void UpdateTitle()
+        {
+            if (Incident == null)
+            {
+                Title = "Analyses";
+            }
+            else
+            {
+                string incidentName = Incident.New ? "New Incident" : Incident.Name;
+                Title = string.Format("{0} Analyses", incidentName).Trim();
+            }
         }
 
         protected override ICollectionView GetItems()
@@ -94,7 +100,15 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshListMessage(RefreshListMessage<Pgm> msg)
+        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
+        {
+            if (msg.Entity == Incident)
+            {
+                UpdateTitle();
+            }
+        }
+
+        private void OnRefreshPgmListMessage(RefreshListMessage<Pgm> msg)
         {
             if (msg.IncidentId == IncidentId)
             {

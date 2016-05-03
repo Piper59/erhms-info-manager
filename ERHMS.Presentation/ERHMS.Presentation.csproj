@@ -222,6 +222,7 @@
     <Compile Include="Messages\ExitMessage.cs" />
     <Compile Include="Messages\LocateMessage.cs" />
     <Compile Include="Messages\RefreshListMessage.cs" />
+    <Compile Include="Messages\RefreshMessage.cs" />
     <Compile Include="Messages\ServiceMessage.cs" />
     <Compile Include="Messages\ToastMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

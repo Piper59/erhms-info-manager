@@ -1,4 +1,6 @@
 ﻿using ERHMS.Domain;
+using ERHMS.Presentation.Messages;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -16,13 +18,6 @@ namespace ERHMS.Presentation.ViewModels
         public IncidentViewModel(Incident incident)
         {
             Incident = incident;
-            incident.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == "New")
-                {
-                    UpdateTitle();
-                }
-            };
             UpdateTitle();
             Detail = new IncidentDetailViewModel(incident);
             Notes = new IncidentNotesViewModel(incident);
@@ -31,6 +26,7 @@ namespace ERHMS.Presentation.ViewModels
             Templates = new TemplateListViewModel(incident);
             Pgms = new PgmListViewModel(incident);
             Canvases = new CanvasListViewModel(incident);
+            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
         }
 
         private void UpdateTitle()
@@ -42,6 +38,14 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 Title = Incident.Name;
+            }
+        }
+
+        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
+        {
+            if (msg.Entity == Incident)
+            {
+                UpdateTitle();
             }
         }
     }

@@ -4,7 +4,6 @@ using ERHMS.EpiInfo.MakeView;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -30,16 +29,16 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Templates";
             Incident = incident;
+            Refresh();
             Selecting += (sender, e) =>
             {
                 CreateCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
             CreateCommand = new RelayCommand(Create, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<Template>>(this, OnRefreshListMessage);
+            Messenger.Default.Register<RefreshListMessage<Template>>(this, OnRefreshTemplateListMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -73,7 +72,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshListMessage(RefreshListMessage<Template> msg)
+        private void OnRefreshTemplateListMessage(RefreshListMessage<Template> msg)
         {
             Refresh();
         }

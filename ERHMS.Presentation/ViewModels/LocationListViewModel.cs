@@ -2,7 +2,6 @@
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -21,19 +20,26 @@ namespace ERHMS.Presentation.ViewModels
 
         public LocationListViewModel(Incident incident)
         {
-            Title = string.Format("{0} Locations", incident.Name);
             Incident = incident;
+            UpdateTitle();
+            Refresh();
             Selecting += (sender, e) =>
             {
                 EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<Location>>(this, OnRefreshListMessage);
+            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
+            Messenger.Default.Register<RefreshListMessage<Location>>(this, OnRefreshLocationListMessage);
+        }
+
+        private void UpdateTitle()
+        {
+            string incidentName = Incident.New ? "New Incident" : Incident.Name;
+            Title = string.Format("{0} Locations", incidentName).Trim();
         }
 
         protected override ICollectionView GetItems()
@@ -79,7 +85,15 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshListMessage(RefreshListMessage<Location> msg)
+        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
+        {
+            if (msg.Entity == Incident)
+            {
+                UpdateTitle();
+            }
+        }
+
+        private void OnRefreshLocationListMessage(RefreshListMessage<Location> msg)
         {
             if (msg.IncidentId == Incident.IncidentId)
             {

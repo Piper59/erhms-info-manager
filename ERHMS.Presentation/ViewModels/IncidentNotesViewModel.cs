@@ -31,13 +31,27 @@ namespace ERHMS.Presentation.ViewModels
 
         public IncidentNotesViewModel(Incident incident)
         {
-            Title = string.Format("{0} Notes", incident.Name);
             Incident = incident;
+            UpdateTitle();
             Refresh();
             Note = CreateNote();
             SaveCommand = new RelayCommand(Save, HasContent);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<IncidentNote>>(this, OnRefreshListMessage);
+            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
+            Messenger.Default.Register<RefreshListMessage<IncidentNote>>(this, OnRefreshIncidentNoteListMessage);
+        }
+
+        private void UpdateTitle()
+        {
+            if (Incident == null)
+            {
+                Title = "Notes";
+            }
+            else
+            {
+                string incidentName = Incident.New ? "New Incident" : Incident.Name;
+                Title = string.Format("{0} Notes", incidentName).Trim();
+            }
         }
 
         public void Refresh()
@@ -74,7 +88,15 @@ namespace ERHMS.Presentation.ViewModels
             Note = CreateNote();
         }
 
-        private void OnRefreshListMessage(RefreshListMessage<IncidentNote> msg)
+        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
+        {
+            if (msg.Entity == Incident)
+            {
+                UpdateTitle();
+            }
+        }
+
+        private void OnRefreshIncidentNoteListMessage(RefreshListMessage<IncidentNote> msg)
         {
             if (msg.IncidentId == Incident.IncidentId)
             {

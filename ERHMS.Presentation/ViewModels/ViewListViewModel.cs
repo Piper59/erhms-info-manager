@@ -9,7 +9,6 @@ using ERHMS.EpiInfo.MakeView;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -97,15 +96,9 @@ namespace ERHMS.Presentation.ViewModels
 
         public ViewListViewModel(Incident incident)
         {
-            if (incident == null)
-            {
-                Title = "Forms";
-            }
-            else
-            {
-                Title = string.Format("{0} Forms", incident.Name);
-            }
             Incident = incident;
+            UpdateTitle();
+            Refresh();
             Selecting += (sender, e) =>
             {
                 EditCommand.RaiseCanExecuteChanged();
@@ -125,7 +118,6 @@ namespace ERHMS.Presentation.ViewModels
                 AnalyzeClassicCommand.RaiseCanExecuteChanged();
                 AnalyzeVisualCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
@@ -148,7 +140,21 @@ namespace ERHMS.Presentation.ViewModels
             CreateCanvasCommand = new RelayCommand(CreateCanvas, HasCanvasName);
             CancelCanvasCommand = new RelayCommand(CancelCanvas);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshListMessage);
+            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
+            Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
+        }
+
+        private void UpdateTitle()
+        {
+            if (Incident == null)
+            {
+                Title = "Forms";
+            }
+            else
+            {
+                string incidentName = Incident.New ? "New Incident" : Incident.Name;
+                Title = string.Format("{0} Forms", incidentName).Trim();
+            }
         }
 
         protected override ICollectionView GetItems()
@@ -340,7 +346,15 @@ namespace ERHMS.Presentation.ViewModels
             CanvasName = "";
         }
 
-        private void OnRefreshListMessage(RefreshListMessage<View> msg)
+        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
+        {
+            if (msg.Entity == Incident)
+            {
+                UpdateTitle();
+            }
+        }
+
+        private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
         {
             if (msg.IncidentId == IncidentId)
             {

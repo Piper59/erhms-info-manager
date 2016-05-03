@@ -2,7 +2,6 @@
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -21,19 +20,19 @@ namespace ERHMS.Presentation.ViewModels
         public ResponderListViewModel()
         {
             Title = "Responders";
+            Refresh();
             Selecting += (sender, e) =>
             {
                 EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
                 EmailCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshListMessage);
+            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -86,7 +85,7 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Implement
         }
 
-        private void OnRefreshListMessage(RefreshListMessage<Responder> msg)
+        private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)
         {
             Refresh();
         }
