@@ -81,6 +81,7 @@ namespace ERHMS.EpiInfo.DataAccess
                     entity.SetProperty(column.ColumnName, null);
                 }
             }
+            entity.GlobalRecordId = Guid.NewGuid().ToString();
             return entity;
         }
 

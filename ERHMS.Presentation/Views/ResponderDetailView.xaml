@@ -29,7 +29,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="False" Text="{Binding ResponderId}" />
+                            <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding ResponderId}" />
                             <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
                             <ComboBox Grid.Row="1" Grid.Column="1"
                                       ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"

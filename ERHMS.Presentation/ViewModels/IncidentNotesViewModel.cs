@@ -50,6 +50,7 @@ namespace ERHMS.Presentation.ViewModels
         private IncidentNote CreateNote()
         {
             IncidentNote note = DataContext.IncidentNotes.Create();
+            note.IncidentId = Incident.IncidentId;
             note.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName != "Content")
@@ -67,7 +68,6 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Save()
         {
-            Note.IncidentId = Incident.IncidentId;
             Note.Date = DateTime.Now;
             DataContext.IncidentNotes.Save(Note);
             Messenger.Default.Send(new RefreshMessage<IncidentNote>(Incident.IncidentId));

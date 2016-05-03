@@ -26,6 +26,7 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 entity.SetProperty(column.ColumnName, null);
             }
+            entity.Guid = Guid.NewGuid().ToString();
             return entity;
         }
 
