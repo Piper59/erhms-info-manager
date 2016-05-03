@@ -209,8 +209,7 @@
     <Compile Include="Controls\DataGridExtensions.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
-    <Compile Include="Converters\DateTimeToShortDateConverter.cs" />
-    <Compile Include="Converters\DateTimeToShortDateTimeConverter.cs" />
+    <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="Converters\NullToBoolConverter.cs" />

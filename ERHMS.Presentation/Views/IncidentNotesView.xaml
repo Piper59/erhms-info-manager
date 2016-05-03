@@ -8,7 +8,7 @@
              d:DesignWidth="640" d:DesignHeight="480"
              Name="Root">
     <UserControl.Resources>
-        <conv:DateTimeToShortDateTimeConverter x:Key="DateTimeToShortDateTimeConverter" />
+        <conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
     </UserControl.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" DataContext="{Binding Note}">
@@ -23,7 +23,7 @@
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding Content}" />
-                        <TextBlock Text="{Binding Date, Converter={StaticResource DateTimeToShortDateTimeConverter}}" />
+                        <TextBlock Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

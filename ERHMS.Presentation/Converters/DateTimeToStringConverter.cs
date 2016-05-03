@@ -4,14 +4,21 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.Converters
 {
-    public class DateTimeToShortDateTimeConverter : IValueConverter
+    public class DateTimeToStringConverter : IValueConverter
     {
+        public string Format { get; set; }
+
+        public DateTimeToStringConverter()
+        {
+            Format = "g";
+        }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            DateTime? date = (DateTime?)value;
-            if (date.HasValue)
+            DateTime? dateTime = (DateTime?)value;
+            if (dateTime.HasValue)
             {
-                return string.Format("{0} {1}", date.Value.ToShortDateString(), date.Value.ToShortTimeString());
+                return dateTime.Value.ToString(Format);
             }
             else
             {
@@ -27,10 +34,10 @@ namespace ERHMS.Presentation.Converters
             }
             else
             {
-                DateTime date;
-                if (DateTime.TryParse(value.ToString(), out date))
+                DateTime dateTime;
+                if (DateTime.TryParse(value.ToString(), out dateTime))
                 {
-                    return date;
+                    return dateTime;
                 }
                 else
                 {

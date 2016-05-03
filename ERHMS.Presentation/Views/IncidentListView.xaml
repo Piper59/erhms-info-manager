@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <UserControl.Resources>
-        <conv:DateTimeToShortDateConverter x:Key="DateTimeToShortDateConverter" />
+        <conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" Format="d" />
         <conv:PhaseToDescriptionConverter x:Key="PhaseToDescriptionConverter" />
     </UserControl.Resources>
     <DockPanel>
@@ -37,7 +37,7 @@
                 <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Description" Width="4*" Binding="{Binding Description}" />
                 <DataGridTextColumn Header="Phase" Width="2*" Binding="{Binding Phase, Converter={StaticResource PhaseToDescriptionConverter}}" />
-                <DataGridTextColumn Header="Start Date" Width="*" Binding="{Binding StartDate, Converter={StaticResource DateTimeToShortDateConverter}}" />
+                <DataGridTextColumn Header="Start Date" Width="*" Binding="{Binding StartDate, Converter={StaticResource DateTimeToStringConverter}}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
