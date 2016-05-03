@@ -60,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             SaveCommand = new RelayCommand(Save);
             LocateCommand = new RelayCommand(Locate, HasAddress);
-            Messenger.Default.Register<LocateMessage>(this, OnMapMessage);
+            Messenger.Default.Register<LocateMessage>(this, OnLocateMessage);
         }
 
         private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -160,7 +160,7 @@ namespace ERHMS.Presentation.ViewModels
             UpdateTitle();
         }
 
-        private void OnMapMessage(LocateMessage msg)
+        private void OnLocateMessage(LocateMessage msg)
         {
             SetCoordinates(msg.Location.Latitude, msg.Location.Longitude);
         }
