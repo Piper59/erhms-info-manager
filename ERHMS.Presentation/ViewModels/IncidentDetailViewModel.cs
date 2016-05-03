@@ -29,7 +29,7 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Validate fields
             DataContext.Incidents.Save(Incident);
             Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Incident has been saved."));
-            Messenger.Default.Send(new RefreshMessage<Incident>());
+            Messenger.Default.Send(new RefreshListMessage<Incident>());
         }
     }
 }

@@ -45,7 +45,7 @@ namespace ERHMS.Presentation.ViewModels
             OpenCommand = new RelayCommand(Open, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<Canvas>>(this, OnRefreshMessage);
+            Messenger.Default.Register<RefreshListMessage<Canvas>>(this, OnRefreshListMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -87,12 +87,12 @@ namespace ERHMS.Presentation.ViewModels
                     DataContext.CanvasLinks.Delete(canvasLink);
                 }
                 DataContext.Project.DeleteCanvas(SelectedItem.CanvasId);
-                Messenger.Default.Send(new RefreshMessage<Canvas>(IncidentId));
+                Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
             };
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshMessage(RefreshMessage<Canvas> msg)
+        private void OnRefreshListMessage(RefreshListMessage<Canvas> msg)
         {
             if (msg.IncidentId == IncidentId)
             {

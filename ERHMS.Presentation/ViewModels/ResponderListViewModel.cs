@@ -33,7 +33,7 @@ namespace ERHMS.Presentation.ViewModels
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<Responder>>(this, OnRefreshMessage);
+            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshListMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -76,7 +76,7 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.Responders.Delete(SelectedItem);
-                Messenger.Default.Send(new RefreshMessage<Responder>());
+                Messenger.Default.Send(new RefreshListMessage<Responder>());
             };
             Messenger.Default.Send(msg);
         }
@@ -86,7 +86,7 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Implement
         }
 
-        private void OnRefreshMessage(RefreshMessage<Responder> msg)
+        private void OnRefreshListMessage(RefreshListMessage<Responder> msg)
         {
             Refresh();
         }

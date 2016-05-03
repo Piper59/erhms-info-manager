@@ -37,7 +37,7 @@ namespace ERHMS.Presentation.ViewModels
             Note = CreateNote();
             SaveCommand = new RelayCommand(Save, HasContent);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<IncidentNote>>(this, OnRefreshMessage);
+            Messenger.Default.Register<RefreshListMessage<IncidentNote>>(this, OnRefreshListMessage);
         }
 
         public void Refresh()
@@ -70,11 +70,11 @@ namespace ERHMS.Presentation.ViewModels
         {
             Note.Date = DateTime.Now;
             DataContext.IncidentNotes.Save(Note);
-            Messenger.Default.Send(new RefreshMessage<IncidentNote>(Incident.IncidentId));
+            Messenger.Default.Send(new RefreshListMessage<IncidentNote>(Incident.IncidentId));
             Note = CreateNote();
         }
 
-        private void OnRefreshMessage(RefreshMessage<IncidentNote> msg)
+        private void OnRefreshListMessage(RefreshListMessage<IncidentNote> msg)
         {
             if (msg.IncidentId == Incident.IncidentId)
             {

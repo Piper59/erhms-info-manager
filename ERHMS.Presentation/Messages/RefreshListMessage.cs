@@ -1,10 +1,10 @@
 ﻿namespace ERHMS.Presentation.Messages
 {
-    public class RefreshMessage<T>
+    public class RefreshListMessage<T>
     {
         public string IncidentId { get; private set; }
 
-        public RefreshMessage(string incidentId = null)
+        public RefreshListMessage(string incidentId = null)
         {
             IncidentId = incidentId;
         }

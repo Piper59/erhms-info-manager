@@ -156,7 +156,7 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Validate fields
             DataContext.Locations.Save(Location);
             Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Location has been saved."));
-            Messenger.Default.Send(new RefreshMessage<Location>(Location.IncidentId));
+            Messenger.Default.Send(new RefreshListMessage<Location>(Location.IncidentId));
             UpdateTitle();
         }
 

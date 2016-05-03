@@ -148,7 +148,7 @@ namespace ERHMS.Presentation.ViewModels
             CreateCanvasCommand = new RelayCommand(CreateCanvas, HasCanvasName);
             CancelCanvasCommand = new RelayCommand(CancelCanvas);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<View>>(this, OnRefreshMessage);
+            Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshListMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -205,7 +205,7 @@ namespace ERHMS.Presentation.ViewModels
                     DataContext.ViewLinks.Delete(viewLink);
                 }
                 DataContext.Project.DeleteView(SelectedItem.Id);
-                Messenger.Default.Send(new RefreshMessage<View>(IncidentId));
+                Messenger.Default.Send(new RefreshListMessage<View>(IncidentId));
             };
             Messenger.Default.Send(msg);
         }
@@ -301,7 +301,7 @@ namespace ERHMS.Presentation.ViewModels
                 pgmLink.IncidentId = IncidentId;
                 DataContext.PgmLinks.Save(pgmLink);
             }
-            Messenger.Default.Send(new RefreshMessage<Pgm>(IncidentId));
+            Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
             CreatingPgm = false;
             PgmName = "";
             Analysis.OpenPgm(pgm, true);
@@ -322,7 +322,7 @@ namespace ERHMS.Presentation.ViewModels
                 canvasLink.IncidentId = IncidentId;
                 DataContext.CanvasLinks.Save(canvasLink);
             }
-            Messenger.Default.Send(new RefreshMessage<Canvas>(IncidentId));
+            Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
             CreatingCanvas = false;
             CanvasName = "";
             AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, IncidentId);
@@ -340,7 +340,7 @@ namespace ERHMS.Presentation.ViewModels
             CanvasName = "";
         }
 
-        private void OnRefreshMessage(RefreshMessage<View> msg)
+        private void OnRefreshListMessage(RefreshListMessage<View> msg)
         {
             if (msg.IncidentId == IncidentId)
             {

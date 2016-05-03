@@ -45,7 +45,7 @@ namespace ERHMS.Presentation.ViewModels
             OpenCommand = new RelayCommand(Open, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<Pgm>>(this, OnRefreshMessage);
+            Messenger.Default.Register<RefreshListMessage<Pgm>>(this, OnRefreshListMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -89,12 +89,12 @@ namespace ERHMS.Presentation.ViewModels
                     DataContext.PgmLinks.Delete(pgmLink);
                 }
                 DataContext.Project.DeletePgm(SelectedItem.PgmId);
-                Messenger.Default.Send(new RefreshMessage<Pgm>(IncidentId));
+                Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
             };
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshMessage(RefreshMessage<Pgm> msg)
+        private void OnRefreshListMessage(RefreshListMessage<Pgm> msg)
         {
             if (msg.IncidentId == IncidentId)
             {

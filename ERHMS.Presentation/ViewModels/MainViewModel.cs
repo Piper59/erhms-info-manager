@@ -232,7 +232,7 @@ namespace ERHMS.Presentation.ViewModels
                     DataContext.ViewLinks.Save(viewLink);
                 }
             }
-            Messenger.Default.Send(new RefreshMessage<View>(incidentId));
+            Messenger.Default.Send(new RefreshListMessage<View>(incidentId));
         }
 
         private void Service_ViewDataImported(object sender, ViewEventArgs e)
@@ -247,7 +247,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Service_TemplateAdded(object sender, TemplateEventArgs e)
         {
-            Messenger.Default.Send(new RefreshMessage<Template>());
+            Messenger.Default.Send(new RefreshListMessage<Template>());
         }
 
         // TODO: Make this more robust
@@ -260,7 +260,7 @@ namespace ERHMS.Presentation.ViewModels
                 canvas.Content = File.ReadAllText(e.CanvasPath);
                 DataContext.Project.UpdateCanvas(canvas);
             }
-            Messenger.Default.Send(new RefreshMessage<Canvas>(incidentId));
+            Messenger.Default.Send(new RefreshListMessage<Canvas>(incidentId));
         }
     }
 }
