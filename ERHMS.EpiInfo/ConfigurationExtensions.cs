@@ -51,7 +51,7 @@ namespace ERHMS.EpiInfo
             directories.Output = root.CreateSubdirectory("Output").FullName;
             directories.Project = root.CreateSubdirectory("Projects").FullName;
             directories.Samples = root.CreateSubdirectory(Path.Combine("Resources", "Samples")).FullName;
-            DeleteIfExists(root.GetSubdirectory(Path.Combine("Resources", "PHIN")));
+            DeleteIfExists(root.GetSubdirectory("Resources", "PHIN"));
             DirectoryInfo templates = root.CreateSubdirectory("Templates");
             directories.Templates = templates.FullName;
             templates.CreateSubdirectory("Fields");

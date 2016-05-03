@@ -2,21 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using SearchOption = System.IO.SearchOption;
 
 namespace ERHMS.Utility
 {
     public static class IOExtensions
     {
-        public static FileInfo GetFile(this DirectoryInfo @this, string path)
+        public static FileInfo GetFile(this DirectoryInfo @this, params string[] paths)
         {
-            return new FileInfo(Path.Combine(@this.FullName, path));
+            return new FileInfo(Path.Combine(@this.FullName, Path.Combine(paths)));
         }
 
-        public static DirectoryInfo GetSubdirectory(this DirectoryInfo @this, string path)
+        public static DirectoryInfo GetSubdirectory(this DirectoryInfo @this, params string[] paths)
         {
-            return new DirectoryInfo(Path.Combine(@this.FullName, path));
+            return new DirectoryInfo(Path.Combine(@this.FullName, Path.Combine(paths)));
         }
 
         public static IEnumerable<FileInfo> SearchByExtension(this DirectoryInfo @this, string extension, bool recurse = true)

@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using System.ServiceModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -76,7 +75,7 @@ namespace ERHMS.Presentation
             Service = new Service();
             host = Service.OpenHost();
             // TODO: Allow data context selection
-            FileInfo file = ConfigurationExtensions.GetConfigurationRoot().GetFile(@"Projects\ERHMS\ERHMS.prj");
+            FileInfo file = ConfigurationExtensions.GetConfigurationRoot().GetFile("Projects", "ERHMS", "ERHMS.prj");
             DataContext = new DataContext(new Project(file));
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler(TextBox_GotFocus));
         }
