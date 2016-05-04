@@ -4,7 +4,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Mantin.Controls.Wpf.Notification;
 using System.ComponentModel;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace ERHMS.Presentation
@@ -16,10 +16,25 @@ namespace ERHMS.Presentation
         public MainWindow()
         {
             Closing += MainWindow_Closing;
+            Messenger.Default.Register<BlockMessage>(this, OnBlockMessage);
             Messenger.Default.Register<ConfirmMessage>(this, OnConfirmMessage);
             Messenger.Default.Register<ToastMessage>(this, OnToastMessage);
             Messenger.Default.Register<ExitMessage>(this, OnExitMessage);
             InitializeComponent();
+        }
+
+        private async void BlockAsync(BlockMessage msg)
+        {
+            ProgressDialogController dialog = await this.ShowProgressAsync(
+                "Working \u2026",
+                msg.Message,
+                false,
+                new MetroDialogSettings
+                {
+                    AnimateHide = false
+                });
+            await Task.Factory.StartNew(msg.Action);
+            await dialog.CloseAsync();
         }
 
         private async void ConfirmAsync(ConfirmMessage msg)
@@ -59,6 +74,11 @@ namespace ERHMS.Presentation
                 closing = false;
             };
             ConfirmAsync(msg);
+        }
+
+        private void OnBlockMessage(BlockMessage msg)
+        {
+            BlockAsync(msg);
         }
 
         private void OnConfirmMessage(ConfirmMessage msg)
