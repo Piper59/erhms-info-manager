@@ -35,11 +35,7 @@ namespace ERHMS.EpiInfo.Domain
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            PropertyChanged?.Invoke(this, e);
         }
         protected void OnPropertyChanged(string name)
         {

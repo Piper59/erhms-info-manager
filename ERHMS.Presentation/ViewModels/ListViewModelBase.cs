@@ -57,11 +57,7 @@ namespace ERHMS.Presentation.ViewModels
         public event EventHandler Selecting;
         private void OnSelecting(EventArgs e)
         {
-            EventHandler handler = Selecting;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Selecting?.Invoke(this, e);
         }
         private void OnSelecting()
         {

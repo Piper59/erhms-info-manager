@@ -18,11 +18,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public event EventHandler Completed;
         private void OnCompleted(EventArgs e)
         {
-            EventHandler handler = Completed;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Completed?.Invoke(this, e);
         }
         private void OnCompleted()
         {

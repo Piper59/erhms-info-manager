@@ -30,11 +30,7 @@ namespace ERHMS.Utility
         public event EventHandler Executing;
         private void OnExecuting(EventArgs e)
         {
-            EventHandler handler = Executing;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Executing?.Invoke(this, e);
         }
         private void OnExecuting()
         {

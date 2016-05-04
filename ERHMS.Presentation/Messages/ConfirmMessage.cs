@@ -20,11 +20,7 @@ namespace ERHMS.Presentation.Messages
         public event EventHandler Confirmed;
         public void OnConfirmed(EventArgs e)
         {
-            EventHandler handler = Confirmed;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Confirmed?.Invoke(this, e);
         }
         public void OnConfirmed()
         {
