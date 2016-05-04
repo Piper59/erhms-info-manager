@@ -4,7 +4,14 @@
   <ItemGroup>
     <Content Include="$(BuildDir)**" Exclude="$(BuildDir)**\*.pdb">
       <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="Templates\**">
+      <PublishState>Include</PublishState>
+      <IncludeHash>true</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
   </ItemGroup>
 </Project>
