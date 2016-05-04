@@ -14,6 +14,23 @@ namespace ERHMS.EpiInfo
             return Driver.Select(Driver.CreateQuery(sql));
         }
 
+        public IEnumerable<int> GetSortedFieldIds(int viewId)
+        {
+            string sql = @"
+                SELECT F.FieldId, F.TabIndex, F.PageId, P.[Position]
+                FROM metaFields AS F
+                LEFT OUTER JOIN metaPages AS P ON F.PageId = P.PageId
+                WHERE F.ViewId = @ViewId";
+            Query query = Driver.CreateQuery(sql);
+            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
+            DataTable fields = Driver.Select(query);
+            return fields.AsEnumerable()
+                .OrderBy(field => field.IsNull("PageId") ? 1 : 2)
+                .ThenBy(field => field.Field<short?>("Position") ?? field.Field<int>("FieldId"))
+                .ThenBy(field => field.Field<double?>("TabIndex") ?? field.Field<int>("FieldId"))
+                .Select(field => field.Field<int>("FieldId"));
+        }
+
         public IEnumerable<View> GetViews()
         {
             return Metadata.GetViews().Cast<View>();

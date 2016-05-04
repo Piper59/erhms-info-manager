@@ -1,10 +1,13 @@
 ﻿using Epi;
+using Epi.Fields;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Enter;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
@@ -13,6 +16,13 @@ namespace ERHMS.Presentation.ViewModels
     {
         public View View { get; private set; }
         public ViewEntityRepository<ViewEntity> Entities { get; private set; }
+
+        private ICollection<DataGridColumn> columns;
+        public ICollection<DataGridColumn> Columns
+        {
+            get { return columns; }
+            set { Set(() => Columns, ref columns, value); }
+        }
 
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
@@ -25,6 +35,16 @@ namespace ERHMS.Presentation.ViewModels
             Title = view.Name;
             View = view;
             Entities = new ViewEntityRepository<ViewEntity>(App.Current.DataContext.Driver, view);
+            List<int> fieldIds = DataContext.Project.GetSortedFieldIds(view.Id).ToList();
+            Columns = view.Fields.TableColumnFields
+                .Cast<Field>()
+                .OrderBy(field => fieldIds.IndexOf(field.Id))
+                .Select(field => (DataGridColumn)new DataGridTextColumn
+                {
+                    Header = field.Name,
+                    Binding = new Binding(field.Name)
+                })
+                .ToList();
             Refresh();
             Selecting += (sender, e) =>
             {
