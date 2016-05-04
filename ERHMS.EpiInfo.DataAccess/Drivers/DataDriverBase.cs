@@ -158,7 +158,7 @@ namespace ERHMS.EpiInfo.DataAccess
                     {
                         continue;
                     }
-                    ExecuteNonQuery(transaction, sql);
+                    ExecuteNonQuery(transaction, sql.Trim());
                 }
                 transaction.Commit();
             }
