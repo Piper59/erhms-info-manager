@@ -120,13 +120,16 @@ namespace ERHMS.EpiInfo.Domain
 
         protected void LinkProperties(string sourceName, string targetName)
         {
-            PropertyChanged += (sender, e) =>
+            if (sourceName != targetName)
             {
-                if (e.PropertyName == sourceName)
+                PropertyChanged += (sender, e) =>
                 {
-                    OnPropertyChanged(targetName);
-                }
-            };
+                    if (e.PropertyName == sourceName)
+                    {
+                        OnPropertyChanged(targetName);
+                    }
+                };
+            }
         }
 
         public sealed override bool TryGetMember(GetMemberBinder binder, out object result)

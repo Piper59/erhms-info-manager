@@ -70,6 +70,19 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
+        public ViewEntity()
+        {
+            LinkProperties(ColumnNames.UNIQUE_KEY, "UniqueKey");
+            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, "GlobalRecordId");
+            LinkProperties(ColumnNames.FOREIGN_KEY, "ForeignKey");
+            LinkProperties(ColumnNames.REC_STATUS, "RecordStatus");
+            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, "FirstSaveLogonName");
+            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_TIME, "FirstSaveTime");
+            LinkProperties(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, "LastSaveLogonName");
+            LinkProperties(ColumnNames.RECORD_LAST_SAVE_TIME, "LastSaveTime");
+            LinkProperties(ColumnNames.REC_STATUS, "Deleted");
+        }
+
         public void SetDeleted(bool deleted)
         {
             RecordStatus = deleted ? (short)0 : (short)1;
