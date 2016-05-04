@@ -36,5 +36,22 @@ namespace ERHMS.EpiInfo
                 return false;
             }
         }
+
+        public static string ToDirectoryName(this TemplateLevel @this)
+        {
+            switch (@this)
+            {
+                case TemplateLevel.Project:
+                    return "Projects";
+                case TemplateLevel.View:
+                    return "Forms";
+                case TemplateLevel.Page:
+                    return "Pages";
+                case TemplateLevel.Field:
+                    return "Fields";
+                default:
+                    throw new NotSupportedException();
+            }
+        }
     }
 }

@@ -78,7 +78,7 @@ namespace ERHMS.EpiInfo
             Configuration configuration = Configuration.GetNewInstance();
             FileInfo file = new FileInfo(Path.Combine(
                 configuration.Directories.Templates,
-                EnumExtensions.ToDescription(level),
+                level.ToDirectoryName(),
                 string.Format("{0}{1}", name, FileExtension)));
             return Get(file);
         }
