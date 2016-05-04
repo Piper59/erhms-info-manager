@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.RecordListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="640" d:DesignHeight="480">
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <Button Command="{Binding CreateCommand}">Create</Button>
+            <Button Command="{Binding EditCommand}">Edit</Button>
+            <Button Command="{Binding DeleteCommand}">Delete</Button>
+            <Button Command="{Binding UndeleteCommand}">Undelete</Button>
+            <Button Command="{Binding RefreshCommand}">Refresh</Button>
+        </WrapPanel>
+        <DataGrid IsReadOnly="True"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}" />
+    </DockPanel>
+</UserControl>

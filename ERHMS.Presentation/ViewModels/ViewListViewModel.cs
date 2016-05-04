@@ -223,7 +223,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ViewData()
         {
-            // TODO: Implement
+            Locator.Main.OpenRecordListView(SelectedItem);
         }
 
         public void PublishToTemplate()

@@ -169,6 +169,11 @@ namespace ERHMS.Presentation.ViewModels
             OpenDocument(new ViewListViewModel(null));
         }
 
+        public void OpenRecordListView(View view)
+        {
+            OpenDocument(new RecordListViewModel(view));
+        }
+
         public void OpenTemplateListView()
         {
             OpenDocument(new TemplateListViewModel(null));

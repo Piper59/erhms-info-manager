@@ -33,7 +33,7 @@
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Enter" Command="{Binding EnterDataCommand}" />
-                        <MenuItem Header="View" Command="{Binding ViewDataCommand}" IsEnabled="False" />
+                        <MenuItem Header="View" Command="{Binding ViewDataCommand}" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>

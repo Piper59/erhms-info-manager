@@ -247,6 +247,7 @@
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PgmListViewModel.cs" />
+    <Compile Include="ViewModels\RecordListViewModel.cs" />
     <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
@@ -285,6 +286,9 @@
     </Compile>
     <Compile Include="Views\PgmListView.xaml.cs">
       <DependentUpon>PgmListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecordListView.xaml.cs">
+      <DependentUpon>RecordListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ResponderDetailView.xaml.cs">
       <DependentUpon>ResponderDetailView.xaml</DependentUpon>
@@ -391,6 +395,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PgmListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RecordListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
