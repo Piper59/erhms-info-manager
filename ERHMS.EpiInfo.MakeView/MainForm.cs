@@ -2,6 +2,7 @@
 using Epi.Windows.MakeView.PresentationLogic;
 using ERHMS.Utility;
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.MakeView
@@ -45,7 +46,18 @@ namespace ERHMS.EpiInfo.MakeView
             {
                 ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "CloseCurrentProject", Type.EmptyTypes, null);
             }
-            ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "OpenProject", new Type[] { typeof(Epi.Project) }, new object[] { project });
+            try
+            {
+                ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "OpenProject", new Type[] { typeof(Epi.Project) }, new object[] { project });
+            }
+            catch (TargetInvocationException ex)
+            {
+                NullReferenceException innerEx = ex.InnerException as NullReferenceException;
+                if (innerEx == null || innerEx.TargetSite.Name != "get_CurrentView")
+                {
+                    throw;
+                }
+            }
         }
 
         public void OpenProject(string projectPath)
