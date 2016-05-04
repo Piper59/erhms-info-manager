@@ -9,7 +9,7 @@ namespace ERHMS.Presentation.Controls
             "OpenContextMenuOnClick",
             typeof(bool),
             typeof(ButtonExtensions),
-            new FrameworkPropertyMetadata(Target_PropertyChanged));
+            new FrameworkPropertyMetadata(OpenContextMenuOnClick_PropertyChanged));
         public static bool GetOpenContextMenuOnClick(Button target)
         {
             return (bool)target.GetValue(OpenContextMenuOnClick);
@@ -19,20 +19,20 @@ namespace ERHMS.Presentation.Controls
             target.SetValue(OpenContextMenuOnClick, value);
         }
 
-        private static void Target_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void OpenContextMenuOnClick_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             Button target = (Button)sender;
             if (!(bool)e.OldValue && (bool)e.NewValue)
             {
-                target.Click += Target_Click;
+                target.Click += OpenContextMenuOnClick_Target_Click;
             }
             else if ((bool)e.OldValue && !(bool)e.NewValue)
             {
-                target.Click -= Target_Click;
+                target.Click -= OpenContextMenuOnClick_Target_Click;
             }
         }
 
-        private static void Target_Click(object sender, RoutedEventArgs e)
+        private static void OpenContextMenuOnClick_Target_Click(object sender, RoutedEventArgs e)
         {
             Button target = (Button)sender;
             if (target.ContextMenu != null)
