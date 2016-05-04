@@ -46,10 +46,9 @@ namespace ERHMS.EpiInfo
             };
             project.CollectedData.Initialize(project.CollectedDataDbInfo, driver, true);
             project.MetadataSource = MetadataSource.SameDb;
-            MetadataDbProvider metadata = (MetadataDbProvider)project.Metadata;
-            metadata.AttachDbDriver(project.Driver);
-            metadata.CreateMetadataTables();
-            project.CreateCanvasesTable();
+            project.Metadata.AttachDbDriver(project.Driver);
+            project.Metadata.CreateMetadataTables();
+            project.Metadata.CreateCanvasesTable();
             project.Save();
             return project;
         }
@@ -68,6 +67,11 @@ namespace ERHMS.EpiInfo
         public IDbDriver Driver
         {
             get { return CollectedData.GetDbDriver(); }
+        }
+
+        public new MetadataDbProvider Metadata
+        {
+            get { return (MetadataDbProvider)base.Metadata; }
         }
 
         private Project() { }

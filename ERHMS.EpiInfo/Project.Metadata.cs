@@ -8,16 +8,6 @@ namespace ERHMS.EpiInfo
 {
     public partial class Project
     {
-        private void CreateCanvasesTable()
-        {
-            Driver.CreateTable("metaCanvases", new List<TableColumn>
-            {
-                new TableColumn("CanvasId", GenericDbColumnType.Int32, false, true, true),
-                new TableColumn("Name", GenericDbColumnType.String, 64, false),
-                new TableColumn("Content", GenericDbColumnType.StringLong, false)
-            });
-        }
-
         public DataTable GetFieldsAsDataTable()
         {
             string sql = "SELECT * FROM metaFields";

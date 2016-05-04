@@ -60,6 +60,7 @@
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="InvalidViewNameReason.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="MetadataDbProviderExtensions.cs" />
     <Compile Include="Pgm.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Project.Metadata.cs" />
