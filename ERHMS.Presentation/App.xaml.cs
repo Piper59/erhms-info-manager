@@ -1,6 +1,7 @@
 ﻿using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
+using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Utility;
 using System;
 using System.IO;
@@ -76,7 +77,22 @@ namespace ERHMS.Presentation
             host = Service.OpenHost();
             // TODO: Allow data context selection
             FileInfo file = ConfigurationExtensions.GetConfigurationRoot().GetFile("Projects", "ERHMS", "ERHMS.prj");
-            DataContext = new DataContext(new Project(file));
+            if (file.Exists)
+            {
+                DataContext = new DataContext(new Project(file));
+            }
+            else
+            {
+                AccessDriver driver = AccessDriver.Create(Path.ChangeExtension(file.FullName, ".mdb"));
+                Project project = Project.Create(
+                    "ERHMS",
+                    "Emergency Responder Health Monitoring and Surveillance",
+                    file.Directory,
+                    driver.Provider.ToEpiInfoName(),
+                    driver.Builder,
+                    driver.DatabaseName);
+                DataContext = DataContext.Create(project);
+            }
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler(TextBox_GotFocus));
         }
 

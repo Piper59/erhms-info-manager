@@ -1,6 +1,9 @@
 ﻿using Epi;
 using Epi.Data;
+using Epi.Data.Services;
 using ERHMS.Utility;
+using System;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -17,23 +20,36 @@ namespace ERHMS.EpiInfo
             return InvalidViewNameCharacter.Replace(viewName, "");
         }
 
-        public static Project Create(string name, string description, DirectoryInfo location, string driver, string connectionString)
+        public static Project Create(string name, string description, DirectoryInfo location, string driver, DbConnectionStringBuilder builder, string databaseName)
         {
-            string safeConnectionString = DataExtensions.ToSafeString(connectionString);
-            Log.Current.DebugFormat("Creating project: {0}, {1}, {2}, {3}", name, location.FullName, driver, safeConnectionString);
+            Log.Current.DebugFormat(
+                "Creating project: {0}, {1}, {2}, {3}, {4}",
+                name,
+                location.FullName,
+                driver,
+                builder.ToSafeString(),
+                databaseName);
+            location.Create();
             Project project = new Project
             {
+                Id = Guid.NewGuid(),
                 Name = name,
                 Description = description,
                 Location = location,
                 CollectedDataDriver = driver,
-                CollectedDataConnectionString = connectionString
+                CollectedDataConnectionString = builder.ConnectionString
             };
-            project.CollectedDataDbInfo.DBCnnStringBuilder.ConnectionString = connectionString;
+            project.CollectedDataDbInfo = new DbDriverInfo
+            {
+                DBCnnStringBuilder = builder,
+                DBName = databaseName
+            };
             project.CollectedData.Initialize(project.CollectedDataDbInfo, driver, true);
-            project.CreateCanvasesTable();
             project.MetadataSource = MetadataSource.SameDb;
-            project.Metadata.AttachDbDriver(project.Driver);
+            MetadataDbProvider metadata = (MetadataDbProvider)project.Metadata;
+            metadata.AttachDbDriver(project.Driver);
+            metadata.CreateMetadataTables();
+            project.CreateCanvasesTable();
             project.Save();
             return project;
         }
