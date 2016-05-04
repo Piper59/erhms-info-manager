@@ -33,7 +33,7 @@ namespace ERHMS.EpiInfo.DataAccess
         }
 
         private SqlServerDriver(SqlConnectionStringBuilder builder)
-            : base(DataProvider.SqlServer, builder)
+            : base(DataProvider.SqlServer, builder, builder.InitialCatalog)
         { }
 
         public override string GetParameterName(int index)

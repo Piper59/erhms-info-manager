@@ -11,14 +11,21 @@ namespace ERHMS.EpiInfo.DataAccess
         private DbProviderFactory factory;
 
         public DataProvider Provider { get; private set; }
-        public string ConnectionString { get; private set; }
+        public DbConnectionStringBuilder Builder { get; private set; }
+        public string DatabaseName { get; private set; }
 
-        protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder)
+        public string ConnectionString
+        {
+            get { return Builder.ConnectionString; }
+        }
+
+        protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder, string databaseName)
         {
             Log.Current.DebugFormat("Opening data driver: {0}, {1}", provider.ToInvariantName(), builder.ToSafeString());
             factory = DbProviderFactories.GetFactory(provider.ToInvariantName());
             Provider = provider;
-            ConnectionString = builder.ConnectionString;
+            Builder = builder;
+            DatabaseName = databaseName;
         }
 
         public string Escape(string identifier)

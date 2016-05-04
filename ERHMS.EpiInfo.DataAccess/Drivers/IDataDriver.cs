@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
     public interface IDataDriver
     {
         DataProvider Provider { get; }
+        DbConnectionStringBuilder Builder { get; }
         string ConnectionString { get; }
+        string DatabaseName { get; }
 
         string Escape(string identifier);
         string GetParameterName(int index);

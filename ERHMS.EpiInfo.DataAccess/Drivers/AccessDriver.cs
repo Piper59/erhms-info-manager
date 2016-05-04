@@ -1,4 +1,5 @@
 ﻿using System.Data.OleDb;
+using System.IO;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
@@ -22,7 +23,7 @@ namespace ERHMS.EpiInfo.DataAccess
         }
 
         private AccessDriver(OleDbConnectionStringBuilder builder)
-            : base(DataProvider.Access, builder)
+            : base(DataProvider.Access, builder, Path.GetFileNameWithoutExtension(builder.DataSource))
         { }
 
         public override string GetParameterName(int index)
