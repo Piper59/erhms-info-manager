@@ -2,16 +2,32 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="ERHMS.Common.targets" />
   <ItemGroup>
-    <Content Include="$(BuildDir)**" Exclude="$(BuildDir)**\*.pdb">
+    <Content Include="$(BuildDir)**" Exclude="$(BuildDir)**\*.pdb;$(BuildDir)Templates\**">
       <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <PublishFile Include="Templates\**">
-      <PublishState>Include</PublishState>
-      <IncludeHash>true</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
-  </ItemGroup>
+  <Target Name="CopyTemplates" BeforeTargets="IncludeTemplates">
+    <ItemGroup>
+      <Template Include="$(BuildDir)Templates\**" />
+    </ItemGroup>
+    <RemoveDir Directories="Templates" />
+    <Copy SourceFiles="@(Template)" DestinationFiles="Templates\%(RecursiveDir)%(FileName)%(Extension)" />
+  </Target>
+  <Target Name="IncludeTemplates" BeforeTargets="BeforeBuild">
+    <ItemGroup>
+      <Content Include="Templates\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+    <ItemGroup>
+      <PublishFile Include="Templates\**">
+        <PublishState>Include</PublishState>
+        <FileType>File</FileType>
+      </PublishFile>
+    </ItemGroup>
+  </Target>
+  <Target Name="CleanTemplates" AfterTargets="Clean">
+    <RemoveDir Directories="Templates" />
+  </Target>
 </Project>
