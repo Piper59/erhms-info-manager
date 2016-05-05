@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
@@ -12,7 +13,11 @@
 
     <Style TargetType="{x:Type ctrl:MultiSelectDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
 
-    <Style TargetType="{x:Type TabControl}">
+    <Style TargetType="{x:Type mah:MetroTabControl}">
         <Setter Property="TabStripPlacement" Value="Left" />
+    </Style>
+
+    <Style TargetType="{x:Type mah:MetroTabItem}">
+        <Setter Property="mah:ControlsHelper.HeaderFontSize" Value="18" />
     </Style>
 </ResourceDictionary>

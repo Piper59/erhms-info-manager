@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
              x:Name="Root">
@@ -10,8 +11,8 @@
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>
-        <TabControl DataContext="{Binding Responder}">
-            <TabItem Header="Personal">
+        <mah:MetroTabControl DataContext="{Binding Responder}">
+            <mah:MetroTabItem Header="Personal">
                 <StackPanel>
                     <GroupBox Header="Identity">
                         <Grid>
@@ -111,8 +112,8 @@
                         </Grid>
                     </GroupBox>
                 </StackPanel>
-            </TabItem>
-            <TabItem Header="Emergency Contact">
+            </mah:MetroTabItem>
+            <mah:MetroTabItem Header="Emergency Contact">
                 <StackPanel>
                     <GroupBox Header="Identity">
                         <Grid>
@@ -182,8 +183,8 @@
                         </Grid>
                     </GroupBox>
                 </StackPanel>
-            </TabItem>
-            <TabItem Header="Organization">
+            </mah:MetroTabItem>
+            <mah:MetroTabItem Header="Organization">
                 <StackPanel>
                     <GroupBox Header="Contact">
                         <Grid>
@@ -256,7 +257,7 @@
                         </Grid>
                     </GroupBox>
                 </StackPanel>
-            </TabItem>
-        </TabControl>
+            </mah:MetroTabItem>
+        </mah:MetroTabControl>
     </DockPanel>
 </UserControl>
