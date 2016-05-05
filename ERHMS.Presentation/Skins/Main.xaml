@@ -11,20 +11,33 @@
         <ResourceDictionary Source="../Resources/Icons.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="{x:Type ctrl:MultiSelectDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
-
     <Style TargetType="{x:Type mah:MetroTabControl}">
-        <Setter Property="TabStripPlacement" Value="Left" />
         <Setter Property="TabStripMargin" Value="0,0,10,0" />
+        <Setter Property="TabStripPlacement" Value="Left" />
     </Style>
 
     <Style TargetType="{x:Type mah:MetroTabItem}">
         <Setter Property="mah:ControlsHelper.HeaderFontSize" Value="18" />
     </Style>
 
+    <Style TargetType="{x:Type ctrl:MultiSelectDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
+
     <Style TargetType="{x:Type TextBlock}" x:Key="DocumentTitle">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="MaxWidth" Value="200" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <Style TargetType="{x:Type WrapPanel}" x:Key="AppBar">
+        <Style.Resources>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Height" Value="50" />
+                <Setter Property="Margin" Value="5,0,0,5" />
+                <Setter Property="MinWidth" Value="50" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,10,10,0" />
     </Style>
 </ResourceDictionary>

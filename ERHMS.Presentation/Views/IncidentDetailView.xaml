@@ -11,7 +11,7 @@
         <conv:PhaseToDescriptionConverter x:Key="PhaseToDescriptionConverter" />
     </UserControl.Resources>
     <DockPanel>
-        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>
         <Grid DataContext="{Binding Incident}">

@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
-        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding CreateCommand}">Create</Button>
             <Button Command="{Binding EditCommand}">Edit</Button>
             <Button Command="{Binding DeleteCommand}">Delete</Button>

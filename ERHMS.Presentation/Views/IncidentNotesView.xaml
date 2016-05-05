@@ -15,7 +15,7 @@
             <TextBox AcceptsReturn="True" TextWrapping="Wrap" Height="100" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" />
             <Button HorizontalAlignment="Center" Command="{Binding DataContext.SaveCommand, ElementName=Root}">Save</Button>
         </StackPanel>
-        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
         <ListView ItemsSource="{Binding Notes}">

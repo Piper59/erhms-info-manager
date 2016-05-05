@@ -33,7 +33,7 @@
             <Label Grid.Row="4" Grid.Column="0">Longitude</Label>
             <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Longitude, TargetNullValue=''}" />
         </Grid>
-        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>
         <bing:Map Name="Map"
