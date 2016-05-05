@@ -3,30 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
              Name="Root">
-    <UserControl.Resources>
-        <conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
-    </UserControl.Resources>
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" DataContext="{Binding Note}">
-            <TextBox AcceptsReturn="True" TextWrapping="Wrap" Height="100" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" />
-            <Button HorizontalAlignment="Center" Command="{Binding DataContext.SaveCommand, ElementName=Root}">Save</Button>
-        </StackPanel>
+        <TextBox DockPanel.Dock="Top" AcceptsReturn="True" TextWrapping="Wrap" Height="100"
+                 Text="{Binding Note.Content, UpdateSourceTrigger=PropertyChanged}" />
+        <WrapPanel DockPanel.Dock="Top" Style="{StaticResource AppBar}">
+            <Button Command="{Binding SaveCommand}">Save</Button>
+        </WrapPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
-        <ListView ItemsSource="{Binding Notes}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Content}" />
-                        <TextBlock Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <ListView ItemsSource="{Binding Notes}" Style="{StaticResource IncidentNotes}" />
     </DockPanel>
 </UserControl>
