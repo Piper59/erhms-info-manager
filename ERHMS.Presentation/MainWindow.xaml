@@ -90,6 +90,11 @@
             <dock:DockingManager.Theme>
                 <dock:MetroTheme />
             </dock:DockingManager.Theme>
+            <dock:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Style="{StaticResource DocumentTitle}" Text="{Binding Title}" />
+                </DataTemplate>
+            </dock:DockingManager.DocumentHeaderTemplate>
             <dock:DockingManager.LayoutItemContainerStyle>
                 <Style TargetType="{x:Type dock:LayoutItem}">
                     <Setter Property="Title" Value="{Binding Model.Title}" />
