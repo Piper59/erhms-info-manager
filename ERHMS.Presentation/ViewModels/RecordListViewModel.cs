@@ -57,7 +57,7 @@ namespace ERHMS.Presentation.ViewModels
             DeleteCommand = new RelayCommand(Delete, HasDeletableSelectedItem);
             UndeleteCommand = new RelayCommand(Undelete, HasUndeletableSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            // TODO: Register for service messages
+            // TODO: Handle service messages
         }
 
         public bool HasDeletableSelectedItem()

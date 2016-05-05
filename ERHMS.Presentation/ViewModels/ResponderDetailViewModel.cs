@@ -29,7 +29,7 @@ namespace ERHMS.Presentation.ViewModels
             Genders = GetCodes(DataContext.Genders);
             States = GetCodes(DataContext.States);
             SaveCommand = new RelayCommand(Save);
-            // TODO: Handle ServiceMessage<RecordEventArgs>
+            // TODO: Handle ServiceMessage<RecordEventArgs>?
         }
 
         private void UpdateTitle()
