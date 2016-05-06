@@ -18,7 +18,9 @@
         <mah:MetroTabItem Header="Notes" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:IncidentNotesView DataContext="{Binding Notes}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Roster" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" IsEnabled="False" />
+        <mah:MetroTabItem Header="Roster" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+            <v:RosterListView DataContext="{Binding Rosters}" />
+        </mah:MetroTabItem>
         <mah:MetroTabItem Header="Locations" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:LocationListView DataContext="{Binding Locations}" />
         </mah:MetroTabItem>

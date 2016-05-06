@@ -9,6 +9,7 @@ namespace ERHMS.Presentation.ViewModels
         public Incident Incident { get; private set; }
         public IncidentDetailViewModel Detail { get; private set; }
         public IncidentNotesViewModel Notes { get; private set; }
+        public RosterListViewModel Rosters { get; private set; }
         public LocationListViewModel Locations { get; private set; }
         public ViewListViewModel Views { get; private set; }
         public TemplateListViewModel Templates { get; private set; }
@@ -21,6 +22,7 @@ namespace ERHMS.Presentation.ViewModels
             UpdateTitle();
             Detail = new IncidentDetailViewModel(incident);
             Notes = new IncidentNotesViewModel(incident);
+            Rosters = new RosterListViewModel(incident);
             Locations = new LocationListViewModel(incident);
             Views = new ViewListViewModel(incident);
             Templates = new TemplateListViewModel(incident);

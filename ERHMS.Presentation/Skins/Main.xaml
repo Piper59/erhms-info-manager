@@ -65,6 +65,6 @@
             </Style>
         </Style.Resources>
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0,10,10,0" />
+        <Setter Property="Margin" Value="0,5,10,0" />
     </Style>
 </ResourceDictionary>
