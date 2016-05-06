@@ -251,6 +251,7 @@
     <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
     <Compile Include="ViewModels\RosterListViewModel.cs" />
+    <Compile Include="ViewModels\RosterViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
     <Compile Include="ViewModels\ViewListViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

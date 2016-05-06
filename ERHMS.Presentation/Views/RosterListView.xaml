@@ -37,14 +37,14 @@
                                           MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding ResponderId}" />
-                        <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding LastName}" />
-                        <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding FirstName}" />
-                        <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding EmailAddress}" />
-                        <DataGridTextColumn Header="City" Width="2*" Binding="{Binding City}" />
-                        <DataGridTextColumn Header="State" Width="*" Binding="{Binding State}" />
-                        <DataGridTextColumn Header="Organization" Width="2*" Binding="{Binding OrganizationName}" />
-                        <DataGridTextColumn Header="Occupation" Width="2*" Binding="{Binding Occupation}" />
+                        <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding Responder.ResponderId}" />
+                        <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding Responder.LastName}" />
+                        <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding Responder.FirstName}" />
+                        <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding Responder.EmailAddress}" />
+                        <DataGridTextColumn Header="City" Width="2*" Binding="{Binding Responder.City}" />
+                        <DataGridTextColumn Header="State" Width="*" Binding="{Binding Responder.State}" />
+                        <DataGridTextColumn Header="Organization" Width="2*" Binding="{Binding Responder.OrganizationName}" />
+                        <DataGridTextColumn Header="Occupation" Width="2*" Binding="{Binding Responder.Occupation}" />
                     </DataGrid.Columns>
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>
@@ -70,14 +70,14 @@
                                           MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding ResponderId}" />
-                        <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding LastName}" />
-                        <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding FirstName}" />
-                        <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding EmailAddress}" />
-                        <DataGridTextColumn Header="City" Width="2*" Binding="{Binding City}" />
-                        <DataGridTextColumn Header="State" Width="*" Binding="{Binding State}" />
-                        <DataGridTextColumn Header="Organization" Width="2*" Binding="{Binding OrganizationName}" />
-                        <DataGridTextColumn Header="Occupation" Width="2*" Binding="{Binding Occupation}" />
+                        <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding Responder.ResponderId}" />
+                        <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding Responder.LastName}" />
+                        <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding Responder.FirstName}" />
+                        <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding Responder.EmailAddress}" />
+                        <DataGridTextColumn Header="City" Width="2*" Binding="{Binding Responder.City}" />
+                        <DataGridTextColumn Header="State" Width="*" Binding="{Binding Responder.State}" />
+                        <DataGridTextColumn Header="Organization" Width="2*" Binding="{Binding Responder.OrganizationName}" />
+                        <DataGridTextColumn Header="Occupation" Width="2*" Binding="{Binding Responder.Occupation}" />
                     </DataGrid.Columns>
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>

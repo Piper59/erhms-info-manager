@@ -1,5 +1,4 @@
 ﻿using ERHMS.Domain;
-using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -13,14 +12,14 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class RosterListViewModel : ViewModelBase
     {
-        public class ResponderListViewModel : ListViewModelBase<Responder>
+        public class RosterListByStatusViewModel : ListViewModelBase<RosterViewModel>
         {
             public RosterListViewModel Parent { get; private set; }
             public bool Rostered { get; private set; }
 
             public RelayCommand EditCommand { get; private set; }
 
-            public ResponderListViewModel(RosterListViewModel parent, bool rostered)
+            public RosterListByStatusViewModel(RosterListViewModel parent, bool rostered)
             {
                 Parent = parent;
                 Rostered = rostered;
@@ -31,44 +30,62 @@ namespace ERHMS.Presentation.ViewModels
                 EditCommand = new RelayCommand(Edit, HasSelectedItem);
             }
 
-            protected override IEnumerable<string> GetFilteredValues(Responder item)
+            protected override ICollectionView GetItems()
+            {
+                ICollection<RosterViewModel> items = new List<RosterViewModel>();
+                if (Rostered)
+                {
+                    foreach (Roster roster in Parent.Rosters)
+                    {
+                        Responder responder = Parent.Responders.SingleOrDefault(_responder => _responder.ResponderId.Equals(roster.ResponderId, StringComparison.OrdinalIgnoreCase));
+                        if (responder != null)
+                        {
+                            items.Add(new RosterViewModel(roster, responder));
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (Responder responder in Parent.Responders)
+                    {
+                        Roster roster = Parent.Rosters.SingleOrDefault(_roster => _roster.ResponderId.Equals(responder.ResponderId, StringComparison.OrdinalIgnoreCase));
+                        if (roster == null)
+                        {
+                            items.Add(new RosterViewModel(null, responder));
+                        }
+                    }
+                }
+                return CollectionViewSource.GetDefaultView(items.OrderBy(roster => roster.Responder.LastName).ThenBy(roster => roster.Responder.FirstName));
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(RosterViewModel item)
             {
                 return RosterListViewModel.GetFilteredValues(item);
             }
 
-            protected override ICollectionView GetItems()
-            {
-                ICollection<string> responderIds = Parent.Rosters.Select(roster => roster.ResponderId).ToList();
-                return CollectionViewSource.GetDefaultView(Parent.Responders
-                    .Where(responder => responderIds.Contains(responder.ResponderId, StringComparer.OrdinalIgnoreCase) == Rostered)
-                    .OrderBy(responder => responder.LastName)
-                    .ThenBy(responder => responder.FirstName));
-            }
-
             public void Edit()
             {
-                Locator.Main.OpenResponderDetailView(SelectedItem);
+                Locator.Main.OpenResponderDetailView(SelectedItem.Responder);
             }
         }
 
-        private static IEnumerable<string> GetFilteredValues(Responder item)
+        private static IEnumerable<string> GetFilteredValues(RosterViewModel item)
         {
-            yield return item.ResponderId;
-            yield return item.LastName;
-            yield return item.FirstName;
-            yield return item.EmailAddress;
-            yield return item.City;
-            yield return item.State;
-            yield return item.OrganizationName;
-            yield return item.Occupation;
+            yield return item.Responder.ResponderId;
+            yield return item.Responder.LastName;
+            yield return item.Responder.FirstName;
+            yield return item.Responder.EmailAddress;
+            yield return item.Responder.City;
+            yield return item.Responder.State;
+            yield return item.Responder.OrganizationName;
+            yield return item.Responder.Occupation;
         }
-
 
         public Incident Incident { get; private set; }
         private ICollection<Responder> Responders { get; set; }
         private ICollection<Roster> Rosters { get; set; }
-        public ResponderListViewModel UnrosteredResponders { get; private set; }
-        public ResponderListViewModel RosteredResponders { get; private set; }
+        public RosterListByStatusViewModel UnrosteredResponders { get; private set; }
+        public RosterListByStatusViewModel RosteredResponders { get; private set; }
 
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand RemoveCommand { get; private set; }
@@ -78,8 +95,8 @@ namespace ERHMS.Presentation.ViewModels
         {
             Incident = incident;
             UpdateTitle();
-            UnrosteredResponders = new ResponderListViewModel(this, false);
-            RosteredResponders = new ResponderListViewModel(this, true);
+            UnrosteredResponders = new RosterListByStatusViewModel(this, false);
+            RosteredResponders = new RosterListByStatusViewModel(this, true);
             UnrosteredResponders.Selecting += (sender, e) =>
             {
                 AddCommand.RaiseCanExecuteChanged();
@@ -114,29 +131,21 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            foreach (Responder responder in UnrosteredResponders.SelectedItems)
+            foreach (RosterViewModel roster in UnrosteredResponders.SelectedItems)
             {
-                Roster roster = DataContext.Rosters.Create();
-                roster.ResponderId = responder.ResponderId;
-                roster.IncidentId = Incident.IncidentId;
-                DataContext.Rosters.Save(roster);
+                Roster _roster = DataContext.Rosters.Create();
+                _roster.ResponderId = roster.Responder.ResponderId;
+                _roster.IncidentId = Incident.IncidentId;
+                DataContext.Rosters.Save(_roster);
             }
             Refresh();
         }
 
         public void Remove()
         {
-            foreach (Responder responder in RosteredResponders.SelectedItems)
+            foreach (RosterViewModel roster in RosteredResponders.SelectedItems)
             {
-                DataParameterCollection parameters = new DataParameterCollection(DataContext.Driver);
-                parameters.AddByValue(responder.ResponderId);
-                parameters.AddByValue(Incident.IncidentId);
-                string sql = parameters.Format("ResponderId = {0} AND IncidentId = {1}");
-                Roster roster = DataContext.Rosters.Select(new DataPredicate(sql, parameters)).FirstOrDefault();
-                if (roster != null)
-                {
-                    DataContext.Rosters.Delete(roster);
-                }
+                DataContext.Rosters.Delete(roster.Roster);
             }
             Refresh();
         }
