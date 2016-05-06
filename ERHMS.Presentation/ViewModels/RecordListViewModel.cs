@@ -34,7 +34,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = view.Name;
             View = view;
-            Entities = new ViewEntityRepository<ViewEntity>(App.Current.DataContext.Driver, view);
+            Entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, view);
             List<int> fieldIds = DataContext.Project.GetSortedFieldIds(view.Id).ToList();
             Columns = view.Fields.TableColumnFields
                 .Cast<Field>()
