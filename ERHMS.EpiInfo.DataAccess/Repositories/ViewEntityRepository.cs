@@ -14,6 +14,7 @@ namespace ERHMS.EpiInfo.DataAccess
     {
         public View View { get; private set; }
         protected DataTable BaseSchema { get; private set; }
+        protected DataTable UpdatableBaseSchema { get; private set; }
         protected DataSet PageSchemas { get; private set; }
 
         protected string BaseTableName
@@ -37,6 +38,8 @@ namespace ERHMS.EpiInfo.DataAccess
             Log.Current.DebugFormat("Opening view repository: {0}", view.Name);
             View = view;
             BaseSchema = GetSchema(view.TableName);
+            UpdatableBaseSchema = BaseSchema.Clone();
+            UpdatableBaseSchema.Columns.Remove(ColumnNames.GLOBAL_RECORD_ID);
             PageSchemas = new DataSet();
             foreach (Page page in view.Pages)
             {
@@ -183,7 +186,7 @@ namespace ERHMS.EpiInfo.DataAccess
             entity.SetAuditProperties(false, true, user);
             using (DataTransaction transaction = Driver.BeginTransaction())
             {
-                Update(entity, BaseSchema, transaction);
+                Update(entity, UpdatableBaseSchema, transaction);
                 foreach (DataTable pageSchema in PageSchemas.Tables)
                 {
                     Update(entity, pageSchema, transaction);
