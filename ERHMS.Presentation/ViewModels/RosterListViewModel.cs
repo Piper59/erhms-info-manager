@@ -12,14 +12,14 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class RosterListViewModel : ViewModelBase
     {
-        public class RosterListByStatusViewModel : ListViewModelBase<RosterViewModel>
+        public class RosterListInternalViewModel : ListViewModelBase<RosterViewModel>
         {
             public RosterListViewModel Parent { get; private set; }
             public bool Rostered { get; private set; }
 
             public RelayCommand EditCommand { get; private set; }
 
-            public RosterListByStatusViewModel(RosterListViewModel parent, bool rostered)
+            public RosterListInternalViewModel(RosterListViewModel parent, bool rostered)
             {
                 Parent = parent;
                 Rostered = rostered;
@@ -84,8 +84,8 @@ namespace ERHMS.Presentation.ViewModels
         public Incident Incident { get; private set; }
         private ICollection<Responder> Responders { get; set; }
         private ICollection<Roster> Rosters { get; set; }
-        public RosterListByStatusViewModel UnrosteredResponders { get; private set; }
-        public RosterListByStatusViewModel RosteredResponders { get; private set; }
+        public RosterListInternalViewModel UnrosteredResponders { get; private set; }
+        public RosterListInternalViewModel RosteredResponders { get; private set; }
 
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand RemoveCommand { get; private set; }
@@ -95,8 +95,9 @@ namespace ERHMS.Presentation.ViewModels
         {
             Incident = incident;
             UpdateTitle();
-            UnrosteredResponders = new RosterListByStatusViewModel(this, false);
-            RosteredResponders = new RosterListByStatusViewModel(this, true);
+            UnrosteredResponders = new RosterListInternalViewModel(this, false);
+            RosteredResponders = new RosterListInternalViewModel(this, true);
+            Refresh();
             UnrosteredResponders.Selecting += (sender, e) =>
             {
                 AddCommand.RaiseCanExecuteChanged();
@@ -105,9 +106,8 @@ namespace ERHMS.Presentation.ViewModels
             {
                 RemoveCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
-            AddCommand = new RelayCommand(Add, HasSelectedUnrosteredResponder);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedRosteredResponder);
+            AddCommand = new RelayCommand(Add, UnrosteredResponders.HasSelectedItem);
+            RemoveCommand = new RelayCommand(Remove, RosteredResponders.HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
@@ -119,14 +119,12 @@ namespace ERHMS.Presentation.ViewModels
             Title = string.Format("{0} Roster", incidentName).Trim();
         }
 
-        public bool HasSelectedUnrosteredResponder()
+        public void Refresh()
         {
-            return UnrosteredResponders.HasSelectedItem();
-        }
-
-        public bool HasSelectedRosteredResponder()
-        {
-            return RosteredResponders.HasSelectedItem();
+            Responders = DataContext.Responders.SelectByDeleted(false).ToList();
+            Rosters = DataContext.Rosters.SelectByIncident(Incident.IncidentId).ToList();
+            UnrosteredResponders.Refresh();
+            RosteredResponders.Refresh();
         }
 
         public void Add()
@@ -148,14 +146,6 @@ namespace ERHMS.Presentation.ViewModels
                 DataContext.Rosters.Delete(roster.Roster);
             }
             Refresh();
-        }
-
-        public void Refresh()
-        {
-            Responders = DataContext.Responders.SelectByDeleted(false).ToList();
-            Rosters = DataContext.Rosters.SelectByIncident(Incident.IncidentId).ToList();
-            UnrosteredResponders.Refresh();
-            RosteredResponders.Refresh();
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
