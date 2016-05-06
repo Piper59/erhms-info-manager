@@ -23,7 +23,7 @@
             <Label Grid.Row="0" Grid.Column="0">Quick Filter</Label>
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
-        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding CreateCommand}">Create</Button>
             <Button Command="{Binding OpenCommand}">Open</Button>
             <Button Command="{Binding DeleteCommand}">Delete</Button>
