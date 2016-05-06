@@ -30,7 +30,9 @@
         <mah:MetroTabItem Header="Templates" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:TemplateListView DataContext="{Binding Templates}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Assignments" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}" IsEnabled="False" />
+        <mah:MetroTabItem Header="Assignments" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+            <v:AssignmentListView DataContext="{Binding Assignments}" />
+        </mah:MetroTabItem>
         <mah:MetroTabItem Header="Analyses" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:PgmListView DataContext="{Binding Pgms}" />
         </mah:MetroTabItem>

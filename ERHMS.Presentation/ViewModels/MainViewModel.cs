@@ -181,7 +181,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenAssignmentListView()
         {
-            // TODO: Implement
+            OpenDocument(new AssignmentListViewModel(null));
         }
 
         public void OpenPgmListView()

@@ -71,7 +71,7 @@ namespace ERHMS.Presentation.ViewModels
 
         protected abstract ICollectionView GetItems();
 
-        public void Refresh()
+        public virtual void Refresh()
         {
             Items = GetItems();
             Items.Filter = MatchesFilter;

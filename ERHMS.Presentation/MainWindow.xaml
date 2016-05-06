@@ -33,7 +33,7 @@
             <MenuItem Header="_Data">
                 <MenuItem Header="_Forms" Command="{Binding FormsCommand}" />
                 <MenuItem Header="_Templates" Command="{Binding TemplatesCommand}" />
-                <MenuItem Header="A_ssignments" Command="{Binding AssignmentsCommand}" IsEnabled="False" />
+                <MenuItem Header="A_ssignments" Command="{Binding AssignmentsCommand}" />
                 <MenuItem Header="A_nalyses" Command="{Binding AnalysesCommand}" />
                 <MenuItem Header="_Dashboards" Command="{Binding DashboardsCommand}" />
             </MenuItem>
@@ -70,6 +70,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:TemplateListViewModel}">
                     <v:TemplateListView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:AssignmentListViewModel}">
+                    <v:AssignmentListView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:PgmListViewModel}">
                     <v:PgmListView />

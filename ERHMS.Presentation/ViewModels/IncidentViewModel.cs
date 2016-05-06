@@ -13,6 +13,7 @@ namespace ERHMS.Presentation.ViewModels
         public LocationListViewModel Locations { get; private set; }
         public ViewListViewModel Views { get; private set; }
         public TemplateListViewModel Templates { get; private set; }
+        public AssignmentListViewModel Assignments { get; private set; }
         public PgmListViewModel Pgms { get; private set; }
         public CanvasListViewModel Canvases { get; private set; }
 
@@ -26,6 +27,7 @@ namespace ERHMS.Presentation.ViewModels
             Locations = new LocationListViewModel(incident);
             Views = new ViewListViewModel(incident);
             Templates = new TemplateListViewModel(incident);
+            Assignments = new AssignmentListViewModel(incident);
             Pgms = new PgmListViewModel(incident);
             Canvases = new CanvasListViewModel(incident);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
