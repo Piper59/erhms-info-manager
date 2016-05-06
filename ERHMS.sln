@@ -5,6 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42EEED00-3E3F-498A-9667-C1DA2B2522A9}"
 	ProjectSection(SolutionItems) = preProject
+		ERHMS Info Manager.bat = ERHMS Info Manager.bat
 		ERHMS.Build.targets = ERHMS.Build.targets
 		ERHMS.Common.targets = ERHMS.Common.targets
 		ERHMS.Deploy.targets = ERHMS.Deploy.targets

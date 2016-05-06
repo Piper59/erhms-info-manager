@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
-    <BuildDir>$(SolutionDir)Build\</BuildDir>
+    <BuildDir>$(SolutionDir)Build\ERHMS Info Manager\</BuildDir>
   </PropertyGroup>
 </Project>
