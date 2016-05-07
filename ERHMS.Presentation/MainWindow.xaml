@@ -90,9 +90,6 @@
                     <v:AboutView />
                 </DataTemplate>
             </dock:DockingManager.Resources>
-            <dock:DockingManager.Theme>
-                <dock:MetroTheme />
-            </dock:DockingManager.Theme>
             <dock:DockingManager.DocumentHeaderTemplate>
                 <DataTemplate>
                     <TextBlock Style="{StaticResource DocumentTitle}" Text="{Binding Title}" />
