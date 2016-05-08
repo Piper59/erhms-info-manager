@@ -119,7 +119,7 @@
                 </DockPanel>
             </scw:ChildWindow>
         </WrapPanel>
-        <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>

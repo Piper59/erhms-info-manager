@@ -22,7 +22,7 @@
             <Button Command="{Binding DeleteCommand}">Delete</Button>
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
-        <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
             <DataGrid.Columns>

@@ -14,7 +14,7 @@
             <Button Command="{Binding UndeleteCommand}">Undelete</Button>
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
-        <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
                   ctrl:DataGridExtensions.BoundColumns="{Binding Columns}"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}" />
