@@ -4,14 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:bing="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
              Name="Root">
     <DockPanel>
-        <Grid DockPanel.Dock="Top" DataContext="{Binding Location}">
+        <ctrl:FormGrid DockPanel.Dock="Top" DataContext="{Binding Location}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -32,7 +31,7 @@
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Latitude, TargetNullValue=''}" />
             <Label Grid.Row="4" Grid.Column="0">Longitude</Label>
             <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Longitude, TargetNullValue=''}" />
-        </Grid>
+        </ctrl:FormGrid>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>

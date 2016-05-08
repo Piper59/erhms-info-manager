@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
              Name="Root">
@@ -14,11 +15,7 @@
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <Button Command="{Binding SaveCommand}">Save</Button>
         </WrapPanel>
-        <Grid DataContext="{Binding Incident}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <ctrl:FormGrid DataContext="{Binding Incident}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -45,6 +42,6 @@
             <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding EndDateEstimate, Mode=TwoWay}" />
             <Label Grid.Row="5" Grid.Column="0">End Date (Actual)</Label>
             <DatePicker Grid.Row="5" Grid.Column="1" SelectedDate="{Binding EndDateActual, Mode=TwoWay}" />
-        </Grid>
+        </ctrl:FormGrid>
     </DockPanel>
 </UserControl>

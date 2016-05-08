@@ -12,6 +12,14 @@
         <ResourceDictionary Source="../Resources/Icons.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <Style TargetType="{x:Type ctrl:FormGrid}">
+        <Style.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="HorizontalAlignment" Value="Right" />
+            </Style>
+        </Style.Resources>
+    </Style>
+
     <Style TargetType="{x:Type ListView}" x:Key="IncidentNotes">
         <Style.Resources>
             <conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
