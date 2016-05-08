@@ -14,9 +14,20 @@
             <Button Command="{Binding UndeleteCommand}">Undelete</Button>
             <Button Command="{Binding RefreshCommand}">Refresh</Button>
         </WrapPanel>
-        <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
-                  ctrl:DataGridExtensions.BoundColumns="{Binding Columns}"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}" />
+        <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
+                                  ctrl:DataGridExtensions.BoundColumns="{Binding Columns}"
+                                  ItemsSource="{Binding Items}"
+                                  SelectedItem="{Binding SelectedItem}"
+                                  MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Deleted}" Value="True">
+                            <Setter Property="Foreground" Value="Gray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+        </ctrl:MultiSelectDataGrid>
     </DockPanel>
 </UserControl>

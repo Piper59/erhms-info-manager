@@ -54,20 +54,10 @@ namespace ERHMS.Presentation.ViewModels
             };
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasDeletableSelectedItem);
-            UndeleteCommand = new RelayCommand(Undelete, HasUndeletableSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
+            UndeleteCommand = new RelayCommand(Undelete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             // TODO: Handle service messages
-        }
-
-        public bool HasDeletableSelectedItem()
-        {
-            return HasSelectedItem() && !SelectedItem.Deleted;
-        }
-
-        public bool HasUndeletableSelectedItem()
-        {
-            return HasSelectedItem() && SelectedItem.Deleted;
         }
 
         protected override ICollectionView GetItems()
@@ -92,12 +82,24 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            Entities.Delete(SelectedItem);
+            foreach (ViewEntity entity in SelectedItems)
+            {
+                if (!entity.Deleted)
+                {
+                    Entities.Delete(entity);
+                }
+            }
         }
 
         public void Undelete()
         {
-            Entities.Undelete(SelectedItem);
+            foreach (ViewEntity entity in SelectedItems)
+            {
+                if (entity.Deleted)
+                {
+                    Entities.Undelete(entity);
+                }
+            }
         }
     }
 }
