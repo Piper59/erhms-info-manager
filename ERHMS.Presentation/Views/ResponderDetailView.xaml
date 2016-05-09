@@ -14,218 +14,224 @@
         </WrapPanel>
         <mah:MetroTabControl DataContext="{Binding Responder}">
             <mah:MetroTabItem Header="Personal">
-                <StackPanel>
-                    <GroupBox Header="Identity">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding ResponderId}" />
-                            <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
-                            <ComboBox Grid.Row="1" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
-                                      SelectedItem="{Binding Prefix, TargetNullValue=''}" />
-                            <Label Grid.Row="2" Grid.Column="0">First Name</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FirstName}" />
-                            <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MiddleInitial}" />
-                            <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding LastName}" />
-                            <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
-                            <ComboBox Grid.Row="5" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
-                                      SelectedItem="{Binding Suffix, TargetNullValue=''}" />
-                            <Label Grid.Row="6" Grid.Column="0">Alias</Label>
-                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Alias}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                    <GroupBox Header="Personal">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Birth Date</Label>
-                            <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
-                            <Label Grid.Row="1" Grid.Column="0">Gender</Label>
-                            <ComboBox Grid.Row="1" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.Genders, ElementName=Root}"
-                                      SelectedItem="{Binding Gender, TargetNullValue=''}" />
-                            <Label Grid.Row="2" Grid.Column="0">Height (Feet)</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightFeet, TargetNullValue=''}" />
-                            <Label Grid.Row="3" Grid.Column="0">Height (Inches)</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding HeightInches, TargetNullValue=''}" />
-                            <Label Grid.Row="4" Grid.Column="0">Weight (Pounds)</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding WeightPounds, TargetNullValue=''}" />
-                            <Label Grid.Row="5" Grid.Column="0">Passport Number</Label>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding PassportNumber}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                    <GroupBox Header="Contact">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Address</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressLine1}" />
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AddressLine2}" />
-                            <Label Grid.Row="2" Grid.Column="0">City</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding City}" />
-                            <Label Grid.Row="3" Grid.Column="0">State</Label>
-                            <ComboBox Grid.Row="3" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.States, ElementName=Root}"
-                                      SelectedItem="{Binding State, TargetNullValue=''}" />
-                            <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ZipCode}" />
-                            <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding EmailAddress}" />
-                            <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
-                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding PhoneNumber}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel>
+                        <GroupBox Header="Identity">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding ResponderId}" />
+                                <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
+                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
+                                          SelectedItem="{Binding Prefix, TargetNullValue=''}" />
+                                <Label Grid.Row="2" Grid.Column="0">First Name</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FirstName}" />
+                                <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
+                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MiddleInitial}" />
+                                <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
+                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding LastName}" />
+                                <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
+                                <ComboBox Grid.Row="5" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
+                                          SelectedItem="{Binding Suffix, TargetNullValue=''}" />
+                                <Label Grid.Row="6" Grid.Column="0">Alias</Label>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Alias}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                        <GroupBox Header="Personal">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Birth Date</Label>
+                                <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
+                                <Label Grid.Row="1" Grid.Column="0">Gender</Label>
+                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.Genders, ElementName=Root}"
+                                          SelectedItem="{Binding Gender, TargetNullValue=''}" />
+                                <Label Grid.Row="2" Grid.Column="0">Height (Feet)</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightFeet, TargetNullValue=''}" />
+                                <Label Grid.Row="3" Grid.Column="0">Height (Inches)</Label>
+                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding HeightInches, TargetNullValue=''}" />
+                                <Label Grid.Row="4" Grid.Column="0">Weight (Pounds)</Label>
+                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding WeightPounds, TargetNullValue=''}" />
+                                <Label Grid.Row="5" Grid.Column="0">Passport Number</Label>
+                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding PassportNumber}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                        <GroupBox Header="Contact">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Address</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressLine1}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AddressLine2}" />
+                                <Label Grid.Row="2" Grid.Column="0">City</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding City}" />
+                                <Label Grid.Row="3" Grid.Column="0">State</Label>
+                                <ComboBox Grid.Row="3" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.States, ElementName=Root}"
+                                          SelectedItem="{Binding State, TargetNullValue=''}" />
+                                <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
+                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ZipCode}" />
+                                <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
+                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding EmailAddress}" />
+                                <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding PhoneNumber}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Emergency Contact">
-                <StackPanel>
-                    <GroupBox Header="Identity">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Relationship</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactRelationship}" />
-                            <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
-                            <ComboBox Grid.Row="1" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
-                                      SelectedItem="{Binding ContactPrefix, TargetNullValue=''}" />
-                            <Label Grid.Row="2" Grid.Column="0">First Name</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactFirstName}" />
-                            <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactMiddleInitial}" />
-                            <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactLastName}" />
-                            <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
-                            <ComboBox Grid.Row="5" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
-                                      SelectedItem="{Binding ContactSuffix, TargetNullValue=''}" />
-                            <Label Grid.Row="6" Grid.Column="0">Alias</Label>
-                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactAlias}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                    <GroupBox Header="Contact">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Address</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactAddressLine1}" />
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ContactAddressLine2}" />
-                            <Label Grid.Row="2" Grid.Column="0">City</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactCity}" />
-                            <Label Grid.Row="3" Grid.Column="0">State</Label>
-                            <ComboBox Grid.Row="3" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.States, ElementName=Root}"
-                                      SelectedItem="{Binding ContactState, TargetNullValue=''}" />
-                            <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactZipCode}" />
-                            <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ContactEmailAddress}" />
-                            <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
-                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactPhoneNumber}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel>
+                        <GroupBox Header="Identity">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Relationship</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactRelationship}" />
+                                <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
+                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
+                                          SelectedItem="{Binding ContactPrefix, TargetNullValue=''}" />
+                                <Label Grid.Row="2" Grid.Column="0">First Name</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactFirstName}" />
+                                <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
+                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactMiddleInitial}" />
+                                <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
+                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactLastName}" />
+                                <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
+                                <ComboBox Grid.Row="5" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
+                                          SelectedItem="{Binding ContactSuffix, TargetNullValue=''}" />
+                                <Label Grid.Row="6" Grid.Column="0">Alias</Label>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactAlias}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                        <GroupBox Header="Contact">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Address</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactAddressLine1}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ContactAddressLine2}" />
+                                <Label Grid.Row="2" Grid.Column="0">City</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactCity}" />
+                                <Label Grid.Row="3" Grid.Column="0">State</Label>
+                                <ComboBox Grid.Row="3" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.States, ElementName=Root}"
+                                          SelectedItem="{Binding ContactState, TargetNullValue=''}" />
+                                <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
+                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactZipCode}" />
+                                <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
+                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ContactEmailAddress}" />
+                                <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactPhoneNumber}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Organization">
-                <StackPanel>
-                    <GroupBox Header="Contact">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Organization Name</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding OrganizationName}" />
-                            <Label Grid.Row="1" Grid.Column="0">Contact Person Name</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OrganizationContactName}" />
-                            <Label Grid.Row="2" Grid.Column="0">Address</Label>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding OrganizationAddressLine1}" />
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationAddressLine2}" />
-                            <Label Grid.Row="4" Grid.Column="0">City</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationCity}" />
-                            <Label Grid.Row="5" Grid.Column="0">State</Label>
-                            <ComboBox Grid.Row="5" Grid.Column="1"
-                                      ItemsSource="{Binding DataContext.States, ElementName=Root}"
-                                      SelectedItem="{Binding OrganizationState, TargetNullValue=''}" />
-                            <Label Grid.Row="6" Grid.Column="0">ZIP Code</Label>
-                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding OrganizationZipCode}" />
-                            <Label Grid.Row="7" Grid.Column="0">Email Address</Label>
-                            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding OrganizationEmailAddress}" />
-                            <Label Grid.Row="8" Grid.Column="0">Phone Number</Label>
-                            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding OrganizationPhoneNumber}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                    <GroupBox Header="Role">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Occupation</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Occupation}" />
-                            <Label Grid.Row="1" Grid.Column="0">Volunteer</Label>
-                            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsVolunteer}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                    <GroupBox Header="Union">
-                        <ctrl:FormGrid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Union Name</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding UnionName}" />
-                            <Label Grid.Row="1" Grid.Column="0">Local Number</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding UnionLocalNumber}" />
-                        </ctrl:FormGrid>
-                    </GroupBox>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel>
+                        <GroupBox Header="Contact">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Organization Name</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding OrganizationName}" />
+                                <Label Grid.Row="1" Grid.Column="0">Contact Person Name</Label>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OrganizationContactName}" />
+                                <Label Grid.Row="2" Grid.Column="0">Address</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding OrganizationAddressLine1}" />
+                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationAddressLine2}" />
+                                <Label Grid.Row="4" Grid.Column="0">City</Label>
+                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationCity}" />
+                                <Label Grid.Row="5" Grid.Column="0">State</Label>
+                                <ComboBox Grid.Row="5" Grid.Column="1"
+                                          ItemsSource="{Binding DataContext.States, ElementName=Root}"
+                                          SelectedItem="{Binding OrganizationState, TargetNullValue=''}" />
+                                <Label Grid.Row="6" Grid.Column="0">ZIP Code</Label>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding OrganizationZipCode}" />
+                                <Label Grid.Row="7" Grid.Column="0">Email Address</Label>
+                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding OrganizationEmailAddress}" />
+                                <Label Grid.Row="8" Grid.Column="0">Phone Number</Label>
+                                <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding OrganizationPhoneNumber}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                        <GroupBox Header="Role">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Occupation</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Occupation}" />
+                                <Label Grid.Row="1" Grid.Column="0">Volunteer</Label>
+                                <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsVolunteer}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                        <GroupBox Header="Union">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Union Name</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding UnionName}" />
+                                <Label Grid.Row="1" Grid.Column="0">Local Number</Label>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding UnionLocalNumber}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
             </mah:MetroTabItem>
         </mah:MetroTabControl>
     </DockPanel>

@@ -7,16 +7,38 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <mah:MetroTabControl>
-        <mah:MetroTabItem Header="Data Sources" />
-        <mah:MetroTabItem Header="Responders" />
-        <mah:MetroTabItem Header="Incidents" />
-        <mah:MetroTabItem Header="Notes" />
-        <mah:MetroTabItem Header="Roster" />
-        <mah:MetroTabItem Header="Locations" />
-        <mah:MetroTabItem Header="Forms" />
-        <mah:MetroTabItem Header="Templates" />
-        <mah:MetroTabItem Header="Assignments" />
-        <mah:MetroTabItem Header="Analyses" />
-        <mah:MetroTabItem Header="Dashboards" />
+        <mah:MetroTabItem Header="Data Sources">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Responders">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Incidents">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Notes">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Roster">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Locations">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Forms">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Templates">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Assignments">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Analyses">
+            <ScrollViewer />
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Dashboards">
+            <ScrollViewer />
+        </mah:MetroTabItem>
     </mah:MetroTabControl>
 </UserControl>

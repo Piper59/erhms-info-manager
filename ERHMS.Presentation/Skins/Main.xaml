@@ -69,6 +69,10 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     </Style>
 
+    <Style TargetType="{x:Type ScrollViewer}">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    </Style>
+
     <Style TargetType="{x:Type WrapPanel}" x:Key="AppBar">
         <Style.Resources>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
