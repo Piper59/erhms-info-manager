@@ -10,7 +10,6 @@
                  mc:Ignorable="d"
                  Icon="ERHMS.ico"
                  Width="1024" Height="768"
-                 WindowStartupLocation="CenterScreen"
                  EnableDWMDropShadow="True"
                  DataContext="{Binding Main, Source={StaticResource ViewModelLocator}}"
                  Title="{Binding Title}">
