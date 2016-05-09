@@ -12,119 +12,119 @@
     <UserControl.Resources>
         <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
     </UserControl.Resources>
-    <DockPanel>
-        <Grid DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Quick Filter</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
-        </Grid>
-        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <Button Command="{Binding CreateCommand}">Create</Button>
-            <Button Command="{Binding EditCommand}">Edit</Button>
-            <Button Command="{Binding DeleteCommand}">Delete</Button>
-            <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Data"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Enter" Command="{Binding EnterDataCommand}" />
-                        <MenuItem Header="View" Command="{Binding ViewDataCommand}" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Publish"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="To Template" Command="{Binding PublishToTemplateCommand}" />
-                        <MenuItem Header="To Web" Command="{Binding PublishToWebCommand}" IsEnabled="False" />
-                        <MenuItem Header="To Mobile" Command="{Binding PublishToMobileCommand}" IsEnabled="False" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Import"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="From Project" Command="{Binding ImportFromProjectCommand}" />
-                        <MenuItem Header="From Package" Command="{Binding ImportFromPackageCommand}" />
-                        <MenuItem Header="From File" Command="{Binding ImportFromFileCommand}" />
-                        <MenuItem Header="From Web" Command="{Binding ImportFromWebCommand}" IsEnabled="False" />
-                        <MenuItem Header="From Mobile" Command="{Binding ImportFromMobileCommand}" IsEnabled="False" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Export"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="To Package" Command="{Binding ExportToPackageCommand}" />
-                        <MenuItem Header="To File" Command="{Binding ExportToFileCommand}" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Analyze"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Classic" Command="{Binding AnalyzeClassicCommand}" />
-                        <MenuItem Header="Visual" Command="{Binding AnalyzeVisualCommand}" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button Command="{Binding RefreshCommand}">Refresh</Button>
-        </WrapPanel>
-        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-            <scw:ChildWindow Title="Create a New Analysis" ShowCloseButton="True" IsOpen="{Binding CreatingPgm}">
-                <DockPanel>
-                    <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-                        <Button Command="{Binding CreatePgmCommand}">Create</Button>
-                        <Button Command="{Binding CancelPgmCommand}">Cancel</Button>
-                    </WrapPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PgmName, UpdateSourceTrigger=PropertyChanged}" />
-                    </Grid>
-                </DockPanel>
-            </scw:ChildWindow>
-            <scw:ChildWindow Title="Create a New Dashboard" ShowCloseButton="True" IsOpen="{Binding CreatingCanvas}">
-                <DockPanel>
-                    <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-                        <Button Command="{Binding CreateCanvasCommand}">Create</Button>
-                        <Button Command="{Binding CancelCanvasCommand}">Cancel</Button>
-                    </WrapPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CanvasName, UpdateSourceTrigger=PropertyChanged}" />
-                    </Grid>
-                </DockPanel>
-            </scw:ChildWindow>
-        </WrapPanel>
-        <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
-            </DataGrid.Columns>
-        </DataGrid>
-    </DockPanel>
+    <Grid>
+        <DockPanel>
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Quick Filter</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                <Button Command="{Binding CreateCommand}">Create</Button>
+                <Button Command="{Binding EditCommand}">Edit</Button>
+                <Button Command="{Binding DeleteCommand}">Delete</Button>
+                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Data"
+                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Enter" Command="{Binding EnterDataCommand}" />
+                            <MenuItem Header="View" Command="{Binding ViewDataCommand}" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Publish"
+                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="To Template" Command="{Binding PublishToTemplateCommand}" />
+                            <MenuItem Header="To Web" Command="{Binding PublishToWebCommand}" IsEnabled="False" />
+                            <MenuItem Header="To Mobile" Command="{Binding PublishToMobileCommand}" IsEnabled="False" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Import"
+                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="From Project" Command="{Binding ImportFromProjectCommand}" />
+                            <MenuItem Header="From Package" Command="{Binding ImportFromPackageCommand}" />
+                            <MenuItem Header="From File" Command="{Binding ImportFromFileCommand}" />
+                            <MenuItem Header="From Web" Command="{Binding ImportFromWebCommand}" IsEnabled="False" />
+                            <MenuItem Header="From Mobile" Command="{Binding ImportFromMobileCommand}" IsEnabled="False" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Export"
+                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="To Package" Command="{Binding ExportToPackageCommand}" />
+                            <MenuItem Header="To File" Command="{Binding ExportToFileCommand}" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Analyze"
+                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Classic" Command="{Binding AnalyzeClassicCommand}" />
+                            <MenuItem Header="Visual" Command="{Binding AnalyzeVisualCommand}" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+                <Button Command="{Binding RefreshCommand}">Refresh</Button>
+            </WrapPanel>
+            <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                      ItemsSource="{Binding Items}"
+                      SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+        <scw:ChildWindow Title="Create a New Analysis" IsOpen="{Binding CreatingPgm}">
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                    <Button Command="{Binding CreatePgmCommand}">Create</Button>
+                    <Button Command="{Binding CancelPgmCommand}">Cancel</Button>
+                </WrapPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0">Name</Label>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PgmName, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </DockPanel>
+        </scw:ChildWindow>
+        <scw:ChildWindow Title="Create a New Dashboard" IsOpen="{Binding CreatingCanvas}">
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                    <Button Command="{Binding CreateCanvasCommand}">Create</Button>
+                    <Button Command="{Binding CancelCanvasCommand}">Cancel</Button>
+                </WrapPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0">Name</Label>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CanvasName, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </DockPanel>
+        </scw:ChildWindow>
+    </Grid>
 </UserControl>
