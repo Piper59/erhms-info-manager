@@ -2,9 +2,9 @@
 
 namespace ERHMS.Presentation.Views
 {
-    public partial class LogView : UserControl
+    public partial class LogListView : UserControl
     {
-        public LogView()
+        public LogListView()
         {
             InitializeComponent();
         }

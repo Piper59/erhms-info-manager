@@ -39,7 +39,7 @@
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Settings" Command="{Binding SettingsCommand}" IsEnabled="False" />
-                <MenuItem Header="_Log" Command="{Binding LogCommand}" />
+                <MenuItem Header="_Logs" Command="{Binding LogsCommand}" />
                 <MenuItem Header="_Help" Command="{Binding HelpCommand}" />
                 <Separator />
                 <MenuItem Header="_About" Command="{Binding AboutCommand}" />
@@ -80,8 +80,8 @@
                 <DataTemplate DataType="{x:Type vm:CanvasListViewModel}">
                     <v:CanvasListView />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:LogViewModel}">
-                    <v:LogView />
+                <DataTemplate DataType="{x:Type vm:LogListViewModel}">
+                    <v:LogListView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:HelpViewModel}">
                     <v:HelpView />

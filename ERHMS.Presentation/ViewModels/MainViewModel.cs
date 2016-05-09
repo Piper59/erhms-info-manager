@@ -39,7 +39,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand AnalysesCommand { get; private set; }
         public RelayCommand DashboardsCommand { get; private set; }
         public RelayCommand SettingsCommand { get; private set; }
-        public RelayCommand LogCommand { get; private set; }
+        public RelayCommand LogsCommand { get; private set; }
         public RelayCommand HelpCommand { get; private set; }
         public RelayCommand AboutCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
@@ -62,7 +62,7 @@ namespace ERHMS.Presentation.ViewModels
             AnalysesCommand = new RelayCommand(OpenPgmListView);
             DashboardsCommand = new RelayCommand(OpenCanvasListView);
             SettingsCommand = new RelayCommand(OpenSettingsView);
-            LogCommand = new RelayCommand(OpenLogView);
+            LogsCommand = new RelayCommand(OpenLogListView);
             HelpCommand = new RelayCommand(OpenHelpView);
             AboutCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
@@ -199,9 +199,9 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Implement
         }
 
-        public void OpenLogView()
+        public void OpenLogListView()
         {
-            OpenDocument(new LogViewModel());
+            OpenDocument(new LogListViewModel());
         }
 
         public void OpenHelpView()
