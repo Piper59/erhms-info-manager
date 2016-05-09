@@ -27,9 +27,9 @@
     <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
   <Target Name="CopyLauncher" AfterTargets="Build" Condition="'$(MainProject)' == 'true'">
-    <Copy SourceFiles="$(SolutionDir)ERHMS Info Manager.bat" DestinationFolder="$(BuildDir)\.." SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(SolutionDir)ERHMS Info Manager.bat" DestinationFolder="$(BuildDir).." SkipUnchangedFiles="true" />
   </Target>
   <Target Name="CleanBuildDir" AfterTargets="Clean" Condition="'$(Rebuilding)' == 'false'">
-    <RemoveDir Directories="$(BuildDir)" />
+    <RemoveDir Directories="$(BuildDir).." />
   </Target>
 </Project>
