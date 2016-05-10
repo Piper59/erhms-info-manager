@@ -21,9 +21,9 @@
                      Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <Button Command="{Binding OpenCommand}">Open</Button>
-            <Button Command="{Binding DeleteCommand}">Delete</Button>
-            <Button Command="{Binding RefreshCommand}">Refresh</Button>
+            <ctrl:AppBarButton Command="{Binding OpenCommand}" Visual="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
         <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
                   ItemsSource="{Binding Items}"

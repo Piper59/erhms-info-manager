@@ -8,11 +8,11 @@
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <Button Command="{Binding CreateCommand}">Create</Button>
-            <Button Command="{Binding EditCommand}">Edit</Button>
-            <Button Command="{Binding DeleteCommand}">Delete</Button>
-            <Button Command="{Binding UndeleteCommand}">Undelete</Button>
-            <Button Command="{Binding RefreshCommand}">Refresh</Button>
+            <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding EditCommand}" Visual="{DynamicResource appbar_edit}">Edit</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_page_delete}">Delete</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding UndeleteCommand}" Visual="{DynamicResource appbar_page_check}">Undelete</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
         <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
                                   ctrl:DataGridExtensions.BoundColumns="{Binding Columns}"

@@ -14,7 +14,7 @@
     </UserControl.Resources>
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <Button Command="{Binding SaveCommand}">Save</Button>
+            <ctrl:AppBarButton Command="{Binding SaveCommand}" Visual="{DynamicResource appbar_save}">Save</ctrl:AppBarButton>
         </WrapPanel>
         <ScrollViewer>
             <ctrl:FormGrid DataContext="{Binding Incident}">

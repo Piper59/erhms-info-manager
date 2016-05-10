@@ -27,10 +27,10 @@
                          Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <Button Command="{Binding CreateCommand}">Create</Button>
-                <Button Command="{Binding EditCommand}">Edit</Button>
-                <Button Command="{Binding DeleteCommand}">Delete</Button>
-                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Data"
+                <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding EditCommand}" Visual="{DynamicResource appbar_edit}">Edit</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
+                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_database}" Content="Data"
                         IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
@@ -38,8 +38,8 @@
                             <MenuItem Header="View" Command="{Binding ViewDataCommand}" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                </Button>
-                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Publish"
+                </ctrl:AppBarButton>
+                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_page_upload}" Content="Publish"
                         IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
@@ -48,8 +48,8 @@
                             <MenuItem Header="To Mobile" Command="{Binding PublishToMobileCommand}" IsEnabled="False" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                </Button>
-                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Import"
+                </ctrl:AppBarButton>
+                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_door_enter}" Content="Import"
                         IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
@@ -60,8 +60,8 @@
                             <MenuItem Header="From Mobile" Command="{Binding ImportFromMobileCommand}" IsEnabled="False" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                </Button>
-                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Export"
+                </ctrl:AppBarButton>
+                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_door_leave}" Content="Export"
                         IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
@@ -69,8 +69,8 @@
                             <MenuItem Header="To File" Command="{Binding ExportToFileCommand}" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                </Button>
-                <Button ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Content="Analyze"
+                </ctrl:AppBarButton>
+                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_graph_bar}" Content="Analyze"
                         IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
@@ -78,8 +78,8 @@
                             <MenuItem Header="Visual" Command="{Binding AnalyzeVisualCommand}" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                </Button>
-                <Button Command="{Binding RefreshCommand}">Refresh</Button>
+                </ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
             </WrapPanel>
             <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
                       ItemsSource="{Binding Items}"
@@ -92,8 +92,8 @@
         <scw:ChildWindow Title="Create a New Analysis" IsOpen="{Binding CreatingPgm}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <Button Command="{Binding CreatePgmCommand}">Create</Button>
-                    <Button Command="{Binding CancelPgmCommand}">Cancel</Button>
+                    <ctrl:AppBarButton Command="{Binding CreatePgmCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelPgmCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -111,8 +111,8 @@
         <scw:ChildWindow Title="Create a New Dashboard" IsOpen="{Binding CreatingCanvas}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <Button Command="{Binding CreateCanvasCommand}">Create</Button>
-                    <Button Command="{Binding CancelCanvasCommand}">Cancel</Button>
+                    <ctrl:AppBarButton Command="{Binding CreateCanvasCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCanvasCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>

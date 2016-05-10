@@ -205,6 +205,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\AppBarButton.cs" />
     <Compile Include="Controls\ButtonExtensions.cs" />
     <Compile Include="Controls\DataGridExtensions.cs" />
     <Compile Include="Controls\FormGrid.cs" />

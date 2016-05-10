@@ -34,7 +34,7 @@
             <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Longitude, TargetNullValue=''}" />
         </ctrl:FormGrid>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <Button Command="{Binding SaveCommand}">Save</Button>
+            <ctrl:AppBarButton Command="{Binding SaveCommand}" Visual="{DynamicResource appbar_save}">Save</ctrl:AppBarButton>
         </WrapPanel>
         <bing:Map Name="Map"
                   MouseDoubleClick="Map_MouseDoubleClick"

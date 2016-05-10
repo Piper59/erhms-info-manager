@@ -10,7 +10,7 @@ namespace ERHMS.Presentation.Controls
             "MultiSelectedItems",
             typeof(IList),
             typeof(MultiSelectDataGrid),
-            new PropertyMetadata(null));
+            new PropertyMetadata());
         public IList MultiSelectedItems
         {
             get { return (IList)GetValue(MultiSelectedItemsProperty); }

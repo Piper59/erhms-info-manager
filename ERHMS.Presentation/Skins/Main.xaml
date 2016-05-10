@@ -13,6 +13,28 @@
         <ResourceDictionary Source="../Resources/Icons.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <Style TargetType="{x:Type ctrl:AppBarButton}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel>
+                        <Rectangle Width="25" Height="20" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Uniform"
+                                             Visual="{Binding Visual, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:AppBarButton}}}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <ContentPresenter HorizontalAlignment="Center" Margin="0" TextBlock.FontSize="12"
+                                          Content="{Binding Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:AppBarButton}}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Height" Value="50" />
+        <Setter Property="Margin" Value="5,0,0,5" />
+        <Setter Property="MinWidth" Value="50" />
+    </Style>
+
     <Style TargetType="{x:Type scw:ChildWindow}">
         <Setter Property="ChildWindowWidth" Value="400" />
     </Style>
@@ -80,14 +102,6 @@
     </Style>
 
     <Style TargetType="{x:Type WrapPanel}" x:Key="AppBar">
-        <Style.Resources>
-            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="Height" Value="50" />
-                <Setter Property="Margin" Value="5,0,0,5" />
-                <Setter Property="MinWidth" Value="50" />
-            </Style>
-        </Style.Resources>
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,5,10,0" />
     </Style>
