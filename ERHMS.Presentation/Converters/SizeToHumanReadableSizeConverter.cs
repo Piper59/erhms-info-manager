@@ -12,7 +12,7 @@ namespace ERHMS.Presentation.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            long size = (long)value;
+            double size = (long)value;
             if (size < BytesPerKilobyte)
             {
                 return string.Format("{0} B", size);
