@@ -9,11 +9,16 @@
     <mah:MetroTabControl>
         <mah:MetroTabItem Header="About">
             <ScrollViewer>
-                <TextBlock TextWrapping="Wrap">
-                    ERHMS Info Manager<LineBreak />
-                    Version <Run Text="{Binding Version, Mode=OneTime}" /><LineBreak />
-                    <Run Text="{Binding InformationalVersion, Mode=OneTime}" />
-                </TextBlock>
+                <StackPanel>
+                    <Viewbox Width="400">
+                        <ContentPresenter Content="{StaticResource Logo}" />
+                    </Viewbox>
+                    <TextBlock TextWrapping="Wrap">
+                        ERHMS Info Manager<LineBreak />
+                        Version <Run Text="{Binding Version, Mode=OneTime}" /><LineBreak />
+                        <Run Text="{Binding InformationalVersion, Mode=OneTime}" />
+                    </TextBlock>
+                </StackPanel>
             </ScrollViewer>
         </mah:MetroTabItem>
         <mah:MetroTabItem Header="Disclaimer">
