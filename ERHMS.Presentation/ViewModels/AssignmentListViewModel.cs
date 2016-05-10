@@ -120,6 +120,9 @@ namespace ERHMS.Presentation.ViewModels
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
+            Messenger.Default.Register<RefreshListMessage<Assignment>>(this, OnRefreshAssignmentListMessage);
+            Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
+            Messenger.Default.Register<RefreshListMessage<Roster>>(this, OnRefreshRosterListMessage);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
         }
 
@@ -193,7 +196,7 @@ namespace ERHMS.Presentation.ViewModels
                 assignment.ResponderId = responder.ResponderId;
                 DataContext.Assignments.Save(assignment);
             }
-            Refresh();
+            Messenger.Default.Send(new RefreshListMessage<Assignment>(IncidentId));
         }
 
         public void Remove()
@@ -202,7 +205,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 DataContext.Assignments.Delete(assignment.Assignment);
             }
-            Refresh();
+            Messenger.Default.Send(new RefreshListMessage<Assignment>(IncidentId));
         }
 
         public void Email()
@@ -215,6 +218,30 @@ namespace ERHMS.Presentation.ViewModels
             if (msg.Entity == Incident)
             {
                 UpdateTitle();
+            }
+        }
+
+        private void OnRefreshAssignmentListMessage(RefreshListMessage<Assignment> msg)
+        {
+            if (msg.IncidentId == IncidentId)
+            {
+                Refresh();
+            }
+        }
+
+        private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
+        {
+            if (msg.IncidentId == IncidentId)
+            {
+                Refresh();
+            }
+        }
+
+        private void OnRefreshRosterListMessage(RefreshListMessage<Roster> msg)
+        {
+            if (msg.IncidentId == IncidentId)
+            {
+                Refresh();
             }
         }
 

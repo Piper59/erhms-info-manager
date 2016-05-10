@@ -110,6 +110,7 @@ namespace ERHMS.Presentation.ViewModels
             RemoveCommand = new RelayCommand(Remove, RosteredResponders.HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
+            Messenger.Default.Register<RefreshListMessage<Roster>>(this, OnRefreshRosterListMessage);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
         }
 
@@ -136,7 +137,7 @@ namespace ERHMS.Presentation.ViewModels
                 _roster.IncidentId = Incident.IncidentId;
                 DataContext.Rosters.Save(_roster);
             }
-            Refresh();
+            Messenger.Default.Send(new RefreshListMessage<Roster>(Incident.IncidentId));
         }
 
         public void Remove()
@@ -145,7 +146,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 DataContext.Rosters.Delete(roster.Roster);
             }
-            Refresh();
+            Messenger.Default.Send(new RefreshListMessage<Roster>(Incident.IncidentId));
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
@@ -153,6 +154,14 @@ namespace ERHMS.Presentation.ViewModels
             if (msg.Entity == Incident)
             {
                 UpdateTitle();
+            }
+        }
+
+        private void OnRefreshRosterListMessage(RefreshListMessage<Roster> msg)
+        {
+            if (msg.IncidentId == Incident.IncidentId)
+            {
+                Refresh();
             }
         }
 

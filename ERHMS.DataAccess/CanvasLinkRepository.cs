@@ -1,7 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ERHMS.DataAccess
 {
@@ -16,12 +15,11 @@ namespace ERHMS.DataAccess
             return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
         }
 
-        public CanvasLink SelectByCanvasId(int canvasId)
+        public void DeleteByCanvasId(int canvasId)
         {
             DataParameterCollection parameters = new DataParameterCollection(Driver);
             parameters.AddByValue(canvasId);
-            string sql = parameters.Format("CanvasId = {0}");
-            return Select(new DataPredicate(sql, parameters)).SingleOrDefault();
+            Delete(parameters.ToPredicate("CanvasId = {0}"));
         }
     }
 }

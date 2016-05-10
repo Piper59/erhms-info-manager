@@ -1,7 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ERHMS.DataAccess
 {
@@ -16,12 +15,11 @@ namespace ERHMS.DataAccess
             return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
         }
 
-        public ViewLink SelectByViewId(int viewId)
+        public void DeleteByViewId(int viewId)
         {
             DataParameterCollection parameters = new DataParameterCollection(Driver);
             parameters.AddByValue(viewId);
-            string sql = parameters.Format("ViewId = {0}");
-            return Select(new DataPredicate(sql, parameters)).SingleOrDefault();
+            Delete(parameters.ToPredicate("ViewId = {0}"));
         }
     }
 }

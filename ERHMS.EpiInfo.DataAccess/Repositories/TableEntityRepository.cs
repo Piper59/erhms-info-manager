@@ -84,5 +84,11 @@ namespace ERHMS.EpiInfo.DataAccess
             string sql = string.Format("DELETE FROM {0} WHERE {1}", Driver.Escape(TableName), predicate);
             Driver.ExecuteNonQuery(sql, parameter);
         }
+
+        public virtual void Delete(DataPredicate predicate)
+        {
+            string sql = string.Format("DELETE FROM {0} WHERE {1}", Driver.Escape(TableName), predicate.Sql);
+            Driver.ExecuteNonQuery(sql, predicate.Parameters);
+        }
     }
 }

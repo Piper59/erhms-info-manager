@@ -87,11 +87,7 @@ namespace ERHMS.Presentation.ViewModels
                 "Don't Delete");
             msg.Confirmed += (sender, e) =>
             {
-                CanvasLink canvasLink = DataContext.CanvasLinks.SelectByCanvasId(SelectedItem.CanvasId);
-                if (canvasLink != null)
-                {
-                    DataContext.CanvasLinks.Delete(canvasLink);
-                }
+                DataContext.CanvasLinks.DeleteByCanvasId(SelectedItem.CanvasId);
                 DataContext.Project.DeleteCanvas(SelectedItem.CanvasId);
                 Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
             };

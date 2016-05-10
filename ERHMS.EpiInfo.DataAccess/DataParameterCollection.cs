@@ -27,6 +27,11 @@ namespace ERHMS.EpiInfo.DataAccess
             return string.Format(format, parameters.Select(parameter => parameter.Name).ToArray());
         }
 
+        public DataPredicate ToPredicate(string format)
+        {
+            return new DataPredicate(Format(format), this);
+        }
+
         public IEnumerator<DataParameter> GetEnumerator()
         {
             return parameters.GetEnumerator();
