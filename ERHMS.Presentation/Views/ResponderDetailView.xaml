@@ -34,11 +34,11 @@
                                           ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
                                           SelectedItem="{Binding Prefix, TargetNullValue=''}" />
                                 <Label Grid.Row="2" Grid.Column="0">First Name</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FirstName}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding FirstName}" />
                                 <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
                                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MiddleInitial}" />
                                 <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
-                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding LastName}" />
+                                <TextBox Grid.Row="4" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding LastName}" />
                                 <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
                                 <ComboBox Grid.Row="5" Grid.Column="1"
                                           ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
@@ -96,7 +96,7 @@
                                 <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
                                 <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ZipCode}" />
                                 <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
-                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding EmailAddress}" />
+                                <TextBox Grid.Row="5" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding EmailAddress}" />
                                 <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
                                 <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding PhoneNumber}" />
                             </ctrl:FormGrid>
