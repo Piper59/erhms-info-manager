@@ -101,6 +101,18 @@ namespace ERHMS.Presentation
             ((TextBox)sender).SelectAll();
         }
 
+        public void Invoke(Action action)
+        {
+            if (Dispatcher.CheckAccess())
+            {
+                action();
+            }
+            else
+            {
+                Dispatcher.Invoke(action);
+            }
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             if (host != null)

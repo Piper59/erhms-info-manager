@@ -73,8 +73,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public virtual void Refresh()
         {
-            Items = GetItems();
-            Items.Filter = MatchesFilter;
+            App.Current.Invoke(() =>
+            {
+                Items = GetItems();
+                Items.Filter = MatchesFilter;
+            });
         }
 
         protected abstract IEnumerable<string> GetFilteredValues(T item);
