@@ -8,8 +8,7 @@
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
-             d:DesignWidth="640" d:DesignHeight="480"
-             x:Name="Root">
+             d:DesignWidth="640" d:DesignHeight="480">
     <UserControl.Resources>
         <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
     </UserControl.Resources>
