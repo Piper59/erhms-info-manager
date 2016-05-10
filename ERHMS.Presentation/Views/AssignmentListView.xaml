@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
@@ -51,7 +52,8 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Quick Filter</Label>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Responders.Filter, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.ClearTextButton="True"
+                             Text="{Binding Responders.Filter, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
                 <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
                                           DataContext="{Binding Responders}"
@@ -85,7 +87,8 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Quick Filter</Label>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.ClearTextButton="True"
+                             Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
                 <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
                                           ItemsSource="{Binding Items}"
