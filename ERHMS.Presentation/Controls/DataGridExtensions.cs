@@ -11,7 +11,7 @@ namespace ERHMS.Presentation.Controls
             "BoundColumns",
             typeof(ICollection<DataGridColumn>),
             typeof(DataGridExtensions),
-            new FrameworkPropertyMetadata(BoundColumns_PropertyChanged));
+            new PropertyMetadata(BoundColumns_PropertyChanged));
         public static ICollection<DataGridColumn> GetBoundColumns(DataGrid target)
         {
             return (ICollection<DataGridColumn>)target.GetValue(BoundColumnsProperty);
@@ -39,7 +39,7 @@ namespace ERHMS.Presentation.Controls
             "DoubleClickCommand",
             typeof(ICommand),
             typeof(DataGridExtensions),
-            new FrameworkPropertyMetadata(DoubleClickCommand_PropertyChanged));
+            new PropertyMetadata(DoubleClickCommand_PropertyChanged));
         public static ICommand GetDoubleClickCommand(DataGrid target)
         {
             return (ICommand)target.GetValue(DoubleClickCommandProperty);

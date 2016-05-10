@@ -9,7 +9,7 @@ namespace ERHMS.Presentation.Controls
             "OpenContextMenuOnClick",
             typeof(bool),
             typeof(ButtonExtensions),
-            new FrameworkPropertyMetadata(OpenContextMenuOnClick_PropertyChanged));
+            new PropertyMetadata(OpenContextMenuOnClick_PropertyChanged));
         public static bool GetOpenContextMenuOnClick(Button target)
         {
             return (bool)target.GetValue(OpenContextMenuOnClick);
