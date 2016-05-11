@@ -90,17 +90,6 @@
                     <v:AboutView />
                 </DataTemplate>
             </dock:DockingManager.Resources>
-            <dock:DockingManager.DocumentHeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Style="{StaticResource DocumentTitle}" Text="{Binding Title}" />
-                </DataTemplate>
-            </dock:DockingManager.DocumentHeaderTemplate>
-            <dock:DockingManager.LayoutItemContainerStyle>
-                <Style TargetType="{x:Type dock:LayoutItem}">
-                    <Setter Property="Title" Value="{Binding Model.Title}" />
-                    <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
-                </Style>
-            </dock:DockingManager.LayoutItemContainerStyle>
             <dock:LayoutRoot>
                 <dock:LayoutPanel>
                     <dock:LayoutDocumentPane />
