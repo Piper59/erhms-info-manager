@@ -11,6 +11,7 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml" />
         <ResourceDictionary Source="../Resources/Icons.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -51,6 +52,14 @@
                 <DataTemplate>
                     <TextBlock FontSize="18" Margin="5,0,0,0" MaxWidth="200" TextTrimming="CharacterEllipsis" Text="{Binding Title}" />
                 </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="DocumentPaneControlStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type dock:LayoutDocumentPaneControl}" BasedOn="{StaticResource DocumentPaneControlStyle}">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Padding" Value="5" />
+                </Style>
             </Setter.Value>
         </Setter>
         <Setter Property="LayoutItemContainerStyle">
