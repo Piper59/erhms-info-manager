@@ -3,6 +3,7 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -83,7 +84,11 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     if (log.Exists)
                     {
-                        log.Recycle();
+                        try
+                        {
+                            log.Recycle();
+                        }
+                        catch (OperationCanceledException) { }
                     }
                 }
                 Refresh();
