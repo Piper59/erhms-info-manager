@@ -17,10 +17,9 @@
 
     <Style x:Key="AppBar" TargetType="{x:Type WrapPanel}">
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0,5,10,0" />
     </Style>
 
-    <Style TargetType="{x:Type ctrl:AppBarButton}" BasedOn="{StaticResource {x:Type Button}}">
+    <Style TargetType="{x:Type ctrl:AppBarButton}" BasedOn="{StaticResource MetroButton}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -38,12 +37,16 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Height" Value="50" />
-        <Setter Property="Margin" Value="5,0,0,5" />
+        <Setter Property="Margin" Value="0,0,5,5" />
         <Setter Property="MinWidth" Value="50" />
     </Style>
 
     <Style TargetType="{x:Type scw:ChildWindow}">
         <Setter Property="ChildWindowWidth" Value="400" />
+    </Style>
+
+    <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MetroDataGrid}">
+        <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
     <Style TargetType="{x:Type dock:DockingManager}">
@@ -58,7 +61,8 @@
             <Setter.Value>
                 <Style TargetType="{x:Type dock:LayoutDocumentPaneControl}" BasedOn="{StaticResource DocumentPaneControlStyle}">
                     <Setter Property="Background" Value="White" />
-                    <Setter Property="Padding" Value="5" />
+                    <Setter Property="Margin" Value="5" />
+                    <Setter Property="Padding" Value="5,5,5,0" />
                 </Style>
             </Setter.Value>
         </Setter>
@@ -80,8 +84,8 @@
         </Style.Resources>
     </Style>
 
-    <Style TargetType="{x:Type dock:LayoutDocumentControl}">
-        <Setter Property="Background" Value="White" />
+    <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource MetroGroupBox}">
+        <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
     <Style x:Key="IncidentNotes" TargetType="{x:Type ListView}">
@@ -134,7 +138,7 @@
     </Canvas>
 
     <Style TargetType="{x:Type mah:MetroTabControl}">
-        <Setter Property="TabStripMargin" Value="0,0,10,0" />
+        <Setter Property="TabStripMargin" Value="0,0,5,0" />
         <Setter Property="TabStripPlacement" Value="Left" />
     </Style>
 
