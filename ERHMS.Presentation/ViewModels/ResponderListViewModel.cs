@@ -67,6 +67,9 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
+            Responder responder = SelectedItem;
+            SelectedItems.Clear();
+            SelectedItem = responder;
             ConfirmMessage msg = new ConfirmMessage(
                 "Delete?",
                 "Are you sure you want to delete this responder?",
