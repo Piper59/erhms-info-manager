@@ -1,6 +1,8 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -70,13 +72,23 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            foreach (FileInfo log in SelectedItems)
+            ConfirmMessage msg = new ConfirmMessage(
+                "Delete?",
+                string.Format("Are you sure you want to delete {0}?", SelectedItems.Count > 1 ? "these logs" : "this log"),
+                "Delete",
+                "Don't Delete");
+            msg.Confirmed += (sender, e) =>
             {
-                if (log.Exists)
+                foreach (FileInfo log in SelectedItems)
                 {
-                    log.Recycle();
+                    if (log.Exists)
+                    {
+                        log.Recycle();
+                    }
                 }
-            }
+                Refresh();
+            };
+            Messenger.Default.Send(msg);
         }
 
         public void Package()
