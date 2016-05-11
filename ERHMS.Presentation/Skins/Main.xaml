@@ -76,6 +76,10 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type ctrl:Filter}">
+        <Setter Property="Margin" Value="0,0,0,5" />
+    </Style>
+
     <Style TargetType="{x:Type ctrl:FormGrid}">
         <Style.Resources>
             <Style TargetType="{x:Type Label}">

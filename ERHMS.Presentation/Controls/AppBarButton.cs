@@ -10,7 +10,7 @@ namespace ERHMS.Presentation.Controls
             "Visual",
             typeof(Visual),
             typeof(AppBarButton),
-            new PropertyMetadata());
+            null);
         public Visual Visual
         {
             get { return (Visual)GetValue(VisualProperty); }

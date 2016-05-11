@@ -8,18 +8,7 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
-        <Grid DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Quick Filter</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.ClearTextButton="True"
-                     Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
-        </Grid>
+        <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding EditCommand}" Visual="{DynamicResource appbar_edit}">Edit</ctrl:AppBarButton>

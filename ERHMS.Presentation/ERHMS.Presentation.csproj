@@ -208,6 +208,9 @@
     <Compile Include="Controls\AppBarButton.cs" />
     <Compile Include="Controls\ButtonExtensions.cs" />
     <Compile Include="Controls\DataGridExtensions.cs" />
+    <Compile Include="Controls\Filter.xaml.cs">
+      <DependentUpon>Filter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FormGrid.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
@@ -351,6 +354,10 @@
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Filter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
