@@ -122,8 +122,6 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        // TODO: Use existing document if applicable
-
         public void OpenDataSource()
         {
             // TODO: Implement
@@ -134,6 +132,36 @@ namespace ERHMS.Presentation.ViewModels
             // TODO: Implement
         }
 
+        private TViewModel GetDocument<TViewModel>(Predicate<TViewModel> predicate = null) where TViewModel : ViewModelBase
+        {
+            foreach (ViewModelBase document in Documents)
+            {
+                TViewModel typedDocument = document as TViewModel;
+                if (typedDocument != null)
+                {
+                    if (predicate == null || predicate(typedDocument))
+                    {
+                        return typedDocument;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private bool TryActivateDocument<TViewModel>(Predicate<TViewModel> predicate = null) where TViewModel : ViewModelBase
+        {
+            TViewModel document = GetDocument(predicate);
+            if (document == null)
+            {
+                return false;
+            }
+            else
+            {
+                ActiveDocument = document;
+                return true;
+            }
+        }
+
         private void OpenDocument(ViewModelBase document)
         {
             Documents.Add(document);
@@ -142,57 +170,93 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenResponderListView()
         {
-            OpenDocument(new ResponderListViewModel());
+            if (!TryActivateDocument<ResponderListViewModel>())
+            {
+                OpenDocument(new ResponderListViewModel());
+            }
         }
 
         public void OpenResponderDetailView(Responder responder)
         {
-            OpenDocument(new ResponderDetailViewModel(responder));
+            if (!TryActivateDocument<ResponderDetailViewModel>(
+                document => document.Responder.ResponderId.Equals(responder.ResponderId, StringComparison.OrdinalIgnoreCase)))
+            {
+                OpenDocument(new ResponderDetailViewModel(responder));
+            }
         }
 
         public void OpenIncidentListView()
         {
-            OpenDocument(new IncidentListViewModel());
+            if (!TryActivateDocument<IncidentListViewModel>())
+            {
+                OpenDocument(new IncidentListViewModel());
+            }
         }
 
         public void OpenIncidentView(Incident incident)
         {
-            OpenDocument(new IncidentViewModel(incident));
+            if (!TryActivateDocument<IncidentViewModel>(
+                document => document.Incident.IncidentId.Equals(incident.IncidentId, StringComparison.OrdinalIgnoreCase)))
+            {
+                OpenDocument(new IncidentViewModel(incident));
+            }
         }
 
         public void OpenLocationDetailView(Location location)
         {
-            OpenDocument(new LocationDetailViewModel(location));
+            if (!TryActivateDocument<LocationDetailViewModel>(
+                document => document.Location.LocationId.Equals(location.LocationId, StringComparison.OrdinalIgnoreCase)))
+            {
+                OpenDocument(new LocationDetailViewModel(location));
+            }
         }
 
         public void OpenViewListView()
         {
-            OpenDocument(new ViewListViewModel(null));
+            if (!TryActivateDocument<ViewListViewModel>())
+            {
+                OpenDocument(new ViewListViewModel(null));
+            }
         }
 
         public void OpenRecordListView(View view)
         {
-            OpenDocument(new RecordListViewModel(view));
+            if (!TryActivateDocument<RecordListViewModel>(document => document.View.Id == view.Id))
+            {
+                OpenDocument(new RecordListViewModel(view));
+            }
         }
 
         public void OpenTemplateListView()
         {
-            OpenDocument(new TemplateListViewModel(null));
+            if (!TryActivateDocument<TemplateListViewModel>())
+            {
+                OpenDocument(new TemplateListViewModel(null));
+            }
         }
 
         public void OpenAssignmentListView()
         {
-            OpenDocument(new AssignmentListViewModel(null));
+            if (!TryActivateDocument<AssignmentListViewModel>())
+            {
+                OpenDocument(new AssignmentListViewModel(null));
+            }
         }
 
         public void OpenPgmListView()
         {
-            OpenDocument(new PgmListViewModel(null));
+            if (!TryActivateDocument<PgmListViewModel>())
+            {
+                OpenDocument(new PgmListViewModel(null));
+            }
         }
 
         public void OpenCanvasListView()
         {
-            OpenDocument(new CanvasListViewModel(null));
+            if (!TryActivateDocument<CanvasListViewModel>())
+            {
+                OpenDocument(new CanvasListViewModel(null));
+            }
         }
 
         public void OpenSettingsView()
@@ -202,17 +266,26 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenLogListView()
         {
-            OpenDocument(new LogListViewModel());
+            if (!TryActivateDocument<LogListViewModel>())
+            {
+                OpenDocument(new LogListViewModel());
+            }
         }
 
         public void OpenHelpView()
         {
-            OpenDocument(new HelpViewModel());
+            if (!TryActivateDocument<HelpViewModel>())
+            {
+                OpenDocument(new HelpViewModel());
+            }
         }
 
         public void OpenAboutView()
         {
-            OpenDocument(new AboutViewModel());
+            if (!TryActivateDocument<AboutViewModel>())
+            {
+                OpenDocument(new AboutViewModel());
+            }
         }
 
         public void Exit()
