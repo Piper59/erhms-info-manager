@@ -221,6 +221,7 @@
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
+    <Compile Include="Converters\StringToUpperConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -245,6 +246,7 @@
     <Compile Include="ViewModels\AssignmentListViewModel.cs" />
     <Compile Include="ViewModels\AssignmentViewModel.cs" />
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
+    <Compile Include="ViewModels\DataSourceListViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
@@ -273,6 +275,9 @@
     </Compile>
     <Compile Include="Views\CanvasListView.xaml.cs">
       <DependentUpon>CanvasListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSourceListView.xaml.cs">
+      <DependentUpon>DataSourceListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HelpView.xaml.cs">
       <DependentUpon>HelpView.xaml</DependentUpon>
@@ -384,6 +389,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CanvasListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataSourceListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

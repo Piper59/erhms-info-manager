@@ -7,12 +7,12 @@ namespace ERHMS.Presentation.ViewModels
     {
         public ViewModelLocator Locator
         {
-            get { return (ViewModelLocator)App.Current.FindResource("ViewModelLocator"); }
+            get { return App.Current.Locator; }
         }
 
         protected DataContext DataContext
         {
-            get { return App.Current.DataContext; }
+            get { return Locator.Main.DataSource; }
         }
 
         private string title;

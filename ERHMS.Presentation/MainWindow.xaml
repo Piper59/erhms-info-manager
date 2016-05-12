@@ -12,13 +12,11 @@
                  Width="1024" Height="768"
                  MinWidth="640" MinHeight="480"
                  EnableDWMDropShadow="True"
-                 DataContext="{Binding Main, Source={StaticResource ViewModelLocator}}"
                  Title="{Binding Title}">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open Data Source" Command="{Binding OpenDataSourceCommand}" IsEnabled="False" />
-                <MenuItem Header="_Close Data Source" Command="{Binding CloseDataSourceCommand}" IsEnabled="False" />
+                <MenuItem Header="_Data Sources" Command="{Binding DataSourcesCommand}" />
                 <Separator />
                 <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
@@ -47,6 +45,9 @@
         </Menu>
         <dock:DockingManager DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
             <dock:DockingManager.Resources>
+                <DataTemplate DataType="{x:Type vm:DataSourceListViewModel}">
+                    <v:DataSourceListView />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ResponderListViewModel}">
                     <v:ResponderListView />
                 </DataTemplate>

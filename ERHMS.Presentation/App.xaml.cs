@@ -2,6 +2,7 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
 using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.ViewModels;
 using ERHMS.Utility;
 using System;
 using System.IO;
@@ -51,9 +52,15 @@ namespace ERHMS.Presentation
                     }
                 }
                 ConfigurationExtensions.CreateAndOrLoad();
+                // TODO: Copy sample data source and add to settings
                 App app = new App();
                 app.InitializeComponent();
-                app.Run(new MainWindow());
+                MainWindow window = new MainWindow(app.Locator.Main);
+                window.Loaded += (_sender, _e) =>
+                {
+                    app.Locator.Main.OpenDataSourceListView();
+                };
+                app.Run(window);
                 Log.Current.Debug("Exiting");
             };
             try
@@ -69,30 +76,13 @@ namespace ERHMS.Presentation
         private ServiceHost host;
 
         public Service Service { get; private set; }
-        public DataContext DataContext { get; set; }
+        public ViewModelLocator Locator { get; private set; }
 
         public App()
         {
             Service = new Service();
             host = Service.OpenHost();
-            // TODO: Allow data context selection
-            FileInfo file = ConfigurationExtensions.GetConfigurationRoot().GetFile("Projects", "ERHMS", "ERHMS.prj");
-            if (file.Exists)
-            {
-                DataContext = new DataContext(new Project(file));
-            }
-            else
-            {
-                AccessDriver driver = AccessDriver.Create(Path.ChangeExtension(file.FullName, ".mdb"));
-                Project project = Project.Create(
-                    "ERHMS",
-                    "Emergency Responder Health Monitoring and Surveillance",
-                    file.Directory,
-                    driver.Provider.ToEpiInfoName(),
-                    driver.Builder,
-                    driver.DatabaseName);
-                DataContext = DataContext.Create(project);
-            }
+            Locator = new ViewModelLocator();
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler(TextBox_GotFocus));
         }
 

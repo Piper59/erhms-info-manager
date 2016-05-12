@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
+using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
@@ -11,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
+using Project = ERHMS.EpiInfo.Project;
 using Template = ERHMS.EpiInfo.Template;
 
 namespace ERHMS.Presentation.ViewModels
@@ -18,6 +20,13 @@ namespace ERHMS.Presentation.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private ICollection<ViewModelBase> cachedDocuments;
+
+        private DataContext dataSource;
+        public DataContext DataSource
+        {
+            get { return dataSource; }
+            private set { Set(() => DataSource, ref dataSource, value); }
+        }
 
         public ObservableCollection<ViewModelBase> Documents { get; private set; }
 
@@ -28,8 +37,7 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => ActiveDocument, ref activeDocument, value); }
         }
 
-        public RelayCommand OpenDataSourceCommand { get; private set; }
-        public RelayCommand CloseDataSourceCommand { get; private set; }
+        public RelayCommand DataSourcesCommand { get; private set; }
         public RelayCommand ShowRespondersCommand { get; private set; }
         public RelayCommand CreateResponderCommand { get; private set; }
         public RelayCommand ShowIncidentsCommand { get; private set; }
@@ -48,20 +56,34 @@ namespace ERHMS.Presentation.ViewModels
         public MainViewModel()
         {
             Title = App.Title;
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "DataSource")
+                {
+                    ShowRespondersCommand.RaiseCanExecuteChanged();
+                    CreateResponderCommand.RaiseCanExecuteChanged();
+                    ShowIncidentsCommand.RaiseCanExecuteChanged();
+                    CreateIncidentCommand.RaiseCanExecuteChanged();
+                    FormsCommand.RaiseCanExecuteChanged();
+                    TemplatesCommand.RaiseCanExecuteChanged();
+                    AssignmentsCommand.RaiseCanExecuteChanged();
+                    AnalysesCommand.RaiseCanExecuteChanged();
+                    DashboardsCommand.RaiseCanExecuteChanged();
+                }
+            };
             Documents = new ObservableCollection<ViewModelBase>();
             Documents.CollectionChanged += Documents_CollectionChanged;
             cachedDocuments = new List<ViewModelBase>(Documents);
-            OpenDataSourceCommand = new RelayCommand(OpenDataSource);
-            CloseDataSourceCommand = new RelayCommand(CloseDataSource);
-            ShowRespondersCommand = new RelayCommand(OpenResponderListView);
-            CreateResponderCommand = new RelayCommand(() => { OpenResponderDetailView(DataContext.Responders.Create()); });
-            ShowIncidentsCommand = new RelayCommand(OpenIncidentListView);
-            CreateIncidentCommand = new RelayCommand(() => { OpenIncidentView(DataContext.Incidents.Create()); });
-            FormsCommand = new RelayCommand(OpenViewListView);
-            TemplatesCommand = new RelayCommand(OpenTemplateListView);
-            AssignmentsCommand = new RelayCommand(OpenAssignmentListView);
-            AnalysesCommand = new RelayCommand(OpenPgmListView);
-            DashboardsCommand = new RelayCommand(OpenCanvasListView);
+            DataSourcesCommand = new RelayCommand(OpenDataSourceListView);
+            ShowRespondersCommand = new RelayCommand(OpenResponderListView, HasDataSource);
+            CreateResponderCommand = new RelayCommand(() => { OpenResponderDetailView(DataContext.Responders.Create()); }, HasDataSource);
+            ShowIncidentsCommand = new RelayCommand(OpenIncidentListView, HasDataSource);
+            CreateIncidentCommand = new RelayCommand(() => { OpenIncidentView(DataContext.Incidents.Create()); }, HasDataSource);
+            FormsCommand = new RelayCommand(OpenViewListView, HasDataSource);
+            TemplatesCommand = new RelayCommand(OpenTemplateListView, HasDataSource);
+            AssignmentsCommand = new RelayCommand(OpenAssignmentListView, HasDataSource);
+            AnalysesCommand = new RelayCommand(OpenPgmListView, HasDataSource);
+            DashboardsCommand = new RelayCommand(OpenCanvasListView, HasDataSource);
             SettingsCommand = new RelayCommand(OpenSettingsView);
             LogsCommand = new RelayCommand(OpenLogListView);
             HelpCommand = new RelayCommand(OpenHelpView);
@@ -122,14 +144,40 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public void OpenDataSource()
+        public bool HasDataSource()
         {
-            // TODO: Implement
+            return DataSource != null;
         }
 
-        public void CloseDataSource()
+        private void OpenDataSourceInternal(FileInfo file)
         {
-            // TODO: Implement
+            Documents.Clear();
+            DataSource = new DataContext(new Project(file));
+        }
+
+        public void OpenDataSource(FileInfo file)
+        {
+            if (HasDataSource())
+            {
+                if (DataSource.Project.FilePath.Equals(file.FullName, StringComparison.OrdinalIgnoreCase))
+                {
+                    CloseDataSourceListView();
+                    return;
+                }
+                ConfirmMessage msg = new ConfirmMessage(
+                    "Open?",
+                    "Open data source? This will close the currently active data source.",
+                    "Open",
+                    "Don't Open");
+                msg.Confirmed += (sender, e) =>
+                {
+                    OpenDataSourceInternal(file);
+                };
+            }
+            else
+            {
+                OpenDataSourceInternal(file);
+            }
         }
 
         private TViewModel GetDocument<TViewModel>(Predicate<TViewModel> predicate = null) where TViewModel : ViewModelBase
@@ -166,6 +214,19 @@ namespace ERHMS.Presentation.ViewModels
         {
             Documents.Add(document);
             ActiveDocument = document;
+        }
+
+        public void OpenDataSourceListView()
+        {
+            if (!TryActivateDocument<DataSourceListViewModel>())
+            {
+                OpenDocument(new DataSourceListViewModel());
+            }
+        }
+
+        public void CloseDataSourceListView()
+        {
+            GetDocument<DataSourceListViewModel>()?.Close();
         }
 
         public void OpenResponderListView()

@@ -1,4 +1,5 @@
 ﻿using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.ViewModels;
 using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
@@ -13,8 +14,9 @@ namespace ERHMS.Presentation
     {
         private bool closing;
 
-        public MainWindow()
+        public MainWindow(MainViewModel model)
         {
+            DataContext = model;
             Closing += MainWindow_Closing;
             Messenger.Default.Register<BlockMessage>(this, OnBlockMessage);
             Messenger.Default.Register<ConfirmMessage>(this, OnConfirmMessage);

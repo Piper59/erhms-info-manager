@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.DataSourceListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="640" d:DesignHeight="480">
+    <DockPanel>
+        <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
+        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+            <ctrl:AppBarButton Command="{Binding OpenCommand}" Visual="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
+            <ctrl:AppBarButton Content="Add" Visual="{DynamicResource appbar_add}"
+                               ctrl:ButtonExtensions.OpenContextMenuOnClick="True">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="New" Command="{Binding AddNewCommand}" />
+                        <MenuItem Header="Existing" Command="{Binding AddExistingCommand}" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding RemoveCommand}" Visual="{DynamicResource appbar_close}">Remove</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
+        </WrapPanel>
+        <DataGrid SelectionMode="Single"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}"
+                  ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Description" Width="3*" Binding="{Binding Description}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>
