@@ -282,11 +282,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void AnalyzeClassic()
         {
+            PgmName = "";
             CreatingPgm = true;
         }
 
         public void AnalyzeVisual()
         {
+            CanvasName = "";
             CreatingCanvas = true;
         }
 
@@ -307,7 +309,6 @@ namespace ERHMS.Presentation.ViewModels
             }
             Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
             CreatingPgm = false;
-            PgmName = "";
             Analysis.OpenPgm(pgm, true);
         }
 
@@ -328,20 +329,17 @@ namespace ERHMS.Presentation.ViewModels
             }
             Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
             CreatingCanvas = false;
-            CanvasName = "";
             AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, IncidentId);
         }
 
         public void CancelPgm()
         {
             CreatingPgm = false;
-            PgmName = "";
         }
 
         public void CancelCanvas()
         {
             CreatingCanvas = false;
-            CanvasName = "";
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
