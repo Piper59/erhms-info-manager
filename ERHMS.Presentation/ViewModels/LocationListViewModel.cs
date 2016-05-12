@@ -2,6 +2,7 @@
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshLocationListMessage(RefreshListMessage<Location> msg)
         {
-            if (msg.IncidentId == Incident.IncidentId)
+            if (msg.IncidentId.Equals(Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }

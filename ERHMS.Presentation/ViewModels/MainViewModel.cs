@@ -5,6 +5,7 @@ using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -222,7 +223,7 @@ namespace ERHMS.Presentation.ViewModels
         private void Service_ViewAdded(object sender, ViewEventArgs e)
         {
             string incidentId = e.Tag;
-            if (e.ProjectPath == DataContext.Project.FilePath && incidentId != null)
+            if (e.ProjectPath.Equals(DataContext.Project.FilePath, StringComparison.OrdinalIgnoreCase) && incidentId != null)
             {
                 View view = DataContext.Project.GetViewByName(e.ViewName);
                 if (view == null)
@@ -259,7 +260,7 @@ namespace ERHMS.Presentation.ViewModels
         private void Service_CanvasClosed(object sender, CanvasEventArgs e)
         {
             string incidentId = e.Tag;
-            if (DataContext.Project.FilePath == e.ProjectPath)
+            if (DataContext.Project.FilePath.Equals(e.ProjectPath, StringComparison.OrdinalIgnoreCase))
             {
                 Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
                 canvas.Content = File.ReadAllText(e.CanvasPath);

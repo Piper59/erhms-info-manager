@@ -4,6 +4,7 @@ using ERHMS.EpiInfo.AnalysisDashboard;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -104,7 +105,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshCanvasListMessage(RefreshListMessage<Canvas> msg)
         {
-            if (msg.IncidentId == IncidentId)
+            if (msg.IncidentId.Equals(IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }
