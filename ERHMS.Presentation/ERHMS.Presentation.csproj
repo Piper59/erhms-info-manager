@@ -213,6 +213,7 @@
     </Compile>
     <Compile Include="Controls\FormGrid.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
+    <Compile Include="Controls\ResponsiveFormGrid.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\DebugConverter.cs" />

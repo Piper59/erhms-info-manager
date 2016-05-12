@@ -88,17 +88,13 @@
                     <ctrl:AppBarButton Command="{Binding CreatePgmCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
                     <ctrl:AppBarButton Command="{Binding CancelPgmCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <ctrl:ResponsiveFormGrid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Name</Label>
                     <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PgmName, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+                </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
         <scw:ChildWindow Title="Create a New Dashboard" IsOpen="{Binding CreatingCanvas}">
@@ -107,17 +103,13 @@
                     <ctrl:AppBarButton Command="{Binding CreateCanvasCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
                     <ctrl:AppBarButton Command="{Binding CancelCanvasCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <ctrl:ResponsiveFormGrid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Name</Label>
                     <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CanvasName, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+                </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
     </Grid>

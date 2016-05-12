@@ -25,11 +25,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <DockPanel Grid.Row="0" Grid.Column="0">
-                <Grid DockPanel.Dock="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <ctrl:ResponsiveFormGrid DockPanel.Dock="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -41,7 +37,7 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                </Grid>
+                </ctrl:ResponsiveFormGrid>
                 <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Responders.Filter}" />
                 <ctrl:MultiSelectDataGrid DataContext="{Binding Responders}"
                                           ItemsSource="{Binding Items}"
