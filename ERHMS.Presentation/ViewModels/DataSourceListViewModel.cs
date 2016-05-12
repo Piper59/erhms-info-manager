@@ -3,6 +3,7 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -72,7 +73,23 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Remove()
         {
-            // TODO: Implement
+            ConfirmMessage msg = new ConfirmMessage(
+                "Remove?",
+                "Are you sure you want to remove this data source?",
+                "Remove",
+                "Don't Remove");
+            msg.Confirmed += (sender, e) =>
+            {
+                int index = Settings.Default.DataSources.FindIndex(
+                    dataSource => dataSource.Equals(SelectedItem.File.FullName, StringComparison.OrdinalIgnoreCase));
+                if (index != -1)
+                {
+                    Settings.Default.DataSources.Remove(SelectedItem.File.FullName);
+                    Settings.Default.Save();
+                }
+                Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+            };
+            Messenger.Default.Send(msg);
         }
 
         private void OnRefreshDataSourceList(RefreshListMessage<ProjectInfo> msg)
