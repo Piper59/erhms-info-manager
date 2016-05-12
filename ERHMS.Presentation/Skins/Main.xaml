@@ -197,6 +197,7 @@
     </Style>
 
     <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource MetroScrollViewer}">
+        <Setter Property="Margin" Value="0,0,0,5" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
 
