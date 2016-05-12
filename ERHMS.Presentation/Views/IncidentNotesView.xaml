@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
-        <TextBox DockPanel.Dock="Top" AcceptsReturn="True" TextWrapping="Wrap" Height="100"
+        <TextBox DockPanel.Dock="Top" Style="{StaticResource MultiLineTextBox}"
                  Text="{Binding Note.Content, UpdateSourceTrigger=PropertyChanged}" />
         <WrapPanel DockPanel.Dock="Top" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding SaveCommand}" Visual="{DynamicResource appbar_save}">Save</ctrl:AppBarButton>
@@ -15,6 +15,6 @@
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
-        <ListView ItemsSource="{Binding Notes}" Style="{StaticResource IncidentNotes}" />
+        <ListView Style="{StaticResource IncidentNotes}" ItemsSource="{Binding Notes}" />
     </DockPanel>
 </UserControl>

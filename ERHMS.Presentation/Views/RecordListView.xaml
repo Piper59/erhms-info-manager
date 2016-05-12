@@ -14,16 +14,15 @@
             <ctrl:AppBarButton Command="{Binding UndeleteCommand}" Visual="{DynamicResource appbar_page_check}">Undelete</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
-        <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                                  ctrl:DataGridExtensions.BoundColumns="{Binding Columns}"
+        <ctrl:MultiSelectDataGrid ctrl:DataGridExtensions.BoundColumns="{Binding Columns}"
                                   ItemsSource="{Binding Items}"
                                   SelectedItem="{Binding SelectedItem}"
-                                  MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                  MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Deleted}" Value="True">
-                            <Setter Property="Foreground" Value="Gray" />
+                            <Setter Property="Foreground" Value="{StaticResource GrayNormalBrush}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

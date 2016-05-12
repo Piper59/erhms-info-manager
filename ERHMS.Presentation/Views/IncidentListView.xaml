@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
@@ -20,7 +19,7 @@
             <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
-        <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+        <DataGrid SelectionMode="Single"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}"
                   ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">

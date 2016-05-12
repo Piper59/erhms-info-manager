@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <UserControl.Resources>
@@ -19,8 +18,9 @@
                 <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding EditCommand}" Visual="{DynamicResource appbar_edit}">Edit</ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
-                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_database}" Content="Data"
-                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                <ctrl:AppBarButton Content="Data" Visual="{DynamicResource appbar_database}"
+                                   ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
+                                   IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Enter" Command="{Binding EnterDataCommand}" />
@@ -28,8 +28,9 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_page_upload}" Content="Publish"
-                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                <ctrl:AppBarButton Content="Publish" Visual="{DynamicResource appbar_page_upload}"
+                                   ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
+                                   IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="To Template" Command="{Binding PublishToTemplateCommand}" />
@@ -38,8 +39,9 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_door_enter}" Content="Import"
-                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                <ctrl:AppBarButton Content="Import" Visual="{DynamicResource appbar_door_enter}"
+                                   ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
+                                   IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="From Project" Command="{Binding ImportFromProjectCommand}" />
@@ -50,8 +52,9 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_door_leave}" Content="Export"
-                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                <ctrl:AppBarButton Content="Export" Visual="{DynamicResource appbar_door_leave}"
+                                   ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
+                                   IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="To Package" Command="{Binding ExportToPackageCommand}" />
@@ -59,8 +62,9 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton ctrl:ButtonExtensions.OpenContextMenuOnClick="True" Visual="{DynamicResource appbar_graph_bar}" Content="Analyze"
-                        IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                <ctrl:AppBarButton Content="Analyze" Visual="{DynamicResource appbar_graph_bar}"
+                                   ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
+                                   IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Classic" Command="{Binding AnalyzeClassicCommand}" />
@@ -70,7 +74,7 @@
                 </ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
             </WrapPanel>
-            <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+            <DataGrid SelectionMode="Single"
                       ItemsSource="{Binding Items}"
                       SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>

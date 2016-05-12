@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
@@ -44,11 +43,10 @@
                     </ComboBox>
                 </Grid>
                 <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Responders.Filter}" />
-                <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                                          DataContext="{Binding Responders}"
+                <ctrl:MultiSelectDataGrid DataContext="{Binding Responders}"
                                           ItemsSource="{Binding Items}"
                                           SelectedItem="{Binding SelectedItem}"
-                                          MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
                                           ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding ResponderId}" />
@@ -68,10 +66,9 @@
             </WrapPanel>
             <DockPanel Grid.Row="2" Grid.Column="0">
                 <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
-                <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                                          ItemsSource="{Binding Items}"
+                <ctrl:MultiSelectDataGrid ItemsSource="{Binding Items}"
                                           SelectedItem="{Binding SelectedItem}"
-                                          MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                          MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Form" Width="*" Binding="{Binding View.Name}" />
                         <DataGridTextColumn Header="Responder" Width="*" Binding="{Binding Responder, Converter={StaticResource ResponderToNameConverter}}" />

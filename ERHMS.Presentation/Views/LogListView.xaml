@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
@@ -19,10 +18,9 @@
             <ctrl:AppBarButton Command="{Binding PackageCommand}" Visual="{DynamicResource appbar_cabinet_files}" IsEnabled="False">Package</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
-        <ctrl:MultiSelectDataGrid AutoGenerateColumns="False" IsReadOnly="True"
-                                  ItemsSource="{Binding Items}"
+        <ctrl:MultiSelectDataGrid ItemsSource="{Binding Items}"
                                   SelectedItem="{Binding SelectedItem}"
-                                  MultiSelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
                                   ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />

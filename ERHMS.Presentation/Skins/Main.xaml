@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:bing="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+                    xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
+                    xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
                     xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
-                    xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
-                    xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls">
+                    xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -14,6 +15,10 @@
         <ResourceDictionary Source="pack://application:,,,/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml" />
         <ResourceDictionary Source="../Resources/Icons.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="AccentButton" TargetType="{x:Type Button}" BasedOn="{StaticResource AccentedSquareButtonStyle}">
+        <Setter Property="mah:ButtonHelper.PreserveTextCase" Value="True" />
+    </Style>
 
     <Style x:Key="AppBar" TargetType="{x:Type WrapPanel}">
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -36,16 +41,35 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="MinWidth" Value="50" />
         <Setter Property="Height" Value="50" />
         <Setter Property="Margin" Value="0,0,5,5" />
-        <Setter Property="MinWidth" Value="50" />
+    </Style>
+
+    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MetroCheckBox}">
+        <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
     <Style TargetType="{x:Type scw:ChildWindow}">
+        <Style.Resources>
+            <Style TargetType="{x:Type DockPanel}">
+                <Setter Property="Margin" Value="1,5,1,-4" />
+            </Style>
+        </Style.Resources>
         <Setter Property="ChildWindowWidth" Value="400" />
     </Style>
 
+    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MetroComboBox}">
+        <Setter Property="Margin" Value="0,0,0,5" />
+    </Style>
+
     <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MetroDataGrid}">
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Margin" Value="0,0,0,5" />
+    </Style>
+
+    <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource MetroDatePicker}">
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
@@ -61,7 +85,7 @@
             <Setter.Value>
                 <Style TargetType="{x:Type dock:LayoutDocumentPaneControl}" BasedOn="{StaticResource DocumentPaneControlStyle}">
                     <Setter Property="Background" Value="White" />
-                    <Setter Property="Margin" Value="5" />
+                    <Setter Property="Margin" Value="5,4,5,5" />
                     <Setter Property="Padding" Value="5,5,5,0" />
                 </Style>
             </Setter.Value>
@@ -76,31 +100,19 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type ctrl:Filter}">
-        <Setter Property="Margin" Value="0,0,0,5" />
-    </Style>
-
-    <Style TargetType="{x:Type ctrl:FormGrid}">
-        <Style.Resources>
-            <Style TargetType="{x:Type Label}">
-                <Setter Property="HorizontalAlignment" Value="Right" />
-            </Style>
-        </Style.Resources>
-    </Style>
-
     <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource MetroGroupBox}">
         <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="Padding" Value="5,5,5,0" />
     </Style>
 
-    <Style x:Key="IncidentNotes" TargetType="{x:Type ListView}">
+    <Style x:Key="IncidentNotes" TargetType="{x:Type ListView}" BasedOn="{StaticResource MetroListView}">
         <Style.Resources>
             <conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         </Style.Resources>
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
-                <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource MetroListViewItem}">
                     <Setter Property="Focusable" Value="False" />
                 </Style>
             </Setter.Value>
@@ -108,16 +120,22 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Border BorderBrush="LightGray" BorderThickness="0,1,0,0">
+                    <Border BorderBrush="{StaticResource GrayBrush6}" BorderThickness="0,1,0,0">
                         <StackPanel Margin="5">
                             <TextBlock Margin="0,0,0,5" TextWrapping="Wrap" Text="{Binding Content}" />
-                            <TextBlock Foreground="Gray" Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
+                            <TextBlock Foreground="{StaticResource GrayNormalBrush}" Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
                         </StackPanel>
                     </Border>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Margin" Value="0,-2,0,5" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
+
+    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MetroLabel}">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
     <Canvas x:Key="Logo" Width="500" Height="85">
@@ -141,6 +159,10 @@
         </Canvas>
     </Canvas>
 
+    <Style TargetType="{x:Type bing:Map}">
+        <Setter Property="Margin" Value="0,0,0,5" />
+    </Style>
+
     <Style TargetType="{x:Type mah:MetroTabControl}">
         <Setter Property="TabStripMargin" Value="0,0,5,0" />
         <Setter Property="TabStripPlacement" Value="Left" />
@@ -150,13 +172,24 @@
         <Setter Property="mah:ControlsHelper.HeaderFontSize" Value="18" />
     </Style>
 
+    <Style x:Key="MultiLineTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MetroTextBox}">
+        <Setter Property="AcceptsReturn" Value="True" />
+        <Setter Property="Height" Value="100" />
+        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
     <Style TargetType="{x:Type ctrl:MultiSelectDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
 
-    <Style x:Key="Numeric" TargetType="{x:Type TextBlock}">
+    <Style x:Key="Numeric" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MetroTextBlock}">
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
 
-    <Style TargetType="{x:Type ScrollViewer}">
+    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource MetroScrollViewer}">
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    </Style>
+
+    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MetroTextBox}">
+        <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 </ResourceDictionary>
