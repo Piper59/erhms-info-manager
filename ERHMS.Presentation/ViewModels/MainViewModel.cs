@@ -128,20 +128,23 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            ViewModelBase document = (ViewModelBase)sender;
-            switch (e.PropertyName)
+            App.Current.Invoke(() =>
             {
-                case "Closed":
-                    if (document.Closed)
-                    {
-                        Documents.Remove(document);
-                    }
-                    else
-                    {
-                        Documents.Add(document);
-                    }
-                    break;
-            }
+                ViewModelBase document = (ViewModelBase)sender;
+                switch (e.PropertyName)
+                {
+                    case "Closed":
+                        if (document.Closed)
+                        {
+                            Documents.Remove(document);
+                        }
+                        else
+                        {
+                            Documents.Add(document);
+                        }
+                        break;
+                }
+            });
         }
 
         public bool HasDataSource()
@@ -151,8 +154,11 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OpenDataSourceInternal(FileInfo file)
         {
-            Documents.Clear();
-            DataSource = new DataContext(new Project(file));
+            App.Current.Invoke(() =>
+            {
+                Documents.Clear();
+                DataSource = new DataContext(new Project(file));
+            });
         }
 
         public void OpenDataSource(FileInfo file)
@@ -213,8 +219,11 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OpenDocument(ViewModelBase document)
         {
-            Documents.Add(document);
-            ActiveDocument = document;
+            App.Current.Invoke(() =>
+            {
+                Documents.Add(document);
+                ActiveDocument = document;
+            });
         }
 
         public void OpenDataSourceListView()
