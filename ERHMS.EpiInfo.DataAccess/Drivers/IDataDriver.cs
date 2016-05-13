@@ -13,6 +13,8 @@ namespace ERHMS.EpiInfo.DataAccess
 
         string Escape(string identifier);
         string GetParameterName(int index);
+        bool DatabaseExists();
+        void CreateDatabase();
         DataTransaction BeginTransaction();
         DataTable GetSchema(string sql);
         DataTable ExecuteQuery(DataTransaction transaction, string sql, IEnumerable<DataParameter> parameters);
