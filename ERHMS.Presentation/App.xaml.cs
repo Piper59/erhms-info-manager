@@ -54,7 +54,7 @@ namespace ERHMS.Presentation
                 App app = new App();
                 app.InitializeComponent();
                 MainWindow window = new MainWindow(app.Locator.Main);
-                window.Loaded += (_sender, _e) =>
+                window.ContentRendered += (_sender, _e) =>
                 {
                     app.Locator.Main.OpenDataSourceListView();
                 };
