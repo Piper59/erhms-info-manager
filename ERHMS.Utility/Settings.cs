@@ -5,7 +5,7 @@ namespace ERHMS.Utility
     public class Settings : SettingsBase<Settings>
     {
         public string LogLevel { get; set; }
-        public List<string> DataSources { get; set; }
+        public HashSet<string> DataSources { get; set; }
         public string RootDirectory { get; set; }
         public string ServiceAddress { get; set; }
         public string EmailHost { get; set; }
@@ -20,7 +20,7 @@ namespace ERHMS.Utility
 #else
             LogLevel = "WARN";
 #endif
-            DataSources = new List<string>();
+            DataSources = new HashSet<string>();
             RootDirectory = "";
             ServiceAddress = "net.pipe://localhost/erhms-info-manager";
             EmailHost = "";

@@ -1,4 +1,5 @@
-﻿using ERHMS.EpiInfo;
+﻿using Epi;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
@@ -9,8 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Data;
 using System.Windows.Forms;
+using Project = ERHMS.EpiInfo.Project;
+using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -89,7 +93,9 @@ namespace ERHMS.Presentation.ViewModels
                     Remove(file);
                 }
             }
-            return CollectionViewSource.GetDefaultView(items);
+            return CollectionViewSource.GetDefaultView(items
+                .OrderBy(projectInfo => projectInfo.Name)
+                .ThenBy(projectInfo => projectInfo.Description));
         }
 
         protected override IEnumerable<string> GetFilteredValues(ProjectInfo item)
@@ -109,14 +115,27 @@ namespace ERHMS.Presentation.ViewModels
             Creating = true;
         }
 
-        public void AddExisting()
+        private void AddExisting(FileInfo file)
         {
-            // TODO: Implement
+            Settings.Default.DataSources.Add(file.FullName);
+            Settings.Default.Save();
         }
 
-        public void AddExisting(FileInfo file)
+        public void AddExisting()
         {
-            // TODO: Implement
+            Configuration configuration = Configuration.GetNewInstance();
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Title = "Add Existing Data Source";
+                dialog.InitialDirectory = configuration.Directories.Project;
+                dialog.Filter = string.Format("Data Sources (*{0})|*{0}", Project.FileExtension);
+                dialog.CheckFileExists = true;
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    AddExisting(new FileInfo(dialog.FileName));
+                    Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                }
+            }
         }
 
         public void Browse()
@@ -147,7 +166,10 @@ namespace ERHMS.Presentation.ViewModels
                 msg.Confirmed += (sender, e) =>
                 {
                     AddExisting(file);
+                    Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                    Creating = false;
                 };
+                Messenger.Default.Send(msg);
             }
             else
             {
@@ -189,11 +211,7 @@ namespace ERHMS.Presentation.ViewModels
                         Settings.Default.DataSources.Add(file.FullName);
                         Settings.Default.Save();
                         Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
-                        App.Current.Invoke(() =>
-                        {
-                            Creating = false;
-                            Locator.Main.OpenDataSource(project.File);
-                        });
+                        Creating = false;
                     };
                     Messenger.Default.Send(msg);
                 }
@@ -207,13 +225,8 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Remove(FileInfo file)
         {
-            int index = Settings.Default.DataSources.FindIndex(
-                dataSource => dataSource.Equals(file.FullName, StringComparison.OrdinalIgnoreCase));
-            if (index != -1)
-            {
-                Settings.Default.DataSources.Remove(file.FullName);
-                Settings.Default.Save();
-            }
+            Settings.Default.DataSources.RemoveWhere(dataSource => dataSource.Equals(file.FullName, StringComparison.OrdinalIgnoreCase));
+            Settings.Default.Save();
         }
 
         public void Remove()
