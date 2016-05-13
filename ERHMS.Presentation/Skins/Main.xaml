@@ -102,13 +102,13 @@
 
     <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource MetroGroupBox}">
         <Style.Resources>
-            <conv:StringToUpperConverter x:Key="StringToUpperConverter" />
+            <conv:StringToUppercaseStringConverter x:Key="StringToUppercaseStringConverter" />
         </Style.Resources>
         <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <TextBlock Padding="0,0,0,5"
-                               Text="{Binding Header, RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Converter={StaticResource StringToUpperConverter}}" />
+                               Text="{Binding Header, RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}, Converter={StaticResource StringToUppercaseStringConverter}}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>

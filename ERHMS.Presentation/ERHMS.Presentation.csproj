@@ -222,7 +222,7 @@
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
-    <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="Converters\StringToUppercaseStringConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
