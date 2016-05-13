@@ -55,7 +55,7 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 sql.Insert(0, "(");
                 sql.Append(string.Format(
-                    ") INNER JOIN {1} ON {0}.{2} = {1}.{2}",
+                    " INNER JOIN {1} ON {0}.{2} = {1}.{2})",
                     Driver.Escape(BaseTableName),
                     Driver.Escape(pageTableName),
                     Driver.Escape(ColumnNames.GLOBAL_RECORD_ID)));
