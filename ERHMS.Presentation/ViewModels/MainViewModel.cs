@@ -173,6 +173,7 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     OpenDataSourceInternal(file);
                 };
+                Messenger.Default.Send(msg);
             }
             else
             {
