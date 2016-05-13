@@ -214,10 +214,13 @@
     <Compile Include="Controls\FormGrid.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Controls\ResponsiveFormGrid.cs" />
+    <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
+    <Compile Include="Converters\DataProviderToDescriptionConverter.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
+    <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToBoolConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />
@@ -248,6 +251,7 @@
     <Compile Include="ViewModels\AssignmentViewModel.cs" />
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceListViewModel.cs" />
+    <Compile Include="ViewModels\DataSourceViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />

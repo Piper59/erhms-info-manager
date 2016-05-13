@@ -1,7 +1,5 @@
-﻿using ERHMS.DataAccess;
-using ERHMS.EpiInfo;
+﻿using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
-using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.ViewModels;
 using ERHMS.Utility;
 using System;

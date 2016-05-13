@@ -35,7 +35,10 @@ namespace ERHMS.Presentation
                 {
                     AnimateHide = false
                 });
-            await Task.Factory.StartNew(msg.Action);
+            await Task.Factory.StartNew(() =>
+            {
+                msg.OnExecuting();
+            });
             await dialog.CloseAsync();
         }
 

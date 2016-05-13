@@ -20,7 +20,7 @@ namespace ERHMS.EpiInfo
             return InvalidViewNameCharacter.Replace(viewName, "");
         }
 
-        public static Project Create(string name, string description, DirectoryInfo location, string driver, DbConnectionStringBuilder builder, string databaseName)
+        public static Project Create(string name, string description, DirectoryInfo location, string driver, DbConnectionStringBuilder builder, string databaseName, bool initialize)
         {
             Log.Current.DebugFormat(
                 "Creating project: {0}, {1}, {2}, {3}, {4}",
@@ -44,11 +44,14 @@ namespace ERHMS.EpiInfo
                 DBCnnStringBuilder = builder,
                 DBName = databaseName
             };
-            project.CollectedData.Initialize(project.CollectedDataDbInfo, driver, true);
+            project.CollectedData.Initialize(project.CollectedDataDbInfo, driver, false);
             project.MetadataSource = MetadataSource.SameDb;
             project.Metadata.AttachDbDriver(project.Driver);
-            project.Metadata.CreateMetadataTables();
-            project.Metadata.CreateCanvasesTable();
+            if (initialize)
+            {
+                project.Metadata.CreateMetadataTables();
+                project.Metadata.CreateCanvasesTable();
+            }
             project.Save();
             return project;
         }

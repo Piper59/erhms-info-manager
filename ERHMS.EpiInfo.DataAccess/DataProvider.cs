@@ -1,12 +1,16 @@
 ﻿using Epi;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
     public enum DataProvider
     {
+        [Description("Microsoft Access")]
         Access,
+
+        [Description("Microsoft SQL Server")]
         SqlServer
     }
 

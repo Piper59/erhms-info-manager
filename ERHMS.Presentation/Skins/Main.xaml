@@ -56,7 +56,7 @@
                 <Setter Property="Margin" Value="1,5,1,-4" />
             </Style>
         </Style.Resources>
-        <Setter Property="ChildWindowWidth" Value="400" />
+        <Setter Property="ChildWindowWidth" Value="500" />
     </Style>
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MetroComboBox}">

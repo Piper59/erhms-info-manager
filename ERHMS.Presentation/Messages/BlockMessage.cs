@@ -5,12 +5,20 @@ namespace ERHMS.Presentation.Messages
     public class BlockMessage
     {
         public string Message { get; private set; }
-        public Action Action { get; private set; }
 
-        public BlockMessage(string message, Action action)
+        public BlockMessage(string message)
         {
             Message = message;
-            Action = action;
+        }
+
+        public event EventHandler Executing;
+        public void OnExecuting(EventArgs e)
+        {
+            Executing?.Invoke(this, e);
+        }
+        public void OnExecuting()
+        {
+            OnExecuting(EventArgs.Empty);
         }
     }
 }
