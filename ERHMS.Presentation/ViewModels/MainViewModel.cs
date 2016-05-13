@@ -158,6 +158,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Documents.Clear();
                 DataSource = new DataContext(new Project(file));
+                Title = string.Format("{0} - {1}", App.Title, DataSource.Project.Name);
             });
         }
 
