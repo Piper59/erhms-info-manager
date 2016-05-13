@@ -105,7 +105,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshCanvasListMessage(RefreshListMessage<Canvas> msg)
         {
-            if (msg.IncidentId.Equals(IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }

@@ -98,7 +98,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshIncidentNoteListMessage(RefreshListMessage<IncidentNote> msg)
         {
-            if (msg.IncidentId.Equals(Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(msg.IncidentId, Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }

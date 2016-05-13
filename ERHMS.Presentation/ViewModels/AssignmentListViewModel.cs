@@ -223,7 +223,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshAssignmentListMessage(RefreshListMessage<Assignment> msg)
         {
-            if (msg.IncidentId.Equals(IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }
@@ -231,7 +231,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
         {
-            if (msg.IncidentId.Equals(IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }
@@ -239,7 +239,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshRosterListMessage(RefreshListMessage<Roster> msg)
         {
-            if (msg.IncidentId.Equals(IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }

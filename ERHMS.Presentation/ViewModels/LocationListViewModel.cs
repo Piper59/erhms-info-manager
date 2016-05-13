@@ -96,7 +96,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshLocationListMessage(RefreshListMessage<Location> msg)
         {
-            if (msg.IncidentId.Equals(Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(msg.IncidentId, Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
             {
                 Refresh();
             }
