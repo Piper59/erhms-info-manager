@@ -109,16 +109,16 @@ namespace ERHMS.Presentation.ViewModels
             Locator.Main.OpenDataSource(SelectedItem.File);
         }
 
+        private void Add(FileInfo file)
+        {
+            Settings.Default.DataSources.Add(file.FullName);
+            Settings.Default.Save();
+        }
+
         public void AddNew()
         {
             DataSource.Reset();
             Creating = true;
-        }
-
-        private void AddExisting(FileInfo file)
-        {
-            Settings.Default.DataSources.Add(file.FullName);
-            Settings.Default.Save();
         }
 
         public void AddExisting()
@@ -132,7 +132,7 @@ namespace ERHMS.Presentation.ViewModels
                 dialog.CheckFileExists = true;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    AddExisting(new FileInfo(dialog.FileName));
+                    Add(new FileInfo(dialog.FileName));
                     Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
                 }
             }
@@ -147,6 +147,27 @@ namespace ERHMS.Presentation.ViewModels
                     DataSource.Location = new DirectoryInfo(dialog.SelectedPath);
                 }
             }
+        }
+
+        private void Create(FileInfo file, IDataDriver driver, bool initialize)
+        {
+            if (initialize)
+            {
+                driver.CreateDatabase();
+            }
+            Project project = Project.Create(
+                DataSource.Name,
+                DataSource.Description,
+                file.Directory,
+                driver.Provider.ToEpiInfoName(),
+                driver.Builder,
+                driver.DatabaseName,
+                initialize);
+            if (initialize)
+            {
+                DataAccess.DataContext.Create(project);
+            }
+            Add(file);
         }
 
         public void Create()
@@ -165,7 +186,7 @@ namespace ERHMS.Presentation.ViewModels
                     "Don't Add");
                 msg.Confirmed += (sender, e) =>
                 {
-                    AddExisting(file);
+                    Add(file);
                     Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
                     Creating = false;
                 };
@@ -191,25 +212,25 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 if (driver.DatabaseExists())
                 {
-                    Messenger.Default.Send(new ToastMessage(NotificationType.Error, "Database already exists."));
+                    ConfirmMessage msg = new ConfirmMessage(
+                        "Add?",
+                        "Database already exists. Add a data source using this database?",
+                        "Add",
+                        "Don't Add");
+                    msg.Confirmed += (sender, e) =>
+                    {
+                        Create(file, driver, false);
+                        Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                        Creating = false;
+                    };
+                    Messenger.Default.Send(msg);
                 }
                 else
                 {
                     BlockMessage msg = new BlockMessage("Creating data source \u2026");
                     msg.Executing += (sender, e) =>
                     {
-                        driver.CreateDatabase();
-                        Project project = Project.Create(
-                            DataSource.Name,
-                            DataSource.Description,
-                            file.Directory,
-                            driver.Provider.ToEpiInfoName(),
-                            driver.Builder,
-                            driver.DatabaseName,
-                            true);
-                        DataAccess.DataContext.Create(project);
-                        Settings.Default.DataSources.Add(file.FullName);
-                        Settings.Default.Save();
+                        Create(file, driver, true);
                         Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
                         Creating = false;
                     };
