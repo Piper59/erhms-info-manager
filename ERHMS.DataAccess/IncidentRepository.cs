@@ -14,6 +14,7 @@ namespace ERHMS.DataAccess
         {
             Incident incident = base.Create();
             incident.Phase = Phase.PreDeployment;
+            incident.Deleted = false;
             return incident;
         }
 
