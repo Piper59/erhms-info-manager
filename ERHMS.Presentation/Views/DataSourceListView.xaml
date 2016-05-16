@@ -6,6 +6,7 @@
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:eida="clr-namespace:ERHMS.EpiInfo.DataAccess;assembly=ERHMS.EpiInfo.DataAccess"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
@@ -60,7 +61,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Name}" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" Text="{Binding Name}" />
                         <Label Grid.Row="1" Grid.Column="0">Description</Label>
                         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource MultiLineTextBox}" Text="{Binding Description}" />
                         <Label Grid.Row="2" Grid.Column="0">Location</Label>
@@ -85,9 +86,9 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">Server Name</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DataSource}" />
+                            <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding DataSource}" />
                             <Label Grid.Row="1" Grid.Column="0">Database Name</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding InitialCatalog}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding InitialCatalog}" />
                             <Label Grid.Row="2" Grid.Column="0">Windows Authentication</Label>
                             <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IntegratedSecurity}" />
                             <Label Grid.Row="3" Grid.Column="0">User Name</Label>
