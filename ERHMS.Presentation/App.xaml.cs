@@ -77,15 +77,20 @@ namespace ERHMS.Presentation
 
         public App()
         {
+            DispatcherUnhandledException += (sender, e) =>
+            {
+                Log.Current.Fatal("Fatal error", e.Exception);
+                MessageBox.Show(string.Format("{0} encountered an error and must shut down.", Title), Title, MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Handled = true;
+                Shutdown();
+            };
             Service = new Service();
             host = Service.OpenHost();
             Locator = new ViewModelLocator();
-            EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler(TextBox_GotFocus));
-        }
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ((TextBox)sender).SelectAll();
+            EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((sender, e) =>
+            {
+                ((TextBox)sender).SelectAll();
+            }));
         }
 
         public void Invoke(Action action)

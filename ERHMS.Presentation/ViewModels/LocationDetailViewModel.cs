@@ -43,7 +43,23 @@ namespace ERHMS.Presentation.ViewModels
         public LocationDetailViewModel(Location location)
         {
             Location = location;
-            location.PropertyChanged += Location_PropertyChanged;
+            location.PropertyChanged += (sender, e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case "Address":
+                        LocateCommand.RaiseCanExecuteChanged();
+                        break;
+                    case "Latitude":
+                    case "Longitude":
+                        Pins.Clear();
+                        if (HasCoordinates())
+                        {
+                            Pins.Add(GetCoordinates());
+                        }
+                        break;
+                }
+            };
             UpdateTitle();
             CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
             Pins = new ObservableCollection<Coordinates>();
@@ -61,24 +77,6 @@ namespace ERHMS.Presentation.ViewModels
             SaveCommand = new RelayCommand(Save);
             LocateCommand = new RelayCommand(Locate, HasAddress);
             Messenger.Default.Register<LocateMessage>(this, OnLocateMessage);
-        }
-
-        private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "Address":
-                    LocateCommand.RaiseCanExecuteChanged();
-                    break;
-                case "Latitude":
-                case "Longitude":
-                    Pins.Clear();
-                    if (HasCoordinates())
-                    {
-                        Pins.Add(GetCoordinates());
-                    }
-                    break;
-            }
         }
 
         private void UpdateTitle()

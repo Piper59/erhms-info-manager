@@ -64,7 +64,6 @@ namespace ERHMS.EpiInfo
             Hierarchy.Root.AddAppender(appender);
             Hierarchy.Root.Level = GetInitialLevel();
             Hierarchy.Configured = true;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
         private static Level GetInitialLevel()
@@ -81,20 +80,6 @@ namespace ERHMS.EpiInfo
             else
             {
                 return level;
-            }
-        }
-
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            string message = "Fatal error";
-            Exception ex = e.ExceptionObject as Exception;
-            if (ex == null)
-            {
-                Current.Fatal(message);
-            }
-            else
-            {
-                Current.Fatal(message, ex);
             }
         }
 
