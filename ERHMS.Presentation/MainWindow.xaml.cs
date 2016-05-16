@@ -4,7 +4,9 @@ using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Mantin.Controls.Wpf.Notification;
+using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
@@ -25,20 +27,22 @@ namespace ERHMS.Presentation
             InitializeComponent();
         }
 
+        private Task RunTask(Action action)
+        {
+            return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+        }
+
         private async void BlockAsync(BlockMessage msg)
         {
             ProgressDialogController dialog = await this.ShowProgressAsync(
-                "Working \u2026",
+                msg.Title,
                 msg.Message,
                 false,
                 new MetroDialogSettings
                 {
                     AnimateHide = false
                 });
-            await Task.Factory.StartNew(() =>
-            {
-                msg.OnExecuting();
-            });
+            await RunTask(msg.OnExecuting);
             await dialog.CloseAsync();
         }
 
@@ -56,7 +60,14 @@ namespace ERHMS.Presentation
                 });
             if (result == MessageDialogResult.Affirmative)
             {
-                msg.OnConfirmed();
+                if (msg.Async)
+                {
+                    await RunTask(msg.OnConfirmed);
+                }
+                else
+                {
+                    msg.OnConfirmed();
+                }
             }
         }
 
