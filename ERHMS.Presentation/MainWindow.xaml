@@ -3,6 +3,7 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
                  xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:v="clr-namespace:ERHMS.Presentation.Views"
@@ -14,6 +15,9 @@
                  EnableDWMDropShadow="True"
                  WindowTransitionsEnabled="False"
                  Title="{Binding Title}">
+    <mah:MetroWindow.Resources>
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    </mah:MetroWindow.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -21,15 +25,15 @@
                 <Separator />
                 <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
-            <MenuItem Header="_Responders">
+            <MenuItem Header="_Responders" Visibility="{Binding DataSource, Converter={StaticResource NullToVisibilityConverter}}">
                 <MenuItem Header="Show _All" Command="{Binding ShowRespondersCommand}" />
                 <MenuItem Header="Create _New" Command="{Binding CreateResponderCommand}" />
             </MenuItem>
-            <MenuItem Header="_Incidents">
+            <MenuItem Header="_Incidents" Visibility="{Binding DataSource, Converter={StaticResource NullToVisibilityConverter}}">
                 <MenuItem Header="Show _All" Command="{Binding ShowIncidentsCommand}" />
                 <MenuItem Header="Create _New" Command="{Binding CreateIncidentCommand}" />
             </MenuItem>
-            <MenuItem Header="_Data">
+            <MenuItem Header="_Data" Visibility="{Binding DataSource, Converter={StaticResource NullToVisibilityConverter}}">
                 <MenuItem Header="_Forms" Command="{Binding FormsCommand}" />
                 <MenuItem Header="_Templates" Command="{Binding TemplatesCommand}" />
                 <MenuItem Header="A_ssignments" Command="{Binding AssignmentsCommand}" />

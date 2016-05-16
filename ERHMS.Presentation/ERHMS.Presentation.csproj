@@ -222,6 +222,7 @@
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToBoolConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
