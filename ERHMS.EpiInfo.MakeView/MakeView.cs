@@ -1,4 +1,5 @@
-﻿using ERHMS.EpiInfo.Communication;
+﻿using Epi.Windows.MakeView.Dialogs;
+using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
 using System.Diagnostics;
@@ -204,6 +205,26 @@ namespace ERHMS.EpiInfo.MakeView
             else
             {
                 throw new ArgumentException("Template level is not project or view.");
+            }
+        }
+
+        public static Process PublishToMobile(View view)
+        {
+            return Execute(args => Main_PublishToMobile(args), view.Project.FilePath, view.Name);
+        }
+        private static void Main_PublishToMobile(string[] args)
+        {
+            string projectPath = args[0];
+            string viewName = args[1];
+            using (MainForm form = new MainForm(false))
+            {
+                Project project = new Project(projectPath);
+                form.OpenProject(project);
+                form.ProjectExplorer.SelectView(viewName);
+                using (CopyToAndroid dialog = new CopyToAndroid(form.CurrentView, form.Mediator))
+                {
+                    dialog.ShowDialog();
+                }
             }
         }
     }

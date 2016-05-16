@@ -35,7 +35,7 @@
                         <ContextMenu>
                             <MenuItem Header="To Template" Command="{Binding PublishToTemplateCommand}" />
                             <MenuItem Header="To Web" Command="{Binding PublishToWebCommand}" IsEnabled="False" />
-                            <MenuItem Header="To Mobile" Command="{Binding PublishToMobileCommand}" IsEnabled="False" />
+                            <MenuItem Header="To Mobile" Command="{Binding PublishToMobileCommand}" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
@@ -48,7 +48,7 @@
                             <MenuItem Header="From Package" Command="{Binding ImportFromPackageCommand}" />
                             <MenuItem Header="From File" Command="{Binding ImportFromFileCommand}" />
                             <MenuItem Header="From Web" Command="{Binding ImportFromWebCommand}" IsEnabled="False" />
-                            <MenuItem Header="From Mobile" Command="{Binding ImportFromMobileCommand}" IsEnabled="False" />
+                            <MenuItem Header="From Mobile" Command="{Binding ImportFromMobileCommand}" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>

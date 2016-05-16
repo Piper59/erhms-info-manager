@@ -23,6 +23,14 @@ namespace ERHMS.EpiInfo.ImportExport
             }
         }
 
+        public static bool ImportFromMobile(View target)
+        {
+            using (ImportPhoneDataForm form = new ImportPhoneDataForm(target))
+            {
+                return form.ShowDialog() == DialogResult.OK;
+            }
+        }
+
         public static bool ExportToPackage(View source)
         {
             using (PackageForTransportDialog dialog = new PackageForTransportDialog(source.Project.FilePath, source))

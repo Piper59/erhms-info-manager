@@ -236,7 +236,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToMobile()
         {
-            // TODO: Implement
+            MakeView.PublishToMobile(SelectedItem);
         }
 
         public void ImportFromProject()
@@ -267,7 +267,10 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromMobile()
         {
-            // TODO: Implement
+            if (ImportExport.ImportFromMobile(SelectedItem))
+            {
+                App.Current.Service.OnViewDataImported(SelectedItem.Project.FilePath, SelectedItem.Name);
+            }
         }
 
         public void ExportToPackage()
