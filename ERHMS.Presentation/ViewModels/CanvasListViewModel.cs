@@ -89,7 +89,7 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.CanvasLinks.DeleteByCanvasId(SelectedItem.CanvasId);
-                DataContext.Project.DeleteCanvas(SelectedItem.CanvasId);
+                DataContext.Project.DeleteCanvas(SelectedItem);
                 Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
             };
             Messenger.Default.Send(msg);

@@ -35,6 +35,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public void ExecuteCommand(string command, Action callback = null)
         {
+            Log.Current.DebugFormat("Executing command: {0}", command);
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
@@ -66,10 +67,7 @@ namespace ERHMS.EpiInfo.Analysis
                 ProgramEditor.txtTextArea.Enabled = true;
                 ProgramEditor.btnRun.Enabled = true;
                 UpdateStatus("Ready", false);
-                if (callback != null)
-                {
-                    callback();
-                }
+                callback?.Invoke();
             };
             worker.RunWorkerAsync();
         }

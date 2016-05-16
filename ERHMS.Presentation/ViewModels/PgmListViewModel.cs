@@ -91,7 +91,7 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.PgmLinks.DeleteByPgmId(SelectedItem.PgmId);
-                DataContext.Project.DeletePgm(SelectedItem.PgmId);
+                DataContext.Project.DeletePgm(SelectedItem);
                 Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
             };
             Messenger.Default.Send(msg);

@@ -1,4 +1,5 @@
-﻿using ERHMS.Presentation.Messages;
+﻿using ERHMS.EpiInfo;
+using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
 using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
@@ -34,6 +35,7 @@ namespace ERHMS.Presentation
 
         private async void BlockAsync(BlockMessage msg)
         {
+            Log.Current.DebugFormat("Blocking: {0}", msg.Message);
             ProgressDialogController dialog = await this.ShowProgressAsync(
                 msg.Title,
                 msg.Message,
@@ -48,6 +50,7 @@ namespace ERHMS.Presentation
 
         private async void ConfirmAsync(ConfirmMessage msg)
         {
+            Log.Current.DebugFormat("Confirming: {0}", msg.Message);
             MessageDialogResult result = await this.ShowMessageAsync(
                 msg.Title,
                 msg.Message,
@@ -60,6 +63,7 @@ namespace ERHMS.Presentation
                 });
             if (result == MessageDialogResult.Affirmative)
             {
+                Log.Current.DebugFormat("Confirmed: {0}", msg.Message);
                 if (msg.Async)
                 {
                     await RunTask(msg.OnConfirmed);

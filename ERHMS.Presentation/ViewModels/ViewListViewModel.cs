@@ -208,7 +208,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 DataContext.Assignments.DeleteByViewId(SelectedItem.Id);
                 DataContext.ViewLinks.DeleteByViewId(SelectedItem.Id);
-                DataContext.Project.DeleteView(SelectedItem.Id);
+                DataContext.Project.DeleteView(SelectedItem);
                 Messenger.Default.Send(new RefreshListMessage<View>(IncidentId));
             };
             Messenger.Default.Send(msg);

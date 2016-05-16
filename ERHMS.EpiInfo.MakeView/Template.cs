@@ -20,6 +20,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public void InstantiateTemplate(string path)
         {
+            Log.Current.DebugFormat("Instantiating template: {0}", path);
             ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
@@ -30,6 +31,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public void CreateTemplate(View view, string templateName)
         {
+            Log.Current.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
             ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { templateName, view });
         }
     }

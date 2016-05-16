@@ -8,6 +8,7 @@ namespace ERHMS.EpiInfo
     {
         public static void CreateCanvasesTable(this MetadataDbProvider @this)
         {
+            Log.Current.Debug("Creating canvases table");
             @this.db.CreateTable("metaCanvases", new List<TableColumn>
             {
                 new TableColumn("CanvasId", GenericDbColumnType.Int32, false, true, true),

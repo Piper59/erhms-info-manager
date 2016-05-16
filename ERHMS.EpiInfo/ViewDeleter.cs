@@ -82,14 +82,18 @@ namespace ERHMS.EpiInfo
 
         public void DeleteViewAndDescendants(int viewId)
         {
+            Log.Current.DebugFormat("Deleting view and descendants: {0}", viewId);
             foreach (int childViewId in GetChildViewIds(viewId))
             {
+                Log.Current.DebugFormat("Deleting child view: {0}", childViewId);
                 DeleteViewAndDescendants(childViewId);
             }
             foreach (int parentFieldId in GetParentFieldIds(viewId))
             {
+                Log.Current.DebugFormat("Deleting parent field: {0}", parentFieldId);
                 DeleteField(parentFieldId);
             }
+            Log.Current.DebugFormat("Deleting view: {0}", viewId);
             DeleteView(viewId);
         }
     }

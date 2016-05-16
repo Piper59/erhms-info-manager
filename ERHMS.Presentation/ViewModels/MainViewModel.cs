@@ -70,6 +70,10 @@ namespace ERHMS.Presentation.ViewModels
                     AnalysesCommand.RaiseCanExecuteChanged();
                     DashboardsCommand.RaiseCanExecuteChanged();
                 }
+                else if (e.PropertyName == "ActiveDocument" && ActiveDocument != null)
+                {
+                    Log.Current.DebugFormat("Activating tab: {0}", ActiveDocument.GetType().Name);
+                }
             };
             Documents = new ObservableCollection<ViewModelBase>();
             Documents.CollectionChanged += Documents_CollectionChanged;
@@ -136,6 +140,7 @@ namespace ERHMS.Presentation.ViewModels
                     case "Closed":
                         if (document.Closed)
                         {
+                            Log.Current.DebugFormat("Closing tab: {0}", document.GetType().Name);
                             Documents.Remove(document);
                         }
                         else
@@ -222,6 +227,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             App.Current.Invoke(() =>
             {
+                Log.Current.DebugFormat("Opening tab: {0}", document.GetType().Name);
                 Documents.Add(document);
                 ActiveDocument = document;
             });
