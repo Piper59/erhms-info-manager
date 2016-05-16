@@ -103,77 +103,6 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
-        public static Process AddFromTemplate(Project project, EpiInfo.Template template, string prefix = null, string tag = null)
-        {
-            return Execute(args => Main_AddFromTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
-        }
-        private static void Main_AddFromTemplate(string[] args)
-        {
-            string projectPath = args[0];
-            string templatePath = args[1];
-            string prefix = args[2];
-            if (prefix != "" && !prefix.EndsWith("_"))
-            {
-                prefix = string.Format("{0}_", prefix);
-            }
-            string tag = args[3];
-            if (tag == "")
-            {
-                tag = null;
-            }
-            Project project = new Project(projectPath);
-            EpiInfo.Template template;
-            if (!EpiInfo.Template.TryRead(new FileInfo(templatePath), out template))
-            {
-                throw new ArgumentException("Failed to read template.");
-            }
-            if (template.Level == TemplateLevel.Project)
-            {
-                using (MainForm form = new MainForm(false))
-                {
-                    form.OpenProject(project);
-                    Template _template = new Template(form.Mediator);
-                    _template.AddFromTemplate(template);
-                }
-            }
-            else if (template.Level == TemplateLevel.View)
-            {
-                using (MainForm form = new MainForm())
-                {
-                    form.OpenProject(project);
-                    XmlDocument document = new XmlDocument();
-                    document.Load(templatePath);
-                    XmlNode viewNode = document.SelectSingleNode("/Template/Project/View");
-                    string viewName = Project.SanitizeViewName(string.Format("{0}{1}", prefix, viewNode.Attributes["Name"].Value));
-                    form.Load += (sender, e) =>
-                    {
-                        using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
-                        {
-                            if (dialog.ShowDialog() == DialogResult.OK)
-                            {
-                                viewName = dialog.ViewName;
-                                viewNode.Attributes["Name"].Value = viewName;
-                                FileInfo templateFile = IOExtensions.GetTemporaryFile(extension: EpiInfo.Template.FileExtension);
-                                document.Save(templateFile.FullName);
-                                Template _template = new Template(form.Mediator);
-                                _template.AddFromTemplate(templateFile.FullName);
-                                IService service = Service.Connect();
-                                if (service != null)
-                                {
-                                    service.OnViewAdded(projectPath, dialog.ViewName, tag);
-                                }
-                            }
-                        }
-                    };
-                    Application.Run(form);
-                }
-            }
-            else
-            {
-                throw new ArgumentException("Template level is not project or view.");
-            }
-        }
-
         public static Process CreateTemplate(View view)
         {
             return Execute(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
@@ -204,6 +133,77 @@ namespace ERHMS.EpiInfo.MakeView
                     form.Close();
                 };
                 Application.Run(form);
+            }
+        }
+
+        public static Process InstantiateTemplate(Project project, EpiInfo.Template template, string prefix = null, string tag = null)
+        {
+            return Execute(args => Main_InstantiateTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
+        }
+        private static void Main_InstantiateTemplate(string[] args)
+        {
+            string projectPath = args[0];
+            string templatePath = args[1];
+            string prefix = args[2];
+            if (prefix != "" && !prefix.EndsWith("_"))
+            {
+                prefix = string.Format("{0}_", prefix);
+            }
+            string tag = args[3];
+            if (tag == "")
+            {
+                tag = null;
+            }
+            Project project = new Project(projectPath);
+            EpiInfo.Template template;
+            if (!EpiInfo.Template.TryRead(new FileInfo(templatePath), out template))
+            {
+                throw new ArgumentException("Failed to read template.");
+            }
+            if (template.Level == TemplateLevel.Project)
+            {
+                using (MainForm form = new MainForm(false))
+                {
+                    form.OpenProject(project);
+                    Template _template = new Template(form.Mediator);
+                    _template.InstantiateTemplate(template);
+                }
+            }
+            else if (template.Level == TemplateLevel.View)
+            {
+                using (MainForm form = new MainForm())
+                {
+                    form.OpenProject(project);
+                    XmlDocument document = new XmlDocument();
+                    document.Load(templatePath);
+                    XmlNode viewNode = document.SelectSingleNode("/Template/Project/View");
+                    string viewName = Project.SanitizeViewName(string.Format("{0}{1}", prefix, viewNode.Attributes["Name"].Value));
+                    form.Load += (sender, e) =>
+                    {
+                        using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
+                        {
+                            if (dialog.ShowDialog() == DialogResult.OK)
+                            {
+                                viewName = dialog.ViewName;
+                                viewNode.Attributes["Name"].Value = viewName;
+                                FileInfo templateFile = IOExtensions.GetTemporaryFile(extension: EpiInfo.Template.FileExtension);
+                                document.Save(templateFile.FullName);
+                                Template _template = new Template(form.Mediator);
+                                _template.InstantiateTemplate(templateFile.FullName);
+                                IService service = Service.Connect();
+                                if (service != null)
+                                {
+                                    service.OnViewAdded(projectPath, dialog.ViewName, tag);
+                                }
+                            }
+                        }
+                    };
+                    Application.Run(form);
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Template level is not project or view.");
             }
         }
     }

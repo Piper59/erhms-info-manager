@@ -18,14 +18,14 @@ namespace ERHMS.EpiInfo.MakeView
             @base = constructor.Invoke(new object[] { mediator });
         }
 
-        public void AddFromTemplate(string path)
+        public void InstantiateTemplate(string path)
         {
             ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
-        public void AddFromTemplate(EpiInfo.Template template)
+        public void InstantiateTemplate(EpiInfo.Template template)
         {
-            AddFromTemplate(template.File.FullName);
+            InstantiateTemplate(template.File.FullName);
         }
 
         public void CreateTemplate(View view, string templateName)

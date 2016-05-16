@@ -17,7 +17,7 @@ namespace ERHMS.DataAccess
         {
             Log.Current.DebugFormat("Creating data context: {0}", project.FilePath);
             Template template = Template.Get(TemplateLevel.Project, "ERHMS");
-            MakeView.AddFromTemplate(project, template).WaitForExit();
+            MakeView.InstantiateTemplate(project, template).WaitForExit();
             foreach (View view in project.Views)
             {
                 project.CollectedData.CreateDataTableForView(view, 1);
