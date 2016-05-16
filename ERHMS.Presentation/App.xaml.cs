@@ -50,7 +50,6 @@ namespace ERHMS.Presentation
                     }
                 }
                 ConfigurationExtensions.CreateAndOrLoad();
-                // TODO: Copy sample data source and add to settings
                 App app = new App();
                 app.InitializeComponent();
                 MainWindow window = new MainWindow(app.Locator.Main);
