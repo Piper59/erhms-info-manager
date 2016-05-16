@@ -6,7 +6,7 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
-             FontSize="16">
+             FontSize="{StaticResource LargerFontSize}">
     <mah:MetroTabControl>
         <mah:MetroTabItem Header="About">
             <ScrollViewer>

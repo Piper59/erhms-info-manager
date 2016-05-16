@@ -5,7 +5,8 @@
                     xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
                     xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow">
+                    xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -115,6 +116,8 @@
         <Setter Property="Margin" Value="0,0,0,5" />
         <Setter Property="Padding" Value="5,5,5,0" />
     </Style>
+
+    <sys:Double x:Key="LargerFontSize">16.0</sys:Double>
 
     <Style x:Key="IncidentNotes" TargetType="{x:Type ListView}" BasedOn="{StaticResource MetroListView}">
         <Style.Resources>
