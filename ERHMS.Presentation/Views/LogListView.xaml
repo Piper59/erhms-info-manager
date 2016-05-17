@@ -15,7 +15,7 @@
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding OpenCommand}" Visual="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
-            <ctrl:AppBarButton Command="{Binding PackageCommand}" Visual="{DynamicResource appbar_cabinet_files}" IsEnabled="False">Package</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding PackageCommand}" Visual="{DynamicResource appbar_cabinet_files}">Package</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
         <ctrl:MultiSelectDataGrid ItemsSource="{Binding Items}"

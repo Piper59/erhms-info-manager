@@ -128,7 +128,6 @@ namespace ERHMS.Presentation.ViewModels
                 dialog.Title = "Add Existing Data Source";
                 dialog.InitialDirectory = configuration.Directories.Project;
                 dialog.Filter = string.Format("Data Sources (*{0})|*{0}", Project.FileExtension);
-                dialog.CheckFileExists = true;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     Add(new FileInfo(dialog.FileName));

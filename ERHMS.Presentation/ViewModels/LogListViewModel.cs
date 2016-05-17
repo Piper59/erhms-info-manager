@@ -3,6 +3,8 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Ionic.Zip;
+using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Forms;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -98,7 +101,26 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Package()
         {
-            // TODO: Implement
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Package and Save Logs";
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                dialog.Filter = "ZIP Files (*.zip)|*.zip";
+                dialog.FileName = string.Format("Logs-{0:yyyyMMdd}-{0:HHmmss}.zip", DateTime.Now);
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (Stream stream = dialog.OpenFile())
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        foreach (FileInfo log in SelectedItems)
+                        {
+                            zip.AddFile(log.FullName);
+                        }
+                        zip.Save(stream);
+                    }
+                    Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Logs have been packaged."));
+                }
+            }
         }
     }
 }
