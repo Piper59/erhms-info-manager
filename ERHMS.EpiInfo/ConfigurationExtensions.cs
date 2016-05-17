@@ -20,10 +20,11 @@ namespace ERHMS.EpiInfo
             return new DirectoryInfo(Settings.Default.RootDirectory);
         }
 
-        private static string GetConfigurationFilePath()
+        private static string GetConfigurationFilePath(DirectoryInfo root = null)
         {
+            root = root ?? GetConfigurationRoot();
             string fileName = Path.GetFileName(Configuration.DefaultConfigurationPath);
-            return Path.Combine(GetConfigurationRoot().FullName, "Configuration", fileName);
+            return Path.Combine(root.FullName, "Configuration", fileName);
         }
 
         public static Configuration Create()
@@ -44,6 +45,17 @@ namespace ERHMS.EpiInfo
         private static void InitializeDirectories(Config config)
         {
             DirectoryInfo root = GetConfigurationRoot();
+            SetDirectories(config, root);
+            DeleteIfExists(root.GetSubdirectory("Resources", "PHIN"));
+            DirectoryInfo templates = new DirectoryInfo(config.Directories.Single().Templates);
+            templates.CreateSubdirectory("Fields");
+            templates.CreateSubdirectory("Forms");
+            templates.CreateSubdirectory("Pages");
+            templates.CreateSubdirectory("Projects");
+        }
+
+        private static void SetDirectories(Config config, DirectoryInfo root)
+        {
             Config.DirectoriesRow directories = config.Directories.Single();
             directories.Archive = root.CreateSubdirectory("Archive").FullName;
             directories.Configuration = root.CreateSubdirectory("Configuration").FullName;
@@ -51,13 +63,7 @@ namespace ERHMS.EpiInfo
             directories.Output = root.CreateSubdirectory("Output").FullName;
             directories.Project = root.CreateSubdirectory("Projects").FullName;
             directories.Samples = root.CreateSubdirectory(Path.Combine("Resources", "Samples")).FullName;
-            DeleteIfExists(root.GetSubdirectory("Resources", "PHIN"));
-            DirectoryInfo templates = root.CreateSubdirectory("Templates");
-            directories.Templates = templates.FullName;
-            templates.CreateSubdirectory("Fields");
-            templates.CreateSubdirectory("Forms");
-            templates.CreateSubdirectory("Pages");
-            templates.CreateSubdirectory("Projects");
+            directories.Templates = root.CreateSubdirectory("Templates").FullName;
             directories.Working = Path.GetTempPath();
         }
 
@@ -131,10 +137,20 @@ namespace ERHMS.EpiInfo
             }
         }
 
+        public static Configuration ChangeRoot(Configuration configuration, DirectoryInfo root)
+        {
+            IOExtensions.Copy(GetConfigurationRoot(), root);
+            Config config = (Config)configuration.ConfigDataSet.Copy();
+            SetDirectories(config, root);
+            config.RecentView.Clear();
+            config.RecentProject.Clear();
+            return new Configuration(GetConfigurationFilePath(root), config);
+        }
+
         public static void Save(this Configuration @this)
         {
             Configuration.Save(@this);
-            File.Copy(GetConfigurationFilePath(), Configuration.DefaultConfigurationPath, true);
+            File.Copy(@this.ConfigFilePath, Configuration.DefaultConfigurationPath, true);
         }
 
         public static void Refresh(this Configuration @this, bool save)

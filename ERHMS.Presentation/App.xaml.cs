@@ -1,9 +1,9 @@
 ﻿using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
+using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.ViewModels;
 using ERHMS.Utility;
 using System;
-using System.IO;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Forms;
@@ -32,12 +32,11 @@ namespace ERHMS.Presentation
                 if (string.IsNullOrEmpty(Settings.Default.RootDirectory))
                 {
                     Log.Current.Debug("Prompting for root directory");
-                    using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+                    using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
                     {
-                        dialog.Description = string.Format("Choose a location for your documents. We'll create a folder named {0} in that location.", Title);
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
-                            string path = Path.Combine(dialog.SelectedPath, Title);
+                            string path = dialog.GetRootDirectory();
                             Log.Current.DebugFormat("Setting root directory: {0}", path);
                             Settings.Default.RootDirectory = path;
                             Settings.Default.Save();
@@ -74,6 +73,7 @@ namespace ERHMS.Presentation
 
         public Service Service { get; private set; }
         public ViewModelLocator Locator { get; private set; }
+        public bool ShuttingDown { get; private set; }
 
         public App()
         {
@@ -103,6 +103,12 @@ namespace ERHMS.Presentation
             {
                 Dispatcher.Invoke(action);
             }
+        }
+
+        public new void Shutdown()
+        {
+            ShuttingDown = true;
+            base.Shutdown();
         }
 
         protected override void OnExit(ExitEventArgs e)

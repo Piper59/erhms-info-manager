@@ -77,7 +77,7 @@ namespace ERHMS.Presentation
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (closing)
+            if (App.Current.ShuttingDown || closing)
             {
                 return;
             }

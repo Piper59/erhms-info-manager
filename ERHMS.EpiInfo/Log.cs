@@ -62,25 +62,18 @@ namespace ERHMS.EpiInfo
             };
             appender.ActivateOptions();
             Hierarchy.Root.AddAppender(appender);
-            Hierarchy.Root.Level = GetInitialLevel();
+            SetLevelName(Settings.Default.LogLevel);
             Hierarchy.Configured = true;
         }
 
-        private static Level GetInitialLevel()
+        public static string GetLevelName()
         {
-            Level level = Hierarchy.LevelMap[Settings.Default.LogLevel];
-            if (level == null)
-            {
-#if DEBUG
-                return Level.Debug;
-#else
-                return Level.Warn;
-#endif
-            }
-            else
-            {
-                return level;
-            }
+            return Hierarchy.Root.Level.Name;
+        }
+
+        public static void SetLevelName(string levelName)
+        {
+            Level = Hierarchy.LevelMap[levelName];
         }
 
         public static void Configure(Configuration configuration)

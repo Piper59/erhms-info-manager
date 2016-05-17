@@ -22,7 +22,7 @@ namespace ERHMS.Utility
 
         public int Timeout { get; set; }
 
-        public SingleInstanceExecuter(int timeout = 0)
+        public SingleInstanceExecuter(int timeout = 10000)
         {
             Timeout = timeout;
         }

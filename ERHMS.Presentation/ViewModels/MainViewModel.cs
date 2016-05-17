@@ -339,7 +339,10 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenSettingsView()
         {
-            // TODO: Implement
+            if (!TryActivateDocument<SettingsViewModel>())
+            {
+                OpenDocument(new SettingsViewModel());
+            }
         }
 
         public void OpenLogListView()

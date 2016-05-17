@@ -41,7 +41,7 @@
                 <MenuItem Header="_Dashboards" Command="{Binding DashboardsCommand}" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="_Settings" Command="{Binding SettingsCommand}" IsEnabled="False" />
+                <MenuItem Header="_Settings" Command="{Binding SettingsCommand}" />
                 <MenuItem Header="_Logs" Command="{Binding LogsCommand}" />
                 <MenuItem Header="_Help" Command="{Binding HelpCommand}" />
                 <Separator />
@@ -85,6 +85,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:CanvasListViewModel}">
                     <v:CanvasListView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                    <v:SettingsView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LogListViewModel}">
                     <v:LogListView />
