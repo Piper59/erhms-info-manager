@@ -476,6 +476,8 @@
     <Resource Include="..\ERHMS\ERHMS.ico">
       <Link>ERHMS.ico</Link>
     </Resource>
+    <Resource Include="Images\EpiInfo.png" />
+    <Resource Include="Images\ERHMS.png" />
     <Resource Include="Resources\Entypo-license.txt" />
     <Resource Include="Resources\Entypo.ttf" />
     <Resource Include="Resources\WindowsIcons-license.txt" />

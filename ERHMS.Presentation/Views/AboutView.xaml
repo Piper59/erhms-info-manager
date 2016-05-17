@@ -9,19 +9,23 @@
              FontSize="{StaticResource LargerFontSize}">
     <mah:MetroTabControl>
         <mah:MetroTabItem Header="About">
+            <mah:MetroTabItem.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                </Style>
+            </mah:MetroTabItem.Resources>
             <ScrollViewer>
                 <StackPanel>
-                    <StackPanel.Resources>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                        </Style>
-                    </StackPanel.Resources>
-                    <Viewbox Margin="0,0,0,5" Width="400">
-                        <ContentPresenter Content="{StaticResource Logo}" />
-                    </Viewbox>
-                    <TextBlock Text="{Binding AppTitle, Mode=OneTime}" />
-                    <TextBlock>Version <Run Text="{Binding Version, Mode=OneTime}" /></TextBlock>
-                    <TextBlock><Run Text="{Binding InformationalVersion, Mode=OneTime}" /></TextBlock>
+                    <StackPanel Margin="0,0,0,50">
+                        <Image Source="/Images/ERHMS.png" Stretch="None" Margin="0,0,0,5" />
+                        <TextBlock Text="{Binding AppTitle, Mode=OneTime}" />
+                        <TextBlock>Version <Run Text="{Binding Version, Mode=OneTime}" /></TextBlock>
+                        <TextBlock><Run Text="{Binding InformationalVersion, Mode=OneTime}" /></TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock>Built with Epi Info™</TextBlock>
+                        <Image Source="/Images/EpiInfo.png" Stretch="None" Margin="0,5,0,0" />
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </mah:MetroTabItem>
