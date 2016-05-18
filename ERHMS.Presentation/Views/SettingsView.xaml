@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
+    <UserControl.Resources>
+        <conv:BindingToDescriptionConverter x:Key="BindingToDescriptionConverter" />
+    </UserControl.Resources>
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding SaveCommand}" Visual="{DynamicResource appbar_save}">Save</ctrl:AppBarButton>
@@ -68,9 +72,13 @@
                         <Label Grid.Row="1" Grid.Column="0">Windows Authentication</Label>
                         <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding WindowsAuthentication}" />
                         <Label Grid.Row="2" Grid.Column="0">Binding Protocol</Label>
-                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedValuePath="Key" DisplayMemberPath="Value"
-                                  ItemsSource="{Binding Bindings}"
-                                  SelectedValue="{Binding Binding}" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Bindings}" SelectedItem="{Binding Binding}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource BindingToDescriptionConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <Label Grid.Row="3" Grid.Column="0">Organization Name</Label>
                         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationName}" />
                         <Label Grid.Row="4" Grid.Column="0">Organization Key</Label>

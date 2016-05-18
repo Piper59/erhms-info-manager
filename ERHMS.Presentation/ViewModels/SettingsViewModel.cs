@@ -2,13 +2,16 @@
 using ERHMS.EpiInfo;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Mantin.Controls.Wpf.Notification;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Binding = ERHMS.EpiInfo.WebSurvey.Binding;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
@@ -41,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public class WebSurveySettingsViewModel : ViewModelBase
         {
-            public ICollection<KeyValuePair<string, string>> Bindings { get; private set; }
+            public ICollection<Binding> Bindings { get; private set; }
 
             private string address;
             public string Address
@@ -57,8 +60,8 @@ namespace ERHMS.Presentation.ViewModels
                 set { Set(() => WindowsAuthentication, ref windowsAuthentication, value); }
             }
 
-            private string binding;
-            public string Binding
+            private Binding binding;
+            public Binding Binding
             {
                 get { return binding; }
                 set { Set(() => Binding, ref binding, value); }
@@ -80,11 +83,7 @@ namespace ERHMS.Presentation.ViewModels
 
             public WebSurveySettingsViewModel()
             {
-                Bindings = new List<KeyValuePair<string, string>>
-                {
-                    new KeyValuePair<string, string>("BASIC", "Basic HTTP"),
-                    new KeyValuePair<string, string>("WSHTTP", "WS HTTP")
-                };
+                Bindings = EnumExtensions.GetValues<Binding>().ToList();
             }
         }
 
@@ -150,10 +149,19 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Address = configuration.Settings.WebServiceEndpointAddress,
                 WindowsAuthentication = configuration.Settings.WebServiceAuthMode == 1,
-                Binding = configuration.Settings.WebServiceBindingMode,
                 OrganizationName = Settings.Default.OrganizationName,
                 OrganizationKey = Settings.Default.WebSurveyKey
             };
+            switch (configuration.Settings.WebServiceBindingMode)
+            {
+                case "WSHTTP":
+                    WebSurvey.Binding = Binding.WsHttp;
+                    break;
+                case "BASIC":
+                default:
+                    WebSurvey.Binding = Binding.BasicHttp;
+                    break;
+            }
             BrowseCommand = new RelayCommand(Browse);
             SaveCommand = new RelayCommand(Save);
         }
@@ -190,7 +198,17 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.MapLicenseKey = MapLicenseKey;
             configuration.Settings.WebServiceEndpointAddress = WebSurvey.Address;
             configuration.Settings.WebServiceAuthMode = WebSurvey.WindowsAuthentication ? 1 : 0;
-            configuration.Settings.WebServiceBindingMode = WebSurvey.Binding;
+            switch (WebSurvey.Binding)
+            {
+                case Binding.BasicHttp:
+                    configuration.Settings.WebServiceBindingMode = "BASIC";
+                    break;
+                case Binding.WsHttp:
+                    configuration.Settings.WebServiceBindingMode = "WSHTTP";
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
             Settings.Default.OrganizationName = WebSurvey.OrganizationName;
             Settings.Default.WebSurveyKey = WebSurvey.OrganizationKey;
             if (RootDirectoryChanged)
