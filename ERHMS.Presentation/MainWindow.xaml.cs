@@ -22,8 +22,9 @@ namespace ERHMS.Presentation
             DataContext = model;
             Closing += MainWindow_Closing;
             Messenger.Default.Register<BlockMessage>(this, OnBlockMessage);
-            Messenger.Default.Register<ConfirmMessage>(this, OnConfirmMessage);
+            Messenger.Default.Register<NotifyMessage>(this, OnNotifyMessage);
             Messenger.Default.Register<ToastMessage>(this, OnToastMessage);
+            Messenger.Default.Register<ConfirmMessage>(this, OnConfirmMessage);
             Messenger.Default.Register<ExitMessage>(this, OnExitMessage);
             InitializeComponent();
         }
@@ -46,6 +47,20 @@ namespace ERHMS.Presentation
                 });
             await RunTask(msg.OnExecuting);
             await dialog.CloseAsync();
+        }
+
+        private async void NotifyAsync(NotifyMessage msg)
+        {
+            Log.Current.DebugFormat("Notifying: {0}", msg.Message);
+            await this.ShowMessageAsync(
+                msg.Title,
+                msg.Message,
+                MessageDialogStyle.Affirmative,
+                new MetroDialogSettings
+                {
+                    AffirmativeButtonText = "OK",
+                    AnimateHide = false
+                });
         }
 
         private async void ConfirmAsync(ConfirmMessage msg)
@@ -101,9 +116,9 @@ namespace ERHMS.Presentation
             BlockAsync(msg);
         }
 
-        private void OnConfirmMessage(ConfirmMessage msg)
+        private void OnNotifyMessage(NotifyMessage msg)
         {
-            ConfirmAsync(msg);
+            NotifyAsync(msg);
         }
 
         private void OnToastMessage(ToastMessage msg)
@@ -114,6 +129,11 @@ namespace ERHMS.Presentation
                 BorderBrush = Brushes.Black
             };
             popup.Show();
+        }
+
+        private void OnConfirmMessage(ConfirmMessage msg)
+        {
+            ConfirmAsync(msg);
         }
 
         private void OnExitMessage(ExitMessage msg)

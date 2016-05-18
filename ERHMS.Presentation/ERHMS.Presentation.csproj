@@ -245,6 +245,7 @@
     <Compile Include="Messages\ConfirmMessage.cs" />
     <Compile Include="Messages\ExitMessage.cs" />
     <Compile Include="Messages\LocateMessage.cs" />
+    <Compile Include="Messages\NotifyMessage.cs" />
     <Compile Include="Messages\RefreshListMessage.cs" />
     <Compile Include="Messages\RefreshMessage.cs" />
     <Compile Include="Messages\ServiceMessage.cs" />
