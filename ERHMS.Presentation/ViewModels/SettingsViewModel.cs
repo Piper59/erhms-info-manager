@@ -1,12 +1,12 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.WebSurvey;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Mantin.Controls.Wpf.Notification;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -149,19 +149,10 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Address = configuration.Settings.WebServiceEndpointAddress,
                 WindowsAuthentication = configuration.Settings.WebServiceAuthMode == 1,
+                Binding = BindingExtensions.FromEpiInfoName(configuration.Settings.WebServiceBindingMode),
                 OrganizationName = Settings.Default.OrganizationName,
                 OrganizationKey = Settings.Default.WebSurveyKey
             };
-            switch (configuration.Settings.WebServiceBindingMode)
-            {
-                case "WSHTTP":
-                    WebSurvey.Binding = Binding.WsHttp;
-                    break;
-                case "BASIC":
-                default:
-                    WebSurvey.Binding = Binding.BasicHttp;
-                    break;
-            }
             BrowseCommand = new RelayCommand(Browse);
             SaveCommand = new RelayCommand(Save);
         }
@@ -198,17 +189,7 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.MapLicenseKey = MapLicenseKey;
             configuration.Settings.WebServiceEndpointAddress = WebSurvey.Address;
             configuration.Settings.WebServiceAuthMode = WebSurvey.WindowsAuthentication ? 1 : 0;
-            switch (WebSurvey.Binding)
-            {
-                case Binding.BasicHttp:
-                    configuration.Settings.WebServiceBindingMode = "BASIC";
-                    break;
-                case Binding.WsHttp:
-                    configuration.Settings.WebServiceBindingMode = "WSHTTP";
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
+            configuration.Settings.WebServiceBindingMode = WebSurvey.Binding.ToEpiInfoName();
             Settings.Default.OrganizationName = WebSurvey.OrganizationName;
             Settings.Default.WebSurveyKey = WebSurvey.OrganizationKey;
             if (RootDirectoryChanged)
