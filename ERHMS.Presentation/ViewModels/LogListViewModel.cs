@@ -103,22 +103,26 @@ namespace ERHMS.Presentation.ViewModels
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
-                dialog.Title = "Package and Save Logs";
+                dialog.Title = "Package Logs";
                 dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                 dialog.Filter = "ZIP Files (*.zip)|*.zip";
                 dialog.FileName = string.Format("Logs-{0:yyyyMMdd}-{0:HHmmss}.zip", DateTime.Now);
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    using (Stream stream = dialog.OpenFile())
-                    using (ZipFile zip = new ZipFile())
+                    BlockMessage msg = new BlockMessage("Packaging logs \u2026");
+                    msg.Executing += (sender, e) =>
                     {
-                        foreach (FileInfo log in SelectedItems)
+                        using (Stream stream = dialog.OpenFile())
+                        using (ZipFile zip = new ZipFile())
                         {
-                            zip.AddFile(log.FullName);
+                            foreach (FileInfo log in SelectedItems)
+                            {
+                                zip.AddFile(log.FullName);
+                            }
+                            zip.Save(stream);
                         }
-                        zip.Save(stream);
-                    }
-                    Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Logs have been packaged."));
+                    };
+                    Messenger.Default.Send(msg);
                 }
             }
         }
