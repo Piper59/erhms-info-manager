@@ -50,6 +50,7 @@ namespace ERHMS.DataAccess
         public ViewLinkRepository ViewLinks { get; private set; }
         public PgmLinkRepository PgmLinks { get; private set; }
         public CanvasLinkRepository CanvasLinks { get; private set; }
+        public WebSurveyRepository WebSurveys { get; private set; }
 
         public DataContext(Project project)
         {
@@ -69,6 +70,7 @@ namespace ERHMS.DataAccess
             ViewLinks = new ViewLinkRepository(Driver);
             PgmLinks = new PgmLinkRepository(Driver);
             CanvasLinks = new CanvasLinkRepository(Driver);
+            WebSurveys = new WebSurveyRepository(Driver);
         }
 
         private DataPredicate GetIncidentPredicate(string incidentId)

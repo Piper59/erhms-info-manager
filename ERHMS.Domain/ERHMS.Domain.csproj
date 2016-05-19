@@ -62,6 +62,7 @@
     <Compile Include="Responder.cs" />
     <Compile Include="Roster.cs" />
     <Compile Include="ViewLink.cs" />
+    <Compile Include="WebSurvey.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\Forms\ARC_HSR.xml">

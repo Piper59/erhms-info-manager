@@ -86,6 +86,7 @@
     <Compile Include="ResponderRepository.cs" />
     <Compile Include="RosterRepository.cs" />
     <Compile Include="ViewLinkRepository.cs" />
+    <Compile Include="WebSurveyRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Create.sql" />
