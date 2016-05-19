@@ -26,5 +26,15 @@ namespace ERHMS.Presentation.Messages
         {
             OnExecuting(EventArgs.Empty);
         }
+
+        public event EventHandler Executed;
+        public void OnExecuted(EventArgs e)
+        {
+            Executed?.Invoke(this, e);
+        }
+        public void OnExecuted()
+        {
+            OnExecuted(EventArgs.Empty);
+        }
     }
 }

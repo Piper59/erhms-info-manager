@@ -44,7 +44,7 @@
                         <Label Grid.Row="0" Grid.Column="0">SMTP Host</Label>
                         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Host}" />
                         <Label Grid.Row="1" Grid.Column="0">SMTP Port</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Port}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Port, TargetNullValue=''}" />
                         <Label Grid.Row="2" Grid.Column="0">Sender Address</Label>
                         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Sender}" />
                     </ctrl:FormGrid>
@@ -82,7 +82,7 @@
                         <Label Grid.Row="3" Grid.Column="0">Organization Name</Label>
                         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationName}" />
                         <Label Grid.Row="4" Grid.Column="0">Organization Key</Label>
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationKey}" />
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationKey, TargetNullValue=''}" />
                     </ctrl:FormGrid>
                 </GroupBox>
             </StackPanel>

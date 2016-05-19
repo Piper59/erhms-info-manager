@@ -6,19 +6,245 @@ using ERHMS.EpiInfo.AnalysisDashboard;
 using ERHMS.EpiInfo.Enter;
 using ERHMS.EpiInfo.ImportExport;
 using ERHMS.EpiInfo.MakeView;
+using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using Action = System.Action;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class ViewListViewModel : ListViewModelBase<View>
     {
+        public class SurveyViewModel : ViewModelBase
+        {
+            public ICollection<ResponseType> ResponseTypes { get; private set; }
+
+            private bool active;
+            public bool Active
+            {
+                get { return active; }
+                set { Set(() => Active, ref active, value); }
+            }
+
+            public View View { get; private set; }
+
+            private Survey survey;
+            public Survey Survey
+            {
+                get { return survey; }
+                set { Set(() => Survey, ref survey, value); }
+            }
+
+            public RelayCommand PublishCommand { get; private set; }
+            public RelayCommand CancelCommand { get; private set; }
+
+            public SurveyViewModel()
+            {
+                ResponseTypes = EnumExtensions.GetValues<ResponseType>()
+                    .Where(responseType => responseType != ResponseType.Unspecified)
+                    .ToList();
+                PublishCommand = new RelayCommand(Publish);
+                CancelCommand = new RelayCommand(Cancel);
+            }
+
+            private void RequestConfigurationInternal(string message)
+            {
+                NotifyMessage msg = new NotifyMessage(message);
+                msg.Dismissed += (sender, e) =>
+                {
+                    Locator.Main.OpenSettingsView();
+                };
+                Messenger.Default.Send(msg);
+            }
+
+            public void RequestConfiguration()
+            {
+                RequestConfigurationInternal("Please configure web survey settings.");
+            }
+
+            public void RequestConfiguration(string reason)
+            {
+                RequestConfigurationInternal(string.Format("{0} Please verify web survey settings.", reason));
+            }
+
+            public void RequestConfiguration(ConfigurationError error)
+            {
+                RequestConfiguration(error.GetMessage());
+            }
+
+            public void Activate(View view)
+            {
+                View = view;
+                if (view.IsPublished())
+                {
+                    ConfigurationError error = ConfigurationError.None;
+                    BlockMessage msg = new BlockMessage("Retrieving details \u2026");
+                    msg.Executing += (sender, e) =>
+                    {
+                        Service service = new Service();
+                        error = service.CheckConfiguration();
+                        if (error == ConfigurationError.None)
+                        {
+                            Survey = service.GetSurvey(view);
+                        }
+                    };
+                    msg.Executed += (sender, e) =>
+                    {
+                        if (error != ConfigurationError.None)
+                        {
+                            RequestConfiguration(error);
+                        }
+                        else if (Survey == null)
+                        {
+                            RequestConfiguration("Retrieval failed.");
+                        }
+                        else
+                        {
+                            Active = true;
+                        }
+                    };
+                    Messenger.Default.Send(msg);
+                }
+                else
+                {
+                    DateTime now = DateTime.Now;
+                    Survey = new Survey
+                    {
+                        Title = view.Name,
+                        StartDate = now,
+                        EndDate = now.AddMonths(1),
+                        ResponseType = ResponseType.Single,
+                        Intro = "",
+                        Outro = "",
+                        Draft = false,
+                        PublishKey = Guid.NewGuid()
+                    };
+                    Active = true;
+                }
+            }
+
+            public void Publish()
+            {
+                // TODO: Validate fields
+                bool success = false;
+                ConfigurationError error = ConfigurationError.None;
+                BlockMessage msg = new BlockMessage("Publishing to web \u2026");
+                msg.Executing += (sender, e) =>
+                {
+                    Service service = new Service();
+                    error = service.CheckConfiguration();
+                    if (error == ConfigurationError.None)
+                    {
+                        if (View.IsPublished())
+                        {
+                            success = service.Republish(View, Survey);
+                        }
+                        else
+                        {
+                            success = service.Publish(View, Survey);
+                            if (success)
+                            {
+                                WebSurvey webSurvey = DataContext.WebSurveys.Create();
+                                webSurvey.WebSurveyId = Survey.SurveyId;
+                                webSurvey.ViewId = View.Id;
+                                webSurvey.PublishKey = Survey.PublishKey.ToString();
+                                DataContext.WebSurveys.Save(webSurvey);
+                            }
+                        }
+                    }
+                };
+                msg.Executed += (sender, e) =>
+                {
+                    if (error != ConfigurationError.None)
+                    {
+                        RequestConfiguration(error);
+                    }
+                    else if (!success)
+                    {
+                        RequestConfiguration("Publish failed.");
+                    }
+                    else
+                    {
+                        Active = false;
+                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Form has been published."));
+                    }
+                };
+                Messenger.Default.Send(msg);
+            }
+
+            public void Cancel()
+            {
+                Active = false;
+            }
+        }
+
+        public class AnalysisViewModel : ViewModelBase
+        {
+            private bool active;
+            public bool Active
+            {
+                get { return active; }
+                set { Set(() => Active, ref active, value); }
+            }
+
+            private string name;
+            public string Name
+            {
+                get
+                {
+                    return name;
+                }
+                set
+                {
+                    if (Set(() => Name, ref name, value))
+                    {
+                        CreateCommand.RaiseCanExecuteChanged();
+                    }
+                }
+            }
+
+            public Action Callback { get; private set; }
+
+            public RelayCommand CreateCommand { get; private set; }
+            public RelayCommand CancelCommand { get; private set; }
+
+            public AnalysisViewModel(Action callback)
+            {
+                Callback = callback;
+                CreateCommand = new RelayCommand(Create, HasName);
+                CancelCommand = new RelayCommand(Cancel);
+            }
+
+            public bool HasName()
+            {
+                return !string.IsNullOrWhiteSpace(Name);
+            }
+
+            public void Activate()
+            {
+                Name = "";
+                Active = true;
+            }
+
+            public void Create()
+            {
+                Callback();
+            }
+
+            public void Cancel()
+            {
+                Active = false;
+            }
+        }
+
         public Incident Incident { get; private set; }
 
         public string IncidentId
@@ -26,51 +252,9 @@ namespace ERHMS.Presentation.ViewModels
             get { return Incident == null ? null : Incident.IncidentId; }
         }
 
-        private bool creatingPgm;
-        public bool CreatingPgm
-        {
-            get { return creatingPgm; }
-            set { Set(() => CreatingPgm, ref creatingPgm, value); }
-        }
-
-        private bool creatingCanvas;
-        public bool CreatingCanvas
-        {
-            get { return creatingCanvas; }
-            set { Set(() => CreatingCanvas, ref creatingCanvas, value); }
-        }
-
-        private string pgmName;
-        public string PgmName
-        {
-            get
-            {
-                return pgmName;
-            }
-            set
-            {
-                if (Set(() => PgmName, ref pgmName, value))
-                {
-                    CreatePgmCommand.RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        private string canvasName;
-        public string CanvasName
-        {
-            get
-            {
-                return canvasName;
-            }
-            set
-            {
-                if (Set(() => CanvasName, ref canvasName, value))
-                {
-                    CreateCanvasCommand.RaiseCanExecuteChanged();
-                }
-            }
-        }
+        public SurveyViewModel SurveyModel { get; private set; }
+        public AnalysisViewModel PgmModel { get; private set; }
+        public AnalysisViewModel CanvasModel { get; private set; }
 
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
@@ -88,11 +272,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand ExportToPackageCommand { get; private set; }
         public RelayCommand ExportToFileCommand { get; private set; }
         public RelayCommand AnalyzeClassicCommand { get; private set; }
-        public RelayCommand CreatePgmCommand { get; private set; }
-        public RelayCommand CancelPgmCommand { get; private set; }
         public RelayCommand AnalyzeVisualCommand { get; private set; }
-        public RelayCommand CreateCanvasCommand { get; private set; }
-        public RelayCommand CancelCanvasCommand { get; private set; }
         public RelayCommand RefreshCommand { get; private set; }
 
         public ViewListViewModel(Incident incident)
@@ -119,6 +299,9 @@ namespace ERHMS.Presentation.ViewModels
                 AnalyzeClassicCommand.RaiseCanExecuteChanged();
                 AnalyzeVisualCommand.RaiseCanExecuteChanged();
             };
+            SurveyModel = new SurveyViewModel();
+            PgmModel = new AnalysisViewModel(CreatePgm);
+            CanvasModel = new AnalysisViewModel(CreateCanvas);
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
@@ -135,11 +318,7 @@ namespace ERHMS.Presentation.ViewModels
             ExportToPackageCommand = new RelayCommand(ExportToPackage, HasSelectedItem);
             ExportToFileCommand = new RelayCommand(ExportToFile, HasSelectedItem);
             AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasSelectedItem);
-            CreatePgmCommand = new RelayCommand(CreatePgm, HasPgmName);
-            CancelPgmCommand = new RelayCommand(CancelPgm);
             AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasSelectedItem);
-            CreateCanvasCommand = new RelayCommand(CreateCanvas, HasCanvasName);
-            CancelCanvasCommand = new RelayCommand(CancelCanvas);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
             Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
@@ -177,16 +356,6 @@ namespace ERHMS.Presentation.ViewModels
             yield return item.Name;
         }
 
-        public bool HasPgmName()
-        {
-            return !string.IsNullOrWhiteSpace(PgmName);
-        }
-
-        public bool HasCanvasName()
-        {
-            return !string.IsNullOrWhiteSpace(CanvasName);
-        }
-
         public void Create()
         {
             MakeView.AddView(DataContext.Project, Incident == null ? null : Incident.Name, IncidentId);
@@ -208,6 +377,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 DataContext.Assignments.DeleteByViewId(SelectedItem.Id);
                 DataContext.ViewLinks.DeleteByViewId(SelectedItem.Id);
+                DataContext.WebSurveys.DeleteByViewId(SelectedItem.Id);
                 DataContext.Project.DeleteView(SelectedItem);
                 Messenger.Default.Send(new RefreshListMessage<View>(IncidentId));
             };
@@ -231,7 +401,15 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToWeb()
         {
-            // TODO: Implement
+            Service service = new Service();
+            if (service.IsConfigured())
+            {
+                SurveyModel.Activate(SelectedItem);
+            }
+            else
+            {
+                SurveyModel.RequestConfiguration();
+            }
         }
 
         public void PublishToMobile()
@@ -285,21 +463,19 @@ namespace ERHMS.Presentation.ViewModels
 
         public void AnalyzeClassic()
         {
-            PgmName = "";
-            CreatingPgm = true;
+            PgmModel.Activate();
         }
 
         public void AnalyzeVisual()
         {
-            CanvasName = "";
-            CreatingCanvas = true;
+            CanvasModel.Activate();
         }
 
         public void CreatePgm()
         {
             Pgm pgm = new Pgm
             {
-                Name = PgmName,
+                Name = PgmModel.Name,
                 Content = Pgm.GetContentForView(SelectedItem)
             };
             DataContext.Project.InsertPgm(pgm);
@@ -311,7 +487,7 @@ namespace ERHMS.Presentation.ViewModels
                 DataContext.PgmLinks.Save(pgmLink);
             }
             Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
-            CreatingPgm = false;
+            PgmModel.Active = false;
             Analysis.OpenPgm(pgm, true);
         }
 
@@ -319,7 +495,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Canvas canvas = new Canvas
             {
-                Name = CanvasName,
+                Name = CanvasModel.Name,
                 Content = Canvas.GetContentForView(SelectedItem)
             };
             DataContext.Project.InsertCanvas(canvas);
@@ -331,18 +507,8 @@ namespace ERHMS.Presentation.ViewModels
                 DataContext.CanvasLinks.Save(canvasLink);
             }
             Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
-            CreatingCanvas = false;
+            CanvasModel.Active = false;
             AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, IncidentId);
-        }
-
-        public void CancelPgm()
-        {
-            CreatingPgm = false;
-        }
-
-        public void CancelCanvas()
-        {
-            CreatingCanvas = false;
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)

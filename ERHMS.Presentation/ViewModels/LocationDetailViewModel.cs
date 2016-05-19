@@ -145,7 +145,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Messenger.Default.Send(new NotifyMessage("Error", "Address could not be found."));
+                Messenger.Default.Send(new NotifyMessage("Address could not be found."));
             }
         }
 

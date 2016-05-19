@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace ERHMS.EpiInfo.WebSurvey
+namespace ERHMS.EpiInfo.Web
 {
     public enum Binding
     {

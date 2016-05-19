@@ -1,17 +1,18 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.WebSurvey;
+using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Mantin.Controls.Wpf.Notification;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Binding = ERHMS.EpiInfo.WebSurvey.Binding;
+using Binding = ERHMS.EpiInfo.Web.Binding;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
@@ -27,8 +28,8 @@ namespace ERHMS.Presentation.ViewModels
                 set { Set(() => Host, ref host, value); }
             }
 
-            private int port;
-            public int Port
+            private int? port;
+            public int? Port
             {
                 get { return port; }
                 set { Set(() => Port, ref port, value); }
@@ -74,8 +75,8 @@ namespace ERHMS.Presentation.ViewModels
                 set { Set(() => OrganizationName, ref organizationName, value); }
             }
 
-            private string organizationKey;
-            public string OrganizationKey
+            private Guid? organizationKey;
+            public Guid? OrganizationKey
             {
                 get { return organizationKey; }
                 set { Set(() => OrganizationKey, ref organizationKey, value); }

@@ -43,7 +43,7 @@ namespace ERHMS.Presentation
                         }
                         else
                         {
-                            Log.Current.Fatal("Canceled setting root directory");
+                            Log.Current.Debug("Canceled setting root directory");
                             return;
                         }
                     }

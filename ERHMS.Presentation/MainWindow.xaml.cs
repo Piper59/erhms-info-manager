@@ -47,6 +47,7 @@ namespace ERHMS.Presentation
                 });
             await RunTask(msg.OnExecuting);
             await dialog.CloseAsync();
+            msg.OnExecuted();
         }
 
         private async void NotifyAsync(NotifyMessage msg)
@@ -61,6 +62,14 @@ namespace ERHMS.Presentation
                     AffirmativeButtonText = "OK",
                     AnimateHide = false
                 });
+            if (msg.Async)
+            {
+                await RunTask(msg.OnDismissed);
+            }
+            else
+            {
+                msg.OnDismissed();
+            }
         }
 
         private async void ConfirmAsync(ConfirmMessage msg)

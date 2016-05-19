@@ -79,6 +79,7 @@
       <DependentUpon>ViewCanvas.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewDeleter.cs" />
+    <Compile Include="ViewExtensions.cs" />
     <Compile Include="Wrapper.cs" />
   </ItemGroup>
   <ItemGroup>

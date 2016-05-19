@@ -122,6 +122,10 @@ namespace ERHMS.Presentation.ViewModels
                             zip.Save(stream);
                         }
                     };
+                    msg.Executed += (sender, e) =>
+                    {
+                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Logs have been packaged."));
+                    };
                     Messenger.Default.Send(msg);
                 }
             }

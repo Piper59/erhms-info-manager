@@ -188,9 +188,9 @@
       <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
       <Name>ERHMS.EpiInfo.MakeView</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.WebSurvey\ERHMS.EpiInfo.WebSurvey.csproj">
+    <ProjectReference Include="..\ERHMS.EpiInfo.Web\ERHMS.EpiInfo.Web.csproj">
       <Project>{05366c9d-7568-4c45-9c80-c77b18eb69e8}</Project>
-      <Name>ERHMS.EpiInfo.WebSurvey</Name>
+      <Name>ERHMS.EpiInfo.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
@@ -234,6 +234,7 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />
+    <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
     <Compile Include="Converters\StringToUppercaseStringConverter.cs" />
     <Compile Include="Dialogs\RootDirectoryDialog.cs" />

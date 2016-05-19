@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <UserControl.Resources>
         <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
+        <conv:ResponseTypeToDescriptionConverter x:Key="ResponseTypeToDescriptionConverter" />
     </UserControl.Resources>
     <Grid>
         <DockPanel>
@@ -34,7 +36,7 @@
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="To Template" Command="{Binding PublishToTemplateCommand}" />
-                            <MenuItem Header="To Web" Command="{Binding PublishToWebCommand}" IsEnabled="False" />
+                            <MenuItem Header="To Web" Command="{Binding PublishToWebCommand}" />
                             <MenuItem Header="To Mobile" Command="{Binding PublishToMobileCommand}" />
                         </ContextMenu>
                     </Button.ContextMenu>
@@ -47,7 +49,7 @@
                             <MenuItem Header="From Project" Command="{Binding ImportFromProjectCommand}" />
                             <MenuItem Header="From Package" Command="{Binding ImportFromPackageCommand}" />
                             <MenuItem Header="From File" Command="{Binding ImportFromFileCommand}" />
-                            <MenuItem Header="From Web" Command="{Binding ImportFromWebCommand}" IsEnabled="False" />
+                            <MenuItem Header="From Web" Command="{Binding ImportFromWebCommand}" />
                             <MenuItem Header="From Mobile" Command="{Binding ImportFromMobileCommand}" />
                         </ContextMenu>
                     </Button.ContextMenu>
@@ -82,33 +84,71 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <scw:ChildWindow Title="Create a New Analysis" IsOpen="{Binding CreatingPgm}">
+        <scw:ChildWindow Name="SurveyWindow" Title="Publish to Web" DataContext="{Binding SurveyModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding CreatePgmCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelPgmCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding PublishCommand}" Visual="{DynamicResource appbar_page_upload}">Publish</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
-                <ctrl:ResponsiveFormGrid>
+                <ctrl:ResponsiveFormGrid DataContext="{Binding Survey}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PgmName, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Grid.Row="0" Grid.Column="0">Title</Label>
+                    <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding Title}" />
+                    <Label Grid.Row="1" Grid.Column="0">Start Date</Label>
+                    <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
+                    <Label Grid.Row="2" Grid.Column="0">End Date</Label>
+                    <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding EndDate, Mode=TwoWay}" />
+                    <Label Grid.Row="3" Grid.Column="0">Response Type</Label>
+                    <ComboBox Grid.Row="3" Grid.Column="1"
+                              ItemsSource="{Binding DataContext.ResponseTypes, ElementName=SurveyWindow}"
+                              SelectedItem="{Binding ResponseType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource ResponseTypeToDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Grid.Row="4" Grid.Column="0">Welcome Text</Label>
+                    <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource MultiLineTextBox}" Text="{Binding Intro}" />
+                    <Label Grid.Row="5" Grid.Column="0">Completion Text</Label>
+                    <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource MultiLineTextBox}" Text="{Binding Outro}" />
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
-        <scw:ChildWindow Title="Create a New Dashboard" IsOpen="{Binding CreatingCanvas}">
+        <scw:ChildWindow Title="Create a New Analysis" DataContext="{Binding PgmModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding CreateCanvasCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCanvasCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <ctrl:ResponsiveFormGrid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CanvasName, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                </ctrl:ResponsiveFormGrid>
+            </DockPanel>
+        </scw:ChildWindow>
+        <scw:ChildWindow Title="Create a New Dashboard" DataContext="{Binding CanvasModel}" IsOpen="{Binding Active}">
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                </WrapPanel>
+                <ctrl:ResponsiveFormGrid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0">Name</Label>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
