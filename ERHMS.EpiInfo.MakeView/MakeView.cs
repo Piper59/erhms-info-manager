@@ -116,6 +116,7 @@ namespace ERHMS.EpiInfo.MakeView
             {
                 Project project = new Project(projectPath);
                 form.OpenProject(projectPath);
+                form.ProjectExplorer.SelectView(viewName);
                 form.Load += (sender, e) =>
                 {
                     using (CreateTemplateDialog dialog = new CreateTemplateDialog(project, viewName))
@@ -134,6 +135,25 @@ namespace ERHMS.EpiInfo.MakeView
                     form.Close();
                 };
                 Application.Run(form);
+            }
+        }
+
+        public static string CreateWebTemplate(View view)
+        {
+            Process process = Execute(args => Main_CreateWebTemplate(args), view.Project.FilePath, view.Name);
+            return process.StandardOutput.ReadToEnd();
+        }
+        private static void Main_CreateWebTemplate(string[] args)
+        {
+            string projectPath = args[0];
+            string viewName = args[1];
+            using (MainForm form = new MainForm(false))
+            {
+                Project project = new Project(projectPath);
+                form.OpenProject(project);
+                form.ProjectExplorer.SelectView(viewName);
+                Template template = new Template(form.Mediator);
+                Console.Write(template.CreateWebTemplate());
             }
         }
 
