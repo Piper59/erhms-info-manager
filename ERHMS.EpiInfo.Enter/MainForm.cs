@@ -41,7 +41,10 @@ namespace ERHMS.EpiInfo.Enter
 
         public void SetValue(string fieldName, string value)
         {
-            View.Fields.DataFields[fieldName].CurrentRecordValueString = value;
+            if (View.Fields.DataFields.Contains(fieldName))
+            {
+                View.Fields.DataFields[fieldName].CurrentRecordValueString = value;
+            }
         }
 
         public new void Refresh()
