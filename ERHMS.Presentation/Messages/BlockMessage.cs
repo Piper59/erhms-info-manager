@@ -14,8 +14,7 @@ namespace ERHMS.Presentation.Messages
         }
 
         public BlockMessage(string message)
-            : this("Working \u2026", message)
-        { }
+            : this("Working \u2026", message) { }
 
         public event EventHandler Executing;
         public void OnExecuting(EventArgs e)

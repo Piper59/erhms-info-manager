@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class ViewLinkRepository : TableEntityRepository<ViewLink>
     {
         public ViewLinkRepository(IDataDriver driver)
-            : base(driver, "ERHMS_ViewLinks")
-        { }
+            : base(driver, "ERHMS_ViewLinks") { }
 
         public IEnumerable<ViewLink> SelectByIncident(string incidentId)
         {

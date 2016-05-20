@@ -57,13 +57,14 @@ namespace ERHMS.EpiInfo.DataAccess
 
         protected static Type GetDataType(string columnName, DataTable schema)
         {
-            if (schema.Columns.Contains(columnName))
+            DataColumn column = schema.Columns[columnName];
+            if (column == null)
             {
-                return schema.Columns[columnName].DataType;
+                return null;
             }
             else
             {
-                return null;
+                return column.DataType;
             }
         }
 
@@ -78,8 +79,7 @@ namespace ERHMS.EpiInfo.DataAccess
         }
 
         protected EntityRepositoryBase(IDataDriver driver)
-            : base(driver)
-        { }
+            : base(driver) { }
 
         protected DataParameter GetParameter(DataColumn column, object value)
         {

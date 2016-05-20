@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class PgmLinkRepository : TableEntityRepository<PgmLink>
     {
         public PgmLinkRepository(IDataDriver driver)
-            : base(driver, "ERHMS_PgmLinks")
-        { }
+            : base(driver, "ERHMS_PgmLinks") { }
 
         public IEnumerable<PgmLink> SelectByIncident(string incidentId)
         {

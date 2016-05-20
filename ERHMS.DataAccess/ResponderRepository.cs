@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class ResponderRepository : ViewEntityRepository<Responder>
     {
         public ResponderRepository(IDataDriver driver, Project project)
-            : base(driver, project.Views["Responders"])
-        { }
+            : base(driver, project.Views["Responders"]) { }
 
         public override Responder Create()
         {

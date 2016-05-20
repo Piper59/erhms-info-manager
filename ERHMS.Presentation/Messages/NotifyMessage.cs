@@ -16,8 +16,7 @@ namespace ERHMS.Presentation.Messages
         }
 
         public NotifyMessage(string message, bool async = false)
-            : this("Error", message, async)
-        { }
+            : this("Error", message, async) { }
 
         public event EventHandler Dismissed;
         public void OnDismissed(EventArgs e)

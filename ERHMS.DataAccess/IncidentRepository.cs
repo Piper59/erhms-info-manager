@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class IncidentRepository : TableEntityRepository<Incident>
     {
         public IncidentRepository(IDataDriver driver)
-            : base(driver, "ERHMS_Incidents")
-        { }
+            : base(driver, "ERHMS_Incidents") { }
 
         public override Incident Create()
         {

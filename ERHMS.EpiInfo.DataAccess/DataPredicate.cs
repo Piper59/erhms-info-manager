@@ -15,8 +15,7 @@ namespace ERHMS.EpiInfo.DataAccess
         }
 
         public DataPredicate(string sql, params DataParameter[] parameters)
-            : this(sql, (IEnumerable<DataParameter>)parameters)
-        { }
+            : this(sql, (IEnumerable<DataParameter>)parameters) { }
     }
 
     public static class DataPredicateExtensions

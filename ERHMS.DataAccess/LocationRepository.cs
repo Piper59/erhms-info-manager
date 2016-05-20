@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class LocationRepository : TableEntityRepository<Location>
     {
         public LocationRepository(IDataDriver driver)
-            : base(driver, "ERHMS_Locations")
-        { }
+            : base(driver, "ERHMS_Locations") { }
 
         public IEnumerable<Location> SelectByIncident(string incidentId)
         {

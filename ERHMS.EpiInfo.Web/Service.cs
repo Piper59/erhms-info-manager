@@ -158,6 +158,7 @@ namespace ERHMS.EpiInfo.Web
 
         public IEnumerable<Record> GetRecords(View view, Survey survey)
         {
+            // TODO: Handle errors
             Log.Current.DebugFormat("Importing from web: {0}", view.Name);
             ManagerServiceV2Client client = ServiceClient.GetClientV2();
             SurveyAnswerRequest request = new SurveyAnswerRequest

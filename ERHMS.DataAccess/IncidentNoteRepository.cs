@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class IncidentNoteRepository : TableEntityRepository<IncidentNote>
     {
         public IncidentNoteRepository(IDataDriver driver)
-            : base(driver, "ERHMS_IncidentNotes")
-        { }
+            : base(driver, "ERHMS_IncidentNotes") { }
 
         public IEnumerable<IncidentNote> SelectByIncident(string incidentId)
         {

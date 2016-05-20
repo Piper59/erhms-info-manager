@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class RosterRepository : TableEntityRepository<Roster>
     {
         public RosterRepository(IDataDriver driver)
-            : base(driver, "ERHMS_Rosters")
-        { }
+            : base(driver, "ERHMS_Rosters") { }
 
         public IEnumerable<Roster> SelectByIncident(string incidentId)
         {

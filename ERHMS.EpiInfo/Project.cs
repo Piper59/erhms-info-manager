@@ -86,8 +86,7 @@ namespace ERHMS.EpiInfo
         }
 
         public Project(FileInfo file)
-            : this(file.FullName)
-        { }
+            : this(file.FullName) { }
 
         public bool IsValidViewName(string viewName, out InvalidViewNameReason reason)
         {

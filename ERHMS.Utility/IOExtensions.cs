@@ -57,8 +57,7 @@ namespace ERHMS.Utility
                 string fileName = string.Format("{0}{1:N}{2}", prefix, Guid.NewGuid(), extension);
                 file = new FileInfo(Path.Combine(path, fileName));
             } while (file.Exists);
-            using (file.OpenWrite())
-            { }
+            using (file.OpenWrite()) { }
             return file;
         }
 

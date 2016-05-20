@@ -7,8 +7,7 @@ namespace ERHMS.DataAccess
     public class CanvasLinkRepository : TableEntityRepository<CanvasLink>
     {
         public CanvasLinkRepository(IDataDriver driver)
-            : base(driver, "ERHMS_CanvasLinks")
-        { }
+            : base(driver, "ERHMS_CanvasLinks") { }
 
         public IEnumerable<CanvasLink> SelectByIncident(string incidentId)
         {

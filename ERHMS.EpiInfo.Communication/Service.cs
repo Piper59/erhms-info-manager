@@ -55,17 +55,16 @@ namespace ERHMS.EpiInfo.Communication
         {
             string message = string.Format("Invoking {0} service event", eventName);
             Log.Current.DebugFormat("{0}: {1}", message, e);
-            if (handler == null)
+            if (handler != null)
             {
-                return;
-            }
-            try
-            {
-                handler(this, e);
-            }
-            catch (Exception ex)
-            {
-                Log.Current.Warn(string.Format("{0} failed: {1}", message, e), ex);
+                try
+                {
+                    handler(this, e);
+                }
+                catch (Exception ex)
+                {
+                    Log.Current.Warn(string.Format("{0} failed: {1}", message, e), ex);
+                }
             }
         }
 

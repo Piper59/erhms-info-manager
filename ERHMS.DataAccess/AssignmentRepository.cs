@@ -6,8 +6,7 @@ namespace ERHMS.DataAccess
     public class AssignmentRepository : TableEntityRepository<Assignment>
     {
         public AssignmentRepository(IDataDriver driver)
-            : base(driver, "ERHMS_Assignments")
-        { }
+            : base(driver, "ERHMS_Assignments") { }
 
         public void DeleteByViewId(int viewId)
         {

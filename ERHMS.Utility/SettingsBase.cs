@@ -53,8 +53,7 @@ namespace ERHMS.Utility
             }
             if (!file.Exists)
             {
-                using (file.Create())
-                { }
+                using (file.Create()) { }
             }
             using (Stream stream = new FileStream(file.FullName, FileMode.Truncate, FileAccess.Write))
             {

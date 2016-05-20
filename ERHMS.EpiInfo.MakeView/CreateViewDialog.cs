@@ -35,25 +35,7 @@ namespace ERHMS.EpiInfo.MakeView
             }
             else
             {
-                string message;
-                switch (reason)
-                {
-                    case InvalidViewNameReason.Empty:
-                        message = "Please enter a form name.";
-                        break;
-                    case InvalidViewNameReason.InvalidCharacter:
-                        message = "Please enter a form name that contains only letters, numbers, and underscores.";
-                        break;
-                    case InvalidViewNameReason.InvalidFirstCharacter:
-                        message = "Please enter a form name that begins with a letter.";
-                        break;
-                    case InvalidViewNameReason.Duplicate:
-                        message = "This form name is already in use. Please enter a different form name.";
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                }
-                MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(GetErrorMessage(reason), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtViewName.Focus();
             }
         }
@@ -61,6 +43,23 @@ namespace ERHMS.EpiInfo.MakeView
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+        }
+
+        private string GetErrorMessage(InvalidViewNameReason reason)
+        {
+            switch (reason)
+            {
+                case InvalidViewNameReason.Empty:
+                    return "Please enter a form name.";
+                case InvalidViewNameReason.InvalidCharacter:
+                    return "Please enter a form name that contains only letters, numbers, and underscores.";
+                case InvalidViewNameReason.InvalidFirstCharacter:
+                    return "Please enter a form name that begins with a letter.";
+                case InvalidViewNameReason.Duplicate:
+                    return "This form name is already in use. Please enter a different form name.";
+                default:
+                    throw new NotSupportedException();
+            }
         }
     }
 }

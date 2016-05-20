@@ -6,8 +6,7 @@ namespace ERHMS.DataAccess
     public class WebSurveyRepository : TableEntityRepository<WebSurvey>
     {
         public WebSurveyRepository(IDataDriver driver)
-            : base(driver, "ERHMS_WebSurveys")
-        { }
+            : base(driver, "ERHMS_WebSurveys") { }
 
         public void DeleteByViewId(int viewId)
         {

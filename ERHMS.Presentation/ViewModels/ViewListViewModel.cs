@@ -143,23 +143,24 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     Service service = new Service();
                     error = service.CheckConfiguration();
-                    if (error == ConfigurationError.None)
+                    if (error != ConfigurationError.None)
                     {
-                        if (View.IsPublished())
+                        return;
+                    }
+                    if (View.IsPublished())
+                    {
+                        success = service.Republish(View, Survey);
+                    }
+                    else
+                    {
+                        success = service.Publish(View, Survey);
+                        if (success)
                         {
-                            success = service.Republish(View, Survey);
-                        }
-                        else
-                        {
-                            success = service.Publish(View, Survey);
-                            if (success)
-                            {
-                                WebSurvey webSurvey = DataContext.WebSurveys.Create();
-                                webSurvey.WebSurveyId = Survey.SurveyId;
-                                webSurvey.ViewId = View.Id;
-                                webSurvey.PublishKey = Survey.PublishKey.ToString();
-                                DataContext.WebSurveys.Save(webSurvey);
-                            }
+                            WebSurvey webSurvey = DataContext.WebSurveys.Create();
+                            webSurvey.WebSurveyId = Survey.SurveyId;
+                            webSurvey.ViewId = View.Id;
+                            webSurvey.PublishKey = Survey.PublishKey.ToString();
+                            DataContext.WebSurveys.Save(webSurvey);
                         }
                     }
                 };
@@ -442,66 +443,66 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromWeb()
         {
-            if (SelectedItem.IsPublished())
-            {
-                bool success = false;
-                ConfigurationError error = ConfigurationError.None;
-                Survey survey = null;
-                BlockMessage msg = new BlockMessage("Importing data from web \u2026");
-                msg.Executing += (sender, e) =>
-                {
-                    Service service = new Service();
-                    error = service.CheckConfiguration();
-                    if (error == ConfigurationError.None)
-                    {
-                        survey = service.GetSurvey(SelectedItem);
-                        if (survey != null)
-                        {
-                            ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, SelectedItem);
-                            foreach (Record record in service.GetRecords(SelectedItem, survey))
-                            {
-                                ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
-                                if (entity == null)
-                                {
-                                    entity = entities.Create();
-                                    entity.GlobalRecordId = record.GlobalRecordId;
-                                }
-                                foreach (string key in record.Keys)
-                                {
-                                    Type type = entities.GetDataType(key);
-                                    entity.SetProperty(key, record.GetValue(key, type));
-                                }
-                                entities.Save(entity);
-                            }
-                            success = true;
-                        }
-                    }
-                };
-                msg.Executed += (sender, e) =>
-                {
-                    if (error != ConfigurationError.None)
-                    {
-                        SurveyViewModel.RequestConfiguration(error);
-                    }
-                    else if (survey == null)
-                    {
-                        SurveyViewModel.RequestConfiguration("Failed to retrieve web survey details.");
-                    }
-                    else if (!success)
-                    {
-                        SurveyViewModel.RequestConfiguration("Failed to import data from web.");
-                    }
-                    else
-                    {
-                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Data has been imported from web."));
-                    }
-                };
-                Messenger.Default.Send(msg);
-            }
-            else
+            if (!SelectedItem.IsPublished())
             {
                 Messenger.Default.Send(new NotifyMessage("Form has not been published to web."));
+                return;
             }
+            bool success = false;
+            ConfigurationError error = ConfigurationError.None;
+            Survey survey = null;
+            BlockMessage msg = new BlockMessage("Importing data from web \u2026");
+            msg.Executing += (sender, e) =>
+            {
+                Service service = new Service();
+                error = service.CheckConfiguration();
+                if (error != ConfigurationError.None)
+                {
+                    return;
+                }
+                survey = service.GetSurvey(SelectedItem);
+                if (survey == null)
+                {
+                    return;
+                }
+                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, SelectedItem);
+                foreach (Record record in service.GetRecords(SelectedItem, survey))
+                {
+                    ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
+                    if (entity == null)
+                    {
+                        entity = entities.Create();
+                        entity.GlobalRecordId = record.GlobalRecordId;
+                    }
+                    foreach (string key in record.Keys)
+                    {
+                        Type type = entities.GetDataType(key);
+                        entity.SetProperty(key, record.GetValue(key, type));
+                    }
+                    entities.Save(entity);
+                }
+                success = true;
+            };
+            msg.Executed += (sender, e) =>
+            {
+                if (error != ConfigurationError.None)
+                {
+                    SurveyViewModel.RequestConfiguration(error);
+                }
+                else if (survey == null)
+                {
+                    SurveyViewModel.RequestConfiguration("Failed to retrieve web survey details.");
+                }
+                else if (!success)
+                {
+                    SurveyViewModel.RequestConfiguration("Failed to import data from web.");
+                }
+                else
+                {
+                    Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Data has been imported from web."));
+                }
+            };
+            Messenger.Default.Send(msg);
         }
 
         public void ImportFromMobile()
