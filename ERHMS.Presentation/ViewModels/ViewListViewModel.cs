@@ -3,6 +3,8 @@ using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analysis;
 using ERHMS.EpiInfo.AnalysisDashboard;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Enter;
 using ERHMS.EpiInfo.ImportExport;
 using ERHMS.EpiInfo.MakeView;
@@ -25,6 +27,31 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class SurveyViewModel : ViewModelBase
         {
+            private static void RequestConfigurationInternal(string message)
+            {
+                NotifyMessage msg = new NotifyMessage(message);
+                msg.Dismissed += (sender, e) =>
+                {
+                    Locator.Main.OpenSettingsView();
+                };
+                Messenger.Default.Send(msg);
+            }
+
+            public static void RequestConfiguration()
+            {
+                RequestConfigurationInternal("Please configure web survey settings.");
+            }
+
+            public static void RequestConfiguration(string reason)
+            {
+                RequestConfigurationInternal(string.Format("{0} Please verify web survey settings.", reason));
+            }
+
+            public static void RequestConfiguration(ConfigurationError error)
+            {
+                RequestConfiguration(error.GetMessage());
+            }
+
             public ICollection<ResponseType> ResponseTypes { get; private set; }
 
             private bool active;
@@ -55,38 +82,13 @@ namespace ERHMS.Presentation.ViewModels
                 CancelCommand = new RelayCommand(Cancel);
             }
 
-            private void RequestConfigurationInternal(string message)
-            {
-                NotifyMessage msg = new NotifyMessage(message);
-                msg.Dismissed += (sender, e) =>
-                {
-                    Locator.Main.OpenSettingsView();
-                };
-                Messenger.Default.Send(msg);
-            }
-
-            public void RequestConfiguration()
-            {
-                RequestConfigurationInternal("Please configure web survey settings.");
-            }
-
-            public void RequestConfiguration(string reason)
-            {
-                RequestConfigurationInternal(string.Format("{0} Please verify web survey settings.", reason));
-            }
-
-            public void RequestConfiguration(ConfigurationError error)
-            {
-                RequestConfiguration(error.GetMessage());
-            }
-
             public void Activate(View view)
             {
                 View = view;
                 if (view.IsPublished())
                 {
                     ConfigurationError error = ConfigurationError.None;
-                    BlockMessage msg = new BlockMessage("Retrieving details \u2026");
+                    BlockMessage msg = new BlockMessage("Retrieving web survey details \u2026");
                     msg.Executing += (sender, e) =>
                     {
                         Service service = new Service();
@@ -104,7 +106,7 @@ namespace ERHMS.Presentation.ViewModels
                         }
                         else if (Survey == null)
                         {
-                            RequestConfiguration("Retrieval failed.");
+                            RequestConfiguration("Failed to retrieve web survey details.");
                         }
                         else
                         {
@@ -136,7 +138,7 @@ namespace ERHMS.Presentation.ViewModels
                 // TODO: Validate fields
                 bool success = false;
                 ConfigurationError error = ConfigurationError.None;
-                BlockMessage msg = new BlockMessage("Publishing to web \u2026");
+                BlockMessage msg = new BlockMessage("Publishing form to web \u2026");
                 msg.Executing += (sender, e) =>
                 {
                     Service service = new Service();
@@ -169,12 +171,12 @@ namespace ERHMS.Presentation.ViewModels
                     }
                     else if (!success)
                     {
-                        RequestConfiguration("Publish failed.");
+                        RequestConfiguration("Failed to publish form to web.");
                     }
                     else
                     {
                         Active = false;
-                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Form has been published."));
+                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Form has been published to web."));
                     }
                 };
                 Messenger.Default.Send(msg);
@@ -408,7 +410,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                SurveyModel.RequestConfiguration();
+                SurveyViewModel.RequestConfiguration();
             }
         }
 
@@ -440,7 +442,66 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromWeb()
         {
-            // TODO: Implement
+            if (SelectedItem.IsPublished())
+            {
+                bool success = false;
+                ConfigurationError error = ConfigurationError.None;
+                Survey survey = null;
+                BlockMessage msg = new BlockMessage("Importing data from web \u2026");
+                msg.Executing += (sender, e) =>
+                {
+                    Service service = new Service();
+                    error = service.CheckConfiguration();
+                    if (error == ConfigurationError.None)
+                    {
+                        survey = service.GetSurvey(SelectedItem);
+                        if (survey != null)
+                        {
+                            ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, SelectedItem);
+                            foreach (Record record in service.GetRecords(SelectedItem, survey))
+                            {
+                                ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
+                                if (entity == null)
+                                {
+                                    entity = entities.Create();
+                                    entity.GlobalRecordId = record.GlobalRecordId;
+                                }
+                                foreach (string key in record.Keys)
+                                {
+                                    Type type = entities.GetDataType(key);
+                                    entity.SetProperty(key, record.GetValue(key, type));
+                                }
+                                entities.Save(entity);
+                            }
+                            success = true;
+                        }
+                    }
+                };
+                msg.Executed += (sender, e) =>
+                {
+                    if (error != ConfigurationError.None)
+                    {
+                        SurveyViewModel.RequestConfiguration(error);
+                    }
+                    else if (survey == null)
+                    {
+                        SurveyViewModel.RequestConfiguration("Failed to retrieve web survey details.");
+                    }
+                    else if (!success)
+                    {
+                        SurveyViewModel.RequestConfiguration("Failed to import data from web.");
+                    }
+                    else
+                    {
+                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Data has been imported from web."));
+                    }
+                };
+                Messenger.Default.Send(msg);
+            }
+            else
+            {
+                Messenger.Default.Send(new NotifyMessage("Form has not been published to web."));
+            }
         }
 
         public void ImportFromMobile()

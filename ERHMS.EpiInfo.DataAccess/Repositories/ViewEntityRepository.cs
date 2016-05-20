@@ -70,6 +70,19 @@ namespace ERHMS.EpiInfo.DataAccess
             return new DataPredicate(sql, parameter);
         }
 
+        public override Type GetDataType(string columnName)
+        {
+            foreach (DataTable pageSchema in PageSchemas.Tables)
+            {
+                Type dataType = GetDataType(columnName, pageSchema);
+                if (dataType != null)
+                {
+                    return dataType;
+                }
+            }
+            return null;
+        }
+
         public virtual TEntity Create()
         {
             TEntity entity = new TEntity();

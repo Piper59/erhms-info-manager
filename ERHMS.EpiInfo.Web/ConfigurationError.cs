@@ -22,7 +22,7 @@ namespace ERHMS.EpiInfo.Web
                 case ConfigurationError.OrganizationKey:
                     return "Invalid organization key.";
                 case ConfigurationError.Connection:
-                    return "Connection to endpoint failed.";
+                    return "Failed to connect to endpoint.";
                 case ConfigurationError.Unknown:
                     return "Configuration error.";
                 default:

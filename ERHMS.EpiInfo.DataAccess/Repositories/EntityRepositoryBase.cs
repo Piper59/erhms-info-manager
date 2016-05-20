@@ -55,6 +55,18 @@ namespace ERHMS.EpiInfo.DataAccess
             }
         }
 
+        protected static Type GetDataType(string columnName, DataTable schema)
+        {
+            if (schema.Columns.Contains(columnName))
+            {
+                return schema.Columns[columnName].DataType;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         protected static DataColumn GetKeyColumn(DataTable schema)
         {
             return schema.PrimaryKey.Single();
@@ -101,6 +113,7 @@ namespace ERHMS.EpiInfo.DataAccess
             return Driver.GetSchema(sql);
         }
 
+        public abstract Type GetDataType(string columnName);
         public abstract IEnumerable<TEntity> Select();
         public abstract IEnumerable<TEntity> Select(DataPredicate predicate);
 

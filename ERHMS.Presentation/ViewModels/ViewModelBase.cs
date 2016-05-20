@@ -5,12 +5,12 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ViewModelBase : GalaSoft.MvvmLight.ViewModelBase
     {
-        public ViewModelLocator Locator
+        public static ViewModelLocator Locator
         {
             get { return App.Current.Locator; }
         }
 
-        protected DataContext DataContext
+        protected static DataContext DataContext
         {
             get { return Locator.Main.DataSource; }
         }

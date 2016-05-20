@@ -2,7 +2,10 @@
 using Epi.Core.ServiceClient;
 using Epi.SurveyManagerServiceV2;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
+using System.Xml;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo.Web
@@ -151,6 +154,54 @@ namespace ERHMS.EpiInfo.Web
             };
             PublishResponse response = client.RePublishSurvey(request);
             return response.PublishInfo.IsPulished;
+        }
+
+        public IEnumerable<Record> GetRecords(View view, Survey survey)
+        {
+            Log.Current.DebugFormat("Importing from web: {0}", view.Name);
+            ManagerServiceV2Client client = ServiceClient.GetClientV2();
+            SurveyAnswerRequest request = new SurveyAnswerRequest
+            {
+                Criteria = new SurveyAnswerCriteria
+                {
+                    OrganizationKey = OrganizationKey.Value,
+                    SurveyId = survey.SurveyId,
+                    IsDraftMode = survey.Draft,
+                    UserPublishKey = survey.PublishKey,
+                    StatusId = -1,
+                    ReturnSizeInfoOnly = true,
+                    SurveyAnswerIdList = new List<string>()
+                },
+                SurveyAnswerList = new List<SurveyAnswerDTO>()
+            };
+            int pageCount;
+            {
+                SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                request.Criteria.PageSize = response.PageSize;
+                pageCount = response.NumberOfPages;
+            }
+            request.Criteria.ReturnSizeInfoOnly = false;
+            for (int page = 1; page <= pageCount; page++)
+            {
+                request.Criteria.PageNumber = page;
+                SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
+                {
+                    Record record = new Record();
+                    record.GlobalRecordId = answer.ResponseId;
+                    using (XmlReader reader = XmlReader.Create(new StringReader(answer.XML)))
+                    {
+                        while (reader.Read())
+                        {
+                            while (reader.NodeType == XmlNodeType.Element && reader.Name == "ResponseDetail")
+                            {
+                                record[reader.GetAttribute("QuestionName")] = reader.ReadElementContentAsString();
+                            }
+                        }
+                    }
+                    yield return record;
+                }
+            }
         }
     }
 }

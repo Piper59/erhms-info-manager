@@ -19,6 +19,11 @@ namespace ERHMS.EpiInfo.DataAccess
             Schema = GetSchema(tableName);
         }
 
+        public override Type GetDataType(string columnName)
+        {
+            return GetDataType(columnName, Schema);
+        }
+
         public virtual TEntity Create()
         {
             TEntity entity = new TEntity();
