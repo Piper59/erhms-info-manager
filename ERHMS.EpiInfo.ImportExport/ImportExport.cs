@@ -5,7 +5,7 @@ using View = Epi.View;
 
 namespace ERHMS.EpiInfo.ImportExport
 {
-    public class ImportExport
+    public static class ImportExport
     {
         public static bool ImportFromView(View target)
         {
