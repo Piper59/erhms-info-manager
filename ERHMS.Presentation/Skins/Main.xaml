@@ -119,18 +119,10 @@
 
     <sys:Double x:Key="LargerFontSize">16.0</sys:Double>
 
-    <Style x:Key="IncidentNotes" TargetType="{x:Type ListView}" BasedOn="{StaticResource MetroListView}">
+    <Style x:Key="IncidentNotes" TargetType="{x:Type ItemsControl}">
         <Style.Resources>
             <conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         </Style.Resources>
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="ItemContainerStyle">
-            <Setter.Value>
-                <Style TargetType="ListViewItem" BasedOn="{StaticResource MetroListViewItem}">
-                    <Setter Property="Focusable" Value="False" />
-                </Style>
-            </Setter.Value>
-        </Setter>
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -143,8 +135,6 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Margin" Value="0,-2,0,5" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
     </Style>
 
     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MetroLabel}">
