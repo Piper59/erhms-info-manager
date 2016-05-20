@@ -6,7 +6,6 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -213,7 +212,7 @@ namespace ERHMS.Presentation.ViewModels
                 Settings.Default.Save();
                 configuration.Refresh(true);
                 Log.SetLevelName(Settings.Default.LogLevel);
-                Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Settings have been saved."));
+                Messenger.Default.Send(new ToastMessage("Settings have been saved."));
             }
         }
     }

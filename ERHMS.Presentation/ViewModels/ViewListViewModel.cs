@@ -13,7 +13,6 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -177,7 +176,7 @@ namespace ERHMS.Presentation.ViewModels
                     else
                     {
                         Active = false;
-                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Form has been published to web."));
+                        Messenger.Default.Send(new ToastMessage("Form has been published to web."));
                     }
                 };
                 Messenger.Default.Send(msg);
@@ -499,7 +498,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else
                 {
-                    Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Data has been imported from web."));
+                    Messenger.Default.Send(new ToastMessage("Data has been imported from web."));
                 }
             };
             Messenger.Default.Send(msg);

@@ -12,5 +12,8 @@ namespace ERHMS.Presentation.Messages
             NotificationType = notificationType;
             Message = message;
         }
+
+        public ToastMessage(string message)
+            : this(NotificationType.Information, message) { }
     }
 }

@@ -5,7 +5,6 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -235,7 +234,7 @@ namespace ERHMS.Presentation.ViewModels
                     };
                     msg.Executed += (sender, e) =>
                     {
-                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Data source has been created."));
+                        Messenger.Default.Send(new ToastMessage("Data source has been created."));
                     };
                     Messenger.Default.Send(msg);
                 }

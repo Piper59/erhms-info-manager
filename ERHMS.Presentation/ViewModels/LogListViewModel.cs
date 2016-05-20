@@ -4,7 +4,6 @@ using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Ionic.Zip;
-using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -124,7 +123,7 @@ namespace ERHMS.Presentation.ViewModels
                     };
                     msg.Executed += (sender, e) =>
                     {
-                        Messenger.Default.Send(new ToastMessage(NotificationType.Information, "Logs have been packaged."));
+                        Messenger.Default.Send(new ToastMessage("Logs have been packaged."));
                     };
                     Messenger.Default.Send(msg);
                 }
