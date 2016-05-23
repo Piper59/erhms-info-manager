@@ -54,7 +54,7 @@ namespace ERHMS.Presentation.ViewModels
         protected override ICollectionView GetItems()
         {
             ICollection<ProjectInfo> items = new List<ProjectInfo>();
-            foreach (string path in Settings.Default.DataSources)
+            foreach (string path in Settings.Default.DataSources.ToList())
             {
                 ProjectInfo projectInfo;
                 FileInfo file = new FileInfo(path);
