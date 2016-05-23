@@ -202,17 +202,6 @@ namespace ERHMS.Presentation.ViewModels
             yield return item.Name;
         }
 
-        private bool IsResponderView(View view)
-        {
-            return view.Name.EqualsIgnoreCase(DataContext.Responders.View.Name);
-        }
-
-        private bool IsResponderLinkedView(View view)
-        {
-            Responder responder;
-            return !IsResponderView(view) && view.Fields.Contains(nameof(responder.ResponderId));
-        }
-
         public void Create()
         {
             string prefix = Incident == null ? null : Incident.Name;
@@ -226,7 +215,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            if (IsResponderView(SelectedItem))
+            if (DataContext.IsResponderView(SelectedItem))
             {
                 Messenger.Default.Send(new NotifyMessage("The selected form cannot be deleted."));
             }
@@ -247,7 +236,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void EnterData()
         {
-            if (IsResponderLinkedView(SelectedItem))
+            if (DataContext.IsResponderLinkedView(SelectedItem))
             {
                 ResponderModel.Reset(SelectedItem);
                 ResponderModel.Active = true;

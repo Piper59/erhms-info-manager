@@ -1,4 +1,5 @@
-﻿using ERHMS.Utility;
+﻿using Epi;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ namespace ERHMS.EpiInfo.Web
         private static readonly ICollection<string> FalseValues = new string[] { "0", "No" };
 
         public string GlobalRecordId { get; set; }
+        public string Passcode { get; set; }
 
         public object GetValue(string key, Type type)
         {
@@ -40,6 +42,14 @@ namespace ERHMS.EpiInfo.Web
                     return null;
                 }
             }
+        }
+
+        public string GetUrl()
+        {
+            Configuration configuration = Configuration.GetNewInstance();
+            string address = configuration.Settings.WebServiceEndpointAddress;
+            int index = address.LastIndexOf('/');
+            return string.Format("{0}/Survey/{1}", address.Substring(0, index), GlobalRecordId);
         }
     }
 }

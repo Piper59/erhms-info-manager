@@ -1,4 +1,6 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Converters;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
@@ -11,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Windows.Forms;
+using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -51,13 +54,55 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => Subject, ref subject, value); }
         }
 
-        public ObservableCollection<AttachmentViewModel> Attachments { get; private set; }
-
         private string body;
         public string Body
         {
             get { return body; }
             set { Set(() => Body, ref body, value); }
+        }
+
+        public ObservableCollection<AttachmentViewModel> Attachments { get; private set; }
+
+        private ICollection<View> views;
+        public ICollection<View> Views
+        {
+            get { return views; }
+            set { Set(() => Views, ref views, value); }
+        }
+
+        private View selectedView;
+        public View SelectedView
+        {
+            get { return selectedView; }
+            set { Set(() => SelectedView, ref selectedView, value); }
+        }
+
+        private bool appendUrl;
+        public bool AppendUrl
+        {
+            get { return appendUrl; }
+            set { Set(() => AppendUrl, ref appendUrl, value); }
+        }
+
+        private bool canAppendUrl;
+        public bool CanAppendUrl
+        {
+            get { return canAppendUrl; }
+            set { Set(() => CanAppendUrl, ref canAppendUrl, value); }
+        }
+
+        private bool prepopulate;
+        public bool Prepopulate
+        {
+            get { return prepopulate; }
+            set { Set(() => Prepopulate, ref prepopulate, value); }
+        }
+
+        private bool canPrepopulate;
+        public bool CanPrepopulate
+        {
+            get { return canPrepopulate; }
+            set { Set(() => CanPrepopulate, ref canPrepopulate, value); }
         }
 
         public RelayCommand AddCommand { get; private set; }
@@ -70,10 +115,35 @@ namespace ERHMS.Presentation.ViewModels
             RefreshResponders();
             Recipients = new ObservableCollection<RecipientViewModel>();
             Attachments = new ObservableCollection<AttachmentViewModel>();
+            RefreshViews();
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(Views))
+                {
+                    CanAppendUrl = Views.Count > 0;
+                }
+                else if (e.PropertyName == nameof(SelectedView))
+                {
+                    CanPrepopulate = SelectedView != null && DataContext.IsResponderLinkedView(SelectedView);
+                }
+                else if (e.PropertyName == nameof(AppendUrl) && !AppendUrl)
+                {
+                    SelectedView = null;
+                }
+                else if (e.PropertyName == nameof(CanAppendUrl) && !CanAppendUrl)
+                {
+                    AppendUrl = false;
+                }
+                else if (e.PropertyName == nameof(CanPrepopulate) && !CanPrepopulate)
+                {
+                    Prepopulate = false;
+                }
+            };
             AddCommand = new RelayCommand(Add);
             AttachCommand = new RelayCommand(Attach);
             SendCommand = new RelayCommand(Send);
-            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderList);
+            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
+            Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
         }
 
         public EmailViewModel(IEnumerable<Responder> responders)
@@ -91,6 +161,14 @@ namespace ERHMS.Presentation.ViewModels
                 .OrderBy(responder => responder.LastName)
                 .ThenBy(responder => responder.FirstName)
                 .ThenBy(responder => responder.EmailAddress)
+                .ToList();
+        }
+
+        private void RefreshViews()
+        {
+            Views = DataContext.GetViews()
+                .Where(view => view.IsPublished())
+                .OrderBy(view => view.Name)
                 .ToList();
         }
 
@@ -121,81 +199,110 @@ namespace ERHMS.Presentation.ViewModels
         public void Send()
         {
             // TODO: Validate fields
+            // TODO: Handle errors
             if (!Email.IsConfigured())
             {
                 RequestConfiguration("Please configure email settings.");
                 return;
             }
-            ICollection<RecipientViewModel> invalidRecipients = new List<RecipientViewModel>();
-            MailMessage message = Email.GetMessage();
-            foreach (RecipientViewModel recipient in Recipients)
-            {
-                string address = recipient.GetEmailAddress();
-                if (Email.IsValidAddress(address))
-                {
-                    message.Bcc.Add(new MailAddress(address));
-                }
-                else
-                {
-                    invalidRecipients.Add(recipient);
-                }
-            }
-            if (invalidRecipients.Count > 0)
-            {
-                Messenger.Default.Send(new NotifyMessage(string.Format(
-                    "The following recipients have invalid email addresses:{0}{0}{1}",
-                    Environment.NewLine,
-                    string.Join("; ", invalidRecipients.Select(recipient => RecipientToStringConverter.Convert(recipient))))));
-                return;
-            }
-            message.Subject = Subject;
-            message.Body = Body;
-            Exception ex = null;
+            bool success = false;
+            ICollection<RecipientViewModel> failures = new List<RecipientViewModel>();
             BlockMessage msg = new BlockMessage("Sending email \u2026");
             msg.Executing += (sender, e) =>
             {
-                try
+                Service service = null;
+                Survey survey = null;
+                if (Prepopulate)
                 {
-                    foreach (AttachmentViewModel attachment in Attachments)
+                    service = new Service();
+                    // TODO: Check configuration
+                    survey = service.GetSurvey(SelectedView);
+                }
+                MailMessage message = Email.GetMessage();
+                message.Subject = Subject;
+                foreach (AttachmentViewModel attachment in Attachments)
+                {
+                    message.Attachments.Add(new Attachment(attachment.File.FullName));
+                }
+                using (SmtpClient client = Email.GetClient())
+                {
+                    foreach (RecipientViewModel recipient in Recipients)
                     {
-                        message.Attachments.Add(new Attachment(attachment.File.FullName));
+                        try
+                        {
+                            message.To.Clear();
+                            message.To.Add(new MailAddress(recipient.GetEmailAddress()));
+                            if (AppendUrl)
+                            {
+                                if (recipient.IsResponder && Prepopulate)
+                                {
+                                    Record record = service.AddRecord(SelectedView, survey, new
+                                    {
+                                        ResponderId = recipient.Responder.ResponderId
+                                    });
+                                    message.Body = string.Format(
+                                        "{0}{1}{1}URL: {2}{1}Passcode: {3}",
+                                        Body.TrimEnd(),
+                                        Environment.NewLine,
+                                        record.GetUrl(),
+                                        record.Passcode);
+                                }
+                                else
+                                {
+                                    message.Body = string.Format(
+                                        "{0}{1}{1}URL: {2}",
+                                        Body.TrimEnd(),
+                                        Environment.NewLine,
+                                        SelectedView.GetUrl());
+                                }
+                            }
+                            else
+                            {
+                                message.Body = Body;
+                            }
+                            client.Send(message);
+                        }
+                        catch
+                        {
+                            failures.Add(recipient);
+                        }
                     }
-                    Email.GetClient().Send(message);
                 }
-                catch (Exception _ex)
-                {
-                    ex = _ex;
-                }
+                success = true;
             };
             msg.Executed += (sender, e) =>
             {
-                if (ex == null)
+                if (success)
                 {
-                    Messenger.Default.Send(new ToastMessage("Email has been sent."));
-                    Close();
-                }
-                else
-                {
-                    SmtpFailedRecipientsException recipientsEx = ex as SmtpFailedRecipientsException;
-                    if (recipientsEx == null)
-                    {
-                        RequestConfiguration("Failed to send email. Please verify email settings.");
-                    }
-                    else
+                    if (failures.Count > 0)
                     {
                         Messenger.Default.Send(new NotifyMessage(string.Format(
                             "Delivery to the following recipients failed:{0}{0}{1}",
                             Environment.NewLine,
-                            string.Join("; ", recipientsEx.InnerExceptions.Select(recipientEx => recipientEx.FailedRecipient)))));
+                            string.Join("; ", failures.Select(recipient => RecipientToStringConverter.Convert(recipient))))));
                     }
+                    else
+                    {
+                        Messenger.Default.Send(new ToastMessage("Email has been sent."));
+                        Close();
+                    }
+                }
+                else
+                {
+                    RequestConfiguration("Failed to send email. Please verify email settings.");
                 }
             };
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshResponderList(RefreshListMessage<Responder> msg)
+        private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)
         {
             RefreshResponders();
+        }
+
+        private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
+        {
+            RefreshViews();
         }
     }
 }

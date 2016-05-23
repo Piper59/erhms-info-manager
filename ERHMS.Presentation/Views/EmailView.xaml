@@ -26,8 +26,10 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Grid.Column="0">Recipients</Label>
                 <ctrl:RemovableItemsControl Grid.Row="0" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Recipients}">
@@ -39,16 +41,36 @@
                 </ctrl:RemovableItemsControl>
                 <Label Grid.Row="1" Grid.Column="0">Subject</Label>
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Subject}" />
-                <Label Grid.Row="2" Grid.Column="0">Attachments</Label>
-                <ctrl:RemovableItemsControl Grid.Row="2" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Attachments}">
+                <Label Grid.Row="2" Grid.Column="0">Body</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" Text="{Binding Body}" />
+                <Label Grid.Row="3" Grid.Column="0">Attachments</Label>
+                <ctrl:RemovableItemsControl Grid.Row="3" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Attachments}">
                     <ctrl:RemovableItemsControl.ItemTextTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=., Converter={StaticResource AttachmentToStringConverter}}" />
                         </DataTemplate>
                     </ctrl:RemovableItemsControl.ItemTextTemplate>
                 </ctrl:RemovableItemsControl>
-                <Label Grid.Row="3" Grid.Column="0">Body</Label>
-                <TextBox Grid.Row="3" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" Text="{Binding Body}" />
+                <Label Grid.Row="4" Grid.Column="0">Options</Label>
+                <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding AppendUrl}">Append web survey URL</CheckBox>
+                    <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="Name" Margin="5,0,0,5"
+                              ItemsSource="{Binding Views}"
+                              SelectedItem="{Binding SelectedView}"
+                              IsEnabled="{Binding AppendUrl}" />
+                </Grid>
+                <CheckBox Grid.Row="5" Grid.Column="1"
+                          IsChecked="{Binding Prepopulate}"
+                          IsEnabled="{Binding CanPrepopulate}">
+                    Prepopulate responder ID field
+                </CheckBox>
             </ctrl:FormGrid>
         </DockPanel>
         <scw:ChildWindow Title="Add a Recipient" DataContext="{Binding Recipient}" IsOpen="{Binding Active}">

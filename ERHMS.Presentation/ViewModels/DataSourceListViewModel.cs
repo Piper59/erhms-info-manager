@@ -48,7 +48,7 @@ namespace ERHMS.Presentation.ViewModels
             AddExistingCommand = new RelayCommand(AddExisting);
             RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<ProjectInfo>>(this, OnRefreshDataSourceList);
+            Messenger.Default.Register<RefreshListMessage<ProjectInfo>>(this, OnRefreshDataSourceListMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -121,7 +121,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshDataSourceList(RefreshListMessage<ProjectInfo> msg)
+        private void OnRefreshDataSourceListMessage(RefreshListMessage<ProjectInfo> msg)
         {
             Refresh();
         }

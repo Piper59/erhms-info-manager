@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.MakeView;
@@ -151,6 +152,17 @@ namespace ERHMS.DataAccess
                 .Select(canvasLink => canvasLink.CanvasId)
                 .ToList();
             return GetCanvases().Where(canvas => !canvasIds.Contains(canvas.CanvasId));
+        }
+
+        public bool IsResponderView(View view)
+        {
+            return view.Name.EqualsIgnoreCase(Responders.View.Name);
+        }
+
+        public bool IsResponderLinkedView(View view)
+        {
+            Responder responder;
+            return !IsResponderView(view) && view.Fields.Contains(nameof(responder.ResponderId));
         }
     }
 }

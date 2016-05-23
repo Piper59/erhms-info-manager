@@ -4,6 +4,7 @@ using Epi.SurveyManagerServiceV2;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.ServiceModel;
 using System.Xml;
 using Settings = ERHMS.Utility.Settings;
@@ -202,6 +203,40 @@ namespace ERHMS.EpiInfo.Web
                     }
                     yield return record;
                 }
+            }
+        }
+
+        public Record AddRecord(View view, Survey survey, object record)
+        {
+            // TODO: Handle errors
+            Log.Current.DebugFormat("Adding record: {0}", view.Name);
+            Record _record = new Record();
+            foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                _record[view.Fields[property.Name].Name] = Convert.ToString(property.GetValue(record, null));
+            }
+            ManagerServiceV2Client client = ServiceClient.GetClientV2();
+            PreFilledAnswerRequest request = new PreFilledAnswerRequest
+            {
+                AnswerInfo = new PreFilledAnswerDTO
+                {
+                    OrganizationKey = OrganizationKey.Value,
+                    SurveyId = new Guid(survey.SurveyId),
+                    UserPublishKey = survey.PublishKey,
+                    SurveyQuestionAnswerList = _record
+                }
+            };
+            PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
+            switch (response.Status)
+            {
+                case "Failed":
+                    return null;
+                case "Success":
+                    _record.GlobalRecordId = response.SurveyResponseID;
+                    _record.Passcode = response.SurveyResponsePassCode;
+                    return _record;
+                default:
+                    throw new NotSupportedException();
             }
         }
     }
