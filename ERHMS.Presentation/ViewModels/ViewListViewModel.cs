@@ -123,6 +123,11 @@ namespace ERHMS.Presentation.ViewModels
             yield return item.Name;
         }
 
+        private bool IsResponderView(View view)
+        {
+            return view.Name.EqualsIgnoreCase(DataContext.Responders.View.Name);
+        }
+
         public void Create()
         {
             string prefix = Incident == null ? null : Incident.Name;
@@ -136,16 +141,23 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected form?");
-            msg.Confirmed += (sender, e) =>
+            if (IsResponderView(SelectedItem))
             {
-                DataContext.Assignments.DeleteByViewId(SelectedItem.Id);
-                DataContext.ViewLinks.DeleteByViewId(SelectedItem.Id);
-                DataContext.WebSurveys.DeleteByViewId(SelectedItem.Id);
-                DataContext.Project.DeleteView(SelectedItem);
-                Messenger.Default.Send(new RefreshListMessage<View>(IncidentId));
-            };
-            Messenger.Default.Send(msg);
+                Messenger.Default.Send(new NotifyMessage("The selected form cannot be deleted."));
+            }
+            else
+            {
+                ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected form?");
+                msg.Confirmed += (sender, e) =>
+                {
+                    DataContext.Assignments.DeleteByViewId(SelectedItem.Id);
+                    DataContext.ViewLinks.DeleteByViewId(SelectedItem.Id);
+                    DataContext.WebSurveys.DeleteByViewId(SelectedItem.Id);
+                    DataContext.Project.DeleteView(SelectedItem);
+                    Messenger.Default.Send(new RefreshListMessage<View>(IncidentId));
+                };
+                Messenger.Default.Send(msg);
+            }
         }
 
         public void EnterData()
