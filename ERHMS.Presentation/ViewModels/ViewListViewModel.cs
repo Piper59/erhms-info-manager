@@ -249,6 +249,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ViewData()
         {
+            SelectedItem.CreateDataTables();
             Locator.Main.OpenRecordListView(SelectedItem);
         }
 
@@ -272,11 +273,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToMobile()
         {
+            SelectedItem.CreateDataTables();
             MakeView.PublishToMobile(SelectedItem);
         }
 
         public void ImportFromProject()
         {
+            SelectedItem.CreateDataTables();
             if (ImportExport.ImportFromView(SelectedItem))
             {
                 Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
@@ -285,6 +288,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromPackage()
         {
+            SelectedItem.CreateDataTables();
             if (ImportExport.ImportFromPackage(SelectedItem))
             {
                 Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
@@ -293,11 +297,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromFile()
         {
+            SelectedItem.CreateDataTables();
             Analysis.Import(SelectedItem);
         }
 
         public void ImportFromWeb()
         {
+            SelectedItem.CreateDataTables();
             SurveyViewModel surveyModel = new SurveyViewModel(SelectedItem);
             if (surveyModel.Import())
             {
@@ -307,6 +313,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromMobile()
         {
+            SelectedItem.CreateDataTables();
             if (ImportExport.ImportFromMobile(SelectedItem))
             {
                 Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
@@ -315,11 +322,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ExportToPackage()
         {
+            SelectedItem.CreateDataTables();
             ImportExport.ExportToPackage(SelectedItem);
         }
 
         public void ExportToFile()
         {
+            SelectedItem.CreateDataTables();
             Analysis.Export(SelectedItem);
         }
 
@@ -352,6 +361,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
             PgmModel.Active = false;
+            SelectedItem.CreateDataTables();
             Analysis.OpenPgm(pgm, true);
         }
 
@@ -372,6 +382,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
             CanvasModel.Active = false;
+            SelectedItem.CreateDataTables();
             AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, IncidentId);
         }
 

@@ -151,6 +151,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
+            View.CreateDataTables();
             bool success = false;
             ConfigurationError error = ConfigurationError.None;
             BlockMessage msg = new BlockMessage("Publishing form to web \u2026");

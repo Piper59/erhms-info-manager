@@ -4,6 +4,14 @@ namespace ERHMS.EpiInfo
 {
     public static class ViewExtensions
     {
+        public static void CreateDataTables(this View @this)
+        {
+            if (!@this.Project.CollectedData.TableExists(@this.TableName))
+            {
+                @this.Project.CollectedData.CreateDataTableForView(@this, 1);
+            }
+        }
+
         public static bool IsPublished(this View @this)
         {
             return !string.IsNullOrEmpty(@this.WebSurveyId);
