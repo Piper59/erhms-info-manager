@@ -82,12 +82,12 @@ namespace ERHMS.Presentation.ViewModels
         public void Reset()
         {
             Configuration configuration = Configuration.GetNewInstance();
-            Name = "";
-            Description = "";
+            Name = null;
+            Description = null;
             Location = new DirectoryInfo(configuration.Directories.Project);
             Provider = DataProvider.Access;
-            SqlServer.DataSource = "";
-            SqlServer.InitialCatalog = "";
+            SqlServer.DataSource = null;
+            SqlServer.InitialCatalog = null;
             SqlServer.IntegratedSecurity = true;
             SqlServer.UserId = null;
             SqlServer.Password = null;

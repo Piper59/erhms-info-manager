@@ -337,6 +337,11 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public void OpenEmailView(EmailViewModel email)
+        {
+            OpenDocument(email);
+        }
+
         public void OpenSettingsView()
         {
             if (!TryActivateDocument<SettingsViewModel>())

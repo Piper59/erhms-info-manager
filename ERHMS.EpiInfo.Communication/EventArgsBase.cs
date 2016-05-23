@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 
 namespace ERHMS.EpiInfo.Communication
@@ -19,12 +18,12 @@ namespace ERHMS.EpiInfo.Communication
             if (Tag != null)
             {
                 builder.AppendFormat("({0})", Tag);
-                if (values.Any())
+                if (values.Length > 0)
                 {
                     builder.Append(" ");
                 }
             }
-            if (values.Any())
+            if (values.Length > 0)
             {
                 builder.AppendFormat("{0}", string.Join(", ", values));
             }

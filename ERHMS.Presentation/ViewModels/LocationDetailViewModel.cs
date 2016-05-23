@@ -91,7 +91,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public bool HasAddress()
         {
-            return !string.IsNullOrEmpty(Location.Address);
+            return !string.IsNullOrWhiteSpace(Location.Address);
         }
 
         public bool HasCoordinates()

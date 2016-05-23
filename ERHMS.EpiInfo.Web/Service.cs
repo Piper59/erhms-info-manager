@@ -31,7 +31,7 @@ namespace ERHMS.EpiInfo.Web
 
         public bool IsConfigured()
         {
-            if (string.IsNullOrEmpty(Address))
+            if (string.IsNullOrWhiteSpace(Address))
             {
                 return false;
             }

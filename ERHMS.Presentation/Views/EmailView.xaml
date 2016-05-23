@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.EmailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
+             mc:Ignorable="d" 
+             d:DesignWidth="640" d:DesignHeight="480"
+             Name="Root">
+    <UserControl.Resources>
+        <conv:AttachmentToStringConverter x:Key="AttachmentToStringConverter" />
+        <conv:BoolInverter x:Key="BoolInverter" />
+        <conv:RecipientToStringConverter x:Key="RecipientToStringConverter" />
+        <conv:ResponderToNameEmailConverter x:Key="ResponderToNameEmailConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <DockPanel>
+            <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                <ctrl:AppBarButton Command="{Binding AddCommand}" Visual="{DynamicResource appbar_user_add}">Add</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding AttachCommand}" Visual="{DynamicResource appbar_page_add}">Attach</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding SendCommand}" Visual="{DynamicResource appbar_email}">Send</ctrl:AppBarButton>
+            </WrapPanel>
+            <ctrl:FormGrid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Recipients</Label>
+                <ctrl:RemovableItemsControl Grid.Row="0" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Recipients}">
+                    <ctrl:RemovableItemsControl.ItemTextTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource RecipientToStringConverter}}" />
+                        </DataTemplate>
+                    </ctrl:RemovableItemsControl.ItemTextTemplate>
+                </ctrl:RemovableItemsControl>
+                <Label Grid.Row="1" Grid.Column="0">Subject</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Subject}" />
+                <Label Grid.Row="2" Grid.Column="0">Attachments</Label>
+                <ctrl:RemovableItemsControl Grid.Row="2" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Attachments}">
+                    <ctrl:RemovableItemsControl.ItemTextTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource AttachmentToStringConverter}}" />
+                        </DataTemplate>
+                    </ctrl:RemovableItemsControl.ItemTextTemplate>
+                </ctrl:RemovableItemsControl>
+                <Label Grid.Row="3" Grid.Column="0">Body</Label>
+                <TextBox Grid.Row="3" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" Text="{Binding Body}" />
+            </ctrl:FormGrid>
+        </DockPanel>
+        <scw:ChildWindow Title="Add a New Recipient" DataContext="{Binding Recipient}" IsOpen="{Binding Active}">
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                    <ctrl:AppBarButton Command="{Binding AddCommand}" Visual="{DynamicResource appbar_add}">Add</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                </WrapPanel>
+                <ctrl:ResponsiveFormGrid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <RadioButton Grid.Row="0" Grid.Column="0" GroupName="IsResponder" IsChecked="{Binding IsResponder}">Responder</RadioButton>
+                    <ComboBox Grid.Row="0" Grid.Column="1"
+                              ItemsSource="{Binding DataContext.Responders, ElementName=Root}"
+                              SelectedItem="{Binding Responder}"
+                              IsEnabled="{Binding IsResponder}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource ResponderToNameEmailConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <RadioButton Grid.Row="1" Grid.Column="0" GroupName="IsResponder" IsChecked="{Binding IsResponder, Converter={StaticResource BoolInverter}}">Email Address</RadioButton>
+                    <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding EmailAddress}" IsEnabled="{Binding IsResponder, Converter={StaticResource BoolInverter}}" />
+                </ctrl:ResponsiveFormGrid>
+            </DockPanel>
+        </scw:ChildWindow>
+    </Grid>
+</UserControl>

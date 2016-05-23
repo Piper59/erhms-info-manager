@@ -85,7 +85,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Email()
         {
-            // TODO: Implement
+            Locator.Main.OpenEmailView(new EmailViewModel(SelectedItems.Cast<Responder>()));
         }
 
         private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)

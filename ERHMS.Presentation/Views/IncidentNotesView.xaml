@@ -15,6 +15,6 @@
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
-        <ItemsControl Style="{StaticResource IncidentNotes}" ItemsSource="{Binding Notes}" />
+        <ItemsControl Style="{StaticResource IncidentNoteList}" ItemsSource="{Binding Notes}" />
     </DockPanel>
 </UserControl>

@@ -84,7 +84,7 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <scw:ChildWindow Name="SurveyWindow" Title="Publish to Web" DataContext="{Binding SurveyModel}" IsOpen="{Binding Active}">
+        <scw:ChildWindow Name="Survey" Title="Publish to Web" DataContext="{Binding SurveyModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding PublishCommand}" Visual="{DynamicResource appbar_page_upload}">Publish</ctrl:AppBarButton>
@@ -107,7 +107,7 @@
                     <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding EndDate, Mode=TwoWay}" />
                     <Label Grid.Row="3" Grid.Column="0">Response Type</Label>
                     <ComboBox Grid.Row="3" Grid.Column="1"
-                              ItemsSource="{Binding DataContext.ResponseTypes, ElementName=SurveyWindow}"
+                              ItemsSource="{Binding DataContext.ResponseTypes, ElementName=Survey}"
                               SelectedItem="{Binding ResponseType}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>

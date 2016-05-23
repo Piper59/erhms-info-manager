@@ -119,7 +119,7 @@
 
     <sys:Double x:Key="LargerFontSize">16.0</sys:Double>
 
-    <Style x:Key="IncidentNotes" TargetType="{x:Type ItemsControl}">
+    <Style x:Key="IncidentNoteList" TargetType="{x:Type ItemsControl}">
         <Style.Resources>
             <conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         </Style.Resources>
@@ -166,6 +166,56 @@
 
     <Style x:Key="Numeric" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MetroTextBlock}">
         <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+
+    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MetroRadioButton}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <ContentControl FlowDirection="LeftToRight" Content="{Binding}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="FlowDirection" Value="RightToLeft" />
+        <Setter Property="Margin" Value="0,0,5,5" />
+    </Style>
+
+    <Style TargetType="{x:Type ctrl:RemovableItemsControl}">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel MinHeight="31" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border BorderThickness="1" MinHeight="26" Margin="0,0,5,5" SnapsToDevicePixels="True">
+                        <Border.Style>
+                            <Style>
+                                <Setter Property="Border.BorderBrush" Value="{StaticResource GrayBrush6}" />
+                                <Style.Triggers>
+                                    <Trigger Property="Border.IsMouseOver" Value="True">
+                                        <Setter Property="Border.BorderBrush" Value="{StaticResource GrayBrush2}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <ContentPresenter ContentTemplate="{Binding ItemTextTemplate, RelativeSource={RelativeSource AncestorType={x:Type ctrl:RemovableItemsControl}}}" />
+                            <Button Command="{Binding RemoveCommand}" Margin="3,0,0,0" Style="{StaticResource ChromelessButtonStyle}">
+                                <Rectangle Width="8" Height="8" Fill="{DynamicResource BlackBrush}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Uniform" Visual="{DynamicResource appbar_close}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource MetroScrollViewer}">

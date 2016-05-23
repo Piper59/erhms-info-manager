@@ -221,7 +221,9 @@
     </Compile>
     <Compile Include="Controls\FormGrid.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
+    <Compile Include="Controls\RemovableItemsControl.cs" />
     <Compile Include="Controls\ResponsiveFormGrid.cs" />
+    <Compile Include="Converters\AttachmentToStringConverter.cs" />
     <Compile Include="Converters\BindingToDescriptionConverter.cs" />
     <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
@@ -233,7 +235,9 @@
     <Compile Include="Converters\NullToBoolConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
+    <Compile Include="Converters\RecipientToStringConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />
+    <Compile Include="Converters\ResponderToNameEmailConverter.cs" />
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
     <Compile Include="Converters\StringToUppercaseStringConverter.cs" />
@@ -265,6 +269,7 @@
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
+    <Compile Include="ViewModels\EmailViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
@@ -297,6 +302,9 @@
     </Compile>
     <Compile Include="Views\DataSourceListView.xaml.cs">
       <DependentUpon>DataSourceListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmailView.xaml.cs">
+      <DependentUpon>EmailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HelpView.xaml.cs">
       <DependentUpon>HelpView.xaml</DependentUpon>
@@ -415,6 +423,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataSourceListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EmailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

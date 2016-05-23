@@ -123,8 +123,8 @@ namespace ERHMS.Presentation.ViewModels
                         StartDate = now,
                         EndDate = now.AddMonths(1),
                         ResponseType = ResponseType.Single,
-                        Intro = "",
-                        Outro = "",
+                        Intro = null,
+                        Outro = null,
                         Draft = false,
                         PublishKey = Guid.NewGuid()
                     };
@@ -232,7 +232,7 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Activate()
             {
-                Name = "";
+                Name = null;
                 Active = true;
             }
 
