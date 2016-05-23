@@ -150,7 +150,9 @@ namespace ERHMS.EpiInfo
         public static void Save(this Configuration @this)
         {
             Configuration.Save(@this);
-            File.Copy(@this.ConfigFilePath, Configuration.DefaultConfigurationPath, true);
+            FileInfo defaultConfigurationFile = new FileInfo(Configuration.DefaultConfigurationPath);
+            defaultConfigurationFile.Directory.Create();
+            File.Copy(@this.ConfigFilePath, defaultConfigurationFile.FullName, true);
         }
 
         public static void Refresh(this Configuration @this, bool save)
