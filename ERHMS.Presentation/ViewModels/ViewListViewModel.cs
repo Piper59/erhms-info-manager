@@ -20,6 +20,83 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ViewListViewModel : ListViewModelBase<View>
     {
+        public class ResponderInternalViewModel : ViewModelBase
+        {
+            private bool active;
+            public bool Active
+            {
+                get { return active; }
+                set { Set(() => Active, ref active, value); }
+            }
+
+            public View View { get; private set; }
+
+            private ICollection<Responder> responders;
+            public ICollection<Responder> Responders
+            {
+                get { return responders; }
+                set { Set(() => Responders, ref responders, value); }
+            }
+
+            private Responder selectedResponder;
+            public Responder SelectedResponder
+            {
+                get { return selectedResponder; }
+                set { Set(() => SelectedResponder, ref selectedResponder, value); }
+            }
+
+            public RelayCommand ContinueCommand { get; private set; }
+            public RelayCommand CancelCommand { get; private set; }
+
+            public ResponderInternalViewModel()
+            {
+                Refresh();
+                ContinueCommand = new RelayCommand(Continue);
+                CancelCommand = new RelayCommand(Cancel);
+                Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
+            }
+
+            private void Refresh()
+            {
+                Responders = DataContext.Responders.SelectByDeleted(false)
+                    .OrderBy(responder => responder.LastName)
+                    .ThenBy(responder => responder.FirstName)
+                    .ToList();
+            }
+
+            public void Reset(View view)
+            {
+                View = view;
+                SelectedResponder = null;
+            }
+
+            public void Continue()
+            {
+                if (SelectedResponder == null)
+                {
+                    Enter.OpenView(View);
+                }
+                else
+                {
+                    Enter.OpenView(View, new
+                    {
+                        ResponderId = SelectedResponder.ResponderId
+                    });
+                }
+                Active = false;
+            }
+
+            public void Cancel()
+            {
+                Active = false;
+            }
+
+            private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)
+            {
+                Refresh();
+            }
+        }
+
         public Incident Incident { get; private set; }
 
         public string IncidentId
@@ -27,6 +104,7 @@ namespace ERHMS.Presentation.ViewModels
             get { return Incident == null ? null : Incident.IncidentId; }
         }
 
+        public ResponderInternalViewModel ResponderModel { get; private set; }
         public SurveyViewModel SurveyModel { get; private set; }
         public AnalysisViewModel PgmModel { get; private set; }
         public AnalysisViewModel CanvasModel { get; private set; }
@@ -74,6 +152,7 @@ namespace ERHMS.Presentation.ViewModels
                 AnalyzeClassicCommand.RaiseCanExecuteChanged();
                 AnalyzeVisualCommand.RaiseCanExecuteChanged();
             };
+            ResponderModel = new ResponderInternalViewModel();
             SurveyModel = new SurveyViewModel();
             PgmModel = new AnalysisViewModel(CreatePgm);
             CanvasModel = new AnalysisViewModel(CreateCanvas);
@@ -128,6 +207,12 @@ namespace ERHMS.Presentation.ViewModels
             return view.Name.EqualsIgnoreCase(DataContext.Responders.View.Name);
         }
 
+        private bool IsResponderLinkedView(View view)
+        {
+            Responder responder;
+            return !IsResponderView(view) && view.Fields.Contains(nameof(responder.ResponderId));
+        }
+
         public void Create()
         {
             string prefix = Incident == null ? null : Incident.Name;
@@ -162,7 +247,15 @@ namespace ERHMS.Presentation.ViewModels
 
         public void EnterData()
         {
-            Enter.OpenView(SelectedItem);
+            if (IsResponderLinkedView(SelectedItem))
+            {
+                ResponderModel.Reset(SelectedItem);
+                ResponderModel.Active = true;
+            }
+            else
+            {
+                Enter.OpenView(SelectedItem);
+            }
         }
 
         public void ViewData()

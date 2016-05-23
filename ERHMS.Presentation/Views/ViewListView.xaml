@@ -11,6 +11,7 @@
              d:DesignWidth="640" d:DesignHeight="480">
     <UserControl.Resources>
         <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
+        <conv:ResponderToNameConverter x:Key="ResponderToNameConverter" />
         <conv:ResponseTypeToDescriptionConverter x:Key="ResponseTypeToDescriptionConverter" />
     </UserControl.Resources>
     <Grid>
@@ -87,6 +88,25 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
+        <scw:ChildWindow Title="Select a Responder" DataContext="{Binding ResponderModel}" IsOpen="{Binding Active}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Margin="0,0,0,5" TextWrapping="Wrap">
+                    The selected form appears to contain a responder ID field.
+                    To prepopulate this field, select a responder from the list below.
+                </TextBlock>
+                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                    <ctrl:AppBarButton Command="{Binding ContinueCommand}" Visual="{DynamicResource appbar_arrow_right}">Continue</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                </WrapPanel>
+                <ComboBox ItemsSource="{Binding Responders}" SelectedItem="{Binding SelectedResponder}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource ResponderToNameConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </DockPanel>
+        </scw:ChildWindow>
         <scw:ChildWindow Name="Survey" Title="Publish to Web" DataContext="{Binding SurveyModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">

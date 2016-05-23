@@ -14,7 +14,15 @@ namespace ERHMS.Presentation.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Convert((Responder)value);
+            Responder responder = value as Responder;
+            if (responder == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Convert(responder);
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
