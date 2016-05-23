@@ -172,6 +172,11 @@ namespace ERHMS.Presentation.ViewModels
                 .ToList();
         }
 
+        public void SetSelectedView(string viewName)
+        {
+            SelectedView = Views.SingleOrDefault(view => view.Name.EqualsIgnoreCase(viewName));
+        }
+
         public void Add()
         {
             Recipient = new RecipientViewModel(Recipients)

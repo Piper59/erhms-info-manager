@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Domain;
+using ERHMS.EpiInfo;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -118,7 +119,7 @@ namespace ERHMS.Presentation.ViewModels
             };
             AddCommand = new RelayCommand(Add, CanAddAssignment);
             RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            EmailCommand = new RelayCommand(Email, HasSelectedItem);
+            EmailCommand = new RelayCommand(Email, CanEmail);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
             Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
@@ -135,6 +136,11 @@ namespace ERHMS.Presentation.ViewModels
         public bool CanAddAssignment()
         {
             return SelectedView != null && Responders.HasSelectedItem();
+        }
+
+        public bool CanEmail()
+        {
+            return HasSelectedItem() && SelectedItems.Cast<AssignmentViewModel>().All(assignment => assignment.View == SelectedItem.View);
         }
 
         protected override ICollectionView GetItems()
@@ -204,7 +210,17 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Email()
         {
-            // TODO: Implement
+            EmailViewModel email = new EmailViewModel(SelectedItems.Cast<AssignmentViewModel>().Select(assignment => assignment.Responder));
+            if (SelectedItem.View.IsPublished())
+            {
+                email.AppendUrl = true;
+                email.SetSelectedView(SelectedItem.View.Name);
+                if (DataContext.IsResponderLinkedView(SelectedItem.View))
+                {
+                    email.Prepopulate = true;
+                }
+            }
+            Locator.Main.OpenEmailView(email);
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
