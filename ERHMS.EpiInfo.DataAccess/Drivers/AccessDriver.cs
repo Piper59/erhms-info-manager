@@ -1,6 +1,7 @@
 ﻿using ADOX;
 using System.Data.OleDb;
 using System.IO;
+using System.Threading;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
@@ -46,6 +47,22 @@ namespace ERHMS.EpiInfo.DataAccess
             Directory.CreateDirectory(Path.GetDirectoryName(Builder.DataSource));
             Catalog catalog = new Catalog();
             catalog.Create(Builder.ConnectionString);
+            for (int attempt = 1; attempt <= 10; attempt++)
+            {
+                if (attempt > 1)
+                {
+                    Thread.Sleep(1000);
+                }
+                try
+                {
+                    using (OleDbConnection connection = new OleDbConnection(Builder.ConnectionString))
+                    {
+                        connection.Open();
+                    }
+                    return;
+                }
+                catch { }
+            }
         }
     }
 }
