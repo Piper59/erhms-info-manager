@@ -163,15 +163,24 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    ConfirmMessage msg = new ConfirmMessage(
-                        "Change",
-                        string.Format("Change the root directory? {0} will copy your documents and restart when settings are saved.", App.Title));
-                    msg.Confirmed += (sender, e) =>
+                    string path = dialog.GetRootDirectory();
+                    if (path.EqualsIgnoreCase(Settings.Default.RootDirectory))
                     {
-                        RootDirectory = dialog.GetRootDirectory();
-                        RootDirectoryChanged = true;
-                    };
-                    Messenger.Default.Send(msg);
+                        RootDirectory = path;
+                        RootDirectoryChanged = false;
+                    }
+                    else
+                    {
+                        ConfirmMessage msg = new ConfirmMessage(
+                            "Change",
+                            string.Format("Change the Root Directory? {0} will copy your documents and restart when settings are saved.", App.Title));
+                        msg.Confirmed += (sender, e) =>
+                        {
+                            RootDirectory = path;
+                            RootDirectoryChanged = true;
+                        };
+                        Messenger.Default.Send(msg);
+                    }
                 }
             }
         }
@@ -214,18 +223,26 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.WebSurveyKey = WebSurvey.OrganizationKey;
             if (RootDirectoryChanged)
             {
-                configuration = ConfigurationExtensions.ChangeRoot(configuration, new DirectoryInfo(RootDirectory));
-                ICollection<string> dataSources = Settings.Default.DataSources.ToList();
-                Settings.Default.DataSources.Clear();
-                foreach (string dataSource in dataSources)
+                try
                 {
-                    Settings.Default.DataSources.Add(dataSource.Replace(Settings.Default.RootDirectory, RootDirectory));
+                    configuration = ConfigurationExtensions.ChangeRoot(configuration, new DirectoryInfo(RootDirectory));
+                    ICollection<string> dataSources = Settings.Default.DataSources.ToList();
+                    Settings.Default.DataSources.Clear();
+                    foreach (string dataSource in dataSources)
+                    {
+                        Settings.Default.DataSources.Add(dataSource.Replace(Settings.Default.RootDirectory, RootDirectory));
+                    }
+                    Settings.Default.RootDirectory = RootDirectory;
+                    Settings.Default.Save();
+                    configuration.Save();
+                    App.Current.Shutdown();
+                    Application.Restart();
                 }
-                Settings.Default.RootDirectory = RootDirectory;
-                Settings.Default.Save();
-                configuration.Save();
-                App.Current.Shutdown();
-                Application.Restart();
+                catch (UnauthorizedAccessException)
+                {
+                    Log.Current.WarnFormat("Access denied to root directory: {0}", RootDirectory);
+                    Messenger.Default.Send(new NotifyMessage(string.Format("You do not have access to {0}. Settings have not been saved.", RootDirectory)));
+                }
             }
             else
             {

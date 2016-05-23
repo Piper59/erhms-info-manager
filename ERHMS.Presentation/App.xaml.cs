@@ -34,7 +34,19 @@ namespace ERHMS.Presentation
             executer.Executing += (sender, e) =>
             {
                 Log.Current.Debug("Starting up");
-                if (string.IsNullOrEmpty(Settings.Default.RootDirectory))
+                if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
+                {
+                    try
+                    {
+                        ConfigurationExtensions.CreateAndOrLoad();
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Default.RootDirectory);
+                        Settings.Default.RootDirectory = null;
+                    }
+                }
+                while (string.IsNullOrEmpty(Settings.Default.RootDirectory))
                 {
                     Log.Current.Debug("Prompting for root directory");
                     using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
@@ -44,7 +56,17 @@ namespace ERHMS.Presentation
                             string path = dialog.GetRootDirectory();
                             Log.Current.DebugFormat("Setting root directory: {0}", path);
                             Settings.Default.RootDirectory = path;
-                            Settings.Default.Save();
+                            try
+                            {
+                                ConfigurationExtensions.CreateAndOrLoad();
+                                Settings.Default.Save();
+                            }
+                            catch (UnauthorizedAccessException)
+                            {
+                                Log.Current.WarnFormat("Access denied to root directory: {0}", path);
+                                ShowErrorMessage(string.Format("You do not have access to {0}. Please choose another location.", path));
+                                Settings.Default.RootDirectory = null;
+                            }
                         }
                         else
                         {
@@ -53,7 +75,6 @@ namespace ERHMS.Presentation
                         }
                     }
                 }
-                ConfigurationExtensions.CreateAndOrLoad();
                 App app = new App();
                 app.InitializeComponent();
                 MainWindow window = new MainWindow(app.Locator.Main);
@@ -72,6 +93,11 @@ namespace ERHMS.Presentation
             {
                 ShowErrorMessage(string.Format("An instance of {0} is already running.", Title));
             }
+        }
+
+        private static void SetRootDirectory()
+        {
+
         }
 
         private ServiceHost host;
