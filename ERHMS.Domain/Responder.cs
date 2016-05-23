@@ -210,6 +210,18 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(ContactPhoneNumber), value); }
         }
 
+        public string Occupation
+        {
+            get { return GetProperty<string>(nameof(Occupation)); }
+            set { SetProperty(nameof(Occupation), value); }
+        }
+
+        public bool IsVolunteer
+        {
+            get { return GetProperty<bool>(nameof(IsVolunteer)); }
+            set { SetProperty(nameof(IsVolunteer), value); }
+        }
+
         public string OrganizationName
         {
             get { return GetProperty<string>(nameof(OrganizationName)); }
@@ -262,18 +274,6 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>(nameof(OrganizationPhoneNumber)); }
             set { SetProperty(nameof(OrganizationPhoneNumber), value); }
-        }
-
-        public string Occupation
-        {
-            get { return GetProperty<string>(nameof(Occupation)); }
-            set { SetProperty(nameof(Occupation), value); }
-        }
-
-        public bool IsVolunteer
-        {
-            get { return GetProperty<bool>(nameof(IsVolunteer)); }
-            set { SetProperty(nameof(IsVolunteer), value); }
         }
 
         public string UnionName

@@ -169,6 +169,18 @@
             <mah:MetroTabItem Header="Organization">
                 <ScrollViewer>
                     <StackPanel>
+                        <GroupBox Header="Role">
+                            <ctrl:FormGrid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0">Occupation</Label>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Occupation}" />
+                                <Label Grid.Row="1" Grid.Column="0">Volunteer</Label>
+                                <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsVolunteer}" />
+                            </ctrl:FormGrid>
+                        </GroupBox>
                         <GroupBox Header="Contact">
                             <ctrl:FormGrid>
                                 <Grid.RowDefinitions>
@@ -201,18 +213,6 @@
                                 <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding OrganizationEmailAddress}" />
                                 <Label Grid.Row="8" Grid.Column="0">Phone Number</Label>
                                 <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding OrganizationPhoneNumber}" />
-                            </ctrl:FormGrid>
-                        </GroupBox>
-                        <GroupBox Header="Role">
-                            <ctrl:FormGrid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Label Grid.Row="0" Grid.Column="0">Occupation</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Occupation}" />
-                                <Label Grid.Row="1" Grid.Column="0">Volunteer</Label>
-                                <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsVolunteer}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                         <GroupBox Header="Union">
