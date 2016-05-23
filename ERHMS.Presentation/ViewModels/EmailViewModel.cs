@@ -201,10 +201,44 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        private bool Validate()
+        {
+            ICollection<string> fields = new List<string>();
+            if (Recipients.Count == 0)
+            {
+                fields.Add("Recipients");
+            }
+            if (string.IsNullOrWhiteSpace(Subject))
+            {
+                fields.Add("Subject");
+            }
+            if (string.IsNullOrWhiteSpace(Body))
+            {
+                fields.Add("Body");
+            }
+            if (fields.Count > 0)
+            {
+                NotifyRequired(fields);
+                return false;
+            }
+            else if (AppendUrl && SelectedView == null)
+            {
+                Messenger.Default.Send(new NotifyMessage("Please select a form to append a web survey URL."));
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void Send()
         {
-            // TODO: Validate fields
             // TODO: Handle errors
+            if (!Validate())
+            {
+                return;
+            }
             if (!Email.IsConfigured())
             {
                 RequestConfiguration("Please configure email settings.");

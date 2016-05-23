@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
              mc:Ignorable="d" 
              d:DesignWidth="640" d:DesignHeight="480"
@@ -40,9 +41,11 @@
                     </ctrl:RemovableItemsControl.ItemTextTemplate>
                 </ctrl:RemovableItemsControl>
                 <Label Grid.Row="1" Grid.Column="0">Subject</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Subject}" />
+                <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding Subject}" />
                 <Label Grid.Row="2" Grid.Column="0">Body</Label>
-                <TextBox Grid.Row="2" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" Text="{Binding Body}" />
+                <TextBox Grid.Row="2" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                         mah:TextBoxHelper.Watermark="Required"
+                         Text="{Binding Body}" />
                 <Label Grid.Row="3" Grid.Column="0">Attachments</Label>
                 <ctrl:RemovableItemsControl Grid.Row="3" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Attachments}">
                     <ctrl:RemovableItemsControl.ItemTextTemplate>

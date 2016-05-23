@@ -130,7 +130,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            Title = GetTitleWithIncidentName("Assignments", Incident);
+            Title = GetTitle("Assignments", Incident);
         }
 
         public bool CanAddAssignment()

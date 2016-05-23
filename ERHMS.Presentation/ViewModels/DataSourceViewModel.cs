@@ -6,6 +6,7 @@ using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Project = ERHMS.EpiInfo.Project;
@@ -158,6 +159,35 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        private bool Validate()
+        {
+            ICollection<string> fields = new List<string>();
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                fields.Add("Name");
+            }
+            if (Provider == DataProvider.SqlServer)
+            {
+                if (string.IsNullOrWhiteSpace(SqlServer.DataSource))
+                {
+                    fields.Add("Server Name");
+                }
+                if (string.IsNullOrWhiteSpace(SqlServer.InitialCatalog))
+                {
+                    fields.Add("Database Name");
+                }
+            }
+            if (fields.Count > 0)
+            {
+                NotifyRequired(fields);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         private void Create(FileInfo file, IDataDriver driver, bool initialize)
         {
             if (initialize)
@@ -181,8 +211,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            // TODO: Validate fields
             // TODO: Handle errors
+            if (!Validate())
+            {
+                return;
+            }
             FileInfo file = Location.GetFile(Path.Combine(Name, Path.ChangeExtension(Name, Project.FileExtension)));
             if (file.Exists)
             {

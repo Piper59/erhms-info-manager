@@ -119,7 +119,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            Title = GetTitleWithIncidentName("Roster", Incident);
+            Title = GetTitle("Roster", Incident);
         }
 
         public void Refresh()

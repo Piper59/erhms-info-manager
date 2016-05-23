@@ -1,5 +1,8 @@
 ﻿using ERHMS.Domain;
+using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 
 namespace ERHMS.Presentation.ViewModels
@@ -88,9 +91,30 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        private bool Validate()
+        {
+            if (Responder == null && string.IsNullOrWhiteSpace(EmailAddress))
+            {
+                Messenger.Default.Send(new NotifyMessage("Please select a Responder or enter an Email Address."));
+                return false;
+            }
+            else if (!IsResponder && !Email.IsValidAddress(EmailAddress))
+            {
+                Messenger.Default.Send(new NotifyMessage("Please enter a valid Email Address."));
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void Add()
         {
-            // TODO: Validate fields
+            if (!Validate())
+            {
+                return;
+            }
             Container.Add(this);
             Active = false;
         }

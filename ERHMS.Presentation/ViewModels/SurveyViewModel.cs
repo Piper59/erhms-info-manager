@@ -128,9 +128,29 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        private bool Validate()
+        {
+            ICollection<string> fields = new List<string>();
+            if (string.IsNullOrWhiteSpace(Survey.Title))
+            {
+                fields.Add("Title");
+            }
+            if (fields.Count > 0)
+            {
+                NotifyRequired(fields);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         public void Publish()
         {
-            // TODO: Validate fields
+            if (!Validate())
+            {
+                return;
+            }
             bool success = false;
             ConfigurationError error = ConfigurationError.None;
             BlockMessage msg = new BlockMessage("Publishing form to web \u2026");

@@ -44,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            Title = GetTitleWithIncidentName("Notes", Incident);
+            Title = GetTitle("Notes", Incident);
         }
 
         public void Refresh()

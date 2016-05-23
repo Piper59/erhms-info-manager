@@ -176,9 +176,31 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        private bool Validate()
+        {
+            Uri uri;
+            if (!string.IsNullOrWhiteSpace(Email.Sender) && !Utility.Email.IsValidAddress(Email.Sender))
+            {
+                Messenger.Default.Send(new NotifyMessage("Please enter a valid Sender Address."));
+                return false;
+            }
+            else if (!string.IsNullOrWhiteSpace(WebSurvey.Address) && !Uri.TryCreate(WebSurvey.Address, UriKind.Absolute, out uri))
+            {
+                Messenger.Default.Send(new NotifyMessage("Please enter a valid Endpoint Address."));
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void Save()
         {
-            // TODO: Validate fields
+            if (!Validate())
+            {
+                return;
+            }
             Configuration configuration = Configuration.GetNewInstance();
             Settings.Default.LogLevel = LogLevel;
             Settings.Default.EmailHost = Email.Host;

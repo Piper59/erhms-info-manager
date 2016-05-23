@@ -45,9 +45,43 @@ namespace ERHMS.Presentation.ViewModels
                 .ToList();
         }
 
+        private bool Validate()
+        {
+            ICollection<string> fields = new List<string>();
+            if (string.IsNullOrWhiteSpace(Responder.FirstName))
+            {
+                fields.Add("First Name");
+            }
+            if (string.IsNullOrWhiteSpace(Responder.LastName))
+            {
+                fields.Add("Last Name");
+            }
+            if (string.IsNullOrWhiteSpace(Responder.EmailAddress))
+            {
+                fields.Add("Email Address");
+            }
+            if (fields.Count > 0)
+            {
+                NotifyRequired(fields);
+                return false;
+            }
+            else if (!Email.IsValidAddress(Responder.EmailAddress))
+            {
+                Messenger.Default.Send(new NotifyMessage("Please enter a valid Email Address."));
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void Save()
         {
-            // TODO: Validate fields
+            if (!Validate())
+            {
+                return;
+            }
             DataContext.Responders.Save(Responder);
             Messenger.Default.Send(new ToastMessage("Responder has been saved."));
             Messenger.Default.Send(new RefreshListMessage<Responder>());

@@ -1,6 +1,10 @@
 ﻿using ERHMS.DataAccess;
 using ERHMS.Domain;
+using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using System;
+using System.Collections.Generic;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -42,7 +46,7 @@ namespace ERHMS.Presentation.ViewModels
             Closed = true;
         }
 
-        protected string GetTitleWithIncidentName(string title, Incident incident)
+        protected string GetTitle(string title, Incident incident)
         {
             if (incident == null)
             {
@@ -53,6 +57,14 @@ namespace ERHMS.Presentation.ViewModels
                 string incidentName = incident.New ? "New Incident" : incident.Name;
                 return string.Format("{0} {1}", incidentName, title).Trim();
             }
+        }
+
+        protected void NotifyRequired(IEnumerable<string> fields)
+        {
+            Messenger.Default.Send(new NotifyMessage(string.Format(
+                "The following fields are required:{0}{0}{1}",
+                Environment.NewLine,
+                string.Join(", ", fields))));
         }
     }
 }

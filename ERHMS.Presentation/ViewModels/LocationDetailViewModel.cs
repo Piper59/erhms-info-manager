@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Maps.MapControl.WPF;
 using Microsoft.Maps.MapControl.WPF.Core;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Coordinates = Microsoft.Maps.MapControl.WPF.Location;
 using Location = ERHMS.Domain.Location;
@@ -139,9 +140,30 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        private bool Validate()
+        {
+            ICollection<string> fields = new List<string>();
+            if (string.IsNullOrWhiteSpace(Location.Name))
+            {
+                fields.Add("Name");
+            }
+            if (fields.Count > 0)
+            {
+                NotifyRequired(fields);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void Save()
         {
-            // TODO: Validate fields
+            if (!Validate())
+            {
+                return;
+            }
             DataContext.Locations.Save(Location);
             Messenger.Default.Send(new ToastMessage("Location has been saved."));
             Messenger.Default.Send(new RefreshListMessage<Location>(Location.IncidentId));

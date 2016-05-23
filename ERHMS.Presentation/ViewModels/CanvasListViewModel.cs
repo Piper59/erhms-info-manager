@@ -44,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            Title = GetTitleWithIncidentName("Dashboards", Incident);
+            Title = GetTitle("Dashboards", Incident);
         }
 
         protected override ICollectionView GetItems()

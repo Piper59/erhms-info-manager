@@ -180,7 +180,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            Title = GetTitleWithIncidentName("Forms", Incident);
+            Title = GetTitle("Forms", Incident);
         }
 
         protected override ICollectionView GetItems()
