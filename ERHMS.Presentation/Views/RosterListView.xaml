@@ -26,7 +26,6 @@
                                           MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
                                           ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding Responder.ResponderId}" />
                         <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding Responder.LastName}" />
                         <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding Responder.FirstName}" />
                         <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding Responder.EmailAddress}" />
@@ -48,7 +47,6 @@
                                           MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
                                           ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Responder ID" Width="2*" Binding="{Binding Responder.ResponderId}" />
                         <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding Responder.LastName}" />
                         <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding Responder.FirstName}" />
                         <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding Responder.EmailAddress}" />

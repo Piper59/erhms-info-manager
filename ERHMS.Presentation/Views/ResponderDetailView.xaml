@@ -25,26 +25,23 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Label Grid.Row="0" Grid.Column="0">Responder ID</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding ResponderId}" />
-                                <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
-                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                <Label Grid.Row="0" Grid.Column="0">Prefix</Label>
+                                <ComboBox Grid.Row="0" Grid.Column="1"
                                           ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
                                           SelectedItem="{Binding Prefix, TargetNullValue=''}" />
-                                <Label Grid.Row="2" Grid.Column="0">First Name</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding FirstName}" />
-                                <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
-                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MiddleInitial}" />
-                                <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
-                                <TextBox Grid.Row="4" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding LastName}" />
-                                <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
-                                <ComboBox Grid.Row="5" Grid.Column="1"
+                                <Label Grid.Row="1" Grid.Column="0">First Name</Label>
+                                <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding FirstName}" />
+                                <Label Grid.Row="2" Grid.Column="0">Middle Initial</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MiddleInitial}" />
+                                <Label Grid.Row="3" Grid.Column="0">Last Name</Label>
+                                <TextBox Grid.Row="3" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding LastName}" />
+                                <Label Grid.Row="4" Grid.Column="0">Suffix</Label>
+                                <ComboBox Grid.Row="4" Grid.Column="1"
                                           ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
                                           SelectedItem="{Binding Suffix, TargetNullValue=''}" />
-                                <Label Grid.Row="6" Grid.Column="0">Alias</Label>
-                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Alias}" />
+                                <Label Grid.Row="5" Grid.Column="0">Alias</Label>
+                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Alias}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                         <GroupBox Header="Personal">
