@@ -125,14 +125,18 @@ namespace ERHMS.EpiInfo.Analysis
                                 csvFileName,
                                 string.Join(" ", mappings.EscapedTargets)));
                             form.AddCommand(GetReadCommand(projectPath, viewName));
+                            form.AddCommand("TYPEOUT \"Importing data...\"");
                             form.AddCommand(string.Format(
                                 "MERGE {{{0}}}:{1} {2} :: {3}",
                                 csvConnectionString,
                                 csvFileName,
                                 ColumnNames.GLOBAL_RECORD_ID,
                                 mappings.GetKeyTarget()));
+                            form.AddCommand("TYPEOUT \"Data has been imported.\"");
+                            form.Enabled = false;
                             form.ExecuteCommands(() =>
                             {
+                                form.Enabled = true;
                                 IService service = Service.Connect();
                                 if (service != null)
                                 {
