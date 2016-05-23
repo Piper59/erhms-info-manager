@@ -13,55 +13,55 @@ namespace ERHMS.Domain
 
         public string IncidentId
         {
-            get { return GetProperty<string>("IncidentId"); }
-            set { SetProperty("IncidentId", value); }
+            get { return GetProperty<string>(nameof(IncidentId)); }
+            set { SetProperty(nameof(IncidentId), value); }
         }
 
         public string Name
         {
-            get { return GetProperty<string>("Name"); }
-            set { SetProperty("Name", value); }
+            get { return GetProperty<string>(nameof(Name)); }
+            set { SetProperty(nameof(Name), value); }
         }
 
         public string Description
         {
-            get { return GetProperty<string>("Description"); }
-            set { SetProperty("Description", value); }
+            get { return GetProperty<string>(nameof(Description)); }
+            set { SetProperty(nameof(Description), value); }
         }
 
         public Phase Phase
         {
-            get { return (Phase)Enum.Parse(typeof(Phase), GetProperty<string>("Phase")); }
-            set { SetProperty("Phase", value.ToString()); }
+            get { return (Phase)Enum.Parse(typeof(Phase), GetProperty<string>(nameof(Phase))); }
+            set { SetProperty(nameof(Phase), value.ToString()); }
         }
 
         public DateTime? StartDate
         {
-            get { return GetProperty<DateTime?>("StartDate"); }
-            set { SetProperty("StartDate", value); }
+            get { return GetProperty<DateTime?>(nameof(StartDate)); }
+            set { SetProperty(nameof(StartDate), value); }
         }
 
         public DateTime? EndDateEstimate
         {
-            get { return GetProperty<DateTime?>("EndDateEstimate"); }
-            set { SetProperty("EndDateEstimate", value); }
+            get { return GetProperty<DateTime?>(nameof(EndDateEstimate)); }
+            set { SetProperty(nameof(EndDateEstimate), value); }
         }
 
         public DateTime? EndDateActual
         {
-            get { return GetProperty<DateTime?>("EndDateActual"); }
-            set { SetProperty("EndDateActual", value); }
+            get { return GetProperty<DateTime?>(nameof(EndDateActual)); }
+            set { SetProperty(nameof(EndDateActual), value); }
         }
 
         public bool Deleted
         {
-            get { return GetProperty<bool>("Deleted"); }
-            set { SetProperty("Deleted", value); }
+            get { return GetProperty<bool>(nameof(Deleted)); }
+            set { SetProperty(nameof(Deleted), value); }
         }
 
         public Incident()
         {
-            LinkProperties("IncidentId", "Guid");
+            LinkProperties(nameof(IncidentId), nameof(Guid));
         }
     }
 }

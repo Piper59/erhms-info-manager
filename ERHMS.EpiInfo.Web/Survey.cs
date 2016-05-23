@@ -32,63 +32,63 @@ namespace ERHMS.EpiInfo.Web
         public string SurveyId
         {
             get { return surveyId; }
-            set { Set("SurveyId", ref surveyId, value); }
+            set { Set(nameof(SurveyId), ref surveyId, value); }
         }
 
         private string title;
         public string Title
         {
             get { return title; }
-            set { Set("Title", ref title, value); }
+            set { Set(nameof(Title), ref title, value); }
         }
 
         private DateTime startDate;
         public DateTime StartDate
         {
             get { return startDate; }
-            set { Set("StartDate", ref startDate, value.Date); }
+            set { Set(nameof(StartDate), ref startDate, value.Date); }
         }
 
         private DateTime endDate;
         public DateTime EndDate
         {
             get { return endDate; }
-            set { Set("EndDate", ref endDate, value.Date.Add(new TimeSpan(1, 0, 0, -1))); }
+            set { Set(nameof(EndDate), ref endDate, value.Date.Add(new TimeSpan(1, 0, 0, -1))); }
         }
 
         private ResponseType responseType;
         public ResponseType ResponseType
         {
             get { return responseType; }
-            set { Set("ResponseType", ref responseType, value); }
+            set { Set(nameof(ResponseType), ref responseType, value); }
         }
 
         private string intro;
         public string Intro
         {
             get { return intro; }
-            set { Set("Intro", ref intro, value); }
+            set { Set(nameof(Intro), ref intro, value); }
         }
 
         private string outro;
         public string Outro
         {
             get { return outro; }
-            set { Set("Outro", ref outro, value); }
+            set { Set(nameof(Outro), ref outro, value); }
         }
 
         private bool draft;
         public bool Draft
         {
             get { return draft; }
-            set { Set("Draft", ref draft, value); }
+            set { Set(nameof(Draft), ref draft, value); }
         }
 
         private Guid publishKey;
         public Guid PublishKey
         {
             get { return publishKey; }
-            set { Set("PublishKey", ref publishKey, value); }
+            set { Set(nameof(PublishKey), ref publishKey, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

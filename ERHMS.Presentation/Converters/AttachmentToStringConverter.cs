@@ -9,7 +9,7 @@ namespace ERHMS.Presentation.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            EmailViewModel.AttachmentViewModel attachment = (EmailViewModel.AttachmentViewModel)value;
+            AttachmentViewModel attachment = (AttachmentViewModel)value;
             return attachment.File.Name;
         }
 

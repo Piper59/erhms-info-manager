@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Converters;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -11,6 +12,8 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ResponderDetailViewModel : ViewModelBase
     {
+        private static readonly ResponderToNameConverter ResponderToNameConverter = new ResponderToNameConverter();
+
         public Responder Responder { get; private set; }
         public ICollection<string> Prefixes { get; private set; }
         public ICollection<string> Suffixes { get; private set; }
@@ -28,19 +31,11 @@ namespace ERHMS.Presentation.ViewModels
             Genders = GetCodes(DataContext.Genders);
             States = GetCodes(DataContext.States);
             SaveCommand = new RelayCommand(Save);
-            // TODO: Handle ServiceMessage<RecordEventArgs>?
         }
 
         private void UpdateTitle()
         {
-            if (Responder.New)
-            {
-                Title = "New Responder";
-            }
-            else
-            {
-                Title = string.Format("{0}, {1}", Responder.LastName, Responder.FirstName);
-            }
+            Title = Responder.New ? "New Responder" : ResponderToNameConverter.Convert(Responder);
         }
 
         private ICollection<string> GetCodes(CodeRepository codes)

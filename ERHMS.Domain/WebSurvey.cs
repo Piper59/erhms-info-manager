@@ -12,25 +12,25 @@ namespace ERHMS.Domain
 
         public string WebSurveyId
         {
-            get { return GetProperty<string>("WebSurveyId"); }
-            set { SetProperty("WebSurveyId", value); }
+            get { return GetProperty<string>(nameof(WebSurveyId)); }
+            set { SetProperty(nameof(WebSurveyId), value); }
         }
 
         public int ViewId
         {
-            get { return GetProperty<int>("ViewId"); }
-            set { SetProperty("ViewId", value); }
+            get { return GetProperty<int>(nameof(ViewId)); }
+            set { SetProperty(nameof(ViewId), value); }
         }
 
         public string PublishKey
         {
-            get { return GetProperty<string>("PublishKey"); }
-            set { SetProperty("PublishKey", value); }
+            get { return GetProperty<string>(nameof(PublishKey)); }
+            set { SetProperty(nameof(PublishKey), value); }
         }
 
         public WebSurvey()
         {
-            LinkProperties("WebSurveyId", "Guid");
+            LinkProperties(nameof(WebSurveyId), nameof(Guid));
         }
     }
 }

@@ -22,6 +22,11 @@ namespace ERHMS.Presentation
             get { return (App)Application.Current; }
         }
 
+        public static void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -65,7 +70,7 @@ namespace ERHMS.Presentation
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(string.Format("An instance of {0} is already running.", Title), Title, MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowErrorMessage(string.Format("An instance of {0} is already running.", Title));
             }
         }
 
@@ -80,7 +85,7 @@ namespace ERHMS.Presentation
             DispatcherUnhandledException += (sender, e) =>
             {
                 Log.Current.Fatal("Fatal error", e.Exception);
-                MessageBox.Show(string.Format("{0} encountered an error and must shut down.", Title), Title, MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowErrorMessage(string.Format("{0} encountered an error and must shut down.", Title));
                 e.Handled = true;
                 Shutdown();
             };

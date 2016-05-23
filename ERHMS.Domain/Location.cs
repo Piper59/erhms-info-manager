@@ -12,49 +12,49 @@ namespace ERHMS.Domain
 
         public string LocationId
         {
-            get { return GetProperty<string>("LocationId"); }
-            set { SetProperty("LocationId", value); }
+            get { return GetProperty<string>(nameof(LocationId)); }
+            set { SetProperty(nameof(LocationId), value); }
         }
 
         public string IncidentId
         {
-            get { return GetProperty<string>("IncidentId"); }
-            set { SetProperty("IncidentId", value); }
+            get { return GetProperty<string>(nameof(IncidentId)); }
+            set { SetProperty(nameof(IncidentId), value); }
         }
 
         public string Name
         {
-            get { return GetProperty<string>("Name"); }
-            set { SetProperty("Name", value); }
+            get { return GetProperty<string>(nameof(Name)); }
+            set { SetProperty(nameof(Name), value); }
         }
 
         public string Description
         {
-            get { return GetProperty<string>("Description"); }
-            set { SetProperty("Description", value); }
+            get { return GetProperty<string>(nameof(Description)); }
+            set { SetProperty(nameof(Description), value); }
         }
 
         public string Address
         {
-            get { return GetProperty<string>("Address"); }
-            set { SetProperty("Address", value); }
+            get { return GetProperty<string>(nameof(Address)); }
+            set { SetProperty(nameof(Address), value); }
         }
 
         public double? Latitude
         {
-            get { return GetProperty<double?>("Latitude"); }
-            set { SetProperty("Latitude", value); }
+            get { return GetProperty<double?>(nameof(Latitude)); }
+            set { SetProperty(nameof(Latitude), value); }
         }
 
         public double? Longitude
         {
-            get { return GetProperty<double?>("Longitude"); }
-            set { SetProperty("Longitude", value); }
+            get { return GetProperty<double?>(nameof(Longitude)); }
+            set { SetProperty(nameof(Longitude), value); }
         }
 
         public Location()
         {
-            LinkProperties("LocationId", "Guid");
+            LinkProperties(nameof(LocationId), nameof(Guid));
         }
     }
 }

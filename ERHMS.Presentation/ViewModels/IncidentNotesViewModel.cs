@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -43,15 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            if (Incident == null)
-            {
-                Title = "Notes";
-            }
-            else
-            {
-                string incidentName = Incident.New ? "New Incident" : Incident.Name;
-                Title = string.Format("{0} Notes", incidentName).Trim();
-            }
+            Title = GetTitleWithIncidentName("Notes", Incident);
         }
 
         public void Refresh()
@@ -67,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
             note.IncidentId = Incident.IncidentId;
             note.PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName != "Content")
+                if (e.PropertyName != nameof(note.Content))
                 {
                     SaveCommand.RaiseCanExecuteChanged();
                 }
@@ -98,7 +91,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshIncidentNoteListMessage(RefreshListMessage<IncidentNote> msg)
         {
-            if (string.Equals(msg.IncidentId, Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, Incident.IncidentId))
             {
                 Refresh();
             }

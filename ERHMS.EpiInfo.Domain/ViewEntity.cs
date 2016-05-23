@@ -72,15 +72,15 @@ namespace ERHMS.EpiInfo.Domain
 
         public ViewEntity()
         {
-            LinkProperties(ColumnNames.UNIQUE_KEY, "UniqueKey");
-            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, "GlobalRecordId");
-            LinkProperties(ColumnNames.FOREIGN_KEY, "ForeignKey");
-            LinkProperties(ColumnNames.REC_STATUS, "RecordStatus");
-            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, "FirstSaveLogonName");
-            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_TIME, "FirstSaveTime");
-            LinkProperties(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, "LastSaveLogonName");
-            LinkProperties(ColumnNames.RECORD_LAST_SAVE_TIME, "LastSaveTime");
-            LinkProperties(ColumnNames.REC_STATUS, "Deleted");
+            LinkProperties(ColumnNames.UNIQUE_KEY, nameof(UniqueKey));
+            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, nameof(GlobalRecordId));
+            LinkProperties(ColumnNames.FOREIGN_KEY, nameof(ForeignKey));
+            LinkProperties(ColumnNames.REC_STATUS, nameof(RecordStatus));
+            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, nameof(FirstSaveLogonName));
+            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_TIME, nameof(FirstSaveTime));
+            LinkProperties(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, nameof(LastSaveLogonName));
+            LinkProperties(ColumnNames.RECORD_LAST_SAVE_TIME, nameof(LastSaveTime));
+            LinkProperties(ColumnNames.REC_STATUS, nameof(Deleted));
         }
 
         public void SetDeleted(bool deleted)

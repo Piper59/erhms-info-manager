@@ -35,14 +35,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            if (Incident.New)
-            {
-                Title = "New Incident";
-            }
-            else
-            {
-                Title = Incident.Name;
-            }
+            Title = Incident.New ? "New Incident" : Incident.Name;
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)

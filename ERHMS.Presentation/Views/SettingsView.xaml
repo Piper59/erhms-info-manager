@@ -31,7 +31,7 @@
                                   SelectedItem="{Binding LogLevel}" />
                         <Label Grid.Row="1" Grid.Column="0">Root Directory</Label>
                         <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Text="{Binding RootDirectory}" />
-                        <Button Grid.Row="1" Grid.Column="2" Command="{Binding BrowseCommand}" Margin="5,0,0,5" Style="{StaticResource AccentButton}">Browse</Button>
+                        <Button Grid.Row="1" Grid.Column="2" Margin="5,0,0,5" Style="{StaticResource AccentButton}" Command="{Binding BrowseCommand}">Browse</Button>
                     </ctrl:FormGrid>
                 </GroupBox>
                 <GroupBox Header="Email" DataContext="{Binding Email}">

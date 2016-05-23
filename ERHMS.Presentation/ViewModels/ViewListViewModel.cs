@@ -3,8 +3,6 @@ using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analysis;
 using ERHMS.EpiInfo.AnalysisDashboard;
-using ERHMS.EpiInfo.DataAccess;
-using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Enter;
 using ERHMS.EpiInfo.ImportExport;
 using ERHMS.EpiInfo.MakeView;
@@ -13,240 +11,15 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using Action = System.Action;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class ViewListViewModel : ListViewModelBase<View>
     {
-        public class SurveyViewModel : ViewModelBase
-        {
-            private static void RequestConfigurationInternal(string message)
-            {
-                NotifyMessage msg = new NotifyMessage(message);
-                msg.Dismissed += (sender, e) =>
-                {
-                    Locator.Main.OpenSettingsView();
-                };
-                Messenger.Default.Send(msg);
-            }
-
-            public static void RequestConfiguration()
-            {
-                RequestConfigurationInternal("Please configure web survey settings.");
-            }
-
-            public static void RequestConfiguration(string reason)
-            {
-                RequestConfigurationInternal(string.Format("{0} Please verify web survey settings.", reason));
-            }
-
-            public static void RequestConfiguration(ConfigurationError error)
-            {
-                RequestConfiguration(error.GetMessage());
-            }
-
-            public ICollection<ResponseType> ResponseTypes { get; private set; }
-
-            private bool active;
-            public bool Active
-            {
-                get { return active; }
-                set { Set(() => Active, ref active, value); }
-            }
-
-            public View View { get; private set; }
-
-            private Survey survey;
-            public Survey Survey
-            {
-                get { return survey; }
-                set { Set(() => Survey, ref survey, value); }
-            }
-
-            public RelayCommand PublishCommand { get; private set; }
-            public RelayCommand CancelCommand { get; private set; }
-
-            public SurveyViewModel()
-            {
-                ResponseTypes = EnumExtensions.GetValues<ResponseType>()
-                    .Where(responseType => responseType != ResponseType.Unspecified)
-                    .ToList();
-                PublishCommand = new RelayCommand(Publish);
-                CancelCommand = new RelayCommand(Cancel);
-            }
-
-            public void Activate(View view)
-            {
-                View = view;
-                if (view.IsPublished())
-                {
-                    ConfigurationError error = ConfigurationError.None;
-                    BlockMessage msg = new BlockMessage("Retrieving web survey details \u2026");
-                    msg.Executing += (sender, e) =>
-                    {
-                        Service service = new Service();
-                        error = service.CheckConfiguration();
-                        if (error == ConfigurationError.None)
-                        {
-                            Survey = service.GetSurvey(view);
-                        }
-                    };
-                    msg.Executed += (sender, e) =>
-                    {
-                        if (error != ConfigurationError.None)
-                        {
-                            RequestConfiguration(error);
-                        }
-                        else if (Survey == null)
-                        {
-                            RequestConfiguration("Failed to retrieve web survey details.");
-                        }
-                        else
-                        {
-                            Active = true;
-                        }
-                    };
-                    Messenger.Default.Send(msg);
-                }
-                else
-                {
-                    DateTime now = DateTime.Now;
-                    Survey = new Survey
-                    {
-                        Title = view.Name,
-                        StartDate = now,
-                        EndDate = now.AddMonths(1),
-                        ResponseType = ResponseType.Single,
-                        Intro = null,
-                        Outro = null,
-                        Draft = false,
-                        PublishKey = Guid.NewGuid()
-                    };
-                    Active = true;
-                }
-            }
-
-            public void Publish()
-            {
-                // TODO: Validate fields
-                bool success = false;
-                ConfigurationError error = ConfigurationError.None;
-                BlockMessage msg = new BlockMessage("Publishing form to web \u2026");
-                msg.Executing += (sender, e) =>
-                {
-                    Service service = new Service();
-                    error = service.CheckConfiguration();
-                    if (error != ConfigurationError.None)
-                    {
-                        return;
-                    }
-                    if (View.IsPublished())
-                    {
-                        success = service.Republish(View, Survey);
-                    }
-                    else
-                    {
-                        success = service.Publish(View, Survey);
-                        if (success)
-                        {
-                            WebSurvey webSurvey = DataContext.WebSurveys.Create();
-                            webSurvey.WebSurveyId = Survey.SurveyId;
-                            webSurvey.ViewId = View.Id;
-                            webSurvey.PublishKey = Survey.PublishKey.ToString();
-                            DataContext.WebSurveys.Save(webSurvey);
-                        }
-                    }
-                };
-                msg.Executed += (sender, e) =>
-                {
-                    if (error != ConfigurationError.None)
-                    {
-                        RequestConfiguration(error);
-                    }
-                    else if (!success)
-                    {
-                        RequestConfiguration("Failed to publish form to web.");
-                    }
-                    else
-                    {
-                        Active = false;
-                        Messenger.Default.Send(new ToastMessage("Form has been published to web."));
-                    }
-                };
-                Messenger.Default.Send(msg);
-            }
-
-            public void Cancel()
-            {
-                Active = false;
-            }
-        }
-
-        public class AnalysisViewModel : ViewModelBase
-        {
-            private bool active;
-            public bool Active
-            {
-                get { return active; }
-                set { Set(() => Active, ref active, value); }
-            }
-
-            private string name;
-            public string Name
-            {
-                get
-                {
-                    return name;
-                }
-                set
-                {
-                    if (Set(() => Name, ref name, value))
-                    {
-                        CreateCommand.RaiseCanExecuteChanged();
-                    }
-                }
-            }
-
-            public Action Callback { get; private set; }
-
-            public RelayCommand CreateCommand { get; private set; }
-            public RelayCommand CancelCommand { get; private set; }
-
-            public AnalysisViewModel(Action callback)
-            {
-                Callback = callback;
-                CreateCommand = new RelayCommand(Create, HasName);
-                CancelCommand = new RelayCommand(Cancel);
-            }
-
-            public bool HasName()
-            {
-                return !string.IsNullOrWhiteSpace(Name);
-            }
-
-            public void Activate()
-            {
-                Name = null;
-                Active = true;
-            }
-
-            public void Create()
-            {
-                Callback();
-            }
-
-            public void Cancel()
-            {
-                Active = false;
-            }
-        }
-
         public Incident Incident { get; private set; }
 
         public string IncidentId
@@ -328,15 +101,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            if (Incident == null)
-            {
-                Title = "Forms";
-            }
-            else
-            {
-                string incidentName = Incident.New ? "New Incident" : Incident.Name;
-                Title = string.Format("{0} Forms", incidentName).Trim();
-            }
+            Title = GetTitleWithIncidentName("Forms", Incident);
         }
 
         protected override ICollectionView GetItems()
@@ -360,7 +125,8 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            MakeView.AddView(DataContext.Project, Incident == null ? null : Incident.Name, IncidentId);
+            string prefix = Incident == null ? null : Incident.Name;
+            MakeView.AddView(DataContext.Project, prefix, IncidentId);
         }
 
         public void Edit()
@@ -370,11 +136,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                "Are you sure you want to delete this form?",
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected form?");
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.Assignments.DeleteByViewId(SelectedItem.Id);
@@ -423,7 +185,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (ImportExport.ImportFromView(SelectedItem))
             {
-                App.Current.Service.OnViewDataImported(SelectedItem.Project.FilePath, SelectedItem.Name);
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
             }
         }
 
@@ -431,7 +193,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (ImportExport.ImportFromPackage(SelectedItem))
             {
-                App.Current.Service.OnViewDataImported(SelectedItem.Project.FilePath, SelectedItem.Name);
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
             }
         }
 
@@ -442,73 +204,18 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromWeb()
         {
-            if (!SelectedItem.IsPublished())
+            SurveyViewModel surveyModel = new SurveyViewModel(SelectedItem);
+            if (surveyModel.Import())
             {
-                Messenger.Default.Send(new NotifyMessage("Form has not been published to web."));
-                return;
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
             }
-            bool success = false;
-            ConfigurationError error = ConfigurationError.None;
-            Survey survey = null;
-            BlockMessage msg = new BlockMessage("Importing data from web \u2026");
-            msg.Executing += (sender, e) =>
-            {
-                Service service = new Service();
-                error = service.CheckConfiguration();
-                if (error != ConfigurationError.None)
-                {
-                    return;
-                }
-                survey = service.GetSurvey(SelectedItem);
-                if (survey == null)
-                {
-                    return;
-                }
-                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, SelectedItem);
-                foreach (Record record in service.GetRecords(SelectedItem, survey))
-                {
-                    ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
-                    if (entity == null)
-                    {
-                        entity = entities.Create();
-                        entity.GlobalRecordId = record.GlobalRecordId;
-                    }
-                    foreach (string key in record.Keys)
-                    {
-                        Type type = entities.GetDataType(key);
-                        entity.SetProperty(key, record.GetValue(key, type));
-                    }
-                    entities.Save(entity);
-                }
-                success = true;
-            };
-            msg.Executed += (sender, e) =>
-            {
-                if (error != ConfigurationError.None)
-                {
-                    SurveyViewModel.RequestConfiguration(error);
-                }
-                else if (survey == null)
-                {
-                    SurveyViewModel.RequestConfiguration("Failed to retrieve web survey details.");
-                }
-                else if (!success)
-                {
-                    SurveyViewModel.RequestConfiguration("Failed to import data from web.");
-                }
-                else
-                {
-                    Messenger.Default.Send(new ToastMessage("Data has been imported from web."));
-                }
-            };
-            Messenger.Default.Send(msg);
         }
 
         public void ImportFromMobile()
         {
             if (ImportExport.ImportFromMobile(SelectedItem))
             {
-                App.Current.Service.OnViewDataImported(SelectedItem.Project.FilePath, SelectedItem.Name);
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
             }
         }
 
@@ -524,12 +231,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public void AnalyzeClassic()
         {
-            PgmModel.Activate();
+            PgmModel.Reset();
+            PgmModel.Active = true;
         }
 
         public void AnalyzeVisual()
         {
-            CanvasModel.Activate();
+            CanvasModel.Reset();
+            CanvasModel.Active = true;
         }
 
         public void CreatePgm()
@@ -582,7 +291,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
         {
-            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }

@@ -21,5 +21,9 @@ namespace ERHMS.Utility
             }
             return false;
         }
+        public static bool EqualsIgnoreCase(this string @this, string value)
+        {
+            return string.Equals(@this, value, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

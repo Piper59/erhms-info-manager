@@ -54,16 +54,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            MakeView.InstantiateTemplate(DataContext.Project, SelectedItem, Incident == null ? null : Incident.Name, IncidentId);
+            string prefix = Incident == null ? null : Incident.Name;
+            MakeView.InstantiateTemplate(DataContext.Project, SelectedItem, prefix, IncidentId);
         }
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                "Are you sure you want to delete this template?",
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected template?");
             msg.Confirmed += (sender, e) =>
             {
                 SelectedItem.Delete();

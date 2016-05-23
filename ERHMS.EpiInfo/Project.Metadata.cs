@@ -1,6 +1,6 @@
 ﻿using Epi;
 using Epi.Data;
-using System;
+using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -39,7 +39,7 @@ namespace ERHMS.EpiInfo
 
         public new View GetViewByName(string viewName)
         {
-            return GetViews().SingleOrDefault(view => view.Name.Equals(viewName, StringComparison.OrdinalIgnoreCase));
+            return GetViews().SingleOrDefault(view => view.Name.EqualsIgnoreCase(viewName));
         }
 
         public new IEnumerable<Pgm> GetPgms()

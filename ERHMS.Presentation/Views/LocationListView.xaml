@@ -22,8 +22,8 @@
                 <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Description" Width="4*" Binding="{Binding Description}" />
                 <DataGridTextColumn Header="Address" Width="4*" Binding="{Binding Address}" />
-                <DataGridTextColumn Header="Latitude" Width="*" ElementStyle="{StaticResource Numeric}" Binding="{Binding Latitude, StringFormat='n3'}" />
-                <DataGridTextColumn Header="Longitude" Width="*" ElementStyle="{StaticResource Numeric}" Binding="{Binding Longitude, StringFormat='n3'}" />
+                <DataGridTextColumn Header="Latitude" Width="*" CellStyle="{StaticResource Numeric}" Binding="{Binding Latitude, StringFormat='n3'}" />
+                <DataGridTextColumn Header="Longitude" Width="*" CellStyle="{StaticResource Numeric}" Binding="{Binding Longitude, StringFormat='n3'}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

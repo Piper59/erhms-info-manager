@@ -35,9 +35,7 @@ namespace ERHMS.Presentation.ViewModels
 
         protected override ICollectionView GetItems()
         {
-            return CollectionViewSource.GetDefaultView(DataContext.Incidents
-                .SelectByDeleted(false)
-                .OrderBy(incident => incident.Name));
+            return CollectionViewSource.GetDefaultView(DataContext.Incidents.SelectByDeleted(false).OrderBy(incident => incident.Name));
         }
 
         protected override IEnumerable<string> GetFilteredValues(Incident item)
@@ -60,11 +58,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                "Are you sure you want to delete this incident?",
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected incident?");
             msg.Confirmed += (sender, e) =>
             {
                 SelectedItem.Deleted = true;

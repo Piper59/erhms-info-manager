@@ -71,31 +71,31 @@ namespace ERHMS.EpiInfo.Communication
         public event EventHandler<ViewEventArgs> ViewAdded;
         public void OnViewAdded(string projectPath, string viewName, string tag = null)
         {
-            OnEvent(ViewAdded, new ViewEventArgs(projectPath, viewName, tag), "ViewAdded");
+            OnEvent(ViewAdded, new ViewEventArgs(projectPath, viewName, tag), nameof(ViewAdded));
         }
 
         public event EventHandler<ViewEventArgs> ViewDataImported;
         public void OnViewDataImported(string projectPath, string viewName, string tag = null)
         {
-            OnEvent(ViewDataImported, new ViewEventArgs(projectPath, viewName, tag), "ViewDataImported");
+            OnEvent(ViewDataImported, new ViewEventArgs(projectPath, viewName, tag), nameof(ViewDataImported));
         }
 
         public event EventHandler<RecordEventArgs> RecordSaved;
         public void OnRecordSaved(string projectPath, string viewName, string globalRecordId, string tag = null)
         {
-            OnEvent(RecordSaved, new RecordEventArgs(projectPath, viewName, globalRecordId, tag), "RecordSaved");
+            OnEvent(RecordSaved, new RecordEventArgs(projectPath, viewName, globalRecordId, tag), nameof(RecordSaved));
         }
 
         public event EventHandler<TemplateEventArgs> TemplateAdded;
         public void OnTemplateAdded(string templatePath, string tag = null)
         {
-            OnEvent(TemplateAdded, new TemplateEventArgs(templatePath, tag), "TemplateAdded");
+            OnEvent(TemplateAdded, new TemplateEventArgs(templatePath, tag), nameof(TemplateAdded));
         }
 
         public event EventHandler<CanvasEventArgs> CanvasClosed;
         public void OnCanvasClosed(string projectPath, int canvasId, string canvasPath, string tag = null)
         {
-            OnEvent(CanvasClosed, new CanvasEventArgs(projectPath, canvasId, canvasPath, tag), "CanvasClosed");
+            OnEvent(CanvasClosed, new CanvasEventArgs(projectPath, canvasId, canvasPath, tag), nameof(CanvasClosed));
         }
     }
 }

@@ -1,6 +1,15 @@
 ﻿using Epi;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.IO;
+using System.Windows.Forms;
+using Project = ERHMS.EpiInfo.Project;
+using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -42,6 +51,48 @@ namespace ERHMS.Presentation.ViewModels
                 get { return password; }
                 set { Set(() => Password, ref password, value); }
             }
+
+            public SqlServerDataSourceViewModel()
+            {
+                PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == nameof(IntegratedSecurity))
+                    {
+                        if (IntegratedSecurity)
+                        {
+                            UserId = null;
+                            Password = null;
+                        }
+                    }
+                };
+            }
+
+            public void Reset()
+            {
+                DataSource = null;
+                InitialCatalog = null;
+                IntegratedSecurity = true;
+                UserId = null;
+                Password = null;
+            }
+
+            public SqlServerDriver CreateDriver()
+            {
+                return SqlServerDriver.Create(DataSource, InitialCatalog, UserId, Password);
+            }
+        }
+
+        public static void Add(FileInfo file)
+        {
+            Settings.Default.DataSources.Add(file.FullName);
+            Settings.Default.Save();
+        }
+
+        private bool active;
+        public bool Active
+        {
+            get { return active; }
+            set { Set(() => Active, ref active, value); }
         }
 
         private string name;
@@ -74,9 +125,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public SqlServerDataSourceViewModel SqlServer { get; private set; }
 
+        public RelayCommand BrowseCommand { get; private set; }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand CancelCommand { get; private set; }
+
         public DataSourceViewModel()
         {
             SqlServer = new SqlServerDataSourceViewModel();
+            BrowseCommand = new RelayCommand(Browse);
+            CreateCommand = new RelayCommand(Create);
+            CancelCommand = new RelayCommand(Cancel);
         }
 
         public void Reset()
@@ -86,11 +144,103 @@ namespace ERHMS.Presentation.ViewModels
             Description = null;
             Location = new DirectoryInfo(configuration.Directories.Project);
             Provider = DataProvider.Access;
-            SqlServer.DataSource = null;
-            SqlServer.InitialCatalog = null;
-            SqlServer.IntegratedSecurity = true;
-            SqlServer.UserId = null;
-            SqlServer.Password = null;
+            SqlServer.Reset();
+        }
+
+        public void Browse()
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    Location = new DirectoryInfo(dialog.SelectedPath);
+                }
+            }
+        }
+
+        private void Create(FileInfo file, IDataDriver driver, bool initialize)
+        {
+            if (initialize)
+            {
+                driver.CreateDatabase();
+            }
+            Project project = Project.Create(
+                Name,
+                Description,
+                file.Directory,
+                driver.Provider.ToEpiInfoName(),
+                driver.Builder,
+                driver.DatabaseName,
+                initialize);
+            if (initialize)
+            {
+                DataAccess.DataContext.Create(project);
+            }
+            Add(file);
+        }
+
+        public void Create()
+        {
+            // TODO: Validate fields
+            // TODO: Handle errors
+            FileInfo file = Location.GetFile(Path.Combine(Name, Path.ChangeExtension(Name, Project.FileExtension)));
+            if (file.Exists)
+            {
+                ConfirmMessage msg = new ConfirmMessage("Add", "Data source already exists. Add it to your list of data sources?");
+                msg.Confirmed += (sender, e) =>
+                {
+                    Add(file);
+                    Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                    Active = false;
+                };
+                Messenger.Default.Send(msg);
+            }
+            else
+            {
+                IDataDriver driver;
+                switch (Provider)
+                {
+                    case DataProvider.Access:
+                        driver = AccessDriver.Create(Path.ChangeExtension(file.FullName, ".mdb"));
+                        break;
+                    case DataProvider.SqlServer:
+                        driver = SqlServer.CreateDriver();
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+                if (driver.DatabaseExists())
+                {
+                    ConfirmMessage msg = new ConfirmMessage("Add", "Database already exists. Add a data source using this database?");
+                    msg.Confirmed += (sender, e) =>
+                    {
+                        Create(file, driver, false);
+                        Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                        Active = false;
+                    };
+                    Messenger.Default.Send(msg);
+                }
+                else
+                {
+                    BlockMessage msg = new BlockMessage("Creating data source \u2026");
+                    msg.Executing += (sender, e) =>
+                    {
+                        Create(file, driver, true);
+                        Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                        Active = false;
+                    };
+                    msg.Executed += (sender, e) =>
+                    {
+                        Messenger.Default.Send(new ToastMessage("Data source has been created."));
+                    };
+                    Messenger.Default.Send(msg);
+                }
+            }
+        }
+
+        public void Cancel()
+        {
+            Active = false;
         }
     }
 }

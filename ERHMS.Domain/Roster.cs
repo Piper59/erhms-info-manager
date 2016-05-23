@@ -12,25 +12,25 @@ namespace ERHMS.Domain
 
         public string RosterId
         {
-            get { return GetProperty<string>("RosterId"); }
-            set { SetProperty("RosterId", value); }
+            get { return GetProperty<string>(nameof(RosterId)); }
+            set { SetProperty(nameof(RosterId), value); }
         }
 
         public string ResponderId
         {
-            get { return GetProperty<string>("ResponderId"); }
-            set { SetProperty("ResponderId", value); }
+            get { return GetProperty<string>(nameof(ResponderId)); }
+            set { SetProperty(nameof(ResponderId), value); }
         }
 
         public string IncidentId
         {
-            get { return GetProperty<string>("IncidentId"); }
-            set { SetProperty("IncidentId", value); }
+            get { return GetProperty<string>(nameof(IncidentId)); }
+            set { SetProperty(nameof(IncidentId), value); }
         }
 
         public Roster()
         {
-            LinkProperties("RosterId", "Guid");
+            LinkProperties(nameof(RosterId), nameof(Guid));
         }
     }
 }

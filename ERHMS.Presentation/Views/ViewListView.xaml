@@ -20,7 +20,8 @@
                 <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding EditCommand}" Visual="{DynamicResource appbar_edit}">Edit</ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="Data" Visual="{DynamicResource appbar_database}"
+                <ctrl:AppBarButton Content="Data"
+                                   Visual="{DynamicResource appbar_database}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -30,7 +31,8 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="Publish" Visual="{DynamicResource appbar_page_upload}"
+                <ctrl:AppBarButton Content="Publish"
+                                   Visual="{DynamicResource appbar_page_upload}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -41,7 +43,8 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="Import" Visual="{DynamicResource appbar_door_enter}"
+                <ctrl:AppBarButton Content="Import"
+                                   Visual="{DynamicResource appbar_door_enter}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -54,7 +57,8 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="Export" Visual="{DynamicResource appbar_door_leave}"
+                <ctrl:AppBarButton Content="Export"
+                                   Visual="{DynamicResource appbar_door_leave}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -64,7 +68,8 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="Analyze" Visual="{DynamicResource appbar_graph_bar}"
+                <ctrl:AppBarButton Content="Analyze"
+                                   Visual="{DynamicResource appbar_graph_bar}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -76,9 +81,7 @@
                 </ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
             </WrapPanel>
-            <DataGrid SelectionMode="Single"
-                      ItemsSource="{Binding Items}"
-                      SelectedItem="{Binding SelectedItem}">
+            <DataGrid SelectionMode="Single" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
                 </DataGrid.Columns>
@@ -122,7 +125,7 @@
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
-        <scw:ChildWindow Title="Create a New Analysis" DataContext="{Binding PgmModel}" IsOpen="{Binding Active}">
+        <scw:ChildWindow Title="Create an Analysis" DataContext="{Binding PgmModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
@@ -137,7 +140,7 @@
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
-        <scw:ChildWindow Title="Create a New Dashboard" DataContext="{Binding CanvasModel}" IsOpen="{Binding Active}">
+        <scw:ChildWindow Title="Create a Dashboard" DataContext="{Binding CanvasModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>

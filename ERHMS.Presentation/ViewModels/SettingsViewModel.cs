@@ -127,7 +127,7 @@ namespace ERHMS.Presentation.ViewModels
         public SettingsViewModel()
         {
             Title = "Settings";
-            LogLevels = new List<string>
+            LogLevels = new string[]
             {
                 "DEBUG",
                 "INFO",
@@ -164,10 +164,8 @@ namespace ERHMS.Presentation.ViewModels
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     ConfirmMessage msg = new ConfirmMessage(
-                        "Change?",
-                        string.Format("Change root directory? {0} will copy your documents and restart when settings are saved.", App.Title),
                         "Change",
-                        "Don't Change");
+                        string.Format("Change the root directory? {0} will copy your documents and restart when settings are saved.", App.Title));
                     msg.Confirmed += (sender, e) =>
                     {
                         RootDirectory = dialog.GetRootDirectory();

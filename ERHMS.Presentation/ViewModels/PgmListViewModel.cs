@@ -2,9 +2,9 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analysis;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -44,15 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            if (Incident == null)
-            {
-                Title = "Analyses";
-            }
-            else
-            {
-                string incidentName = Incident.New ? "New Incident" : Incident.Name;
-                Title = string.Format("{0} Analyses", incidentName).Trim();
-            }
+            Title = GetTitleWithIncidentName("Analyses", Incident);
         }
 
         protected override ICollectionView GetItems()
@@ -83,11 +75,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                "Are you sure you want to delete this analysis?",
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected analysis?");
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.PgmLinks.DeleteByPgmId(SelectedItem.PgmId);
@@ -107,7 +95,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshPgmListMessage(RefreshListMessage<Pgm> msg)
         {
-            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }

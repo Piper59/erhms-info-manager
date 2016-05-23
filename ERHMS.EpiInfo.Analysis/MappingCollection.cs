@@ -1,5 +1,5 @@
 ﻿using Epi;
-using System;
+using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,7 +35,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public bool ContainsTarget(string target)
         {
-            return this.Any(mapping => mapping.Target.Equals(target, StringComparison.OrdinalIgnoreCase));
+            return this.Any(mapping => mapping.Target.EqualsIgnoreCase(target));
         }
 
         public bool ContainsNonEmptyKeyTarget()

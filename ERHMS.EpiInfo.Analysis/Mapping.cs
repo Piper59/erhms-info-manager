@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 
 namespace ERHMS.EpiInfo.Analysis
 {
@@ -22,7 +23,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public bool IsIdentity()
         {
-            return string.Equals(Source, Target, StringComparison.OrdinalIgnoreCase);
+            return StringExtensions.EqualsIgnoreCase(Source, Target);
         }
 
         public string GetDefineCommand()

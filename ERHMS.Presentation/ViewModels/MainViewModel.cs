@@ -1,9 +1,11 @@
 ﻿using Epi;
-using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Communication;
 using ERHMS.DataAccess;
 using ERHMS.Domain;
+using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Communication;
+using ERHMS.EpiInfo.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -58,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
             Title = App.Title;
             PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName == "DataSource")
+                if (e.PropertyName == nameof(DataSource))
                 {
                     ShowRespondersCommand.RaiseCanExecuteChanged();
                     CreateResponderCommand.RaiseCanExecuteChanged();
@@ -70,7 +72,7 @@ namespace ERHMS.Presentation.ViewModels
                     AnalysesCommand.RaiseCanExecuteChanged();
                     DashboardsCommand.RaiseCanExecuteChanged();
                 }
-                else if (e.PropertyName == "ActiveDocument" && ActiveDocument != null)
+                else if (e.PropertyName == nameof(ActiveDocument) && ActiveDocument != null)
                 {
                     Log.Current.DebugFormat("Activating tab: {0}", ActiveDocument.GetType().Name);
                 }
@@ -132,24 +134,22 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            App.Current.Invoke(() =>
+            ViewModelBase document = (ViewModelBase)sender;
+            if (e.PropertyName == nameof(document.Closed))
             {
-                ViewModelBase document = (ViewModelBase)sender;
-                switch (e.PropertyName)
+                App.Current.Invoke(() =>
                 {
-                    case "Closed":
-                        if (document.Closed)
-                        {
-                            Log.Current.DebugFormat("Closing tab: {0}", document.GetType().Name);
-                            Documents.Remove(document);
-                        }
-                        else
-                        {
-                            Documents.Add(document);
-                        }
-                        break;
-                }
-            });
+                    if (document.Closed)
+                    {
+                        Log.Current.DebugFormat("Closing tab: {0}", document.GetType().Name);
+                        Documents.Remove(document);
+                    }
+                    else
+                    {
+                        Documents.Add(document);
+                    }
+                });
+            }
         }
 
         public bool HasDataSource()
@@ -171,16 +171,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (HasDataSource())
             {
-                if (DataSource.Project.FilePath.Equals(file.FullName, StringComparison.OrdinalIgnoreCase))
+                if (DataSource.Project.FilePath.EqualsIgnoreCase(file.FullName))
                 {
                     CloseDataSourceListView();
                     return;
                 }
-                ConfirmMessage msg = new ConfirmMessage(
-                    "Open?",
-                    "Open data source? This will close the currently active data source.",
-                    "Open",
-                    "Don't Open");
+                ConfirmMessage msg = new ConfirmMessage("Open", "Open data source? This will close the currently active data source.");
                 msg.Confirmed += (sender, e) =>
                 {
                     OpenDataSourceInternal(file);
@@ -256,8 +252,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenResponderDetailView(Responder responder)
         {
-            if (!TryActivateDocument<ResponderDetailViewModel>(
-                document => document.Responder.ResponderId.Equals(responder.ResponderId, StringComparison.OrdinalIgnoreCase)))
+            if (!TryActivateDocument<ResponderDetailViewModel>(document => document.Responder.ResponderId.EqualsIgnoreCase(responder.ResponderId)))
             {
                 OpenDocument(new ResponderDetailViewModel(responder));
             }
@@ -273,8 +268,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenIncidentView(Incident incident)
         {
-            if (!TryActivateDocument<IncidentViewModel>(
-                document => document.Incident.IncidentId.Equals(incident.IncidentId, StringComparison.OrdinalIgnoreCase)))
+            if (!TryActivateDocument<IncidentViewModel>(document => document.Incident.IncidentId.EqualsIgnoreCase(incident.IncidentId)))
             {
                 OpenDocument(new IncidentViewModel(incident));
             }
@@ -282,8 +276,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenLocationDetailView(Location location)
         {
-            if (!TryActivateDocument<LocationDetailViewModel>(
-                document => document.Location.LocationId.Equals(location.LocationId, StringComparison.OrdinalIgnoreCase)))
+            if (!TryActivateDocument<LocationDetailViewModel>(document => document.Location.LocationId.EqualsIgnoreCase(location.LocationId)))
             {
                 OpenDocument(new LocationDetailViewModel(location));
             }
@@ -382,7 +375,7 @@ namespace ERHMS.Presentation.ViewModels
         private void Service_ViewAdded(object sender, ViewEventArgs e)
         {
             string incidentId = e.Tag;
-            if (e.ProjectPath.Equals(DataContext.Project.FilePath, StringComparison.OrdinalIgnoreCase) && incidentId != null)
+            if (e.ProjectPath.EqualsIgnoreCase(DataContext.Project.FilePath) && incidentId != null)
             {
                 View view = DataContext.Project.GetViewByName(e.ViewName);
                 if (view == null)
@@ -402,12 +395,12 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Service_ViewDataImported(object sender, ViewEventArgs e)
         {
-            Messenger.Default.Send(new ServiceMessage<ViewEventArgs>("ViewDataImported", e));
+            Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
         }
 
         private void Service_RecordSaved(object sender, RecordEventArgs e)
         {
-            Messenger.Default.Send(new ServiceMessage<RecordEventArgs>("RecordSaved", e));
+            Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
         }
 
         private void Service_TemplateAdded(object sender, TemplateEventArgs e)
@@ -415,17 +408,15 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshListMessage<Template>());
         }
 
-        // TODO: Make this more robust
         private void Service_CanvasClosed(object sender, CanvasEventArgs e)
         {
             string incidentId = e.Tag;
-            if (DataContext.Project.FilePath.Equals(e.ProjectPath, StringComparison.OrdinalIgnoreCase))
+            if (DataContext.Project.FilePath.EqualsIgnoreCase(e.ProjectPath))
             {
                 Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
                 canvas.Content = File.ReadAllText(e.CanvasPath);
                 DataContext.Project.UpdateCanvas(canvas);
             }
-            Messenger.Default.Send(new RefreshListMessage<Canvas>(incidentId));
         }
     }
 }

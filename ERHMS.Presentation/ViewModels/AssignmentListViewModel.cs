@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -15,13 +16,13 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class ResponderListInternalViewModel : ListViewModelBase<Responder>
         {
-            public AssignmentListViewModel Parent { get; private set; }
+            public string IncidentId { get; private set; }
 
             public RelayCommand EditCommand { get; private set; }
 
-            public ResponderListInternalViewModel(AssignmentListViewModel parent)
+            public ResponderListInternalViewModel(string incidentId)
             {
-                Parent = parent;
+                IncidentId = incidentId;
                 Selecting += (sender, e) =>
                 {
                     EditCommand.RaiseCanExecuteChanged();
@@ -32,13 +33,13 @@ namespace ERHMS.Presentation.ViewModels
             protected override ICollectionView GetItems()
             {
                 IEnumerable<Responder> items;
-                if (Parent.Incident == null)
+                if (IncidentId == null)
                 {
                     items = DataContext.Responders.SelectByDeleted(false);
                 }
                 else
                 {
-                    ICollection<string> responderIds = DataContext.Rosters.SelectByIncident(Parent.IncidentId)
+                    ICollection<string> responderIds = DataContext.Rosters.SelectByIncident(IncidentId)
                         .Select(roster => roster.ResponderId)
                         .ToList();
                     items = DataContext.Responders.SelectByDeleted(false)
@@ -97,19 +98,19 @@ namespace ERHMS.Presentation.ViewModels
         {
             Incident = incident;
             UpdateTitle();
-            Responders = new ResponderListInternalViewModel(this);
-            Refresh();
             PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName == "SelectedView")
+                if (e.PropertyName == nameof(SelectedView))
                 {
                     AddCommand.RaiseCanExecuteChanged();
                 }
             };
+            Responders = new ResponderListInternalViewModel(IncidentId);
             Responders.Selecting += (sender, e) =>
             {
                 AddCommand.RaiseCanExecuteChanged();
             };
+            Refresh();
             Selecting += (sender, e) =>
             {
                 RemoveCommand.RaiseCanExecuteChanged();
@@ -120,23 +121,15 @@ namespace ERHMS.Presentation.ViewModels
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
-            Messenger.Default.Register<RefreshListMessage<Assignment>>(this, OnRefreshAssignmentListMessage);
             Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
-            Messenger.Default.Register<RefreshListMessage<Roster>>(this, OnRefreshRosterListMessage);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
+            Messenger.Default.Register<RefreshListMessage<Roster>>(this, OnRefreshRosterListMessage);
+            Messenger.Default.Register<RefreshListMessage<Assignment>>(this, OnRefreshAssignmentListMessage);
         }
 
         private void UpdateTitle()
         {
-            if (Incident == null)
-            {
-                Title = "Assignments";
-            }
-            else
-            {
-                string incidentName = Incident.New ? "New Incident" : Incident.Name;
-                Title = string.Format("{0} Assignments", incidentName).Trim();
-            }
+            Title = GetTitleWithIncidentName("Assignments", Incident);
         }
 
         public bool CanAddAssignment()
@@ -151,26 +144,22 @@ namespace ERHMS.Presentation.ViewModels
             foreach (Assignment assignment in DataContext.Assignments.Select())
             {
                 View view = Views.SingleOrDefault(_view => _view.Id == assignment.ViewId);
-                if (view != null)
+                Responder responder = responders.SingleOrDefault(_responder => _responder.ResponderId.EqualsIgnoreCase(assignment.ResponderId));
+                if (view != null && responder != null)
                 {
-                    Responder responder = responders.SingleOrDefault(_responder => _responder.ResponderId.Equals(assignment.ResponderId, StringComparison.OrdinalIgnoreCase));
-                    if (responder != null)
-                    {
-                        items.Add(new AssignmentViewModel(assignment, view, responder));
-                    }
+                    items.Add(new AssignmentViewModel(assignment, view, responder));
                 }
             }
-            return CollectionViewSource.GetDefaultView(items
-                .OrderBy(assignment => assignment.View.Name)
+            return CollectionViewSource.GetDefaultView(items.OrderBy(assignment => assignment.View.Name)
                 .ThenBy(assignment => assignment.Responder.LastName)
                 .ThenBy(assignment => assignment.Responder.FirstName));
         }
 
         protected override IEnumerable<string> GetFilteredValues(AssignmentViewModel item)
         {
+            yield return item.View.Name;
             yield return item.Responder.LastName;
             yield return item.Responder.FirstName;
-            yield return item.View.Name;
         }
 
         public override void Refresh()
@@ -201,11 +190,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Remove()
         {
-            foreach (AssignmentViewModel assignment in SelectedItems)
+            ConfirmMessage msg = new ConfirmMessage("Remove", "Remove the selected assignments?");
+            msg.Confirmed += (sender, e) =>
             {
-                DataContext.Assignments.Delete(assignment.Assignment);
-            }
-            Messenger.Default.Send(new RefreshListMessage<Assignment>(IncidentId));
+                foreach (AssignmentViewModel assignment in SelectedItems)
+                {
+                    DataContext.Assignments.Delete(assignment.Assignment);
+                }
+                Messenger.Default.Send(new RefreshListMessage<Assignment>(IncidentId));
+            };
+            Messenger.Default.Send(msg);
         }
 
         public void Email()
@@ -221,25 +215,9 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        private void OnRefreshAssignmentListMessage(RefreshListMessage<Assignment> msg)
-        {
-            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
-            {
-                Refresh();
-            }
-        }
-
         private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
         {
-            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
-            {
-                Refresh();
-            }
-        }
-
-        private void OnRefreshRosterListMessage(RefreshListMessage<Roster> msg)
-        {
-            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }
@@ -248,6 +226,22 @@ namespace ERHMS.Presentation.ViewModels
         private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)
         {
             Refresh();
+        }
+
+        private void OnRefreshRosterListMessage(RefreshListMessage<Roster> msg)
+        {
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
+            {
+                Refresh();
+            }
+        }
+
+        private void OnRefreshAssignmentListMessage(RefreshListMessage<Assignment> msg)
+        {
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
+            {
+                Refresh();
+            }
         }
     }
 }

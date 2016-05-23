@@ -17,14 +17,14 @@
             <ScrollViewer>
                 <StackPanel>
                     <StackPanel Margin="0,0,0,50">
-                        <Image Source="/Images/ERHMS.png" Stretch="None" Margin="0,0,0,5" />
+                        <Image Margin="0,0,0,5" Source="/Images/ERHMS.png" Stretch="None" />
                         <TextBlock Text="{Binding AppTitle, Mode=OneTime}" />
                         <TextBlock>Version <Run Text="{Binding Version, Mode=OneTime}" /></TextBlock>
                         <TextBlock><Run Text="{Binding InformationalVersion, Mode=OneTime}" /></TextBlock>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock>Built with Epi Info™</TextBlock>
-                        <Image Source="/Images/EpiInfo.png" Stretch="None" Margin="0,5,0,0" />
+                        <Image Margin="0,5,0,0" Source="/Images/EpiInfo.png" Stretch="None" />
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>

@@ -1,4 +1,5 @@
 ﻿using ERHMS.DataAccess;
+using ERHMS.Domain;
 using GalaSoft.MvvmLight.Command;
 
 namespace ERHMS.Presentation.ViewModels
@@ -39,6 +40,19 @@ namespace ERHMS.Presentation.ViewModels
         public void Close()
         {
             Closed = true;
+        }
+
+        protected string GetTitleWithIncidentName(string title, Incident incident)
+        {
+            if (incident == null)
+            {
+                return title;
+            }
+            else
+            {
+                string incidentName = incident.New ? "New Incident" : incident.Name;
+                return string.Format("{0} {1}", incidentName, title).Trim();
+            }
         }
     }
 }

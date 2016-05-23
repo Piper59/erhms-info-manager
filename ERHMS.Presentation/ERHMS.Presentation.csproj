@@ -241,6 +241,7 @@
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
     <Compile Include="Converters\StringToUppercaseStringConverter.cs" />
+    <Compile Include="Dialogs\FileDialogExtensions.cs" />
     <Compile Include="Dialogs\RootDirectoryDialog.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -251,9 +252,9 @@
     <Compile Include="Messages\ExitMessage.cs" />
     <Compile Include="Messages\LocateMessage.cs" />
     <Compile Include="Messages\NotifyMessage.cs" />
+    <Compile Include="Messages\RefreshDataMessage.cs" />
     <Compile Include="Messages\RefreshListMessage.cs" />
     <Compile Include="Messages\RefreshMessage.cs" />
-    <Compile Include="Messages\ServiceMessage.cs" />
     <Compile Include="Messages\ToastMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -264,8 +265,10 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\AnalysisViewModel.cs" />
     <Compile Include="ViewModels\AssignmentListViewModel.cs" />
     <Compile Include="ViewModels\AssignmentViewModel.cs" />
+    <Compile Include="ViewModels\AttachmentViewModel.cs" />
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
@@ -281,12 +284,14 @@
     <Compile Include="ViewModels\LogListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PgmListViewModel.cs" />
+    <Compile Include="ViewModels\RecipientViewModel.cs" />
     <Compile Include="ViewModels\RecordListViewModel.cs" />
     <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
     <Compile Include="ViewModels\RosterListViewModel.cs" />
     <Compile Include="ViewModels\RosterViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\SurveyViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
     <Compile Include="ViewModels\ViewListViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

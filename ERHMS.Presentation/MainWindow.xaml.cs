@@ -5,10 +5,7 @@ using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Mantin.Controls.Wpf.Notification;
-using System;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace ERHMS.Presentation
@@ -29,11 +26,6 @@ namespace ERHMS.Presentation
             InitializeComponent();
         }
 
-        private Task RunTask(Action action)
-        {
-            return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
-        }
-
         private async void BlockAsync(BlockMessage msg)
         {
             Log.Current.DebugFormat("Blocking: {0}", msg.Message);
@@ -45,7 +37,7 @@ namespace ERHMS.Presentation
                 {
                     AnimateHide = false
                 });
-            await RunTask(msg.OnExecuting);
+            await msg.OnExecuting();
             await dialog.CloseAsync();
             msg.OnExecuted();
         }
@@ -62,40 +54,26 @@ namespace ERHMS.Presentation
                     AffirmativeButtonText = "OK",
                     AnimateHide = false
                 });
-            if (msg.Async)
-            {
-                await RunTask(msg.OnDismissed);
-            }
-            else
-            {
-                msg.OnDismissed();
-            }
+            msg.OnDismissed();
         }
 
         private async void ConfirmAsync(ConfirmMessage msg)
         {
             Log.Current.DebugFormat("Confirming: {0}", msg.Message);
             MessageDialogResult result = await this.ShowMessageAsync(
-                msg.Title,
+                string.Format("{0}?", msg.Verb),
                 msg.Message,
                 MessageDialogStyle.AffirmativeAndNegative,
                 new MetroDialogSettings
                 {
-                    AffirmativeButtonText = msg.AffirmativeButtonText,
-                    NegativeButtonText = msg.NegativeButtonText,
+                    AffirmativeButtonText = msg.Verb,
+                    NegativeButtonText = string.Format("Don't {0}", msg.Verb),
                     AnimateHide = false
                 });
             if (result == MessageDialogResult.Affirmative)
             {
                 Log.Current.DebugFormat("Confirmed: {0}", msg.Message);
-                if (msg.Async)
-                {
-                    await RunTask(msg.OnConfirmed);
-                }
-                else
-                {
-                    msg.OnConfirmed();
-                }
+                msg.OnConfirmed();
             }
         }
 
@@ -106,11 +84,7 @@ namespace ERHMS.Presentation
                 return;
             }
             e.Cancel = true;
-            ConfirmMessage msg = new ConfirmMessage(
-                "Exit?",
-                string.Format("Are you sure you want to exit {0}?", App.Title),
-                "Exit",
-                "Don't Exit");
+            ConfirmMessage msg = new ConfirmMessage("Exit", string.Format("Are you sure you want to exit {0}?", App.Title));
             msg.Confirmed += (_sender, _e) =>
             {
                 closing = true;

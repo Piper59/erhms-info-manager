@@ -1,8 +1,8 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -39,14 +39,12 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            string incidentName = Incident.New ? "New Incident" : Incident.Name;
-            Title = string.Format("{0} Locations", incidentName).Trim();
+            Title = GetTitleWithIncidentName("Locations", Incident);
         }
 
         protected override ICollectionView GetItems()
         {
-            return CollectionViewSource.GetDefaultView(DataContext.Locations
-                .SelectByIncident(Incident.IncidentId)
+            return CollectionViewSource.GetDefaultView(DataContext.Locations.SelectByIncident(Incident.IncidentId)
                 .OrderBy(location => location.Name));
         }
 
@@ -73,11 +71,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                "Are you sure you want to delete this location?",
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected location?");
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.Locations.Delete(SelectedItem);
@@ -96,7 +90,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshLocationListMessage(RefreshListMessage<Location> msg)
         {
-            if (string.Equals(msg.IncidentId, Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, Incident.IncidentId))
             {
                 Refresh();
             }

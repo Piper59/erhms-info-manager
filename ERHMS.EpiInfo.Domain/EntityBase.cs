@@ -21,7 +21,7 @@ namespace ERHMS.EpiInfo.Domain
                 if (value != @new)
                 {
                     @new = value;
-                    OnPropertyChanged("New");
+                    OnPropertyChanged(nameof(New));
                 }
             }
         }

@@ -12,25 +12,25 @@ namespace ERHMS.Domain
 
         public string CanvasLinkId
         {
-            get { return GetProperty<string>("CanvasLinkId"); }
-            set { SetProperty("CanvasLinkId", value); }
+            get { return GetProperty<string>(nameof(CanvasLinkId)); }
+            set { SetProperty(nameof(CanvasLinkId), value); }
         }
 
         public int CanvasId
         {
-            get { return GetProperty<int>("CanvasId"); }
-            set { SetProperty("CanvasId", value); }
+            get { return GetProperty<int>(nameof(CanvasId)); }
+            set { SetProperty(nameof(CanvasId), value); }
         }
 
         public string IncidentId
         {
-            get { return GetProperty<string>("IncidentId"); }
-            set { SetProperty("IncidentId", value); }
+            get { return GetProperty<string>(nameof(IncidentId)); }
+            set { SetProperty(nameof(IncidentId), value); }
         }
 
         public CanvasLink()
         {
-            LinkProperties("CanvasLinkId", "Guid");
+            LinkProperties(nameof(CanvasLinkId), nameof(Guid));
         }
     }
 }

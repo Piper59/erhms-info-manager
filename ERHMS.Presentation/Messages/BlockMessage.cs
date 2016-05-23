@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.Messages
 {
@@ -17,13 +19,20 @@ namespace ERHMS.Presentation.Messages
             : this("Working \u2026", message) { }
 
         public event EventHandler Executing;
-        public void OnExecuting(EventArgs e)
+        public async Task OnExecuting(EventArgs e)
         {
-            Executing?.Invoke(this, e);
+            EventHandler handler = Executing;
+            if (handler != null)
+            {
+                await ThreadingExtensions.Run(() =>
+                {
+                    handler(this, e);
+                });
+            }
         }
-        public void OnExecuting()
+        public async Task OnExecuting()
         {
-            OnExecuting(EventArgs.Empty);
+            await OnExecuting(EventArgs.Empty);
         }
 
         public event EventHandler Executed;

@@ -12,25 +12,25 @@ namespace ERHMS.Domain
 
         public string PgmLinkId
         {
-            get { return GetProperty<string>("PgmLinkId"); }
-            set { SetProperty("PgmLinkId", value); }
+            get { return GetProperty<string>(nameof(PgmLinkId)); }
+            set { SetProperty(nameof(PgmLinkId), value); }
         }
 
         public int PgmId
         {
-            get { return GetProperty<int>("PgmId"); }
-            set { SetProperty("PgmId", value); }
+            get { return GetProperty<int>(nameof(PgmId)); }
+            set { SetProperty(nameof(PgmId), value); }
         }
 
         public string IncidentId
         {
-            get { return GetProperty<string>("IncidentId"); }
-            set { SetProperty("IncidentId", value); }
+            get { return GetProperty<string>(nameof(IncidentId)); }
+            set { SetProperty(nameof(IncidentId), value); }
         }
 
         public PgmLink()
         {
-            LinkProperties("PgmLinkId", "Guid");
+            LinkProperties(nameof(PgmLinkId), nameof(Guid));
         }
     }
 }

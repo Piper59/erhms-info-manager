@@ -1,8 +1,8 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -37,7 +37,8 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     foreach (Roster roster in Parent.Rosters)
                     {
-                        Responder responder = Parent.Responders.SingleOrDefault(_responder => _responder.ResponderId.Equals(roster.ResponderId, StringComparison.OrdinalIgnoreCase));
+                        Responder responder = Parent.Responders.SingleOrDefault(
+                            _responder => _responder.ResponderId.EqualsIgnoreCase(roster.ResponderId));
                         if (responder != null)
                         {
                             items.Add(new RosterViewModel(roster, responder));
@@ -48,14 +49,16 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     foreach (Responder responder in Parent.Responders)
                     {
-                        Roster roster = Parent.Rosters.SingleOrDefault(_roster => _roster.ResponderId.Equals(responder.ResponderId, StringComparison.OrdinalIgnoreCase));
+                        Roster roster = Parent.Rosters.SingleOrDefault(
+                            _roster => _roster.ResponderId.EqualsIgnoreCase(responder.ResponderId));
                         if (roster == null)
                         {
                             items.Add(new RosterViewModel(null, responder));
                         }
                     }
                 }
-                return CollectionViewSource.GetDefaultView(items.OrderBy(roster => roster.Responder.LastName).ThenBy(roster => roster.Responder.FirstName));
+                return CollectionViewSource.GetDefaultView(items.OrderBy(roster => roster.Responder.LastName)
+                    .ThenBy(roster => roster.Responder.FirstName));
             }
 
             protected override IEnumerable<string> GetFilteredValues(RosterViewModel item)
@@ -110,14 +113,13 @@ namespace ERHMS.Presentation.ViewModels
             RemoveCommand = new RelayCommand(Remove, RosteredResponders.HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
-            Messenger.Default.Register<RefreshListMessage<Roster>>(this, OnRefreshRosterListMessage);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
+            Messenger.Default.Register<RefreshListMessage<Roster>>(this, OnRefreshRosterListMessage);
         }
 
         private void UpdateTitle()
         {
-            string incidentName = Incident.New ? "New Incident" : Incident.Name;
-            Title = string.Format("{0} Roster", incidentName).Trim();
+            Title = GetTitleWithIncidentName("Roster", Incident);
         }
 
         public void Refresh()
@@ -130,12 +132,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            foreach (RosterViewModel roster in UnrosteredResponders.SelectedItems)
+            foreach (RosterViewModel rosterModel in UnrosteredResponders.SelectedItems)
             {
-                Roster _roster = DataContext.Rosters.Create();
-                _roster.ResponderId = roster.Responder.ResponderId;
-                _roster.IncidentId = Incident.IncidentId;
-                DataContext.Rosters.Save(_roster);
+                Roster roster = DataContext.Rosters.Create();
+                roster.ResponderId = rosterModel.Responder.ResponderId;
+                roster.IncidentId = Incident.IncidentId;
+                DataContext.Rosters.Save(roster);
             }
             Messenger.Default.Send(new RefreshListMessage<Roster>(Incident.IncidentId));
         }
@@ -159,7 +161,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshRosterListMessage(RefreshListMessage<Roster> msg)
         {
-            if (string.Equals(msg.IncidentId, Incident.IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, Incident.IncidentId))
             {
                 Refresh();
             }

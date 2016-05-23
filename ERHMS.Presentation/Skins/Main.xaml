@@ -30,7 +30,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel>
-                        <Rectangle Width="25" Height="20" Fill="{DynamicResource BlackBrush}">
+                        <Rectangle Width="25" Height="20" Fill="{StaticResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Uniform"
                                              Visual="{Binding Visual, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:AppBarButton}}}" />
@@ -42,9 +42,9 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="MinWidth" Value="50" />
         <Setter Property="Height" Value="50" />
         <Setter Property="Margin" Value="0,0,5,5" />
+        <Setter Property="MinWidth" Value="50" />
     </Style>
 
     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MetroCheckBox}">
@@ -129,7 +129,8 @@
                     <Border BorderBrush="{StaticResource GrayBrush6}" BorderThickness="0,1,0,0">
                         <StackPanel Margin="5">
                             <TextBlock Margin="0,0,0,5" TextWrapping="Wrap" Text="{Binding Content}" />
-                            <TextBlock Foreground="{StaticResource GrayNormalBrush}" Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
+                            <TextBlock Foreground="{StaticResource GrayNormalBrush}"
+                                       Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
                         </StackPanel>
                     </Border>
                 </DataTemplate>
@@ -164,8 +165,8 @@
 
     <Style TargetType="{x:Type ctrl:MultiSelectDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}" />
 
-    <Style x:Key="Numeric" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MetroTextBlock}">
-        <Setter Property="HorizontalAlignment" Value="Right" />
+    <Style x:Key="Numeric" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
+        <Setter Property="HorizontalContentAlignment" Value="Right" />
     </Style>
 
     <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MetroRadioButton}">
@@ -191,7 +192,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Border BorderThickness="1" MinHeight="26" Margin="0,0,5,5" SnapsToDevicePixels="True">
+                    <Border BorderThickness="1" Margin="0,0,5,5" MinHeight="26" SnapsToDevicePixels="True">
                         <Border.Style>
                             <Style>
                                 <Setter Property="Border.BorderBrush" Value="{StaticResource GrayBrush6}" />
@@ -204,8 +205,8 @@
                         </Border.Style>
                         <StackPanel Margin="3" Orientation="Horizontal">
                             <ContentPresenter ContentTemplate="{Binding ItemTextTemplate, RelativeSource={RelativeSource AncestorType={x:Type ctrl:RemovableItemsControl}}}" />
-                            <Button Command="{Binding RemoveCommand}" Margin="3,0,0,0" Style="{StaticResource ChromelessButtonStyle}">
-                                <Rectangle Width="8" Height="8" Fill="{DynamicResource BlackBrush}">
+                            <Button Margin="3,0,0,0" Style="{StaticResource ChromelessButtonStyle}" Command="{Binding RemoveCommand}">
+                                <Rectangle Width="8" Height="8" Fill="{StaticResource BlackBrush}">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Stretch="Uniform" Visual="{DynamicResource appbar_close}" />
                                     </Rectangle.OpacityMask>

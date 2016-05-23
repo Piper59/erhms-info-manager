@@ -14,283 +14,283 @@ namespace ERHMS.Domain
 
         public string Prefix
         {
-            get { return GetProperty<string>("Prefix"); }
-            set { SetProperty("Prefix", value); }
+            get { return GetProperty<string>(nameof(Prefix)); }
+            set { SetProperty(nameof(Prefix), value); }
         }
 
         public string FirstName
         {
-            get { return GetProperty<string>("FirstName"); }
-            set { SetProperty("FirstName", value); }
+            get { return GetProperty<string>(nameof(FirstName)); }
+            set { SetProperty(nameof(FirstName), value); }
         }
 
         public string MiddleInitial
         {
-            get { return GetProperty<string>("MiddleInitial"); }
-            set { SetProperty("MiddleInitial", value); }
+            get { return GetProperty<string>(nameof(MiddleInitial)); }
+            set { SetProperty(nameof(MiddleInitial), value); }
         }
 
         public string LastName
         {
-            get { return GetProperty<string>("LastName"); }
-            set { SetProperty("LastName", value); }
+            get { return GetProperty<string>(nameof(LastName)); }
+            set { SetProperty(nameof(LastName), value); }
         }
 
         public string Suffix
         {
-            get { return GetProperty<string>("Suffix"); }
-            set { SetProperty("Suffix", value); }
+            get { return GetProperty<string>(nameof(Suffix)); }
+            set { SetProperty(nameof(Suffix), value); }
         }
 
         public string Alias
         {
-            get { return GetProperty<string>("Alias"); }
-            set { SetProperty("Alias", value); }
+            get { return GetProperty<string>(nameof(Alias)); }
+            set { SetProperty(nameof(Alias), value); }
         }
 
         public DateTime? BirthDate
         {
-            get { return GetProperty<DateTime?>("BirthDate"); }
-            set { SetProperty("BirthDate", value); }
+            get { return GetProperty<DateTime?>(nameof(BirthDate)); }
+            set { SetProperty(nameof(BirthDate), value); }
         }
 
         public string Gender
         {
-            get { return GetProperty<string>("Gender"); }
-            set { SetProperty("Gender", value); }
+            get { return GetProperty<string>(nameof(Gender)); }
+            set { SetProperty(nameof(Gender), value); }
         }
 
         public double? HeightFeet
         {
-            get { return GetProperty<double?>("HeightFeet"); }
-            set { SetProperty("HeightFeet", value); }
+            get { return GetProperty<double?>(nameof(HeightFeet)); }
+            set { SetProperty(nameof(HeightFeet), value); }
         }
 
         public double? HeightInches
         {
-            get { return GetProperty<double?>("HeightInches"); }
-            set { SetProperty("HeightInches", value); }
+            get { return GetProperty<double?>(nameof(HeightInches)); }
+            set { SetProperty(nameof(HeightInches), value); }
         }
 
         public double? WeightPounds
         {
-            get { return GetProperty<double?>("WeightPounds"); }
-            set { SetProperty("WeightPounds", value); }
+            get { return GetProperty<double?>(nameof(WeightPounds)); }
+            set { SetProperty(nameof(WeightPounds), value); }
         }
 
         public string PassportNumber
         {
-            get { return GetProperty<string>("PassportNumber"); }
-            set { SetProperty("PassportNumber", value); }
+            get { return GetProperty<string>(nameof(PassportNumber)); }
+            set { SetProperty(nameof(PassportNumber), value); }
         }
 
         public string AddressLine1
         {
-            get { return GetProperty<string>("AddressLine1"); }
-            set { SetProperty("AddressLine1", value); }
+            get { return GetProperty<string>(nameof(AddressLine1)); }
+            set { SetProperty(nameof(AddressLine1), value); }
         }
 
         public string AddressLine2
         {
-            get { return GetProperty<string>("AddressLine2"); }
-            set { SetProperty("AddressLine2", value); }
+            get { return GetProperty<string>(nameof(AddressLine2)); }
+            set { SetProperty(nameof(AddressLine2), value); }
         }
 
         public string City
         {
-            get { return GetProperty<string>("City"); }
-            set { SetProperty("City", value); }
+            get { return GetProperty<string>(nameof(City)); }
+            set { SetProperty(nameof(City), value); }
         }
 
         public string State
         {
-            get { return GetProperty<string>("State"); }
-            set { SetProperty("State", value); }
+            get { return GetProperty<string>(nameof(State)); }
+            set { SetProperty(nameof(State), value); }
         }
 
         public string ZipCode
         {
-            get { return GetProperty<string>("ZipCode"); }
-            set { SetProperty("ZipCode", value); }
+            get { return GetProperty<string>(nameof(ZipCode)); }
+            set { SetProperty(nameof(ZipCode), value); }
         }
 
         public string EmailAddress
         {
-            get { return GetProperty<string>("EmailAddress"); }
-            set { SetProperty("EmailAddress", value); }
+            get { return GetProperty<string>(nameof(EmailAddress)); }
+            set { SetProperty(nameof(EmailAddress), value); }
         }
 
         public string PhoneNumber
         {
-            get { return GetProperty<string>("PhoneNumber"); }
-            set { SetProperty("PhoneNumber", value); }
+            get { return GetProperty<string>(nameof(PhoneNumber)); }
+            set { SetProperty(nameof(PhoneNumber), value); }
         }
 
         public string ContactRelationship
         {
-            get { return GetProperty<string>("ContactRelationship"); }
-            set { SetProperty("ContactRelationship", value); }
+            get { return GetProperty<string>(nameof(ContactRelationship)); }
+            set { SetProperty(nameof(ContactRelationship), value); }
         }
 
         public string ContactPrefix
         {
-            get { return GetProperty<string>("ContactPrefix"); }
-            set { SetProperty("ContactPrefix", value); }
+            get { return GetProperty<string>(nameof(ContactPrefix)); }
+            set { SetProperty(nameof(ContactPrefix), value); }
         }
 
         public string ContactFirstName
         {
-            get { return GetProperty<string>("ContactFirstName"); }
-            set { SetProperty("ContactFirstName", value); }
+            get { return GetProperty<string>(nameof(ContactFirstName)); }
+            set { SetProperty(nameof(ContactFirstName), value); }
         }
 
         public string ContactMiddleInitial
         {
-            get { return GetProperty<string>("ContactMiddleInitial"); }
-            set { SetProperty("ContactMiddleInitial", value); }
+            get { return GetProperty<string>(nameof(ContactMiddleInitial)); }
+            set { SetProperty(nameof(ContactMiddleInitial), value); }
         }
 
         public string ContactLastName
         {
-            get { return GetProperty<string>("ContactLastName"); }
-            set { SetProperty("ContactLastName", value); }
+            get { return GetProperty<string>(nameof(ContactLastName)); }
+            set { SetProperty(nameof(ContactLastName), value); }
         }
 
         public string ContactSuffix
         {
-            get { return GetProperty<string>("ContactSuffix"); }
-            set { SetProperty("ContactSuffix", value); }
+            get { return GetProperty<string>(nameof(ContactSuffix)); }
+            set { SetProperty(nameof(ContactSuffix), value); }
         }
 
         public string ContactAlias
         {
-            get { return GetProperty<string>("ContactAlias"); }
-            set { SetProperty("ContactAlias", value); }
+            get { return GetProperty<string>(nameof(ContactAlias)); }
+            set { SetProperty(nameof(ContactAlias), value); }
         }
 
         public string ContactAddressLine1
         {
-            get { return GetProperty<string>("ContactAddressLine1"); }
-            set { SetProperty("ContactAddressLine1", value); }
+            get { return GetProperty<string>(nameof(ContactAddressLine1)); }
+            set { SetProperty(nameof(ContactAddressLine1), value); }
         }
 
         public string ContactAddressLine2
         {
-            get { return GetProperty<string>("ContactAddressLine2"); }
-            set { SetProperty("ContactAddressLine2", value); }
+            get { return GetProperty<string>(nameof(ContactAddressLine2)); }
+            set { SetProperty(nameof(ContactAddressLine2), value); }
         }
 
         public string ContactCity
         {
-            get { return GetProperty<string>("ContactCity"); }
-            set { SetProperty("ContactCity", value); }
+            get { return GetProperty<string>(nameof(ContactCity)); }
+            set { SetProperty(nameof(ContactCity), value); }
         }
 
         public string ContactState
         {
-            get { return GetProperty<string>("ContactState"); }
-            set { SetProperty("ContactState", value); }
+            get { return GetProperty<string>(nameof(ContactState)); }
+            set { SetProperty(nameof(ContactState), value); }
         }
 
         public string ContactZipCode
         {
-            get { return GetProperty<string>("ContactZipCode"); }
-            set { SetProperty("ContactZipCode", value); }
+            get { return GetProperty<string>(nameof(ContactZipCode)); }
+            set { SetProperty(nameof(ContactZipCode), value); }
         }
 
         public string ContactEmailAddress
         {
-            get { return GetProperty<string>("ContactEmailAddress"); }
-            set { SetProperty("ContactEmailAddress", value); }
+            get { return GetProperty<string>(nameof(ContactEmailAddress)); }
+            set { SetProperty(nameof(ContactEmailAddress), value); }
         }
 
         public string ContactPhoneNumber
         {
-            get { return GetProperty<string>("ContactPhoneNumber"); }
-            set { SetProperty("ContactPhoneNumber", value); }
+            get { return GetProperty<string>(nameof(ContactPhoneNumber)); }
+            set { SetProperty(nameof(ContactPhoneNumber), value); }
         }
 
         public string OrganizationName
         {
-            get { return GetProperty<string>("OrganizationName"); }
-            set { SetProperty("OrganizationName", value); }
+            get { return GetProperty<string>(nameof(OrganizationName)); }
+            set { SetProperty(nameof(OrganizationName), value); }
         }
 
         public string OrganizationContactName
         {
-            get { return GetProperty<string>("OrganizationContactName"); }
-            set { SetProperty("OrganizationContactName", value); }
+            get { return GetProperty<string>(nameof(OrganizationContactName)); }
+            set { SetProperty(nameof(OrganizationContactName), value); }
         }
 
         public string OrganizationAddressLine1
         {
-            get { return GetProperty<string>("OrganizationAddressLine1"); }
-            set { SetProperty("OrganizationAddressLine1", value); }
+            get { return GetProperty<string>(nameof(OrganizationAddressLine1)); }
+            set { SetProperty(nameof(OrganizationAddressLine1), value); }
         }
 
         public string OrganizationAddressLine2
         {
-            get { return GetProperty<string>("OrganizationAddressLine2"); }
-            set { SetProperty("OrganizationAddressLine2", value); }
+            get { return GetProperty<string>(nameof(OrganizationAddressLine2)); }
+            set { SetProperty(nameof(OrganizationAddressLine2), value); }
         }
 
         public string OrganizationCity
         {
-            get { return GetProperty<string>("OrganizationCity"); }
-            set { SetProperty("OrganizationCity", value); }
+            get { return GetProperty<string>(nameof(OrganizationCity)); }
+            set { SetProperty(nameof(OrganizationCity), value); }
         }
 
         public string OrganizationState
         {
-            get { return GetProperty<string>("OrganizationState"); }
-            set { SetProperty("OrganizationState", value); }
+            get { return GetProperty<string>(nameof(OrganizationState)); }
+            set { SetProperty(nameof(OrganizationState), value); }
         }
 
         public string OrganizationZipCode
         {
-            get { return GetProperty<string>("OrganizationZipCode"); }
-            set { SetProperty("OrganizationZipCode", value); }
+            get { return GetProperty<string>(nameof(OrganizationZipCode)); }
+            set { SetProperty(nameof(OrganizationZipCode), value); }
         }
 
         public string OrganizationEmailAddress
         {
-            get { return GetProperty<string>("OrganizationEmailAddress"); }
-            set { SetProperty("OrganizationEmailAddress", value); }
+            get { return GetProperty<string>(nameof(OrganizationEmailAddress)); }
+            set { SetProperty(nameof(OrganizationEmailAddress), value); }
         }
 
         public string OrganizationPhoneNumber
         {
-            get { return GetProperty<string>("OrganizationPhoneNumber"); }
-            set { SetProperty("OrganizationPhoneNumber", value); }
+            get { return GetProperty<string>(nameof(OrganizationPhoneNumber)); }
+            set { SetProperty(nameof(OrganizationPhoneNumber), value); }
         }
 
         public string Occupation
         {
-            get { return GetProperty<string>("Occupation"); }
-            set { SetProperty("Occupation", value); }
+            get { return GetProperty<string>(nameof(Occupation)); }
+            set { SetProperty(nameof(Occupation), value); }
         }
 
         public bool IsVolunteer
         {
-            get { return GetProperty<bool>("IsVolunteer"); }
-            set { SetProperty("IsVolunteer", value); }
+            get { return GetProperty<bool>(nameof(IsVolunteer)); }
+            set { SetProperty(nameof(IsVolunteer), value); }
         }
 
         public string UnionName
         {
-            get { return GetProperty<string>("UnionName"); }
-            set { SetProperty("UnionName", value); }
+            get { return GetProperty<string>(nameof(UnionName)); }
+            set { SetProperty(nameof(UnionName), value); }
         }
 
         public string UnionLocalNumber
         {
-            get { return GetProperty<string>("UnionLocalNumber"); }
-            set { SetProperty("UnionLocalNumber", value); }
+            get { return GetProperty<string>(nameof(UnionLocalNumber)); }
+            set { SetProperty(nameof(UnionLocalNumber), value); }
         }
 
         public Responder()
         {
-            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, "ResponderId");
+            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, nameof(ResponderId));
         }
     }
 }

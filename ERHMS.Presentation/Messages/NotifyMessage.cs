@@ -6,17 +6,15 @@ namespace ERHMS.Presentation.Messages
     {
         public string Title { get; private set; }
         public string Message { get; private set; }
-        public bool Async { get; private set; }
 
-        public NotifyMessage(string title, string message, bool async = false)
+        public NotifyMessage(string title, string message)
         {
             Title = title;
             Message = message;
-            Async = async;
         }
 
-        public NotifyMessage(string message, bool async = false)
-            : this("Error", message, async) { }
+        public NotifyMessage(string message)
+            : this("Error", message) { }
 
         public event EventHandler Dismissed;
         public void OnDismissed(EventArgs e)

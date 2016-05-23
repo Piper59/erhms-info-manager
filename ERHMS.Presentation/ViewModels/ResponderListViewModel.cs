@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
@@ -33,12 +34,12 @@ namespace ERHMS.Presentation.ViewModels
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
+            Messenger.Default.Register<RefreshDataMessage>(this, OnRefreshDataMessage);
         }
 
         protected override ICollectionView GetItems()
         {
-            return CollectionViewSource.GetDefaultView(DataContext.Responders
-                .SelectByDeleted(false)
+            return CollectionViewSource.GetDefaultView(DataContext.Responders.SelectByDeleted(false)
                 .OrderBy(responder => responder.LastName)
                 .ThenBy(responder => responder.FirstName));
         }
@@ -70,11 +71,7 @@ namespace ERHMS.Presentation.ViewModels
             Responder responder = SelectedItem;
             SelectedItems.Clear();
             SelectedItem = responder;
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                "Are you sure you want to delete this responder?",
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected responder?");
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.Responders.Delete(SelectedItem);
@@ -91,6 +88,14 @@ namespace ERHMS.Presentation.ViewModels
         private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)
         {
             Refresh();
+        }
+
+        private void OnRefreshDataMessage(RefreshDataMessage msg)
+        {
+            if (msg.ProjectPath.EqualsIgnoreCase(DataContext.Project.FilePath) && msg.ViewName.EqualsIgnoreCase(DataContext.Responders.View.Name))
+            {
+                Refresh();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace ERHMS.EpiInfo.Analysis
             }
             foreach (string source in sources)
             {
-                string target = targets.FirstOrDefault(_target => _target.Equals(source, StringComparison.OrdinalIgnoreCase));
+                string target = targets.FirstOrDefault(_target => _target.EqualsIgnoreCase(source));
                 if (target == null)
                 {
                     target = EmptyTarget;
@@ -69,7 +70,7 @@ namespace ERHMS.EpiInfo.Analysis
             {
                 string source = (string)row.Cells["colSource"].Value;
                 string target = (string)row.Cells["colTarget"].Value;
-                if (target.Equals(EmptyTarget, StringComparison.OrdinalIgnoreCase))
+                if (target.EqualsIgnoreCase(EmptyTarget))
                 {
                     continue;
                 }

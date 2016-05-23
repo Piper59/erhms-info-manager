@@ -21,8 +21,7 @@
             <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                 <ctrl:AppBarButton Command="{Binding OpenCommand}" Visual="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="Add" Visual="{DynamicResource appbar_add}"
-                                   ctrl:ButtonExtensions.OpenContextMenuOnClick="True">
+                <ctrl:AppBarButton Content="Add" Visual="{DynamicResource appbar_add}" ctrl:ButtonExtensions.OpenContextMenuOnClick="True">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="New" Command="{Binding AddNewCommand}" />
@@ -43,13 +42,13 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <scw:ChildWindow Title="Create a New Data Source" IsOpen="{Binding Creating}">
+        <scw:ChildWindow Title="Create a Data Source" DataContext="{Binding DataSource}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
                     <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
-                <StackPanel DataContext="{Binding DataSource}">
+                <StackPanel>
                     <ctrl:ResponsiveFormGrid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -63,12 +62,20 @@
                         <Label Grid.Row="0" Grid.Column="0">Name</Label>
                         <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" Text="{Binding Name}" />
                         <Label Grid.Row="1" Grid.Column="0">Description</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource MultiLineTextBox}" Text="{Binding Description}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                 Style="{StaticResource MultiLineTextBox}"
+                                 Text="{Binding Description}" />
                         <Label Grid.Row="2" Grid.Column="0">Location</Label>
                         <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" Text="{Binding Location.FullName, Mode=OneWay}" />
-                        <Button Grid.Row="2" Grid.Column="2" Command="{Binding DataContext.BrowseCommand, ElementName=Root}" Margin="5,0,0,5" Style="{StaticResource AccentButton}">Browse</Button>
+                        <Button Grid.Row="2" Grid.Column="2" Margin="5,0,0,5"
+                                Style="{StaticResource AccentButton}"
+                                Command="{Binding BrowseCommand}">
+                            Browse
+                        </Button>
                         <Label Grid.Row="3" Grid.Column="0">Database Type</Label>
-                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding DataContext.Providers, ElementName=Root}" SelectedItem="{Binding Provider}">
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding DataContext.Providers, ElementName=Root}"
+                                  SelectedItem="{Binding Provider}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Converter={StaticResource DataProviderToDescriptionConverter}}" />
@@ -76,7 +83,8 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </ctrl:ResponsiveFormGrid>
-                    <GroupBox Header="Connection" Visibility="{Binding Provider, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static eida:DataProvider.SqlServer}}">
+                    <GroupBox Header="Connection"
+                              Visibility="{Binding Provider, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static eida:DataProvider.SqlServer}}">
                         <ctrl:ResponsiveFormGrid DataContext="{Binding SqlServer}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -92,10 +100,13 @@
                             <Label Grid.Row="2" Grid.Column="0">Windows Authentication</Label>
                             <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IntegratedSecurity}" />
                             <Label Grid.Row="3" Grid.Column="0">User Name</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding UserId, TargetNullValue=''}" IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
+                            <TextBox Grid.Row="3" Grid.Column="1"
+                                     Text="{Binding UserId, TargetNullValue=''}"
+                                     IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
                             <Label Grid.Row="4" Grid.Column="0">Password</Label>
-                            <!-- TODO: Change to PasswordBox -->
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Password, TargetNullValue=''}" IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
+                            <TextBox Grid.Row="4" Grid.Column="1"
+                                     Text="{Binding Password, TargetNullValue=''}"
+                                     IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
                         </ctrl:ResponsiveFormGrid>
                     </GroupBox>
                 </StackPanel>

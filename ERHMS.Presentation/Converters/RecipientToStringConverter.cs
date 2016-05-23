@@ -9,7 +9,7 @@ namespace ERHMS.Presentation.Converters
     {
         private static readonly ResponderToNameConverter ResponderToNameConverter = new ResponderToNameConverter();
 
-        public string Convert(EmailViewModel.RecipientViewModel recipient)
+        public string Convert(RecipientViewModel recipient)
         {
             if (recipient.IsResponder)
             {
@@ -30,7 +30,7 @@ namespace ERHMS.Presentation.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Convert((EmailViewModel.RecipientViewModel)value);
+            return Convert((RecipientViewModel)value);
 
         }
 

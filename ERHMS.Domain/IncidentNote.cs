@@ -13,31 +13,31 @@ namespace ERHMS.Domain
 
         public string IncidentNoteId
         {
-            get { return GetProperty<string>("IncidentNoteId"); }
-            set { SetProperty("IncidentNoteId", value); }
+            get { return GetProperty<string>(nameof(IncidentNoteId)); }
+            set { SetProperty(nameof(IncidentNoteId), value); }
         }
 
         public string IncidentId
         {
-            get { return GetProperty<string>("IncidentId"); }
-            set { SetProperty("IncidentId", value); }
+            get { return GetProperty<string>(nameof(IncidentId)); }
+            set { SetProperty(nameof(IncidentId), value); }
         }
 
         public string Content
         {
-            get { return GetProperty<string>("Content"); }
-            set { SetProperty("Content", value); }
+            get { return GetProperty<string>(nameof(Content)); }
+            set { SetProperty(nameof(Content), value); }
         }
 
         public DateTime Date
         {
-            get { return GetProperty<DateTime>("Date"); }
-            set { SetProperty("Date", value); }
+            get { return GetProperty<DateTime>(nameof(Date)); }
+            set { SetProperty(nameof(Date), value); }
         }
 
         public IncidentNote()
         {
-            LinkProperties("IncidentNoteId", "Guid");
+            LinkProperties(nameof(IncidentNoteId), nameof(Guid));
         }
     }
 }

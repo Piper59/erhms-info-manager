@@ -3,7 +3,10 @@ using Epi.Fields;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Enter;
+using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -57,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             UndeleteCommand = new RelayCommand(Undelete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            // TODO: Handle service messages
+            Messenger.Default.Register<RefreshDataMessage>(this, OnRefreshDataMessage);
         }
 
         protected override ICollectionView GetItems()
@@ -99,6 +102,14 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     Entities.Undelete(entity);
                 }
+            }
+        }
+
+        private void OnRefreshDataMessage(RefreshDataMessage msg)
+        {
+            if (msg.ProjectPath.EqualsIgnoreCase(DataContext.Project.FilePath) && msg.ViewName.EqualsIgnoreCase(View.Name))
+            {
+                Refresh();
             }
         }
     }

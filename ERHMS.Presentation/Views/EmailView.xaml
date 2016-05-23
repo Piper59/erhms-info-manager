@@ -51,7 +51,7 @@
                 <TextBox Grid.Row="3" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" Text="{Binding Body}" />
             </ctrl:FormGrid>
         </DockPanel>
-        <scw:ChildWindow Title="Add a New Recipient" DataContext="{Binding Recipient}" IsOpen="{Binding Active}">
+        <scw:ChildWindow Title="Add a Recipient" DataContext="{Binding Recipient}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding AddCommand}" Visual="{DynamicResource appbar_add}">Add</ctrl:AppBarButton>
@@ -74,8 +74,13 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <RadioButton Grid.Row="1" Grid.Column="0" GroupName="IsResponder" IsChecked="{Binding IsResponder, Converter={StaticResource BoolInverter}}">Email Address</RadioButton>
-                    <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding EmailAddress}" IsEnabled="{Binding IsResponder, Converter={StaticResource BoolInverter}}" />
+                    <RadioButton Grid.Row="1" Grid.Column="0" GroupName="IsResponder"
+                                 IsChecked="{Binding IsResponder, Converter={StaticResource BoolInverter}}">
+                        Email Address
+                    </RadioButton>
+                    <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"
+                             Text="{Binding EmailAddress}"
+                             IsEnabled="{Binding IsResponder, Converter={StaticResource BoolInverter}}" />
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>

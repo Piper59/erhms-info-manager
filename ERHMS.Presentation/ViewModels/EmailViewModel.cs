@@ -16,129 +16,17 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class EmailViewModel : ViewModelBase
     {
-        public class RecipientViewModel : ViewModelBase
-        {
-            public EmailViewModel Parent { get; private set; }
-
-            private bool active;
-            public bool Active
-            {
-                get { return active; }
-                set { Set(() => Active, ref active, value); }
-            }
-
-            private bool isResponder;
-            public bool IsResponder
-            {
-                get { return isResponder; }
-                set { Set(() => IsResponder, ref isResponder, value); }
-            }
-
-            private Responder responder;
-            public Responder Responder
-            {
-                get { return responder; }
-                set { Set(() => Responder, ref responder, value); }
-            }
-
-            private string emailAddress;
-            public string EmailAddress
-            {
-                get { return emailAddress; }
-                set { Set(() => EmailAddress, ref emailAddress, value); }
-            }
-
-            public RelayCommand AddCommand { get; private set; }
-            public RelayCommand CancelCommand { get; private set; }
-            public RelayCommand RemoveCommand { get; private set; }
-
-            public RecipientViewModel(EmailViewModel parent)
-            {
-                Parent = parent;
-                IsResponder = true;
-                PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == "IsResponder")
-                    {
-                        if (IsResponder)
-                        {
-                            EmailAddress = null;
-                        }
-                        else
-                        {
-                            Responder = null;
-                        }
-                    }
-                };
-                AddCommand = new RelayCommand(Add);
-                CancelCommand = new RelayCommand(Cancel);
-                RemoveCommand = new RelayCommand(Remove);
-            }
-
-            public RecipientViewModel(EmailViewModel parent, Responder responder)
-                : this(parent)
-            {
-                Responder = responder;
-            }
-
-            public string GetEmailAddress()
-            {
-                if (IsResponder)
-                {
-                    if (Responder == null)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return Responder.EmailAddress;
-                    }
-                }
-                else
-                {
-                    return EmailAddress;
-                }
-            }
-
-            public void Add()
-            {
-                // TODO: Validate fields
-                Parent.Recipients.Add(this);
-                Active = false;
-            }
-
-            public void Cancel()
-            {
-                Active = false;
-            }
-
-            public void Remove()
-            {
-                Parent.Recipients.Remove(this);
-            }
-        }
-
-        public class AttachmentViewModel : ViewModelBase
-        {
-            public EmailViewModel Parent { get; private set; }
-            public FileInfo File { get; private set; }
-
-            public RelayCommand RemoveCommand { get; private set; }
-
-            public AttachmentViewModel(EmailViewModel parent, FileInfo file)
-            {
-                Parent = parent;
-                File = file;
-                RemoveCommand = new RelayCommand(Remove);
-            }
-
-            public void Remove()
-            {
-                Parent.Attachments.Remove(this);
-            }
-        }
-
         private static readonly RecipientToStringConverter RecipientToStringConverter = new RecipientToStringConverter();
+
+        private static void RequestConfiguration(string message)
+        {
+            NotifyMessage msg = new NotifyMessage(message);
+            msg.Dismissed += (sender, e) =>
+            {
+                Locator.Main.OpenSettingsView();
+            };
+            Messenger.Default.Send(msg);
+        }
 
         private ICollection<Responder> responders;
         public ICollection<Responder> Responders
@@ -179,17 +67,13 @@ namespace ERHMS.Presentation.ViewModels
         public EmailViewModel()
         {
             Title = "Email";
-            Responders = DataContext.Responders.SelectByDeleted(false)
-                .OrderBy(responder => responder.LastName)
-                .ThenBy(responder => responder.FirstName)
-                .ThenBy(responder => responder.EmailAddress)
-                .ToList();
+            RefreshResponders();
             Recipients = new ObservableCollection<RecipientViewModel>();
             Attachments = new ObservableCollection<AttachmentViewModel>();
             AddCommand = new RelayCommand(Add);
             AttachCommand = new RelayCommand(Attach);
             SendCommand = new RelayCommand(Send);
-            // TODO: Handle RefreshListMessage<Responder>
+            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderList);
         }
 
         public EmailViewModel(IEnumerable<Responder> responders)
@@ -197,23 +81,22 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (Responder responder in responders)
             {
-                Recipients.Add(new RecipientViewModel(this, responder));
+                Recipients.Add(new RecipientViewModel(Recipients, responder));
             }
         }
 
-        private static void RequestConfiguration(string message)
+        private void RefreshResponders()
         {
-            NotifyMessage msg = new NotifyMessage(message);
-            msg.Dismissed += (sender, e) =>
-            {
-                Locator.Main.OpenSettingsView();
-            };
-            Messenger.Default.Send(msg);
+            Responders = DataContext.Responders.SelectByDeleted(false)
+                .OrderBy(responder => responder.LastName)
+                .ThenBy(responder => responder.FirstName)
+                .ThenBy(responder => responder.EmailAddress)
+                .ToList();
         }
 
         public void Add()
         {
-            Recipient = new RecipientViewModel(this)
+            Recipient = new RecipientViewModel(Recipients)
             {
                 Active = true
             };
@@ -229,7 +112,7 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     foreach (string path in dialog.FileNames)
                     {
-                        Attachments.Add(new AttachmentViewModel(this, new FileInfo(path)));
+                        Attachments.Add(new AttachmentViewModel(Attachments, new FileInfo(path)));
                     }
                 }
             }
@@ -247,11 +130,12 @@ namespace ERHMS.Presentation.ViewModels
             MailMessage message = Email.GetMessage();
             foreach (RecipientViewModel recipient in Recipients)
             {
-                try
+                string address = recipient.GetEmailAddress();
+                if (Email.IsValidAddress(address))
                 {
-                    message.Bcc.Add(new MailAddress(recipient.GetEmailAddress()));
+                    message.Bcc.Add(new MailAddress(address));
                 }
-                catch
+                else
                 {
                     invalidRecipients.Add(recipient);
                 }
@@ -307,6 +191,11 @@ namespace ERHMS.Presentation.ViewModels
                 }
             };
             Messenger.Default.Send(msg);
+        }
+
+        private void OnRefreshResponderList(RefreshListMessage<Responder> msg)
+        {
+            RefreshResponders();
         }
     }
 }

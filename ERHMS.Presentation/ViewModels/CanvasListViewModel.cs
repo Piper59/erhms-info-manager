@@ -2,9 +2,9 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.AnalysisDashboard;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -44,15 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            if (Incident == null)
-            {
-                Title = "Dashboards";
-            }
-            else
-            {
-                string incidentName = Incident.New ? "New Incident" : Incident.Name;
-                Title = string.Format("{0} Dashboards", incidentName).Trim();
-            }
+            Title = GetTitleWithIncidentName("Dashboards", Incident);
         }
 
         protected override ICollectionView GetItems()
@@ -81,11 +73,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                "Are you sure you want to delete this dashboard?",
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete?", "Delete the selected dashboard?");
             msg.Confirmed += (sender, e) =>
             {
                 DataContext.CanvasLinks.DeleteByCanvasId(SelectedItem.CanvasId);
@@ -105,7 +93,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshCanvasListMessage(RefreshListMessage<Canvas> msg)
         {
-            if (string.Equals(msg.IncidentId, IncidentId, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }

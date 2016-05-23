@@ -15,6 +15,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         private const double UnpinnedZoomLevel = 6.0;
         private const double PinnedZoomLevel = 12.0;
+        private static readonly Coordinates Washington = new Coordinates(38.904722, -77.016389);
 
         public Location Location { get; private set; }
         public CredentialsProvider CredentialsProvider { get; private set; }
@@ -43,19 +44,17 @@ namespace ERHMS.Presentation.ViewModels
             Location = location;
             location.PropertyChanged += (sender, e) =>
             {
-                switch (e.PropertyName)
+                if (e.PropertyName == nameof(location.Address))
                 {
-                    case "Address":
-                        LocateCommand.RaiseCanExecuteChanged();
-                        break;
-                    case "Latitude":
-                    case "Longitude":
-                        Pins.Clear();
-                        if (HasCoordinates())
-                        {
-                            Pins.Add(GetCoordinates());
-                        }
-                        break;
+                    LocateCommand.RaiseCanExecuteChanged();
+                }
+                else if (e.PropertyName == nameof(location.Latitude) || e.PropertyName == nameof(location.Longitude))
+                {
+                    Pins.Clear();
+                    if (HasCoordinates())
+                    {
+                        Pins.Add(GetCoordinates());
+                    }
                 }
             };
             UpdateTitle();
@@ -69,7 +68,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Center = new Coordinates(38.904722, -77.016389);
+                Center = Washington;
                 ZoomLevel = UnpinnedZoomLevel;
             }
             SaveCommand = new RelayCommand(Save);
@@ -79,14 +78,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void UpdateTitle()
         {
-            if (Location.New)
-            {
-                Title = "New Location";
-            }
-            else
-            {
-                Title = Location.Name;
-            }
+            Title = Location.New ? "New Location" : Location.Name;
         }
 
         public bool HasAddress()

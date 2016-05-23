@@ -33,7 +33,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 return entities.SingleOrDefault(entity => entity.PropertyEquals(column.ColumnName, value, comparisonType));
             }
 
-            public static void SetEntities(DataTable table, DataColumn column, ICollection<TEntity> entities, StringComparison comparisonType = StringComparison.Ordinal)
+            public static void SetEntities(DataTable table, DataColumn column, ICollection<TEntity> entities, StringComparison comparisonType)
             {
                 foreach (DataRow row in table.Rows)
                 {

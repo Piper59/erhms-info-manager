@@ -1,4 +1,5 @@
 ﻿using ERHMS.EpiInfo;
+using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -75,11 +76,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage(
-                "Delete?",
-                string.Format("Are you sure you want to delete {0}?", SelectedItems.Count > 1 ? "these logs" : "this log"),
-                "Delete",
-                "Don't Delete");
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected logs?");
             msg.Confirmed += (sender, e) =>
             {
                 foreach (FileInfo log in SelectedItems)
@@ -104,7 +101,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 dialog.Title = "Package Logs";
                 dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                dialog.Filter = "ZIP Files (*.zip)|*.zip";
+                dialog.Filter = FileDialogExtensions.GetFilter("ZIP Files", ".zip");
                 dialog.FileName = string.Format("Logs-{0:yyyyMMdd}-{0:HHmmss}.zip", DateTime.Now);
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
