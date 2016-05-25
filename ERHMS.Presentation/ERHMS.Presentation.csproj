@@ -251,7 +251,6 @@
     <Compile Include="Messages\BlockMessage.cs" />
     <Compile Include="Messages\ConfirmMessage.cs" />
     <Compile Include="Messages\ExitMessage.cs" />
-    <Compile Include="Messages\LocateMessage.cs" />
     <Compile Include="Messages\NotifyMessage.cs" />
     <Compile Include="Messages\RefreshDataMessage.cs" />
     <Compile Include="Messages\RefreshListMessage.cs" />

@@ -1,5 +1,4 @@
-﻿using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Messaging;
+﻿using ERHMS.Presentation.ViewModels;
 using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +7,11 @@ namespace ERHMS.Presentation.Views
 {
     public partial class LocationDetailView : UserControl
     {
+        public new LocationDetailViewModel DataContext
+        {
+            get { return (LocationDetailViewModel)base.DataContext; }
+        }
+
         public LocationDetailView()
         {
             InitializeComponent();
@@ -15,8 +19,7 @@ namespace ERHMS.Presentation.Views
 
         private void Map_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Location location = Map.ViewportPointToLocation(e.GetPosition(Map));
-            Messenger.Default.Send(new LocateMessage(location));
+            DataContext.SetCoordinates(Map.ViewportPointToLocation(e.GetPosition(Map)));
             e.Handled = true;
         }
     }

@@ -89,7 +89,6 @@ namespace ERHMS.Presentation.ViewModels
             ZoomInCommand = new RelayCommand(ZoomIn, CanZoomIn);
             ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
             SaveCommand = new RelayCommand(Save);
-            Messenger.Default.Register<LocateMessage>(this, OnLocateMessage);
         }
 
         private void UpdateTitle()
@@ -118,6 +117,11 @@ namespace ERHMS.Presentation.ViewModels
             Location.Longitude = null;
             Location.Latitude = latitude;
             Location.Longitude = longitude;
+        }
+
+        public void SetCoordinates(Coordinates coordinates)
+        {
+            SetCoordinates(coordinates.Latitude, coordinates.Longitude);
         }
 
         public void Locate()
@@ -219,11 +223,6 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new ToastMessage("Location has been saved."));
             Messenger.Default.Send(new RefreshListMessage<Location>(Location.IncidentId));
             UpdateTitle();
-        }
-
-        private void OnLocateMessage(LocateMessage msg)
-        {
-            SetCoordinates(msg.Location.Latitude, msg.Location.Longitude);
         }
     }
 }
