@@ -18,7 +18,7 @@ namespace ERHMS.EpiInfo.Web
             switch (@this)
             {
                 case ConfigurationError.Version:
-                    return "Invalid endpoint address (version 2 required).";
+                    return "Version 2 endpoint address required.";
                 case ConfigurationError.OrganizationKey:
                     return "Invalid organization key.";
                 case ConfigurationError.Connection:
