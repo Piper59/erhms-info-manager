@@ -51,6 +51,10 @@
                     </DataTemplate>
                 </bing:MapItemsControl.ItemTemplate>
             </bing:MapItemsControl>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                <ctrl:MapButton Command="{Binding ZoomInCommand}" Visual="{DynamicResource appbar_add}" />
+                <ctrl:MapButton Command="{Binding ZoomOutCommand}" Visual="{DynamicResource appbar_minus}" />
+            </StackPanel>
         </bing:Map>
     </DockPanel>
 </UserControl>

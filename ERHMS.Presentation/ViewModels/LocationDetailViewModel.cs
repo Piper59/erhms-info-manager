@@ -14,6 +14,9 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class LocationDetailViewModel : ViewModelBase
     {
+        private const double ZoomLevelMin = 0.75;
+        private const double ZoomLevelMax = 21.0;
+        private const double ZoomLevelIncrement = 1.2;
         private const double UnpinnedZoomLevel = 6.0;
         private const double PinnedZoomLevel = 12.0;
         private static readonly Coordinates Washington = new Coordinates(38.904722, -77.016389);
@@ -38,6 +41,8 @@ namespace ERHMS.Presentation.ViewModels
         public ObservableCollection<Coordinates> Pins { get; private set; }
 
         public RelayCommand LocateCommand { get; private set; }
+        public RelayCommand ZoomInCommand { get; private set; }
+        public RelayCommand ZoomOutCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
         public LocationDetailViewModel(Location location)
@@ -72,8 +77,18 @@ namespace ERHMS.Presentation.ViewModels
                 Center = Washington;
                 ZoomLevel = UnpinnedZoomLevel;
             }
-            SaveCommand = new RelayCommand(Save);
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ZoomLevel))
+                {
+                    ZoomInCommand.RaiseCanExecuteChanged();
+                    ZoomOutCommand.RaiseCanExecuteChanged();
+                }
+            };
             LocateCommand = new RelayCommand(Locate, HasAddress);
+            ZoomInCommand = new RelayCommand(ZoomIn, CanZoomIn);
+            ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
+            SaveCommand = new RelayCommand(Save);
             Messenger.Default.Register<LocateMessage>(this, OnLocateMessage);
         }
 
@@ -138,6 +153,42 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Messenger.Default.Send(new NotifyMessage("Address could not be found."));
             }
+        }
+
+        public bool CanZoomIn()
+        {
+            return ZoomLevel < ZoomLevelMax;
+        }
+
+        public bool CanZoomOut()
+        {
+            return ZoomLevel > ZoomLevelMin;
+        }
+
+        public void SetZoomLevel(double zoomLevel)
+        {
+            if (zoomLevel < ZoomLevelMin)
+            {
+                ZoomLevel = ZoomLevelMin;
+            }
+            else if (zoomLevel > ZoomLevelMax)
+            {
+                ZoomLevel = ZoomLevelMax;
+            }
+            else
+            {
+                ZoomLevel = zoomLevel;
+            }
+        }
+
+        public void ZoomIn()
+        {
+            SetZoomLevel(ZoomLevel + ZoomLevelIncrement);
+        }
+
+        public void ZoomOut()
+        {
+            SetZoomLevel(ZoomLevel - ZoomLevelIncrement);
         }
 
         private bool Validate()

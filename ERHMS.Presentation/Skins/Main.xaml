@@ -149,6 +149,22 @@
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
+    <Style TargetType="{x:Type ctrl:MapButton}" BasedOn="{StaticResource MetroButton}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Rectangle Width="25" Height="20" Fill="{StaticResource BlackBrush}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Uniform"
+                                         Visual="{Binding Visual, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:MapButton}}}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="0,0,5,5" />
+    </Style>
+
     <Style TargetType="{x:Type mah:MetroTabControl}">
         <Setter Property="TabStripMargin" Value="0,0,5,0" />
         <Setter Property="TabStripPlacement" Value="Left" />

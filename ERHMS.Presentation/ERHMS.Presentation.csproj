@@ -220,6 +220,7 @@
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\FormGrid.cs" />
+    <Compile Include="Controls\MapButton.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Controls\RemovableItemsControl.cs" />
     <Compile Include="Controls\ResponsiveFormGrid.cs" />
