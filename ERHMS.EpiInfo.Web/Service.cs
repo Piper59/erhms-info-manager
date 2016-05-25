@@ -92,74 +92,94 @@ namespace ERHMS.EpiInfo.Web
 
         public Survey GetSurvey(View view)
         {
-            // TODO: Handle errors
             Log.Current.DebugFormat("Getting survey: {0}", view.Name);
-            ManagerServiceV2Client client = ServiceClient.GetClientV2();
-            SurveyInfoRequest request = new SurveyInfoRequest
+            try
             {
-                Criteria = new SurveyInfoCriteria
+                ManagerServiceV2Client client = ServiceClient.GetClientV2();
+                SurveyInfoRequest request = new SurveyInfoRequest
                 {
-                    OrganizationKey = OrganizationKey.Value,
-                    SurveyType = ResponseType.Unspecified.ToEpiInfoValue(),
-                    SurveyIdList = new string[] { view.WebSurveyId }
+                    Criteria = new SurveyInfoCriteria
+                    {
+                        OrganizationKey = OrganizationKey.Value,
+                        SurveyType = ResponseType.Unspecified.ToEpiInfoValue(),
+                        SurveyIdList = new string[] { view.WebSurveyId }
+                    }
+                };
+                SurveyInfoResponse response = client.GetSurveyInfo(request);
+                if (response.SurveyInfoList.Length == 0)
+                {
+                    return null;
                 }
-            };
-            SurveyInfoResponse response = client.GetSurveyInfo(request);
-            if (response.SurveyInfoList.Length == 0)
-            {
-                return null;
+                else
+                {
+                    if (response.SurveyInfoList.Length > 1)
+                    {
+                        Log.Current.WarnFormat("Multiple surveys found: {0}", view.Name);
+                    }
+                    return Survey.FromServiceObject(response.SurveyInfoList[0]);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                if (response.SurveyInfoList.Length > 1)
-                {
-                    Log.Current.WarnFormat("Multiple surveys found: {0}", view.Name);
-                }
-                return Survey.FromServiceObject(response.SurveyInfoList[0]);
+                Log.Current.Warn(string.Format("Failed to get survey: {0}", view.Name), ex);
+                return null;
             }
         }
 
         public bool Publish(View view, Survey survey)
         {
-            // TODO: Handle errors
             Log.Current.DebugFormat("Publishing to web: {0}", view.Name);
-            ManagerServiceV2Client client = ServiceClient.GetClientV2();
-            PublishRequest request = new PublishRequest
+            try
             {
-                SurveyInfo = survey.ToServiceObject(view)
-            };
-            PublishResponse response = client.PublishSurvey(request);
-            if (response.PublishInfo.IsPulished)
-            {
-                string url = response.PublishInfo.URL;
-                survey.SurveyId = url.Substring(url.LastIndexOf('/') + 1);
-                view.WebSurveyId = survey.SurveyId;
-                view.SaveToDb();
-                return true;
+                ManagerServiceV2Client client = ServiceClient.GetClientV2();
+                PublishRequest request = new PublishRequest
+                {
+                    SurveyInfo = survey.ToServiceObject(view)
+                };
+                PublishResponse response = client.PublishSurvey(request);
+                if (response.PublishInfo.IsPulished)
+                {
+                    string url = response.PublishInfo.URL;
+                    survey.SurveyId = url.Substring(url.LastIndexOf('/') + 1);
+                    view.WebSurveyId = survey.SurveyId;
+                    view.SaveToDb();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                Log.Current.Warn(string.Format("Failed to publish to web: {0}", view.Name), ex);
                 return false;
             }
         }
 
         public bool Republish(View view, Survey survey)
         {
-            // TODO: Handle errors
-            Log.Current.DebugFormat("Republishing to web: {0}", view.Name);
-            ManagerServiceV2Client client = ServiceClient.GetClientV2();
-            PublishRequest request = new PublishRequest
+            try
             {
-                Action = "Update",
-                SurveyInfo = survey.ToServiceObject(view)
-            };
-            PublishResponse response = client.RePublishSurvey(request);
-            return response.PublishInfo.IsPulished;
+                Log.Current.DebugFormat("Republishing to web: {0}", view.Name);
+                ManagerServiceV2Client client = ServiceClient.GetClientV2();
+                PublishRequest request = new PublishRequest
+                {
+                    Action = "Update",
+                    SurveyInfo = survey.ToServiceObject(view)
+                };
+                PublishResponse response = client.RePublishSurvey(request);
+                return response.PublishInfo.IsPulished;
+            }
+            catch (Exception ex)
+            {
+                Log.Current.Warn(string.Format("Failed to republish to web: {0}", view.Name), ex);
+                return false;
+            }
         }
 
         public IEnumerable<Record> GetRecords(View view, Survey survey)
         {
-            // TODO: Handle errors
             Log.Current.DebugFormat("Importing from web: {0}", view.Name);
             ManagerServiceV2Client client = ServiceClient.GetClientV2();
             SurveyAnswerRequest request = new SurveyAnswerRequest
@@ -208,35 +228,42 @@ namespace ERHMS.EpiInfo.Web
 
         public Record AddRecord(View view, Survey survey, object record)
         {
-            // TODO: Handle errors
             Log.Current.DebugFormat("Adding record: {0}", view.Name);
-            Record _record = new Record();
-            foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            try
             {
-                _record[view.Fields[property.Name].Name] = Convert.ToString(property.GetValue(record, null));
-            }
-            ManagerServiceV2Client client = ServiceClient.GetClientV2();
-            PreFilledAnswerRequest request = new PreFilledAnswerRequest
-            {
-                AnswerInfo = new PreFilledAnswerDTO
+                Record _record = new Record();
+                foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
-                    OrganizationKey = OrganizationKey.Value,
-                    SurveyId = new Guid(survey.SurveyId),
-                    UserPublishKey = survey.PublishKey,
-                    SurveyQuestionAnswerList = _record
+                    _record[view.Fields[property.Name].Name] = Convert.ToString(property.GetValue(record, null));
                 }
-            };
-            PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
-            switch (response.Status)
+                ManagerServiceV2Client client = ServiceClient.GetClientV2();
+                PreFilledAnswerRequest request = new PreFilledAnswerRequest
+                {
+                    AnswerInfo = new PreFilledAnswerDTO
+                    {
+                        OrganizationKey = OrganizationKey.Value,
+                        SurveyId = new Guid(survey.SurveyId),
+                        UserPublishKey = survey.PublishKey,
+                        SurveyQuestionAnswerList = _record
+                    }
+                };
+                PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
+                switch (response.Status)
+                {
+                    case "Failed":
+                        return null;
+                    case "Success":
+                        _record.GlobalRecordId = response.SurveyResponseID;
+                        _record.Passcode = response.SurveyResponsePassCode;
+                        return _record;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+            catch (Exception ex)
             {
-                case "Failed":
-                    return null;
-                case "Success":
-                    _record.GlobalRecordId = response.SurveyResponseID;
-                    _record.Passcode = response.SurveyResponsePassCode;
-                    return _record;
-                default:
-                    throw new NotSupportedException();
+                Log.Current.Warn(string.Format("Failed to add record: {0}", view.Name), ex);
+                return null;
             }
         }
     }

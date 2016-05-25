@@ -234,7 +234,6 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Send()
         {
-            // TODO: Handle errors
             if (!Validate())
             {
                 return;
@@ -245,90 +244,111 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             bool success = false;
+            ConfigurationError error = ConfigurationError.None;
+            Survey survey = null;
             ICollection<RecipientViewModel> failures = new List<RecipientViewModel>();
             BlockMessage msg = new BlockMessage("Sending email \u2026");
             msg.Executing += (sender, e) =>
             {
                 Service service = null;
-                Survey survey = null;
                 if (Prepopulate)
                 {
                     service = new Service();
-                    // TODO: Check configuration
-                    survey = service.GetSurvey(SelectedView);
-                }
-                MailMessage message = Email.GetMessage();
-                message.Subject = Subject;
-                foreach (AttachmentViewModel attachment in Attachments)
-                {
-                    message.Attachments.Add(new Attachment(attachment.File.FullName));
-                }
-                using (SmtpClient client = Email.GetClient())
-                {
-                    foreach (RecipientViewModel recipient in Recipients)
+                    error = service.CheckConfiguration();
+                    if (error != ConfigurationError.None)
                     {
-                        try
+                        return;
+                    }
+                    survey = service.GetSurvey(SelectedView);
+                    if (survey == null)
+                    {
+                        return;
+                    }
+                }
+                try
+                {
+                    MailMessage message = Email.GetMessage();
+                    message.Subject = Subject;
+                    foreach (AttachmentViewModel attachment in Attachments)
+                    {
+                        message.Attachments.Add(new Attachment(attachment.File.FullName));
+                    }
+                    using (SmtpClient client = Email.GetClient())
+                    {
+                        foreach (RecipientViewModel recipient in Recipients)
                         {
-                            message.To.Clear();
-                            message.To.Add(new MailAddress(recipient.GetEmailAddress()));
-                            if (AppendUrl)
+                            try
                             {
-                                if (recipient.IsResponder && Prepopulate)
+                                message.To.Clear();
+                                message.To.Add(new MailAddress(recipient.GetEmailAddress()));
+                                if (AppendUrl)
                                 {
-                                    Record record = service.AddRecord(SelectedView, survey, new
+                                    if (recipient.IsResponder && Prepopulate)
                                     {
-                                        ResponderId = recipient.Responder.ResponderId
-                                    });
-                                    message.Body = string.Format(
-                                        "{0}{1}{1}URL: {2}{1}Passcode: {3}",
-                                        Body.TrimEnd(),
-                                        Environment.NewLine,
-                                        record.GetUrl(),
-                                        record.Passcode);
+                                        Record record = service.AddRecord(SelectedView, survey, new
+                                        {
+                                            ResponderId = recipient.Responder.ResponderId
+                                        });
+                                        message.Body = string.Format(
+                                            "{0}{1}{1}URL: {2}{1}Passcode: {3}",
+                                            Body.TrimEnd(),
+                                            Environment.NewLine,
+                                            record.GetUrl(),
+                                            record.Passcode);
+                                    }
+                                    else
+                                    {
+                                        message.Body = string.Format(
+                                            "{0}{1}{1}URL: {2}",
+                                            Body.TrimEnd(),
+                                            Environment.NewLine,
+                                            SelectedView.GetUrl());
+                                    }
                                 }
                                 else
                                 {
-                                    message.Body = string.Format(
-                                        "{0}{1}{1}URL: {2}",
-                                        Body.TrimEnd(),
-                                        Environment.NewLine,
-                                        SelectedView.GetUrl());
+                                    message.Body = Body;
                                 }
+                                client.Send(message);
                             }
-                            else
+                            catch
                             {
-                                message.Body = Body;
+                                failures.Add(recipient);
                             }
-                            client.Send(message);
-                        }
-                        catch
-                        {
-                            failures.Add(recipient);
                         }
                     }
+                    success = true;
                 }
-                success = true;
+                catch (Exception ex)
+                {
+                    Log.Current.Warn("Failed to send email", ex);
+                }
             };
             msg.Executed += (sender, e) =>
             {
-                if (success)
+                if (error != ConfigurationError.None)
                 {
-                    if (failures.Count > 0)
-                    {
-                        Messenger.Default.Send(new NotifyMessage(string.Format(
-                            "Delivery to the following recipients failed:{0}{0}{1}",
-                            Environment.NewLine,
-                            string.Join("; ", failures.Select(recipient => RecipientToStringConverter.Convert(recipient))))));
-                    }
-                    else
-                    {
-                        Messenger.Default.Send(new ToastMessage("Email has been sent."));
-                        Close();
-                    }
+                    SurveyViewModel.RequestConfiguration(error);
+                }
+                else if (Prepopulate && survey == null)
+                {
+                    SurveyViewModel.RequestConfiguration("Failed to retrieve web survey details.");
+                }
+                else if (failures.Count > 0)
+                {
+                    Messenger.Default.Send(new NotifyMessage(string.Format(
+                        "Delivery to the following recipients failed:{0}{0}{1}",
+                        Environment.NewLine,
+                        string.Join("; ", failures.Select(recipient => RecipientToStringConverter.Convert(recipient))))));
+                }
+                else if (!success)
+                {
+                    RequestConfiguration("Failed to send email. Please verify email settings.");
                 }
                 else
                 {
-                    RequestConfiguration("Failed to send email. Please verify email settings.");
+                    Messenger.Default.Send(new ToastMessage("Email has been sent."));
+                    Close();
                 }
             };
             Messenger.Default.Send(msg);

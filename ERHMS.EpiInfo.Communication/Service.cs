@@ -32,10 +32,8 @@ namespace ERHMS.EpiInfo.Communication
             ServiceHost host = new ServiceHost(this, new Uri(Settings.Default.ServiceAddress));
             ServiceBehaviorAttribute behavior = host.Description.Behaviors.Find<ServiceBehaviorAttribute>();
             behavior.InstanceContextMode = InstanceContextMode.Single;
-#if DEBUG
             host.Description.Behaviors.Add(new ServiceMetadataBehavior());
             host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), "mex");
-#endif
             host.AddServiceEndpoint(typeof(IService), new NetNamedPipeBinding(), "");
             try
             {

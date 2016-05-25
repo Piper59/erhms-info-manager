@@ -18,11 +18,7 @@ namespace ERHMS.Utility
 
         public Settings()
         {
-#if DEBUG
             LogLevel = "DEBUG";
-#else
-            LogLevel = "WARN";
-#endif
             DataSources = new HashSet<string>();
             RootDirectory = null;
             ServiceAddress = "net.pipe://localhost/erhms-info-manager";

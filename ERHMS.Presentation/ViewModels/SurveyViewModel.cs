@@ -229,22 +229,29 @@ namespace ERHMS.Presentation.ViewModels
                     return;
                 }
                 ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, View);
-                foreach (Record record in service.GetRecords(View, Survey))
+                try
                 {
-                    ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
-                    if (entity == null)
+                    foreach (Record record in service.GetRecords(View, Survey))
                     {
-                        entity = entities.Create();
-                        entity.GlobalRecordId = record.GlobalRecordId;
+                        ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
+                        if (entity == null)
+                        {
+                            entity = entities.Create();
+                            entity.GlobalRecordId = record.GlobalRecordId;
+                        }
+                        foreach (string key in record.Keys)
+                        {
+                            Type type = entities.GetDataType(key);
+                            entity.SetProperty(key, record.GetValue(key, type));
+                        }
+                        entities.Save(entity);
                     }
-                    foreach (string key in record.Keys)
-                    {
-                        Type type = entities.GetDataType(key);
-                        entity.SetProperty(key, record.GetValue(key, type));
-                    }
-                    entities.Save(entity);
+                    success = true;
                 }
-                success = true;
+                catch (Exception ex)
+                {
+                    Log.Current.Warn("Failed to import data from web", ex);
+                }
             };
             msg.Executed += (sender, e) =>
             {

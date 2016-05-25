@@ -211,43 +211,19 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            // TODO: Handle errors
             if (!Validate())
             {
                 return;
             }
-            FileInfo file = Location.GetFile(Path.Combine(Name, Path.ChangeExtension(Name, Project.FileExtension)));
-            if (file.Exists)
+            try
             {
-                ConfirmMessage msg = new ConfirmMessage("Add", "Data source already exists. Add it to your list of data sources?");
-                msg.Confirmed += (sender, e) =>
+                FileInfo file = Location.GetFile(Path.Combine(Name, Path.ChangeExtension(Name, Project.FileExtension)));
+                if (file.Exists)
                 {
-                    Add(file);
-                    Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
-                    Active = false;
-                };
-                Messenger.Default.Send(msg);
-            }
-            else
-            {
-                IDataDriver driver;
-                switch (Provider)
-                {
-                    case DataProvider.Access:
-                        driver = AccessDriver.Create(Path.ChangeExtension(file.FullName, ".mdb"));
-                        break;
-                    case DataProvider.SqlServer:
-                        driver = SqlServer.CreateDriver();
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                }
-                if (driver.DatabaseExists())
-                {
-                    ConfirmMessage msg = new ConfirmMessage("Add", "Database already exists. Add a data source using this database?");
+                    ConfirmMessage msg = new ConfirmMessage("Add", "Data source already exists. Add it to your list of data sources?");
                     msg.Confirmed += (sender, e) =>
                     {
-                        Create(file, driver, false);
+                        Add(file);
                         Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
                         Active = false;
                     };
@@ -255,19 +231,50 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else
                 {
-                    BlockMessage msg = new BlockMessage("Creating data source \u2026");
-                    msg.Executing += (sender, e) =>
+                    IDataDriver driver;
+                    switch (Provider)
                     {
-                        Create(file, driver, true);
-                        Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
-                        Active = false;
-                    };
-                    msg.Executed += (sender, e) =>
+                        case DataProvider.Access:
+                            driver = AccessDriver.Create(Path.ChangeExtension(file.FullName, ".mdb"));
+                            break;
+                        case DataProvider.SqlServer:
+                            driver = SqlServer.CreateDriver();
+                            break;
+                        default:
+                            throw new NotSupportedException();
+                    }
+                    if (driver.DatabaseExists())
                     {
-                        Messenger.Default.Send(new ToastMessage("Data source has been created."));
-                    };
-                    Messenger.Default.Send(msg);
+                        ConfirmMessage msg = new ConfirmMessage("Add", "Database already exists. Add a data source using this database?");
+                        msg.Confirmed += (sender, e) =>
+                        {
+                            Create(file, driver, false);
+                            Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                            Active = false;
+                        };
+                        Messenger.Default.Send(msg);
+                    }
+                    else
+                    {
+                        BlockMessage msg = new BlockMessage("Creating data source \u2026");
+                        msg.Executing += (sender, e) =>
+                        {
+                            Create(file, driver, true);
+                            Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                            Active = false;
+                        };
+                        msg.Executed += (sender, e) =>
+                        {
+                            Messenger.Default.Send(new ToastMessage("Data source has been created."));
+                        };
+                        Messenger.Default.Send(msg);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Current.Warn("Failed to create data source", ex);
+                Messenger.Default.Send(new NotifyMessage("Failed to create data source."));
             }
         }
 
