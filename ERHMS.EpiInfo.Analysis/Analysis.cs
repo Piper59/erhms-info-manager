@@ -106,14 +106,32 @@ namespace ERHMS.EpiInfo.Analysis
                             IEnumerable<string> targets = view.Fields.TableColumnFields
                                 .Cast<Field>()
                                 .Select(field => field.Name);
-                            MappingCollection mappings;
-                            using (MappingDialog dialog = new MappingDialog(form, sources, targets))
+                            MappingCollection mappings = null;
+                            while (true)
                             {
-                                if (dialog.ShowDialog() != DialogResult.OK)
+                                using (MappingDialog dialog = new MappingDialog(form, sources, targets))
                                 {
-                                    return;
+                                    if (dialog.ShowDialog() == DialogResult.OK)
+                                    {
+                                        mappings = dialog.GetMappings();
+                                    }
                                 }
-                                mappings = dialog.GetMappings();
+                                if (mappings == null || mappings.Count == 0)
+                                {
+                                    DialogResult result = MessageBox.Show(
+                                        "No variables have been mapped. Cancel import?",
+                                        "Error",
+                                        MessageBoxButtons.YesNo,
+                                        MessageBoxIcon.Error);
+                                    if (result == DialogResult.Yes)
+                                    {
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    break;
+                                }
                             }
                             form.AddCommand(mappings.GetCommands());
                             FileInfo csv = IOExtensions.GetTemporaryFile(extension: ".csv");
