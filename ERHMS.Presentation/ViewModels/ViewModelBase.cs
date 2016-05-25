@@ -66,5 +66,13 @@ namespace ERHMS.Presentation.ViewModels
                 Environment.NewLine,
                 string.Join(", ", fields))));
         }
+
+        protected void NotifyInvalid(IEnumerable<string> fields)
+        {
+            Messenger.Default.Send(new NotifyMessage(string.Format(
+                "The following fields are invalid:{0}{0}{1}",
+                Environment.NewLine,
+                string.Join(", ", fields))));
+        }
     }
 }

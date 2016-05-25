@@ -65,14 +65,29 @@ namespace ERHMS.Presentation.ViewModels
                 NotifyRequired(fields);
                 return false;
             }
-            else if (!Email.IsValidAddress(Responder.EmailAddress))
-            {
-                Messenger.Default.Send(new NotifyMessage("Please enter a valid Email Address."));
-                return false;
-            }
             else
             {
-                return true;
+                if (!Email.IsValidAddress(Responder.EmailAddress))
+                {
+                    fields.Add("Email Address");
+                }
+                if (!string.IsNullOrWhiteSpace(Responder.ContactEmailAddress) && !Email.IsValidAddress(Responder.ContactEmailAddress))
+                {
+                    fields.Add("Emergency Contact Email Address");
+                }
+                if (!string.IsNullOrWhiteSpace(Responder.OrganizationEmailAddress) && !Email.IsValidAddress(Responder.OrganizationEmailAddress))
+                {
+                    fields.Add("Organization Email Address");
+                }
+                if (fields.Count > 0)
+                {
+                    NotifyInvalid(fields);
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
 
