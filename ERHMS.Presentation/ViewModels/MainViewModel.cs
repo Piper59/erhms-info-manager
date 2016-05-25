@@ -99,6 +99,7 @@ namespace ERHMS.Presentation.ViewModels
             App.Current.Service.ViewDataImported += Service_ViewDataImported;
             App.Current.Service.RecordSaved += Service_RecordSaved;
             App.Current.Service.TemplateAdded += Service_TemplateAdded;
+            App.Current.Service.PgmSaved += Service_PgmSaved;
             App.Current.Service.CanvasSaved += Service_CanvasSaved;
         }
 
@@ -408,6 +409,12 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshListMessage<Template>());
         }
 
+        private void Service_PgmSaved(object sender, PgmEventArgs e)
+        {
+            string incidentId = e.Tag;
+            Messenger.Default.Send(new RefreshListMessage<Pgm>(incidentId));
+        }
+
         private void Service_CanvasSaved(object sender, CanvasEventArgs e)
         {
             string incidentId = e.Tag;
@@ -417,6 +424,7 @@ namespace ERHMS.Presentation.ViewModels
                 canvas.Content = File.ReadAllText(e.CanvasPath);
                 DataContext.Project.UpdateCanvas(canvas);
             }
+            Messenger.Default.Send(new RefreshListMessage<Canvas>(incidentId));
         }
     }
 }

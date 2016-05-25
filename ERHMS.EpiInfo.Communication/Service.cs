@@ -90,6 +90,12 @@ namespace ERHMS.EpiInfo.Communication
             OnEvent(TemplateAdded, new TemplateEventArgs(templatePath, tag), nameof(TemplateAdded));
         }
 
+        public event EventHandler<PgmEventArgs> PgmSaved;
+        public void OnPgmSaved(string projectPath, int pgmId, string tag = null)
+        {
+            OnEvent(PgmSaved, new PgmEventArgs(projectPath, pgmId, tag), nameof(PgmSaved));
+        }
+
         public event EventHandler<CanvasEventArgs> CanvasSaved;
         public void OnCanvasSaved(string projectPath, int canvasId, string canvasPath, string tag = null)
         {

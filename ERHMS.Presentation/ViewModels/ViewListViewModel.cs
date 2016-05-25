@@ -362,7 +362,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
             PgmModel.Active = false;
             SelectedItem.CreateDataTables();
-            Analysis.OpenPgm(pgm, true);
+            Analysis.OpenPgm(DataContext.Project, pgm, true, IncidentId);
         }
 
         public void CreateCanvas()

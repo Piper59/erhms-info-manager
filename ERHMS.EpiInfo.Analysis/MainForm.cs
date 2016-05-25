@@ -1,7 +1,9 @@
-﻿using Epi.Windows.Analysis.Forms;
+﻿using Epi.Windows.Analysis.Dialogs;
+using Epi.Windows.Analysis.Forms;
 using System;
 using System.ComponentModel;
 using System.Data;
+using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.Analysis
 {
@@ -81,6 +83,14 @@ namespace ERHMS.EpiInfo.Analysis
         {
             EpiInterpreter.Context.GetOutput();
             return EpiInterpreter.Context.DataSet.Tables["Output"].Clone();
+        }
+
+        public bool SavePgm(string name)
+        {
+            using (PgmDialog dialog = new PgmDialog(this, name, Commands, PgmDialog.PgmDialogMode.SaveProgram))
+            {
+                return dialog.ShowDialog() == DialogResult.OK;
+            }
         }
     }
 }

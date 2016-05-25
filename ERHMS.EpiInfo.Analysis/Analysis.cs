@@ -49,16 +49,24 @@ namespace ERHMS.EpiInfo.Analysis
             }
         }
 
-        public static Process OpenPgm(Pgm pgm, bool execute)
+        public static Process OpenPgm(Project project, Pgm pgm, bool execute, string tag = null)
         {
             FileInfo file = IOExtensions.GetTemporaryFile(extension: Pgm.FileExtension);
             File.WriteAllText(file.FullName, pgm.Content);
-            return Execute(args => Main_OpenPgm(args), file.FullName, execute.ToString());
+            return Execute(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
         }
         private static void Main_OpenPgm(string[] args)
         {
-            string pgmPath = args[0];
-            bool execute = bool.Parse(args[1]);
+            string projectPath = args[0];
+            int pgmId = int.Parse(args[1]);
+            string pgmName = args[2];
+            string pgmPath = args[3];
+            bool execute = bool.Parse(args[4]);
+            string tag = args[5];
+            if (tag == "")
+            {
+                tag = null;
+            }
             using (MainForm form = new MainForm())
             {
                 form.Load += (sender, e) =>
@@ -67,6 +75,32 @@ namespace ERHMS.EpiInfo.Analysis
                     if (execute)
                     {
                         form.ExecuteCommands();
+                    }
+                };
+                form.FormClosing += (sender, e) =>
+                {
+                    if (e.CloseReason == CloseReason.UserClosing)
+                    {
+                        DialogResult result = MessageBox.Show(
+                            "Save changes to this program before exiting?",
+                            "Save?",
+                            MessageBoxButtons.YesNoCancel,
+                            MessageBoxIcon.Warning);
+                        if (result == DialogResult.Yes)
+                        {
+                            if (form.SavePgm(pgmName))
+                            {
+                                IService service = Service.Connect();
+                                if (service != null)
+                                {
+                                    service.OnPgmSaved(projectPath, pgmId, tag);
+                                }
+                            }
+                        }
+                        else if (result == DialogResult.Cancel)
+                        {
+                            e.Cancel = true;
+                        }
                     }
                 };
                 Application.Run(form);
@@ -120,7 +154,7 @@ namespace ERHMS.EpiInfo.Analysis
                                 {
                                     DialogResult result = MessageBox.Show(
                                         "No variables have been mapped. Cancel import?",
-                                        "Error",
+                                        "Cancel?",
                                         MessageBoxButtons.YesNo,
                                         MessageBoxIcon.Error);
                                     if (result == DialogResult.Yes)

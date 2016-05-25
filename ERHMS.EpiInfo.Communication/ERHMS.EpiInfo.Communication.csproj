@@ -60,6 +60,7 @@
     <Compile Include="CanvasEventArgs.cs" />
     <Compile Include="EventArgsBase.cs" />
     <Compile Include="IService.cs" />
+    <Compile Include="PgmEventArgs.cs" />
     <Compile Include="ProjectEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordEventArgs.cs" />

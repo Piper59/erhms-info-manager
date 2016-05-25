@@ -70,7 +70,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Open()
         {
-            Analysis.OpenPgm(DataContext.Project.GetPgmById(SelectedItem.PgmId), false);
+            Analysis.OpenPgm(DataContext.Project, DataContext.Project.GetPgmById(SelectedItem.PgmId), false, IncidentId);
         }
 
         public void Delete()
