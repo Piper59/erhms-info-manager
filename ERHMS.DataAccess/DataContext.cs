@@ -5,6 +5,7 @@ using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.MakeView;
 using ERHMS.Utility;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
@@ -17,7 +18,11 @@ namespace ERHMS.DataAccess
         public static DataContext Create(Project project)
         {
             Log.Current.DebugFormat("Creating data context: {0}", project.FilePath);
-            Template template = Template.Get(TemplateLevel.Project, "ERHMS");
+            FileInfo templateFile = IOExtensions.GetTemporaryFile(extension: ".xml");
+            File.WriteAllText(
+                templateFile.FullName,
+                Assembly.GetAssembly(typeof(Responder)).GetManifestResourceText("ERHMS.Domain.Templates.Projects.ERHMS.xml"));
+            Template template = Template.Get(templateFile);
             MakeView.InstantiateTemplate(project, template).WaitForExit();
             foreach (View view in project.Views)
             {
