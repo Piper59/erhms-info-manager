@@ -9,6 +9,7 @@
              d:DesignWidth="640" d:DesignHeight="480">
     <UserControl.Resources>
         <conv:BindingToDescriptionConverter x:Key="BindingToDescriptionConverter" />
+        <conv:BoolInverter x:Key="BoolInverter" />
     </UserControl.Resources>
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
@@ -72,7 +73,10 @@
                         <Label Grid.Row="1" Grid.Column="0">Windows Authentication</Label>
                         <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding WindowsAuthentication}" />
                         <Label Grid.Row="2" Grid.Column="0">Binding Protocol</Label>
-                        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Bindings}" SelectedItem="{Binding Binding}">
+                        <ComboBox Grid.Row="2" Grid.Column="1"
+                                  ItemsSource="{Binding Bindings}"
+                                  SelectedItem="{Binding Binding}"
+                                  IsEnabled="{Binding WindowsAuthentication, Converter={StaticResource BoolInverter}}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Converter={StaticResource BindingToDescriptionConverter}}" />

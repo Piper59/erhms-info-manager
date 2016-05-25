@@ -84,6 +84,16 @@ namespace ERHMS.Presentation.ViewModels
             public WebSurveySettingsViewModel()
             {
                 Bindings = EnumExtensions.GetValues<Binding>().ToList();
+                PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == nameof(WindowsAuthentication))
+                    {
+                        if (WindowsAuthentication)
+                        {
+                            Binding = Binding.BasicHttp;
+                        }
+                    }
+                };
             }
         }
 
