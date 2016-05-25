@@ -197,15 +197,19 @@ namespace ERHMS.Presentation.ViewModels
 
         private bool Validate()
         {
+            ICollection<string> fields = new List<string>();
             Uri uri;
             if (!string.IsNullOrWhiteSpace(Email.Sender) && !Utility.Email.IsValidAddress(Email.Sender))
             {
-                Messenger.Default.Send(new NotifyMessage("Please enter a valid Sender Address."));
-                return false;
+                fields.Add("Sender Address");
             }
-            else if (!string.IsNullOrWhiteSpace(WebSurvey.Address) && !Uri.TryCreate(WebSurvey.Address, UriKind.Absolute, out uri))
+            if (!string.IsNullOrWhiteSpace(WebSurvey.Address) && !Uri.TryCreate(WebSurvey.Address, UriKind.Absolute, out uri))
             {
-                Messenger.Default.Send(new NotifyMessage("Please enter a valid Endpoint Address."));
+                fields.Add("Endpoint Address");
+            }
+            if (fields.Count > 0)
+            {
+                NotifyInvalid(fields);
                 return false;
             }
             else
