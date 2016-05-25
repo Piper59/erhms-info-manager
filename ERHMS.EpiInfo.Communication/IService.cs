@@ -21,6 +21,6 @@ namespace ERHMS.EpiInfo.Communication
         void OnTemplateAdded(string templatePath, string tag = null);
 
         [OperationContract]
-        void OnCanvasClosed(string projectPath, int canvasId, string canvasPath, string tag = null);
+        void OnCanvasSaved(string projectPath, int canvasId, string canvasPath, string tag = null);
     }
 }

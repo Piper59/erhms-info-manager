@@ -44,24 +44,25 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
             {
                 tag = null;
             }
-            try
+            FileInfo file = new FileInfo(canvasPath);
+            using (FileSystemWatcher watcher = new FileSystemWatcher(file.Directory.FullName, file.Name))
+            using (DashboardMainForm form = new DashboardMainForm())
             {
-                using (DashboardMainForm form = new DashboardMainForm())
+                watcher.NotifyFilter = NotifyFilters.LastWrite;
+                watcher.Changed += (sender, e) =>
                 {
-                    form.Load += (sender, e) =>
+                    IService service = Service.Connect();
+                    if (service != null)
                     {
-                        form.OpenCanvas(canvasPath);
-                    };
-                    Application.Run(form);
-                }
-            }
-            finally
-            {
-                IService service = Service.Connect();
-                if (service != null)
+                        service.OnCanvasSaved(projectPath, canvasId, canvasPath, tag);
+                    }
+                };
+                watcher.EnableRaisingEvents = true;
+                form.Load += (sender, e) =>
                 {
-                    service.OnCanvasClosed(projectPath, canvasId, canvasPath, tag);
-                }
+                    form.OpenCanvas(canvasPath);
+                };
+                Application.Run(form);
             }
         }
     }

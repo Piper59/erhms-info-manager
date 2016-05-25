@@ -90,10 +90,10 @@ namespace ERHMS.EpiInfo.Communication
             OnEvent(TemplateAdded, new TemplateEventArgs(templatePath, tag), nameof(TemplateAdded));
         }
 
-        public event EventHandler<CanvasEventArgs> CanvasClosed;
-        public void OnCanvasClosed(string projectPath, int canvasId, string canvasPath, string tag = null)
+        public event EventHandler<CanvasEventArgs> CanvasSaved;
+        public void OnCanvasSaved(string projectPath, int canvasId, string canvasPath, string tag = null)
         {
-            OnEvent(CanvasClosed, new CanvasEventArgs(projectPath, canvasId, canvasPath, tag), nameof(CanvasClosed));
+            OnEvent(CanvasSaved, new CanvasEventArgs(projectPath, canvasId, canvasPath, tag), nameof(CanvasSaved));
         }
     }
 }

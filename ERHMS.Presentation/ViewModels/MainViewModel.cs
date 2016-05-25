@@ -99,7 +99,7 @@ namespace ERHMS.Presentation.ViewModels
             App.Current.Service.ViewDataImported += Service_ViewDataImported;
             App.Current.Service.RecordSaved += Service_RecordSaved;
             App.Current.Service.TemplateAdded += Service_TemplateAdded;
-            App.Current.Service.CanvasClosed += Service_CanvasClosed;
+            App.Current.Service.CanvasSaved += Service_CanvasSaved;
         }
 
         private void Documents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -408,7 +408,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshListMessage<Template>());
         }
 
-        private void Service_CanvasClosed(object sender, CanvasEventArgs e)
+        private void Service_CanvasSaved(object sender, CanvasEventArgs e)
         {
             string incidentId = e.Tag;
             if (DataContext.Project.FilePath.EqualsIgnoreCase(e.ProjectPath))
