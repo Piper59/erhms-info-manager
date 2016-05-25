@@ -7,6 +7,9 @@ namespace ERHMS.EpiInfo.DataAccess
 {
     public class AccessDriver : DataDriverBase
     {
+        private const int CreationAttemptCount = 10;
+        private const int CreationAttemptDelay = 1000;
+
         public static AccessDriver Create(string dataSource, string password = null)
         {
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
@@ -47,11 +50,11 @@ namespace ERHMS.EpiInfo.DataAccess
             Directory.CreateDirectory(Path.GetDirectoryName(Builder.DataSource));
             Catalog catalog = new Catalog();
             catalog.Create(Builder.ConnectionString);
-            for (int attempt = 1; attempt <= 10; attempt++)
+            for (int attempt = 1; attempt <= CreationAttemptCount; attempt++)
             {
                 if (attempt > 1)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(CreationAttemptDelay);
                 }
                 try
                 {
