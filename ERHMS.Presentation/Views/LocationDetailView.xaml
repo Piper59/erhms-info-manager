@@ -40,10 +40,19 @@
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding SaveCommand}" Visual="{DynamicResource appbar_save}">Save</ctrl:AppBarButton>
         </WrapPanel>
-        <bing:Map Name="Map" MouseDoubleClick="Map_MouseDoubleClick"
+        <bing:Map Name="Map"
+                  MouseRightButtonDown="Map_MouseRightButtonDown"
+                  MouseDoubleClick="Map_MouseDoubleClick"
                   CredentialsProvider="{Binding CredentialsProvider}"
                   Center="{Binding Center, Mode=TwoWay}"
                   ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}">
+            <bing:Map.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Drop Pin" Command="{Binding DropPinCommand}" />
+                    <MenuItem Header="Zoom In" Command="{Binding CenterZoomInCommand}" />
+                    <MenuItem Header="Zoom Out" Command="{Binding CenterZoomOutCommand}" />
+                </ContextMenu>
+            </bing:Map.ContextMenu>
             <bing:MapItemsControl ItemsSource="{Binding Pins}">
                 <bing:MapItemsControl.ItemTemplate>
                     <DataTemplate>

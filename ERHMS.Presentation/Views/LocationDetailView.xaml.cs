@@ -17,6 +17,11 @@ namespace ERHMS.Presentation.Views
             InitializeComponent();
         }
 
+        private void Map_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DataContext.Target = Map.ViewportPointToLocation(e.GetPosition(Map));
+        }
+
         private void Map_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataContext.SetCoordinates(Map.ViewportPointToLocation(e.GetPosition(Map)));

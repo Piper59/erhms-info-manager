@@ -31,6 +31,13 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => Center, ref center, value); }
         }
 
+        private Coordinates target;
+        public Coordinates Target
+        {
+            get { return target; }
+            set { Set(() => Target, ref target, value); }
+        }
+
         private double zoomLevel;
         public double ZoomLevel
         {
@@ -41,8 +48,11 @@ namespace ERHMS.Presentation.ViewModels
         public ObservableCollection<Coordinates> Pins { get; private set; }
 
         public RelayCommand LocateCommand { get; private set; }
+        public RelayCommand DropPinCommand { get; private set; }
         public RelayCommand ZoomInCommand { get; private set; }
         public RelayCommand ZoomOutCommand { get; private set; }
+        public RelayCommand CenterZoomInCommand { get; private set; }
+        public RelayCommand CenterZoomOutCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
         public LocationDetailViewModel(Location location)
@@ -86,8 +96,11 @@ namespace ERHMS.Presentation.ViewModels
                 }
             };
             LocateCommand = new RelayCommand(Locate, HasAddress);
+            DropPinCommand = new RelayCommand(DropPin);
             ZoomInCommand = new RelayCommand(ZoomIn, CanZoomIn);
             ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
+            CenterZoomInCommand = new RelayCommand(CenterZoomIn, CanZoomIn);
+            CenterZoomOutCommand = new RelayCommand(CenterZoomOut, CanZoomOut);
             SaveCommand = new RelayCommand(Save);
         }
 
@@ -159,6 +172,14 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public void DropPin()
+        {
+            if (Target != null)
+            {
+                SetCoordinates(Target);
+            }
+        }
+
         public bool CanZoomIn()
         {
             return ZoomLevel < ZoomLevelMax;
@@ -193,6 +214,24 @@ namespace ERHMS.Presentation.ViewModels
         public void ZoomOut()
         {
             SetZoomLevel(ZoomLevel - ZoomLevelIncrement);
+        }
+
+        public void CenterZoomIn()
+        {
+            if (Target != null)
+            {
+                Center = Target;
+            }
+            ZoomIn();
+        }
+
+        public void CenterZoomOut()
+        {
+            if (Target != null)
+            {
+                Center = Target;
+            }
+            ZoomOut();
         }
 
         private bool Validate()
