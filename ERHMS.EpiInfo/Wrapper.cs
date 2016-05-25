@@ -39,11 +39,19 @@ namespace ERHMS.EpiInfo
 
         protected static void MainBase(Type type, string[] args)
         {
-            Application.EnableVisualStyles();
-            Log.Current.Debug("Starting up");
-            ConfigurationExtensions.Load();
-            ReflectionExtensions.Invoke(type, args.First(), new Type[] { typeof(string[]) }, new object[] { args.Skip(1).ToArray() });
-            Log.Current.Debug("Exiting");
+            try
+            {
+                Application.EnableVisualStyles();
+                Log.Current.Debug("Starting up");
+                ConfigurationExtensions.Load();
+                ReflectionExtensions.Invoke(type, args.First(), new Type[] { typeof(string[]) }, new object[] { args.Skip(1).ToArray() });
+                Log.Current.Debug("Exiting");
+            }
+            catch (Exception ex)
+            {
+                Log.Current.Fatal("Fatal error", ex);
+                MessageBox.Show("Epi Info encountered an error and must shut down.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
