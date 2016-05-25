@@ -95,11 +95,6 @@ namespace ERHMS.Presentation
             }
         }
 
-        private static void SetRootDirectory()
-        {
-
-        }
-
         private ServiceHost host;
 
         public Service Service { get; private set; }
