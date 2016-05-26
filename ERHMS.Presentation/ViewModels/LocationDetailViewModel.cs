@@ -18,7 +18,7 @@ namespace ERHMS.Presentation.ViewModels
         private const double ZoomLevelMax = 21.0;
         private const double ZoomLevelIncrement = 1.2;
         private const double UnpinnedZoomLevel = 6.0;
-        private const double PinnedZoomLevel = 12.0;
+        private const double PinnedZoomLevel = 14.0;
         private static readonly Coordinates Washington = new Coordinates(38.904722, -77.016389);
 
         public Location Location { get; private set; }
