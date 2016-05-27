@@ -46,7 +46,7 @@ namespace ERHMS.Utility
 
         public static FileInfo GetTemporaryFile(string prefix = "ERHMS_", string extension = null)
         {
-            if (!extension.StartsWith("."))
+            if (extension != null && !extension.StartsWith("."))
             {
                 extension = string.Format(".{0}", extension);
             }
