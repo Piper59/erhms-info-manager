@@ -70,6 +70,9 @@
     <Compile Include="AnalysisDashboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ComponentArt.Win.DataVisualization.lic" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\ERHMS.Build.targets" />
 </Project>
