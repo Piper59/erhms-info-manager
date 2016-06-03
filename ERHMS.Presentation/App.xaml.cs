@@ -7,6 +7,7 @@ using System;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -34,6 +35,18 @@ namespace ERHMS.Presentation
             executer.Executing += (sender, e) =>
             {
                 Log.Current.Debug("Starting up");
+                if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                        string.Format("Reset settings for {0}?", Title),
+                        Title,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Settings.Reset();
+                    }
+                }
                 if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
                 {
                     try

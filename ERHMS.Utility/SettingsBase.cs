@@ -29,6 +29,11 @@ namespace ERHMS.Utility
             }
         }
 
+        public static void Reset()
+        {
+            Default = new TSettings();
+        }
+
         public static void Load()
         {
             if (!file.Exists)
