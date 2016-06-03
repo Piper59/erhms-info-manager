@@ -122,22 +122,22 @@
             // lblViewName
             // 
             this.lblViewName.AutoSize = true;
-            this.lblViewName.Location = new System.Drawing.Point(13, 13);
+            this.lblViewName.Location = new System.Drawing.Point(12, 9);
             this.lblViewName.Name = "lblViewName";
-            this.lblViewName.Size = new System.Drawing.Size(64, 13);
+            this.lblViewName.Size = new System.Drawing.Size(61, 13);
             this.lblViewName.TabIndex = 0;
-            this.lblViewName.Text = "Form Name:";
+            this.lblViewName.Text = "Form Name";
             // 
             // txtViewName
             // 
-            this.txtViewName.Location = new System.Drawing.Point(13, 30);
+            this.txtViewName.Location = new System.Drawing.Point(12, 25);
             this.txtViewName.Name = "txtViewName";
-            this.txtViewName.Size = new System.Drawing.Size(359, 20);
+            this.txtViewName.Size = new System.Drawing.Size(360, 20);
             this.txtViewName.TabIndex = 1;
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(216, 56);
+            this.btnOk.Location = new System.Drawing.Point(216, 51);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 2;
@@ -148,7 +148,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(297, 56);
+            this.btnCancel.Location = new System.Drawing.Point(297, 51);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -162,7 +162,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(384, 91);
+            this.ClientSize = new System.Drawing.Size(384, 86);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.txtViewName);
