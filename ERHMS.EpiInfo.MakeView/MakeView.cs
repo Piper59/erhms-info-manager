@@ -124,7 +124,7 @@ namespace ERHMS.EpiInfo.MakeView
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
                             Template template = new Template(form.Mediator);
-                            template.CreateTemplate(project.Views[viewName], dialog.TemplateName);
+                            template.CreateTemplate(project.Views[viewName], dialog.TemplateName, dialog.Description);
                             IService service = Service.Connect();
                             if (service != null)
                             {

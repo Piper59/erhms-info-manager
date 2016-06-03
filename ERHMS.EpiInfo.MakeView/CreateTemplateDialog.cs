@@ -29,6 +29,12 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
+        public string Description
+        {
+            get { return txtDescription.Text; }
+            set { txtDescription.Text = value; }
+        }
+
         public CreateTemplateDialog(Project project, string templateName)
         {
             InitializeComponent();
