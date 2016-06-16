@@ -119,7 +119,7 @@
         <Setter Property="Padding" Value="5,5,5,0" />
     </Style>
 
-    <sys:Double x:Key="LargerFontSize">16.0</sys:Double>
+    <sys:Double x:Key="LargerFontSize">15.0</sys:Double>
 
     <Style x:Key="IncidentNoteList" TargetType="{x:Type ItemsControl}">
         <Style.Resources>

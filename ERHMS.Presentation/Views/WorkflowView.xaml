@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.WorkflowView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DesignWidth="800" d:DesignHeight="600">
+    <UserControl.Resources>
+        <conv:StringToGeometryConverter x:Key="StringToGeometryConverter" />
+    </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+        <Canvas Width="600" Height="600">
+            <Canvas.Resources>
+                <sys:String x:Key="Cap">M0,0 L-5,10 L20,0 L-5,-10 Z</sys:String>
+                <Style x:Key="Header" TargetType="{x:Type Run}">
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </Style>
+                <Style TargetType="{x:Type Hyperlink}">
+                    <Setter Property="Foreground" Value="#ff000000" />
+                </Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="FontSize" Value="{StaticResource LargerFontSize}" />
+                    <Setter Property="TextAlignment" Value="Center" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+            </Canvas.Resources>
+            <Grid Canvas.Left="0" Canvas.Top="259.808">
+                <Ellipse Width="300" Height="300" Fill="#ff26b9f1" />
+                <TextBlock>
+                    <Run Style="{StaticResource Header}">Pre-Deployment Phase</Run><LineBreak />
+                    <LineBreak />
+                    Rostering and credentialing<LineBreak />
+                    Health screening<LineBreak />
+                    Health and safety training<LineBreak />
+                    Data management<LineBreak />
+                    Information security<LineBreak />
+                    <LineBreak />
+                    Modules:<LineBreak />
+                    <Hyperlink Command="{Binding RespondersCommand}">Responders</Hyperlink><LineBreak />
+                    <Hyperlink Command="{Binding TemplatesCommand}">Templates</Hyperlink>
+                </TextBlock>
+            </Grid>
+            <Grid Canvas.Left="150" Canvas.Top="0">
+                <Ellipse Width="300" Height="300" Fill="#ffef3e45" />
+                <TextBlock>
+                    <Run Style="{StaticResource Header}">Deployment Phase</Run><LineBreak />
+                    <LineBreak />
+                    On-site responder in-processing<LineBreak />
+                    Health monitoring and surveillance<LineBreak />
+                    Exposure assessment<LineBreak />
+                    Activities documentation<LineBreak />
+                    Communication<LineBreak />
+                    <LineBreak />
+                    Modules:<LineBreak />
+                    <Hyperlink Command="{Binding IncidentsCommand}">Incidents</Hyperlink><LineBreak />
+                    <Hyperlink Command="{Binding FormsCommand}">Forms</Hyperlink>
+                </TextBlock>
+            </Grid>
+            <Grid Canvas.Left="300" Canvas.Top="259.808">
+                <Ellipse Width="300" Height="300" Fill="#ff26b26b" />
+                <TextBlock>
+                    <Run Style="{StaticResource Header}">Post-Deployment Phase</Run><LineBreak />
+                    <LineBreak />
+                    Responder out-processing<LineBreak />
+                    Post-event health tracking<LineBreak />
+                    After-action reporting<LineBreak /><LineBreak />
+                    Modules:<LineBreak />
+                    <Hyperlink Command="{Binding AnalysesCommand}">Analyses</Hyperlink><LineBreak />
+                    <Hyperlink Command="{Binding DashboardsCommand}">Dashboards</Hyperlink>
+                </TextBlock>
+            </Grid>
+            <Grid Canvas.Left="250" Canvas.Top="273.205">
+                <Ellipse Width="100" Height="100" Fill="#f0808080" />
+                <TextBlock FontWeight="SemiBold" Foreground="#ffffffff">
+                    Post-Event<LineBreak />
+                    Tracking<LineBreak />
+                    Decision
+                </TextBlock>
+            </Grid>
+            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5"
+                             StrokeEndLineCap="{Binding Source={StaticResource Cap}, Converter={StaticResource StringToGeometryConverter}, Mode=OneTime}">
+                <ctrl:CappedPath.Data>
+                    <PathGeometry Figures="M58.519,258.500 A250,250,20,0,1,108.489,162.508" />
+                </ctrl:CappedPath.Data>
+            </ctrl:CappedPath>
+            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5"
+                             StrokeEndLineCap="{Binding Source={StaticResource Cap}, Converter={StaticResource StringToGeometryConverter}, Mode=OneTime}">
+                <ctrl:CappedPath.Data>
+                    <PathGeometry Figures="M476.777,146.428 A250,250,20,0,1,534.923,237.700" />
+                </ctrl:CappedPath.Data>
+            </ctrl:CappedPath>
+            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5"
+                             StrokeEndLineCap="{Binding Source={StaticResource Cap}, Converter={StaticResource StringToGeometryConverter}, Mode=OneTime}">
+                <ctrl:CappedPath.Data>
+                    <PathGeometry Figures="M364.705,564.687 A250,250,20,0,1,256.588,569.407" />
+                </ctrl:CappedPath.Data>
+            </ctrl:CappedPath>
+        </Canvas>
+    </ScrollViewer>
+</UserControl>

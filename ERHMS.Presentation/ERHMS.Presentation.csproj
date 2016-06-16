@@ -215,6 +215,7 @@
     </Compile>
     <Compile Include="Controls\AppBarButton.cs" />
     <Compile Include="Controls\ButtonExtensions.cs" />
+    <Compile Include="Controls\CappedPath.cs" />
     <Compile Include="Controls\DataGridExtensions.cs" />
     <Compile Include="Controls\Filter.xaml.cs">
       <DependentUpon>Filter.xaml</DependentUpon>
@@ -241,6 +242,7 @@
     <Compile Include="Converters\ResponderToNameEmailConverter.cs" />
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
+    <Compile Include="Converters\StringToGeometryConverter.cs" />
     <Compile Include="Converters\StringToUppercaseStringConverter.cs" />
     <Compile Include="Dialogs\FileDialogExtensions.cs" />
     <Compile Include="Dialogs\RootDirectoryDialog.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="ViewModels\ViewListViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="ViewModels\WorkflowViewModel.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -358,6 +361,9 @@
     </Compile>
     <Compile Include="Views\ViewListView.xaml.cs">
       <DependentUpon>ViewListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WorkflowView.xaml.cs">
+      <DependentUpon>WorkflowView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -496,6 +502,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ViewListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WorkflowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
