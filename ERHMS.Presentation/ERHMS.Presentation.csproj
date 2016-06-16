@@ -242,7 +242,6 @@
     <Compile Include="Converters\ResponderToNameEmailConverter.cs" />
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
-    <Compile Include="Converters\StringToGeometryConverter.cs" />
     <Compile Include="Converters\StringToUppercaseStringConverter.cs" />
     <Compile Include="Dialogs\FileDialogExtensions.cs" />
     <Compile Include="Dialogs\RootDirectoryDialog.cs" />
@@ -250,6 +249,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Markup\ArcExtension.cs" />
     <Compile Include="Messages\BlockMessage.cs" />
     <Compile Include="Messages\ConfirmMessage.cs" />
     <Compile Include="Messages\ExitMessage.cs" />

@@ -1,9 +1,12 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace ERHMS.Presentation.Views
 {
     public partial class WorkflowView : UserControl
     {
+        public static readonly Geometry StrokeLineCap = Geometry.Parse("M0,0 L-5,10 L20,0 L-5,-10 Z");
+
         public WorkflowView()
         {
             InitializeComponent();

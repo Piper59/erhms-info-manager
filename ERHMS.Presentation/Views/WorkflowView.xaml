@@ -3,18 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:mark="clr-namespace:ERHMS.Presentation.Markup"
+             xmlns:v="clr-namespace:ERHMS.Presentation.Views"
              mc:Ignorable="d"
              d:DesignWidth="800" d:DesignHeight="600">
-    <UserControl.Resources>
-        <conv:StringToGeometryConverter x:Key="StringToGeometryConverter" />
-    </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <Canvas Width="600" Height="600">
             <Canvas.Resources>
-                <sys:String x:Key="Cap">M0,0 L-5,10 L20,0 L-5,-10 Z</sys:String>
                 <Style x:Key="Header" TargetType="{x:Type Run}">
                     <Setter Property="FontWeight" Value="SemiBold" />
                 </Style>
@@ -80,22 +76,19 @@
                     Decision
                 </TextBlock>
             </Grid>
-            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5"
-                             StrokeEndLineCap="{Binding Source={StaticResource Cap}, Converter={StaticResource StringToGeometryConverter}, Mode=OneTime}">
+            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5" StrokeEndLineCap="{x:Static v:WorkflowView.StrokeLineCap}">
                 <ctrl:CappedPath.Data>
-                    <PathGeometry Figures="M58.519,258.500 A250,250,20,0,1,108.489,162.508" />
+                    <PathGeometry Figures="{mark:Arc X=300, Y=323.205, Radius=250, StartAngle=165, EndAngle=140, Clockwise=True}" />
                 </ctrl:CappedPath.Data>
             </ctrl:CappedPath>
-            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5"
-                             StrokeEndLineCap="{Binding Source={StaticResource Cap}, Converter={StaticResource StringToGeometryConverter}, Mode=OneTime}">
+            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5" StrokeEndLineCap="{x:Static v:WorkflowView.StrokeLineCap}">
                 <ctrl:CappedPath.Data>
-                    <PathGeometry Figures="M476.777,146.428 A250,250,20,0,1,534.923,237.700" />
+                    <PathGeometry Figures="{mark:Arc X=300, Y=323.205, Radius=250, StartAngle=45, EndAngle=20, Clockwise=True}" />
                 </ctrl:CappedPath.Data>
             </ctrl:CappedPath>
-            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5"
-                             StrokeEndLineCap="{Binding Source={StaticResource Cap}, Converter={StaticResource StringToGeometryConverter}, Mode=OneTime}">
+            <ctrl:CappedPath Stroke="#ff878787" StrokeThickness="5" StrokeEndLineCap="{x:Static v:WorkflowView.StrokeLineCap}">
                 <ctrl:CappedPath.Data>
-                    <PathGeometry Figures="M364.705,564.687 A250,250,20,0,1,256.588,569.407" />
+                    <PathGeometry Figures="{mark:Arc X=300, Y=323.205, Radius=250, StartAngle=285, EndAngle=260, Clockwise=True}" />
                 </ctrl:CappedPath.Data>
             </ctrl:CappedPath>
         </Canvas>
