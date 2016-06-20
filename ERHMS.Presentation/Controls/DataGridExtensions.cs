@@ -52,13 +52,10 @@ namespace ERHMS.Presentation.Controls
         private static void DoubleClickCommand_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             DataGrid target = (DataGrid)sender;
-            if (e.OldValue == null && e.NewValue != null)
+            target.MouseDoubleClick -= DoubleClickCommand_Target_MouseDoubleClick;
+            if (e.NewValue != null)
             {
                 target.MouseDoubleClick += DoubleClickCommand_Target_MouseDoubleClick;
-            }
-            else if (e.OldValue != null && e.NewValue == null)
-            {
-                target.MouseDoubleClick -= DoubleClickCommand_Target_MouseDoubleClick;
             }
         }
 
@@ -66,10 +63,6 @@ namespace ERHMS.Presentation.Controls
         {
             DataGrid target = (DataGrid)sender;
             ICommand command = GetDoubleClickCommand(target);
-            if (command == null)
-            {
-                return;
-            }
             if (command.CanExecute(target))
             {
                 command.Execute(target);

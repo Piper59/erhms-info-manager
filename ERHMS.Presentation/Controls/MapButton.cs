@@ -9,8 +9,7 @@ namespace ERHMS.Presentation.Controls
         public static readonly DependencyProperty VisualProperty = DependencyProperty.Register(
             "Visual",
             typeof(Visual),
-            typeof(MapButton),
-            null);
+            typeof(MapButton));
         public Visual Visual
         {
             get { return (Visual)GetValue(VisualProperty); }

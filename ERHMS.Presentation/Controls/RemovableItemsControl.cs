@@ -8,8 +8,7 @@ namespace ERHMS.Presentation.Controls
         public static readonly DependencyProperty ItemTextTemplateProperty = DependencyProperty.Register(
             "ItemTextTemplate",
             typeof(DataTemplate),
-            typeof(RemovableItemsControl),
-            null);
+            typeof(RemovableItemsControl));
         public DataTemplate ItemTextTemplate
         {
             get { return (DataTemplate)GetValue(ItemTextTemplateProperty); }
