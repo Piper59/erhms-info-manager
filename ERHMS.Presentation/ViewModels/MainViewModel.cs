@@ -49,9 +49,8 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand AnalysesCommand { get; private set; }
         public RelayCommand DashboardsCommand { get; private set; }
         public RelayCommand SettingsCommand { get; private set; }
-        public RelayCommand WorkflowCommand { get; private set; }
-        public RelayCommand HelpCommand { get; private set; }
         public RelayCommand LogsCommand { get; private set; }
+        public RelayCommand HelpCommand { get; private set; }
         public RelayCommand AboutCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
 
@@ -91,9 +90,8 @@ namespace ERHMS.Presentation.ViewModels
             AnalysesCommand = new RelayCommand(OpenPgmListView, HasDataSource);
             DashboardsCommand = new RelayCommand(OpenCanvasListView, HasDataSource);
             SettingsCommand = new RelayCommand(OpenSettingsView);
-            WorkflowCommand = new RelayCommand(OpenWorkflowView);
-            HelpCommand = new RelayCommand(OpenHelpView);
             LogsCommand = new RelayCommand(OpenLogListView);
+            HelpCommand = new RelayCommand(OpenHelpView);
             AboutCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
             App.Current.Service.ViewAdded += Service_ViewAdded;
@@ -166,6 +164,7 @@ namespace ERHMS.Presentation.ViewModels
                 Documents.Clear();
                 DataSource = new DataContext(new Project(file));
                 Title = string.Format("{0} - {1}", App.Title, DataSource.Project.Name);
+                OpenHelpView();
             });
         }
 
@@ -345,11 +344,11 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public void OpenWorkflowView()
+        public void OpenLogListView()
         {
-            if (!TryActivateDocument<WorkflowViewModel>())
+            if (!TryActivateDocument<LogListViewModel>())
             {
-                OpenDocument(new WorkflowViewModel());
+                OpenDocument(new LogListViewModel());
             }
         }
 
@@ -358,14 +357,6 @@ namespace ERHMS.Presentation.ViewModels
             if (!TryActivateDocument<HelpViewModel>())
             {
                 OpenDocument(new HelpViewModel());
-            }
-        }
-
-        public void OpenLogListView()
-        {
-            if (!TryActivateDocument<LogListViewModel>())
-            {
-                OpenDocument(new LogListViewModel());
             }
         }
 
