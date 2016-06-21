@@ -104,9 +104,9 @@
                                      Text="{Binding UserId, TargetNullValue=''}"
                                      IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
                             <Label Grid.Row="4" Grid.Column="0">Password</Label>
-                            <TextBox Grid.Row="4" Grid.Column="1"
-                                     Text="{Binding Password, TargetNullValue=''}"
-                                     IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
+                            <PasswordBox Grid.Row="4" Grid.Column="1" ctrl:PasswordBoxExtensions.Bound="True"
+                                         ctrl:PasswordBoxExtensions.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+                                         IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
                         </ctrl:ResponsiveFormGrid>
                     </GroupBox>
                 </StackPanel>

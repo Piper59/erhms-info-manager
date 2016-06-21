@@ -187,6 +187,10 @@
         <Setter Property="HorizontalContentAlignment" Value="Right" />
     </Style>
 
+    <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource MetroPasswordBox}">
+        <Setter Property="Margin" Value="0,0,0,5" />
+    </Style>
+
     <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MetroRadioButton}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
