@@ -8,7 +8,7 @@ namespace ERHMS.Presentation.Dialogs
         public static FolderBrowserDialog GetDialog()
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.Description = string.Format("Choose a location for your documents. We'll create a folder named {0} in that location.", App.Title);
+            dialog.Description = string.Format("Choose a location for your application files. We'll create a folder named {0} in that location.", App.Title);
             return dialog;
         }
 
