@@ -94,6 +94,7 @@ namespace ERHMS.Presentation
                 window.ContentRendered += (_sender, _e) =>
                 {
                     app.Locator.Main.OpenDataSourceListView();
+                    window.Activate();
                 };
                 app.Run(window);
                 Log.Current.Debug("Exiting");
