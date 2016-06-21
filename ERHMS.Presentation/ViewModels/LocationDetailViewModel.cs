@@ -19,7 +19,7 @@ namespace ERHMS.Presentation.ViewModels
         private const double ZoomLevelIncrement = 1.2;
         private const double UnpinnedZoomLevel = 6.0;
         private const double PinnedZoomLevel = 14.0;
-        private static readonly Coordinates Washington = new Coordinates(38.904722, -77.016389);
+        private static readonly Coordinates DistrictOfColumbia = new Coordinates(38.904722, -77.016389);
 
         public Location Location { get; private set; }
         public CredentialsProvider CredentialsProvider { get; private set; }
@@ -84,7 +84,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Center = Washington;
+                Center = DistrictOfColumbia;
                 ZoomLevel = UnpinnedZoomLevel;
             }
             PropertyChanged += (sender, e) =>
