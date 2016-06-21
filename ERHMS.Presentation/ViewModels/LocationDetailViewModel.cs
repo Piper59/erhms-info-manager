@@ -21,6 +21,9 @@ namespace ERHMS.Presentation.ViewModels
         private const double PinnedZoomLevel = 14.0;
         private static readonly Coordinates DistrictOfColumbia = new Coordinates(38.904722, -77.016389);
 
+        private static Coordinates LastCenter { get; set; }
+        private static double? LastZoomLevel { get; set; }
+
         public Location Location { get; private set; }
         public CredentialsProvider CredentialsProvider { get; private set; }
 
@@ -81,11 +84,12 @@ namespace ERHMS.Presentation.ViewModels
                 Center = GetCoordinates();
                 ZoomLevel = PinnedZoomLevel;
                 Pins.Add(GetCoordinates());
+                SaveState();
             }
             else
             {
-                Center = DistrictOfColumbia;
-                ZoomLevel = UnpinnedZoomLevel;
+                Center = LastCenter ?? DistrictOfColumbia;
+                ZoomLevel = LastZoomLevel ?? UnpinnedZoomLevel;
             }
             PropertyChanged += (sender, e) =>
             {
@@ -107,6 +111,12 @@ namespace ERHMS.Presentation.ViewModels
         private void UpdateTitle()
         {
             Title = Location.New ? "New Location" : Location.Name;
+        }
+
+        public void SaveState()
+        {
+            LastCenter = Center;
+            LastZoomLevel = ZoomLevel;
         }
 
         public bool HasAddress()
@@ -165,6 +175,7 @@ namespace ERHMS.Presentation.ViewModels
                 SetCoordinates(result.Latitude, result.Longitude);
                 Center = GetCoordinates();
                 ZoomLevel = PinnedZoomLevel;
+                SaveState();
             }
             else
             {
@@ -177,6 +188,7 @@ namespace ERHMS.Presentation.ViewModels
             if (Target != null)
             {
                 SetCoordinates(Target);
+                SaveState();
             }
         }
 
@@ -262,6 +274,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new ToastMessage("Location has been saved."));
             Messenger.Default.Send(new RefreshListMessage<Location>(Location.IncidentId));
             UpdateTitle();
+            SaveState();
         }
     }
 }

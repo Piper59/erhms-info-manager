@@ -25,6 +25,7 @@ namespace ERHMS.Presentation.Views
         private void Map_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataContext.SetCoordinates(Map.ViewportPointToLocation(e.GetPosition(Map)));
+            DataContext.SaveState();
             e.Handled = true;
         }
     }
