@@ -21,7 +21,7 @@
                             <Setter Property="Foreground" Value="#ff000000" />
                         </Style>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="FontSize" Value="{StaticResource LargerFontSize}" />
+                            <Setter Property="FontSize" Value="14.0" />
                             <Setter Property="TextAlignment" Value="Center" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
@@ -31,14 +31,12 @@
                         <TextBlock>
                             <Run Style="{StaticResource Header}">Pre-Deployment Phase</Run><LineBreak />
                             <LineBreak />
-                            Rostering and credentialing<LineBreak />
-                            Health screening<LineBreak />
-                            Health and safety training<LineBreak />
-                            Data management<LineBreak />
-                            Information security<LineBreak />
+                            &#x2022; Rostering and credentialing<LineBreak />
+                            &#x2022; Health screening<LineBreak />
+                            &#x2022; Health and safety training<LineBreak />
                             <LineBreak />
-                            Modules:<LineBreak />
-                            <Hyperlink Command="{Binding RespondersCommand}">Responders</Hyperlink><LineBreak />
+                            Modules:
+                            <Hyperlink Command="{Binding RespondersCommand}">Responders</Hyperlink>,
                             <Hyperlink Command="{Binding TemplatesCommand}">Templates</Hyperlink>
                         </TextBlock>
                     </Grid>
@@ -47,14 +45,15 @@
                         <TextBlock>
                             <Run Style="{StaticResource Header}">Deployment Phase</Run><LineBreak />
                             <LineBreak />
-                            On-site responder in-processing<LineBreak />
-                            Health monitoring and surveillance<LineBreak />
-                            Exposure assessment<LineBreak />
-                            Activities documentation<LineBreak />
-                            Communication<LineBreak />
+                            &#x2022; On-site responder in-processing<LineBreak />
+                            &#x2022; Health monitoring and surveillance<LineBreak />
+                            &#x2022; Exposure assessment<LineBreak />
+                            &#x2022; Activities documentation<LineBreak />
+                            &#x2022; Controls<LineBreak />
+                            &#x2022; Communication of exposure and health<LineBreak />monitoring and surveillance data<LineBreak />
                             <LineBreak />
-                            Modules:<LineBreak />
-                            <Hyperlink Command="{Binding IncidentsCommand}">Incidents</Hyperlink><LineBreak />
+                            Modules:
+                            <Hyperlink Command="{Binding IncidentsCommand}">Incidents</Hyperlink>,
                             <Hyperlink Command="{Binding FormsCommand}">Forms</Hyperlink>
                         </TextBlock>
                     </Grid>
@@ -63,11 +62,11 @@
                         <TextBlock>
                             <Run Style="{StaticResource Header}">Post-Deployment Phase</Run><LineBreak />
                             <LineBreak />
-                            Responder out-processing<LineBreak />
-                            Post-event health tracking<LineBreak />
-                            After-action reporting<LineBreak /><LineBreak />
-                            Modules:<LineBreak />
-                            <Hyperlink Command="{Binding AnalysesCommand}">Analyses</Hyperlink><LineBreak />
+                            &#x2022; Responder out-processing<LineBreak />
+                            &#x2022; Post-event health tracking<LineBreak />
+                            &#x2022; After-action reporting<LineBreak /><LineBreak />
+                            Modules:
+                            <Hyperlink Command="{Binding AnalysesCommand}">Analyses</Hyperlink>,
                             <Hyperlink Command="{Binding DashboardsCommand}">Dashboards</Hyperlink>
                         </TextBlock>
                     </Grid>
