@@ -175,6 +175,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Templates\Forms\Empty.xml" />
     <EmbeddedResource Include="Templates\Projects\ERHMS.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

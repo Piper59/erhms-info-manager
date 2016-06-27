@@ -15,7 +15,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public Template(GuiMediator mediator)
         {
-            Type type = typeof(MakeViewWindowsModule).Assembly.GetType("Epi.Windows.MakeView.Template");
+            Type type = Assembly.GetAssembly(typeof(MakeViewWindowsModule)).GetType("Epi.Windows.MakeView.Template");
             ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(GuiMediator) });
             @base = constructor.Invoke(new object[] { mediator });
         }

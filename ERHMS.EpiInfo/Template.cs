@@ -3,6 +3,7 @@ using ERHMS.Utility;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 
 namespace ERHMS.EpiInfo
@@ -100,6 +101,13 @@ namespace ERHMS.EpiInfo
         public static IEnumerable<Template> GetByLevel(TemplateLevel level)
         {
             return GetAll().Where(template => template.Level == level);
+        }
+
+        public static Template GetFromResource(Assembly assembly, string resourceName)
+        {
+            FileInfo file = IOExtensions.GetTemporaryFile(extension: ".xml");
+            System.IO.File.WriteAllText(file.FullName, assembly.GetManifestResourceText(resourceName));
+            return Get(file);
         }
 
         public FileInfo File { get; private set; }

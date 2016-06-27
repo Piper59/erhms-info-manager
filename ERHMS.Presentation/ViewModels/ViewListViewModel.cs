@@ -14,6 +14,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
@@ -205,7 +206,8 @@ namespace ERHMS.Presentation.ViewModels
         public void Create()
         {
             string prefix = Incident == null ? null : Incident.Name;
-            MakeView.AddView(DataContext.Project, prefix, IncidentId);
+            EpiInfo.Template template = EpiInfo.Template.GetFromResource(Assembly.GetAssembly(typeof(Responder)), "ERHMS.Domain.Templates.Forms.Empty.xml");
+            MakeView.InstantiateTemplate(DataContext.Project, template, prefix, IncidentId);
         }
 
         public void Edit()

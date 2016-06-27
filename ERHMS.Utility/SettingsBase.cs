@@ -13,7 +13,7 @@ namespace ERHMS.Utility
 
         static SettingsBase()
         {
-            Assembly assembly = typeof(TSettings).Assembly;
+            Assembly assembly = Assembly.GetAssembly(typeof(TSettings));
             file = new FileInfo(Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 assembly.GetCompany(),
