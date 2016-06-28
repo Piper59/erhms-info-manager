@@ -76,7 +76,7 @@
                 </CheckBox>
             </ctrl:FormGrid>
         </DockPanel>
-        <scw:ChildWindow Title="Add a Recipient" DataContext="{Binding Recipient}" IsOpen="{Binding Active}">
+        <scw:ChildWindow Title="Add a Recipient" DataContext="{Binding Recipient}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=Responder}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding AddCommand}" Visual="{DynamicResource appbar_add}">Add</ctrl:AppBarButton>
@@ -89,7 +89,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <RadioButton Grid.Row="0" Grid.Column="0" GroupName="IsResponder" IsChecked="{Binding IsResponder}">Responder</RadioButton>
-                    <ComboBox Grid.Row="0" Grid.Column="1"
+                    <ComboBox Name="Responder" Grid.Row="0" Grid.Column="1"
                               ItemsSource="{Binding DataContext.Responders, ElementName=Root}"
                               SelectedItem="{Binding Responder}"
                               IsEnabled="{Binding IsResponder}">
