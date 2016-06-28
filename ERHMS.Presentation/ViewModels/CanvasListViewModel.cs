@@ -58,7 +58,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 canvases = DataContext.GetLinkedCanvases(IncidentId).Select(canvas => new Link<Canvas>(canvas, Incident));
             }
-            return CollectionViewSource.GetDefaultView(canvases.OrderBy(canvas => canvas.IncidentName).ThenBy(canvas => canvas.Data.Name));
+            return CollectionViewSource.GetDefaultView(canvases.OrderBy(canvas => canvas.Data.Name));
         }
 
         protected override IEnumerable<string> GetFilteredValues(Link<Canvas> item)

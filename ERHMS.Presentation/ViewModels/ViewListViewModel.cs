@@ -195,7 +195,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 views = DataContext.GetLinkedViews(IncidentId).Select(view => new Link<View>(view, Incident));
             }
-            return CollectionViewSource.GetDefaultView(views.OrderBy(view => view.IncidentName).ThenBy(view => view.Data.Name));
+            return CollectionViewSource.GetDefaultView(views.OrderBy(view => view.Data.Name));
         }
 
         protected override IEnumerable<string> GetFilteredValues(Link<View> item)

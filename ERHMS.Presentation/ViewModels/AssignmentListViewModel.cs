@@ -156,8 +156,7 @@ namespace ERHMS.Presentation.ViewModels
                     items.Add(new AssignmentViewModel(assignment, view, responder));
                 }
             }
-            return CollectionViewSource.GetDefaultView(items.OrderBy(assignment => assignment.IncidentName)
-                .ThenBy(assignment => assignment.View.Data.Name)
+            return CollectionViewSource.GetDefaultView(items.OrderBy(assignment => assignment.View.Data.Name)
                 .ThenBy(assignment => assignment.Responder.LastName)
                 .ThenBy(assignment => assignment.Responder.FirstName));
         }

@@ -58,7 +58,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 pgms = DataContext.GetLinkedPgms(IncidentId).Select(pgm => new Link<Pgm>(pgm, Incident));
             }
-            return CollectionViewSource.GetDefaultView(pgms.OrderBy(pgm => pgm.IncidentName).ThenBy(pgm => pgm.Data.Name));
+            return CollectionViewSource.GetDefaultView(pgms.OrderBy(pgm => pgm.Data.Name));
         }
 
         protected override IEnumerable<string> GetFilteredValues(Link<Pgm> item)
