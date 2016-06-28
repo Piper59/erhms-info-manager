@@ -196,6 +196,10 @@ namespace ERHMS.EpiInfo.Analysis
                                 {
                                     service.OnViewDataImported(projectPath, viewName);
                                 }
+                                if (MessageBox.Show("Data has been imported. Close Epi Info?", "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                {
+                                    form.Close();
+                                }
                             });
                         });
                     };
@@ -228,7 +232,13 @@ namespace ERHMS.EpiInfo.Analysis
                                 form.AddCommand(dialog.CommandText);
                                 if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)
                                 {
-                                    form.ExecuteCommand(dialog.CommandText);
+                                    form.ExecuteCommand(dialog.CommandText, () =>
+                                    {
+                                        if (MessageBox.Show("Data has been exported. Close Epi Info?", "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                        {
+                                            form.Close();
+                                        }
+                                    });
                                 }
                             }
                         }
