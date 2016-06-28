@@ -22,11 +22,11 @@
                                   SelectedItem="{Binding SelectedItem}"
                                   MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
                                   ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">
-            <ctrl:MultiSelectDataGrid.Columns>
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Location" Width="4*" Binding="{Binding DirectoryName}" />
                 <DataGridTextColumn Header="Size" Width="*" Binding="{Binding Length, Converter={StaticResource SizeToHumanReadableSizeConverter}}" />
-            </ctrl:MultiSelectDataGrid.Columns>
+            </DataGrid.Columns>
         </ctrl:MultiSelectDataGrid>
     </DockPanel>
 </UserControl>

@@ -18,7 +18,7 @@
                                   ItemsSource="{Binding Items}"
                                   SelectedItem="{Binding SelectedItem}"
                                   MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}">
-            <ctrl:MultiSelectDataGrid.CellStyle>
+            <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Deleted}" Value="True">
@@ -26,7 +26,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ctrl:MultiSelectDataGrid.CellStyle>
+            </DataGrid.CellStyle>
         </ctrl:MultiSelectDataGrid>
     </DockPanel>
 </UserControl>

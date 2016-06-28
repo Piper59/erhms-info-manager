@@ -39,7 +39,7 @@
                                           SelectedItem="{Binding SelectedItem}"
                                           MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
                                           ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
-                    <ctrl:MultiSelectDataGrid.Columns>
+                    <DataGrid.Columns>
                         <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding LastName}" />
                         <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding FirstName}" />
                         <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding EmailAddress}" />
@@ -47,7 +47,7 @@
                         <DataGridTextColumn Header="State" Width="*" Binding="{Binding State}" />
                         <DataGridTextColumn Header="Organization" Width="2*" Binding="{Binding OrganizationName}" />
                         <DataGridTextColumn Header="Occupation" Width="2*" Binding="{Binding Occupation}" />
-                    </ctrl:MultiSelectDataGrid.Columns>
+                    </DataGrid.Columns>
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>
             <WrapPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource AppBar}">
@@ -59,14 +59,14 @@
                 <ctrl:MultiSelectDataGrid ItemsSource="{Binding Items}"
                                           SelectedItem="{Binding SelectedItem}"
                                           MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}">
-                    <ctrl:MultiSelectDataGrid.Resources>
+                    <DataGrid.Resources>
                         <ctrl:BindingProxy x:Key="Proxy" DataContext="{Binding}" />
-                    </ctrl:MultiSelectDataGrid.Resources>
-                    <ctrl:MultiSelectDataGrid.Columns>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
                         <DataGridTextColumn Header="Form" Width="*" Binding="{Binding View.Data.Name}" />
                         <DataGridTextColumn Header="Responder" Width="*" Binding="{Binding Responder, Converter={StaticResource ResponderToNameConverter}}" />
                         <DataGridTextColumn Header="Incident" Width="*" Binding="{Binding IncidentName}" Visibility="{Binding DataContext.Incident, Source={StaticResource Proxy}, Converter={StaticResource NullToVisibilityInverter}}" />
-                    </ctrl:MultiSelectDataGrid.Columns>
+                    </DataGrid.Columns>
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>
         </Grid>
