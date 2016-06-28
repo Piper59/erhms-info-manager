@@ -89,6 +89,7 @@ namespace ERHMS.EpiInfo.Analysis
         {
             using (PgmDialog dialog = new PgmDialog(this, name, Commands, PgmDialog.PgmDialogMode.SaveProgram))
             {
+                dialog.StartPosition = FormStartPosition.CenterParent;
                 return dialog.ShowDialog() == DialogResult.OK;
             }
         }

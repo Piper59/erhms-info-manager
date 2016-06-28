@@ -125,6 +125,7 @@ namespace ERHMS.EpiInfo.Analysis
                         string command;
                         using (ReadDialog dialog = new ReadDialog(form))
                         {
+                            dialog.StartPosition = FormStartPosition.CenterParent;
                             if (dialog.ShowDialog() != DialogResult.OK)
                             {
                                 return;
@@ -145,6 +146,7 @@ namespace ERHMS.EpiInfo.Analysis
                             {
                                 using (MappingDialog dialog = new MappingDialog(form, sources, targets))
                                 {
+                                    dialog.StartPosition = FormStartPosition.CenterParent;
                                     if (dialog.ShowDialog() == DialogResult.OK)
                                     {
                                         mappings = dialog.GetMappings();
@@ -220,6 +222,7 @@ namespace ERHMS.EpiInfo.Analysis
                     {
                         using (WriteDialog dialog = new WriteDialog(form))
                         {
+                            dialog.StartPosition = FormStartPosition.CenterParent;
                             if (dialog.ShowDialog() == DialogResult.OK)
                             {
                                 form.AddCommand(dialog.CommandText);

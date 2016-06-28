@@ -86,6 +86,7 @@ namespace ERHMS.EpiInfo.MakeView
                 {
                     using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                     {
+                        dialog.StartPosition = FormStartPosition.CenterParent;
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
                             viewName = dialog.ViewName;
@@ -121,6 +122,7 @@ namespace ERHMS.EpiInfo.MakeView
                 {
                     using (CreateTemplateDialog dialog = new CreateTemplateDialog(project, viewName))
                     {
+                        dialog.StartPosition = FormStartPosition.CenterParent;
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
                             Template template = new Template(form.Mediator);
@@ -203,6 +205,7 @@ namespace ERHMS.EpiInfo.MakeView
                     {
                         using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                         {
+                            dialog.StartPosition = FormStartPosition.CenterParent;
                             if (dialog.ShowDialog() == DialogResult.OK)
                             {
                                 viewName = dialog.ViewName;
@@ -243,6 +246,7 @@ namespace ERHMS.EpiInfo.MakeView
                 form.ProjectExplorer.SelectView(viewName);
                 using (CopyToAndroid dialog = new CopyToAndroid(form.CurrentView, form.Mediator))
                 {
+                    dialog.StartPosition = FormStartPosition.CenterParent;
                     dialog.ShowDialog();
                 }
             }
