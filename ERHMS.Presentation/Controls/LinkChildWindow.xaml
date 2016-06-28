@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Controls.LinkChildWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
+             mc:Ignorable="d"
+             d:DesignWidth="640" d:DesignHeight="480">
+    <scw:ChildWindow Title="Link to Incident" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=SelectedIncident}">
+        <DockPanel>
+            <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                <ctrl:AppBarButton Command="{Binding LinkCommand}" Visual="{DynamicResource appbar_link}">Link</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding UnlinkCommand}" Visual="{DynamicResource appbar_close}">Unlink</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+            </WrapPanel>
+            <ctrl:ResponsiveFormGrid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Incident</Label>
+                <ComboBox Name="SelectedIncident" Grid.Row="0" Grid.Column="1" DisplayMemberPath="Name"
+                          ItemsSource="{Binding Incidents}"
+                          SelectedItem="{Binding SelectedIncident}" />
+            </ctrl:ResponsiveFormGrid>
+        </DockPanel>
+    </scw:ChildWindow>
+</UserControl>

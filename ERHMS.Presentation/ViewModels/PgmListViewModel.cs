@@ -14,6 +14,35 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class PgmListViewModel : ListViewModelBase<Link<Pgm>>
     {
+        public class LinkInternalViewModel : LinkViewModelBase
+        {
+            public Link<Pgm> Pgm { get; private set; }
+
+            public void Reset(Link<Pgm> pgm)
+            {
+                Reset(pgm.IncidentId);
+                Pgm = pgm;
+            }
+
+            public override void Link()
+            {
+                DataContext.PgmLinks.DeleteByPgmId(Pgm.Data.PgmId);
+                PgmLink pgmLink = DataContext.PgmLinks.Create();
+                pgmLink.PgmId = Pgm.Data.PgmId;
+                pgmLink.IncidentId = SelectedIncidentId;
+                DataContext.PgmLinks.Save(pgmLink);
+                Messenger.Default.Send(new RefreshListMessage<Pgm>(SelectedIncidentId));
+                Active = false;
+            }
+
+            public override void Unlink()
+            {
+                DataContext.PgmLinks.DeleteByPgmId(Pgm.Data.PgmId);
+                Messenger.Default.Send(new RefreshListMessage<Pgm>(SelectedIncidentId));
+                Active = false;
+            }
+        }
+
         public Incident Incident { get; private set; }
 
         public string IncidentId
@@ -21,7 +50,10 @@ namespace ERHMS.Presentation.ViewModels
             get { return Incident == null ? null : Incident.IncidentId; }
         }
 
+        public LinkInternalViewModel LinkModel { get; private set; }
+
         public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand LinkCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand RefreshCommand { get; private set; }
 
@@ -32,10 +64,13 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             Selecting += (sender, e) =>
             {
+                LinkCommand.RaiseCanExecuteChanged();
                 OpenCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
+            LinkModel = new LinkInternalViewModel();
             OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            LinkCommand = new RelayCommand(Link, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
@@ -72,6 +107,12 @@ namespace ERHMS.Presentation.ViewModels
         public void Open()
         {
             Analysis.OpenPgm(DataContext.Project, DataContext.Project.GetPgmById(SelectedItem.Data.PgmId), false, SelectedItem.IncidentId);
+        }
+
+        public void Link()
+        {
+            LinkModel.Reset(SelectedItem);
+            LinkModel.Active = true;
         }
 
         public void Delete()

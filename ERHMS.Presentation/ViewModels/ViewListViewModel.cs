@@ -21,6 +21,35 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ViewListViewModel : ListViewModelBase<Link<View>>
     {
+        public class LinkInternalViewModel : LinkViewModelBase
+        {
+            public Link<View> View { get; private set; }
+
+            public void Reset(Link<View> view)
+            {
+                Reset(view.IncidentId);
+                View = view;
+            }
+
+            public override void Link()
+            {
+                DataContext.ViewLinks.DeleteByViewId(View.Data.Id);
+                ViewLink viewLink = DataContext.ViewLinks.Create();
+                viewLink.ViewId = View.Data.Id;
+                viewLink.IncidentId = SelectedIncidentId;
+                DataContext.ViewLinks.Save(viewLink);
+                Messenger.Default.Send(new RefreshListMessage<View>(SelectedIncidentId));
+                Active = false;
+            }
+
+            public override void Unlink()
+            {
+                DataContext.ViewLinks.DeleteByViewId(View.Data.Id);
+                Messenger.Default.Send(new RefreshListMessage<View>(SelectedIncidentId));
+                Active = false;
+            }
+        }
+
         public class ResponderInternalViewModel : ViewModelBase
         {
             private bool active;
@@ -105,13 +134,15 @@ namespace ERHMS.Presentation.ViewModels
             get { return Incident == null ? null : Incident.IncidentId; }
         }
 
+        public LinkInternalViewModel LinkModel { get; private set; }
         public ResponderInternalViewModel ResponderModel { get; private set; }
         public SurveyViewModel SurveyModel { get; private set; }
         public AnalysisViewModel PgmModel { get; private set; }
         public AnalysisViewModel CanvasModel { get; private set; }
 
         public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
+        public RelayCommand DesignCommand { get; private set; }
+        public RelayCommand LinkCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand EnterDataCommand { get; private set; }
         public RelayCommand ViewDataCommand { get; private set; }
@@ -136,7 +167,8 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             Selecting += (sender, e) =>
             {
-                EditCommand.RaiseCanExecuteChanged();
+                DesignCommand.RaiseCanExecuteChanged();
+                LinkCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
                 EnterDataCommand.RaiseCanExecuteChanged();
                 ViewDataCommand.RaiseCanExecuteChanged();
@@ -153,12 +185,14 @@ namespace ERHMS.Presentation.ViewModels
                 AnalyzeClassicCommand.RaiseCanExecuteChanged();
                 AnalyzeVisualCommand.RaiseCanExecuteChanged();
             };
+            LinkModel = new LinkInternalViewModel();
             ResponderModel = new ResponderInternalViewModel();
             SurveyModel = new SurveyViewModel();
             PgmModel = new AnalysisViewModel(CreatePgm);
             CanvasModel = new AnalysisViewModel(CreateCanvas);
             CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasSelectedItem);
+            DesignCommand = new RelayCommand(Design, HasSelectedItem);
+            LinkCommand = new RelayCommand(Link, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             EnterDataCommand = new RelayCommand(EnterData, HasSelectedItem);
             ViewDataCommand = new RelayCommand(ViewData, HasSelectedItem);
@@ -211,9 +245,15 @@ namespace ERHMS.Presentation.ViewModels
             MakeView.InstantiateTemplate(DataContext.Project, template, prefix, IncidentId);
         }
 
-        public void Edit()
+        public void Design()
         {
             MakeView.OpenView(SelectedItem.Data);
+        }
+
+        public void Link()
+        {
+            LinkModel.Reset(SelectedItem);
+            LinkModel.Active = true;
         }
 
         public void Delete()

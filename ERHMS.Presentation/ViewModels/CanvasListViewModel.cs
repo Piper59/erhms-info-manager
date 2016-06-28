@@ -14,6 +14,35 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class CanvasListViewModel : ListViewModelBase<Link<Canvas>>
     {
+        public class LinkInternalViewModel : LinkViewModelBase
+        {
+            public Link<Canvas> Canvas { get; private set; }
+
+            public void Reset(Link<Canvas> canvas)
+            {
+                Reset(canvas.IncidentId);
+                Canvas = canvas;
+            }
+
+            public override void Link()
+            {
+                DataContext.CanvasLinks.DeleteByCanvasId(Canvas.Data.CanvasId);
+                CanvasLink canvasLink = DataContext.CanvasLinks.Create();
+                canvasLink.CanvasId = Canvas.Data.CanvasId;
+                canvasLink.IncidentId = SelectedIncidentId;
+                DataContext.CanvasLinks.Save(canvasLink);
+                Messenger.Default.Send(new RefreshListMessage<Canvas>(SelectedIncidentId));
+                Active = false;
+            }
+
+            public override void Unlink()
+            {
+                DataContext.CanvasLinks.DeleteByCanvasId(Canvas.Data.CanvasId);
+                Messenger.Default.Send(new RefreshListMessage<Canvas>(SelectedIncidentId));
+                Active = false;
+            }
+        }
+
         public Incident Incident { get; private set; }
 
         public string IncidentId
@@ -21,7 +50,10 @@ namespace ERHMS.Presentation.ViewModels
             get { return Incident == null ? null : Incident.IncidentId; }
         }
 
+        public LinkInternalViewModel LinkModel { get; private set; }
+
         public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand LinkCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand RefreshCommand { get; private set; }
 
@@ -32,10 +64,13 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             Selecting += (sender, e) =>
             {
+                LinkCommand.RaiseCanExecuteChanged();
                 OpenCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
+            LinkModel = new LinkInternalViewModel();
             OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            LinkCommand = new RelayCommand(Link, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
@@ -70,6 +105,12 @@ namespace ERHMS.Presentation.ViewModels
         public void Open()
         {
             AnalysisDashboard.OpenCanvas(DataContext.Project, DataContext.Project.GetCanvasById(SelectedItem.Data.CanvasId), SelectedItem.IncidentId);
+        }
+
+        public void Link()
+        {
+            LinkModel.Reset(SelectedItem);
+            LinkModel.Active = true;
         }
 
         public void Delete()

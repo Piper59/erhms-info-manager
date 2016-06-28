@@ -20,7 +20,17 @@
             <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                 <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding EditCommand}" Visual="{DynamicResource appbar_edit}">Edit</ctrl:AppBarButton>
+                <ctrl:AppBarButton Content="Edit"
+                                   Visual="{DynamicResource appbar_edit}"
+                                   ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
+                                   IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Design Form" Command="{Binding DesignCommand}" />
+                            <MenuItem Header="Link to Incident" Command="{Binding LinkCommand}" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
                 <ctrl:AppBarButton Content="Data"
                                    Visual="{DynamicResource appbar_database}"
@@ -93,7 +103,8 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <scw:ChildWindow Title="Select a Responder" DataContext="{Binding ResponderModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=SelectedResponder}">
+        <ctrl:LinkChildWindow DataContext="{Binding LinkModel}" />
+        <scw:ChildWindow Title="Prepopulate Responder ID Field" DataContext="{Binding ResponderModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=SelectedResponder}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,0,0,5" TextWrapping="Wrap">
                     The selected form appears to contain a responder ID field.

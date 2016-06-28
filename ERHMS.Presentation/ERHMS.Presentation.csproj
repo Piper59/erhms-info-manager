@@ -222,6 +222,9 @@
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\FormGrid.cs" />
+    <Compile Include="Controls\LinkChildWindow.xaml.cs">
+      <DependentUpon>LinkChildWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MapButton.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Controls\PasswordBoxExtensions.cs" />
@@ -283,6 +286,7 @@
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
     <Compile Include="ViewModels\IncidentNotesViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
+    <Compile Include="ViewModels\LinkViewModelBase.cs" />
     <Compile Include="ViewModels\ListViewModelBase.cs" />
     <Compile Include="ViewModels\LocationDetailViewModel.cs" />
     <Compile Include="ViewModels\LocationListViewModel.cs" />
@@ -401,6 +405,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Filter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LinkChildWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
