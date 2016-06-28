@@ -106,6 +106,42 @@ namespace ERHMS.DataAccess
             return Project.GetCanvases();
         }
 
+        public IEnumerable<Link<View>> GetLinkedViews()
+        {
+            ICollection<Incident> incidents = Incidents.Select().ToList();
+            ICollection<ViewLink> viewLinks = ViewLinks.Select().ToList();
+            foreach (View view in GetViews())
+            {
+                ViewLink viewLink = viewLinks.SingleOrDefault(_viewLink => _viewLink.ViewId == view.Id);
+                Incident incident = viewLink == null ? null : incidents.Single(_incident => _incident.IncidentId == viewLink.IncidentId);
+                yield return new Link<View>(view, incident);
+            }
+        }
+
+        public IEnumerable<Link<Pgm>> GetLinkedPgms()
+        {
+            ICollection<Incident> incidents = Incidents.Select().ToList();
+            ICollection<PgmLink> pgmLinks = PgmLinks.Select().ToList();
+            foreach (Pgm pgm in GetPgms())
+            {
+                PgmLink pgmLink = pgmLinks.SingleOrDefault(_pgmLink => _pgmLink.PgmId == pgm.PgmId);
+                Incident incident = pgmLink == null ? null : incidents.Single(_incident => _incident.IncidentId == pgmLink.IncidentId);
+                yield return new Link<Pgm>(pgm, incident);
+            }
+        }
+
+        public IEnumerable<Link<Canvas>> GetLinkedCanvases()
+        {
+            ICollection<Incident> incidents = Incidents.Select().ToList();
+            ICollection<CanvasLink> canvasLinks = CanvasLinks.Select().ToList();
+            foreach (Canvas canvas in GetCanvases())
+            {
+                CanvasLink canvasLink = canvasLinks.SingleOrDefault(_canvasLink => _canvasLink.CanvasId == canvas.CanvasId);
+                Incident incident = canvasLink == null ? null : incidents.Single(_incident => _incident.IncidentId == canvasLink.IncidentId);
+                yield return new Link<Canvas>(canvas, incident);
+            }
+        }
+
         public IEnumerable<View> GetLinkedViews(string incidentId)
         {
             ICollection<int> viewIds = ViewLinks.Select(GetIncidentPredicate(incidentId))

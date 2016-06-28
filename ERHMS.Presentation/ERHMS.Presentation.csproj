@@ -214,6 +214,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\AppBarButton.cs" />
+    <Compile Include="Controls\BindingProxy.cs" />
     <Compile Include="Controls\ButtonExtensions.cs" />
     <Compile Include="Controls\CappedPath.cs" />
     <Compile Include="Controls\DataGridExtensions.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToBoolConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityInverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
     <Compile Include="Converters\RecipientToStringConverter.cs" />
     <Compile Include="Converters\ResponderToNameConverter.cs" />

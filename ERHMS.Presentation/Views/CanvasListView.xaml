@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
+    <UserControl.Resources>
+        <conv:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
+    </UserControl.Resources>
     <DockPanel>
         <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
@@ -17,8 +21,12 @@
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}"
                   ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">
+            <DataGrid.Resources>
+                <ctrl:BindingProxy x:Key="Proxy" DataContext="{Binding}" />
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Data.Name}" />
+                <DataGridTextColumn Header="Incident" Width="*" Binding="{Binding IncidentName}" Visibility="{Binding DataContext.Incident, Source={StaticResource Proxy}, Converter={StaticResource NullToVisibilityInverter}}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

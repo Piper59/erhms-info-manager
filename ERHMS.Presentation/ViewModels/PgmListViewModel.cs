@@ -12,7 +12,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class PgmListViewModel : ListViewModelBase<Pgm>
+    public class PgmListViewModel : ListViewModelBase<Link<Pgm>>
     {
         public Incident Incident { get; private set; }
 
@@ -49,28 +49,29 @@ namespace ERHMS.Presentation.ViewModels
 
         protected override ICollectionView GetItems()
         {
-            IEnumerable<Pgm> pgms;
+            IEnumerable<Link<Pgm>> pgms;
             if (Incident == null)
             {
-                pgms = DataContext.GetUnlinkedPgms();
+                pgms = DataContext.GetLinkedPgms().Where(pgm => pgm.Incident == null || !pgm.Incident.Deleted);
             }
             else
             {
-                pgms = DataContext.GetLinkedPgms(IncidentId);
+                pgms = DataContext.GetLinkedPgms(IncidentId).Select(pgm => new Link<Pgm>(pgm, Incident));
             }
-            return CollectionViewSource.GetDefaultView(pgms.OrderBy(pgm => pgm.Name));
+            return CollectionViewSource.GetDefaultView(pgms.OrderBy(pgm => pgm.IncidentName).ThenBy(pgm => pgm.Data.Name));
         }
 
-        protected override IEnumerable<string> GetFilteredValues(Pgm item)
+        protected override IEnumerable<string> GetFilteredValues(Link<Pgm> item)
         {
-            yield return item.Name;
-            yield return item.Comment;
-            yield return item.Author;
+            yield return item.Data.Name;
+            yield return item.Data.Comment;
+            yield return item.Data.Author;
+            yield return item.IncidentName;
         }
 
         public void Open()
         {
-            Analysis.OpenPgm(DataContext.Project, DataContext.Project.GetPgmById(SelectedItem.PgmId), false, IncidentId);
+            Analysis.OpenPgm(DataContext.Project, DataContext.Project.GetPgmById(SelectedItem.Data.PgmId), false, SelectedItem.IncidentId);
         }
 
         public void Delete()
@@ -78,9 +79,9 @@ namespace ERHMS.Presentation.ViewModels
             ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected analysis?");
             msg.Confirmed += (sender, e) =>
             {
-                DataContext.PgmLinks.DeleteByPgmId(SelectedItem.PgmId);
-                DataContext.Project.DeletePgm(SelectedItem);
-                Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
+                DataContext.PgmLinks.DeleteByPgmId(SelectedItem.Data.PgmId);
+                DataContext.Project.DeletePgm(SelectedItem.Data);
+                Messenger.Default.Send(new RefreshListMessage<Pgm>(SelectedItem.IncidentId));
             };
             Messenger.Default.Send(msg);
         }
@@ -95,7 +96,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshPgmListMessage(RefreshListMessage<Pgm> msg)
         {
-            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
+            if (Incident == null || StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }

@@ -12,7 +12,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class CanvasListViewModel : ListViewModelBase<Canvas>
+    public class CanvasListViewModel : ListViewModelBase<Link<Canvas>>
     {
         public Incident Incident { get; private set; }
 
@@ -49,26 +49,27 @@ namespace ERHMS.Presentation.ViewModels
 
         protected override ICollectionView GetItems()
         {
-            IEnumerable<Canvas> canvases;
+            IEnumerable<Link<Canvas>> canvases;
             if (Incident == null)
             {
-                canvases = DataContext.GetUnlinkedCanvases();
+                canvases = DataContext.GetLinkedCanvases().Where(canvas => canvas.Incident == null || !canvas.Incident.Deleted);
             }
             else
             {
-                canvases = DataContext.GetLinkedCanvases(IncidentId);
+                canvases = DataContext.GetLinkedCanvases(IncidentId).Select(canvas => new Link<Canvas>(canvas, Incident));
             }
-            return CollectionViewSource.GetDefaultView(canvases.OrderBy(canvas => canvas.Name));
+            return CollectionViewSource.GetDefaultView(canvases.OrderBy(canvas => canvas.IncidentName).ThenBy(canvas => canvas.Data.Name));
         }
 
-        protected override IEnumerable<string> GetFilteredValues(Canvas item)
+        protected override IEnumerable<string> GetFilteredValues(Link<Canvas> item)
         {
-            yield return item.Name;
+            yield return item.Data.Name;
+            yield return item.IncidentName;
         }
 
         public void Open()
         {
-            AnalysisDashboard.OpenCanvas(DataContext.Project, DataContext.Project.GetCanvasById(SelectedItem.CanvasId), IncidentId);
+            AnalysisDashboard.OpenCanvas(DataContext.Project, DataContext.Project.GetCanvasById(SelectedItem.Data.CanvasId), SelectedItem.IncidentId);
         }
 
         public void Delete()
@@ -76,9 +77,9 @@ namespace ERHMS.Presentation.ViewModels
             ConfirmMessage msg = new ConfirmMessage("Delete?", "Delete the selected dashboard?");
             msg.Confirmed += (sender, e) =>
             {
-                DataContext.CanvasLinks.DeleteByCanvasId(SelectedItem.CanvasId);
-                DataContext.Project.DeleteCanvas(SelectedItem);
-                Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
+                DataContext.CanvasLinks.DeleteByCanvasId(SelectedItem.Data.CanvasId);
+                DataContext.Project.DeleteCanvas(SelectedItem.Data);
+                Messenger.Default.Send(new RefreshListMessage<Canvas>(SelectedItem.IncidentId));
             };
             Messenger.Default.Send(msg);
         }
@@ -93,7 +94,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshCanvasListMessage(RefreshListMessage<Canvas> msg)
         {
-            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
+            if (Incident == null || StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }

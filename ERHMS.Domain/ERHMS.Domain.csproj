@@ -55,6 +55,7 @@
     <Compile Include="CanvasLink.cs" />
     <Compile Include="Incident.cs" />
     <Compile Include="IncidentNote.cs" />
+    <Compile Include="Link.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="PgmLink.cs" />
     <Compile Include="Phase.cs" />

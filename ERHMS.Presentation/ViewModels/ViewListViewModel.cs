@@ -19,7 +19,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class ViewListViewModel : ListViewModelBase<View>
+    public class ViewListViewModel : ListViewModelBase<Link<View>>
     {
         public class ResponderInternalViewModel : ViewModelBase
         {
@@ -186,21 +186,22 @@ namespace ERHMS.Presentation.ViewModels
 
         protected override ICollectionView GetItems()
         {
-            IEnumerable<View> views;
+            IEnumerable<Link<View>> views;
             if (Incident == null)
             {
-                views = DataContext.GetUnlinkedViews();
+                views = DataContext.GetLinkedViews().Where(view => view.Incident == null || !view.Incident.Deleted);
             }
             else
             {
-                views = DataContext.GetLinkedViews(IncidentId);
+                views = DataContext.GetLinkedViews(IncidentId).Select(view => new Link<View>(view, Incident));
             }
-            return CollectionViewSource.GetDefaultView(views.OrderBy(view => view.Name));
+            return CollectionViewSource.GetDefaultView(views.OrderBy(view => view.IncidentName).ThenBy(view => view.Data.Name));
         }
 
-        protected override IEnumerable<string> GetFilteredValues(View item)
+        protected override IEnumerable<string> GetFilteredValues(Link<View> item)
         {
-            yield return item.Name;
+            yield return item.Data.Name;
+            yield return item.IncidentName;
         }
 
         public void Create()
@@ -212,12 +213,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Edit()
         {
-            MakeView.OpenView(SelectedItem);
+            MakeView.OpenView(SelectedItem.Data);
         }
 
         public void Delete()
         {
-            if (DataContext.IsResponderView(SelectedItem))
+            if (DataContext.IsResponderView(SelectedItem.Data))
             {
                 Messenger.Default.Send(new NotifyMessage("The selected form cannot be deleted."));
             }
@@ -226,11 +227,11 @@ namespace ERHMS.Presentation.ViewModels
                 ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected form?");
                 msg.Confirmed += (sender, e) =>
                 {
-                    DataContext.Assignments.DeleteByViewId(SelectedItem.Id);
-                    DataContext.ViewLinks.DeleteByViewId(SelectedItem.Id);
-                    DataContext.WebSurveys.DeleteByViewId(SelectedItem.Id);
-                    DataContext.Project.DeleteView(SelectedItem);
-                    Messenger.Default.Send(new RefreshListMessage<View>(IncidentId));
+                    DataContext.Assignments.DeleteByViewId(SelectedItem.Data.Id);
+                    DataContext.ViewLinks.DeleteByViewId(SelectedItem.Data.Id);
+                    DataContext.WebSurveys.DeleteByViewId(SelectedItem.Data.Id);
+                    DataContext.Project.DeleteView(SelectedItem.Data);
+                    Messenger.Default.Send(new RefreshListMessage<View>(SelectedItem.IncidentId));
                 };
                 Messenger.Default.Send(msg);
             }
@@ -238,26 +239,26 @@ namespace ERHMS.Presentation.ViewModels
 
         public void EnterData()
         {
-            if (DataContext.IsResponderLinkedView(SelectedItem))
+            if (DataContext.IsResponderLinkedView(SelectedItem.Data))
             {
-                ResponderModel.Reset(SelectedItem);
+                ResponderModel.Reset(SelectedItem.Data);
                 ResponderModel.Active = true;
             }
             else
             {
-                Enter.OpenView(SelectedItem);
+                Enter.OpenView(SelectedItem.Data);
             }
         }
 
         public void ViewData()
         {
-            SelectedItem.CreateDataTables();
-            Locator.Main.OpenRecordListView(SelectedItem);
+            SelectedItem.Data.CreateDataTables();
+            Locator.Main.OpenRecordListView(SelectedItem.Data);
         }
 
         public void PublishToTemplate()
         {
-            MakeView.CreateTemplate(SelectedItem);
+            MakeView.CreateTemplate(SelectedItem.Data);
         }
 
         public void PublishToWeb()
@@ -265,7 +266,7 @@ namespace ERHMS.Presentation.ViewModels
             Service service = new Service();
             if (service.IsConfigured())
             {
-                SurveyModel.Activate(SelectedItem);
+                SurveyModel.Activate(SelectedItem.Data);
             }
             else
             {
@@ -275,63 +276,63 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToMobile()
         {
-            SelectedItem.CreateDataTables();
-            MakeView.PublishToMobile(SelectedItem);
+            SelectedItem.Data.CreateDataTables();
+            MakeView.PublishToMobile(SelectedItem.Data);
         }
 
         public void ImportFromProject()
         {
-            SelectedItem.CreateDataTables();
-            if (ImportExport.ImportFromView(SelectedItem))
+            SelectedItem.Data.CreateDataTables();
+            if (ImportExport.ImportFromView(SelectedItem.Data))
             {
-                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem.Data));
             }
         }
 
         public void ImportFromPackage()
         {
-            SelectedItem.CreateDataTables();
-            if (ImportExport.ImportFromPackage(SelectedItem))
+            SelectedItem.Data.CreateDataTables();
+            if (ImportExport.ImportFromPackage(SelectedItem.Data))
             {
-                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem.Data));
             }
         }
 
         public void ImportFromFile()
         {
-            SelectedItem.CreateDataTables();
-            Analysis.Import(SelectedItem);
+            SelectedItem.Data.CreateDataTables();
+            Analysis.Import(SelectedItem.Data);
         }
 
         public void ImportFromWeb()
         {
-            SelectedItem.CreateDataTables();
-            SurveyViewModel surveyModel = new SurveyViewModel(SelectedItem);
+            SelectedItem.Data.CreateDataTables();
+            SurveyViewModel surveyModel = new SurveyViewModel(SelectedItem.Data);
             if (surveyModel.Import())
             {
-                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem.Data));
             }
         }
 
         public void ImportFromMobile()
         {
-            SelectedItem.CreateDataTables();
-            if (ImportExport.ImportFromMobile(SelectedItem))
+            SelectedItem.Data.CreateDataTables();
+            if (ImportExport.ImportFromMobile(SelectedItem.Data))
             {
-                Messenger.Default.Send(new RefreshDataMessage(SelectedItem));
+                Messenger.Default.Send(new RefreshDataMessage(SelectedItem.Data));
             }
         }
 
         public void ExportToPackage()
         {
-            SelectedItem.CreateDataTables();
-            ImportExport.ExportToPackage(SelectedItem);
+            SelectedItem.Data.CreateDataTables();
+            ImportExport.ExportToPackage(SelectedItem.Data);
         }
 
         public void ExportToFile()
         {
-            SelectedItem.CreateDataTables();
-            Analysis.Export(SelectedItem);
+            SelectedItem.Data.CreateDataTables();
+            Analysis.Export(SelectedItem.Data);
         }
 
         public void AnalyzeClassic()
@@ -351,20 +352,20 @@ namespace ERHMS.Presentation.ViewModels
             Pgm pgm = new Pgm
             {
                 Name = PgmModel.Name,
-                Content = Pgm.GetContentForView(SelectedItem)
+                Content = Pgm.GetContentForView(SelectedItem.Data)
             };
             DataContext.Project.InsertPgm(pgm);
-            if (Incident != null)
+            if (SelectedItem.Incident != null)
             {
                 PgmLink pgmLink = DataContext.PgmLinks.Create();
                 pgmLink.PgmId = pgm.PgmId;
-                pgmLink.IncidentId = IncidentId;
+                pgmLink.IncidentId = SelectedItem.IncidentId;
                 DataContext.PgmLinks.Save(pgmLink);
             }
-            Messenger.Default.Send(new RefreshListMessage<Pgm>(IncidentId));
+            Messenger.Default.Send(new RefreshListMessage<Pgm>(SelectedItem.IncidentId));
             PgmModel.Active = false;
-            SelectedItem.CreateDataTables();
-            Analysis.OpenPgm(DataContext.Project, pgm, true, IncidentId);
+            SelectedItem.Data.CreateDataTables();
+            Analysis.OpenPgm(DataContext.Project, pgm, true, SelectedItem.IncidentId);
         }
 
         public void CreateCanvas()
@@ -372,20 +373,20 @@ namespace ERHMS.Presentation.ViewModels
             Canvas canvas = new Canvas
             {
                 Name = CanvasModel.Name,
-                Content = Canvas.GetContentForView(SelectedItem)
+                Content = Canvas.GetContentForView(SelectedItem.Data)
             };
             DataContext.Project.InsertCanvas(canvas);
-            if (Incident != null)
+            if (SelectedItem.Incident != null)
             {
                 CanvasLink canvasLink = DataContext.CanvasLinks.Create();
                 canvasLink.CanvasId = canvas.CanvasId;
-                canvasLink.IncidentId = IncidentId;
+                canvasLink.IncidentId = SelectedItem.IncidentId;
                 DataContext.CanvasLinks.Save(canvasLink);
             }
-            Messenger.Default.Send(new RefreshListMessage<Canvas>(IncidentId));
+            Messenger.Default.Send(new RefreshListMessage<Canvas>(SelectedItem.IncidentId));
             CanvasModel.Active = false;
-            SelectedItem.CreateDataTables();
-            AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, IncidentId);
+            SelectedItem.Data.CreateDataTables();
+            AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, SelectedItem.IncidentId);
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
@@ -398,7 +399,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
         {
-            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
+            if (Incident == null || StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }
