@@ -74,15 +74,15 @@ namespace ERHMS.Presentation.ViewModels
             get { return Incident == null ? null : Incident.IncidentId; }
         }
 
-        private ICollection<View> views;
-        public ICollection<View> Views
+        private ICollection<Link<View>> views;
+        public ICollection<Link<View>> Views
         {
             get { return views; }
             set { Set(() => Views, ref views, value); }
         }
 
-        private View selectedView;
-        public View SelectedView
+        private Link<View> selectedView;
+        public Link<View> SelectedView
         {
             get { return selectedView; }
             set { Set(() => SelectedView, ref selectedView, value); }
@@ -149,34 +149,42 @@ namespace ERHMS.Presentation.ViewModels
             ICollection<AssignmentViewModel> items = new List<AssignmentViewModel>();
             foreach (Assignment assignment in DataContext.Assignments.Select())
             {
-                View view = Views.SingleOrDefault(_view => _view.Id == assignment.ViewId);
+                Link<View> view = Views.SingleOrDefault(_view => _view.Data.Id == assignment.ViewId);
                 Responder responder = responders.SingleOrDefault(_responder => _responder.ResponderId.EqualsIgnoreCase(assignment.ResponderId));
-                if (view != null && responder != null)
+                if (view != null && (view.Incident == null || !view.Incident.Deleted) && responder != null)
                 {
                     items.Add(new AssignmentViewModel(assignment, view, responder));
                 }
             }
-            return CollectionViewSource.GetDefaultView(items.OrderBy(assignment => assignment.View.Name)
+            return CollectionViewSource.GetDefaultView(items.OrderBy(assignment => assignment.IncidentName)
+                .ThenBy(assignment => assignment.View.Data.Name)
                 .ThenBy(assignment => assignment.Responder.LastName)
                 .ThenBy(assignment => assignment.Responder.FirstName));
         }
 
         protected override IEnumerable<string> GetFilteredValues(AssignmentViewModel item)
         {
-            yield return item.View.Name;
+            yield return item.View.Data.Name;
             yield return item.Responder.LastName;
             yield return item.Responder.FirstName;
+            yield return item.IncidentName;
         }
 
         public override void Refresh()
         {
             if (Incident == null)
             {
-                Views = DataContext.GetUnlinkedViews().ToList();
+                Views = DataContext.GetLinkedViews()
+                    .Where(view => view.Incident == null || !view.Incident.Deleted)
+                    .OrderBy(view => view.Data.Name)
+                    .ToList();
             }
             else
             {
-                Views = DataContext.GetLinkedViews(Incident.IncidentId).ToList();
+                Views = DataContext.GetLinkedViews(IncidentId)
+                    .Select(view => new Link<View>(view, Incident))
+                    .OrderBy(view => view.Data.Name)
+                    .ToList();
             }
             Responders.Refresh();
             base.Refresh();
@@ -187,11 +195,11 @@ namespace ERHMS.Presentation.ViewModels
             foreach (Responder responder in Responders.SelectedItems)
             {
                 Assignment assignment = DataContext.Assignments.Create();
-                assignment.ViewId = SelectedView.Id;
+                assignment.ViewId = SelectedView.Data.Id;
                 assignment.ResponderId = responder.ResponderId;
                 DataContext.Assignments.Save(assignment);
             }
-            Messenger.Default.Send(new RefreshListMessage<Assignment>(IncidentId));
+            Messenger.Default.Send(new RefreshListMessage<Assignment>(SelectedView.IncidentId));
         }
 
         public void Remove()
@@ -211,11 +219,11 @@ namespace ERHMS.Presentation.ViewModels
         public void Email()
         {
             EmailViewModel email = new EmailViewModel(SelectedItems.Cast<AssignmentViewModel>().Select(assignment => assignment.Responder));
-            if (SelectedItem.View.IsPublished())
+            if (SelectedItem.View.Data.IsPublished())
             {
                 email.AppendUrl = true;
-                email.SetSelectedView(SelectedItem.View.Name);
-                if (DataContext.IsResponderLinkedView(SelectedItem.View))
+                email.SetSelectedView(SelectedItem.View.Data.Name);
+                if (DataContext.IsResponderLinkedView(SelectedItem.View.Data))
                 {
                     email.Prepopulate = true;
                 }
@@ -233,7 +241,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
         {
-            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
+            if (Incident == null || StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }
@@ -254,7 +262,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OnRefreshAssignmentListMessage(RefreshListMessage<Assignment> msg)
         {
-            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
+            if (Incident == null || StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
             {
                 Refresh();
             }

@@ -8,6 +8,7 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <UserControl.Resources>
+        <conv:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
         <conv:ResponderToNameConverter x:Key="ResponderToNameConverter" />
     </UserControl.Resources>
     <DockPanel>
@@ -30,7 +31,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Form</Label>
-                    <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="Name" ItemsSource="{Binding Views}" SelectedItem="{Binding SelectedView}" />
+                    <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="Data.Name" ItemsSource="{Binding Views}" SelectedItem="{Binding SelectedView}" />
                 </ctrl:ResponsiveFormGrid>
                 <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Responders.Filter}" />
                 <ctrl:MultiSelectDataGrid DataContext="{Binding Responders}"
@@ -58,9 +59,13 @@
                 <ctrl:MultiSelectDataGrid ItemsSource="{Binding Items}"
                                           SelectedItem="{Binding SelectedItem}"
                                           MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}">
+                    <ctrl:MultiSelectDataGrid.Resources>
+                        <ctrl:BindingProxy x:Key="Proxy" DataContext="{Binding}" />
+                    </ctrl:MultiSelectDataGrid.Resources>
                     <ctrl:MultiSelectDataGrid.Columns>
-                        <DataGridTextColumn Header="Form" Width="*" Binding="{Binding View.Name}" />
+                        <DataGridTextColumn Header="Form" Width="*" Binding="{Binding View.Data.Name}" />
                         <DataGridTextColumn Header="Responder" Width="*" Binding="{Binding Responder, Converter={StaticResource ResponderToNameConverter}}" />
+                        <DataGridTextColumn Header="Incident" Width="*" Binding="{Binding IncidentName}" Visibility="{Binding DataContext.Incident, Source={StaticResource Proxy}, Converter={StaticResource NullToVisibilityInverter}}" />
                     </ctrl:MultiSelectDataGrid.Columns>
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>
