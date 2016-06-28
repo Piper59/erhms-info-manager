@@ -38,7 +38,7 @@
                                           SelectedItem="{Binding SelectedItem}"
                                           MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
                                           ctrl:DataGridExtensions.DoubleClickCommand="{Binding EditCommand}">
-                    <DataGrid.Columns>
+                    <ctrl:MultiSelectDataGrid.Columns>
                         <DataGridTextColumn Header="Last Name" Width="2*" Binding="{Binding LastName}" />
                         <DataGridTextColumn Header="First Name" Width="2*" Binding="{Binding FirstName}" />
                         <DataGridTextColumn Header="Email Address" Width="2*" Binding="{Binding EmailAddress}" />
@@ -46,7 +46,7 @@
                         <DataGridTextColumn Header="State" Width="*" Binding="{Binding State}" />
                         <DataGridTextColumn Header="Organization" Width="2*" Binding="{Binding OrganizationName}" />
                         <DataGridTextColumn Header="Occupation" Width="2*" Binding="{Binding Occupation}" />
-                    </DataGrid.Columns>
+                    </ctrl:MultiSelectDataGrid.Columns>
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>
             <WrapPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource AppBar}">
@@ -58,10 +58,10 @@
                 <ctrl:MultiSelectDataGrid ItemsSource="{Binding Items}"
                                           SelectedItem="{Binding SelectedItem}"
                                           MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGrid.Columns>
+                    <ctrl:MultiSelectDataGrid.Columns>
                         <DataGridTextColumn Header="Form" Width="*" Binding="{Binding View.Name}" />
                         <DataGridTextColumn Header="Responder" Width="*" Binding="{Binding Responder, Converter={StaticResource ResponderToNameConverter}}" />
-                    </DataGrid.Columns>
+                    </ctrl:MultiSelectDataGrid.Columns>
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>
         </Grid>
