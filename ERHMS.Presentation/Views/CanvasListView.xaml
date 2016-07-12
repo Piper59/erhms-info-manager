@@ -14,10 +14,10 @@
         <DockPanel>
             <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding OpenCommand}" Visual="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding LinkCommand}" Visual="{DynamicResource appbar_link}">Link</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding OpenCommand}" Icon="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding LinkCommand}" Icon="{DynamicResource appbar_link}">Link</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding DeleteCommand}" Icon="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
             </WrapPanel>
             <DataGrid SelectionMode="Single"
                       ItemsSource="{Binding Items}"

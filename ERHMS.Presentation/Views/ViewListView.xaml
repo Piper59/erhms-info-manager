@@ -19,9 +19,9 @@
         <DockPanel>
             <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding CreateCommand}" Icon="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
                 <ctrl:AppBarButton Content="Edit"
-                                   Visual="{DynamicResource appbar_edit}"
+                                   Icon="{DynamicResource appbar_edit}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -31,9 +31,9 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding DeleteCommand}" Icon="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
                 <ctrl:AppBarButton Content="Data"
-                                   Visual="{DynamicResource appbar_database}"
+                                   Icon="{DynamicResource appbar_database}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -44,7 +44,7 @@
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
                 <ctrl:AppBarButton Content="Publish"
-                                   Visual="{DynamicResource appbar_page_upload}"
+                                   Icon="{DynamicResource appbar_page_upload}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -56,7 +56,7 @@
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
                 <ctrl:AppBarButton Content="Import"
-                                   Visual="{DynamicResource appbar_door_enter}"
+                                   Icon="{DynamicResource appbar_door_enter}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -70,7 +70,7 @@
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
                 <ctrl:AppBarButton Content="Export"
-                                   Visual="{DynamicResource appbar_door_leave}"
+                                   Icon="{DynamicResource appbar_door_leave}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -81,7 +81,7 @@
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
                 <ctrl:AppBarButton Content="Analyze"
-                                   Visual="{DynamicResource appbar_graph_bar}"
+                                   Icon="{DynamicResource appbar_graph_bar}"
                                    ctrl:ButtonExtensions.OpenContextMenuOnClick="True"
                                    IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBoolConverter}}">
                     <Button.ContextMenu>
@@ -91,7 +91,7 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
             </WrapPanel>
             <DataGrid SelectionMode="Single" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Resources>
@@ -111,8 +111,8 @@
                     To prepopulate this field, select a responder from the list below.
                 </TextBlock>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding ContinueCommand}" Visual="{DynamicResource appbar_arrow_right}">Continue</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding ContinueCommand}" Icon="{DynamicResource appbar_arrow_right}">Continue</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <ComboBox Name="SelectedResponder" ItemsSource="{Binding Responders}" SelectedItem="{Binding SelectedResponder}">
                     <ComboBox.ItemTemplate>
@@ -126,8 +126,8 @@
         <scw:ChildWindow Name="Survey" Title="Publish to Web" DataContext="{Binding SurveyModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=SurveyTitle}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding PublishCommand}" Visual="{DynamicResource appbar_page_upload}">Publish</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding PublishCommand}" Icon="{DynamicResource appbar_page_upload}">Publish</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <ctrl:ResponsiveFormGrid DataContext="{Binding Survey}">
                     <Grid.RowDefinitions>
@@ -164,8 +164,8 @@
         <scw:ChildWindow Title="Create an Analysis" DataContext="{Binding PgmModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=AnalysisName}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Icon="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <ctrl:ResponsiveFormGrid>
                     <Grid.RowDefinitions>
@@ -179,8 +179,8 @@
         <scw:ChildWindow Title="Create a Dashboard" DataContext="{Binding CanvasModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=DashboardName}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Icon="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <ctrl:ResponsiveFormGrid>
                     <Grid.RowDefinitions>

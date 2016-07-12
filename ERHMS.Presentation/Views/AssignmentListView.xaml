@@ -13,8 +13,8 @@
     </UserControl.Resources>
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding EmailCommand}" Visual="{DynamicResource appbar_email}">Email</ctrl:AppBarButton>
-            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding EmailCommand}" Icon="{DynamicResource appbar_email}">Email</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -51,8 +51,8 @@
                 </ctrl:MultiSelectDataGrid>
             </DockPanel>
             <WrapPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding AddCommand}" Visual="{DynamicResource appbar_arrow_down}">Add</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding RemoveCommand}" Visual="{DynamicResource appbar_arrow_up}">Remove</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding AddCommand}" Icon="{DynamicResource appbar_arrow_down}">Add</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding RemoveCommand}" Icon="{DynamicResource appbar_arrow_up}">Remove</ctrl:AppBarButton>
             </WrapPanel>
             <DockPanel Grid.Row="2" Grid.Column="0">
                 <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />

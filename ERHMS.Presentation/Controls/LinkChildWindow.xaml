@@ -10,9 +10,9 @@
     <scw:ChildWindow Title="Link to Incident" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=SelectedIncident}">
         <DockPanel>
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding LinkCommand}" Visual="{DynamicResource appbar_link}">Link</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding UnlinkCommand}" Visual="{DynamicResource appbar_close}">Unlink</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding LinkCommand}" Icon="{DynamicResource appbar_link}">Link</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding UnlinkCommand}" Icon="{DynamicResource appbar_close}">Unlink</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
             </WrapPanel>
             <ctrl:ResponsiveFormGrid>
                 <Grid.RowDefinitions>

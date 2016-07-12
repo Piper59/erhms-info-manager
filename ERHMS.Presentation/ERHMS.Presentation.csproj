@@ -213,7 +213,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\AppBarButton.cs" />
+    <Compile Include="Controls\AppBarButton.xaml.cs">
+      <DependentUpon>AppBarButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BindingProxy.cs" />
     <Compile Include="Controls\ButtonExtensions.cs" />
     <Compile Include="Controls\CappedPath.cs" />
@@ -403,6 +405,10 @@
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\AppBarButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Filter.xaml">
       <SubType>Designer</SubType>

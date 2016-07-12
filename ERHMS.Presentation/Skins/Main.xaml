@@ -19,36 +19,14 @@
 
     <Style x:Key="AccentButton" TargetType="{x:Type Button}" BasedOn="{StaticResource AccentedSquareButtonStyle}">
         <Setter Property="Height" Value="26" />
+        <Setter Property="mah:ButtonHelper.PreserveTextCase" Value="True" />
         <Setter Property="Margin" Value="5,0,0,5" />
         <Setter Property="Padding" Value="5,-1,5,1" />
-        <Setter Property="mah:ButtonHelper.PreserveTextCase" Value="True" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
     <Style x:Key="AppBar" TargetType="{x:Type WrapPanel}">
         <Setter Property="HorizontalAlignment" Value="Center" />
-    </Style>
-
-    <Style TargetType="{x:Type ctrl:AppBarButton}" BasedOn="{StaticResource MetroButton}">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel>
-                        <Rectangle Width="25" Height="20" Fill="{StaticResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Uniform"
-                                             Visual="{Binding Visual, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:AppBarButton}}}" />
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                        <ContentPresenter HorizontalAlignment="Center" Margin="0" TextBlock.FontSize="12"
-                                          Content="{Binding Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:AppBarButton}}}" />
-                    </StackPanel>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Height" Value="50" />
-        <Setter Property="Margin" Value="0,0,5,5" />
-        <Setter Property="MinWidth" Value="50" />
     </Style>
 
     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MetroCheckBox}">

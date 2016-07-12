@@ -20,8 +20,8 @@
         <DockPanel>
             <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding OpenCommand}" Visual="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="Add" Visual="{DynamicResource appbar_add}" ctrl:ButtonExtensions.OpenContextMenuOnClick="True">
+                <ctrl:AppBarButton Command="{Binding OpenCommand}" Icon="{DynamicResource appbar_folder_open}">Open</ctrl:AppBarButton>
+                <ctrl:AppBarButton Content="Add" Icon="{DynamicResource appbar_add}" ctrl:ButtonExtensions.OpenContextMenuOnClick="True">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="New" Command="{Binding AddNewCommand}" />
@@ -29,8 +29,8 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding RemoveCommand}" Visual="{DynamicResource appbar_close}">Remove</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding RemoveCommand}" Icon="{DynamicResource appbar_close}">Remove</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
             </WrapPanel>
             <DataGrid SelectionMode="Single"
                       ItemsSource="{Binding Items}"
@@ -45,8 +45,8 @@
         <scw:ChildWindow Title="Create a Data Source" DataContext="{Binding DataSource}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=DataSourceName}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Visual="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Icon="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <StackPanel>
                     <ctrl:ResponsiveFormGrid>
