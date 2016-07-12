@@ -227,7 +227,6 @@
     <Compile Include="Controls\LinkChildWindow.xaml.cs">
       <DependentUpon>LinkChildWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MapButton.cs" />
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Controls\PasswordBoxExtensions.cs" />
     <Compile Include="Controls\RemovableItemsControl.cs" />
