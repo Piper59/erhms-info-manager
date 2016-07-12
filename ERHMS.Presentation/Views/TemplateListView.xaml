@@ -9,7 +9,7 @@
     <DockPanel>
         <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_page_copy}">Create</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding CreateCommand}" Visual="{DynamicResource appbar_page_add}">Create</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding DeleteCommand}" Visual="{DynamicResource appbar_delete}">Delete</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Visual="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
