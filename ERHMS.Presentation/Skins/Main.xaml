@@ -18,7 +18,11 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="AccentButton" TargetType="{x:Type Button}" BasedOn="{StaticResource AccentedSquareButtonStyle}">
+        <Setter Property="Height" Value="26" />
+        <Setter Property="Margin" Value="5,0,0,5" />
+        <Setter Property="Padding" Value="5,-1,5,1" />
         <Setter Property="mah:ButtonHelper.PreserveTextCase" Value="True" />
+        <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
     <Style x:Key="AppBar" TargetType="{x:Type WrapPanel}">

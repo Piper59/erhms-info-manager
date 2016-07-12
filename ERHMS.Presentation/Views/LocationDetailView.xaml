@@ -27,11 +27,9 @@
             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource MultiLineTextBox}" Text="{Binding Description}" />
             <Label Grid.Row="2" Grid.Column="0">Address</Label>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
-            <Button Grid.Row="2" Grid.Column="2" Margin="5,0,0,5"
+            <Button Grid.Row="2" Grid.Column="2" Content="Locate"
                     Style="{StaticResource AccentButton}"
-                    Command="{Binding DataContext.LocateCommand, ElementName=Root}">
-                Locate
-            </Button>
+                    Command="{Binding DataContext.LocateCommand, ElementName=Root}" />
             <Label Grid.Row="3" Grid.Column="0">Latitude</Label>
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Latitude, TargetNullValue=''}" />
             <Label Grid.Row="4" Grid.Column="0">Longitude</Label>
