@@ -249,7 +249,6 @@
     <Compile Include="Converters\ResponderToNameEmailConverter.cs" />
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
-    <Compile Include="Converters\StringToUppercaseStringConverter.cs" />
     <Compile Include="Dialogs\FileDialogExtensions.cs" />
     <Compile Include="Dialogs\RootDirectoryDialog.cs" />
     <Compile Include="MainWindow.xaml.cs">
