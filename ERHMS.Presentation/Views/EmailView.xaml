@@ -19,11 +19,12 @@
     <Grid>
         <DockPanel>
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding AddCommand}" Visual="{DynamicResource appbar_user_add}">Add</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding AttachCommand}" Visual="{DynamicResource appbar_page_add}">Attach</ctrl:AppBarButton>
                 <ctrl:AppBarButton Command="{Binding SendCommand}" Visual="{DynamicResource appbar_email}">Send</ctrl:AppBarButton>
             </WrapPanel>
             <ctrl:FormGrid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -40,11 +41,12 @@
                         </DataTemplate>
                     </ctrl:RemovableItemsControl.ItemTextTemplate>
                 </ctrl:RemovableItemsControl>
+                <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource AccentButton}" Command="{Binding AddRecipientCommand}">Add</Button>
                 <Label Grid.Row="1" Grid.Column="0">Subject</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding Subject}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" Text="{Binding Subject}" />
                 <Label Grid.Row="2" Grid.Column="0">Body</Label>
-                <TextBox Grid.Row="2" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
-                         mah:TextBoxHelper.Watermark="Required"
+                <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                         AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" mah:TextBoxHelper.Watermark="Required"
                          Text="{Binding Body}" />
                 <Label Grid.Row="3" Grid.Column="0">Attachments</Label>
                 <ctrl:RemovableItemsControl Grid.Row="3" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Attachments}">
@@ -54,8 +56,9 @@
                         </DataTemplate>
                     </ctrl:RemovableItemsControl.ItemTextTemplate>
                 </ctrl:RemovableItemsControl>
+                <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource AccentButton}" Command="{Binding AddAttachmentCommand}">Add</Button>
                 <Label Grid.Row="4" Grid.Column="0">Options</Label>
-                <Grid Grid.Row="4" Grid.Column="1">
+                <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />

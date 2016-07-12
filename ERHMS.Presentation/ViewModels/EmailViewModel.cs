@@ -105,8 +105,8 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => CanPrepopulate, ref canPrepopulate, value); }
         }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand AttachCommand { get; private set; }
+        public RelayCommand AddRecipientCommand { get; private set; }
+        public RelayCommand AddAttachmentCommand { get; private set; }
         public RelayCommand SendCommand { get; private set; }
 
         public EmailViewModel()
@@ -139,8 +139,8 @@ namespace ERHMS.Presentation.ViewModels
                     Prepopulate = false;
                 }
             };
-            AddCommand = new RelayCommand(Add);
-            AttachCommand = new RelayCommand(Attach);
+            AddRecipientCommand = new RelayCommand(AddRecipient);
+            AddAttachmentCommand = new RelayCommand(AddAttachment);
             SendCommand = new RelayCommand(Send);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
             Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
@@ -177,7 +177,7 @@ namespace ERHMS.Presentation.ViewModels
             SelectedView = Views.SingleOrDefault(view => view.Name.EqualsIgnoreCase(viewName));
         }
 
-        public void Add()
+        public void AddRecipient()
         {
             Recipient = new RecipientViewModel(Recipients)
             {
@@ -185,7 +185,7 @@ namespace ERHMS.Presentation.ViewModels
             };
         }
 
-        public void Attach()
+        public void AddAttachment()
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
