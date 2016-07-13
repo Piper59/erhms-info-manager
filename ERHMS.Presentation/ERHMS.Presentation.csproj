@@ -229,7 +229,9 @@
     </Compile>
     <Compile Include="Controls\MultiSelectDataGrid.cs" />
     <Compile Include="Controls\PasswordBoxExtensions.cs" />
-    <Compile Include="Controls\RemovableItemsControl.cs" />
+    <Compile Include="Controls\RemovableItemsControl.xaml.cs">
+      <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ResponsiveFormGrid.cs" />
     <Compile Include="Converters\AttachmentToStringConverter.cs" />
     <Compile Include="Converters\BindingToDescriptionConverter.cs" />
@@ -413,6 +415,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\LinkChildWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RemovableItemsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
