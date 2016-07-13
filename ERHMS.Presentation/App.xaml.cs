@@ -107,6 +107,11 @@ namespace ERHMS.Presentation
             {
                 ShowErrorMessage(string.Format("An instance of {0} is already running.", Title));
             }
+            catch (Exception ex)
+            {
+                Log.Current.Fatal("Fatal error", ex);
+                ShowErrorMessage(string.Format("{0} encountered an error and must shut down.", Title));
+            }
         }
 
         private ServiceHost host;
