@@ -10,7 +10,7 @@
              x:Name="Root">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_save}">Save</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">Save</ctrl:AppBarButton>
         </WrapPanel>
         <mah:MetroTabControl DataContext="{Binding Responder}">
             <mah:MetroTabItem Header="Personal">
