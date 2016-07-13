@@ -192,8 +192,8 @@ namespace ERHMS.Presentation.ViewModels
             CanvasModel = new AnalysisViewModel(CreateCanvas);
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            IncidentCommand = new RelayCommand(Link, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasNonSystemSelectedView);
+            IncidentCommand = new RelayCommand(Link, HasNonSystemSelectedView);
             EnterDataCommand = new RelayCommand(EnterData, HasSelectedItem);
             ViewDataCommand = new RelayCommand(ViewData, HasSelectedItem);
             PublishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedItem);
@@ -238,6 +238,11 @@ namespace ERHMS.Presentation.ViewModels
             yield return item.IncidentName;
         }
 
+        public bool HasNonSystemSelectedView()
+        {
+            return HasSelectedItem() && !DataContext.IsResponderView(SelectedItem.Data);
+        }
+
         public void Create()
         {
             string prefix = Incident == null ? null : Incident.Name;
@@ -252,23 +257,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            if (DataContext.IsResponderView(SelectedItem.Data))
+            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected form?");
+            msg.Confirmed += (sender, e) =>
             {
-                Messenger.Default.Send(new NotifyMessage("The selected form cannot be deleted."));
-            }
-            else
-            {
-                ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected form?");
-                msg.Confirmed += (sender, e) =>
-                {
-                    DataContext.Assignments.DeleteByViewId(SelectedItem.Data.Id);
-                    DataContext.ViewLinks.DeleteByViewId(SelectedItem.Data.Id);
-                    DataContext.WebSurveys.DeleteByViewId(SelectedItem.Data.Id);
-                    DataContext.Project.DeleteView(SelectedItem.Data);
-                    Messenger.Default.Send(new RefreshListMessage<View>(SelectedItem.IncidentId));
-                };
-                Messenger.Default.Send(msg);
-            }
+                DataContext.Assignments.DeleteByViewId(SelectedItem.Data.Id);
+                DataContext.ViewLinks.DeleteByViewId(SelectedItem.Data.Id);
+                DataContext.WebSurveys.DeleteByViewId(SelectedItem.Data.Id);
+                DataContext.Project.DeleteView(SelectedItem.Data);
+                Messenger.Default.Send(new RefreshListMessage<View>(SelectedItem.IncidentId));
+            };
+            Messenger.Default.Send(msg);
         }
 
         public void Link()
