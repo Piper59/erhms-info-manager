@@ -141,9 +141,9 @@ namespace ERHMS.Presentation.ViewModels
         public AnalysisViewModel CanvasModel { get; private set; }
 
         public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand DesignCommand { get; private set; }
-        public RelayCommand LinkCommand { get; private set; }
+        public RelayCommand EditCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand IncidentCommand { get; private set; }
         public RelayCommand EnterDataCommand { get; private set; }
         public RelayCommand ViewDataCommand { get; private set; }
         public RelayCommand PublishToTemplateCommand { get; private set; }
@@ -167,9 +167,9 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             Selecting += (sender, e) =>
             {
-                DesignCommand.RaiseCanExecuteChanged();
-                LinkCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
+                IncidentCommand.RaiseCanExecuteChanged();
                 EnterDataCommand.RaiseCanExecuteChanged();
                 ViewDataCommand.RaiseCanExecuteChanged();
                 PublishToTemplateCommand.RaiseCanExecuteChanged();
@@ -191,9 +191,9 @@ namespace ERHMS.Presentation.ViewModels
             PgmModel = new AnalysisViewModel(CreatePgm);
             CanvasModel = new AnalysisViewModel(CreateCanvas);
             CreateCommand = new RelayCommand(Create);
-            DesignCommand = new RelayCommand(Design, HasSelectedItem);
-            LinkCommand = new RelayCommand(Link, HasSelectedItem);
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
+            IncidentCommand = new RelayCommand(Link, HasSelectedItem);
             EnterDataCommand = new RelayCommand(EnterData, HasSelectedItem);
             ViewDataCommand = new RelayCommand(ViewData, HasSelectedItem);
             PublishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedItem);
@@ -245,15 +245,9 @@ namespace ERHMS.Presentation.ViewModels
             MakeView.InstantiateTemplate(DataContext.Project, template, prefix, IncidentId);
         }
 
-        public void Design()
+        public void Edit()
         {
             MakeView.OpenView(SelectedItem.Data);
-        }
-
-        public void Link()
-        {
-            LinkModel.Reset(SelectedItem);
-            LinkModel.Active = true;
         }
 
         public void Delete()
@@ -275,6 +269,12 @@ namespace ERHMS.Presentation.ViewModels
                 };
                 Messenger.Default.Send(msg);
             }
+        }
+
+        public void Link()
+        {
+            LinkModel.Reset(SelectedItem);
+            LinkModel.Active = true;
         }
 
         public void EnterData()

@@ -53,8 +53,8 @@ namespace ERHMS.Presentation.ViewModels
         public LinkInternalViewModel LinkModel { get; private set; }
 
         public RelayCommand OpenCommand { get; private set; }
-        public RelayCommand LinkCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand IncidentCommand { get; private set; }
         public RelayCommand RefreshCommand { get; private set; }
 
         public CanvasListViewModel(Incident incident)
@@ -64,14 +64,14 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             Selecting += (sender, e) =>
             {
-                LinkCommand.RaiseCanExecuteChanged();
                 OpenCommand.RaiseCanExecuteChanged();
+                IncidentCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
             LinkModel = new LinkInternalViewModel();
             OpenCommand = new RelayCommand(Open, HasSelectedItem);
-            LinkCommand = new RelayCommand(Link, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
+            IncidentCommand = new RelayCommand(Link, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
             Messenger.Default.Register<RefreshListMessage<Canvas>>(this, OnRefreshCanvasListMessage);
@@ -107,12 +107,6 @@ namespace ERHMS.Presentation.ViewModels
             AnalysisDashboard.OpenCanvas(DataContext.Project, DataContext.Project.GetCanvasById(SelectedItem.Data.CanvasId), SelectedItem.IncidentId);
         }
 
-        public void Link()
-        {
-            LinkModel.Reset(SelectedItem);
-            LinkModel.Active = true;
-        }
-
         public void Delete()
         {
             ConfirmMessage msg = new ConfirmMessage("Delete?", "Delete the selected dashboard?");
@@ -123,6 +117,12 @@ namespace ERHMS.Presentation.ViewModels
                 Messenger.Default.Send(new RefreshListMessage<Canvas>(SelectedItem.IncidentId));
             };
             Messenger.Default.Send(msg);
+        }
+
+        public void Link()
+        {
+            LinkModel.Reset(SelectedItem);
+            LinkModel.Active = true;
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
