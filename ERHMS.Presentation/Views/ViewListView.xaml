@@ -95,7 +95,7 @@
             </DataGrid>
         </DockPanel>
         <ctrl:LinkChildWindow DataContext="{Binding LinkModel}" />
-        <scw:ChildWindow Title="Prepopulate Responder ID Field" DataContext="{Binding ResponderModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=SelectedResponder}">
+        <scw:ChildWindow Title="Prepopulate Responder ID Field" DataContext="{Binding ResponderModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,0,0,5" TextWrapping="Wrap">
                     The selected form appears to contain a responder ID field.
@@ -105,7 +105,7 @@
                     <ctrl:AppBarButton Command="{Binding ContinueCommand}" Icon="{DynamicResource appbar_arrow_right}">Continue</ctrl:AppBarButton>
                     <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
                 </WrapPanel>
-                <ComboBox Name="SelectedResponder" ItemsSource="{Binding Responders}" SelectedItem="{Binding SelectedResponder}">
+                <ComboBox ItemsSource="{Binding Responders}" SelectedItem="{Binding SelectedResponder}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource ResponderToNameConverter}}" />
@@ -114,7 +114,7 @@
                 </ComboBox>
             </DockPanel>
         </scw:ChildWindow>
-        <scw:ChildWindow Name="Survey" Title="Publish to Web" DataContext="{Binding SurveyModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=SurveyTitle}">
+        <scw:ChildWindow Name="Survey" Title="Publish to Web" DataContext="{Binding SurveyModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding PublishCommand}" Icon="{DynamicResource appbar_page_upload}">Publish</ctrl:AppBarButton>
@@ -130,7 +130,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Title</Label>
-                    <TextBox Name="SurveyTitle" Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding Title}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding Title}" />
                     <Label Grid.Row="1" Grid.Column="0">Start Date</Label>
                     <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
                     <Label Grid.Row="2" Grid.Column="0">End Date</Label>
@@ -152,7 +152,7 @@
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
-        <scw:ChildWindow Title="Create an Analysis" DataContext="{Binding PgmModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=AnalysisName}">
+        <scw:ChildWindow Title="Create an Analysis" DataContext="{Binding PgmModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding CreateCommand}" Icon="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
@@ -163,11 +163,11 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                    <TextBox Name="AnalysisName" Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
-        <scw:ChildWindow Title="Create a Dashboard" DataContext="{Binding CanvasModel}" IsOpen="{Binding Active}" FocusedElement="{Binding ElementName=DashboardName}">
+        <scw:ChildWindow Title="Create a Dashboard" DataContext="{Binding CanvasModel}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding CreateCommand}" Icon="{DynamicResource appbar_add}">Create</ctrl:AppBarButton>
@@ -178,7 +178,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                    <TextBox Name="DashboardName" Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
