@@ -184,7 +184,19 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                return true;
+                if (Name.IndexOfAny(Path.GetInvalidPathChars()) != -1 || Name.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+                {
+                    fields.Add("Name");
+                }
+                if (fields.Count > 0)
+                {
+                    NotifyInvalid(fields);
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
 

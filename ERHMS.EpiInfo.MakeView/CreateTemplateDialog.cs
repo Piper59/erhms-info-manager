@@ -80,7 +80,7 @@ namespace ERHMS.EpiInfo.MakeView
                 message = string.Format(
                     "Please enter a template name that does not contain any of the following characters:{0}{0}{1}",
                     Environment.NewLine,
-                    string.Join(" ", invalidCharacters));
+                    string.Join(" ", invalidCharacters.Where(character => !char.IsControl(character))));
                 return false;
             }
             else if (File.Exists(TemplatePath))
