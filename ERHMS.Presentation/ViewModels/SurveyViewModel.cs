@@ -50,7 +50,12 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => Active, ref active, value); }
         }
 
-        public View View { get; private set; }
+        private View view;
+        public View View
+        {
+            get { return view; }
+            private set { Set(() => View, ref view, value); }
+        }
 
         private Survey survey;
         public Survey Survey

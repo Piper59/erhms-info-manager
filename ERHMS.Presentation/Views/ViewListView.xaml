@@ -14,6 +14,7 @@
         <conv:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
         <conv:ResponderToNameConverter x:Key="ResponderToNameConverter" />
         <conv:ResponseTypeToDescriptionConverter x:Key="ResponseTypeToDescriptionConverter" />
+        <conv:ViewToUrlConverter x:Key="ViewToUrlConverter" />
     </UserControl.Resources>
     <Grid>
         <DockPanel>
@@ -128,6 +129,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Title</Label>
                     <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding Title}" />
@@ -149,6 +151,9 @@
                     <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource MultiLineTextBox}" Text="{Binding Intro}" />
                     <Label Grid.Row="5" Grid.Column="0">Completion Text</Label>
                     <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource MultiLineTextBox}" Text="{Binding Outro}" />
+                    <Label Grid.Row="6" Grid.Column="0">URL</Label>
+                    <TextBox Grid.Row="6" Grid.Column="1" IsReadOnly="True"
+                             Text="{Binding DataContext.View, ElementName=Survey, Mode=OneWay, Converter={StaticResource ViewToUrlConverter}}" />
                 </ctrl:ResponsiveFormGrid>
             </DockPanel>
         </scw:ChildWindow>
