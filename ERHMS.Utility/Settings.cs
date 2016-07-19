@@ -5,6 +5,7 @@ namespace ERHMS.Utility
 {
     public class Settings : SettingsBase<Settings>
     {
+        public bool InitialExecution { get; set; }
         public string LogLevel { get; set; }
         public HashSet<string> DataSources { get; set; }
         public string RootDirectory { get; set; }
@@ -18,6 +19,7 @@ namespace ERHMS.Utility
 
         public Settings()
         {
+            InitialExecution = true;
             LogLevel = "DEBUG";
             DataSources = new HashSet<string>();
             RootDirectory = null;

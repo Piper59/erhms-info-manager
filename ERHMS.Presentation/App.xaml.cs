@@ -1,8 +1,10 @@
 ﻿using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
 using ERHMS.Presentation.Dialogs;
+using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
 using ERHMS.Utility;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.ServiceModel;
 using System.Windows;
@@ -95,6 +97,19 @@ namespace ERHMS.Presentation
                 {
                     app.Locator.Main.OpenDataSourceListView();
                     window.Activate();
+                    if (Settings.Default.InitialExecution)
+                    {
+                        string message = string.Join(" ", new string[]
+                        {
+                            "Welcome to ERHMS Info Manager!",
+                            "To get started, select a data source from the list and click Open.",
+                            "To add a new data source to the list, click Add > New.",
+                            "To add an existing data source to the list, click Add > Existing."
+                        });
+                        Messenger.Default.Send(new NotifyMessage("Welcome", message));
+                        Settings.Default.InitialExecution = false;
+                        Settings.Default.Save();
+                    }
                 };
                 app.Run(window);
                 Log.Current.Debug("Exiting");
