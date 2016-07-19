@@ -1,4 +1,5 @@
 ﻿using Epi;
+using Epi.Fields;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analysis;
@@ -11,6 +12,7 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -299,23 +301,49 @@ namespace ERHMS.Presentation.ViewModels
             MakeView.CreateTemplate(SelectedItem.Data);
         }
 
+        private void NotifyUnsupported(string message, IEnumerable<Field> fields)
+        {
+            string fieldList = string.Join(", ", fields.Select(field => string.Format("{0} ({1})", field.Name, field.FieldType)));
+            Messenger.Default.Send(new NotifyMessage(string.Format("{0}{1}{1}{2}", message, Environment.NewLine, fieldList)));
+        }
+
         public void PublishToWeb()
         {
-            Service service = new Service();
-            if (service.IsConfigured())
+            ICollection<Field> fields = SelectedItem.Data.Fields.Cast<Field>()
+                .Where(field => !field.FieldType.IsWebSupported())
+                .ToList();
+            if (fields.Count > 0)
             {
-                SurveyModel.Activate(SelectedItem.Data);
+                NotifyUnsupported("The following fields are not supported for publication to web:", fields);
             }
             else
             {
-                SurveyViewModel.RequestConfiguration();
+                Service service = new Service();
+                if (service.IsConfigured())
+                {
+                    SurveyModel.Activate(SelectedItem.Data);
+                }
+                else
+                {
+                    SurveyViewModel.RequestConfiguration();
+                }
             }
         }
 
         public void PublishToMobile()
         {
-            SelectedItem.Data.CreateDataTables();
-            MakeView.PublishToMobile(SelectedItem.Data);
+            ICollection<Field> fields = SelectedItem.Data.Fields.Cast<Field>()
+                .Where(field => !field.FieldType.IsMobileSupported())
+                .ToList();
+            if (fields.Count > 0)
+            {
+                NotifyUnsupported("The following fields are not supported for publication to mobile:", fields);
+            }
+            else
+            {
+                SelectedItem.Data.CreateDataTables();
+                MakeView.PublishToMobile(SelectedItem.Data);
+            }
         }
 
         public void ImportFromProject()
