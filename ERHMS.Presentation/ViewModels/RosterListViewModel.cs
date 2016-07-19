@@ -92,6 +92,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand RemoveCommand { get; private set; }
+        public RelayCommand EmailCommand { get; private set; }
         public RelayCommand RefreshCommand { get; private set; }
 
         public RosterListViewModel(Incident incident)
@@ -111,6 +112,7 @@ namespace ERHMS.Presentation.ViewModels
             };
             AddCommand = new RelayCommand(Add, UnrosteredResponders.HasSelectedItem);
             RemoveCommand = new RelayCommand(Remove, RosteredResponders.HasSelectedItem);
+            EmailCommand = new RelayCommand(Email, RosteredResponders.HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
             Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
@@ -149,6 +151,13 @@ namespace ERHMS.Presentation.ViewModels
                 DataContext.Rosters.Delete(roster.Roster);
             }
             Messenger.Default.Send(new RefreshListMessage<Roster>(Incident.IncidentId));
+        }
+
+        public void Email()
+        {
+            Locator.Main.OpenEmailView(new EmailViewModel(RosteredResponders.SelectedItems
+                .Cast<RosterViewModel>()
+                .Select(roster => roster.Responder)));
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)

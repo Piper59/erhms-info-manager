@@ -8,6 +8,7 @@
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+            <ctrl:AppBarButton Command="{Binding EmailCommand}" Icon="{DynamicResource appbar_email}">Email</ctrl:AppBarButton>
             <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
         </WrapPanel>
         <Grid>
