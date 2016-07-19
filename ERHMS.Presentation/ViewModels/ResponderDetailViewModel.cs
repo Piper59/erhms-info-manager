@@ -5,6 +5,7 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -67,6 +68,10 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
+                if (Responder.BirthDate.HasValue && Responder.BirthDate.Value.Date > DateTime.Today)
+                {
+                    fields.Add("Birth Date");
+                }
                 if (!Email.IsValidAddress(Responder.EmailAddress))
                 {
                     fields.Add("Email Address");
