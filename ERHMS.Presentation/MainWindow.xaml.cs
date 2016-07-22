@@ -61,7 +61,7 @@ namespace ERHMS.Presentation
         {
             Log.Current.DebugFormat("Confirming: {0}", msg.Message);
             MessageDialogResult result = await this.ShowMessageAsync(
-                string.Format("{0}?", msg.Verb),
+                msg.Title,
                 msg.Message,
                 MessageDialogStyle.AffirmativeAndNegative,
                 new MetroDialogSettings
@@ -74,6 +74,11 @@ namespace ERHMS.Presentation
             {
                 Log.Current.DebugFormat("Confirmed: {0}", msg.Message);
                 msg.OnConfirmed();
+            }
+            else
+            {
+                Log.Current.DebugFormat("Canceled: {0}", msg.Message);
+                msg.OnCanceled();
             }
         }
 

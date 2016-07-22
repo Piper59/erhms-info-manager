@@ -99,16 +99,36 @@ namespace ERHMS.Presentation
                     window.Activate();
                     if (Settings.Default.InitialExecution)
                     {
-                        string message = string.Join(" ", new string[]
+                        string message;
+                        message = string.Join(Environment.NewLine, new string[]
                         {
-                            "Welcome to ERHMS Info Manager!",
-                            "To get started, select a data source from the list and click Open.",
-                            "To add a new data source to the list, click Add > New.",
-                            "To add an existing data source to the list, click Add > Existing."
+                            "Confidentiality and Non-Disclosure",
+                            "",
+                            "By agreeing to provide peer review for this software, you acknowledge that you fully understand the confidential nature of the review process and agree: (1) to destroy or return all materials related to it; (2) not to discuss the materials associated with the review, your evaluation, or other information associated with your review with any other individual except as authorized by the designated NIOSH official; and (3) to refer all inquiries concerning the review to the designated NIOSH official.",
+                            "",
+                            "Disclaimer of Liability",
+                            "",
+                            "This NIOSH-developed software is provided \"as-is\" without warranty of any kind, including express or implied warranties of merchantability or fitness for a particular purpose. By acceptance and use of this software, which is conveyed to the user without consideration by NIOSH, the user expressly waives any and all claims for damage and/or suits for personal injury or property damage resulting from any direct, indirect, incidental, special or consequential damages, or damages for loss of profits, revenue, data or property use, incurred by you or any third party, whether in an action in contract or tort, arising from your access to, or use of, this software in whole or in part."
                         });
-                        Messenger.Default.Send(new NotifyMessage("Welcome", message));
-                        Settings.Default.InitialExecution = false;
-                        Settings.Default.Save();
+                        ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", message);
+                        msg.Confirmed += (__sender, __e) =>
+                        {
+                            message = string.Join(" ", new string[]
+                            {
+                                "Welcome to ERHMS Info Manager!",
+                                "To get started, select a data source from the list and click Open.",
+                                "To add a new data source to the list, click Add > New.",
+                                "To add an existing data source to the list, click Add > Existing."
+                            });
+                            Messenger.Default.Send(new NotifyMessage("Welcome", message));
+                            Settings.Default.InitialExecution = false;
+                            Settings.Default.Save();
+                        };
+                        msg.Canceled += (__sender, __e) =>
+                        {
+                            app.Shutdown();
+                        };
+                        Messenger.Default.Send(msg);
                     }
                 };
                 app.Run(window);
