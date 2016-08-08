@@ -66,6 +66,12 @@
     <Compile Include="WebSurvey.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Projects\Sample\Sample.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Projects\Sample\Sample.prj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\Forms\ARC_HSR.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

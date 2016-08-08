@@ -1,4 +1,5 @@
-﻿using ERHMS.EpiInfo;
+﻿using Epi;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
@@ -6,12 +7,15 @@ using ERHMS.Presentation.ViewModels;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.IO;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Action = System.Action;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
+using Settings = ERHMS.Utility.Settings;
 using TextBox = System.Windows.Controls.TextBox;
 
 namespace ERHMS.Presentation
@@ -74,6 +78,8 @@ namespace ERHMS.Presentation
                             try
                             {
                                 ConfigurationExtensions.CreateAndOrLoad();
+                                Configuration configuration = Configuration.GetNewInstance();
+                                Settings.Default.DataSources.Add(Path.Combine(configuration.Directories.Project, "Sample", "Sample.prj"));
                                 Settings.Default.Save();
                             }
                             catch (UnauthorizedAccessException)
