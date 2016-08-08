@@ -14,7 +14,8 @@
                  MinWidth="640" MinHeight="480"
                  EnableDWMDropShadow="True"
                  WindowTransitionsEnabled="False"
-                 Title="{Binding Title}">
+                 Title="{Binding Title}"
+                 TitleCaps="False">
     <mah:MetroWindow.Resources>
         <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     </mah:MetroWindow.Resources>
