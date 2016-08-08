@@ -99,6 +99,7 @@ namespace ERHMS.Presentation
                     window.Activate();
                     if (Settings.Default.InitialExecution)
                     {
+                        /*
                         string message;
                         message = string.Join(Environment.NewLine, new string[]
                         {
@@ -129,6 +130,9 @@ namespace ERHMS.Presentation
                             app.Shutdown();
                         };
                         Messenger.Default.Send(msg);
+                        */
+                        Settings.Default.InitialExecution = false;
+                        Settings.Default.Save();
                     }
                 };
                 app.Run(window);
