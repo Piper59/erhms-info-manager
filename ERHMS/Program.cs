@@ -24,7 +24,7 @@ namespace ERHMS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "ERHMS Info Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.ToString(), "ERHMS Info Manager\u2122", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

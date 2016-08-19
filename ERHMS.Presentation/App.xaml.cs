@@ -22,7 +22,12 @@ namespace ERHMS.Presentation
 {
     public partial class App : Application
     {
-        public const string Title = "ERHMS Info Manager";
+        public const string BareTitle = "ERHMS Info Manager";
+
+        public static string Title
+        {
+            get { return string.Format("{0}\u2122", BareTitle); }
+        }
 
         public new static App Current
         {
@@ -122,7 +127,7 @@ namespace ERHMS.Presentation
                         {
                             message = string.Join(" ", new string[]
                             {
-                                "Welcome to ERHMS Info Manager!",
+                                string.Format("Welcome to {0}!", Title),
                                 "To get started, select a data source from the list and click Open.",
                                 "To add a new data source to the list, click Add > New.",
                                 "To add an existing data source to the list, click Add > Existing."

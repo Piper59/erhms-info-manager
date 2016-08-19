@@ -56,7 +56,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public MainViewModel()
         {
-            Title = string.Format("{0}™", App.Title);
+            Title = App.Title;
             PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(DataSource))
@@ -163,7 +163,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Documents.Clear();
                 DataSource = new DataContext(new Project(file));
-                Title = string.Format("{0}™ - {1}", App.Title, DataSource.Project.Name);
+                Title = string.Format("{0} - {1}", App.Title, DataSource.Project.Name);
                 OpenHelpView();
             });
         }

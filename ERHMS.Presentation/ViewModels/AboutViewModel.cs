@@ -12,7 +12,7 @@ namespace ERHMS.Presentation.ViewModels
         public AboutViewModel()
         {
             Title = "About";
-            AppTitle = string.Format("{0}™", App.Title);
+            AppTitle = App.Title;
             Assembly assembly = Assembly.GetExecutingAssembly();
             Version = assembly.GetVersion();
             InformationalVersion = assembly.GetInformationalVersion();

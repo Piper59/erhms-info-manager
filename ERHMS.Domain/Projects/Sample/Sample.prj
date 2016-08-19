@@ -1,4 +1,4 @@
-<Project id="602c3182-af15-4fe9-bd29-5277acfc60dc" name="Sample" location="" description="Sample data source for ERHMS Info Manager" schemaVersion="102" epiVersion="" createDate="" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False">
+<Project id="602c3182-af15-4fe9-bd29-5277acfc60dc" name="Sample" location="" description="Sample data source for ERHMS Info Manager&#x2122;" schemaVersion="102" epiVersion="" createDate="" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False">
   <CollectedData>
     <Database connectionString="zHDkaR2yI5Pbh2/LYHfZ7ljYKFwMFLb6TrxCvYEORi7csqJucXA0eUm4ILZ7oROEr1/Sb9DZbLxOcMezPiJdUzw7GNCF2+D26MBuECdWC7VrqORNCMXY6upbC7hRbiqu" dataDriver="Epi.Data.Office.AccessDBFactory, Epi.Data.Office" />
   </CollectedData>

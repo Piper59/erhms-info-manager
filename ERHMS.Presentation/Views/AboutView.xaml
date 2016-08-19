@@ -29,7 +29,7 @@
                         <TextBlock Text="{Binding InformationalVersion, Mode=OneTime}" />
                     </StackPanel>
                     <StackPanel>
-                        <TextBlock>Built with Epi Info™</TextBlock>
+                        <TextBlock>Built with Epi Info&#x2122;</TextBlock>
                         <Image Margin="0,5,0,0" Source="/Images/EpiInfo.png" Stretch="None" />
                     </StackPanel>
                 </StackPanel>
