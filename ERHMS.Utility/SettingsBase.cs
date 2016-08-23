@@ -1,23 +1,31 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace ERHMS.Utility
 {
     public class SettingsBase<TSettings> where TSettings : new()
     {
+        private static readonly Regex NonAscii = new Regex(@"[^\u0020-\u007e]");
+
         private static FileInfo file;
 
         public static TSettings Default { get; private set; }
+
+        private static string ToAscii(string value)
+        {
+            return NonAscii.Replace(value, "");
+        }
 
         static SettingsBase()
         {
             Assembly assembly = Assembly.GetAssembly(typeof(TSettings));
             file = new FileInfo(Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                assembly.GetCompany(),
-                assembly.GetProduct(),
+                ToAscii(assembly.GetCompany()),
+                ToAscii(assembly.GetProduct()),
                 string.Format("{0}.xml", typeof(TSettings).FullName)));
             try
             {
