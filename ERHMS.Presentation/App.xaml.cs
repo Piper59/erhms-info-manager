@@ -182,9 +182,16 @@ namespace ERHMS.Presentation
             Service = new Service();
             host = Service.OpenHost();
             Locator = new ViewModelLocator();
-            EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler((sender, e) =>
+            EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotKeyboardFocusEvent, new KeyboardFocusChangedEventHandler((sender, e) =>
             {
-                ((TextBox)sender).SelectAll();
+                if (e.KeyboardDevice.IsKeyDown(Key.Tab))
+                {
+                    ((TextBox)sender).SelectAll();
+                }
+            }));
+            EventManager.RegisterClassHandler(typeof(TextBox), UIElement.LostKeyboardFocusEvent, new KeyboardFocusChangedEventHandler((sender, e) =>
+            {
+                ((TextBox)sender).Select(0, 0);
             }));
         }
 
