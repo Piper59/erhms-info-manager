@@ -84,6 +84,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Activate(View view)
         {
+            View = null;
             View = view;
             if (view.IsPublished())
             {
