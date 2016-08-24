@@ -100,6 +100,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<string> LogLevels { get; private set; }
 
         private string logLevel;
+        [DirtyCheck]
         public string LogLevel
         {
             get { return logLevel; }
@@ -107,6 +108,7 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         private string rootDirectory;
+        [DirtyCheck]
         public string RootDirectory
         {
             get { return rootDirectory; }
@@ -123,6 +125,7 @@ namespace ERHMS.Presentation.ViewModels
         public EmailSettingsViewModel Email { get; private set; }
 
         private string mapLicenseKey;
+        [DirtyCheck]
         public string MapLicenseKey
         {
             get { return mapLicenseKey; }
@@ -154,6 +157,7 @@ namespace ERHMS.Presentation.ViewModels
                 Port = Settings.Default.EmailPort,
                 Sender = Settings.Default.EmailSender
             };
+            Email.PropertyChanged += OnDirtyCheckPropertyChanged;
             MapLicenseKey = Settings.Default.MapLicenseKey;
             WebSurvey = new WebSurveySettingsViewModel
             {
@@ -163,6 +167,8 @@ namespace ERHMS.Presentation.ViewModels
                 OrganizationName = Settings.Default.OrganizationName,
                 OrganizationKey = Settings.Default.WebSurveyKey
             };
+            WebSurvey.PropertyChanged += OnDirtyCheckPropertyChanged;
+            Dirty = false;
             BrowseCommand = new RelayCommand(Browse);
             SaveCommand = new RelayCommand(Save);
         }
@@ -249,6 +255,7 @@ namespace ERHMS.Presentation.ViewModels
                     Settings.Default.RootDirectory = RootDirectory;
                     Settings.Default.Save();
                     configuration.Save();
+                    Dirty = false;
                     App.Current.Shutdown();
                     Application.Restart();
                 }
@@ -261,6 +268,7 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 Settings.Default.Save();
+                Dirty = false;
                 configuration.Refresh(true);
                 Log.SetLevelName(Settings.Default.LogLevel);
                 Messenger.Default.Send(new ToastMessage("Settings have been saved."));

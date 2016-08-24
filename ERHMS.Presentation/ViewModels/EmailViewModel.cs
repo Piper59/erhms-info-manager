@@ -48,6 +48,7 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         private string subject;
+        [DirtyCheck]
         public string Subject
         {
             get { return subject; }
@@ -55,6 +56,7 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         private string body;
+        [DirtyCheck]
         public string Body
         {
             get { return body; }
@@ -347,6 +349,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else
                 {
+                    Dirty = false;
                     Messenger.Default.Send(new ToastMessage("Email has been sent."));
                     Close();
                 }

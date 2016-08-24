@@ -76,6 +76,11 @@ namespace ERHMS.Presentation.ViewModels
                     }
                 }
             };
+            location.PropertyChanged += OnDirtyCheckPropertyChanged;
+            AfterClosed += (sender, e) =>
+            {
+                location.PropertyChanged -= OnDirtyCheckPropertyChanged;
+            };
             UpdateTitle();
             CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
             Pins = new ObservableCollection<Coordinates>();
@@ -271,6 +276,7 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             DataContext.Locations.Save(Location);
+            Dirty = false;
             Messenger.Default.Send(new ToastMessage("Location has been saved."));
             Messenger.Default.Send(new RefreshListMessage<Location>(Location.IncidentId));
             UpdateTitle();

@@ -17,6 +17,12 @@ namespace ERHMS.Presentation.ViewModels
         public PgmListViewModel Pgms { get; private set; }
         public CanvasListViewModel Canvases { get; private set; }
 
+        public override bool Dirty
+        {
+            get { return base.Dirty || Detail.Dirty || Notes.Dirty; }
+            set { base.Dirty = value; }
+        }
+
         public IncidentViewModel(Incident incident)
         {
             Incident = incident;

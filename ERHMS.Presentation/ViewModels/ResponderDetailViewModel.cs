@@ -26,6 +26,11 @@ namespace ERHMS.Presentation.ViewModels
         public ResponderDetailViewModel(Responder responder)
         {
             Responder = responder;
+            responder.PropertyChanged += OnDirtyCheckPropertyChanged;
+            AfterClosed += (sender, e) =>
+            {
+                responder.PropertyChanged -= OnDirtyCheckPropertyChanged;
+            };
             UpdateTitle();
             Prefixes = GetCodes(DataContext.Prefixes);
             Suffixes = GetCodes(DataContext.Suffixes);
@@ -103,6 +108,7 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             DataContext.Responders.Save(Responder);
+            Dirty = false;
             Messenger.Default.Send(new ToastMessage("Responder has been saved."));
             Messenger.Default.Send(new RefreshListMessage<Responder>());
             UpdateTitle();

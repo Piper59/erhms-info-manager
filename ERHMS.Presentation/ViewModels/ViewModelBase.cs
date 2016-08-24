@@ -1,6 +1,7 @@
 ﻿using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -27,6 +28,13 @@ namespace ERHMS.Presentation.ViewModels
             protected set { Set(() => Title, ref title, value); }
         }
 
+        private bool dirty;
+        public virtual bool Dirty
+        {
+            get { return dirty; }
+            set { Set(() => Dirty, ref dirty, value); }
+        }
+
         private bool closed;
         public bool Closed
         {
@@ -38,12 +46,58 @@ namespace ERHMS.Presentation.ViewModels
 
         public ViewModelBase()
         {
+            PropertyChanged += (sender, e) =>
+            {
+                if (GetType().GetProperty(e.PropertyName).GetCustomAttribute<DirtyCheckAttribute>() != null)
+                {
+                    OnDirtyCheckPropertyChanged(sender, e);
+                }
+            };
             CloseCommand = new RelayCommand(Close);
+        }
+
+        public event EventHandler AfterClosed;
+        private void OnAfterClosed(EventArgs e)
+        {
+            AfterClosed?.Invoke(this, e);
+        }
+        private void OnAfterClosed()
+        {
+            OnAfterClosed(EventArgs.Empty);
+        }
+
+        protected void OnDirtyCheckPropertyChanged(object sender, EventArgs e)
+        {
+            Dirty = true;
+        }
+
+        private void CloseInternal()
+        {
+            Closed = true;
+            OnAfterClosed();
         }
 
         public void Close()
         {
-            Closed = true;
+            if (Closed)
+            {
+                return;
+            }
+            if (Dirty)
+            {
+                ConfirmMessage msg = new ConfirmMessage(
+                    "Close",
+                    string.Format("There may be unsaved changes. Are you sure you want to close {0}?", Title));
+                msg.Confirmed += (sender, e) =>
+                {
+                    CloseInternal();
+                };
+                Messenger.Default.Send(msg);
+            }
+            else
+            {
+                CloseInternal();
+            }
         }
 
         protected string GetTitle(string title, Incident incident)

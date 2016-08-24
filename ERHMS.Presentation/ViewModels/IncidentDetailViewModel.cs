@@ -20,6 +20,11 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = incident.Name;
             Incident = incident;
+            incident.PropertyChanged += OnDirtyCheckPropertyChanged;
+            AfterClosed += (sender, e) =>
+            {
+                incident.PropertyChanged -= OnDirtyCheckPropertyChanged;
+            };
             Phases = EnumExtensions.GetValues<Phase>().ToList();
             SaveCommand = new RelayCommand(Save);
         }
@@ -64,6 +69,7 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             DataContext.Incidents.Save(Incident);
+            Dirty = false;
             Messenger.Default.Send(new ToastMessage("Incident has been saved."));
             Messenger.Default.Send(new RefreshMessage<Incident>(Incident));
             Messenger.Default.Send(new RefreshListMessage<Incident>());

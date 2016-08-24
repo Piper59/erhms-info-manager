@@ -283,6 +283,7 @@
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
+    <Compile Include="ViewModels\DirtyCheckAttribute.cs" />
     <Compile Include="ViewModels\EmailViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />

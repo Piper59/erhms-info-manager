@@ -36,6 +36,11 @@ namespace ERHMS.Presentation.ViewModels
             UpdateTitle();
             Refresh();
             Note = CreateNote();
+            Note.PropertyChanged += OnDirtyCheckPropertyChanged;
+            AfterClosed += (sender, e) =>
+            {
+                Note.PropertyChanged -= OnDirtyCheckPropertyChanged;
+            };
             SaveCommand = new RelayCommand(Save, HasContent);
             RefreshCommand = new RelayCommand(Refresh);
             Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
@@ -77,8 +82,11 @@ namespace ERHMS.Presentation.ViewModels
         {
             Note.Date = DateTime.Now;
             DataContext.IncidentNotes.Save(Note);
+            Dirty = false;
             Messenger.Default.Send(new RefreshListMessage<IncidentNote>(Incident.IncidentId));
+            Note.PropertyChanged -= OnDirtyCheckPropertyChanged;
             Note = CreateNote();
+            Note.PropertyChanged += OnDirtyCheckPropertyChanged;
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
