@@ -34,11 +34,6 @@ namespace ERHMS.Presentation
             get { return (App)Application.Current; }
         }
 
-        public static void ShowErrorMessage(string message)
-        {
-            MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
         [STAThread]
         public static void Main(string[] args)
         {
@@ -46,61 +41,7 @@ namespace ERHMS.Presentation
             executer.Executing += (sender, e) =>
             {
                 Log.Current.Debug("Starting up");
-                if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-                {
-                    MessageBoxResult result = MessageBox.Show(
-                        string.Format("Reset settings for {0}?", Title),
-                        Title,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        Settings.Reset();
-                    }
-                }
-                if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
-                {
-                    try
-                    {
-                        ConfigurationExtensions.CreateAndOrLoad();
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Default.RootDirectory);
-                        Settings.Default.RootDirectory = null;
-                    }
-                }
-                while (string.IsNullOrEmpty(Settings.Default.RootDirectory))
-                {
-                    Log.Current.Debug("Prompting for root directory");
-                    using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
-                    {
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                        {
-                            string path = dialog.GetRootDirectory();
-                            Log.Current.DebugFormat("Setting root directory: {0}", path);
-                            Settings.Default.RootDirectory = path;
-                            try
-                            {
-                                ConfigurationExtensions.CreateAndOrLoad();
-                                Configuration configuration = Configuration.GetNewInstance();
-                                Settings.Default.DataSources.Add(Path.Combine(configuration.Directories.Project, "Sample", "Sample.prj"));
-                                Settings.Default.Save();
-                            }
-                            catch (UnauthorizedAccessException)
-                            {
-                                Log.Current.WarnFormat("Access denied to root directory: {0}", path);
-                                ShowErrorMessage(string.Format("You do not have access to {0}. Please choose another location.", path));
-                                Settings.Default.RootDirectory = null;
-                            }
-                        }
-                        else
-                        {
-                            Log.Current.Debug("Canceled setting root directory");
-                            return;
-                        }
-                    }
-                }
+                LoadSettings();
                 App app = new App();
                 app.InitializeComponent();
                 MainWindow window = new MainWindow(app.Locator.Main);
@@ -110,28 +51,10 @@ namespace ERHMS.Presentation
                     window.Activate();
                     if (Settings.Default.InitialExecution)
                     {
-                        string message;
-                        message = string.Join(Environment.NewLine, new string[]
-                        {
-                            "Confidentiality and Non-Disclosure",
-                            "",
-                            "By agreeing to provide peer review for this software, you acknowledge that you fully understand the confidential nature of the review process and agree: (1) to destroy or return all materials related to it; (2) not to discuss the materials associated with the review, your evaluation, or other information associated with your review with any other individual except as authorized by the designated NIOSH official; and (3) to refer all inquiries concerning the review to the designated NIOSH official.",
-                            "",
-                            "Disclaimer of Liability",
-                            "",
-                            "This NIOSH-developed software is provided \"as-is\" without warranty of any kind, including express or implied warranties of merchantability or fitness for a particular purpose. By acceptance and use of this software, which is conveyed to the user without consideration by NIOSH, the user expressly waives any and all claims for damage and/or suits for personal injury or property damage resulting from any direct, indirect, incidental, special or consequential damages, or damages for loss of profits, revenue, data or property use, incurred by you or any third party, whether in an action in contract or tort, arising from your access to, or use of, this software in whole or in part."
-                        });
-                        ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", message);
+                        ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", app.TermsOfUse);
                         msg.Confirmed += (__sender, __e) =>
                         {
-                            string _message = string.Join(" ", new string[]
-                            {
-                                string.Format("Welcome to {0}!", Title),
-                                "To get started, select a data source from the list and click Open.",
-                                "To add a new data source to the list, click Add > New.",
-                                "To add an existing data source to the list, click Add > Existing."
-                            });
-                            Messenger.Default.Send(new NotifyMessage("Welcome", _message));
+                            Messenger.Default.Send(new NotifyMessage("Welcome", app.Welcome));
                             Settings.Default.InitialExecution = false;
                             Settings.Default.Save();
                         };
@@ -160,11 +83,95 @@ namespace ERHMS.Presentation
             }
         }
 
+        public static void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private static bool LoadSettings()
+        {
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    string.Format("Reset settings for {0}?", Title),
+                    Title,
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Settings.Reset();
+                }
+            }
+            if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
+            {
+                try
+                {
+                    ConfigurationExtensions.CreateAndOrLoad();
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Default.RootDirectory);
+                    Settings.Default.RootDirectory = null;
+                }
+            }
+            while (string.IsNullOrEmpty(Settings.Default.RootDirectory))
+            {
+                Log.Current.Debug("Prompting for root directory");
+                using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
+                {
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string path = dialog.GetRootDirectory();
+                        Log.Current.DebugFormat("Setting root directory: {0}", path);
+                        Settings.Default.RootDirectory = path;
+                        try
+                        {
+                            ConfigurationExtensions.CreateAndOrLoad();
+                            Configuration configuration = Configuration.GetNewInstance();
+                            Settings.Default.DataSources.Add(Path.Combine(configuration.Directories.Project, "Sample", "Sample.prj"));
+                            Settings.Default.Save();
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            Log.Current.WarnFormat("Access denied to root directory: {0}", path);
+                            ShowErrorMessage(string.Format("You do not have access to {0}. Please choose another location.", path));
+                            Settings.Default.RootDirectory = null;
+                        }
+                    }
+                    else
+                    {
+                        Log.Current.Debug("Canceled setting root directory");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         private ServiceHost host;
 
         public Service Service { get; private set; }
         public ViewModelLocator Locator { get; private set; }
         public bool ShuttingDown { get; private set; }
+
+        private string TermsOfUse
+        {
+            get { return (string)FindResource("TermsOfUse"); }
+        }
+
+        private string Welcome
+        {
+            get
+            {
+                return string.Join(" ", new string[]
+                {
+                    string.Format("Welcome to {0}!", Title),
+                    "To get started, select a data source from the list and click Open.",
+                    "To add a new data source to the list, click Add > New.",
+                    "To add an existing data source to the list, click Add > Existing."
+                });
+            }
+        }
 
         public App()
         {
