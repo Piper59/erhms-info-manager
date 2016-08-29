@@ -154,12 +154,12 @@ namespace ERHMS.Presentation
         public ViewModelLocator Locator { get; private set; }
         public bool ShuttingDown { get; private set; }
 
-        private string TermsOfUse
+        public string TermsOfUse
         {
             get { return (string)FindResource("TermsOfUse"); }
         }
 
-        private string Welcome
+        public string Welcome
         {
             get
             {

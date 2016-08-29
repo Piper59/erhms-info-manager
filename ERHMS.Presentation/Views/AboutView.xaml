@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
@@ -30,9 +31,14 @@
             </ScrollViewer>
         </mah:MetroTabItem>
         <mah:MetroTabItem Header="Terms of Use">
-            <ScrollViewer>
-                <TextBlock TextWrapping="Wrap" Text="{StaticResource TermsOfUse}" />
-            </ScrollViewer>
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                    <ctrl:AppBarButton Command="{Binding PrintCommand}" Icon="{DynamicResource appbar_printer}">Print</ctrl:AppBarButton>
+                </WrapPanel>
+                <ScrollViewer>
+                    <TextBlock TextWrapping="Wrap" Text="{StaticResource TermsOfUse}" />
+                </ScrollViewer>
+            </DockPanel>
         </mah:MetroTabItem>
     </mah:MetroTabControl>
 </UserControl>
