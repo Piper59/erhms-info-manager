@@ -110,7 +110,6 @@ namespace ERHMS.Presentation
                     window.Activate();
                     if (Settings.Default.InitialExecution)
                     {
-                        /*
                         string message;
                         message = string.Join(Environment.NewLine, new string[]
                         {
@@ -125,14 +124,14 @@ namespace ERHMS.Presentation
                         ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", message);
                         msg.Confirmed += (__sender, __e) =>
                         {
-                            message = string.Join(" ", new string[]
+                            string _message = string.Join(" ", new string[]
                             {
                                 string.Format("Welcome to {0}!", Title),
                                 "To get started, select a data source from the list and click Open.",
                                 "To add a new data source to the list, click Add > New.",
                                 "To add an existing data source to the list, click Add > Existing."
                             });
-                            Messenger.Default.Send(new NotifyMessage("Welcome", message));
+                            Messenger.Default.Send(new NotifyMessage("Welcome", _message));
                             Settings.Default.InitialExecution = false;
                             Settings.Default.Save();
                         };
@@ -141,9 +140,6 @@ namespace ERHMS.Presentation
                             app.Shutdown();
                         };
                         Messenger.Default.Send(msg);
-                        */
-                        Settings.Default.InitialExecution = false;
-                        Settings.Default.Save();
                     }
                 };
                 app.Run(window);
