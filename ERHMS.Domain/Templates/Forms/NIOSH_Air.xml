@@ -14,8 +14,8 @@
     </View>
   </Project>
   <SourceTable TableName="codetype1">
-    <Item type="Dermal" />
-    <Item type="Surface" />
+    <Item type="General area" />
+    <Item type="Breathing zone" />
   </SourceTable>
   <GridTable TableName="AirSampl">
     <Item GridColumnId="13" Name="UniqueRowId" Size="0" Position="0" Text="" ShouldRepeatLast="False" IsRequired="False" IsReadOnly="True" Pattern="" Upper="" Lower="" Width="0" SourceTableName="" CodeColumnName="" TextColumnName="" Sort="False" IsExclusiveTable="False" DataTableName="" FieldId="209" FieldTypeId="28" IsUniqueField="False" />
