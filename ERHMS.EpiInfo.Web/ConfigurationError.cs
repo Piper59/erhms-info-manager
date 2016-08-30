@@ -18,7 +18,7 @@ namespace ERHMS.EpiInfo.Web
             switch (@this)
             {
                 case ConfigurationError.Version:
-                    return "Version 2 endpoint address required.";
+                    return "Version 2 endpoint address (SurveyManagerServiceV2.svc) required.";
                 case ConfigurationError.OrganizationKey:
                     return "Invalid organization key.";
                 case ConfigurationError.Connection:
