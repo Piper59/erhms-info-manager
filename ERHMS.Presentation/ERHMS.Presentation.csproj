@@ -285,7 +285,6 @@
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
     <Compile Include="ViewModels\DirtyCheckAttribute.cs" />
     <Compile Include="ViewModels\EmailViewModel.cs" />
-    <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
     <Compile Include="ViewModels\IncidentNotesViewModel.cs" />
@@ -309,6 +308,7 @@
     <Compile Include="ViewModels\ViewListViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="ViewModels\WorkflowViewModel.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -323,9 +323,6 @@
     </Compile>
     <Compile Include="Views\EmailView.xaml.cs">
       <DependentUpon>EmailView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\HelpView.xaml.cs">
-      <DependentUpon>HelpView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\IncidentDetailView.xaml.cs">
       <DependentUpon>IncidentDetailView.xaml</DependentUpon>
@@ -371,6 +368,9 @@
     </Compile>
     <Compile Include="Views\ViewListView.xaml.cs">
       <DependentUpon>ViewListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WorkflowView.xaml.cs">
+      <DependentUpon>WorkflowView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -460,10 +460,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HelpView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\IncidentDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -521,6 +517,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ViewListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WorkflowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

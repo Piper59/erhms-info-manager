@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class HelpViewModel : ViewModelBase
+    public class WorkflowViewModel : ViewModelBase
     {
         public RelayCommand RespondersCommand { get; private set; }
         public RelayCommand IncidentsCommand { get; private set; }
@@ -13,9 +13,9 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand AnalysesCommand { get; private set; }
         public RelayCommand DashboardsCommand { get; private set; }
 
-        public HelpViewModel()
+        public WorkflowViewModel()
         {
-            Title = "Help";
+            Title = "Workflow";
             RespondersCommand = new RelayCommand(OpenResponderListView);
             IncidentsCommand = new RelayCommand(OpenIncidentListView);
             FormsCommand = new RelayCommand(OpenViewListView);
