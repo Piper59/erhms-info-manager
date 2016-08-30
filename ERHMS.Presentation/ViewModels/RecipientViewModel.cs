@@ -95,12 +95,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (Responder == null && string.IsNullOrWhiteSpace(EmailAddress))
             {
-                Messenger.Default.Send(new NotifyMessage("Please select a Responder or enter an Email Address."));
+                Messenger.Default.Send(new NotifyMessage("Please select a responder or enter an email address."));
                 return false;
             }
             else if (!IsResponder && !Email.IsValidAddress(EmailAddress))
             {
-                Messenger.Default.Send(new NotifyMessage("Please enter a valid Email Address."));
+                Messenger.Default.Send(new NotifyMessage("Please enter a valid email address."));
                 return false;
             }
             else

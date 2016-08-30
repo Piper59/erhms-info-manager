@@ -189,7 +189,7 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         ConfirmMessage msg = new ConfirmMessage(
                             "Change",
-                            string.Format("Change the Root Directory? {0} will copy your documents and restart when settings are saved.", App.Title));
+                            string.Format("Change the root directory? {0} will copy your documents and restart when settings are saved.", App.Title));
                         msg.Confirmed += (sender, e) =>
                         {
                             RootDirectory = path;

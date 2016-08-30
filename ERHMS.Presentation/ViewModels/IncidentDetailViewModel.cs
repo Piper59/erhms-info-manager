@@ -48,12 +48,12 @@ namespace ERHMS.Presentation.ViewModels
             }
             else if (!ValidateDates(Incident.StartDate, Incident.EndDateEstimate))
             {
-                Messenger.Default.Send(new NotifyMessage("End Date (Estimate) must be later than Start Date."));
+                Messenger.Default.Send(new NotifyMessage("Estimated end date must be later than start date."));
                 return false;
             }
             else if (!ValidateDates(Incident.StartDate, Incident.EndDateActual))
             {
-                Messenger.Default.Send(new NotifyMessage("End Date (Actual) must be later than Start Date."));
+                Messenger.Default.Send(new NotifyMessage("Actual end date must be later than start date."));
                 return false;
             }
             else
