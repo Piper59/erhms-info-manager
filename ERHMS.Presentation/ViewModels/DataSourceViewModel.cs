@@ -202,23 +202,31 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Create(FileInfo file, IDataDriver driver, bool initialize)
         {
-            if (initialize)
+            try
             {
-                driver.CreateDatabase();
+                if (initialize)
+                {
+                    driver.CreateDatabase();
+                }
+                Project project = Project.Create(
+                    Name,
+                    Description,
+                    file.Directory,
+                    driver.Provider.ToEpiInfoName(),
+                    driver.Builder,
+                    driver.DatabaseName,
+                    initialize);
+                if (initialize)
+                {
+                    DataAccess.DataContext.Create(project);
+                }
+                Add(file);
             }
-            Project project = Project.Create(
-                Name,
-                Description,
-                file.Directory,
-                driver.Provider.ToEpiInfoName(),
-                driver.Builder,
-                driver.DatabaseName,
-                initialize);
-            if (initialize)
+            catch (Exception ex)
             {
-                DataAccess.DataContext.Create(project);
+                Log.Current.Warn("Failed to create data source", ex);
+                Messenger.Default.Send(new NotifyMessage("Failed to create data source."));
             }
-            Add(file);
         }
 
         public void Create()

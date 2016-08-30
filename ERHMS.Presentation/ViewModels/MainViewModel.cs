@@ -161,10 +161,19 @@ namespace ERHMS.Presentation.ViewModels
         {
             App.Current.Invoke(() =>
             {
-                Documents.Clear();
-                DataSource = new DataContext(new Project(file));
-                Title = string.Format("{0} - {1}", App.Title, DataSource.Project.Name);
-                OpenHelpView();
+                try
+                {
+                    Documents.Clear();
+                    DataSource = new DataContext(new Project(file));
+                    Title = string.Format("{0} - {1}", App.Title, DataSource.Project.Name);
+                    OpenHelpView();
+                }
+                catch (Exception ex)
+                {
+                    Log.Current.Warn("Failed to open data source", ex);
+                    Messenger.Default.Send(new NotifyMessage("Failed to open data source."));
+                    OpenDataSourceListView();
+                }
             });
         }
 
