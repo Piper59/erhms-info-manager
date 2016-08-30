@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Data;
 using ERHMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,6 +10,29 @@ namespace ERHMS.EpiInfo
 {
     public partial class Project
     {
+        public string GetVersion()
+        {
+            string sql = "SELECT ERHMSVersion FROM metaDbInfo";
+            Query query = Driver.CreateQuery(sql);
+            try
+            {
+                return (string)Driver.ExecuteScalar(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Current.Warn("Could not determine version", ex);
+                return null;
+            }
+        }
+
+        public void SetVersion(string version)
+        {
+            string sql = "UPDATE metaDbInfo SET ERHMSVersion = @ERHMSVersion";
+            Query query = Driver.CreateQuery(sql);
+            query.Parameters.Add(new QueryParameter("@ERHMSVersion", DbType.String, version, 255));
+            Driver.ExecuteNonQuery(query);
+        }
+
         public DataTable GetFieldsAsDataTable()
         {
             string sql = "SELECT * FROM metaFields";

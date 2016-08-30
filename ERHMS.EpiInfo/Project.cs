@@ -6,6 +6,7 @@ using System;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo
@@ -50,6 +51,8 @@ namespace ERHMS.EpiInfo
             if (initialize)
             {
                 project.Metadata.CreateMetadataTables();
+                project.Metadata.AddVersionColumn();
+                project.SetVersion(Assembly.GetExecutingAssembly().GetVersion());
                 project.Metadata.CreateCanvasesTable();
             }
             project.Save();

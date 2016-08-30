@@ -6,6 +6,12 @@ namespace ERHMS.EpiInfo
 {
     public static class MetadataDbProviderExtensions
     {
+        public static void AddVersionColumn(this MetadataDbProvider @this)
+        {
+            Log.Current.Debug("Adding version column");
+            @this.db.AddColumn("metaDbInfo", new TableColumn("ERHMSVersion", GenericDbColumnType.String, 255, true));
+        }
+
         public static void CreateCanvasesTable(this MetadataDbProvider @this)
         {
             Log.Current.Debug("Creating canvases table");
