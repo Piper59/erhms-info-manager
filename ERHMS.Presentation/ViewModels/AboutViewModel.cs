@@ -15,7 +15,8 @@ namespace ERHMS.Presentation.ViewModels
         public string Version { get; private set; }
         public string InformationalVersion { get; private set; }
 
-        public RelayCommand PrintCommand { get; private set; }
+        public RelayCommand PrintTermsOfUseCommand { get; private set; }
+        public RelayCommand PrintLicenseCommand { get; private set; }
 
         public AboutViewModel()
         {
@@ -24,10 +25,11 @@ namespace ERHMS.Presentation.ViewModels
             Assembly assembly = Assembly.GetExecutingAssembly();
             Version = assembly.GetVersion();
             InformationalVersion = assembly.GetInformationalVersion();
-            PrintCommand = new RelayCommand(Print);
+            PrintTermsOfUseCommand = new RelayCommand(PrintTermsOfUse);
+            PrintLicenseCommand = new RelayCommand(PrintLicense);
         }
 
-        public void Print()
+        private void Print(string title, string text)
         {
             PrintDialog dialog = new PrintDialog();
             if (dialog.ShowDialog().GetValueOrDefault())
@@ -39,12 +41,22 @@ namespace ERHMS.Presentation.ViewModels
                     FontFamily = new FontFamily("Segoe UI"),
                     FontSize = 14.0
                 };
-                foreach (string line in App.Current.TermsOfUse.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
+                foreach (string line in text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
                 {
                     document.Blocks.Add(new Paragraph(new Run(line)));
                 }
-                dialog.PrintDocument(((IDocumentPaginatorSource)document).DocumentPaginator, string.Format("{0} - Terms of Use", App.Title));
+                dialog.PrintDocument(((IDocumentPaginatorSource)document).DocumentPaginator, string.Format("{0} - {1}", App.Title, title));
             }
+        }
+
+        public void PrintTermsOfUse()
+        {
+            Print("Terms of Use", App.Current.TermsOfUse);
+        }
+
+        public void PrintLicense()
+        {
+            Print("License", App.Current.License);
         }
     }
 }

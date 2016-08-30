@@ -33,10 +33,20 @@
         <mah:MetroTabItem Header="Terms of Use">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding PrintCommand}" Icon="{DynamicResource appbar_printer}">Print</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding PrintTermsOfUseCommand}" Icon="{DynamicResource appbar_printer}">Print</ctrl:AppBarButton>
                 </WrapPanel>
                 <ScrollViewer>
                     <TextBlock TextWrapping="Wrap" Text="{StaticResource TermsOfUse}" />
+                </ScrollViewer>
+            </DockPanel>
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="License">
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
+                    <ctrl:AppBarButton Command="{Binding PrintLicenseCommand}" Icon="{DynamicResource appbar_printer}">Print</ctrl:AppBarButton>
+                </WrapPanel>
+                <ScrollViewer>
+                    <TextBlock TextWrapping="Wrap" Text="{StaticResource License}" />
                 </ScrollViewer>
             </DockPanel>
         </mah:MetroTabItem>

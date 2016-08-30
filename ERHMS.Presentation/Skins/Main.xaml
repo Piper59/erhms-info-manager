@@ -137,6 +137,14 @@
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
+    <sys:String x:Key="License" xml:space="preserve">Placeholder License
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam faucibus nibh id dui ullamcorper, vitae tempus odio vehicula. Aliquam posuere mauris quam, in porttitor justo vulputate vel. Praesent ut pulvinar velit. Donec faucibus nunc vel mollis lacinia. Praesent convallis aliquam interdum. Aliquam vel varius mauris. Etiam tincidunt eros molestie odio scelerisque efficitur. Nam aliquet efficitur quam, a porttitor lectus commodo non.
+
+Nullam eget viverra ligula. Proin posuere nunc non leo aliquam hendrerit. Maecenas eget faucibus turpis. Aliquam rhoncus elit eget quam dignissim, sed auctor velit ultricies. Mauris ac metus convallis, laoreet risus non, pulvinar libero. Integer commodo velit odio, ac auctor sem accumsan in. Suspendisse potenti. Duis pretium felis bibendum, sodales ex in, auctor justo. Donec luctus vestibulum malesuada. Quisque maximus orci a varius tempor. Morbi eget tincidunt est. Proin congue, nunc a commodo efficitur, sapien lacus vulputate arcu, non vulputate libero leo vel dolor.
+
+Sed neque eros, feugiat vitae ultricies a, hendrerit non tellus. Phasellus diam enim, dapibus ac elementum id, efficitur nec mauris. Vestibulum lorem lacus, semper non odio quis, congue pulvinar purus. Nullam auctor felis et nulla ultrices lobortis. In laoreet augue id velit sagittis pretium. Sed tristique nisi tortor, nec cursus ligula interdum vitae. Duis rutrum elementum magna. Etiam et ultrices odio, nec pellentesque est. Aliquam id posuere justo.</sys:String>
+
     <Style TargetType="{x:Type bing:Map}">
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
@@ -201,11 +209,11 @@
 
     <sys:String x:Key="TermsOfUse" xml:space="preserve">Confidentiality and Non-Disclosure
 
-By agreeing to provide peer review for this software, you acknowledge that you fully understand the confidential nature of the review process and agree: (1) to destroy or return all materials related to it; (2) not to discuss the materials associated with the review, your evaluation, or other information associated with your review with any other individual except as authorized by the designated NIOSH official; and (3) to refer all inquiries concerning the review to the designated NIOSH official.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec leo eros, tincidunt ut tortor sit amet, commodo porta velit. Praesent iaculis augue ac eros fringilla, ut faucibus tortor pellentesque. Etiam sit amet sapien non nibh fermentum euismod. Pellentesque mollis scelerisque tellus, non consectetur ipsum vehicula a. Nullam consequat mi non efficitur dictum. Cras consequat ante vitae libero auctor tempor. Curabitur non feugiat ipsum. Mauris mi sem, commodo sed tellus non, vulputate fringilla nibh. Aliquam tincidunt enim a lorem rhoncus elementum. Nulla ut nibh vitae tellus suscipit viverra. Maecenas eget enim justo.
 
 Disclaimer of Liability
 
-This NIOSH-developed software is provided "as-is" without warranty of any kind, including express or implied warranties of merchantability or fitness for a particular purpose. By acceptance and use of this software, which is conveyed to the user without consideration by NIOSH, the user expressly waives any and all claims for damage and/or suits for personal injury or property damage resulting from any direct, indirect, incidental, special or consequential damages, or damages for loss of profits, revenue, data or property use, incurred by you or any third party, whether in an action in contract or tort, arising from your access to, or use of, this software in whole or in part.</sys:String>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam malesuada nisl orci, ut dictum nisl feugiat nec. Aenean tristique quam sem, quis pellentesque neque pretium in. Curabitur venenatis ante vel libero pharetra, vitae semper ipsum commodo. Duis vestibulum porttitor nulla, molestie commodo ante aliquam vel. Fusce posuere, ante vel luctus ornare, quam mi iaculis enim, vel malesuada erat nulla quis eros. Nunc nec arcu vitae felis dignissim imperdiet a ac metus. Nullam sapien elit, suscipit ut eros vel, scelerisque lacinia mi. Donec at gravida dolor.</sys:String>
 
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MetroTextBox}">
         <Setter Property="Margin" Value="0,0,0,5" />

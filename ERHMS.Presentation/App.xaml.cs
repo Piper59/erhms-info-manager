@@ -178,6 +178,11 @@ namespace ERHMS.Presentation
             get { return (string)FindResource("TermsOfUse"); }
         }
 
+        public string License
+        {
+            get { return (string)FindResource("License"); }
+        }
+
         public string Welcome
         {
             get
