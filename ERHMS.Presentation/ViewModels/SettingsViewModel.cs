@@ -187,9 +187,17 @@ namespace ERHMS.Presentation.ViewModels
                     }
                     else
                     {
-                        ConfirmMessage msg = new ConfirmMessage(
-                            "Change",
-                            string.Format("Change the root directory? {0} will copy your documents and restart when settings are saved.", App.Title));
+                        string message = string.Format(
+                            "Change the root directory? {0} will copy your documents and restart when settings are saved.",
+                            App.Title);
+                        if (Directory.Exists(path))
+                        {
+                            message = string.Format(
+                                "{0}{1}{1}Warning: The directory you have selected already exists.",
+                                message,
+                                Environment.NewLine);
+                        }
+                        ConfirmMessage msg = new ConfirmMessage("Change", message);
                         msg.Confirmed += (sender, e) =>
                         {
                             RootDirectory = path;
