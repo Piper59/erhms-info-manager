@@ -1,15 +1,34 @@
 ﻿using Epi;
 using Epi.DataSets;
 using ERHMS.Utility;
+using System;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo
 {
     public static class ConfigurationExtensions
     {
+        public static bool FipsMode
+        {
+            get
+            {
+                try
+                {
+                    new MD5CryptoServiceProvider();
+                    return false;
+                }
+                catch (InvalidOperationException)
+                {
+                    return true;
+                }
+            }
+        }
+
         public static DirectoryInfo GetApplicationRoot()
         {
             return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
@@ -32,6 +51,12 @@ namespace ERHMS.EpiInfo
             string path = GetConfigurationFilePath();
             Log.Current.DebugFormat("Creating configuration: {0}", path);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
+            if (FipsMode)
+            {
+                DataRow row = config.TextEncryptionModule.NewRow();
+                row.SetField("FileName", GetApplicationRoot().GetFile("FipsCrypto.dll").FullName);
+                config.TextEncryptionModule.Rows.Add(row);
+            }
             InitializeDirectories(config);
             CopyAssets();
             config.RecentView.Clear();

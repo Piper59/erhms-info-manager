@@ -12,9 +12,11 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Xml;
 using Action = System.Action;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
+using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -128,7 +130,24 @@ namespace ERHMS.Presentation
                         {
                             ConfigurationExtensions.CreateAndOrLoad();
                             Configuration configuration = Configuration.GetNewInstance();
-                            Settings.Default.DataSources.Add(Path.Combine(configuration.Directories.Project, "Sample", "Sample.prj"));
+                            DirectoryInfo projects = new DirectoryInfo(configuration.Directories.Project);
+                            foreach (FileInfo project in projects.SearchByExtension(Project.FileExtension))
+                            {
+                                XmlDocument document = new XmlDocument();
+                                document.Load(project.FullName);
+                                XmlNode databaseNode = document.SelectSingleNode("/Project/CollectedData/Database");
+                                if (databaseNode.Attributes["connectionString"].Value == "")
+                                {
+                                    FileInfo database = new FileInfo(Path.ChangeExtension(project.FullName, ".mdb"));
+                                    if (database.Exists)
+                                    {
+                                        databaseNode.Attributes["connectionString"].Value = Configuration.Encrypt(
+                                            string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\"{0}\"", database.FullName));
+                                        document.Save(project.FullName);
+                                    }
+                                }
+                                Settings.Default.DataSources.Add(project.FullName);
+                            }
                             Settings.Default.Save();
                         }
                         catch (UnauthorizedAccessException)
