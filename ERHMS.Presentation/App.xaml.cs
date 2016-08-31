@@ -43,31 +43,33 @@ namespace ERHMS.Presentation
             executer.Executing += (sender, e) =>
             {
                 Log.Current.Debug("Starting up");
-                LoadSettings();
-                App app = new App();
-                app.InitializeComponent();
-                MainWindow window = new MainWindow(app.Locator.Main);
-                window.Loaded += (_sender, _e) =>
+                if (LoadSettings())
                 {
-                    app.Locator.Main.OpenDataSourceListView();
-                    window.Activate();
-                    if (Settings.Default.InitialExecution)
+                    App app = new App();
+                    app.InitializeComponent();
+                    MainWindow window = new MainWindow(app.Locator.Main);
+                    window.Loaded += (_sender, _e) =>
                     {
-                        ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", app.TermsOfUse);
-                        msg.Confirmed += (__sender, __e) =>
+                        app.Locator.Main.OpenDataSourceListView();
+                        window.Activate();
+                        if (Settings.Default.InitialExecution)
                         {
-                            Messenger.Default.Send(new NotifyMessage("Welcome", app.Welcome));
-                            Settings.Default.InitialExecution = false;
-                            Settings.Default.Save();
-                        };
-                        msg.Canceled += (__sender, __e) =>
-                        {
-                            app.Shutdown();
-                        };
-                        Messenger.Default.Send(msg);
-                    }
-                };
-                app.Run(window);
+                            ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", app.TermsOfUse);
+                            msg.Confirmed += (__sender, __e) =>
+                            {
+                                Messenger.Default.Send(new NotifyMessage("Welcome", app.Welcome));
+                                Settings.Default.InitialExecution = false;
+                                Settings.Default.Save();
+                            };
+                            msg.Canceled += (__sender, __e) =>
+                            {
+                                app.Shutdown();
+                            };
+                            Messenger.Default.Send(msg);
+                        }
+                    };
+                    app.Run(window);
+                }
                 Log.Current.Debug("Exiting");
             };
             try
