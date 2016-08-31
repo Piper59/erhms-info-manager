@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Communication;
+using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
@@ -43,33 +44,9 @@ namespace ERHMS.Presentation
             executer.Executing += (sender, e) =>
             {
                 Log.Current.Debug("Starting up");
-                if (LoadSettings())
-                {
-                    App app = new App();
-                    app.InitializeComponent();
-                    MainWindow window = new MainWindow(app.Locator.Main);
-                    window.Loaded += (_sender, _e) =>
-                    {
-                        app.Locator.Main.OpenDataSourceListView();
-                        window.Activate();
-                        if (Settings.Default.InitialExecution)
-                        {
-                            ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", app.TermsOfUse);
-                            msg.Confirmed += (__sender, __e) =>
-                            {
-                                Messenger.Default.Send(new NotifyMessage("Welcome", app.Welcome));
-                                Settings.Default.InitialExecution = false;
-                                Settings.Default.Save();
-                            };
-                            msg.Canceled += (__sender, __e) =>
-                            {
-                                app.Shutdown();
-                            };
-                            Messenger.Default.Send(msg);
-                        }
-                    };
-                    app.Run(window);
-                }
+                App app = new App();
+                app.InitializeComponent();
+                app.Run();
                 Log.Current.Debug("Exiting");
             };
             try
@@ -90,82 +67,6 @@ namespace ERHMS.Presentation
         public static void ShowErrorMessage(string message)
         {
             MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private static bool LoadSettings()
-        {
-            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            {
-                MessageBoxResult result = MessageBox.Show(
-                    string.Format("Reset settings for {0}?", Title),
-                    Title,
-                    MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    Settings.Reset();
-                }
-            }
-            if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
-            {
-                try
-                {
-                    ConfigurationExtensions.CreateAndOrLoad();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Default.RootDirectory);
-                    Settings.Default.RootDirectory = null;
-                }
-            }
-            while (string.IsNullOrEmpty(Settings.Default.RootDirectory))
-            {
-                Log.Current.Debug("Prompting for root directory");
-                using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
-                {
-                    if (dialog.ShowDialog(true) == DialogResult.OK)
-                    {
-                        string path = dialog.GetRootDirectory();
-                        Log.Current.DebugFormat("Setting root directory: {0}", path);
-                        Settings.Default.RootDirectory = path;
-                        try
-                        {
-                            ConfigurationExtensions.CreateAndOrLoad();
-                            Configuration configuration = Configuration.GetNewInstance();
-                            DirectoryInfo projects = new DirectoryInfo(configuration.Directories.Project);
-                            foreach (FileInfo project in projects.SearchByExtension(Project.FileExtension))
-                            {
-                                XmlDocument document = new XmlDocument();
-                                document.Load(project.FullName);
-                                XmlNode databaseNode = document.SelectSingleNode("/Project/CollectedData/Database");
-                                if (databaseNode.Attributes["connectionString"].Value == "")
-                                {
-                                    FileInfo database = new FileInfo(Path.ChangeExtension(project.FullName, ".mdb"));
-                                    if (database.Exists)
-                                    {
-                                        databaseNode.Attributes["connectionString"].Value = Configuration.Encrypt(
-                                            string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\"{0}\"", database.FullName));
-                                        document.Save(project.FullName);
-                                    }
-                                }
-                                Settings.Default.DataSources.Add(project.FullName);
-                            }
-                            Settings.Default.Save();
-                        }
-                        catch (UnauthorizedAccessException)
-                        {
-                            Log.Current.WarnFormat("Access denied to root directory: {0}", path);
-                            ShowErrorMessage(string.Format("You do not have access to {0}. Please choose another location.", path));
-                            Settings.Default.RootDirectory = null;
-                        }
-                    }
-                    else
-                    {
-                        Log.Current.Debug("Canceled setting root directory");
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
 
         private ServiceHost host;
@@ -200,6 +101,7 @@ namespace ERHMS.Presentation
 
         public App()
         {
+            Startup += (sender, e) => Initialize();
             DispatcherUnhandledException += (sender, e) =>
             {
                 Log.Current.Fatal("Fatal error", e.Exception);
@@ -232,6 +134,117 @@ namespace ERHMS.Presentation
             else
             {
                 Dispatcher.Invoke(action);
+            }
+        }
+
+        private void Initialize()
+        {
+            if (LoadSettings())
+            {
+                MainWindow window = new MainWindow(Locator.Main);
+                window.Loaded += (_sender, _e) =>
+                {
+                    Locator.Main.OpenDataSourceListView();
+                    window.Activate();
+                    if (Settings.Default.InitialExecution)
+                    {
+                        ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", TermsOfUse);
+                        msg.Confirmed += (__sender, __e) =>
+                        {
+                            Messenger.Default.Send(new NotifyMessage("Welcome", Welcome));
+                            Settings.Default.InitialExecution = false;
+                            Settings.Default.Save();
+                        };
+                        msg.Canceled += (__sender, __e) =>
+                        {
+                            Shutdown();
+                        };
+                        Messenger.Default.Send(msg);
+                    }
+                };
+                window.Show();
+            }
+            else
+            {
+                Shutdown();
+            }
+        }
+
+        private bool LoadSettings()
+        {
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                string message = string.Format("Reset settings for {0}?", Title);
+                if (MessageBox.Show(message, Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    Settings.Reset();
+                }
+            }
+            if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
+            {
+                try
+                {
+                    ConfigurationExtensions.CreateAndOrLoad();
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Default.RootDirectory);
+                    Settings.Default.RootDirectory = null;
+                }
+            }
+            while (string.IsNullOrEmpty(Settings.Default.RootDirectory))
+            {
+                Log.Current.Debug("Prompting for root directory");
+                using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
+                {
+                    if (dialog.ShowDialog(true) == DialogResult.OK)
+                    {
+                        string path = dialog.GetRootDirectory();
+                        Log.Current.DebugFormat("Setting root directory: {0}", path);
+                        Settings.Default.RootDirectory = path;
+                        try
+                        {
+                            ConfigurationExtensions.CreateAndOrLoad();
+                            AddDataSources();
+                            Settings.Default.Save();
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            Log.Current.WarnFormat("Access denied to root directory: {0}", path);
+                            ShowErrorMessage(string.Format("You do not have access to {0}. Please choose another location.", path));
+                            Settings.Default.RootDirectory = null;
+                        }
+                    }
+                    else
+                    {
+                        Log.Current.Debug("Canceled setting root directory");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private void AddDataSources()
+        {
+            Configuration configuration = Configuration.GetNewInstance();
+            DirectoryInfo projects = new DirectoryInfo(configuration.Directories.Project);
+            foreach (FileInfo project in projects.SearchByExtension(Project.FileExtension))
+            {
+                XmlDocument document = new XmlDocument();
+                document.Load(project.FullName);
+                XmlNode databaseNode = document.SelectSingleNode("/Project/CollectedData/Database");
+                if (databaseNode.Attributes["connectionString"].Value == "")
+                {
+                    FileInfo database = new FileInfo(Path.ChangeExtension(project.FullName, ".mdb"));
+                    if (database.Exists)
+                    {
+                        AccessDriver driver = AccessDriver.Create(database.FullName);
+                        databaseNode.Attributes["connectionString"].Value = Configuration.Encrypt(driver.ConnectionString);
+                        document.Save(project.FullName);
+                    }
+                }
+                Settings.Default.DataSources.Add(project.FullName);
             }
         }
 
