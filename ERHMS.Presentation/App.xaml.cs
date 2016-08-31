@@ -139,35 +139,45 @@ namespace ERHMS.Presentation
 
         private void Initialize()
         {
-            if (LoadSettings())
+            MainWindow window = new MainWindow(Locator.Main);
+            window.ContentRendered += (sender, e) =>
             {
-                MainWindow window = new MainWindow(Locator.Main);
-                window.Loaded += (_sender, _e) =>
+                if (Settings.Default.InitialExecution)
                 {
-                    Locator.Main.OpenDataSourceListView();
-                    window.Activate();
-                    if (Settings.Default.InitialExecution)
+                    ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", TermsOfUse);
+                    msg.Confirmed += (_sender, _e) =>
                     {
-                        ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", TermsOfUse);
-                        msg.Confirmed += (__sender, __e) =>
+                        if (LoadSettings())
                         {
+                            Locator.Main.OpenDataSourceListView();
                             Messenger.Default.Send(new NotifyMessage("Welcome", Welcome));
                             Settings.Default.InitialExecution = false;
                             Settings.Default.Save();
-                        };
-                        msg.Canceled += (__sender, __e) =>
+                        }
+                        else
                         {
                             Shutdown();
-                        };
-                        Messenger.Default.Send(msg);
+                        }
+                    };
+                    msg.Canceled += (_sender, _e) =>
+                    {
+                        Shutdown();
+                    };
+                    Messenger.Default.Send(msg);
+                }
+                else
+                {
+                    if (LoadSettings())
+                    {
+                        Locator.Main.OpenDataSourceListView();
                     }
-                };
-                window.Show();
-            }
-            else
-            {
-                Shutdown();
-            }
+                    else
+                    {
+                        Shutdown();
+                    }
+                }
+            };
+            window.Show();
         }
 
         private bool LoadSettings()
