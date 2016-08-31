@@ -177,7 +177,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
             {
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog(true) == DialogResult.OK)
                 {
                     string path = dialog.GetRootDirectory();
                     if (path.EqualsIgnoreCase(Settings.Default.RootDirectory))
@@ -190,13 +190,6 @@ namespace ERHMS.Presentation.ViewModels
                         string message = string.Format(
                             "Change the root directory? {0} will copy your documents and restart when settings are saved.",
                             App.Title);
-                        if (Directory.Exists(path))
-                        {
-                            message = string.Format(
-                                "{0}{1}{1}Warning: The directory you have selected already exists.",
-                                message,
-                                Environment.NewLine);
-                        }
                         ConfirmMessage msg = new ConfirmMessage("Change", message);
                         msg.Confirmed += (sender, e) =>
                         {

@@ -122,7 +122,7 @@ namespace ERHMS.Presentation
                 Log.Current.Debug("Prompting for root directory");
                 using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
                 {
-                    if (dialog.ShowDialog() == DialogResult.OK)
+                    if (dialog.ShowDialog(true) == DialogResult.OK)
                     {
                         string path = dialog.GetRootDirectory();
                         Log.Current.DebugFormat("Setting root directory: {0}", path);
