@@ -5,6 +5,8 @@ namespace ERHMS.Presentation.Dialogs
 {
     public static class RootDirectoryDialog
     {
+        private const MessageBoxOptions Topmost = (MessageBoxOptions)0x40000;
+
         public static FolderBrowserDialog GetDialog()
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
@@ -23,7 +25,14 @@ namespace ERHMS.Presentation.Dialogs
                     string message = string.Format(
                         "A folder named {0} already exists in the location you have selected. Are you sure you want to use this location?",
                         App.BareTitle);
-                    if (MessageBox.Show(message, App.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    DialogResult _result = MessageBox.Show(
+                        message,
+                        App.Title,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning,
+                        MessageBoxDefaultButton.Button1,
+                        Topmost);
+                    if (_result == DialogResult.Yes)
                     {
                         break;
                     }
