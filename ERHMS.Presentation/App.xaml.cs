@@ -97,8 +97,7 @@ namespace ERHMS.Presentation
                 MessageBoxResult result = MessageBox.Show(
                     string.Format("Reset settings for {0}?", Title),
                     Title,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+                    MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
                     Settings.Reset();
