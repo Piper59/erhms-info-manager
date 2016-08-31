@@ -154,12 +154,8 @@ namespace ERHMS.EpiInfo.Analysis
                                 }
                                 if (mappings == null || mappings.Count == 0)
                                 {
-                                    DialogResult result = MessageBox.Show(
-                                        "No variables have been mapped. Cancel import?",
-                                        "Cancel?",
-                                        MessageBoxButtons.YesNo,
-                                        MessageBoxIcon.Error);
-                                    if (result == DialogResult.Yes)
+                                    string message = "No variables have been mapped. Cancel import?";
+                                    if (MessageBox.Show(message, "Cancel?", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
                                     {
                                         return;
                                     }
@@ -196,7 +192,8 @@ namespace ERHMS.EpiInfo.Analysis
                                 {
                                     service.OnViewDataImported(projectPath, viewName);
                                 }
-                                if (MessageBox.Show("Data has been imported. Close Epi Info?", "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                string message = "Data has been imported. Close Epi Info?";
+                                if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                 {
                                     form.Close();
                                 }
@@ -234,7 +231,8 @@ namespace ERHMS.EpiInfo.Analysis
                                 {
                                     form.ExecuteCommand(dialog.CommandText, () =>
                                     {
-                                        if (MessageBox.Show("Data has been exported. Close Epi Info?", "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                        string message = "Data has been exported. Close Epi Info?";
+                                        if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                         {
                                             form.Close();
                                         }

@@ -132,7 +132,8 @@ namespace ERHMS.EpiInfo.MakeView
                             {
                                 service.OnTemplateAdded(dialog.TemplatePath);
                             }
-                            if (MessageBox.Show("Template has been created. Close Epi Info?", "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                            string message = "Template has been created. Close Epi Info?";
+                            if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
                                 form.Close();
                             }
@@ -223,7 +224,8 @@ namespace ERHMS.EpiInfo.MakeView
                                 {
                                     service.OnViewAdded(projectPath, dialog.ViewName, tag);
                                 }
-                                if (MessageBox.Show("Form has been created. Close Epi Info?", "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                string message = "Form has been created. Close Epi Info?";
+                                if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                 {
                                     form.Close();
                                 }
