@@ -163,6 +163,8 @@ Surveillance logo, and ERHMS, either separately or in combination, are
 trademarks of the National Institute for Occupational Safety and Health
 (NIOSH).</sys:String>
 
+    <ResourceDictionary x:Key="LicenseDialog" Source="../Resources/LicenseDialog.xaml" />
+
     <sys:String x:Key="LicenseFullText" xml:space="preserve">                                 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/

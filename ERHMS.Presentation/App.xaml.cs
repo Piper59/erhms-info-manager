@@ -144,8 +144,8 @@ namespace ERHMS.Presentation
             {
                 if (Settings.Default.InitialExecution)
                 {
-                    ConfirmMessage msg = new ConfirmMessage("License", "Accept", LicenseFullText);
-                    msg.Confirmed += (_sender, _e) =>
+                    LicenseDialog dialog = new LicenseDialog(window);
+                    dialog.Accepted += (_sender, _e) =>
                     {
                         if (LoadSettings())
                         {
@@ -159,11 +159,11 @@ namespace ERHMS.Presentation
                             Shutdown();
                         }
                     };
-                    msg.Canceled += (_sender, _e) =>
+                    dialog.Canceled += (_sender, _e) =>
                     {
                         Shutdown();
                     };
-                    Messenger.Default.Send(msg);
+                    dialog.ShowDialogAsync();
                 }
                 else
                 {

@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/Dialogs/BaseMetroDialog.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <sys:Double x:Key="DialogMessageFontSize">12</sys:Double>
+
+    <Style TargetType="{x:Type Dialogs:MessageDialog}">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="Consolas" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <!-- Modified from https://raw.githubusercontent.com/MahApps/MahApps.Metro/1.3.0/MahApps.Metro/Themes/Dialogs/BaseMetroDialog.xaml -->
+                <ControlTemplate TargetType="{x:Type Dialogs:BaseMetroDialog}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Border FocusVisualStyle="{x:Null}" Focusable="False">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <ContentPresenter Grid.Row="0" Content="{TemplateBinding DialogTop}" />
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10*" />
+                                        <ColumnDefinition Width="80*" />
+                                        <ColumnDefinition Width="10*" />
+                                    </Grid.ColumnDefinitions>
+                                    <!--  Content area  -->
+                                    <Grid Grid.Column="1" Margin="0 10 0 0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock x:Name="PART_Title"
+                                                   Grid.Row="0"
+                                                   FontFamily="{StaticResource DefaultFont}"
+                                                   FontSize="{TemplateBinding DialogTitleFontSize}"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   Text="{TemplateBinding Title}"
+                                                   TextWrapping="Wrap" />
+                                        <ContentPresenter Grid.Row="1" Content="{TemplateBinding Content}" />
+                                    </Grid>
+                                </Grid>
+                                <ContentPresenter Grid.Row="2" Content="{TemplateBinding DialogBottom}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Title" Value="{x:Null}">
+                            <Setter TargetName="PART_Title" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard Storyboard="{StaticResource DialogShownStoryboard}" />
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

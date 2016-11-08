@@ -253,6 +253,7 @@
     <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
     <Compile Include="Converters\ViewToUrlConverter.cs" />
     <Compile Include="Dialogs\FileDialogExtensions.cs" />
+    <Compile Include="Dialogs\LicenseDialog.cs" />
     <Compile Include="Dialogs\RootDirectoryDialog.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -435,6 +436,10 @@
     <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\LicenseDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Skins\Main.xaml">
       <SubType>Designer</SubType>
