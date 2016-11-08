@@ -15,7 +15,7 @@
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </mah:MetroTabItem.Resources>
-            <ScrollViewer>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <StackPanel>
                     <StackPanel Margin="0,0,0,50">
                         <Image Margin="0,0,0,5" Source="/Images/ERHMS.png" Stretch="None" />
@@ -23,30 +23,21 @@
                         <TextBlock>Version <Run Text="{Binding Version, Mode=OneTime}" /></TextBlock>
                         <TextBlock Text="{Binding InformationalVersion, Mode=OneTime}" />
                     </StackPanel>
-                    <StackPanel>
+                    <StackPanel Margin="0,0,0,50">
                         <TextBlock>Built with Epi Info&#x2122;</TextBlock>
                         <Image Margin="0,5,0,0" Source="/Images/EpiInfo.png" Stretch="None" />
                     </StackPanel>
+                    <TextBlock Text="{StaticResource LicenseBoilerplate}" Style="{StaticResource Legalese}" />
                 </StackPanel>
             </ScrollViewer>
-        </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Terms of Use">
-            <DockPanel>
-                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding PrintTermsOfUseCommand}" Icon="{DynamicResource appbar_printer}">Print</ctrl:AppBarButton>
-                </WrapPanel>
-                <ScrollViewer>
-                    <TextBlock TextWrapping="Wrap" Text="{StaticResource TermsOfUse}" />
-                </ScrollViewer>
-            </DockPanel>
         </mah:MetroTabItem>
         <mah:MetroTabItem Header="License">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding PrintLicenseCommand}" Icon="{DynamicResource appbar_printer}">Print</ctrl:AppBarButton>
                 </WrapPanel>
-                <ScrollViewer>
-                    <TextBlock TextWrapping="Wrap" Text="{StaticResource License}" />
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                    <TextBlock Text="{StaticResource LicenseFullText}" Style="{StaticResource Legalese}" />
                 </ScrollViewer>
             </DockPanel>
         </mah:MetroTabItem>

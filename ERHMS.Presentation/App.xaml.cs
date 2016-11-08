@@ -75,14 +75,14 @@ namespace ERHMS.Presentation
         public ViewModelLocator Locator { get; private set; }
         public bool ShuttingDown { get; private set; }
 
-        public string TermsOfUse
+        public string LicenseBoilerplate
         {
-            get { return (string)FindResource("TermsOfUse"); }
+            get { return (string)FindResource("LicenseBoilerplate"); }
         }
 
-        public string License
+        public string LicenseFullText
         {
-            get { return (string)FindResource("License"); }
+            get { return (string)FindResource("LicenseFullText"); }
         }
 
         public string Welcome
@@ -144,7 +144,7 @@ namespace ERHMS.Presentation
             {
                 if (Settings.Default.InitialExecution)
                 {
-                    ConfirmMessage msg = new ConfirmMessage("Terms of Use", "Accept", TermsOfUse);
+                    ConfirmMessage msg = new ConfirmMessage("License", "Accept", LicenseFullText);
                     msg.Confirmed += (_sender, _e) =>
                     {
                         if (LoadSettings())

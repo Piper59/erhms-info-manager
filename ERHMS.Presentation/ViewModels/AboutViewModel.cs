@@ -15,7 +15,6 @@ namespace ERHMS.Presentation.ViewModels
         public string Version { get; private set; }
         public string InformationalVersion { get; private set; }
 
-        public RelayCommand PrintTermsOfUseCommand { get; private set; }
         public RelayCommand PrintLicenseCommand { get; private set; }
 
         public AboutViewModel()
@@ -25,7 +24,6 @@ namespace ERHMS.Presentation.ViewModels
             Assembly assembly = Assembly.GetExecutingAssembly();
             Version = assembly.GetVersion();
             InformationalVersion = assembly.GetInformationalVersion();
-            PrintTermsOfUseCommand = new RelayCommand(PrintTermsOfUse);
             PrintLicenseCommand = new RelayCommand(PrintLicense);
         }
 
@@ -38,8 +36,8 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     ColumnWidth = dialog.PrintableAreaWidth,
                     PagePadding = new Thickness(48.0),
-                    FontFamily = new FontFamily("Segoe UI"),
-                    FontSize = 14.0
+                    FontFamily = new FontFamily("Consolas"),
+                    FontSize = 12.0
                 };
                 foreach (string line in text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
                 {
@@ -49,14 +47,9 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public void PrintTermsOfUse()
-        {
-            Print("Terms of Use", App.Current.TermsOfUse);
-        }
-
         public void PrintLicense()
         {
-            Print("License", App.Current.License);
+            Print("License", App.Current.LicenseFullText);
         }
     }
 }
