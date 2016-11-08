@@ -18,7 +18,7 @@
                     <Setter Property="Foreground" Value="#ff000000" />
                 </Style>
                 <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="FontSize" Value="14.0" />
+                    <Setter Property="FontSize" Value="14" />
                     <Setter Property="TextAlignment" Value="Center" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
