@@ -188,6 +188,7 @@ namespace ERHMS.Presentation
                 if (MessageBox.Show(message, Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     Settings.Reset();
+                    Settings.Default.Save();
                 }
             }
             if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
