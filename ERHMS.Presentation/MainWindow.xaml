@@ -42,9 +42,9 @@
                 <MenuItem Header="_Dashboards" Command="{Binding DashboardsCommand}" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="_Workflow" Command="{Binding WorkflowCommand}" />
                 <MenuItem Header="_Settings" Command="{Binding SettingsCommand}" />
                 <MenuItem Header="_Logs" Command="{Binding LogsCommand}" />
+                <MenuItem Header="_Help" Command="{Binding HelpCommand}" />
                 <Separator />
                 <MenuItem Header="_About" Command="{Binding AboutCommand}" />
             </MenuItem>
@@ -90,14 +90,14 @@
                 <DataTemplate DataType="{x:Type vm:EmailViewModel}">
                     <v:EmailView />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:WorkflowViewModel}">
-                    <v:WorkflowView />
-                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
                     <v:SettingsView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LogListViewModel}">
                     <v:LogListView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HelpViewModel}">
+                    <v:HelpView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AboutViewModel}">
                     <v:AboutView />
