@@ -117,6 +117,9 @@ namespace ERHMS.EpiInfo
             CopyIfExists(applicationRoot, configurationRoot, "Projects");
             CopyIfExists(applicationRoot, configurationRoot, "Resources");
             CopyIfExists(applicationRoot, configurationRoot, "Templates");
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            assembly.SaveResource("ERHMS.EpiInfo.LICENSE.txt", configurationRoot.GetFile("LICENSE.txt").FullName);
+            assembly.SaveResource("ERHMS.EpiInfo.NOTICE.txt", configurationRoot.GetFile("NOTICE.txt").FullName);
         }
 
         private static void InitializeSettings(Config config)

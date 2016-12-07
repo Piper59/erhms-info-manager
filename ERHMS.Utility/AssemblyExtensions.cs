@@ -38,5 +38,14 @@ namespace ERHMS.Utility
                 return reader.ReadToEnd();
             }
         }
+
+        public static void SaveResource(this Assembly @this, string resourceName, string path)
+        {
+            using (Stream source = @this.GetManifestResourceStream(resourceName))
+            using (Stream target = File.Create(path))
+            {
+                source.CopyTo(target);
+            }
+        }
     }
 }

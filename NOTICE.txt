@@ -1,0 +1,7 @@
+                                     NOTICE
+
+The end-user documentation included with the redistribution, if any, must
+include the following acknowledgment: "This derivative product includes ERHMS
+Info Manager™ and Epi Info™ software developed by NIOSH and CDC, which can be
+found at http://www.cdc.gov/niosh/topics/erhms/ and
+http://www.cdc.gov/epiinfo/index.html."

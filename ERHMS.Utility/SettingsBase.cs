@@ -50,7 +50,7 @@ namespace ERHMS.Utility
             }
             else
             {
-                using (Stream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
+                using (Stream stream = File.OpenRead(file.FullName))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
                     Default = (TSettings)serializer.Deserialize(stream);
@@ -64,11 +64,7 @@ namespace ERHMS.Utility
             {
                 file.Directory.Create();
             }
-            if (!file.Exists)
-            {
-                using (file.Create()) { }
-            }
-            using (Stream stream = new FileStream(file.FullName, FileMode.Truncate, FileAccess.Write))
+            using (Stream stream = File.Create(file.FullName))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
                 serializer.Serialize(stream, this);
