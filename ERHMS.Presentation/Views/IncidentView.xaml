@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:v="clr-namespace:ERHMS.Presentation.Views"
              mc:Ignorable="d"
-             d:DesignWidth="640" d:DesignHeight="480">
+             d:DesignWidth="640" d:DesignHeight="480"
+             ctrl:TabControlExtensions.ControlPageNavigationTabControl="{Binding ElementName=TabControl}">
     <UserControl.Resources>
         <conv:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
     </UserControl.Resources>
-    <mah:MetroTabControl>
+    <mah:MetroTabControl Name="TabControl">
         <mah:MetroTabItem Header="Details">
             <v:IncidentDetailView DataContext="{Binding Detail}" />
         </mah:MetroTabItem>

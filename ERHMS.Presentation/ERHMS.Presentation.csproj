@@ -233,6 +233,7 @@
       <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ResponsiveFormGrid.cs" />
+    <Compile Include="Controls\TabControlExtensions.cs" />
     <Compile Include="Converters\AttachmentToStringConverter.cs" />
     <Compile Include="Converters\BindingToDescriptionConverter.cs" />
     <Compile Include="Converters\BoolInverter.cs" />

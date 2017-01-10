@@ -7,8 +7,9 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
-             FontSize="{StaticResource LargerFontSize}">
-    <mah:MetroTabControl>
+             FontSize="{StaticResource LargerFontSize}"
+             ctrl:TabControlExtensions.ControlPageNavigationTabControl="{Binding ElementName=TabControl}">
+    <mah:MetroTabControl Name="TabControl">
         <mah:MetroTabItem Header="About">
             <mah:MetroTabItem.Resources>
                 <Style TargetType="{x:Type TextBlock}">

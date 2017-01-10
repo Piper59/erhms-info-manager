@@ -7,12 +7,13 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480"
-             x:Name="Root">
+             x:Name="Root"
+             ctrl:TabControlExtensions.ControlPageNavigationTabControl="{Binding ElementName=TabControl}">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">Save</ctrl:AppBarButton>
         </WrapPanel>
-        <mah:MetroTabControl DataContext="{Binding Responder}">
+        <mah:MetroTabControl Name="TabControl" DataContext="{Binding Responder}">
             <mah:MetroTabItem Header="Personal">
                 <ScrollViewer>
                     <StackPanel>
