@@ -55,6 +55,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource GrayBrush5}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="Once" />
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
