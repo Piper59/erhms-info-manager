@@ -14,7 +14,7 @@
             <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">_Save</ctrl:AppBarButton>
         </WrapPanel>
         <mah:MetroTabControl Name="TabControl" DataContext="{Binding Responder}">
-            <mah:MetroTabItem Header="Personal">
+            <mah:MetroTabItem Header="_Personal">
                 <ScrollViewer>
                     <StackPanel>
                         <GroupBox Header="Identity">
@@ -102,7 +102,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Emergency Contact">
+            <mah:MetroTabItem Header="_Emergency Contact">
                 <ScrollViewer>
                     <StackPanel>
                         <GroupBox Header="Identity">
@@ -167,7 +167,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Organization">
+            <mah:MetroTabItem Header="_Organization">
                 <ScrollViewer>
                     <StackPanel>
                         <GroupBox Header="Role">

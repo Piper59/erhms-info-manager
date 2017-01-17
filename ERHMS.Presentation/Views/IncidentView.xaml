@@ -14,31 +14,31 @@
         <conv:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
     </UserControl.Resources>
     <mah:MetroTabControl Name="TabControl">
-        <mah:MetroTabItem Header="Details">
+        <mah:MetroTabItem Header="D_etails">
             <v:IncidentDetailView DataContext="{Binding Detail}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Notes" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="_Notes" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:IncidentNotesView DataContext="{Binding Notes}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Roster" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="_Roster" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:RosterListView DataContext="{Binding Rosters}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Locations" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="_Locations" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:LocationListView DataContext="{Binding Locations}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Forms" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="_Forms" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:ViewListView DataContext="{Binding Views}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Templates" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="_Templates" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:TemplateListView DataContext="{Binding Templates}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Assignments" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="Assi_gnments" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:AssignmentListView DataContext="{Binding Assignments}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Analyses" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="Anal_yses" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:PgmListView DataContext="{Binding Pgms}" />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Dashboards" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
+        <mah:MetroTabItem Header="D_ashboards" Visibility="{Binding Incident.New, Converter={StaticResource BoolToVisibilityInverter}}">
             <v:CanvasListView DataContext="{Binding Canvases}" />
         </mah:MetroTabItem>
     </mah:MetroTabControl>

@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <mah:MetroTabControl Name="TabControl" SelectionChanged="TabControl_SelectionChanged">
-        <mah:MetroTabItem Header="Workflow">
+        <mah:MetroTabItem Header="_Workflow">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalAlignment="Top">
                 <Canvas Width="600" Height="600">
                     <Canvas.Resources>
@@ -96,37 +96,37 @@
                 </Canvas>
             </ScrollViewer>
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Data Sources" Cursor="No">
+        <mah:MetroTabItem Header="Data _Sources" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Responders" Cursor="No">
+        <mah:MetroTabItem Header="R_esponders" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Incidents" Cursor="No">
+        <mah:MetroTabItem Header="_Incidents" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Notes" Cursor="No">
+        <mah:MetroTabItem Header="_Notes" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Roster" Cursor="No">
+        <mah:MetroTabItem Header="R_oster" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Locations" Cursor="No">
+        <mah:MetroTabItem Header="_Locations" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Forms" Cursor="No">
+        <mah:MetroTabItem Header="_Forms" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Templates" Cursor="No">
+        <mah:MetroTabItem Header="_Templates" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Assignments" Cursor="No">
+        <mah:MetroTabItem Header="Assi_gnments" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Analyses" Cursor="No">
+        <mah:MetroTabItem Header="Anal_yses" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="Dashboards" Cursor="No">
+        <mah:MetroTabItem Header="Dash_boards" Cursor="No">
             <ScrollViewer />
         </mah:MetroTabItem>
     </mah:MetroTabControl>

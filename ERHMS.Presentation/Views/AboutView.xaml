@@ -10,7 +10,7 @@
              FontSize="{StaticResource LargerFontSize}"
              ctrl:TabControlExtensions.ControlPageNavigationTabControl="{Binding ElementName=TabControl}">
     <mah:MetroTabControl Name="TabControl">
-        <mah:MetroTabItem Header="About">
+        <mah:MetroTabItem Header="_About">
             <mah:MetroTabItem.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -32,7 +32,7 @@
                 </StackPanel>
             </ScrollViewer>
         </mah:MetroTabItem>
-        <mah:MetroTabItem Header="License">
+        <mah:MetroTabItem Header="_License">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
                     <ctrl:AppBarButton Command="{Binding PrintLicenseCommand}" Icon="{DynamicResource appbar_printer}">_Print</ctrl:AppBarButton>
