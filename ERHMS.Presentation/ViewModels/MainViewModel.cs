@@ -52,6 +52,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand LogsCommand { get; private set; }
         public RelayCommand HelpCommand { get; private set; }
         public RelayCommand AboutCommand { get; private set; }
+        public RelayCommand CloseActiveDocumentCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
 
         public MainViewModel()
@@ -93,6 +94,7 @@ namespace ERHMS.Presentation.ViewModels
             LogsCommand = new RelayCommand(OpenLogListView);
             HelpCommand = new RelayCommand(OpenHelpView);
             AboutCommand = new RelayCommand(OpenAboutView);
+            CloseActiveDocumentCommand = new RelayCommand(CloseActiveDocument, HasActiveDocument);
             ExitCommand = new RelayCommand(Exit);
             App.Current.Service.ViewAdded += Service_ViewAdded;
             App.Current.Service.ViewDataImported += Service_ViewDataImported;
@@ -143,6 +145,10 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         Log.Current.DebugFormat("Closing tab: {0}", document.GetType().Name);
                         Documents.Remove(document);
+                        if (Documents.Count == 0)
+                        {
+                            ActiveDocument = null;
+                        }
                     }
                     else
                     {
@@ -150,6 +156,11 @@ namespace ERHMS.Presentation.ViewModels
                     }
                 });
             }
+        }
+
+        public bool HasActiveDocument()
+        {
+            return ActiveDocument != null;
         }
 
         public bool HasDataSource()
@@ -375,6 +386,11 @@ namespace ERHMS.Presentation.ViewModels
             {
                 OpenDocument(new AboutViewModel());
             }
+        }
+
+        public void CloseActiveDocument()
+        {
+            ActiveDocument.Close();
         }
 
         public void Exit()

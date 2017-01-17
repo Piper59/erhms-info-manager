@@ -21,11 +21,15 @@
     <Window.Resources>
         <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding CloseActiveDocumentCommand}" />
+    </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Data Sources" Command="{Binding DataSourcesCommand}" />
                 <Separator />
+                <MenuItem Header="_Close Tab" Command="{Binding CloseActiveDocumentCommand}" />
                 <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="_Responders" Visibility="{Binding DataSource, Converter={StaticResource NullToVisibilityConverter}}">
