@@ -35,7 +35,7 @@
         <mah:MetroTabItem Header="License">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding PrintLicenseCommand}" Icon="{DynamicResource appbar_printer}">Print</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding PrintLicenseCommand}" Icon="{DynamicResource appbar_printer}">_Print</ctrl:AppBarButton>
                 </WrapPanel>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
                     <TextBlock Text="{StaticResource LicenseFullText}" Style="{StaticResource Legalese}" />

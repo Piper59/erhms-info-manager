@@ -19,7 +19,7 @@
     <Grid>
         <DockPanel>
             <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding SendCommand}" Icon="{DynamicResource appbar_email}">Send</ctrl:AppBarButton>
+                <ctrl:AppBarButton Command="{Binding SendCommand}" Icon="{DynamicResource appbar_email}">_Send</ctrl:AppBarButton>
             </WrapPanel>
             <ctrl:FormGrid>
                 <Grid.ColumnDefinitions>
@@ -82,8 +82,8 @@
         <scw:ChildWindow Title="Add a Recipient" DataContext="{Binding Recipient}" IsOpen="{Binding Active}">
             <DockPanel>
                 <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding AddCommand}" Icon="{DynamicResource appbar_add}">Add</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">Cancel</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding AddCommand}" Icon="{DynamicResource appbar_add}">_Add</ctrl:AppBarButton>
+                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">_Cancel</ctrl:AppBarButton>
                 </WrapPanel>
                 <ctrl:ResponsiveFormGrid>
                     <Grid.RowDefinitions>

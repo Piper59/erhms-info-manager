@@ -11,7 +11,7 @@
              ctrl:TabControlExtensions.ControlPageNavigationTabControl="{Binding ElementName=TabControl}">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">Save</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">_Save</ctrl:AppBarButton>
         </WrapPanel>
         <mah:MetroTabControl Name="TabControl" DataContext="{Binding Responder}">
             <mah:MetroTabItem Header="Personal">

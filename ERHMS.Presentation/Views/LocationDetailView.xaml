@@ -36,7 +36,7 @@
             <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Longitude, TargetNullValue=''}" />
         </ctrl:FormGrid>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">Save</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">_Save</ctrl:AppBarButton>
         </WrapPanel>
         <bing:Map Name="Map"
                   MouseRightButtonDown="Map_MouseRightButtonDown"
@@ -46,9 +46,9 @@
                   ZoomLevel="{Binding ZoomLevel, Mode=TwoWay}">
             <bing:Map.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Drop Pin" Command="{Binding DropPinCommand}" />
-                    <MenuItem Header="Zoom In" Command="{Binding CenterZoomInCommand}" />
-                    <MenuItem Header="Zoom Out" Command="{Binding CenterZoomOutCommand}" />
+                    <MenuItem Header="_Drop Pin" Command="{Binding DropPinCommand}" />
+                    <MenuItem Header="Zoom _In" Command="{Binding CenterZoomInCommand}" />
+                    <MenuItem Header="Zoom _Out" Command="{Binding CenterZoomOutCommand}" />
                 </ContextMenu>
             </bing:Map.ContextMenu>
             <bing:MapItemsControl ItemsSource="{Binding Pins}">

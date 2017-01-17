@@ -15,7 +15,9 @@
                         <VisualBrush Stretch="Uniform" Visual="{Binding Icon, ElementName=Root}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
-                <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding}" />
+                <TextBlock FontSize="12" HorizontalAlignment="Center">
+                    <AccessText Text="{Binding}" />
+                </TextBlock>
             </StackPanel>
         </DataTemplate>
     </Button.ContentTemplate>

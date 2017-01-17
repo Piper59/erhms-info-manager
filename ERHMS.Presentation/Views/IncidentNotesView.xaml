@@ -9,10 +9,10 @@
     <DockPanel>
         <TextBox DockPanel.Dock="Top" Style="{StaticResource MultiLineTextBox}" Text="{Binding Note.Content, UpdateSourceTrigger=PropertyChanged}" />
         <WrapPanel DockPanel.Dock="Top" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">Save</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">_Save</ctrl:AppBarButton>
         </WrapPanel>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">Refresh</ctrl:AppBarButton>
+            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">_Refresh</ctrl:AppBarButton>
         </WrapPanel>
         <ItemsControl Style="{StaticResource IncidentNoteList}" ItemsSource="{Binding Notes}" />
     </DockPanel>
