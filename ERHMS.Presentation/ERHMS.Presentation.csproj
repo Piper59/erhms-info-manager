@@ -223,6 +223,7 @@
     <Compile Include="Controls\Filter.xaml.cs">
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FixKeyboardCuesBehavior.cs" />
     <Compile Include="Controls\FormGrid.cs" />
     <Compile Include="Controls\LinkChildWindow.xaml.cs">
       <DependentUpon>LinkChildWindow.xaml</DependentUpon>

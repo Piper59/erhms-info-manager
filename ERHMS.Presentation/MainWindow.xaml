@@ -4,7 +4,9 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
+                 xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
                  xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:v="clr-namespace:ERHMS.Presentation.Views"
                  xmlns:vm="clr-namespace:ERHMS.Presentation.ViewModels"
@@ -52,55 +54,123 @@
         <dock:DockingManager DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
             <dock:DockingManager.Resources>
                 <DataTemplate DataType="{x:Type vm:DataSourceListViewModel}">
-                    <v:DataSourceListView />
+                    <v:DataSourceListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:DataSourceListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ResponderListViewModel}">
-                    <v:ResponderListView />
+                    <v:ResponderListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:ResponderListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ResponderDetailViewModel}">
-                    <v:ResponderDetailView />
+                    <v:ResponderDetailView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:ResponderDetailView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:IncidentListViewModel}">
-                    <v:IncidentListView />
+                    <v:IncidentListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:IncidentListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:IncidentViewModel}">
-                    <v:IncidentView />
+                    <v:IncidentView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:IncidentView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LocationDetailViewModel}">
-                    <v:LocationDetailView />
+                    <v:LocationDetailView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:LocationDetailView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ViewListViewModel}">
-                    <v:ViewListView />
+                    <v:ViewListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:ViewListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:RecordListViewModel}">
-                    <v:RecordListView />
+                    <v:RecordListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:RecordListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:TemplateListViewModel}">
-                    <v:TemplateListView />
+                    <v:TemplateListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:TemplateListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AssignmentListViewModel}">
-                    <v:AssignmentListView />
+                    <v:AssignmentListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:AssignmentListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:PgmListViewModel}">
-                    <v:PgmListView />
+                    <v:PgmListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:PgmListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:CanvasListViewModel}">
-                    <v:CanvasListView />
+                    <v:CanvasListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:CanvasListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:EmailViewModel}">
-                    <v:EmailView />
+                    <v:EmailView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:EmailView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-                    <v:SettingsView />
+                    <v:SettingsView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:SettingsView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:LogListViewModel}">
-                    <v:LogListView />
+                    <v:LogListView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:LogListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:HelpViewModel}">
-                    <v:HelpView />
+                    <v:HelpView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:HelpView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:AboutViewModel}">
-                    <v:AboutView />
+                    <v:AboutView>
+                        <i:Interaction.Behaviors>
+                            <ctrl:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </v:AboutView>
                 </DataTemplate>
             </dock:DockingManager.Resources>
             <dock:LayoutRoot>
