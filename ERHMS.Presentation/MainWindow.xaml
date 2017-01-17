@@ -103,7 +103,11 @@
                     <v:AboutView />
                 </DataTemplate>
             </dock:DockingManager.Resources>
-            <dock:LayoutRoot />
+            <dock:LayoutRoot>
+                <dock:LayoutPanel>
+                    <dock:LayoutDocumentPane />
+                </dock:LayoutPanel>
+            </dock:LayoutRoot>
         </dock:DockingManager>
     </DockPanel>
 </mah:MetroWindow>
