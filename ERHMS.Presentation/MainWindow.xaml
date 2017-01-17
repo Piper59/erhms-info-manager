@@ -18,9 +18,9 @@
                  WindowTransitionsEnabled="False"
                  Title="{Binding Title}"
                  TitleCaps="False">
-    <mah:MetroWindow.Resources>
+    <Window.Resources>
         <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-    </mah:MetroWindow.Resources>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">

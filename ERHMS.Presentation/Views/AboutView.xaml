@@ -11,11 +11,11 @@
              ctrl:TabControlExtensions.ControlPageNavigationTabControl="{Binding ElementName=TabControl}">
     <mah:MetroTabControl Name="TabControl">
         <mah:MetroTabItem Header="_About">
-            <mah:MetroTabItem.Resources>
+            <TabItem.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
-            </mah:MetroTabItem.Resources>
+            </TabItem.Resources>
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <StackPanel>
                     <StackPanel Margin="0,0,0,50">
