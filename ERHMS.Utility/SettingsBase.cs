@@ -58,6 +58,8 @@ namespace ERHMS.Utility
             }
         }
 
+        protected SettingsBase() { }
+
         public void Save()
         {
             if (!file.Directory.Exists)

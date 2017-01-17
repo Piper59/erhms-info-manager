@@ -39,7 +39,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand UnlinkCommand { get; private set; }
         public RelayCommand CancelCommand { get; private set; }
 
-        public LinkViewModelBase()
+        protected LinkViewModelBase()
         {
             Refresh();
             LinkCommand = new RelayCommand(Link, HasSelectedIncident);

@@ -44,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public RelayCommand CloseCommand { get; private set; }
 
-        public ViewModelBase()
+        protected ViewModelBase()
         {
             PropertyChanged += (sender, e) =>
             {

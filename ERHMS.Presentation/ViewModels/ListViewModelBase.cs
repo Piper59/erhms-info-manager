@@ -54,6 +54,8 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        protected ListViewModelBase() { }
+
         public event EventHandler Selecting;
         private void OnSelecting(EventArgs e)
         {

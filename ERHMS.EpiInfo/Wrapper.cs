@@ -53,5 +53,7 @@ namespace ERHMS.EpiInfo
                 MessageBox.Show("Epi Info encountered an error and must shut down.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        protected Wrapper() { }
     }
 }
