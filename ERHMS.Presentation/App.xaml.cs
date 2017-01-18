@@ -253,6 +253,19 @@ namespace ERHMS.Presentation
                         AccessDriver driver = AccessDriver.Create(database.FullName);
                         databaseNode.Attributes["connectionString"].Value = Configuration.Encrypt(driver.ConnectionString);
                         document.Save(project.FullName);
+                        using (Project _project = new Project(project))
+                        {
+                            foreach (Canvas canvas in _project.GetCanvases())
+                            {
+                                canvas.Content = canvas.Content.Replace("%ROOT_DIRECTORY%", Settings.Default.RootDirectory);
+                                _project.UpdateCanvas(canvas);
+                            }
+                            foreach (Pgm pgm in _project.GetPgms())
+                            {
+                                pgm.Content = pgm.Content.Replace("%ROOT_DIRECTORY%", Settings.Default.RootDirectory);
+                                _project.UpdatePgm(pgm);
+                            }
+                        }
                     }
                 }
                 Settings.Default.DataSources.Add(project.FullName);
