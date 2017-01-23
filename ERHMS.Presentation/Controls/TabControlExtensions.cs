@@ -35,6 +35,7 @@ namespace ERHMS.Presentation.Controls
 
         private static void ControlPageNavigationTabControl_Target_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            // TODO: Use e.KeyboardDevice.Modifiers == ModifierKeys.Control
             if ((e.Key == Key.PageUp || e.Key == Key.PageDown) &&
                 (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
             {
