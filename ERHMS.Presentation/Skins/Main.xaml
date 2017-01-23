@@ -8,12 +8,12 @@
                     xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml" />
+        <ResourceDictionary Source="/MahApps.Metro;component/Styles/Controls.xaml" />
+        <ResourceDictionary Source="/MahApps.Metro;component/Styles/Fonts.xaml" />
+        <ResourceDictionary Source="/MahApps.Metro;component/Styles/Colors.xaml" />
+        <ResourceDictionary Source="/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+        <ResourceDictionary Source="/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+        <ResourceDictionary Source="/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml" />
         <ResourceDictionary Source="../Resources/Icons.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
