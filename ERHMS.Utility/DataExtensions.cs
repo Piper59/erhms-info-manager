@@ -1,28 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
+﻿using System.Data.Common;
+using System.Linq;
+using Property = System.Collections.Generic.KeyValuePair<string, object>;
 
 namespace ERHMS.Utility
 {
     public static class DataExtensions
     {
-        public static string ToSafeString(this DbConnectionStringBuilder @this)
+        private static bool IsCensored(Property property)
         {
-            ICollection<string> properties = new List<string>();
-            foreach (KeyValuePair<string, object> property in @this)
-            {
-                object value = property.Key.ToLower().Contains("password") ? "?" : property.Value;
-                properties.Add(string.Format("{0} = {1}", property.Key, value));
-            }
-            return string.Join(", ", properties);
+            return property.Key.ContainsIgnoreCase("Password") || property.Key.EqualsIgnoreCase("Pwd");
         }
 
-        public static string ToSafeString(string connectionString)
+        private static string FormatProperty(Property property)
         {
-            DbConnectionStringBuilder builder = new DbConnectionStringBuilder
-            {
-                ConnectionString = connectionString
-            };
-            return builder.ToSafeString();
+            return string.Format("{0} = {1}", property.Key, IsCensored(property) ? "?" : property.Value);
+        }
+
+        public static string GetCensoredConnectionString(this DbConnectionStringBuilder @this)
+        {
+            return string.Join(", ", @this.Cast<Property>().Select(property => FormatProperty(property)));
         }
     }
 }

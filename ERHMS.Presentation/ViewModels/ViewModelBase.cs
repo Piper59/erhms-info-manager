@@ -48,7 +48,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             PropertyChanged += (sender, e) =>
             {
-                if (GetType().GetProperty(e.PropertyName).GetCustomAttribute<DirtyCheckAttribute>() != null)
+                if (GetType().GetProperty(e.PropertyName).HasCustomAttribute<DirtyCheckAttribute>())
                 {
                     OnDirtyCheckPropertyChanged(sender, e);
                 }

@@ -1,5 +1,4 @@
-﻿using ERHMS.Utility;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.Messages
@@ -24,7 +23,7 @@ namespace ERHMS.Presentation.Messages
             EventHandler handler = Executing;
             if (handler != null)
             {
-                await ThreadingExtensions.Run(() =>
+                await Task.Factory.StartNew(() =>
                 {
                     handler(this, e);
                 });

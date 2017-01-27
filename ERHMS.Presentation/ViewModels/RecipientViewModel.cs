@@ -98,7 +98,7 @@ namespace ERHMS.Presentation.ViewModels
                 Messenger.Default.Send(new NotifyMessage("Please select a responder or enter an email address."));
                 return false;
             }
-            else if (!IsResponder && !Email.IsValidAddress(EmailAddress))
+            else if (!IsResponder && !MailExtensions.IsValidAddress(EmailAddress))
             {
                 Messenger.Default.Send(new NotifyMessage("Please enter a valid email address."));
                 return false;

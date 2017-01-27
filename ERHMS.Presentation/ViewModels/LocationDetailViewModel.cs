@@ -82,7 +82,7 @@ namespace ERHMS.Presentation.ViewModels
                 location.PropertyChanged -= OnDirtyCheckPropertyChanged;
             };
             UpdateTitle();
-            CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
+            CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Instance.MapLicenseKey);
             Pins = new ObservableCollection<Coordinates>();
             if (HasCoordinates())
             {
@@ -158,7 +158,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Credentials = new Credentials
                 {
-                    ApplicationId = Settings.Default.MapLicenseKey
+                    ApplicationId = Settings.Instance.MapLicenseKey
                 },
                 Query = Location.Address,
                 Options = new GeocodeOptions

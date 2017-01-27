@@ -85,8 +85,8 @@ namespace ERHMS.Presentation.ViewModels
 
         public static void Add(FileInfo file)
         {
-            Settings.Default.DataSources.Add(file.FullName);
-            Settings.Default.Save();
+            Settings.Instance.DataSources.Add(file.FullName);
+            Settings.Instance.Save();
         }
 
         private bool active;

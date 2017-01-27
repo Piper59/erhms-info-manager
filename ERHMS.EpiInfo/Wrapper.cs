@@ -1,6 +1,5 @@
 ﻿using ERHMS.Utility;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,23 +17,14 @@ namespace ERHMS.EpiInfo
             return ConfigurationExtensions.GetApplicationRoot().GetFile(fileName);
         }
 
-        public static string EscapeArg(string arg)
-        {
-            return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
-        }
-
-        public static string FormatArgs(IEnumerable<string> args)
-        {
-            return string.Join(" ", args.Select(arg => EscapeArg(arg ?? "")));
-        }
-
-        protected static Process Execute(Expression<Action<string[]>> expression, params string[] args)
+        protected static Process Execute(Expression<Action<string[]>> expression, params string[] arguments)
         {
             FileInfo executable = GetExecutable(Assembly.GetCallingAssembly());
             string methodName = ((MethodCallExpression)expression.Body).Method.Name;
-            string formattedArgs = FormatArgs(args.Prepend(methodName));
-            Log.Current.DebugFormat("Executing wrapper: {0} {1}", executable.FullName, formattedArgs);
-            return ProcessExtensions.Start(executable, formattedArgs);
+            Process process = ProcessExtensions.Create(executable, arguments.Prepend(methodName));
+            Log.Current.DebugFormat("Executing wrapper: {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
+            process.Start();
+            return process;
         }
 
         protected static void MainBase(Type type, string[] args)

@@ -9,9 +9,9 @@ namespace ERHMS.EpiInfo.Communication
     {
         public static IService Connect()
         {
-            Log.Current.DebugFormat("Connecting to service: {0}", Settings.Default.ServiceAddress);
+            Log.Current.DebugFormat("Connecting to service: {0}", Settings.Instance.ServiceAddress);
             NetNamedPipeBinding binding = new NetNamedPipeBinding();
-            EndpointAddress address = new EndpointAddress(Settings.Default.ServiceAddress);
+            EndpointAddress address = new EndpointAddress(Settings.Instance.ServiceAddress);
             ChannelFactory<IService> factory = new ChannelFactory<IService>(binding, address);
             IService service = factory.CreateChannel();
             try
@@ -21,15 +21,15 @@ namespace ERHMS.EpiInfo.Communication
             }
             catch
             {
-                Log.Current.WarnFormat("Failed to connect to service: {0}", Settings.Default.ServiceAddress);
+                Log.Current.WarnFormat("Failed to connect to service: {0}", Settings.Instance.ServiceAddress);
                 return null;
             }
         }
 
         public ServiceHost OpenHost()
         {
-            Log.Current.DebugFormat("Opening service host: {0}", Settings.Default.ServiceAddress);
-            ServiceHost host = new ServiceHost(this, new Uri(Settings.Default.ServiceAddress));
+            Log.Current.DebugFormat("Opening service host: {0}", Settings.Instance.ServiceAddress);
+            ServiceHost host = new ServiceHost(this, new Uri(Settings.Instance.ServiceAddress));
             ServiceBehaviorAttribute behavior = host.Description.Behaviors.Find<ServiceBehaviorAttribute>();
             behavior.InstanceContextMode = InstanceContextMode.Single;
             host.Description.Behaviors.Add(new ServiceMetadataBehavior());
@@ -42,7 +42,7 @@ namespace ERHMS.EpiInfo.Communication
             }
             catch
             {
-                Log.Current.WarnFormat("Failed to open service host: {0}", Settings.Default.ServiceAddress);
+                Log.Current.WarnFormat("Failed to open service host: {0}", Settings.Instance.ServiceAddress);
                 return null;
             }
         }

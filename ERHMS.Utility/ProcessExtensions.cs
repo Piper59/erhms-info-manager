@@ -1,22 +1,37 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace ERHMS.Utility
 {
     public static class ProcessExtensions
     {
-        public static Process Start(FileInfo executable, string args = "")
+        private static string EscapeArgument(string argument)
         {
-            return Process.Start(new ProcessStartInfo
+            return string.Format("\"{0}\"", argument.Replace("\"", "\"\""));
+        }
+
+        private static string FormatArguments(IEnumerable<string> arguments)
+        {
+            return string.Join(" ", arguments.Select(argument => EscapeArgument(argument ?? "")));
+        }
+
+        public static Process Create(FileInfo executable, IEnumerable<string> arguments = null)
+        {
+            return new Process
             {
-                UseShellExecute = false,
-                WorkingDirectory = executable.DirectoryName,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                FileName = executable.FullName,
-                Arguments = args
-            });
+                StartInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = false,
+                    WorkingDirectory = executable.DirectoryName,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    FileName = executable.FullName,
+                    Arguments = arguments == null ? "" : FormatArguments(arguments)
+                }
+            };
         }
     }
 }

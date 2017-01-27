@@ -105,7 +105,7 @@ namespace ERHMS.EpiInfo
 
         public static Template GetFromResource(Assembly assembly, string resourceName)
         {
-            FileInfo file = IOExtensions.GetTemporaryFile(extension: ".xml");
+            FileInfo file = IOExtensions.GetTemporaryFile(".xml");
             System.IO.File.WriteAllText(file.FullName, assembly.GetManifestResourceText(resourceName));
             return Get(file);
         }

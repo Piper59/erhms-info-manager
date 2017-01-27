@@ -92,7 +92,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             foreach (string value in GetFilteredValues((T)item))
             {
-                if (value != null && value.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+                if (value != null && value.ContainsIgnoreCase(Filter))
                 {
                     return true;
                 }

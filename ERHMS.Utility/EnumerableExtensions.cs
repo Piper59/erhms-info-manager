@@ -6,9 +6,9 @@ namespace ERHMS.Utility
     {
         public static IEnumerable<T> Append<T>(this IEnumerable<T> @this, T item)
         {
-            foreach (T t in @this)
+            foreach (T existingItem in @this)
             {
-                yield return t;
+                yield return existingItem;
             }
             yield return item;
         }
@@ -16,9 +16,9 @@ namespace ERHMS.Utility
         public static IEnumerable<T> Prepend<T>(this IEnumerable<T> @this, T item)
         {
             yield return item;
-            foreach (T t in @this)
+            foreach (T existingItem in @this)
             {
-                yield return t;
+                yield return existingItem;
             }
         }
     }

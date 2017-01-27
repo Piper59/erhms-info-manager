@@ -1,34 +1,16 @@
 ﻿using Epi;
 using Epi.DataSets;
 using ERHMS.Utility;
-using System;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo
 {
     public static class ConfigurationExtensions
     {
-        public static bool FipsMode
-        {
-            get
-            {
-                try
-                {
-                    new MD5CryptoServiceProvider();
-                    return false;
-                }
-                catch (InvalidOperationException)
-                {
-                    return true;
-                }
-            }
-        }
-
         public static DirectoryInfo GetApplicationRoot()
         {
             return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
@@ -36,7 +18,7 @@ namespace ERHMS.EpiInfo
 
         public static DirectoryInfo GetConfigurationRoot()
         {
-            return new DirectoryInfo(Settings.Default.RootDirectory);
+            return new DirectoryInfo(Settings.Instance.RootDirectory);
         }
 
         private static string GetConfigurationFilePath(DirectoryInfo root = null)
@@ -51,7 +33,7 @@ namespace ERHMS.EpiInfo
             string path = GetConfigurationFilePath();
             Log.Current.DebugFormat("Creating configuration: {0}", path);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
-            if (FipsMode)
+            if (CryptographyExtensions.RequiresFipsCompliance())
             {
                 DataRow row = config.TextEncryptionModule.NewRow();
                 row.SetField("FileName", GetApplicationRoot().GetFile("FipsCrypto.dll").FullName);
@@ -106,7 +88,7 @@ namespace ERHMS.EpiInfo
             if (subsource.Exists)
             {
                 DirectoryInfo subtarget = target.GetSubdirectory(subdirectoryName);
-                IOExtensions.Copy(subsource, subtarget);
+                subsource.CopyTo(subtarget, false);
             }
         }
 
@@ -118,8 +100,8 @@ namespace ERHMS.EpiInfo
             CopyIfExists(applicationRoot, configurationRoot, "Resources");
             CopyIfExists(applicationRoot, configurationRoot, "Templates");
             Assembly assembly = Assembly.GetExecutingAssembly();
-            assembly.SaveResource("ERHMS.EpiInfo.LICENSE.txt", configurationRoot.GetFile("LICENSE.txt").FullName);
-            assembly.SaveResource("ERHMS.EpiInfo.NOTICE.txt", configurationRoot.GetFile("NOTICE.txt").FullName);
+            assembly.CopyManifestResourceTo("ERHMS.EpiInfo.LICENSE.txt", configurationRoot.GetFile("LICENSE.txt"));
+            assembly.CopyManifestResourceTo("ERHMS.EpiInfo.NOTICE.txt", configurationRoot.GetFile("NOTICE.txt"));
         }
 
         private static void InitializeSettings(Config config)
@@ -167,7 +149,7 @@ namespace ERHMS.EpiInfo
 
         public static Configuration ChangeRoot(Configuration configuration, DirectoryInfo root)
         {
-            IOExtensions.Copy(GetConfigurationRoot(), root);
+            GetApplicationRoot().CopyTo(root, false);
             Config config = (Config)configuration.ConfigDataSet.Copy();
             SetDirectories(config, root);
             config.RecentView.Clear();

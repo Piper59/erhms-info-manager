@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Core.ServiceClient;
 using Epi.SurveyManagerServiceV2;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +23,7 @@ namespace ERHMS.EpiInfo.Web
 
         public Guid? OrganizationKey
         {
-            get { return Settings.Default.WebSurveyKey; }
+            get { return ConvertExtensions.ToNullableGuid(Settings.Instance.WebSurveyOrganizationKey); }
         }
 
         public Service()

@@ -121,8 +121,8 @@ namespace ERHMS.EpiInfo.Web
             {
                 ServiceObject = new SurveyInfoDTO();
             }
-            ServiceObject.OrganizationName = Settings.Default.OrganizationName;
-            ServiceObject.OrganizationKey = Settings.Default.WebSurveyKey.Value;
+            ServiceObject.OrganizationName = Settings.Instance.WebSurveyOrganizationName;
+            ServiceObject.OrganizationKey = new Guid(Settings.Instance.WebSurveyOrganizationKey);
             ServiceObject.SurveyId = SurveyId;
             ServiceObject.SurveyName = Title;
             ServiceObject.StartDate = StartDate;

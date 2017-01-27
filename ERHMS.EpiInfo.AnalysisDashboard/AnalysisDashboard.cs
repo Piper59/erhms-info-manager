@@ -30,7 +30,7 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
 
         public static Process OpenCanvas(Project project, Canvas canvas, string tag = null)
         {
-            FileInfo file = IOExtensions.GetTemporaryFile(extension: Canvas.FileExtension);
+            FileInfo file = IOExtensions.GetTemporaryFile(Canvas.FileExtension);
             File.WriteAllText(file.FullName, canvas.Content);
             return Execute(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
         }

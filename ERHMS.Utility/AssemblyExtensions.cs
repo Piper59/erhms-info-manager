@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace ERHMS.Utility
@@ -20,9 +21,9 @@ namespace ERHMS.Utility
             return @this.GetCustomAttribute<AssemblyTitleAttribute>().Title;
         }
 
-        public static string GetVersion(this Assembly @this)
+        public static Version GetVersion(this Assembly @this)
         {
-            return @this.GetName().Version.ToString();
+            return @this.GetName().Version;
         }
 
         public static string GetInformationalVersion(this Assembly @this)
@@ -39,10 +40,10 @@ namespace ERHMS.Utility
             }
         }
 
-        public static void SaveResource(this Assembly @this, string resourceName, string path)
+        public static void CopyManifestResourceTo(this Assembly @this, string resourceName, FileInfo file)
         {
             using (Stream source = @this.GetManifestResourceStream(resourceName))
-            using (Stream target = File.Create(path))
+            using (Stream target = file.Create())
             {
                 source.CopyTo(target);
             }

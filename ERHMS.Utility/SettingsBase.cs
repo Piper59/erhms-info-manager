@@ -1,60 +1,34 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace ERHMS.Utility
 {
     public class SettingsBase<TSettings> where TSettings : new()
     {
-        private static readonly Regex NonAscii = new Regex(@"[^\u0020-\u007e]");
-
-        private static FileInfo file;
-
-        public static TSettings Default { get; private set; }
-
-        private static string ToAscii(string value)
-        {
-            return NonAscii.Replace(value, "");
-        }
+        public static FileInfo File { get; private set; }
+        public static TSettings Instance { get; private set; }
 
         static SettingsBase()
         {
             Assembly assembly = Assembly.GetAssembly(typeof(TSettings));
-            file = new FileInfo(Path.Combine(
+            File = new FileInfo(Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                ToAscii(assembly.GetCompany()),
-                ToAscii(assembly.GetProduct()),
-                string.Format("{0}.xml", typeof(TSettings).FullName)));
+                assembly.GetCompany().ToPrintable(),
+                assembly.GetProduct().ToPrintable(),
+                string.Format("{0}.xml", typeof(TSettings).FullName.ToPrintable())));
             try
             {
-                Load();
+                using (Stream stream = System.IO.File.OpenRead(File.FullName))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
+                    Instance = (TSettings)serializer.Deserialize(stream);
+                }
             }
             catch
             {
-                Default = new TSettings();
-            }
-        }
-
-        public static void Reset()
-        {
-            Default = new TSettings();
-        }
-
-        public static void Load()
-        {
-            if (!file.Exists)
-            {
-                Default = new TSettings();
-            }
-            else
-            {
-                using (Stream stream = File.OpenRead(file.FullName))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
-                    Default = (TSettings)serializer.Deserialize(stream);
-                }
+                Instance = new TSettings();
             }
         }
 
@@ -62,11 +36,11 @@ namespace ERHMS.Utility
 
         public void Save()
         {
-            if (!file.Directory.Exists)
+            if (!File.Directory.Exists)
             {
-                file.Directory.Create();
+                File.Directory.Create();
             }
-            using (Stream stream = File.Create(file.FullName))
+            using (Stream stream = System.IO.File.Create(File.FullName))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
                 serializer.Serialize(stream, this);

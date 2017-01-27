@@ -149,23 +149,23 @@ namespace ERHMS.Presentation.ViewModels
                 "FATAL"
             };
             Configuration configuration = Configuration.GetNewInstance();
-            LogLevel = Settings.Default.LogLevel;
-            RootDirectory = Settings.Default.RootDirectory;
+            LogLevel = Settings.Instance.LogLevel;
+            RootDirectory = Settings.Instance.RootDirectory;
             Email = new EmailSettingsViewModel
             {
-                Host = Settings.Default.EmailHost,
-                Port = Settings.Default.EmailPort,
-                Sender = Settings.Default.EmailSender
+                Host = Settings.Instance.EmailHost,
+                Port = Settings.Instance.EmailPort,
+                Sender = Settings.Instance.EmailSender
             };
             Email.PropertyChanged += OnDirtyCheckPropertyChanged;
-            MapLicenseKey = Settings.Default.MapLicenseKey;
+            MapLicenseKey = Settings.Instance.MapLicenseKey;
             WebSurvey = new WebSurveySettingsViewModel
             {
                 Address = configuration.Settings.WebServiceEndpointAddress,
                 WindowsAuthentication = configuration.Settings.WebServiceAuthMode == 1,
                 Binding = BindingExtensions.FromEpiInfoName(configuration.Settings.WebServiceBindingMode),
-                OrganizationName = Settings.Default.OrganizationName,
-                OrganizationKey = Settings.Default.WebSurveyKey
+                OrganizationName = Settings.Instance.WebSurveyOrganizationName,
+                OrganizationKey = ConvertExtensions.ToNullableGuid(Settings.Instance.WebSurveyOrganizationKey)
             };
             WebSurvey.PropertyChanged += OnDirtyCheckPropertyChanged;
             Dirty = false;
@@ -180,7 +180,7 @@ namespace ERHMS.Presentation.ViewModels
                 if (dialog.ShowDialog(true) == DialogResult.OK)
                 {
                     string path = dialog.GetRootDirectory();
-                    if (path.EqualsIgnoreCase(Settings.Default.RootDirectory))
+                    if (path.EqualsIgnoreCase(Settings.Instance.RootDirectory))
                     {
                         RootDirectory = path;
                         RootDirectoryChanged = false;
@@ -206,7 +206,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             ICollection<string> fields = new List<string>();
             Uri uri;
-            if (!string.IsNullOrWhiteSpace(Email.Sender) && !Utility.Email.IsValidAddress(Email.Sender))
+            if (!string.IsNullOrWhiteSpace(Email.Sender) && !MailExtensions.IsValidAddress(Email.Sender))
             {
                 fields.Add("Sender Address");
             }
@@ -232,29 +232,29 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             Configuration configuration = Configuration.GetNewInstance();
-            Settings.Default.LogLevel = LogLevel;
-            Settings.Default.EmailHost = Email.Host;
-            Settings.Default.EmailPort = Email.Port;
-            Settings.Default.EmailSender = Email.Sender;
-            Settings.Default.MapLicenseKey = MapLicenseKey;
+            Settings.Instance.LogLevel = LogLevel;
+            Settings.Instance.EmailHost = Email.Host;
+            Settings.Instance.EmailPort = Email.Port;
+            Settings.Instance.EmailSender = Email.Sender;
+            Settings.Instance.MapLicenseKey = MapLicenseKey;
             configuration.Settings.WebServiceEndpointAddress = WebSurvey.Address;
             configuration.Settings.WebServiceAuthMode = WebSurvey.WindowsAuthentication ? 1 : 0;
             configuration.Settings.WebServiceBindingMode = WebSurvey.Binding.ToEpiInfoName();
-            Settings.Default.OrganizationName = WebSurvey.OrganizationName;
-            Settings.Default.WebSurveyKey = WebSurvey.OrganizationKey;
+            Settings.Instance.WebSurveyOrganizationName = WebSurvey.OrganizationName;
+            Settings.Instance.WebSurveyOrganizationKey = WebSurvey.OrganizationKey.ToString();
             if (RootDirectoryChanged)
             {
                 try
                 {
                     configuration = ConfigurationExtensions.ChangeRoot(configuration, new DirectoryInfo(RootDirectory));
-                    ICollection<string> dataSources = Settings.Default.DataSources.ToList();
-                    Settings.Default.DataSources.Clear();
+                    ICollection<string> dataSources = Settings.Instance.DataSources.ToList();
+                    Settings.Instance.DataSources.Clear();
                     foreach (string dataSource in dataSources)
                     {
-                        Settings.Default.DataSources.Add(dataSource.Replace(Settings.Default.RootDirectory, RootDirectory));
+                        Settings.Instance.DataSources.Add(dataSource.Replace(Settings.Instance.RootDirectory, RootDirectory));
                     }
-                    Settings.Default.RootDirectory = RootDirectory;
-                    Settings.Default.Save();
+                    Settings.Instance.RootDirectory = RootDirectory;
+                    Settings.Instance.Save();
                     configuration.Save();
                     Dirty = false;
                     App.Current.Shutdown();
@@ -268,10 +268,10 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Settings.Default.Save();
+                Settings.Instance.Save();
                 Dirty = false;
                 configuration.Refresh(true);
-                Log.SetLevelName(Settings.Default.LogLevel);
+                Log.SetLevelName(Settings.Instance.LogLevel);
                 Messenger.Default.Send(new ToastMessage("Settings have been saved."));
             }
         }

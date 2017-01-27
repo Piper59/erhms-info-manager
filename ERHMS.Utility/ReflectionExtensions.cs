@@ -7,8 +7,10 @@ namespace ERHMS.Utility
     {
         private static MethodInfo GetMethod(Type type, bool instance, string methodName, Type[] parameterTypes)
         {
-            BindingFlags bindingFlags = instance ? BindingFlags.Instance : BindingFlags.Static;
-            bindingFlags |= BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy;
+            BindingFlags bindingFlags =
+                (instance ? BindingFlags.Instance : BindingFlags.Static) |
+                BindingFlags.Public |
+                BindingFlags.NonPublic;
             return type.GetMethod(methodName, bindingFlags, null, parameterTypes, null);
         }
 

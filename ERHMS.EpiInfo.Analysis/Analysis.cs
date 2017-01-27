@@ -51,7 +51,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public static Process OpenPgm(Project project, Pgm pgm, bool execute, string tag = null)
         {
-            FileInfo file = IOExtensions.GetTemporaryFile(extension: Pgm.FileExtension);
+            FileInfo file = IOExtensions.GetTemporaryFile(Pgm.FileExtension);
             File.WriteAllText(file.FullName, pgm.Content);
             return Execute(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
         }
@@ -166,7 +166,7 @@ namespace ERHMS.EpiInfo.Analysis
                                 }
                             }
                             form.AddCommand(mappings.GetCommands());
-                            FileInfo csv = IOExtensions.GetTemporaryFile(extension: ".csv");
+                            FileInfo csv = IOExtensions.GetTemporaryFile(".csv");
                             string csvConnectionString = GetCsvConnectionString(csv);
                             string csvFileName = csv.Name.Replace(".", "#");
                             form.AddCommand(string.Format(

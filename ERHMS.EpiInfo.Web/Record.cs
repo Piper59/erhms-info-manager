@@ -24,11 +24,11 @@ namespace ERHMS.EpiInfo.Web
             {
                 if (type == typeof(bool))
                 {
-                    if (TrueValues.Contains(value, StringComparison.OrdinalIgnoreCase))
+                    if (TrueValues.ContainsIgnoreCase(value))
                     {
                         return true;
                     }
-                    else if (FalseValues.Contains(value, StringComparison.OrdinalIgnoreCase))
+                    else if (FalseValues.ContainsIgnoreCase(value))
                     {
                         return false;
                     }

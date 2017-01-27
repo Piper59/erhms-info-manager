@@ -28,7 +28,7 @@ namespace ERHMS.EpiInfo
                 name,
                 location.FullName,
                 driver,
-                builder.ToSafeString(),
+                builder.GetCensoredConnectionString(),
                 databaseName);
             location.Create();
             Project project = new Project
@@ -52,7 +52,7 @@ namespace ERHMS.EpiInfo
             {
                 project.Metadata.CreateMetadataTables();
                 project.Metadata.AddVersionColumn();
-                project.SetVersion(Assembly.GetExecutingAssembly().GetVersion());
+                project.SetVersion(Assembly.GetExecutingAssembly().GetVersion().ToString());
                 project.Metadata.CreateCanvasesTable();
             }
             project.Save();

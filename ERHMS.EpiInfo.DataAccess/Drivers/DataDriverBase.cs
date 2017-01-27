@@ -21,7 +21,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         protected DataDriverBase(DataProvider provider, DbConnectionStringBuilder builder, string databaseName)
         {
-            Log.Current.DebugFormat("Opening data driver: {0}, {1}", provider.ToInvariantName(), builder.ToSafeString());
+            Log.Current.DebugFormat("Opening data driver: {0}, {1}", provider.ToInvariantName(), builder.GetCensoredConnectionString());
             factory = DbProviderFactories.GetFactory(provider.ToInvariantName());
             Provider = provider;
             Builder = builder;

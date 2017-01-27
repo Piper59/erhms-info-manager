@@ -77,15 +77,15 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     fields.Add("Birth Date");
                 }
-                if (!Email.IsValidAddress(Responder.EmailAddress))
+                if (!MailExtensions.IsValidAddress(Responder.EmailAddress))
                 {
                     fields.Add("Email Address");
                 }
-                if (!string.IsNullOrWhiteSpace(Responder.ContactEmailAddress) && !Email.IsValidAddress(Responder.ContactEmailAddress))
+                if (!string.IsNullOrWhiteSpace(Responder.ContactEmailAddress) && !MailExtensions.IsValidAddress(Responder.ContactEmailAddress))
                 {
                     fields.Add("Emergency Contact Email Address");
                 }
-                if (!string.IsNullOrWhiteSpace(Responder.OrganizationEmailAddress) && !Email.IsValidAddress(Responder.OrganizationEmailAddress))
+                if (!string.IsNullOrWhiteSpace(Responder.OrganizationEmailAddress) && !MailExtensions.IsValidAddress(Responder.OrganizationEmailAddress))
                 {
                     fields.Add("Organization Email Address");
                 }
