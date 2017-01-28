@@ -23,7 +23,7 @@ namespace ERHMS.EpiInfo.Web
 
         public Guid? OrganizationKey
         {
-            get { return ConvertExtensions.ToNullableGuid(Settings.Instance.WebSurveyOrganizationKey); }
+            get { return ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey); }
         }
 
         public Service()

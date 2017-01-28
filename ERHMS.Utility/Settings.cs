@@ -16,8 +16,8 @@ namespace ERHMS.Utility
         public int? EmailPort { get; set; }
         public string EmailSender { get; set; }
         public string MapLicenseKey { get; set; }
-        public string WebSurveyOrganizationName { get; set; }
-        public string WebSurveyOrganizationKey { get; set; }
+        public string OrganizationName { get; set; }
+        public string OrganizationKey { get; set; }
 
         public Settings()
         {
@@ -36,8 +36,8 @@ namespace ERHMS.Utility
             EmailPort = 25;
             EmailSender = null;
             MapLicenseKey = "Am2Kmtkt9FKkcW1k9o0NS6NnySTT9JtrAZWeZxwpPP0Ki21n2kyLpIohVd224-uy";
-            WebSurveyOrganizationName = null;
-            WebSurveyOrganizationKey = null;
+            OrganizationName = null;
+            OrganizationKey = null;
         }
 
         public bool IsEmailConfigured()

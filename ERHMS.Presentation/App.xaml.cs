@@ -142,7 +142,7 @@ namespace ERHMS.Presentation
             MainWindow window = new MainWindow(Locator.Main);
             window.ContentRendered += (sender, e) =>
             {
-                if (!Settings.Instance.LicenseAccepted)
+                if (!Settings.Default.LicenseAccepted)
                 {
                     LicenseDialog dialog = new LicenseDialog(window);
                     dialog.Accepted += (_sender, _e) =>
@@ -151,8 +151,8 @@ namespace ERHMS.Presentation
                         {
                             Locator.Main.OpenDataSourceListView();
                             Messenger.Default.Send(new NotifyMessage("Welcome", Welcome));
-                            Settings.Instance.LicenseAccepted = true;
-                            Settings.Instance.Save();
+                            Settings.Default.LicenseAccepted = true;
+                            Settings.Default.Save();
                         }
                         else
                         {
@@ -187,12 +187,12 @@ namespace ERHMS.Presentation
                 string message = string.Format("Reset settings for {0}?", Title);
                 if (MessageBox.Show(message, Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    Settings.Instance.Reset();
-                    Settings.Instance.LicenseAccepted = true;
-                    Settings.Instance.Save();
+                    Settings.Default.Reset();
+                    Settings.Default.LicenseAccepted = true;
+                    Settings.Default.Save();
                 }
             }
-            if (!string.IsNullOrEmpty(Settings.Instance.RootDirectory))
+            if (!string.IsNullOrEmpty(Settings.Default.RootDirectory))
             {
                 try
                 {
@@ -200,11 +200,11 @@ namespace ERHMS.Presentation
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Instance.RootDirectory);
-                    Settings.Instance.RootDirectory = null;
+                    Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Default.RootDirectory);
+                    Settings.Default.RootDirectory = null;
                 }
             }
-            while (string.IsNullOrEmpty(Settings.Instance.RootDirectory))
+            while (string.IsNullOrEmpty(Settings.Default.RootDirectory))
             {
                 Log.Current.Debug("Prompting for root directory");
                 using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
@@ -213,18 +213,18 @@ namespace ERHMS.Presentation
                     {
                         string path = dialog.GetRootDirectory();
                         Log.Current.DebugFormat("Setting root directory: {0}", path);
-                        Settings.Instance.RootDirectory = path;
+                        Settings.Default.RootDirectory = path;
                         try
                         {
                             ConfigurationExtensions.CreateAndOrLoad();
                             AddDataSources();
-                            Settings.Instance.Save();
+                            Settings.Default.Save();
                         }
                         catch (UnauthorizedAccessException)
                         {
                             Log.Current.WarnFormat("Access denied to root directory: {0}", path);
                             ShowErrorMessage(string.Format("You do not have access to {0}. Please choose another location.", path));
-                            Settings.Instance.RootDirectory = null;
+                            Settings.Default.RootDirectory = null;
                         }
                     }
                     else
@@ -258,18 +258,18 @@ namespace ERHMS.Presentation
                         {
                             foreach (Canvas canvas in _project.GetCanvases())
                             {
-                                canvas.Content = canvas.Content.Replace("%ROOT_DIRECTORY%", Settings.Instance.RootDirectory);
+                                canvas.Content = canvas.Content.Replace("%ROOT_DIRECTORY%", Settings.Default.RootDirectory);
                                 _project.UpdateCanvas(canvas);
                             }
                             foreach (Pgm pgm in _project.GetPgms())
                             {
-                                pgm.Content = pgm.Content.Replace("%ROOT_DIRECTORY%", Settings.Instance.RootDirectory);
+                                pgm.Content = pgm.Content.Replace("%ROOT_DIRECTORY%", Settings.Default.RootDirectory);
                                 _project.UpdatePgm(pgm);
                             }
                         }
                     }
                 }
-                Settings.Instance.DataSources.Add(project.FullName);
+                Settings.Default.DataSources.Add(project.FullName);
             }
         }
 

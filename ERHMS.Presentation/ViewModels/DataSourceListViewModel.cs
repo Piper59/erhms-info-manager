@@ -54,7 +54,7 @@ namespace ERHMS.Presentation.ViewModels
         protected override ICollectionView GetItems()
         {
             ICollection<ProjectInfo> items = new List<ProjectInfo>();
-            foreach (string path in Settings.Instance.DataSources.ToList())
+            foreach (string path in Settings.Default.DataSources.ToList())
             {
                 ProjectInfo projectInfo;
                 FileInfo file = new FileInfo(path);
@@ -106,8 +106,8 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Remove(FileInfo file)
         {
-            Settings.Instance.DataSources.RemoveWhere(dataSource => dataSource.EqualsIgnoreCase(file.FullName));
-            Settings.Instance.Save();
+            Settings.Default.DataSources.RemoveWhere(dataSource => dataSource.EqualsIgnoreCase(file.FullName));
+            Settings.Default.Save();
         }
 
         public void Remove()

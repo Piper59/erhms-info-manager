@@ -62,7 +62,7 @@ namespace ERHMS.EpiInfo
             };
             appender.ActivateOptions();
             Hierarchy.Root.AddAppender(appender);
-            SetLevelName(Settings.Instance.LogLevel);
+            SetLevelName(Settings.Default.LogLevel);
             Hierarchy.Configured = true;
         }
 

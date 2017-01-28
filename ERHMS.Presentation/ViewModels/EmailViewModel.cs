@@ -240,7 +240,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            if (!Settings.Instance.IsEmailConfigured())
+            if (!Settings.Default.IsEmailConfigured())
             {
                 RequestConfiguration("Please configure email settings.");
                 return;
@@ -269,13 +269,13 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 try
                 {
-                    MailMessage message = Settings.Instance.GetMailMessage();
+                    MailMessage message = Settings.Default.GetMailMessage();
                     message.Subject = Subject;
                     foreach (AttachmentViewModel attachment in Attachments)
                     {
                         message.Attachments.Add(new Attachment(attachment.File.FullName));
                     }
-                    using (SmtpClient client = Settings.Instance.GetSmtpClient())
+                    using (SmtpClient client = Settings.Default.GetSmtpClient())
                     {
                         foreach (RecipientViewModel recipient in Recipients)
                         {

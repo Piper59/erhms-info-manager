@@ -8,7 +8,7 @@ namespace ERHMS.Utility
     public class SettingsBase<TSettings> where TSettings : new()
     {
         public static FileInfo File { get; private set; }
-        public static TSettings Instance { get; private set; }
+        public static TSettings Default { get; private set; }
 
         static SettingsBase()
         {
@@ -23,12 +23,12 @@ namespace ERHMS.Utility
                 using (Stream stream = System.IO.File.OpenRead(File.FullName))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
-                    Instance = (TSettings)serializer.Deserialize(stream);
+                    Default = (TSettings)serializer.Deserialize(stream);
                 }
             }
             catch
             {
-                Instance = new TSettings();
+                Default = new TSettings();
             }
         }
 
