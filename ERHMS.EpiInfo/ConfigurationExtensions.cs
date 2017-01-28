@@ -53,7 +53,11 @@ namespace ERHMS.EpiInfo
         {
             DirectoryInfo root = GetConfigurationRoot();
             SetDirectories(config, root);
-            DeleteIfExists(root.GetSubdirectory("Resources", "PHIN"));
+            DirectoryInfo phin = root.GetSubdirectory("Resources", "PHIN");
+            if (phin.Exists)
+            {
+                phin.Delete();
+            }
             DirectoryInfo templates = new DirectoryInfo(config.Directories.Single().Templates);
             templates.CreateSubdirectory("Fields");
             templates.CreateSubdirectory("Forms");
@@ -72,14 +76,6 @@ namespace ERHMS.EpiInfo
             directories.Samples = root.CreateSubdirectory(Path.Combine("Resources", "Samples")).FullName;
             directories.Templates = root.CreateSubdirectory("Templates").FullName;
             directories.Working = Path.GetTempPath();
-        }
-
-        private static void DeleteIfExists(DirectoryInfo directory)
-        {
-            if (directory.Exists)
-            {
-                directory.Delete();
-            }
         }
 
         private static void CopyIfExists(DirectoryInfo source, DirectoryInfo target, string subdirectoryName)

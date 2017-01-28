@@ -7,42 +7,60 @@ namespace ERHMS.Utility
 {
     public class SettingsBase<TSettings> where TSettings : new()
     {
-        public static FileInfo File { get; private set; }
+        private static FileInfo file;
+        private static XmlSerializer serializer;
+
         public static TSettings Default { get; private set; }
 
         static SettingsBase()
         {
+            serializer = new XmlSerializer(typeof(TSettings));
             Assembly assembly = Assembly.GetAssembly(typeof(TSettings));
-            File = new FileInfo(Path.Combine(
+            file = new FileInfo(Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 assembly.GetCompany().ToPrintable(),
                 assembly.GetProduct().ToPrintable(),
                 string.Format("{0}.xml", typeof(TSettings).FullName.ToPrintable())));
+            Default = Load();
+        }
+
+        public static FileInfo GetFile()
+        {
+            file.Refresh();
+            return file;
+        }
+
+        public static TSettings Load(out bool loaded)
+        {
             try
             {
-                using (Stream stream = System.IO.File.OpenRead(File.FullName))
+                using (Stream stream = file.OpenRead())
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
-                    Default = (TSettings)serializer.Deserialize(stream);
+                    TSettings settings = (TSettings)serializer.Deserialize(stream);
+                    loaded = true;
+                    return settings;
                 }
             }
             catch
             {
-                Default = new TSettings();
+                loaded = false;
+                return new TSettings();
             }
+        }
+
+        public static TSettings Load()
+        {
+            bool loaded;
+            return Load(out loaded);
         }
 
         protected SettingsBase() { }
 
         public void Save()
         {
-            if (!File.Directory.Exists)
+            file.Directory.Create();
+            using (Stream stream = file.Create())
             {
-                File.Directory.Create();
-            }
-            using (Stream stream = System.IO.File.Create(File.FullName))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(TSettings));
                 serializer.Serialize(stream, this);
             }
         }

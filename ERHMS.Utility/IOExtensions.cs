@@ -10,7 +10,14 @@ namespace ERHMS.Utility
     {
         public static string NormalizeExtension(string extension)
         {
-            return extension.StartsWith(".") ? extension : string.Format(".{0}", extension);
+            if (string.IsNullOrEmpty(extension))
+            {
+                return "";
+            }
+            else
+            {
+                return extension.StartsWith(".") ? extension : string.Format(".{0}", extension);
+            }
         }
 
         public static FileInfo GetFile(this DirectoryInfo @this, params string[] paths)
@@ -46,14 +53,6 @@ namespace ERHMS.Utility
             }
         }
 
-        public static void DeleteIfExists(this DirectoryInfo @this)
-        {
-            if (@this.Exists)
-            {
-                @this.Delete();
-            }
-        }
-
         public static void Recycle(this FileInfo @this)
         {
             FileSystem.DeleteFile(@this.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
@@ -66,14 +65,16 @@ namespace ERHMS.Utility
 
         public static FileInfo GetTemporaryFile(string extension)
         {
+            extension = NormalizeExtension(extension);
             string path = Path.GetTempPath();
             FileInfo file;
             do
             {
-                string fileName = string.Format("ERHMS_{0:N}{1}", Guid.NewGuid(), NormalizeExtension(extension));
+                string fileName = string.Format("ERHMS_{0:N}{1}", Guid.NewGuid(), extension);
                 file = new FileInfo(Path.Combine(path, fileName));
             } while (file.Exists);
             using (file.OpenWrite()) { }
+            file.Refresh();
             return file;
         }
     }

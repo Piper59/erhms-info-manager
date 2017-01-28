@@ -44,7 +44,7 @@ namespace ERHMS.EpiInfo.MakeView
         {
             if (ProjectExplorer.IsProjectLoaded)
             {
-                ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "CloseCurrentProject", Type.EmptyTypes, null);
+                ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "CloseCurrentProject");
             }
             try
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 
 namespace ERHMS.Utility
 {
@@ -12,18 +13,21 @@ namespace ERHMS.Utility
             return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
         }
 
+        private static string GetDescription(FieldInfo field)
+        {
+            DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
+            return attribute == null ? null : attribute.Description;
+        }
+
         public static string ToDescription(Enum value)
         {
-            return value.GetType()
-                .GetField(value.ToString())
-                .GetCustomAttribute<DescriptionAttribute>()
-                .Description;
+            return GetDescription(value.GetType().GetField(value.ToString()));
         }
 
         public static TEnum FromDescription<TEnum>(string description)
         {
             return (TEnum)typeof(TEnum).GetFields()
-                .Single(field => field.GetCustomAttribute<DescriptionAttribute>().Description == description)
+                .Single(field => GetDescription(field) == description)
                 .GetValue(null);
         }
     }
