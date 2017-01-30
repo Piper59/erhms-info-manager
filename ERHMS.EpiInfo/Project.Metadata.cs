@@ -1,7 +1,6 @@
 ﻿using Epi;
 using Epi.Data;
 using ERHMS.Utility;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -12,22 +11,13 @@ namespace ERHMS.EpiInfo
     {
         public string GetVersion()
         {
-            string sql = "SELECT ERHMSVersion FROM metaDbInfo";
-            Query query = Driver.CreateQuery(sql);
-            try
-            {
-                return (string)Driver.ExecuteScalar(query);
-            }
-            catch (Exception ex)
-            {
-                Log.Current.Warn("Could not determine version", ex);
-                return null;
-            }
+            string sql = "SELECT [ERHMSVersion] FROM [metaDbInfo]";
+            return (string)Driver.ExecuteScalar(Driver.CreateQuery(sql));
         }
 
         public void SetVersion(string version)
         {
-            string sql = "UPDATE metaDbInfo SET ERHMSVersion = @ERHMSVersion";
+            string sql = "UPDATE [metaDbInfo] SET [ERHMSVersion] = @ERHMSVersion";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ERHMSVersion", DbType.String, version, 255));
             Driver.ExecuteNonQuery(query);
@@ -35,17 +25,17 @@ namespace ERHMS.EpiInfo
 
         public DataTable GetFieldsAsDataTable()
         {
-            string sql = "SELECT * FROM metaFields";
+            string sql = "SELECT * FROM [metaFields]";
             return Driver.Select(Driver.CreateQuery(sql));
         }
 
         public IEnumerable<int> GetSortedFieldIds(int viewId)
         {
             string sql = @"
-                SELECT F.FieldId, F.TabIndex, F.PageId, P.[Position]
-                FROM metaFields AS F
-                LEFT OUTER JOIN metaPages AS P ON F.PageId = P.PageId
-                WHERE F.ViewId = @ViewId";
+                SELECT F.[FieldId], F.[TabIndex], F.[PageId], P.[Position]
+                FROM [metaFields] AS F
+                LEFT OUTER JOIN [metaPages] AS P ON F.[PageId] = P.[PageId]
+                WHERE F.[ViewId] = @ViewId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
             DataTable fields = Driver.Select(query);
@@ -88,7 +78,7 @@ namespace ERHMS.EpiInfo
 
         public IEnumerable<Canvas> GetCanvases()
         {
-            string sql = "SELECT * FROM metaCanvases";
+            string sql = "SELECT * FROM [metaCanvases]";
             foreach (DataRow row in Driver.Select(Driver.CreateQuery(sql)).Rows)
             {
                 yield return new Canvas
@@ -108,8 +98,8 @@ namespace ERHMS.EpiInfo
         public void InsertPgm(Pgm pgm)
         {
             Log.Current.DebugFormat("Inserting PGM: {0}", pgm.Name);
-            Metadata.InsertPgm(pgm.Name, pgm.Content ?? "", pgm.Comment ?? "", pgm.Author ?? "");
-            string sql = "SELECT MAX(ProgramId) FROM metaPrograms";
+            Metadata.InsertPgm(pgm.Name, pgm.Content, pgm.Comment, pgm.Author);
+            string sql = "SELECT MAX([ProgramId]) FROM [metaPrograms]";
             pgm.PgmId = (int)Driver.ExecuteScalar(Driver.CreateQuery(sql));
         }
 
@@ -117,14 +107,14 @@ namespace ERHMS.EpiInfo
         {
             Log.Current.DebugFormat("Inserting canvas: {0}", canvas.Name);
             {
-                string sql = "INSERT INTO metaCanvases (Name, Content) VALUES (@Name, @Content)";
+                string sql = "INSERT INTO [metaCanvases] ([Name], [Content]) VALUES (@Name, @Content)";
                 Query query = Driver.CreateQuery(sql);
                 query.Parameters.Add(new QueryParameter("@Name", DbType.String, canvas.Name));
-                query.Parameters.Add(new QueryParameter("@Content", DbType.String, canvas.Content ?? ""));
+                query.Parameters.Add(new QueryParameter("@Content", DbType.String, canvas.Content));
                 Driver.ExecuteNonQuery(query);
             }
             {
-                string sql = "SELECT MAX(CanvasId) FROM metaCanvases";
+                string sql = "SELECT MAX([CanvasId]) FROM [metaCanvases]";
                 canvas.CanvasId = (int)Driver.ExecuteScalar(Driver.CreateQuery(sql));
             }
         }
@@ -138,7 +128,7 @@ namespace ERHMS.EpiInfo
         public void UpdateCanvas(Canvas canvas)
         {
             Log.Current.DebugFormat("Updating canvas: {0}", canvas.Name);
-            string sql = "UPDATE metaCanvases SET Name = @Name, Content = @Content WHERE CanvasId = @CanvasId";
+            string sql = "UPDATE [metaCanvases] SET [Name] = @Name, [Content] = @Content WHERE [CanvasId] = @CanvasId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@Name", DbType.String, canvas.Name));
             query.Parameters.Add(new QueryParameter("@Content", DbType.String, canvas.Content));
@@ -148,6 +138,7 @@ namespace ERHMS.EpiInfo
 
         public void DeleteView(View view)
         {
+            Log.Current.DebugFormat("Deleting view: {0}", view.Name);
             ViewDeleter deleter = new ViewDeleter(this);
             deleter.DeleteViewAndDescendants(view.Id);
         }
@@ -161,7 +152,7 @@ namespace ERHMS.EpiInfo
         public void DeleteCanvas(Canvas canvas)
         {
             Log.Current.DebugFormat("Deleting canvas: {0}", canvas.Name);
-            string sql = "DELETE FROM metaCanvases WHERE CanvasId = @CanvasId";
+            string sql = "DELETE FROM [metaCanvases] WHERE [CanvasId] = @CanvasId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@CanvasId", DbType.Int32, canvas.CanvasId));
             Driver.ExecuteNonQuery(query);

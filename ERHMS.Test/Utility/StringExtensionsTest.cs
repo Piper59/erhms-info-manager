@@ -24,13 +24,28 @@ namespace ERHMS.Test.Utility
         [Test]
         public void ToPrintableTest()
         {
-            char[] characters = Enumerable.Range(0, 0xffff)
+            char[] chars = Enumerable.Range(0, 0xffff)
                 .Select(codePoint => Convert.ToChar(codePoint))
                 .ToArray();
-            char[] printables = new string(characters).ToPrintable().ToCharArray();
-            Assert.AreEqual(printables.Length, 95);
-            Assert.AreEqual(printables.Min(), 0x20);
-            Assert.AreEqual(printables.Max(), 0x7e);
+            char[] printableChars = new string(chars).ToPrintable().ToCharArray();
+            Assert.AreEqual(printableChars.Length, 95);
+            Assert.AreEqual(printableChars.Min(), 0x20);
+            Assert.AreEqual(printableChars.Max(), 0x7e);
+        }
+
+        [Test]
+        public void MakeUniqueTest()
+        {
+            string[] values = new string[]
+            {
+                "test",
+                "test (2)",
+                "TEST (3)"
+            };
+            string format = "{0} ({1})";
+            Assert.AreEqual("test".MakeUnique(format, value => false), "test");
+            Assert.AreEqual("test".MakeUnique(format, value => values.Contains(value)), "test (3)");
+            Assert.AreEqual("test".MakeUnique(format, value => values.ContainsIgnoreCase(value)), "test (4)");
         }
     }
 }

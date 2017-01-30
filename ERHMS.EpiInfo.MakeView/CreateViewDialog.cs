@@ -51,9 +51,9 @@ namespace ERHMS.EpiInfo.MakeView
             {
                 case InvalidViewNameReason.Empty:
                     return "Please enter a form name.";
-                case InvalidViewNameReason.InvalidCharacter:
+                case InvalidViewNameReason.InvalidChar:
                     return "Please enter a form name that contains only letters, numbers, and underscores.";
-                case InvalidViewNameReason.InvalidFirstCharacter:
+                case InvalidViewNameReason.InvalidFirstChar:
                     return "Please enter a form name that begins with a letter.";
                 case InvalidViewNameReason.Duplicate:
                     return "This form name is already in use. Please enter a different form name.";

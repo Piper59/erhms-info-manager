@@ -7,17 +7,17 @@ using View = Epi.View;
 
 namespace ERHMS.EpiInfo.Enter
 {
-    public class Enter : Wrapper
+    public static class Enter
     {
         [STAThread]
         internal static void Main(string[] args)
         {
-            MainBase(typeof(Enter), args);
+            WrapperBase.MainBase(typeof(Enter), args);
         }
 
         public static Process Execute()
         {
-            return Execute(args => Main_Execute(args));
+            return WrapperBase.Execute(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -29,7 +29,7 @@ namespace ERHMS.EpiInfo.Enter
 
         public static Process OpenView(View view, object record = null)
         {
-            Process process = Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
+            Process process = WrapperBase.Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
             if (record != null)
             {
                 foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
@@ -75,7 +75,7 @@ namespace ERHMS.EpiInfo.Enter
 
         public static Process OpenRecord(View view, int uniqueKey)
         {
-            return Execute(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
+            return WrapperBase.Execute(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
         }
         private static void Main_OpenRecord(string[] args)
         {

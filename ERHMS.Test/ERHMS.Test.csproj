@@ -72,9 +72,11 @@
     <Compile Include="Utility\SettingsBaseTest.cs" />
     <Compile Include="Utility\SingleInstanceExecuterTest.cs" />
     <Compile Include="Utility\StringExtensionsTest.cs" />
+    <Compile Include="Utility\XmlExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Utility\Resource.txt" />
+    <EmbeddedResource Include="Utility\Message.txt" />
+    <EmbeddedResource Include="Utility\People.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

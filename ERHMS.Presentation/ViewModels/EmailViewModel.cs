@@ -169,7 +169,7 @@ namespace ERHMS.Presentation.ViewModels
         private void RefreshViews()
         {
             Views = DataContext.GetViews()
-                .Where(view => view.IsPublished())
+                .Where(view => view.IsWebSurvey())
                 .OrderBy(view => view.Name)
                 .ToList();
         }
@@ -304,7 +304,7 @@ namespace ERHMS.Presentation.ViewModels
                                             "{0}{1}{1}URL: {2}",
                                             Body.TrimEnd(),
                                             Environment.NewLine,
-                                            SelectedView.GetUrl());
+                                            SelectedView.GetWebSurveyUrl());
                                     }
                                 }
                                 else

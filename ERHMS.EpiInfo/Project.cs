@@ -3,53 +3,39 @@ using Epi.Data;
 using Epi.Data.Services;
 using ERHMS.Utility;
 using System;
-using System.Data.Common;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo
 {
     public partial class Project : Epi.Project
     {
         public new const string FileExtension = ".prj";
-        private static readonly Regex InvalidViewNameCharacter = new Regex(@"[^a-zA-Z0-9_]");
 
-        public static string SanitizeViewName(string viewName)
+        public static Project Create(ProjectCreationInfo info)
         {
-            return InvalidViewNameCharacter.Replace(viewName, "");
-        }
-
-        public static Project Create(string name, string description, DirectoryInfo location, string driver, DbConnectionStringBuilder builder, string databaseName, bool initialize)
-        {
-            Log.Current.DebugFormat(
-                "Creating project: {0}, {1}, {2}, {3}, {4}",
-                name,
-                location.FullName,
-                driver,
-                builder.GetCensoredConnectionString(),
-                databaseName);
-            location.Create();
+            Log.Current.DebugFormat("Creating project: {0}", info.ToString());
+            info.Location.Create();
             Project project = new Project
             {
                 Id = Guid.NewGuid(),
-                Name = name,
-                Description = description,
-                Location = location,
-                CollectedDataDriver = driver,
-                CollectedDataConnectionString = builder.ConnectionString
+                Name = info.Name,
+                Description = info.Description,
+                Location = info.Location.FullName,
+                CollectedDataDriver = info.Driver,
+                CollectedDataConnectionString = info.Builder.ConnectionString
             };
             project.CollectedDataDbInfo = new DbDriverInfo
             {
-                DBCnnStringBuilder = builder,
-                DBName = databaseName
+                DBCnnStringBuilder = info.Builder,
+                DBName = info.DatabaseName
             };
-            project.CollectedData.Initialize(project.CollectedDataDbInfo, driver, false);
+            project.CollectedData.Initialize(project.CollectedDataDbInfo, info.Driver, false);
             project.MetadataSource = MetadataSource.SameDb;
             project.Metadata.AttachDbDriver(project.Driver);
-            if (initialize)
+            if (info.Initialize)
             {
+                Log.Current.DebugFormat("Initializing project: {0}", project.FilePath);
                 project.Metadata.CreateMetadataTables();
                 project.Metadata.AddVersionColumn();
                 project.SetVersion(Assembly.GetExecutingAssembly().GetVersion().ToString());
@@ -59,25 +45,14 @@ namespace ERHMS.EpiInfo
             return project;
         }
 
-        public new DirectoryInfo Location
+        public new MetadataDbProvider Metadata
         {
-            get { return new DirectoryInfo(base.Location); }
-            set { base.Location = value.FullName; }
-        }
-
-        public FileInfo File
-        {
-            get { return new FileInfo(FilePath); }
+            get { return (MetadataDbProvider)base.Metadata; }
         }
 
         public IDbDriver Driver
         {
             get { return CollectedData.GetDbDriver(); }
-        }
-
-        public new MetadataDbProvider Metadata
-        {
-            get { return (MetadataDbProvider)base.Metadata; }
         }
 
         private Project() { }
@@ -93,56 +68,33 @@ namespace ERHMS.EpiInfo
 
         public bool IsValidViewName(string viewName, out InvalidViewNameReason reason)
         {
-            if (string.IsNullOrWhiteSpace(viewName))
+            if (ViewExtensions.IsValidName(viewName, out reason))
             {
-                reason = InvalidViewNameReason.Empty;
-                return false;
-            }
-            else if (InvalidViewNameCharacter.IsMatch(viewName))
-            {
-                reason = InvalidViewNameReason.InvalidCharacter;
-                return false;
-            }
-            else if (!char.IsLetter(viewName.First()))
-            {
-                reason = InvalidViewNameReason.InvalidFirstCharacter;
-                return false;
-            }
-            else if (Views.Names.Contains(viewName))
-            {
-                reason = InvalidViewNameReason.Duplicate;
-                return false;
+                if (Views.Names.ContainsIgnoreCase(viewName))
+                {
+                    reason = InvalidViewNameReason.Duplicate;
+                    return false;
+                }
+                else
+                {
+                    reason = InvalidViewNameReason.None;
+                    return true;
+                }
             }
             else
             {
-                reason = InvalidViewNameReason.None;
-                return true;
+                return false;
             }
         }
 
         public string SuggestViewName(string viewName)
         {
-            string baseViewName = SanitizeViewName(viewName);
-            if (!Views.Names.Contains(baseViewName))
-            {
-                return baseViewName;
-            }
-            else
-            {
-                for (int copy = 2; ; copy++)
-                {
-                    string copyViewName = string.Format("{0}_{1}", baseViewName, copy);
-                    if (!Views.Names.Contains(copyViewName))
-                    {
-                        return copyViewName;
-                    }
-                }
-            }
+            return ViewExtensions.SanitizeName(viewName).MakeUnique("{0}_{1}", value => Views.Names.ContainsIgnoreCase(value));
         }
 
         public override void Save()
         {
-            Log.Current.DebugFormat("Saving project: {0}", File.FullName);
+            Log.Current.DebugFormat("Saving project: {0}", FilePath);
             base.Save();
         }
     }

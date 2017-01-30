@@ -15,7 +15,7 @@ using View = Epi.View;
 
 namespace ERHMS.EpiInfo.Analysis
 {
-    public class Analysis : Wrapper
+    public static class Analysis
     {
         private static string GetReadCommand(string projectPath, string viewName)
         {
@@ -34,12 +34,12 @@ namespace ERHMS.EpiInfo.Analysis
         [STAThread]
         internal static void Main(string[] args)
         {
-            MainBase(typeof(Analysis), args);
+            WrapperBase.MainBase(typeof(Analysis), args);
         }
 
         public static Process Execute()
         {
-            return Execute(args => Main_Execute(args));
+            return WrapperBase.Execute(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -53,7 +53,7 @@ namespace ERHMS.EpiInfo.Analysis
         {
             FileInfo file = IOExtensions.GetTemporaryFile(Pgm.FileExtension);
             File.WriteAllText(file.FullName, pgm.Content);
-            return Execute(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
+            return WrapperBase.Execute(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
         }
         private static void Main_OpenPgm(string[] args)
         {
@@ -109,7 +109,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public static Process Import(View target)
         {
-            return Execute(args => Main_Import(args), target.Project.FilePath, target.Name);
+            return WrapperBase.Execute(args => Main_Import(args), target.Project.FilePath, target.Name);
         }
         private static void Main_Import(string[] args)
         {
@@ -207,7 +207,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public static Process Export(View source)
         {
-            return Execute(args => Main_Export(args), source.Project.FilePath, source.Name);
+            return WrapperBase.Execute(args => Main_Export(args), source.Project.FilePath, source.Name);
         }
         private static void Main_Export(string[] args)
         {

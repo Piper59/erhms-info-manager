@@ -7,7 +7,7 @@ namespace ERHMS.Test.Utility
 {
     public class AssemblyExtensionsTest
     {
-        private const string ResourceName = "ERHMS.Test.Utility.Resource.txt";
+        private const string ResourceName = "ERHMS.Test.Utility.Message.txt";
         private const string ResourceContent = "Hello, world!";
 
         [Test]

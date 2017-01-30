@@ -208,14 +208,16 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     driver.CreateDatabase();
                 }
-                Project project = Project.Create(
-                    Name,
-                    Description,
-                    file.Directory,
-                    driver.Provider.ToEpiInfoName(),
-                    driver.Builder,
-                    driver.DatabaseName,
-                    initialize);
+                Project project = Project.Create(new ProjectCreationInfo
+                {
+                    Name = Name,
+                    Description = Description,
+                    Location = file.Directory,
+                    Driver = driver.Provider.ToEpiInfoName(),
+                    Builder = driver.Builder,
+                    DatabaseName = driver.DatabaseName,
+                    Initialize = initialize
+                });
                 if (initialize)
                 {
                     DataAccess.DataContext.Create(project);

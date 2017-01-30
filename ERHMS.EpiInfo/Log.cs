@@ -1,5 +1,4 @@
-﻿using Epi;
-using log4net;
+﻿using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
@@ -15,7 +14,7 @@ namespace ERHMS.EpiInfo
     {
         private static RollingFileAppender appender;
 
-        public static string Name
+        private static string Name
         {
             get { return Assembly.GetEntryAssembly().GetName().Name; }
         }
@@ -23,11 +22,6 @@ namespace ERHMS.EpiInfo
         private static string FileName
         {
             get { return string.Format("{0}.txt", Name); }
-        }
-
-        public static ILog Current
-        {
-            get { return LogManager.GetLogger(Name); }
         }
 
         private static Hierarchy Hierarchy
@@ -41,11 +35,22 @@ namespace ERHMS.EpiInfo
             {
                 return Hierarchy.Root.Level;
             }
-            set
+            private set
             {
                 Hierarchy.Root.Level = value;
                 Hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
             }
+        }
+
+        public static string LevelName
+        {
+            get { return Level.Name; }
+            set { Level = Hierarchy.LevelMap[value]; }
+        }
+
+        public static ILog Current
+        {
+            get { return LogManager.GetLogger(Name); }
         }
 
         static Log()
@@ -62,29 +67,14 @@ namespace ERHMS.EpiInfo
             };
             appender.ActivateOptions();
             Hierarchy.Root.AddAppender(appender);
-            SetLevelName(Settings.Default.LogLevel);
+            LevelName = Settings.Default.LogLevel;
             Hierarchy.Configured = true;
         }
 
-        public static string GetLevelName()
+        public static void SetDirectory(DirectoryInfo directory)
         {
-            return Hierarchy.Root.Level.Name;
-        }
-
-        public static void SetLevelName(string levelName)
-        {
-            Level = Hierarchy.LevelMap[levelName];
-        }
-
-        public static void Configure(Configuration configuration)
-        {
-            appender.File = Path.Combine(configuration.Directories.LogDir, FileName);
+            appender.File = Path.Combine(directory.FullName, FileName);
             appender.ActivateOptions();
-        }
-
-        public static Stream Read()
-        {
-            return new FileStream(appender.File, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         }
     }
 }

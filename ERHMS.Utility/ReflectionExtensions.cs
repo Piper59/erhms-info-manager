@@ -19,14 +19,14 @@ namespace ERHMS.Utility
             return GetMethod(type, false, methodName, parameterTypes).Invoke(null, parameters);
         }
 
-        public static object Invoke(object obj, Type type, string methodName, Type[] parameterTypes = null, object[] parameters = null)
+        public static object Invoke(object @object, Type type, string methodName, Type[] parameterTypes = null, object[] parameters = null)
         {
-            return GetMethod(type, true, methodName, parameterTypes).Invoke(obj, parameters);
+            return GetMethod(type, true, methodName, parameterTypes).Invoke(@object, parameters);
         }
 
-        public static object Invoke(object obj, string methodName, Type[] parameterTypes = null, object[] parameters = null)
+        public static object Invoke(object @object, string methodName, Type[] parameterTypes = null, object[] parameters = null)
         {
-            return Invoke(obj, obj.GetType(), methodName, parameterTypes, parameters);
+            return Invoke(@object, @object.GetType(), methodName, parameterTypes, parameters);
         }
     }
 }

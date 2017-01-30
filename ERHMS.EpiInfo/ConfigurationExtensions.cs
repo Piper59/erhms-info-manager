@@ -21,51 +21,37 @@ namespace ERHMS.EpiInfo
             return new DirectoryInfo(Settings.Default.RootDirectory);
         }
 
-        private static string GetConfigurationFilePath(DirectoryInfo root = null)
+        private static FileInfo GetConfigurationFile(DirectoryInfo root = null)
         {
-            root = root ?? GetConfigurationRoot();
-            string fileName = Path.GetFileName(Configuration.DefaultConfigurationPath);
-            return Path.Combine(root.FullName, "Configuration", fileName);
+            DirectoryInfo directory = (root ?? GetConfigurationRoot()).GetSubdirectory("Configuration");
+            return directory.GetFile(Path.GetFileName(Configuration.DefaultConfigurationPath));
         }
 
         public static Configuration Create()
         {
-            string path = GetConfigurationFilePath();
-            Log.Current.DebugFormat("Creating configuration: {0}", path);
+            FileInfo file = GetConfigurationFile();
+            Log.Current.DebugFormat("Creating configuration: {0}", file.FullName);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
-            if (CryptographyExtensions.RequiresFipsCompliance())
-            {
-                DataRow row = config.TextEncryptionModule.NewRow();
-                row.SetField("FileName", GetApplicationRoot().GetFile("FipsCrypto.dll").FullName);
-                config.TextEncryptionModule.Rows.Add(row);
-            }
-            InitializeDirectories(config);
+            ClearRecents(config);
+            ClearConnections(config);
+            InitializeDirectories(config, GetConfigurationRoot());
+            InitializeSettings(config);
             CopyAssets();
+            return new Configuration(file.FullName, config);
+        }
+
+        private static void ClearRecents(Config config)
+        {
             config.RecentView.Clear();
             config.RecentProject.Clear();
-            config.Database.Clear();
-            config.File.Clear();
-            InitializeSettings(config);
-            return new Configuration(path, config);
         }
 
-        private static void InitializeDirectories(Config config)
+        private static void ClearConnections(Config config)
         {
-            DirectoryInfo root = GetConfigurationRoot();
-            SetDirectories(config, root);
-            DirectoryInfo phin = root.GetSubdirectory("Resources", "PHIN");
-            if (phin.Exists)
-            {
-                phin.Delete();
-            }
-            DirectoryInfo templates = new DirectoryInfo(config.Directories.Single().Templates);
-            templates.CreateSubdirectory("Fields");
-            templates.CreateSubdirectory("Forms");
-            templates.CreateSubdirectory("Pages");
-            templates.CreateSubdirectory("Projects");
+            config.Connections.Clear();
         }
 
-        private static void SetDirectories(Config config, DirectoryInfo root)
+        private static void InitializeDirectories(Config config, DirectoryInfo root)
         {
             Config.DirectoriesRow directories = config.Directories.Single();
             directories.Archive = root.CreateSubdirectory("Archive").FullName;
@@ -74,11 +60,45 @@ namespace ERHMS.EpiInfo
             directories.Output = root.CreateSubdirectory("Output").FullName;
             directories.Project = root.CreateSubdirectory("Projects").FullName;
             directories.Samples = root.CreateSubdirectory(Path.Combine("Resources", "Samples")).FullName;
-            directories.Templates = root.CreateSubdirectory("Templates").FullName;
+            DirectoryInfo templates = root.CreateSubdirectory("Templates");
+            templates.CreateSubdirectory("Fields");
+            templates.CreateSubdirectory("Forms");
+            templates.CreateSubdirectory("Pages");
+            templates.CreateSubdirectory("Projects");
+            directories.Templates = templates.FullName;
             directories.Working = Path.GetTempPath();
         }
 
-        private static void CopyIfExists(DirectoryInfo source, DirectoryInfo target, string subdirectoryName)
+        private static void InitializeSettings(Config config)
+        {
+            if (CryptographyExtensions.RequiresFipsCompliance())
+            {
+                DataRow row = config.TextEncryptionModule.NewRow();
+                row.SetField("FileName", GetApplicationRoot().GetFile("FipsCrypto.dll").FullName);
+                config.TextEncryptionModule.Rows.Add(row);
+            }
+            Config.SettingsRow settings = config.Settings.Single();
+            settings.CheckForUpdates = false;
+        }
+
+        private static void CopyAssets()
+        {
+            DirectoryInfo applicationRoot = GetApplicationRoot();
+            DirectoryInfo configurationRoot = GetConfigurationRoot();
+            CopyAssets(applicationRoot, configurationRoot, "Projects");
+            CopyAssets(applicationRoot, configurationRoot, "Resources");
+            CopyAssets(applicationRoot, configurationRoot, "Templates");
+            DirectoryInfo phin = configurationRoot.GetSubdirectory("Resources", "PHIN");
+            if (phin.Exists)
+            {
+                phin.Delete(true);
+            }
+            Assembly assembly = Assembly.GetAssembly(typeof(Settings));
+            assembly.CopyManifestResourceTo("ERHMS.Utility.LICENSE.txt", configurationRoot.GetFile("LICENSE.txt"));
+            assembly.CopyManifestResourceTo("ERHMS.Utility.NOTICE.txt", configurationRoot.GetFile("NOTICE.txt"));
+        }
+
+        private static void CopyAssets(DirectoryInfo source, DirectoryInfo target, string subdirectoryName)
         {
             DirectoryInfo subsource = source.GetSubdirectory(subdirectoryName);
             if (subsource.Exists)
@@ -88,44 +108,31 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        private static void CopyAssets()
-        {
-            DirectoryInfo applicationRoot = GetApplicationRoot();
-            DirectoryInfo configurationRoot = GetConfigurationRoot();
-            CopyIfExists(applicationRoot, configurationRoot, "Projects");
-            CopyIfExists(applicationRoot, configurationRoot, "Resources");
-            CopyIfExists(applicationRoot, configurationRoot, "Templates");
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            assembly.CopyManifestResourceTo("ERHMS.EpiInfo.LICENSE.txt", configurationRoot.GetFile("LICENSE.txt"));
-            assembly.CopyManifestResourceTo("ERHMS.EpiInfo.NOTICE.txt", configurationRoot.GetFile("NOTICE.txt"));
-        }
-
-        private static void InitializeSettings(Config config)
-        {
-            Config.SettingsRow settings = config.Settings.Single();
-            settings.CheckForUpdates = false;
-        }
-
         public static void Load(string path)
         {
             Log.Current.DebugFormat("Loading configuration: {0}", path);
             Configuration.Load(path);
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
-            Log.Configure(Configuration.GetNewInstance());
+            Log.SetDirectory(new DirectoryInfo(Configuration.GetNewInstance().Directories.LogDir));
             Log.Current.DebugFormat("Loaded configuration: {0}", path);
+        }
+
+        public static void Load(FileInfo file)
+        {
+            Load(file.FullName);
         }
 
         public static void Load()
         {
-            Load(GetConfigurationFilePath());
+            Load(GetConfigurationFile());
         }
 
         public static bool TryLoad()
         {
-            string path = GetConfigurationFilePath();
-            if (File.Exists(path))
+            FileInfo file = GetConfigurationFile();
+            if (file.Exists)
             {
-                Load(path);
+                Load(file);
                 return true;
             }
             else
@@ -145,28 +152,23 @@ namespace ERHMS.EpiInfo
 
         public static Configuration ChangeRoot(Configuration configuration, DirectoryInfo root)
         {
-            GetApplicationRoot().CopyTo(root, false);
+            Log.Current.DebugFormat("Changing configuration root: {0}", root.FullName);
+            GetConfigurationRoot().CopyTo(root, false);
             Config config = (Config)configuration.ConfigDataSet.Copy();
-            SetDirectories(config, root);
-            config.RecentView.Clear();
-            config.RecentProject.Clear();
-            return new Configuration(GetConfigurationFilePath(root), config);
+            ClearRecents(config);
+            InitializeDirectories(config, root);
+            return new Configuration(GetConfigurationFile(root).FullName, config);
         }
 
         public static void Save(this Configuration @this)
         {
+            Log.Current.DebugFormat("Saving configuration: {0}", @this.ConfigFilePath);
             Configuration.Save(@this);
-            FileInfo defaultConfigurationFile = new FileInfo(Configuration.DefaultConfigurationPath);
-            defaultConfigurationFile.Directory.Create();
-            File.Copy(@this.ConfigFilePath, defaultConfigurationFile.FullName, true);
+            Configuration.Save(new Configuration(Configuration.DefaultConfigurationPath, @this.ConfigDataSet));
         }
 
-        public static void Refresh(this Configuration @this, bool save)
+        public static void Load(this Configuration @this)
         {
-            if (save)
-            {
-                @this.Save();
-            }
             Load(@this.ConfigFilePath);
         }
     }

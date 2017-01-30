@@ -60,6 +60,15 @@
     <Compile Include="SettingsBase.cs" />
     <Compile Include="SingleInstanceExecuter.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="XmlExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\NOTICE.txt">
+      <Link>NOTICE.txt</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\ERHMS.Build.targets" />

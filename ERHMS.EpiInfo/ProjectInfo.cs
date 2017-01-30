@@ -13,40 +13,16 @@ namespace ERHMS.EpiInfo
             result = null;
             try
             {
-                string name = null;
-                string description = null;
                 using (XmlReader reader = XmlReader.Create(file.FullName))
                 {
-                    while (reader.Read())
+                    XmlElement element = reader.ReadNextElement();
+                    if (element != null && element.Name == "Project" && element.HasAllAttributes("name", "description"))
                     {
-                        if (reader.NodeType == XmlNodeType.Element)
-                        {
-                            if (reader.Name != "Project")
-                            {
-                                return false;
-                            }
-                            while (reader.MoveToNextAttribute())
-                            {
-                                switch (reader.Name)
-                                {
-                                    case "name":
-                                        name = reader.Value;
-                                        break;
-                                    case "description":
-                                        description = reader.Value;
-                                        break;
-                                }
-                            }
-                            break;
-                        }
+                        result = new ProjectInfo(file, element.GetAttribute("name"), element.GetAttribute("description"));
+                        return true;
                     }
-                }
-                if (name == null || description == null)
-                {
                     return false;
                 }
-                result = new ProjectInfo(file, name, description);
-                return true;
             }
             catch
             {
@@ -84,11 +60,6 @@ namespace ERHMS.EpiInfo
             File = file;
             Name = name;
             Description = description;
-        }
-
-        public Project OpenProject()
-        {
-            return new Project(File);
         }
     }
 }

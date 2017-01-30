@@ -17,7 +17,7 @@ namespace ERHMS.Presentation.Converters
             }
             else
             {
-                return view.IsPublished() ? view.GetUrl() : "Unpublished";
+                return view.IsWebSurvey() ? view.GetWebSurveyUrl().ToString() : "Unpublished";
             }
         }
 

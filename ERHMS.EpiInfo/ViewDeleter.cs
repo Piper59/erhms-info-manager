@@ -48,7 +48,7 @@ namespace ERHMS.EpiInfo
 
         private void DeleteField(int fieldId)
         {
-            string sql = "DELETE FROM metaFields WHERE FieldId = @FieldId";
+            string sql = "DELETE FROM [metaFields] WHERE [FieldId] = @FieldId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@FieldId", DbType.Int32, fieldId));
             Driver.ExecuteNonQuery(query);
@@ -56,7 +56,7 @@ namespace ERHMS.EpiInfo
 
         private void DeleteFieldsByView(int viewId)
         {
-            string sql = "DELETE FROM metaFields WHERE ViewId = @ViewId";
+            string sql = "DELETE FROM [metaFields] WHERE [ViewId] = @ViewId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
             Driver.ExecuteNonQuery(query);
@@ -65,7 +65,7 @@ namespace ERHMS.EpiInfo
         private void DeletePagesByView(int viewId)
         {
             DeleteFieldsByView(viewId);
-            string sql = "DELETE FROM metaPages WHERE ViewId = @ViewId";
+            string sql = "DELETE FROM [metaPages] WHERE [ViewId] = @ViewId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
             Driver.ExecuteNonQuery(query);
@@ -74,7 +74,7 @@ namespace ERHMS.EpiInfo
         private void DeleteView(int viewId)
         {
             DeletePagesByView(viewId);
-            string sql = "DELETE FROM metaViews WHERE ViewId = @ViewId";
+            string sql = "DELETE FROM [metaViews] WHERE [ViewId] = @ViewId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
             Driver.ExecuteNonQuery(query);

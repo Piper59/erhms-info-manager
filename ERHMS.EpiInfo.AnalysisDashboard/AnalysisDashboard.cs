@@ -8,17 +8,17 @@ using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.AnalysisDashboard
 {
-    public class AnalysisDashboard : Wrapper
+    public static class AnalysisDashboard
     {
         [STAThread]
         internal static void Main(string[] args)
         {
-            MainBase(typeof(AnalysisDashboard), args);
+            WrapperBase.MainBase(typeof(AnalysisDashboard), args);
         }
 
         public static Process Execute()
         {
-            return Execute(args => Main_Execute(args));
+            return WrapperBase.Execute(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -32,7 +32,7 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
         {
             FileInfo file = IOExtensions.GetTemporaryFile(Canvas.FileExtension);
             File.WriteAllText(file.FullName, canvas.Content);
-            return Execute(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
+            return WrapperBase.Execute(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
         }
         private static void Main_OpenCanvas(string[] args)
         {

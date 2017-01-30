@@ -10,17 +10,17 @@ using View = Epi.View;
 
 namespace ERHMS.EpiInfo.MakeView
 {
-    public class MakeView : Wrapper
+    public static class MakeView
     {
         [STAThread]
         internal static void Main(string[] args)
         {
-            MainBase(typeof(MakeView), args);
+            WrapperBase.MainBase(typeof(MakeView), args);
         }
 
         public static Process Execute()
         {
-            return Execute(args => Main_Execute(args));
+            return WrapperBase.Execute(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -32,7 +32,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process OpenProject(Project project)
         {
-            return Execute(args => Main_OpenProject(args), project.FilePath);
+            return WrapperBase.Execute(args => Main_OpenProject(args), project.FilePath);
         }
         private static void Main_OpenProject(string[] args)
         {
@@ -46,7 +46,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process OpenView(View view)
         {
-            return Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
+            return WrapperBase.Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
         }
         private static void Main_OpenView(string[] args)
         {
@@ -62,7 +62,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process AddView(Project project, string prefix = null, string tag = null)
         {
-            return Execute(args => Main_AddView(args), project.FilePath, prefix, tag);
+            return WrapperBase.Execute(args => Main_AddView(args), project.FilePath, prefix, tag);
         }
         private static void Main_AddView(string[] args)
         {
@@ -78,7 +78,7 @@ namespace ERHMS.EpiInfo.MakeView
                 tag = null;
             }
             Project project = new Project(projectPath);
-            string viewName = Project.SanitizeViewName(prefix);
+            string viewName = ViewExtensions.SanitizeName(prefix);
             using (MainForm form = new MainForm())
             {
                 form.OpenProject(project);
@@ -107,7 +107,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process CreateTemplate(View view)
         {
-            return Execute(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
+            return WrapperBase.Execute(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
         }
         private static void Main_CreateTemplate(string[] args)
         {
@@ -147,7 +147,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static string CreateWebTemplate(View view)
         {
-            Process process = Execute(args => Main_CreateWebTemplate(args), view.Project.FilePath, view.Name);
+            Process process = WrapperBase.Execute(args => Main_CreateWebTemplate(args), view.Project.FilePath, view.Name);
             return process.StandardOutput.ReadToEnd();
         }
         private static void Main_CreateWebTemplate(string[] args)
@@ -166,7 +166,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process InstantiateTemplate(Project project, EpiInfo.Template template, string prefix = null, string tag = null)
         {
-            return Execute(args => Main_InstantiateTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
+            return WrapperBase.Execute(args => Main_InstantiateTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
         }
         private static void Main_InstantiateTemplate(string[] args)
         {
@@ -205,7 +205,7 @@ namespace ERHMS.EpiInfo.MakeView
                     XmlDocument document = new XmlDocument();
                     document.Load(templatePath);
                     XmlNode viewNode = document.SelectSingleNode("/Template/Project/View");
-                    string viewName = Project.SanitizeViewName(string.Format("{0}{1}", prefix, viewNode.Attributes["Name"].Value));
+                    string viewName = ViewExtensions.SanitizeName(string.Format("{0}{1}", prefix, viewNode.Attributes["Name"].Value));
                     form.Load += (sender, e) =>
                     {
                         using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
@@ -243,7 +243,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Process PublishToMobile(View view)
         {
-            return Execute(args => Main_PublishToMobile(args), view.Project.FilePath, view.Name);
+            return WrapperBase.Execute(args => Main_PublishToMobile(args), view.Project.FilePath, view.Name);
         }
         private static void Main_PublishToMobile(string[] args)
         {

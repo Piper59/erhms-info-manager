@@ -218,7 +218,7 @@ namespace ERHMS.Presentation.ViewModels
         public void Email()
         {
             EmailViewModel email = new EmailViewModel(SelectedItems.Cast<AssignmentViewModel>().Select(assignment => assignment.Responder));
-            if (SelectedItem.View.Data.IsPublished())
+            if (SelectedItem.View.Data.IsWebSurvey())
             {
                 email.AppendUrl = true;
                 email.SetSelectedView(SelectedItem.View.Data.Name);

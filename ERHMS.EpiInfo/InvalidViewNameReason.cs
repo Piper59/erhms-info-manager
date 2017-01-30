@@ -4,8 +4,8 @@
     {
         None,
         Empty,
-        InvalidCharacter,
-        InvalidFirstCharacter,
+        InvalidChar,
+        InvalidFirstChar,
         Duplicate
     }
 }

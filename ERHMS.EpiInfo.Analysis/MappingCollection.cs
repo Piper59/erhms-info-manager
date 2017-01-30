@@ -51,19 +51,7 @@ namespace ERHMS.EpiInfo.Analysis
             }
             else
             {
-                string baseTarget = string.Format("Empty{0}", ColumnNames.GLOBAL_RECORD_ID);
-                if (!ContainsTarget(baseTarget))
-                {
-                    return baseTarget;
-                }
-                for (int copy = 2; ; copy++)
-                {
-                    string copyTarget = string.Format("{0}{1}", baseTarget, copy);
-                    if (!ContainsTarget(copyTarget))
-                    {
-                        return copyTarget;
-                    }
-                }
+                return string.Format("Empty{0}", ColumnNames.GLOBAL_RECORD_ID).MakeUnique("{0}{1}", value => ContainsTarget(value));
             }
         }
 

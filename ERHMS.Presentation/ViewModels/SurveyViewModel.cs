@@ -86,7 +86,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             View = null;
             View = view;
-            if (view.IsPublished())
+            if (view.IsWebSurvey())
             {
                 ConfigurationError error = ConfigurationError.None;
                 BlockMessage msg = new BlockMessage("Retrieving web survey details \u2026");
@@ -157,7 +157,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            View.CreateDataTables();
+            View.EnsureDataTablesExist();
             bool success = false;
             ConfigurationError error = ConfigurationError.None;
             BlockMessage msg = new BlockMessage("Publishing form to web \u2026");
@@ -169,7 +169,7 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     return;
                 }
-                if (View.IsPublished())
+                if (View.IsWebSurvey())
                 {
                     success = service.Republish(View, Survey);
                 }
@@ -212,7 +212,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public bool Import()
         {
-            if (!View.IsPublished())
+            if (!View.IsWebSurvey())
             {
                 Messenger.Default.Send(new NotifyMessage("Form has not been published to web."));
                 return false;

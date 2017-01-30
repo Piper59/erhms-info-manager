@@ -270,8 +270,9 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Settings.Default.Save();
                 Dirty = false;
-                configuration.Refresh(true);
-                Log.SetLevelName(Settings.Default.LogLevel);
+                configuration.Save();
+                configuration.Load();
+                Log.LevelName = Settings.Default.LogLevel;
                 Messenger.Default.Send(new ToastMessage("Settings have been saved."));
             }
         }
