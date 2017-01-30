@@ -13,7 +13,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void GetManifestResourceTextTest()
         {
-            Assert.AreEqual(Assembly.GetExecutingAssembly().GetManifestResourceText(ResourceName), ResourceContent);
+            Assert.AreEqual(ResourceContent, Assembly.GetExecutingAssembly().GetManifestResourceText(ResourceName));
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace ERHMS.Test.Utility
             try
             {
                 Assembly.GetExecutingAssembly().CopyManifestResourceTo(ResourceName, file);
-                Assert.AreEqual(File.ReadAllText(file.FullName), ResourceContent);
+                Assert.AreEqual(ResourceContent, File.ReadAllText(file.FullName));
             }
             finally
             {

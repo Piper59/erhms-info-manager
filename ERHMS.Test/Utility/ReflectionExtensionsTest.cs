@@ -44,12 +44,12 @@ namespace ERHMS.Test.Utility
         {
             Counter counter = new Counter();
             ReflectionExtensions.Invoke(counter, "Increment");
-            Assert.AreEqual(counter.Value, 2);
+            Assert.AreEqual(2, counter.Value);
             ReflectionExtensions.Invoke(counter, "Increment", new Type[] { typeof(int) }, new object[] { 2 });
-            Assert.AreEqual(counter.Value, 4);
+            Assert.AreEqual(4, counter.Value);
             ReflectionExtensions.Invoke(counter, typeof(Number), "Reset");
-            Assert.AreEqual(counter.Value, 1);
-            Assert.AreEqual(ReflectionExtensions.Invoke(typeof(Counter), "GetStep"), 1);
+            Assert.AreEqual(1, counter.Value);
+            Assert.AreEqual(1, ReflectionExtensions.Invoke(typeof(Counter), "GetStep"));
         }
     }
 }

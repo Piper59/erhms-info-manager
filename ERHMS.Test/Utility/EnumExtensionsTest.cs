@@ -21,24 +21,25 @@ namespace ERHMS.Test.Utility
         [Test]
         public void GetValuesTest()
         {
-            CollectionAssert.AreEqual(EnumExtensions.GetValues<Number>(), new Number[]
+            Number[] numbers = new Number[]
             {
                 Number.One,
                 Number.Two,
                 Number.Three
-            });
+            };
+            CollectionAssert.AreEqual(numbers, EnumExtensions.GetValues<Number>());
         }
 
         [Test]
         public void ToDescriptionTest()
         {
-            Assert.AreEqual(EnumExtensions.ToDescription(Number.One), "1");
+            Assert.AreEqual("1", EnumExtensions.ToDescription(Number.One));
         }
 
         [Test]
         public void FromDescriptionTest()
         {
-            Assert.AreEqual(EnumExtensions.FromDescription<Number>("1"), Number.One);
+            Assert.AreEqual(Number.One, EnumExtensions.FromDescription<Number>("1"));
         }
     }
 }

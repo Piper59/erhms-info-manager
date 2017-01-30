@@ -37,9 +37,9 @@ namespace ERHMS.Test.Utility
             });
             timedOut.Set();
             task.Wait();
-            Assert.AreEqual(value, 1);
+            Assert.AreEqual(1, value);
             executer2.Execute();
-            Assert.AreEqual(value, 2);
+            Assert.AreEqual(2, value);
         }
     }
 }

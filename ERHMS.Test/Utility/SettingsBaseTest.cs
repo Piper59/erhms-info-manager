@@ -27,7 +27,7 @@ namespace ERHMS.Test.Utility
                 settings.FirstName = "Jane";
                 settings = Settings.Load(out loaded);
                 Assert.IsTrue(loaded);
-                Assert.AreEqual(settings.FirstName, "John");
+                Assert.AreEqual("John", settings.FirstName);
             }
             finally
             {

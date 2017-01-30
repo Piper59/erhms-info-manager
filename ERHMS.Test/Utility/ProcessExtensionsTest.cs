@@ -17,11 +17,11 @@ namespace ERHMS.Test.Utility
                 "2 3 4",
                 "\"5\""
             });
-            Assert.AreEqual(process1.StartInfo.Arguments, "\"1\" \"2 3 4\" \"\"\"5\"\"\"");
+            Assert.AreEqual("\"1\" \"2 3 4\" \"\"\"5\"\"\"", process1.StartInfo.Arguments);
             Process process2 = ProcessExtensions.Create(executable, new string[] { });
-            Assert.AreEqual(process2.StartInfo.Arguments, "");
+            Assert.AreEqual("", process2.StartInfo.Arguments);
             Process process3 = ProcessExtensions.Create(executable);
-            Assert.AreEqual(process3.StartInfo.Arguments, "");
+            Assert.AreEqual("", process2.StartInfo.Arguments);
         }
     }
 }

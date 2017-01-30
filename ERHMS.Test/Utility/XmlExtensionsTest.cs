@@ -25,15 +25,15 @@ namespace ERHMS.Test.Utility
             {
                 XmlElement element;
                 element = reader.ReadNextElement();
-                Assert.AreEqual(element.Name, "people");
+                Assert.AreEqual("people", element.Name);
                 element = reader.ReadNextElement();
-                Assert.AreEqual(element.Name, "person");
-                Assert.AreEqual(element.Attributes["firstName"].Value, "John");
-                Assert.AreEqual(element.Attributes["lastName"].Value, "Doe");
+                Assert.AreEqual("person", element.Name);
+                Assert.AreEqual("John", element.Attributes["firstName"].Value);
+                Assert.AreEqual("Doe", element.Attributes["lastName"].Value);
                 element = reader.ReadNextElement();
-                Assert.AreEqual(element.Name, "person");
-                Assert.AreEqual(element.Attributes["firstName"].Value, "Jane");
-                Assert.AreEqual(element.Attributes["lastName"].Value, "Doe");
+                Assert.AreEqual("person", element.Name);
+                Assert.AreEqual("Jane", element.Attributes["firstName"].Value);
+                Assert.AreEqual("Doe", element.Attributes["lastName"].Value);
                 element = reader.ReadNextElement();
                 Assert.IsNull(element);
             }

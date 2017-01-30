@@ -33,10 +33,10 @@ namespace ERHMS.Test.Utility
         [Test]
         public void NormalizeExtensionTest()
         {
-            Assert.AreEqual(IOExtensions.NormalizeExtension(".txt"), ".txt");
-            Assert.AreEqual(IOExtensions.NormalizeExtension("txt"), ".txt");
-            Assert.AreEqual(IOExtensions.NormalizeExtension(""), "");
-            Assert.AreEqual(IOExtensions.NormalizeExtension(null), "");
+            Assert.AreEqual(".txt", IOExtensions.NormalizeExtension(".txt"));
+            Assert.AreEqual(".txt", IOExtensions.NormalizeExtension("txt"));
+            Assert.AreEqual("", IOExtensions.NormalizeExtension(""));
+            Assert.AreEqual("", IOExtensions.NormalizeExtension(null));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace ERHMS.Test.Utility
                     file1,
                     file3
                 };
-                CollectionAssert.AreEqual(directory.SearchByExtension(".txt"), textFiles, new FileInfoComparer());
+                CollectionAssert.AreEqual(textFiles, directory.SearchByExtension(".txt"), new FileInfoComparer());
             }
             finally
             {
@@ -93,10 +93,17 @@ namespace ERHMS.Test.Utility
         public void GetTemporaryFileTest()
         {
             FileInfo file = IOExtensions.GetTemporaryFile(".txt");
-            FileAssert.Exists(file);
-            Assert.LessOrEqual((DateTime.Now - file.CreationTime).TotalSeconds, 1.0);
-            Assert.AreEqual(file.Length, 0);
-            Assert.AreEqual(file.Extension, ".txt");
+            try
+            {
+                FileAssert.Exists(file);
+                Assert.LessOrEqual((DateTime.Now - file.CreationTime).TotalSeconds, 1.0);
+                Assert.AreEqual(0, file.Length);
+                Assert.AreEqual(".txt", file.Extension);
+            }
+            finally
+            {
+                file.Delete();
+            }
         }
     }
 }

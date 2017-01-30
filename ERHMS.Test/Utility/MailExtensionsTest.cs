@@ -9,7 +9,7 @@ namespace ERHMS.Test.Utility
         public void IsValidAddressTest()
         {
             // https://en.wikipedia.org/wiki/Email_address#Examples
-            string[] valids = new string[]
+            string[] validAddresses = new string[]
             {
                 "prettyandsimple@example.com",
                 "very.common@example.com",
@@ -31,7 +31,7 @@ namespace ERHMS.Test.Utility
                 "user@[IPv6:2001:DB8::1]"
             };
             // The commented addresses below are incorrectly reported as valid
-            string[] invalids = new string[]
+            string[] invalidAddresses = new string[]
             {
                 "Abc.example.com",
                 "A@b@c@example.com",
@@ -45,11 +45,11 @@ namespace ERHMS.Test.Utility
                 " john.doe@example.com",
                 "john.doe@example.com "*/
             };
-            foreach (string address in valids)
+            foreach (string address in validAddresses)
             {
                 Assert.IsTrue(MailExtensions.IsValidAddress(address), address);
             }
-            foreach (string address in invalids)
+            foreach (string address in invalidAddresses)
             {
                 Assert.IsFalse(MailExtensions.IsValidAddress(address), address);
             }
