@@ -246,6 +246,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 try
                 {
+                    // TODO: Close files?
                     configuration = ConfigurationExtensions.ChangeRoot(configuration, new DirectoryInfo(RootDirectory));
                     ICollection<string> dataSources = Settings.Default.DataSources.ToList();
                     Settings.Default.DataSources.Clear();

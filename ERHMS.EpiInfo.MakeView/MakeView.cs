@@ -206,6 +206,7 @@ namespace ERHMS.EpiInfo.MakeView
                     document.Load(templatePath);
                     XmlNode viewNode = document.SelectSingleNode("/Template/Project/View");
                     string viewName = ViewExtensions.SanitizeName(string.Format("{0}{1}", prefix, viewNode.Attributes["Name"].Value));
+                    // TODO: project.SuggestViewName?
                     form.Load += (sender, e) =>
                     {
                         using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))

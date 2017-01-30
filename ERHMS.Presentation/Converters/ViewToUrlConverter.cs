@@ -17,6 +17,7 @@ namespace ERHMS.Presentation.Converters
             }
             else
             {
+                // TODO: Return a Uri and use TargetNullValue?
                 return view.IsWebSurvey() ? view.GetWebSurveyUrl().ToString() : "Unpublished";
             }
         }

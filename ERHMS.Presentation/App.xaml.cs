@@ -38,7 +38,7 @@ namespace ERHMS.Presentation
         }
 
         [STAThread]
-        public static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             SingleInstanceExecuter executer = new SingleInstanceExecuter();
             executer.Executing += (sender, e) =>
@@ -61,11 +61,13 @@ namespace ERHMS.Presentation
             {
                 Log.Current.Fatal("Fatal error", ex);
                 ShowErrorMessage(string.Format("{0} encountered an error and must shut down.", Title));
+                // TODO: Force shutdown to avoid multiple message boxes?
             }
         }
 
         public static void ShowErrorMessage(string message)
         {
+            // TODO: Will these be correctly owned?
             MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 

@@ -56,7 +56,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public override bool DatabaseExists()
         {
-            string sql = "SELECT 1 FROM sys.databases WHERE name = @name";
+            string sql = "SELECT 1 FROM [sys].[databases] WHERE [name] = @name";
             using (SqlConnection connection = GetMasterConnection())
             using (SqlCommand command = new SqlCommand(sql, connection))
             {

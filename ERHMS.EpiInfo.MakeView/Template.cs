@@ -48,7 +48,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public string CreateWebTemplate()
         {
-            Log.Current.DebugFormat("Creating web template");
+            Log.Current.Debug("Creating web template");
             return (string)ReflectionExtensions.Invoke(@base, "CreateWebSurveyTemplate");
         }
     }

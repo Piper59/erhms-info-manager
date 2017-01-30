@@ -69,18 +69,18 @@ namespace ERHMS.EpiInfo.MakeView
 
         private bool HasValidTemplateName(out string message)
         {
-            char[] invalidCharacters = Path.GetInvalidFileNameChars();
+            char[] invalidChars = Path.GetInvalidFileNameChars();
             if (string.IsNullOrWhiteSpace(TemplateName))
             {
                 message = "Please enter a template name.";
                 return false;
             }
-            else if (TemplateName.Any(character => invalidCharacters.Contains(character)))
+            else if (TemplateName.Any(@char => invalidChars.Contains(@char)))
             {
                 message = string.Format(
                     "Please enter a template name that does not contain any of the following characters:{0}{0}{1}",
                     Environment.NewLine,
-                    string.Join(" ", invalidCharacters.Where(character => !char.IsControl(character))));
+                    string.Join(" ", invalidChars.Where(@char => !char.IsControl(@char))));
                 return false;
             }
             else if (File.Exists(TemplatePath))

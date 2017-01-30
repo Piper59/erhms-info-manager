@@ -35,7 +35,7 @@ namespace ERHMS.DataAccess
         {
             DataParameterCollection parameters = new DataParameterCollection(driver);
             parameters.AddByValue(incidentId);
-            string sql = parameters.Format("IncidentId = {0}");
+            string sql = parameters.Format("[IncidentId] = {0}");
             return new DataPredicate(sql, parameters);
         }
 
