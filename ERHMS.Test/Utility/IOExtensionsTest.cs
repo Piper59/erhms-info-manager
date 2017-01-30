@@ -30,11 +30,6 @@ namespace ERHMS.Test.Utility
             }
         }
 
-        private static DirectoryInfo GetTemporaryDirectory(string methodName)
-        {
-            return Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), typeof(IOExtensionsTest).FullName, methodName));
-        }
-
         [Test]
         public void NormalizeExtensionTest()
         {
@@ -47,7 +42,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void SearchByExtensionTest()
         {
-            DirectoryInfo directory = GetTemporaryDirectory("SearchByExtensionTest");
+            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => SearchByExtensionTest());
             try
             {
                 DirectoryInfo subdirectory = directory.CreateSubdirectory("subdirectory");
@@ -68,18 +63,14 @@ namespace ERHMS.Test.Utility
             }
             finally
             {
-                directory.Refresh();
-                if (directory.Exists)
-                {
-                    directory.Delete(true);
-                }
+                directory.Delete(true);
             }
         }
 
         [Test]
         public void CopyToTest()
         {
-            DirectoryInfo directory = GetTemporaryDirectory("CopyToTest");
+            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => CopyToTest());
             try
             {
                 DirectoryInfo subdirectory1 = directory.CreateSubdirectory("subdirectory1");
@@ -94,11 +85,7 @@ namespace ERHMS.Test.Utility
             }
             finally
             {
-                directory.Refresh();
-                if (directory.Exists)
-                {
-                    directory.Delete(true);
-                }
+                directory.Delete(true);
             }
         }
 
