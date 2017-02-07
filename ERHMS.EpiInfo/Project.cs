@@ -19,6 +19,7 @@ namespace ERHMS.EpiInfo
             creationInfo.Location.Create();
             Project project = new Project
             {
+                Id = Guid.NewGuid(),
                 Version = Assembly.GetExecutingAssembly().GetVersion(),
                 Name = creationInfo.Name,
                 Description = creationInfo.Description,
@@ -26,7 +27,6 @@ namespace ERHMS.EpiInfo
                 CollectedDataDriver = creationInfo.Driver,
                 CollectedDataConnectionString = creationInfo.Builder.ConnectionString
             };
-            project.Id = project.GetProjectId();
             project.CollectedDataDbInfo = new DbDriverInfo
             {
                 DBCnnStringBuilder = creationInfo.Builder,
