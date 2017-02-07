@@ -19,7 +19,7 @@ namespace ERHMS.DataAccess
         public static DataContext Create(Project project)
         {
             Log.Current.DebugFormat("Creating data context: {0}", project.FilePath);
-            FileInfo templateFile = IOExtensions.GetTemporaryFile(".xml");
+            FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.xml");
             Assembly.GetAssembly(typeof(Responder)).CopyManifestResourceTo("ERHMS.Domain.Templates.Projects.ERHMS.xml", templateFile);
             Template template = Template.Get(templateFile);
             MakeView.InstantiateTemplate(project, template).WaitForExit();

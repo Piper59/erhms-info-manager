@@ -14,14 +14,20 @@ namespace ERHMS.Utility
 
         static SettingsBase()
         {
-            Assembly assembly = Assembly.GetAssembly(typeof(TSettings));
-            file = new FileInfo(Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                assembly.GetCompany().ToPrintable(),
-                assembly.GetProduct().ToPrintable(),
-                string.Format("{0}.xml", typeof(TSettings).FullName.ToPrintable())));
+            file = new FileInfo(GetPath());
             serializer = new XmlSerializer(typeof(TSettings));
             Default = Load();
+        }
+
+        private static string GetPath()
+        {
+            Assembly assembly = Assembly.GetAssembly(typeof(TSettings));
+            AssemblyCompanyAttribute companyAttribute = assembly.GetCustomAttribute<AssemblyCompanyAttribute>();
+            string company = companyAttribute == null ? "Temp" : companyAttribute.Company;
+            AssemblyProductAttribute productAttribute = assembly.GetCustomAttribute<AssemblyProductAttribute>();
+            string product = productAttribute == null ? assembly.GetName().Name : productAttribute.Product;
+            string fileName = string.Format("{0}.xml", typeof(TSettings).FullName);
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), company, product, fileName);
         }
 
         public static FileInfo GetFile()

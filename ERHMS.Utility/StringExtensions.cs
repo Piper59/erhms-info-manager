@@ -6,8 +6,6 @@ namespace ERHMS.Utility
 {
     public static class StringExtensions
     {
-        private static readonly Regex NonPrintableChar = new Regex(@"[^\u0020-\u007e]");
-
         public static bool EqualsIgnoreCase(this string @this, string value)
         {
             return string.Equals(@this, value, StringComparison.OrdinalIgnoreCase);
@@ -33,11 +31,6 @@ namespace ERHMS.Utility
         public static string Strip(this string @this, Regex regex)
         {
             return regex.Replace(@this, "");
-        }
-
-        public static string ToPrintable(this string @this)
-        {
-            return @this.Strip(NonPrintableChar);
         }
 
         public static string MakeUnique(this string @this, string format, Predicate<string> exists)

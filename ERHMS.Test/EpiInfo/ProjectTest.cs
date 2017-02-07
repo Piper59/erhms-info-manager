@@ -270,7 +270,7 @@ namespace ERHMS.Test.EpiInfo
             creationInfo = new ProjectCreationInfo
             {
                 Name = name,
-                Location = new DirectoryInfo(configuration.Directories.Project).GetSubdirectory(name),
+                Location = new DirectoryInfo(configuration.Directories.Project).GetDirectory(name),
                 Driver = Configuration.SqlDriver,
                 Builder = builder,
                 DatabaseName = builder.InitialCatalog,

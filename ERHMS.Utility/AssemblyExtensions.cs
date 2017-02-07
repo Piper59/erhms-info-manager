@@ -11,29 +11,9 @@ namespace ERHMS.Utility
             return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
         }
 
-        public static string GetCompany(this Assembly @this)
-        {
-            return @this.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
-        }
-
-        public static string GetProduct(this Assembly @this)
-        {
-            return @this.GetCustomAttribute<AssemblyProductAttribute>().Product;
-        }
-
-        public static string GetTitle(this Assembly @this)
-        {
-            return @this.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-        }
-
         public static Version GetVersion(this Assembly @this)
         {
             return @this.GetName().Version;
-        }
-
-        public static string GetInformationalVersion(this Assembly @this)
-        {
-            return @this.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         }
 
         public static string GetManifestResourceText(this Assembly @this, string resourceName)

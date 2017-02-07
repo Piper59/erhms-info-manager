@@ -23,7 +23,7 @@ namespace ERHMS.Presentation.ViewModels
             AppTitle = App.Title;
             Assembly assembly = Assembly.GetExecutingAssembly();
             Version = assembly.GetVersion().ToString();
-            InformationalVersion = assembly.GetInformationalVersion();
+            InformationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             PrintLicenseCommand = new RelayCommand(PrintLicense);
         }
 

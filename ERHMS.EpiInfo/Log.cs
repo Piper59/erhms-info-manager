@@ -32,9 +32,14 @@ namespace ERHMS.EpiInfo
             Resume();
         }
 
+        public static FileInfo GetFile()
+        {
+            return directory.GetFile(fileName);
+        }
+
         public static DirectoryInfo GetDefaultDirectory()
         {
-            return AssemblyExtensions.GetEntryDirectory().GetSubdirectory("Logs");
+            return AssemblyExtensions.GetEntryDirectory().GetDirectory("Logs");
         }
 
         public static DirectoryInfo GetDirectory()
@@ -50,11 +55,6 @@ namespace ERHMS.EpiInfo
                 appender.File = GetFile().FullName;
                 appender.ActivateOptions();
             }
-        }
-
-        public static FileInfo GetFile()
-        {
-            return directory.GetFile(fileName);
         }
 
         public static void Resume()

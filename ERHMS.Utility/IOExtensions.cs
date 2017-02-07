@@ -2,27 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SearchOption = System.IO.SearchOption;
 
 namespace ERHMS.Utility
 {
     public static class IOExtensions
     {
-        public static string NormalizeExtension(string extension)
-        {
-            if (string.IsNullOrEmpty(extension))
-            {
-                return "";
-            }
-            else
-            {
-                return extension.StartsWith(".") ? extension : string.Format(".{0}", extension);
-            }
-        }
-
         public static void Touch(this FileInfo @this)
         {
-            @this.Directory.Create();
             using (@this.OpenWrite()) { }
             @this.Refresh();
         }
@@ -32,21 +20,14 @@ namespace ERHMS.Utility
             return new FileInfo(Path.Combine(@this.FullName, Path.Combine(paths)));
         }
 
-        public static FileInfo TouchFile(this DirectoryInfo @this, string path)
-        {
-            FileInfo file = @this.GetFile(path);
-            file.Touch();
-            return file;
-        }
-
-        public static DirectoryInfo GetSubdirectory(this DirectoryInfo @this, params string[] paths)
+        public static DirectoryInfo GetDirectory(this DirectoryInfo @this, params string[] paths)
         {
             return new DirectoryInfo(Path.Combine(@this.FullName, Path.Combine(paths)));
         }
 
         public static IEnumerable<FileInfo> SearchByExtension(this DirectoryInfo @this, string extension)
         {
-            return @this.EnumerateFiles(string.Format("*{0}", NormalizeExtension(extension)), SearchOption.AllDirectories);
+            return @this.EnumerateFiles(string.Format("*{0}", extension), SearchOption.AllDirectories);
         }
 
         public static void CopyTo(this DirectoryInfo @this, DirectoryInfo target, bool overwrite)
@@ -62,7 +43,7 @@ namespace ERHMS.Utility
             }
             foreach (DirectoryInfo subsource in @this.GetDirectories())
             {
-                DirectoryInfo subtarget = target.GetSubdirectory(subsource.Name);
+                DirectoryInfo subtarget = target.GetDirectory(subsource.Name);
                 subsource.CopyTo(subtarget, overwrite);
             }
         }
@@ -77,14 +58,13 @@ namespace ERHMS.Utility
             FileSystem.DeleteDirectory(@this.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
         }
 
-        public static FileInfo GetTemporaryFile(string extension)
+        public static FileInfo GetTemporaryFile(string format, params object[] args)
         {
-            extension = NormalizeExtension(extension);
             string path = Path.GetTempPath();
             FileInfo file;
             do
             {
-                string fileName = string.Format("ERHMS_{0:N}{1}", Guid.NewGuid(), extension);
+                string fileName = string.Format(format, args.Prepend(Guid.NewGuid()).ToArray());
                 file = new FileInfo(Path.Combine(path, fileName));
             } while (file.Exists);
             file.Touch();

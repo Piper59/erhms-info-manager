@@ -10,7 +10,7 @@ namespace ERHMS.Utility
     {
         private static Mutex GetMutex()
         {
-            string name = string.Format(@"Global\{0}", Assembly.GetEntryAssembly().GetName().Name);
+            string name = string.Format("Global\\{0}", Assembly.GetEntryAssembly().GetName().Name);
             bool created;
             MutexSecurity security = new MutexSecurity();
             security.AddAccessRule(new MutexAccessRule(

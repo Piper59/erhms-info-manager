@@ -89,7 +89,6 @@
     <Compile Include="Utility\IOExtensionsTest.cs" />
     <Compile Include="Utility\MailExtensionsTest.cs" />
     <Compile Include="Utility\ObjectExtensionsTest.cs" />
-    <Compile Include="Utility\ProcessExtensionsTest.cs" />
     <Compile Include="Utility\ReflectionExtensionsTest.cs" />
     <Compile Include="Utility\SettingsBaseTest.cs" />
     <Compile Include="Utility\SettingsTest.cs" />

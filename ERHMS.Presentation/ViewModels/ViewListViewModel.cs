@@ -250,7 +250,7 @@ namespace ERHMS.Presentation.ViewModels
         public void Create()
         {
             string prefix = Incident == null ? null : Incident.Name;
-            FileInfo templateFile = IOExtensions.GetTemporaryFile(".xml");
+            FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.xml");
             Assembly.GetAssembly(typeof(Responder)).CopyManifestResourceTo("ERHMS.Domain.Templates.Forms.Empty.xml", templateFile);
             Template template = Template.Get(templateFile);
             MakeView.InstantiateTemplate(DataContext.Project, template, prefix, IncidentId);

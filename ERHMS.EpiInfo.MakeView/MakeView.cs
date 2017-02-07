@@ -216,7 +216,7 @@ namespace ERHMS.EpiInfo.MakeView
                             {
                                 viewName = dialog.ViewName;
                                 viewElement.SetAttribute("Name", viewName);
-                                FileInfo templateFile = IOExtensions.GetTemporaryFile(EpiInfo.Template.FileExtension);
+                                FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", EpiInfo.Template.FileExtension);
                                 document.Save(templateFile.FullName);
                                 Template _template = new Template(form.Mediator);
                                 _template.InstantiateTemplate(templateFile.FullName);

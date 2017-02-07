@@ -110,7 +110,9 @@ namespace ERHMS.Test.EpiInfo
 
         private void CreateAsset(params string[] paths)
         {
-            new FileInfo(Path.Combine(paths)).Touch();
+            FileInfo file = new FileInfo(Path.Combine(paths));
+            file.Directory.Create();
+            file.Touch();
         }
 
         private void AssetTest(params string[] paths)
@@ -133,8 +135,8 @@ namespace ERHMS.Test.EpiInfo
             DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => ChangeRootTest());
             try
             {
-                DirectoryInfo subdirectory1 = directory.GetSubdirectory("1");
-                DirectoryInfo subdirectory2 = directory.GetSubdirectory("2");
+                DirectoryInfo subdirectory1 = directory.GetDirectory("1");
+                DirectoryInfo subdirectory2 = directory.GetDirectory("2");
                 Settings.Default.RootDirectory = subdirectory1.FullName;
                 Configuration configuration = ConfigurationExtensions.Create();
                 configuration.ChangeRoot(subdirectory2);

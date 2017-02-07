@@ -1,10 +1,12 @@
 ﻿using Epi;
 using Epi.DataSets;
 using ERHMS.Utility;
+using System;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo
@@ -47,19 +49,19 @@ namespace ERHMS.EpiInfo
         private static void SetDirectories(Config config, DirectoryInfo root)
         {
             Config.DirectoriesRow directories = config.Directories.Single();
-            directories.Archive = root.GetSubdirectory("Archive").FullName;
+            directories.Archive = root.GetDirectory("Archive").FullName;
             directories.Configuration = GetFile().DirectoryName;
-            directories.LogDir = root.GetSubdirectory("Logs").FullName;
-            directories.Output = root.GetSubdirectory("Output").FullName;
-            directories.Project = root.GetSubdirectory("Projects").FullName;
-            directories.Samples = root.GetSubdirectory(Path.Combine("Resources", "Samples")).FullName;
-            directories.Templates = root.GetSubdirectory("Templates").FullName;
+            directories.LogDir = root.GetDirectory("Logs").FullName;
+            directories.Output = root.GetDirectory("Output").FullName;
+            directories.Project = root.GetDirectory("Projects").FullName;
+            directories.Samples = root.GetDirectory(Path.Combine("Resources", "Samples")).FullName;
+            directories.Templates = root.GetDirectory("Templates").FullName;
             directories.Working = Path.GetTempPath();
         }
 
         private static void SetSettings(Config config)
         {
-            if (CryptographyExtensions.RequiresFipsCompliance())
+            if (RequiresFipsCrypto())
             {
                 DataRow row = config.TextEncryptionModule.NewRow();
                 row.SetField("FileName", AssemblyExtensions.GetEntryDirectory().GetFile("FipsCrypto.dll").FullName);
@@ -67,6 +69,19 @@ namespace ERHMS.EpiInfo
             }
             Config.SettingsRow settings = config.Settings.Single();
             settings.CheckForUpdates = false;
+        }
+
+        private static bool RequiresFipsCrypto()
+        {
+            try
+            {
+                new MD5CryptoServiceProvider();
+                return false;
+            }
+            catch (InvalidOperationException)
+            {
+                return true;
+            }
         }
 
         public static void Save(this Configuration @this)
@@ -139,8 +154,8 @@ namespace ERHMS.EpiInfo
             templates.CreateSubdirectory("Pages");
             templates.CreateSubdirectory("Projects");
             DirectoryInfo entryRoot = AssemblyExtensions.GetEntryDirectory();
-            CopyToIfExists(entryRoot.GetSubdirectory("Projects"), @this.Directories.Project);
-            CopyToIfExists(entryRoot.GetSubdirectory("Templates"), @this.Directories.Templates);
+            CopyToIfExists(entryRoot.GetDirectory("Projects"), @this.Directories.Project);
+            CopyToIfExists(entryRoot.GetDirectory("Templates"), @this.Directories.Templates);
             Assembly assembly = Assembly.GetAssembly(typeof(Settings));
             assembly.CopyManifestResourceTo("ERHMS.Utility.LICENSE.txt", root.GetFile("LICENSE.txt"));
             assembly.CopyManifestResourceTo("ERHMS.Utility.NOTICE.txt", root.GetFile("NOTICE.txt"));
