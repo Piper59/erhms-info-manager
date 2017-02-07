@@ -10,6 +10,7 @@ using System.Windows.Media;
 
 namespace ERHMS.Presentation
 {
+    // TODO: Persist window size?
     public partial class MainWindow : MetroWindow
     {
         private bool closing;

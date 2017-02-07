@@ -182,6 +182,9 @@ namespace ERHMS.Presentation
             window.Show();
         }
 
+        // TODO: Too fast and loose with settings?
+        // TODO: Consider changes to ConfigurationExtensions
+        // Assets must be explicitly copied!
         private bool LoadSettings()
         {
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
@@ -238,6 +241,7 @@ namespace ERHMS.Presentation
             return true;
         }
 
+        // TODO: This is fragile and shouldn't be here anyway
         private void AddDataSources()
         {
             Configuration configuration = Configuration.GetNewInstance();

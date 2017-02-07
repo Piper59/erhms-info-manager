@@ -13,6 +13,7 @@ using Template = ERHMS.EpiInfo.Template;
 
 namespace ERHMS.DataAccess
 {
+    // TODO: Add hook for version upgrade actions
     public class DataContext
     {
         public static DataContext Create(Project project)

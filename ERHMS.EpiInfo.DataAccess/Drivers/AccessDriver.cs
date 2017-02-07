@@ -47,6 +47,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public override void CreateDatabase()
         {
+            // TODO: Copy an embedded resource instead?
             Directory.CreateDirectory(Path.GetDirectoryName(Builder.DataSource));
             Catalog catalog = new Catalog();
             catalog.Create(Builder.ConnectionString);
