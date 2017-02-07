@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using Template = ERHMS.EpiInfo.Template;
 
 namespace ERHMS.Presentation.ViewModels
 {

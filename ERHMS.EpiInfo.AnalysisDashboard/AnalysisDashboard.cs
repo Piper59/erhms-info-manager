@@ -45,7 +45,7 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
                 tag = null;
             }
             FileInfo file = new FileInfo(canvasPath);
-            using (FileSystemWatcher watcher = new FileSystemWatcher(file.Directory.FullName, file.Name))
+            using (FileSystemWatcher watcher = new FileSystemWatcher(file.DirectoryName, file.Name))
             using (DashboardMainForm form = new DashboardMainForm())
             {
                 watcher.NotifyFilter = NotifyFilters.LastWrite;

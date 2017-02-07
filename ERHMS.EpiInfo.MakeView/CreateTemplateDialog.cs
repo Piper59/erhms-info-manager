@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Windows.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -69,7 +70,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         private bool HasValidTemplateName(out string message)
         {
-            char[] invalidChars = Path.GetInvalidFileNameChars();
+            ICollection<char> invalidChars = Path.GetInvalidFileNameChars();
             if (string.IsNullOrWhiteSpace(TemplateName))
             {
                 message = "Please enter a template name.";

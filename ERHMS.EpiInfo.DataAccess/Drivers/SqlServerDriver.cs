@@ -47,8 +47,10 @@ namespace ERHMS.EpiInfo.DataAccess
 
         private SqlConnection GetMasterConnection()
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Builder.ConnectionString);
-            builder.InitialCatalog = "master";
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Builder.ConnectionString)
+            {
+                InitialCatalog = "master"
+            };
             SqlConnection connection = new SqlConnection(builder.ConnectionString);
             connection.Open();
             return connection;

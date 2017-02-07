@@ -239,7 +239,8 @@ namespace ERHMS.Presentation.ViewModels
             }
             try
             {
-                FileInfo file = Location.GetFile(Path.Combine(Name, Path.ChangeExtension(Name, Project.FileExtension)));
+                string fileName = Path.ChangeExtension(Name, Project.FileExtension);
+                FileInfo file = Location.GetFile(Path.Combine(Name, fileName));
                 if (file.Exists)
                 {
                     ConfirmMessage msg = new ConfirmMessage("Add", "Data source already exists. Add it to your list of data sources?");
