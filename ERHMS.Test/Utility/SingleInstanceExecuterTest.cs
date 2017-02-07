@@ -13,13 +13,13 @@ namespace ERHMS.Test.Utility
         {
             SingleInstanceExecuter executer1 = new SingleInstanceExecuter(0);
             SingleInstanceExecuter executer2 = new SingleInstanceExecuter(0);
-            ManualResetEvent executing = new ManualResetEvent(false);
-            ManualResetEvent timedOut = new ManualResetEvent(false);
+            ManualResetEvent executing1 = new ManualResetEvent(false);
+            ManualResetEvent timedOut2 = new ManualResetEvent(false);
             int value = 0;
             executer1.Executing += (sender, e) =>
             {
-                executing.Set();
-                timedOut.WaitOne();
+                executing1.Set();
+                timedOut2.WaitOne();
                 value = 1;
             };
             executer2.Executing += (sender, e) =>
@@ -30,12 +30,12 @@ namespace ERHMS.Test.Utility
             {
                 executer1.Execute();
             });
-            executing.WaitOne();
+            executing1.WaitOne();
             Assert.Throws<TimeoutException>(() =>
             {
                 executer2.Execute();
             });
-            timedOut.Set();
+            timedOut2.Set();
             task.Wait();
             Assert.AreEqual(1, value);
             executer2.Execute();

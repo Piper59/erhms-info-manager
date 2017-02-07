@@ -1,3 +1,4 @@
+using ERHMS.Utility;
 using NUnitLite;
 
 namespace ERHMS.Test
@@ -6,6 +7,7 @@ namespace ERHMS.Test
     {
         internal static int Main(string[] args)
         {
+            Settings.Default.Reset();
             return new AutoRun().Execute(args);
         }
     }

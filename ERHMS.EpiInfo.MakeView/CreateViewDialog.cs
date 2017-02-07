@@ -55,8 +55,12 @@ namespace ERHMS.EpiInfo.MakeView
                     return "Please enter a form name that contains only letters, numbers, and underscores.";
                 case InvalidViewNameReason.InvalidFirstChar:
                     return "Please enter a form name that begins with a letter.";
-                case InvalidViewNameReason.Duplicate:
+                case InvalidViewNameReason.TooLong:
+                    return "Please enter a form name that is no longer than 64 characters.";
+                case InvalidViewNameReason.ViewExists:
                     return "This form name is already in use. Please enter a different form name.";
+                case InvalidViewNameReason.TableExists:
+                    return "A table with this name already exists in the database. Please enter a different form name.";
                 default:
                     throw new NotSupportedException();
             }

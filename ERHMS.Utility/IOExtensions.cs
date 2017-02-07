@@ -20,9 +20,23 @@ namespace ERHMS.Utility
             }
         }
 
+        public static void Touch(this FileInfo @this)
+        {
+            @this.Directory.Create();
+            using (@this.OpenWrite()) { }
+            @this.Refresh();
+        }
+
         public static FileInfo GetFile(this DirectoryInfo @this, params string[] paths)
         {
             return new FileInfo(Path.Combine(@this.FullName, Path.Combine(paths)));
+        }
+
+        public static FileInfo TouchFile(this DirectoryInfo @this, string path)
+        {
+            FileInfo file = @this.GetFile(path);
+            file.Touch();
+            return file;
         }
 
         public static DirectoryInfo GetSubdirectory(this DirectoryInfo @this, params string[] paths)
@@ -73,8 +87,7 @@ namespace ERHMS.Utility
                 string fileName = string.Format("ERHMS_{0:N}{1}", Guid.NewGuid(), extension);
                 file = new FileInfo(Path.Combine(path, fileName));
             } while (file.Exists);
-            using (file.OpenWrite()) { }
-            file.Refresh();
+            file.Touch();
             return file;
         }
     }

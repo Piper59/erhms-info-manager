@@ -247,7 +247,9 @@ namespace ERHMS.Presentation.ViewModels
                 try
                 {
                     // TODO: Close files?
-                    configuration = ConfigurationExtensions.ChangeRoot(configuration, new DirectoryInfo(RootDirectory));
+                    DirectoryInfo directory = new DirectoryInfo(RootDirectory);
+                    configuration.ChangeRoot(directory);
+                    new DirectoryInfo(Settings.Default.RootDirectory).CopyTo(directory, false);
                     ICollection<string> dataSources = Settings.Default.DataSources.ToList();
                     Settings.Default.DataSources.Clear();
                     foreach (string dataSource in dataSources)
@@ -270,10 +272,10 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 Settings.Default.Save();
-                Dirty = false;
                 configuration.Save();
-                configuration.Load();
-                Log.LevelName = Settings.Default.LogLevel;
+                Dirty = false;
+                ConfigurationExtensions.Load();
+                Log.SetLevelName(Settings.Default.LogLevel);
                 Messenger.Default.Send(new ToastMessage("Settings have been saved."));
             }
         }

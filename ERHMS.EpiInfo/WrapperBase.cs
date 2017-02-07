@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo
         public static Process Execute(Expression<Action<string[]>> expression, params string[] arguments)
         {
             string fileName = string.Format("{0}.exe", Assembly.GetCallingAssembly().GetTitle());
-            FileInfo executable = ConfigurationExtensions.GetApplicationRoot().GetFile(fileName);
+            FileInfo executable = AssemblyExtensions.GetEntryDirectory().GetFile(fileName);
             string methodName = ((MethodCallExpression)expression.Body).Method.Name;
             Process process = ProcessExtensions.Create(executable, arguments.Prepend(methodName));
             Log.Current.DebugFormat("Executing wrapper: {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);

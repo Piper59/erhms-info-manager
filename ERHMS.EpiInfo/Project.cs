@@ -5,6 +5,7 @@ using ERHMS.Utility;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
@@ -12,37 +13,61 @@ namespace ERHMS.EpiInfo
     {
         public new const string FileExtension = ".prj";
 
-        public static Project Create(ProjectCreationInfo info)
+        public static Project Create(ProjectCreationInfo creationInfo)
         {
-            Log.Current.DebugFormat("Creating project: {0}", info.ToString());
-            info.Location.Create();
+            Log.Current.DebugFormat("Creating project: {0}", creationInfo.ToString());
+            creationInfo.Location.Create();
             Project project = new Project
             {
-                Id = Guid.NewGuid(),
-                Name = info.Name,
-                Description = info.Description,
-                Location = info.Location.FullName,
-                CollectedDataDriver = info.Driver,
-                CollectedDataConnectionString = info.Builder.ConnectionString
+                Version = Assembly.GetExecutingAssembly().GetVersion(),
+                Name = creationInfo.Name,
+                Description = creationInfo.Description,
+                Location = creationInfo.Location.FullName,
+                CollectedDataDriver = creationInfo.Driver,
+                CollectedDataConnectionString = creationInfo.Builder.ConnectionString
             };
+            project.Id = project.GetProjectId();
             project.CollectedDataDbInfo = new DbDriverInfo
             {
-                DBCnnStringBuilder = info.Builder,
-                DBName = info.DatabaseName
+                DBCnnStringBuilder = creationInfo.Builder,
+                DBName = creationInfo.DatabaseName
             };
-            project.CollectedData.Initialize(project.CollectedDataDbInfo, info.Driver, false);
+            project.CollectedData.Initialize(project.CollectedDataDbInfo, creationInfo.Driver, false);
             project.MetadataSource = MetadataSource.SameDb;
             project.Metadata.AttachDbDriver(project.Driver);
-            if (info.Initialize)
+            if (creationInfo.Initialize)
             {
                 Log.Current.DebugFormat("Initializing project: {0}", project.FilePath);
                 project.Metadata.CreateMetadataTables();
-                project.Metadata.AddVersionColumn();
-                project.SetVersion(Assembly.GetExecutingAssembly().GetVersion().ToString());
                 project.Metadata.CreateCanvasesTable();
             }
             project.Save();
             return project;
+        }
+
+        private XmlElement XmlElement
+        {
+            get { return GetXmlDocument().DocumentElement; }
+        }
+
+        public Version Version
+        {
+            get
+            {
+                Version version;
+                if (Version.TryParse(XmlElement.GetAttribute("erhmsVersion"), out version))
+                {
+                    return version;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                XmlElement.SetAttribute("erhmsVersion", value.ToString());
+            }
         }
 
         public new MetadataDbProvider Metadata
@@ -70,9 +95,14 @@ namespace ERHMS.EpiInfo
         {
             if (ViewExtensions.IsValidName(viewName, out reason))
             {
-                if (Views.Names.ContainsIgnoreCase(viewName))
+                if (Views.Contains(viewName))
                 {
-                    reason = InvalidViewNameReason.Duplicate;
+                    reason = InvalidViewNameReason.ViewExists;
+                    return false;
+                }
+                else if (Driver.TableExists(viewName))
+                {
+                    reason = InvalidViewNameReason.TableExists;
                     return false;
                 }
                 else
@@ -89,7 +119,7 @@ namespace ERHMS.EpiInfo
 
         public string SuggestViewName(string viewName)
         {
-            return ViewExtensions.SanitizeName(viewName).MakeUnique("{0}_{1}", value => Views.Names.ContainsIgnoreCase(value));
+            return ViewExtensions.SanitizeName(viewName).MakeUnique("{0}_{1}", value => Views.Contains(value) || Driver.TableExists(value));
         }
 
         public override void Save()

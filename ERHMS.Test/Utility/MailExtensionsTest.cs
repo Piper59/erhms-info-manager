@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace ERHMS.Test.Utility
 {
@@ -9,7 +10,7 @@ namespace ERHMS.Test.Utility
         public void IsValidAddressTest()
         {
             // https://en.wikipedia.org/wiki/Email_address#Examples
-            string[] validAddresses = new string[]
+            ICollection<string> validAddresses = new string[]
             {
                 "prettyandsimple@example.com",
                 "very.common@example.com",
@@ -31,7 +32,7 @@ namespace ERHMS.Test.Utility
                 "user@[IPv6:2001:DB8::1]"
             };
             // The commented addresses below are incorrectly reported as valid
-            string[] invalidAddresses = new string[]
+            ICollection<string> invalidAddresses = new string[]
             {
                 "Abc.example.com",
                 "A@b@c@example.com",

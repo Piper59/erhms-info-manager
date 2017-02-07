@@ -53,6 +53,7 @@
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="IOExtensions.cs" />
     <Compile Include="MailExtensions.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="ProcessExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />

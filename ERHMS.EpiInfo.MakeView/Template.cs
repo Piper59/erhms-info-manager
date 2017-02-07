@@ -42,7 +42,7 @@ namespace ERHMS.EpiInfo.MakeView
                 string.Format("{0}{1}", templateName, EpiInfo.Template.FileExtension));
             XmlDocument document = new XmlDocument();
             document.Load(path);
-            document.SelectSingleNode("/Template").Attributes["Description"].Value = description;
+            document.DocumentElement.SetAttribute("Description", description);
             document.Save(path);
         }
 

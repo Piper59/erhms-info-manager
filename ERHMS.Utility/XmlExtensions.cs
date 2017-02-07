@@ -1,4 +1,6 @@
-﻿using System.Xml;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 
 namespace ERHMS.Utility
 {
@@ -32,6 +34,16 @@ namespace ERHMS.Utility
                 }
             }
             return null;
+        }
+
+        public static IEnumerable<XmlElement> SelectElements(this XmlNode @this, string xpath)
+        {
+            return @this.SelectNodes(xpath).OfType<XmlElement>();
+        }
+
+        public static XmlElement SelectSingleElement(this XmlNode @this, string xpath)
+        {
+            return @this.SelectElements(xpath).FirstOrDefault();
         }
     }
 }

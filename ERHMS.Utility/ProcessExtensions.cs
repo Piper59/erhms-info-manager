@@ -7,12 +7,12 @@ namespace ERHMS.Utility
 {
     public static class ProcessExtensions
     {
-        public static string EscapeArgument(string argument)
+        private static string EscapeArgument(string argument)
         {
             return string.Format("\"{0}\"", argument.Replace("\"", "\"\""));
         }
 
-        public static string FormatArguments(IEnumerable<string> arguments)
+        private static string FormatArguments(IEnumerable<string> arguments)
         {
             return string.Join(" ", arguments.Select(argument => EscapeArgument(argument ?? "")));
         }

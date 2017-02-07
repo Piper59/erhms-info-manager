@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Utility;
 using System;
 
 namespace ERHMS.EpiInfo
@@ -27,5 +28,22 @@ namespace ERHMS.EpiInfo
         public string Content { get; set; }
         public string Comment { get; set; }
         public string Author { get; set; }
+
+        public Pgm()
+        {
+            Comment = "";
+            Author = "";
+        }
+
+        public override bool Equals(object obj)
+        {
+            Pgm pgm = obj as Pgm;
+            return pgm != null && pgm.PgmId == PgmId && pgm.Name == Name && pgm.Content == Content && pgm.Comment == Comment && pgm.Author == Author;
+        }
+
+        public override int GetHashCode()
+        {
+            return ObjectExtensions.GetHashCode(PgmId, Name, Content, Comment, Author);
+        }
     }
 }

@@ -296,7 +296,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ViewData()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             Locator.Main.OpenRecordListView(SelectedItem.Data);
         }
 
@@ -345,14 +345,14 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                SelectedItem.Data.EnsureDataTablesExist();
+                SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
                 MakeView.PublishToMobile(SelectedItem.Data);
             }
         }
 
         public void ImportFromProject()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             if (ImportExport.ImportFromView(SelectedItem.Data))
             {
                 Messenger.Default.Send(new RefreshDataMessage(SelectedItem.Data));
@@ -361,7 +361,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromPackage()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             if (ImportExport.ImportFromPackage(SelectedItem.Data))
             {
                 Messenger.Default.Send(new RefreshDataMessage(SelectedItem.Data));
@@ -370,13 +370,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromFile()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             Analysis.Import(SelectedItem.Data);
         }
 
         public void ImportFromWeb()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             SurveyViewModel surveyModel = new SurveyViewModel(SelectedItem.Data);
             if (surveyModel.Import())
             {
@@ -386,7 +386,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ImportFromMobile()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             if (ImportExport.ImportFromMobile(SelectedItem.Data))
             {
                 Messenger.Default.Send(new RefreshDataMessage(SelectedItem.Data));
@@ -395,13 +395,13 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ExportToPackage()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             ImportExport.ExportToPackage(SelectedItem.Data);
         }
 
         public void ExportToFile()
         {
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             Analysis.Export(SelectedItem.Data);
         }
 
@@ -434,7 +434,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             Messenger.Default.Send(new RefreshListMessage<Pgm>(SelectedItem.IncidentId));
             PgmModel.Active = false;
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             Analysis.OpenPgm(DataContext.Project, pgm, true, SelectedItem.IncidentId);
         }
 
@@ -455,7 +455,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             Messenger.Default.Send(new RefreshListMessage<Canvas>(SelectedItem.IncidentId));
             CanvasModel.Active = false;
-            SelectedItem.Data.EnsureDataTablesExist();
+            SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
             AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, SelectedItem.IncidentId);
         }
 

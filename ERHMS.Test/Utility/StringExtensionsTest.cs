@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ERHMS.Test.Utility
 {
@@ -18,7 +19,15 @@ namespace ERHMS.Test.Utility
         public void ContainsIgnoreCaseTest()
         {
             Assert.IsTrue("Hello, world!".ContainsIgnoreCase("WORLD"));
-            Assert.IsTrue("one two three".Split().ContainsIgnoreCase("THREE"));
+            Assert.IsTrue("ONE TWO THREE".Split().ContainsIgnoreCase("two"));
+        }
+
+        [Test]
+        public void StripTest()
+        {
+            Assert.AreEqual("abcdef", "123abc456def".Strip(new Regex(@"[0-9]")));
+            Assert.AreEqual("abcdefghij", "a!b@c#d$e%f^g&h*i(j)".Strip(new Regex(@"[^a-z]")));
+            Assert.AreEqual("abcdef", "   abcdef".Strip(new Regex(@"^[^a-z]+")));
         }
 
         [Test]

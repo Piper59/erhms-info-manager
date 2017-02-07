@@ -9,20 +9,6 @@ namespace ERHMS.EpiInfo
 {
     public partial class Project
     {
-        public string GetVersion()
-        {
-            string sql = "SELECT [ERHMSVersion] FROM [metaDbInfo]";
-            return (string)Driver.ExecuteScalar(Driver.CreateQuery(sql));
-        }
-
-        public void SetVersion(string version)
-        {
-            string sql = "UPDATE [metaDbInfo] SET [ERHMSVersion] = @ERHMSVersion";
-            Query query = Driver.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@ERHMSVersion", DbType.String, version, 255));
-            Driver.ExecuteNonQuery(query);
-        }
-
         public DataTable GetFieldsAsDataTable()
         {
             string sql = "SELECT * FROM [metaFields]";
@@ -141,6 +127,7 @@ namespace ERHMS.EpiInfo
             Log.Current.DebugFormat("Deleting view: {0}", view.Name);
             ViewDeleter deleter = new ViewDeleter(this);
             deleter.DeleteViewAndDescendants(view.Id);
+            LoadViews();
         }
 
         public void DeletePgm(Pgm pgm)

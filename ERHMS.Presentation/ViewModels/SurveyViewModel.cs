@@ -157,7 +157,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            View.EnsureDataTablesExist();
+            View.Project.CollectedData.EnsureDataTablesExist(View);
             bool success = false;
             ConfigurationError error = ConfigurationError.None;
             BlockMessage msg = new BlockMessage("Publishing form to web \u2026");

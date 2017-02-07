@@ -30,9 +30,14 @@ namespace ERHMS.Utility
             return false;
         }
 
+        public static string Strip(this string @this, Regex regex)
+        {
+            return regex.Replace(@this, "");
+        }
+
         public static string ToPrintable(this string @this)
         {
-            return NonPrintableChar.Replace(@this, "");
+            return @this.Strip(NonPrintableChar);
         }
 
         public static string MakeUnique(this string @this, string format, Predicate<string> exists)

@@ -57,6 +57,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Canvas.cs" />
+    <Compile Include="CollectedDataProviderExtensions.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="InvalidViewNameReason.cs" />
     <Compile Include="Log.cs" />

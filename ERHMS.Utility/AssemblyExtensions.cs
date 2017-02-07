@@ -6,6 +6,11 @@ namespace ERHMS.Utility
 {
     public static class AssemblyExtensions
     {
+        public static DirectoryInfo GetEntryDirectory()
+        {
+            return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
+        }
+
         public static string GetCompany(this Assembly @this)
         {
             return @this.GetCustomAttribute<AssemblyCompanyAttribute>().Company;

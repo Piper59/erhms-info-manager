@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System.IO;
 
 namespace ERHMS.Test.Utility
 {
@@ -16,17 +17,18 @@ namespace ERHMS.Test.Utility
         {
             try
             {
-                Settings settings;
-                bool loaded;
-                settings = Settings.Load(out loaded);
-                Assert.IsFalse(loaded);
+                bool found;
+                Settings settings = Settings.Load(out found);
+                Assert.IsFalse(found);
                 settings.FirstName = "John";
                 settings.LastName = "Doe";
                 settings.Save();
-                FileAssert.Exists(Settings.GetFile());
+                FileInfo file = Settings.GetFile();
+                FileAssert.Exists(file);
+                Assert.IsTrue(file.CreationTime.IsRecent());
                 settings.FirstName = "Jane";
-                settings = Settings.Load(out loaded);
-                Assert.IsTrue(loaded);
+                settings = Settings.Load(out found);
+                Assert.IsTrue(found);
                 Assert.AreEqual("John", settings.FirstName);
             }
             finally

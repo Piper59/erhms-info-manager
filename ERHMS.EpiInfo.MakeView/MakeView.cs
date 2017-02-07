@@ -204,8 +204,8 @@ namespace ERHMS.EpiInfo.MakeView
                     form.OpenProject(project);
                     XmlDocument document = new XmlDocument();
                     document.Load(templatePath);
-                    XmlNode viewNode = document.SelectSingleNode("/Template/Project/View");
-                    string viewName = ViewExtensions.SanitizeName(string.Format("{0}{1}", prefix, viewNode.Attributes["Name"].Value));
+                    XmlElement viewElement = document.SelectSingleElement("/Template/Project/View");
+                    string viewName = ViewExtensions.SanitizeName(string.Format("{0}{1}", prefix, viewElement.GetAttribute("Name")));
                     // TODO: project.SuggestViewName?
                     form.Load += (sender, e) =>
                     {
@@ -215,7 +215,7 @@ namespace ERHMS.EpiInfo.MakeView
                             if (dialog.ShowDialog() == DialogResult.OK)
                             {
                                 viewName = dialog.ViewName;
-                                viewNode.Attributes["Name"].Value = viewName;
+                                viewElement.SetAttribute("Name", viewName);
                                 FileInfo templateFile = IOExtensions.GetTemporaryFile(EpiInfo.Template.FileExtension);
                                 document.Save(templateFile.FullName);
                                 Template _template = new Template(form.Mediator);

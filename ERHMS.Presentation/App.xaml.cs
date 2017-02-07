@@ -190,7 +190,6 @@ namespace ERHMS.Presentation
                 if (MessageBox.Show(message, Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     Settings.Default.Reset();
-                    Settings.Default.LicenseAccepted = true;
                     Settings.Default.Save();
                 }
             }
@@ -198,7 +197,7 @@ namespace ERHMS.Presentation
             {
                 try
                 {
-                    ConfigurationExtensions.CreateAndOrLoad();
+                    ConfigurationExtensions.Load();
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -218,7 +217,7 @@ namespace ERHMS.Presentation
                         Settings.Default.RootDirectory = path;
                         try
                         {
-                            ConfigurationExtensions.CreateAndOrLoad();
+                            ConfigurationExtensions.Load();
                             AddDataSources();
                             Settings.Default.Save();
                         }
@@ -247,14 +246,14 @@ namespace ERHMS.Presentation
             {
                 XmlDocument document = new XmlDocument();
                 document.Load(project.FullName);
-                XmlNode databaseNode = document.SelectSingleNode("/Project/CollectedData/Database");
-                if (databaseNode.Attributes["connectionString"].Value == "")
+                XmlElement databaseElement = document.SelectSingleElement("/Project/CollectedData/Database");
+                if (databaseElement.GetAttribute("connectionString") == "")
                 {
                     FileInfo database = new FileInfo(Path.ChangeExtension(project.FullName, ".mdb"));
                     if (database.Exists)
                     {
                         AccessDriver driver = AccessDriver.Create(database.FullName);
-                        databaseNode.Attributes["connectionString"].Value = Configuration.Encrypt(driver.ConnectionString);
+                        databaseElement.SetAttribute("connectionString", Configuration.Encrypt(driver.ConnectionString));
                         document.Save(project.FullName);
                         using (Project _project = new Project(project))
                         {

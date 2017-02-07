@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 
 namespace ERHMS.Utility
 {
@@ -12,7 +11,7 @@ namespace ERHMS.Utility
                 new MailAddress(address);
                 return true;
             }
-            catch (FormatException)
+            catch
             {
                 return false;
             }

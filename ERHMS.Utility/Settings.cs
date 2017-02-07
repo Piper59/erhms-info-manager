@@ -7,8 +7,9 @@ namespace ERHMS.Utility
     public class Settings : SettingsBase<Settings>
     {
         public string Version { get; set; }
-        public bool LicenseAccepted { get; set; }
         public string LogLevel { get; set; }
+        public bool LicenseAccepted { get; set; }
+        public string ConfigurationFile { get; set; }
         public string RootDirectory { get; set; }
         public HashSet<string> DataSources { get; set; }
         public string ServiceAddress { get; set; }
@@ -21,14 +22,15 @@ namespace ERHMS.Utility
 
         public Settings()
         {
+            Version = Assembly.GetExecutingAssembly().GetVersion().ToString();
+            LicenseAccepted = false;
             Reset();
         }
 
         public void Reset()
         {
-            Version = Assembly.GetExecutingAssembly().GetVersion().ToString();
-            LicenseAccepted = false;
             LogLevel = "DEBUG";
+            ConfigurationFile = null;
             RootDirectory = null;
             DataSources = new HashSet<string>();
             ServiceAddress = "net.pipe://localhost/erhms-info-manager";
@@ -42,22 +44,7 @@ namespace ERHMS.Utility
 
         public bool IsEmailConfigured()
         {
-            if (string.IsNullOrWhiteSpace(EmailHost))
-            {
-                return false;
-            }
-            else if (!EmailPort.HasValue)
-            {
-                return false;
-            }
-            else if (EmailSender == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return !string.IsNullOrWhiteSpace(EmailHost) && EmailPort.HasValue && MailExtensions.IsValidAddress(EmailSender);
         }
 
         public SmtpClient GetSmtpClient()

@@ -1,80 +1,99 @@
-﻿using log4net;
+﻿using ERHMS.Utility;
+using log4net;
 using log4net.Appender;
-using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
 using System.IO;
 using System.Reflection;
-using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo
 {
     public static class Log
     {
+        private static string name;
+        private static string fileName;
+        private static DirectoryInfo directory;
+        private static Hierarchy hierarchy;
         private static RollingFileAppender appender;
-
-        private static string Name
-        {
-            get { return Assembly.GetEntryAssembly().GetName().Name; }
-        }
-
-        private static string FileName
-        {
-            get { return string.Format("{0}.txt", Name); }
-        }
-
-        private static Hierarchy Hierarchy
-        {
-            get { return (Hierarchy)LogManager.GetRepository(); }
-        }
-
-        public static Level Level
-        {
-            get
-            {
-                return Hierarchy.Root.Level;
-            }
-            private set
-            {
-                Hierarchy.Root.Level = value;
-                Hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
-            }
-        }
-
-        public static string LevelName
-        {
-            get { return Level.Name; }
-            set { Level = Hierarchy.LevelMap[value]; }
-        }
 
         public static ILog Current
         {
-            get { return LogManager.GetLogger(Name); }
+            get { return LogManager.GetLogger(name); }
         }
 
         static Log()
         {
-            PatternLayout layout = new PatternLayout("%date %-5level - %message%newline");
-            layout.ActivateOptions();
-            appender = new RollingFileAppender
-            {
-                File = Path.Combine("Logs", FileName),
-                RollingStyle = RollingFileAppender.RollingMode.Date,
-                DatePattern = ".yyyy-MM",
-                MaxSizeRollBackups = -1,
-                Layout = layout
-            };
-            appender.ActivateOptions();
-            Hierarchy.Root.AddAppender(appender);
-            LevelName = Settings.Default.LogLevel;
-            Hierarchy.Configured = true;
+            name = Assembly.GetEntryAssembly().GetName().Name;
+            fileName = string.Format("{0}.txt", name);
+            directory = GetDefaultDirectory();
+            hierarchy = (Hierarchy)LogManager.GetRepository();
+            hierarchy.Root.Level = hierarchy.LevelMap[Settings.Default.LogLevel];
+            Resume();
+        }
+
+        public static DirectoryInfo GetDefaultDirectory()
+        {
+            return AssemblyExtensions.GetEntryDirectory().GetSubdirectory("Logs");
+        }
+
+        public static DirectoryInfo GetDirectory()
+        {
+            return new DirectoryInfo(directory.FullName);
         }
 
         public static void SetDirectory(DirectoryInfo directory)
         {
-            appender.File = Path.Combine(directory.FullName, FileName);
-            appender.ActivateOptions();
+            Log.directory = directory;
+            if (hierarchy.Configured)
+            {
+                appender.File = GetFile().FullName;
+                appender.ActivateOptions();
+            }
+        }
+
+        public static FileInfo GetFile()
+        {
+            return directory.GetFile(fileName);
+        }
+
+        public static void Resume()
+        {
+            if (!hierarchy.Configured)
+            {
+                PatternLayout layout = new PatternLayout("%date %-5level - %message%newline");
+                layout.ActivateOptions();
+                appender = new RollingFileAppender
+                {
+                    File = GetFile().FullName,
+                    RollingStyle = RollingFileAppender.RollingMode.Date,
+                    DatePattern = ".yyyy-MM",
+                    MaxSizeRollBackups = -1,
+                    Layout = layout
+                };
+                appender.ActivateOptions();
+                hierarchy.Root.AddAppender(appender);
+                hierarchy.Configured = true;
+            }
+        }
+
+        public static void Suspend()
+        {
+            if (hierarchy.Configured)
+            {
+                hierarchy.ResetConfiguration();
+            }
+        }
+
+        public static string GetLevelName()
+        {
+            return hierarchy.Root.Level.Name;
+        }
+
+        public static void SetLevelName(string levelName)
+        {
+            hierarchy.Root.Level = hierarchy.LevelMap[levelName];
+            hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
         }
     }
 }

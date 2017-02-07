@@ -6,6 +6,8 @@
         Empty,
         InvalidChar,
         InvalidFirstChar,
-        Duplicate
+        TooLong,
+        ViewExists,
+        TableExists
     }
 }

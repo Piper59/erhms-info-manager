@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Utility;
 using System;
 using System.Text.RegularExpressions;
 
@@ -7,6 +8,7 @@ namespace ERHMS.EpiInfo
     public static class ViewExtensions
     {
         private static readonly Regex InvalidNameChar = new Regex(@"[^a-zA-Z0-9_]");
+        private static readonly Regex InvalidNameBeginning = new Regex(@"^[^a-zA-Z]+");
 
         public static bool IsValidName(string viewName, out InvalidViewNameReason reason)
         {
@@ -25,6 +27,11 @@ namespace ERHMS.EpiInfo
                 reason = InvalidViewNameReason.InvalidFirstChar;
                 return false;
             }
+            else if (viewName.Length > 64)
+            {
+                reason = InvalidViewNameReason.TooLong;
+                return false;
+            }
             else
             {
                 reason = InvalidViewNameReason.None;
@@ -34,22 +41,7 @@ namespace ERHMS.EpiInfo
 
         public static string SanitizeName(string viewName)
         {
-            if (char.IsLetter(viewName[0]))
-            {
-                return InvalidNameChar.Replace(viewName, "");
-            }
-            else
-            {
-                throw new ArgumentException("View name does not begin with a letter.");
-            }
-        }
-
-        public static void EnsureDataTablesExist(this View @this)
-        {
-            if (!@this.Project.CollectedData.TableExists(@this.TableName))
-            {
-                @this.Project.CollectedData.CreateDataTableForView(@this, 1);
-            }
+            return viewName.Strip(InvalidNameChar).Strip(InvalidNameBeginning);
         }
 
         public static bool IsWebSurvey(this View @this)

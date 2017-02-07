@@ -20,20 +20,20 @@ namespace ERHMS.EpiInfo
 
     public static class TemplateLevelExtensions
     {
-        public static bool TryParse(string value, out TemplateLevel result)
+        public static TemplateLevel Parse(string value)
         {
+            TemplateLevel result;
             if (Enum.TryParse(value, out result))
             {
-                return true;
+                return result;
             }
             else if (value == "Form")
             {
-                result = TemplateLevel.View;
-                return true;
+                return TemplateLevel.View;
             }
             else
             {
-                return false;
+                throw new ArgumentException("Requested value was not found.");
             }
         }
 

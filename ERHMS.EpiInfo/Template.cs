@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,26 +14,17 @@ namespace ERHMS.EpiInfo
 
         public static bool TryRead(FileInfo file, out Template result)
         {
-            result = null;
             try
             {
                 using (XmlReader reader = XmlReader.Create(file.FullName))
                 {
-                    XmlElement element = reader.ReadNextElement();
-                    if (element != null && element.Name == "Template" && element.HasAllAttributes("Name", "Description", "Level"))
-                    {
-                        TemplateLevel level;
-                        if (TemplateLevelExtensions.TryParse(element.GetAttribute("Level"), out level))
-                        {
-                            result = new Template(file, element.GetAttribute("Name"), element.GetAttribute("Description"), level);
-                            return true;
-                        }
-                    }
-                    return false;
+                    result = new Template(file, reader.ReadNextElement());
+                    return true;
                 }
             }
             catch
             {
+                result = null;
                 return false;
             }
         }
@@ -44,10 +36,13 @@ namespace ERHMS.EpiInfo
             return template;
         }
 
-        public static IEnumerable<Template> GetAll()
+        public static IEnumerable<Template> GetAll(DirectoryInfo directory = null)
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Templates);
+            if (directory == null)
+            {
+                Configuration configuration = Configuration.GetNewInstance();
+                directory = new DirectoryInfo(configuration.Directories.Templates);
+            }
             foreach (FileInfo file in directory.SearchByExtension(FileExtension))
             {
                 Template template;
@@ -58,9 +53,9 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static IEnumerable<Template> GetByLevel(TemplateLevel level)
+        public static IEnumerable<Template> GetByLevel(TemplateLevel level, DirectoryInfo directory = null)
         {
-            return GetAll().Where(template => template.Level == level);
+            return GetAll(directory).Where(template => template.Level == level);
         }
 
         public FileInfo File { get; private set; }
@@ -68,12 +63,16 @@ namespace ERHMS.EpiInfo
         public string Description { get; private set; }
         public TemplateLevel Level { get; private set; }
 
-        private Template(FileInfo file, string name, string description, TemplateLevel level)
+        private Template(FileInfo file, XmlElement element)
         {
+            if (element.Name != "Template" || !element.HasAllAttributes("Name", "Description", "Level"))
+            {
+                throw new ArgumentException("Element is not a valid template.");
+            }
             File = file;
-            Name = name;
-            Description = description;
-            Level = level;
+            Name = element.GetAttribute("Name");
+            Description = element.GetAttribute("Description");
+            Level = TemplateLevelExtensions.Parse(element.GetAttribute("Level"));
         }
 
         public void Delete()

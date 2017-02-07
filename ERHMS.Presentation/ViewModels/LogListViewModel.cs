@@ -41,17 +41,17 @@ namespace ERHMS.Presentation.ViewModels
 
         private IEnumerable<FileInfo> GetLogs(DirectoryInfo directory)
         {
-            return directory.GetSubdirectory("Logs").SearchByExtension(".txt");
+            return directory.SearchByExtension(".txt");
         }
 
         protected override ICollectionView GetItems()
         {
             ICollection<FileInfo> items = new List<FileInfo>();
-            foreach (FileInfo log in GetLogs(ConfigurationExtensions.GetApplicationRoot()))
+            foreach (FileInfo log in GetLogs(Log.GetDefaultDirectory()))
             {
                 items.Add(log);
             }
-            foreach (FileInfo log in GetLogs(ConfigurationExtensions.GetConfigurationRoot()))
+            foreach (FileInfo log in GetLogs(Log.GetDirectory()))
             {
                 items.Add(log);
             }

@@ -27,6 +27,7 @@ namespace ERHMS.Utility
         public static TEnum FromDescription<TEnum>(string description)
         {
             return (TEnum)typeof(TEnum).GetFields()
+                .Where(field => field.FieldType == typeof(TEnum))
                 .Single(field => GetDescription(field) == description)
                 .GetValue(null);
         }

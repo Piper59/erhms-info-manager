@@ -14,44 +14,43 @@ namespace ERHMS.Utility
 
         static SettingsBase()
         {
-            serializer = new XmlSerializer(typeof(TSettings));
             Assembly assembly = Assembly.GetAssembly(typeof(TSettings));
             file = new FileInfo(Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 assembly.GetCompany().ToPrintable(),
                 assembly.GetProduct().ToPrintable(),
                 string.Format("{0}.xml", typeof(TSettings).FullName.ToPrintable())));
+            serializer = new XmlSerializer(typeof(TSettings));
             Default = Load();
         }
 
         public static FileInfo GetFile()
         {
-            file.Refresh();
-            return file;
+            return new FileInfo(file.FullName);
         }
 
-        public static TSettings Load(out bool loaded)
+        public static TSettings Load(out bool found)
         {
             try
             {
                 using (Stream stream = file.OpenRead())
                 {
                     TSettings settings = (TSettings)serializer.Deserialize(stream);
-                    loaded = true;
+                    found = true;
                     return settings;
                 }
             }
             catch
             {
-                loaded = false;
+                found = false;
                 return new TSettings();
             }
         }
 
         public static TSettings Load()
         {
-            bool loaded;
-            return Load(out loaded);
+            bool found;
+            return Load(out found);
         }
 
         protected SettingsBase() { }
