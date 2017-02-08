@@ -77,7 +77,6 @@ namespace ERHMS.Test.EpiInfo
             bool actual;
             Configuration configuration = ConfigurationExtensions.Load(out actual);
             Assert.AreEqual(expected, actual);
-            Assert.AreEqual(Settings.Default.ConfigurationFile, Configuration.DefaultConfigurationPath);
             return configuration;
         }
 

@@ -238,6 +238,8 @@ namespace ERHMS.Presentation
                     }
                 }
             }
+            Settings.Default.ConfigurationFile = Configuration.DefaultConfigurationPath;
+            Settings.Default.Save();
             return true;
         }
 

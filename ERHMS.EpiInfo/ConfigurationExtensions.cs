@@ -114,16 +114,6 @@ namespace ERHMS.EpiInfo
                     Save(Create());
                 }
             }
-            if (Settings.Default.ConfigurationFile != file.FullName)
-            {
-                if (Settings.Default.ConfigurationFile != null)
-                {
-                    Log.Current.DebugFormat("Unsetting configuration file: {0}", Settings.Default.ConfigurationFile);
-                }
-                Log.Current.DebugFormat("Setting configuration file: {0}", file.FullName);
-                Settings.Default.ConfigurationFile = file.FullName;
-                Settings.Default.Save();
-            }
             Log.Current.DebugFormat("Loading configuration: {0}", file.FullName);
             Configuration.Load(file.FullName);
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
