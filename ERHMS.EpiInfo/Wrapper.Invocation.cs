@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo
 {
     public partial class Wrapper
     {
-        protected static Wrapper Invoke(Expression<Action<string[]>> expression, params object[] args)
+        protected static Wrapper Invoke(Expression<Action<string[]>> expression, params string[] args)
         {
             Wrapper wrapper = new Wrapper(Assembly.GetCallingAssembly(), expression, args);
             wrapper.Invoke();
@@ -31,7 +31,7 @@ namespace ERHMS.EpiInfo
             throw new NotSupportedException();
         }
 
-        private Wrapper(Assembly assembly, Expression<Action<string[]>> expression, params object[] args)
+        private Wrapper(Assembly assembly, Expression<Action<string[]>> expression, params string[] args)
         {
             string fileName = string.Format("{0}.exe", assembly.GetName().Name);
             executable = AssemblyExtensions.GetEntryDirectory().GetFile(fileName);
@@ -39,9 +39,6 @@ namespace ERHMS.EpiInfo
             arguments = ProcessExtensions.FormatArgs(args.Prepend(methodName));
             Exited = new ManualResetEvent(false);
         }
-
-        protected Wrapper(Expression<Action<string[]>> expression, params object[] args)
-            : this(Assembly.GetCallingAssembly(), expression, args) { }
 
         // TODO: Define events
 
@@ -108,6 +105,11 @@ namespace ERHMS.EpiInfo
         public string ReadToEnd()
         {
             return string.Join(Environment.NewLine, ReadAllLines());
+        }
+
+        public void WriteLine(object value)
+        {
+            process.StandardInput.WriteLine(value);
         }
 
         public void WriteLine(string format, params object[] args)

@@ -13,7 +13,6 @@ namespace ERHMS.Test.Utility
             Assert.AreEqual("\"one\"", ProcessExtensions.EscapeArg("one"));
             Assert.AreEqual("\"one two\"", ProcessExtensions.EscapeArg("one two"));
             Assert.AreEqual("\"one \"\"two\"\" three\"", ProcessExtensions.EscapeArg("one \"two\" three"));
-            Assert.AreEqual("\"1\"", ProcessExtensions.EscapeArg(1));
         }
 
         [Test]
@@ -24,7 +23,6 @@ namespace ERHMS.Test.Utility
             Assert.AreEqual("\"one\" \"\" \"three\"", ProcessExtensions.FormatArgs("one", null, "three"));
             Assert.AreEqual("\"one\" \"\" \"three\"", ProcessExtensions.FormatArgs("one", "", "three"));
             Assert.AreEqual("\"one\" \"two \"\"three\"\" four\" \"five\"", ProcessExtensions.FormatArgs("one", "two \"three\" four", "five"));
-            Assert.AreEqual("\"1\" \"2\" \"3\"", ProcessExtensions.FormatArgs(1, 2, 3));
         }
     }
 }
