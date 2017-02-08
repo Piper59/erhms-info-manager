@@ -21,7 +21,7 @@ namespace ERHMS.Test
 
         public static bool IsRecent(this DateTime @this)
         {
-            return (DateTime.Now - @this).TotalSeconds <= 1.0;
+            return (DateTime.Now - @this).TotalMinutes <= 1.0;
         }
     }
 }
