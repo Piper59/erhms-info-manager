@@ -83,7 +83,8 @@
     </Compile>
     <Compile Include="ViewDeleter.cs" />
     <Compile Include="ViewExtensions.cs" />
-    <Compile Include="WrapperBase.cs" />
+    <Compile Include="Wrapper.Execution.cs" />
+    <Compile Include="Wrapper.Invocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\TableCanvas.tt">

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,7 +14,7 @@ using View = Epi.View;
 
 namespace ERHMS.EpiInfo.Analysis
 {
-    public static class Analysis
+    public class Analysis : Wrapper
     {
         private static string GetReadCommand(string projectPath, string viewName)
         {
@@ -34,12 +33,12 @@ namespace ERHMS.EpiInfo.Analysis
         [STAThread]
         internal static void Main(string[] args)
         {
-            WrapperBase.MainBase(typeof(Analysis), args);
+            MainBase(typeof(Analysis), args);
         }
 
-        public static Process Execute()
+        public static Wrapper Execute()
         {
-            return WrapperBase.Execute(args => Main_Execute(args));
+            return Invoke(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -49,11 +48,11 @@ namespace ERHMS.EpiInfo.Analysis
             }
         }
 
-        public static Process OpenPgm(Project project, Pgm pgm, bool execute, string tag = null)
+        public static Wrapper OpenPgm(Project project, Pgm pgm, bool execute, string tag = null)
         {
             FileInfo file = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", Pgm.FileExtension);
             File.WriteAllText(file.FullName, pgm.Content);
-            return WrapperBase.Execute(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
+            return Invoke(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
         }
         private static void Main_OpenPgm(string[] args)
         {
@@ -107,9 +106,9 @@ namespace ERHMS.EpiInfo.Analysis
             }
         }
 
-        public static Process Import(View target)
+        public static Wrapper Import(View target)
         {
-            return WrapperBase.Execute(args => Main_Import(args), target.Project.FilePath, target.Name);
+            return Invoke(args => Main_Import(args), target.Project.FilePath, target.Name);
         }
         private static void Main_Import(string[] args)
         {
@@ -205,9 +204,9 @@ namespace ERHMS.EpiInfo.Analysis
             }
         }
 
-        public static Process Export(View source)
+        public static Wrapper Export(View source)
         {
-            return WrapperBase.Execute(args => Main_Export(args), source.Project.FilePath, source.Name);
+            return Invoke(args => Main_Export(args), source.Project.FilePath, source.Name);
         }
         private static void Main_Export(string[] args)
         {
@@ -245,5 +244,7 @@ namespace ERHMS.EpiInfo.Analysis
                 Application.Run(form);
             }
         }
+
+        private Analysis() { }
     }
 }

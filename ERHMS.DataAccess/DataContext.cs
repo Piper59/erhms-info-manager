@@ -22,7 +22,7 @@ namespace ERHMS.DataAccess
             FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.xml");
             Assembly.GetAssembly(typeof(Responder)).CopyManifestResourceTo("ERHMS.Domain.Templates.Projects.ERHMS.xml", templateFile);
             Template template = Template.Get(templateFile);
-            MakeView.InstantiateTemplate(project, template).WaitForExit();
+            MakeView.InstantiateTemplate(project, template).Exited.WaitOne();
             foreach (View view in project.Views)
             {
                 project.CollectedData.CreateDataTableForView(view, 1);

@@ -132,7 +132,7 @@ namespace ERHMS.EpiInfo.Web
             ServiceObject.ExitText = Outro;
             ServiceObject.IsDraftMode = Draft;
             ServiceObject.UserPublishKey = PublishKey;
-            ServiceObject.XML = MakeView.MakeView.CreateWebTemplate(view);
+            ServiceObject.XML = MakeView.MakeView.CreateWebTemplate(view).ReadToEnd();
             return ServiceObject;
         }
     }

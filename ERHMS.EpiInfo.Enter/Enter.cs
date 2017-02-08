@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -7,17 +6,17 @@ using View = Epi.View;
 
 namespace ERHMS.EpiInfo.Enter
 {
-    public static class Enter
+    public class Enter : Wrapper
     {
         [STAThread]
         internal static void Main(string[] args)
         {
-            WrapperBase.MainBase(typeof(Enter), args);
+            MainBase(typeof(Enter), args);
         }
 
-        public static Process Execute()
+        public static Wrapper Execute()
         {
-            return WrapperBase.Execute(args => Main_Execute(args));
+            return Invoke(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -27,18 +26,18 @@ namespace ERHMS.EpiInfo.Enter
             }
         }
 
-        public static Process OpenView(View view, object record = null)
+        public static Wrapper OpenView(View view, object record = null)
         {
-            Process process = WrapperBase.Execute(args => Main_OpenView(args), view.Project.FilePath, view.Name);
+            Wrapper wrapper = Invoke(args => Main_OpenView(args), view.Project.FilePath, view.Name);
             if (record != null)
             {
                 foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
-                    process.StandardInput.WriteLine("{0} = {1}", property.Name, property.GetValue(record, null));
+                    wrapper.WriteLine("{0} = {1}", property.Name, property.GetValue(record, null));
                 }
             }
-            process.StandardInput.Close();
-            return process;
+            wrapper.EndWrite();
+            return wrapper;
         }
         private static void Main_OpenView(string[] args)
         {
@@ -52,7 +51,7 @@ namespace ERHMS.EpiInfo.Enter
                 Regex field = new Regex(@"^(?<name>\S+) = (?<value>.*)$");
                 while (true)
                 {
-                    string line = Console.ReadLine();
+                    string line = In.ReadLine();
                     if (line == null)
                     {
                         break;
@@ -73,9 +72,9 @@ namespace ERHMS.EpiInfo.Enter
             }
         }
 
-        public static Process OpenRecord(View view, int uniqueKey)
+        public static Wrapper OpenRecord(View view, int uniqueKey)
         {
-            return WrapperBase.Execute(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
+            return Invoke(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
         }
         private static void Main_OpenRecord(string[] args)
         {
@@ -89,5 +88,7 @@ namespace ERHMS.EpiInfo.Enter
                 Application.Run(form);
             }
         }
+
+        private Enter() { }
     }
 }

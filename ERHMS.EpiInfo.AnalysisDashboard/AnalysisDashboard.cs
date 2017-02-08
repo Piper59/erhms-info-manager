@@ -2,23 +2,22 @@
 using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.AnalysisDashboard
 {
-    public static class AnalysisDashboard
+    public class AnalysisDashboard : Wrapper
     {
         [STAThread]
         internal static void Main(string[] args)
         {
-            WrapperBase.MainBase(typeof(AnalysisDashboard), args);
+            MainBase(typeof(AnalysisDashboard), args);
         }
 
-        public static Process Execute()
+        public static Wrapper Execute()
         {
-            return WrapperBase.Execute(args => Main_Execute(args));
+            return Invoke(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -28,11 +27,11 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
             }
         }
 
-        public static Process OpenCanvas(Project project, Canvas canvas, string tag = null)
+        public static Wrapper OpenCanvas(Project project, Canvas canvas, string tag = null)
         {
             FileInfo file = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", Canvas.FileExtension);
             File.WriteAllText(file.FullName, canvas.Content);
-            return WrapperBase.Execute(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
+            return Invoke(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
         }
         private static void Main_OpenCanvas(string[] args)
         {
@@ -65,5 +64,7 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
                 Application.Run(form);
             }
         }
+
+        private AnalysisDashboard() { }
     }
 }
