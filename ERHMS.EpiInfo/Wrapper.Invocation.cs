@@ -12,9 +12,9 @@ namespace ERHMS.EpiInfo
 {
     public partial class Wrapper
     {
-        protected static Wrapper Invoke(Expression<Action<string[]>> expression, params string[] args)
+        protected static Wrapper Invoke(Expression<Action<string[]>> expression, params object[] args)
         {
-            Wrapper wrapper = new Wrapper(expression, args);
+            Wrapper wrapper = new Wrapper(Assembly.GetCallingAssembly(), expression, args);
             wrapper.Invoke();
             return wrapper;
         }
@@ -31,14 +31,17 @@ namespace ERHMS.EpiInfo
             throw new NotSupportedException();
         }
 
-        protected Wrapper(Expression<Action<string[]>> expression, params string[] args)
+        private Wrapper(Assembly assembly, Expression<Action<string[]>> expression, params object[] args)
         {
-            string fileName = string.Format("{0}.exe", Assembly.GetCallingAssembly().GetName().Name);
+            string fileName = string.Format("{0}.exe", assembly.GetName().Name);
             executable = AssemblyExtensions.GetEntryDirectory().GetFile(fileName);
             string methodName = ((MethodCallExpression)expression.Body).Method.Name;
             arguments = ProcessExtensions.FormatArgs(args.Prepend(methodName));
             Exited = new ManualResetEvent(false);
         }
+
+        protected Wrapper(Expression<Action<string[]>> expression, params object[] args)
+            : this(Assembly.GetCallingAssembly(), expression, args) { }
 
         // TODO: Define events
 

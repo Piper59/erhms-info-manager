@@ -5,17 +5,17 @@ namespace ERHMS.Utility
 {
     public static class ProcessExtensions
     {
-        public static string EscapeArg(string arg)
+        public static string EscapeArg(object arg)
         {
-            return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
+            return string.Format("\"{0}\"", (arg ?? "").ToString().Replace("\"", "\"\""));
         }
 
-        public static string FormatArgs(IEnumerable<string> args)
+        public static string FormatArgs(IEnumerable<object> args)
         {
-            return string.Join(" ", args.Select(arg => EscapeArg(arg ?? "")));
+            return string.Join(" ", args.Select(arg => EscapeArg(arg)));
         }
 
-        public static string FormatArgs(params string[] args)
+        public static string FormatArgs(params object[] args)
         {
             return FormatArgs(args.AsEnumerable());
         }

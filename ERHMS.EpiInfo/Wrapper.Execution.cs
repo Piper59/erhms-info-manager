@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo
                 Out = Console.Out;
                 Console.SetIn(new StreamReader(Stream.Null));
                 Console.SetOut(new StreamWriter(Stream.Null));
-                ReflectionExtensions.Invoke(type, args[0], new Type[] { typeof(string[]) }, args.Skip(1).ToArray());
+                ReflectionExtensions.Invoke(type, args[0], new Type[] { typeof(string[]) }, new object[] { args.Skip(1).ToArray() });
                 Log.Current.Debug("Exiting");
             }
             catch (Exception ex)
