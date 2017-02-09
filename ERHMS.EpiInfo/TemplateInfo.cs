@@ -8,17 +8,17 @@ using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
-    public class Template
+    public class TemplateInfo
     {
         public const string FileExtension = ".xml";
 
-        public static bool TryRead(FileInfo file, out Template result)
+        public static bool TryRead(FileInfo file, out TemplateInfo result)
         {
             try
             {
                 using (XmlReader reader = XmlReader.Create(file.FullName))
                 {
-                    result = new Template(file, reader.ReadNextElement());
+                    result = new TemplateInfo(file, reader.ReadNextElement());
                     return true;
                 }
             }
@@ -29,14 +29,14 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static Template Get(FileInfo file)
+        public static TemplateInfo Get(FileInfo file)
         {
-            Template template;
-            TryRead(file, out template);
-            return template;
+            TemplateInfo templateInfo;
+            TryRead(file, out templateInfo);
+            return templateInfo;
         }
 
-        public static IEnumerable<Template> GetAll(DirectoryInfo directory = null)
+        public static IEnumerable<TemplateInfo> GetAll(DirectoryInfo directory = null)
         {
             if (directory == null)
             {
@@ -45,15 +45,15 @@ namespace ERHMS.EpiInfo
             }
             foreach (FileInfo file in directory.SearchByExtension(FileExtension))
             {
-                Template template;
-                if (TryRead(file, out template))
+                TemplateInfo templateInfo;
+                if (TryRead(file, out templateInfo))
                 {
-                    yield return template;
+                    yield return templateInfo;
                 }
             }
         }
 
-        public static IEnumerable<Template> GetByLevel(TemplateLevel level, DirectoryInfo directory = null)
+        public static IEnumerable<TemplateInfo> GetByLevel(TemplateLevel level, DirectoryInfo directory = null)
         {
             return GetAll(directory).Where(template => template.Level == level);
         }
@@ -63,7 +63,7 @@ namespace ERHMS.EpiInfo
         public string Description { get; private set; }
         public TemplateLevel Level { get; private set; }
 
-        private Template(FileInfo file, XmlElement element)
+        private TemplateInfo(FileInfo file, XmlElement element)
         {
             if (element.Name != "Template" || !element.HasAllAttributes("Name", "Description", "Level"))
             {

@@ -11,7 +11,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TemplateListViewModel : ListViewModelBase<Template>
+    public class TemplateListViewModel : ListViewModelBase<TemplateInfo>
     {
         public Incident Incident { get; private set; }
 
@@ -37,15 +37,15 @@ namespace ERHMS.Presentation.ViewModels
             CreateCommand = new RelayCommand(Create, HasSelectedItem);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<Template>>(this, OnRefreshTemplateListMessage);
+            Messenger.Default.Register<RefreshListMessage<TemplateInfo>>(this, OnRefreshTemplateListMessage);
         }
 
         protected override ICollectionView GetItems()
         {
-            return CollectionViewSource.GetDefaultView(DataContext.GetTemplates(TemplateLevel.View).OrderBy(template => template.Name));
+            return CollectionViewSource.GetDefaultView(DataContext.GetTemplateInfos(TemplateLevel.View).OrderBy(template => template.Name));
         }
 
-        protected override IEnumerable<string> GetFilteredValues(Template item)
+        protected override IEnumerable<string> GetFilteredValues(TemplateInfo item)
         {
             yield return item.Name;
             yield return item.Description;
@@ -63,12 +63,12 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 SelectedItem.Delete();
-                Messenger.Default.Send(new RefreshListMessage<Template>());
+                Messenger.Default.Send(new RefreshListMessage<TemplateInfo>());
             };
             Messenger.Default.Send(msg);
         }
 
-        private void OnRefreshTemplateListMessage(RefreshListMessage<Template> msg)
+        private void OnRefreshTemplateListMessage(RefreshListMessage<TemplateInfo> msg)
         {
             Refresh();
         }

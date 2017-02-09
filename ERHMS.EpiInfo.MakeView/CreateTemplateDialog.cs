@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo.MakeView
                 return Path.Combine(
                     configuration.Directories.Templates,
                     "Forms",
-                    string.Format("{0}{1}", TemplateName, EpiInfo.Template.FileExtension));
+                    string.Format("{0}{1}", TemplateName, TemplateInfo.FileExtension));
             }
         }
 

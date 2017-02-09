@@ -14,7 +14,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using Project = ERHMS.EpiInfo.Project;
-using Template = ERHMS.EpiInfo.Template;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -431,7 +430,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void Service_TemplateAdded(object sender, TemplateEventArgs e)
         {
-            Messenger.Default.Send(new RefreshListMessage<Template>());
+            Messenger.Default.Send(new RefreshListMessage<TemplateInfo>());
         }
 
         private void Service_PgmSaved(object sender, PgmEventArgs e)

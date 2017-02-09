@@ -19,7 +19,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Data;
-using Template = ERHMS.EpiInfo.Template;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -252,8 +251,8 @@ namespace ERHMS.Presentation.ViewModels
             string prefix = Incident == null ? null : Incident.Name;
             FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.xml");
             Assembly.GetAssembly(typeof(Responder)).CopyManifestResourceTo("ERHMS.Domain.Templates.Forms.Empty.xml", templateFile);
-            Template template = Template.Get(templateFile);
-            MakeView.InstantiateTemplate(DataContext.Project, template, prefix, IncidentId).Invoke();
+            TemplateInfo templateInfo = TemplateInfo.Get(templateFile);
+            MakeView.InstantiateTemplate(DataContext.Project, templateInfo, prefix, IncidentId).Invoke();
         }
 
         public void Edit()

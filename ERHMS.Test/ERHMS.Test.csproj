@@ -79,7 +79,7 @@
     <Compile Include="EpiInfo\LogTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
-    <Compile Include="EpiInfo\TemplateTest.cs" />
+    <Compile Include="EpiInfo\TemplateInfoTest.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
     <Compile Include="FileInfoComparer.cs" />
     <Compile Include="Helpers.cs" />

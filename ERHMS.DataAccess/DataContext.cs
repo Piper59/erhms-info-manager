@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
-using Template = ERHMS.EpiInfo.Template;
 
 namespace ERHMS.DataAccess
 {
@@ -21,8 +20,8 @@ namespace ERHMS.DataAccess
             Log.Current.DebugFormat("Creating data context: {0}", project.FilePath);
             FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.xml");
             Assembly.GetAssembly(typeof(Responder)).CopyManifestResourceTo("ERHMS.Domain.Templates.Projects.ERHMS.xml", templateFile);
-            Template template = Template.Get(templateFile);
-            Wrapper wrapper = MakeView.InstantiateTemplate(project, template);
+            TemplateInfo templateInfo = TemplateInfo.Get(templateFile);
+            Wrapper wrapper = MakeView.InstantiateTemplate(project, templateInfo);
             wrapper.Invoke();
             wrapper.Exited.WaitOne();
             foreach (View view in project.Views)
@@ -90,15 +89,15 @@ namespace ERHMS.DataAccess
             return Project.GetViews();
         }
 
-        public IEnumerable<Template> GetTemplates(TemplateLevel? level = null)
+        public IEnumerable<TemplateInfo> GetTemplateInfos(TemplateLevel? level = null)
         {
             if (level.HasValue)
             {
-                return Template.GetByLevel(level.Value);
+                return TemplateInfo.GetByLevel(level.Value);
             }
             else
             {
-                return Template.GetAll();
+                return TemplateInfo.GetAll();
             }
         }
 

@@ -162,9 +162,9 @@ namespace ERHMS.EpiInfo.MakeView
             }
         }
 
-        public static Wrapper InstantiateTemplate(Project project, EpiInfo.Template template, string prefix = null, string tag = null)
+        public static Wrapper InstantiateTemplate(Project project, TemplateInfo templateInfo, string prefix = null, string tag = null)
         {
-            return Create(args => Main_InstantiateTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
+            return Create(args => Main_InstantiateTemplate(args), project.FilePath, templateInfo.File.FullName, prefix, tag);
         }
         private static void Main_InstantiateTemplate(string[] args)
         {
@@ -181,21 +181,21 @@ namespace ERHMS.EpiInfo.MakeView
                 tag = null;
             }
             Project project = new Project(projectPath);
-            EpiInfo.Template template;
-            if (!EpiInfo.Template.TryRead(new FileInfo(templatePath), out template))
+            TemplateInfo templateInfo;
+            if (!TemplateInfo.TryRead(new FileInfo(templatePath), out templateInfo))
             {
                 throw new ArgumentException("Failed to read template.");
             }
-            if (template.Level == TemplateLevel.Project)
+            if (templateInfo.Level == TemplateLevel.Project)
             {
                 using (MainForm form = new MainForm(false))
                 {
                     form.OpenProject(project);
-                    Template _template = new Template(form.Mediator);
-                    _template.InstantiateTemplate(template);
+                    Template template = new Template(form.Mediator);
+                    template.InstantiateTemplate(templateInfo);
                 }
             }
-            else if (template.Level == TemplateLevel.View)
+            else if (templateInfo.Level == TemplateLevel.View)
             {
                 using (MainForm form = new MainForm())
                 {
@@ -214,10 +214,10 @@ namespace ERHMS.EpiInfo.MakeView
                             {
                                 viewName = dialog.ViewName;
                                 viewElement.SetAttribute("Name", viewName);
-                                FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", EpiInfo.Template.FileExtension);
+                                FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
                                 document.Save(templateFile.FullName);
-                                Template _template = new Template(form.Mediator);
-                                _template.InstantiateTemplate(templateFile.FullName);
+                                Template template = new Template(form.Mediator);
+                                template.InstantiateTemplate(templateFile.FullName);
                                 IService service = Service.Connect();
                                 if (service != null)
                                 {

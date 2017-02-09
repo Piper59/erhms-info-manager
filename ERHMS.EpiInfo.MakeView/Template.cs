@@ -26,9 +26,9 @@ namespace ERHMS.EpiInfo.MakeView
             ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
-        public void InstantiateTemplate(EpiInfo.Template template)
+        public void InstantiateTemplate(TemplateInfo templateInfo)
         {
-            InstantiateTemplate(template.File.FullName);
+            InstantiateTemplate(templateInfo.File.FullName);
         }
 
         public void CreateTemplate(View view, string templateName, string description)
@@ -39,7 +39,7 @@ namespace ERHMS.EpiInfo.MakeView
             string path = Path.Combine(
                 configuration.Directories.Templates,
                 "Forms",
-                string.Format("{0}{1}", templateName, EpiInfo.Template.FileExtension));
+                string.Format("{0}{1}", templateName, TemplateInfo.FileExtension));
             XmlDocument document = new XmlDocument();
             document.Load(path);
             document.DocumentElement.SetAttribute("Description", description);

@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace ERHMS.Test.EpiInfo
 {
-    public class TemplateTest
+    public class TemplateInfoTest
     {
         [Test]
         public void TryReadTest()
@@ -15,11 +15,11 @@ namespace ERHMS.Test.EpiInfo
             try
             {
                 Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.EpiInfo.Surveillance.xml", file);
-                Template template;
-                Assert.IsTrue(Template.TryRead(file, out template));
-                Assert.AreEqual("Surveillance", template.Name);
-                Assert.AreEqual("Description for Surveillance.xml", template.Description);
-                Assert.AreEqual(TemplateLevel.View, template.Level);
+                TemplateInfo templateInfo;
+                Assert.IsTrue(TemplateInfo.TryRead(file, out templateInfo));
+                Assert.AreEqual("Surveillance", templateInfo.Name);
+                Assert.AreEqual("Description for Surveillance.xml", templateInfo.Description);
+                Assert.AreEqual(TemplateLevel.View, templateInfo.Level);
             }
             finally
             {
