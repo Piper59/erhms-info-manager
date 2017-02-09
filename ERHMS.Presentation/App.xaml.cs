@@ -183,11 +183,25 @@ namespace ERHMS.Presentation
             window.Show();
         }
 
-        // TODO: Too fast and loose with settings?
         // TODO: Consider changes to ConfigurationExtensions
         // Assets (including LICENSE and NOTICE) must be explicitly copied!
         private bool LoadSettings()
         {
+            Settings.Default.RootDirectory = @"C:\Users\gev3\Desktop\scratch\ERHMS Info Manager";
+            DirectoryInfo root = new DirectoryInfo(Settings.Default.RootDirectory);
+            if (root.Exists)
+            {
+                root.Delete(true);
+            }
+            ConfigurationExtensions.Create(root).Save();
+            Configuration configuration = ConfigurationExtensions.Load();
+            configuration.CreateDirectories();
+            DirectoryInfo entryRoot = AssemblyExtensions.GetEntryDirectory();
+            entryRoot.GetDirectory("Projects").CopyTo(new DirectoryInfo(configuration.Directories.Project), false);
+            entryRoot.GetDirectory("Templates").CopyTo(new DirectoryInfo(configuration.Directories.Templates), false);
+            AddDataSources();
+            return true;
+            /*
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
             {
                 string message = string.Format("Reset settings for {0}?", Title);
@@ -242,6 +256,7 @@ namespace ERHMS.Presentation
             Settings.Default.ConfigurationFile = Configuration.DefaultConfigurationPath;
             Settings.Default.Save();
             return true;
+            */
         }
 
         // TODO: This is fragile and shouldn't be here anyway
