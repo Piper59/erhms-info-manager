@@ -1,6 +1,7 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -9,8 +10,6 @@ namespace ERHMS.Test.Utility
 {
     public class XmlExtensionsTest
     {
-        private const string ResourceName = "ERHMS.Test.Utility.People.xml";
-
         [Test]
         public void HasAllAttributesTest()
         {
@@ -29,10 +28,15 @@ namespace ERHMS.Test.Utility
             Assert.AreEqual(lastName, element.GetAttribute("lastName"));
         }
 
+        private Stream GetResourceStream()
+        {
+            return Assembly.GetExecutingAssembly().GetManifestResourceStream("ERHMS.Test.Utility.People.xml");
+        }
+
         [Test]
         public void ReadNextElementTest()
         {
-            using (XmlReader reader = XmlReader.Create(Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceName)))
+            using (XmlReader reader = XmlReader.Create(GetResourceStream()))
             {
                 XmlElement element;
                 element = reader.ReadNextElement();
@@ -50,7 +54,7 @@ namespace ERHMS.Test.Utility
         public void SelectElementsTest()
         {
             XmlDocument document = new XmlDocument();
-            document.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceName));
+            document.Load(GetResourceStream());
             IList<XmlElement> elements = document.SelectElements("/people/person").ToList();
             PersonTest(elements[0], "John", "Doe");
             PersonTest(elements[1], "Jane", "Doe");
@@ -60,7 +64,7 @@ namespace ERHMS.Test.Utility
         public void SelectSingleElementTest()
         {
             XmlDocument document = new XmlDocument();
-            document.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceName));
+            document.Load(GetResourceStream());
             PersonTest(document.SelectSingleElement("/people/person"), "John", "Doe");
         }
     }

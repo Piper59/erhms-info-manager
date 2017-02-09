@@ -60,12 +60,12 @@ namespace ERHMS.Utility
 
         public static FileInfo GetTemporaryFile(string format, params object[] args)
         {
-            string path = Path.GetTempPath();
+            string directoryName = Path.GetTempPath();
             FileInfo file;
             do
             {
                 string fileName = string.Format(format, args.Prepend(Guid.NewGuid()).ToArray());
-                file = new FileInfo(Path.Combine(path, fileName));
+                file = new FileInfo(Path.Combine(directoryName, fileName));
             } while (file.Exists);
             file.Touch();
             return file;

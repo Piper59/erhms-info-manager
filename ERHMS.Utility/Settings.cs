@@ -9,8 +9,8 @@ namespace ERHMS.Utility
         public string Version { get; set; }
         public string LogLevel { get; set; }
         public bool LicenseAccepted { get; set; }
-        public string ConfigurationFile { get; set; }
         public string RootDirectory { get; set; }
+        public string ConfigurationFile { get; set; }
         public HashSet<string> DataSources { get; set; }
         // TODO: Remove when Epi Info communication project removed
         public string ServiceAddress { get; set; }
@@ -31,8 +31,8 @@ namespace ERHMS.Utility
         public void Reset()
         {
             LogLevel = "DEBUG";
-            ConfigurationFile = null;
             RootDirectory = null;
+            ConfigurationFile = null;
             DataSources = new HashSet<string>();
             ServiceAddress = "net.pipe://localhost/erhms-info-manager";
             EmailHost = null;
