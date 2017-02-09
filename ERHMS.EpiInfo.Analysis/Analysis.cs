@@ -1,7 +1,6 @@
 ﻿using Epi;
 using Epi.Fields;
 using Epi.Windows.Analysis.Dialogs;
-using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
@@ -89,11 +88,11 @@ namespace ERHMS.EpiInfo
                         {
                             if (form.SavePgm(pgmName))
                             {
-                                IService service = Service.Connect();
-                                if (service != null)
-                                {
-                                    service.OnPgmSaved(projectPath, pgmId, tag);
-                                }
+                                //IService service = Service.Connect();
+                                //if (service != null)
+                                //{
+                                //    service.OnPgmSaved(projectPath, pgmId, tag);
+                                //}
                             }
                         }
                         else if (result == DialogResult.Cancel)
@@ -186,11 +185,11 @@ namespace ERHMS.EpiInfo
                             form.ExecuteCommands(() =>
                             {
                                 form.Enabled = true;
-                                IService service = Service.Connect();
-                                if (service != null)
-                                {
-                                    service.OnViewDataImported(projectPath, viewName);
-                                }
+                                //IService service = Service.Connect();
+                                //if (service != null)
+                                //{
+                                //    service.OnViewDataImported(projectPath, viewName);
+                                //}
                                 string message = "Data has been imported. Close Epi Info?";
                                 if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                 {

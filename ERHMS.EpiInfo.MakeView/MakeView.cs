@@ -1,5 +1,4 @@
 ﻿using Epi.Windows.MakeView.Dialogs;
-using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
 using System.IO;
@@ -92,11 +91,11 @@ namespace ERHMS.EpiInfo
                             View view = project.CreateView(viewName);
                             view.CreatePage("Page 1", 0);
                             form.ProjectExplorer.AddView(view);
-                            IService service = Service.Connect();
-                            if (service != null)
-                            {
-                                service.OnViewAdded(projectPath, viewName, tag);
-                            }
+                            //IService service = Service.Connect();
+                            //if (service != null)
+                            //{
+                            //    service.OnViewAdded(projectPath, viewName, tag);
+                            //}
                         }
                     }
                 };
@@ -126,11 +125,11 @@ namespace ERHMS.EpiInfo
                         {
                             Template template = new Template(form.Mediator);
                             template.CreateTemplate(project.Views[viewName], dialog.TemplateName, dialog.Description);
-                            IService service = Service.Connect();
-                            if (service != null)
-                            {
-                                service.OnTemplateAdded(dialog.TemplatePath);
-                            }
+                            //IService service = Service.Connect();
+                            //if (service != null)
+                            //{
+                            //    service.OnTemplateAdded(dialog.TemplatePath);
+                            //}
                             string message = "Template has been created. Close Epi Info?";
                             if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
@@ -218,11 +217,11 @@ namespace ERHMS.EpiInfo
                                 document.Save(templateFile.FullName);
                                 Template template = new Template(form.Mediator);
                                 template.InstantiateTemplate(templateFile.FullName);
-                                IService service = Service.Connect();
-                                if (service != null)
-                                {
-                                    service.OnViewAdded(projectPath, dialog.ViewName, tag);
-                                }
+                                //IService service = Service.Connect();
+                                //if (service != null)
+                                //{
+                                //    service.OnViewAdded(projectPath, dialog.ViewName, tag);
+                                //}
                                 string message = "Form has been created. Close Epi Info?";
                                 if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                 {

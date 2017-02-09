@@ -164,10 +164,6 @@
       <Project>{02554b6e-557d-4c58-ae39-4ac674755d71}</Project>
       <Name>ERHMS.EpiInfo.Analysis</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.Communication\ERHMS.EpiInfo.Communication.csproj">
-      <Project>{4feb8705-98bb-431c-9878-004b0c4d7d41}</Project>
-      <Name>ERHMS.EpiInfo.Communication</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.DataAccess\ERHMS.EpiInfo.DataAccess.csproj">
       <Project>{af729d69-3971-45ee-b351-1fc9bfd6ed7d}</Project>
       <Name>ERHMS.EpiInfo.DataAccess</Name>

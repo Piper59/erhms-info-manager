@@ -1,5 +1,4 @@
 ﻿using Epi.Windows.AnalysisDashboard;
-using ERHMS.EpiInfo.Communication;
 using ERHMS.Utility;
 using System;
 using System.IO;
@@ -50,11 +49,11 @@ namespace ERHMS.EpiInfo
                 watcher.NotifyFilter = NotifyFilters.LastWrite;
                 watcher.Changed += (sender, e) =>
                 {
-                    IService service = Service.Connect();
-                    if (service != null)
-                    {
-                        service.OnCanvasSaved(projectPath, canvasId, canvasPath, tag);
-                    }
+                    //IService service = Service.Connect();
+                    //if (service != null)
+                    //{
+                    //    service.OnCanvasSaved(projectPath, canvasId, canvasPath, tag);
+                    //}
                 };
                 watcher.EnableRaisingEvents = true;
                 form.Load += (sender, e) =>

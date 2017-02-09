@@ -2,7 +2,6 @@
 using Epi;
 using Epi.Windows.Enter;
 using Epi.Windows.Enter.PresentationLogic;
-using ERHMS.EpiInfo.Communication;
 
 namespace ERHMS.EpiInfo
 {
@@ -12,11 +11,11 @@ namespace ERHMS.EpiInfo
         {
             RecordSaved += (sender, e) =>
             {
-                IService service = Service.Connect();
-                if (service != null)
-                {
-                    service.OnRecordSaved(e.Form.Project.FilePath, e.Form.Name, e.RecordGuid, tag);
-                }
+                //IService service = Service.Connect();
+                //if (service != null)
+                //{
+                //    service.OnRecordSaved(e.Form.Project.FilePath, e.Form.Name, e.RecordGuid, tag);
+                //}
             };
         }
 

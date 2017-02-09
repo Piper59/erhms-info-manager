@@ -12,8 +12,6 @@ namespace ERHMS.Utility
         public string RootDirectory { get; set; }
         public string ConfigurationFile { get; set; }
         public HashSet<string> DataSources { get; set; }
-        // TODO: Remove when Epi Info communication project removed
-        public string ServiceAddress { get; set; }
         public string EmailHost { get; set; }
         public int? EmailPort { get; set; }
         public string EmailSender { get; set; }
@@ -34,7 +32,6 @@ namespace ERHMS.Utility
             RootDirectory = null;
             ConfigurationFile = null;
             DataSources = new HashSet<string>();
-            ServiceAddress = "net.pipe://localhost/erhms-info-manager";
             EmailHost = null;
             EmailPort = 25;
             EmailSender = null;

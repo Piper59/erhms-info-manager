@@ -2,7 +2,6 @@
 using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Communication;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -95,12 +94,6 @@ namespace ERHMS.Presentation.ViewModels
             AboutCommand = new RelayCommand(OpenAboutView);
             CloseActiveDocumentCommand = new RelayCommand(CloseActiveDocument, HasActiveDocument);
             ExitCommand = new RelayCommand(Exit);
-            App.Current.Service.ViewAdded += Service_ViewAdded;
-            App.Current.Service.ViewDataImported += Service_ViewDataImported;
-            App.Current.Service.RecordSaved += Service_RecordSaved;
-            App.Current.Service.TemplateAdded += Service_TemplateAdded;
-            App.Current.Service.PgmSaved += Service_PgmSaved;
-            App.Current.Service.CanvasSaved += Service_CanvasSaved;
         }
 
         private void Documents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -397,58 +390,58 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new ExitMessage());
         }
 
-        private void Service_ViewAdded(object sender, ViewEventArgs e)
-        {
-            string incidentId = e.Tag;
-            if (e.ProjectPath.EqualsIgnoreCase(DataContext.Project.FilePath) && incidentId != null)
-            {
-                View view = DataContext.Project.GetViewByName(e.ViewName);
-                if (view == null)
-                {
-                    Log.Current.WarnFormat("View not found: {0}", e);
-                }
-                else
-                {
-                    ViewLink viewLink = DataContext.ViewLinks.Create();
-                    viewLink.ViewId = view.Id;
-                    viewLink.IncidentId = incidentId;
-                    DataContext.ViewLinks.Save(viewLink);
-                }
-            }
-            Messenger.Default.Send(new RefreshListMessage<View>(incidentId));
-        }
+        //private void Service_ViewAdded(object sender, ViewEventArgs e)
+        //{
+        //    string incidentId = e.Tag;
+        //    if (e.ProjectPath.EqualsIgnoreCase(DataContext.Project.FilePath) && incidentId != null)
+        //    {
+        //        View view = DataContext.Project.GetViewByName(e.ViewName);
+        //        if (view == null)
+        //        {
+        //            Log.Current.WarnFormat("View not found: {0}", e);
+        //        }
+        //        else
+        //        {
+        //            ViewLink viewLink = DataContext.ViewLinks.Create();
+        //            viewLink.ViewId = view.Id;
+        //            viewLink.IncidentId = incidentId;
+        //            DataContext.ViewLinks.Save(viewLink);
+        //        }
+        //    }
+        //    Messenger.Default.Send(new RefreshListMessage<View>(incidentId));
+        //}
 
-        private void Service_ViewDataImported(object sender, ViewEventArgs e)
-        {
-            Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
-        }
+        //private void Service_ViewDataImported(object sender, ViewEventArgs e)
+        //{
+        //    Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
+        //}
 
-        private void Service_RecordSaved(object sender, RecordEventArgs e)
-        {
-            Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
-        }
+        //private void Service_RecordSaved(object sender, RecordEventArgs e)
+        //{
+        //    Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
+        //}
 
-        private void Service_TemplateAdded(object sender, TemplateEventArgs e)
-        {
-            Messenger.Default.Send(new RefreshListMessage<TemplateInfo>());
-        }
+        //private void Service_TemplateAdded(object sender, TemplateEventArgs e)
+        //{
+        //    Messenger.Default.Send(new RefreshListMessage<TemplateInfo>());
+        //}
 
-        private void Service_PgmSaved(object sender, PgmEventArgs e)
-        {
-            string incidentId = e.Tag;
-            Messenger.Default.Send(new RefreshListMessage<Pgm>(incidentId));
-        }
+        //private void Service_PgmSaved(object sender, PgmEventArgs e)
+        //{
+        //    string incidentId = e.Tag;
+        //    Messenger.Default.Send(new RefreshListMessage<Pgm>(incidentId));
+        //}
 
-        private void Service_CanvasSaved(object sender, CanvasEventArgs e)
-        {
-            string incidentId = e.Tag;
-            if (DataContext.Project.FilePath.EqualsIgnoreCase(e.ProjectPath))
-            {
-                Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
-                canvas.Content = File.ReadAllText(e.CanvasPath);
-                DataContext.Project.UpdateCanvas(canvas);
-            }
-            Messenger.Default.Send(new RefreshListMessage<Canvas>(incidentId));
-        }
+        //private void Service_CanvasSaved(object sender, CanvasEventArgs e)
+        //{
+        //    string incidentId = e.Tag;
+        //    if (DataContext.Project.FilePath.EqualsIgnoreCase(e.ProjectPath))
+        //    {
+        //        Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
+        //        canvas.Content = File.ReadAllText(e.CanvasPath);
+        //        DataContext.Project.UpdateCanvas(canvas);
+        //    }
+        //    Messenger.Default.Send(new RefreshListMessage<Canvas>(incidentId));
+        //}
     }
 }

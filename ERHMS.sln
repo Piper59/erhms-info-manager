@@ -22,8 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Domain", "ERH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.DataAccess", "ERHMS.EpiInfo.DataAccess\ERHMS.EpiInfo.DataAccess.csproj", "{AF729D69-3971-45EE-B351-1FC9BFD6ED7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Communication", "ERHMS.EpiInfo.Communication\ERHMS.EpiInfo.Communication.csproj", "{4FEB8705-98BB-431C-9878-004B0C4D7D41}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Analysis", "ERHMS.EpiInfo.Analysis\ERHMS.EpiInfo.Analysis.csproj", "{02554B6E-557D-4C58-AE39-4AC674755D71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.AnalysisDashboard", "ERHMS.EpiInfo.AnalysisDashboard\ERHMS.EpiInfo.AnalysisDashboard.csproj", "{0545C649-4922-4C42-89B1-518C056FB483}"
@@ -71,10 +69,6 @@ Global
 		{AF729D69-3971-45EE-B351-1FC9BFD6ED7D}.Debug|x86.Build.0 = Debug|x86
 		{AF729D69-3971-45EE-B351-1FC9BFD6ED7D}.Release|x86.ActiveCfg = Release|x86
 		{AF729D69-3971-45EE-B351-1FC9BFD6ED7D}.Release|x86.Build.0 = Release|x86
-		{4FEB8705-98BB-431C-9878-004B0C4D7D41}.Debug|x86.ActiveCfg = Debug|x86
-		{4FEB8705-98BB-431C-9878-004B0C4D7D41}.Debug|x86.Build.0 = Debug|x86
-		{4FEB8705-98BB-431C-9878-004B0C4D7D41}.Release|x86.ActiveCfg = Release|x86
-		{4FEB8705-98BB-431C-9878-004B0C4D7D41}.Release|x86.Build.0 = Release|x86
 		{02554B6E-557D-4C58-AE39-4AC674755D71}.Debug|x86.ActiveCfg = Debug|x86
 		{02554B6E-557D-4C58-AE39-4AC674755D71}.Debug|x86.Build.0 = Debug|x86
 		{02554B6E-557D-4C58-AE39-4AC674755D71}.Release|x86.ActiveCfg = Release|x86

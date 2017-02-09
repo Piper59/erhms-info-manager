@@ -1,6 +1,5 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Communication;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
@@ -72,9 +71,6 @@ namespace ERHMS.Presentation
             MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private ServiceHost host;
-
-        public Service Service { get; private set; }
         public ViewModelLocator Locator { get; private set; }
         public bool ShuttingDown { get; private set; }
 
@@ -112,8 +108,6 @@ namespace ERHMS.Presentation
                 e.Handled = true;
                 Shutdown();
             };
-            Service = new Service();
-            host = Service.OpenHost();
             Locator = new ViewModelLocator();
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotKeyboardFocusEvent, new KeyboardFocusChangedEventHandler((sender, e) =>
             {
@@ -300,15 +294,6 @@ namespace ERHMS.Presentation
         {
             ShuttingDown = true;
             base.Shutdown();
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            if (host != null)
-            {
-                host.Close();
-            }
-            base.OnExit(e);
         }
     }
 }
