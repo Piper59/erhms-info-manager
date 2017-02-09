@@ -12,6 +12,7 @@ namespace ERHMS.Utility
         public string ConfigurationFile { get; set; }
         public string RootDirectory { get; set; }
         public HashSet<string> DataSources { get; set; }
+        // TODO: Remove when Epi Info communication project removed
         public string ServiceAddress { get; set; }
         public string EmailHost { get; set; }
         public int? EmailPort { get; set; }

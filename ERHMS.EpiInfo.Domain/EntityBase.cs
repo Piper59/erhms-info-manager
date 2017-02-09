@@ -9,6 +9,7 @@ namespace ERHMS.EpiInfo.Domain
     {
         private IDictionary<string, object> properties;
 
+        // TODO: Rename
         private bool @new;
         public bool New
         {

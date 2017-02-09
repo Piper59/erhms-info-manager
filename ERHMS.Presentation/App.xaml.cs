@@ -23,6 +23,7 @@ using TextBox = System.Windows.Controls.TextBox;
 
 namespace ERHMS.Presentation
 {
+    // TODO: Add hook for version upgrade actions
     public partial class App : Application
     {
         public const string BareTitle = "ERHMS Info Manager";
