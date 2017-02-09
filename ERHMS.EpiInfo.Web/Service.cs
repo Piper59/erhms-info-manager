@@ -212,6 +212,7 @@ namespace ERHMS.EpiInfo.Web
                 {
                     Record record = new Record();
                     record.GlobalRecordId = answer.ResponseId;
+                    // TODO: Use XmlExtensions?
                     using (XmlReader reader = XmlReader.Create(new StringReader(answer.XML)))
                     {
                         while (reader.Read())

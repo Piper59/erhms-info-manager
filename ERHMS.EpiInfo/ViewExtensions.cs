@@ -46,7 +46,7 @@ namespace ERHMS.EpiInfo
 
         public static bool IsWebSurvey(this View @this)
         {
-            return !string.IsNullOrEmpty(@this.WebSurveyId);
+            return !string.IsNullOrWhiteSpace(@this.WebSurveyId);
         }
 
         public static Uri GetWebSurveyUrl(this View @this)

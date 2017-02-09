@@ -1,6 +1,5 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
-using System;
 
 namespace ERHMS.Test.Utility
 {

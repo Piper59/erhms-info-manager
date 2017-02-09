@@ -203,7 +203,7 @@ namespace ERHMS.Presentation
                 {
                     ConfigurationExtensions.Load();
                 }
-                catch (UnauthorizedAccessException)
+                catch (UnauthorizedAccessException)  // TODO: Is this still relevant?
                 {
                     Log.Current.WarnFormat("Access denied to root directory: {0}", Settings.Default.RootDirectory);
                     Settings.Default.RootDirectory = null;
