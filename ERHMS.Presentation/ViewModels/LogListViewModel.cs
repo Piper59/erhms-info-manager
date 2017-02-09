@@ -1,5 +1,4 @@
-﻿using ERHMS.EpiInfo;
-using ERHMS.Presentation.Dialogs;
+﻿using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;

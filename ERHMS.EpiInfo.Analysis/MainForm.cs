@@ -1,5 +1,6 @@
 ﻿using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
+using ERHMS.Utility;
 using System;
 using System.ComponentModel;
 using System.Data;

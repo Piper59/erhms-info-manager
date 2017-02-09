@@ -73,7 +73,6 @@
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="ImportExport.cs" />
     <Compile Include="InvalidViewNameReason.cs" />
-    <Compile Include="Log.cs" />
     <Compile Include="MetadataDbProviderExtensions.cs" />
     <Compile Include="MetaFieldTypeExtensions.cs" />
     <Compile Include="Pgm.cs" />

@@ -76,7 +76,6 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
-    <Compile Include="EpiInfo\LogTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
@@ -92,6 +91,7 @@
     <Compile Include="Utility\EnumerableExtensionsTest.cs" />
     <Compile Include="Utility\EnumExtensionsTest.cs" />
     <Compile Include="Utility\IOExtensionsTest.cs" />
+    <Compile Include="Utility\LogTest.cs" />
     <Compile Include="Utility\MailExtensionsTest.cs" />
     <Compile Include="Utility\ObjectExtensionsTest.cs" />
     <Compile Include="Utility\ProcessExtensionsTest.cs" />

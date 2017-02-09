@@ -1,9 +1,8 @@
-﻿using ERHMS.EpiInfo;
-using ERHMS.Utility;
+﻿using ERHMS.Utility;
 using NUnit.Framework;
 using System.IO;
 
-namespace ERHMS.Test.EpiInfo
+namespace ERHMS.Test.Utility
 {
     public class LogTest
     {
