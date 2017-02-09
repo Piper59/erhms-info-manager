@@ -71,36 +71,23 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static Configuration Load(string path)
+        public static Configuration Load()
         {
-            Log.Current.DebugFormat("Loading configuration: {0}", path);
-            Configuration.Load(path);
+            Log.Current.DebugFormat("Loading configuration: {0}", Configuration.DefaultConfigurationPath);
+            Configuration.Load(Configuration.DefaultConfigurationPath);
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
             Configuration configuration = Configuration.GetNewInstance();
             Log.SetDirectory(new DirectoryInfo(configuration.Directories.LogDir));
-            Log.Current.DebugFormat("Loaded configuration: {0}", path);
+            Log.Current.DebugFormat("Loaded configuration: {0}", Configuration.DefaultConfigurationPath);
             return configuration;
         }
 
-        public static Configuration Load()
+        public static bool TryLoad(out Configuration configuration)
         {
-            return Load(Configuration.DefaultConfigurationPath);
-        }
-
-        public static bool TryLoad(string path, out Configuration configuration)
-        {
-            Log.Current.DebugFormat("Trying to load configuration: {0}", path);
             try
             {
-                if (File.Exists(path))
-                {
-                    configuration = Load(path);
-                    return true;
-                }
-                else
-                {
-                    Log.Current.Debug("Configuration not found");
-                }
+                configuration = Load();
+                return true;
             }
             catch (Exception ex)
             {
@@ -108,11 +95,6 @@ namespace ERHMS.EpiInfo
             }
             configuration = null;
             return false;
-        }
-
-        public static bool TryLoad(out Configuration configuration)
-        {
-            return TryLoad(Configuration.DefaultConfigurationPath, out configuration);
         }
 
         public static void Save(this Configuration @this)
