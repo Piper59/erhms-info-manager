@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System;
 
 namespace ERHMS.Test.Utility
 {
@@ -8,7 +9,10 @@ namespace ERHMS.Test.Utility
         [Test]
         public void EscapeArgTest()
         {
-            Assert.AreEqual("\"\"", ProcessExtensions.EscapeArg(null));
+            Assert.Throws<Exception>(() =>
+            {
+                ProcessExtensions.EscapeArg(null);
+            });
             Assert.AreEqual("\"\"", ProcessExtensions.EscapeArg(""));
             Assert.AreEqual("\"one\"", ProcessExtensions.EscapeArg("one"));
             Assert.AreEqual("\"one two\"", ProcessExtensions.EscapeArg("one two"));
@@ -20,7 +24,10 @@ namespace ERHMS.Test.Utility
         {
             Assert.AreEqual("\"one\"", ProcessExtensions.FormatArgs("one"));
             Assert.AreEqual("\"one\" \"two\"", ProcessExtensions.FormatArgs("one", "two"));
-            Assert.AreEqual("\"one\" \"\" \"three\"", ProcessExtensions.FormatArgs("one", null, "three"));
+            Assert.Throws<Exception>(() =>
+            {
+                ProcessExtensions.FormatArgs("one", null, "three");
+            });
             Assert.AreEqual("\"one\" \"\" \"three\"", ProcessExtensions.FormatArgs("one", "", "three"));
             Assert.AreEqual("\"one\" \"two \"\"three\"\" four\" \"five\"", ProcessExtensions.FormatArgs("one", "two \"three\" four", "five"));
         }

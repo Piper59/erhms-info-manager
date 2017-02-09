@@ -7,7 +7,7 @@ namespace ERHMS.Utility
     {
         public static string EscapeArg(string arg)
         {
-            return string.Format("\"{0}\"", (arg ?? "").Replace("\"", "\"\""));
+            return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
         }
 
         public static string FormatArgs(IEnumerable<string> args)
