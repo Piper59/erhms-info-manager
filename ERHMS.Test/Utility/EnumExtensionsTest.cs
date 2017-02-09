@@ -27,11 +27,11 @@ namespace ERHMS.Test.Utility
         {
             Assert.AreEqual(Number.One, EnumExtensions.Parse<Number>("One"));
             Assert.AreEqual(Number.NaN, EnumExtensions.Parse<Number>("NaN"));
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<Exception>(() =>
             {
                 EnumExtensions.Parse<Number>(null);
             });
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<Exception>(() =>
             {
                 EnumExtensions.Parse<Number>("Four");
             });
@@ -62,11 +62,11 @@ namespace ERHMS.Test.Utility
         {
             Assert.AreEqual(Number.One, EnumExtensions.FromDescription<Number>("1"));
             Assert.AreEqual(Number.NaN, EnumExtensions.FromDescription<Number>(null));
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.Throws<Exception>(() =>
             {
                 EnumExtensions.FromDescription<DayOfWeek>("Sunday");
             });
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.Throws<Exception>(() =>
             {
                 EnumExtensions.FromDescription<DayOfWeek>(null);
             });
