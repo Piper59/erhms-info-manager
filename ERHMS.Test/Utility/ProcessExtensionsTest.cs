@@ -9,7 +9,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void EscapeArgTest()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Catch(() =>
             {
                 ProcessExtensions.EscapeArg(null);
             });
@@ -24,7 +24,7 @@ namespace ERHMS.Test.Utility
         {
             Assert.AreEqual("\"one\"", ProcessExtensions.FormatArgs("one"));
             Assert.AreEqual("\"one\" \"two\"", ProcessExtensions.FormatArgs("one", "two"));
-            Assert.Throws<Exception>(() =>
+            Assert.Catch(() =>
             {
                 ProcessExtensions.FormatArgs("one", null, "three");
             });

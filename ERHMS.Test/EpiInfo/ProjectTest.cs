@@ -288,7 +288,7 @@ namespace ERHMS.Test.EpiInfo
             }
             else
             {
-                TestContext.Error.WriteLine("Database '{0}' must be manually dropped.", builder.InitialCatalog);
+                TestContext.Error.WriteLine("Database '{0}' may need to be manually dropped.", builder.InitialCatalog);
             }
         }
 
