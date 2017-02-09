@@ -115,14 +115,14 @@ namespace ERHMS.EpiInfo.Web
                 {
                     if (response.SurveyInfoList.Length > 1)
                     {
-                        Log.Current.WarnFormat("Multiple surveys found: {0}", view.Name);
+                        Log.Current.Warn("Multiple surveys found");
                     }
                     return Survey.FromServiceObject(response.SurveyInfoList[0]);
                 }
             }
             catch (Exception ex)
             {
-                Log.Current.Warn(string.Format("Failed to get survey: {0}", view.Name), ex);
+                Log.Current.Warn("Failed to get survey", ex);
                 return null;
             }
         }
@@ -153,7 +153,7 @@ namespace ERHMS.EpiInfo.Web
             }
             catch (Exception ex)
             {
-                Log.Current.Warn(string.Format("Failed to publish to web: {0}", view.Name), ex);
+                Log.Current.Warn("Failed to publish to web", ex);
                 return false;
             }
         }
@@ -174,7 +174,7 @@ namespace ERHMS.EpiInfo.Web
             }
             catch (Exception ex)
             {
-                Log.Current.Warn(string.Format("Failed to republish to web: {0}", view.Name), ex);
+                Log.Current.Warn("Failed to republish to web", ex);
                 return false;
             }
         }
@@ -263,7 +263,7 @@ namespace ERHMS.EpiInfo.Web
             }
             catch (Exception ex)
             {
-                Log.Current.Warn(string.Format("Failed to add record: {0}", view.Name), ex);
+                Log.Current.Warn("Failed to add record", ex);
                 return null;
             }
         }

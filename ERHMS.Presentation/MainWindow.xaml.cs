@@ -73,12 +73,12 @@ namespace ERHMS.Presentation
                 });
             if (result == MessageDialogResult.Affirmative)
             {
-                Log.Current.DebugFormat("Confirmed: {0}", msg.Message);
+                Log.Current.Debug("Confirmed");
                 msg.OnConfirmed();
             }
             else
             {
-                Log.Current.DebugFormat("Canceled: {0}", msg.Message);
+                Log.Current.Debug("Canceled");
                 msg.OnCanceled();
             }
         }

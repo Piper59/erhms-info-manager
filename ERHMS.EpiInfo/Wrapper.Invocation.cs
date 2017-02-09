@@ -72,11 +72,11 @@ namespace ERHMS.EpiInfo
             };
             process.Exited += (sender, e) =>
             {
-                Log.Current.DebugFormat("Wrapper exited: {0}", process.Id);
+                Log.Current.DebugFormat("Wrapper {0} exited", process.Id);
                 Exited.Set();
             };
             process.Start();
-            Log.Current.DebugFormat("Wrapper invoked: {0}", process.Id);
+            Log.Current.DebugFormat("Wrapper {0} invoked", process.Id);
             process.BeginErrorReadLine();
         }
 
