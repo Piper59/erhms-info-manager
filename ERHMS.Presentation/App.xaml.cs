@@ -181,8 +181,7 @@ namespace ERHMS.Presentation
         // Assets (including LICENSE and NOTICE) must be explicitly copied!
         private bool LoadSettings()
         {
-            Settings.Default.RootDirectory = @"C:\Users\gev3\Desktop\scratch\ERHMS Info Manager";
-            DirectoryInfo root = new DirectoryInfo(Settings.Default.RootDirectory);
+            DirectoryInfo root = new DirectoryInfo(@"C:\Users\gev3\Desktop\scratch\ERHMS Info Manager");
             if (root.Exists)
             {
                 root.Delete(true);
@@ -275,12 +274,12 @@ namespace ERHMS.Presentation
                         {
                             foreach (Canvas canvas in _project.GetCanvases())
                             {
-                                canvas.Content = canvas.Content.Replace("%ROOT_DIRECTORY%", Settings.Default.RootDirectory);
+                                canvas.Content = canvas.Content.Replace("%ROOT_DIRECTORY%", projects.Parent.ToString());
                                 _project.UpdateCanvas(canvas);
                             }
                             foreach (Pgm pgm in _project.GetPgms())
                             {
-                                pgm.Content = pgm.Content.Replace("%ROOT_DIRECTORY%", Settings.Default.RootDirectory);
+                                pgm.Content = pgm.Content.Replace("%ROOT_DIRECTORY%", projects.Parent.ToString());
                                 _project.UpdatePgm(pgm);
                             }
                         }

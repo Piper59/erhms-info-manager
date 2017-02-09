@@ -107,6 +107,8 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(() => LogLevel, ref logLevel, value); }
         }
 
+        private string originalRootDirectory;
+
         private string rootDirectory;
         [DirtyCheck]
         public string RootDirectory
@@ -150,7 +152,9 @@ namespace ERHMS.Presentation.ViewModels
             };
             Configuration configuration = Configuration.GetNewInstance();
             LogLevel = Settings.Default.LogLevel;
-            RootDirectory = Settings.Default.RootDirectory;
+            // TODO: Revisit this for version 2
+            originalRootDirectory = new DirectoryInfo(configuration.Directories.Project).Parent.FullName;
+            RootDirectory = originalRootDirectory;
             Email = new EmailSettingsViewModel
             {
                 Host = Settings.Default.EmailHost,
@@ -180,7 +184,7 @@ namespace ERHMS.Presentation.ViewModels
                 if (dialog.ShowDialog(true) == DialogResult.OK)
                 {
                     string path = dialog.GetRootDirectory();
-                    if (path.EqualsIgnoreCase(Settings.Default.RootDirectory))
+                    if (path.EqualsIgnoreCase(originalRootDirectory))
                     {
                         RootDirectory = path;
                         RootDirectoryChanged = false;
@@ -249,14 +253,13 @@ namespace ERHMS.Presentation.ViewModels
                     // TODO: Close files?
                     DirectoryInfo directory = new DirectoryInfo(RootDirectory);
                     configuration.ChangeRoot(directory);
-                    new DirectoryInfo(Settings.Default.RootDirectory).CopyTo(directory, false);
+                    new DirectoryInfo(originalRootDirectory).CopyTo(directory, false);
                     ICollection<string> dataSources = Settings.Default.DataSources.ToList();
                     Settings.Default.DataSources.Clear();
                     foreach (string dataSource in dataSources)
                     {
-                        Settings.Default.DataSources.Add(dataSource.Replace(Settings.Default.RootDirectory, RootDirectory));
+                        Settings.Default.DataSources.Add(dataSource.Replace(originalRootDirectory, RootDirectory));
                     }
-                    Settings.Default.RootDirectory = RootDirectory;
                     Settings.Default.Save();
                     configuration.Save();
                     Dirty = false;
