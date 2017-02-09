@@ -1,11 +1,27 @@
-﻿using ERHMS.EpiInfo;
+﻿using Epi;
+using ERHMS.EpiInfo;
 using NUnit.Framework;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace ERHMS.Test.EpiInfo
 {
     public class WrapperTest
     {
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            DirectoryInfo root = new DirectoryInfo(Environment.CurrentDirectory);
+            ConfigurationExtensions.Create(root).Save();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            File.Delete(Configuration.DefaultConfigurationPath);
+        }
+
         [Test]
         public void OutTest()
         {

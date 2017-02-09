@@ -185,7 +185,7 @@ namespace ERHMS.Presentation
 
         // TODO: Too fast and loose with settings?
         // TODO: Consider changes to ConfigurationExtensions
-        // Assets must be explicitly copied!
+        // Assets (including LICENSE and NOTICE) must be explicitly copied!
         private bool LoadSettings()
         {
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))

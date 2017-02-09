@@ -14,7 +14,6 @@ using System.Reflection;
 using System.Xml;
 using Configuration = Epi.Configuration;
 using Project = ERHMS.EpiInfo.Project;
-using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Test.EpiInfo
 {
@@ -29,14 +28,13 @@ namespace ERHMS.Test.EpiInfo
         public void OneTimeSetUp()
         {
             directory = Helpers.GetTemporaryDirectory(GetType());
-            Settings.Default.RootDirectory = directory.FullName;
+            ConfigurationExtensions.Create(directory).Save();
             configuration = ConfigurationExtensions.Load();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            Settings.Default.Reset();
             File.Delete(Configuration.DefaultConfigurationPath);
             Log.SetDirectory(Log.GetDefaultDirectory());
             directory.Delete(true);

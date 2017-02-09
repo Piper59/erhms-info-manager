@@ -1,10 +1,7 @@
-﻿using Epi;
-using ERHMS.EpiInfo;
+﻿using ERHMS.EpiInfo;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Test
 {
@@ -12,15 +9,7 @@ namespace ERHMS.Test
     {
         internal static void Main(string[] args)
         {
-            Settings.Default.RootDirectory = Environment.CurrentDirectory;
-            try
-            {
-                MainBase(typeof(TestProgram), args);
-            }
-            finally
-            {
-                File.Delete(Configuration.DefaultConfigurationPath);
-            }
+            MainBase(typeof(TestProgram), args);
         }
 
         public static Wrapper OutTest()

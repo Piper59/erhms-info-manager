@@ -373,6 +373,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\NOTICE.txt">
+      <Link>NOTICE.txt</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Service References\GeocodeService\configuration91.svcinfo" />
