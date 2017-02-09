@@ -23,6 +23,21 @@ namespace ERHMS.Test.Utility
         }
 
         [Test]
+        public void ParseTest()
+        {
+            Assert.AreEqual(Number.One, EnumExtensions.Parse<Number>("One"));
+            Assert.AreEqual(Number.NaN, EnumExtensions.Parse<Number>("NaN"));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                EnumExtensions.Parse<Number>(null);
+            });
+            Assert.Throws<ArgumentException>(() =>
+            {
+                EnumExtensions.Parse<Number>("Four");
+            });
+        }
+
+        [Test]
         public void GetValuesTest()
         {
             ICollection<Number> numbers = new Number[]

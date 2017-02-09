@@ -16,7 +16,7 @@ namespace ERHMS.EpiInfo.Enter
 
         public static Wrapper Execute()
         {
-            return Invoke(args => Main_Execute(args));
+            return Create(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -28,7 +28,7 @@ namespace ERHMS.EpiInfo.Enter
 
         public static Wrapper OpenView(View view, object record = null)
         {
-            Wrapper wrapper = Invoke(args => Main_OpenView(args), view.Project.FilePath, view.Name);
+            Wrapper wrapper = Create(args => Main_OpenView(args), view.Project.FilePath, view.Name);
             if (record != null)
             {
                 foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
@@ -74,7 +74,7 @@ namespace ERHMS.EpiInfo.Enter
 
         public static Wrapper OpenRecord(View view, int uniqueKey)
         {
-            return Invoke(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
+            return Create(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
         }
         private static void Main_OpenRecord(string[] args)
         {

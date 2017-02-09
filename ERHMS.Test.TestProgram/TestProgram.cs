@@ -25,7 +25,7 @@ namespace ERHMS.Test
 
         public static Wrapper OutTest()
         {
-            return Invoke(args => Main_OutTest(args));
+            return Create(args => Main_OutTest(args));
         }
         private static void Main_OutTest(string[] args)
         {
@@ -35,7 +35,7 @@ namespace ERHMS.Test
 
         public static Wrapper InAndOutTest()
         {
-            return Invoke(args => Main_InAndOutTest(args));
+            return Create(args => Main_InAndOutTest(args));
         }
         private static void Main_InAndOutTest(string[] args)
         {
@@ -56,7 +56,7 @@ namespace ERHMS.Test
 
         public static Wrapper ArgsTest(IEnumerable<int> values)
         {
-            return Invoke(args => Main_ArgsTest(args), values.Select(value => value.ToString()).ToArray());
+            return Create(args => Main_ArgsTest(args), values.Select(value => value.ToString()).ToArray());
         }
         private static void Main_ArgsTest(string[] args)
         {
@@ -67,6 +67,23 @@ namespace ERHMS.Test
                 sum += value;
             }
             Out.WriteLine(sum);
+        }
+
+        public static Wrapper EventTest()
+        {
+            return Create(args => Main_EventTest(args));
+        }
+        private static void Main_EventTest(string[] args)
+        {
+            Console.Error.WriteLine("Standard error should be redirected to a null stream.");
+            RaiseEvent(WrapperEventType.Default, new
+            {
+                Empty = "",
+                Message = "'Hello, world!'",
+                Math = "1 + 2 + 3 = 6",
+                Logic = "A & B & C = D",
+                Number = 42
+            });
         }
     }
 }

@@ -54,7 +54,7 @@ namespace ERHMS.Presentation.ViewModels
         public void Create()
         {
             string prefix = Incident == null ? null : Incident.Name;
-            MakeView.InstantiateTemplate(DataContext.Project, SelectedItem, prefix, IncidentId);
+            MakeView.InstantiateTemplate(DataContext.Project, SelectedItem, prefix, IncidentId).Invoke();
         }
 
         public void Delete()

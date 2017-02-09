@@ -106,7 +106,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Open()
         {
-            Analysis.OpenPgm(DataContext.Project, DataContext.Project.GetPgmById(SelectedItem.Data.PgmId), false, SelectedItem.IncidentId);
+            Analysis.OpenPgm(DataContext.Project, DataContext.Project.GetPgmById(SelectedItem.Data.PgmId), false, SelectedItem.IncidentId).Invoke();
         }
 
         public void Delete()

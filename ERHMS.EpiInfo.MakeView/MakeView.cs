@@ -19,7 +19,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper Execute()
         {
-            return Invoke(args => Main_Execute(args));
+            return Create(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -31,7 +31,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper OpenProject(Project project)
         {
-            return Invoke(args => Main_OpenProject(args), project.FilePath);
+            return Create(args => Main_OpenProject(args), project.FilePath);
         }
         private static void Main_OpenProject(string[] args)
         {
@@ -45,7 +45,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper OpenView(View view)
         {
-            return Invoke(args => Main_OpenView(args), view.Project.FilePath, view.Name);
+            return Create(args => Main_OpenView(args), view.Project.FilePath, view.Name);
         }
         private static void Main_OpenView(string[] args)
         {
@@ -61,7 +61,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper AddView(Project project, string prefix = null, string tag = null)
         {
-            return Invoke(args => Main_AddView(args), project.FilePath, prefix, tag);
+            return Create(args => Main_AddView(args), project.FilePath, prefix, tag);
         }
         private static void Main_AddView(string[] args)
         {
@@ -106,7 +106,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper CreateTemplate(View view)
         {
-            return Invoke(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
+            return Create(args => Main_CreateTemplate(args), view.Project.FilePath, view.Name);
         }
         private static void Main_CreateTemplate(string[] args)
         {
@@ -146,7 +146,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper CreateWebTemplate(View view)
         {
-            return Invoke(args => Main_CreateWebTemplate(args), view.Project.FilePath, view.Name);
+            return Create(args => Main_CreateWebTemplate(args), view.Project.FilePath, view.Name);
         }
         private static void Main_CreateWebTemplate(string[] args)
         {
@@ -164,7 +164,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper InstantiateTemplate(Project project, EpiInfo.Template template, string prefix = null, string tag = null)
         {
-            return Invoke(args => Main_InstantiateTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
+            return Create(args => Main_InstantiateTemplate(args), project.FilePath, template.File.FullName, prefix, tag);
         }
         private static void Main_InstantiateTemplate(string[] args)
         {
@@ -242,7 +242,7 @@ namespace ERHMS.EpiInfo.MakeView
 
         public static Wrapper PublishToMobile(View view)
         {
-            return Invoke(args => Main_PublishToMobile(args), view.Project.FilePath, view.Name);
+            return Create(args => Main_PublishToMobile(args), view.Project.FilePath, view.Name);
         }
         private static void Main_PublishToMobile(string[] args)
         {

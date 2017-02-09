@@ -8,6 +8,11 @@ namespace ERHMS.Utility
 {
     public static class EnumExtensions
     {
+        public static TEnum Parse<TEnum>(string value)
+        {
+            return (TEnum)Enum.Parse(typeof(TEnum), value);
+        }
+
         public static IEnumerable<TEnum> GetValues<TEnum>()
         {
             return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();

@@ -17,7 +17,7 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
 
         public static Wrapper Execute()
         {
-            return Invoke(args => Main_Execute(args));
+            return Create(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -31,7 +31,7 @@ namespace ERHMS.EpiInfo.AnalysisDashboard
         {
             FileInfo file = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", Canvas.FileExtension);
             File.WriteAllText(file.FullName, canvas.Content);
-            return Invoke(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
+            return Create(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
         }
         private static void Main_OpenCanvas(string[] args)
         {

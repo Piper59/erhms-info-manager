@@ -38,7 +38,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public static Wrapper Execute()
         {
-            return Invoke(args => Main_Execute(args));
+            return Create(args => Main_Execute(args));
         }
         private static void Main_Execute(string[] args)
         {
@@ -52,7 +52,7 @@ namespace ERHMS.EpiInfo.Analysis
         {
             FileInfo file = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", Pgm.FileExtension);
             File.WriteAllText(file.FullName, pgm.Content);
-            return Invoke(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
+            return Create(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
         }
         private static void Main_OpenPgm(string[] args)
         {
@@ -108,7 +108,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public static Wrapper Import(View target)
         {
-            return Invoke(args => Main_Import(args), target.Project.FilePath, target.Name);
+            return Create(args => Main_Import(args), target.Project.FilePath, target.Name);
         }
         private static void Main_Import(string[] args)
         {
@@ -206,7 +206,7 @@ namespace ERHMS.EpiInfo.Analysis
 
         public static Wrapper Export(View source)
         {
-            return Invoke(args => Main_Export(args), source.Project.FilePath, source.Name);
+            return Create(args => Main_Export(args), source.Project.FilePath, source.Name);
         }
         private static void Main_Export(string[] args)
         {

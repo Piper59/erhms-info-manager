@@ -1,6 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ERHMS.Test.Utility
@@ -32,7 +32,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void MakeUniqueTest()
         {
-            string[] values = new string[]
+            ICollection<string> values = new string[]
             {
                 "test",
                 "test (2)",

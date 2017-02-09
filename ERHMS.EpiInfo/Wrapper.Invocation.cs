@@ -1,7 +1,5 @@
 ﻿using ERHMS.Utility;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq.Expressions;
@@ -12,17 +10,14 @@ namespace ERHMS.EpiInfo
 {
     public partial class Wrapper
     {
-        protected static Wrapper Invoke(Expression<Action<string[]>> expression, params string[] args)
+        protected static Wrapper Create(Expression<Action<string[]>> expression, params string[] args)
         {
-            Wrapper wrapper = new Wrapper(Assembly.GetCallingAssembly(), expression, args);
-            wrapper.Invoke();
-            return wrapper;
+            return new Wrapper(Assembly.GetCallingAssembly(), expression, args);
         }
 
         private FileInfo executable;
         private string arguments;
         private Process process;
-        private BlockingCollection<string> output;
 
         public ManualResetEvent Exited { get; private set; }
 
@@ -40,9 +35,17 @@ namespace ERHMS.EpiInfo
             Exited = new ManualResetEvent(false);
         }
 
-        // TODO: Define events
+        public event EventHandler<WrapperEventArgs> Event;
+        private void OnEvent(WrapperEventArgs e)
+        {
+            Event?.Invoke(this, e);
+        }
+        private void OnEvent(string line)
+        {
+            OnEvent(WrapperEventArgs.Parse(line));
+        }
 
-        private void Invoke()
+        public void Invoke()
         {
             Log.Current.DebugFormat("Invoking wrapper: {0} {1}", executable.FullName, arguments);
             process = new Process
@@ -59,55 +62,40 @@ namespace ERHMS.EpiInfo
                     Arguments = arguments
                 }
             };
-            output = new BlockingCollection<string>();
-            process.OutputDataReceived += (sender, e) =>
+            process.ErrorDataReceived += (sender, e) =>
             {
-                // TODO: Translate output into events
-                output.Add(e.Data);
+                if (e.Data != null)
+                {
+                    Log.Current.DebugFormat("Received data from wrapper {0}: {1}", process.Id, e.Data);
+                    OnEvent(e.Data);
+                }
             };
             process.Exited += (sender, e) =>
             {
-                output.CompleteAdding();
+                Log.Current.DebugFormat("Wrapper exited: {0}", process.Id);
                 Exited.Set();
             };
             process.Start();
-            process.BeginOutputReadLine();
+            Log.Current.DebugFormat("Wrapper invoked: {0}", process.Id);
+            process.BeginErrorReadLine();
         }
 
         public string ReadLine()
         {
-            try
-            {
-                return output.Take();
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
-        }
-
-        public IEnumerable<string> ReadAllLines()
-        {
-            while (true)
-            {
-                string line = ReadLine();
-                if (line == null)
-                {
-                    yield break;
-                }
-                else
-                {
-                    yield return line;
-                }
-            }
+            return process.StandardOutput.ReadLine();
         }
 
         public string ReadToEnd()
         {
-            return string.Join(Environment.NewLine, ReadAllLines());
+            return process.StandardOutput.ReadToEnd();
         }
 
         public void WriteLine(object value)
+        {
+            process.StandardInput.WriteLine(value);
+        }
+
+        public void WriteLine(string value)
         {
             process.StandardInput.WriteLine(value);
         }

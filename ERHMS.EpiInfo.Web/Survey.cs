@@ -117,6 +117,8 @@ namespace ERHMS.EpiInfo.Web
 
         internal SurveyInfoDTO ToServiceObject(View view)
         {
+            Wrapper wrapper = MakeView.MakeView.CreateTemplate(view);
+            wrapper.Invoke();
             if (ServiceObject == null)
             {
                 ServiceObject = new SurveyInfoDTO();
@@ -132,7 +134,7 @@ namespace ERHMS.EpiInfo.Web
             ServiceObject.ExitText = Outro;
             ServiceObject.IsDraftMode = Draft;
             ServiceObject.UserPublishKey = PublishKey;
-            ServiceObject.XML = MakeView.MakeView.CreateWebTemplate(view).ReadToEnd();
+            ServiceObject.XML = wrapper.ReadToEnd();
             return ServiceObject;
         }
     }

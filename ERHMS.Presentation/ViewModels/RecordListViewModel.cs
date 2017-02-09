@@ -75,12 +75,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Enter.OpenView(View);
+            Enter.OpenView(View).Invoke();
         }
 
         public void Edit()
         {
-            Enter.OpenRecord(View, SelectedItem.UniqueKey.Value);
+            Enter.OpenRecord(View, SelectedItem.UniqueKey.Value).Invoke();
         }
 
         public void Delete()

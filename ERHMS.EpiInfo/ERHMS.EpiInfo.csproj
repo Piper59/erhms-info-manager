@@ -85,6 +85,8 @@
     <Compile Include="ViewExtensions.cs" />
     <Compile Include="Wrapper.Execution.cs" />
     <Compile Include="Wrapper.Invocation.cs" />
+    <Compile Include="WrapperEventArgs.cs" />
+    <Compile Include="WrapperEventType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\TableCanvas.tt">

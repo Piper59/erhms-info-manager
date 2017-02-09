@@ -108,14 +108,14 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (SelectedResponder == null)
                 {
-                    Enter.OpenView(View);
+                    Enter.OpenView(View).Invoke();
                 }
                 else
                 {
                     Enter.OpenView(View, new
                     {
                         ResponderId = SelectedResponder.ResponderId
-                    });
+                    }).Invoke();
                 }
                 Active = false;
             }
@@ -253,12 +253,12 @@ namespace ERHMS.Presentation.ViewModels
             FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.xml");
             Assembly.GetAssembly(typeof(Responder)).CopyManifestResourceTo("ERHMS.Domain.Templates.Forms.Empty.xml", templateFile);
             Template template = Template.Get(templateFile);
-            MakeView.InstantiateTemplate(DataContext.Project, template, prefix, IncidentId);
+            MakeView.InstantiateTemplate(DataContext.Project, template, prefix, IncidentId).Invoke();
         }
 
         public void Edit()
         {
-            MakeView.OpenView(SelectedItem.Data);
+            MakeView.OpenView(SelectedItem.Data).Invoke();
         }
 
         public void Delete()
@@ -290,7 +290,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Enter.OpenView(SelectedItem.Data);
+                Enter.OpenView(SelectedItem.Data).Invoke();
             }
         }
 
@@ -302,7 +302,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToTemplate()
         {
-            MakeView.CreateTemplate(SelectedItem.Data);
+            MakeView.CreateTemplate(SelectedItem.Data).Invoke();
         }
 
         private void NotifyUnsupported(string message, IEnumerable<Field> fields)
@@ -346,7 +346,7 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
-                MakeView.PublishToMobile(SelectedItem.Data);
+                MakeView.PublishToMobile(SelectedItem.Data).Invoke();
             }
         }
 
@@ -371,7 +371,7 @@ namespace ERHMS.Presentation.ViewModels
         public void ImportFromFile()
         {
             SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
-            Analysis.Import(SelectedItem.Data);
+            Analysis.Import(SelectedItem.Data).Invoke();
         }
 
         public void ImportFromWeb()
@@ -402,7 +402,7 @@ namespace ERHMS.Presentation.ViewModels
         public void ExportToFile()
         {
             SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
-            Analysis.Export(SelectedItem.Data);
+            Analysis.Export(SelectedItem.Data).Invoke();
         }
 
         public void AnalyzeClassic()
@@ -435,7 +435,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshListMessage<Pgm>(SelectedItem.IncidentId));
             PgmModel.Active = false;
             SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
-            Analysis.OpenPgm(DataContext.Project, pgm, true, SelectedItem.IncidentId);
+            Analysis.OpenPgm(DataContext.Project, pgm, true, SelectedItem.IncidentId).Invoke();
         }
 
         public void CreateCanvas()
@@ -456,7 +456,7 @@ namespace ERHMS.Presentation.ViewModels
             Messenger.Default.Send(new RefreshListMessage<Canvas>(SelectedItem.IncidentId));
             CanvasModel.Active = false;
             SelectedItem.Data.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Data);
-            AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, SelectedItem.IncidentId);
+            AnalysisDashboard.OpenCanvas(DataContext.Project, canvas, SelectedItem.IncidentId).Invoke();
         }
 
         private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
