@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using View = Epi.View;
 
-namespace ERHMS.EpiInfo.Enter
+namespace ERHMS.EpiInfo
 {
     public class Enter : Wrapper
     {

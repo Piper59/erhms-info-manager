@@ -3,7 +3,7 @@ using Epi.Windows.ImportExport.Dialogs;
 using System.Windows.Forms;
 using View = Epi.View;
 
-namespace ERHMS.EpiInfo.ImportExport
+namespace ERHMS.EpiInfo
 {
     public static class ImportExport
     {

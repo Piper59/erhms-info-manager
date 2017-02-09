@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo.MakeView
+namespace ERHMS.EpiInfo
 {
-    public partial class CreateTemplateDialog : DialogBase
+    internal partial class CreateTemplateDialog : DialogBase
     {
         public Project Project { get; private set; }
 

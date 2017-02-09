@@ -7,7 +7,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 
-namespace ERHMS.EpiInfo.MakeView
+namespace ERHMS.EpiInfo
 {
     internal class Template
     {

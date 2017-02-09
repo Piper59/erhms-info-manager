@@ -1,4 +1,4 @@
-﻿namespace ERHMS.EpiInfo.MakeView
+﻿namespace ERHMS.EpiInfo
 {
     partial class CreateTemplateDialog
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ERHMS.EpiInfo.Analysis
+namespace ERHMS.EpiInfo
 {
     internal class MappingCollection : List<Mapping>
     {

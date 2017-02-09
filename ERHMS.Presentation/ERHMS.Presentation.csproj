@@ -180,10 +180,6 @@
       <Project>{1f323f8b-ac7b-4dba-94cc-9b9c2e7d7652}</Project>
       <Name>ERHMS.EpiInfo.Enter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.ImportExport\ERHMS.EpiInfo.ImportExport.csproj">
-      <Project>{e55468b5-c9b9-4ac4-84da-dedb30f28dce}</Project>
-      <Name>ERHMS.EpiInfo.ImportExport</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.MakeView\ERHMS.EpiInfo.MakeView.csproj">
       <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
       <Name>ERHMS.EpiInfo.MakeView</Name>

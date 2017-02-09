@@ -2,7 +2,6 @@
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
-using ERHMS.EpiInfo.MakeView;
 using ERHMS.Utility;
 using System.Collections.Generic;
 using System.IO;

@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo.MakeView
+namespace ERHMS.EpiInfo
 {
     internal class MainForm : MakeViewMainForm
     {

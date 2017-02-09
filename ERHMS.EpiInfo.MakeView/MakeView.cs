@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Xml;
 using View = Epi.View;
 
-namespace ERHMS.EpiInfo.MakeView
+namespace ERHMS.EpiInfo
 {
     public class MakeView : Wrapper
     {

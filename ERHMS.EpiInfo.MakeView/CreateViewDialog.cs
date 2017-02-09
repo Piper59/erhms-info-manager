@@ -2,9 +2,9 @@
 using System;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo.MakeView
+namespace ERHMS.EpiInfo
 {
-    public partial class CreateViewDialog : DialogBase
+    internal partial class CreateViewDialog : DialogBase
     {
         public Project Project { get; private set; }
 

@@ -1,7 +1,7 @@
 ﻿using ERHMS.Utility;
 using System;
 
-namespace ERHMS.EpiInfo.Analysis
+namespace ERHMS.EpiInfo
 {
     internal class Mapping
     {

@@ -2,11 +2,6 @@
 using Epi.Fields;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Analysis;
-using ERHMS.EpiInfo.AnalysisDashboard;
-using ERHMS.EpiInfo.Enter;
-using ERHMS.EpiInfo.ImportExport;
-using ERHMS.EpiInfo.MakeView;
 using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;

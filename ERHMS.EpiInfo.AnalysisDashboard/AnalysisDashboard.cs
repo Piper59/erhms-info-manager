@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo.AnalysisDashboard
+namespace ERHMS.EpiInfo
 {
     public class AnalysisDashboard : Wrapper
     {

@@ -4,9 +4,9 @@ using Epi.Windows.Enter;
 using Epi.Windows.Enter.PresentationLogic;
 using ERHMS.EpiInfo.Communication;
 
-namespace ERHMS.EpiInfo.Enter
+namespace ERHMS.EpiInfo
 {
-    public class MainForm : EnterMainForm
+    internal class MainForm : EnterMainForm
     {
         public MainForm(string tag = null)
         {

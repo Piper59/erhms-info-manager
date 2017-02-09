@@ -1,8 +1,8 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
-using ERHMS.EpiInfo.Enter;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;

@@ -117,7 +117,7 @@ namespace ERHMS.EpiInfo.Web
 
         internal SurveyInfoDTO ToServiceObject(View view)
         {
-            Wrapper wrapper = MakeView.MakeView.CreateTemplate(view);
+            Wrapper wrapper = MakeView.CreateTemplate(view);
             wrapper.Invoke();
             if (ServiceObject == null)
             {

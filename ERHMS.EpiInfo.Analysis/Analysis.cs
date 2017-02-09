@@ -12,7 +12,7 @@ using System.Linq;
 using System.Windows.Forms;
 using View = Epi.View;
 
-namespace ERHMS.EpiInfo.Analysis
+namespace ERHMS.EpiInfo
 {
     public class Analysis : Wrapper
     {
