@@ -7,72 +7,26 @@ using System.Web;
 
 namespace ERHMS.Utility
 {
-    public class QueryString : IEnumerable<KeyValuePair<string, string>>
-    {
-        public static QueryString Parse(string value)
-        {
-            return new QueryString(HttpUtility.ParseQueryString(value));
-        }
+    using Pair = KeyValuePair<string, string>;
 
+    public class QueryString : IEnumerable<Pair>
+    {
         private NameValueCollection @base;
 
-        public int Count
+        public QueryString(string query = "")
         {
-            get { return @base.Count; }
-        }
-
-        public IEnumerable<string> Keys
-        {
-            get { return @base.Cast<string>(); }
-        }
-
-        public IEnumerable<string> Values
-        {
-            get { return Keys.Select(key => Get(key)); }
-        }
-
-        public IEnumerable<KeyValuePair<string, string>> Pairs
-        {
-            get { return Keys.Select(key => new KeyValuePair<string, string>(key, Get(key))); }
-        }
-
-        private QueryString(NameValueCollection @base)
-        {
-            this.@base = @base;
-        }
-
-        public QueryString()
-            : this(HttpUtility.ParseQueryString("")) { }
-
-        public void Clear()
-        {
-            @base.Clear();
-        }
-
-        public bool ContainsKey(string key)
-        {
-            return Keys.Contains(key);
-        }
-
-        public string Get(string key)
-        {
-            return @base.Get(key);
-        }
-
-        public void Remove(string key)
-        {
-            @base.Remove(key);
+            @base = HttpUtility.ParseQueryString(query);
         }
 
         public void Set(string key, string value)
         {
             if (key == null)
             {
-                throw new ArgumentNullException("Key cannot be null.");
+                throw new ArgumentNullException(nameof(key));
             }
             if (value == null)
             {
-                throw new ArgumentNullException("Value cannot be null.");
+                throw new ArgumentNullException(nameof(value));
             }
             @base.Set(key, value);
         }
@@ -87,9 +41,11 @@ namespace ERHMS.Utility
             return @base.ToString();
         }
 
-        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        public IEnumerator<Pair> GetEnumerator()
         {
-            return Pairs.GetEnumerator();
+            return @base.Cast<string>()
+                .Select(key => new Pair(key, @base.Get(key)))
+                .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

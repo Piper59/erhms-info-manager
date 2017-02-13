@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -7,8 +8,14 @@ namespace ERHMS.Test.Utility
 {
     public class AssemblyExtensionsTest
     {
-        private const string ResourceName = "ERHMS.Test.Utility.Message.txt";
+        private const string ResourceName = "ERHMS.Test.Resources.Message.txt";
         private const string ResourceContent = "Hello, world!";
+
+        [Test]
+        public void GetEntryDirectoryPath()
+        {
+            Assert.AreEqual(Environment.CurrentDirectory, AssemblyExtensions.GetEntryDirectoryPath());
+        }
 
         [Test]
         public void GetManifestResourceTextTest()
@@ -19,15 +26,15 @@ namespace ERHMS.Test.Utility
         [Test]
         public void CopyManifestResourceToTest()
         {
-            FileInfo file = new FileInfo(Path.GetTempFileName());
+            string path = Path.GetTempFileName();
             try
             {
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo(ResourceName, file);
-                Assert.AreEqual(ResourceContent, File.ReadAllText(file.FullName));
+                Assembly.GetExecutingAssembly().CopyManifestResourceTo(ResourceName, path);
+                Assert.AreEqual(ResourceContent, File.ReadAllText(path));
             }
             finally
             {
-                file.Delete();
+                File.Delete(path);
             }
         }
     }

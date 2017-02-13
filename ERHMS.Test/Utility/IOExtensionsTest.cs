@@ -2,103 +2,81 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace ERHMS.Test.Utility
 {
     public class IOExtensionsTest
     {
         [Test]
-        public void TouchTest()
+        public void GetTempFileNameTest()
         {
-            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => TouchTest());
+            string path1 = null;
+            string path2 = null;
             try
             {
-                string fileName = "file.txt";
-                FileInfo file = directory.GetFile(fileName);
-                file.Touch();
-                FileAssert.Exists(file);
-                Assert.IsTrue(file.CreationTime.IsRecent());
-                Assert.AreEqual(0, file.Length);
-                string content = "Hello, world!";
-                File.WriteAllText(file.FullName, content);
-                Assert.AreEqual(content, File.ReadAllText(file.FullName));
-                Assert.DoesNotThrow(() =>
-                {
-                    file.Touch();
-                });
-                Assert.AreEqual(content, File.ReadAllText(file.FullName));
+                path1 = IOExtensions.GetTempFileName("temp_{0:N}.txt");
+                path2 = IOExtensions.GetTempFileName("{1}{0:N}{2}", "temp_", ".txt");
+                GetTempFileNameTest(path1);
+                GetTempFileNameTest(path2);
             }
             finally
             {
-                directory.Delete(true);
+                if (path1 != null)
+                {
+                    File.Delete(path1);
+                }
+                if (path2 != null)
+                {
+                    File.Delete(path2);
+                }
+            }
+        }
+
+        private void GetTempFileNameTest(string path)
+        {
+            FileInfo file = new FileInfo(path);
+            FileAssert.Exists(file);
+            Assert.IsTrue(file.CreationTime.IsRecent());
+            Assert.AreEqual(0, file.Length);
+            StringAssert.IsMatch(@"^temp_[0-9a-f]{32}\.txt$", file.Name);
+        }
+
+        private void CreateFiles(TempDirectory directory)
+        {
+            directory.CreateFile("file1.txt");
+            directory.CreateFile("file2.csv");
+            directory.CreateFile("subdirectory", "file3.txt");
+            directory.CreateFile("subdirectory", "file4.csv");
+        }
+
+        [Test]
+        public void CopyDirectoryTest()
+        {
+            using (TempDirectory directory1 = new TempDirectory(nameof(CopyDirectoryTest) + "1"))
+            using (TempDirectory directory2 = new TempDirectory(nameof(CopyDirectoryTest) + "2"))
+            {
+                CreateFiles(directory1);
+                IOExtensions.CopyDirectory(directory1.Path, directory2.Path);
+                FileAssert.Exists(directory2.CombinePaths("file1.txt"));
+                FileAssert.Exists(directory2.CombinePaths("file2.csv"));
+                FileAssert.Exists(directory2.CombinePaths("subdirectory", "file3.txt"));
+                FileAssert.Exists(directory2.CombinePaths("subdirectory", "file4.csv"));
             }
         }
 
         [Test]
-        public void SearchByExtensionTest()
+        public void SearchTest()
         {
-            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => SearchByExtensionTest());
-            try
+            using (TempDirectory directory = new TempDirectory(nameof(SearchTest)))
             {
-                DirectoryInfo subdirectory = directory.CreateSubdirectory("subdirectory");
-                FileInfo file1 = directory.GetFile("file1.txt");
-                FileInfo file2 = directory.GetFile("file2.csv");
-                FileInfo file3 = subdirectory.GetFile("file3.txt");
-                FileInfo file4 = subdirectory.GetFile("file4.csv");
-                file1.Touch();
-                file2.Touch();
-                file3.Touch();
-                file4.Touch();
-                ICollection<FileInfo> textFiles = new FileInfo[]
+                CreateFiles(directory);
+                ICollection<string> paths = new string[]
                 {
-                    file1,
-                    file3
+                    directory.CombinePaths("file1.txt"),
+                    directory.CombinePaths("subdirectory", "file3.txt")
                 };
-                CollectionAssert.AreEqual(textFiles, directory.SearchByExtension(".txt"), new FileInfoComparer());
-            }
-            finally
-            {
-                directory.Delete(true);
-            }
-        }
-
-        [Test]
-        public void CopyToTest()
-        {
-            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => CopyToTest());
-            try
-            {
-                DirectoryInfo subdirectory1 = directory.CreateSubdirectory("subdirectory1");
-                DirectoryInfo subsubdirectory1 = subdirectory1.CreateSubdirectory("subsubdirectory");
-                subdirectory1.GetFile("file1.txt").Touch();
-                subsubdirectory1.GetFile("file2.txt").Touch();
-                DirectoryInfo subdirectory2 = directory.GetDirectory("subdirectory2");
-                DirectoryInfo subsubdirectory2 = subdirectory2.GetDirectory("subsubdirectory");
-                subdirectory1.CopyTo(subdirectory2, true);
-                FileAssert.Exists(subdirectory2.GetFile("file1.txt"));
-                FileAssert.Exists(subsubdirectory2.GetFile("file2.txt"));
-            }
-            finally
-            {
-                directory.Delete(true);
-            }
-        }
-
-        [Test]
-        public void GetTemporaryFileTest()
-        {
-            FileInfo file = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.txt");
-            try
-            {
-                FileAssert.Exists(file);
-                Assert.IsTrue(file.CreationTime.IsRecent());
-                Assert.AreEqual(0, file.Length);
-                Assert.IsTrue(Regex.IsMatch(file.Name, @"^ERHMS_[0-9a-f]{32}\.txt$"));
-            }
-            finally
-            {
-                file.Delete();
+                CollectionAssert.AreEqual(paths, new DirectoryInfo(directory.Path).Search(".txt").Select(file => file.FullName));
             }
         }
     }

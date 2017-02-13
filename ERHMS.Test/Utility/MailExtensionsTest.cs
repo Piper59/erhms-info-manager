@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace ERHMS.Test.Utility
 {
+    // https://en.wikipedia.org/wiki/Email_address#Examples
     public class MailExtensionsTest
     {
         [Test]
-        public void IsValidAddressTest()
+        public void IsValidAddressTestValid()
         {
-            // https://en.wikipedia.org/wiki/Email_address#Examples
-            ICollection<string> validAddresses = new string[]
+            ICollection<string> addresses = new string[]
             {
                 "prettyandsimple@example.com",
                 "very.common@example.com",
@@ -31,8 +31,13 @@ namespace ERHMS.Test.Utility
                 "user@tt",
                 "user@[IPv6:2001:DB8::1]"
             };
-            // The commented addresses below are incorrectly reported as valid
-            ICollection<string> invalidAddresses = new string[]
+            IsValidAddressTest(addresses, true);
+        }
+
+        [Test]
+        public void IsValidAddressTestInvalid()
+        {
+            ICollection<string> addresses = new string[]
             {
                 "Abc.example.com",
                 "A@b@c@example.com",
@@ -40,19 +45,21 @@ namespace ERHMS.Test.Utility
                 "just\"not\"right@example.com",
                 "this is\"not\\allowed@example.com",
                 "this\\ still\\\"not\\\\allowed@example.com"/*,
+                // These are incorrectly reported as valid
                 "1234567890123456789012345678901234567890123456789012345678901234+x@example.com",
                 "john..doe@example.com",
                 "john.doe@example..com",
                 " john.doe@example.com",
                 "john.doe@example.com "*/
             };
-            foreach (string address in validAddresses)
+            IsValidAddressTest(addresses, false);
+        }
+
+        private void IsValidAddressTest(IEnumerable<string> addresses, bool expected)
+        {
+            foreach (string address in addresses)
             {
-                Assert.IsTrue(MailExtensions.IsValidAddress(address), address);
-            }
-            foreach (string address in invalidAddresses)
-            {
-                Assert.IsFalse(MailExtensions.IsValidAddress(address), address);
+                Assert.AreEqual(expected, MailExtensions.IsValidAddress(address), address);
             }
         }
     }

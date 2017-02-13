@@ -6,8 +6,7 @@ namespace ERHMS.Utility
     {
         public static Guid? ToNullableGuid(string value)
         {
-            Guid guid;
-            return Guid.TryParse(value, out guid) ? guid : (Guid?)null;
+            return value == null ? (Guid?)null : Guid.Parse(value);
         }
     }
 }

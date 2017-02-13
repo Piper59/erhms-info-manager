@@ -6,11 +6,11 @@ namespace ERHMS.Utility
 {
     public static class XmlExtensions
     {
-        public static bool HasAllAttributes(this XmlElement @this, params string[] attributeNames)
+        public static bool HasAllAttributes(this XmlElement @this, params string[] names)
         {
-            foreach (string attributeName in attributeNames)
+            foreach (string name in names)
             {
-                if (!@this.HasAttribute(attributeName))
+                if (!@this.HasAttribute(name))
                 {
                     return false;
                 }
@@ -24,8 +24,7 @@ namespace ERHMS.Utility
             {
                 if (@this.NodeType == XmlNodeType.Element)
                 {
-                    XmlDocument document = new XmlDocument();
-                    XmlElement element = document.CreateElement(@this.Name);
+                    XmlElement element = new XmlDocument().CreateElement(@this.Name);
                     while (@this.MoveToNextAttribute())
                     {
                         element.SetAttribute(@this.Name, @this.Value);

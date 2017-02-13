@@ -4,21 +4,23 @@ using System.Linq;
 
 namespace ERHMS.Utility
 {
+    using Property = KeyValuePair<string, object>;
+
     public static class DataExtensions
     {
-        private static bool IsCensored(KeyValuePair<string, object> property)
+        private static bool IsCensored(Property property)
         {
             return property.Key.ContainsIgnoreCase("Password") || property.Key.EqualsIgnoreCase("Pwd");
         }
 
-        private static string FormatProperty(KeyValuePair<string, object> property)
+        private static string FormatProperty(Property property)
         {
             return string.Format("{0}={1}", property.Key, IsCensored(property) ? "?" : property.Value);
         }
 
         public static string GetCensoredConnectionString(this DbConnectionStringBuilder @this)
         {
-            return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => FormatProperty(property)));
+            return string.Join(";", @this.Cast<Property>().Select(property => FormatProperty(property)));
         }
     }
 }

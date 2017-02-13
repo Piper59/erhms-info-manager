@@ -1,34 +1,28 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 
 namespace ERHMS.Utility
 {
     public static class AssemblyExtensions
     {
-        public static DirectoryInfo GetEntryDirectory()
+        public static string GetEntryDirectoryPath()
         {
-            return new FileInfo(Assembly.GetEntryAssembly().Location).Directory;
-        }
-
-        public static Version GetVersion(this Assembly @this)
-        {
-            return @this.GetName().Version;
+            return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         }
 
         public static string GetManifestResourceText(this Assembly @this, string resourceName)
         {
             using (Stream stream = @this.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            using (TextReader reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
             }
         }
 
-        public static void CopyManifestResourceTo(this Assembly @this, string resourceName, FileInfo file)
+        public static void CopyManifestResourceTo(this Assembly @this, string resourceName, string path)
         {
             using (Stream source = @this.GetManifestResourceStream(resourceName))
-            using (Stream target = file.Create())
+            using (Stream target = File.Create(path))
             {
                 source.CopyTo(target);
             }

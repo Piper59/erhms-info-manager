@@ -64,8 +64,7 @@
     <Compile Include="QueryString.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SettingsBase.cs" />
-    <Compile Include="SingleInstanceExecuter.cs" />
+    <Compile Include="Settings.Serialization.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="XmlExtensions.cs" />
   </ItemGroup>

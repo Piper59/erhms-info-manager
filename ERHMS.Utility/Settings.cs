@@ -4,11 +4,12 @@ using System.Reflection;
 
 namespace ERHMS.Utility
 {
-    public class Settings : SettingsBase<Settings>
+    public partial class Settings
     {
         public string Version { get; set; }
-        public string LogLevel { get; set; }
+        public bool InitialExecution { get; set; }
         public bool LicenseAccepted { get; set; }
+        public string LogLevel { get; set; }
         public string ConfigurationFile { get; set; }
         public HashSet<string> DataSources { get; set; }
         public string EmailHost { get; set; }
@@ -20,7 +21,8 @@ namespace ERHMS.Utility
 
         public Settings()
         {
-            Version = Assembly.GetExecutingAssembly().GetVersion().ToString();
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            InitialExecution = true;
             LicenseAccepted = false;
             Reset();
         }

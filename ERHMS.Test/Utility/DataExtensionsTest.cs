@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace ERHMS.Test.Utility
@@ -9,7 +10,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void GetCensoredConnectionStringTest()
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            DbConnectionStringBuilder builder = new SqlConnectionStringBuilder
             {
                 UserID = "jdoe",
                 Password = "1234"

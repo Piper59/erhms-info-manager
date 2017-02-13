@@ -80,11 +80,12 @@
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
-    <Compile Include="FileInfoComparer.cs" />
-    <Compile Include="Helpers.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TempDirectory.cs" />
     <Compile Include="Utility\AssemblyExtensionsTest.cs" />
+    <Compile Include="Utility\AttributeExtensionsTest.cs" />
     <Compile Include="Utility\ConvertExtensionsTest.cs" />
     <Compile Include="Utility\DataExtensionsTest.cs" />
     <Compile Include="Utility\DateTimeExtensionsTest.cs" />
@@ -97,18 +98,15 @@
     <Compile Include="Utility\ProcessExtensionsTest.cs" />
     <Compile Include="Utility\QueryStringTest.cs" />
     <Compile Include="Utility\ReflectionExtensionsTest.cs" />
-    <Compile Include="Utility\SettingsBaseTest.cs" />
-    <Compile Include="Utility\SettingsTest.cs" />
-    <Compile Include="Utility\SingleInstanceExecuterTest.cs" />
     <Compile Include="Utility\StringExtensionsTest.cs" />
     <Compile Include="Utility\XmlExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EpiInfo\Empty.mdb" />
-    <EmbeddedResource Include="EpiInfo\Sample.prj" />
-    <EmbeddedResource Include="EpiInfo\Surveillance.xml" />
-    <EmbeddedResource Include="Utility\Message.txt" />
-    <EmbeddedResource Include="Utility\People.xml" />
+    <EmbeddedResource Include="Resources\Empty.mdb" />
+    <EmbeddedResource Include="Resources\Message.txt" />
+    <EmbeddedResource Include="Resources\People.xml" />
+    <EmbeddedResource Include="Resources\Sample.prj" />
+    <EmbeddedResource Include="Resources\Surveillance.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

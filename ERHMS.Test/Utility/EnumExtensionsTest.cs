@@ -25,8 +25,8 @@ namespace ERHMS.Test.Utility
         [Test]
         public void ParseTest()
         {
-            Assert.AreEqual(Number.One, EnumExtensions.Parse<Number>("One"));
             Assert.AreEqual(Number.NaN, EnumExtensions.Parse<Number>("NaN"));
+            Assert.AreEqual(Number.One, EnumExtensions.Parse<Number>("One"));
             Assert.Catch(() =>
             {
                 EnumExtensions.Parse<Number>(null);
@@ -53,15 +53,15 @@ namespace ERHMS.Test.Utility
         [Test]
         public void ToDescriptionTest()
         {
+            Assert.IsNull(EnumExtensions.ToDescription(Number.NaN));
             Assert.AreEqual("1", EnumExtensions.ToDescription(Number.One));
-            Assert.AreEqual(null, EnumExtensions.ToDescription(Number.NaN));
         }
 
         [Test]
         public void FromDescriptionTest()
         {
-            Assert.AreEqual(Number.One, EnumExtensions.FromDescription<Number>("1"));
             Assert.AreEqual(Number.NaN, EnumExtensions.FromDescription<Number>(null));
+            Assert.AreEqual(Number.One, EnumExtensions.FromDescription<Number>("1"));
             Assert.Catch(() =>
             {
                 EnumExtensions.FromDescription<DayOfWeek>("Sunday");

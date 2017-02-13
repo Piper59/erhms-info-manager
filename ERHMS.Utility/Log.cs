@@ -10,13 +10,12 @@ namespace ERHMS.Utility
 {
     public static class Log
     {
-        private static string name;
-        private static string fileName;
-        private static DirectoryInfo directory;
-        private static Hierarchy hierarchy;
-        private static RollingFileAppender appender;
+        public static readonly string FilePath;
 
-        public static ILog Current
+        private static string name;
+        private static Hierarchy hierarchy;
+
+        public static ILog Logger
         {
             get { return LogManager.GetLogger(name); }
         }
@@ -24,64 +23,19 @@ namespace ERHMS.Utility
         static Log()
         {
             name = Assembly.GetEntryAssembly().GetName().Name;
-            fileName = string.Format("{0}.txt", name);
-            directory = GetDefaultDirectory();
+            FilePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Logs", name + ".txt");
             hierarchy = (Hierarchy)LogManager.GetRepository();
-            hierarchy.Root.Level = hierarchy.LevelMap[Settings.Default.LogLevel];
-            Resume();
-        }
-
-        public static FileInfo GetFile()
-        {
-            return directory.GetFile(fileName);
-        }
-
-        public static DirectoryInfo GetDefaultDirectory()
-        {
-            return AssemblyExtensions.GetEntryDirectory().GetDirectory("Logs");
-        }
-
-        public static DirectoryInfo GetDirectory()
-        {
-            return new DirectoryInfo(directory.FullName);
-        }
-
-        public static void SetDirectory(DirectoryInfo directory)
-        {
-            Log.directory = directory;
-            if (hierarchy.Configured)
+            PatternLayout layout = new PatternLayout("%date %-5level - %message%newline");
+            layout.ActivateOptions();
+            TextWriterAppender appender = new FileAppender
             {
-                appender.File = GetFile().FullName;
-                appender.ActivateOptions();
-            }
-        }
-
-        public static void Resume()
-        {
-            if (!hierarchy.Configured)
-            {
-                PatternLayout layout = new PatternLayout("%date %-5level - %message%newline");
-                layout.ActivateOptions();
-                appender = new RollingFileAppender
-                {
-                    File = GetFile().FullName,
-                    RollingStyle = RollingFileAppender.RollingMode.Date,
-                    DatePattern = ".yyyy-MM",
-                    MaxSizeRollBackups = -1,
-                    Layout = layout
-                };
-                appender.ActivateOptions();
-                hierarchy.Root.AddAppender(appender);
-                hierarchy.Configured = true;
-            }
-        }
-
-        public static void Suspend()
-        {
-            if (hierarchy.Configured)
-            {
-                hierarchy.ResetConfiguration();
-            }
+                File = FilePath,
+                LockingModel = new FileAppender.InterProcessLock(),
+                Layout = layout
+            };
+            appender.ActivateOptions();
+            hierarchy.Root.AddAppender(appender);
+            hierarchy.Configured = true;
         }
 
         public static string GetLevelName()

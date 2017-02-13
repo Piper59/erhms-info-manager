@@ -5,7 +5,7 @@ namespace ERHMS.Utility
 {
     public static class ProcessExtensions
     {
-        public static string EscapeArg(string arg)
+        private static string EscapeArg(string arg)
         {
             return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
         }
@@ -13,11 +13,6 @@ namespace ERHMS.Utility
         public static string FormatArgs(IEnumerable<string> args)
         {
             return string.Join(" ", args.Select(arg => EscapeArg(arg)));
-        }
-
-        public static string FormatArgs(params string[] args)
-        {
-            return FormatArgs(args.AsEnumerable());
         }
     }
 }

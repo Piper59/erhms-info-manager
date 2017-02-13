@@ -5,25 +5,25 @@ namespace ERHMS.Utility
 {
     public static class ReflectionExtensions
     {
-        private static MethodInfo GetMethod(Type type, bool instance, string methodName, Type[] parameterTypes)
+        private static MethodInfo GetMethod(Type type, bool instance, string name, Type[] argTypes)
         {
-            BindingFlags bindingFlags = (instance ? BindingFlags.Instance : BindingFlags.Static) | BindingFlags.Public | BindingFlags.NonPublic;
-            return type.GetMethod(methodName, bindingFlags, null, parameterTypes ?? Type.EmptyTypes, null);
+            BindingFlags flags = (instance ? BindingFlags.Instance : BindingFlags.Static) | BindingFlags.Public | BindingFlags.NonPublic;
+            return type.GetMethod(name, flags, null, argTypes ?? Type.EmptyTypes, null);
         }
 
-        public static object Invoke(Type type, string methodName, Type[] parameterTypes = null, object[] parameters = null)
+        public static object Invoke(Type type, string methodName, Type[] argTypes = null, object[] args = null)
         {
-            return GetMethod(type, false, methodName, parameterTypes).Invoke(null, parameters);
+            return GetMethod(type, false, methodName, argTypes).Invoke(null, args);
         }
 
-        public static object Invoke(object obj, Type type, string methodName, Type[] parameterTypes = null, object[] parameters = null)
+        public static object Invoke(object obj, Type type, string methodName, Type[] argTypes = null, object[] args = null)
         {
-            return GetMethod(type, true, methodName, parameterTypes).Invoke(obj, parameters);
+            return GetMethod(type, true, methodName, argTypes).Invoke(obj, args);
         }
 
-        public static object Invoke(object obj, string methodName, Type[] parameterTypes = null, object[] parameters = null)
+        public static object Invoke(object obj, string methodName, Type[] argTypes = null, object[] args = null)
         {
-            return Invoke(obj, obj.GetType(), methodName, parameterTypes, parameters);
+            return Invoke(obj, obj.GetType(), methodName, argTypes, args);
         }
     }
 }

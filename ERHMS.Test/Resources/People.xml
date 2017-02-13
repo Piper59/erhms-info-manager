@@ -1,0 +1,4 @@
+﻿<people>
+  <person id="johnd" firstName="John" lastName="Doe" />
+  <person id="janed" firstName="Jane" lastName="Doe" />
+</people>
