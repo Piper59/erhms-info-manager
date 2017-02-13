@@ -55,6 +55,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="InvalidEnumValueException.cs" />
     <Compile Include="IOExtensions.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MailExtensions.cs" />

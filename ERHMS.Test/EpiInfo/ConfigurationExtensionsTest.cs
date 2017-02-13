@@ -1,6 +1,5 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
-using ERHMS.Utility;
 using NUnit.Framework;
 using System.IO;
 using System.Xml;
@@ -9,104 +8,70 @@ namespace ERHMS.Test.EpiInfo
 {
     public class ConfigurationExtensionsTest
     {
-        private void DirectoriesTest(DirectoryInfo root)
+        [TearDown]
+        public void TearDown()
         {
-            FileInfo file = new FileInfo(Configuration.DefaultConfigurationPath);
-            XmlDocument document = new XmlDocument();
-            document.Load(file.FullName);
-            foreach (XmlElement element in document.SelectElements("/Config/Directories/*"))
-            {
-                if (element.Name == "Configuration")
-                {
-                    Assert.AreEqual(file.DirectoryName, element.InnerText);
-                }
-                else if (element.Name != "Working")
-                {
-                    StringAssert.Contains(root.FullName, element.InnerText);
-                }
-            }
+            File.Delete(ConfigurationExtensions.FilePath);
         }
 
         [Test]
         public void CreateAndSaveTest()
         {
-            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => CreateAndSaveTest());
-            try
+            using (TempDirectory directory = new TempDirectory(nameof(CreateAndSaveTest)))
             {
-                Configuration configuration = ConfigurationExtensions.Create(directory);
+                Configuration configuration = ConfigurationExtensions.Create(directory.Path);
                 configuration.Save();
-                FileInfo file = new FileInfo(Configuration.DefaultConfigurationPath);
+                FileInfo file = new FileInfo(ConfigurationExtensions.FilePath);
                 FileAssert.Exists(file);
-                Assert.IsTrue(file.LastWriteTime.IsRecent());
-                DirectoriesTest(directory);
-            }
-            finally
-            {
-                File.Delete(Configuration.DefaultConfigurationPath);
-                directory.Delete(true);
+                Assert.IsTrue(file.CreationTime.IsRecent());
+                XmlDocument document = new XmlDocument();
+                document.Load(ConfigurationExtensions.FilePath);
+                XmlNode directoriesNode = document.SelectSingleNode("/Config/Directories");
+                StringAssert.Contains(directory.Path, directoriesNode.SelectSingleNode("Project").InnerText);
+                StringAssert.Contains(directory.Path, directoriesNode.SelectSingleNode("Templates").InnerText);
             }
         }
 
         [Test]
         public void TryLoadTest()
         {
-            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => TryLoadTest());
-            try
+            using (TempDirectory directory = new TempDirectory(nameof(TryLoadTest)))
             {
-                Assert.AreEqual(Log.GetDefaultDirectory().FullName, Log.GetDirectory().FullName);
                 Configuration configuration;
                 Assert.IsFalse(ConfigurationExtensions.TryLoad(out configuration));
                 Assert.IsNull(configuration);
-                ConfigurationExtensions.Create(directory).Save();
+                ConfigurationExtensions.Create(directory.Path).Save();
                 Assert.IsTrue(ConfigurationExtensions.TryLoad(out configuration));
-                Assert.AreEqual(configuration.Directories.LogDir, Log.GetDirectory().FullName);
-            }
-            finally
-            {
-                File.Delete(Configuration.DefaultConfigurationPath);
-                Log.SetDirectory(Log.GetDefaultDirectory());
-                directory.Delete(true);
+                StringAssert.Contains(directory.Path, configuration.Directories.Project);
+                StringAssert.Contains(directory.Path, configuration.Directories.Templates);
             }
         }
 
         [Test]
-        public void CreateDirectoriesTest()
+        public void CreateUserDirectoriesTest()
         {
-            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => CreateDirectoriesTest());
-            try
+            using (TempDirectory directory = new TempDirectory(nameof(CreateUserDirectoriesTest)))
             {
-                Configuration configuration = ConfigurationExtensions.Create(directory);
-                configuration.CreateDirectories();
-                DirectoryAssert.Exists(configuration.Directories.Archive);
-                DirectoryAssert.Exists(configuration.Directories.LogDir);
-                DirectoryAssert.Exists(configuration.Directories.Output);
+                Configuration configuration = ConfigurationExtensions.Create(directory.Path);
+                configuration.CreateUserDirectories();
                 DirectoryAssert.Exists(configuration.Directories.Project);
-                DirectoryAssert.Exists(configuration.Directories.Samples);
                 DirectoryAssert.Exists(configuration.Directories.Templates);
             }
-            finally
-            {
-                directory.Delete(true);
-            }
         }
 
         [Test]
-        public void ChangeRootTest()
+        public void ChangeUserDirectoriesTest()
         {
-            DirectoryInfo directory = Helpers.GetTemporaryDirectory(() => ChangeRootTest());
-            try
+            using (TempDirectory directory1 = new TempDirectory(nameof(ChangeUserDirectoriesTest) + "1"))
+            using (TempDirectory directory2 = new TempDirectory(nameof(ChangeUserDirectoriesTest) + "2"))
             {
-                DirectoryInfo subdirectory1 = directory.GetDirectory("1");
-                DirectoryInfo subdirectory2 = directory.GetDirectory("2");
-                Configuration configuration = ConfigurationExtensions.Create(subdirectory1);
-                configuration.ChangeRoot(subdirectory2);
-                configuration.Save();
-                DirectoriesTest(subdirectory2);
-            }
-            finally
-            {
-                File.Delete(Configuration.DefaultConfigurationPath);
-                directory.Delete(true);
+                Configuration configuration = ConfigurationExtensions.Create(directory1.Path);
+                configuration.CreateUserDirectories();
+                directory1.CreateFile("Projects", "Test", "Test.prj");
+                directory1.CreateFile("Templates", "Forms", "Test.xml");
+                configuration.ChangeUserDirectories(directory2.Path);
+                FileAssert.Exists(directory2.CombinePaths("Projects", "Test", "Test.prj"));
+                FileAssert.Exists(directory2.CombinePaths("Templates", "Forms", "Test.xml"));
             }
         }
     }

@@ -11,15 +11,17 @@ namespace ERHMS.EpiInfo
 {
     public static class ConfigurationExtensions
     {
-        public static Configuration Create(DirectoryInfo root)
+        public static readonly string FilePath = Configuration.DefaultConfigurationPath;
+
+        public static Configuration Create(string userDirectoryPath)
         {
-            Log.Current.DebugFormat("Creating configuration: {0}", Configuration.DefaultConfigurationPath);
+            Log.Logger.DebugFormat("Creating configuration: {0}", userDirectoryPath);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
             ClearRecents(config);
             ClearDatabases(config);
-            SetDirectories(config, root);
+            SetDirectories(config, userDirectoryPath);
             SetSettings(config);
-            return new Configuration(Configuration.DefaultConfigurationPath, config);
+            return new Configuration(FilePath, config);
         }
 
         private static void ClearRecents(Config config)
@@ -33,17 +35,24 @@ namespace ERHMS.EpiInfo
             config.Database.Clear();
         }
 
-        private static void SetDirectories(Config config, DirectoryInfo root)
+        private static void SetDirectories(Config config, string userDirectoryPath)
         {
-            Config.DirectoriesRow directories = config.Directories.Single();
-            directories.Archive = root.GetDirectory("Archive").FullName;
-            directories.Configuration = Path.GetDirectoryName(Configuration.DefaultConfigurationPath);
-            directories.LogDir = root.GetDirectory("Logs").FullName;
-            directories.Output = root.GetDirectory("Output").FullName;
-            directories.Project = root.GetDirectory("Projects").FullName;
-            directories.Samples = root.GetDirectory(Path.Combine("Resources", "Samples")).FullName;
-            directories.Templates = root.GetDirectory("Templates").FullName;
+            Config.DirectoriesRow directories = config.Directories[0];
+            SetSystemDirectories(directories);
+            SetUserDirectories(directories, userDirectoryPath);
+        }
+
+        private static void SetSystemDirectories(Config.DirectoriesRow directories)
+        {
+            directories.Configuration = Path.GetDirectoryName(FilePath);
+            directories.LogDir = Path.GetDirectoryName(Log.FilePath);
             directories.Working = Path.GetTempPath();
+        }
+
+        private static void SetUserDirectories(Config.DirectoriesRow directories, string userDirectoryPath)
+        {
+            directories.Project = Path.Combine(userDirectoryPath, "Projects");
+            directories.Templates = Path.Combine(userDirectoryPath, "Templates");
         }
 
         private static void SetSettings(Config config)
@@ -51,7 +60,7 @@ namespace ERHMS.EpiInfo
             if (RequiresFipsCrypto())
             {
                 DataRow row = config.TextEncryptionModule.NewRow();
-                row.SetField("FileName", AssemblyExtensions.GetEntryDirectory().GetFile("FipsCrypto.dll").FullName);
+                row.SetField("FileName", Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "FipsCrypto.dll"));
                 config.TextEncryptionModule.Rows.Add(row);
             }
             Config.SettingsRow settings = config.Settings.Single();
@@ -73,43 +82,37 @@ namespace ERHMS.EpiInfo
 
         public static Configuration Load()
         {
-            Log.Current.DebugFormat("Loading configuration: {0}", Configuration.DefaultConfigurationPath);
-            Configuration.Load(Configuration.DefaultConfigurationPath);
+            Log.Logger.DebugFormat("Loading configuration: {0}", FilePath);
+            Configuration.Load(FilePath);
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
             Configuration configuration = Configuration.GetNewInstance();
-            Log.SetDirectory(new DirectoryInfo(configuration.Directories.LogDir));
-            Log.Current.DebugFormat("Loaded configuration: {0}", Configuration.DefaultConfigurationPath);
             return configuration;
         }
 
         public static bool TryLoad(out Configuration configuration)
         {
-            try
+            if (File.Exists(FilePath))
             {
                 configuration = Load();
                 return true;
             }
-            catch (Exception ex)
+            else
             {
-                Log.Current.Warn("Failed to load configuration", ex);
+                configuration = null;
+                return false;
             }
-            configuration = null;
-            return false;
         }
 
         public static void Save(this Configuration @this)
         {
-            Log.Current.DebugFormat("Saving configuration: {0}", @this.ConfigFilePath);
+            Log.Logger.DebugFormat("Saving configuration: {0}", @this.ConfigFilePath);
             Configuration.Save(@this);
         }
 
-        public static void CreateDirectories(this Configuration @this)
+        public static void CreateUserDirectories(this Configuration @this)
         {
-            Directory.CreateDirectory(@this.Directories.Archive);
-            Directory.CreateDirectory(@this.Directories.LogDir);
-            Directory.CreateDirectory(@this.Directories.Output);
+            Log.Logger.Debug("Creating user directories");
             Directory.CreateDirectory(@this.Directories.Project);
-            Directory.CreateDirectory(@this.Directories.Samples);
             DirectoryInfo templates = Directory.CreateDirectory(@this.Directories.Templates);
             templates.CreateSubdirectory("Fields");
             templates.CreateSubdirectory("Forms");
@@ -117,11 +120,15 @@ namespace ERHMS.EpiInfo
             templates.CreateSubdirectory("Projects");
         }
 
-        public static void ChangeRoot(this Configuration @this, DirectoryInfo root)
+        public static void ChangeUserDirectories(this Configuration @this, string userDirectoryPath)
         {
-            Log.Current.DebugFormat("Changing root: {0}", root.FullName);
-            ClearRecents(@this.ConfigDataSet);
-            SetDirectories(@this.ConfigDataSet, root);
+            Log.Logger.DebugFormat("Changing user directories: {0}", userDirectoryPath);
+            Config.DirectoriesRow directories = ((Config)@this.ConfigDataSet.Copy()).Directories[0];
+            SetUserDirectories(directories, userDirectoryPath);
+            Directory.CreateDirectory(userDirectoryPath);
+            IOExtensions.CopyDirectory(@this.Directories.Project, directories.Project);
+            IOExtensions.CopyDirectory(@this.Directories.Templates, directories.Templates);
+            SetUserDirectories(@this.ConfigDataSet.Directories[0], userDirectoryPath);
         }
     }
 }

@@ -12,14 +12,13 @@ namespace ERHMS.Test.EpiInfo
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            DirectoryInfo root = new DirectoryInfo(Environment.CurrentDirectory);
-            ConfigurationExtensions.Create(root).Save();
+            ConfigurationExtensions.Create(Environment.CurrentDirectory).Save();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            File.Delete(Configuration.DefaultConfigurationPath);
+            File.Delete(ConfigurationExtensions.FilePath);
         }
 
         [Test]
@@ -28,6 +27,7 @@ namespace ERHMS.Test.EpiInfo
             Wrapper wrapper = TestProgram.OutTest();
             wrapper.Invoke();
             Assert.AreEqual("Hello, world!", wrapper.ReadLine());
+            Assert.IsNull(wrapper.ReadLine());
             wrapper.Exited.WaitOne();
         }
 
@@ -41,7 +41,7 @@ namespace ERHMS.Test.EpiInfo
                 wrapper.WriteLine(value);
                 Assert.AreEqual(value.ToString(), wrapper.ReadLine());
             }
-            wrapper.EndWrite();
+            wrapper.Close();
             wrapper.Exited.WaitOne();
         }
 
@@ -58,10 +58,10 @@ namespace ERHMS.Test.EpiInfo
         public void EventTest()
         {
             Wrapper wrapper = TestProgram.EventTest();
-            int eventCount = 0;
+            bool raised = false;
             wrapper.Event += (sender, e) =>
             {
-                eventCount++;
+                raised = true;
                 Assert.AreEqual(WrapperEventType.Default, e.Type);
                 Assert.AreEqual("", e.Properties.Empty);
                 Assert.AreEqual("'Hello, world!'", e.Properties.Message);
@@ -71,7 +71,7 @@ namespace ERHMS.Test.EpiInfo
             };
             wrapper.Invoke();
             wrapper.Exited.WaitOne();
-            Assert.AreEqual(1, eventCount);
+            Assert.IsTrue(raised);
         }
     }
 }

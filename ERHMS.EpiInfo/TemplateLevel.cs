@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.ComponentModel;
 
 namespace ERHMS.EpiInfo
@@ -33,7 +34,7 @@ namespace ERHMS.EpiInfo
             }
             else
             {
-                throw new ArgumentException("Requested value was not found.");
+                throw new ArgumentException(string.Format("Requested value '{0}' was not found.", value));
             }
         }
 
@@ -50,7 +51,7 @@ namespace ERHMS.EpiInfo
                 case TemplateLevel.Field:
                     return "Fields";
                 default:
-                    throw new NotSupportedException();
+                    throw new InvalidEnumValueException(@this);
             }
         }
     }

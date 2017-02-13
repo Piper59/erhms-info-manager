@@ -14,7 +14,7 @@ namespace ERHMS.Test
 
         public static Wrapper OutTest()
         {
-            return Create(args => Main_OutTest(args));
+            return Create(nameof(Main_OutTest));
         }
         private static void Main_OutTest(string[] args)
         {
@@ -24,7 +24,7 @@ namespace ERHMS.Test
 
         public static Wrapper InAndOutTest()
         {
-            return Create(args => Main_InAndOutTest(args));
+            return Create(nameof(Main_InAndOutTest));
         }
         private static void Main_InAndOutTest(string[] args)
         {
@@ -45,7 +45,7 @@ namespace ERHMS.Test
 
         public static Wrapper ArgsTest(IEnumerable<int> values)
         {
-            return Create(args => Main_ArgsTest(args), values.Select(value => value.ToString()).ToArray());
+            return Create(nameof(Main_ArgsTest), values.Select(value => value.ToString()).ToArray());
         }
         private static void Main_ArgsTest(string[] args)
         {
@@ -60,7 +60,7 @@ namespace ERHMS.Test
 
         public static Wrapper EventTest()
         {
-            return Create(args => Main_EventTest(args));
+            return Create(nameof(Main_EventTest));
         }
         private static void Main_EventTest(string[] args)
         {

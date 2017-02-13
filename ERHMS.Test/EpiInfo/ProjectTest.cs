@@ -19,7 +19,7 @@ namespace ERHMS.Test.EpiInfo
 {
     public abstract class ProjectTestBase
     {
-        protected DirectoryInfo directory;
+        protected TempDirectory directory;
         protected Configuration configuration;
         protected ProjectCreationInfo creationInfo;
         protected Project project;
@@ -27,17 +27,17 @@ namespace ERHMS.Test.EpiInfo
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            directory = Helpers.GetTemporaryDirectory(GetType());
-            ConfigurationExtensions.Create(directory).Save();
+            directory = new TempDirectory(nameof(ProjectTestBase));
+            ConfigurationExtensions.Create(directory.Path).Save();
             configuration = ConfigurationExtensions.Load();
+            configuration.CreateUserDirectories();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            File.Delete(Configuration.DefaultConfigurationPath);
-            Log.SetDirectory(Log.GetDefaultDirectory());
-            directory.Delete(true);
+            File.Delete(ConfigurationExtensions.FilePath);
+            directory.Dispose();
         }
 
         [Test]
@@ -48,11 +48,11 @@ namespace ERHMS.Test.EpiInfo
             document.Load(project.FilePath);
             XmlElement projectElement = document.DocumentElement;
             Assert.AreEqual("Project", projectElement.Name);
-            Version version = Assembly.GetExecutingAssembly().GetVersion();
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
             Assert.AreEqual(version.ToString(), projectElement.GetAttribute("erhmsVersion"));
             Assert.AreEqual(version, project.Version);
             Assert.AreEqual(creationInfo.Name, projectElement.GetAttribute("name"));
-            Assert.AreEqual(creationInfo.Location.FullName, projectElement.GetAttribute("location"));
+            Assert.AreEqual(creationInfo.Location, projectElement.GetAttribute("location"));
             XmlElement databaseElement = projectElement.SelectSingleElement("CollectedData/Database");
             Assert.AreEqual(creationInfo.Builder.ConnectionString, Configuration.Decrypt(databaseElement.GetAttribute("connectionString")));
             Assert.IsTrue(project.Driver.TableExists("metaCanvases"));
@@ -146,7 +146,8 @@ namespace ERHMS.Test.EpiInfo
             Assert.IsTrue(project.Views.Contains(parentView.Name));
             Assert.IsFalse(project.Views.Contains(view.Name));
             Assert.IsFalse(project.Views.Contains(childView.Name));
-            Assert.IsFalse(project.Views[parentView.Name].Fields.Contains("Relate"));
+            parentView.MustRefreshFieldCollection = true;
+            Assert.IsFalse(parentView.Fields.Contains("Relate"));
             project.DeleteView(parentView);
             Assert.IsFalse(project.Views.Contains(parentView.Name));
             ICollection<string> tableNames = new string[]
@@ -229,9 +230,10 @@ namespace ERHMS.Test.EpiInfo
         public new void OneTimeSetUp()
         {
             string name = "AccessTest";
-            DirectoryInfo location = new DirectoryInfo(configuration.Directories.Project).CreateSubdirectory(name);
-            FileInfo database = location.GetFile(string.Format("{0}.mdb", name));
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.EpiInfo.Empty.mdb", database);
+            string location = Path.Combine(configuration.Directories.Project, name);
+            Directory.CreateDirectory(location);
+            string databasePath = Path.Combine(location, name + ".mdb");
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", databasePath);
             creationInfo = new ProjectCreationInfo
             {
                 Name = name,
@@ -240,7 +242,7 @@ namespace ERHMS.Test.EpiInfo
                 Builder = new OleDbConnectionStringBuilder
                 {
                     Provider = "Microsoft.Jet.OLEDB.4.0",
-                    DataSource = database.FullName
+                    DataSource = databasePath
                 },
                 DatabaseName = name,
                 Initialize = true
@@ -251,6 +253,8 @@ namespace ERHMS.Test.EpiInfo
 
     public class SqlServerProjectTest : ProjectTestBase
     {
+        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString;
+
         private SqlConnectionStringBuilder builder;
         private bool created;
 
@@ -258,8 +262,7 @@ namespace ERHMS.Test.EpiInfo
         public new void OneTimeSetUp()
         {
             string name = "SqlServerTest";
-            string connectionString = ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString;
-            builder = new SqlConnectionStringBuilder(connectionString)
+            builder = new SqlConnectionStringBuilder(ConnectionString)
             {
                 Pooling = false
             };
@@ -268,7 +271,7 @@ namespace ERHMS.Test.EpiInfo
             creationInfo = new ProjectCreationInfo
             {
                 Name = name,
-                Location = new DirectoryInfo(configuration.Directories.Project).GetDirectory(name),
+                Location = Path.Combine(configuration.Directories.Project, name),
                 Driver = Configuration.SqlDriver,
                 Builder = builder,
                 DatabaseName = builder.InitialCatalog,
@@ -292,13 +295,12 @@ namespace ERHMS.Test.EpiInfo
 
         private int ExecuteMaster(string sql, params string[] identifiers)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString;
-            SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
+            SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString)
             {
                 InitialCatalog = "master"
             };
             SqlCommandBuilder commandBuilder = new SqlCommandBuilder();
-            string[] quotedIdentifiers = identifiers.Select(identifier => commandBuilder.QuoteIdentifier(identifier)).ToArray();
+            object[] quotedIdentifiers = identifiers.Select(identifier => commandBuilder.QuoteIdentifier(identifier)).ToArray();
             using (SqlConnection connection = new SqlConnection(connectionStringBuilder.ConnectionString))
             using (SqlCommand command = new SqlCommand(string.Format(sql, quotedIdentifiers), connection))
             {

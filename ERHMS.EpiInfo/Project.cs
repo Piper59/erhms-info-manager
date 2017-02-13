@@ -3,6 +3,7 @@ using Epi.Data;
 using Epi.Data.Services;
 using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
@@ -15,15 +16,15 @@ namespace ERHMS.EpiInfo
 
         public static Project Create(ProjectCreationInfo creationInfo)
         {
-            Log.Current.DebugFormat("Creating project: {0}", creationInfo.ToString());
-            creationInfo.Location.Create();
+            Log.Logger.DebugFormat("Creating project: {0}", creationInfo);
+            Directory.CreateDirectory(creationInfo.Location);
             Project project = new Project
             {
                 Id = Guid.NewGuid(),
-                Version = Assembly.GetExecutingAssembly().GetVersion(),
+                Version = Assembly.GetExecutingAssembly().GetName().Version,
                 Name = creationInfo.Name,
                 Description = creationInfo.Description,
-                Location = creationInfo.Location.FullName,
+                Location = creationInfo.Location,
                 CollectedDataDriver = creationInfo.Driver,
                 CollectedDataConnectionString = creationInfo.Builder.ConnectionString
             };
@@ -37,7 +38,7 @@ namespace ERHMS.EpiInfo
             project.Metadata.AttachDbDriver(project.Driver);
             if (creationInfo.Initialize)
             {
-                Log.Current.DebugFormat("Initializing project: {0}", project.FilePath);
+                Log.Logger.DebugFormat("Initializing project: {0}", project.FilePath);
                 project.Metadata.CreateMetadataTables();
                 project.Metadata.CreateCanvasesTable();
             }
@@ -85,11 +86,8 @@ namespace ERHMS.EpiInfo
         public Project(string path)
             : base(path)
         {
-            Log.Current.DebugFormat("Opening project: {0}", path);
+            Log.Logger.DebugFormat("Opening project: {0}", path);
         }
-
-        public Project(FileInfo file)
-            : this(file.FullName) { }
 
         public bool IsValidViewName(string viewName, out InvalidViewNameReason reason)
         {
@@ -119,12 +117,16 @@ namespace ERHMS.EpiInfo
 
         public string SuggestViewName(string viewName)
         {
-            return ViewExtensions.SanitizeName(viewName).MakeUnique("{0}_{1}", value => Views.Contains(value) || Driver.TableExists(value));
+            ICollection<string> tableNames = Driver.GetTableNames();
+            return ViewExtensions.SanitizeName(viewName).MakeUnique("{0}_{1}", value =>
+            {
+                return Views.Contains(value) || tableNames.ContainsIgnoreCase(value);
+            });
         }
 
         public override void Save()
         {
-            Log.Current.DebugFormat("Saving project: {0}", FilePath);
+            Log.Logger.DebugFormat("Saving project: {0}", FilePath);
             base.Save();
         }
     }

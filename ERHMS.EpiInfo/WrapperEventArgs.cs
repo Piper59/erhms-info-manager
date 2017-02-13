@@ -9,7 +9,7 @@ namespace ERHMS.EpiInfo
     {
         internal static WrapperEventArgs Parse(string line)
         {
-            IList<string> chunks = line.Split();
+            IList<string> chunks = line.Split(new char[] { ' ' }, 2);
             WrapperEventType type = EnumExtensions.Parse<WrapperEventType>(chunks[0]);
             if (chunks.Count == 1)
             {
@@ -17,7 +17,7 @@ namespace ERHMS.EpiInfo
             }
             else
             {
-                return new WrapperEventArgs(type, QueryString.Parse(chunks[1]));
+                return new WrapperEventArgs(type, new QueryString(chunks[1]));
             }
         }
 

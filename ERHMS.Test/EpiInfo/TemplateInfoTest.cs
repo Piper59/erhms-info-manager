@@ -11,19 +11,19 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void TryReadTest()
         {
-            FileInfo file = new FileInfo(Path.GetTempFileName());
+            string path = Path.GetTempFileName();
             try
             {
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.EpiInfo.Surveillance.xml", file);
+                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Surveillance.xml", path);
                 TemplateInfo templateInfo;
-                Assert.IsTrue(TemplateInfo.TryRead(file, out templateInfo));
+                Assert.IsTrue(TemplateInfo.TryRead(path, out templateInfo));
                 Assert.AreEqual("Surveillance", templateInfo.Name);
                 Assert.AreEqual("Description for Surveillance.xml", templateInfo.Description);
                 Assert.AreEqual(TemplateLevel.View, templateInfo.Level);
             }
             finally
             {
-                file.Delete();
+                File.Delete(path);
             }
         }
     }

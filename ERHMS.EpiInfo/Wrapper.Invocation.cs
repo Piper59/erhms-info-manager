@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 
@@ -10,12 +9,12 @@ namespace ERHMS.EpiInfo
 {
     public partial class Wrapper
     {
-        protected static Wrapper Create(Expression<Action<string[]>> expression, params string[] args)
+        protected static Wrapper Create(string methodName, params string[] args)
         {
-            return new Wrapper(Assembly.GetCallingAssembly(), expression, args);
+            return new Wrapper(Assembly.GetCallingAssembly(), methodName, args);
         }
 
-        private FileInfo executable;
+        private string executablePath;
         private string arguments;
         private Process process;
 
@@ -26,11 +25,10 @@ namespace ERHMS.EpiInfo
             throw new NotSupportedException();
         }
 
-        private Wrapper(Assembly assembly, Expression<Action<string[]>> expression, params string[] args)
+        private Wrapper(Assembly assembly, string methodName, params string[] args)
         {
             string fileName = string.Format("{0}.exe", assembly.GetName().Name);
-            executable = AssemblyExtensions.GetEntryDirectory().GetFile(fileName);
-            string methodName = ((MethodCallExpression)expression.Body).Method.Name;
+            executablePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), fileName);
             arguments = ProcessExtensions.FormatArgs(args.Prepend(methodName));
             Exited = new ManualResetEvent(false);
         }
@@ -47,7 +45,7 @@ namespace ERHMS.EpiInfo
 
         public void Invoke()
         {
-            Log.Current.DebugFormat("Invoking wrapper: {0} {1}", executable.FullName, arguments);
+            Log.Logger.DebugFormat("Invoking wrapper: {0} {1}", executablePath, arguments);
             process = new Process
             {
                 EnableRaisingEvents = true,
@@ -57,8 +55,8 @@ namespace ERHMS.EpiInfo
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = executable.DirectoryName,
-                    FileName = executable.FullName,
+                    WorkingDirectory = Path.GetDirectoryName(executablePath),
+                    FileName = executablePath,
                     Arguments = arguments
                 }
             };
@@ -66,17 +64,17 @@ namespace ERHMS.EpiInfo
             {
                 if (e.Data != null)
                 {
-                    Log.Current.DebugFormat("Received data from wrapper {0}: {1}", process.Id, e.Data);
+                    Log.Logger.DebugFormat("Received data from wrapper {0}: {1}", process.Id, e.Data);
                     OnEvent(e.Data);
                 }
             };
             process.Exited += (sender, e) =>
             {
-                Log.Current.DebugFormat("Wrapper {0} exited", process.Id);
+                Log.Logger.DebugFormat("Wrapper {0} exited", process.Id);
                 Exited.Set();
             };
             process.Start();
-            Log.Current.DebugFormat("Wrapper {0} invoked", process.Id);
+            Log.Logger.DebugFormat("Wrapper {0} invoked", process.Id);
             process.BeginErrorReadLine();
         }
 
@@ -105,7 +103,7 @@ namespace ERHMS.EpiInfo
             process.StandardInput.WriteLine(format, args);
         }
 
-        public void EndWrite()
+        public void Close()
         {
             process.StandardInput.Close();
         }

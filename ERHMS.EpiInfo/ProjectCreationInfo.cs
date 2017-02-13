@@ -1,6 +1,5 @@
 ﻿using ERHMS.Utility;
 using System.Data.Common;
-using System.IO;
 
 namespace ERHMS.EpiInfo
 {
@@ -8,7 +7,7 @@ namespace ERHMS.EpiInfo
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public DirectoryInfo Location { get; set; }
+        public string Location { get; set; }
         public string Driver { get; set; }
         public DbConnectionStringBuilder Builder { get; set; }
         public string DatabaseName { get; set; }
@@ -16,7 +15,7 @@ namespace ERHMS.EpiInfo
 
         public override string ToString()
         {
-            return string.Format("{0}, {1}, {2}, {3}, {4}", Name, Location.FullName, Driver, Builder.GetCensoredConnectionString(), DatabaseName);
+            return string.Join(", ", Name, Location, Driver, Builder.GetCensoredConnectionString(), DatabaseName);
         }
     }
 }

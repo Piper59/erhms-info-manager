@@ -83,7 +83,7 @@ namespace ERHMS.EpiInfo
 
         public void InsertPgm(Pgm pgm)
         {
-            Log.Current.DebugFormat("Inserting PGM: {0}", pgm.Name);
+            Log.Logger.DebugFormat("Inserting PGM: {0}", pgm.Name);
             Metadata.InsertPgm(pgm.Name, pgm.Content, pgm.Comment, pgm.Author);
             string sql = "SELECT MAX([ProgramId]) FROM [metaPrograms]";
             pgm.PgmId = (int)Driver.ExecuteScalar(Driver.CreateQuery(sql));
@@ -91,7 +91,7 @@ namespace ERHMS.EpiInfo
 
         public void InsertCanvas(Canvas canvas)
         {
-            Log.Current.DebugFormat("Inserting canvas: {0}", canvas.Name);
+            Log.Logger.DebugFormat("Inserting canvas: {0}", canvas.Name);
             {
                 string sql = "INSERT INTO [metaCanvases] ([Name], [Content]) VALUES (@Name, @Content)";
                 Query query = Driver.CreateQuery(sql);
@@ -107,13 +107,13 @@ namespace ERHMS.EpiInfo
 
         public void UpdatePgm(Pgm pgm)
         {
-            Log.Current.DebugFormat("Updating PGM: {0}", pgm.Name);
+            Log.Logger.DebugFormat("Updating PGM: {0}", pgm.Name);
             Metadata.UpdatePgm(pgm.PgmId, pgm.Name, pgm.Content, pgm.Comment, pgm.Author);
         }
 
         public void UpdateCanvas(Canvas canvas)
         {
-            Log.Current.DebugFormat("Updating canvas: {0}", canvas.Name);
+            Log.Logger.DebugFormat("Updating canvas: {0}", canvas.Name);
             string sql = "UPDATE [metaCanvases] SET [Name] = @Name, [Content] = @Content WHERE [CanvasId] = @CanvasId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@Name", DbType.String, canvas.Name));
@@ -124,7 +124,7 @@ namespace ERHMS.EpiInfo
 
         public void DeleteView(View view)
         {
-            Log.Current.DebugFormat("Deleting view: {0}", view.Name);
+            Log.Logger.DebugFormat("Deleting view: {0}", view.Name);
             ViewDeleter deleter = new ViewDeleter(this);
             deleter.DeleteViewAndDescendants(view.Id);
             LoadViews();
@@ -132,13 +132,13 @@ namespace ERHMS.EpiInfo
 
         public void DeletePgm(Pgm pgm)
         {
-            Log.Current.DebugFormat("Deleting PGM: {0}", pgm.Name);
+            Log.Logger.DebugFormat("Deleting PGM: {0}", pgm.Name);
             Metadata.DeletePgm(pgm.PgmId);
         }
 
         public void DeleteCanvas(Canvas canvas)
         {
-            Log.Current.DebugFormat("Deleting canvas: {0}", canvas.Name);
+            Log.Logger.DebugFormat("Deleting canvas: {0}", canvas.Name);
             string sql = "DELETE FROM [metaCanvases] WHERE [CanvasId] = @CanvasId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@CanvasId", DbType.Int32, canvas.CanvasId));

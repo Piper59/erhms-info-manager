@@ -17,7 +17,7 @@ namespace ERHMS.EpiInfo
         {
             try
             {
-                Log.Current.Debug("Starting up");
+                Log.Logger.Debug("Starting up");
                 Application.ThreadException += (sender, e) =>
                 {
                     HandleError(e.Exception);
@@ -31,7 +31,7 @@ namespace ERHMS.EpiInfo
                 Console.SetOut(new StreamWriter(Stream.Null));
                 Console.SetError(new StreamWriter(Stream.Null));
                 ReflectionExtensions.Invoke(type, args[0], new Type[] { typeof(string[]) }, new object[] { args.Skip(1).ToArray() });
-                Log.Current.Debug("Exiting");
+                Log.Logger.Debug("Exiting");
             }
             catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace ERHMS.EpiInfo
 
         protected static void HandleError(Exception ex)
         {
-            Log.Current.Fatal("Fatal error", ex);
+            Log.Logger.Fatal("Fatal error", ex);
             MessageBox.Show("Epi Info\u2122 encountered an error and must shut down.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -53,7 +53,7 @@ namespace ERHMS.EpiInfo
                 query.Set(property.Name, property.GetValue(properties, null));
             }
             string line = string.Format("{0} {1}", type, query);
-            Log.Current.DebugFormat("Raising event: {0}", line);
+            Log.Logger.DebugFormat("Raising event: {0}", line);
             Error.WriteLine(line);
         }
     }
