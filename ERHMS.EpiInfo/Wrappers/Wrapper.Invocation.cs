@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     public partial class Wrapper
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     public class WrapperEventArgs : EventArgs
     {

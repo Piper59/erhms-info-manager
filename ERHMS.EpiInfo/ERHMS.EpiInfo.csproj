@@ -95,10 +95,10 @@
     </Compile>
     <Compile Include="ViewDeleter.cs" />
     <Compile Include="ViewExtensions.cs" />
-    <Compile Include="Wrapper.Execution.cs" />
-    <Compile Include="Wrapper.Invocation.cs" />
-    <Compile Include="WrapperEventArgs.cs" />
-    <Compile Include="WrapperEventType.cs" />
+    <Compile Include="Wrappers\Wrapper.Execution.cs" />
+    <Compile Include="Wrappers\Wrapper.Invocation.cs" />
+    <Compile Include="Wrappers\WrapperEventArgs.cs" />
+    <Compile Include="Wrappers\WrapperEventType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\TableCanvas.tt">

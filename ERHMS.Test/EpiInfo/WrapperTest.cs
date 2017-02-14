@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Wrappers;
 using NUnit.Framework;
 using System;
 using System.IO;
