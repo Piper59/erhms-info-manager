@@ -4,10 +4,11 @@ using ERHMS.EpiInfo.Wrappers;
 using NUnit.Framework;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace ERHMS.Test.EpiInfo
 {
+    using Test = Wrappers.Test;
+
     public class WrapperTest
     {
         [OneTimeSetUp]
@@ -25,7 +26,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void OutTest()
         {
-            Wrapper wrapper = TestProgram.OutTest();
+            Wrapper wrapper = Test.OutTest();
             wrapper.Invoke();
             Assert.AreEqual("Hello, world!", wrapper.ReadLine());
             Assert.IsNull(wrapper.ReadLine());
@@ -35,7 +36,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void InAndOutTest()
         {
-            Wrapper wrapper = TestProgram.InAndOutTest();
+            Wrapper wrapper = Test.InAndOutTest();
             wrapper.Invoke();
             for (int value = 1; value <= 10; value++)
             {
@@ -49,16 +50,26 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void ArgsTest()
         {
-            Wrapper wrapper = TestProgram.ArgsTest(Enumerable.Range(1, 10));
-            wrapper.Invoke();
-            Assert.AreEqual("55", wrapper.ReadLine());
-            wrapper.Exited.WaitOne();
+            {
+                Wrapper wrapper = Test.ArgsTest("John", 20, true, DayOfWeek.Sunday);
+                wrapper.Invoke();
+                Assert.AreEqual("John is 20 years old.", wrapper.ReadLine());
+                Assert.AreEqual("He will turn 21 on Sunday.", wrapper.ReadLine());
+                wrapper.Exited.WaitOne();
+            }
+            {
+                Wrapper wrapper = Test.ArgsTest("Jane", 30, false, DayOfWeek.Monday);
+                wrapper.Invoke();
+                Assert.AreEqual("Jane is 30 years old.", wrapper.ReadLine());
+                Assert.AreEqual("She will turn 31 on Monday.", wrapper.ReadLine());
+                wrapper.Exited.WaitOne();
+            }
         }
 
         [Test]
         public void EventTest()
         {
-            Wrapper wrapper = TestProgram.EventTest();
+            Wrapper wrapper = Test.EventTest();
             bool raised = false;
             wrapper.Event += (sender, e) =>
             {

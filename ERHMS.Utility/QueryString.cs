@@ -13,9 +13,19 @@ namespace ERHMS.Utility
     {
         private NameValueCollection @base;
 
-        public QueryString(string query = "")
+        public QueryString(string value = "")
         {
-            @base = HttpUtility.ParseQueryString(query);
+            @base = HttpUtility.ParseQueryString(value);
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return @base.Cast<string>().Contains(key);
+        }
+
+        public string Get(string key)
+        {
+            return @base.Get(key);
         }
 
         public void Set(string key, string value)

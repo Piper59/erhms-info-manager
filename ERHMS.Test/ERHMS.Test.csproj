@@ -62,9 +62,9 @@
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
       <Name>ERHMS.EpiInfo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.Test.TestProgram\ERHMS.Test.TestProgram.csproj">
+    <ProjectReference Include="..\ERHMS.Test.Wrappers.Test\ERHMS.Test.Wrappers.Test.csproj">
       <Project>{086ec5c0-1cbe-4ecb-8c28-b62da47a6fa1}</Project>
-      <Name>ERHMS.Test.TestProgram</Name>
+      <Name>ERHMS.Test.Wrappers.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\ERHMS.Utility\ERHMS.Utility.csproj">
       <Project>{f8e50f50-057d-4666-9555-16a773b925e9}</Project>
@@ -95,7 +95,6 @@
     <Compile Include="Utility\LogTest.cs" />
     <Compile Include="Utility\MailExtensionsTest.cs" />
     <Compile Include="Utility\ObjectExtensionsTest.cs" />
-    <Compile Include="Utility\ProcessExtensionsTest.cs" />
     <Compile Include="Utility\QueryStringTest.cs" />
     <Compile Include="Utility\ReflectionExtensionsTest.cs" />
     <Compile Include="Utility\StringExtensionsTest.cs" />

@@ -30,7 +30,16 @@ namespace ERHMS.EpiInfo.Wrappers
                 Console.SetIn(new StreamReader(Stream.Null));
                 Console.SetOut(new StreamWriter(Stream.Null));
                 Console.SetError(new StreamWriter(Stream.Null));
-                ReflectionExtensions.Invoke(type, args[0], new Type[] { typeof(string[]) }, new object[] { args.Skip(1).ToArray() });
+                MethodInfo method = type.GetMethod(args[0], BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                ParameterInfo parameter = method.GetParameters().FirstOrDefault();
+                if (parameter == null)
+                {
+                    method.Invoke(null, null);
+                }
+                else
+                {
+                    method.Invoke(null, new object[] { WrapperArgsBase.Parse(parameter.ParameterType, In.ReadLine()) });
+                }
                 Log.Logger.Debug("Exiting");
             }
             catch (Exception ex)
@@ -54,12 +63,12 @@ namespace ERHMS.EpiInfo.Wrappers
             }
             else
             {
-                QueryString query = new QueryString();
+                QueryString queryString = new QueryString();
                 foreach (PropertyInfo property in properties.GetType().GetProperties())
                 {
-                    query.Set(property.Name, property.GetValue(properties, null));
+                    queryString.Set(property.Name, property.GetValue(properties, null));
                 }
-                line = string.Format("{0} {1}", type, query);
+                line = string.Format("{0} {1}", type, queryString);
             }
             Log.Logger.DebugFormat("Raising event: {0}", line);
             Error.WriteLine(line);

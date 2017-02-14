@@ -1,22 +1,20 @@
 ﻿using ERHMS.EpiInfo.Wrappers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace ERHMS.Test
+namespace ERHMS.Test.Wrappers
 {
-    public class TestProgram : Wrapper
+    public class Test : Wrapper
     {
         internal static void Main(string[] args)
         {
-            MainBase(typeof(TestProgram), args);
+            MainBase(typeof(Test), args);
         }
 
         public static Wrapper OutTest()
         {
             return Create(nameof(Main_OutTest));
         }
-        private static void Main_OutTest(string[] args)
+        private static void Main_OutTest()
         {
             Console.Out.WriteLine("Standard output should be redirected to a null stream.");
             Out.WriteLine("Hello, world!");
@@ -26,7 +24,7 @@ namespace ERHMS.Test
         {
             return Create(nameof(Main_InAndOutTest));
         }
-        private static void Main_InAndOutTest(string[] args)
+        private static void Main_InAndOutTest()
         {
             if (Console.In.Peek() != -1)
             {
@@ -43,26 +41,34 @@ namespace ERHMS.Test
             }
         }
 
-        public static Wrapper ArgsTest(IEnumerable<int> values)
+        public class ArgsTestArgs : WrapperArgsBase
         {
-            return Create(nameof(Main_ArgsTest), values.Select(value => value.ToString()).ToArray());
+            public string Name { get; set; }
+            public int Age { get; set; }
+            public bool Male { get; set; }
+            public DayOfWeek BirthDay { get; set; }
         }
-        private static void Main_ArgsTest(string[] args)
+        public static Wrapper ArgsTest(string name, int age, bool male, DayOfWeek birthDay)
         {
-            int sum = 0;
-            foreach (string arg in args)
+            return Create(nameof(Main_ArgsTest), new ArgsTestArgs
             {
-                int value = int.Parse(arg);
-                sum += value;
-            }
-            Out.WriteLine(sum);
+                Name = name,
+                Age = age,
+                Male = male,
+                BirthDay = birthDay
+            });
+        }
+        private static void Main_ArgsTest(ArgsTestArgs args)
+        {
+            Out.WriteLine("{0} is {1} years old.", args.Name, args.Age);
+            Out.WriteLine("{0} will turn {1} on {2}.", args.Male ? "He" : "She", args.Age + 1, args.BirthDay);
         }
 
         public static Wrapper EventTest()
         {
             return Create(nameof(Main_EventTest));
         }
-        private static void Main_EventTest(string[] args)
+        private static void Main_EventTest()
         {
             Console.Error.WriteLine("Standard error should be redirected to a null stream.");
             RaiseEvent(WrapperEventType.Default, new

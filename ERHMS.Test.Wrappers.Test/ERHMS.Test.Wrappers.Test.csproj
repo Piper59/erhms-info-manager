@@ -7,8 +7,8 @@
     <ProjectGuid>{086EC5C0-1CBE-4ECB-8C28-B62DA47A6FA1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ERHMS.Test</RootNamespace>
-    <AssemblyName>ERHMS.Test.TestProgram</AssemblyName>
+    <RootNamespace>ERHMS.Test.Wrappers</RootNamespace>
+    <AssemblyName>ERHMS.Test.Wrappers.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -59,7 +59,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestProgram.cs" />
+    <Compile Include="Test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
