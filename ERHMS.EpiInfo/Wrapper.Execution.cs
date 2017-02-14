@@ -45,14 +45,22 @@ namespace ERHMS.EpiInfo
             MessageBox.Show("Epi Info\u2122 encountered an error and must shut down.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        protected static void RaiseEvent(WrapperEventType type, object properties)
+        protected static void RaiseEvent(WrapperEventType type, object properties = null)
         {
-            QueryString query = new QueryString();
-            foreach (PropertyInfo property in properties.GetType().GetProperties())
+            string line;
+            if (properties == null)
             {
-                query.Set(property.Name, property.GetValue(properties, null));
+                line = type.ToString();
             }
-            string line = string.Format("{0} {1}", type, query);
+            else
+            {
+                QueryString query = new QueryString();
+                foreach (PropertyInfo property in properties.GetType().GetProperties())
+                {
+                    query.Set(property.Name, property.GetValue(properties, null));
+                }
+                line = string.Format("{0} {1}", type, query);
+            }
             Log.Logger.DebugFormat("Raising event: {0}", line);
             Error.WriteLine(line);
         }
