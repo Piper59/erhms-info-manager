@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal class MainForm : AnalysisMainForm
     {
@@ -30,45 +30,33 @@ namespace ERHMS.EpiInfo
 
         public void AddCommand(string command)
         {
-            if (!string.IsNullOrWhiteSpace(command))
-            {
-                ProgramEditor.AddCommand(command);
-            }
+            ProgramEditor.AddCommand(command);
         }
 
         public void ExecuteCommand(string command, Action callback = null)
         {
-            Log.Current.DebugFormat("Executing command: {0}", command);
+            Log.Logger.DebugFormat("Executing command: {0}", command);
+            ProgramEditor.txtTextArea.Enabled = false;
+            ProgramEditor.btnRun.Enabled = false;
+            ProgramEditor.ShowErrorMessage("");
+            UpdateStatus("Running...", false);
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
-                BeginInvoke(new Action(() =>
+                EpiInterpreter.Context.ClearState();
+                if (!string.IsNullOrWhiteSpace(command))
                 {
-                    ProgramEditor.txtTextArea.Enabled = false;
-                    ProgramEditor.btnRun.Enabled = false;
-                    ProgramEditor.ShowErrorMessage("");
-                    UpdateStatus("Running PGM...", false);
-                }));
-                try
-                {
-                    EpiInterpreter.Context.ClearState();
-                    if (!string.IsNullOrWhiteSpace(command))
-                    {
-                        EpiInterpreter.Execute(command);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    BeginInvoke(new Action(() =>
-                    {
-                        ProgramEditor.ShowErrorMessage(ex.ToString());
-                    }));
+                    EpiInterpreter.Execute(command);
                 }
             };
             worker.RunWorkerCompleted += (sender, e) =>
             {
                 ProgramEditor.txtTextArea.Enabled = true;
                 ProgramEditor.btnRun.Enabled = true;
+                if (e.Error != null)
+                {
+                    ProgramEditor.ShowErrorMessage(e.Error.ToString());
+                }
                 UpdateStatus("Ready", false);
                 callback?.Invoke();
             };

@@ -4,63 +4,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal class MappingCollection : List<Mapping>
     {
-        public IEnumerable<string> Targets
-        {
-            get
-            {
-                if (!ContainsNonEmptyKeyTarget())
-                {
-                    yield return GetKeyTarget();
-                }
-                foreach (Mapping mapping in this)
-                {
-                    yield return mapping.Target;
-                }
-            }
-        }
-
-        public IEnumerable<string> EscapedTargets
-        {
-            get { return Targets.Select(target => string.Format("[{0}]", target)); }
-        }
-
         public void Add(string source, string target)
         {
             Add(new Mapping(source, target));
         }
 
-        public bool ContainsTarget(string target)
+        private bool ContainsTarget(string target)
         {
             return this.Any(mapping => mapping.Target.EqualsIgnoreCase(target));
         }
 
-        public bool ContainsNonEmptyKeyTarget()
+        private bool ContainsKeyMapping()
         {
             return ContainsTarget(ColumnNames.GLOBAL_RECORD_ID);
         }
 
         public string GetKeyTarget()
         {
-            if (ContainsNonEmptyKeyTarget())
+            if (ContainsKeyMapping())
             {
                 return ColumnNames.GLOBAL_RECORD_ID;
             }
             else
             {
-                return string.Format("Empty{0}", ColumnNames.GLOBAL_RECORD_ID).MakeUnique("{0}{1}", value => ContainsTarget(value));
+                return ("Empty" + ColumnNames.GLOBAL_RECORD_ID).MakeUnique("{0}{1}", value => ContainsTarget(value));
+            }
+        }
+
+        public IEnumerable<string> GetTargets()
+        {
+            if (!ContainsKeyMapping())
+            {
+                yield return GetKeyTarget();
+            }
+            foreach (Mapping mapping in this)
+            {
+                yield return mapping.Target;
             }
         }
 
         public string GetCommands()
         {
             StringBuilder commands = new StringBuilder();
-            if (!ContainsNonEmptyKeyTarget())
+            if (!ContainsKeyMapping())
             {
-                commands.AppendLine(Mapping.GetDefineCommand(GetKeyTarget()));
+                commands.AppendLine(Commands.Define(GetKeyTarget()));
             }
             foreach (Mapping mapping in this)
             {
@@ -68,8 +60,8 @@ namespace ERHMS.EpiInfo
                 {
                     continue;
                 }
-                commands.AppendLine(mapping.GetDefineCommand());
-                commands.AppendLine(mapping.GetAssignCommand());
+                commands.AppendLine(Commands.Define(mapping.Target));
+                commands.AppendLine(Commands.Assign(mapping.Source, mapping.Target));
             }
             return commands.ToString().Trim();
         }

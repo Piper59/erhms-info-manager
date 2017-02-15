@@ -1,4 +1,4 @@
-﻿namespace ERHMS.EpiInfo
+﻿namespace ERHMS.EpiInfo.Wrappers
 {
     partial class MappingDialog
     {

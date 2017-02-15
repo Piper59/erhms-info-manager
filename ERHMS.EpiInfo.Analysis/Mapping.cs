@@ -1,19 +1,11 @@
 ﻿using ERHMS.Utility;
-using System;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal class Mapping
     {
-        public static string GetDefineCommand(string target)
-        {
-            return string.Format("DEFINE {0}", target);
-        }
-
-        public string Source { get; set; }
-        public string Target { get; set; }
-
-        public Mapping() { }
+        public string Source { get; private set; }
+        public string Target { get; private set; }
 
         public Mapping(string source, string target)
         {
@@ -24,16 +16,6 @@ namespace ERHMS.EpiInfo
         public bool IsIdentity()
         {
             return StringExtensions.EqualsIgnoreCase(Source, Target);
-        }
-
-        public string GetDefineCommand()
-        {
-            return GetDefineCommand(Target);
-        }
-
-        public string GetAssignCommand()
-        {
-            return string.Format("ASSIGN {0} = [{1}]", Target, Source);
         }
     }
 }

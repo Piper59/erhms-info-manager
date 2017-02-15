@@ -2,6 +2,8 @@
 {
     public enum WrapperEventType
     {
-        Default
+        Default,
+        ViewDataImported,
+        PgmSaved
     }
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal partial class MappingDialog : CommandDesignDialog
     {
@@ -54,12 +54,8 @@ namespace ERHMS.EpiInfo
             }
             foreach (string source in sources)
             {
-                string target = targets.FirstOrDefault(_target => _target.EqualsIgnoreCase(source));
-                if (target == null)
-                {
-                    target = EmptyTarget;
-                }
-                dgvMappings.Rows.Add(source, target);
+                string suggestedTarget = targets.FirstOrDefault(target => target.EqualsIgnoreCase(source));
+                dgvMappings.Rows.Add(source, suggestedTarget ?? EmptyTarget);
             }
         }
 

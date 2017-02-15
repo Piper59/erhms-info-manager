@@ -1,249 +1,175 @@
-﻿using Epi;
-using Epi.Fields;
+﻿using Epi.Fields;
 using Epi.Windows.Analysis.Dialogs;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using View = Epi.View;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     public class Analysis : Wrapper
     {
-        private static string GetReadCommand(string projectPath, string viewName)
-        {
-            return string.Format("READ {{{0}}}:{1}", projectPath, viewName);
-        }
-
-        private static string GetCsvConnectionString(FileInfo csv)
-        {
-            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
-            builder.Provider = "Microsoft.Jet.OLEDB.4.0";
-            builder.DataSource = csv.DirectoryName;
-            builder["Extended Properties"] = "text;HDR=Yes;FMT=Delimited";
-            return builder.ConnectionString;
-        }
-
         [STAThread]
         internal static void Main(string[] args)
         {
             MainBase(typeof(Analysis), args);
         }
 
-        public static Wrapper Execute()
+        public static Wrapper OpenPgm(Pgm pgm, bool execute)
         {
-            return Create(args => Main_Execute(args));
+            return Create(() => Main_OpenPgm(pgm.Name, pgm.Content, execute));
         }
-        private static void Main_Execute(string[] args)
+        private static void Main_OpenPgm(string name, string content, bool execute)
         {
-            using (MainForm form = new MainForm())
+            MainForm form = new MainForm();
+            form.Shown += (sender, e) =>
             {
-                Application.Run(form);
-            }
-        }
-
-        public static Wrapper OpenPgm(Project project, Pgm pgm, bool execute, string tag = null)
-        {
-            FileInfo file = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", Pgm.FileExtension);
-            File.WriteAllText(file.FullName, pgm.Content);
-            return Create(args => Main_OpenPgm(args), project.FilePath, pgm.PgmId.ToString(), pgm.Name, file.FullName, execute.ToString(), tag);
-        }
-        private static void Main_OpenPgm(string[] args)
-        {
-            string projectPath = args[0];
-            int pgmId = int.Parse(args[1]);
-            string pgmName = args[2];
-            string pgmPath = args[3];
-            bool execute = bool.Parse(args[4]);
-            string tag = args[5];
-            if (tag == "")
-            {
-                tag = null;
-            }
-            using (MainForm form = new MainForm())
-            {
-                form.Load += (sender, e) =>
+                form.Commands = content;
+                if (execute)
                 {
-                    form.Commands = File.ReadAllText(pgmPath);
-                    if (execute)
-                    {
-                        form.ExecuteCommands();
-                    }
-                };
-                form.FormClosing += (sender, e) =>
+                    form.ExecuteCommands();
+                }
+            };
+            form.FormClosing += (sender, e) =>
+            {
+                if (e.CloseReason == CloseReason.UserClosing && form.Commands != content)
                 {
-                    if (e.CloseReason == CloseReason.UserClosing)
+                    string message = "Save changes to this program before exiting?";
+                    DialogResult result = MessageBox.Show(message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
                     {
-                        DialogResult result = MessageBox.Show(
-                            "Save changes to this program before exiting?",
-                            "Save?",
-                            MessageBoxButtons.YesNoCancel,
-                            MessageBoxIcon.Warning);
-                        if (result == DialogResult.Yes)
+                        if (form.SavePgm(name))
                         {
-                            if (form.SavePgm(pgmName))
-                            {
-                                //IService service = Service.Connect();
-                                //if (service != null)
-                                //{
-                                //    service.OnPgmSaved(projectPath, pgmId, tag);
-                                //}
-                            }
-                        }
-                        else if (result == DialogResult.Cancel)
-                        {
-                            e.Cancel = true;
+                            RaiseEvent(WrapperEventType.PgmSaved);
                         }
                     }
-                };
-                Application.Run(form);
-            }
+                    else if (result == DialogResult.Cancel)
+                    {
+                        e.Cancel = true;
+                    }
+                }
+            };
+            Application.Run(form);
         }
 
         public static Wrapper Import(View target)
         {
-            return Create(args => Main_Import(args), target.Project.FilePath, target.Name);
+            return Create(() => Main_Import(target.Project.FilePath, target.Name));
         }
-        private static void Main_Import(string[] args)
+        private static void Main_Import(string projectPath, string viewName)
         {
-            string projectPath = args[0];
-            string viewName = args[1];
-            using (Project project = new Project(projectPath))
+            Project project = new Project(projectPath);
+            View view = project.Views[viewName];
+            MainForm form = new MainForm();
+            form.Shown += (sender, e) =>
             {
-                View view = project.Views[viewName];
-                using (MainForm form = new MainForm())
+                string command;
+                using (ReadDialog dialog = new ReadDialog(form))
                 {
-                    form.Load += (sender, e) =>
+                    dialog.StartPosition = FormStartPosition.CenterParent;
+                    if (dialog.ShowDialog() != DialogResult.OK)
                     {
-                        string command;
-                        using (ReadDialog dialog = new ReadDialog(form))
+                        string message = "No data source was selected. Import has been canceled. Close Epi Info?";
+                        if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                         {
-                            dialog.StartPosition = FormStartPosition.CenterParent;
-                            if (dialog.ShowDialog() != DialogResult.OK)
-                            {
-                                return;
-                            }
-                            command = dialog.CommandText;
+                            form.Close();
+                            return;
                         }
-                        form.AddCommand(command);
-                        form.ExecuteCommand(command, () =>
-                        {
-                            IEnumerable<string> sources = form.GetOutput().Columns
-                                .Cast<DataColumn>()
-                                .Select(column => column.ColumnName);
-                            IEnumerable<string> targets = view.Fields.TableColumnFields
-                                .Cast<Field>()
-                                .Select(field => field.Name);
-                            MappingCollection mappings = null;
-                            while (true)
-                            {
-                                using (MappingDialog dialog = new MappingDialog(form, sources, targets))
-                                {
-                                    dialog.StartPosition = FormStartPosition.CenterParent;
-                                    if (dialog.ShowDialog() == DialogResult.OK)
-                                    {
-                                        mappings = dialog.GetMappings();
-                                    }
-                                }
-                                if (mappings == null || mappings.Count == 0)
-                                {
-                                    string message = "No variables have been mapped. Cancel import?";
-                                    if (MessageBox.Show(message, "Cancel?", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
-                                    {
-                                        return;
-                                    }
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            form.AddCommand(mappings.GetCommands());
-                            FileInfo csv = IOExtensions.GetTemporaryFile("ERHMS_{0:N}.csv");
-                            string csvConnectionString = GetCsvConnectionString(csv);
-                            string csvFileName = csv.Name.Replace(".", "#");
-                            form.AddCommand(string.Format(
-                                "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}",
-                                csvConnectionString,
-                                csvFileName,
-                                string.Join(" ", mappings.EscapedTargets)));
-                            form.AddCommand(GetReadCommand(projectPath, viewName));
-                            form.AddCommand("TYPEOUT \"Importing data...\"");
-                            form.AddCommand(string.Format(
-                                "MERGE {{{0}}}:{1} {2} :: {3}",
-                                csvConnectionString,
-                                csvFileName,
-                                ColumnNames.GLOBAL_RECORD_ID,
-                                mappings.GetKeyTarget()));
-                            form.AddCommand("TYPEOUT \"Data has been imported.\"");
-                            form.Enabled = false;
-                            form.ExecuteCommands(() =>
-                            {
-                                form.Enabled = true;
-                                //IService service = Service.Connect();
-                                //if (service != null)
-                                //{
-                                //    service.OnViewDataImported(projectPath, viewName);
-                                //}
-                                string message = "Data has been imported. Close Epi Info?";
-                                if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                                {
-                                    form.Close();
-                                }
-                            });
-                        });
-                    };
-                    Application.Run(form);
+                    }
+                    command = dialog.CommandText;
                 }
-            }
-        }
-
-        public static Wrapper Export(View source)
-        {
-            return Create(args => Main_Export(args), source.Project.FilePath, source.Name);
-        }
-        private static void Main_Export(string[] args)
-        {
-            string projectPath = args[0];
-            string viewName = args[1];
-            using (MainForm form = new MainForm())
-            {
-                form.Load += (sender, e) =>
+                form.AddCommand(command);
+                form.ExecuteCommand(command, () =>
                 {
-                    string command = GetReadCommand(projectPath, viewName);
-                    form.AddCommand(command);
-                    form.ExecuteCommand(command, () =>
+                    ICollection<string> sources = form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
+                    ICollection<string> targets = view.Fields.TableColumnFields.Cast<Field>().Select(field => field.Name).ToList();
+                    MappingCollection mappings = null;
+                    while (true)
                     {
-                        using (WriteDialog dialog = new WriteDialog(form))
+                        using (MappingDialog dialog = new MappingDialog(form, sources, targets))
                         {
                             dialog.StartPosition = FormStartPosition.CenterParent;
                             if (dialog.ShowDialog() == DialogResult.OK)
                             {
-                                form.AddCommand(dialog.CommandText);
-                                if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)
-                                {
-                                    form.ExecuteCommand(dialog.CommandText, () =>
-                                    {
-                                        string message = "Data has been exported. Close Epi Info?";
-                                        if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                                        {
-                                            form.Close();
-                                        }
-                                    });
-                                }
+                                mappings = dialog.GetMappings();
                             }
                         }
+                        if (mappings == null || mappings.Count == 0)
+                        {
+                            string message = "No variables were mapped. Retry mapping or cancel import?";
+                            if (MessageBox.Show(message, "Retry?", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                            {
+                                form.Close();
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    form.AddCommand(mappings.GetCommands());
+                    string csvPath = IOExtensions.GetTempFileName("ERHMS_{0:N}.csv");
+                    form.AddCommand(Commands.WriteCsv(csvPath, mappings.GetTargets()));
+                    form.AddCommand(Commands.Read(projectPath, viewName));
+                    form.AddCommand(Commands.Type("Importing data..."));
+                    form.AddCommand(Commands.MergeCsv(csvPath, mappings.GetKeyTarget()));
+                    form.AddCommand(Commands.Type("Data has been imported."));
+                    form.Enabled = false;
+                    // TODO: Display indeterminate progress bar?
+                    form.ExecuteCommands(() =>
+                    {
+                        form.Enabled = true;
+                        RaiseEvent(WrapperEventType.ViewDataImported);
+                        string message = "Data has been imported. Close Epi Info?";
+                        if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            form.Close();
+                        }
                     });
-                };
-                Application.Run(form);
-            }
+                });
+            };
+            Application.Run(form);
         }
 
-        private Analysis() { }
+        public static Wrapper Export(View source)
+        {
+            return Create(() => Main_Export(source.Project.FilePath, source.Name));
+        }
+        private static void Main_Export(string projectPath, string viewName)
+        {
+            MainForm form = new MainForm();
+            form.Shown += (sender, e) =>
+            {
+                string readCommand = Commands.Read(projectPath, viewName);
+                form.AddCommand(readCommand);
+                form.ExecuteCommand(readCommand, () =>
+                {
+                    using (WriteDialog dialog = new WriteDialog(form))
+                    {
+                        dialog.StartPosition = FormStartPosition.CenterParent;
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            form.AddCommand(dialog.CommandText);
+                            if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)
+                            {
+                                form.ExecuteCommand(dialog.CommandText, () =>
+                                {
+                                    string message = "Data has been exported. Close Epi Info?";
+                                    if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                    {
+                                        form.Close();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            };
+            Application.Run(form);
+        }
     }
 }

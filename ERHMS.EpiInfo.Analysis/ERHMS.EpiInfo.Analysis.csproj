@@ -7,7 +7,7 @@
     <ProjectGuid>{02554B6E-557D-4C58-AE39-4AC674755D71}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ERHMS.EpiInfo</RootNamespace>
+    <RootNamespace>ERHMS.EpiInfo.Wrappers</RootNamespace>
     <AssemblyName>ERHMS.EpiInfo.Analysis</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -74,6 +74,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Analysis.cs" />
+    <Compile Include="Commands.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
