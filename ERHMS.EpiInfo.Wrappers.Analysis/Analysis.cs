@@ -18,9 +18,9 @@ namespace ERHMS.EpiInfo.Wrappers
             MainBase(typeof(Analysis), args);
         }
 
-        public static Wrapper OpenPgm(Pgm pgm, bool execute)
+        public static Wrapper OpenPgm(string name, string content, bool execute)
         {
-            return Create(() => Main_OpenPgm(pgm.Name, pgm.Content, execute));
+            return Create(() => Main_OpenPgm(name, content, execute));
         }
         private static void Main_OpenPgm(string name, string content, bool execute)
         {
@@ -30,7 +30,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 form.Commands = content;
                 if (execute)
                 {
-                    form.ExecuteCommands();
+                    form.ExecuteCommands(true);
                 }
             };
             form.FormClosing += (sender, e) =>
@@ -38,7 +38,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 if (e.CloseReason == CloseReason.UserClosing && form.Commands != content)
                 {
                     string message = "Save changes to this program before exiting?";
-                    DialogResult result = MessageBox.Show(message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    DialogResult result = MessageBox.Show(form, message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
                         if (form.SavePgm(name))
@@ -55,9 +55,9 @@ namespace ERHMS.EpiInfo.Wrappers
             Application.Run(form);
         }
 
-        public static Wrapper Import(View target)
+        public static Wrapper Import(string projectPath, string viewName)
         {
-            return Create(() => Main_Import(target.Project.FilePath, target.Name));
+            return Create(() => Main_Import(projectPath, viewName));
         }
         private static void Main_Import(string projectPath, string viewName)
         {
@@ -70,10 +70,10 @@ namespace ERHMS.EpiInfo.Wrappers
                 using (ReadDialog dialog = new ReadDialog(form))
                 {
                     dialog.StartPosition = FormStartPosition.CenterParent;
-                    if (dialog.ShowDialog() != DialogResult.OK)
+                    if (dialog.ShowDialog(form) != DialogResult.OK)
                     {
                         string message = "No data source was selected. Import has been canceled. Close Epi Info?";
-                        if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                        if (MessageBox.Show(form, message, "Close?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                         {
                             form.Close();
                             return;
@@ -82,7 +82,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     command = dialog.CommandText;
                 }
                 form.AddCommand(command);
-                form.ExecuteCommand(command, () =>
+                form.ExecuteCommand(command, true, () =>
                 {
                     ICollection<string> sources = form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
                     ICollection<string> targets = view.Fields.TableColumnFields.Cast<Field>().Select(field => field.Name).ToList();
@@ -92,7 +92,7 @@ namespace ERHMS.EpiInfo.Wrappers
                         using (MappingDialog dialog = new MappingDialog(form, sources, targets))
                         {
                             dialog.StartPosition = FormStartPosition.CenterParent;
-                            if (dialog.ShowDialog() == DialogResult.OK)
+                            if (dialog.ShowDialog(form) == DialogResult.OK)
                             {
                                 mappings = dialog.GetMappings();
                             }
@@ -100,7 +100,7 @@ namespace ERHMS.EpiInfo.Wrappers
                         if (mappings == null || mappings.Count == 0)
                         {
                             string message = "No variables were mapped. Retry mapping or cancel import?";
-                            if (MessageBox.Show(message, "Retry?", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                            if (MessageBox.Show(form, message, "Retry?", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                             {
                                 form.Close();
                                 return;
@@ -118,14 +118,11 @@ namespace ERHMS.EpiInfo.Wrappers
                     form.AddCommand(Commands.Type("Importing data..."));
                     form.AddCommand(Commands.MergeCsv(csvPath, mappings.GetKeyTarget()));
                     form.AddCommand(Commands.Type("Data has been imported."));
-                    form.Enabled = false;
-                    // TODO: Display indeterminate progress bar?
-                    form.ExecuteCommands(() =>
+                    form.ExecuteCommands(true, () =>
                     {
-                        form.Enabled = true;
                         RaiseEvent(WrapperEventType.ViewDataImported);
                         string message = "Data has been imported. Close Epi Info?";
-                        if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        if (MessageBox.Show(form, message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             form.Close();
                         }
@@ -135,32 +132,32 @@ namespace ERHMS.EpiInfo.Wrappers
             Application.Run(form);
         }
 
-        public static Wrapper Export(View source)
+        public static Wrapper Export(string projectPath, string viewName)
         {
-            return Create(() => Main_Export(source.Project.FilePath, source.Name));
+            return Create(() => Main_Export(projectPath, viewName));
         }
         private static void Main_Export(string projectPath, string viewName)
         {
             MainForm form = new MainForm();
             form.Shown += (sender, e) =>
             {
-                string readCommand = Commands.Read(projectPath, viewName);
-                form.AddCommand(readCommand);
-                form.ExecuteCommand(readCommand, () =>
+                string command = Commands.Read(projectPath, viewName);
+                form.AddCommand(command);
+                form.ExecuteCommand(command, true, () =>
                 {
                     using (WriteDialog dialog = new WriteDialog(form))
                     {
                         dialog.StartPosition = FormStartPosition.CenterParent;
-                        DialogResult result = dialog.ShowDialog();
+                        DialogResult result = dialog.ShowDialog(form);
                         if (result == DialogResult.OK)
                         {
                             form.AddCommand(dialog.CommandText);
                             if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)
                             {
-                                form.ExecuteCommand(dialog.CommandText, () =>
+                                form.ExecuteCommand(dialog.CommandText, false, () =>
                                 {
                                     string message = "Data has been exported. Close Epi Info?";
-                                    if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                    if (MessageBox.Show(form, message, "Close?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                     {
                                         form.Close();
                                     }
@@ -170,7 +167,7 @@ namespace ERHMS.EpiInfo.Wrappers
                         else if (result == DialogResult.Cancel)
                         {
                             string message = "Export has been canceled. Close Epi Info?";
-                            if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                            if (MessageBox.Show(form, message, "Close?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                             {
                                 form.Close();
                             }

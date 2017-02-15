@@ -8,8 +8,6 @@ namespace ERHMS.Test.Utility
     {
         private class Number
         {
-            private int start = 0;
-
             public int Value { get; protected set; }
 
             public Number()
@@ -19,17 +17,15 @@ namespace ERHMS.Test.Utility
 
             private void Reset()
             {
-                Value = start;
+                Value = 0;
             }
         }
 
         private class Counter : Number
         {
-            private int step = 1;
-
             private void Increment()
             {
-                Value += step;
+                Value += 1;
             }
 
             private void Increment(int step)
@@ -42,8 +38,6 @@ namespace ERHMS.Test.Utility
         public void InvokeTest()
         {
             Counter counter = new Counter();
-            Assert.AreEqual(0, ReflectionExtensions.GetValue(counter, typeof(Number), "start"));
-            Assert.AreEqual(1, ReflectionExtensions.GetValue(counter, "step"));
             ReflectionExtensions.Invoke(counter, "Increment");
             Assert.AreEqual(1, counter.Value);
             ReflectionExtensions.Invoke(counter, "Increment", new Type[] { typeof(int) }, new object[] { 2 });

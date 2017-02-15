@@ -17,10 +17,11 @@ namespace ERHMS.EpiInfo.Wrappers
             try
             {
                 Log.Logger.Debug("Starting up");
-                Application.ThreadException += (sender, e) =>
+                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
                 {
-                    HandleError(e.Exception);
+                    HandleError(e.ExceptionObject as Exception);
                 };
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
                 Application.EnableVisualStyles();
                 ConfigurationExtensions.Load();
                 In = Console.In;

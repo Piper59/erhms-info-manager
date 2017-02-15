@@ -1,15 +1,20 @@
-﻿using Epi.Windows.Analysis.Dialogs;
+﻿using Epi;
+using Epi.Analysis.Dialogs;
+using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
 using ERHMS.Utility;
 using System;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
+using Action = System.Action;
 
 namespace ERHMS.EpiInfo.Wrappers
 {
     internal class MainForm : AnalysisMainForm
     {
+        private WaitDialog waitDialog;
+
         public string Commands
         {
             get { return ProgramEditor.txtTextArea.Text; }
@@ -28,44 +33,64 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
+        public MainForm()
+        {
+            waitDialog = new WaitDialog();
+        }
+
+        private void BeginWait(bool showDialog)
+        {
+            ProgramEditor.ShowErrorMessage("");
+            UpdateStatus("Running...", false);
+            Enabled = false;
+            if (showDialog)
+            {
+                waitDialog.Show(this);
+            }
+        }
+
+        private void EndWait()
+        {
+            waitDialog.Hide();
+            Enabled = true;
+            UpdateStatus(SharedStrings.READY, false);
+        }
+
         public void AddCommand(string command)
         {
             ProgramEditor.AddCommand(command);
         }
 
-        public void ExecuteCommand(string command, Action callback = null)
+        public void ExecuteCommand(string command, bool showDialog, Action callback = null)
         {
             Log.Logger.DebugFormat("Executing command: {0}", command);
-            ProgramEditor.txtTextArea.Enabled = false;
-            ProgramEditor.btnRun.Enabled = false;
-            ProgramEditor.ShowErrorMessage("");
-            UpdateStatus("Running...", false);
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
                 EpiInterpreter.Context.ClearState();
-                if (!string.IsNullOrWhiteSpace(command))
-                {
-                    EpiInterpreter.Execute(command);
-                }
+                EpiInterpreter.Execute(command);
             };
             worker.RunWorkerCompleted += (sender, e) =>
             {
-                ProgramEditor.txtTextArea.Enabled = true;
-                ProgramEditor.btnRun.Enabled = true;
-                if (e.Error != null)
+                EndWait();
+                if (e.Error == null)
+                {
+                    callback?.Invoke();
+                }
+                else
                 {
                     ProgramEditor.ShowErrorMessage(e.Error.ToString());
+                    string message = "An error occurred while running commands. See the program editor's output window for details.";
+                    MessageBox.Show(this, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                UpdateStatus("Ready", false);
-                callback?.Invoke();
             };
+            BeginWait(showDialog);
             worker.RunWorkerAsync();
         }
 
-        public void ExecuteCommands(Action callback = null)
+        public void ExecuteCommands(bool showDialog, Action callback = null)
         {
-            ExecuteCommand(Commands, callback);
+            ExecuteCommand(Commands, showDialog, callback);
         }
 
         public DataTable GetOutput()
@@ -79,7 +104,7 @@ namespace ERHMS.EpiInfo.Wrappers
             using (PgmDialog dialog = new PgmDialog(this, name, Commands, PgmDialog.PgmDialogMode.SaveProgram))
             {
                 dialog.StartPosition = FormStartPosition.CenterParent;
-                return dialog.ShowDialog() == DialogResult.OK;
+                return dialog.ShowDialog(this) == DialogResult.OK;
             }
         }
     }
