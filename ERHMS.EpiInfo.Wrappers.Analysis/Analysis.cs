@@ -151,7 +151,8 @@ namespace ERHMS.EpiInfo.Wrappers
                     using (WriteDialog dialog = new WriteDialog(form))
                     {
                         dialog.StartPosition = FormStartPosition.CenterParent;
-                        if (dialog.ShowDialog() == DialogResult.OK)
+                        DialogResult result = dialog.ShowDialog();
+                        if (result == DialogResult.OK)
                         {
                             form.AddCommand(dialog.CommandText);
                             if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)
@@ -164,6 +165,14 @@ namespace ERHMS.EpiInfo.Wrappers
                                         form.Close();
                                     }
                                 });
+                            }
+                        }
+                        else if (result == DialogResult.Cancel)
+                        {
+                            string message = "Export has been canceled. Close Epi Info?";
+                            if (MessageBox.Show(message, "Close?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                            {
+                                form.Close();
                             }
                         }
                     }
