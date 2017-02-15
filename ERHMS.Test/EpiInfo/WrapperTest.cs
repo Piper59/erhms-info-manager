@@ -11,6 +11,8 @@ namespace ERHMS.Test.EpiInfo
 
     public class WrapperTest
     {
+        private Wrapper wrapper;
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -23,66 +25,110 @@ namespace ERHMS.Test.EpiInfo
             File.Delete(ConfigurationExtensions.FilePath);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            if (wrapper != null)
+            {
+                if (!wrapper.Exited.WaitOne(10000))
+                {
+                    TestContext.Error.WriteLine("Wrapper is not responding.");
+                }
+                wrapper = null;
+            }
+        }
+
         [Test]
         public void OutTest()
         {
-            Wrapper wrapper = Test.OutTest();
+            wrapper = Test.OutTest();
             wrapper.Invoke();
             Assert.AreEqual("Hello, world!", wrapper.ReadLine());
             Assert.IsNull(wrapper.ReadLine());
-            wrapper.Exited.WaitOne();
         }
 
         [Test]
         public void InAndOutTest()
         {
-            Wrapper wrapper = Test.InAndOutTest();
+            wrapper = Test.InAndOutTest();
             wrapper.Invoke();
-            for (int value = 1; value <= 10; value++)
+            Random random = new Random();
+            try
             {
-                wrapper.WriteLine(value);
-                Assert.AreEqual(value.ToString(), wrapper.ReadLine());
+                for (int index = 0; index < 10; index++)
+                {
+                    int value = random.Next();
+                    wrapper.WriteLine(value);
+                    Assert.AreEqual(value.ToString(), wrapper.ReadLine());
+                }
             }
-            wrapper.Close();
-            wrapper.Exited.WaitOne();
-        }
-
-        [Test]
-        public void ArgsTest()
-        {
+            finally
             {
-                Wrapper wrapper = Test.ArgsTest("John", 20, true, DayOfWeek.Sunday);
-                wrapper.Invoke();
-                Assert.AreEqual("John is 20 years old.", wrapper.ReadLine());
-                Assert.AreEqual("He will turn 21 on Sunday.", wrapper.ReadLine());
-                wrapper.Exited.WaitOne();
-            }
-            {
-                Wrapper wrapper = Test.ArgsTest("Jane", 30, false, DayOfWeek.Monday);
-                wrapper.Invoke();
-                Assert.AreEqual("Jane is 30 years old.", wrapper.ReadLine());
-                Assert.AreEqual("She will turn 31 on Monday.", wrapper.ReadLine());
-                wrapper.Exited.WaitOne();
+                wrapper.Close();
             }
         }
 
         [Test]
-        public void EventTest()
+        public void ArgsTest1()
         {
-            Wrapper wrapper = Test.EventTest();
+            wrapper = Test.ArgsTest("johnd", "John Doe", 20.25, true);
+            wrapper.Invoke();
+            Assert.AreEqual("ID = johnd", wrapper.ReadLine());
+            Assert.AreEqual("Name = John Doe", wrapper.ReadLine());
+            Assert.AreEqual("Age = 20 years 3 months", wrapper.ReadLine());
+            Assert.AreEqual("Gender = M", wrapper.ReadLine());
+        }
+
+        [Test]
+        public void ArgsTest2()
+        {
+            wrapper = Test.ArgsTest(null, "Jane Doe", 30.75, false);
+            wrapper.Invoke();
+            Assert.AreEqual("ID = N/A", wrapper.ReadLine());
+            Assert.AreEqual("Name = Jane Doe", wrapper.ReadLine());
+            Assert.AreEqual("Age = 30 years 9 months", wrapper.ReadLine());
+            Assert.AreEqual("Gender = F", wrapper.ReadLine());
+        }
+
+        [Test]
+        public void LongArgTest()
+        {
+            wrapper = Test.LongArgTest(new string('A', 10000));
+            wrapper.Invoke();
+            Assert.AreEqual("10000", wrapper.ReadLine());
+        }
+
+        [Test]
+        public void EventTypeTest()
+        {
+            wrapper = Test.EventTypeTest();
             bool raised = false;
             wrapper.Event += (sender, e) =>
             {
                 raised = true;
                 Assert.AreEqual(WrapperEventType.Default, e.Type);
-                Assert.AreEqual("", e.Properties.Empty);
-                Assert.AreEqual("'Hello, world!'", e.Properties.Message);
-                Assert.AreEqual("1 + 2 + 3 = 6", e.Properties.Math);
-                Assert.AreEqual("A & B & C = D", e.Properties.Logic);
-                Assert.AreEqual("42", e.Properties.Number);
             };
             wrapper.Invoke();
             wrapper.Exited.WaitOne();
+            wrapper = null;
+            Assert.IsTrue(raised);
+        }
+
+        [Test]
+        public void EventPropertiesTest()
+        {
+            wrapper = Test.EventPropertiesTest();
+            bool raised = false;
+            wrapper.Event += (sender, e) =>
+            {
+                raised = true;
+                Assert.AreEqual("John Doe", e.Properties.Name);
+                Assert.AreEqual(20, e.Properties.Age);
+                Assert.AreEqual(true, e.Properties.Male);
+            };
+            wrapper.Invoke();
+            wrapper.Exited.WaitOne();
+            wrapper = null;
             Assert.IsTrue(raised);
         }
     }

@@ -12,7 +12,7 @@ namespace ERHMS.Test.Wrappers
 
         public static Wrapper OutTest()
         {
-            return Create(nameof(Main_OutTest));
+            return Create(() => Main_OutTest());
         }
         private static void Main_OutTest()
         {
@@ -22,7 +22,7 @@ namespace ERHMS.Test.Wrappers
 
         public static Wrapper InAndOutTest()
         {
-            return Create(nameof(Main_InAndOutTest));
+            return Create(() => Main_InAndOutTest());
         }
         private static void Main_InAndOutTest()
         {
@@ -41,43 +41,50 @@ namespace ERHMS.Test.Wrappers
             }
         }
 
-        public class ArgsTestArgs : WrapperArgsBase
+        public static Wrapper ArgsTest(string id, string name, double age, bool male)
         {
-            public string Name { get; set; }
-            public int Age { get; set; }
-            public bool Male { get; set; }
-            public DayOfWeek BirthDay { get; set; }
+            return Create(() => Main_ArgsTest(id, name, age, male));
         }
-        public static Wrapper ArgsTest(string name, int age, bool male, DayOfWeek birthDay)
+        private static void Main_ArgsTest(string id, string name, double age, bool male)
         {
-            return Create(nameof(Main_ArgsTest), new ArgsTestArgs
-            {
-                Name = name,
-                Age = age,
-                Male = male,
-                BirthDay = birthDay
-            });
-        }
-        private static void Main_ArgsTest(ArgsTestArgs args)
-        {
-            Out.WriteLine("{0} is {1} years old.", args.Name, args.Age);
-            Out.WriteLine("{0} will turn {1} on {2}.", args.Male ? "He" : "She", args.Age + 1, args.BirthDay);
+            int ageYears = Convert.ToInt32(Math.Truncate(age));
+            int ageMonths = Convert.ToInt32(Math.Truncate((age - ageYears) * 12));
+            Out.WriteLine("ID = {0}", id == null ? "N/A" : id);
+            Out.WriteLine("Name = {0}", name);
+            Out.WriteLine("Age = {0} years {1} months", ageYears, ageMonths);
+            Out.WriteLine("Gender = {0}", male ? "M" : "F");
         }
 
-        public static Wrapper EventTest()
+        public static Wrapper LongArgTest(string value)
         {
-            return Create(nameof(Main_EventTest));
+            return Create(() => Main_LongArgTest(value));
         }
-        private static void Main_EventTest()
+        private static void Main_LongArgTest(string value)
+        {
+            Out.WriteLine(value.Length);
+        }
+
+        public static Wrapper EventTypeTest()
+        {
+            return Create(() => Main_EventTypeTest());
+        }
+        private static void Main_EventTypeTest()
         {
             Console.Error.WriteLine("Standard error should be redirected to a null stream.");
+            RaiseEvent(WrapperEventType.Default);
+        }
+
+        public static Wrapper EventPropertiesTest()
+        {
+            return Create(() => Main_EventPropertiesTest());
+        }
+        private static void Main_EventPropertiesTest()
+        {
             RaiseEvent(WrapperEventType.Default, new
             {
-                Empty = "",
-                Message = "'Hello, world!'",
-                Math = "1 + 2 + 3 = 6",
-                Logic = "A & B & C = D",
-                Number = 42
+                Name = "John Doe",
+                Age = 20,
+                Male = true
             });
         }
     }

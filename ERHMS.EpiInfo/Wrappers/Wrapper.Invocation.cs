@@ -1,7 +1,10 @@
 ﻿using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 
@@ -9,45 +12,33 @@ namespace ERHMS.EpiInfo.Wrappers
 {
     public partial class Wrapper
     {
-        protected static Wrapper Create(string methodName, WrapperArgsBase args = null)
+        protected static Wrapper Create(Expression<Action> expression)
         {
+            MethodCallExpression body = (MethodCallExpression)expression.Body;
+            string methodName = body.Method.Name;
+            IEnumerable<object> args = body.Arguments.Select(arg => Expression.Lambda(arg).Compile().DynamicInvoke());
             return new Wrapper(Assembly.GetCallingAssembly(), methodName, args);
         }
 
-        private string executablePath;
-        private string methodName;
-        private WrapperArgsBase args;
+        private ICollection<object> args;
         private Process process;
+        private ManualResetEvent exited;
 
-        public ManualResetEvent Exited { get; private set; }
+        public WaitHandle Exited
+        {
+            get { return exited; }
+        }
 
         protected Wrapper()
         {
             throw new NotSupportedException();
         }
 
-        private Wrapper(Assembly assembly, string methodName, WrapperArgsBase args)
+        private Wrapper(Assembly assembly, string methodName, IEnumerable<object> args)
         {
             string fileName = string.Format("{0}.exe", assembly.GetName().Name);
-            executablePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), fileName);
-            this.methodName = methodName;
-            this.args = args;
-            Exited = new ManualResetEvent(false);
-        }
-
-        public event EventHandler<WrapperEventArgs> Event;
-        private void OnEvent(WrapperEventArgs e)
-        {
-            Event?.Invoke(this, e);
-        }
-        private void OnEvent(string line)
-        {
-            OnEvent(WrapperEventArgs.Parse(line));
-        }
-
-        public void Invoke()
-        {
-            Log.Logger.DebugFormat("Invoking wrapper: {0} {1}", executablePath, methodName);
+            string path = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), fileName);
+            this.args = args.ToList();
             process = new Process
             {
                 EnableRaisingEvents = true,
@@ -57,32 +48,56 @@ namespace ERHMS.EpiInfo.Wrappers
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = Path.GetDirectoryName(executablePath),
-                    FileName = executablePath,
+                    WorkingDirectory = Path.GetDirectoryName(path),
+                    FileName = path,
                     Arguments = methodName
                 }
             };
+            exited = new ManualResetEvent(false);
             process.ErrorDataReceived += (sender, e) =>
             {
                 if (e.Data != null)
                 {
-                    Log.Logger.DebugFormat("Event raised by wrapper {0}: {1}", process.Id, e.Data);
                     OnEvent(e.Data);
                 }
             };
             process.Exited += (sender, e) =>
             {
                 Log.Logger.DebugFormat("Wrapper {0} exited", process.Id);
-                Exited.Set();
+                exited.Set();
             };
+        }
+
+        public event EventHandler<WrapperEventArgs> Event;
+        private void OnEvent(WrapperEventArgs e)
+        {
+            Log.Logger.DebugFormat("Event raised by wrapper {0}: {1}", process.Id, e.Type);
+            Event?.Invoke(this, e);
+        }
+        private void OnEvent(string data)
+        {
+            OnEvent(new WrapperEventArgs(data));
+        }
+
+        public void Invoke()
+        {
             process.Start();
-            Log.Logger.DebugFormat("Wrapper {0} invoked", process.Id);
+            Log.Logger.DebugFormat("Invoked wrapper {0}: {1} {2}", process.Id, process.StartInfo.FileName, process.StartInfo.Arguments);
             if (args != null)
             {
-                Log.Logger.DebugFormat("Sending args to wrapper {0}: {1}", process.Id, args);
-                WriteLine(args);
+                SendArgs();
             }
             process.BeginErrorReadLine();
+        }
+
+        private void SendArgs()
+        {
+            Log.Logger.DebugFormat("Sending args to wrapper {0}", process.Id);
+            WriteLine(args.Count);
+            foreach (object arg in args)
+            {
+                WriteLine(arg == null ? "" : ConvertExtensions.ToBase64String(arg));
+            }
         }
 
         public string ReadLine()
@@ -95,9 +110,9 @@ namespace ERHMS.EpiInfo.Wrappers
             return process.StandardOutput.ReadToEnd();
         }
 
-        public void WriteLine(object value)
+        public void WriteLine()
         {
-            process.StandardInput.WriteLine(value);
+            process.StandardInput.WriteLine();
         }
 
         public void WriteLine(string value)
@@ -108,6 +123,11 @@ namespace ERHMS.EpiInfo.Wrappers
         public void WriteLine(string format, params object[] args)
         {
             process.StandardInput.WriteLine(format, args);
+        }
+
+        public void WriteLine(object value)
+        {
+            process.StandardInput.WriteLine(value);
         }
 
         public void Close()

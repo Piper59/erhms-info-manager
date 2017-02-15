@@ -89,13 +89,13 @@
     <Compile Include="Utility\ConvertExtensionsTest.cs" />
     <Compile Include="Utility\DataExtensionsTest.cs" />
     <Compile Include="Utility\DateTimeExtensionsTest.cs" />
+    <Compile Include="Utility\DynamicExtensionsTest.cs" />
     <Compile Include="Utility\EnumerableExtensionsTest.cs" />
     <Compile Include="Utility\EnumExtensionsTest.cs" />
     <Compile Include="Utility\IOExtensionsTest.cs" />
     <Compile Include="Utility\LogTest.cs" />
     <Compile Include="Utility\MailExtensionsTest.cs" />
     <Compile Include="Utility\ObjectExtensionsTest.cs" />
-    <Compile Include="Utility\QueryStringTest.cs" />
     <Compile Include="Utility\ReflectionExtensionsTest.cs" />
     <Compile Include="Utility\StringExtensionsTest.cs" />
     <Compile Include="Utility\XmlExtensionsTest.cs" />

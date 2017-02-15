@@ -30,7 +30,7 @@ namespace ERHMS.Utility
 
         public static TEnum FromDescription<TEnum>(string description) where TEnum : struct
         {
-            return (TEnum)typeof(TEnum).GetFields()
+            return (TEnum)typeof(TEnum).GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Where(field => field.FieldType == typeof(TEnum))
                 .Single(field => GetDescription(field) == description)
                 .GetValue(null);

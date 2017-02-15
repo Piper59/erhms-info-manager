@@ -7,17 +7,15 @@ namespace ERHMS.EpiInfo.Wrappers
 {
     public class WrapperEventArgs : EventArgs
     {
-        internal static WrapperEventArgs Parse(string line)
+        internal static string GetData(WrapperEventType type, object properties)
         {
-            IList<string> chunks = line.Split(new char[] { ' ' }, 2);
-            WrapperEventType type = EnumExtensions.Parse<WrapperEventType>(chunks[0]);
-            if (chunks.Count == 1)
+            if (properties == null)
             {
-                return new WrapperEventArgs(type);
+                return type.ToString();
             }
             else
             {
-                return new WrapperEventArgs(type, new QueryString(chunks[1]));
+                return string.Format("{0} {1}", type, DynamicExtensions.Serialize(properties));
             }
         }
 
@@ -30,18 +28,17 @@ namespace ERHMS.EpiInfo.Wrappers
             get { return properties; }
         }
 
-        internal WrapperEventArgs(WrapperEventType type)
+        internal WrapperEventArgs(string data)
         {
-            Type = type;
-            properties = new ExpandoObject();
-        }
-
-        internal WrapperEventArgs(WrapperEventType type, IEnumerable<KeyValuePair<string, string>> properties)
-            : this(type)
-        {
-            foreach (KeyValuePair<string, string> property in properties)
+            IList<string> chunks = data.Split(new char[] { ' ' }, 2);
+            Type = EnumExtensions.Parse<WrapperEventType>(chunks[0]);
+            if (chunks.Count == 2)
             {
-                ((IDictionary<string, object>)this.properties).Add(property.Key, property.Value);
+                properties = DynamicExtensions.Deserialize(chunks[1]);
+            }
+            else
+            {
+                properties = new ExpandoObject();
             }
         }
     }

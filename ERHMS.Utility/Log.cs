@@ -3,6 +3,7 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -22,10 +23,11 @@ namespace ERHMS.Utility
 
         static Log()
         {
+            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
             name = Assembly.GetEntryAssembly().GetName().Name;
             FilePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Logs", name + ".txt");
             hierarchy = (Hierarchy)LogManager.GetRepository();
-            PatternLayout layout = new PatternLayout("%date %-5level - %message%newline");
+            PatternLayout layout = new PatternLayout("%date %10property{process} %-5level - %message%newline");
             layout.ActivateOptions();
             TextWriterAppender appender = new FileAppender
             {

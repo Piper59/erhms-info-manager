@@ -1,7 +1,6 @@
 ﻿using ERHMS.Utility;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -30,21 +29,32 @@ namespace ERHMS.EpiInfo.Wrappers
                 Console.SetIn(new StreamReader(Stream.Null));
                 Console.SetOut(new StreamWriter(Stream.Null));
                 Console.SetError(new StreamWriter(Stream.Null));
-                MethodInfo method = type.GetMethod(args[0], BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                ParameterInfo parameter = method.GetParameters().FirstOrDefault();
-                if (parameter == null)
-                {
-                    method.Invoke(null, null);
-                }
-                else
-                {
-                    method.Invoke(null, new object[] { WrapperArgsBase.Parse(parameter.ParameterType, In.ReadLine()) });
-                }
+                MethodInfo method = type.GetMethod(args[0], BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                method.Invoke(null, ReceiveArgs());
                 Log.Logger.Debug("Exiting");
             }
             catch (Exception ex)
             {
                 HandleError(ex);
+            }
+        }
+
+        private static object[] ReceiveArgs()
+        {
+            int count = int.Parse(In.ReadLine());
+            if (count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                object[] args = new object[count];
+                for (int index = 0; index < count; index++)
+                {
+                    string line = In.ReadLine();
+                    args[index] = line == "" ? null : ConvertExtensions.FromBase64String(line);
+                }
+                return args;
             }
         }
 
@@ -56,22 +66,8 @@ namespace ERHMS.EpiInfo.Wrappers
 
         protected static void RaiseEvent(WrapperEventType type, object properties = null)
         {
-            string line;
-            if (properties == null)
-            {
-                line = type.ToString();
-            }
-            else
-            {
-                QueryString queryString = new QueryString();
-                foreach (PropertyInfo property in properties.GetType().GetProperties())
-                {
-                    queryString.Set(property.Name, property.GetValue(properties, null));
-                }
-                line = string.Format("{0} {1}", type, queryString);
-            }
-            Log.Logger.DebugFormat("Raising event: {0}", line);
-            Error.WriteLine(line);
+            Log.Logger.DebugFormat("Raising event: {0}", type);
+            Error.WriteLine(WrapperEventArgs.GetData(type, properties));
         }
     }
 }

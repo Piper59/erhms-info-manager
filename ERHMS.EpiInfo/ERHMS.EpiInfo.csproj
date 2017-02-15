@@ -97,7 +97,6 @@
     <Compile Include="ViewExtensions.cs" />
     <Compile Include="Wrappers\Wrapper.Execution.cs" />
     <Compile Include="Wrappers\Wrapper.Invocation.cs" />
-    <Compile Include="Wrappers\WrapperArgsBase.cs" />
     <Compile Include="Wrappers\WrapperEventArgs.cs" />
     <Compile Include="Wrappers\WrapperEventType.cs" />
   </ItemGroup>

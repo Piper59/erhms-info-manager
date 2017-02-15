@@ -6,8 +6,32 @@ namespace ERHMS.Test.Utility
 {
     public class ConvertExtensionsTest
     {
+        [Serializable]
+        private class Person
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+            public bool Male { get; set; }
+        }
+
         [Test]
-        public void ToNullableGuidTest()
+        public void Base64StringTest()
+        {
+            Person original = new Person
+            {
+                Name = "John Doe",
+                Age = 20,
+                Male = true
+            };
+            string value = ConvertExtensions.ToBase64String(original);
+            Person converted = (Person)ConvertExtensions.FromBase64String(value);
+            Assert.AreEqual("John Doe", converted.Name);
+            Assert.AreEqual(20, converted.Age);
+            Assert.AreEqual(true, converted.Male);
+        }
+
+        [Test]
+        public void NullableGuidTest()
         {
             Assert.IsNull(ConvertExtensions.ToNullableGuid(null));
             Assert.Catch(() =>
