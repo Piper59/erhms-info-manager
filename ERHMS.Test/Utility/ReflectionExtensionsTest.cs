@@ -8,6 +8,8 @@ namespace ERHMS.Test.Utility
     {
         private class Number
         {
+            private int start = 0;
+
             public int Value { get; protected set; }
 
             public Number()
@@ -17,20 +19,17 @@ namespace ERHMS.Test.Utility
 
             private void Reset()
             {
-                Value = 1;
+                Value = start;
             }
         }
 
         private class Counter : Number
         {
-            private static int GetStep()
-            {
-                return 1;
-            }
+            private int step = 1;
 
             private void Increment()
             {
-                Value += GetStep();
+                Value += step;
             }
 
             private void Increment(int step)
@@ -43,13 +42,14 @@ namespace ERHMS.Test.Utility
         public void InvokeTest()
         {
             Counter counter = new Counter();
+            Assert.AreEqual(0, ReflectionExtensions.GetValue(counter, typeof(Number), "start"));
+            Assert.AreEqual(1, ReflectionExtensions.GetValue(counter, "step"));
             ReflectionExtensions.Invoke(counter, "Increment");
-            Assert.AreEqual(2, counter.Value);
-            ReflectionExtensions.Invoke(counter, "Increment", new Type[] { typeof(int) }, new object[] { 2 });
-            Assert.AreEqual(4, counter.Value);
-            ReflectionExtensions.Invoke(counter, typeof(Number), "Reset");
             Assert.AreEqual(1, counter.Value);
-            Assert.AreEqual(1, ReflectionExtensions.Invoke(typeof(Counter), "GetStep"));
+            ReflectionExtensions.Invoke(counter, "Increment", new Type[] { typeof(int) }, new object[] { 2 });
+            Assert.AreEqual(3, counter.Value);
+            ReflectionExtensions.Invoke(counter, typeof(Number), "Reset");
+            Assert.AreEqual(0, counter.Value);
         }
     }
 }

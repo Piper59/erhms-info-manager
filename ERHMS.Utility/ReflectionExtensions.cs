@@ -5,20 +5,21 @@ namespace ERHMS.Utility
 {
     public static class ReflectionExtensions
     {
-        private static MethodInfo GetMethod(Type type, bool instance, string name, Type[] argTypes)
+        private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+        public static object GetValue(object obj, Type type, string fieldName)
         {
-            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | (instance ? BindingFlags.Instance : BindingFlags.Static);
-            return type.GetMethod(name, flags, null, argTypes ?? Type.EmptyTypes, null);
+            return type.GetField(fieldName, Flags).GetValue(obj);
         }
 
-        public static object Invoke(Type type, string methodName, Type[] argTypes = null, object[] args = null)
+        public static object GetValue(object obj, string fieldName)
         {
-            return GetMethod(type, false, methodName, argTypes).Invoke(null, args);
+            return GetValue(obj, obj.GetType(), fieldName);
         }
 
         public static object Invoke(object obj, Type type, string methodName, Type[] argTypes = null, object[] args = null)
         {
-            return GetMethod(type, true, methodName, argTypes).Invoke(obj, args);
+            return type.GetMethod(methodName, Flags, null, argTypes ?? Type.EmptyTypes, null).Invoke(obj, args);
         }
 
         public static object Invoke(object obj, string methodName, Type[] argTypes = null, object[] args = null)
