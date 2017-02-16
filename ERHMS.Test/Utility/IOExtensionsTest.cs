@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace ERHMS.Test.Utility
         {
             FileInfo file = new FileInfo(path);
             FileAssert.Exists(file);
-            Assert.IsTrue(file.CreationTime.IsRecent());
+            Assert.LessOrEqual(DateTime.Now - file.CreationTime, TimeSpan.FromSeconds(1.0));
             Assert.AreEqual(0, file.Length);
             StringAssert.IsMatch(@"^temp_[0-9a-f]{32}\.txt$", file.Name);
         }

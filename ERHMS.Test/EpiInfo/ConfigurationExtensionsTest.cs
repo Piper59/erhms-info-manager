@@ -20,10 +20,9 @@ namespace ERHMS.Test.EpiInfo
             using (TempDirectory directory = new TempDirectory(nameof(CreateAndSaveTest)))
             {
                 Configuration configuration = ConfigurationExtensions.Create(directory.Path);
+                FileAssert.DoesNotExist(ConfigurationExtensions.FilePath);
                 configuration.Save();
-                FileInfo file = new FileInfo(ConfigurationExtensions.FilePath);
-                FileAssert.Exists(file);
-                Assert.IsTrue(file.CreationTime.IsRecent());
+                FileAssert.Exists(ConfigurationExtensions.FilePath);
                 XmlDocument document = new XmlDocument();
                 document.Load(ConfigurationExtensions.FilePath);
                 XmlNode directoriesNode = document.SelectSingleNode("/Config/Directories");
