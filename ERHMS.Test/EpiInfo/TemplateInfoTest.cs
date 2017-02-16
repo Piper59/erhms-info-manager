@@ -18,7 +18,7 @@ namespace ERHMS.Test.EpiInfo
                 TemplateInfo templateInfo;
                 Assert.IsTrue(TemplateInfo.TryRead(path, out templateInfo));
                 Assert.AreEqual("Surveillance", templateInfo.Name);
-                Assert.AreEqual("Description for Surveillance.xml", templateInfo.Description);
+                Assert.AreEqual("Description for Surveillance template", templateInfo.Description);
                 Assert.AreEqual(TemplateLevel.View, templateInfo.Level);
             }
             finally

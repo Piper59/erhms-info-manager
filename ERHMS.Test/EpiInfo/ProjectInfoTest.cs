@@ -18,9 +18,9 @@ namespace ERHMS.Test.EpiInfo
                 Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.prj", path);
                 ProjectInfo projectInfo;
                 Assert.IsTrue(ProjectInfo.TryRead(path, out projectInfo));
-                Assert.AreEqual(new Version(1, 2, 3, 4), projectInfo.Version);
+                Assert.AreEqual(new Version(1, 0, 0, 0), projectInfo.Version);
                 Assert.AreEqual("Sample", projectInfo.Name);
-                Assert.AreEqual("Description for Sample.prj", projectInfo.Description);
+                Assert.AreEqual("Description for Sample project", projectInfo.Description);
             }
             finally
             {

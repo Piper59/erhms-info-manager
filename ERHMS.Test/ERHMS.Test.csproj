@@ -104,6 +104,7 @@
     <EmbeddedResource Include="Resources\Empty.mdb" />
     <EmbeddedResource Include="Resources\Message.txt" />
     <EmbeddedResource Include="Resources\People.xml" />
+    <EmbeddedResource Include="Resources\Sample.mdb" />
     <EmbeddedResource Include="Resources\Sample.prj" />
     <EmbeddedResource Include="Resources\Surveillance.xml" />
   </ItemGroup>

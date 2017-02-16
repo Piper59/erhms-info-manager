@@ -1,4 +1,4 @@
-<Project id="95ce9039-5f8e-1a9f-a36a-075a53e9053c" name="Sample" location="" description="Description for Sample.prj" schemaVersion="102" epiVersion="" erhmsVersion="1.2.3.4" createDate="" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False">
+<Project id="95ce9039-5f8e-1a9f-a36a-075a53e9053c" name="Sample" location="" description="Description for Sample project" schemaVersion="102" epiVersion="" erhmsVersion="1.0.0.0" createDate="" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False">
   <CollectedData>
     <Database connectionString="" dataDriver="Epi.Data.Office.AccessDBFactory, Epi.Data.Office" />
   </CollectedData>
