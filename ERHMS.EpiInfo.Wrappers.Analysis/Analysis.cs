@@ -35,7 +35,7 @@ namespace ERHMS.EpiInfo.Wrappers
             };
             form.FormClosing += (sender, e) =>
             {
-                if (e.CloseReason == CloseReason.UserClosing && form.Commands != content)
+                if (e.CloseReason == CloseReason.UserClosing && form.Commands.NormalizeNewLines() != content.NormalizeNewLines())
                 {
                     string message = "Save changes to this program before exiting?";
                     DialogResult result = MessageBox.Show(form, message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);

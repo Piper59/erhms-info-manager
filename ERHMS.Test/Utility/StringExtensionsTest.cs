@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -27,6 +28,21 @@ namespace ERHMS.Test.Utility
             Assert.AreEqual("abcdef", "123abc456def".Strip(new Regex(@"[0-9]")));
             Assert.AreEqual("abcdefghij", "a!b@c#d$e%f^g&h*i(j)".Strip(new Regex(@"[^a-z]")));
             Assert.AreEqual("abcdef", "   abcdef".Strip(new Regex(@"^[^a-z]+")));
+        }
+
+        [Test]
+        public void NormalizeNewLinesTest()
+        {
+            string format = "Line 1{0}Line 2{0}{0}Line 3{0}{0}{0}Line 4";
+            string windows = string.Format(format, "\r\n");
+            string unix = string.Format(format, "\n");
+            string mac = string.Format(format, "\r");
+            string mixed = "Line 1\r\nLine 2\r\n\nLine 3\r\n\n\rLine 4";
+            string normalized = string.Format(format, Environment.NewLine);
+            Assert.AreEqual(normalized, windows.NormalizeNewLines());
+            Assert.AreEqual(normalized, unix.NormalizeNewLines());
+            Assert.AreEqual(normalized, mac.NormalizeNewLines());
+            Assert.AreEqual(normalized, mixed.NormalizeNewLines());
         }
 
         [Test]
