@@ -1,4 +1,5 @@
 ﻿using Epi.Windows.Dialogs;
+using ERHMS.Utility;
 using System;
 using System.Windows.Forms;
 
@@ -10,7 +11,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public string ViewName
         {
-            get { return txtViewName.Text; }
+            get { return txtViewName.Text.Trim(); }
             set { txtViewName.Text = value; }
         }
 
@@ -62,7 +63,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 case InvalidViewNameReason.TableExists:
                     return "A table with this name already exists in the database. Please enter a different form name.";
                 default:
-                    throw new NotSupportedException();
+                    throw new InvalidEnumValueException(reason);
             }
         }
     }

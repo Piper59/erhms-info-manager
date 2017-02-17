@@ -26,11 +26,6 @@ namespace ERHMS.EpiInfo.Wrappers
             ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
-        public void InstantiateTemplate(TemplateInfo templateInfo)
-        {
-            InstantiateTemplate(templateInfo.File.FullName);
-        }
-
         public void CreateTemplate(View view, string templateName, string description)
         {
             Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
@@ -38,8 +33,8 @@ namespace ERHMS.EpiInfo.Wrappers
             Configuration configuration = Configuration.GetNewInstance();
             string path = Path.Combine(
                 configuration.Directories.Templates,
-                "Forms",
-                string.Format("{0}{1}", templateName, TemplateInfo.FileExtension));
+                TemplateLevel.View.ToDirectoryName(),
+                templateName + TemplateInfo.FileExtension);
             XmlDocument document = new XmlDocument();
             document.Load(path);
             document.DocumentElement.SetAttribute("Description", description);

@@ -60,9 +60,9 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        public void OpenProject(string projectPath)
+        public void OpenProject(string path)
         {
-            OpenProject(new Project(projectPath));
+            OpenProject(new Project(path));
         }
     }
 }

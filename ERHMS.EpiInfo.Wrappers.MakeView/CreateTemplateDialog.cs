@@ -10,11 +10,11 @@ namespace ERHMS.EpiInfo.Wrappers
 {
     internal partial class CreateTemplateDialog : DialogBase
     {
-        public Project Project { get; private set; }
+        private static readonly ICollection<char> InvalidChars = Path.GetInvalidFileNameChars().ToList();
 
         public string TemplateName
         {
-            get { return txtTemplateName.Text; }
+            get { return txtTemplateName.Text.Trim(); }
             set { txtTemplateName.Text = value; }
         }
 
@@ -25,21 +25,20 @@ namespace ERHMS.EpiInfo.Wrappers
                 Configuration configuration = Configuration.GetNewInstance();
                 return Path.Combine(
                     configuration.Directories.Templates,
-                    "Forms",
-                    string.Format("{0}{1}", TemplateName, TemplateInfo.FileExtension));
+                    TemplateLevel.View.ToDirectoryName(),
+                    TemplateName + TemplateInfo.FileExtension);
             }
         }
 
         public string Description
         {
-            get { return txtDescription.Text; }
+            get { return txtDescription.Text.Trim(); }
             set { txtDescription.Text = value; }
         }
 
-        public CreateTemplateDialog(Project project, string templateName)
+        public CreateTemplateDialog(string templateName)
         {
             InitializeComponent();
-            Project = project;
             TemplateName = templateName;
         }
 
@@ -50,7 +49,6 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            TemplateName = TemplateName.Trim();
             string message;
             if (HasValidTemplateName(out message))
             {
@@ -70,18 +68,17 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private bool HasValidTemplateName(out string message)
         {
-            ICollection<char> invalidChars = Path.GetInvalidFileNameChars();
-            if (string.IsNullOrWhiteSpace(TemplateName))
+            if (TemplateName == "")
             {
                 message = "Please enter a template name.";
                 return false;
             }
-            else if (TemplateName.Any(@char => invalidChars.Contains(@char)))
+            else if (TemplateName.Any(@char => InvalidChars.Contains(@char)))
             {
                 message = string.Format(
                     "Please enter a template name that does not contain any of the following characters:{0}{0}{1}",
                     Environment.NewLine,
-                    string.Join(" ", invalidChars.Where(@char => !char.IsControl(@char))));
+                    string.Join(" ", InvalidChars.Where(invalidChar => !char.IsControl(invalidChar))));
                 return false;
             }
             else if (File.Exists(TemplatePath))
