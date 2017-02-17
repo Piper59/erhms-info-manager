@@ -28,7 +28,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.AnalysisDashb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Enter", "ERHMS.EpiInfo.Enter\ERHMS.EpiInfo.Enter.csproj", "{1F323F8B-AC7B-4DBA-94CC-9B9C2E7D7652}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.MakeView", "ERHMS.EpiInfo.MakeView\ERHMS.EpiInfo.MakeView.csproj", "{B9BD5854-5610-41BB-89F1-8BFA0A1DDD4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Wrappers.MakeView", "ERHMS.EpiInfo.Wrappers.MakeView\ERHMS.EpiInfo.Wrappers.MakeView.csproj", "{B9BD5854-5610-41BB-89F1-8BFA0A1DDD4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Web", "ERHMS.EpiInfo.Web\ERHMS.EpiInfo.Web.csproj", "{05366C9D-7568-4C45-9C80-C77B18EB69E8}"
 EndProject
