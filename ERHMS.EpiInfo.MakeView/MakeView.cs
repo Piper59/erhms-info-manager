@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Xml;
 using View = Epi.View;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     public class MakeView : Wrapper
     {
@@ -80,7 +80,7 @@ namespace ERHMS.EpiInfo
             using (MainForm form = new MainForm())
             {
                 form.OpenProject(project);
-                form.Load += (sender, e) =>
+                form.Shown += (sender, e) =>
                 {
                     using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                     {
@@ -116,7 +116,7 @@ namespace ERHMS.EpiInfo
                 Project project = new Project(projectPath);
                 form.OpenProject(projectPath);
                 form.ProjectExplorer.SelectView(viewName);
-                form.Load += (sender, e) =>
+                form.Shown += (sender, e) =>
                 {
                     using (CreateTemplateDialog dialog = new CreateTemplateDialog(project, viewName))
                     {
@@ -204,7 +204,7 @@ namespace ERHMS.EpiInfo
                     XmlElement viewElement = document.SelectSingleElement("/Template/Project/View");
                     string viewName = ViewExtensions.SanitizeName(string.Format("{0}{1}", prefix, viewElement.GetAttribute("Name")));
                     // TODO: project.SuggestViewName?
-                    form.Load += (sender, e) =>
+                    form.Shown += (sender, e) =>
                     {
                         using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                         {
@@ -213,7 +213,7 @@ namespace ERHMS.EpiInfo
                             {
                                 viewName = dialog.ViewName;
                                 viewElement.SetAttribute("Name", viewName);
-                                FileInfo templateFile = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
+                                FileInfo templateFile = IOExtensions.GetTempFile("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
                                 document.Save(templateFile.FullName);
                                 Template template = new Template(form.Mediator);
                                 template.InstantiateTemplate(templateFile.FullName);

@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal class MainForm : MakeViewMainForm
     {

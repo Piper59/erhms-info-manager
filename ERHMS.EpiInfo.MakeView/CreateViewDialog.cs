@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal partial class CreateViewDialog : DialogBase
     {

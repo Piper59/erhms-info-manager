@@ -7,7 +7,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal class Template
     {
@@ -22,7 +22,7 @@ namespace ERHMS.EpiInfo
 
         public void InstantiateTemplate(string path)
         {
-            Log.Current.DebugFormat("Instantiating template: {0}", path);
+            Log.Logger.DebugFormat("Instantiating template: {0}", path);
             ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
@@ -33,7 +33,7 @@ namespace ERHMS.EpiInfo
 
         public void CreateTemplate(View view, string templateName, string description)
         {
-            Log.Current.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
+            Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
             ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { templateName, view });
             Configuration configuration = Configuration.GetNewInstance();
             string path = Path.Combine(
@@ -48,7 +48,7 @@ namespace ERHMS.EpiInfo
 
         public string CreateWebTemplate()
         {
-            Log.Current.Debug("Creating web template");
+            Log.Logger.Debug("Creating web template");
             return (string)ReflectionExtensions.Invoke(@base, "CreateWebSurveyTemplate");
         }
     }
