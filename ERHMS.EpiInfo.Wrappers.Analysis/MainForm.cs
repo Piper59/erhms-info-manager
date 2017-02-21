@@ -39,22 +39,29 @@ namespace ERHMS.EpiInfo.Wrappers
             waitDialog = new WaitDialog();
         }
 
-        private void BeginWait(bool showDialog)
+        public BackgroundWorker GetBackgroundWorker(string message, bool showDialog)
         {
-            ProgramEditor.ShowErrorMessage("");
-            UpdateStatus("Running...", false);
-            Enabled = false;
-            if (showDialog)
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
             {
-                waitDialog.Show(this);
-            }
-        }
-
-        private void EndWait()
-        {
-            waitDialog.Hide();
-            Enabled = true;
-            UpdateStatus(SharedStrings.READY, false);
+                BeginInvoke(new Action(() =>
+                {
+                    UpdateStatus(message, false);
+                    Enabled = false;
+                    if (showDialog)
+                    {
+                        waitDialog.Prompt = message;
+                        waitDialog.Show(this);
+                    }
+                }));
+            };
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                waitDialog.Hide();
+                Enabled = true;
+                UpdateStatus(SharedStrings.READY, false);
+            };
+            return worker;
         }
 
         public void AddCommand(string command)
@@ -62,10 +69,10 @@ namespace ERHMS.EpiInfo.Wrappers
             ProgramEditor.AddCommand(command);
         }
 
-        public void ExecuteCommand(string command, bool showDialog, Action callback = null)
+        public void ExecuteCommand(string command, bool showDialog, Action<Exception> callback)
         {
             Log.Logger.DebugFormat("Executing command: {0}", command);
-            BackgroundWorker worker = new BackgroundWorker();
+            BackgroundWorker worker = GetBackgroundWorker("Running...", showDialog);
             worker.DoWork += (sender, e) =>
             {
                 EpiInterpreter.Context.ClearState();
@@ -73,23 +80,19 @@ namespace ERHMS.EpiInfo.Wrappers
             };
             worker.RunWorkerCompleted += (sender, e) =>
             {
-                EndWait();
-                if (e.Error == null)
-                {
-                    callback?.Invoke();
-                }
-                else
+                if (e.Error != null)
                 {
                     ProgramEditor.ShowErrorMessage(e.Error.ToString());
                     string message = "An error occurred while running commands. See the program editor's output window for details.";
                     MessageBox.Show(this, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                callback?.Invoke(e.Error);
             };
-            BeginWait(showDialog);
+            ProgramEditor.ShowErrorMessage("");
             worker.RunWorkerAsync();
         }
 
-        public void ExecuteCommands(bool showDialog, Action callback = null)
+        public void ExecuteCommands(bool showDialog, Action<Exception> callback = null)
         {
             ExecuteCommand(Commands, showDialog, callback);
         }

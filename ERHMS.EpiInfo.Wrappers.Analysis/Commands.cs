@@ -30,9 +30,9 @@ namespace ERHMS.EpiInfo.Wrappers
             return string.Format("ASSIGN {0} = {1}", target, Escape(source));
         }
 
-        public static string Define(string name)
+        public static string Define(string variableName)
         {
-            return string.Format("DEFINE {0}", name);
+            return string.Format("DEFINE {0}", variableName);
         }
 
         public static string MergeCsv(string path, string key)
@@ -51,11 +51,11 @@ namespace ERHMS.EpiInfo.Wrappers
             return string.Format("TYPEOUT \"{0}\"", value.Replace("\"", ""));
         }
 
-        public static string WriteCsv(string path, IEnumerable<string> names)
+        public static string WriteCsv(string path, IEnumerable<string> variableNames)
         {
             string format = "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}";
-            IEnumerable<string> escapedNames = names.Select(name => Escape(name));
-            return string.Format(format, GetCsvConnectionString(path), Path.GetFileName(path), escapedNames);
+            string escapedVariableNames = string.Join(" ", variableNames.Select(variableName => Escape(variableName)));
+            return string.Format(format, GetCsvConnectionString(path), Path.GetFileName(path), escapedVariableNames);
         }
     }
 }
