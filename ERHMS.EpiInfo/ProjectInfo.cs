@@ -2,11 +2,14 @@
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.IO;
 using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
+    using IOPath = Path;
+
     public class ProjectInfo
     {
         public static bool TryRead(string path, out ProjectInfo result)
@@ -66,6 +69,20 @@ namespace ERHMS.EpiInfo
             }
             Name = element.GetAttribute("name");
             Description = element.GetAttribute("description");
+        }
+
+        public void SetAccessConnectionString()
+        {
+            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
+            {
+                Provider = "Microsoft.Jet.OLEDB.4.0",
+                DataSource = IOPath.ChangeExtension(Path, ".mdb")
+            };
+            XmlDocument document = new XmlDocument();
+            document.Load(Path);
+            XmlElement databaseElement = document.SelectSingleElement("/Project/CollectedData/Database");
+            databaseElement.SetAttribute("connectionString", Configuration.Encrypt(builder.ConnectionString));
+            document.Save(Path);
         }
     }
 }

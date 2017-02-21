@@ -1,6 +1,5 @@
 ﻿using Epi;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private static string GetCsvConnectionString(string path)
         {
-            DbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
+            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
                 Provider = "Microsoft.Jet.OLEDB.4.0",
                 DataSource = Path.GetDirectoryName(path)
