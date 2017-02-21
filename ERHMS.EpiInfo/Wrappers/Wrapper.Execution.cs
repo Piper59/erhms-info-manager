@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo.Wrappers
         protected static TextWriter Out { get; private set; }
         private static TextWriter Error { get; set; }
 
-        protected static void MainBase(Type type, string[] args)
+        public static void MainBase(string[] args)
         {
             try
             {
@@ -30,14 +30,21 @@ namespace ERHMS.EpiInfo.Wrappers
                 Console.SetIn(new StreamReader(Stream.Null));
                 Console.SetOut(new StreamWriter(Stream.Null));
                 Console.SetError(new StreamWriter(Stream.Null));
-                MethodInfo method = type.GetMethod(args[0], BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-                method.Invoke(null, ReceiveArgs());
+                GetMethod(Assembly.GetCallingAssembly(), args[0]).Invoke(null, ReceiveArgs());
                 Log.Logger.Debug("Exiting");
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+        }
+
+        private static MethodInfo GetMethod(Assembly assembly, string name)
+        {
+            int separatorIndex = name.LastIndexOf('.');
+            string typeName = name.Substring(0, separatorIndex);
+            string methodName = name.Substring(separatorIndex + 1);
+            return assembly.GetType(typeName).GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
         }
 
         private static object[] ReceiveArgs()

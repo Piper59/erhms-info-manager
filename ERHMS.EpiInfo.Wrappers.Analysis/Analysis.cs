@@ -20,7 +20,7 @@ namespace ERHMS.EpiInfo.Wrappers
         [STAThread]
         internal static void Main(string[] args)
         {
-            MainBase(typeof(Analysis), args);
+            MainBase(args);
         }
 
         public static Wrapper OpenPgm(string name, string content, bool execute)

@@ -15,7 +15,7 @@ namespace ERHMS.EpiInfo.Wrappers
         protected static Wrapper Create(Expression<Action> expression)
         {
             MethodCallExpression body = (MethodCallExpression)expression.Body;
-            string methodName = body.Method.Name;
+            string methodName = string.Format("{0}.{1}", body.Method.DeclaringType.FullName, body.Method.Name);
             IEnumerable<object> args = body.Arguments.Select(arg => Expression.Lambda(arg).Compile().DynamicInvoke());
             return new Wrapper(Assembly.GetCallingAssembly(), methodName, args);
         }
