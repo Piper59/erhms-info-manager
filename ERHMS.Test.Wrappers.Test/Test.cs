@@ -12,12 +12,12 @@ namespace ERHMS.Test.Wrappers
 
         public class OutTest : Wrapper
         {
-            public static Wrapper GetWrapper()
+            public static Wrapper Create()
             {
-                return Create(() => _Main());
+                return Create(() => Execute());
             }
 
-            private static void _Main()
+            private static void Execute()
             {
                 Console.Out.WriteLine("Standard output should be redirected to a null stream.");
                 Out.WriteLine("Hello, world!");
@@ -26,12 +26,12 @@ namespace ERHMS.Test.Wrappers
 
         public class InAndOutTest : Wrapper
         {
-            public static Wrapper GetWrapper()
+            public static Wrapper Create()
             {
-                return Create(() => _Main());
+                return Create(() => Execute());
             }
 
-            private static void _Main()
+            private static void Execute()
             {
                 if (Console.In.Peek() != -1)
                 {
@@ -51,12 +51,12 @@ namespace ERHMS.Test.Wrappers
 
         public class ArgsTest : Wrapper
         {
-            public static Wrapper GetWrapper(string id, string name, double age, bool male)
+            public static Wrapper Create(string id, string name, double age, bool male)
             {
-                return Create(() => _Main(id, name, age, male));
+                return Create(() => Execute(id, name, age, male));
             }
 
-            private static void _Main(string id, string name, double age, bool male)
+            private static void Execute(string id, string name, double age, bool male)
             {
                 int ageYears = Convert.ToInt32(Math.Truncate(age));
                 int ageMonths = Convert.ToInt32(Math.Truncate((age - ageYears) * 12));
@@ -69,12 +69,12 @@ namespace ERHMS.Test.Wrappers
 
         public class LongArgTest : Wrapper
         {
-            public static Wrapper GetWrapper(string value)
+            public static Wrapper Create(string value)
             {
-                return Create(() => _Main(value));
+                return Create(() => Execute(value));
             }
 
-            private static void _Main(string value)
+            private static void Execute(string value)
             {
                 Out.WriteLine(value.Length);
             }
@@ -82,12 +82,12 @@ namespace ERHMS.Test.Wrappers
 
         public class EventTypeTest : Wrapper
         {
-            public static Wrapper GetWrapper()
+            public static Wrapper Create()
             {
-                return Create(() => _Main());
+                return Create(() => Execute());
             }
 
-            private static void _Main()
+            private static void Execute()
             {
                 Console.Error.WriteLine("Standard error should be redirected to a null stream.");
                 RaiseEvent(WrapperEventType.Default);
@@ -96,12 +96,12 @@ namespace ERHMS.Test.Wrappers
 
         public class EventPropertiesTest : Wrapper
         {
-            public static Wrapper GetWrapper()
+            public static Wrapper Create()
             {
-                return Create(() => _Main());
+                return Create(() => Execute());
             }
 
-            private static void _Main()
+            private static void Execute()
             {
                 RaiseEvent(WrapperEventType.Default, new
                 {

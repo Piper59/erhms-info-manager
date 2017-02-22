@@ -45,11 +45,6 @@ namespace ERHMS.EpiInfo.Wrappers
             return string.Format("READ {{{0}}}:{1}", projectPath, viewName);
         }
 
-        public static string Type(string value)
-        {
-            return string.Format("TYPEOUT \"{0}\"", value.Replace("\"", ""));
-        }
-
         public static string WriteCsv(string path, IEnumerable<string> variableNames)
         {
             string format = "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}";

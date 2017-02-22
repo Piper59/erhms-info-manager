@@ -41,7 +41,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void OutTest()
         {
-            wrapper = Test.OutTest.GetWrapper();
+            wrapper = Test.OutTest.Create();
             wrapper.Invoke();
             Assert.AreEqual("Hello, world!", wrapper.ReadLine());
             Assert.IsNull(wrapper.ReadLine());
@@ -50,7 +50,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void InAndOutTest()
         {
-            wrapper = Test.InAndOutTest.GetWrapper();
+            wrapper = Test.InAndOutTest.Create();
             wrapper.Invoke();
             Random random = new Random();
             try
@@ -71,7 +71,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void ArgsTest1()
         {
-            wrapper = Test.ArgsTest.GetWrapper("johnd", "John Doe", 20.25, true);
+            wrapper = Test.ArgsTest.Create("johnd", "John Doe", 20.25, true);
             wrapper.Invoke();
             Assert.AreEqual("ID = johnd", wrapper.ReadLine());
             Assert.AreEqual("Name = John Doe", wrapper.ReadLine());
@@ -82,7 +82,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void ArgsTest2()
         {
-            wrapper = Test.ArgsTest.GetWrapper(null, "Jane Doe", 30.75, false);
+            wrapper = Test.ArgsTest.Create(null, "Jane Doe", 30.75, false);
             wrapper.Invoke();
             Assert.AreEqual("ID = N/A", wrapper.ReadLine());
             Assert.AreEqual("Name = Jane Doe", wrapper.ReadLine());
@@ -93,7 +93,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void LongArgTest()
         {
-            wrapper = Test.LongArgTest.GetWrapper(new string('A', 10000));
+            wrapper = Test.LongArgTest.Create(new string('A', 10000));
             wrapper.Invoke();
             Assert.AreEqual("10000", wrapper.ReadLine());
         }
@@ -101,7 +101,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void EventTypeTest()
         {
-            wrapper = Test.EventTypeTest.GetWrapper();
+            wrapper = Test.EventTypeTest.Create();
             bool raised = false;
             wrapper.Event += (sender, e) =>
             {
@@ -117,7 +117,7 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void EventPropertiesTest()
         {
-            wrapper = Test.EventPropertiesTest.GetWrapper();
+            wrapper = Test.EventPropertiesTest.Create();
             bool raised = false;
             wrapper.Event += (sender, e) =>
             {

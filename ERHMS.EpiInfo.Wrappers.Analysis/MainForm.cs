@@ -44,7 +44,7 @@ namespace ERHMS.EpiInfo.Wrappers
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
-                BeginInvoke(new Action(() =>
+                Invoke(new Action(() =>
                 {
                     UpdateStatus(message, false);
                     Enabled = false;
@@ -83,8 +83,6 @@ namespace ERHMS.EpiInfo.Wrappers
                 if (e.Error != null)
                 {
                     ProgramEditor.ShowErrorMessage(e.Error.ToString());
-                    string message = "An error occurred while running commands. See the program editor's output window for details.";
-                    MessageBox.Show(this, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 callback?.Invoke(e.Error);
             };
