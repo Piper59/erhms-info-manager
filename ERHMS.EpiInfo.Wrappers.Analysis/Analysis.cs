@@ -116,7 +116,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (e.Error != null)
                 {
-                    Panic(form, "An error occurred while loading the project.");
+                    Panic(form, "An error occurred while loading the project.", e.Error);
                     return;
                 }
                 string command;
@@ -138,7 +138,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while reading data.");
+                    Panic(form, "An error occurred while reading data.", ex);
                     return;
                 }
                 ICollection<string> sources = form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
@@ -180,7 +180,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while importing data.");
+                    Panic(form, "An error occurred while importing data.", ex);
                     return;
                 }
                 RaiseEvent(WrapperEventType.ViewDataImported);
@@ -219,7 +219,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while reading data.");
+                    Panic(form, "An error occurred while reading data.", ex);
                     return;
                 }
                 using (WriteDialog dialog = new WriteDialog(form))
@@ -245,7 +245,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while exporting data.");
+                    Panic(form, "An error occurred while exporting data.", ex);
                     return;
                 }
                 TryClose(form, "Data has been exported.");

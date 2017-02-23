@@ -93,8 +93,9 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        protected static void Panic(Form form, string reason)
+        protected static void Panic(Form form, string reason, Exception ex)
         {
+            Log.Logger.Fatal("Fatal error", ex);
             string message = string.Format("{0} Epi Info\u2122 must shut down.", reason);
             MessageBox.Show(form, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             form.Close();
