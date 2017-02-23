@@ -142,7 +142,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     return;
                 }
                 ICollection<string> sources = form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
-                ICollection<string> targets = view.Fields.TableColumnFields.Cast<Field>().Select(field => field.Name).ToList();
+                ICollection<string> targets = view.Fields.DataFields.Cast<Field>().Select(field => field.Name).ToList();
                 MappingCollection mappings = null;
                 while (true)
                 {
