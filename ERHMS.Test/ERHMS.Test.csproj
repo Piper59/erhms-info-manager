@@ -36,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
     </Reference>
+    <Reference Include="EpiInfo.Plugin, Version=7.2.1.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Epi Info 7\EpiInfo.Plugin.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.7\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -54,10 +58,17 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.Analysis\ERHMS.EpiInfo.Wrappers.Analysis.csproj">
+      <Project>{02554b6e-557d-4c58-ae39-4ac674755d71}</Project>
+      <Name>ERHMS.EpiInfo.Wrappers.Analysis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
       <Name>ERHMS.EpiInfo</Name>
@@ -79,6 +90,10 @@
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
+    <Compile Include="EpiInfo\Wrappers\AutomationElementX.cs" />
+    <Compile Include="EpiInfo\Wrappers\AutomationExtensions.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,7 +120,10 @@
     <EmbeddedResource Include="Resources\People.xml" />
     <EmbeddedResource Include="Resources\Sample.mdb" />
     <EmbeddedResource Include="Resources\Sample.prj" />
+    <EmbeddedResource Include="Resources\Surveillance.csv" />
     <EmbeddedResource Include="Resources\Surveillance.xml" />
+    <EmbeddedResource Include="Resources\Surveillance_Append.csv" />
+    <EmbeddedResource Include="Resources\Surveillance_Update.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
