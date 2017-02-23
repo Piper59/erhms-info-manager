@@ -24,6 +24,11 @@ namespace ERHMS.EpiInfo.Wrappers
             return builder.ConnectionString;
         }
 
+        private static string GetCsvFileName(string path)
+        {
+            return Path.GetFileNameWithoutExtension(path) + "#csv";
+        }
+
         public static string Assign(string source, string target)
         {
             return string.Format("ASSIGN {0} = {1}", target, Escape(source));
@@ -37,7 +42,7 @@ namespace ERHMS.EpiInfo.Wrappers
         public static string MergeCsv(string path, string key)
         {
             string format = "MERGE {{{0}}}:{1} {2} :: {3}";
-            return string.Format(format, GetCsvConnectionString(path), Path.GetFileName(path), ColumnNames.GLOBAL_RECORD_ID, key);
+            return string.Format(format, GetCsvConnectionString(path), GetCsvFileName(path), ColumnNames.GLOBAL_RECORD_ID, key);
         }
 
         public static string Read(string projectPath, string viewName)
@@ -49,7 +54,7 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             string format = "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}";
             string escapedVariableNames = string.Join(" ", variableNames.Select(variableName => Escape(variableName)));
-            return string.Format(format, GetCsvConnectionString(path), Path.GetFileName(path), escapedVariableNames);
+            return string.Format(format, GetCsvConnectionString(path), GetCsvFileName(path), escapedVariableNames);
         }
     }
 }
