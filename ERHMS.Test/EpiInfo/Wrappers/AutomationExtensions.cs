@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows.Automation;
 using System.Windows.Forms;
@@ -39,9 +41,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             return element;
         }
 
-        public static AutomationElement FindFirstTopLevel(AutomationProperty propertyId, object value)
+        public static IEnumerable<AutomationElement> GetChildren(this AutomationElement @this)
         {
-            return AutomationElement.RootElement.FindFirst(TreeScope.Children, propertyId, value);
+            return @this.FindAll(TreeScope.Children, Condition.TrueCondition).Cast<AutomationElement>();
         }
     }
 

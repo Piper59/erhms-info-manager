@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Automation;
 using System.Windows.Forms;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    // TODO: Add convenience methods for common Find* calls
     public class AutomationElementX
     {
         public class DialogExtensions
@@ -19,8 +17,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
             public void Close(DialogResult result)
             {
-                string automationId = ((int)result).ToString();
-                AutomationElementX button = element.FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, automationId);
+                string id = ((int)result).ToString();
+                AutomationElementX button = element.FindFirstX(TreeScope.Descendants, id: id);
                 button.Invoke.Invoke();
             }
         }
@@ -36,7 +34,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
             private AutomationElementX FindItem(string name)
             {
-                return element.FindFirstX(TreeScope.Descendants, AutomationElement.NameProperty, name);
+                return element.FindFirstX(TreeScope.Descendants, name: name);
             }
 
             public void AddToSelection(string name)
@@ -89,21 +87,26 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             patterns = new Dictionary<AutomationPattern, BasePattern>();
         }
 
-        public AutomationElement FindFirst(TreeScope scope, AutomationProperty propertyId, object value)
+        public AutomationElement FindFirst(TreeScope scope, string id = null, string name = null)
         {
+            AutomationProperty propertyId;
+            object value;
+            if (name == null)
+            {
+                propertyId = AutomationElement.AutomationIdProperty;
+                value = id;
+            }
+            else
+            {
+                propertyId = AutomationElement.NameProperty;
+                value = name;
+            }
             return Element.FindFirst(scope, propertyId, value);
         }
 
-        public AutomationElementX FindFirstX(TreeScope scope, AutomationProperty propertyId, object value)
+        public AutomationElementX FindFirstX(TreeScope scope, string id = null, string name = null)
         {
-            return new AutomationElementX(FindFirst(scope, propertyId, value));
-        }
-
-        public IEnumerable<AutomationElementX> GetChildren()
-        {
-            return Element.FindAll(TreeScope.Children, Condition.TrueCondition)
-                .Cast<AutomationElement>()
-                .Select(element => new AutomationElementX(element));
+            return new AutomationElementX(FindFirst(scope, id, name));
         }
 
         private TPattern GetPattern<TPattern>(AutomationPattern patternId) where TPattern : BasePattern

@@ -13,45 +13,45 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public readonly AutomationElementX statusStrip1;
 
             public MainFormScreen()
-                : base(AutomationExtensions.FindFirstTopLevel(AutomationElement.AutomationIdProperty, "AnalysisMainForm"))
+                : base(AutomationElement.RootElement.FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "AnalysisMainForm"))
             {
-                txtTextArea = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "txtTextArea");
-                statusStrip1 = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "statusStrip1");
+                txtTextArea = FindFirstX(TreeScope.Descendants, id: "txtTextArea");
+                statusStrip1 = FindFirstX(TreeScope.Descendants, id: "statusStrip1");
             }
 
             public AutomationElementX GetCloseDialogScreen()
             {
-                return FindFirstX(TreeScope.Children, AutomationElement.NameProperty, "Close?");
+                return FindFirstX(TreeScope.Children, name: "Close?");
             }
 
             public MappingDialogScreen GetMappingDialogScreen()
             {
-                return new MappingDialogScreen(FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "MappingDialog"));
+                return new MappingDialogScreen(FindFirst(TreeScope.Children, id: "MappingDialog"));
             }
 
             public PgmDialogScreen GetPgmDialogScreen()
             {
-                return new PgmDialogScreen(FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "PgmDialog"));
+                return new PgmDialogScreen(FindFirst(TreeScope.Children, id: "PgmDialog"));
             }
 
             public ReadDialogScreen GetReadDialogScreen()
             {
-                return new ReadDialogScreen(FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "ReadDialog"));
+                return new ReadDialogScreen(FindFirst(TreeScope.Children, id: "ReadDialog"));
             }
 
             public AutomationElementX GetSaveDialogScreen()
             {
-                return FindFirstX(TreeScope.Children, AutomationElement.NameProperty, "Save?");
+                return FindFirstX(TreeScope.Children, name: "Save?");
             }
 
             public WriteDialogScreen GetWriteDialogScreen()
             {
-                return new WriteDialogScreen(FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "WriteDialog"));
+                return new WriteDialogScreen(FindFirst(TreeScope.Children, id: "WriteDialog"));
             }
 
             public void WaitForReady()
             {
-                AutomationExtensions.TryWait(() => statusStrip1.GetChildren().Any(child => child.Element.Current.Name == SharedStrings.READY));
+                AutomationExtensions.TryWait(() => statusStrip1.Element.GetChildren().Any(child => child.Current.Name == SharedStrings.READY));
             }
         }
 
@@ -63,8 +63,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public CsvExistingFileDialogScreen(AutomationElement element)
                 : base(element)
             {
-                txtFileName = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "txtFileName");
-                btnOK = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnOK");
+                txtFileName = FindFirstX(TreeScope.Descendants, id: "txtFileName");
+                btnOK = FindFirstX(TreeScope.Descendants, id: "btnOK");
             }
         }
 
@@ -76,15 +76,17 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public MappingDialogScreen(AutomationElement element)
                 : base(element)
             {
-                dgvMappings = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "dgvMappings");
-                btnOk = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnOk");
+                dgvMappings = FindFirstX(TreeScope.Descendants, id: "dgvMappings");
+                btnOk = FindFirstX(TreeScope.Descendants, id: "btnOk");
             }
 
             public void SetMapping(string source, string target)
             {
-                foreach (AutomationElementX row in dgvMappings.GetChildren())
+                foreach (AutomationElement row in dgvMappings.Element.GetChildren())
                 {
-                    IList<AutomationElementX> cells = row.GetChildren().ToList();
+                    IList<AutomationElementX> cells = row.GetChildren()
+                        .Select(cell => new AutomationElementX(cell))
+                        .ToList();
                     if (cells[0].Element.Current.Name.StartsWith("Source Row") && cells[0].Value.Current.Value == source)
                     {
                         cells[1].Value.SetValue(target);
@@ -100,7 +102,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public OpenDialogScreen(AutomationElement element)
                 : base(element)
             {
-                txtFileName = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "1148");
+                txtFileName = FindFirstX(TreeScope.Descendants, id: "1148");
             }
         }
 
@@ -113,14 +115,14 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public PgmDialogScreen(AutomationElement element)
                 : base(element)
             {
-                btnFindProject = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnFindProject");
-                cmbPrograms = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "cmbPrograms");
-                btnOK = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnOK");
+                btnFindProject = FindFirstX(TreeScope.Descendants, id: "btnFindProject");
+                cmbPrograms = FindFirstX(TreeScope.Descendants, id: "cmbPrograms");
+                btnOK = FindFirstX(TreeScope.Descendants, id: "btnOK");
             }
 
             public OpenDialogScreen GetOpenDialogScreen()
             {
-                return new OpenDialogScreen(FindFirst(TreeScope.Children, AutomationElement.NameProperty, SharedStrings.SELECT_PROJECT));
+                return new OpenDialogScreen(FindFirst(TreeScope.Children, name: SharedStrings.SELECT_PROJECT));
             }
         }
 
@@ -134,15 +136,15 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public ReadDialogScreen(AutomationElement element)
                 : base(element)
             {
-                cmbDataSourcePlugIns = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "cmbDataSourcePlugIns");
-                btnFindDataSource = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnFindDataSource");
-                lvDataSourceObjects = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "lvDataSourceObjects");
-                btnOK = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnOK");
+                cmbDataSourcePlugIns = FindFirstX(TreeScope.Descendants, id: "cmbDataSourcePlugIns");
+                btnFindDataSource = FindFirstX(TreeScope.Descendants, id: "btnFindDataSource");
+                lvDataSourceObjects = FindFirstX(TreeScope.Descendants, id: "lvDataSourceObjects");
+                btnOK = FindFirstX(TreeScope.Descendants, id: "btnOK");
             }
 
             public CsvExistingFileDialogScreen GetCsvExistingFileDialogScreen()
             {
-                return new CsvExistingFileDialogScreen(FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "CsvExistingFileDialog"));
+                return new CsvExistingFileDialogScreen(FindFirst(TreeScope.Children, id: "CsvExistingFileDialog"));
             }
         }
 
@@ -158,17 +160,17 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public WriteDialogScreen(AutomationElement element)
                 : base(element)
             {
-                lbxVariables = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "lbxVariables");
-                rdbReplace = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "rdbReplace");
-                cmbOutputFormat = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "cmbOutputFormat");
-                btnGetFile = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnGetFile");
-                txtFileName = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "1001");
-                btnOK = FindFirstX(TreeScope.Descendants, AutomationElement.AutomationIdProperty, "btnOK");
+                lbxVariables = FindFirstX(TreeScope.Descendants, id: "lbxVariables");
+                rdbReplace = FindFirstX(TreeScope.Descendants, id: "rdbReplace");
+                cmbOutputFormat = FindFirstX(TreeScope.Descendants, id: "cmbOutputFormat");
+                btnGetFile = FindFirstX(TreeScope.Descendants, id: "btnGetFile");
+                txtFileName = FindFirstX(TreeScope.Descendants, id: "1001");
+                btnOK = FindFirstX(TreeScope.Descendants, id: "btnOK");
             }
 
             public CsvExistingFileDialogScreen GetCsvExistingFileDialogScreen()
             {
-                return new CsvExistingFileDialogScreen(FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "CsvExistingFileDialog"));
+                return new CsvExistingFileDialogScreen(FindFirst(TreeScope.Children, id: "CsvExistingFileDialog"));
             }
         }
     }
