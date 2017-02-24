@@ -24,9 +24,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.DataAccess", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Wrappers.Analysis", "ERHMS.EpiInfo.Wrappers.Analysis\ERHMS.EpiInfo.Wrappers.Analysis.csproj", "{02554B6E-557D-4C58-AE39-4AC674755D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.AnalysisDashboard", "ERHMS.EpiInfo.AnalysisDashboard\ERHMS.EpiInfo.AnalysisDashboard.csproj", "{0545C649-4922-4C42-89B1-518C056FB483}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Wrappers.AnalysisDashboard", "ERHMS.EpiInfo.Wrappers.AnalysisDashboard\ERHMS.EpiInfo.Wrappers.AnalysisDashboard.csproj", "{0545C649-4922-4C42-89B1-518C056FB483}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Enter", "ERHMS.EpiInfo.Enter\ERHMS.EpiInfo.Enter.csproj", "{1F323F8B-AC7B-4DBA-94CC-9B9C2E7D7652}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Wrappers.Enter", "ERHMS.EpiInfo.Wrappers.Enter\ERHMS.EpiInfo.Wrappers.Enter.csproj", "{1F323F8B-AC7B-4DBA-94CC-9B9C2E7D7652}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.EpiInfo.Wrappers.MakeView", "ERHMS.EpiInfo.Wrappers.MakeView\ERHMS.EpiInfo.Wrappers.MakeView.csproj", "{B9BD5854-5610-41BB-89F1-8BFA0A1DDD4F}"
 EndProject
