@@ -1,94 +1,112 @@
-﻿using System;
+﻿using Epi;
+using System;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using View = Epi.View;
 
 namespace ERHMS.EpiInfo.Wrappers
 {
-    public class Enter : Wrapper
+    public class Enter
     {
         [STAThread]
         internal static void Main(string[] args)
         {
-            MainBase(typeof(Enter), args);
+            Wrapper.MainBase(args);
         }
 
-        public static Wrapper Execute()
+        public class OpenRecord : Wrapper
         {
-            return Create(args => Main_Execute(args));
-        }
-        private static void Main_Execute(string[] args)
-        {
-            using (MainForm form = new MainForm())
+            private static string projectPath;
+            private static string viewName;
+            private static int uniqueKey;
+            private static MainForm form;
+
+            public static Wrapper Create(string projectPath, string viewName, int uniqueKey)
             {
+                return Create(() => Execute(projectPath, viewName, uniqueKey));
+            }
+
+            private static void Execute(string projectPath, string viewName, int uniqueKey)
+            {
+                OpenRecord.projectPath = projectPath;
+                OpenRecord.viewName = viewName;
+                OpenRecord.uniqueKey = uniqueKey;
+                form = new MainForm();
+                form.Shown += Form_Shown;
+                form.RecordSaved += Form_RecordSaved;
                 Application.Run(form);
             }
+
+            private static void Form_Shown(object sender, EventArgs e)
+            {
+                // TODO: Application.DoEvents?
+                form.OpenRecord(projectPath, viewName, uniqueKey);
+            }
+
+            private static void Form_RecordSaved(object sender, SaveRecordEventArgs e)
+            {
+                RaiseEvent(WrapperEventType.RecordSaved);
+            }
         }
 
-        public static Wrapper OpenView(View view, object record = null)
+        public class OpenNewRecord : Wrapper
         {
-            Wrapper wrapper = Create(args => Main_OpenView(args), view.Project.FilePath, view.Name);
-            if (record != null)
+            private static string projectPath;
+            private static string viewName;
+            private static MainForm form;
+
+            public static Wrapper Create(string projectPath, string viewName, object record = null)
             {
-                foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                Wrapper wrapper = Create(() => Execute(projectPath, viewName));
+                wrapper.Invoked += (sender, e) =>
                 {
-                    wrapper.WriteLine("{0} = {1}", property.Name, property.GetValue(record, null));
-                }
+                    if (record != null)
+                    {
+                        foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                        {
+                            wrapper.WriteLine(property.Name);
+                            wrapper.WriteLine(property.GetValue(record, null));
+                        }
+                    }
+                    wrapper.Close();
+                };
+                return wrapper;
             }
-            wrapper.Close();
-            return wrapper;
-        }
-        private static void Main_OpenView(string[] args)
-        {
-            string projectPath = args[0];
-            string viewName = args[1];
-            using (MainForm form = new MainForm(projectPath, viewName))
+
+            private static void Execute(string projectPath, string viewName)
             {
-                form.Show();
-                form.FireOpenViewEvent(form.View, "+");
+                OpenNewRecord.projectPath = projectPath;
+                OpenNewRecord.viewName = viewName;
+                form = new MainForm();
+                form.Shown += Form_Shown;
+                form.RecordSaved += Form_RecordSaved;
+                Application.Run(form);
+            }
+
+            private static void Form_Shown(object sender, EventArgs e)
+            {
+                // TODO: Application.DoEvents?
+                form.OpenNewRecord(projectPath, viewName);
                 bool refresh = false;
-                Regex field = new Regex(@"^(?<name>\S+) = (?<value>.*)$");
                 while (true)
                 {
-                    string line = In.ReadLine();
-                    if (line == null)
+                    string fieldName = In.ReadLine();
+                    string value = In.ReadLine();
+                    if (fieldName == null || value == null)
                     {
                         break;
                     }
-                    refresh = true;
-                    Match match = field.Match(line);
-                    if (!match.Success)
-                    {
-                        throw new ArgumentException("Failed to read field.");
-                    }
-                    form.SetValue(match.Groups["name"].Value, match.Groups["value"].Value);
+                    refresh = refresh || form.TrySetValue(fieldName, value);
                 }
                 if (refresh)
                 {
                     form.Refresh();
                 }
-                Application.Run(form);
             }
-        }
 
-        public static Wrapper OpenRecord(View view, int uniqueKey)
-        {
-            return Create(args => Main_OpenRecord(args), view.Project.FilePath, view.Name, uniqueKey.ToString());
-        }
-        private static void Main_OpenRecord(string[] args)
-        {
-            string projectPath = args[0];
-            string viewName = args[1];
-            string uniqueKey = args[2];
-            using (MainForm form = new MainForm(projectPath, viewName))
+            private static void Form_RecordSaved(object sender, SaveRecordEventArgs e)
             {
-                form.Show();
-                form.FireOpenViewEvent(form.View, uniqueKey);
-                Application.Run(form);
+                RaiseEvent(WrapperEventType.RecordSaved);
             }
         }
-
-        private Enter() { }
     }
 }

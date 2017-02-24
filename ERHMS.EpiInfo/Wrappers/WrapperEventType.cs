@@ -3,9 +3,11 @@
     public enum WrapperEventType
     {
         Default,
+        RecordSaved,
         ViewCreated,
         ViewDataImported,
         TemplateCreated,
-        PgmSaved
+        PgmSaved,
+        CanvasSaved
     }
 }

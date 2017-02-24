@@ -6,66 +6,51 @@ using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.Wrappers
 {
-    public class AnalysisDashboard : Wrapper
+    public class AnalysisDashboard
     {
         [STAThread]
         internal static void Main(string[] args)
         {
-            MainBase(typeof(AnalysisDashboard), args);
+            Wrapper.MainBase(args);
         }
 
-        public static Wrapper Execute()
+        public class OpenCanvas : Wrapper
         {
-            return Create(args => Main_Execute(args));
-        }
-        private static void Main_Execute(string[] args)
-        {
-            using (DashboardMainForm form = new DashboardMainForm())
-            {
-                // TODO: Set form size/state
-                Application.Run(form);
-            }
-        }
+            private static string canvasPath;
+            private static DashboardMainForm form;
 
-        public static Wrapper OpenCanvas(Project project, Canvas canvas, string tag = null)
-        {
-            FileInfo file = IOExtensions.GetTempFile("ERHMS_{0:N}{1}", Canvas.FileExtension);
-            File.WriteAllText(file.FullName, canvas.Content);
-            return Create(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
-        }
-        private static void Main_OpenCanvas(string[] args)
-        {
-            string projectPath = args[0];
-            int canvasId = int.Parse(args[1]);
-            string canvasPath = args[2];
-            string tag = args[3];
-            if (tag == "")
+            public static Wrapper Create(string projectPath, int canvasId, string content)
             {
-                tag = null;
+                string canvasPath = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", Canvas.FileExtension);
+                File.WriteAllText(canvasPath, content);
+                return Create(() => Execute(projectPath, canvasId, canvasPath));
             }
-            FileInfo file = new FileInfo(canvasPath);
-            using (FileSystemWatcher watcher = new FileSystemWatcher(file.DirectoryName, file.Name))
-            using (DashboardMainForm form = new DashboardMainForm())
+
+            private static void Execute(string projectPath, int canvasId, string canvasPath)
             {
-                // TODO: Set form size/state
-                watcher.NotifyFilter = NotifyFilters.LastWrite;
-                watcher.Changed += (sender, e) =>
+                OpenCanvas.canvasPath = canvasPath;
+                using (FileSystemWatcher watcher = new FileSystemWatcher(Path.GetDirectoryName(canvasPath), Path.GetFileName(canvasPath)))
                 {
-                    //IService service = Service.Connect();
-                    //if (service != null)
-                    //{
-                    //    service.OnCanvasSaved(projectPath, canvasId, canvasPath, tag);
-                    //}
-                };
-                watcher.EnableRaisingEvents = true;
-                form.Shown += (sender, e) =>
-                {
-                    form.OpenCanvas(canvasPath);
-                };
-                Application.Run(form);
+                    watcher.NotifyFilter = NotifyFilters.LastWrite;
+                    watcher.Changed += Watcher_Changed;
+                    watcher.EnableRaisingEvents = true;
+                    form = new DashboardMainForm();
+                    form.Initialize();
+                    form.Shown += Form_Shown;
+                    Application.Run(form);
+                }
+            }
+
+            private static void Watcher_Changed(object sender, FileSystemEventArgs e)
+            {
+                RaiseEvent(WrapperEventType.CanvasSaved);
+            }
+
+            private static void Form_Shown(object sender, EventArgs e)
+            {
+                // TODO: Application.DoEvents?
+                form.OpenCanvas(canvasPath);
             }
         }
-
-        private AnalysisDashboard() { }
     }
 }

@@ -1,30 +1,15 @@
-﻿using System;
-using Epi;
+﻿using Epi;
 using Epi.Windows.Enter;
 using Epi.Windows.Enter.PresentationLogic;
+using System;
 
 namespace ERHMS.EpiInfo.Wrappers
 {
     internal class MainForm : EnterMainForm
     {
-        public MainForm(string tag = null)
+        public MainForm()
         {
-            RecordSaved += (sender, e) =>
-            {
-                //IService service = Service.Connect();
-                //if (service != null)
-                //{
-                //    service.OnRecordSaved(e.Form.Project.FilePath, e.Form.Name, e.RecordGuid, tag);
-                //}
-            };
-        }
-
-        public MainForm(string projectPath, string viewName, string tag = null)
-            : this(tag)
-        {
-            // TODO: Set size/state
-            CurrentProject = new Project(projectPath);
-            View = CurrentProject.Views[viewName];
+            this.Initialize();
         }
 
         protected override object GetService(Type serviceType)
@@ -39,17 +24,38 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        public void SetValue(string fieldName, string value)
+        private void OpenRecord(string projectPath, string viewName, string record)
+        {
+            CurrentProject = new Project(projectPath);
+            FireOpenViewEvent(CurrentProject.Views[viewName], record);
+        }
+
+        public void OpenRecord(string projectPath, string viewName, int uniqueKey)
+        {
+            OpenRecord(projectPath, viewName, uniqueKey.ToString());
+        }
+
+        public void OpenNewRecord(string projectPath, string viewName)
+        {
+            OpenRecord(projectPath, viewName, "*");
+        }
+
+        public bool TrySetValue(string fieldName, string value)
         {
             if (View.Fields.DataFields.Contains(fieldName))
             {
                 View.Fields.DataFields[fieldName].CurrentRecordValueString = value;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
         public new void Refresh()
         {
-            GuiMediator.Instance.Canvas.Render(View.RecStatusField.CurrentRecordValue != 0);
+            GuiMediator.Instance.Canvas.Render(View.RecStatusField.CurrentRecordValue != RecStatus.Deleted.ToValue());
         }
     }
 }

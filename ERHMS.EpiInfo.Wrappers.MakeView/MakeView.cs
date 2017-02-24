@@ -36,6 +36,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Form_Shown(object sender, EventArgs e)
             {
+                Application.DoEvents();
                 form.OpenProject(projectPath);
                 form.ProjectExplorer.SelectView(viewName);
             }
@@ -81,6 +82,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Form_Shown(object sender, EventArgs e)
             {
+                Application.DoEvents();
                 Project project = new Project(projectPath);
                 form.OpenProject(project);
                 XmlDocument document = new XmlDocument();
@@ -130,6 +132,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Form_Shown(object sender, EventArgs e)
             {
+                Application.DoEvents();
                 form.OpenProject(projectPath);
                 form.ProjectExplorer.SelectView(viewName);
                 using (CreateTemplateDialog dialog = new CreateTemplateDialog(viewName))

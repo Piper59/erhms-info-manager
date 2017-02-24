@@ -68,6 +68,16 @@ namespace ERHMS.EpiInfo.Wrappers
             };
         }
 
+        public event EventHandler Invoked;
+        private void OnInvoked(EventArgs e)
+        {
+            Invoked?.Invoke(this, e);
+        }
+        private void OnInvoked()
+        {
+            OnInvoked(EventArgs.Empty);
+        }
+
         public event EventHandler<WrapperEventArgs> Event;
         private void OnEvent(WrapperEventArgs e)
         {
