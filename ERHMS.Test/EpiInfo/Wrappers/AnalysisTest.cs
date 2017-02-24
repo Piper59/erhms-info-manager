@@ -1,7 +1,6 @@
 ﻿using Epi;
 using Epi.Collections;
 using Epi.Fields;
-using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
 using NUnit.Framework;
@@ -11,12 +10,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using Project = ERHMS.EpiInfo.Project;
 using View = Epi.View;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    public partial class AnalysisTest
+    public partial class AnalysisTest : WrapperTestBase
     {
         private static class Commands
         {
@@ -36,48 +34,12 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        private TempDirectory directory;
-        private Configuration configuration;
         private string csvDriverName;
-        private Project project;
-        private Wrapper wrapper;
 
         [OneTimeSetUp]
-        public void OneTimeSetUp()
+        public new void OneTimeSetUp()
         {
-            directory = new TempDirectory(nameof(AnalysisTest));
-            ConfigurationExtensions.Create(directory.Path).Save();
-            configuration = ConfigurationExtensions.Load();
-            configuration.CreateUserDirectories();
             csvDriverName = configuration.DataDrivers.Single(driver => driver.Type == Configuration.CsvDriver).DisplayName;
-            string location = Path.Combine(configuration.Directories.Project, "Sample");
-            Directory.CreateDirectory(location);
-            string projectPath = Path.Combine(location, "Sample.prj");
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.prj", projectPath);
-            assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.mdb", Path.ChangeExtension(projectPath, ".mdb"));
-            ProjectInfo.Get(projectPath).SetAccessConnectionString();
-            project = new Project(projectPath);
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            File.Delete(ConfigurationExtensions.FilePath);
-            directory.Dispose();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            if (wrapper != null)
-            {
-                if (!wrapper.Exited.WaitOne(10000))
-                {
-                    Assert.Fail("Wrapper is not responding.");
-                }
-                wrapper = null;
-            }
         }
 
         [Test]
