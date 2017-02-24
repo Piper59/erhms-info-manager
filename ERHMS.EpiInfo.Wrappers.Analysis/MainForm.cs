@@ -35,7 +35,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public MainForm()
         {
-            WindowState = FormWindowState.Maximized;
+            this.Initialize();
             waitDialog = new WaitDialog();
         }
 

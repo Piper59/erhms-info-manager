@@ -13,14 +13,13 @@ namespace ERHMS.Test.EpiInfo
     public class ProjectInfoTest
     {
         private TempDirectory directory;
-        private Configuration configuration;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             directory = new TempDirectory(nameof(ProjectInfoTest));
             ConfigurationExtensions.Create(directory.Path).Save();
-            configuration = ConfigurationExtensions.Load();
+            ConfigurationExtensions.Load();
         }
 
         [OneTimeTearDown]

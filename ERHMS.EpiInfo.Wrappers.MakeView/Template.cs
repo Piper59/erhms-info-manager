@@ -3,7 +3,6 @@ using Epi.Windows.MakeView;
 using Epi.Windows.MakeView.PresentationLogic;
 using ERHMS.Utility;
 using System;
-using System.IO;
 using System.Reflection;
 using System.Xml;
 
@@ -26,15 +25,11 @@ namespace ERHMS.EpiInfo.Wrappers
             ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
-        public void CreateTemplate(View view, string templateName, string description)
+        public void CreateTemplate(View view, string name, string description)
         {
-            Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
-            ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { templateName, view });
-            Configuration configuration = Configuration.GetNewInstance();
-            string path = Path.Combine(
-                configuration.Directories.Templates,
-                TemplateLevel.View.ToDirectoryName(),
-                templateName + TemplateInfo.FileExtension);
+            Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, name);
+            ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { name, view });
+            string path = TemplateInfo.GetPath(TemplateLevel.View, name);
             XmlDocument document = new XmlDocument();
             document.Load(path);
             document.DocumentElement.SetAttribute("Description", description);

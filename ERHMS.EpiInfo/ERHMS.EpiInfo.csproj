@@ -54,6 +54,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -95,6 +96,7 @@
     </Compile>
     <Compile Include="ViewDeleter.cs" />
     <Compile Include="ViewExtensions.cs" />
+    <Compile Include="Wrappers\FormExtensions.cs" />
     <Compile Include="Wrappers\Wrapper.Execution.cs" />
     <Compile Include="Wrappers\Wrapper.Invocation.cs" />
     <Compile Include="Wrappers\WrapperEventArgs.cs" />

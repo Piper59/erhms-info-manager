@@ -8,9 +8,17 @@ using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
+    using IOPath = Path;
+
     public class TemplateInfo
     {
         public const string FileExtension = ".xml";
+
+        public static string GetPath(TemplateLevel level, string name)
+        {
+            Configuration configuration = Configuration.GetNewInstance();
+            return IOPath.Combine(configuration.Directories.Templates, level.ToDirectoryName(), name + FileExtension);
+        }
 
         public static bool TryRead(string path, out TemplateInfo result)
         {

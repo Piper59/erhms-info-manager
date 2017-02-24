@@ -1,9 +1,9 @@
-﻿using Epi;
-using Epi.Windows.Dialogs;
+﻿using Epi.Windows.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.Wrappers
@@ -16,18 +16,6 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             get { return txtTemplateName.Text.Trim(); }
             set { txtTemplateName.Text = value; }
-        }
-
-        public string TemplatePath
-        {
-            get
-            {
-                Configuration configuration = Configuration.GetNewInstance();
-                return Path.Combine(
-                    configuration.Directories.Templates,
-                    TemplateLevel.View.ToDirectoryName(),
-                    TemplateName + TemplateInfo.FileExtension);
-            }
         }
 
         public string Description
@@ -44,6 +32,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private void CreateTemplateDialog_Load(object sender, EventArgs e)
         {
+            // TODO: Select all instead of just focusing?
             txtTemplateName.Focus();
         }
 
@@ -75,13 +64,14 @@ namespace ERHMS.EpiInfo.Wrappers
             }
             else if (TemplateName.Any(@char => InvalidChars.Contains(@char)))
             {
-                message = string.Format(
-                    "Please enter a template name that does not contain any of the following characters:{0}{0}{1}",
-                    Environment.NewLine,
-                    string.Join(" ", InvalidChars.Where(invalidChar => !char.IsControl(invalidChar))));
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine("Please enter a template name that does not contain any of the following characters:");
+                builder.AppendLine();
+                builder.Append(string.Join(" ", InvalidChars.Where(invalidChar => !char.IsControl(invalidChar))));
+                message = builder.ToString();
                 return false;
             }
-            else if (File.Exists(TemplatePath))
+            else if (File.Exists(TemplateInfo.GetPath(TemplateLevel.View, TemplateName)))
             {
                 message = "This template name is already in use. Please enter a different template name.";
                 return false;

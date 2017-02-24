@@ -21,6 +21,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public MainForm(bool visible = true)
         {
+            this.Initialize();
             if (!visible)
             {
                 WindowState = FormWindowState.Minimized;

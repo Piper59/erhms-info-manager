@@ -15,7 +15,7 @@ namespace ERHMS.EpiInfo.Wrappers
             set { txtViewName.Text = value; }
         }
 
-        public CreateViewDialog(Project project, string viewName = "")
+        public CreateViewDialog(Project project, string viewName)
         {
             InitializeComponent();
             Project = project;

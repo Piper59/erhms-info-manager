@@ -77,28 +77,5 @@ namespace ERHMS.EpiInfo.Wrappers
             Log.Logger.DebugFormat("Raising event: {0}", type);
             Error.WriteLine(WrapperEventArgs.GetData(type, properties));
         }
-
-        protected static bool TryClose(Form form, string reason, MessageBoxIcon icon = MessageBoxIcon.None)
-        {
-            string message = string.Format("{0} Close Epi Info\u2122?", reason);
-            DialogResult result = MessageBox.Show(form, message, "Close?", MessageBoxButtons.YesNo, icon);
-            if (result == DialogResult.Yes)
-            {
-                form.Close();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        protected static void Panic(Form form, string reason, Exception ex)
-        {
-            Log.Logger.Fatal("Fatal error", ex);
-            string message = string.Format("{0} Epi Info\u2122 must shut down.", reason);
-            MessageBox.Show(form, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            form.Close();
-        }
     }
 }

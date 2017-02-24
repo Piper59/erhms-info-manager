@@ -116,7 +116,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (e.Error != null)
                 {
-                    Panic(form, "An error occurred while loading the project.", e.Error);
+                    form.Panic("An error occurred while loading the project.", e.Error);
                     return;
                 }
                 string command;
@@ -125,7 +125,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     dialog.StartPosition = FormStartPosition.CenterParent;
                     if (dialog.ShowDialog(form) != DialogResult.OK)
                     {
-                        TryClose(form, "No data source was selected. Import has been canceled.", MessageBoxIcon.Warning);
+                        form.TryClose("No data source was selected. Import has been canceled.", MessageBoxIcon.Warning);
                         return;
                     }
                     command = dialog.CommandText;
@@ -138,7 +138,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while reading data.", ex);
+                    form.Panic("An error occurred while reading data.", ex);
                     return;
                 }
                 ICollection<string> sources = form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
@@ -180,11 +180,11 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while importing data.", ex);
+                    form.Panic("An error occurred while importing data.", ex);
                     return;
                 }
                 RaiseEvent(WrapperEventType.ViewDataImported);
-                TryClose(form, "Data has been imported.");
+                form.TryClose("Data has been imported.");
             }
         }
 
@@ -219,7 +219,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while reading data.", ex);
+                    form.Panic("An error occurred while reading data.", ex);
                     return;
                 }
                 using (WriteDialog dialog = new WriteDialog(form))
@@ -236,7 +236,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     }
                     else
                     {
-                        TryClose(form, "Export has been canceled.", MessageBoxIcon.Warning);
+                        form.TryClose("Export has been canceled.", MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -245,10 +245,10 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    Panic(form, "An error occurred while exporting data.", ex);
+                    form.Panic("An error occurred while exporting data.", ex);
                     return;
                 }
-                TryClose(form, "Data has been exported.");
+                form.TryClose("Data has been exported.");
             }
         }
     }
