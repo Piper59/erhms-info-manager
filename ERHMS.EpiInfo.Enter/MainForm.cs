@@ -3,7 +3,7 @@ using Epi;
 using Epi.Windows.Enter;
 using Epi.Windows.Enter.PresentationLogic;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     internal class MainForm : EnterMainForm
     {
@@ -22,6 +22,7 @@ namespace ERHMS.EpiInfo
         public MainForm(string projectPath, string viewName, string tag = null)
             : this(tag)
         {
+            // TODO: Set size/state
             CurrentProject = new Project(projectPath);
             View = CurrentProject.Views[viewName];
         }

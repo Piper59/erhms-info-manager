@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     public class AnalysisDashboard : Wrapper
     {
@@ -22,13 +22,14 @@ namespace ERHMS.EpiInfo
         {
             using (DashboardMainForm form = new DashboardMainForm())
             {
+                // TODO: Set form size/state
                 Application.Run(form);
             }
         }
 
         public static Wrapper OpenCanvas(Project project, Canvas canvas, string tag = null)
         {
-            FileInfo file = IOExtensions.GetTemporaryFile("ERHMS_{0:N}{1}", Canvas.FileExtension);
+            FileInfo file = IOExtensions.GetTempFile("ERHMS_{0:N}{1}", Canvas.FileExtension);
             File.WriteAllText(file.FullName, canvas.Content);
             return Create(args => Main_OpenCanvas(args), project.FilePath, canvas.CanvasId.ToString(), file.FullName, tag);
         }
@@ -46,6 +47,7 @@ namespace ERHMS.EpiInfo
             using (FileSystemWatcher watcher = new FileSystemWatcher(file.DirectoryName, file.Name))
             using (DashboardMainForm form = new DashboardMainForm())
             {
+                // TODO: Set form size/state
                 watcher.NotifyFilter = NotifyFilters.LastWrite;
                 watcher.Changed += (sender, e) =>
                 {
@@ -56,7 +58,7 @@ namespace ERHMS.EpiInfo
                     //}
                 };
                 watcher.EnableRaisingEvents = true;
-                form.Load += (sender, e) =>
+                form.Shown += (sender, e) =>
                 {
                     form.OpenCanvas(canvasPath);
                 };

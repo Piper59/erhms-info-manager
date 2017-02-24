@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using View = Epi.View;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Wrappers
 {
     public class Enter : Wrapper
     {
@@ -31,12 +31,12 @@ namespace ERHMS.EpiInfo
             Wrapper wrapper = Create(args => Main_OpenView(args), view.Project.FilePath, view.Name);
             if (record != null)
             {
-                foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
                     wrapper.WriteLine("{0} = {1}", property.Name, property.GetValue(record, null));
                 }
             }
-            wrapper.EndWrite();
+            wrapper.Close();
             return wrapper;
         }
         private static void Main_OpenView(string[] args)
