@@ -32,19 +32,24 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 this.element = element;
             }
 
-            private AutomationElementX FindItem(string name)
+            public IEnumerable<AutomationElement> Get()
+            {
+                return element.GetPattern<SelectionPattern>(SelectionPattern.Pattern).Current.GetSelection();
+            }
+
+            private AutomationElementX Find(string name)
             {
                 return element.FindFirstX(TreeScope.Descendants, name: name);
             }
 
-            public void AddToSelection(string name)
+            public void Add(string name)
             {
-                FindItem(name).SelectionItem.AddToSelection();
+                Find(name).SelectionItem.AddToSelection();
             }
 
-            public void Select(string name)
+            public void Set(string name)
             {
-                FindItem(name).SelectionItem.Select();
+                Find(name).SelectionItem.Select();
             }
         }
 

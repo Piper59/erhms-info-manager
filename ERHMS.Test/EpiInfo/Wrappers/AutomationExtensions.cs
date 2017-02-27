@@ -41,6 +41,11 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             return element;
         }
 
+        public static AutomationElement GetParent(this AutomationElement @this)
+        {
+            return TreeWalker.ControlViewWalker.GetParent(@this);
+        }
+
         public static IEnumerable<AutomationElement> GetChildren(this AutomationElement @this)
         {
             return @this.FindAll(TreeScope.Children, Condition.TrueCondition).Cast<AutomationElement>();

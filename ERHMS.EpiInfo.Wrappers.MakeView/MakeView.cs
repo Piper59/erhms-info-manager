@@ -1,4 +1,5 @@
-﻿using Epi.Windows.MakeView.Dialogs;
+﻿using Epi.Windows;
+using Epi.Windows.MakeView.Dialogs;
 using ERHMS.Utility;
 using System;
 using System.Windows.Forms;
@@ -193,11 +194,18 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Form_Shown(object sender, EventArgs e)
             {
-                // TODO: Show splash screen?
-                form.OpenProject(projectPath);
-                form.ProjectExplorer.SelectView(viewName);
+                using (SplashScreenForm splash = new SplashScreenForm())
+                {
+                    splash.ShowInTaskbar = false;
+                    splash.Show(form);
+                    Application.DoEvents();
+                    form.OpenProject(projectPath);
+                    form.ProjectExplorer.SelectView(viewName);
+                    splash.Close();
+                };
                 using (CopyToAndroid dialog = new CopyToAndroid(form.CurrentView, form.Mediator))
                 {
+                    dialog.ShowInTaskbar = false;
                     dialog.StartPosition = FormStartPosition.CenterScreen;
                     dialog.ShowDialog(form);
                 }

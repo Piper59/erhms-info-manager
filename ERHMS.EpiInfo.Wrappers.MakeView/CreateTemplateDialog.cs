@@ -32,7 +32,6 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private void CreateTemplateDialog_Load(object sender, EventArgs e)
         {
-            // TODO: Select all instead of just focusing?
             txtTemplateName.Focus();
         }
 

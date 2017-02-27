@@ -226,10 +226,9 @@ namespace ERHMS.Test.EpiInfo
 
     public class AccessProjectTest : ProjectTestBase
     {
-        [OneTimeSetUp]
-        public new void OneTimeSetUp()
+        private static Project Create(string name, out ProjectCreationInfo creationInfo)
         {
-            string name = "AccessTest";
+            Configuration configuration = Configuration.GetNewInstance();
             string location = Path.Combine(configuration.Directories.Project, name);
             Directory.CreateDirectory(location);
             string databasePath = Path.Combine(location, name + ".mdb");
@@ -247,7 +246,19 @@ namespace ERHMS.Test.EpiInfo
                 DatabaseName = name,
                 Initialize = true
             };
-            project = Project.Create(creationInfo);
+            return Project.Create(creationInfo);
+        }
+
+        public static Project Create(string name)
+        {
+            ProjectCreationInfo creationInfo;
+            return Create(name, out creationInfo);
+        }
+
+        [OneTimeSetUp]
+        public new void OneTimeSetUp()
+        {
+            project = Create("AccessTest", out creationInfo);
         }
     }
 

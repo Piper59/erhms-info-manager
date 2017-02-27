@@ -83,12 +83,12 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             ReadDialogScreen readDialog = mainForm.GetReadDialogScreen();
-            readDialog.cmbDataSourcePlugIns.Selection.Select(csvDriverName);
+            readDialog.cmbDataSourcePlugIns.Selection.Set(csvDriverName);
             readDialog.btnFindDataSource.Invoke.Invoke();
             CsvExistingFileDialogScreen csvExistingFileDialog = readDialog.GetCsvExistingFileDialogScreen();
             csvExistingFileDialog.txtFileName.Value.SetValue(directory.Path);
             csvExistingFileDialog.btnOK.Invoke.Invoke();
-            readDialog.lvDataSourceObjects.Selection.Select(Path.GetFileNameWithoutExtension(fileName) + "#csv");
+            readDialog.lvDataSourceObjects.Selection.Set(Path.GetFileNameWithoutExtension(fileName) + "#csv");
             readDialog.btnOK.Invoke.Invoke();
             MappingDialogScreen mappingDialog = mainForm.GetMappingDialogScreen();
             mappingDialog.SetMapping("LName", "LastName");
@@ -96,7 +96,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             mappingDialog.btnOk.Invoke.Invoke();
             mainForm.WaitForReady();
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
-            wrapper.Exited.WaitOne();
         }
 
         private void RecordTest(View view, string lastName, string firstName, DateTime entered, DateTime updated)
@@ -136,13 +135,13 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
             WriteDialogScreen writeDialog = mainForm.GetWriteDialogScreen();
-            writeDialog.lbxVariables.Selection.AddToSelection(ColumnNames.GLOBAL_RECORD_ID);
-            writeDialog.lbxVariables.Selection.AddToSelection("LastName");
-            writeDialog.lbxVariables.Selection.AddToSelection("FirstName");
-            writeDialog.lbxVariables.Selection.AddToSelection("Entered");
-            writeDialog.lbxVariables.Selection.AddToSelection("Updated");
+            writeDialog.lbxVariables.Selection.Add(ColumnNames.GLOBAL_RECORD_ID);
+            writeDialog.lbxVariables.Selection.Add("LastName");
+            writeDialog.lbxVariables.Selection.Add("FirstName");
+            writeDialog.lbxVariables.Selection.Add("Entered");
+            writeDialog.lbxVariables.Selection.Add("Updated");
             writeDialog.rdbReplace.SelectionItem.Select();
-            writeDialog.cmbOutputFormat.Selection.Select(csvDriverName);
+            writeDialog.cmbOutputFormat.Selection.Set(csvDriverName);
             writeDialog.btnGetFile.Invoke.Invoke();
             CsvExistingFileDialogScreen csvExistingFileDialog = writeDialog.GetCsvExistingFileDialogScreen();
             csvExistingFileDialog.txtFileName.Value.SetValue(directory.Path);
@@ -154,7 +153,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             writeDialog.btnOK.Invoke.Invoke();
             mainForm.WaitForReady();
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
-            wrapper.Exited.WaitOne();
             string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Surveillance.csv");
             Assert.AreEqual(csvContent, File.ReadAllText(csvPath));
         }

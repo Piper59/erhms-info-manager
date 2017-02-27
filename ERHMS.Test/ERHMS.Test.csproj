@@ -106,6 +106,8 @@
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AutomationElementX.cs" />
     <Compile Include="EpiInfo\Wrappers\AutomationExtensions.cs" />
+    <Compile Include="EpiInfo\Wrappers\MakeViewTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\WrapperTestBase.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
     <Compile Include="Program.cs" />
@@ -128,6 +130,8 @@
     <Compile Include="Utility\XmlExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ADDFull_Project.xml" />
+    <EmbeddedResource Include="Resources\ADDFull_View.xml" />
     <EmbeddedResource Include="Resources\Empty.mdb" />
     <EmbeddedResource Include="Resources\Message.txt" />
     <EmbeddedResource Include="Resources\People.xml" />
