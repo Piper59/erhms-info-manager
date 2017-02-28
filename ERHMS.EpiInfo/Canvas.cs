@@ -1,6 +1,8 @@
 ﻿using Epi;
 using ERHMS.EpiInfo.Templates;
 using ERHMS.Utility;
+using System.Text;
+using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
@@ -21,6 +23,25 @@ namespace ERHMS.EpiInfo
         public int CanvasId { get; set; }
         public string Name { get; set; }
         public string Content { get; set; }
+
+        public void SetProjectPath(string projectPath)
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(Content);
+            XmlNode projectPathNode = document.SelectSingleNode("/DashboardCanvas/dashboardHelper/projectPath");
+            projectPathNode.InnerText = projectPath;
+            StringBuilder builder = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                ConformanceLevel = ConformanceLevel.Fragment
+            };
+            using (XmlWriter writer = XmlWriter.Create(builder, settings))
+            {
+                document.WriteContentTo(writer);
+            }
+            Content = builder.ToString();
+        }
 
         public override bool Equals(object obj)
         {

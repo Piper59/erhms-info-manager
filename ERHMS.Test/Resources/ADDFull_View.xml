@@ -1,4 +1,4 @@
-﻿<Template Name="ADDFull" Description="" CreateDate="" Level="View">
+﻿<Template Name="ADDFull" Description="Description for ADDFull template" CreateDate="" Level="View">
   <Project>
     <View ViewId="1" Name="ADDFull" IsRelatedView="False" CheckCode="" Width="526" Height="747" Orientation="Portrait" LabelAlign="Horizontal">
       <Page PageId="1" Name="PAGE" Position="0" BackgroundId="0" ViewId="1">

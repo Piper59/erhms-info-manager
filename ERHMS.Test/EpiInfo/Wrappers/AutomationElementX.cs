@@ -8,38 +8,37 @@ namespace ERHMS.Test.EpiInfo.Wrappers
     {
         public class DialogExtensions
         {
-            private AutomationElementX element;
+            private AutomationElementX parent;
 
-            public DialogExtensions(AutomationElementX element)
+            public DialogExtensions(AutomationElementX parent)
             {
-                this.element = element;
+                this.parent = parent;
             }
 
             public void Close(DialogResult result)
             {
-                string id = ((int)result).ToString();
-                AutomationElementX button = element.FindFirstX(TreeScope.Descendants, id: id);
+                AutomationElementX button = parent.FindFirstX(TreeScope.Descendants, id: ((int)result).ToString());
                 button.Invoke.Invoke();
             }
         }
 
         public class SelectionExtensions
         {
-            private AutomationElementX element;
+            private AutomationElementX parent;
 
-            public SelectionExtensions(AutomationElementX element)
+            public SelectionExtensions(AutomationElementX parent)
             {
-                this.element = element;
+                this.parent = parent;
             }
 
             public IEnumerable<AutomationElement> Get()
             {
-                return element.GetPattern<SelectionPattern>(SelectionPattern.Pattern).Current.GetSelection();
+                return parent.GetPattern<SelectionPattern>(SelectionPattern.Pattern).Current.GetSelection();
             }
 
             private AutomationElementX Find(string name)
             {
-                return element.FindFirstX(TreeScope.Descendants, name: name);
+                return parent.FindFirstX(TreeScope.Descendants, name: name);
             }
 
             public void Add(string name)
@@ -55,7 +54,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
         private IDictionary<AutomationPattern, BasePattern> patterns;
 
-        public AutomationElement Element { get; private set; }
+        public AutomationElement Element { get; protected set; }
         public DialogExtensions Dialog { get; private set; }
         public SelectionExtensions Selection { get; private set; }
 
@@ -92,26 +91,14 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             patterns = new Dictionary<AutomationPattern, BasePattern>();
         }
 
-        public AutomationElement FindFirst(TreeScope scope, string id = null, string name = null)
+        public AutomationElement FindFirst(TreeScope scope, string id = null, string name = null, bool immediate = false)
         {
-            AutomationProperty propertyId;
-            object value;
-            if (name == null)
-            {
-                propertyId = AutomationElement.AutomationIdProperty;
-                value = id;
-            }
-            else
-            {
-                propertyId = AutomationElement.NameProperty;
-                value = name;
-            }
-            return Element.FindFirst(scope, propertyId, value);
+            return Element.FindFirst(scope, id, name, immediate);
         }
 
-        public AutomationElementX FindFirstX(TreeScope scope, string id = null, string name = null)
+        public AutomationElementX FindFirstX(TreeScope scope, string id = null, string name = null, bool immediate = false)
         {
-            return new AutomationElementX(FindFirst(scope, id, name));
+            return new AutomationElementX(Element.FindFirst(scope, id, name, immediate));
         }
 
         private TPattern GetPattern<TPattern>(AutomationPattern patternId) where TPattern : BasePattern

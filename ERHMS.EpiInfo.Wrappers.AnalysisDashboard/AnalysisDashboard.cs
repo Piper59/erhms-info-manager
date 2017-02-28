@@ -1,4 +1,5 @@
-﻿using Epi.Windows.AnalysisDashboard;
+﻿using Epi.Windows;
+using Epi.Windows.AnalysisDashboard;
 using ERHMS.Utility;
 using System;
 using System.IO;
@@ -36,6 +37,8 @@ namespace ERHMS.EpiInfo.Wrappers
                     watcher.EnableRaisingEvents = true;
                     form = new DashboardMainForm();
                     form.Initialize();
+                    form.WindowState = FormWindowState.Minimized;
+                    form.ShowInTaskbar = false;
                     form.Shown += Form_Shown;
                     Application.Run(form);
                 }
@@ -43,13 +46,28 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Watcher_Changed(object sender, FileSystemEventArgs e)
             {
-                RaiseEvent(WrapperEventType.CanvasSaved);
+                using (FileStream stream = new FileStream(canvasPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    RaiseEvent(WrapperEventType.CanvasSaved, new
+                    {
+                        Content = reader.ReadToEnd()
+                    });
+                }
             }
 
             private static void Form_Shown(object sender, EventArgs e)
             {
-                // TODO: Application.DoEvents?
-                form.OpenCanvas(canvasPath);
+                using (SplashScreenForm splash = new SplashScreenForm())
+                {
+                    splash.ShowInTaskbar = false;
+                    splash.Show(form);
+                    Application.DoEvents();
+                    form.OpenCanvas(canvasPath);
+                    splash.Close();
+                    form.WindowState = FormWindowState.Maximized;
+                    form.ShowInTaskbar = true;
+                }
             }
         }
     }

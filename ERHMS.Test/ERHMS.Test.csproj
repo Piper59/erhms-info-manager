@@ -102,6 +102,8 @@
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AutomationElementX.cs" />
@@ -135,10 +137,10 @@
     <EmbeddedResource Include="Resources\Empty.mdb" />
     <EmbeddedResource Include="Resources\Message.txt" />
     <EmbeddedResource Include="Resources\People.xml" />
+    <EmbeddedResource Include="Resources\SampleSurveillance.cvs7" />
     <EmbeddedResource Include="Resources\Sample.mdb" />
     <EmbeddedResource Include="Resources\Sample.prj" />
-    <EmbeddedResource Include="Resources\Surveillance.csv" />
-    <EmbeddedResource Include="Resources\Surveillance.xml" />
+    <EmbeddedResource Include="Resources\Surveillance_All.csv" />
     <EmbeddedResource Include="Resources\Surveillance_Append.csv" />
     <EmbeddedResource Include="Resources\Surveillance_Update.csv" />
   </ItemGroup>

@@ -9,7 +9,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public readonly AutomationElementX projectTree;
 
             public MainFormScreen()
-                : base(AutomationElement.RootElement.FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "MakeViewMainForm"))
+                : base(AutomationElement.RootElement.FindFirst(TreeScope.Children, id: "MakeViewMainForm"))
             {
                 projectTree = FindFirstX(TreeScope.Descendants, id: "projectTree");
             }

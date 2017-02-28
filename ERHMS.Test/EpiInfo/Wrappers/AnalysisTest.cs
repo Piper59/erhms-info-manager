@@ -53,6 +53,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             content.AppendLine(Commands.CloseOut());
             string pgmName = "OpenPgmTest_Pgm";
             wrapper = Analysis.OpenPgm.Create(pgmName, content.ToString(), true);
+            WrapperEventCollection events = new WrapperEventCollection(wrapper);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
@@ -73,6 +74,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             pgmDialog.btnOK.Invoke.Invoke();
             wrapper.Exited.WaitOne();
             Assert.IsTrue(project.GetPgms().Any(pgm => pgm.Content.Contains(message)));
+            Assert.AreEqual(1, events.Count);
+            Assert.AreEqual(WrapperEventType.PgmSaved, events[0].Type);
+            StringAssert.Contains(message, events[0].Properties.Content);
         }
 
         private void ImportCsv(string resourceName, string fileName)
@@ -81,6 +85,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, path);
             wrapper = Analysis.Import.Create(project.FilePath, "Surveillance");
             wrapper.Invoke();
+            WrapperEventCollection events = new WrapperEventCollection(wrapper);
             MainFormScreen mainForm = new MainFormScreen();
             ReadDialogScreen readDialog = mainForm.GetReadDialogScreen();
             readDialog.cmbDataSourcePlugIns.Selection.Set(csvDriverName);
@@ -96,6 +101,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             mappingDialog.btnOk.Invoke.Invoke();
             mainForm.WaitForReady();
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
+            Assert.AreEqual(1, events.Count);
+            Assert.AreEqual(WrapperEventType.ViewDataImported, events[0].Type);
         }
 
         private void RecordTest(View view, string lastName, string firstName, DateTime entered, DateTime updated)
@@ -153,7 +160,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             writeDialog.btnOK.Invoke.Invoke();
             mainForm.WaitForReady();
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
-            string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Surveillance.csv");
+            string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Surveillance_All.csv");
             Assert.AreEqual(csvContent, File.ReadAllText(csvPath));
         }
     }

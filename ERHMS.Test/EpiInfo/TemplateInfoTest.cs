@@ -14,11 +14,11 @@ namespace ERHMS.Test.EpiInfo
             string path = Path.GetTempFileName();
             try
             {
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Surveillance.xml", path);
+                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull_View.xml", path);
                 TemplateInfo templateInfo;
                 Assert.IsTrue(TemplateInfo.TryRead(path, out templateInfo));
-                Assert.AreEqual("Surveillance", templateInfo.Name);
-                Assert.AreEqual("Description for Surveillance template", templateInfo.Description);
+                Assert.AreEqual("ADDFull", templateInfo.Name);
+                Assert.AreEqual("Description for ADDFull template", templateInfo.Description);
                 Assert.AreEqual(TemplateLevel.View, templateInfo.Level);
             }
             finally

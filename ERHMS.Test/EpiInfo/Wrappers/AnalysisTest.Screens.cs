@@ -13,7 +13,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public readonly AutomationElementX statusStrip1;
 
             public MainFormScreen()
-                : base(AutomationElement.RootElement.FindFirst(TreeScope.Children, AutomationElement.AutomationIdProperty, "AnalysisMainForm"))
+                : base(AutomationElement.RootElement.FindFirst(TreeScope.Children, id: "AnalysisMainForm"))
             {
                 txtTextArea = FindFirstX(TreeScope.Descendants, id: "txtTextArea");
                 statusStrip1 = FindFirstX(TreeScope.Descendants, id: "statusStrip1");

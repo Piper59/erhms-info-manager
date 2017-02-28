@@ -29,16 +29,37 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, AutomationProperty propertyId, object value)
+        public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, AutomationProperty propertyId, object value, bool immediate = false)
         {
             AutomationElement element = null;
             PropertyCondition condition = new PropertyCondition(propertyId, value);
             TryWait(() =>
             {
                 element = @this.FindFirst(scope, condition);
-                return element != null;
+                return immediate || element != null;
             });
             return element;
+        }
+
+        public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, string id = null, string name = null, bool immediate = false)
+        {
+            AutomationProperty propertyId;
+            object value;
+            if (id != null)
+            {
+                propertyId = AutomationElement.AutomationIdProperty;
+                value = id;
+            }
+            else if (name != null)
+            {
+                propertyId = AutomationElement.NameProperty;
+                value = name;
+            }
+            else
+            {
+                throw new ArgumentException("At least one optional argument must be non-null.");
+            }
+            return @this.FindFirst(scope, propertyId, value, immediate);
         }
 
         public static AutomationElement GetParent(this AutomationElement @this)

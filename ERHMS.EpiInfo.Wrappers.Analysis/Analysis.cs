@@ -62,7 +62,10 @@ namespace ERHMS.EpiInfo.Wrappers
                     {
                         if (form.SavePgm(name))
                         {
-                            RaiseEvent(WrapperEventType.PgmSaved);
+                            RaiseEvent(WrapperEventType.PgmSaved, new
+                            {
+                                Content = form.Commands
+                            });
                         }
                         else
                         {

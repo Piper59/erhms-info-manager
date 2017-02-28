@@ -3,6 +3,7 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
@@ -11,6 +12,17 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 {
     public abstract class WrapperTestBase
     {
+        protected class WrapperEventCollection : List<WrapperEventArgs>
+        {
+            public WrapperEventCollection(Wrapper wrapper)
+            {
+                wrapper.Event += (sender, e) =>
+                {
+                    Add(e);
+                };
+            }
+        }
+
         protected TempDirectory directory;
         protected Configuration configuration;
         protected Project project;
