@@ -20,14 +20,14 @@ namespace ERHMS.EpiInfo.Wrappers
             private static string canvasPath;
             private static DashboardMainForm form;
 
-            public static Wrapper Create(string projectPath, int canvasId, string content)
+            public static Wrapper Create(string projectPath, string content)
             {
                 string canvasPath = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", Canvas.FileExtension);
                 File.WriteAllText(canvasPath, content);
-                return Create(() => Execute(projectPath, canvasId, canvasPath));
+                return Create(() => Execute(projectPath, canvasPath));
             }
 
-            private static void Execute(string projectPath, int canvasId, string canvasPath)
+            private static void Execute(string projectPath, string canvasPath)
             {
                 OpenCanvas.canvasPath = canvasPath;
                 using (FileSystemWatcher watcher = new FileSystemWatcher(Path.GetDirectoryName(canvasPath), Path.GetFileName(canvasPath)))

@@ -17,15 +17,20 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         [Test]
         public void OpenViewTest()
         {
+            // Invoke wrapper
             wrapper = MakeView.OpenView.Create(project.FilePath, "ADDFull");
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
+
+            // Verify current page, view, and project
             AutomationElement selectedPage = mainForm.projectTree.Selection.Get().Single();
             Assert.AreEqual("PAGE", selectedPage.Current.Name);
             AutomationElement selectedView = selectedPage.GetParent();
             Assert.AreEqual("ADDFull", selectedView.Current.Name);
             AutomationElement selectedProject = selectedView.GetParent();
             Assert.AreEqual("Sample", selectedProject.Current.Name);
+
+            // Close window
             mainForm.Window.Close();
         }
 
@@ -55,16 +60,24 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             string templatePath = TemplateInfo.GetPath(TemplateLevel.View, "ADDFull");
             try
             {
+                // Create template
                 Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull_View.xml", templatePath);
+
+                // Invoke wrapper
                 wrapper = MakeView.InstantiateViewTemplate.Create(project.FilePath, templatePath, "");
                 WrapperEventCollection events = new WrapperEventCollection(wrapper);
                 wrapper.Invoke();
                 MainFormScreen mainForm = new MainFormScreen();
+
+                // Create view
                 CreateViewDialogScreen createViewDialog = mainForm.GetCreateViewDialogScreen();
                 Assert.AreEqual("ADDFull_2", createViewDialog.txtViewName.Value.Current.Value);
                 createViewDialog.btnOk.Invoke.Invoke();
+
+                // Close window
                 mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
                 wrapper.Exited.WaitOne();
+
                 Assert.IsTrue(project.Views.Contains("ADDFull_2"));
                 Assert.AreEqual(1, events.Count);
                 Assert.AreEqual(WrapperEventType.ViewCreated, events[0].Type);
@@ -90,16 +103,22 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             string templatePath = TemplateInfo.GetPath(TemplateLevel.View, "ADDFull");
             try
             {
+                // Invoke wrapper
                 wrapper = MakeView.CreateTemplate.Create(project.FilePath, "ADDFull");
                 WrapperEventCollection events = new WrapperEventCollection(wrapper);
                 wrapper.Invoke();
                 MainFormScreen mainForm = new MainFormScreen();
+
+                // Create template
                 CreateTemplateDialogScreen createTemplateDialog = mainForm.GetCreateTemplateDialogScreen();
                 Assert.AreEqual("ADDFull", createTemplateDialog.txtTemplateName.Value.Current.Value);
                 string description = "Description for ADDFull template";
                 createTemplateDialog.txtDescription.Text.Set(description);
                 createTemplateDialog.btnOk.Invoke.Invoke();
+
+                // Close window
                 mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
+
                 XmlDocument document = new XmlDocument();
                 document.Load(templatePath);
                 XmlElement templateElement = document.DocumentElement;

@@ -9,40 +9,50 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 {
     public partial class AnalysisDashboardTest : WrapperTestBase
     {
-        private Canvas canvas;
-
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
             project.Metadata.CreateCanvasesTable();
-            canvas = new Canvas
+        }
+
+        [Test]
+        public void OpenCanvasTest()
+        {
+            // Create canvas
+            Canvas canvas = new Canvas
             {
                 Name = "SampleSurveillance",
                 Content = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.SampleSurveillance.cvs7")
             };
             canvas.SetProjectPath(project.FilePath);
             project.InsertCanvas(canvas);
-        }
 
-        [Test]
-        public void OpenCanvasTest()
-        {
-            wrapper = AnalysisDashboard.OpenCanvas.Create(project.FilePath, canvas.CanvasId, canvas.Content);
+            // Invoke wrapper
+            wrapper = AnalysisDashboard.OpenCanvas.Create(project.FilePath, canvas.Content);
             WrapperEventCollection events = new WrapperEventCollection(wrapper);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
+
+            // Change canvas
             string message = "Hello, world!";
             mainForm.standardTextBox.Value.SetValue(message);
+
+            // Refresh data source (causes canvas to be marked dirty)
             mainForm.scrollViewer.Element.SetFocus();
             SendKeys.SendWait("+{F10}{UP 2}{ENTER}");
+
+            // Attempt to close window
             mainForm.WaitForReady();
             mainForm.Window.Close();
-            mainForm.GetQuestionDialogScreen().Dialog.Close(DialogResult.Yes);
+
+            // Save canvas
+            mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
             wrapper.Exited.WaitOne();
+
             CollectionAssert.IsNotEmpty(events);
-            WrapperEventArgs e = events[events.Count - 1];
-            Assert.AreEqual(WrapperEventType.CanvasSaved, e.Type);
-            StringAssert.Contains(message, e.Properties.Content);
+            WrapperEventArgs @event = events[events.Count - 1];
+            Assert.AreEqual(WrapperEventType.CanvasSaved, @event.Type);
+            StringAssert.Contains(message, @event.Properties.Content);
         }
     }
 }

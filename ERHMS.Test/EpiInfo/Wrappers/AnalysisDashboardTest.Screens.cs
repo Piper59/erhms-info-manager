@@ -23,7 +23,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 standardTextBox = FindFirstX(TreeScope.Descendants, id: "standardTextBox");
             }
 
-            public AutomationElementX GetQuestionDialogScreen()
+            public AutomationElementX GetCloseDialogScreen()
             {
                 return FindFirstX(TreeScope.Children, name: "Question");
             }
