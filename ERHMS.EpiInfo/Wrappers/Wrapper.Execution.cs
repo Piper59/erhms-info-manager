@@ -30,21 +30,18 @@ namespace ERHMS.EpiInfo.Wrappers
                 Console.SetIn(new StreamReader(Stream.Null));
                 Console.SetOut(new StreamWriter(Stream.Null));
                 Console.SetError(new StreamWriter(Stream.Null));
-                GetMethod(Assembly.GetCallingAssembly(), args[0]).Invoke(null, ReceiveArgs());
+                int separatorIndex = args[0].LastIndexOf('.');
+                string typeName = args[0].Substring(0, separatorIndex);
+                string methodName = args[0].Substring(separatorIndex + 1);
+                BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+                MethodInfo method = Assembly.GetCallingAssembly().GetType(typeName).GetMethod(methodName, flags);
+                method.Invoke(null, ReceiveArgs());
                 Log.Logger.Debug("Exiting");
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
-        }
-
-        private static MethodInfo GetMethod(Assembly assembly, string name)
-        {
-            int separatorIndex = name.LastIndexOf('.');
-            string typeName = name.Substring(0, separatorIndex);
-            string methodName = name.Substring(separatorIndex + 1);
-            return assembly.GetType(typeName).GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
         }
 
         private static object[] ReceiveArgs()

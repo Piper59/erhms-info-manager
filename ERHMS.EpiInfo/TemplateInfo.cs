@@ -14,10 +14,10 @@ namespace ERHMS.EpiInfo
     {
         public const string FileExtension = ".xml";
 
-        public static string GetPath(TemplateLevel level, string name)
+        public static string GetPath(TemplateLevel level, string templateName)
         {
             Configuration configuration = Configuration.GetNewInstance();
-            return IOPath.Combine(configuration.Directories.Templates, level.ToDirectoryName(), name + FileExtension);
+            return IOPath.Combine(configuration.Directories.Templates, level.ToDirectoryName(), templateName + FileExtension);
         }
 
         public static bool TryRead(string path, out TemplateInfo result)

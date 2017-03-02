@@ -6,11 +6,11 @@ namespace ERHMS.Utility
 {
     public static class XmlExtensions
     {
-        public static bool HasAllAttributes(this XmlElement @this, params string[] names)
+        public static bool HasAllAttributes(this XmlElement @this, params string[] attributeNames)
         {
-            foreach (string name in names)
+            foreach (string attributeName in attributeNames)
             {
-                if (!@this.HasAttribute(name))
+                if (!@this.HasAttribute(attributeName))
                 {
                     return false;
                 }

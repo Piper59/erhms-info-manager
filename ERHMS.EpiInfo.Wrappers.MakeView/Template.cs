@@ -25,11 +25,11 @@ namespace ERHMS.EpiInfo.Wrappers
             ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
         }
 
-        public void CreateTemplate(View view, string name, string description)
+        public void CreateTemplate(View view, string templateName, string description)
         {
-            Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, name);
-            ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { name, view });
-            string path = TemplateInfo.GetPath(TemplateLevel.View, name);
+            Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
+            ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { templateName, view });
+            string path = TemplateInfo.GetPath(TemplateLevel.View, templateName);
             XmlDocument document = new XmlDocument();
             document.Load(path);
             document.DocumentElement.SetAttribute("Description", description);

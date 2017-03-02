@@ -10,9 +10,9 @@ namespace ERHMS.Test
     {
         public string Path { get; private set; }
 
-        public TempDirectory(string name)
+        public TempDirectory(string directoryName)
         {
-            Path = IOPath.Combine(IOPath.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name, name);
+            Path = IOPath.Combine(IOPath.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name, directoryName);
             DeleteIfExists();
             Directory.CreateDirectory(Path);
         }

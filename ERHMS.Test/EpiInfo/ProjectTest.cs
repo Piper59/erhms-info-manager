@@ -226,16 +226,16 @@ namespace ERHMS.Test.EpiInfo
 
     public class AccessProjectTest : ProjectTestBase
     {
-        private static Project Create(string name, out ProjectCreationInfo creationInfo)
+        private static Project Create(string projectName, out ProjectCreationInfo creationInfo)
         {
             Configuration configuration = Configuration.GetNewInstance();
-            string location = Path.Combine(configuration.Directories.Project, name);
+            string location = Path.Combine(configuration.Directories.Project, projectName);
             Directory.CreateDirectory(location);
-            string databasePath = Path.Combine(location, name + ".mdb");
+            string databasePath = Path.Combine(location, projectName + ".mdb");
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", databasePath);
             creationInfo = new ProjectCreationInfo
             {
-                Name = name,
+                Name = projectName,
                 Location = location,
                 Driver = Configuration.AccessDriver,
                 Builder = new OleDbConnectionStringBuilder
@@ -243,16 +243,16 @@ namespace ERHMS.Test.EpiInfo
                     Provider = "Microsoft.Jet.OLEDB.4.0",
                     DataSource = databasePath
                 },
-                DatabaseName = name,
+                DatabaseName = projectName,
                 Initialize = true
             };
             return Project.Create(creationInfo);
         }
 
-        public static Project Create(string name)
+        public static Project Create(string projectName)
         {
             ProjectCreationInfo creationInfo;
-            return Create(name, out creationInfo);
+            return Create(projectName, out creationInfo);
         }
 
         [OneTimeSetUp]
@@ -272,7 +272,7 @@ namespace ERHMS.Test.EpiInfo
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            string name = "SqlServerTest";
+            string projectName = "SqlServerTest";
             builder = new SqlConnectionStringBuilder(ConnectionString)
             {
                 Pooling = false
@@ -281,8 +281,8 @@ namespace ERHMS.Test.EpiInfo
             created = true;
             creationInfo = new ProjectCreationInfo
             {
-                Name = name,
-                Location = Path.Combine(configuration.Directories.Project, name),
+                Name = projectName,
+                Location = Path.Combine(configuration.Directories.Project, projectName),
                 Driver = Configuration.SqlDriver,
                 Builder = builder,
                 DatabaseName = builder.InitialCatalog,
