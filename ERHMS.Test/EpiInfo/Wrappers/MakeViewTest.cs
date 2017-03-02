@@ -64,6 +64,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 Assert.AreEqual("ADDFull_2", createViewDialog.txtViewName.Value.Current.Value);
                 createViewDialog.btnOk.Invoke.Invoke();
                 mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
+                wrapper.Exited.WaitOne();
                 Assert.IsTrue(project.Views.Contains("ADDFull_2"));
                 Assert.AreEqual(1, events.Count);
                 Assert.AreEqual(WrapperEventType.ViewCreated, events[0].Type);
