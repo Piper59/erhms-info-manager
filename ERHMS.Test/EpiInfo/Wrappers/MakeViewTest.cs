@@ -144,17 +144,5 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             TemplateTest(document);
             wrapper.Exited.WaitOne();
         }
-
-        [Test]
-        public void PublishToMobileTest()
-        {
-            wrapper = MakeView.PublishToMobile.Create(project.FilePath, "ADDFull");
-            wrapper.Invoke();
-            MainFormScreen mainForm = new MainFormScreen();
-            CopyToAndroidScreen copyToAndroid = mainForm.GetCopyToAndroidScreen();
-            Assert.AreEqual("ADDFull", copyToAndroid.txtFormName.Value.Current.Value);
-            // TODO: Test copying to Android device
-            copyToAndroid.btnCancel.Invoke.Invoke();
-        }
     }
 }

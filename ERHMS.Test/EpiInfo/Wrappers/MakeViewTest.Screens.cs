@@ -19,11 +19,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 return FindFirstX(TreeScope.Children, name: "Close?");
             }
 
-            public CopyToAndroidScreen GetCopyToAndroidScreen()
-            {
-                return new CopyToAndroidScreen(FindFirst(TreeScope.Children, id: "CopyToAndroid"));
-            }
-
             public CreateTemplateDialogScreen GetCreateTemplateDialogScreen()
             {
                 return new CreateTemplateDialogScreen(FindFirst(TreeScope.Children, id: "CreateTemplateDialog"));
@@ -32,21 +27,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public CreateViewDialogScreen GetCreateViewDialogScreen()
             {
                 return new CreateViewDialogScreen(FindFirst(TreeScope.Children, id: "CreateViewDialog"));
-            }
-        }
-
-        private class CopyToAndroidScreen : AutomationElementX
-        {
-            public readonly AutomationElementX txtFormName;
-            public readonly AutomationElementX btnCopy;
-            public readonly AutomationElementX btnCancel;
-
-            public CopyToAndroidScreen(AutomationElement element)
-                : base(element)
-            {
-                txtFormName = FindFirstX(TreeScope.Descendants, id: "txtFormName");
-                btnCopy = FindFirstX(TreeScope.Descendants, id: "btnCopy");
-                btnCancel = FindFirstX(TreeScope.Descendants, id: "btnCancel");
             }
         }
 
