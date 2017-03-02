@@ -129,7 +129,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
         private void RecordTest(View view, string lastName, string firstName, DateTime entered, DateTime updated)
         {
-            NamedObjectCollection<IDataField> fields = view.Fields.DataFields;
+            NamedObjectCollection<IDataField> fields = view.Fields.TableColumnFields;
             Assert.AreEqual(lastName, fields["LastName"].CurrentRecordValueObject);
             Assert.AreEqual(firstName, fields["FirstName"].CurrentRecordValueObject);
             Assert.AreEqual(entered, fields["Entered"].CurrentRecordValueObject);
