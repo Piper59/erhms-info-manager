@@ -95,34 +95,14 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        private class OpenDialogScreen : AutomationElementX
-        {
-            public readonly AutomationElementX txtFileName;
-
-            public OpenDialogScreen(AutomationElement element)
-                : base(element)
-            {
-                txtFileName = FindFirstX(TreeScope.Descendants, id: "1148");
-            }
-        }
-
         private class PgmDialogScreen : AutomationElementX
         {
-            public readonly AutomationElementX btnFindProject;
-            public readonly AutomationElementX cmbPrograms;
             public readonly AutomationElementX btnOK;
 
             public PgmDialogScreen(AutomationElement element)
                 : base(element)
             {
-                btnFindProject = FindFirstX(TreeScope.Descendants, id: "btnFindProject");
-                cmbPrograms = FindFirstX(TreeScope.Descendants, id: "cmbPrograms");
                 btnOK = FindFirstX(TreeScope.Descendants, id: "btnOK");
-            }
-
-            public OpenDialogScreen GetOpenDialogScreen()
-            {
-                return new OpenDialogScreen(FindFirst(TreeScope.Children, name: SharedStrings.SELECT_PROJECT));
             }
         }
 

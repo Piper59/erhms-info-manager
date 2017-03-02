@@ -21,19 +21,21 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class OpenPgm : Wrapper
         {
-            private static string name;
+            private static Project project;
+            private static string pgmName;
             private static string content;
             private static bool execute;
             private static MainForm form;
 
-            public static Wrapper Create(string name, string content, bool execute)
+            public static Wrapper Create(string projectPath, string pgmName, string content, bool execute)
             {
-                return Create(() => Execute(name, content, execute));
+                return Create(() => Execute(projectPath, pgmName, content, execute));
             }
 
-            private static void Execute(string name, string content, bool execute)
+            private static void Execute(string projectPath, string pgmName, string content, bool execute)
             {
-                OpenPgm.name = name;
+                project = new Project(projectPath);
+                OpenPgm.pgmName = pgmName;
                 OpenPgm.content = content.Trim().NormalizeNewLines();
                 OpenPgm.execute = execute;
                 form = new MainForm();
@@ -60,7 +62,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     DialogResult result = MessageBox.Show(form, message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
-                        if (form.SavePgm(name))
+                        if (form.SavePgm(project, pgmName))
                         {
                             RaiseEvent(WrapperEventType.PgmSaved, new
                             {

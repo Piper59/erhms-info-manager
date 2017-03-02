@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Collections;
 using Epi.Fields;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
 using NUnit.Framework;
@@ -51,8 +52,13 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             content.AppendLine(Commands.RouteOut(outputPath));
             content.AppendLine(Commands.Type(message));
             content.AppendLine(Commands.CloseOut());
-            string pgmName = "OpenPgmTest_Pgm";
-            wrapper = Analysis.OpenPgm.Create(pgmName, content.ToString(), true);
+            Pgm pgm = new Pgm
+            {
+                Name = "OpenPgmTest_Pgm",
+                Content = content.ToString()
+            };
+            project.InsertPgm(pgm);
+            wrapper = Analysis.OpenPgm.Create(project.FilePath, pgm.Name, pgm.Content, true);
             WrapperEventCollection events = new WrapperEventCollection(wrapper);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
@@ -64,16 +70,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             mainForm.Window.Close();
             mainForm.GetSaveDialogScreen().Dialog.Close(DialogResult.Yes);
             PgmDialogScreen pgmDialog = mainForm.GetPgmDialogScreen();
-            pgmDialog.btnFindProject.Invoke.Invoke();
-            OpenDialogScreen openDialog = pgmDialog.GetOpenDialogScreen();
-            openDialog.txtFileName.Value.SetValue(project.FilePath);
-            openDialog.Dialog.Close(DialogResult.OK);
-            pgmDialog.Window.WaitForReady();
-            pgmDialog.cmbPrograms.Element.SetFocus();
-            SendKeys.SendWait(pgmName);
             pgmDialog.btnOK.Invoke.Invoke();
             wrapper.Exited.WaitOne();
-            Assert.IsTrue(project.GetPgms().Any(pgm => pgm.Content.Contains(message)));
+            StringAssert.Contains(message, project.GetPgmById(pgm.PgmId).Content);
             Assert.AreEqual(1, events.Count);
             Assert.AreEqual(WrapperEventType.PgmSaved, events[0].Type);
             StringAssert.Contains(message, events[0].Properties.Content);

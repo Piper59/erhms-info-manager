@@ -101,12 +101,16 @@ namespace ERHMS.EpiInfo.Wrappers
             return EpiInterpreter.Context.DataSet.Tables["Output"].Clone();
         }
 
-        public bool SavePgm(string name)
+        public bool SavePgm(Project project, string pgmName)
         {
-            using (PgmDialog dialog = new PgmDialog(this, name, Commands, PgmDialog.PgmDialogMode.SaveProgram))
+            Epi.Project currentProject = EpiInterpreter.Context.CurrentProject;
+            EpiInterpreter.Context.CurrentProject = project;
+            using (PgmDialog dialog = new PgmDialog(this, pgmName, Commands, PgmDialog.PgmDialogMode.SaveProgram))
             {
                 dialog.StartPosition = FormStartPosition.CenterParent;
-                return dialog.ShowDialog(this) == DialogResult.OK;
+                DialogResult result = dialog.ShowDialog(this);
+                EpiInterpreter.Context.CurrentProject = currentProject;
+                return result == DialogResult.OK;
             }
         }
     }
