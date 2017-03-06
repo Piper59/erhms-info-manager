@@ -97,6 +97,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 SendArgs();
             }
+            OnInvoked();
             process.BeginErrorReadLine();
         }
 

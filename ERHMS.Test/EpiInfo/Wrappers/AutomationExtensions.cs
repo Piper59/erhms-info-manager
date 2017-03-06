@@ -32,7 +32,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, AutomationProperty propertyId, object value, bool immediate = false)
         {
             AutomationElement element = null;
-            PropertyCondition condition = new PropertyCondition(propertyId, value);
+            Condition condition = new PropertyCondition(propertyId, value);
             TryWait(() =>
             {
                 element = @this.FindFirst(scope, condition);

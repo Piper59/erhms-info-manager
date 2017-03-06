@@ -1,4 +1,5 @@
 ﻿using Epi;
+using Epi.Windows;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -38,8 +39,14 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Form_Shown(object sender, EventArgs e)
             {
-                // TODO: Application.DoEvents?
-                form.OpenRecord(projectPath, viewName, uniqueKey);
+                using (SplashScreenForm splash = new SplashScreenForm())
+                {
+                    splash.ShowInTaskbar = false;
+                    splash.Show(form);
+                    Application.DoEvents();
+                    form.OpenRecord(projectPath, viewName, uniqueKey);
+                    splash.Close();
+                }
             }
 
             private static void Form_RecordSaved(object sender, SaveRecordEventArgs e)
@@ -84,22 +91,31 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Form_Shown(object sender, EventArgs e)
             {
-                // TODO: Application.DoEvents?
-                form.OpenNewRecord(projectPath, viewName);
-                bool refresh = false;
-                while (true)
+                using (SplashScreenForm splash = new SplashScreenForm())
                 {
-                    string fieldName = In.ReadLine();
-                    string value = In.ReadLine();
-                    if (fieldName == null || value == null)
+                    splash.ShowInTaskbar = false;
+                    splash.Show(form);
+                    Application.DoEvents();
+                    form.OpenNewRecord(projectPath, viewName);
+                    bool refresh = false;
+                    while (true)
                     {
-                        break;
+                        string fieldName = In.ReadLine();
+                        string value = In.ReadLine();
+                        if (fieldName == null || value == null)
+                        {
+                            break;
+                        }
+                        if (form.TrySetValue(fieldName, value))
+                        {
+                            refresh = true;
+                        }
                     }
-                    refresh = refresh || form.TrySetValue(fieldName, value);
-                }
-                if (refresh)
-                {
-                    form.Refresh();
+                    if (refresh)
+                    {
+                        form.Refresh();
+                    }
+                    splash.Close();
                 }
             }
 

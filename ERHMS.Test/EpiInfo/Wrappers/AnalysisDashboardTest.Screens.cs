@@ -23,15 +23,15 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 standardTextBox = FindFirstX(TreeScope.Descendants, id: "standardTextBox");
             }
 
-            public AutomationElementX GetCloseDialogScreen()
-            {
-                return FindFirstX(TreeScope.Children, name: "Question");
-            }
-
             public void WaitForReady()
             {
                 AutomationElement loadingPanel = FindFirst(TreeScope.Descendants, id: "loadingPanel");
                 AutomationExtensions.TryWait(() => loadingPanel.Current.IsOffscreen);
+            }
+
+            public AutomationElementX GetCloseDialogScreen()
+            {
+                return FindFirstX(TreeScope.Children, name: "Question");
             }
         }
     }

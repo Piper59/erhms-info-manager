@@ -19,6 +19,11 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 statusStrip1 = FindFirstX(TreeScope.Descendants, id: "statusStrip1");
             }
 
+            public void WaitForReady()
+            {
+                AutomationExtensions.TryWait(() => statusStrip1.Element.GetChildren().Any(child => child.Current.Name == SharedStrings.READY));
+            }
+
             public AutomationElementX GetCloseDialogScreen()
             {
                 return FindFirstX(TreeScope.Children, name: "Close?");
@@ -47,11 +52,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public WriteDialogScreen GetWriteDialogScreen()
             {
                 return new WriteDialogScreen(FindFirst(TreeScope.Children, id: "WriteDialog"));
-            }
-
-            public void WaitForReady()
-            {
-                AutomationExtensions.TryWait(() => statusStrip1.Element.GetChildren().Any(child => child.Current.Name == SharedStrings.READY));
             }
         }
 

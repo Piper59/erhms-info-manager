@@ -76,8 +76,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
                 // Close window
                 mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
-                wrapper.Exited.WaitOne();
 
+                wrapper.Exited.WaitOne();
                 Assert.IsTrue(project.Views.Contains("ADDFull_2"));
                 Assert.AreEqual(1, events.Count);
                 Assert.AreEqual(WrapperEventType.ViewCreated, events[0].Type);

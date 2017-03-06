@@ -42,9 +42,9 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public bool TrySetValue(string fieldName, string value)
         {
-            if (View.Fields.DataFields.Contains(fieldName))
+            if (View.Fields.TableColumnFields.Contains(fieldName))
             {
-                View.Fields.DataFields[fieldName].CurrentRecordValueString = value;
+                View.Fields.TableColumnFields[fieldName].CurrentRecordValueString = value;
                 return true;
             }
             else

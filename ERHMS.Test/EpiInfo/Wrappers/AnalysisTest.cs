@@ -86,7 +86,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             StringAssert.Contains(message, project.GetPgmById(pgm.PgmId).Content);
             Assert.AreEqual(1, events.Count);
             Assert.AreEqual(WrapperEventType.PgmSaved, events[0].Type);
-            StringAssert.Contains(message, events[0].Properties.Content);
         }
 
         private void ImportCsv(string resourceName, string fileName)

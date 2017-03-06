@@ -40,9 +40,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             // Refresh data source (causes canvas to be marked dirty)
             mainForm.scrollViewer.Element.SetFocus();
             SendKeys.SendWait("+{F10}{UP 2}{ENTER}");
+            mainForm.WaitForReady();
 
             // Attempt to close window
-            mainForm.WaitForReady();
             mainForm.Window.Close();
 
             // Save canvas

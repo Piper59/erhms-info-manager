@@ -108,6 +108,8 @@
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AutomationElementX.cs" />
     <Compile Include="EpiInfo\Wrappers\AutomationExtensions.cs" />
+    <Compile Include="EpiInfo\Wrappers\EnterTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\EnterTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\MakeViewTest.cs" />
     <Compile Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\WrapperTestBase.cs" />
