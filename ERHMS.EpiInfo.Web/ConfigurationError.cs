@@ -1,4 +1,4 @@
-﻿using System;
+﻿using ERHMS.Utility;
 
 namespace ERHMS.EpiInfo.Web
 {
@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo.Web
                 case ConfigurationError.Unknown:
                     return "Configuration error.";
                 default:
-                    throw new NotSupportedException();
+                    throw new InvalidEnumValueException(@this);
             }
         }
     }

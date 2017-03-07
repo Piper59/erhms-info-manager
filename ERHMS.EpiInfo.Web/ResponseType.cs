@@ -30,9 +30,9 @@ namespace ERHMS.EpiInfo.Web
             return EpiInfoValues.Single(pair => pair.Key == @this).Value;
         }
 
-        public static ResponseType FromEpiInfoValue(int epiInfoValue)
+        public static ResponseType FromEpiInfoValue(int value)
         {
-            return EpiInfoValues.Single(pair => pair.Value == epiInfoValue).Key;
+            return EpiInfoValues.Single(pair => pair.Value == value).Key;
         }
     }
 }

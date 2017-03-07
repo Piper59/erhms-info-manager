@@ -5,7 +5,6 @@ using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.ServiceModel;
 using System.Xml;
 using Settings = ERHMS.Utility.Settings;
@@ -14,26 +13,20 @@ namespace ERHMS.EpiInfo.Web
 {
     public class Service
     {
-        private Configuration configuration;
-
-        public string Address
-        {
-            get { return configuration.Settings.WebServiceEndpointAddress; }
-        }
-
-        public Guid? OrganizationKey
+        private static Guid? OrganizationKey
         {
             get { return ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey); }
         }
 
-        public Service()
+        private static string GetEndpointAddress()
         {
-            configuration = Configuration.GetNewInstance();
+            Configuration configuration = Configuration.GetNewInstance();
+            return configuration.Settings.WebServiceEndpointAddress;
         }
 
-        public bool IsConfigured()
+        public static bool IsConfigured()
         {
-            if (string.IsNullOrWhiteSpace(Address))
+            if (string.IsNullOrWhiteSpace(GetEndpointAddress()))
             {
                 return false;
             }
@@ -47,10 +40,18 @@ namespace ERHMS.EpiInfo.Web
             }
         }
 
+        private ManagerServiceV2Client @base;
+
+        public Service()
+        {
+            @base = ServiceClient.GetClientV2();
+        }
+
         public ConfigurationError CheckConfiguration()
         {
-            Log.Current.Debug("Checking web configuration");
-            if (Address == null || !Address.EndsWith("V2.svc", StringComparison.OrdinalIgnoreCase))
+            Log.Logger.Debug("Checking web configuration");
+            string endpointAddress = GetEndpointAddress();
+            if (endpointAddress == null || !endpointAddress.EndsWith("V2.svc", StringComparison.OrdinalIgnoreCase))
             {
                 return ConfigurationError.Version;
             }
@@ -62,7 +63,6 @@ namespace ERHMS.EpiInfo.Web
             {
                 try
                 {
-                    ManagerServiceV2Client client = ServiceClient.GetClientV2();
                     SurveyInfoRequest request = new SurveyInfoRequest
                     {
                         Criteria = new SurveyInfoCriteria
@@ -71,7 +71,7 @@ namespace ERHMS.EpiInfo.Web
                             SurveyIdList = new string[] { }
                         }
                     };
-                    if (client.IsValidOrgKey(request))
+                    if (@base.IsValidOrgKey(request))
                     {
                         return ConfigurationError.None;
                     }
@@ -93,20 +93,22 @@ namespace ERHMS.EpiInfo.Web
 
         public Survey GetSurvey(View view)
         {
-            Log.Current.DebugFormat("Getting survey: {0}", view.Name);
+            Log.Logger.DebugFormat("Getting web survey: {0}", view.Name);
             try
             {
-                ManagerServiceV2Client client = ServiceClient.GetClientV2();
                 SurveyInfoRequest request = new SurveyInfoRequest
                 {
                     Criteria = new SurveyInfoCriteria
                     {
                         OrganizationKey = OrganizationKey.Value,
                         SurveyType = ResponseType.Unspecified.ToEpiInfoValue(),
-                        SurveyIdList = new string[] { view.WebSurveyId }
+                        SurveyIdList = new string[]
+                        {
+                            view.WebSurveyId
+                        }
                     }
                 };
-                SurveyInfoResponse response = client.GetSurveyInfo(request);
+                SurveyInfoResponse response = @base.GetSurveyInfo(request);
                 if (response.SurveyInfoList.Length == 0)
                 {
                     return null;
@@ -115,35 +117,37 @@ namespace ERHMS.EpiInfo.Web
                 {
                     if (response.SurveyInfoList.Length > 1)
                     {
-                        Log.Current.Warn("Multiple surveys found");
+                        Log.Logger.Warn("Multiple web surveys found");
                     }
-                    return Survey.FromServiceObject(response.SurveyInfoList[0]);
+                    Survey survey = new Survey(response.SurveyInfoList[0]);
+                    Log.Logger.DebugFormat("Found web survey: {0}", survey.SurveyId);
+                    return survey;
                 }
             }
             catch (Exception ex)
             {
-                Log.Current.Warn("Failed to get survey", ex);
+                Log.Logger.Warn("Failed to get web survey", ex);
                 return null;
             }
         }
 
         public bool Publish(View view, Survey survey)
         {
-            Log.Current.DebugFormat("Publishing to web: {0}", view.Name);
+            Log.Logger.DebugFormat("Publishing to web: {0}", view.Name);
             try
             {
-                ManagerServiceV2Client client = ServiceClient.GetClientV2();
                 PublishRequest request = new PublishRequest
                 {
-                    SurveyInfo = survey.ToServiceObject(view)
+                    SurveyInfo = survey.GetSurveyInfo(view)
                 };
-                PublishResponse response = client.PublishSurvey(request);
+                PublishResponse response = @base.PublishSurvey(request);
                 if (response.PublishInfo.IsPulished)
                 {
-                    string url = response.PublishInfo.URL;
-                    survey.SurveyId = url.Substring(url.LastIndexOf('/') + 1);
+                    Uri url = new Uri(response.PublishInfo.URL);
+                    survey.SurveyId = url.Segments[url.Segments.Length - 1];
                     view.WebSurveyId = survey.SurveyId;
                     view.SaveToDb();
+                    Log.Logger.DebugFormat("Published to web: {0}", survey.SurveyId);
                     return true;
                 }
                 else
@@ -153,36 +157,34 @@ namespace ERHMS.EpiInfo.Web
             }
             catch (Exception ex)
             {
-                Log.Current.Warn("Failed to publish to web", ex);
+                Log.Logger.Warn("Failed to publish to web", ex);
                 return false;
             }
         }
 
         public bool Republish(View view, Survey survey)
         {
+            Log.Logger.DebugFormat("Republishing to web: {0}, {1}", view.Name, survey.SurveyId);
             try
             {
-                Log.Current.DebugFormat("Republishing to web: {0}", view.Name);
-                ManagerServiceV2Client client = ServiceClient.GetClientV2();
                 PublishRequest request = new PublishRequest
                 {
                     Action = "Update",
-                    SurveyInfo = survey.ToServiceObject(view)
+                    SurveyInfo = survey.GetSurveyInfo(view)
                 };
-                PublishResponse response = client.RePublishSurvey(request);
+                PublishResponse response = @base.RePublishSurvey(request);
                 return response.PublishInfo.IsPulished;
             }
             catch (Exception ex)
             {
-                Log.Current.Warn("Failed to republish to web", ex);
+                Log.Logger.Warn("Failed to republish to web", ex);
                 return false;
             }
         }
 
-        public IEnumerable<Record> GetRecords(View view, Survey survey)
+        public IEnumerable<Record> GetRecords(Survey survey)
         {
-            Log.Current.DebugFormat("Importing from web: {0}", view.Name);
-            ManagerServiceV2Client client = ServiceClient.GetClientV2();
+            Log.Logger.DebugFormat("Getting web records: {0}", survey.SurveyId);
             SurveyAnswerRequest request = new SurveyAnswerRequest
             {
                 Criteria = new SurveyAnswerCriteria
@@ -199,7 +201,7 @@ namespace ERHMS.EpiInfo.Web
             };
             int pageCount;
             {
-                SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                SurveyAnswerResponse response = @base.GetSurveyAnswer(request);
                 request.Criteria.PageSize = response.PageSize;
                 pageCount = response.NumberOfPages;
             }
@@ -207,19 +209,25 @@ namespace ERHMS.EpiInfo.Web
             for (int page = 1; page <= pageCount; page++)
             {
                 request.Criteria.PageNumber = page;
-                SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                SurveyAnswerResponse response = @base.GetSurveyAnswer(request);
                 foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
                 {
-                    Record record = new Record();
-                    record.GlobalRecordId = answer.ResponseId;
-                    // TODO: Use XmlExtensions?
+                    Record record = new Record
+                    {
+                        GlobalRecordId = answer.ResponseId
+                    };
                     using (XmlReader reader = XmlReader.Create(new StringReader(answer.XML)))
                     {
-                        while (reader.Read())
+                        while (true)
                         {
-                            while (reader.NodeType == XmlNodeType.Element && reader.Name == "ResponseDetail")
+                            XmlElement element = reader.ReadNextElement();
+                            if (element == null)
                             {
-                                record[reader.GetAttribute("QuestionName")] = reader.ReadElementContentAsString();
+                                break;
+                            }
+                            if (element.Name == "ResponseDetail")
+                            {
+                                record[element.GetAttribute("QuestionName")] = element.InnerText;
                             }
                         }
                     }
@@ -228,17 +236,11 @@ namespace ERHMS.EpiInfo.Web
             }
         }
 
-        public Record AddRecord(View view, Survey survey, object record)
+        public bool TryAddRecord(View view, Survey survey, Record record)
         {
-            Log.Current.DebugFormat("Adding record: {0}", view.Name);
+            Log.Logger.DebugFormat("Adding web record: {0}", view.Name);
             try
             {
-                Record _record = new Record();
-                foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
-                {
-                    _record[view.Fields[property.Name].Name] = Convert.ToString(property.GetValue(record, null));
-                }
-                ManagerServiceV2Client client = ServiceClient.GetClientV2();
                 PreFilledAnswerRequest request = new PreFilledAnswerRequest
                 {
                     AnswerInfo = new PreFilledAnswerDTO
@@ -246,26 +248,27 @@ namespace ERHMS.EpiInfo.Web
                         OrganizationKey = OrganizationKey.Value,
                         SurveyId = new Guid(survey.SurveyId),
                         UserPublishKey = survey.PublishKey,
-                        SurveyQuestionAnswerList = _record
+                        SurveyQuestionAnswerList = record
                     }
                 };
-                PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
+                PreFilledAnswerResponse response = @base.SetSurveyAnswer(request);
                 switch (response.Status)
                 {
-                    case "Failed":
-                        return null;
                     case "Success":
-                        _record.GlobalRecordId = response.SurveyResponseID;
-                        _record.Passcode = response.SurveyResponsePassCode;
-                        return _record;
+                        record.GlobalRecordId = response.SurveyResponseID;
+                        record.Passcode = response.SurveyResponsePassCode;
+                        return true;
+                    case "Failed":
+                        return false;
                     default:
-                        throw new NotSupportedException();
+                        Log.Logger.WarnFormat("Unrecognized status: {0}", response.Status);
+                        return false;
                 }
             }
             catch (Exception ex)
             {
-                Log.Current.Warn("Failed to add record", ex);
-                return null;
+                Log.Logger.Warn("Failed to add web record", ex);
+                return false;
             }
         }
     }
