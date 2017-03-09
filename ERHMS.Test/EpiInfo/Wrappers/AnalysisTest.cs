@@ -44,6 +44,49 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         }
 
         [Test]
+        [Order(1)]
+        public void ExportTest()
+        {
+            // Invoke wrapper
+            wrapper = Analysis.Export.Create(project.FilePath, "Surveillance");
+            wrapper.Invoke();
+            MainFormScreen mainForm = new MainFormScreen();
+            mainForm.WaitForReady();
+
+            // Select variables
+            WriteDialogScreen writeDialog = mainForm.GetWriteDialogScreen();
+            writeDialog.lbxVariables.Selection.Add(ColumnNames.GLOBAL_RECORD_ID);
+            writeDialog.lbxVariables.Selection.Add("LastName");
+            writeDialog.lbxVariables.Selection.Add("FirstName");
+            writeDialog.lbxVariables.Selection.Add("Entered");
+            writeDialog.lbxVariables.Selection.Add("Updated");
+
+            // Set export options
+            writeDialog.rdbReplace.SelectionItem.Select();
+            writeDialog.cmbOutputFormat.Selection.Set(csvDriverName);
+
+            // Select CSV
+            writeDialog.btnGetFile.Invoke.Invoke();
+            CsvExistingFileDialogScreen csvExistingFileDialog = writeDialog.GetCsvExistingFileDialogScreen();
+            csvExistingFileDialog.txtFileName.Value.SetValue(directory.Path);
+            csvExistingFileDialog.btnOK.Invoke.Invoke();
+            string csvPath = directory.CombinePaths("Surveillance.csv");
+            writeDialog.Window.WaitForReady();
+            writeDialog.txtFileName.Element.SetFocus();
+            SendKeys.SendWait(Path.GetFileName(csvPath));
+
+            // Run export
+            writeDialog.btnOK.Invoke.Invoke();
+            mainForm.WaitForReady();
+
+            // Close window
+            mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
+
+            string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Surveillance_All.csv");
+            Assert.AreEqual(csvContent, File.ReadAllText(csvPath));
+        }
+
+        [Test]
         public void OpenPgmTest()
         {
             // Create PGM
@@ -152,49 +195,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             View view = project.Views["Surveillance"];
             view.LoadRecord(1);
             RecordTest(view, "Doe", "John", new DateTime(2007, 1, 7), new DateTime(2010, 1, 1));
-        }
-
-        [Test]
-        [Order(1)]
-        public void ExportTest()
-        {
-            // Invoke wrapper
-            wrapper = Analysis.Export.Create(project.FilePath, "Surveillance");
-            wrapper.Invoke();
-            MainFormScreen mainForm = new MainFormScreen();
-            mainForm.WaitForReady();
-
-            // Select variables
-            WriteDialogScreen writeDialog = mainForm.GetWriteDialogScreen();
-            writeDialog.lbxVariables.Selection.Add(ColumnNames.GLOBAL_RECORD_ID);
-            writeDialog.lbxVariables.Selection.Add("LastName");
-            writeDialog.lbxVariables.Selection.Add("FirstName");
-            writeDialog.lbxVariables.Selection.Add("Entered");
-            writeDialog.lbxVariables.Selection.Add("Updated");
-
-            // Set export options
-            writeDialog.rdbReplace.SelectionItem.Select();
-            writeDialog.cmbOutputFormat.Selection.Set(csvDriverName);
-
-            // Select CSV
-            writeDialog.btnGetFile.Invoke.Invoke();
-            CsvExistingFileDialogScreen csvExistingFileDialog = writeDialog.GetCsvExistingFileDialogScreen();
-            csvExistingFileDialog.txtFileName.Value.SetValue(directory.Path);
-            csvExistingFileDialog.btnOK.Invoke.Invoke();
-            string csvPath = directory.CombinePaths("Surveillance.csv");
-            writeDialog.Window.WaitForReady();
-            writeDialog.txtFileName.Element.SetFocus();
-            SendKeys.SendWait(Path.GetFileName(csvPath));
-
-            // Run export
-            writeDialog.btnOK.Invoke.Invoke();
-            mainForm.WaitForReady();
-
-            // Close window
-            mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
-
-            string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Surveillance_All.csv");
-            Assert.AreEqual(csvContent, File.ReadAllText(csvPath));
         }
     }
 }
