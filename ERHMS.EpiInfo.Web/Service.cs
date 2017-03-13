@@ -6,62 +6,55 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo.Web
 {
-    public class Service
+    public static class Service
     {
+        private static readonly Regex NamePattern = new Regex(@"^SurveyManagerService(?:V(?<version>\d+))?\.svc$", RegexOptions.IgnoreCase);
+
         private static Guid? OrganizationKey
         {
             get { return ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey); }
         }
 
-        private static string GetEndpointAddress()
-        {
-            Configuration configuration = Configuration.GetNewInstance();
-            return configuration.Settings.WebServiceEndpointAddress;
-        }
-
-        public static bool IsConfigured()
-        {
-            if (string.IsNullOrWhiteSpace(GetEndpointAddress()))
-            {
-                return false;
-            }
-            else if (!OrganizationKey.HasValue)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        private ManagerServiceV2Client @base;
-
-        public Service()
-        {
-            @base = ServiceClient.GetClientV2();
-        }
-
-        public ConfigurationError CheckConfiguration()
+        public static bool IsConfigured(out ConfigurationError error)
         {
             Log.Logger.Debug("Checking web configuration");
-            string endpointAddress = GetEndpointAddress();
-            if (endpointAddress == null || !endpointAddress.EndsWith("V2.svc", StringComparison.OrdinalIgnoreCase))
+            Configuration configuration = Configuration.GetNewInstance();
+            Uri endpointUrl;
+            try
             {
-                return ConfigurationError.Version;
+                endpointUrl = new Uri(configuration.Settings.WebServiceEndpointAddress);
             }
-            else if (!OrganizationKey.HasValue)
+            catch
             {
-                return ConfigurationError.OrganizationKey;
+                error = ConfigurationError.EndpointAddress;
+                return false;
             }
-            else
+            Match match = NamePattern.Match(endpointUrl.Segments[endpointUrl.Segments.Length - 1]);
+            if (!match.Success)
             {
-                try
+                error = ConfigurationError.EndpointAddress;
+                return false;
+            }
+            Group version = match.Groups["version"];
+            if (!version.Success || int.Parse(version.Value) < 2)
+            {
+                error = ConfigurationError.Version;
+                return false;
+            }
+            if (!OrganizationKey.HasValue)
+            {
+                error = ConfigurationError.OrganizationKey;
+                return false;
+            }
+            try
+            {
+                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
                 {
                     SurveyInfoRequest request = new SurveyInfoRequest
                     {
@@ -71,57 +64,61 @@ namespace ERHMS.EpiInfo.Web
                             SurveyIdList = new string[] { }
                         }
                     };
-                    if (@base.IsValidOrgKey(request))
+                    if (!client.IsValidOrgKey(request))
                     {
-                        return ConfigurationError.None;
+                        error = ConfigurationError.OrganizationKey;
+                        return false;
                     }
-                    else
-                    {
-                        return ConfigurationError.OrganizationKey;
-                    }
+                    error = ConfigurationError.None;
+                    return true;
                 }
-                catch (EndpointNotFoundException)
-                {
-                    return ConfigurationError.Connection;
-                }
-                catch
-                {
-                    return ConfigurationError.Unknown;
-                }
+            }
+            catch (EndpointNotFoundException)
+            {
+                error = ConfigurationError.Connection;
+                return false;
+            }
+            catch
+            {
+                error = ConfigurationError.Unknown;
+                return false;
             }
         }
 
-        public Survey GetSurvey(View view)
+        public static Survey GetSurvey(View view)
         {
             Log.Logger.DebugFormat("Getting web survey: {0}", view.Name);
             try
             {
-                SurveyInfoRequest request = new SurveyInfoRequest
+                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
                 {
-                    Criteria = new SurveyInfoCriteria
+                    SurveyInfoRequest request = new SurveyInfoRequest
                     {
-                        OrganizationKey = OrganizationKey.Value,
-                        SurveyType = ResponseType.Unspecified.ToEpiInfoValue(),
-                        SurveyIdList = new string[]
+                        Criteria = new SurveyInfoCriteria
                         {
-                            view.WebSurveyId
+                            OrganizationKey = OrganizationKey.Value,
+                            SurveyType = ResponseType.Unspecified.ToEpiInfoValue(),
+                            SurveyIdList = new string[]
+                            {
+                                view.WebSurveyId
+                            }
                         }
-                    }
-                };
-                SurveyInfoResponse response = @base.GetSurveyInfo(request);
-                if (response.SurveyInfoList.Length == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    if (response.SurveyInfoList.Length > 1)
+                    };
+                    SurveyInfoResponse response = client.GetSurveyInfo(request);
+                    if (response.SurveyInfoList.Length == 0)
                     {
-                        Log.Logger.Warn("Multiple web surveys found");
+                        return null;
                     }
-                    Survey survey = new Survey(response.SurveyInfoList[0]);
-                    Log.Logger.DebugFormat("Found web survey: {0}", survey.SurveyId);
-                    return survey;
+                    else
+                    {
+                        if (response.SurveyInfoList.Length > 1)
+                        {
+                            Log.Logger.Warn("Multiple web surveys found");
+                        }
+                        Survey survey = new Survey(response.SurveyInfoList[0]);
+                        Log.Logger.DebugFormat("Found web survey: {0}", survey.SurveyId);
+                        return survey;
+                    }
                 }
             }
             catch (Exception ex)
@@ -131,28 +128,31 @@ namespace ERHMS.EpiInfo.Web
             }
         }
 
-        public bool Publish(View view, Survey survey)
+        public static bool Publish(View view, Survey survey)
         {
             Log.Logger.DebugFormat("Publishing to web: {0}", view.Name);
             try
             {
-                PublishRequest request = new PublishRequest
+                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
                 {
-                    SurveyInfo = survey.GetSurveyInfo(view)
-                };
-                PublishResponse response = @base.PublishSurvey(request);
-                if (response.PublishInfo.IsPulished)
-                {
-                    Uri url = new Uri(response.PublishInfo.URL);
-                    survey.SurveyId = url.Segments[url.Segments.Length - 1];
-                    view.WebSurveyId = survey.SurveyId;
-                    view.SaveToDb();
-                    Log.Logger.DebugFormat("Published to web: {0}", survey.SurveyId);
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    PublishRequest request = new PublishRequest
+                    {
+                        SurveyInfo = survey.GetSurveyInfo(view)
+                    };
+                    PublishResponse response = client.PublishSurvey(request);
+                    if (response.PublishInfo.IsPulished)
+                    {
+                        Uri url = new Uri(response.PublishInfo.URL);
+                        survey.SurveyId = url.Segments[url.Segments.Length - 1];
+                        view.WebSurveyId = survey.SurveyId;
+                        view.SaveToDb();
+                        Log.Logger.DebugFormat("Published to web: {0}", survey.SurveyId);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             catch (Exception ex)
@@ -162,18 +162,21 @@ namespace ERHMS.EpiInfo.Web
             }
         }
 
-        public bool Republish(View view, Survey survey)
+        public static bool Republish(View view, Survey survey)
         {
             Log.Logger.DebugFormat("Republishing to web: {0}, {1}", view.Name, survey.SurveyId);
             try
             {
-                PublishRequest request = new PublishRequest
+                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
                 {
-                    Action = "Update",
-                    SurveyInfo = survey.GetSurveyInfo(view)
-                };
-                PublishResponse response = @base.RePublishSurvey(request);
-                return response.PublishInfo.IsPulished;
+                    PublishRequest request = new PublishRequest
+                    {
+                        Action = "Update",
+                        SurveyInfo = survey.GetSurveyInfo(view)
+                    };
+                    PublishResponse response = client.RePublishSurvey(request);
+                    return response.PublishInfo.IsPulished;
+                }
             }
             catch (Exception ex)
             {
@@ -182,87 +185,93 @@ namespace ERHMS.EpiInfo.Web
             }
         }
 
-        public IEnumerable<Record> GetRecords(Survey survey)
+        public static IEnumerable<Record> GetRecords(Survey survey)
         {
             Log.Logger.DebugFormat("Getting web records: {0}", survey.SurveyId);
-            SurveyAnswerRequest request = new SurveyAnswerRequest
+            using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
             {
-                Criteria = new SurveyAnswerCriteria
+                SurveyAnswerRequest request = new SurveyAnswerRequest
                 {
-                    OrganizationKey = OrganizationKey.Value,
-                    SurveyId = survey.SurveyId,
-                    IsDraftMode = survey.Draft,
-                    UserPublishKey = survey.PublishKey,
-                    StatusId = -1,
-                    ReturnSizeInfoOnly = true,
-                    SurveyAnswerIdList = new List<string>()
-                },
-                SurveyAnswerList = new List<SurveyAnswerDTO>()
-            };
-            int pageCount;
-            {
-                SurveyAnswerResponse response = @base.GetSurveyAnswer(request);
-                request.Criteria.PageSize = response.PageSize;
-                pageCount = response.NumberOfPages;
-            }
-            request.Criteria.ReturnSizeInfoOnly = false;
-            for (int page = 1; page <= pageCount; page++)
-            {
-                request.Criteria.PageNumber = page;
-                SurveyAnswerResponse response = @base.GetSurveyAnswer(request);
-                foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
+                    Criteria = new SurveyAnswerCriteria
+                    {
+                        OrganizationKey = OrganizationKey.Value,
+                        SurveyId = survey.SurveyId,
+                        IsDraftMode = survey.Draft,
+                        UserPublishKey = survey.PublishKey,
+                        StatusId = -1,
+                        ReturnSizeInfoOnly = true,
+                        SurveyAnswerIdList = new List<string>()
+                    },
+                    SurveyAnswerList = new List<SurveyAnswerDTO>()
+                };
+                int pageCount;
                 {
-                    Record record = new Record
+                    SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                    request.Criteria.PageSize = response.PageSize;
+                    pageCount = response.NumberOfPages;
+                }
+                request.Criteria.ReturnSizeInfoOnly = false;
+                for (int page = 1; page <= pageCount; page++)
+                {
+                    request.Criteria.PageNumber = page;
+                    SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                    foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
                     {
-                        GlobalRecordId = answer.ResponseId
-                    };
-                    using (XmlReader reader = XmlReader.Create(new StringReader(answer.XML)))
-                    {
-                        while (true)
+                        Record record = new Record
                         {
-                            XmlElement element = reader.ReadNextElement();
-                            if (element == null)
+                            GlobalRecordId = answer.ResponseId
+                        };
+                        using (XmlReader reader = XmlReader.Create(new StringReader(answer.XML)))
+                        {
+                            while (true)
                             {
-                                break;
-                            }
-                            if (element.Name == "ResponseDetail")
-                            {
-                                record[element.GetAttribute("QuestionName")] = element.InnerText;
+                                XmlElement element = reader.ReadNextElement();
+                                if (element == null)
+                                {
+                                    break;
+                                }
+                                if (element.Name == "ResponseDetail")
+                                {
+                                    record[element.GetAttribute("QuestionName")] = element.InnerText;
+                                }
                             }
                         }
+                        yield return record;
                     }
-                    yield return record;
                 }
             }
         }
 
-        public bool TryAddRecord(View view, Survey survey, Record record)
+        public static bool TryAddRecord(View view, Survey survey, Record record)
         {
             Log.Logger.DebugFormat("Adding web record: {0}", view.Name);
             try
             {
-                PreFilledAnswerRequest request = new PreFilledAnswerRequest
+                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
                 {
-                    AnswerInfo = new PreFilledAnswerDTO
+                    PreFilledAnswerRequest request = new PreFilledAnswerRequest
                     {
-                        OrganizationKey = OrganizationKey.Value,
-                        SurveyId = new Guid(survey.SurveyId),
-                        UserPublishKey = survey.PublishKey,
-                        SurveyQuestionAnswerList = record
+                        AnswerInfo = new PreFilledAnswerDTO
+                        {
+                            OrganizationKey = OrganizationKey.Value,
+                            SurveyId = new Guid(survey.SurveyId),
+                            UserPublishKey = survey.PublishKey,
+                            SurveyQuestionAnswerList = record
+                        }
+                    };
+                    PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
+                    switch (response.Status)
+                    {
+                        case "Success":
+                            record.GlobalRecordId = response.SurveyResponseID;
+                            record.Passcode = response.SurveyResponsePassCode;
+                            return true;
+                        case "Failed":
+                            return false;
+                        default:
+                            Log.Logger.WarnFormat("Unrecognized status: {0}", response.Status);
+                            return false;
                     }
-                };
-                PreFilledAnswerResponse response = @base.SetSurveyAnswer(request);
-                switch (response.Status)
-                {
-                    case "Success":
-                        record.GlobalRecordId = response.SurveyResponseID;
-                        record.Passcode = response.SurveyResponsePassCode;
-                        return true;
-                    case "Failed":
-                        return false;
-                    default:
-                        Log.Logger.WarnFormat("Unrecognized status: {0}", response.Status);
-                        return false;
                 }
             }
             catch (Exception ex)

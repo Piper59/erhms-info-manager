@@ -7,8 +7,8 @@ namespace ERHMS.EpiInfo
 {
     public static class ViewExtensions
     {
-        private static readonly Regex InvalidNameChar = new Regex(@"[^a-zA-Z0-9_]");
-        private static readonly Regex InvalidNameBeginning = new Regex(@"^[^a-zA-Z]+");
+        private static readonly Regex InvalidNameCharPattern = new Regex(@"[^a-zA-Z0-9_]");
+        private static readonly Regex InvalidNameBeginningPattern = new Regex(@"^[^a-zA-Z]+");
 
         public static bool IsValidName(string viewName, out InvalidViewNameReason reason)
         {
@@ -17,7 +17,7 @@ namespace ERHMS.EpiInfo
                 reason = InvalidViewNameReason.Empty;
                 return false;
             }
-            else if (InvalidNameChar.IsMatch(viewName))
+            else if (InvalidNameCharPattern.IsMatch(viewName))
             {
                 reason = InvalidViewNameReason.InvalidChar;
                 return false;
@@ -41,7 +41,7 @@ namespace ERHMS.EpiInfo
 
         public static string SanitizeName(string viewName)
         {
-            return viewName.Strip(InvalidNameChar).Strip(InvalidNameBeginning);
+            return viewName.Strip(InvalidNameCharPattern).Strip(InvalidNameBeginningPattern);
         }
 
         public static bool IsWebSurvey(this View @this)

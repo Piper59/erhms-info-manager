@@ -53,10 +53,15 @@ namespace ERHMS.EpiInfo.Wrappers
                     Arguments = methodName
                 }
             };
+            ManualResetEvent closed = new ManualResetEvent(false);
             exited = new ManualResetEvent(false);
             process.ErrorDataReceived += (sender, e) =>
             {
-                if (e.Data != null)
+                if (e.Data == null)
+                {
+                    closed.Set();
+                }
+                else
                 {
                     OnEvent(e.Data);
                 }
@@ -64,6 +69,7 @@ namespace ERHMS.EpiInfo.Wrappers
             process.Exited += (sender, e) =>
             {
                 Log.Logger.DebugFormat("Wrapper {0} exited", process.Id);
+                closed.WaitOne();
                 exited.Set();
             };
         }

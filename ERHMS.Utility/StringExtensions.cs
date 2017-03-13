@@ -7,7 +7,7 @@ namespace ERHMS.Utility
     public static class StringExtensions
     {
         private const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
-        private static readonly Regex NewLine = new Regex(@"\r\n|(?<!\r)\n|\r(?!\n)");
+        private static readonly Regex NewLinePattern = new Regex(@"\r\n|(?<!\r)\n|\r(?!\n)");
 
         public static bool EqualsIgnoreCase(this string @this, string value)
         {
@@ -31,14 +31,14 @@ namespace ERHMS.Utility
             return false;
         }
 
-        public static string Strip(this string @this, Regex regex)
+        public static string Strip(this string @this, Regex pattern)
         {
-            return regex.Replace(@this, "");
+            return pattern.Replace(@this, "");
         }
 
         public static string NormalizeNewLines(this string @this)
         {
-            return NewLine.Replace(@this, Environment.NewLine);
+            return NewLinePattern.Replace(@this, Environment.NewLine);
         }
 
         public static string MakeUnique(this string @this, string format, Predicate<string> exists)

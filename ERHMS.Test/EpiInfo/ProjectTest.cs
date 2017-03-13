@@ -96,9 +96,9 @@ namespace ERHMS.Test.EpiInfo
             view.WebSurveyId = Guid.Empty.ToString();
             view.SaveToDb();
             Assert.IsTrue(view.IsWebSurvey());
-            configuration.Settings.WebServiceEndpointAddress = "http://localhost:8080/EIWS/SurveyManagerServiceV2.svc";
+            configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerServiceV2.svc";
             configuration.Save();
-            Assert.AreEqual("http://localhost:8080/EIWS/Home/00000000-0000-0000-0000-000000000000", view.GetWebSurveyUrl().ToString());
+            Assert.AreEqual("http://example.com/EIWS/Home/00000000-0000-0000-0000-000000000000", view.GetWebSurveyUrl().ToString());
         }
 
         [Test]

@@ -110,7 +110,6 @@ namespace ERHMS.Test.EpiInfo
             };
             wrapper.Invoke();
             wrapper.Exited.WaitOne();
-            wrapper = null;
             Assert.IsTrue(raised);
         }
 
@@ -128,7 +127,6 @@ namespace ERHMS.Test.EpiInfo
             };
             wrapper.Invoke();
             wrapper.Exited.WaitOne();
-            wrapper = null;
             Assert.IsTrue(raised);
         }
     }

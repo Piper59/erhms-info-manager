@@ -65,6 +65,10 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Web\ERHMS.EpiInfo.Web.csproj">
+      <Project>{05366c9d-7568-4c45-9c80-c77b18eb69e8}</Project>
+      <Name>ERHMS.EpiInfo.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.AnalysisDashboard\ERHMS.EpiInfo.Wrappers.AnalysisDashboard.csproj">
       <Project>{0545c649-4922-4c42-89b1-518c056fb483}</Project>
       <Name>ERHMS.EpiInfo.Wrappers.AnalysisDashboard</Name>
@@ -101,7 +105,10 @@
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
+    <Compile Include="EpiInfo\SampleTestBase.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
+    <Compile Include="EpiInfo\Web\RecordTest.cs" />
+    <Compile Include="EpiInfo\Web\ServiceTest.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.cs" />
