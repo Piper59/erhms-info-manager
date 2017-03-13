@@ -9,7 +9,6 @@ namespace ERHMS.EpiInfo.Domain
     {
         private IDictionary<string, object> properties;
 
-        // TODO: Rename
         private bool @new;
         public bool New
         {
@@ -38,42 +37,22 @@ namespace ERHMS.EpiInfo.Domain
         {
             PropertyChanged?.Invoke(this, e);
         }
-        protected void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string propertyName)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(name));
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool HasProperty(string name)
+        public bool TryGetProperty(string propertyName, out object value)
         {
-            return properties.ContainsKey(name);
+            return properties.TryGetValue(propertyName, out value);
         }
 
-        public IEnumerable<string> GetPropertyNames()
+        public bool TryGetProperty<T>(string propertyName, out T value)
         {
-            return properties.Keys;
-        }
-
-        public object GetProperty(string name)
-        {
-            return properties[name];
-        }
-
-        public T GetProperty<T>(string name)
-        {
-            return (T)GetProperty(name);
-        }
-
-        public bool TryGetProperty(string name, out object value)
-        {
-            return properties.TryGetValue(name, out value);
-        }
-
-        public bool TryGetProperty<T>(string name, out T value)
-        {
-            object valueObject;
-            if (TryGetProperty(name, out valueObject))
+            object obj;
+            if (TryGetProperty(propertyName, out obj))
             {
-                value = (T)valueObject;
+                value = (T)obj;
                 return true;
             }
             else
@@ -83,21 +62,24 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        public bool PropertyEquals(string name, object value, StringComparison comparisonType = StringComparison.Ordinal)
+        public object GetProperty(string propertyName)
+        {
+            object value;
+            TryGetProperty(propertyName, out value);
+            return value;
+        }
+
+        public T GetProperty<T>(string propertyName)
+        {
+            return (T)GetProperty(propertyName);
+        }
+
+        public bool PropertyEquals(string propertyName, object value)
         {
             object currentValue;
-            if (TryGetProperty(name, out currentValue))
+            if (TryGetProperty(propertyName, out currentValue))
             {
-                string valueString = value as string;
-                string currentValueString = currentValue as string;
-                if (valueString != null && currentValueString != null)
-                {
-                    return string.Equals(valueString, currentValueString, comparisonType);
-                }
-                else
-                {
-                    return Equals(value, currentValue);
-                }
+                return Equals(value, currentValue);
             }
             else
             {
@@ -105,21 +87,21 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        public bool SetProperty(string name, object value)
+        public bool SetProperty(string propertyName, object value)
         {
-            if (PropertyEquals(name, value))
+            if (PropertyEquals(propertyName, value))
             {
                 return false;
             }
             else
             {
-                properties[name] = value;
-                OnPropertyChanged(name);
+                properties[propertyName] = value;
+                OnPropertyChanged(propertyName);
                 return true;
             }
         }
 
-        protected void LinkProperties(string sourceName, string targetName)
+        protected void AddSynonym(string sourceName, string targetName)
         {
             if (sourceName != targetName)
             {

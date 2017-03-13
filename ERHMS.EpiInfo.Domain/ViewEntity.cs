@@ -30,25 +30,25 @@ namespace ERHMS.EpiInfo.Domain
             set { SetProperty(ColumnNames.REC_STATUS, value); }
         }
 
-        public string FirstSaveLogonName
+        public string FirstSaveUserName
         {
             get { return GetProperty<string>(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME); }
             set { SetProperty(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, value); }
         }
 
-        public DateTime? FirstSaveTime
+        public DateTime? FirstSaveStamp
         {
             get { return GetProperty<DateTime?>(ColumnNames.RECORD_FIRST_SAVE_TIME); }
             set { SetProperty(ColumnNames.RECORD_FIRST_SAVE_TIME, value); }
         }
 
-        public string LastSaveLogonName
+        public string LastSaveUserName
         {
             get { return GetProperty<string>(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME); }
             set { SetProperty(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, value); }
         }
 
-        public DateTime? LastSaveTime
+        public DateTime? LastSaveStamp
         {
             get { return GetProperty<DateTime?>(ColumnNames.RECORD_LAST_SAVE_TIME); }
             set { SetProperty(ColumnNames.RECORD_LAST_SAVE_TIME, value); }
@@ -56,36 +56,21 @@ namespace ERHMS.EpiInfo.Domain
 
         public bool Deleted
         {
-            get
-            {
-                short? recordStatus;
-                if (TryGetProperty(ColumnNames.REC_STATUS, out recordStatus))
-                {
-                    return recordStatus.HasValue && recordStatus.Value == 0;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            get { return RecordStatus.HasValue && EpiInfo.RecordStatus.IsDeleted(RecordStatus.Value); }
+            set { RecordStatus = value ? EpiInfo.RecordStatus.Deleted : EpiInfo.RecordStatus.Undeleted; }
         }
 
         public ViewEntity()
         {
-            LinkProperties(ColumnNames.UNIQUE_KEY, nameof(UniqueKey));
-            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, nameof(GlobalRecordId));
-            LinkProperties(ColumnNames.FOREIGN_KEY, nameof(ForeignKey));
-            LinkProperties(ColumnNames.REC_STATUS, nameof(RecordStatus));
-            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, nameof(FirstSaveLogonName));
-            LinkProperties(ColumnNames.RECORD_FIRST_SAVE_TIME, nameof(FirstSaveTime));
-            LinkProperties(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, nameof(LastSaveLogonName));
-            LinkProperties(ColumnNames.RECORD_LAST_SAVE_TIME, nameof(LastSaveTime));
-            LinkProperties(ColumnNames.REC_STATUS, nameof(Deleted));
-        }
-
-        public void SetDeleted(bool deleted)
-        {
-            RecordStatus = deleted ? (short)0 : (short)1;
+            AddSynonym(ColumnNames.UNIQUE_KEY, nameof(UniqueKey));
+            AddSynonym(ColumnNames.GLOBAL_RECORD_ID, nameof(GlobalRecordId));
+            AddSynonym(ColumnNames.FOREIGN_KEY, nameof(ForeignKey));
+            AddSynonym(ColumnNames.REC_STATUS, nameof(RecordStatus));
+            AddSynonym(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, nameof(FirstSaveUserName));
+            AddSynonym(ColumnNames.RECORD_FIRST_SAVE_TIME, nameof(FirstSaveStamp));
+            AddSynonym(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, nameof(LastSaveUserName));
+            AddSynonym(ColumnNames.RECORD_LAST_SAVE_TIME, nameof(LastSaveStamp));
+            AddSynonym(ColumnNames.REC_STATUS, nameof(Deleted));
         }
 
         public void SetAuditProperties(bool first, bool last, IIdentity user = null)
@@ -97,13 +82,13 @@ namespace ERHMS.EpiInfo.Domain
             DateTime now = DateTime.Now;
             if (first)
             {
-                FirstSaveLogonName = user.Name;
-                FirstSaveTime = now;
+                FirstSaveUserName = user.Name;
+                FirstSaveStamp = now;
             }
             if (last)
             {
-                LastSaveLogonName = user.Name;
-                LastSaveTime = now;
+                LastSaveUserName = user.Name;
+                LastSaveStamp = now;
             }
         }
     }

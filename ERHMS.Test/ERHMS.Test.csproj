@@ -65,6 +65,10 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
+      <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
+      <Name>ERHMS.EpiInfo.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Web\ERHMS.EpiInfo.Web.csproj">
       <Project>{05366c9d-7568-4c45-9c80-c77b18eb69e8}</Project>
       <Name>ERHMS.EpiInfo.Web</Name>
@@ -103,6 +107,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
+    <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <Compile Include="EpiInfo\SampleTestBase.cs" />
