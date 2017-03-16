@@ -13,6 +13,9 @@ using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Test.EpiInfo.Web
 {
+#if IGNORE_LONG_TESTS
+    [TestFixture(Ignore = "IGNORE_LONG_TESTS")]
+#endif
     public class ServiceTest : SampleTestBase
     {
         private View view;
