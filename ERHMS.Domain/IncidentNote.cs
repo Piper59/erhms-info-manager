@@ -37,7 +37,7 @@ namespace ERHMS.Domain
 
         public IncidentNote()
         {
-            LinkProperties(nameof(IncidentNoteId), nameof(Guid));
+            AddSynonym(nameof(IncidentNoteId), nameof(Guid));
         }
     }
 }

@@ -30,7 +30,7 @@ namespace ERHMS.Domain
 
         public Assignment()
         {
-            LinkProperties(nameof(AssignmentId), nameof(Guid));
+            AddSynonym(nameof(AssignmentId), nameof(Guid));
         }
     }
 }

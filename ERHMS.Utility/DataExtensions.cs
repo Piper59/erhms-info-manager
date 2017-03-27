@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 
@@ -19,6 +20,11 @@ namespace ERHMS.Utility
         public static string GetCensoredConnectionString(this DbConnectionStringBuilder @this)
         {
             return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => FormatProperty(property)));
+        }
+
+        public static bool IsEditable(this DataColumn @this)
+        {
+            return !@this.AutoIncrement && !@this.ReadOnly;
         }
     }
 }

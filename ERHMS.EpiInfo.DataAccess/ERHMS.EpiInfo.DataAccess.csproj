@@ -46,17 +46,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="ADOX">
-      <Guid>{00000600-0000-0010-8000-00AA006D2EA4}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
@@ -75,9 +64,9 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="DataParameter.cs" />
-    <Compile Include="DataParameterCollection.cs" />
-    <Compile Include="DataPredicate.cs" />
     <Compile Include="DataProvider.cs" />
+    <Compile Include="DataQuery.cs" />
+    <Compile Include="DataQueryBuilder.cs" />
     <Compile Include="DataTransaction.cs" />
     <Compile Include="DataTransactionState.cs" />
     <Compile Include="Drivers\AccessDriver.cs" />
@@ -85,12 +74,16 @@
     <Compile Include="Drivers\DataDriverFactory.cs" />
     <Compile Include="Drivers\IDataDriver.cs" />
     <Compile Include="Drivers\SqlServerDriver.cs" />
+    <Compile Include="Mappers\EntityMapper.cs" />
+    <Compile Include="Mappers\ViewEntityMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CodeRepository.cs" />
     <Compile Include="Repositories\EntityRepositoryBase.cs" />
-    <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\TableEntityRepository.cs" />
     <Compile Include="Repositories\ViewEntityRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Drivers\Empty.mdb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,8 +1,8 @@
-﻿using ERHMS.EpiInfo.Domain;
+﻿using ERHMS.EpiInfo;
 
 namespace ERHMS.Domain
 {
-    public class PgmLink : TableEntity
+    public class PgmLink : Link<Pgm>
     {
         public override string Guid
         {
@@ -22,15 +22,14 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(PgmId), value); }
         }
 
-        public string IncidentId
-        {
-            get { return GetProperty<string>(nameof(IncidentId)); }
-            set { SetProperty(nameof(IncidentId), value); }
-        }
-
         public PgmLink()
         {
-            LinkProperties(nameof(PgmLinkId), nameof(Guid));
+            AddSynonym(nameof(PgmLinkId), nameof(Guid));
+        }
+
+        public override bool IsEqual(Pgm item)
+        {
+            return PgmId == item.PgmId;
         }
     }
 }

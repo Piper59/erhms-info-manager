@@ -58,7 +58,7 @@
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.EpiInfo.MakeView\ERHMS.EpiInfo.MakeView.csproj">
+    <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.MakeView\ERHMS.EpiInfo.Wrappers.MakeView.csproj">
       <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
       <Name>ERHMS.EpiInfo.MakeView</Name>
     </ProjectReference>
@@ -80,15 +80,24 @@
     <Compile Include="DataContext.cs" />
     <Compile Include="IncidentNoteRepository.cs" />
     <Compile Include="IncidentRepository.cs" />
+    <Compile Include="LinkRepository.cs" />
     <Compile Include="LocationRepository.cs" />
     <Compile Include="PgmLinkRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponderRepository.cs" />
     <Compile Include="RosterRepository.cs" />
+    <Compile Include="SampleDataContext.cs" />
     <Compile Include="ViewLinkRepository.cs" />
     <Compile Include="WebSurveyRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Project.xml" />
+    <EmbeddedResource Include="Resources\Sample\AirQuality.cvs7" />
+    <EmbeddedResource Include="Resources\Sample\SafetyMessages.pgm7" />
+    <EmbeddedResource Include="Resources\Sample\Sample.mdb" />
+    <EmbeddedResource Include="Resources\Sample\Sample.prj" />
+    <EmbeddedResource Include="Resources\Sample\Symptoms.cvs7" />
+    <EmbeddedResource Include="Resources\View.xml" />
     <EmbeddedResource Include="Scripts\Create.sql" />
   </ItemGroup>
   <ItemGroup>

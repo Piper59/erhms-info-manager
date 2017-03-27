@@ -30,7 +30,7 @@ namespace ERHMS.Domain
 
         public WebSurvey()
         {
-            LinkProperties(nameof(WebSurveyId), nameof(Guid));
+            AddSynonym(nameof(WebSurveyId), nameof(Guid));
         }
     }
 }

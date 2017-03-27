@@ -11,18 +11,15 @@ namespace ERHMS.EpiInfo.DataAccess
     {
         public string TableName { get; private set; }
         protected DataTable Schema { get; private set; }
+        protected EntityMapper<TEntity> Mapper { get; private set; }
 
         public TableEntityRepository(IDataDriver driver, string tableName)
             : base(driver)
         {
-            Log.Current.DebugFormat("Opening table repository: {0}", tableName);
+            Log.Logger.DebugFormat("Opening table repository: {0}", tableName);
             TableName = tableName;
             Schema = GetSchema(tableName);
-        }
-
-        public override Type GetDataType(string columnName)
-        {
-            return GetDataType(columnName, Schema);
+            Mapper = new EntityMapper<TEntity>();
         }
 
         public virtual TEntity Create()
@@ -36,24 +33,27 @@ namespace ERHMS.EpiInfo.DataAccess
             return entity;
         }
 
-        public override IEnumerable<TEntity> Select()
+        public virtual IEnumerable<TEntity> Select()
         {
             string sql = string.Format("SELECT * FROM {0}", Driver.Escape(TableName));
-            return Mapper.GetEntities(Driver.ExecuteQuery(sql));
+            return Mapper.Create(Driver.ExecuteQuery(sql));
         }
 
-        public override IEnumerable<TEntity> Select(DataPredicate predicate)
+        protected virtual IEnumerable<TEntity> Select(string predicate, params object[] values)
         {
-            string sql = string.Format("SELECT * FROM {0} WHERE {1}", Driver.Escape(TableName), predicate.Sql);
-            return Mapper.GetEntities(Driver.ExecuteQuery(sql, predicate.Parameters));
+            DataQueryBuilder builder = new DataQueryBuilder(Driver);
+            builder.Sql.AppendFormat("SELECT * FROM {0} WHERE {1}", Driver.Escape(TableName), predicate);
+            foreach (object value in values)
+            {
+                builder.Values.Add(value);
+            }
+            return Mapper.Create(Driver.ExecuteQuery(builder.GetQuery()));
         }
 
         public virtual TEntity SelectByGuid(string guid)
         {
-            DataParameter parameter;
-            string sql = GetConditionalSql(GetKeyColumn(Schema), guid, out parameter);
-            DataPredicate predicate = new DataPredicate(sql, parameter);
-            return Select(predicate).SingleOrDefault();
+            string predicate = string.Format("{0} = {{@}}", Driver.Escape(Schema.PrimaryKey.Single().ColumnName));
+            return Select(predicate, guid).SingleOrDefault();
         }
 
         public virtual void Insert(TEntity entity)
@@ -62,13 +62,13 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 entity.Guid = Guid.NewGuid().ToString();
             }
-            Insert(entity, Schema);
+            Insert(Schema, entity);
             entity.New = false;
         }
 
         public virtual void Update(TEntity entity)
         {
-            Update(entity, Schema);
+            Update(Schema, entity);
         }
 
         public virtual void Save(TEntity entity)
@@ -83,18 +83,21 @@ namespace ERHMS.EpiInfo.DataAccess
             }
         }
 
-        public virtual void Delete(TEntity entity)
+        protected virtual void Delete(string predicate, params object[] values)
         {
-            DataParameter parameter;
-            string predicate = GetConditionalSql(GetKeyColumn(Schema), entity, out parameter);
-            string sql = string.Format("DELETE FROM {0} WHERE {1}", Driver.Escape(TableName), predicate);
-            Driver.ExecuteNonQuery(sql, parameter);
+            DataQueryBuilder builder = new DataQueryBuilder(Driver);
+            builder.Sql.AppendFormat("DELETE FROM {0} WHERE {1}", Driver.Escape(TableName), predicate);
+            foreach (object value in values)
+            {
+                builder.Values.Add(value);
+            }
+            Driver.ExecuteNonQuery(builder.GetQuery());
         }
 
-        public virtual void Delete(DataPredicate predicate)
+        public virtual void Delete(TEntity entity)
         {
-            string sql = string.Format("DELETE FROM {0} WHERE {1}", Driver.Escape(TableName), predicate.Sql);
-            Driver.ExecuteNonQuery(sql, predicate.Parameters);
+            string predicate = string.Format("{0} = {{@}}", Driver.Escape(Schema.PrimaryKey.Single().ColumnName));
+            Delete(predicate, entity.Guid);
         }
     }
 }

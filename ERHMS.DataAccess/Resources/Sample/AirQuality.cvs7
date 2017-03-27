@@ -1,0 +1,126 @@
+﻿<DashboardCanvas>
+  <dashboardHelper>
+    <projectPath>Projects\Sample\Sample.prj</projectPath>
+    <viewName>GreensburgTornado_AirQuality</viewName>
+    <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
+    <advancedDataFilterCondition>
+    </advancedDataFilterCondition>
+    <relatedDataConnections />
+    <dataFilters recordProcessScope="undeleted" />
+    <dashboardRules />
+  </dashboardHelper>
+  <Gadgets>
+    <lineListGadget top="0" left="0" collapsed="False" gadgetType="EpiDashboard.LineListControl" id="c1d458c1-cd08-4c32-a941-9807abf0b573" actualHeight="536">
+      <dataFilters recordProcessScope="undeleted" />
+      <groupVariable>
+      </groupVariable>
+      <groupVariableSecondary>
+      </groupVariableSecondary>
+      <sortColumnsByTabOrder>False</sortColumnsByTabOrder>
+      <usepromptsforcolumnnames>False</usepromptsforcolumnnames>
+      <showListLabels>False</showListLabels>
+      <showLineColumn>True</showLineColumn>
+      <showColumnHeadings>True</showColumnHeadings>
+      <showNullLabels>True</showNullLabels>
+      <customHeading>Line List</customHeading>
+      <customDescription>
+      </customDescription>
+      <maxRows>1000</maxRows>
+      <maxColumnNameLength>24</maxColumnNameLength>
+      <maxWidth>800</maxWidth>
+      <maxHeight>500</maxHeight>
+      <listFields>
+        <listField>AirQualityIndex</listField>
+        <listField>SampleDate</listField>
+      </listFields>
+    </lineListGadget>
+    <LineChartGadget top="536" left="0" collapsed="false" gadgetType="EpiDashboard.Gadgets.Charting.LineChartGadget" id="e5bd27e1-f832-4655-811b-9fbdfd8d5b41" actualHeight="557">
+      <dataFilters recordProcessScope="undeleted" />
+      <mainVariable>SampleDate</mainVariable>
+      <weightVariable>AirQualityIndex</weightVariable>
+      <secondYVarType>0</secondYVarType>
+      <secondYVar>AirQualityIndex</secondYVar>
+      <height>500</height>
+      <width>800</width>
+      <allValues>False</allValues>
+      <showListLabels>False</showListLabels>
+      <sort />
+      <includeMissing>False</includeMissing>
+      <customHeading>Line Chart</customHeading>
+      <customDescription>
+      </customDescription>
+      <customCaption>
+      </customCaption>
+      <useRefValues>True</useRefValues>
+      <showAnnotations>False</showAnnotations>
+      <y2showAnnotations>False</y2showAnnotations>
+      <showGridLines>True</showGridLines>
+      <palette>12</palette>
+      <paletteColor1>#FFDF191E</paletteColor1>
+      <paletteColor2>#FFF56F06</paletteColor2>
+      <paletteColor3>#FFFFCC00</paletteColor3>
+      <paletteColor4>#FFFFF600</paletteColor4>
+      <paletteColor5>#FFA8E319</paletteColor5>
+      <paletteColor6>#FF85BC00</paletteColor6>
+      <paletteColor7>#FF1CF1CE</paletteColor7>
+      <paletteColor8>#FF00BCE3</paletteColor8>
+      <paletteColor9>#FF0077E3</paletteColor9>
+      <paletteColor10>#FF4400E3</paletteColor10>
+      <paletteColor11>#FFA200E3</paletteColor11>
+      <paletteColor12>#FFEE66C4</paletteColor12>
+      <lineType>Auto</lineType>
+      <lineThickness>0</lineThickness>
+      <y2LineType>Auto</y2LineType>
+      <y2LineDashStyle>Solid</y2LineDashStyle>
+      <y2LineThickness>0</y2LineThickness>
+      <yAxisLabel>AQI</yAxisLabel>
+      <yAxisFormatString>
+      </yAxisFormatString>
+      <y2AxisLabel>
+      </y2AxisLabel>
+      <y2AxisLegendTitle>
+      </y2AxisLegendTitle>
+      <y2AxisFormatString>
+      </y2AxisFormatString>
+      <xAxisLabelType>3</xAxisLabelType>
+      <xAxisLabel>Date</xAxisLabel>
+      <xAxisAngle>0</xAxisAngle>
+      <chartTitle>
+      </chartTitle>
+      <chartSubTitle>
+      </chartSubTitle>
+      <showLegend>False</showLegend>
+      <showLegendBorder>False</showLegendBorder>
+      <showLegendVarNames>False</showLegendVarNames>
+      <legendFontSize>12</legendFontSize>
+      <yAxisLabelFontSize>12</yAxisLabelFontSize>
+      <xAxisLabelFontSize>12</xAxisLabelFontSize>
+      <yAxisFontSize>12</yAxisFontSize>
+      <xAxisFontSize>12</xAxisFontSize>
+      <legendDock>1</legendDock>
+    </LineChartGadget>
+  </Gadgets>
+  <OutputSettings>
+    <showCanvasSummaryInfo>True</showCanvasSummaryInfo>
+    <showGadgetHeadings>True</showGadgetHeadings>
+    <showGadgetSettings>True</showGadgetSettings>
+    <useAlternatingColors>False</useAlternatingColors>
+    <defaultChartWidth>800</defaultChartWidth>
+    <defaultChartHeight>500</defaultChartHeight>
+    <tableFontSize>13</tableFontSize>
+    <customHeading>
+    </customHeading>
+    <customSummary>
+    </customSummary>
+    <customConclusion>
+    </customConclusion>
+    <customTableFontFamily>
+    </customTableFontFamily>
+    <canvasHeight>8000</canvasHeight>
+    <sortGadgets>True</sortGadgets>
+  </OutputSettings>
+  <CanvasSettings>
+    <editMode>True</editMode>
+    <layoutMode>free</layoutMode>
+  </CanvasSettings>
+</DashboardCanvas>

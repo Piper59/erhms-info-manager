@@ -1,4 +1,4 @@
-﻿using System;
+﻿using ERHMS.Utility;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 case DataProvider.SqlServer:
                     return SqlServerDriver.Create(project);
                 default:
-                    throw new NotSupportedException();
+                    throw new InvalidEnumValueException(provider);
             }
         }
     }

@@ -290,7 +290,7 @@ namespace ERHMS.Domain
 
         public Responder()
         {
-            LinkProperties(ColumnNames.GLOBAL_RECORD_ID, nameof(ResponderId));
+            AddSynonym(ColumnNames.GLOBAL_RECORD_ID, nameof(ResponderId));
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using ERHMS.EpiInfo.Domain;
+﻿using ERHMS.EpiInfo;
 
 namespace ERHMS.Domain
 {
-    public class CanvasLink : TableEntity
+    public class CanvasLink : Link<Canvas>
     {
         public override string Guid
         {
@@ -22,15 +22,14 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(CanvasId), value); }
         }
 
-        public string IncidentId
-        {
-            get { return GetProperty<string>(nameof(IncidentId)); }
-            set { SetProperty(nameof(IncidentId), value); }
-        }
-
         public CanvasLink()
         {
-            LinkProperties(nameof(CanvasLinkId), nameof(Guid));
+            AddSynonym(nameof(CanvasLinkId), nameof(Guid));
+        }
+
+        public override bool IsEqual(Canvas item)
+        {
+            return CanvasId == item.CanvasId;
         }
     }
 }

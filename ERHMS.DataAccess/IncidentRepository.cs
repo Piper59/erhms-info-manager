@@ -17,11 +17,9 @@ namespace ERHMS.DataAccess
             return incident;
         }
 
-        public IEnumerable<Incident> SelectByDeleted(bool deleted)
+        public IEnumerable<Incident> SelectUndeleted()
         {
-            DataParameter parameter;
-            string sql = GetConditionalSql(Schema.Columns["Deleted"], deleted ? 1 : 0, out parameter);
-            return Select(new DataPredicate(sql, parameter));
+            return Select("[Deleted] = 0");
         }
     }
 }

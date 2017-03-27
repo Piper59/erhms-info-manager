@@ -9,9 +9,9 @@ namespace ERHMS.DataAccess
         public LocationRepository(IDataDriver driver)
             : base(driver, "ERHMS_Locations") { }
 
-        public IEnumerable<Location> SelectByIncident(string incidentId)
+        public IEnumerable<Location> SelectByIncidentId(string incidentId)
         {
-            return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
+            return Select("[IncidentId] = {@}", incidentId);
         }
     }
 }

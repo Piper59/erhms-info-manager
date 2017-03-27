@@ -1,0 +1,6 @@
+﻿READ {Projects\Sample\Sample.prj}:[GreensburgTornado_ICS208]
+DEFINE DateFrom TEXTINPUT
+DEFINE DateTo TEXTINPUT
+ASSIGN DateFrom = FORMAT(OperationalPeriodFrom, "Short Date")
+ASSIGN DateTo = FORMAT(OperationalPeriodTo, "Short Date")
+LIST DateFrom DateTo MessagePlan

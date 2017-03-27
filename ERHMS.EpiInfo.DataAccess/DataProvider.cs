@@ -32,9 +32,9 @@ namespace ERHMS.EpiInfo.DataAccess
             return InvariantNames.Single(pair => pair.Key == @this).Value;
         }
 
-        public static DataProvider FromInvariantName(string invariantName)
+        public static DataProvider FromInvariantName(string value)
         {
-            return InvariantNames.Single(pair => pair.Value == invariantName).Key;
+            return InvariantNames.Single(pair => pair.Value == value).Key;
         }
 
         public static string ToEpiInfoName(this DataProvider @this)
@@ -42,9 +42,9 @@ namespace ERHMS.EpiInfo.DataAccess
             return EpiInfoNames.Single(pair => pair.Key == @this).Value;
         }
 
-        public static DataProvider FromEpiInfoName(string epiInfoName)
+        public static DataProvider FromEpiInfoName(string value)
         {
-            return EpiInfoNames.Single(pair => pair.Value == epiInfoName).Key;
+            return EpiInfoNames.Single(pair => pair.Value == value).Key;
         }
     }
 }

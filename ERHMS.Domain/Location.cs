@@ -54,7 +54,7 @@ namespace ERHMS.Domain
 
         public Location()
         {
-            LinkProperties(nameof(LocationId), nameof(Guid));
+            AddSynonym(nameof(LocationId), nameof(Guid));
         }
     }
 }

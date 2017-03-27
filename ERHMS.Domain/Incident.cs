@@ -61,7 +61,7 @@ namespace ERHMS.Domain
 
         public Incident()
         {
-            LinkProperties(nameof(IncidentId), nameof(Guid));
+            AddSynonym(nameof(IncidentId), nameof(Guid));
         }
     }
 }

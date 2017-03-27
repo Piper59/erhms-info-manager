@@ -280,7 +280,7 @@ namespace ERHMS.Test.EpiInfo
             {
                 Pooling = false
             };
-            ExecuteMaster("CREATE DATABASE {0}", builder.InitialCatalog);
+            ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
             created = true;
             creationInfo = new ProjectCreationInfo
             {
@@ -299,7 +299,7 @@ namespace ERHMS.Test.EpiInfo
         {
             if (created)
             {
-                ExecuteMaster("DROP DATABASE {0}", builder.InitialCatalog);
+                ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
             }
             else
             {
@@ -307,7 +307,7 @@ namespace ERHMS.Test.EpiInfo
             }
         }
 
-        private int ExecuteMaster(string sql, params string[] identifiers)
+        private int ExecuteNonQuery(string sql, params string[] identifiers)
         {
             SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString)
             {

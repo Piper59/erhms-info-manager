@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 
 namespace ERHMS.EpiInfo.DataAccess
@@ -17,14 +16,12 @@ namespace ERHMS.EpiInfo.DataAccess
         void CreateDatabase();
         DataTransaction BeginTransaction();
         DataTable GetSchema(string sql);
-        DataTable ExecuteQuery(DataTransaction transaction, string sql, IEnumerable<DataParameter> parameters);
-        DataTable ExecuteQuery(DataTransaction transaction, string sql, params DataParameter[] parameters);
-        DataTable ExecuteQuery(string sql, IEnumerable<DataParameter> parameters);
-        DataTable ExecuteQuery(string sql, params DataParameter[] parameters);
-        int ExecuteNonQuery(DataTransaction transaction, string sql, IEnumerable<DataParameter> parameters);
-        int ExecuteNonQuery(DataTransaction transaction, string sql, params DataParameter[] parameters);
-        int ExecuteNonQuery(string sql, IEnumerable<DataParameter> parameters);
-        int ExecuteNonQuery(string sql, params DataParameter[] parameters);
-        void ExecuteScript(string sql);
+        T ExecuteScalar<T>(DataQuery query);
+        T ExecuteScalar<T>(string sql);
+        DataTable ExecuteQuery(DataQuery query);
+        DataTable ExecuteQuery(string sql);
+        void ExecuteNonQuery(DataQuery query);
+        void ExecuteNonQuery(string sql);
+        void ExecuteScript(string script);
     }
 }

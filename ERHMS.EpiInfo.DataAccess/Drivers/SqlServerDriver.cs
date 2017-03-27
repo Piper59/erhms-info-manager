@@ -45,7 +45,7 @@ namespace ERHMS.EpiInfo.DataAccess
             return string.Format("@p{0}", index);
         }
 
-        private SqlConnection GetMasterConnection()
+        private SqlConnection OpenMasterConnection()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Builder.ConnectionString)
             {
@@ -59,7 +59,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public override bool DatabaseExists()
         {
             string sql = "SELECT 1 FROM [sys].[databases] WHERE [name] = @name";
-            using (SqlConnection connection = GetMasterConnection())
+            using (SqlConnection connection = OpenMasterConnection())
             using (SqlCommand command = new SqlCommand(sql, connection))
             {
                 command.Parameters.AddWithValue("@name", Builder.InitialCatalog);
@@ -70,7 +70,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public override void CreateDatabase()
         {
             string sql = string.Format("CREATE DATABASE {0}", Escape(Builder.InitialCatalog));
-            using (SqlConnection connection = GetMasterConnection())
+            using (SqlConnection connection = OpenMasterConnection())
             using (SqlCommand command = new SqlCommand(sql, connection))
             {
                 command.ExecuteNonQuery();

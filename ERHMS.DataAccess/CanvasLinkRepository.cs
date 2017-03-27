@@ -1,24 +1,23 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
-    public class CanvasLinkRepository : TableEntityRepository<CanvasLink>
+    public class CanvasLinkRepository : LinkRepository<CanvasLink, Canvas>
     {
-        public CanvasLinkRepository(IDataDriver driver)
-            : base(driver, "ERHMS_CanvasLinks") { }
+        public CanvasLinkRepository(IDataDriver driver, DataContext dataContext)
+            : base(driver, "ERHMS_CanvasLinks", dataContext) { }
 
-        public IEnumerable<CanvasLink> SelectByIncident(string incidentId)
+        protected override IEnumerable<Canvas> GetItems()
         {
-            return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
+            return DataContext.GetCanvases();
         }
 
         public void DeleteByCanvasId(int canvasId)
         {
-            DataParameterCollection parameters = new DataParameterCollection(Driver);
-            parameters.AddByValue(canvasId);
-            Delete(parameters.ToPredicate("CanvasId = {0}"));
+            Delete("[CanvasId] = {@}", canvasId);
         }
     }
 }

@@ -9,9 +9,9 @@ namespace ERHMS.DataAccess
         public IncidentNoteRepository(IDataDriver driver)
             : base(driver, "ERHMS_IncidentNotes") { }
 
-        public IEnumerable<IncidentNote> SelectByIncident(string incidentId)
+        public IEnumerable<IncidentNote> SelectByIncidentId(string incidentId)
         {
-            return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
+            return Select("[IncidentId] = {@}", incidentId);
         }
     }
 }

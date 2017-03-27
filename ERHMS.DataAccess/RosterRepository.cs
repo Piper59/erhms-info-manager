@@ -9,9 +9,9 @@ namespace ERHMS.DataAccess
         public RosterRepository(IDataDriver driver)
             : base(driver, "ERHMS_Rosters") { }
 
-        public IEnumerable<Roster> SelectByIncident(string incidentId)
+        public IEnumerable<Roster> SelectByIncidentId(string incidentId)
         {
-            return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
+            return Select("[IncidentId] = {@}", incidentId);
         }
     }
 }

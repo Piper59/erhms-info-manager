@@ -30,7 +30,7 @@ namespace ERHMS.Domain
 
         public Roster()
         {
-            LinkProperties(nameof(RosterId), nameof(Guid));
+            AddSynonym(nameof(RosterId), nameof(Guid));
         }
     }
 }

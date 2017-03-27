@@ -1,24 +1,23 @@
-﻿using ERHMS.Domain;
+﻿using Epi;
+using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
-    public class ViewLinkRepository : TableEntityRepository<ViewLink>
+    public class ViewLinkRepository : LinkRepository<ViewLink, View>
     {
-        public ViewLinkRepository(IDataDriver driver)
-            : base(driver, "ERHMS_ViewLinks") { }
+        public ViewLinkRepository(IDataDriver driver, DataContext dataContext)
+            : base(driver, "ERHMS_ViewLinks", dataContext) { }
 
-        public IEnumerable<ViewLink> SelectByIncident(string incidentId)
+        protected override IEnumerable<View> GetItems()
         {
-            return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
+            return DataContext.GetViews();
         }
 
         public void DeleteByViewId(int viewId)
         {
-            DataParameterCollection parameters = new DataParameterCollection(Driver);
-            parameters.AddByValue(viewId);
-            Delete(parameters.ToPredicate("ViewId = {0}"));
+            Delete("[ViewId] = {@}", viewId);
         }
     }
 }

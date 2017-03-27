@@ -16,6 +16,7 @@ namespace ERHMS.EpiInfo.DataAccess
         protected DataTable BaseSchema { get; private set; }
         protected DataTable UpdatableBaseSchema { get; private set; }
         protected DataSet PageSchemas { get; private set; }
+        protected ViewEntityMapper<TEntity> Mapper { get; private set; }
 
         protected string BaseTableName
         {
@@ -35,7 +36,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public ViewEntityRepository(IDataDriver driver, View view)
             : base(driver)
         {
-            Log.Current.DebugFormat("Opening view repository: {0}", view.Name);
+            Log.Logger.DebugFormat("Opening view repository: {0}", view.Name);
             View = view;
             BaseSchema = GetSchema(view.TableName);
             UpdatableBaseSchema = BaseSchema.Clone();
@@ -45,39 +46,16 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 PageSchemas.Tables.Add(GetSchema(page.TableName));
             }
+            Mapper = new ViewEntityMapper<TEntity>();
         }
 
-        protected string GetJoinSql()
-        {
-            StringBuilder sql = new StringBuilder();
-            sql.Append(Driver.Escape(BaseTableName));
-            foreach (string pageTableName in PageTableNames)
-            {
-                sql.Insert(0, "(");
-                sql.Append(string.Format(
-                    " INNER JOIN {1} ON {0}.{2} = {1}.{2})",
-                    Driver.Escape(BaseTableName),
-                    Driver.Escape(pageTableName),
-                    Driver.Escape(ColumnNames.GLOBAL_RECORD_ID)));
-            }
-            return sql.ToString();
-        }
-
-        protected DataPredicate GetDeletedPredicate(bool deleted)
-        {
-            DataParameter parameter;
-            string sql = GetConditionalSql(BaseSchema.Columns[ColumnNames.REC_STATUS], (short)0, out parameter, deleted ? "=" : ">");
-            return new DataPredicate(sql, parameter);
-        }
-
-        public override Type GetDataType(string columnName)
+        public Type GetDataType(string columnName)
         {
             foreach (DataTable pageSchema in PageSchemas.Tables)
             {
-                Type dataType = GetDataType(columnName, pageSchema);
-                if (dataType != null)
+                if (pageSchema.Columns.Contains(columnName))
                 {
-                    return dataType;
+                    return pageSchema.Columns[columnName].DataType;
                 }
             }
             return null;
@@ -101,65 +79,67 @@ namespace ERHMS.EpiInfo.DataAccess
             return entity;
         }
 
-        public override IEnumerable<TEntity> Select()
+        public virtual IEnumerable<TEntity> Select()
         {
             ICollection<TEntity> entities;
             {
                 string sql = string.Format("SELECT * FROM {0}", Driver.Escape(BaseTableName));
-                entities = Mapper.GetEntities(Driver.ExecuteQuery(sql)).ToList();
+                entities = Mapper.Create(Driver.ExecuteQuery(sql)).ToList();
             }
             foreach (string pageTableName in PageTableNames)
             {
                 string sql = string.Format("SELECT * FROM {0}", Driver.Escape(pageTableName));
-                DataTable data = Driver.ExecuteQuery(sql);
-                Mapper.SetEntities(data, data.Columns[ColumnNames.GLOBAL_RECORD_ID], entities, StringComparison.OrdinalIgnoreCase);
+                Mapper.Update(Driver.ExecuteQuery(sql), entities);
             }
             return entities;
         }
 
-        public override IEnumerable<TEntity> Select(DataPredicate predicate)
+        protected virtual IEnumerable<TEntity> Select(string predicate, params object[] values)
         {
-            ICollection<TEntity> entities;
-            string sqlFormat = string.Format("SELECT {{0}}.* FROM {0} WHERE {{1}}", GetJoinSql());
+            StringBuilder source = new StringBuilder();
+            source.Append(Driver.Escape(BaseTableName));
+            foreach (string pageTableName in PageTableNames)
             {
-                string sql = string.Format(sqlFormat, Driver.Escape(BaseTableName), predicate.Sql);
-                entities = Mapper.GetEntities(Driver.ExecuteQuery(sql, predicate.Parameters)).ToList();
+                source.Insert(0, "(");
+                source.AppendFormat(
+                    " INNER JOIN {1} ON {0}.{2} = {1}.{2})",
+                    Driver.Escape(BaseTableName),
+                    Driver.Escape(pageTableName),
+                    Driver.Escape(ColumnNames.GLOBAL_RECORD_ID));
+            }
+            ICollection<TEntity> entities;
+            {
+                DataQueryBuilder builder = new DataQueryBuilder(Driver);
+                builder.Sql.AppendFormat("SELECT {0}.* FROM {1} WHERE {2}", Driver.Escape(BaseTableName), source, predicate);
+                foreach (object value in values)
+                {
+                    builder.Values.Add(value);
+                }
+                entities = Mapper.Create(Driver.ExecuteQuery(builder.GetQuery())).ToList();
             }
             foreach (string pageTableName in PageTableNames)
             {
-                string sql = string.Format(sqlFormat, Driver.Escape(pageTableName), predicate.Sql);
-                DataTable data = Driver.ExecuteQuery(sql, predicate.Parameters);
-                Mapper.SetEntities(data, data.Columns[ColumnNames.GLOBAL_RECORD_ID], entities, StringComparison.OrdinalIgnoreCase);
+                DataQueryBuilder builder = new DataQueryBuilder(Driver);
+                builder.Sql.AppendFormat("SELECT {0}.* FROM {1} WHERE {2}", Driver.Escape(pageTableName), source, predicate);
+                foreach (object value in values)
+                {
+                    builder.Values.Add(value);
+                }
+                Mapper.Update(Driver.ExecuteQuery(builder.GetQuery()), entities);
             }
             return entities;
         }
 
-        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted)
+        public virtual IEnumerable<TEntity> SelectUndeleted()
         {
-            return Select(GetDeletedPredicate(deleted));
-        }
-
-        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted, DataPredicate predicate)
-        {
-            return Select(GetDeletedPredicate(deleted), predicate);
-        }
-
-        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted, IEnumerable<DataPredicate> predicates)
-        {
-            return Select(predicates.Prepend(GetDeletedPredicate(deleted)));
-        }
-
-        public virtual IEnumerable<TEntity> SelectByDeleted(bool deleted, params DataPredicate[] predicates)
-        {
-            return Select(predicates.Prepend(GetDeletedPredicate(deleted)));
+            string predicate = string.Format("{0}.{1} <> {2}", Driver.Escape(BaseTableName), ColumnNames.REC_STATUS, RecordStatus.Deleted);
+            return Select(predicate);
         }
 
         public virtual TEntity SelectByGlobalRecordId(string globalRecordId)
         {
-            DataParameter parameter;
-            string sql = GetConditionalSql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], globalRecordId, out parameter);
-            DataPredicate predicate = new DataPredicate(sql, parameter);
-            return Select(predicate).SingleOrDefault();
+            string predicate = string.Format("{0}.{1} = {{@}}", Driver.Escape(BaseTableName), ColumnNames.GLOBAL_RECORD_ID);
+            return Select(predicate, globalRecordId).SingleOrDefault();
         }
 
         public virtual void Insert(TEntity entity, IIdentity user = null)
@@ -170,27 +150,26 @@ namespace ERHMS.EpiInfo.DataAccess
             }
             if (!entity.RecordStatus.HasValue)
             {
-                entity.SetDeleted(false);
+                entity.Deleted = false;
             }
             entity.SetAuditProperties(true, true, user);
             using (DataTransaction transaction = Driver.BeginTransaction())
             {
-                Insert(entity, BaseSchema, transaction);
+                Insert(BaseSchema, entity, transaction);
                 foreach (DataTable pageSchema in PageSchemas.Tables)
                 {
-                    Insert(entity, pageSchema, transaction);
+                    Insert(pageSchema, entity, transaction);
                 }
                 transaction.Commit();
             }
-            DataParameter parameter;
-            string sql = string.Format(
-                "SELECT {0} FROM {1} WHERE {2}",
+            DataQueryBuilder builder = new DataQueryBuilder(Driver);
+            builder.Sql.AppendFormat(
+                "SELECT {0} FROM {1} WHERE {2} = {{@}}",
                 Driver.Escape(ColumnNames.UNIQUE_KEY),
                 Driver.Escape(BaseTableName),
-                GetConditionalSql(BaseSchema.Columns[ColumnNames.GLOBAL_RECORD_ID], entity, out parameter));
-            entity.UniqueKey = Driver.ExecuteQuery(sql, parameter).AsEnumerable()
-                .Single()
-                .Field<int>(ColumnNames.UNIQUE_KEY);
+                Driver.Escape(ColumnNames.GLOBAL_RECORD_ID));
+            builder.Values.Add(entity.GlobalRecordId);
+            entity.UniqueKey = Driver.ExecuteScalar<int>(builder.GetQuery());
             entity.New = false;
         }
 
@@ -199,10 +178,10 @@ namespace ERHMS.EpiInfo.DataAccess
             entity.SetAuditProperties(false, true, user);
             using (DataTransaction transaction = Driver.BeginTransaction())
             {
-                Update(entity, UpdatableBaseSchema, transaction);
+                Update(UpdatableBaseSchema, entity, transaction);
                 foreach (DataTable pageSchema in PageSchemas.Tables)
                 {
-                    Update(entity, pageSchema, transaction);
+                    Update(pageSchema, entity, transaction);
                 }
                 transaction.Commit();
             }
@@ -222,13 +201,13 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public virtual void Delete(TEntity entity, IIdentity user = null)
         {
-            entity.SetDeleted(true);
+            entity.Deleted = true;
             Save(entity, user);
         }
 
         public virtual void Undelete(TEntity entity, IIdentity user = null)
         {
-            entity.SetDeleted(false);
+            entity.Deleted = false;
             Save(entity, user);
         }
     }

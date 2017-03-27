@@ -1,6 +1,5 @@
 ﻿using ERHMS.Utility;
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
 
 namespace ERHMS.EpiInfo.DataAccess
@@ -16,7 +15,7 @@ namespace ERHMS.EpiInfo.DataAccess
             Value = value;
         }
 
-        public object GetDbValue()
+        private object GetDatabaseValue()
         {
             if (Value == null)
             {
@@ -36,20 +35,9 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             DbParameter parameter = command.CreateParameter();
             parameter.ParameterName = Name;
-            parameter.Value = GetDbValue();
+            parameter.Value = GetDatabaseValue();
             command.Parameters.Add(parameter);
             return parameter;
-        }
-    }
-
-    public static class DataParameterExtensions
-    {
-        public static void AddToCommand(this IEnumerable<DataParameter> @this, DbCommand command)
-        {
-            foreach (DataParameter parameter in @this)
-            {
-                parameter.AddToCommand(command);
-            }
         }
     }
 }

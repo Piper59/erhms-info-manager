@@ -1,24 +1,23 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
-    public class PgmLinkRepository : TableEntityRepository<PgmLink>
+    public class PgmLinkRepository : LinkRepository<PgmLink, Pgm>
     {
-        public PgmLinkRepository(IDataDriver driver)
-            : base(driver, "ERHMS_PgmLinks") { }
+        public PgmLinkRepository(IDataDriver driver, DataContext dataContext)
+            : base(driver, "ERHMS_PgmLinks", dataContext) { }
 
-        public IEnumerable<PgmLink> SelectByIncident(string incidentId)
+        protected override IEnumerable<Pgm> GetItems()
         {
-            return Select(DataContext.GetIncidentPredicate(Driver, incidentId));
+            return DataContext.GetPgms();
         }
 
         public void DeleteByPgmId(int pgmId)
         {
-            DataParameterCollection parameters = new DataParameterCollection(Driver);
-            parameters.AddByValue(pgmId);
-            Delete(parameters.ToPredicate("PgmId = {0}"));
+            Delete("[PgmId] = {@}", pgmId);
         }
     }
 }

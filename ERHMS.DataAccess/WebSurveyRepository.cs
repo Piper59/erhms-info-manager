@@ -10,9 +10,7 @@ namespace ERHMS.DataAccess
 
         public void DeleteByViewId(int viewId)
         {
-            DataParameterCollection parameters = new DataParameterCollection(Driver);
-            parameters.AddByValue(viewId);
-            Delete(parameters.ToPredicate("ViewId = {0}"));
+            Delete("[ViewId] = {@}", viewId);
         }
     }
 }

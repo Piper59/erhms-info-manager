@@ -38,17 +38,9 @@ namespace ERHMS.Test
             return path;
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                DeleteIfExists();
-            }
-        }
-
         public void Dispose()
         {
-            Dispose(true);
+            DeleteIfExists();
         }
     }
 }
