@@ -27,11 +27,11 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding Name}" />
+                <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Name" Text="{Binding Name}" />
                 <Label Grid.Row="1" Grid.Column="0">Description</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource MultiLineTextBox}" Text="{Binding Description}" />
+                <TextBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Description" Style="{StaticResource MultiLineTextBox}" Text="{Binding Description}" />
                 <Label Grid.Row="2" Grid.Column="0">Phase</Label>
-                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding DataContext.Phases, ElementName=Root}" SelectedItem="{Binding Phase}">
+                <ComboBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="Phase" ItemsSource="{Binding DataContext.Phases, ElementName=Root}" SelectedItem="{Binding Phase}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource PhaseToDescriptionConverter}}" />
@@ -39,11 +39,11 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Label Grid.Row="3" Grid.Column="0">Start Date</Label>
-                <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
+                <DatePicker Grid.Row="3" Grid.Column="1" AutomationProperties.Name="Start Date" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
                 <Label Grid.Row="4" Grid.Column="0">End Date (Estimate)</Label>
-                <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding EndDateEstimate, Mode=TwoWay}" />
+                <DatePicker Grid.Row="4" Grid.Column="1" AutomationProperties.Name="End Date (Estimate)" SelectedDate="{Binding EndDateEstimate, Mode=TwoWay}" />
                 <Label Grid.Row="5" Grid.Column="0">End Date (Actual)</Label>
-                <DatePicker Grid.Row="5" Grid.Column="1" SelectedDate="{Binding EndDateActual, Mode=TwoWay}" />
+                <DatePicker Grid.Row="5" Grid.Column="1" AutomationProperties.Name="End Date (Actual)" SelectedDate="{Binding EndDateActual, Mode=TwoWay}" />
             </ctrl:FormGrid>
         </ScrollViewer>
     </DockPanel>

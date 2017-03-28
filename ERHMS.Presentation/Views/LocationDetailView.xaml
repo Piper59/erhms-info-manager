@@ -22,18 +22,18 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0">Name</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" Text="{Binding Name}" />
+            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Name" Text="{Binding Name}" />
             <Label Grid.Row="1" Grid.Column="0">Description</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource MultiLineTextBox}" Text="{Binding Description}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" AutomationProperties.Name="Description" Style="{StaticResource MultiLineTextBox}" Text="{Binding Description}" />
             <Label Grid.Row="2" Grid.Column="0">Address</Label>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="Address" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Row="2" Grid.Column="2" Content="Locate"
                     Style="{StaticResource AccentButton}"
                     Command="{Binding DataContext.LocateCommand, ElementName=Root}" />
             <Label Grid.Row="3" Grid.Column="0">Latitude</Label>
-            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Latitude, TargetNullValue=''}" />
+            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" AutomationProperties.Name="Latitude" Text="{Binding Latitude, TargetNullValue=''}" />
             <Label Grid.Row="4" Grid.Column="0">Longitude</Label>
-            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Longitude, TargetNullValue=''}" />
+            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" AutomationProperties.Name="Longitude" Text="{Binding Longitude, TargetNullValue=''}" />
         </ctrl:FormGrid>
         <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">_Save</ctrl:AppBarButton>

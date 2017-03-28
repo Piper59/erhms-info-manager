@@ -28,21 +28,21 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Prefix</Label>
-                                <ComboBox Grid.Row="0" Grid.Column="1"
+                                <ComboBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Prefix"
                                           ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
                                           SelectedItem="{Binding Prefix, TargetNullValue=''}" />
                                 <Label Grid.Row="1" Grid.Column="0">First Name</Label>
-                                <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding FirstName}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="First Name" Text="{Binding FirstName}" />
                                 <Label Grid.Row="2" Grid.Column="0">Middle Initial</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MiddleInitial}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="Middle Initial" Text="{Binding MiddleInitial}" />
                                 <Label Grid.Row="3" Grid.Column="0">Last Name</Label>
-                                <TextBox Grid.Row="3" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding LastName}" />
+                                <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="Last Name" mah:TextBoxHelper.Watermark="Required" Text="{Binding LastName}" />
                                 <Label Grid.Row="4" Grid.Column="0">Suffix</Label>
-                                <ComboBox Grid.Row="4" Grid.Column="1"
+                                <ComboBox Grid.Row="4" Grid.Column="1" AutomationProperties.Name="Suffix"
                                           ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
                                           SelectedItem="{Binding Suffix, TargetNullValue=''}" />
                                 <Label Grid.Row="5" Grid.Column="0">Alias</Label>
-                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Alias}" />
+                                <TextBox Grid.Row="5" Grid.Column="1" AutomationProperties.Name="Alias" Text="{Binding Alias}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                         <GroupBox Header="Personal">
@@ -56,19 +56,19 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Birth Date</Label>
-                                <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
+                                <DatePicker Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Birth Date" SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
                                 <Label Grid.Row="1" Grid.Column="0">Gender</Label>
-                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                <ComboBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Gender"
                                           ItemsSource="{Binding DataContext.Genders, ElementName=Root}"
                                           SelectedItem="{Binding Gender, TargetNullValue=''}" />
                                 <Label Grid.Row="2" Grid.Column="0">Height (Feet)</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HeightFeet, TargetNullValue=''}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="Height (Feet)" Text="{Binding HeightFeet, TargetNullValue=''}" />
                                 <Label Grid.Row="3" Grid.Column="0">Height (Inches)</Label>
-                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding HeightInches, TargetNullValue=''}" />
+                                <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="Height (Inches)" Text="{Binding HeightInches, TargetNullValue=''}" />
                                 <Label Grid.Row="4" Grid.Column="0">Weight (Pounds)</Label>
-                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding WeightPounds, TargetNullValue=''}" />
+                                <TextBox Grid.Row="4" Grid.Column="1" AutomationProperties.Name="Weight (Pounds)" Text="{Binding WeightPounds, TargetNullValue=''}" />
                                 <Label Grid.Row="5" Grid.Column="0">Passport Number</Label>
-                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding PassportNumber}" />
+                                <TextBox Grid.Row="5" Grid.Column="1" AutomationProperties.Name="Passport Number" Text="{Binding PassportNumber}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                         <GroupBox Header="Contact">
@@ -83,20 +83,20 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Address</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressLine1}" />
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AddressLine2}" />
+                                <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Address (Line 1)" Text="{Binding AddressLine1}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Address (Line 2)" Text="{Binding AddressLine2}" />
                                 <Label Grid.Row="2" Grid.Column="0">City</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding City}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="City" Text="{Binding City}" />
                                 <Label Grid.Row="3" Grid.Column="0">State</Label>
-                                <ComboBox Grid.Row="3" Grid.Column="1"
+                                <ComboBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="State"
                                           ItemsSource="{Binding DataContext.States, ElementName=Root}"
                                           SelectedItem="{Binding State, TargetNullValue=''}" />
                                 <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
-                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ZipCode}" />
+                                <TextBox Grid.Row="4" Grid.Column="1" AutomationProperties.Name="ZIP Code" Text="{Binding ZipCode}" />
                                 <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
-                                <TextBox Grid.Row="5" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding EmailAddress}" />
+                                <TextBox Grid.Row="5" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Email Address" Text="{Binding EmailAddress}" />
                                 <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
-                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding PhoneNumber}" />
+                                <TextBox Grid.Row="6" Grid.Column="1" AutomationProperties.Name="Phone Number" Text="{Binding PhoneNumber}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                     </StackPanel>
@@ -117,23 +117,23 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Relationship</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactRelationship}" />
+                                <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Relationship" Text="{Binding ContactRelationship}" />
                                 <Label Grid.Row="1" Grid.Column="0">Prefix</Label>
-                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                <ComboBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Prefix"
                                           ItemsSource="{Binding DataContext.Prefixes, ElementName=Root}"
                                           SelectedItem="{Binding ContactPrefix, TargetNullValue=''}" />
                                 <Label Grid.Row="2" Grid.Column="0">First Name</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactFirstName}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="First Name" Text="{Binding ContactFirstName}" />
                                 <Label Grid.Row="3" Grid.Column="0">Middle Initial</Label>
-                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ContactMiddleInitial}" />
+                                <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="Middle Initial" Text="{Binding ContactMiddleInitial}" />
                                 <Label Grid.Row="4" Grid.Column="0">Last Name</Label>
-                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactLastName}" />
+                                <TextBox Grid.Row="4" Grid.Column="1" AutomationProperties.Name="Last Name" Text="{Binding ContactLastName}" />
                                 <Label Grid.Row="5" Grid.Column="0">Suffix</Label>
-                                <ComboBox Grid.Row="5" Grid.Column="1"
+                                <ComboBox Grid.Row="5" Grid.Column="1" AutomationProperties.Name="Suffix"
                                           ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
                                           SelectedItem="{Binding ContactSuffix, TargetNullValue=''}" />
                                 <Label Grid.Row="6" Grid.Column="0">Alias</Label>
-                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactAlias}" />
+                                <TextBox Grid.Row="6" Grid.Column="1" AutomationProperties.Name="Alias" Text="{Binding ContactAlias}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                         <GroupBox Header="Contact">
@@ -148,20 +148,20 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Address</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ContactAddressLine1}" />
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ContactAddressLine2}" />
+                                <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Address (Line 1)" Text="{Binding ContactAddressLine1}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Address (Line 2)" Text="{Binding ContactAddressLine2}" />
                                 <Label Grid.Row="2" Grid.Column="0">City</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ContactCity}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="City" Text="{Binding ContactCity}" />
                                 <Label Grid.Row="3" Grid.Column="0">State</Label>
-                                <ComboBox Grid.Row="3" Grid.Column="1"
+                                <ComboBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="State"
                                           ItemsSource="{Binding DataContext.States, ElementName=Root}"
                                           SelectedItem="{Binding ContactState, TargetNullValue=''}" />
                                 <Label Grid.Row="4" Grid.Column="0">ZIP Code</Label>
-                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ContactZipCode}" />
+                                <TextBox Grid.Row="4" Grid.Column="1" AutomationProperties.Name="ZIP Code" Text="{Binding ContactZipCode}" />
                                 <Label Grid.Row="5" Grid.Column="0">Email Address</Label>
-                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ContactEmailAddress}" />
+                                <TextBox Grid.Row="5" Grid.Column="1" AutomationProperties.Name="Email Address" Text="{Binding ContactEmailAddress}" />
                                 <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
-                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ContactPhoneNumber}" />
+                                <TextBox Grid.Row="6" Grid.Column="1" AutomationProperties.Name="Phone Number" Text="{Binding ContactPhoneNumber}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                     </StackPanel>
@@ -177,9 +177,9 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Occupation</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Occupation}" />
+                                <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Occupation" Text="{Binding Occupation}" />
                                 <Label Grid.Row="1" Grid.Column="0">Volunteer</Label>
-                                <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsVolunteer}" />
+                                <CheckBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Volunteer" IsChecked="{Binding IsVolunteer}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                         <GroupBox Header="Contact">
@@ -196,24 +196,24 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Organization Name</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding OrganizationName}" />
+                                <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Organization Name" Text="{Binding OrganizationName}" />
                                 <Label Grid.Row="1" Grid.Column="0">Contact Person Name</Label>
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OrganizationContactName}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Contact Person Name" Text="{Binding OrganizationContactName}" />
                                 <Label Grid.Row="2" Grid.Column="0">Address</Label>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding OrganizationAddressLine1}" />
-                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationAddressLine2}" />
+                                <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="Address (Line 1)" Text="{Binding OrganizationAddressLine1}" />
+                                <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="Address (Line 2)" Text="{Binding OrganizationAddressLine2}" />
                                 <Label Grid.Row="4" Grid.Column="0">City</Label>
-                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationCity}" />
+                                <TextBox Grid.Row="4" Grid.Column="1" AutomationProperties.Name="City" Text="{Binding OrganizationCity}" />
                                 <Label Grid.Row="5" Grid.Column="0">State</Label>
-                                <ComboBox Grid.Row="5" Grid.Column="1"
+                                <ComboBox Grid.Row="5" Grid.Column="1" AutomationProperties.Name="State"
                                           ItemsSource="{Binding DataContext.States, ElementName=Root}"
                                           SelectedItem="{Binding OrganizationState, TargetNullValue=''}" />
                                 <Label Grid.Row="6" Grid.Column="0">ZIP Code</Label>
-                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding OrganizationZipCode}" />
+                                <TextBox Grid.Row="6" Grid.Column="1" AutomationProperties.Name="ZIP Code" Text="{Binding OrganizationZipCode}" />
                                 <Label Grid.Row="7" Grid.Column="0">Email Address</Label>
-                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding OrganizationEmailAddress}" />
+                                <TextBox Grid.Row="7" Grid.Column="1" AutomationProperties.Name="Email Address" Text="{Binding OrganizationEmailAddress}" />
                                 <Label Grid.Row="8" Grid.Column="0">Phone Number</Label>
-                                <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding OrganizationPhoneNumber}" />
+                                <TextBox Grid.Row="8" Grid.Column="1" AutomationProperties.Name="Phone Number" Text="{Binding OrganizationPhoneNumber}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                         <GroupBox Header="Union">
@@ -223,9 +223,9 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0">Union Name</Label>
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding UnionName}" />
+                                <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Union Name" Text="{Binding UnionName}" />
                                 <Label Grid.Row="1" Grid.Column="0">Local Number</Label>
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding UnionLocalNumber}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Local Number" Text="{Binding UnionLocalNumber}" />
                             </ctrl:FormGrid>
                         </GroupBox>
                     </StackPanel>

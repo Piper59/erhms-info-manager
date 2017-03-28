@@ -16,7 +16,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=Text}">_Quick Filter</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Name="Text" mah:TextBoxHelper.ClearTextButton="True"
+        <TextBox Grid.Row="0" Grid.Column="1" Name="Text" mah:TextBoxHelper.ClearTextButton="True" AutomationProperties.Name="Quick Filter"
                  Text="{Binding Value, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

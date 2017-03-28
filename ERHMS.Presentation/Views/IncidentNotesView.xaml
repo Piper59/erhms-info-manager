@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignWidth="640" d:DesignHeight="480">
     <DockPanel>
-        <TextBox DockPanel.Dock="Top" Style="{StaticResource MultiLineTextBox}" Text="{Binding Note.Content, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox DockPanel.Dock="Top" AutomationProperties.Name="Note" Style="{StaticResource MultiLineTextBox}" Text="{Binding Note.Content, UpdateSourceTrigger=PropertyChanged}" />
         <WrapPanel DockPanel.Dock="Top" Style="{StaticResource AppBar}">
             <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">_Save</ctrl:AppBarButton>
         </WrapPanel>

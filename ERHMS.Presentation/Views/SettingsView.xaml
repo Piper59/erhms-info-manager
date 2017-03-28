@@ -27,11 +27,11 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Logging Level</Label>
-                        <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                        <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" AutomationProperties.Name="Logging Level"
                                   ItemsSource="{Binding LogLevels}"
                                   SelectedItem="{Binding LogLevel}" />
                         <Label Grid.Row="1" Grid.Column="0">Root Directory</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Text="{Binding RootDirectory}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" AutomationProperties.Name="Root Directory" Text="{Binding RootDirectory}" />
                         <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource AccentButton}" Command="{Binding BrowseCommand}">Browse</Button>
                     </ctrl:FormGrid>
                 </GroupBox>
@@ -43,11 +43,11 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">SMTP Host</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Host}" />
+                        <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="SMTP Host" Text="{Binding Host}" />
                         <Label Grid.Row="1" Grid.Column="0">SMTP Port</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Port, TargetNullValue=''}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="SMTP Port" Text="{Binding Port, TargetNullValue=''}" />
                         <Label Grid.Row="2" Grid.Column="0">Sender Address</Label>
-                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Sender}" />
+                        <TextBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="Sender Address" Text="{Binding Sender}" />
                     </ctrl:FormGrid>
                 </GroupBox>
                 <GroupBox Header="Mapping">
@@ -56,7 +56,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">License Key</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MapLicenseKey}" />
+                        <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="License Key" Text="{Binding MapLicenseKey}" />
                     </ctrl:FormGrid>
                 </GroupBox>
                 <GroupBox Header="Web Survey" DataContext="{Binding WebSurvey}">
@@ -69,11 +69,11 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Endpoint Address</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Address}" />
+                        <TextBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Endpoint Address" Text="{Binding Address}" />
                         <Label Grid.Row="1" Grid.Column="0">Windows Authentication</Label>
-                        <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding WindowsAuthentication}" />
+                        <CheckBox Grid.Row="1" Grid.Column="1" AutomationProperties.Name="Windows Authentication" IsChecked="{Binding WindowsAuthentication}" />
                         <Label Grid.Row="2" Grid.Column="0">Binding Protocol</Label>
-                        <ComboBox Grid.Row="2" Grid.Column="1"
+                        <ComboBox Grid.Row="2" Grid.Column="1" AutomationProperties.Name="Binding Protocol"
                                   ItemsSource="{Binding Bindings}"
                                   SelectedItem="{Binding Binding}"
                                   IsEnabled="{Binding WindowsAuthentication, Converter={StaticResource BoolInverter}}">
@@ -84,9 +84,9 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                         <Label Grid.Row="3" Grid.Column="0">Organization Name</Label>
-                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationName}" />
+                        <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="Organization Name" Text="{Binding OrganizationName}" />
                         <Label Grid.Row="4" Grid.Column="0">Organization Key</Label>
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationKey, TargetNullValue=''}" />
+                        <TextBox Grid.Row="4" Grid.Column="1" AutomationProperties.Name="Organization Key" Text="{Binding OrganizationKey, TargetNullValue=''}" />
                     </ctrl:FormGrid>
                 </GroupBox>
             </StackPanel>

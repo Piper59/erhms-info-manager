@@ -60,16 +60,16 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" Text="{Binding Name}" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Name" Text="{Binding Name}" />
                         <Label Grid.Row="1" Grid.Column="0">Description</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" AutomationProperties.Name="Description"
                                  Style="{StaticResource MultiLineTextBox}"
                                  Text="{Binding Description}" />
                         <Label Grid.Row="2" Grid.Column="0">Location</Label>
-                        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" Text="{Binding Location.FullName, Mode=OneWay}" />
+                        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" AutomationProperties.Name="Location" Text="{Binding Location.FullName, Mode=OneWay}" />
                         <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource AccentButton}" Command="{Binding BrowseCommand}">Browse</Button>
                         <Label Grid.Row="3" Grid.Column="0">Database Type</Label>
-                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" AutomationProperties.Name="Database Type"
                                   ItemsSource="{Binding DataContext.Providers, ElementName=Root}"
                                   SelectedItem="{Binding Provider}">
                             <ComboBox.ItemTemplate>
@@ -90,17 +90,17 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">Server Name</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding DataSource}" />
+                            <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Server Name" Text="{Binding DataSource}" />
                             <Label Grid.Row="1" Grid.Column="0">Database Name</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding InitialCatalog}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Database Name" Text="{Binding InitialCatalog}" />
                             <Label Grid.Row="2" Grid.Column="0">Windows Authentication</Label>
-                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IntegratedSecurity}" />
+                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IntegratedSecurity}" AutomationProperties.Name="Windows Authentication" />
                             <Label Grid.Row="3" Grid.Column="0">User Name</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1"
+                            <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.Name="User Name"
                                      Text="{Binding UserId, TargetNullValue=''}"
                                      IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
                             <Label Grid.Row="4" Grid.Column="0">Password</Label>
-                            <PasswordBox Grid.Row="4" Grid.Column="1" ctrl:PasswordBoxExtensions.Bound="True"
+                            <PasswordBox Grid.Row="4" Grid.Column="1" ctrl:PasswordBoxExtensions.Bound="True" AutomationProperties.Name="Password"
                                          ctrl:PasswordBoxExtensions.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
                                          IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
                         </ctrl:ResponsiveFormGrid>

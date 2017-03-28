@@ -31,7 +31,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">Form</Label>
-                    <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="Data.Name" ItemsSource="{Binding Views}" SelectedItem="{Binding SelectedView}" />
+                    <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="Data.Name" AutomationProperties.Name="Form" ItemsSource="{Binding Views}" SelectedItem="{Binding SelectedView}" />
                 </ctrl:ResponsiveFormGrid>
                 <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Responders.Filter}" />
                 <ctrl:MultiSelectDataGrid DataContext="{Binding Responders}"

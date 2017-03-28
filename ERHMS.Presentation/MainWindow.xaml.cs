@@ -5,13 +5,20 @@ using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Mantin.Controls.Wpf.Notification;
+using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media;
 
 namespace ERHMS.Presentation
 {
     public partial class MainWindow : MetroWindow
     {
+        private static readonly ResourceDictionary ResourceDictionary = new ResourceDictionary
+        {
+            Source = new Uri("pack://application:,,,/ERHMS.Presentation;component/Skins/Blue508.xaml")
+        };
+
         private bool closing;
 
         public MainWindow(MainViewModel model)
@@ -35,6 +42,7 @@ namespace ERHMS.Presentation
                 false,
                 new MetroDialogSettings
                 {
+                    CustomResourceDictionary = ResourceDictionary,
                     AnimateHide = false
                 });
             await msg.OnExecuting();
@@ -51,6 +59,7 @@ namespace ERHMS.Presentation
                 MessageDialogStyle.Affirmative,
                 new MetroDialogSettings
                 {
+                    CustomResourceDictionary = ResourceDictionary,
                     AffirmativeButtonText = "OK",
                     AnimateHide = false
                 });
@@ -66,6 +75,7 @@ namespace ERHMS.Presentation
                 MessageDialogStyle.AffirmativeAndNegative,
                 new MetroDialogSettings
                 {
+                    CustomResourceDictionary = ResourceDictionary,
                     AffirmativeButtonText = msg.Verb,
                     NegativeButtonText = string.Format("Don't {0}", msg.Verb),
                     AnimateHide = false

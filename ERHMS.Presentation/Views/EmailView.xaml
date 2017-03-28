@@ -43,10 +43,10 @@
                 </ctrl:RemovableItemsControl>
                 <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource AccentButton}" Command="{Binding AddRecipientCommand}">Add</Button>
                 <Label Grid.Row="1" Grid.Column="0">Subject</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" Text="{Binding Subject}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Subject" Text="{Binding Subject}" />
                 <Label Grid.Row="2" Grid.Column="0">Body</Label>
                 <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-                         AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" mah:TextBoxHelper.Watermark="Required"
+                         AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" mah:TextBoxHelper.Watermark="Required" AutomationProperties.Name="Body"
                          Text="{Binding Body}" />
                 <Label Grid.Row="3" Grid.Column="0">Attachments</Label>
                 <ctrl:RemovableItemsControl Grid.Row="3" Grid.Column="1" TabIndex="-1" ItemsSource="{Binding Attachments}">
@@ -67,7 +67,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding AppendUrl}">Append web survey URL</CheckBox>
-                    <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="Name" Margin="5,0,0,5"
+                    <ComboBox Grid.Row="0" Grid.Column="1" DisplayMemberPath="Name" Margin="5,0,0,5" AutomationProperties.Name="Append web survey URL"
                               ItemsSource="{Binding Views}"
                               SelectedItem="{Binding SelectedView}"
                               IsEnabled="{Binding AppendUrl}" />
@@ -92,7 +92,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <RadioButton Grid.Row="0" Grid.Column="0" GroupName="IsResponder" IsChecked="{Binding IsResponder}">Responder</RadioButton>
-                    <ComboBox Grid.Row="0" Grid.Column="1"
+                    <ComboBox Grid.Row="0" Grid.Column="1" AutomationProperties.Name="Responder"
                               ItemsSource="{Binding DataContext.Responders, ElementName=Root}"
                               SelectedItem="{Binding Responder}"
                               IsEnabled="{Binding IsResponder}">
@@ -106,7 +106,7 @@
                                  IsChecked="{Binding IsResponder, Converter={StaticResource BoolInverter}}">
                         Email Address
                     </RadioButton>
-                    <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"
+                    <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" AutomationProperties.Name="Email Address"
                              Text="{Binding EmailAddress}"
                              IsEnabled="{Binding IsResponder, Converter={StaticResource BoolInverter}}" />
                 </ctrl:ResponsiveFormGrid>
