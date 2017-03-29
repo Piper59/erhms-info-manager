@@ -85,7 +85,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             // Close window
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
 
-            string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Surveillance_All.csv");
+            string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Surveillance.All.csv");
             Assert.AreEqual(csvContent, File.ReadAllText(csvPath));
         }
 
@@ -184,7 +184,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         [Test]
         public void ImportAppendTest()
         {
-            ImportCsv("ERHMS.Test.Resources.Surveillance_Append.csv", "Surveillance_Append.csv");
+            ImportCsv("ERHMS.Test.Resources.Surveillance.Append.csv", "Surveillance_Append.csv");
             View view = project.Views["Surveillance"];
             Assert.AreEqual(21, view.GetRecordCount());
             view.LoadLastRecord();
@@ -194,7 +194,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         [Test]
         public void ImportUpdateTest()
         {
-            ImportCsv("ERHMS.Test.Resources.Surveillance_Update.csv", "Surveillance_Update.csv");
+            ImportCsv("ERHMS.Test.Resources.Surveillance.Update.csv", "Surveillance_Update.csv");
             View view = project.Views["Surveillance"];
             view.LoadRecord(1);
             RecordTest(view, "Doe", "John", new DateTime(2007, 1, 7), new DateTime(2010, 1, 1));

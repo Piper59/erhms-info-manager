@@ -280,7 +280,7 @@ namespace ERHMS.Test.EpiInfo
             {
                 Pooling = false
             };
-            ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
+            SqlClientExtensions.ExecuteMaster(ConnectionString, "CREATE DATABASE {0}", builder.InitialCatalog);
             created = true;
             creationInfo = new ProjectCreationInfo
             {
@@ -299,27 +299,11 @@ namespace ERHMS.Test.EpiInfo
         {
             if (created)
             {
-                ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
+                SqlClientExtensions.ExecuteMaster(ConnectionString, "DROP DATABASE {0}", builder.InitialCatalog);
             }
             else
             {
                 TestContext.Error.WriteLine("Database '{0}' may need to be manually dropped.", builder.InitialCatalog);
-            }
-        }
-
-        private int ExecuteNonQuery(string sql, params string[] identifiers)
-        {
-            SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString)
-            {
-                InitialCatalog = "master"
-            };
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder();
-            object[] quotedIdentifiers = identifiers.Select(identifier => commandBuilder.QuoteIdentifier(identifier)).ToArray();
-            using (SqlConnection connection = new SqlConnection(connectionStringBuilder.ConnectionString))
-            using (SqlCommand command = new SqlCommand(string.Format(sql, quotedIdentifiers), connection))
-            {
-                connection.Open();
-                return command.ExecuteNonQuery();
             }
         }
     }

@@ -86,13 +86,6 @@ namespace ERHMS.DataAccess
             }
         }
 
-        public TemplateInfo GetNewViewTemplateInfo()
-        {
-            string path = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.DataAccess.Resources.View.xml", path);
-            return TemplateInfo.Get(path);
-        }
-
         public IEnumerable<Pgm> GetPgms()
         {
             return Project.GetPgms();
@@ -103,6 +96,13 @@ namespace ERHMS.DataAccess
             return Project.GetCanvases();
         }
 
+        public TemplateInfo CreateNewViewTemplateInfo()
+        {
+            string path = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.DataAccess.Resources.View.xml", path);
+            return TemplateInfo.Get(path);
+        }
+
         public bool IsResponderView(View view)
         {
             return view.Name.EqualsIgnoreCase(Responders.View.Name);
@@ -110,8 +110,7 @@ namespace ERHMS.DataAccess
 
         public bool IsResponderLinkedView(View view)
         {
-            Responder responder;
-            return !IsResponderView(view) && view.Fields.Contains(nameof(responder.ResponderId));
+            return !IsResponderView(view) && view.Fields.Contains(nameof(Responder.ResponderId));
         }
     }
 }

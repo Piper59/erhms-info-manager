@@ -53,16 +53,12 @@ namespace ERHMS.EpiInfo.DataAccess
                 {
                     continue;
                 }
-                assignments.Add(string.Format("{0} = {{@}}", column.ColumnName));
+                assignments.Add(string.Format("{0} = {{@}}", Driver.Escape(column.ColumnName)));
                 builder.Values.Add(entity.GetProperty(column.ColumnName));
             }
             foreach (DataColumn column in schema.PrimaryKey)
             {
-                if (!column.IsEditable())
-                {
-                    continue;
-                }
-                predicates.Add(string.Format("{0} = {{@}}", column.ColumnName));
+                predicates.Add(string.Format("{0} = {{@}}", Driver.Escape(column.ColumnName)));
                 builder.Values.Add(entity.GetProperty(column.ColumnName));
             }
             builder.Sql.AppendFormat(

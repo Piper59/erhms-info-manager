@@ -44,7 +44,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             try
             {
                 Project project = AccessProjectTest.Create("ADDFull");
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull_Project.xml", templatePath);
+                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull.Project.xml", templatePath);
                 wrapper = MakeView.InstantiateProjectTemplate.Create(project.FilePath, templatePath);
                 wrapper.Invoke();
                 wrapper.Exited.WaitOne();
@@ -64,7 +64,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             try
             {
                 // Create template
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull_View.xml", templatePath);
+                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull.View.xml", templatePath);
 
                 // Invoke wrapper
                 wrapper = MakeView.InstantiateViewTemplate.Create(project.FilePath, templatePath, "");

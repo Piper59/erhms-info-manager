@@ -16,13 +16,13 @@ namespace ERHMS.DataAccess
             DataContext = dataContext;
         }
 
-        protected abstract IEnumerable<TItem> GetItems();
+        public abstract IEnumerable<TItem> SelectItems();
 
         public IEnumerable<DeepLink<TItem>> SelectDeepLinks()
         {
             ICollection<TLink> links = Select().ToList();
             ICollection<Incident> incidents = DataContext.Incidents.Select().ToList();
-            foreach (TItem item in GetItems())
+            foreach (TItem item in SelectItems())
             {
                 TLink itemLink = links.SingleOrDefault(link => link.IsEqual(item));
                 Incident itemIncident = null;

@@ -14,7 +14,7 @@ namespace ERHMS.Test.EpiInfo
             string path = Path.GetTempFileName();
             try
             {
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull_View.xml", path);
+                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.ADDFull.View.xml", path);
                 TemplateInfo templateInfo;
                 Assert.IsTrue(TemplateInfo.TryRead(path, out templateInfo));
                 Assert.AreEqual("ADDFull", templateInfo.Name);

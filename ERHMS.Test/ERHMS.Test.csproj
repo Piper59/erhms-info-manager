@@ -65,6 +65,18 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.DataAccess\ERHMS.DataAccess.csproj">
+      <Project>{66fd6304-c5e0-4502-9ea2-dc326c470154}</Project>
+      <Name>ERHMS.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
+      <Project>{f979d2bb-289f-443f-bfe4-ab3cb877c521}</Project>
+      <Name>ERHMS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.DataAccess\ERHMS.EpiInfo.DataAccess.csproj">
+      <Project>{af729d69-3971-45ee-b351-1fc9bfd6ed7d}</Project>
+      <Name>ERHMS.EpiInfo.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
@@ -106,7 +118,12 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="DataAccess\SampleDataContextTest.cs" />
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
+    <Compile Include="EpiInfo\DataAccess\CodeRepositoryTest.cs" />
+    <Compile Include="EpiInfo\DataAccess\DataDriverTest.cs" />
+    <Compile Include="EpiInfo\DataAccess\TableEntityRepositoryTest.cs" />
+    <Compile Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
     <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
@@ -128,6 +145,7 @@
     <Compile Include="EpiInfo\WrapperTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlClientExtensions.cs" />
     <Compile Include="TempDirectory.cs" />
     <Compile Include="Utility\AssemblyExtensionsTest.cs" />
     <Compile Include="Utility\AttributeExtensionsTest.cs" />
@@ -146,17 +164,18 @@
     <Compile Include="Utility\XmlExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ADDFull_Project.xml" />
-    <EmbeddedResource Include="Resources\ADDFull_View.xml" />
+    <EmbeddedResource Include="Resources\ADDFull\Project.xml" />
+    <EmbeddedResource Include="Resources\ADDFull\View.xml" />
     <EmbeddedResource Include="Resources\Empty.mdb" />
     <EmbeddedResource Include="Resources\Message.txt" />
     <EmbeddedResource Include="Resources\People.xml" />
+    <EmbeddedResource Include="Resources\Person.sql" />
     <EmbeddedResource Include="Resources\SampleSurveillance.cvs7" />
     <EmbeddedResource Include="Resources\Sample.mdb" />
     <EmbeddedResource Include="Resources\Sample.prj" />
-    <EmbeddedResource Include="Resources\Surveillance_All.csv" />
-    <EmbeddedResource Include="Resources\Surveillance_Append.csv" />
-    <EmbeddedResource Include="Resources\Surveillance_Update.csv" />
+    <EmbeddedResource Include="Resources\Surveillance\All.csv" />
+    <EmbeddedResource Include="Resources\Surveillance\Append.csv" />
+    <EmbeddedResource Include="Resources\Surveillance\Update.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

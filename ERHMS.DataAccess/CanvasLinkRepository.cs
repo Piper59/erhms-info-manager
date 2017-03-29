@@ -10,7 +10,7 @@ namespace ERHMS.DataAccess
         public CanvasLinkRepository(IDataDriver driver, DataContext dataContext)
             : base(driver, "ERHMS_CanvasLinks", dataContext) { }
 
-        protected override IEnumerable<Canvas> GetItems()
+        public override IEnumerable<Canvas> SelectItems()
         {
             return DataContext.GetCanvases();
         }

@@ -10,7 +10,7 @@ namespace ERHMS.DataAccess
         public PgmLinkRepository(IDataDriver driver, DataContext dataContext)
             : base(driver, "ERHMS_PgmLinks", dataContext) { }
 
-        protected override IEnumerable<Pgm> GetItems()
+        public override IEnumerable<Pgm> SelectItems()
         {
             return DataContext.GetPgms();
         }

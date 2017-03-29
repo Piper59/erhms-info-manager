@@ -10,7 +10,7 @@ namespace ERHMS.DataAccess
         public ViewLinkRepository(IDataDriver driver, DataContext dataContext)
             : base(driver, "ERHMS_ViewLinks", dataContext) { }
 
-        protected override IEnumerable<View> GetItems()
+        public override IEnumerable<View> SelectItems()
         {
             return DataContext.GetViews();
         }

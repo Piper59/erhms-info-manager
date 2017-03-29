@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public new OleDbConnectionStringBuilder Builder { get; private set; }
 
-        private AccessDriver(OleDbConnectionStringBuilder builder)
+        public AccessDriver(OleDbConnectionStringBuilder builder)
             : base(DataProvider.Access, builder, Path.GetFileNameWithoutExtension(builder.DataSource))
         {
             Builder = builder;

@@ -34,7 +34,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public new SqlConnectionStringBuilder Builder { get; private set; }
 
-        private SqlServerDriver(SqlConnectionStringBuilder builder)
+        public SqlServerDriver(SqlConnectionStringBuilder builder)
             : base(DataProvider.SqlServer, builder, builder.InitialCatalog)
         {
             Builder = builder;
