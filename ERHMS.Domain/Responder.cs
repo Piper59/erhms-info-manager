@@ -288,6 +288,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(UnionLocalNumber), value); }
         }
 
+        public string FullName
+        {
+            get { return string.Format("{0}, {1}", LastName, FirstName); }
+        }
+
         public Responder()
         {
             AddSynonym(ColumnNames.GLOBAL_RECORD_ID, nameof(ResponderId));
