@@ -21,7 +21,7 @@ namespace ERHMS.Test.DataAccess
             ConfigurationExtensions.Create(directory.Path).Save();
             configuration = ConfigurationExtensions.Load();
             configuration.CreateUserDirectories();
-            dataContext = SampleDataContext.Create();
+            dataContext = SampleDataContext.Create(configuration);
         }
 
         [OneTimeTearDown]
