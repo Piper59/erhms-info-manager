@@ -16,6 +16,7 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             try
             {
+                Log.SetLevelName(Settings.Default.LogLevel);
                 Log.Logger.Debug("Starting up");
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
                 {
