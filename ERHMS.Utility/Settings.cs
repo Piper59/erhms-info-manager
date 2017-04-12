@@ -7,7 +7,6 @@ namespace ERHMS.Utility
     public partial class Settings
     {
         public string Version { get; set; }
-        public bool InitialExecution { get; set; }
         public bool LicenseAccepted { get; set; }
         public string LogLevel { get; set; }
         public string ConfigurationFile { get; set; }
@@ -22,7 +21,6 @@ namespace ERHMS.Utility
         public Settings()
         {
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            InitialExecution = true;
             LicenseAccepted = false;
             Reset();
         }
