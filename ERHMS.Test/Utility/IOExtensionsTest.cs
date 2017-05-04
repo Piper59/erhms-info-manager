@@ -77,7 +77,7 @@ namespace ERHMS.Test.Utility
                     directory.CombinePaths("file1.txt"),
                     directory.CombinePaths("subdirectory", "file3.txt")
                 };
-                CollectionAssert.AreEqual(paths, new DirectoryInfo(directory.Path).Search(".txt").Select(file => file.FullName));
+                CollectionAssert.AreEqual(paths, new DirectoryInfo(directory.Path).SearchByExtension(".txt").Select(file => file.FullName));
             }
         }
     }

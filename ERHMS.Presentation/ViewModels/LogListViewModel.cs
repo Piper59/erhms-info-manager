@@ -1,4 +1,5 @@
-﻿using ERHMS.Presentation.Dialogs;
+﻿using Epi;
+using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -6,11 +7,9 @@ using GalaSoft.MvvmLight.Messaging;
 using Ionic.Zip;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Data;
 using System.Windows.Forms;
 
 namespace ERHMS.Presentation.ViewModels
@@ -26,16 +25,16 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Logs";
             Refresh();
-            Selecting += (sender, e) =>
+            OpenCommand = new RelayCommand(Open, HasAnySelectedItems);
+            DeleteCommand = new RelayCommand(Delete, HasAnySelectedItems);
+            PackageCommand = new RelayCommand(Package, HasAnySelectedItems);
+            RefreshCommand = new RelayCommand(Refresh);
+            SelectedItemChanged += (sender, e) =>
             {
                 OpenCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
                 PackageCommand.RaiseCanExecuteChanged();
             };
-            OpenCommand = new RelayCommand(Open, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            PackageCommand = new RelayCommand(Package, HasSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
         }
 
         private IEnumerable<FileInfo> GetLogs(DirectoryInfo directory)
@@ -43,18 +42,11 @@ namespace ERHMS.Presentation.ViewModels
             return directory.SearchByExtension(".txt");
         }
 
-        protected override ICollectionView GetItems()
+        protected override IEnumerable<FileInfo> GetItems()
         {
-            ICollection<FileInfo> items = new List<FileInfo>();
-            foreach (FileInfo log in GetLogs(Log.GetDefaultDirectory()))
-            {
-                items.Add(log);
-            }
-            foreach (FileInfo log in GetLogs(Log.GetDirectory()))
-            {
-                items.Add(log);
-            }
-            return CollectionViewSource.GetDefaultView(items.OrderBy(log => log.FullName));
+            Configuration configuration = Configuration.GetNewInstance();
+            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.LogDir);
+            return directory.SearchByExtension(Path.GetExtension(Log.FilePath)).OrderBy(item => item.FullName);
         }
 
         protected override IEnumerable<string> GetFilteredValues(FileInfo item)
@@ -66,6 +58,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (FileInfo log in SelectedItems)
             {
+                log.Refresh();
                 if (log.Exists)
                 {
                     Process.Start(log.FullName);
@@ -75,16 +68,22 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected logs?");
+            ConfirmMessage msg = new ConfirmMessage
+            {
+                Verb = "Delete",
+                Message = "Delete the selected logs?"
+            };
             msg.Confirmed += (sender, e) =>
             {
+                // TODO: Close current log?
                 foreach (FileInfo log in SelectedItems)
                 {
+                    log.Refresh();
                     if (log.Exists)
                     {
                         try
                         {
-                            log.Recycle();
+                            IOExtensions.RecycleFile(log.FullName);
                         }
                         catch (OperationCanceledException) { }
                     }
@@ -102,24 +101,36 @@ namespace ERHMS.Presentation.ViewModels
                 dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                 dialog.Filter = FileDialogExtensions.GetFilter("ZIP Files", ".zip");
                 dialog.FileName = string.Format("Logs-{0:yyyyMMdd}-{0:HHmmss}.zip", DateTime.Now);
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog(App.Current.MainWin32Window) == DialogResult.OK)
                 {
-                    BlockMessage msg = new BlockMessage("Packaging logs \u2026");
+                    BlockMessage msg = new BlockMessage
+                    {
+                        Message = "Packaging logs \u2026"
+                    };
                     msg.Executing += (sender, e) =>
                     {
-                        using (Stream stream = dialog.OpenFile())
-                        using (ZipFile zip = new ZipFile())
+                        using (ZipFile package = new ZipFile())
                         {
                             foreach (FileInfo log in SelectedItems)
                             {
-                                zip.AddFile(log.FullName);
+                                log.Refresh();
+                                if (log.Exists)
+                                {
+                                    package.AddFile(log.FullName);
+                                }
                             }
-                            zip.Save(stream);
+                            using (Stream stream = dialog.OpenFile())
+                            {
+                                package.Save(stream);
+                            }
                         }
                     };
                     msg.Executed += (sender, e) =>
                     {
-                        Messenger.Default.Send(new ToastMessage("Logs have been packaged."));
+                        Messenger.Default.Send(new ToastMessage
+                        {
+                            Message = "Logs have been packaged."
+                        });
                     };
                     Messenger.Default.Send(msg);
                 }

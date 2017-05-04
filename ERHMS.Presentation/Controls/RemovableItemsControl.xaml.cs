@@ -1,40 +1,35 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace ERHMS.Presentation.Controls
 {
     public partial class RemovableItemsControl : ItemsControl
     {
-        public static readonly DependencyProperty ItemTextTemplateProperty = DependencyProperty.Register(
-            "ItemTextTemplate",
+        public static readonly DependencyProperty ItemContentTemplateProperty = DependencyProperty.Register(
+            "ItemContentTemplate",
             typeof(DataTemplate),
             typeof(RemovableItemsControl));
-        public DataTemplate ItemTextTemplate
+        public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register(
+            "RemoveCommand",
+            typeof(ICommand),
+            typeof(RemovableItemsControl));
+
+        public DataTemplate ItemContentTemplate
         {
-            get { return (DataTemplate)GetValue(ItemTextTemplateProperty); }
-            set { SetValue(ItemTextTemplateProperty, value); }
+            get { return (DataTemplate)GetValue(ItemContentTemplateProperty); }
+            set { SetValue(ItemContentTemplateProperty, value); }
+        }
+
+        public ICommand RemoveCommand
+        {
+            get { return (ICommand)GetValue(RemoveCommandProperty); }
+            set { SetValue(RemoveCommandProperty, value); }
         }
 
         public RemovableItemsControl()
         {
             InitializeComponent();
-        }
-
-        private void Border_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Middle)
-            {
-                FrameworkElement source = (FrameworkElement)e.Source;
-                FrameworkElement parent = (FrameworkElement)source.TemplatedParent;
-                Button button = (Button)Root.ItemTemplate.FindName("Remove", parent);
-                ICommand command = (ICommand)button.GetValue(ButtonBase.CommandProperty);
-                if (command != null && command.CanExecute(null))
-                {
-                    command.Execute(null);
-                }
-            }
         }
     }
 }

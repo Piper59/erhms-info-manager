@@ -36,6 +36,11 @@ namespace ERHMS.Utility
             return pattern.Replace(@this, "");
         }
 
+        public static string[] SplitLines(this string @this)
+        {
+            return NewLinePattern.Split(@this);
+        }
+
         public static string NormalizeNewLines(this string @this)
         {
             return NewLinePattern.Replace(@this, Environment.NewLine);

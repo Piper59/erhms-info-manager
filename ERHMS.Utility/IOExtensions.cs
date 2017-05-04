@@ -33,7 +33,7 @@ namespace ERHMS.Utility
             FileSystem.CopyDirectory(sourcePath, targetPath, UIOption.AllDialogs);
         }
 
-        public static IEnumerable<FileInfo> Search(this DirectoryInfo @this, string extension)
+        public static IEnumerable<FileInfo> SearchByExtension(this DirectoryInfo @this, string extension)
         {
             return @this.EnumerateFiles("*" + extension, SearchOption.AllDirectories);
         }

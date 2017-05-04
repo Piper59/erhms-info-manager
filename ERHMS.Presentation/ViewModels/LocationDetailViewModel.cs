@@ -31,21 +31,31 @@ namespace ERHMS.Presentation.ViewModels
         public Coordinates Center
         {
             get { return center; }
-            set { Set(() => Center, ref center, value); }
+            set { Set(nameof(Center), ref center, value); }
         }
 
         private Coordinates target;
         public Coordinates Target
         {
             get { return target; }
-            set { Set(() => Target, ref target, value); }
+            set { Set(nameof(Target), ref target, value); }
         }
 
         private double zoomLevel;
         public double ZoomLevel
         {
-            get { return zoomLevel; }
-            set { Set(() => ZoomLevel, ref zoomLevel, value); }
+            get
+            {
+                return zoomLevel;
+            }
+            set
+            {
+                if (Set(nameof(ZoomLevel), ref zoomLevel, value))
+                {
+                    ZoomInCommand.RaiseCanExecuteChanged();
+                    ZoomOutCommand.RaiseCanExecuteChanged();
+                }
+            }
         }
 
         public ObservableCollection<Coordinates> Pins { get; private set; }
@@ -54,8 +64,8 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand DropPinCommand { get; private set; }
         public RelayCommand ZoomInCommand { get; private set; }
         public RelayCommand ZoomOutCommand { get; private set; }
-        public RelayCommand CenterZoomInCommand { get; private set; }
-        public RelayCommand CenterZoomOutCommand { get; private set; }
+        public RelayCommand CenterAndZoomInCommand { get; private set; }
+        public RelayCommand CenterAndZoomOutCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
         public LocationDetailViewModel(Location location)
@@ -63,11 +73,11 @@ namespace ERHMS.Presentation.ViewModels
             Location = location;
             location.PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName == nameof(location.Address))
+                if (e.PropertyName == nameof(Location.Address))
                 {
                     LocateCommand.RaiseCanExecuteChanged();
                 }
-                else if (e.PropertyName == nameof(location.Latitude) || e.PropertyName == nameof(location.Longitude))
+                else if (e.PropertyName == nameof(Location.Latitude) || e.PropertyName == nameof(Location.Longitude))
                 {
                     Pins.Clear();
                     if (HasCoordinates())
@@ -76,14 +86,17 @@ namespace ERHMS.Presentation.ViewModels
                     }
                 }
             };
-            location.PropertyChanged += OnDirtyCheckPropertyChanged;
-            AfterClosed += (sender, e) =>
-            {
-                location.PropertyChanged -= OnDirtyCheckPropertyChanged;
-            };
-            UpdateTitle();
+            AddDirtyCheck(location);
+            Refresh();
             CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
             Pins = new ObservableCollection<Coordinates>();
+            LocateCommand = new RelayCommand(Locate, HasAddress);
+            DropPinCommand = new RelayCommand(DropPin);
+            ZoomInCommand = new RelayCommand(ZoomIn, CanZoomIn);
+            ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
+            CenterAndZoomInCommand = new RelayCommand(CenterAndZoomIn, CanZoomIn);
+            CenterAndZoomOutCommand = new RelayCommand(CenterAndZoomOut, CanZoomOut);
+            SaveCommand = new RelayCommand(Save);
             if (HasCoordinates())
             {
                 Center = GetCoordinates();
@@ -93,27 +106,11 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Center = LastCenter ?? DistrictOfColumbia;
-                ZoomLevel = LastZoomLevel ?? UnpinnedZoomLevel;
+                LoadState();
             }
-            PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(ZoomLevel))
-                {
-                    ZoomInCommand.RaiseCanExecuteChanged();
-                    ZoomOutCommand.RaiseCanExecuteChanged();
-                }
-            };
-            LocateCommand = new RelayCommand(Locate, HasAddress);
-            DropPinCommand = new RelayCommand(DropPin);
-            ZoomInCommand = new RelayCommand(ZoomIn, CanZoomIn);
-            ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
-            CenterZoomInCommand = new RelayCommand(CenterZoomIn, CanZoomIn);
-            CenterZoomOutCommand = new RelayCommand(CenterZoomOut, CanZoomOut);
-            SaveCommand = new RelayCommand(Save);
         }
 
-        private void UpdateTitle()
+        private void Refresh()
         {
             Title = Location.New ? "New Location" : Location.Name;
         }
@@ -122,6 +119,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             LastCenter = Center;
             LastZoomLevel = ZoomLevel;
+        }
+
+        public void LoadState()
+        {
+            Center = LastCenter ?? DistrictOfColumbia;
+            ZoomLevel = LastZoomLevel ?? UnpinnedZoomLevel;
         }
 
         public bool HasAddress()
@@ -184,7 +187,10 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Messenger.Default.Send(new NotifyMessage("Address could not be found."));
+                Messenger.Default.Send(new AlertMessage
+                {
+                    Message = "Address could not be found."
+                });
             }
         }
 
@@ -233,7 +239,7 @@ namespace ERHMS.Presentation.ViewModels
             SetZoomLevel(ZoomLevel - ZoomLevelIncrement);
         }
 
-        public void CenterZoomIn()
+        public void CenterAndZoomIn()
         {
             if (Target != null)
             {
@@ -242,7 +248,7 @@ namespace ERHMS.Presentation.ViewModels
             ZoomIn();
         }
 
-        public void CenterZoomOut()
+        public void CenterAndZoomOut()
         {
             if (Target != null)
             {
@@ -260,7 +266,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                NotifyRequired(fields);
+                ShowRequiredMessage(fields);
                 return false;
             }
             else
@@ -277,10 +283,13 @@ namespace ERHMS.Presentation.ViewModels
             }
             DataContext.Locations.Save(Location);
             Dirty = false;
-            Messenger.Default.Send(new ToastMessage("Location has been saved."));
-            Messenger.Default.Send(new RefreshListMessage<Location>(Location.IncidentId));
-            UpdateTitle();
+            Messenger.Default.Send(new ToastMessage
+            {
+                Message = "Location has been saved."
+            });
+            Messenger.Default.Send(new RefreshMessage<Location>());
             SaveState();
+            Refresh();
         }
     }
 }

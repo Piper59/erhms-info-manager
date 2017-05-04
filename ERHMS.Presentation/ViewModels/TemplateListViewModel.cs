@@ -1,23 +1,18 @@
-﻿using ERHMS.Domain;
+﻿using Epi;
+using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class TemplateListViewModel : ListViewModelBase<TemplateInfo>
     {
         public Incident Incident { get; private set; }
-
-        public string IncidentId
-        {
-            get { return Incident == null ? null : Incident.IncidentId; }
-        }
 
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
@@ -28,20 +23,20 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Templates";
             Incident = incident;
             Refresh();
-            Selecting += (sender, e) =>
+            CreateCommand = new RelayCommand(Create, HasOneSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasOneSelectedItem);
+            RefreshCommand = new RelayCommand(Refresh);
+            SelectedItemChanged += (sender, e) =>
             {
                 CreateCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
-            CreateCommand = new RelayCommand(Create, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<TemplateInfo>>(this, OnRefreshTemplateListMessage);
+            Messenger.Default.Register<RefreshMessage<TemplateInfo>>(this, msg => Refresh());
         }
 
-        protected override ICollectionView GetItems()
+        protected override IEnumerable<TemplateInfo> GetItems()
         {
-            return CollectionViewSource.GetDefaultView(DataContext.GetTemplateInfos(TemplateLevel.View).OrderBy(template => template.Name));
+            return TemplateInfo.GetByLevel(TemplateLevel.View).OrderBy(item => item.Name);
         }
 
         protected override IEnumerable<string> GetFilteredValues(TemplateInfo item)
@@ -52,24 +47,30 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            string prefix = Incident == null ? null : Incident.Name;
-            MakeView.InstantiateTemplate(DataContext.Project, SelectedItem, prefix, IncidentId).Invoke();
+            string namePrefix = Incident == null ? "" : Incident.Name + "_";
+            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(DataContext.Project.FilePath, SelectedItem.Path, namePrefix);
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == WrapperEventType.ViewCreated)
+                {
+                    Messenger.Default.Send(new RefreshMessage<View>());
+                }
+            };
         }
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected template?");
+            ConfirmMessage msg = new ConfirmMessage
+            {
+                Verb = "Delete",
+                Message = "Delete the selected template?"
+            };
             msg.Confirmed += (sender, e) =>
             {
                 SelectedItem.Delete();
-                Messenger.Default.Send(new RefreshListMessage<TemplateInfo>());
+                Messenger.Default.Send(new RefreshMessage<TemplateInfo>());
             };
             Messenger.Default.Send(msg);
-        }
-
-        private void OnRefreshTemplateListMessage(RefreshListMessage<TemplateInfo> msg)
-        {
-            Refresh();
         }
     }
 }

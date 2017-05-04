@@ -1,189 +1,240 @@
-﻿<mah:MetroWindow x:Class="ERHMS.Presentation.MainWindow"
-                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
-                 xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
-                 xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
-                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 xmlns:v="clr-namespace:ERHMS.Presentation.Views"
-                 xmlns:vm="clr-namespace:ERHMS.Presentation.ViewModels"
-                 mc:Ignorable="d"
-                 Icon="ERHMS.ico"
-                 Width="800" Height="600"
-                 MinWidth="640" MinHeight="480"
-                 WindowState="Maximized"
-                 EnableDWMDropShadow="True"
-                 WindowTransitionsEnabled="False"
-                 Title="{Binding Title}"
-                 TitleCaps="False">
+﻿<MahApps:MetroWindow x:Class="ERHMS.Presentation.MainWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:AvalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
+                     xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
+                     xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+                     xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
+                     xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
+                     xmlns:ViewModels="clr-namespace:ERHMS.Presentation.ViewModels"
+                     xmlns:Views="clr-namespace:ERHMS.Presentation.Views"
+                     EnableDWMDropShadow="True"
+                     Height="600"
+                     Icon="ERHMS.ico"
+                     MinHeight="480"
+                     MinWidth="640"
+                     Title="{Binding Title}"
+                     TitleCaps="False"
+                     Width="800"
+                     WindowState="Maximized"
+                     WindowTransitionsEnabled="False">
     <Window.Resources>
-        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding CloseActiveDocumentCommand}" />
+        <KeyBinding Command="{Binding CloseActiveDocumentCommand}"
+                    Key="W"
+                    Modifiers="Ctrl" />
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Data Sources" Command="{Binding DataSourcesCommand}" />
+                <MenuItem Command="{Binding OpenDataSourceListViewCommand}"
+                          Header="_Data Sources" />
                 <Separator />
-                <!-- TODO: Add input gesture text -->
-                <MenuItem Header="_Close Tab" Command="{Binding CloseActiveDocumentCommand}" />
-                <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
+                <MenuItem Command="{Binding CloseActiveDocumentCommand}"
+                          Header="_Close Tab"
+                          InputGestureText="Ctrl+W" />
+                <MenuItem Command="{Binding ExitCommand}"
+                          Header="E_xit" />
             </MenuItem>
-            <MenuItem Header="_Responders" Visibility="{Binding DataSource, Converter={StaticResource NullToVisibilityConverter}}">
-                <MenuItem Header="Show _All" Command="{Binding ShowRespondersCommand}" />
-                <MenuItem Header="Create _New" Command="{Binding CreateResponderCommand}" />
+            <MenuItem Header="_Responders"
+                      Visibility="{Binding DataContext, Converter={StaticResource NullToVisibilityConverter}}">
+                <MenuItem Command="{Binding OpenResponderListViewCommand}"
+                          Header="Show _All" />
+                <MenuItem Command="{Binding CreateResponderCommand}"
+                          Header="Create _New" />
             </MenuItem>
-            <MenuItem Header="_Incidents" Visibility="{Binding DataSource, Converter={StaticResource NullToVisibilityConverter}}">
-                <MenuItem Header="Show _All" Command="{Binding ShowIncidentsCommand}" />
-                <MenuItem Header="Create _New" Command="{Binding CreateIncidentCommand}" />
+            <MenuItem Header="Incidents"
+                      Visibility="{Binding DataContext, Converter={StaticResource NullToVisibilityConverter}}">
+                <MenuItem Command="{Binding OpenIncidentListViewCommand}"
+                          Header="Show _All" />
+                <MenuItem Command="{Binding CreateIncidentCommand}"
+                          Header="Create _New" />
             </MenuItem>
-            <MenuItem Header="_Data" Visibility="{Binding DataSource, Converter={StaticResource NullToVisibilityConverter}}">
-                <MenuItem Header="_Forms" Command="{Binding FormsCommand}" />
-                <MenuItem Header="_Templates" Command="{Binding TemplatesCommand}" />
-                <MenuItem Header="A_ssignments" Command="{Binding AssignmentsCommand}" />
-                <MenuItem Header="A_nalyses" Command="{Binding AnalysesCommand}" />
-                <MenuItem Header="_Dashboards" Command="{Binding DashboardsCommand}" />
+            <MenuItem Header="_Data"
+                      Visibility="{Binding DataContext, Converter={StaticResource NullToVisibilityConverter}}">
+                <MenuItem Command="{Binding OpenViewListViewCommand}"
+                          Header="_Forms" />
+                <MenuItem Command="{Binding OpenTemplateListViewCommand}"
+                          Header="_Templates" />
+                <MenuItem Command="{Binding OpenAssignmentListViewCommand}"
+                          Header="A_ssignments" />
+                <MenuItem Command="{Binding OpenPgmListViewCommand}"
+                          Header="A_nalyses" />
+                <MenuItem Command="{Binding OpenCanvasListViewCommand}"
+                          Header="_Dashboards" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="_Settings" Command="{Binding SettingsCommand}" />
-                <MenuItem Header="_Logs" Command="{Binding LogsCommand}" />
-                <MenuItem Header="_Help" Command="{Binding HelpCommand}" />
+                <MenuItem Command="{Binding OpenSettingsViewCommand}"
+                          Header="_Settings" />
+                <MenuItem Command="{Binding OpenLogListViewCommand}"
+                          Header="_Logs" />
+                <MenuItem Command="{Binding OpenHelpViewCommand}"
+                          Header="_Help" />
                 <Separator />
-                <MenuItem Header="_About" Command="{Binding AboutCommand}" />
+                <MenuItem Command="{Binding OpenAboutViewCommand}"
+                          Header="_About" />
             </MenuItem>
         </Menu>
-        <dock:DockingManager DocumentsSource="{Binding Documents}" ActiveContent="{Binding ActiveDocument, Mode=TwoWay}">
-            <dock:DockingManager.Resources>
-                <DataTemplate DataType="{x:Type vm:DataSourceListViewModel}">
-                    <v:DataSourceListView>
+        <AvalonDock:DockingManager ActiveContent="{Binding ActiveDocument, Mode=TwoWay}"
+                                   DocumentsSource="{Binding Documents}">
+            <AvalonDock:DockingManager.Resources>
+                <DataTemplate DataType="{x:Type ViewModels:AboutViewModel}">
+                    <Views:AboutView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:DataSourceListView>
+                    </Views:AboutView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:ResponderListViewModel}">
-                    <v:ResponderListView>
+                <DataTemplate DataType="{x:Type ViewModels:AssignmentListViewModel}">
+                    <Views:AssignmentListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:ResponderListView>
+                    </Views:AssignmentListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:ResponderDetailViewModel}">
-                    <v:ResponderDetailView>
+                <DataTemplate DataType="{x:Type ViewModels:CanvasListViewModel}">
+                    <Views:CanvasListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:ResponderDetailView>
+                    </Views:CanvasListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:IncidentListViewModel}">
-                    <v:IncidentListView>
+                <DataTemplate DataType="{x:Type ViewModels:DataSourceListViewModel}">
+                    <Views:DataSourceListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:IncidentListView>
+                    </Views:DataSourceListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:IncidentViewModel}">
-                    <v:IncidentView>
+                <DataTemplate DataType="{x:Type ViewModels:EmailViewModel}">
+                    <Views:EmailView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:IncidentView>
+                    </Views:EmailView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:LocationDetailViewModel}">
-                    <v:LocationDetailView>
+                <DataTemplate DataType="{x:Type ViewModels:HelpViewModel}">
+                    <Views:HelpView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:LocationDetailView>
+                    </Views:HelpView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:ViewListViewModel}">
-                    <v:ViewListView>
+                <DataTemplate DataType="{x:Type ViewModels:IncidentListViewModel}">
+                    <Views:IncidentListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:ViewListView>
+                    </Views:IncidentListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:RecordListViewModel}">
-                    <v:RecordListView>
+                <DataTemplate DataType="{x:Type ViewModels:IncidentViewModel}">
+                    <Views:IncidentView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:RecordListView>
+                    </Views:IncidentView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:TemplateListViewModel}">
-                    <v:TemplateListView>
+                <DataTemplate DataType="{x:Type ViewModels:LocationDetailViewModel}">
+                    <Views:LocationDetailView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:TemplateListView>
+                    </Views:LocationDetailView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:AssignmentListViewModel}">
-                    <v:AssignmentListView>
+                <DataTemplate DataType="{x:Type ViewModels:LogListViewModel}">
+                    <Views:LogListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:AssignmentListView>
+                    </Views:LogListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:PgmListViewModel}">
-                    <v:PgmListView>
+                <DataTemplate DataType="{x:Type ViewModels:PgmListViewModel}">
+                    <Views:PgmListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:PgmListView>
+                    </Views:PgmListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:CanvasListViewModel}">
-                    <v:CanvasListView>
+                <DataTemplate DataType="{x:Type ViewModels:RecordListViewModel}">
+                    <Views:RecordListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:CanvasListView>
+                    </Views:RecordListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:EmailViewModel}">
-                    <v:EmailView>
+                <DataTemplate DataType="{x:Type ViewModels:ResponderDetailViewModel}">
+                    <Views:ResponderDetailView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:EmailView>
+                    </Views:ResponderDetailView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-                    <v:SettingsView>
+                <DataTemplate DataType="{x:Type ViewModels:ResponderListViewModel}">
+                    <Views:ResponderListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:SettingsView>
+                    </Views:ResponderListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:LogListViewModel}">
-                    <v:LogListView>
+                <DataTemplate DataType="{x:Type ViewModels:SettingsViewModel}">
+                    <Views:SettingsView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:LogListView>
+                    </Views:SettingsView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:HelpViewModel}">
-                    <v:HelpView>
+                <DataTemplate DataType="{x:Type ViewModels:TemplateListViewModel}">
+                    <Views:TemplateListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:HelpView>
+                    </Views:TemplateListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:AboutViewModel}">
-                    <v:AboutView>
+                <DataTemplate DataType="{x:Type ViewModels:ViewListViewModel}">
+                    <Views:ViewListView>
                         <i:Interaction.Behaviors>
-                            <ctrl:FixKeyboardCuesBehavior />
+                            <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </v:AboutView>
+                    </Views:ViewListView>
                 </DataTemplate>
-            </dock:DockingManager.Resources>
-            <dock:LayoutRoot>
-                <dock:LayoutPanel>
-                    <dock:LayoutDocumentPane />
-                </dock:LayoutPanel>
-            </dock:LayoutRoot>
-        </dock:DockingManager>
+            </AvalonDock:DockingManager.Resources>
+            <AvalonDock:DockingManager.Background>
+                <ImageBrush ImageSource="/Images/ERHMS.png"
+                            Opacity="0.25"
+                            Stretch="None" />
+            </AvalonDock:DockingManager.Background>
+            <AvalonDock:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock FontSize="18"
+                               Margin="5,0,0,0"
+                               MaxWidth="200"
+                               Text="{Binding Title}"
+                               TextTrimming="CharacterEllipsis" />
+                </DataTemplate>
+            </AvalonDock:DockingManager.DocumentHeaderTemplate>
+            <AvalonDock:DockingManager.DocumentPaneControlStyle>
+                <Style TargetType="AvalonDock:LayoutDocumentPaneControl" BasedOn="{StaticResource DocumentPaneControlStyle}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Model.ChildrenCount, RelativeSource={RelativeSource Self}}" Value="0">
+                            <Setter Property="Background" Value="Transparent" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </AvalonDock:DockingManager.DocumentPaneControlStyle>
+            <AvalonDock:DockingManager.LayoutItemContainerStyle>
+                <Style TargetType="AvalonDock:LayoutItem">
+                    <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
+                    <Setter Property="Title" Value="{Binding Model.Title}" />
+                </Style>
+            </AvalonDock:DockingManager.LayoutItemContainerStyle>
+            <AvalonDock:LayoutRoot>
+                <AvalonDock:LayoutPanel>
+                    <AvalonDock:LayoutDocumentPane />
+                </AvalonDock:LayoutPanel>
+            </AvalonDock:LayoutRoot>
+        </AvalonDock:DockingManager>
     </DockPanel>
-</mah:MetroWindow>
+</MahApps:MetroWindow>

@@ -1,6 +1,5 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -17,14 +16,14 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<IncidentNote> Notes
         {
             get { return notes; }
-            set { Set(() => Notes, ref notes, value); }
+            private set { Set(nameof(Notes), ref notes, value); }
         }
 
         private IncidentNote note;
         public IncidentNote Note
         {
             get { return note; }
-            set { Set(() => Note, ref note, value); }
+            private set { Set(nameof(Note), ref note, value); }
         }
 
         public RelayCommand SaveCommand { get; private set; }
@@ -33,44 +32,11 @@ namespace ERHMS.Presentation.ViewModels
         public IncidentNotesViewModel(Incident incident)
         {
             Incident = incident;
-            UpdateTitle();
+            ResetNote();
             Refresh();
-            Note = CreateNote();
-            Note.PropertyChanged += OnDirtyCheckPropertyChanged;
-            AfterClosed += (sender, e) =>
-            {
-                Note.PropertyChanged -= OnDirtyCheckPropertyChanged;
-            };
             SaveCommand = new RelayCommand(Save, HasContent);
             RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
-            Messenger.Default.Register<RefreshListMessage<IncidentNote>>(this, OnRefreshIncidentNoteListMessage);
-        }
-
-        private void UpdateTitle()
-        {
-            Title = GetTitle("Notes", Incident);
-        }
-
-        public void Refresh()
-        {
-            Notes = DataContext.IncidentNotes.SelectByIncident(Incident.IncidentId)
-                .OrderByDescending(note => note.Date)
-                .ToList();
-        }
-
-        private IncidentNote CreateNote()
-        {
-            IncidentNote note = DataContext.IncidentNotes.Create();
-            note.IncidentId = Incident.IncidentId;
-            note.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName != nameof(note.Content))
-                {
-                    SaveCommand.RaiseCanExecuteChanged();
-                }
-            };
-            return note;
+            Messenger.Default.Register<RefreshMessage<IncidentNote>>(this, msg => Refresh());
         }
 
         public bool HasContent()
@@ -78,31 +44,38 @@ namespace ERHMS.Presentation.ViewModels
             return !string.IsNullOrWhiteSpace(Note.Content);
         }
 
+        private void ResetNote()
+        {
+            if (Note != null)
+            {
+                RemoveDirtyCheck(Note);
+            }
+            Note = DataContext.IncidentNotes.Create();
+            Note.IncidentId = Incident.IncidentId;
+            Note.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName != nameof(IncidentNote.Content))
+                {
+                    SaveCommand.RaiseCanExecuteChanged();
+                }
+            };
+            AddDirtyCheck(Note);
+        }
+
+        public void Refresh()
+        {
+            Notes = DataContext.IncidentNotes.SelectByIncidentId(Incident.IncidentId)
+                .OrderByDescending(note => note.Date)
+                .ToList();
+        }
+
         public void Save()
         {
             Note.Date = DateTime.Now;
             DataContext.IncidentNotes.Save(Note);
             Dirty = false;
-            Messenger.Default.Send(new RefreshListMessage<IncidentNote>(Incident.IncidentId));
-            Note.PropertyChanged -= OnDirtyCheckPropertyChanged;
-            Note = CreateNote();
-            Note.PropertyChanged += OnDirtyCheckPropertyChanged;
-        }
-
-        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
-        {
-            if (msg.Entity == Incident)
-            {
-                UpdateTitle();
-            }
-        }
-
-        private void OnRefreshIncidentNoteListMessage(RefreshListMessage<IncidentNote> msg)
-        {
-            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, Incident.IncidentId))
-            {
-                Refresh();
-            }
+            Messenger.Default.Send(new RefreshMessage<IncidentNote>());
+            ResetNote();
         }
     }
 }

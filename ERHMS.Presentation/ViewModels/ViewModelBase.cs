@@ -1,51 +1,47 @@
 ﻿using ERHMS.DataAccess;
-using ERHMS.Domain;
+using ERHMS.Presentation.Infrastructure;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class ViewModelBase : GalaSoft.MvvmLight.ViewModelBase
     {
-        public static ViewModelLocator Locator
+        protected MainViewModel Main
         {
-            get { return App.Current.Locator; }
+            get { return MainViewModel.Instance; }
         }
 
-        protected static DataContext DataContext
+        protected DataContext DataContext
         {
-            get { return Locator.Main.DataSource; }
+            get { return Main.DataContext; }
         }
 
         private string title;
         public string Title
         {
             get { return title; }
-            protected set { Set(() => Title, ref title, value); }
+            protected set { Set(nameof(Title), ref title, value); }
         }
 
         private bool dirty;
         public virtual bool Dirty
         {
             get { return dirty; }
-            set { Set(() => Dirty, ref dirty, value); }
-        }
-
-        private bool closed;
-        public bool Closed
-        {
-            get { return closed; }
-            private set { Set(() => Closed, ref closed, value); }
+            protected set { Set(nameof(Dirty), ref dirty, value); }
         }
 
         public RelayCommand CloseCommand { get; private set; }
 
         protected ViewModelBase()
         {
+            CloseCommand = new RelayCommand(Close);
             PropertyChanged += (sender, e) =>
             {
                 if (GetType().GetProperty(e.PropertyName).HasCustomAttribute<DirtyCheckAttribute>())
@@ -53,80 +49,80 @@ namespace ERHMS.Presentation.ViewModels
                     OnDirtyCheckPropertyChanged(sender, e);
                 }
             };
-            CloseCommand = new RelayCommand(Close);
         }
 
-        public event EventHandler AfterClosed;
-        private void OnAfterClosed(EventArgs e)
+        public event EventHandler Closing;
+        private void OnClosing(EventArgs e)
         {
-            AfterClosed?.Invoke(this, e);
+            Closing?.Invoke(this, e);
         }
-        private void OnAfterClosed()
+        private void OnClosing()
         {
-            OnAfterClosed(EventArgs.Empty);
+            OnClosing(EventArgs.Empty);
         }
 
-        protected void OnDirtyCheckPropertyChanged(object sender, EventArgs e)
+        private void OnDirtyCheckPropertyChanged(object sender, EventArgs e)
         {
             Dirty = true;
         }
 
-        private void CloseInternal()
+        protected void AddDirtyCheck(INotifyPropertyChanged entity)
         {
-            Closed = true;
-            OnAfterClosed();
+            entity.PropertyChanged += OnDirtyCheckPropertyChanged;
+            Closing += (sender, e) =>
+            {
+                entity.PropertyChanged -= OnDirtyCheckPropertyChanged;
+            };
+        }
+
+        protected void RemoveDirtyCheck(INotifyPropertyChanged entity)
+        {
+            entity.PropertyChanged -= OnDirtyCheckPropertyChanged;
         }
 
         public void Close()
         {
-            if (Closed)
-            {
-                return;
-            }
             if (Dirty)
             {
-                ConfirmMessage msg = new ConfirmMessage(
-                    "Close",
-                    string.Format("There may be unsaved changes. Are you sure you want to close {0}?", Title));
+                ConfirmMessage msg = new ConfirmMessage
+                {
+                    Verb = "Close",
+                    Message = string.Format("There may be unsaved changes. Are you sure you want to close {0}?", Title),
+                };
                 msg.Confirmed += (sender, e) =>
                 {
-                    CloseInternal();
+                    OnClosing();
                 };
                 Messenger.Default.Send(msg);
             }
             else
             {
-                CloseInternal();
+                OnClosing();
             }
         }
 
-        protected string GetTitle(string title, Incident incident)
+        private void ShowValidationMessage(IEnumerable<string> fields, string reason)
         {
-            if (incident == null)
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("The following fields are {0}:", reason);
+            builder.AppendLine();
+            builder.AppendLine();
+            builder.Append(string.Join(", ", fields));
+            AlertMessage msg = new AlertMessage
             {
-                return title;
-            }
-            else
-            {
-                string incidentName = incident.New ? "New Incident" : incident.Name;
-                return string.Format("{0} {1}", incidentName, title).Trim();
-            }
+                Message = builder.ToString()
+            };
+            Messenger.Default.Send(msg);
         }
 
-        protected void NotifyRequired(IEnumerable<string> fields)
+        protected void ShowRequiredMessage(IEnumerable<string> fields)
         {
-            Messenger.Default.Send(new NotifyMessage(string.Format(
-                "The following fields are required:{0}{0}{1}",
-                Environment.NewLine,
-                string.Join(", ", fields))));
+            ShowValidationMessage(fields, "required");
         }
 
-        protected void NotifyInvalid(IEnumerable<string> fields)
+        protected void ShowInvalidMessage(IEnumerable<string> fields)
         {
-            Messenger.Default.Send(new NotifyMessage(string.Format(
-                "The following fields are invalid:{0}{0}{1}",
-                Environment.NewLine,
-                string.Join(", ", fields))));
+            ShowValidationMessage(fields, "invalid");
         }
     }
 }

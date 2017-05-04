@@ -6,32 +6,35 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class HelpViewModel : ViewModelBase
     {
-        public RelayCommand RespondersCommand { get; private set; }
-        public RelayCommand IncidentsCommand { get; private set; }
-        public RelayCommand FormsCommand { get; private set; }
-        public RelayCommand TemplatesCommand { get; private set; }
-        public RelayCommand AnalysesCommand { get; private set; }
-        public RelayCommand DashboardsCommand { get; private set; }
+        public RelayCommand OpenResponderListViewCommand { get; private set; }
+        public RelayCommand OpenIncidentListViewCommand { get; private set; }
+        public RelayCommand OpenViewListViewCommand { get; private set; }
+        public RelayCommand OpenTemplateListViewCommand { get; private set; }
+        public RelayCommand OpenPgmListViewCommand { get; private set; }
+        public RelayCommand OpenCanvasListViewCommand { get; private set; }
 
         public HelpViewModel()
         {
             Title = "Help";
-            RespondersCommand = new RelayCommand(OpenResponderListView);
-            IncidentsCommand = new RelayCommand(OpenIncidentListView);
-            FormsCommand = new RelayCommand(OpenViewListView);
-            TemplatesCommand = new RelayCommand(OpenTemplateListView);
-            AnalysesCommand = new RelayCommand(OpenPgmListView);
-            DashboardsCommand = new RelayCommand(OpenCanvasListView);
+            OpenResponderListViewCommand = new RelayCommand(OpenResponderListView);
+            OpenIncidentListViewCommand = new RelayCommand(OpenIncidentListView);
+            OpenViewListViewCommand = new RelayCommand(OpenViewListView);
+            OpenTemplateListViewCommand = new RelayCommand(OpenTemplateListView);
+            OpenPgmListViewCommand = new RelayCommand(OpenPgmListView);
+            OpenCanvasListViewCommand = new RelayCommand(OpenCanvasListView);
         }
 
-        private bool CheckDataContext()
+        private bool Validate()
         {
             if (DataContext == null)
             {
-                NotifyMessage msg = new NotifyMessage("Please open a data source.");
+                AlertMessage msg = new AlertMessage
+                {
+                    Message = "Please open a data source."
+                };
                 msg.Dismissed += (sender, e) =>
                 {
-                    Locator.Main.OpenDataSourceListView();
+                    Main.OpenDataSourceListView();
                 };
                 Messenger.Default.Send(msg);
                 return false;
@@ -44,49 +47,49 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenResponderListView()
         {
-            if (CheckDataContext())
+            if (Validate())
             {
-                Locator.Main.OpenResponderListView();
+                Main.OpenResponderListView();
             }
         }
 
         public void OpenIncidentListView()
         {
-            if (CheckDataContext())
+            if (Validate())
             {
-                Locator.Main.OpenIncidentListView();
+                Main.OpenIncidentListView();
             }
         }
 
         public void OpenViewListView()
         {
-            if (CheckDataContext())
+            if (Validate())
             {
-                Locator.Main.OpenViewListView();
+                Main.OpenViewListView();
             }
         }
 
         public void OpenTemplateListView()
         {
-            if (CheckDataContext())
+            if (Validate())
             {
-                Locator.Main.OpenTemplateListView();
+                Main.OpenTemplateListView();
             }
         }
 
         public void OpenPgmListView()
         {
-            if (CheckDataContext())
+            if (Validate())
             {
-                Locator.Main.OpenPgmListView();
+                Main.OpenPgmListView();
             }
         }
 
         public void OpenCanvasListView()
         {
-            if (CheckDataContext())
+            if (Validate())
             {
-                Locator.Main.OpenCanvasListView();
+                Main.OpenCanvasListView();
             }
         }
     }

@@ -1,112 +1,59 @@
 ﻿<UserControl x:Class="ERHMS.Presentation.Views.DataSourceListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
-             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
-             xmlns:eida="clr-namespace:ERHMS.EpiInfo.DataAccess;assembly=ERHMS.EpiInfo.DataAccess"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:scw="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
-             mc:Ignorable="d"
-             d:DesignWidth="640" d:DesignHeight="480"
-             Name="Root">
-    <UserControl.Resources>
-        <conv:BoolInverter x:Key="BoolInverter" />
-        <conv:DataProviderToDescriptionConverter x:Key="DataProviderToDescriptionConverter" />
-        <conv:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
-    </UserControl.Resources>
+             xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
     <Grid>
-        <DockPanel>
-            <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
-            <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                <ctrl:AppBarButton Command="{Binding OpenCommand}" Icon="{DynamicResource appbar_folder_open}">_Open</ctrl:AppBarButton>
-                <ctrl:AppBarButton Content="_Add" Icon="{DynamicResource appbar_add}" ctrl:ButtonExtensions.OpenContextMenuOnClick="True">
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="_New" Command="{Binding AddNewCommand}" />
-                            <MenuItem Header="_Existing" Command="{Binding AddExistingCommand}" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                </ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding RemoveCommand}" Icon="{DynamicResource appbar_close}">Re_move</ctrl:AppBarButton>
-                <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">_Refresh</ctrl:AppBarButton>
-            </WrapPanel>
-            <DataGrid SelectionMode="Single"
-                      ItemsSource="{Binding Items}"
-                      SelectedItem="{Binding SelectedItem}"
-                      ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="Description" Width="3*" Binding="{Binding Description}" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </DockPanel>
-        <scw:ChildWindow Title="Create a Data Source" DataContext="{Binding DataSource}" IsOpen="{Binding Active}">
-            <DockPanel>
-                <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-                    <ctrl:AppBarButton Command="{Binding CreateCommand}" Icon="{DynamicResource appbar_add}">C_reate</ctrl:AppBarButton>
-                    <ctrl:AppBarButton Command="{Binding CancelCommand}" Icon="{DynamicResource appbar_cancel}">C_ancel</ctrl:AppBarButton>
-                </WrapPanel>
-                <StackPanel>
-                    <ctrl:ResponsiveFormGrid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" mah:TextBoxHelper.Watermark="Required" Text="{Binding Name}" />
-                        <Label Grid.Row="1" Grid.Column="0">Description</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-                                 Style="{StaticResource MultiLineTextBox}"
-                                 Text="{Binding Description}" />
-                        <Label Grid.Row="2" Grid.Column="0">Location</Label>
-                        <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" Text="{Binding Location.FullName, Mode=OneWay}" />
-                        <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource AccentButton}" Command="{Binding BrowseCommand}">Browse</Button>
-                        <Label Grid.Row="3" Grid.Column="0">Database Type</Label>
-                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
-                                  ItemsSource="{Binding DataContext.Providers, ElementName=Root}"
-                                  SelectedItem="{Binding Provider}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource DataProviderToDescriptionConverter}}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </ctrl:ResponsiveFormGrid>
-                    <GroupBox Header="Connection"
-                              Visibility="{Binding Provider, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static eida:DataProvider.SqlServer}}">
-                        <ctrl:ResponsiveFormGrid DataContext="{Binding SqlServer}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0">Server Name</Label>
-                            <TextBox Grid.Row="0" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding DataSource}" />
-                            <Label Grid.Row="1" Grid.Column="0">Database Name</Label>
-                            <TextBox Grid.Row="1" Grid.Column="1" mah:TextBoxHelper.Watermark="Required" Text="{Binding InitialCatalog}" />
-                            <Label Grid.Row="2" Grid.Column="0">Windows Authentication</Label>
-                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IntegratedSecurity}" />
-                            <Label Grid.Row="3" Grid.Column="0">User Name</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1"
-                                     Text="{Binding UserId, TargetNullValue=''}"
-                                     IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
-                            <Label Grid.Row="4" Grid.Column="0">Password</Label>
-                            <PasswordBox Grid.Row="4" Grid.Column="1" ctrl:PasswordBoxExtensions.Bound="True"
-                                         ctrl:PasswordBoxExtensions.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
-                                         IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BoolInverter}}" />
-                        </ctrl:ResponsiveFormGrid>
-                    </GroupBox>
-                </StackPanel>
-            </DockPanel>
-        </scw:ChildWindow>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Controls:Filter Grid.Row="0"
+                         Value="{Binding Filter}" />
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectionMode="Single">
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding OpenCommand}"
+                              MouseAction="LeftDoubleClick" />
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}"
+                                    Header="Name"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding Description}"
+                                    Header="Description"
+                                    Width="3*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <WrapPanel Grid.Row="2"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Open"
+                                 Command="{Binding OpenCommand}"
+                                 Icon="{StaticResource appbar_folder_open}" />
+            <Controls:IconButton AccessText="_Add"
+                                 Icon="{StaticResource appbar_add}">
+                <i:Interaction.Behaviors>
+                    <Behaviors:OpenContextMenuOnClickBehavior />
+                </i:Interaction.Behaviors>
+                <Controls:IconButton.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding AddNewCommand}"
+                                  Header="_New" />
+                        <MenuItem Command="{Binding AddExistingCommand}"
+                                  Header="_Existing" />
+                    </ContextMenu>
+                </Controls:IconButton.ContextMenu>
+            </Controls:IconButton>
+            <Controls:IconButton AccessText="Re_move"
+                                 Command="{Binding RemoveCommand}"
+                                 Icon="{StaticResource appbar_close}" />
+            <Controls:IconButton AccessText="_Refresh"
+                                 Command="{Binding RefreshCommand}"
+                                 Icon="{StaticResource appbar_refresh_clockwise_down}" />
+        </WrapPanel>
     </Grid>
 </UserControl>

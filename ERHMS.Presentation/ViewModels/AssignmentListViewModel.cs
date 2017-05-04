@@ -5,53 +5,75 @@ using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class AssignmentListViewModel : ListViewModelBase<AssignmentViewModel>
     {
-        public class ResponderListInternalViewModel : ListViewModelBase<Responder>
+        public class ViewDeepLinkListViewModel : ListViewModelBase<DeepLink<View>>
         {
-            public string IncidentId { get; private set; }
+            public Incident Incident { get; private set; }
 
-            public RelayCommand EditCommand { get; private set; }
-
-            public ResponderListInternalViewModel(string incidentId)
+            public ViewDeepLinkListViewModel(Incident incident)
             {
-                IncidentId = incidentId;
-                Selecting += (sender, e) =>
-                {
-                    EditCommand.RaiseCanExecuteChanged();
-                };
-                EditCommand = new RelayCommand(Edit, HasSelectedItem);
+                Incident = incident;
+                Messenger.Default.Register<RefreshMessage<View>>(this, msg => Refresh());
             }
 
-            protected override ICollectionView GetItems()
+            protected override IEnumerable<DeepLink<View>> GetItems()
             {
-                IEnumerable<Responder> items;
-                if (IncidentId == null)
+                IEnumerable<DeepLink<View>> items;
+                if (Incident == null)
                 {
-                    items = DataContext.Responders.SelectByDeleted(false);
+                    items = DataContext.ViewLinks.SelectDeepLinks();
                 }
                 else
                 {
-                    ICollection<string> responderIds = DataContext.Rosters.SelectByIncident(IncidentId)
-                        .Select(roster => roster.ResponderId)
-                        .ToList();
-                    items = DataContext.Responders.SelectByDeleted(false)
-                        .Where(responder => responderIds.Contains(responder.ResponderId, StringComparer.OrdinalIgnoreCase));
+                    items = DataContext.ViewLinks.SelectDeepLinksByIncidentId(Incident.IncidentId);
                 }
-                return CollectionViewSource.GetDefaultView(items.OrderBy(responder => responder.LastName).ThenBy(responder => responder.FirstName));
+                return items.OrderBy(item => item.Item.Name);
+            }
+        }
+
+        public class ResponderListViewModel : ListViewModelBase<Responder>
+        {
+            public Incident Incident { get; private set; }
+
+            public RelayCommand EditCommand { get; private set; }
+
+            public ResponderListViewModel(Incident incident)
+            {
+                Incident = incident;
+                EditCommand = new RelayCommand(Edit, HasOneSelectedItem);
+                SelectedItemChanged += (sender, e) =>
+                {
+                    EditCommand.RaiseCanExecuteChanged();
+                };
+                Messenger.Default.Register<RefreshMessage<Responder>>(this, msg => Refresh());
+                if (incident != null)
+                {
+                    Messenger.Default.Register<RefreshMessage<Roster>>(this, msg => Refresh());
+                }
+            }
+
+            protected override IEnumerable<Responder> GetItems()
+            {
+                IEnumerable<Responder> items;
+                if (Incident == null)
+                {
+                    items = DataContext.Responders.SelectUndeleted();
+                }
+                else
+                {
+                    items = DataContext.Responders.SelectByIncidentId(Incident.IncidentId);
+                }
+                return items.OrderBy(item => item.LastName).ThenBy(item => item.FirstName);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
             {
-                yield return item.ResponderId;
                 yield return item.LastName;
                 yield return item.FirstName;
                 yield return item.EmailAddress;
@@ -63,32 +85,13 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Locator.Main.OpenResponderDetailView(SelectedItem);
+                Main.OpenResponderDetailView(SelectedItem);
             }
         }
 
         public Incident Incident { get; private set; }
-
-        public string IncidentId
-        {
-            get { return Incident == null ? null : Incident.IncidentId; }
-        }
-
-        private ICollection<Link<View>> views;
-        public ICollection<Link<View>> Views
-        {
-            get { return views; }
-            set { Set(() => Views, ref views, value); }
-        }
-
-        private Link<View> selectedView;
-        public Link<View> SelectedView
-        {
-            get { return selectedView; }
-            set { Set(() => SelectedView, ref selectedView, value); }
-        }
-
-        public ResponderListInternalViewModel Responders { get; private set; }
+        public ViewDeepLinkListViewModel ViewDeepLinks { get; private set; }
+        public ResponderListViewModel Responders { get; private set; }
 
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand RemoveCommand { get; private set; }
@@ -97,96 +100,75 @@ namespace ERHMS.Presentation.ViewModels
 
         public AssignmentListViewModel(Incident incident)
         {
+            Title = "Assignments";
             Incident = incident;
-            UpdateTitle();
-            PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(SelectedView))
-                {
-                    AddCommand.RaiseCanExecuteChanged();
-                }
-            };
-            Responders = new ResponderListInternalViewModel(IncidentId);
-            Responders.Selecting += (sender, e) =>
+            ViewDeepLinks = new ViewDeepLinkListViewModel(incident);
+            Responders = new ResponderListViewModel(incident);
+            Refresh();
+            AddCommand = new RelayCommand(Add, CanAdd);
+            RemoveCommand = new RelayCommand(Remove, HasAnySelectedItems);
+            EmailCommand = new RelayCommand(Email, CanEmail);
+            RefreshCommand = new RelayCommand(Refresh);
+            ViewDeepLinks.SelectedItemChanged += (sender, e) =>
             {
                 AddCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
-            Selecting += (sender, e) =>
+            Responders.SelectedItemChanged += (sender, e) =>
+            {
+                AddCommand.RaiseCanExecuteChanged();
+            };
+            SelectedItemChanged += (sender, e) =>
             {
                 RemoveCommand.RaiseCanExecuteChanged();
                 EmailCommand.RaiseCanExecuteChanged();
             };
-            AddCommand = new RelayCommand(Add, CanAddAssignment);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            EmailCommand = new RelayCommand(Email, CanEmail);
-            RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
-            Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
-            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
-            Messenger.Default.Register<RefreshListMessage<Roster>>(this, OnRefreshRosterListMessage);
-            Messenger.Default.Register<RefreshListMessage<Assignment>>(this, OnRefreshAssignmentListMessage);
+            Messenger.Default.Register<RefreshMessage<View>>(this, msg => Refresh());
+            Messenger.Default.Register<RefreshMessage<Responder>>(this, msg => Refresh());
+            Messenger.Default.Register<RefreshMessage<Assignment>>(this, msg => Refresh());
         }
 
-        private void UpdateTitle()
+        public bool CanAdd()
         {
-            Title = GetTitle("Assignments", Incident);
-        }
-
-        public bool CanAddAssignment()
-        {
-            return SelectedView != null && Responders.HasSelectedItem();
+            return ViewDeepLinks.HasOneSelectedItem() && Responders.HasAnySelectedItems();
         }
 
         public bool CanEmail()
         {
-            return HasSelectedItem() && SelectedItems.Cast<AssignmentViewModel>().All(assignment => assignment.View == SelectedItem.View);
+            if (!HasAnySelectedItems())
+            {
+                return false;
+            }
+            else
+            {
+                int viewId = SelectedItem.Assignment.ViewId;
+                return TypedSelectedItems.All(item => item.Assignment.ViewId == viewId);
+            }
         }
 
-        protected override ICollectionView GetItems()
+        protected override IEnumerable<AssignmentViewModel> GetItems()
         {
-            ICollection<Responder> responders = DataContext.Responders.SelectByDeleted(false).ToList();
+            ICollection<Responder> responders = DataContext.Responders.SelectUndeleted().ToList();
             ICollection<AssignmentViewModel> items = new List<AssignmentViewModel>();
             foreach (Assignment assignment in DataContext.Assignments.Select())
             {
-                Link<View> view = Views.SingleOrDefault(_view => _view.Data.Id == assignment.ViewId);
-                Responder responder = responders.SingleOrDefault(_responder => _responder.ResponderId.EqualsIgnoreCase(assignment.ResponderId));
-                if (view != null && (view.Incident == null || !view.Incident.Deleted) && responder != null)
+                DeepLink<View> itemViewDeepLink = ViewDeepLinks.TypedItems.SingleOrDefault(viewDeepLink => viewDeepLink.Item.Id == assignment.ViewId);
+                Responder itemResponder = responders.SingleOrDefault(responder => responder.ResponderId.EqualsIgnoreCase(assignment.ResponderId));
+                if (itemViewDeepLink != null && itemResponder != null)
                 {
-                    items.Add(new AssignmentViewModel(assignment, view, responder));
+                    items.Add(new AssignmentViewModel(assignment, itemViewDeepLink, itemResponder));
                 }
             }
-            return CollectionViewSource.GetDefaultView(items.OrderBy(assignment => assignment.View.Data.Name)
-                .ThenBy(assignment => assignment.Responder.LastName)
-                .ThenBy(assignment => assignment.Responder.FirstName));
+            return items.OrderBy(item => item.ViewDeepLink.Item.Name).ThenBy(item => item.Responder.FullName);
         }
 
         protected override IEnumerable<string> GetFilteredValues(AssignmentViewModel item)
         {
-            yield return item.View.Data.Name;
-            yield return item.Responder.LastName;
-            yield return item.Responder.FirstName;
-            yield return item.IncidentName;
-        }
-
-        public override void Refresh()
-        {
+            yield return item.ViewDeepLink.Item.Name;
+            yield return item.Responder.FullName;
             if (Incident == null)
             {
-                Views = DataContext.GetLinkedViews()
-                    .Where(view => view.Incident == null || !view.Incident.Deleted)
-                    .OrderBy(view => view.Data.Name)
-                    .ToList();
+                yield return item.ViewDeepLink.Incident?.Name;
             }
-            else
-            {
-                Views = DataContext.GetLinkedViews(IncidentId)
-                    .Select(view => new Link<View>(view, Incident))
-                    .OrderBy(view => view.Data.Name)
-                    .ToList();
-            }
-            Responders.Refresh();
-            base.Refresh();
         }
 
         public void Add()
@@ -194,77 +176,51 @@ namespace ERHMS.Presentation.ViewModels
             foreach (Responder responder in Responders.SelectedItems)
             {
                 Assignment assignment = DataContext.Assignments.Create();
-                assignment.ViewId = SelectedView.Data.Id;
+                assignment.ViewId = ViewDeepLinks.SelectedItem.Item.Id;
                 assignment.ResponderId = responder.ResponderId;
                 DataContext.Assignments.Save(assignment);
             }
-            Messenger.Default.Send(new RefreshListMessage<Assignment>(SelectedView.IncidentId));
+            Messenger.Default.Send(new RefreshMessage<Assignment>());
         }
 
         public void Remove()
         {
-            ConfirmMessage msg = new ConfirmMessage("Remove", "Remove the selected assignments?");
+            ConfirmMessage msg = new ConfirmMessage
+            {
+                Verb = "Remove",
+                Message = "Remove the selected assignments?"
+            };
             msg.Confirmed += (sender, e) =>
             {
-                foreach (AssignmentViewModel assignment in SelectedItems)
+                foreach (AssignmentViewModel item in SelectedItems)
                 {
-                    DataContext.Assignments.Delete(assignment.Assignment);
+                    DataContext.Assignments.Delete(item.Assignment);
                 }
-                Messenger.Default.Send(new RefreshListMessage<Assignment>(IncidentId));
+                Messenger.Default.Send(new RefreshMessage<Assignment>());
             };
             Messenger.Default.Send(msg);
         }
 
         public void Email()
         {
-            EmailViewModel email = new EmailViewModel(SelectedItems.Cast<AssignmentViewModel>().Select(assignment => assignment.Responder));
-            if (SelectedItem.View.Data.IsWebSurvey())
+            EmailViewModel email = new EmailViewModel(TypedSelectedItems.Select(item => item.Responder));
+            if (SelectedItem.ViewDeepLink.Item.IsWebSurvey())
             {
-                email.AppendUrl = true;
-                email.SetSelectedView(SelectedItem.View.Data.Name);
-                if (DataContext.IsResponderLinkedView(SelectedItem.View.Data))
+                email.AppendWebSurveyUrl = true;
+                email.Views.SelectItem(view => view.Id == SelectedItem.ViewDeepLink.Item.Id);
+                if (DataContext.IsResponderLinkedView(SelectedItem.ViewDeepLink.Item))
                 {
-                    email.Prepopulate = true;
+                    email.PrepopulateResponderId = true;
                 }
             }
-            Locator.Main.OpenEmailView(email);
+            Main.OpenEmailView(email);
         }
 
-        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
+        public override void Refresh()
         {
-            if (msg.Entity == Incident)
-            {
-                UpdateTitle();
-            }
-        }
-
-        private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
-        {
-            if (Incident == null || StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
-            {
-                Refresh();
-            }
-        }
-
-        private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)
-        {
-            Refresh();
-        }
-
-        private void OnRefreshRosterListMessage(RefreshListMessage<Roster> msg)
-        {
-            if (StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
-            {
-                Refresh();
-            }
-        }
-
-        private void OnRefreshAssignmentListMessage(RefreshListMessage<Assignment> msg)
-        {
-            if (Incident == null || StringExtensions.EqualsIgnoreCase(msg.IncidentId, IncidentId))
-            {
-                Refresh();
-            }
+            ViewDeepLinks.Refresh();
+            Responders.Refresh();
+            base.Refresh();
         }
     }
 }

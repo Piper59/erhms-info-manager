@@ -10,6 +10,7 @@ namespace ERHMS.Presentation.Controls
             typeof(string),
             typeof(Filter),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
         public string Value
         {
             get { return (string)GetValue(ValueProperty); }

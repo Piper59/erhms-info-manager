@@ -31,6 +31,30 @@ namespace ERHMS.Test.Utility
         }
 
         [Test]
+        public void SplitLinesTest()
+        {
+            string format = "Line 1{0}Line 2{0}{0}Line 3{0}{0}{0}Line 4";
+            string windows = string.Format(format, "\r\n");
+            string unix = string.Format(format, "\n");
+            string mac = string.Format(format, "\r");
+            string mixed = "Line 1\r\nLine 2\r\n\nLine 3\r\n\n\rLine 4";
+            ICollection<string> expected = new string[]
+            {
+                "Line 1",
+                "Line 2",
+                "",
+                "Line 3",
+                "",
+                "",
+                "Line 4"
+            };
+            CollectionAssert.AreEqual(expected, windows.SplitLines());
+            CollectionAssert.AreEqual(expected, unix.SplitLines());
+            CollectionAssert.AreEqual(expected, mac.SplitLines());
+            CollectionAssert.AreEqual(expected, mixed.SplitLines());
+        }
+
+        [Test]
         public void NormalizeNewLinesTest()
         {
             string format = "Line 1{0}Line 2{0}{0}Line 3{0}{0}{0}Line 4";

@@ -8,11 +8,8 @@ namespace ERHMS.Presentation.Markup
     [MarkupExtensionReturnType(typeof(PathFigureCollection))]
     public class ArcExtension : MarkupExtension
     {
-        [ConstructorArgument("x")]
-        public double X { get; set; }
-
-        [ConstructorArgument("y")]
-        public double Y { get; set; }
+        [ConstructorArgument("center")]
+        public Point Center { get; set; }
 
         [ConstructorArgument("radius")]
         public double Radius { get; set; }
@@ -23,25 +20,28 @@ namespace ERHMS.Presentation.Markup
         [ConstructorArgument("endAngle")]
         public double EndAngle { get; set; }
 
-        [ConstructorArgument("clockwise")]
-        public bool Clockwise { get; set; }
+        [ConstructorArgument("sweepDirection")]
+        public SweepDirection SweepDirection { get; set; }
 
         public ArcExtension() { }
 
-        public ArcExtension(double x, double y, double radius, double startAngle, double endAngle, bool clockwise)
+        public ArcExtension(Point center, double radius, double startAngle, double endAngle, SweepDirection sweepDirection)
         {
-            X = x;
-            Y = y;
+            Center = center;
             Radius = radius;
             StartAngle = startAngle;
             EndAngle = endAngle;
-            Clockwise = clockwise;
+            SweepDirection = sweepDirection;
         }
 
         private Point GetPoint(double angle)
         {
-            double radians = angle * Math.PI / 180.0;
-            return new Point(X + Radius * Math.Cos(radians), Y - Radius * Math.Sin(radians));
+            double angleInRadians = angle * Math.PI / 180.0;
+            return new Point
+            {
+                X = Center.X + Radius * Math.Cos(angleInRadians),
+                Y = Center.Y - Radius * Math.Sin(angleInRadians)
+            };
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
@@ -57,7 +57,7 @@ namespace ERHMS.Presentation.Markup
                         {
                             Size = new Size(Radius, Radius),
                             Point = GetPoint(EndAngle),
-                            SweepDirection = Clockwise ? SweepDirection.Clockwise : SweepDirection.Counterclockwise
+                            SweepDirection = SweepDirection
                         }
                     }
                 }

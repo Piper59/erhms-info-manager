@@ -18,20 +18,15 @@ namespace ERHMS.Presentation.ViewModels
 
         public IncidentDetailViewModel(Incident incident)
         {
-            Title = incident.Name;
             Incident = incident;
-            incident.PropertyChanged += OnDirtyCheckPropertyChanged;
-            AfterClosed += (sender, e) =>
-            {
-                incident.PropertyChanged -= OnDirtyCheckPropertyChanged;
-            };
+            AddDirtyCheck(incident);
             Phases = EnumExtensions.GetValues<Phase>().ToList();
             SaveCommand = new RelayCommand(Save);
         }
 
-        private bool ValidateDates(DateTime? date1, DateTime? date2)
+        private bool ValidateDates(DateTime? startDate, DateTime? endDate)
         {
-            return !date1.HasValue || !date2.HasValue || date2.Value >= date1.Value;
+            return !startDate.HasValue || !endDate.HasValue || endDate.Value >= startDate.Value;
         }
 
         private bool Validate()
@@ -43,17 +38,23 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                NotifyRequired(fields);
+                ShowRequiredMessage(fields);
                 return false;
             }
             else if (!ValidateDates(Incident.StartDate, Incident.EndDateEstimate))
             {
-                Messenger.Default.Send(new NotifyMessage("Estimated end date must be later than start date."));
+                Messenger.Default.Send(new AlertMessage
+                {
+                    Message = "Estimated end date must be later than start date."
+                });
                 return false;
             }
             else if (!ValidateDates(Incident.StartDate, Incident.EndDateActual))
             {
-                Messenger.Default.Send(new NotifyMessage("Actual end date must be later than start date."));
+                Messenger.Default.Send(new AlertMessage
+                {
+                    Message = "Actual end date must be later than start date."
+                });
                 return false;
             }
             else
@@ -70,9 +71,11 @@ namespace ERHMS.Presentation.ViewModels
             }
             DataContext.Incidents.Save(Incident);
             Dirty = false;
-            Messenger.Default.Send(new ToastMessage("Incident has been saved."));
-            Messenger.Default.Send(new RefreshMessage<Incident>(Incident));
-            Messenger.Default.Send(new RefreshListMessage<Incident>());
+            Messenger.Default.Send(new ToastMessage
+            {
+                Message = "Incident has been saved."
+            });
+            Messenger.Default.Send(new RefreshMessage<Incident>());
         }
     }
 }

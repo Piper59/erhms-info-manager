@@ -1,66 +1,105 @@
 ﻿<UserControl x:Class="ERHMS.Presentation.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
-             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
-             mc:Ignorable="d"
-             d:DesignWidth="640" d:DesignHeight="480">
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
     <UserControl.Resources>
-        <conv:BindingToDescriptionConverter x:Key="BindingToDescriptionConverter" />
-        <conv:BoolInverter x:Key="BoolInverter" />
+        <Converters:BindingTypeToDescriptionConverter x:Key="BindingTypeToDescriptionConverter" />
+        <Converters:BooleanInverter x:Key="BooleanInverter" />
     </UserControl.Resources>
-    <DockPanel>
-        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding SaveCommand}" Icon="{DynamicResource appbar_disk}">_Save</ctrl:AppBarButton>
-        </WrapPanel>
-        <ScrollViewer>
-            <StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Grid.IsSharedSizeScope="True">
                 <GroupBox Header="General">
-                    <ctrl:FormGrid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="Label"
+                                              Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Logging Level</Label>
-                        <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                        <ComboBox Grid.Row="0" Grid.Column="1"
+                                  AutomationProperties.Name="Logging Level"
                                   ItemsSource="{Binding LogLevels}"
                                   SelectedItem="{Binding LogLevel}" />
                         <Label Grid.Row="1" Grid.Column="0">Root Directory</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Text="{Binding RootDirectory}" />
-                        <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource AccentButton}" Command="{Binding BrowseCommand}">Browse</Button>
-                    </ctrl:FormGrid>
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                     AutomationProperties.Name="Root Directory"
+                                     IsReadOnly="True"
+                                     Text="{Binding RootDirectory}" />
+                            <Button Grid.Column="1"
+                                    Command="{Binding BrowseCommand}"
+                                    Style="{StaticResource AccentButton}">
+                                Browse
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </GroupBox>
-                <GroupBox Header="Email" DataContext="{Binding Email}">
-                    <ctrl:FormGrid>
+                <GroupBox Header="Email" DataContext="{Binding EmailSettings}">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="Label"
+                                              Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">SMTP Host</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Host}" />
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                                 AutomationProperties.Name="SMTP Host"
+                                 Text="{Binding Host}" />
                         <Label Grid.Row="1" Grid.Column="0">SMTP Port</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Port, TargetNullValue=''}" />
+                        <TextBox Grid.Row="1" Grid.Column="1"
+                                 AutomationProperties.Name="SMTP Port"
+                                 Text="{Binding Port, TargetNullValue=''}" />
                         <Label Grid.Row="2" Grid.Column="0">Sender Address</Label>
-                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Sender}" />
-                    </ctrl:FormGrid>
+                        <TextBox Grid.Row="2" Grid.Column="1"
+                                 AutomationProperties.Name="Sender Address"
+                                 Text="{Binding Sender}" />
+                    </Grid>
                 </GroupBox>
                 <GroupBox Header="Mapping">
-                    <ctrl:FormGrid>
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="Label"
+                                              Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">License Key</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MapLicenseKey}" />
-                    </ctrl:FormGrid>
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                                 AutomationProperties.Name="License Key"
+                                 Text="{Binding MapLicenseKey}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1"
+                                   TextWrapping="Wrap">
+                            <Run FontWeight="SemiBold">Note:</Run> The default mapping license key should only be used for demonstration purposes.
+                            For optimal performance, please replace the default key with one retrieved from the <Hyperlink Command="{Binding GetMapLicenseKeyCommand}">Bing Maps Dev Center</Hyperlink>.
+                        </TextBlock>
+                    </Grid>
                 </GroupBox>
-                <GroupBox Header="Web Survey" DataContext="{Binding WebSurvey}">
-                    <ctrl:FormGrid>
+                <GroupBox Header="Web Survey" DataContext="{Binding WebSurveySettings}">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -68,28 +107,48 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="Label"
+                                              Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Endpoint Address</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Address}" />
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                                 AutomationProperties.Name="Endpoint Address"
+                                 Text="{Binding Address}" />
                         <Label Grid.Row="1" Grid.Column="0">Windows Authentication</Label>
-                        <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding WindowsAuthentication}" />
+                        <CheckBox Grid.Row="1" Grid.Column="1"
+                                  AutomationProperties.Name="Windows Authentication"
+                                  IsChecked="{Binding WindowsAuthentication}" />
                         <Label Grid.Row="2" Grid.Column="0">Binding Protocol</Label>
                         <ComboBox Grid.Row="2" Grid.Column="1"
-                                  ItemsSource="{Binding Bindings}"
-                                  SelectedItem="{Binding Binding}"
-                                  IsEnabled="{Binding WindowsAuthentication, Converter={StaticResource BoolInverter}}">
+                                  AutomationProperties.Name="Binding Protocol"
+                                  IsEnabled="{Binding WindowsAuthentication, Converter={StaticResource BooleanInverter}}"
+                                  ItemsSource="{Binding BindingTypes}"
+                                  SelectedItem="{Binding BindingType}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource BindingToDescriptionConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource BindingTypeToDescriptionConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                         <Label Grid.Row="3" Grid.Column="0">Organization Name</Label>
-                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OrganizationName}" />
+                        <TextBox Grid.Row="3" Grid.Column="1"
+                                 AutomationProperties.Name="Organization Name"
+                                 Text="{Binding OrganizationName}" />
                         <Label Grid.Row="4" Grid.Column="0">Organization Key</Label>
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OrganizationKey, TargetNullValue=''}" />
-                    </ctrl:FormGrid>
+                        <TextBox Grid.Row="4" Grid.Column="1"
+                                 AutomationProperties.Name="Organization Key"
+                                 Text="{Binding OrganizationKey, TargetNullValue=''}" />
+                    </Grid>
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>
-    </DockPanel>
+        <WrapPanel Grid.Row="1"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Save"
+                                 Command="{Binding SaveCommand}"
+                                 Icon="{StaticResource appbar_disk}" />
+        </WrapPanel>
+    </Grid>
 </UserControl>

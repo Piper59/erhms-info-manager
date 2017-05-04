@@ -40,7 +40,7 @@ namespace ERHMS.EpiInfo
         {
             Configuration configuration = Configuration.GetNewInstance();
             DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Project);
-            foreach (FileInfo file in directory.Search(Project.FileExtension))
+            foreach (FileInfo file in directory.SearchByExtension(Project.FileExtension))
             {
                 ProjectInfo projectInfo;
                 if (TryRead(file.FullName, out projectInfo))

@@ -1,8 +1,6 @@
 ﻿using Epi;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.DataAccess;
-using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
@@ -18,10 +16,13 @@ namespace ERHMS.Presentation.ViewModels
     {
         private static void RequestConfigurationInternal(string message)
         {
-            NotifyMessage msg = new NotifyMessage(message);
+            AlertMessage msg = new AlertMessage
+            {
+                Message = message
+            };
             msg.Dismissed += (sender, e) =>
             {
-                Locator.Main.OpenSettingsView();
+                MainViewModel.Instance.OpenSettingsView();
             };
             Messenger.Default.Send(msg);
         }
@@ -36,9 +37,27 @@ namespace ERHMS.Presentation.ViewModels
             RequestConfigurationInternal(string.Format("{0} Please verify web survey settings.", reason));
         }
 
+        private static string GetErrorMessage(ConfigurationError error)
+        {
+            switch (error)
+            {
+                case ConfigurationError.EndpointAddress:
+                    return "Invalid endpoint address.";
+                case ConfigurationError.Version:
+                    return "Service must be version 2 or later.";
+                case ConfigurationError.OrganizationKey:
+                    return "Invalid organization key.";
+                case ConfigurationError.Connection:
+                    return "Failed to connect to service.";
+                case ConfigurationError.Unknown:
+                    return "Configuration error.";
+                default:
+                    throw new InvalidEnumValueException(error);
+            }
+        }
         public static void RequestConfiguration(ConfigurationError error)
         {
-            RequestConfiguration(error.GetMessage());
+            RequestConfiguration(GetErrorMessage(error));
         }
 
         public ICollection<ResponseType> ResponseTypes { get; private set; }
@@ -47,56 +66,50 @@ namespace ERHMS.Presentation.ViewModels
         public bool Active
         {
             get { return active; }
-            set { Set(() => Active, ref active, value); }
+            set { Set(nameof(Active), ref active, value); }
         }
 
         private View view;
         public View View
         {
             get { return view; }
-            private set { Set(() => View, ref view, value); }
+            private set { Set(nameof(View), ref view, value); }
         }
 
         private Survey survey;
         public Survey Survey
         {
             get { return survey; }
-            set { Set(() => Survey, ref survey, value); }
+            set { Set(nameof(Survey), ref survey, value); }
         }
 
         public RelayCommand PublishCommand { get; private set; }
         public RelayCommand CancelCommand { get; private set; }
 
-        public SurveyViewModel()
+        public SurveyViewModel(View view)
         {
             ResponseTypes = EnumExtensions.GetValues<ResponseType>()
                 .Where(responseType => responseType != ResponseType.Unspecified)
                 .ToList();
+            View = view;
             PublishCommand = new RelayCommand(Publish);
             CancelCommand = new RelayCommand(Cancel);
         }
 
-        public SurveyViewModel(View view)
-            : this()
+        public void Activate()
         {
-            View = view;
-        }
-
-        public void Activate(View view)
-        {
-            View = null;
-            View = view;
-            if (view.IsWebSurvey())
+            if (View.IsWebSurvey())
             {
                 ConfigurationError error = ConfigurationError.None;
-                BlockMessage msg = new BlockMessage("Retrieving web survey details \u2026");
+                BlockMessage msg = new BlockMessage
+                {
+                    Message = "Retrieving web survey details \u2026"
+                };
                 msg.Executing += (sender, e) =>
                 {
-                    Service service = new Service();
-                    error = service.CheckConfiguration();
-                    if (error == ConfigurationError.None)
+                    if (Service.IsConfigured(out error))
                     {
-                        Survey = service.GetSurvey(view);
+                        Survey = Service.GetSurvey(View);
                     }
                 };
                 msg.Executed += (sender, e) =>
@@ -121,9 +134,9 @@ namespace ERHMS.Presentation.ViewModels
                 DateTime now = DateTime.Now;
                 Survey = new Survey
                 {
-                    Title = view.Name,
+                    Title = View.Name,
                     StartDate = now,
-                    EndDate = now.AddMonths(1),
+                    EndDate = now.AddDays(10.0),
                     ResponseType = ResponseType.Single,
                     Intro = null,
                     Outro = null,
@@ -143,7 +156,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                NotifyRequired(fields);
+                ShowRequiredMessage(fields);
                 return false;
             }
             else
@@ -151,31 +164,32 @@ namespace ERHMS.Presentation.ViewModels
                 return true;
             }
         }
+
         public void Publish()
         {
             if (!Validate())
             {
                 return;
             }
-            View.Project.CollectedData.EnsureDataTablesExist(View);
-            bool success = false;
             ConfigurationError error = ConfigurationError.None;
-            BlockMessage msg = new BlockMessage("Publishing form to web \u2026");
+            bool success = false;
+            BlockMessage msg = new BlockMessage
+            {
+                Message = "Publishing form to web \u2026"
+            };
             msg.Executing += (sender, e) =>
             {
-                Service service = new Service();
-                error = service.CheckConfiguration();
-                if (error != ConfigurationError.None)
+                if (!Service.IsConfigured(out error))
                 {
                     return;
                 }
                 if (View.IsWebSurvey())
                 {
-                    success = service.Republish(View, Survey);
+                    success = Service.Republish(View, Survey);
                 }
                 else
                 {
-                    success = service.Publish(View, Survey);
+                    success = Service.Publish(View, Survey);
                     if (success)
                     {
                         WebSurvey webSurvey = DataContext.WebSurveys.Create();
@@ -198,8 +212,11 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else
                 {
+                    Messenger.Default.Send(new ToastMessage
+                    {
+                        Message = "Form has been published to web."
+                    });
                     Active = false;
-                    Messenger.Default.Send(new ToastMessage("Form has been published to web."));
                 }
             };
             Messenger.Default.Send(msg);
@@ -208,78 +225,6 @@ namespace ERHMS.Presentation.ViewModels
         public void Cancel()
         {
             Active = false;
-        }
-
-        public bool Import()
-        {
-            if (!View.IsWebSurvey())
-            {
-                Messenger.Default.Send(new NotifyMessage("Form has not been published to web."));
-                return false;
-            }
-            bool success = false;
-            ConfigurationError error = ConfigurationError.None;
-            Survey = null;
-            BlockMessage msg = new BlockMessage("Importing data from web \u2026");
-            msg.Executing += (sender, e) =>
-            {
-                Service service = new Service();
-                error = service.CheckConfiguration();
-                if (error != ConfigurationError.None)
-                {
-                    return;
-                }
-                Survey = service.GetSurvey(View);
-                if (Survey == null)
-                {
-                    return;
-                }
-                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, View);
-                try
-                {
-                    foreach (Record record in service.GetRecords(View, Survey))
-                    {
-                        ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
-                        if (entity == null)
-                        {
-                            entity = entities.Create();
-                            entity.GlobalRecordId = record.GlobalRecordId;
-                        }
-                        foreach (string key in record.Keys)
-                        {
-                            Type type = entities.GetDataType(key);
-                            entity.SetProperty(key, record.GetValue(key, type));
-                        }
-                        entities.Save(entity);
-                    }
-                    success = true;
-                }
-                catch (Exception ex)
-                {
-                    Log.Current.Warn("Failed to import data from web", ex);
-                }
-            };
-            msg.Executed += (sender, e) =>
-            {
-                if (error != ConfigurationError.None)
-                {
-                    RequestConfiguration(error);
-                }
-                else if (Survey == null)
-                {
-                    RequestConfiguration("Failed to retrieve web survey details.");
-                }
-                else if (!success)
-                {
-                    RequestConfiguration("Failed to import data from web.");
-                }
-                else
-                {
-                    Messenger.Default.Send(new ToastMessage("Data has been imported from web."));
-                }
-            };
-            Messenger.Default.Send(msg);
-            return success;
         }
     }
 }

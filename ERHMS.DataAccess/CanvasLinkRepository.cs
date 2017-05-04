@@ -7,12 +7,12 @@ namespace ERHMS.DataAccess
 {
     public class CanvasLinkRepository : LinkRepository<CanvasLink, Canvas>
     {
-        public CanvasLinkRepository(IDataDriver driver, DataContext dataContext)
-            : base(driver, "ERHMS_CanvasLinks", dataContext) { }
+        public CanvasLinkRepository(Project project, IDataDriver driver, IncidentRepository incidents)
+            : base(project, driver, incidents, "ERHMS_CanvasLinks") { }
 
         public override IEnumerable<Canvas> SelectItems()
         {
-            return DataContext.GetCanvases();
+            return Project.GetCanvases();
         }
 
         public void DeleteByCanvasId(int canvasId)

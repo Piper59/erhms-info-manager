@@ -1,32 +1,57 @@
 ﻿<UserControl x:Class="ERHMS.Presentation.Views.LogListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:conv="clr-namespace:ERHMS.Presentation.Converters"
-             xmlns:ctrl="clr-namespace:ERHMS.Presentation.Controls"
-             mc:Ignorable="d"
-             d:DesignWidth="640" d:DesignHeight="480">
+             xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
+             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
     <UserControl.Resources>
-        <conv:SizeToHumanReadableSizeConverter x:Key="SizeToHumanReadableSizeConverter" />
+        <Converters:SizeToHumanReadableSizeConverter x:Key="SizeToHumanReadableSizeConverter" />
     </UserControl.Resources>
-    <DockPanel>
-        <ctrl:Filter DockPanel.Dock="Top" Value="{Binding Filter}" />
-        <WrapPanel DockPanel.Dock="Bottom" Style="{StaticResource AppBar}">
-            <ctrl:AppBarButton Command="{Binding OpenCommand}" Icon="{DynamicResource appbar_folder_open}">_Open</ctrl:AppBarButton>
-            <ctrl:AppBarButton Command="{Binding DeleteCommand}" Icon="{DynamicResource appbar_delete}">_Delete</ctrl:AppBarButton>
-            <ctrl:AppBarButton Command="{Binding PackageCommand}" Icon="{DynamicResource appbar_cabinet_files}">_Package</ctrl:AppBarButton>
-            <ctrl:AppBarButton Command="{Binding RefreshCommand}" Icon="{DynamicResource appbar_refresh_clockwise_down}">_Refresh</ctrl:AppBarButton>
-        </WrapPanel>
-        <ctrl:MultiSelectDataGrid ItemsSource="{Binding Items}"
-                                  SelectedItem="{Binding SelectedItem}"
-                                  MultiSelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}"
-                                  ctrl:DataGridExtensions.DoubleClickCommand="{Binding OpenCommand}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Controls:Filter Grid.Row="0"
+                         Value="{Binding Filter}" />
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}">
+            <i:Interaction.Behaviors>
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+            </i:Interaction.Behaviors>
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding OpenCommand}"
+                              MouseAction="LeftDoubleClick" />
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Location" Width="4*" Binding="{Binding DirectoryName}" />
-                <DataGridTextColumn Header="Size" Width="*" Binding="{Binding Length, Converter={StaticResource SizeToHumanReadableSizeConverter}}" />
+                <DataGridTextColumn Binding="{Binding Name}"
+                                    Header="Name"
+                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding DirectoryName}"
+                                    Header="Location"
+                                    Width="4*" />
+                <DataGridTextColumn Binding="{Binding Length, Converter={StaticResource SizeToHumanReadableSizeConverter}}"
+                                    Header="Size"
+                                    Width="*" />
             </DataGrid.Columns>
-        </ctrl:MultiSelectDataGrid>
-    </DockPanel>
+        </DataGrid>
+        <WrapPanel Grid.Row="2"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Open"
+                                 Command="{Binding OpenCommand}"
+                                 Icon="{StaticResource appbar_folder_open}" />
+            <Controls:IconButton AccessText="_Delete"
+                                 Command="{Binding DeleteCommand}"
+                                 Icon="{StaticResource appbar_delete}" />
+            <Controls:IconButton AccessText="_Package"
+                                 Command="{Binding PackageCommand}"
+                                 Icon="{StaticResource appbar_cabinet_files}" />
+            <Controls:IconButton AccessText="_Refresh"
+                                 Command="{Binding RefreshCommand}"
+                                 Icon="{StaticResource appbar_refresh_clockwise_down}" />
+        </WrapPanel>
+    </Grid>
 </UserControl>

@@ -4,9 +4,7 @@ using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -21,21 +19,21 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Incidents";
             Refresh();
-            Selecting += (sender, e) =>
+            CreateCommand = new RelayCommand(Create);
+            OpenCommand = new RelayCommand(Open, HasOneSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasOneSelectedItem);
+            RefreshCommand = new RelayCommand(Refresh);
+            SelectedItemChanged += (sender, e) =>
             {
                 OpenCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
-            CreateCommand = new RelayCommand(Create);
-            OpenCommand = new RelayCommand(Open, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<Incident>>(this, OnRefreshIncidentListMessage);
+            Messenger.Default.Register<RefreshMessage<Incident>>(this, msg => Refresh());
         }
 
-        protected override ICollectionView GetItems()
+        protected override IEnumerable<Incident> GetItems()
         {
-            return CollectionViewSource.GetDefaultView(DataContext.Incidents.SelectByDeleted(false).OrderBy(incident => incident.Name));
+            return DataContext.Incidents.SelectUndeleted().OrderBy(incident => incident.Name);
         }
 
         protected override IEnumerable<string> GetFilteredValues(Incident item)
@@ -43,34 +41,36 @@ namespace ERHMS.Presentation.ViewModels
             yield return item.Name;
             yield return item.Description;
             yield return EnumExtensions.ToDescription(item.Phase);
-            yield return item.StartDate.HasValue ? item.StartDate.Value.ToShortDateString() : null;
+            if (item.StartDate.HasValue)
+            {
+                yield return item.StartDate.Value.ToShortDateString();
+            }
         }
 
         public void Create()
         {
-            Locator.Main.OpenIncidentView(DataContext.Incidents.Create());
+            Main.OpenIncidentView(DataContext.Incidents.Create());
         }
 
         public void Open()
         {
-            Locator.Main.OpenIncidentView((Incident)SelectedItem.Clone());
+            Main.OpenIncidentView((Incident)SelectedItem.Clone());
         }
 
         public void Delete()
         {
-            ConfirmMessage msg = new ConfirmMessage("Delete", "Delete the selected incident?");
+            ConfirmMessage msg = new ConfirmMessage
+            {
+                Verb = "Delete",
+                Message = "Delete the selected incident?"
+            };
             msg.Confirmed += (sender, e) =>
             {
                 SelectedItem.Deleted = true;
                 DataContext.Incidents.Save(SelectedItem);
-                Messenger.Default.Send(new RefreshListMessage<Incident>());
+                Messenger.Default.Send(new RefreshMessage<Incident>());
             };
             Messenger.Default.Send(msg);
-        }
-
-        private void OnRefreshIncidentListMessage(RefreshListMessage<Incident> msg)
-        {
-            Refresh();
         }
     }
 }

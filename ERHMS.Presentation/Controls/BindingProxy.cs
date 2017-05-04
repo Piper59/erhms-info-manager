@@ -8,6 +8,7 @@ namespace ERHMS.Presentation.Controls
             "DataContext",
             typeof(object),
             typeof(BindingProxy));
+
         public object DataContext
         {
             get { return GetValue(DataContextProperty); }

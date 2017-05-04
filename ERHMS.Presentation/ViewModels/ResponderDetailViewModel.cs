@@ -1,6 +1,5 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
-using ERHMS.Presentation.Converters;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -13,8 +12,6 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ResponderDetailViewModel : ViewModelBase
     {
-        private static readonly ResponderToNameConverter ResponderToNameConverter = new ResponderToNameConverter();
-
         public Responder Responder { get; private set; }
         public ICollection<string> Prefixes { get; private set; }
         public ICollection<string> Suffixes { get; private set; }
@@ -26,29 +23,24 @@ namespace ERHMS.Presentation.ViewModels
         public ResponderDetailViewModel(Responder responder)
         {
             Responder = responder;
-            responder.PropertyChanged += OnDirtyCheckPropertyChanged;
-            AfterClosed += (sender, e) =>
-            {
-                responder.PropertyChanged -= OnDirtyCheckPropertyChanged;
-            };
-            UpdateTitle();
+            AddDirtyCheck(responder);
+            Refresh();
             Prefixes = GetCodes(DataContext.Prefixes);
             Suffixes = GetCodes(DataContext.Suffixes);
             Genders = GetCodes(DataContext.Genders);
             States = GetCodes(DataContext.States);
             SaveCommand = new RelayCommand(Save);
+            Messenger.Default.Register<RefreshMessage<Responder>>(this, msg => Refresh());
         }
 
-        private void UpdateTitle()
+        private void Refresh()
         {
-            Title = Responder.New ? "New Responder" : ResponderToNameConverter.Convert(Responder);
+            Title = Responder.New ? "New Responder" : Responder.FullName;
         }
 
         private ICollection<string> GetCodes(CodeRepository codes)
         {
-            return codes.Select()
-                .Prepend("")
-                .ToList();
+            return codes.Select().Prepend("").ToList();
         }
 
         private bool Validate()
@@ -68,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                NotifyRequired(fields);
+                ShowRequiredMessage(fields);
                 return false;
             }
             else
@@ -91,7 +83,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 if (fields.Count > 0)
                 {
-                    NotifyInvalid(fields);
+                    ShowInvalidMessage(fields);
                     return false;
                 }
                 else
@@ -109,9 +101,11 @@ namespace ERHMS.Presentation.ViewModels
             }
             DataContext.Responders.Save(Responder);
             Dirty = false;
-            Messenger.Default.Send(new ToastMessage("Responder has been saved."));
-            Messenger.Default.Send(new RefreshListMessage<Responder>());
-            UpdateTitle();
+            Messenger.Default.Send(new ToastMessage
+            {
+                Message = "Responder has been saved."
+            });
+            Messenger.Default.Send(new RefreshMessage<Responder>());
         }
     }
 }

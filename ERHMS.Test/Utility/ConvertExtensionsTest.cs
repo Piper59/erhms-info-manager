@@ -34,10 +34,7 @@ namespace ERHMS.Test.Utility
         public void NullableGuidTest()
         {
             Assert.IsNull(ConvertExtensions.ToNullableGuid(null));
-            Assert.Catch(() =>
-            {
-                ConvertExtensions.ToNullableGuid("");
-            });
+            Assert.IsNull(ConvertExtensions.ToNullableGuid(""));
             Assert.AreEqual(Guid.Empty, ConvertExtensions.ToNullableGuid("00000000-0000-0000-0000-000000000000"));
             Assert.Catch(() =>
             {

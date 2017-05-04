@@ -11,7 +11,6 @@ namespace ERHMS.Test.DataAccess
     public class SampleDataContextTest
     {
         private TempDirectory directory;
-        private Configuration configuration;
         private DataContext dataContext;
 
         [OneTimeSetUp]
@@ -19,9 +18,9 @@ namespace ERHMS.Test.DataAccess
         {
             directory = new TempDirectory(nameof(SampleDataContextTest));
             ConfigurationExtensions.Create(directory.Path).Save();
-            configuration = ConfigurationExtensions.Load();
+            Configuration configuration = ConfigurationExtensions.Load();
             configuration.CreateUserDirectories();
-            dataContext = SampleDataContext.Create(configuration);
+            dataContext = SampleDataContext.Create();
         }
 
         [OneTimeTearDown]
@@ -34,7 +33,7 @@ namespace ERHMS.Test.DataAccess
         [Test]
         public void PgmsTest()
         {
-            foreach (Pgm pgm in dataContext.GetPgms())
+            foreach (Pgm pgm in dataContext.Project.GetPgms())
             {
                 StringAssert.Contains(dataContext.Project.FilePath, pgm.Content);
             }
@@ -43,7 +42,7 @@ namespace ERHMS.Test.DataAccess
         [Test]
         public void CanvasesTest()
         {
-            foreach (Canvas canvas in dataContext.GetCanvases())
+            foreach (Canvas canvas in dataContext.Project.GetCanvases())
             {
                 StringAssert.Contains(dataContext.Project.FilePath, canvas.Content);
             }
@@ -59,8 +58,8 @@ namespace ERHMS.Test.DataAccess
             };
             dataContext.Project.InsertCanvas(canvas);
             Incident incident = dataContext.Incidents.Select().Single();
-            Assert.AreEqual(1, dataContext.CanvasLinks.SelectItems(null).Count());
-            Assert.AreEqual(2, dataContext.CanvasLinks.SelectItems(incident.IncidentId).Count());
+            Assert.AreEqual(3, dataContext.CanvasLinks.SelectItems().Count());
+            Assert.AreEqual(2, dataContext.CanvasLinks.SelectItemsByIncidentId(incident.IncidentId).Count());
         }
     }
 }

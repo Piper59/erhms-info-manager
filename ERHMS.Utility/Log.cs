@@ -3,6 +3,7 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -11,6 +12,14 @@ namespace ERHMS.Utility
 {
     public static class Log
     {
+        public static readonly IEnumerable<string> LevelNames = new string[]
+        {
+            "DEBUG",
+            "INFO",
+            "WARN",
+            "ERROR",
+            "FATAL"
+        };
         public static readonly string FilePath;
 
         private static string name;
@@ -32,7 +41,7 @@ namespace ERHMS.Utility
             TextWriterAppender appender = new FileAppender
             {
                 File = FilePath,
-                LockingModel = new FileAppender.InterProcessLock(),
+                LockingModel = new FileAppender.MinimalLock(),
                 Layout = layout
             };
             appender.ActivateOptions();

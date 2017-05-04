@@ -7,12 +7,12 @@ namespace ERHMS.DataAccess
 {
     public class PgmLinkRepository : LinkRepository<PgmLink, Pgm>
     {
-        public PgmLinkRepository(IDataDriver driver, DataContext dataContext)
-            : base(driver, "ERHMS_PgmLinks", dataContext) { }
+        public PgmLinkRepository(Project project, IDataDriver driver, IncidentRepository incidents)
+            : base(project, driver, incidents, "ERHMS_PgmLinks") { }
 
         public override IEnumerable<Pgm> SelectItems()
         {
-            return DataContext.GetPgms();
+            return Project.GetPgms();
         }
 
         public void DeleteByPgmId(int pgmId)

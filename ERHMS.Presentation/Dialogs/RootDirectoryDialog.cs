@@ -1,29 +1,32 @@
 ﻿using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ERHMS.Presentation.Dialogs
 {
     public static class RootDirectoryDialog
     {
+        private const string DirectoryName = App.BareTitle;
+
         public static FolderBrowserDialog GetDialog()
         {
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.Description = string.Format("Choose a location for your application files. We'll create a folder named {0} in that location.", App.BareTitle);
+            string format = "Choose a location for your application files. We'll create a folder named {0} in that location.";
+            FolderBrowserDialog dialog = new FolderBrowserDialog
+            {
+                Description = string.Format(format, DirectoryName)
+            };
             return dialog;
         }
 
-        public static DialogResult ShowDialog(this FolderBrowserDialog @this, bool verify)
+        public static bool Show(this FolderBrowserDialog @this, IWin32Window owner)
         {
             DialogResult result;
             while (true)
             {
-                result = @this.ShowDialog();
-                if (result == DialogResult.OK && verify && Directory.Exists(@this.GetRootDirectory()))
+                result = @this.ShowDialog(owner);
+                if (result == DialogResult.OK && Directory.Exists(@this.GetRootDirectory()))
                 {
-                    string message = string.Format(
-                        "A folder named {0} already exists in the location you have selected. Are you sure you want to use this location?",
-                        App.BareTitle);
-                    if (MessageBox.Show(message, App.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    if (@this.Confirm())
                     {
                         break;
                     }
@@ -33,7 +36,16 @@ namespace ERHMS.Presentation.Dialogs
                     break;
                 }
             }
-            return result;
+            return result == DialogResult.OK;
+        }
+
+        private static bool Confirm(this FolderBrowserDialog @this)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("The following folder already exists. Are you sure you want to use this location?");
+            builder.AppendLine();
+            builder.Append(@this.GetRootDirectory());
+            return MessageBox.Show(builder.ToString(), App.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
         }
 
         public static string GetRootDirectory(this FolderBrowserDialog @this)

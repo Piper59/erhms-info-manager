@@ -1,16 +1,11 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Windows.Data;
 using System.Windows.Forms;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
@@ -19,9 +14,6 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class DataSourceListViewModel : ListViewModelBase<ProjectInfo>
     {
-        public ICollection<DataProvider> Providers { get; private set; }
-        public DataSourceViewModel DataSource { get; private set; }
-
         public RelayCommand OpenCommand { get; private set; }
         public RelayCommand AddNewCommand { get; private set; }
         public RelayCommand AddExistingCommand { get; private set; }
@@ -31,44 +23,36 @@ namespace ERHMS.Presentation.ViewModels
         public DataSourceListViewModel()
         {
             Title = "Data Sources";
-            Providers = new DataProvider[]
-            {
-                DataProvider.Access,
-                DataProvider.SqlServer
-            };
             Refresh();
-            Selecting += (sender, e) =>
+            OpenCommand = new RelayCommand(Open, HasOneSelectedItem);
+            AddNewCommand = new RelayCommand(AddNew);
+            AddExistingCommand = new RelayCommand(AddExisting);
+            RemoveCommand = new RelayCommand(Remove, HasOneSelectedItem);
+            RefreshCommand = new RelayCommand(Refresh);
+            SelectedItemChanged += (sender, e) =>
             {
                 OpenCommand.RaiseCanExecuteChanged();
                 RemoveCommand.RaiseCanExecuteChanged();
             };
-            DataSource = new DataSourceViewModel();
-            OpenCommand = new RelayCommand(Open, HasSelectedItem);
-            AddNewCommand = new RelayCommand(AddNew);
-            AddExistingCommand = new RelayCommand(AddExisting);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshListMessage<ProjectInfo>>(this, OnRefreshDataSourceListMessage);
+            Messenger.Default.Register<RefreshMessage<ProjectInfo>>(this, msg => Refresh());
         }
 
-        protected override ICollectionView GetItems()
+        protected override IEnumerable<ProjectInfo> GetItems()
         {
             ICollection<ProjectInfo> items = new List<ProjectInfo>();
             foreach (string path in Settings.Default.DataSources.ToList())
             {
                 ProjectInfo projectInfo;
-                FileInfo file = new FileInfo(path);
-                if (ProjectInfo.TryRead(file, out projectInfo))
+                if (ProjectInfo.TryRead(path, out projectInfo))
                 {
                     items.Add(projectInfo);
                 }
                 else
                 {
-                    Remove(file);
+                    DataSourceViewModel.RemoveDataSource(path);
                 }
             }
-            return CollectionViewSource.GetDefaultView(items.OrderBy(projectInfo => projectInfo.Name)
-                .ThenBy(projectInfo => projectInfo.Description));
+            return items.OrderBy(item => item.Name).ThenBy(item => item.Description);
         }
 
         protected override IEnumerable<string> GetFilteredValues(ProjectInfo item)
@@ -79,51 +63,47 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Open()
         {
-            Locator.Main.OpenDataSource(SelectedItem.File);
+            Main.OpenDataSource(SelectedItem.Path);
         }
 
         public void AddNew()
         {
-            DataSource.Reset();
-            DataSource.Active = true;
+            Messenger.Default.Send(new ShowMessage
+            {
+                ViewModel = new DataSourceViewModel
+                {
+                    Active = true
+                }
+            });
         }
 
         public void AddExisting()
         {
-            Configuration configuration = Configuration.GetNewInstance();
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.Title = "Add Existing Data Source";
+                Configuration configuration = Configuration.GetNewInstance();
                 dialog.InitialDirectory = configuration.Directories.Project;
                 dialog.Filter = FileDialogExtensions.GetFilter("Data Sources", Project.FileExtension);
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog(App.Current.MainWin32Window) == DialogResult.OK)
                 {
-                    DataSourceViewModel.Add(new FileInfo(dialog.FileName));
-                    Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                    DataSourceViewModel.AddDataSource(dialog.FileName);
                 }
             }
         }
 
-        private void Remove(FileInfo file)
-        {
-            Settings.Default.DataSources.RemoveWhere(dataSource => dataSource.EqualsIgnoreCase(file.FullName));
-            Settings.Default.Save();
-        }
-
         public void Remove()
         {
-            ConfirmMessage msg = new ConfirmMessage("Remove", "Remove the selected data source?");
+            ConfirmMessage msg = new ConfirmMessage
+            {
+                Verb = "Remove",
+                Message = "Remove the selected data source?"
+            };
             msg.Confirmed += (sender, e) =>
             {
-                Remove(SelectedItem.File);
-                Messenger.Default.Send(new RefreshListMessage<ProjectInfo>());
+                DataSourceViewModel.RemoveDataSource(SelectedItem.Path);
             };
             Messenger.Default.Send(msg);
-        }
-
-        private void OnRefreshDataSourceListMessage(RefreshListMessage<ProjectInfo> msg)
-        {
-            Refresh();
         }
     }
 }

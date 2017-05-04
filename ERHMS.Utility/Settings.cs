@@ -8,8 +8,8 @@ namespace ERHMS.Utility
     {
         public string Version { get; set; }
         public bool LicenseAccepted { get; set; }
-        public string LogLevel { get; set; }
         public string ConfigurationFile { get; set; }
+        public string LogLevel { get; set; }
         public HashSet<string> DataSources { get; set; }
         public string EmailHost { get; set; }
         public int? EmailPort { get; set; }
@@ -22,18 +22,18 @@ namespace ERHMS.Utility
         {
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LicenseAccepted = false;
+            ConfigurationFile = null;
             Reset();
         }
 
         public void Reset()
         {
             LogLevel = "DEBUG";
-            ConfigurationFile = null;
             DataSources = new HashSet<string>();
             EmailHost = null;
             EmailPort = 25;
             EmailSender = null;
-            MapLicenseKey = "Am2Kmtkt9FKkcW1k9o0NS6NnySTT9JtrAZWeZxwpPP0Ki21n2kyLpIohVd224-uy";
+            MapLicenseKey = "Aua5s8kFcEZMx5lsd8Vkerz3frboU1CwzvOyzX_vgSnzsnbqV7xlQ4WTRUlN19_Q";
             OrganizationName = null;
             OrganizationKey = null;
         }

@@ -5,43 +5,28 @@ namespace ERHMS.Presentation.Messages
 {
     public class BlockMessage
     {
-        public string Title { get; private set; }
-        public string Message { get; private set; }
+        public string Title { get; set; }
+        public string Message { get; set; }
 
-        public BlockMessage(string title, string message)
+        public BlockMessage()
         {
-            Title = title;
-            Message = message;
+            Title = "Working \u2026";
         }
-
-        public BlockMessage(string message)
-            : this("Working \u2026", message) { }
 
         public event EventHandler Executing;
-        public async Task OnExecuting(EventArgs e)
-        {
-            EventHandler handler = Executing;
-            if (handler != null)
-            {
-                await Task.Factory.StartNew(() =>
-                {
-                    handler(this, e);
-                });
-            }
-        }
+        public event EventHandler Executed;
+
         public async Task OnExecuting()
         {
-            await OnExecuting(EventArgs.Empty);
+            await Task.Factory.StartNew(() =>
+            {
+                Executing?.Invoke(this, EventArgs.Empty);
+            });
         }
 
-        public event EventHandler Executed;
-        public void OnExecuted(EventArgs e)
-        {
-            Executed?.Invoke(this, e);
-        }
         public void OnExecuted()
         {
-            OnExecuted(EventArgs.Empty);
+            Executed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

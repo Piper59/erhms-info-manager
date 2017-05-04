@@ -1,4 +1,5 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Utility;
 using System.Collections.Generic;
@@ -8,12 +9,14 @@ namespace ERHMS.DataAccess
 {
     public abstract class LinkRepository<TLink, TItem> : TableEntityRepository<TLink> where TLink : Link<TItem>, new()
     {
-        protected DataContext DataContext { get; private set; }
+        public Project Project { get; private set; }
+        public IncidentRepository Incidents { get; private set; }
 
-        public LinkRepository(IDataDriver driver, string tableName, DataContext dataContext)
+        protected LinkRepository(Project project, IDataDriver driver, IncidentRepository incidents, string tableName)
             : base(driver, tableName)
         {
-            DataContext = dataContext;
+            Project = project;
+            Incidents = incidents;
         }
 
         public abstract IEnumerable<TItem> SelectItems();
@@ -21,7 +24,7 @@ namespace ERHMS.DataAccess
         public IEnumerable<DeepLink<TItem>> SelectDeepLinks()
         {
             ICollection<TLink> links = Select().ToList();
-            ICollection<Incident> incidents = DataContext.Incidents.Select().ToList();
+            ICollection<Incident> incidents = Incidents.Select().ToList();
             foreach (TItem item in SelectItems())
             {
                 TLink itemLink = links.SingleOrDefault(link => link.IsEqual(item));
@@ -38,11 +41,22 @@ namespace ERHMS.DataAccess
             }
         }
 
-        public IEnumerable<TItem> SelectItems(string incidentId)
+        public IEnumerable<DeepLink<TItem>> SelectDeepLinksByIncidentId(string incidentId)
         {
-            return SelectDeepLinks()
-                .Where(deepLink => StringExtensions.EqualsIgnoreCase(deepLink.Incident?.IncidentId, incidentId))
-                .Select(deepLink => deepLink.Item);
+            ICollection<TLink> links = Select("[IncidentId] = {@}", incidentId).ToList();
+            Incident incident = Incidents.SelectByGuid(incidentId);
+            foreach (TItem item in SelectItems())
+            {
+                if (links.Any(link => link.IsEqual(item)))
+                {
+                    yield return new DeepLink<TItem>(item, incident);
+                }
+            }
+        }
+
+        public IEnumerable<TItem> SelectItemsByIncidentId(string incidentId)
+        {
+            return SelectDeepLinksByIncidentId(incidentId).Select(deepLink => deepLink.Item);
         }
     }
 }

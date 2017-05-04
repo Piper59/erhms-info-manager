@@ -2,16 +2,19 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Dialogs;
+using ERHMS.Presentation.Infrastructure;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Binding = ERHMS.EpiInfo.Web.Binding;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
@@ -24,76 +27,78 @@ namespace ERHMS.Presentation.ViewModels
             public string Host
             {
                 get { return host; }
-                set { Set(() => Host, ref host, value); }
+                set { Set(nameof(Host), ref host, value); }
             }
 
             private int? port;
             public int? Port
             {
                 get { return port; }
-                set { Set(() => Port, ref port, value); }
+                set { Set(nameof(Port), ref port, value); }
             }
 
             private string sender;
             public string Sender
             {
                 get { return sender; }
-                set { Set(() => Sender, ref sender, value); }
+                set { Set(nameof(Sender), ref sender, value); }
             }
         }
 
         public class WebSurveySettingsViewModel : ViewModelBase
         {
-            public ICollection<Binding> Bindings { get; private set; }
+            public ICollection<BindingType> BindingTypes { get; private set; }
 
             private string address;
             public string Address
             {
                 get { return address; }
-                set { Set(() => Address, ref address, value); }
+                set { Set(nameof(Address), ref address, value); }
             }
 
             private bool windowsAuthentication;
             public bool WindowsAuthentication
             {
-                get { return windowsAuthentication; }
-                set { Set(() => WindowsAuthentication, ref windowsAuthentication, value); }
+                get
+                {
+                    return windowsAuthentication;
+                }
+                set
+                {
+                    if (Set(nameof(WindowsAuthentication), ref windowsAuthentication, value))
+                    {
+                        if (WindowsAuthentication)
+                        {
+                            BindingType = BindingType.BasicHttp;
+                        }
+                    }
+                }
             }
 
-            private Binding binding;
-            public Binding Binding
+            private BindingType bindingType;
+            public BindingType BindingType
             {
-                get { return binding; }
-                set { Set(() => Binding, ref binding, value); }
+                get { return bindingType; }
+                set { Set(nameof(BindingType), ref bindingType, value); }
             }
 
             private string organizationName;
             public string OrganizationName
             {
                 get { return organizationName; }
-                set { Set(() => OrganizationName, ref organizationName, value); }
+                set { Set(nameof(OrganizationName), ref organizationName, value); }
             }
 
             private Guid? organizationKey;
             public Guid? OrganizationKey
             {
                 get { return organizationKey; }
-                set { Set(() => OrganizationKey, ref organizationKey, value); }
+                set { Set(nameof(OrganizationKey), ref organizationKey, value); }
             }
 
             public WebSurveySettingsViewModel()
             {
-                Bindings = EnumExtensions.GetValues<Binding>().ToList();
-                PropertyChanged += (sender, e) =>
-                {
-                    if (e.PropertyName == nameof(WindowsAuthentication))
-                    {
-                        if (WindowsAuthentication)
-                        {
-                            Binding = Binding.BasicHttp;
-                        }
-                    }
-                };
+                BindingTypes = EnumExtensions.GetValues<BindingType>().ToList();
             }
         }
 
@@ -104,76 +109,63 @@ namespace ERHMS.Presentation.ViewModels
         public string LogLevel
         {
             get { return logLevel; }
-            set { Set(() => LogLevel, ref logLevel, value); }
+            set { Set(nameof(LogLevel), ref logLevel, value); }
         }
 
-        private string originalRootDirectory;
+        private string rootDirectoryInit;
 
         private string rootDirectory;
         [DirtyCheck]
         public string RootDirectory
         {
             get { return rootDirectory; }
-            set { Set(() => RootDirectory, ref rootDirectory, value); }
+            set { Set(nameof(RootDirectory), ref rootDirectory, value); }
         }
 
-        private bool rootDirectoryChanged;
-        public bool RootDirectoryChanged
-        {
-            get { return rootDirectoryChanged; }
-            set { Set(() => RootDirectoryChanged, ref rootDirectoryChanged, value); }
-        }
-
-        public EmailSettingsViewModel Email { get; private set; }
+        public EmailSettingsViewModel EmailSettings { get; private set; }
 
         private string mapLicenseKey;
         [DirtyCheck]
         public string MapLicenseKey
         {
             get { return mapLicenseKey; }
-            set { Set(() => MapLicenseKey, ref mapLicenseKey, value); }
+            set { Set(nameof(MapLicenseKey), ref mapLicenseKey, value); }
         }
 
-        public WebSurveySettingsViewModel WebSurvey { get; private set; }
+        public WebSurveySettingsViewModel WebSurveySettings { get; private set; }
 
         public RelayCommand BrowseCommand { get; private set; }
+        public RelayCommand GetMapLicenseKeyCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
         public SettingsViewModel()
         {
             Title = "Settings";
-            LogLevels = new string[]
-            {
-                "DEBUG",
-                "INFO",
-                "WARN",
-                "ERROR",
-                "FATAL"
-            };
-            Configuration configuration = Configuration.GetNewInstance();
+            LogLevels = Log.LevelNames.ToList();
             LogLevel = Settings.Default.LogLevel;
-            // TODO: Revisit this for version 2
-            originalRootDirectory = new DirectoryInfo(configuration.Directories.Project).Parent.FullName;
-            RootDirectory = originalRootDirectory;
-            Email = new EmailSettingsViewModel
+            Configuration configuration = Configuration.GetNewInstance();
+            rootDirectoryInit = new DirectoryInfo(configuration.Directories.Project).Parent.FullName;
+            RootDirectory = rootDirectoryInit;
+            EmailSettings = new EmailSettingsViewModel
             {
                 Host = Settings.Default.EmailHost,
                 Port = Settings.Default.EmailPort,
                 Sender = Settings.Default.EmailSender
             };
-            Email.PropertyChanged += OnDirtyCheckPropertyChanged;
+            AddDirtyCheck(EmailSettings);
             MapLicenseKey = Settings.Default.MapLicenseKey;
-            WebSurvey = new WebSurveySettingsViewModel
+            WebSurveySettings = new WebSurveySettingsViewModel
             {
                 Address = configuration.Settings.WebServiceEndpointAddress,
                 WindowsAuthentication = configuration.Settings.WebServiceAuthMode == 1,
-                Binding = BindingExtensions.FromEpiInfoName(configuration.Settings.WebServiceBindingMode),
+                BindingType = BindingTypeExtensions.FromEpiInfoName(configuration.Settings.WebServiceBindingMode),
                 OrganizationName = Settings.Default.OrganizationName,
                 OrganizationKey = ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey)
             };
-            WebSurvey.PropertyChanged += OnDirtyCheckPropertyChanged;
+            AddDirtyCheck(WebSurveySettings);
             Dirty = false;
             BrowseCommand = new RelayCommand(Browse);
+            GetMapLicenseKeyCommand = new RelayCommand(GetMapLicenseKey);
             SaveCommand = new RelayCommand(Save);
         }
 
@@ -181,24 +173,20 @@ namespace ERHMS.Presentation.ViewModels
         {
             using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
             {
-                if (dialog.ShowDialog(true) == DialogResult.OK)
+                if (dialog.ShowDialog(App.Current.MainWin32Window) == DialogResult.OK)
                 {
                     string path = dialog.GetRootDirectory();
-                    if (path.EqualsIgnoreCase(originalRootDirectory))
+                    if (!path.EqualsIgnoreCase(rootDirectoryInit))
                     {
-                        RootDirectory = path;
-                        RootDirectoryChanged = false;
-                    }
-                    else
-                    {
-                        string message = string.Format(
-                            "Change the root directory? {0} will copy your documents and restart when settings are saved.",
-                            App.Title);
-                        ConfirmMessage msg = new ConfirmMessage("Change", message);
+                        ConfirmMessage msg = new ConfirmMessage
+                        {
+                            Verb = "Change",
+                            Message = string.Format((string)App.Current.FindResource("ChangeRootDirectoryText"), App.Title)
+                        };
                         msg.Confirmed += (sender, e) =>
                         {
+                            Log.Logger.DebugFormat("Root directory chosen: {0}", path);
                             RootDirectory = path;
-                            RootDirectoryChanged = true;
                         };
                         Messenger.Default.Send(msg);
                     }
@@ -206,21 +194,26 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public void GetMapLicenseKey()
+        {
+            Process.Start("https://www.bingmapsportal.com/");
+        }
+
         private bool Validate()
         {
             ICollection<string> fields = new List<string>();
-            Uri uri;
-            if (!string.IsNullOrWhiteSpace(Email.Sender) && !MailExtensions.IsValidAddress(Email.Sender))
+            if (!string.IsNullOrWhiteSpace(EmailSettings.Sender) && !MailExtensions.IsValidAddress(EmailSettings.Sender))
             {
                 fields.Add("Sender Address");
             }
-            if (!string.IsNullOrWhiteSpace(WebSurvey.Address) && !Uri.TryCreate(WebSurvey.Address, UriKind.Absolute, out uri))
+            Uri result;
+            if (!string.IsNullOrWhiteSpace(WebSurveySettings.Address) && !Uri.TryCreate(WebSurveySettings.Address, UriKind.Absolute, out result))
             {
                 fields.Add("Endpoint Address");
             }
             if (fields.Count > 0)
             {
-                NotifyInvalid(fields);
+                ShowInvalidMessage(fields);
                 return false;
             }
             else
@@ -235,51 +228,62 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            Configuration configuration = Configuration.GetNewInstance();
             Settings.Default.LogLevel = LogLevel;
-            Settings.Default.EmailHost = Email.Host;
-            Settings.Default.EmailPort = Email.Port;
-            Settings.Default.EmailSender = Email.Sender;
+            Settings.Default.EmailHost = EmailSettings.Host;
+            Settings.Default.EmailPort = EmailSettings.Port;
+            Settings.Default.EmailSender = EmailSettings.Sender;
             Settings.Default.MapLicenseKey = MapLicenseKey;
-            configuration.Settings.WebServiceEndpointAddress = WebSurvey.Address;
-            configuration.Settings.WebServiceAuthMode = WebSurvey.WindowsAuthentication ? 1 : 0;
-            configuration.Settings.WebServiceBindingMode = WebSurvey.Binding.ToEpiInfoName();
-            Settings.Default.OrganizationName = WebSurvey.OrganizationName;
-            Settings.Default.OrganizationKey = WebSurvey.OrganizationKey.ToString();
-            if (RootDirectoryChanged)
+            Configuration configuration = Configuration.GetNewInstance();
+            configuration.Settings.WebServiceEndpointAddress = WebSurveySettings.Address;
+            configuration.Settings.WebServiceAuthMode = WebSurveySettings.WindowsAuthentication ? 1 : 0;
+            configuration.Settings.WebServiceBindingMode = WebSurveySettings.BindingType.ToEpiInfoName();
+            Settings.Default.OrganizationName = WebSurveySettings.OrganizationName;
+            Settings.Default.OrganizationKey = WebSurveySettings.OrganizationKey.ToString();
+            if (!RootDirectory.EqualsIgnoreCase(rootDirectoryInit))
             {
+                // TODO: Close data source?
                 try
                 {
-                    // TODO: Close files?
-                    DirectoryInfo directory = new DirectoryInfo(RootDirectory);
-                    configuration.ChangeRoot(directory);
-                    new DirectoryInfo(originalRootDirectory).CopyTo(directory, false);
-                    ICollection<string> dataSources = Settings.Default.DataSources.ToList();
+                    configuration.ChangeUserDirectories(RootDirectory);
+                    ICollection<string> paths = Settings.Default.DataSources.ToList();
                     Settings.Default.DataSources.Clear();
-                    foreach (string dataSource in dataSources)
+                    Regex rootDirectoryInitPattern = new Regex("^" + Regex.Escape(rootDirectoryInit), RegexOptions.IgnoreCase);
+                    foreach (string path in paths)
                     {
-                        Settings.Default.DataSources.Add(dataSource.Replace(originalRootDirectory, RootDirectory));
+                        Settings.Default.DataSources.Add(rootDirectoryInitPattern.Replace(path, RootDirectory));
                     }
-                    Settings.Default.Save();
-                    configuration.Save();
-                    Dirty = false;
-                    App.Current.Shutdown();
-                    Application.Restart();
                 }
-                catch (UnauthorizedAccessException)
+                catch (Exception ex)
                 {
-                    Log.Current.WarnFormat("Access denied to root directory: {0}", RootDirectory);
-                    Messenger.Default.Send(new NotifyMessage(string.Format("You do not have access to {0}. Settings have not been saved.", RootDirectory)));
+                    Log.Logger.Warn("Failed to initialize root directory", ex);
+                    StringBuilder builder = new StringBuilder();
+                    builder.AppendFormat("{0} failed to initialize the following folder. Settings have not been saved.", App.Title);
+                    builder.AppendLine();
+                    builder.AppendLine();
+                    builder.Append(RootDirectory);
+                    Messenger.Default.Send(new AlertMessage
+                    {
+                        Message = builder.ToString()
+                    });
+                    return;
                 }
+            }
+            Settings.Default.Save();
+            configuration.Save();
+            Dirty = false;
+            if (RootDirectory.EqualsIgnoreCase(rootDirectoryInit))
+            {
+                Log.SetLevelName(Settings.Default.LogLevel);
+                ConfigurationExtensions.Load();
+                Messenger.Default.Send(new ToastMessage
+                {
+                    Message = "Settings have been saved."
+                });
             }
             else
             {
-                Settings.Default.Save();
-                configuration.Save();
-                Dirty = false;
-                ConfigurationExtensions.Load();
-                Log.SetLevelName(Settings.Default.LogLevel);
-                Messenger.Default.Send(new ToastMessage("Settings have been saved."));
+                App.Current.Shutdown();
+                Application.Restart();
             }
         }
     }

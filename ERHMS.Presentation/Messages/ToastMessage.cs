@@ -4,16 +4,12 @@ namespace ERHMS.Presentation.Messages
 {
     public class ToastMessage
     {
-        public NotificationType NotificationType { get; private set; }
-        public string Message { get; private set; }
+        public NotificationType Type { get; set; }
+        public string Message { get; set; }
 
-        public ToastMessage(NotificationType notificationType, string message)
+        public ToastMessage()
         {
-            NotificationType = notificationType;
-            Message = message;
+            Type = NotificationType.Information;
         }
-
-        public ToastMessage(string message)
-            : this(NotificationType.Information, message) { }
     }
 }

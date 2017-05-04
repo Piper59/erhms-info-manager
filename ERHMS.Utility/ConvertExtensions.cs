@@ -28,7 +28,7 @@ namespace ERHMS.Utility
 
         public static Guid? ToNullableGuid(string value)
         {
-            return value == null ? (Guid?)null : Guid.Parse(value);
+            return string.IsNullOrEmpty(value) ? (Guid?)null : Guid.Parse(value);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Presentation.Converters
 {
-    public class EnumToDescriptionConverter<TEnum> : IValueConverter
+    public class EnumToDescriptionConverter<TEnum> : IValueConverter where TEnum : struct
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -1,5 +1,4 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
@@ -9,59 +8,43 @@ namespace ERHMS.Presentation.ViewModels
 {
     public abstract class LinkViewModelBase : ViewModelBase
     {
+        public class IncidentListViewModel : ListViewModelBase<Incident>
+        {
+            public IncidentListViewModel()
+            {
+                Refresh();
+            }
+
+            protected override IEnumerable<Incident> GetItems()
+            {
+                return DataContext.Incidents.SelectUndeleted().OrderBy(incident => incident.Name);
+            }
+        }
+
         private bool active;
         public bool Active
         {
             get { return active; }
-            set { Set(() => Active, ref active, value); }
+            set { Set(nameof(Active), ref active, value); }
         }
 
-        private ICollection<Incident> incidents;
-        public ICollection<Incident> Incidents
-        {
-            get { return incidents; }
-            set { Set(() => Incidents, ref incidents, value); }
-        }
-
-        private Incident selectedIncident;
-        public Incident SelectedIncident
-        {
-            get { return selectedIncident; }
-            set { Set(() => SelectedIncident, ref selectedIncident, value); }
-        }
-
-        public string SelectedIncidentId
-        {
-            get { return SelectedIncident == null ? null : SelectedIncident.IncidentId; }
-        }
+        public IncidentListViewModel Incidents { get; private set; }
 
         public RelayCommand LinkCommand { get; private set; }
         public RelayCommand UnlinkCommand { get; private set; }
         public RelayCommand CancelCommand { get; private set; }
 
-        protected LinkViewModelBase()
+        protected LinkViewModelBase(string incidentId)
         {
-            Refresh();
-            LinkCommand = new RelayCommand(Link, HasSelectedIncident);
+            Incidents = new IncidentListViewModel();
+            Incidents.SelectItem(incident => incident.IncidentId.EqualsIgnoreCase(incidentId));
+            LinkCommand = new RelayCommand(Link, Incidents.HasOneSelectedItem);
             UnlinkCommand = new RelayCommand(Unlink);
             CancelCommand = new RelayCommand(Cancel);
-        }
-
-        private bool HasSelectedIncident()
-        {
-            return SelectedIncident != null;
-        }
-
-        private void Refresh()
-        {
-            Incidents = DataContext.Incidents.SelectByDeleted(false)
-                .OrderBy(incident => incident.Name)
-                .ToList();
-        }
-
-        public void Reset(string selectedIncidentId)
-        {
-            SelectedIncident = Incidents.SingleOrDefault(incident => incident.IncidentId.EqualsIgnoreCase(selectedIncidentId));
+            Incidents.SelectedItemChanged += (sender, e) =>
+            {
+                LinkCommand.RaiseCanExecuteChanged();
+            };
         }
 
         public abstract void Link();
@@ -70,11 +53,6 @@ namespace ERHMS.Presentation.ViewModels
         public void Cancel()
         {
             Active = false;
-        }
-
-        private void OnRefreshIncidentListMessage(RefreshListMessage<Incident> msg)
-        {
-            Refresh();
         }
     }
 }

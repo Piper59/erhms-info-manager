@@ -4,7 +4,6 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
-using System.Collections.Generic;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
 
@@ -57,46 +56,19 @@ namespace ERHMS.DataAccess
             Suffixes = new CodeRepository(Driver, "codesuffix1", "suffix", false);
             Genders = new CodeRepository(Driver, "codegender1", "gender", false);
             States = new CodeRepository(Driver, "codestate1", "state", true);
-            Responders = new ResponderRepository(Driver, project);
+            Rosters = new RosterRepository(Driver);
+            Responders = new ResponderRepository(Driver, project, Rosters);
             Incidents = new IncidentRepository(Driver);
             IncidentNotes = new IncidentNoteRepository(Driver);
-            Rosters = new RosterRepository(Driver);
             Locations = new LocationRepository(Driver);
             Assignments = new AssignmentRepository(Driver);
-            ViewLinks = new ViewLinkRepository(Driver, this);
-            PgmLinks = new PgmLinkRepository(Driver, this);
-            CanvasLinks = new CanvasLinkRepository(Driver, this);
+            ViewLinks = new ViewLinkRepository(project, Driver, Incidents);
+            PgmLinks = new PgmLinkRepository(project, Driver, Incidents);
+            CanvasLinks = new CanvasLinkRepository(project, Driver, Incidents);
             WebSurveys = new WebSurveyRepository(Driver);
         }
 
-        public IEnumerable<View> GetViews()
-        {
-            return Project.GetViews();
-        }
-
-        public IEnumerable<TemplateInfo> GetTemplateInfos(TemplateLevel? level = null)
-        {
-            if (level.HasValue)
-            {
-                return TemplateInfo.GetByLevel(level.Value);
-            }
-            else
-            {
-                return TemplateInfo.GetAll();
-            }
-        }
-
-        public IEnumerable<Pgm> GetPgms()
-        {
-            return Project.GetPgms();
-        }
-
-        public IEnumerable<Canvas> GetCanvases()
-        {
-            return Project.GetCanvases();
-        }
-
-        public TemplateInfo CreateNewViewTemplateInfo()
+        public TemplateInfo CreateNewViewTemplate()
         {
             string path = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.DataAccess.Resources.View.xml", path);

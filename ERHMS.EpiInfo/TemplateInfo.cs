@@ -48,7 +48,7 @@ namespace ERHMS.EpiInfo
         {
             Configuration configuration = Configuration.GetNewInstance();
             DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Templates);
-            foreach (FileInfo file in directory.Search(FileExtension))
+            foreach (FileInfo file in directory.SearchByExtension(FileExtension))
             {
                 TemplateInfo templateInfo;
                 if (TryRead(file.FullName, out templateInfo))

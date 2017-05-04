@@ -6,23 +6,13 @@ namespace ERHMS.Presentation.ViewModels
     public class AssignmentViewModel : ViewModelBase
     {
         public Assignment Assignment { get; private set; }
-        public Link<View> View { get; private set; }
+        public DeepLink<View> ViewDeepLink { get; private set; }
         public Responder Responder { get; private set; }
 
-        public string IncidentId
-        {
-            get { return View.IncidentId; }
-        }
-
-        public string IncidentName
-        {
-            get { return View.IncidentName; }
-        }
-
-        public AssignmentViewModel(Assignment assignment, Link<View> view, Responder responder)
+        public AssignmentViewModel(Assignment assignment, DeepLink<View> viewDeepLink, Responder responder)
         {
             Assignment = assignment;
-            View = view;
+            ViewDeepLink = viewDeepLink;
             Responder = responder;
         }
     }

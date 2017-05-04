@@ -3,16 +3,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public abstract class ListViewModelBase<T> : ViewModelBase
     {
+        private static readonly TimeSpan TimerInterval = TimeSpan.FromMilliseconds(500.0);
+
+        private DispatcherTimer timer;
+
         private ICollectionView items;
         public ICollectionView Items
         {
             get { return items; }
-            set { Set(() => Items, ref items, value); }
+            private set { Set(nameof(Items), ref items, value); }
+        }
+
+        public IEnumerable<T> TypedItems
+        {
+            get { return Items.Cast<T>(); }
         }
 
         private T selectedItem;
@@ -24,9 +36,9 @@ namespace ERHMS.Presentation.ViewModels
             }
             set
             {
-                if (Set(() => SelectedItem, ref selectedItem, value))
+                if (Set(nameof(SelectedItem), ref selectedItem, value))
                 {
-                    OnSelecting();
+                    OnSelectedItemChanged();
                 }
             }
         }
@@ -35,7 +47,12 @@ namespace ERHMS.Presentation.ViewModels
         public IList SelectedItems
         {
             get { return selectedItems; }
-            set { Set(() => SelectedItems, ref selectedItems, value); }
+            set { Set(nameof(SelectedItems), ref selectedItems, value); }
+        }
+
+        public IEnumerable<T> TypedSelectedItems
+        {
+            get { return SelectedItems.Cast<T>(); }
         }
 
         private string filter;
@@ -47,42 +64,73 @@ namespace ERHMS.Presentation.ViewModels
             }
             set
             {
-                if (Set(() => Filter, ref filter, value))
+                if (Set(nameof(Filter), ref filter, value))
                 {
-                    Items.Refresh();
+                    if (timer.IsEnabled)
+                    {
+                        timer.Stop();
+                    }
+                    timer.Start();
                 }
             }
         }
 
-        protected ListViewModelBase() { }
-
-        public event EventHandler Selecting;
-        private void OnSelecting(EventArgs e)
+        protected ListViewModelBase()
         {
-            Selecting?.Invoke(this, e);
-        }
-        private void OnSelecting()
-        {
-            OnSelecting(EventArgs.Empty);
-        }
-
-        public bool HasSelectedItem()
-        {
-            return SelectedItem != null;
+            timer = new DispatcherTimer
+            {
+                Interval = TimerInterval
+            };
+            timer.Tick += (sender, e) =>
+            {
+                timer.Stop();
+                Items.Refresh();
+            };
         }
 
-        protected abstract ICollectionView GetItems();
+        public event EventHandler Refreshed;
+        private void OnRefreshed(EventArgs e)
+        {
+            Refreshed?.Invoke(this, e);
+        }
+        private void OnRefreshed()
+        {
+            OnRefreshed(EventArgs.Empty);
+        }
+
+        public event EventHandler SelectedItemChanged;
+        private void OnSelectedItemChanged(EventArgs e)
+        {
+            SelectedItemChanged?.Invoke(this, e);
+        }
+        private void OnSelectedItemChanged()
+        {
+            OnSelectedItemChanged(EventArgs.Empty);
+        }
+
+        public bool HasOneSelectedItem()
+        {
+            return SelectedItems == null ? SelectedItem != null : SelectedItems.Count == 1;
+        }
+
+        public bool HasAnySelectedItems()
+        {
+            return SelectedItems == null ? SelectedItem != null : SelectedItems.Count > 0;
+        }
+
+        protected abstract IEnumerable<T> GetItems();
+
+        protected virtual IEnumerable<string> GetFilteredValues(T item)
+        {
+            return Enumerable.Empty<string>();
+        }
 
         public virtual void Refresh()
         {
-            App.Current.Invoke(() =>
-            {
-                Items = GetItems();
-                Items.Filter = MatchesFilter;
-            });
+            Items = CollectionViewSource.GetDefaultView(GetItems());
+            Items.Filter = MatchesFilter;
+            OnRefreshed();
         }
-
-        protected abstract IEnumerable<string> GetFilteredValues(T item);
 
         private bool MatchesFilter(object item)
         {
@@ -98,6 +146,11 @@ namespace ERHMS.Presentation.ViewModels
                 }
             }
             return false;
+        }
+
+        public void SelectItem(Predicate<T> predicate)
+        {
+            SelectedItem = TypedItems.FirstOrDefault(item => predicate(item));
         }
     }
 }

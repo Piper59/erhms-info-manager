@@ -1,0 +1,60 @@
+﻿<MahApps.SimpleChildWindow:ChildWindow x:Class="ERHMS.Presentation.Views.RecipientView"
+                                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                       xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+                                       xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
+                                       xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
+                                       IsOpen="{Binding Active}"
+                                       OverlayBrush="{StaticResource OverlayBrush}"
+                                       Title="Add a Recipient">
+    <MahApps.SimpleChildWindow:ChildWindow.Resources>
+        <Converters:BooleanInverter x:Key="BooleanInverter" />
+        <Converters:ResponderToFullNameAndEmailAddressConverter x:Key="ResponderToFullNameAndEmailAddressConverter" />
+    </MahApps.SimpleChildWindow:ChildWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <RadioButton Grid.Row="0" Grid.Column="0"
+                         IsChecked="{Binding IsResponder}">
+                Responder
+            </RadioButton>
+            <ComboBox Grid.Row="0" Grid.Column="1"
+                      IsEnabled="{Binding IsResponder}"
+                      ItemsSource="{Binding Responders}"
+                      SelectedItem="{Binding Responder}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameAndEmailAddressConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <RadioButton Grid.Row="1" Grid.Column="0"
+                         IsChecked="{Binding IsResponder, Converter={StaticResource BooleanInverter}}">
+                Email Address
+            </RadioButton>
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     IsEnabled="{Binding IsResponder, Converter={StaticResource BooleanInverter}}"
+                     Text="{Binding EmailAddress}" />
+        </Grid>
+        <WrapPanel Grid.Row="1"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Add"
+                                 Command="{Binding AddCommand}"
+                                 Icon="{StaticResource appbar_add}" />
+            <Controls:IconButton AccessText="_Cancel"
+                                 Command="{Binding CancelCommand}"
+                                 Icon="{StaticResource appbar_cancel}" />
+        </WrapPanel>
+    </Grid>
+</MahApps.SimpleChildWindow:ChildWindow>

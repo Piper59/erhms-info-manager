@@ -1,7 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
-using ERHMS.Presentation.Converters;
+using ERHMS.Presentation.Infrastructure;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -9,50 +9,54 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Windows.Forms;
+using Settings = ERHMS.Utility.Settings;
 using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class EmailViewModel : ViewModelBase
     {
-        private static readonly RecipientToStringConverter RecipientToStringConverter = new RecipientToStringConverter();
-
-        private static void RequestConfiguration(string message)
+        public class ViewListViewModel : ListViewModelBase<View>
         {
-            NotifyMessage msg = new NotifyMessage(message);
+            public ViewListViewModel()
+            {
+                Refresh();
+                Messenger.Default.Register<RefreshMessage<View>>(this, msg => Refresh());
+            }
+
+            protected override IEnumerable<View> GetItems()
+            {
+                return DataContext.Project.GetViews()
+                    .Where(view => view.IsWebSurvey())
+                    .OrderBy(view => view.Name);
+            }
+        }
+
+        public static void RequestConfiguration(string message)
+        {
+            AlertMessage msg = new AlertMessage
+            {
+                Message = message
+            };
             msg.Dismissed += (sender, e) =>
             {
-                Locator.Main.OpenSettingsView();
+                MainViewModel.Instance.OpenSettingsView();
             };
             Messenger.Default.Send(msg);
         }
 
-        private ICollection<Responder> responders;
-        public ICollection<Responder> Responders
-        {
-            get { return responders; }
-            set { Set(() => Responders, ref responders, value); }
-        }
-
         public ObservableCollection<RecipientViewModel> Recipients { get; private set; }
-
-        private RecipientViewModel recipient;
-        public RecipientViewModel Recipient
-        {
-            get { return recipient; }
-            set { Set(() => Recipient, ref recipient, value); }
-        }
 
         private string subject;
         [DirtyCheck]
         public string Subject
         {
             get { return subject; }
-            set { Set(() => Subject, ref subject, value); }
+            set { Set(nameof(Subject), ref subject, value); }
         }
 
         private string body;
@@ -60,131 +64,127 @@ namespace ERHMS.Presentation.ViewModels
         public string Body
         {
             get { return body; }
-            set { Set(() => Body, ref body, value); }
+            set { Set(nameof(Body), ref body, value); }
         }
 
-        public ObservableCollection<AttachmentViewModel> Attachments { get; private set; }
+        public ObservableCollection<string> Attachments { get; private set; }
 
-        private ICollection<View> views;
-        public ICollection<View> Views
+        private bool appendWebSurveyUrl;
+        public bool AppendWebSurveyUrl
         {
-            get { return views; }
-            set { Set(() => Views, ref views, value); }
-        }
-
-        private View selectedView;
-        public View SelectedView
-        {
-            get { return selectedView; }
-            set { Set(() => SelectedView, ref selectedView, value); }
-        }
-
-        private bool appendUrl;
-        public bool AppendUrl
-        {
-            get { return appendUrl; }
-            set { Set(() => AppendUrl, ref appendUrl, value); }
-        }
-
-        private bool canAppendUrl;
-        public bool CanAppendUrl
-        {
-            get { return canAppendUrl; }
-            set { Set(() => CanAppendUrl, ref canAppendUrl, value); }
-        }
-
-        private bool prepopulate;
-        public bool Prepopulate
-        {
-            get { return prepopulate; }
-            set { Set(() => Prepopulate, ref prepopulate, value); }
-        }
-
-        private bool canPrepopulate;
-        public bool CanPrepopulate
-        {
-            get { return canPrepopulate; }
-            set { Set(() => CanPrepopulate, ref canPrepopulate, value); }
-        }
-
-        public RelayCommand AddRecipientCommand { get; private set; }
-        public RelayCommand AddAttachmentCommand { get; private set; }
-        public RelayCommand SendCommand { get; private set; }
-
-        public EmailViewModel()
-        {
-            Title = "Email";
-            RefreshResponders();
-            Recipients = new ObservableCollection<RecipientViewModel>();
-            Attachments = new ObservableCollection<AttachmentViewModel>();
-            RefreshViews();
-            PropertyChanged += (sender, e) =>
+            get
             {
-                if (e.PropertyName == nameof(Views))
-                {
-                    CanAppendUrl = Views.Count > 0;
-                }
-                else if (e.PropertyName == nameof(SelectedView))
-                {
-                    CanPrepopulate = SelectedView != null && DataContext.IsResponderLinkedView(SelectedView);
-                }
-                else if (e.PropertyName == nameof(AppendUrl) && !AppendUrl)
-                {
-                    SelectedView = null;
-                }
-                else if (e.PropertyName == nameof(CanAppendUrl) && !CanAppendUrl)
-                {
-                    AppendUrl = false;
-                }
-                else if (e.PropertyName == nameof(CanPrepopulate) && !CanPrepopulate)
-                {
-                    Prepopulate = false;
-                }
-            };
-            AddRecipientCommand = new RelayCommand(AddRecipient);
-            AddAttachmentCommand = new RelayCommand(AddAttachment);
-            SendCommand = new RelayCommand(Send);
-            Messenger.Default.Register<RefreshListMessage<Responder>>(this, OnRefreshResponderListMessage);
-            Messenger.Default.Register<RefreshListMessage<View>>(this, OnRefreshViewListMessage);
-        }
-
-        public EmailViewModel(IEnumerable<Responder> responders)
-            : this()
-        {
-            foreach (Responder responder in responders)
+                return appendWebSurveyUrl;
+            }
+            set
             {
-                Recipients.Add(new RecipientViewModel(Recipients, responder));
+                if (Set(nameof(AppendWebSurveyUrl), ref appendWebSurveyUrl, value))
+                {
+                    if (!AppendWebSurveyUrl)
+                    {
+                        Views.SelectedItem = null;
+                    }
+                }
             }
         }
 
-        private void RefreshResponders()
+        private bool canAppendWebSurveyUrl;
+        public bool CanAppendWebSurveyUrl
         {
-            Responders = DataContext.Responders.SelectByDeleted(false)
-                .OrderBy(responder => responder.LastName)
-                .ThenBy(responder => responder.FirstName)
-                .ThenBy(responder => responder.EmailAddress)
-                .ToList();
+            get
+            {
+                return canAppendWebSurveyUrl;
+            }
+            private set
+            {
+                if (Set(nameof(CanAppendWebSurveyUrl), ref canAppendWebSurveyUrl, value))
+                {
+                    if (!CanAppendWebSurveyUrl)
+                    {
+                        AppendWebSurveyUrl = false;
+                    }
+                }
+            }
         }
 
-        private void RefreshViews()
+        public ViewListViewModel Views { get; private set; }
+
+        private bool prepopulateResponderId;
+        public bool PrepopulateResponderId
         {
-            Views = DataContext.GetViews()
-                .Where(view => view.IsWebSurvey())
-                .OrderBy(view => view.Name)
-                .ToList();
+            get { return prepopulateResponderId; }
+            set { Set(nameof(PrepopulateResponderId), ref prepopulateResponderId, value); }
         }
 
-        public void SetSelectedView(string viewName)
+        private bool canPrepopulateResponderId;
+        public bool CanPrepopulateResponderId
         {
-            SelectedView = Views.SingleOrDefault(view => view.Name.EqualsIgnoreCase(viewName));
+            get
+            {
+                return canPrepopulateResponderId;
+            }
+            private set
+            {
+                if (Set(nameof(CanPrepopulateResponderId), ref canPrepopulateResponderId, value))
+                {
+                    if (!CanPrepopulateResponderId)
+                    {
+                        PrepopulateResponderId = false;
+                    }
+                }
+            }
+        }
+
+        public RelayCommand AddRecipientCommand { get; private set; }
+        public RelayCommand<RecipientViewModel> RemoveRecipientCommand { get; private set; }
+        public RelayCommand AddAttachmentCommand { get; private set; }
+        public RelayCommand<string> RemoveAttachmentCommand { get; private set; }
+        public RelayCommand SendCommand { get; private set; }
+
+        public EmailViewModel(IEnumerable<Responder> responders)
+        {
+            Title = "Email";
+            Recipients = new ObservableCollection<RecipientViewModel>();
+            foreach (Responder responder  in responders)
+            {
+                Recipients.Add(new RecipientViewModel(responder));
+            }
+            Attachments = new ObservableCollection<string>();
+            Views = new ViewListViewModel();
+            AddRecipientCommand = new RelayCommand(AddRecipient);
+            RemoveRecipientCommand = new RelayCommand<RecipientViewModel>(RemoveRecipient);
+            AddAttachmentCommand = new RelayCommand(AddAttachment);
+            RemoveAttachmentCommand = new RelayCommand<string>(RemoveAttachment);
+            SendCommand = new RelayCommand(Send);
+            Views.Refreshed += (sender, e) =>
+            {
+                CanAppendWebSurveyUrl = !Views.Items.IsEmpty;
+            };
+            Views.SelectedItemChanged += (sender, e) =>
+            {
+                CanPrepopulateResponderId = Views.SelectedItem != null && DataContext.IsResponderLinkedView(Views.SelectedItem);
+            };
         }
 
         public void AddRecipient()
         {
-            Recipient = new RecipientViewModel(Recipients)
+            RecipientViewModel recipient = new RecipientViewModel()
             {
                 Active = true
             };
+            recipient.Adding += (sender, e) =>
+            {
+                Recipients.Add(recipient);
+            };
+            Messenger.Default.Send(new ShowMessage
+            {
+                ViewModel = recipient
+            });
+        }
+
+        public void RemoveRecipient(RecipientViewModel recipient)
+        {
+            Recipients.Remove(recipient);
         }
 
         public void AddAttachment()
@@ -193,14 +193,19 @@ namespace ERHMS.Presentation.ViewModels
             {
                 dialog.Title = "Attach a File";
                 dialog.Multiselect = true;
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog(App.Current.MainWin32Window) == DialogResult.OK)
                 {
                     foreach (string path in dialog.FileNames)
                     {
-                        Attachments.Add(new AttachmentViewModel(Attachments, new FileInfo(path)));
+                        Attachments.Add(path);
                     }
                 }
             }
+        }
+
+        public void RemoveAttachment(string path)
+        {
+            Attachments.Remove(path);
         }
 
         private bool Validate()
@@ -220,12 +225,15 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                NotifyRequired(fields);
+                ShowRequiredMessage(fields);
                 return false;
             }
-            else if (AppendUrl && SelectedView == null)
+            else if (AppendWebSurveyUrl && Views.SelectedItem == null)
             {
-                Messenger.Default.Send(new NotifyMessage("Please select a form to append a web survey URL."));
+                Messenger.Default.Send(new AlertMessage
+                {
+                    Message = "Please select a form to append a web survey URL."
+                });
                 return false;
             }
             else
@@ -245,23 +253,23 @@ namespace ERHMS.Presentation.ViewModels
                 RequestConfiguration("Please configure email settings.");
                 return;
             }
-            bool success = false;
             ConfigurationError error = ConfigurationError.None;
             Survey survey = null;
             ICollection<RecipientViewModel> failures = new List<RecipientViewModel>();
-            BlockMessage msg = new BlockMessage("Sending email \u2026");
+            bool success = false;
+            BlockMessage msg = new BlockMessage
+            {
+                Message = "Sending email \u2026"
+            };
             msg.Executing += (sender, e) =>
             {
-                Service service = null;
-                if (Prepopulate)
+                if (PrepopulateResponderId)
                 {
-                    service = new Service();
-                    error = service.CheckConfiguration();
-                    if (error != ConfigurationError.None)
+                    if (!Service.IsConfigured(out error))
                     {
                         return;
                     }
-                    survey = service.GetSurvey(SelectedView);
+                    survey = Service.GetSurvey(Views.SelectedItem);
                     if (survey == null)
                     {
                         return;
@@ -271,9 +279,9 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     MailMessage message = Settings.Default.GetMailMessage();
                     message.Subject = Subject;
-                    foreach (AttachmentViewModel attachment in Attachments)
+                    foreach (string path in Attachments)
                     {
-                        message.Attachments.Add(new Attachment(attachment.File.FullName));
+                        message.Attachments.Add(new Attachment(path));
                     }
                     using (SmtpClient client = Settings.Default.GetSmtpClient())
                     {
@@ -283,29 +291,33 @@ namespace ERHMS.Presentation.ViewModels
                             {
                                 message.To.Clear();
                                 message.To.Add(new MailAddress(recipient.GetEmailAddress()));
-                                if (AppendUrl)
+                                if (AppendWebSurveyUrl)
                                 {
-                                    if (recipient.IsResponder && Prepopulate)
+                                    StringBuilder body = new StringBuilder();
+                                    body.Append(Body.TrimEnd());
+                                    body.AppendLine();
+                                    body.AppendLine();
+                                    if (recipient.IsResponder && PrepopulateResponderId)
                                     {
-                                        Record record = service.AddRecord(SelectedView, survey, new
+                                        Record record = new Record(new
                                         {
                                             ResponderId = recipient.Responder.ResponderId
                                         });
-                                        message.Body = string.Format(
-                                            "{0}{1}{1}URL: {2}{1}Passcode: {3}",
-                                            Body.TrimEnd(),
-                                            Environment.NewLine,
-                                            record.GetUrl(),
-                                            record.Passcode);
+                                        if (!Service.TryAddRecord(Views.SelectedItem, survey, record))
+                                        {
+                                            failures.Add(recipient);
+                                            continue;
+                                        }
+                                        body.AppendFormat("URL: {0}", record.GetUrl());
+                                        body.AppendLine();
+                                        body.AppendFormat("Passcode: {0}", record.Passcode);
+                                        message.Body = body.ToString();
                                     }
                                     else
                                     {
-                                        message.Body = string.Format(
-                                            "{0}{1}{1}URL: {2}",
-                                            Body.TrimEnd(),
-                                            Environment.NewLine,
-                                            SelectedView.GetWebSurveyUrl());
+                                        body.AppendFormat("URL: {0}", Views.SelectedItem.GetWebSurveyUrl());
                                     }
+                                    message.Body = body.ToString();
                                 }
                                 else
                                 {
@@ -323,7 +335,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Log.Current.Warn("Failed to send email", ex);
+                    Log.Logger.Warn("Failed to send email", ex);
                 }
             };
             msg.Executed += (sender, e) =>
@@ -332,16 +344,20 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     SurveyViewModel.RequestConfiguration(error);
                 }
-                else if (Prepopulate && survey == null)
+                else if (PrepopulateResponderId && survey == null)
                 {
                     SurveyViewModel.RequestConfiguration("Failed to retrieve web survey details.");
                 }
                 else if (failures.Count > 0)
                 {
-                    Messenger.Default.Send(new NotifyMessage(string.Format(
-                        "Delivery to the following recipients failed:{0}{0}{1}",
-                        Environment.NewLine,
-                        string.Join("; ", failures.Select(recipient => RecipientToStringConverter.Convert(recipient))))));
+                    StringBuilder message = new StringBuilder();
+                    message.AppendLine("Delivery to the following recipients failed:");
+                    message.AppendLine();
+                    message.Append(string.Join("; ", failures));
+                    Messenger.Default.Send(new AlertMessage
+                    {
+                        Message = message.ToString()
+                    });
                 }
                 else if (!success)
                 {
@@ -350,21 +366,14 @@ namespace ERHMS.Presentation.ViewModels
                 else
                 {
                     Dirty = false;
-                    Messenger.Default.Send(new ToastMessage("Email has been sent."));
+                    Messenger.Default.Send(new ToastMessage
+                    {
+                        Message = "Email has been sent."
+                    });
                     Close();
                 }
             };
             Messenger.Default.Send(msg);
-        }
-
-        private void OnRefreshResponderListMessage(RefreshListMessage<Responder> msg)
-        {
-            RefreshResponders();
-        }
-
-        private void OnRefreshViewListMessage(RefreshListMessage<View> msg)
-        {
-            RefreshViews();
         }
     }
 }

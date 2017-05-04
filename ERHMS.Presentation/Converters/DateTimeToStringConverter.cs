@@ -10,7 +10,7 @@ namespace ERHMS.Presentation.Converters
 
         public DateTimeToStringConverter()
         {
-            Format = "g";
+            Format = "G";
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -28,21 +28,14 @@ namespace ERHMS.Presentation.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            DateTime dateTime;
+            if (DateTime.TryParse((string)value, out dateTime))
             {
-                return null;
+                return dateTime;
             }
             else
             {
-                DateTime dateTime;
-                if (DateTime.TryParse(value.ToString(), out dateTime))
-                {
-                    return dateTime;
-                }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
         }
     }

@@ -14,14 +14,16 @@ namespace ERHMS.DataAccess
     {
         private static readonly Regex ReadCommandPattern = new Regex(@"(?<=READ \{)[^}]+(?=})");
 
-        public static bool Exists(Configuration configuration)
+        public static bool Exists()
         {
+            Configuration configuration = Configuration.GetNewInstance();
             return File.Exists(Path.Combine(configuration.Directories.Project, "Sample", "Sample" + Project.FileExtension));
         }
 
-        public static DataContext Create(Configuration configuration)
+        public static DataContext Create()
         {
             Log.Logger.DebugFormat("Creating sample data context");
+            Configuration configuration = Configuration.GetNewInstance();
             string projectPath = Path.Combine(configuration.Directories.Project, "Sample", "Sample" + Project.FileExtension);
             Directory.CreateDirectory(Path.GetDirectoryName(projectPath));
             Assembly assembly = Assembly.GetExecutingAssembly();

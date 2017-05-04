@@ -1,30 +1,56 @@
 ﻿using Epi;
 using ERHMS.DataAccess;
 using ERHMS.Domain;
-using ERHMS.EpiInfo;
+using ERHMS.Presentation.Infrastructure;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.IO;
+using System.Linq;
 using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
-        private ICollection<ViewModelBase> cachedDocuments;
+        private static MainViewModel instance = new MainViewModel();
 
-        private DataContext dataSource;
-        public DataContext DataSource
+        public static MainViewModel Instance
         {
-            get { return dataSource; }
-            private set { Set(() => DataSource, ref dataSource, value); }
+            get { return instance; }
+        }
+
+        private string title;
+        public string Title
+        {
+            get { return title; }
+            private set { Set(nameof(Title), ref title, value); }
+        }
+
+        private DataContext dataContext;
+        public DataContext DataContext
+        {
+            get
+            {
+                return dataContext;
+            }
+            private set
+            {
+                if (Set(nameof(DataContext), ref dataContext, value))
+                {
+                    OpenResponderListViewCommand.RaiseCanExecuteChanged();
+                    CreateResponderCommand.RaiseCanExecuteChanged();
+                    OpenIncidentListViewCommand.RaiseCanExecuteChanged();
+                    CreateIncidentCommand.RaiseCanExecuteChanged();
+                    OpenViewListViewCommand.RaiseCanExecuteChanged();
+                    OpenTemplateListViewCommand.RaiseCanExecuteChanged();
+                    OpenAssignmentListViewCommand.RaiseCanExecuteChanged();
+                    OpenPgmListViewCommand.RaiseCanExecuteChanged();
+                    OpenCanvasListViewCommand.RaiseCanExecuteChanged();
+                }
+            }
         }
 
         public ObservableCollection<ViewModelBase> Documents { get; private set; }
@@ -32,122 +58,60 @@ namespace ERHMS.Presentation.ViewModels
         private ViewModelBase activeDocument;
         public ViewModelBase ActiveDocument
         {
-            get { return activeDocument; }
-            set { Set(() => ActiveDocument, ref activeDocument, value); }
+            get
+            {
+                return activeDocument;
+            }
+            set
+            {
+                if (Set(nameof(ActiveDocument), ref activeDocument, value))
+                {
+                    if (value != null)
+                    {
+                        Log.Logger.DebugFormat("Activating tab: {0}", value.GetType().Name);
+                    }
+                    CloseActiveDocumentCommand.RaiseCanExecuteChanged();
+                }
+            }
         }
 
-        public RelayCommand DataSourcesCommand { get; private set; }
-        public RelayCommand ShowRespondersCommand { get; private set; }
-        public RelayCommand CreateResponderCommand { get; private set; }
-        public RelayCommand ShowIncidentsCommand { get; private set; }
-        public RelayCommand CreateIncidentCommand { get; private set; }
-        public RelayCommand FormsCommand { get; private set; }
-        public RelayCommand TemplatesCommand { get; private set; }
-        public RelayCommand AssignmentsCommand { get; private set; }
-        public RelayCommand AnalysesCommand { get; private set; }
-        public RelayCommand DashboardsCommand { get; private set; }
-        public RelayCommand SettingsCommand { get; private set; }
-        public RelayCommand LogsCommand { get; private set; }
-        public RelayCommand HelpCommand { get; private set; }
-        public RelayCommand AboutCommand { get; private set; }
         public RelayCommand CloseActiveDocumentCommand { get; private set; }
+        public RelayCommand OpenDataSourceListViewCommand { get; private set; }
+        public RelayCommand OpenResponderListViewCommand { get; private set; }
+        public RelayCommand CreateResponderCommand { get; private set; }
+        public RelayCommand OpenIncidentListViewCommand { get; private set; }
+        public RelayCommand CreateIncidentCommand { get; private set; }
+        public RelayCommand OpenViewListViewCommand { get; private set; }
+        public RelayCommand OpenTemplateListViewCommand { get; private set; }
+        public RelayCommand OpenAssignmentListViewCommand { get; private set; }
+        public RelayCommand OpenPgmListViewCommand { get; private set; }
+        public RelayCommand OpenCanvasListViewCommand { get; private set; }
+        public RelayCommand OpenSettingsViewCommand { get; private set; }
+        public RelayCommand OpenLogListViewCommand { get; private set; }
+        public RelayCommand OpenHelpViewCommand { get; private set; }
+        public RelayCommand OpenAboutViewCommand { get; private set; }
         public RelayCommand ExitCommand { get; private set; }
 
-        public MainViewModel()
+        private MainViewModel()
         {
             Title = App.Title;
-            PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(DataSource))
-                {
-                    ShowRespondersCommand.RaiseCanExecuteChanged();
-                    CreateResponderCommand.RaiseCanExecuteChanged();
-                    ShowIncidentsCommand.RaiseCanExecuteChanged();
-                    CreateIncidentCommand.RaiseCanExecuteChanged();
-                    FormsCommand.RaiseCanExecuteChanged();
-                    TemplatesCommand.RaiseCanExecuteChanged();
-                    AssignmentsCommand.RaiseCanExecuteChanged();
-                    AnalysesCommand.RaiseCanExecuteChanged();
-                    DashboardsCommand.RaiseCanExecuteChanged();
-                }
-                else if (e.PropertyName == nameof(ActiveDocument) && ActiveDocument != null)
-                {
-                    Log.Current.DebugFormat("Activating tab: {0}", ActiveDocument.GetType().Name);
-                }
-            };
             Documents = new ObservableCollection<ViewModelBase>();
-            Documents.CollectionChanged += Documents_CollectionChanged;
-            cachedDocuments = new List<ViewModelBase>(Documents);
-            DataSourcesCommand = new RelayCommand(OpenDataSourceListView);
-            ShowRespondersCommand = new RelayCommand(OpenResponderListView, HasDataSource);
-            CreateResponderCommand = new RelayCommand(() => { OpenResponderDetailView(DataContext.Responders.Create()); }, HasDataSource);
-            ShowIncidentsCommand = new RelayCommand(OpenIncidentListView, HasDataSource);
-            CreateIncidentCommand = new RelayCommand(() => { OpenIncidentView(DataContext.Incidents.Create()); }, HasDataSource);
-            FormsCommand = new RelayCommand(OpenViewListView, HasDataSource);
-            TemplatesCommand = new RelayCommand(OpenTemplateListView, HasDataSource);
-            AssignmentsCommand = new RelayCommand(OpenAssignmentListView, HasDataSource);
-            AnalysesCommand = new RelayCommand(OpenPgmListView, HasDataSource);
-            DashboardsCommand = new RelayCommand(OpenCanvasListView, HasDataSource);
-            SettingsCommand = new RelayCommand(OpenSettingsView);
-            LogsCommand = new RelayCommand(OpenLogListView);
-            HelpCommand = new RelayCommand(OpenHelpView);
-            AboutCommand = new RelayCommand(OpenAboutView);
             CloseActiveDocumentCommand = new RelayCommand(CloseActiveDocument, HasActiveDocument);
+            OpenDataSourceListViewCommand = new RelayCommand(OpenDataSourceListView);
+            OpenResponderListViewCommand = new RelayCommand(OpenResponderListView, HasDataContext);
+            CreateResponderCommand = new RelayCommand(CreateResponder, HasDataContext);
+            OpenIncidentListViewCommand = new RelayCommand(OpenIncidentListView, HasDataContext);
+            CreateIncidentCommand = new RelayCommand(CreateIncident, HasDataContext);
+            OpenViewListViewCommand = new RelayCommand(OpenViewListView, HasDataContext);
+            OpenTemplateListViewCommand = new RelayCommand(OpenTemplateListView, HasDataContext);
+            OpenAssignmentListViewCommand = new RelayCommand(OpenAssignmentListView, HasDataContext);
+            OpenPgmListViewCommand = new RelayCommand(OpenPgmListView, HasDataContext);
+            OpenCanvasListViewCommand = new RelayCommand(OpenCanvasListView, HasDataContext);
+            OpenSettingsViewCommand = new RelayCommand(OpenSettingsView);
+            OpenLogListViewCommand = new RelayCommand(OpenLogListView);
+            OpenHelpViewCommand = new RelayCommand(OpenHelpView);
+            OpenAboutViewCommand = new RelayCommand(OpenAboutView);
             ExitCommand = new RelayCommand(Exit);
-        }
-
-        private void Documents_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                foreach (ViewModelBase document in e.NewItems)
-                {
-                    document.PropertyChanged += Document_PropertyChanged;
-                }
-            }
-            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                foreach (ViewModelBase document in e.OldItems)
-                {
-                    document.PropertyChanged -= Document_PropertyChanged;
-                }
-            }
-            if (e.Action == NotifyCollectionChangedAction.Reset)
-            {
-                foreach (ViewModelBase document in cachedDocuments)
-                {
-                    document.PropertyChanged -= Document_PropertyChanged;
-                }
-                foreach (ViewModelBase document in Documents)
-                {
-                    document.PropertyChanged += Document_PropertyChanged;
-                }
-            }
-            cachedDocuments = new List<ViewModelBase>(Documents);
-        }
-
-        private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            ViewModelBase document = (ViewModelBase)sender;
-            if (e.PropertyName == nameof(document.Closed))
-            {
-                App.Current.Invoke(() =>
-                {
-                    if (document.Closed)
-                    {
-                        Log.Current.DebugFormat("Closing tab: {0}", document.GetType().Name);
-                        Documents.Remove(document);
-                        if (Documents.Count == 0)
-                        {
-                            ActiveDocument = null;
-                        }
-                    }
-                    else
-                    {
-                        Documents.Add(document);
-                    }
-                });
-            }
         }
 
         public bool HasActiveDocument()
@@ -155,72 +119,26 @@ namespace ERHMS.Presentation.ViewModels
             return ActiveDocument != null;
         }
 
-        public bool HasDataSource()
+        public bool HasDataContext()
         {
-            return DataSource != null;
+            return DataContext != null;
         }
 
-        private void OpenDataSourceInternal(FileInfo file)
+        private T GetDocument<T>(Predicate<T> predicate = null) where T : ViewModelBase
         {
-            App.Current.Invoke(() =>
+            foreach (T document in Documents.OfType<T>())
             {
-                try
+                if (predicate == null || predicate(document))
                 {
-                    Documents.Clear();
-                    DataSource = new DataContext(new Project(file));
-                    Title = string.Format("{0} - {1}", App.Title, DataSource.Project.Name);
-                    OpenHelpView();
-                }
-                catch (Exception ex)
-                {
-                    Log.Current.Warn("Failed to open data source", ex);
-                    Messenger.Default.Send(new NotifyMessage("Failed to open data source."));
-                    OpenDataSourceListView();
-                }
-            });
-        }
-
-        public void OpenDataSource(FileInfo file)
-        {
-            if (HasDataSource())
-            {
-                if (DataSource.Project.FilePath.EqualsIgnoreCase(file.FullName))
-                {
-                    CloseDataSourceListView();
-                    return;
-                }
-                ConfirmMessage msg = new ConfirmMessage("Open", "Open data source? This will close the currently active data source.");
-                msg.Confirmed += (sender, e) =>
-                {
-                    OpenDataSourceInternal(file);
-                };
-                Messenger.Default.Send(msg);
-            }
-            else
-            {
-                OpenDataSourceInternal(file);
-            }
-        }
-
-        private TViewModel GetDocument<TViewModel>(Predicate<TViewModel> predicate = null) where TViewModel : ViewModelBase
-        {
-            foreach (ViewModelBase document in Documents)
-            {
-                TViewModel typedDocument = document as TViewModel;
-                if (typedDocument != null)
-                {
-                    if (predicate == null || predicate(typedDocument))
-                    {
-                        return typedDocument;
-                    }
+                    return document;
                 }
             }
             return null;
         }
 
-        private bool TryActivateDocument<TViewModel>(Predicate<TViewModel> predicate = null) where TViewModel : ViewModelBase
+        private bool ActivateDocument<T>(Predicate<T> predicate = null) where T : ViewModelBase
         {
-            TViewModel document = GetDocument(predicate);
+            T document = GetDocument(predicate);
             if (document == null)
             {
                 return false;
@@ -234,62 +152,153 @@ namespace ERHMS.Presentation.ViewModels
 
         private void OpenDocument(ViewModelBase document)
         {
-            App.Current.Invoke(() =>
+            Log.Logger.DebugFormat("Opening tab: {0}", document.GetType().Name);
+            document.Closing += (sender, e) =>
             {
-                Log.Current.DebugFormat("Opening tab: {0}", document.GetType().Name);
-                Documents.Add(document);
-                ActiveDocument = document;
-            });
+                CloseDocument(document);
+            };
+            Documents.Add(document);
+            ActiveDocument = document;
+        }
+
+        private void CloseDocument(ViewModelBase document)
+        {
+            Log.Logger.DebugFormat("Closing tab: {0}", document.GetType().Name);
+            Documents.Remove(document);
+            if (Documents.Count == 0)
+            {
+                ActiveDocument = null;
+            }
+        }
+
+        public void CloseActiveDocument()
+        {
+            ActiveDocument.Close();
+        }
+
+        private void OpenDataSourceInternal(string path)
+        {
+            try
+            {
+                foreach (ViewModelBase document in Documents.ToList())
+                {
+                    document.Close();
+                }
+                using (new WaitCursor())
+                {
+                    DataContext = new DataContext(new Project(path));
+                }
+                Title = string.Format("{0} - {1}", App.Title, DataContext.Project.Name);
+                OpenHelpView();
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Warn("Failed to open data source", ex);
+                Messenger.Default.Send(new AlertMessage
+                {
+                    Message = "Failed to open data source."
+                });
+                OpenDataSourceListView();
+            }
+        }
+
+        public void OpenDataSource(string path)
+        {
+            if (HasDataContext())
+            {
+                if (DataContext.Project.FilePath.EqualsIgnoreCase(path))
+                {
+                    GetDocument<DataSourceListViewModel>()?.Close();
+                    return;
+                }
+                ConfirmMessage msg = new ConfirmMessage
+                {
+                    Verb = "Open",
+                    Message = "Open data source? This will close the current data source."
+                };
+                msg.Confirmed += (sender, e) =>
+                {
+                    OpenDataSourceInternal(path);
+                };
+                Messenger.Default.Send(msg);
+            }
+            else
+            {
+                OpenDataSourceInternal(path);
+            }
         }
 
         public void OpenDataSourceListView()
         {
-            if (!TryActivateDocument<DataSourceListViewModel>())
+            if (!ActivateDocument<DataSourceListViewModel>())
             {
                 OpenDocument(new DataSourceListViewModel());
             }
         }
 
-        public void CloseDataSourceListView()
-        {
-            GetDocument<DataSourceListViewModel>()?.Close();
-        }
-
         public void OpenResponderListView()
         {
-            if (!TryActivateDocument<ResponderListViewModel>())
+            if (!ActivateDocument<ResponderListViewModel>())
             {
-                OpenDocument(new ResponderListViewModel());
+                using (new WaitCursor())
+                {
+                    OpenDocument(new ResponderListViewModel());
+                }
             }
         }
 
         public void OpenResponderDetailView(Responder responder)
         {
-            if (!TryActivateDocument<ResponderDetailViewModel>(document => document.Responder.ResponderId.EqualsIgnoreCase(responder.ResponderId)))
+            if (!ActivateDocument<ResponderDetailViewModel>(document => document.Responder.ResponderId.EqualsIgnoreCase(responder.ResponderId)))
             {
-                OpenDocument(new ResponderDetailViewModel(responder));
+                using (new WaitCursor())
+                {
+                    OpenDocument(new ResponderDetailViewModel(responder));
+                }
+            }
+        }
+
+        public void CreateResponder()
+        {
+            using (new WaitCursor())
+            {
+                OpenDocument(new ResponderDetailViewModel(DataContext.Responders.Create()));
             }
         }
 
         public void OpenIncidentListView()
         {
-            if (!TryActivateDocument<IncidentListViewModel>())
+            if (!ActivateDocument<IncidentListViewModel>())
             {
-                OpenDocument(new IncidentListViewModel());
+                using (new WaitCursor())
+                {
+                    OpenDocument(new IncidentListViewModel());
+                }
             }
         }
 
         public void OpenIncidentView(Incident incident)
         {
-            if (!TryActivateDocument<IncidentViewModel>(document => document.Incident.IncidentId.EqualsIgnoreCase(incident.IncidentId)))
+            if (!ActivateDocument<IncidentViewModel>(document => document.Incident.IncidentId.EqualsIgnoreCase(incident.IncidentId)))
             {
-                OpenDocument(new IncidentViewModel(incident));
+                using (new WaitCursor())
+                {
+                    OpenDocument(new IncidentViewModel(incident));
+                }
+            }
+        }
+
+        public void CreateIncident()
+        {
+            using (new WaitCursor())
+            {
+                OpenDocument(new IncidentViewModel(DataContext.Incidents.Create()));
             }
         }
 
         public void OpenLocationDetailView(Location location)
         {
-            if (!TryActivateDocument<LocationDetailViewModel>(document => document.Location.LocationId.EqualsIgnoreCase(location.LocationId)))
+            if (!ActivateDocument<LocationDetailViewModel>(document => document.Location.LocationId.EqualsIgnoreCase(location.LocationId)))
             {
                 OpenDocument(new LocationDetailViewModel(location));
             }
@@ -297,23 +306,29 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenViewListView()
         {
-            if (!TryActivateDocument<ViewListViewModel>())
+            if (!ActivateDocument<ViewListViewModel>())
             {
-                OpenDocument(new ViewListViewModel(null));
+                using (new WaitCursor())
+                {
+                    OpenDocument(new ViewListViewModel(null));
+                }
             }
         }
 
         public void OpenRecordListView(View view)
         {
-            if (!TryActivateDocument<RecordListViewModel>(document => document.View.Id == view.Id))
+            if (!ActivateDocument<RecordListViewModel>(document => document.View.Id == view.Id))
             {
-                OpenDocument(new RecordListViewModel(view));
+                using (new WaitCursor())
+                {
+                    OpenDocument(new RecordListViewModel(view));
+                }
             }
         }
 
         public void OpenTemplateListView()
         {
-            if (!TryActivateDocument<TemplateListViewModel>())
+            if (!ActivateDocument<TemplateListViewModel>())
             {
                 OpenDocument(new TemplateListViewModel(null));
             }
@@ -321,25 +336,34 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenAssignmentListView()
         {
-            if (!TryActivateDocument<AssignmentListViewModel>())
+            if (!ActivateDocument<AssignmentListViewModel>())
             {
-                OpenDocument(new AssignmentListViewModel(null));
+                using (new WaitCursor())
+                {
+                    OpenDocument(new AssignmentListViewModel(null));
+                }
             }
         }
 
         public void OpenPgmListView()
         {
-            if (!TryActivateDocument<PgmListViewModel>())
+            if (!ActivateDocument<PgmListViewModel>())
             {
-                OpenDocument(new PgmListViewModel(null));
+                using (new WaitCursor())
+                {
+                    OpenDocument(new PgmListViewModel(null));
+                }
             }
         }
 
         public void OpenCanvasListView()
         {
-            if (!TryActivateDocument<CanvasListViewModel>())
+            if (!ActivateDocument<CanvasListViewModel>())
             {
-                OpenDocument(new CanvasListViewModel(null));
+                using (new WaitCursor())
+                {
+                    OpenDocument(new CanvasListViewModel(null));
+                }
             }
         }
 
@@ -350,7 +374,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenSettingsView()
         {
-            if (!TryActivateDocument<SettingsViewModel>())
+            if (!ActivateDocument<SettingsViewModel>())
             {
                 OpenDocument(new SettingsViewModel());
             }
@@ -358,7 +382,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenLogListView()
         {
-            if (!TryActivateDocument<LogListViewModel>())
+            if (!ActivateDocument<LogListViewModel>())
             {
                 OpenDocument(new LogListViewModel());
             }
@@ -366,7 +390,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenHelpView()
         {
-            if (!TryActivateDocument<HelpViewModel>())
+            if (!ActivateDocument<HelpViewModel>())
             {
                 OpenDocument(new HelpViewModel());
             }
@@ -374,74 +398,15 @@ namespace ERHMS.Presentation.ViewModels
 
         public void OpenAboutView()
         {
-            if (!TryActivateDocument<AboutViewModel>())
+            if (!ActivateDocument<AboutViewModel>())
             {
                 OpenDocument(new AboutViewModel());
             }
-        }
-
-        public void CloseActiveDocument()
-        {
-            ActiveDocument.Close();
         }
 
         public void Exit()
         {
             Messenger.Default.Send(new ExitMessage());
         }
-
-        //private void Service_ViewAdded(object sender, ViewEventArgs e)
-        //{
-        //    string incidentId = e.Tag;
-        //    if (e.ProjectPath.EqualsIgnoreCase(DataContext.Project.FilePath) && incidentId != null)
-        //    {
-        //        View view = DataContext.Project.GetViewByName(e.ViewName);
-        //        if (view == null)
-        //        {
-        //            Log.Current.WarnFormat("View not found: {0}", e);
-        //        }
-        //        else
-        //        {
-        //            ViewLink viewLink = DataContext.ViewLinks.Create();
-        //            viewLink.ViewId = view.Id;
-        //            viewLink.IncidentId = incidentId;
-        //            DataContext.ViewLinks.Save(viewLink);
-        //        }
-        //    }
-        //    Messenger.Default.Send(new RefreshListMessage<View>(incidentId));
-        //}
-
-        //private void Service_ViewDataImported(object sender, ViewEventArgs e)
-        //{
-        //    Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
-        //}
-
-        //private void Service_RecordSaved(object sender, RecordEventArgs e)
-        //{
-        //    Messenger.Default.Send(new RefreshDataMessage(e.ProjectPath, e.ViewName));
-        //}
-
-        //private void Service_TemplateAdded(object sender, TemplateEventArgs e)
-        //{
-        //    Messenger.Default.Send(new RefreshListMessage<TemplateInfo>());
-        //}
-
-        //private void Service_PgmSaved(object sender, PgmEventArgs e)
-        //{
-        //    string incidentId = e.Tag;
-        //    Messenger.Default.Send(new RefreshListMessage<Pgm>(incidentId));
-        //}
-
-        //private void Service_CanvasSaved(object sender, CanvasEventArgs e)
-        //{
-        //    string incidentId = e.Tag;
-        //    if (DataContext.Project.FilePath.EqualsIgnoreCase(e.ProjectPath))
-        //    {
-        //        Canvas canvas = DataContext.Project.GetCanvasById(e.CanvasId);
-        //        canvas.Content = File.ReadAllText(e.CanvasPath);
-        //        DataContext.Project.UpdateCanvas(canvas);
-        //    }
-        //    Messenger.Default.Send(new RefreshListMessage<Canvas>(incidentId));
-        //}
     }
 }

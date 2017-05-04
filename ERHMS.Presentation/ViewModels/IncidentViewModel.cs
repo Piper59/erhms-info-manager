@@ -20,13 +20,13 @@ namespace ERHMS.Presentation.ViewModels
         public override bool Dirty
         {
             get { return base.Dirty || Detail.Dirty || Notes.Dirty; }
-            set { base.Dirty = value; }
+            protected set { base.Dirty = value; }
         }
 
         public IncidentViewModel(Incident incident)
         {
             Incident = incident;
-            UpdateTitle();
+            Refresh();
             Detail = new IncidentDetailViewModel(incident);
             Notes = new IncidentNotesViewModel(incident);
             Rosters = new RosterListViewModel(incident);
@@ -36,20 +36,12 @@ namespace ERHMS.Presentation.ViewModels
             Assignments = new AssignmentListViewModel(incident);
             Pgms = new PgmListViewModel(incident);
             Canvases = new CanvasListViewModel(incident);
-            Messenger.Default.Register<RefreshMessage<Incident>>(this, OnRefreshIncidentMessage);
+            Messenger.Default.Register<RefreshMessage<Incident>>(this, msg => Refresh());
         }
 
-        private void UpdateTitle()
+        private void Refresh()
         {
             Title = Incident.New ? "New Incident" : Incident.Name;
-        }
-
-        private void OnRefreshIncidentMessage(RefreshMessage<Incident> msg)
-        {
-            if (msg.Entity == Incident)
-            {
-                UpdateTitle();
-            }
         }
     }
 }

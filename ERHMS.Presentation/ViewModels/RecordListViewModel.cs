@@ -3,12 +3,9 @@ using Epi.Fields;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
-using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
+using ERHMS.EpiInfo.Wrappers;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,7 +21,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<DataGridColumn> Columns
         {
             get { return columns; }
-            set { Set(() => Columns, ref columns, value); }
+            private set { Set(nameof(Columns), ref columns, value); }
         }
 
         public RelayCommand CreateCommand { get; private set; }
@@ -37,6 +34,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = view.Name;
             View = view;
+            DataContext.Project.CollectedData.EnsureDataTablesExist(view);
             Entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, view);
             List<int> fieldIds = DataContext.Project.GetSortedFieldIds(view.Id).ToList();
             Columns = view.Fields.TableColumnFields
@@ -49,38 +47,44 @@ namespace ERHMS.Presentation.ViewModels
                 })
                 .ToList();
             Refresh();
-            Selecting += (sender, e) =>
+            CreateCommand = new RelayCommand(Create);
+            EditCommand = new RelayCommand(Edit, HasOneSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasAnySelectedItems);
+            UndeleteCommand = new RelayCommand(Undelete, HasAnySelectedItems);
+            RefreshCommand = new RelayCommand(Refresh);
+            SelectedItemChanged += (sender, e) =>
             {
                 EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
                 UndeleteCommand.RaiseCanExecuteChanged();
             };
-            CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            UndeleteCommand = new RelayCommand(Undelete, HasSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshDataMessage>(this, OnRefreshDataMessage);
         }
 
-        protected override ICollectionView GetItems()
+        protected override IEnumerable<ViewEntity> GetItems()
         {
-            return CollectionViewSource.GetDefaultView(Entities.Select());
+            return Entities.Select();
         }
 
-        protected override IEnumerable<string> GetFilteredValues(ViewEntity item)
+        private void Invoke(Wrapper wrapper)
         {
-            yield break;
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == WrapperEventType.RecordSaved)
+                {
+                    Refresh();
+                }
+            };
+            wrapper.Invoke();
         }
 
         public void Create()
         {
-            Enter.OpenView(View).Invoke();
+            Invoke(Enter.OpenNewRecord.Create(DataContext.Project.FilePath, View.Name));
         }
 
         public void Edit()
         {
-            Enter.OpenRecord(View, SelectedItem.UniqueKey.Value).Invoke();
+            Invoke(Enter.OpenRecord.Create(DataContext.Project.FilePath, View.Name, SelectedItem.UniqueKey.Value));
         }
 
         public void Delete()
@@ -102,14 +106,6 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     Entities.Undelete(entity);
                 }
-            }
-        }
-
-        private void OnRefreshDataMessage(RefreshDataMessage msg)
-        {
-            if (msg.ProjectPath.EqualsIgnoreCase(DataContext.Project.FilePath) && msg.ViewName.EqualsIgnoreCase(View.Name))
-            {
-                Refresh();
             }
         }
     }
