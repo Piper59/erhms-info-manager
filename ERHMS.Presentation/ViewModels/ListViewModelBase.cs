@@ -24,7 +24,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public IEnumerable<T> TypedItems
         {
-            get { return Items.Cast<T>(); }
+            get { return Items?.Cast<T>(); }
         }
 
         private T selectedItem;
@@ -52,7 +52,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public IEnumerable<T> TypedSelectedItems
         {
-            get { return SelectedItems.Cast<T>(); }
+            get { return SelectedItems?.Cast<T>(); }
         }
 
         private string filter;
