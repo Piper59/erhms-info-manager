@@ -4,11 +4,12 @@ namespace ERHMS.EpiInfo.DataAccess
 {
     public class SqlServerDriver : DataDriverBase
     {
-        public static SqlServerDriver Create(string dataSource, string initialCatalog, string userId = null, string password = null)
+        public static SqlServerDriver Create(string dataSource, string initialCatalog, bool encrypt, string userId = null, string password = null)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
             builder.DataSource = dataSource;
             builder.InitialCatalog = initialCatalog;
+            builder.Encrypt = encrypt;
             if (userId == null && password == null)
             {
                 builder.IntegratedSecurity = true;

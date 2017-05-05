@@ -32,6 +32,13 @@ namespace ERHMS.Presentation.ViewModels
                 set { Set(nameof(InitialCatalog), ref initialCatalog, value); }
             }
 
+            private bool encrypt;
+            public bool Encrypt
+            {
+                get { return encrypt; }
+                set { Set(nameof(Encrypt), ref encrypt, value); }
+            }
+
             private bool integratedSecurity;
             public bool IntegratedSecurity
             {
@@ -68,7 +75,7 @@ namespace ERHMS.Presentation.ViewModels
 
             public IDataDriver CreateDriver()
             {
-                return SqlServerDriver.Create(DataSource, InitialCatalog, UserId, Password);
+                return SqlServerDriver.Create(DataSource, InitialCatalog, Encrypt, UserId, Password);
             }
         }
 
