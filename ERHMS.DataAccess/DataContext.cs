@@ -26,7 +26,7 @@ namespace ERHMS.DataAccess
                 project.CollectedData.CreateDataTableForView(view, 1);
             }
             IDataDriver driver = DataDriverFactory.CreateDataDriver(project);
-            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.DataAccess.Scripts.Create.sql"));
+            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.DataAccess.Scripts.Base.sql"));
             return new DataContext(project);
         }
 
