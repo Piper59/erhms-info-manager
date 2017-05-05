@@ -223,6 +223,7 @@
       <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Win32Window.cs" />
+    <Compile Include="Converters\AccessTextToPlainTextConverter.cs" />
     <Compile Include="Converters\BindingTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\BooleanInverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
