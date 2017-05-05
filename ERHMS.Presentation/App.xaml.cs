@@ -22,7 +22,6 @@ using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation
 {
-    // TODO: Add upgrade hooks
     public partial class App : Application
     {
         public const string BareTitle = "ERHMS Info Manager";

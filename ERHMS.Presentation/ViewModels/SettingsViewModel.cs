@@ -241,10 +241,10 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.OrganizationKey = WebSurveySettings.OrganizationKey.ToString();
             if (!RootDirectory.EqualsIgnoreCase(rootDirectoryInit))
             {
-                // TODO: Close data source?
                 try
                 {
-                    configuration.ChangeUserDirectories(RootDirectory);
+                    IOExtensions.CopyDirectory(rootDirectoryInit, RootDirectory);
+                    configuration.SetUserDirectories(RootDirectory);
                     ICollection<string> paths = Settings.Default.DataSources.ToList();
                     Settings.Default.DataSources.Clear();
                     Regex rootDirectoryInitPattern = new Regex("^" + Regex.Escape(rootDirectoryInit), RegexOptions.IgnoreCase);

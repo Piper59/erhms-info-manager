@@ -120,14 +120,9 @@ namespace ERHMS.EpiInfo
             templates.CreateSubdirectory("Projects");
         }
 
-        public static void ChangeUserDirectories(this Configuration @this, string userDirectoryPath)
+        public static void SetUserDirectories(this Configuration @this, string userDirectoryPath)
         {
-            Log.Logger.DebugFormat("Changing user directories: {0}", userDirectoryPath);
-            Config.DirectoriesRow directories = ((Config)@this.ConfigDataSet.Copy()).Directories[0];
-            SetUserDirectories(directories, userDirectoryPath);
-            Directory.CreateDirectory(userDirectoryPath);
-            IOExtensions.CopyDirectory(@this.Directories.Project, directories.Project);
-            IOExtensions.CopyDirectory(@this.Directories.Templates, directories.Templates);
+            Log.Logger.DebugFormat("Setting user directories: {0}", userDirectoryPath);
             SetUserDirectories(@this.ConfigDataSet.Directories[0], userDirectoryPath);
         }
     }
