@@ -73,6 +73,7 @@
     </Style>
 
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource MetroButton}">
+        <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Height" Value="50" />
         <Setter Property="Margin" Value="2.5,0" />
         <Setter Property="MinWidth" Value="50" />
