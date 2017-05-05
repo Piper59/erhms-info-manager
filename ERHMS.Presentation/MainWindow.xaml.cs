@@ -16,7 +16,7 @@ namespace ERHMS.Presentation
 {
     public partial class MainWindow : MetroWindow
     {
-        private static readonly IDictionary<Type, Type> dialogTypes = new Dictionary<Type, Type>
+        private static readonly IDictionary<Type, Type> DialogTypes = new Dictionary<Type, Type>
         {
             { typeof(DataSourceViewModel), typeof(DataSourceView) },
             { typeof(CanvasLinkViewModel), typeof(LinkView) },
@@ -121,7 +121,7 @@ namespace ERHMS.Presentation
 
         private async void ShowAsync(ShowMessage msg)
         {
-            ChildWindow dialog = (ChildWindow)Activator.CreateInstance(dialogTypes[msg.ViewModel.GetType()]);
+            ChildWindow dialog = (ChildWindow)Activator.CreateInstance(DialogTypes[msg.ViewModel.GetType()]);
             dialog.DataContext = msg.ViewModel;
             await this.ShowChildWindowAsync(dialog, ChildWindowManager.OverlayFillBehavior.FullWindow);
         }
