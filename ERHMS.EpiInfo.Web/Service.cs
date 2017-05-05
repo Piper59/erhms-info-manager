@@ -21,7 +21,7 @@ namespace ERHMS.EpiInfo.Web
             get { return ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey); }
         }
 
-        public static bool IsConfigured(out ConfigurationError error)
+        public static bool IsConfigured(out ConfigurationError error, bool local = false)
         {
             Log.Logger.Debug("Checking web configuration");
             Configuration configuration = Configuration.GetNewInstance();
@@ -51,6 +51,11 @@ namespace ERHMS.EpiInfo.Web
             {
                 error = ConfigurationError.OrganizationKey;
                 return false;
+            }
+            if (local)
+            {
+                error = ConfigurationError.None;
+                return true;
             }
             try
             {

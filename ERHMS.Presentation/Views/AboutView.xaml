@@ -14,9 +14,9 @@
     </UserControl.Resources>
     <TabControl x:Name="TabControl">
         <TabItem Header="_About">
-            <ScrollViewer>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <StackPanel TextBlock.FontSize="{StaticResource LargerFontSize}"
+                    <StackPanel TextBlock.FontSize="15"
                                 Margin="0,0,0,50">
                         <Image Margin="0,0,0,5"
                                Source="/Images/ERHMS.png"
@@ -25,7 +25,7 @@
                         <TextBlock>Version <Run Text="{Binding Version, Mode=OneTime}" /></TextBlock>
                         <TextBlock Text="{Binding InformationalVersion, Mode=OneTime}" />
                     </StackPanel>
-                    <StackPanel TextBlock.FontSize="{StaticResource LargerFontSize}"
+                    <StackPanel TextBlock.FontSize="15"
                                 Margin="0,0,0,50">
                         <TextBlock>Built with Epi Info&#x2122;</TextBlock>
                         <Image Margin="0,5,0,0"
@@ -43,7 +43,8 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ScrollViewer Grid.Row="0">
+                <ScrollViewer Grid.Row="0"
+                              HorizontalScrollBarVisibility="Auto">
                     <TextBlock FontFamily="{StaticResource MonospaceFontFamily}"
                                Text="{StaticResource LICENSE}" />
                 </ScrollViewer>

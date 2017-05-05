@@ -219,7 +219,7 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 ConfigurationError error;
-                if (Service.IsConfigured(out error))
+                if (Service.IsConfigured(out error, true))
                 {
                     SurveyViewModel survey = new SurveyViewModel(SelectedItem.Item);
                     survey.Activate();

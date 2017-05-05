@@ -219,6 +219,7 @@
     <Compile Include="Controls\IconButton.xaml.cs">
       <DependentUpon>IconButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NonGreedyMultiLineTextBox.cs" />
     <Compile Include="Controls\RemovableItemsControl.xaml.cs">
       <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
     </Compile>
@@ -476,6 +477,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\IconsNonShared.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Strings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

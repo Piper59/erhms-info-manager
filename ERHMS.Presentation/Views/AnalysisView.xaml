@@ -4,31 +4,37 @@
                                        xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
-                                       OverlayBrush="{StaticResource OverlayBrush}"
+                                       Style="{StaticResource ChildWindow}"
                                        Title="{Binding Title}">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0">Name</Label>
-            <TextBox Grid.Column="1"
-                     AutomationProperties.Name="Name"
-                     Text="{Binding BindingGroupName, UpdateSourceTrigger=PropertyChanged}" />
+    <Border Style="{StaticResource ChildWindowRoot}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0"
+                       Margin="0">
+                    Name
+                </Label>
+                <TextBox Grid.Column="1"
+                         AutomationProperties.Name="Name"
+                         Margin="0"
+                         Text="{Binding BindingGroupName, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <WrapPanel Grid.Row="1"
+                       Style="{StaticResource IconButtonBar}">
+                <Controls:IconButton AccessText="C_reate"
+                                     Command="{Binding CreateCommand}"
+                                     Icon="{StaticResource appbar_add}" />
+                <Controls:IconButton AccessText="C_ancel"
+                                     Command="{Binding CancelCommand}"
+                                     Icon="{StaticResource appbar_cancel}" />
+            </WrapPanel>
         </Grid>
-        <WrapPanel Grid.Row="1"
-                   Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="C_reate"
-                                 Command="{Binding CreateCommand}"
-                                 Icon="{StaticResource appbar_add}" />
-            <Controls:IconButton AccessText="C_ancel"
-                                 Command="{Binding CancelCommand}"
-                                 Icon="{StaticResource appbar_cancel}" />
-        </WrapPanel>
-    </Grid>
+    </Border>
 </MahApps.SimpleChildWindow:ChildWindow>

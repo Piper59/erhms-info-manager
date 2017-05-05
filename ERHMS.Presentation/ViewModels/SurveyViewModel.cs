@@ -44,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
                 case ConfigurationError.EndpointAddress:
                     return "Invalid endpoint address.";
                 case ConfigurationError.Version:
-                    return "Service must be version 2 or later.";
+                    return "Endpoint address must be version 2 (SurveyManagerServiceV2.svc) or later.";
                 case ConfigurationError.OrganizationKey:
                     return "Invalid organization key.";
                 case ConfigurationError.Connection:
@@ -216,8 +216,8 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         Message = "Form has been published to web."
                     });
-                    Active = false;
                 }
+                Active = false;
             };
             Messenger.Default.Send(msg);
         }

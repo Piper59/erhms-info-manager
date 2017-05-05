@@ -1,16 +1,24 @@
 ﻿<ItemsControl x:Name="Root"
               x:Class="ERHMS.Presentation.Controls.RemovableItemsControl"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              IsTabStop="False">
     <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
-            <WrapPanel />
+            <WrapPanel Margin="0,0,0,-5" />
         </ItemsPanelTemplate>
     </ItemsControl.ItemsPanel>
     <ItemsControl.ItemTemplate>
         <DataTemplate>
             <Border BorderThickness="1"
+                    Margin="0,0,5,5"
+                    MinHeight="26"
                     SnapsToDevicePixels="True">
+                <Border.InputBindings>
+                    <MouseBinding Command="{Binding RemoveCommand, ElementName=Root}"
+                                  CommandParameter="{Binding}"
+                                  MouseAction="MiddleClick" />
+                </Border.InputBindings>
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="BorderBrush" Value="{StaticResource GrayBrush6}" />
@@ -21,23 +29,21 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <Border.InputBindings>
-                    <MouseBinding Command="{Binding RemoveCommand, ElementName=Root}"
-                                  CommandParameter="{Binding}"
-                                  MouseAction="MiddleClick" />
-                </Border.InputBindings>
-                <StackPanel Orientation="Horizontal">
-                    <ContentPresenter ContentTemplate="{Binding ItemContentTemplate, ElementName=Root}" />
-                    <Button Command="{Binding RemoveCommand, ElementName=Root}"
+                <DockPanel Margin="5,3,3,3"
+                           SnapsToDevicePixels="False">
+                    <Button DockPanel.Dock="Right"
+                            Command="{Binding RemoveCommand, ElementName=Root}"
                             CommandParameter="{Binding}"
-                            Height="10"
+                            Height="15"
+                            Margin="3,0,0,0"
                             Style="{StaticResource ChromelessButtonStyle}"
-                            Width="10">
+                            Width="15">
                         <Viewbox Margin="-4">
                             <ContentPresenter Content="{StaticResource appbar_close}" />
                         </Viewbox>
                     </Button>
-                </StackPanel>
+                    <ContentPresenter ContentTemplate="{Binding ItemContentTemplate, ElementName=Root}" />
+                </DockPanel>
             </Border>
         </DataTemplate>
     </ItemsControl.ItemTemplate>

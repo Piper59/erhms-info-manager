@@ -13,8 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0"
-                      HorizontalScrollBarVisibility="Disabled">
+        <ScrollViewer Grid.Row="0">
             <StackPanel Grid.IsSharedSizeScope="True">
                 <GroupBox Header="General">
                     <Grid>
@@ -32,7 +31,10 @@
                                   AutomationProperties.Name="Logging Level"
                                   ItemsSource="{Binding LogLevels}"
                                   SelectedItem="{Binding LogLevel}" />
-                        <Label Grid.Row="1" Grid.Column="0">Root Directory</Label>
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Margin="0">
+                            Root Directory
+                        </Label>
                         <Grid Grid.Row="1" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -41,16 +43,19 @@
                             <TextBox Grid.Column="0"
                                      AutomationProperties.Name="Root Directory"
                                      IsReadOnly="True"
+                                     Margin="0"
                                      Text="{Binding RootDirectory}" />
                             <Button Grid.Column="1"
                                     Command="{Binding BrowseCommand}"
+                                    Margin="5,0,0,0"
                                     Style="{StaticResource AccentButton}">
                                 Browse
                             </Button>
                         </Grid>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Email" DataContext="{Binding EmailSettings}">
+                <GroupBox DataContext="{Binding EmailSettings}"
+                          Header="Email">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -70,9 +75,13 @@
                         <TextBox Grid.Row="1" Grid.Column="1"
                                  AutomationProperties.Name="SMTP Port"
                                  Text="{Binding Port, TargetNullValue=''}" />
-                        <Label Grid.Row="2" Grid.Column="0">Sender Address</Label>
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Margin="0">
+                            Sender Address
+                        </Label>
                         <TextBox Grid.Row="2" Grid.Column="1"
                                  AutomationProperties.Name="Sender Address"
+                                 Margin="0"
                                  Text="{Binding Sender}" />
                     </Grid>
                 </GroupBox>
@@ -98,7 +107,9 @@
                         </TextBlock>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Web Survey" DataContext="{Binding WebSurveySettings}">
+                <GroupBox DataContext="{Binding WebSurveySettings}"
+                          Header="Web Survey"
+                          Margin="0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -136,9 +147,13 @@
                         <TextBox Grid.Row="3" Grid.Column="1"
                                  AutomationProperties.Name="Organization Name"
                                  Text="{Binding OrganizationName}" />
-                        <Label Grid.Row="4" Grid.Column="0">Organization Key</Label>
+                        <Label Grid.Row="4" Grid.Column="0"
+                               Margin="0">
+                            Organization Key
+                        </Label>
                         <TextBox Grid.Row="4" Grid.Column="1"
                                  AutomationProperties.Name="Organization Key"
+                                 Margin="0"
                                  Text="{Binding OrganizationKey, TargetNullValue=''}" />
                     </Grid>
                 </GroupBox>

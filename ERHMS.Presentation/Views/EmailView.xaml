@@ -12,92 +12,101 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Recipients</Label>
-            <Grid Grid.Row="0" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Controls:RemovableItemsControl Grid.Column="0"
-                                                ItemsSource="{Binding Recipients}"
-                                                RemoveCommand="{Binding RemoveRecipientCommand}" />
-                <Button Grid.Column="1"
-                        Command="{Binding AddRecipientCommand}"
-                        Style="{StaticResource AccentButton}">
-                    Add
-                </Button>
-            </Grid>
-            <Label Grid.Row="1" Grid.Column="0">Subject</Label>
-            <TextBox Grid.Row="1" Grid.Column="1"
-                     AutomationProperties.Name="Subject"
-                     MahApps:TextBoxHelper.Watermark="Required"
-                     Text="{Binding Subject}" />
-            <Label Grid.Row="2" Grid.Column="0">Body</Label>
-            <TextBox Grid.Row="2" Grid.Column="1"
-                     AutomationProperties.Name="Body"
-                     MahApps:TextBoxHelper.Watermark="Required"
-                     Height="NaN"
-                     Style="{StaticResource MultiLineTextBox}"
-                     Text="{Binding Body}"
-                     VerticalAlignment="Stretch" />
-            <Label Grid.Row="3" Grid.Column="0">Attachments</Label>
-            <Grid Grid.Row="3" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Controls:RemovableItemsControl Grid.Column="0"
-                                                ItemsSource="{Binding Attachments}"
-                                                RemoveCommand="{Binding RemoveAttachmentCommand}">
-                    <Controls:RemovableItemsControl.ItemContentTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource PathToFileNameConverter}}" />
-                        </DataTemplate>
-                    </Controls:RemovableItemsControl.ItemContentTemplate>
-                </Controls:RemovableItemsControl>
-                <Button Grid.Column="1"
-                        Command="{Binding AddAttachmentCommand}"
-                        Style="{StaticResource AccentButton}">
-                    Add
-                </Button>
-            </Grid>
-            <Label Grid.Row="4" Grid.Column="0">Options</Label>
-            <Grid Grid.Row="4" Grid.Column="1">
+        <ScrollViewer Grid.Row="0">
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <CheckBox Grid.Column="0"
-                          IsChecked="{Binding AppendWebSurveyUrl}"
-                          IsEnabled="{Binding CanAppendWebSurveyUrl}">
-                    Append web survey URL
+                <Label Grid.Row="0" Grid.Column="0">Recipients</Label>
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Column="0"
+                                  Margin="0,0,0,5"
+                                  MaxHeight="100">
+                        <Controls:RemovableItemsControl ItemsSource="{Binding Recipients}"
+                                                        RemoveCommand="{Binding RemoveRecipientCommand}" />
+                    </ScrollViewer>
+                    <Button Grid.Column="1"
+                            Command="{Binding AddRecipientCommand}"
+                            Style="{StaticResource AccentButton}">
+                        Add
+                    </Button>
+                </Grid>
+                <Label Grid.Row="1" Grid.Column="0">Subject</Label>
+                <TextBox Grid.Row="1" Grid.Column="1"
+                         AutomationProperties.Name="Subject"
+                         MahApps:TextBoxHelper.Watermark="Required"
+                         Text="{Binding Subject}" />
+                <Label Grid.Row="2" Grid.Column="0">Body</Label>
+                <Controls:NonGreedyMultiLineTextBox Grid.Row="2" Grid.Column="1"
+                                                    AutomationProperties.Name="Body"
+                                                    MahApps:TextBoxHelper.Watermark="Required"
+                                                    Height="NaN"
+                                                    MinHeight="100"
+                                                    Style="{StaticResource MultiLineTextBox}"
+                                                    Text="{Binding Body}" />
+                <Label Grid.Row="3" Grid.Column="0">Attachments</Label>
+                <Grid Grid.Row="3" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Column="0"
+                                  Margin="0,0,0,5"
+                                  MaxHeight="100">
+                        <Controls:RemovableItemsControl ItemsSource="{Binding Attachments}"
+                                                        RemoveCommand="{Binding RemoveAttachmentCommand}">
+                            <Controls:RemovableItemsControl.ItemContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource PathToFileNameConverter}}" />
+                                </DataTemplate>
+                            </Controls:RemovableItemsControl.ItemContentTemplate>
+                        </Controls:RemovableItemsControl>
+                    </ScrollViewer>
+                    <Button Grid.Column="1"
+                            Command="{Binding AddAttachmentCommand}"
+                            Style="{StaticResource AccentButton}">
+                        Add
+                    </Button>
+                </Grid>
+                <Label Grid.Row="4" Grid.Column="0">Options</Label>
+                <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Grid.Column="0"
+                              IsChecked="{Binding AppendWebSurveyUrl}"
+                              IsEnabled="{Binding CanAppendWebSurveyUrl}">
+                        Append web survey URL
+                    </CheckBox>
+                    <ComboBox Grid.Column="1"
+                              AutomationProperties.Name="Append web survey URL"
+                              DisplayMemberPath="Name"
+                              IsEnabled="{Binding AppendWebSurveyUrl}"
+                              ItemsSource="{Binding Views.Items}"
+                              Margin="5,0,0,5"
+                              SelectedItem="{Binding Views.SelectedItem}" />
+                </Grid>
+                <CheckBox Grid.Row="5" Grid.Column="1"
+                          IsChecked="{Binding PrepopulateResponderId}"
+                          IsEnabled="{Binding CanPrepopulateResponderId}">
+                    Prepopulate responder ID field
                 </CheckBox>
-                <ComboBox Grid.Column="1"
-                          AutomationProperties.Name="Append web survey URL"
-                          DisplayMemberPath="Name"
-                          IsEnabled="{Binding AppendWebSurveyUrl}"
-                          ItemsSource="{Binding Views.Items}"
-                          SelectedItem="{Binding Views.SelectedItem}" />
             </Grid>
-            <CheckBox Grid.Row="5" Grid.Column="1"
-                      IsChecked="{Binding PrepopulateResponderId}"
-                      IsEnabled="{Binding CanPrepopulateResponderId}">
-                Prepopulate responder ID field
-            </CheckBox>
-        </Grid>
+        </ScrollViewer>
         <WrapPanel Grid.Row="1"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Send"

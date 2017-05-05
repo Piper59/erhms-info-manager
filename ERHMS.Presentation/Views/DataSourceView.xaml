@@ -9,120 +9,134 @@
                                        xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
-                                       OverlayBrush="{StaticResource OverlayBrush}"
+                                       Style="{StaticResource ChildWindow}"
                                        Title="Create a Data Source">
     <MahApps.SimpleChildWindow:ChildWindow.Resources>
         <Converters:BooleanInverter x:Key="BooleanInverter" />
         <Converters:DataProviderToDescriptionConverter x:Key="DataProviderToDescriptionConverter" />
         <Converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     </MahApps.SimpleChildWindow:ChildWindow.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0">Name</Label>
-                <TextBox Grid.Row="0" Grid.Column="1"
-                         AutomationProperties.Name="Name"
-                         MahApps:TextBoxHelper.Watermark="Required"
-                         Text="{Binding Name}" />
-                <Label Grid.Row="1" Grid.Column="0">Description</Label>
-                <TextBox Grid.Row="1" Grid.Column="1"
-                         AutomationProperties.Name="Description"
-                         Style="{StaticResource MultiLineTextBox}"
-                         Text="{Binding Description}" />
-                <Label Grid.Row="2" Grid.Column="0">Location</Label>
-                <Grid Grid.Row="2" Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0"
-                             AutomationProperties.Name="Location"
-                             IsReadOnly="True"
-                             Text="{Binding Location}" />
-                    <Button Grid.Column="1"
-                            Command="{Binding BrowseCommand}"
-                            Style="{StaticResource AccentButton}">
-                        Browse
-                    </Button>
-                </Grid>
-                <Label Grid.Row="3" Grid.Column="0">Database Type</Label>
-                <ComboBox Grid.Row="3" Grid.Column="1"
-                          AutomationProperties.Name="Database Type"
-                          ItemsSource="{Binding Providers}"
-                          SelectedItem="{Binding Provider}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource DataProviderToDescriptionConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </Grid>
-            <GroupBox Header="Connection"
-                      Visibility="{Binding Provider, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static EpiInfo.DataAccess:DataProvider.SqlServer}}">
-                <Grid DataContext="{Binding SqlServerOptions}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0">Server Name</Label>
-                    <TextBox Grid.Row="0" Grid.Column="1"
-                             AutomationProperties.Name="Server Name"
-                             MahApps:TextBoxHelper.Watermark="Required"
-                             Text="{Binding DataSource}" />
-                    <Label Grid.Row="1" Grid.Column="0">Database Name</Label>
-                    <TextBox Grid.Row="1" Grid.Column="1"
-                             AutomationProperties.Name="Database Name"
-                             MahApps:TextBoxHelper.Watermark="Required"
-                             Text="{Binding InitialCatalog}" />
-                    <Label Grid.Row="2" Grid.Column="0">Windows Authentication</Label>
-                    <CheckBox Grid.Row="2" Grid.Column="1"
-                              AutomationProperties.Name="Windows Authentication"
-                              IsChecked="{Binding IntegratedSecurity}" />
-                    <Label Grid.Row="3" Grid.Column="0">User Name</Label>
-                    <TextBox Grid.Row="3" Grid.Column="1"
-                             AutomationProperties.Name="User Name"
-                             IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BooleanInverter}}"
-                             Text="{Binding UserId,TargetNullValue=''}" />
-                    <Label Grid.Row="4" Grid.Column="0">Password</Label>
-                    <PasswordBox Grid.Row="4" Grid.Column="1"
-                                 AutomationProperties.Name="Password"
-                                 IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BooleanInverter}}">
-                        <i:Interaction.Behaviors>
-                            <Behaviors:BindPasswordBehavior Password="{Binding Password, TargetNullValue=''}" />
-                        </i:Interaction.Behaviors>
-                    </PasswordBox>
-                </Grid>
-            </GroupBox>
-        </StackPanel>
-        <WrapPanel Grid.Row="1"
-                   Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="C_reate"
-                                 Command="{Binding CreateCommand}"
-                                 Icon="{StaticResource appbar_add}" />
-            <Controls:IconButton AccessText="C_ancel"
-                                 Command="{Binding CancelCommand}"
-                                 Icon="{StaticResource appbar_cancel}" />
-        </WrapPanel>
-    </Grid>
+    <Border Style="{StaticResource ChildWindowRoot}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0"
+                          Margin="-1,0">
+                <StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0">Name</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                                 AutomationProperties.Name="Name"
+                                 MahApps:TextBoxHelper.Watermark="Required"
+                                 Text="{Binding Name}" />
+                        <Label Grid.Row="1" Grid.Column="0">Description</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1"
+                                 AutomationProperties.Name="Description"
+                                 Style="{StaticResource MultiLineTextBox}"
+                                 Text="{Binding Description}" />
+                        <Label Grid.Row="2" Grid.Column="0">Location</Label>
+                        <Grid Grid.Row="2" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                     AutomationProperties.Name="Location"
+                                     IsReadOnly="True"
+                                     Text="{Binding Location}" />
+                            <Button Grid.Column="1"
+                                    Command="{Binding BrowseCommand}"
+                                    Style="{StaticResource AccentButton}">
+                                Browse
+                            </Button>
+                        </Grid>
+                        <Label Grid.Row="3" Grid.Column="0"
+                               Margin="0">
+                            Database Type
+                        </Label>
+                        <ComboBox Grid.Row="3" Grid.Column="1"
+                                  AutomationProperties.Name="Database Type"
+                                  ItemsSource="{Binding Providers}"
+                                  Margin="0"
+                                  SelectedItem="{Binding Provider}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource DataProviderToDescriptionConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <GroupBox Header="Connection"
+                              Margin="0,10,0,0"
+                              Visibility="{Binding Provider, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static EpiInfo.DataAccess:DataProvider.SqlServer}}">
+                        <Grid DataContext="{Binding SqlServerOptions}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Server Name</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1"
+                                     AutomationProperties.Name="Server Name"
+                                     MahApps:TextBoxHelper.Watermark="Required"
+                                     Text="{Binding DataSource}" />
+                            <Label Grid.Row="1" Grid.Column="0">Database Name</Label>
+                            <TextBox Grid.Row="1" Grid.Column="1"
+                                     AutomationProperties.Name="Database Name"
+                                     MahApps:TextBoxHelper.Watermark="Required"
+                                     Text="{Binding InitialCatalog}" />
+                            <Label Grid.Row="2" Grid.Column="0">Windows Authentication</Label>
+                            <CheckBox Grid.Row="2" Grid.Column="1"
+                                      AutomationProperties.Name="Windows Authentication"
+                                      IsChecked="{Binding IntegratedSecurity}" />
+                            <Label Grid.Row="3" Grid.Column="0">User Name</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1"
+                                     AutomationProperties.Name="User Name"
+                                     IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BooleanInverter}}"
+                                     Text="{Binding UserId,TargetNullValue=''}" />
+                            <Label Grid.Row="4" Grid.Column="0"
+                                   Margin="0">
+                                Password
+                            </Label>
+                            <PasswordBox Grid.Row="4" Grid.Column="1"
+                                         AutomationProperties.Name="Password"
+                                         IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BooleanInverter}}"
+                                         Margin="0">
+                                <i:Interaction.Behaviors>
+                                    <Behaviors:BindPasswordBehavior Password="{Binding Password, TargetNullValue=''}" />
+                                </i:Interaction.Behaviors>
+                            </PasswordBox>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+            <WrapPanel Grid.Row="1"
+                       Style="{StaticResource IconButtonBar}">
+                <Controls:IconButton AccessText="C_reate"
+                                     Command="{Binding CreateCommand}"
+                                     Icon="{StaticResource appbar_add}" />
+                <Controls:IconButton AccessText="C_ancel"
+                                     Command="{Binding CancelCommand}"
+                                     Icon="{StaticResource appbar_cancel}" />
+            </WrapPanel>
+        </Grid>
+    </Border>
 </MahApps.SimpleChildWindow:ChildWindow>

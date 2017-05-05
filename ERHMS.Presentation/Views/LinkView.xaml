@@ -4,36 +4,42 @@
                                        xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
-                                       OverlayBrush="{StaticResource OverlayBrush}"
+                                       Style="{StaticResource ChildWindow}"
                                        Title="Link to Incident">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0">Incident</Label>
-            <ComboBox Grid.Column="1"
-                      AutomationProperties.Name="Incident"
-                      DisplayMemberPath="Name"
-                      ItemsSource="{Binding Incidents.Items}"
-                      SelectedItem="{Binding Incidents.SelectedItem}" />
+    <Border Style="{StaticResource ChildWindowRoot}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0"
+                       Margin="0">
+                    Incident
+                </Label>
+                <ComboBox Grid.Column="1"
+                          AutomationProperties.Name="Incident"
+                          DisplayMemberPath="Name"
+                          Margin="0"
+                          ItemsSource="{Binding Incidents.Items}"
+                          SelectedItem="{Binding Incidents.SelectedItem}" />
+            </Grid>
+            <WrapPanel Grid.Row="1"
+                       Style="{StaticResource IconButtonBar}">
+                <Controls:IconButton AccessText="_Link"
+                                     Command="{Binding LinkCommand}"
+                                     Icon="{StaticResource appbar_link}" />
+                <Controls:IconButton AccessText="_Unlink"
+                                     Command="{Binding UnlinkCommand}"
+                                     Icon="{StaticResource appbar_close}" />
+                <Controls:IconButton AccessText="_Cancel"
+                                     Command="{Binding CancelCommand}"
+                                     Icon="{StaticResource appbar_cancel}" />
+            </WrapPanel>
         </Grid>
-        <WrapPanel Grid.Row="1"
-                   Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="_Link"
-                                 Command="{Binding LinkCommand}"
-                                 Icon="{StaticResource appbar_link}" />
-            <Controls:IconButton AccessText="_Unlink"
-                                 Command="{Binding UnlinkCommand}"
-                                 Icon="{StaticResource appbar_close}" />
-            <Controls:IconButton AccessText="_Cancel"
-                                 Command="{Binding CancelCommand}"
-                                 Icon="{StaticResource appbar_cancel}" />
-        </WrapPanel>
-    </Grid>
+    </Border>
 </MahApps.SimpleChildWindow:ChildWindow>

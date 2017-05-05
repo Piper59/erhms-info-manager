@@ -12,14 +12,15 @@
     <TabControl x:Name="TabControl"
                 SelectionChanged="TabControl_SelectionChanged">
         <TabItem Header="_Workflow">
-            <ScrollViewer VerticalAlignment="Top">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalAlignment="Top">
                 <Canvas Height="600"
                         Width="600">
                     <Canvas.Resources>
                         <Style TargetType="Controls:CappedPath">
                             <Setter Property="Stroke" Value="#878787" />
                             <Setter Property="StrokeThickness" Value="5" />
-                            <Setter Property="StrokeEndLineCap" Value="{StaticResource ArrowLineCap}" />
+                            <Setter Property="StrokeEndLineCap" Value="M0,0 L-5,10 L20,0 L-5,-10 Z" />
                         </Style>
                         <Style x:Key="Header" TargetType="Run">
                             <Setter Property="FontWeight" Value="SemiBold" />
@@ -115,27 +116,27 @@
                 </Canvas>
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="_Data Sources"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Responders"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Incidents"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Notes"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Roster"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Locations"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Forms"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Templates"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Assignments"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Analyses"
-                 Style="{StaticResource DisabledTabItem}" />
-        <TabItem Header="_Dashboards"
-                 Style="{StaticResource DisabledTabItem}" />
+        <TabItem Cursor="No"
+                 Header="_Data Sources" />
+        <TabItem Cursor="No"
+                 Header="_Responders" />
+        <TabItem Cursor="No"
+                 Header="_Incidents" />
+        <TabItem Cursor="No"
+                 Header="_Notes" />
+        <TabItem Cursor="No"
+                 Header="_Roster" />
+        <TabItem Cursor="No"
+                 Header="_Locations" />
+        <TabItem Cursor="No"
+                 Header="_Forms" />
+        <TabItem Cursor="No"
+                 Header="_Templates" />
+        <TabItem Cursor="No"
+                 Header="_Assignments" />
+        <TabItem Cursor="No"
+                 Header="_Analyses" />
+        <TabItem Cursor="No"
+                 Header="_Dashboards" />
     </TabControl>
 </UserControl>

@@ -7,79 +7,87 @@
                                        xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
-                                       OverlayBrush="{StaticResource OverlayBrush}"
+                                       Style="{StaticResource ChildWindow}"
                                        Title="Publish to Web">
     <MahApps.SimpleChildWindow:ChildWindow.Resources>
         <Converters:ResponseTypeToDescriptionConverter x:Key="ResponseTypeToDescriptionConverter" />
         <Converters:ViewToWebSurveyUrlConverter x:Key="ViewToWebSurveyUrlConverter" />
     </MahApps.SimpleChildWindow:ChildWindow.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid DataContext="{Binding Survey}">
+    <Border Style="{StaticResource ChildWindowRoot}">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Title</Label>
-            <TextBox Grid.Row="0" Grid.Column="1"
-                     AutomationProperties.Name="Title"
-                     MahApps:TextBoxHelper.Watermark="Required"
-                     Text="{Binding Title}" />
-            <Label Grid.Row="1" Grid.Column="0">Start Date</Label>
-            <DatePicker Grid.Row="1" Grid.Column="1"
-                        AutomationProperties.Name="Start Date"
-                        SelectedDate="{Binding StartDate, Mode=TwoWay}" />
-            <Label Grid.Row="2" Grid.Column="0">End Date</Label>
-            <DatePicker Grid.Row="2" Grid.Column="1"
-                        AutomationProperties.Name="End Date"
-                        SelectedDate="{Binding EndDate, Mode=TwoWay}" />
-            <Label Grid.Row="3" Grid.Column="0">Response Type</Label>
-            <ComboBox Grid.Row="3" Grid.Column="1"
-                      AutomationProperties.Name="Response Type"
-                      ItemsSource="{Binding DataContext.ResponseTypes, ElementName=Survey}"
-                      SelectedItem="{Binding ResponseType}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource ResponseTypeToDescriptionConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Label Grid.Row="4" Grid.Column="0">Welcome Text</Label>
-            <TextBox Grid.Row="4" Grid.Column="1"
-                     AutomationProperties.Name="Welcome Text"
-                     Style="{StaticResource MultiLineTextBox}"
-                     Text="{Binding Intro}" />
-            <Label Grid.Row="5" Grid.Column="0">Completion Text</Label>
-            <TextBox Grid.Row="5" Grid.Column="1"
-                     AutomationProperties.Name="Completion Text"
-                     Style="{StaticResource MultiLineTextBox}"
-                     Text="{Binding Outro}" />
-            <Label Grid.Row="6" Grid.Column="0">URL</Label>
-            <TextBox Grid.Row="6" Grid.Column="1"
-                     AutomationProperties.Name="URL"
-                     IsReadOnly="True"
-                     Text="{Binding DataContext.View, ElementName=Root, Mode=OneWay, Converter={StaticResource ViewToWebSurveyUrlConverter}, TargetNullValue='Unpublished'}" />
+            <ScrollViewer Grid.Row="0">
+                <Grid DataContext="{Binding Survey}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0">Title</Label>
+                    <TextBox Grid.Row="0" Grid.Column="1"
+                             AutomationProperties.Name="Title"
+                             MahApps:TextBoxHelper.Watermark="Required"
+                             Text="{Binding Title}" />
+                    <Label Grid.Row="1" Grid.Column="0">Start Date</Label>
+                    <DatePicker Grid.Row="1" Grid.Column="1"
+                                AutomationProperties.Name="Start Date"
+                                SelectedDate="{Binding StartDate, Mode=TwoWay}" />
+                    <Label Grid.Row="2" Grid.Column="0">End Date</Label>
+                    <DatePicker Grid.Row="2" Grid.Column="1"
+                                AutomationProperties.Name="End Date"
+                                SelectedDate="{Binding EndDate, Mode=TwoWay}" />
+                    <Label Grid.Row="3" Grid.Column="0">Response Type</Label>
+                    <ComboBox Grid.Row="3" Grid.Column="1"
+                              AutomationProperties.Name="Response Type"
+                              ItemsSource="{Binding DataContext.ResponseTypes, ElementName=Root}"
+                              SelectedItem="{Binding ResponseType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource ResponseTypeToDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Grid.Row="4" Grid.Column="0">Welcome Text</Label>
+                    <TextBox Grid.Row="4" Grid.Column="1"
+                             AutomationProperties.Name="Welcome Text"
+                             Style="{StaticResource MultiLineTextBox}"
+                             Text="{Binding Intro}" />
+                    <Label Grid.Row="5" Grid.Column="0">Completion Text</Label>
+                    <TextBox Grid.Row="5" Grid.Column="1"
+                             AutomationProperties.Name="Completion Text"
+                             Style="{StaticResource MultiLineTextBox}"
+                             Text="{Binding Outro}" />
+                    <Label Grid.Row="6" Grid.Column="0"
+                           Margin="0">
+                        URL
+                    </Label>
+                    <TextBox Grid.Row="6" Grid.Column="1"
+                             AutomationProperties.Name="URL"
+                             IsReadOnly="True"
+                             Margin="0"
+                             Text="{Binding DataContext.View, ElementName=Root, Mode=OneWay, Converter={StaticResource ViewToWebSurveyUrlConverter}, TargetNullValue='Unpublished'}" />
+                </Grid>
+            </ScrollViewer>
+            <WrapPanel Grid.Row="1"
+                       Style="{StaticResource IconButtonBar}">
+                <Controls:IconButton AccessText="_Publish"
+                                     Command="{Binding PublishCommand}"
+                                     Icon="{StaticResource appbar_page_upload}" />
+                <Controls:IconButton AccessText="_Cancel"
+                                     Command="{Binding CancelCommand}"
+                                     Icon="{StaticResource appbar_cancel}" />
+            </WrapPanel>
         </Grid>
-        <WrapPanel Grid.Row="2"
-                   Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="_Publish"
-                                 Command="{Binding PublishCommand}"
-                                 Icon="{StaticResource appbar_page_upload}" />
-            <Controls:IconButton AccessText="_Cancel"
-                                 Command="{Binding CancelCommand}"
-                                 Icon="{StaticResource appbar_cancel}" />
-        </WrapPanel>
-    </Grid>
+    </Border>
 </MahApps.SimpleChildWindow:ChildWindow>

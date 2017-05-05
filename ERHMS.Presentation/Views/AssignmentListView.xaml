@@ -19,7 +19,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0"
+              Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -69,6 +70,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <WrapPanel Grid.Row="3"
+                   Margin="0,10,0,10"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Add"
                                  Command="{Binding AddCommand}"

@@ -58,9 +58,13 @@
                                           AutomationProperties.Name="Suffix"
                                           ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
                                           SelectedItem="{Binding Suffix, TargetNullValue=''}" />
-                                <Label Grid.Row="5" Grid.Column="0">Alias</Label>
+                                <Label Grid.Row="5" Grid.Column="0"
+                                       Margin="0">
+                                    Alias
+                                </Label>
                                 <TextBox Grid.Row="5" Grid.Column="1"
                                          AutomationProperties.Name="Alias"
+                                         Margin="0"
                                          Text="{Binding Alias}" />
                             </Grid>
                         </GroupBox>
@@ -100,13 +104,18 @@
                                 <TextBox Grid.Row="4" Grid.Column="1"
                                          AutomationProperties.Name="Weight (Pounds)"
                                          Text="{Binding WeightPounds, TargetNullValue=''}" />
-                                <Label Grid.Row="5" Grid.Column="0">Passport Number</Label>
+                                <Label Grid.Row="5" Grid.Column="0"
+                                       Margin="0">
+                                    Passport Number
+                                </Label>
                                 <TextBox Grid.Row="5" Grid.Column="1"
                                          AutomationProperties.Name="Passport Number"
+                                         Margin="0"
                                          Text="{Binding PassportNumber}" />
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Contact">
+                        <GroupBox Header="Contact"
+                                  Margin="0">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -147,9 +156,13 @@
                                          AutomationProperties.Name="Email Address"
                                          MahApps:TextBoxHelper.Watermark="Required"
                                          Text="{Binding EmailAddress}" />
-                                <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
+                                <Label Grid.Row="6" Grid.Column="0"
+                                       Margin="0">
+                                    Phone Number
+                                </Label>
                                 <TextBox Grid.Row="6" Grid.Column="1"
                                          AutomationProperties.Name="Phone Number"
+                                         Margin="0"
                                          Text="{Binding PhoneNumber}" />
                             </Grid>
                         </GroupBox>
@@ -201,13 +214,18 @@
                                           AutomationProperties.Name="Suffix"
                                           ItemsSource="{Binding DataContext.Suffixes, ElementName=Root}"
                                           SelectedItem="{Binding ContactSuffix, TargetNullValue=''}" />
-                                <Label Grid.Row="6" Grid.Column="0">Alias</Label>
+                                <Label Grid.Row="6" Grid.Column="0"
+                                       Margin="0">
+                                    Alias
+                                </Label>
                                 <TextBox Grid.Row="6" Grid.Column="1"
                                          AutomationProperties.Name="Alias"
+                                         Margin="0"
                                          Text="{Binding ContactAlias}" />
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Contact">
+                        <GroupBox Header="Contact"
+                                  Margin="0">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -247,9 +265,13 @@
                                 <TextBox Grid.Row="5" Grid.Column="1"
                                          AutomationProperties.Name="Email Address"
                                          Text="{Binding ContactEmailAddress}" />
-                                <Label Grid.Row="6" Grid.Column="0">Phone Number</Label>
+                                <Label Grid.Row="6" Grid.Column="0"
+                                       Margin="0">
+                                    Phone Number
+                                </Label>
                                 <TextBox Grid.Row="6" Grid.Column="1"
                                          AutomationProperties.Name="Phone Number"
+                                         Margin="0"
                                          Text="{Binding ContactPhoneNumber}" />
                             </Grid>
                         </GroupBox>
@@ -274,9 +296,13 @@
                                 <TextBox Grid.Row="0" Grid.Column="1"
                                          AutomationProperties.Name="Occupation"
                                          Text="{Binding Occupation}" />
-                                <Label Grid.Row="1" Grid.Column="0">Volunteer</Label>
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Margin="0">
+                                    Volunteer
+                                </Label>
                                 <CheckBox Grid.Row="1" Grid.Column="1"
                                           AutomationProperties.Name="Volunteer"
+                                          Margin="0"
                                           IsChecked="{Binding IsVolunteer}" />
                             </Grid>
                         </GroupBox>
@@ -330,13 +356,18 @@
                                 <TextBox Grid.Row="7" Grid.Column="1"
                                          AutomationProperties.Name="Email Address"
                                          Text="{Binding OrganizationEmailAddress}" />
-                                <Label Grid.Row="8" Grid.Column="0">Phone Number</Label>
+                                <Label Grid.Row="8" Grid.Column="0"
+                                       Margin="0">
+                                    Phone Number
+                                </Label>
                                 <TextBox Grid.Row="8" Grid.Column="1"
                                          AutomationProperties.Name="Phone Number"
+                                         Margin="0"
                                          Text="{Binding OrganizationPhoneNumber}" />
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Union">
+                        <GroupBox Header="Union"
+                                  Margin="0">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -351,9 +382,13 @@
                                 <TextBox Grid.Row="0" Grid.Column="1"
                                          AutomationProperties.Name="Union Name"
                                          Text="{Binding UnionName}" />
-                                <Label Grid.Row="1" Grid.Column="0">Local Number</Label>
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Margin="0">
+                                    Local Number
+                                </Label>
                                 <TextBox Grid.Row="1" Grid.Column="1"
                                          AutomationProperties.Name="Local Number"
+                                         Margin="0"
                                          Text="{Binding UnionLocalNumber}" />
                             </Grid>
                         </GroupBox>

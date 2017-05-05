@@ -13,13 +13,16 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ScrollViewer Grid.Row="0">
+            <ScrollViewer Grid.Row="0"
+                          HorizontalScrollBarVisibility="Auto"
+                          Margin="-100,0">
                 <TextBlock FontFamily="{StaticResource MonospaceFontFamily}"
                            Text="{StaticResource LICENSE}" />
             </ScrollViewer>
             <StackPanel Grid.Row="1"
                         Height="85"
                         HorizontalAlignment="Right"
+                        Margin="-100,0"
                         Orientation="Horizontal">
                 <Button Click="Accept_Click"
                         Height="35"

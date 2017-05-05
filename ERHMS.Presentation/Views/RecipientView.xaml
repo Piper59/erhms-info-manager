@@ -5,56 +5,60 @@
                                        xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
-                                       OverlayBrush="{StaticResource OverlayBrush}"
+                                       Style="{StaticResource ChildWindow}"
                                        Title="Add a Recipient">
     <MahApps.SimpleChildWindow:ChildWindow.Resources>
         <Converters:BooleanInverter x:Key="BooleanInverter" />
         <Converters:ResponderToFullNameAndEmailAddressConverter x:Key="ResponderToFullNameAndEmailAddressConverter" />
     </MahApps.SimpleChildWindow:ChildWindow.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+    <Border Style="{StaticResource ChildWindowRoot}">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <RadioButton Grid.Row="0" Grid.Column="0"
-                         IsChecked="{Binding IsResponder}">
-                Responder
-            </RadioButton>
-            <ComboBox Grid.Row="0" Grid.Column="1"
-                      IsEnabled="{Binding IsResponder}"
-                      ItemsSource="{Binding Responders}"
-                      SelectedItem="{Binding Responder}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameAndEmailAddressConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <RadioButton Grid.Row="1" Grid.Column="0"
-                         IsChecked="{Binding IsResponder, Converter={StaticResource BooleanInverter}}">
-                Email Address
-            </RadioButton>
-            <TextBox Grid.Row="1" Grid.Column="1"
-                     IsEnabled="{Binding IsResponder, Converter={StaticResource BooleanInverter}}"
-                     Text="{Binding EmailAddress}" />
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Row="0" Grid.Column="0"
+                             IsChecked="{Binding IsResponder}">
+                    Responder
+                </RadioButton>
+                <ComboBox Grid.Row="0" Grid.Column="1"
+                          IsEnabled="{Binding IsResponder}"
+                          ItemsSource="{Binding Responders}"
+                          Margin="5,0,0,5"
+                          SelectedItem="{Binding Responder}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameAndEmailAddressConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <RadioButton Grid.Row="1" Grid.Column="0"
+                             IsChecked="{Binding IsResponder, Converter={StaticResource BooleanInverter}}">
+                    Email Address
+                </RadioButton>
+                <TextBox Grid.Row="1" Grid.Column="1"
+                         IsEnabled="{Binding IsResponder, Converter={StaticResource BooleanInverter}}"
+                         Margin="5,0,0,5"
+                         Text="{Binding EmailAddress}" />
+            </Grid>
+            <WrapPanel Grid.Row="1"
+                       Style="{StaticResource IconButtonBar}">
+                <Controls:IconButton AccessText="_Add"
+                                     Command="{Binding AddCommand}"
+                                     Icon="{StaticResource appbar_add}" />
+                <Controls:IconButton AccessText="_Cancel"
+                                     Command="{Binding CancelCommand}"
+                                     Icon="{StaticResource appbar_cancel}" />
+            </WrapPanel>
         </Grid>
-        <WrapPanel Grid.Row="1"
-                   Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="_Add"
-                                 Command="{Binding AddCommand}"
-                                 Icon="{StaticResource appbar_add}" />
-            <Controls:IconButton AccessText="_Cancel"
-                                 Command="{Binding CancelCommand}"
-                                 Icon="{StaticResource appbar_cancel}" />
-        </WrapPanel>
-    </Grid>
+    </Border>
 </MahApps.SimpleChildWindow:ChildWindow>

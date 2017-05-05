@@ -75,7 +75,6 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
-                // TODO: Close current log?
                 foreach (FileInfo log in SelectedItems)
                 {
                     log.Refresh();

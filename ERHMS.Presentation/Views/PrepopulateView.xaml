@@ -5,32 +5,35 @@
                                        xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
-                                       OverlayBrush="{StaticResource OverlayBrush}"
+                                       Style="{StaticResource ChildWindow}"
                                        Title="Prepopulate Responder ID Field">
     <MahApps.SimpleChildWindow:ChildWindow.Resources>
         <Converters:ResponderToFullNameConverter x:Key="ResponderToFullNameConverter" />
     </MahApps.SimpleChildWindow:ChildWindow.Resources>
-    <StackPanel>
-        <TextBlock TextWrapping="Wrap">
-            The selected form appears to contain a responder ID field.
-            To prepopulate this field, select a responder from the list below.
-        </TextBlock>
-        <ComboBox AutomationProperties.Name="Responder"
-                  ItemsSource="{Binding Responders}"
-                  SelectedItem="{Binding SelectedResponder}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameConverter}}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <WrapPanel Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="C_ontinue"
-                                 Command="{Binding ContinueCommand}"
-                                 Icon="{StaticResource appbar_arrow_right}" />
-            <Controls:IconButton AccessText="C_ancel"
-                                 Command="{Binding CancelCommand}"
-                                 Icon="{StaticResource appbar_cancel}" />
-        </WrapPanel>
-    </StackPanel>
+    <Border Style="{StaticResource ChildWindowRoot}">
+        <StackPanel>
+            <TextBlock TextWrapping="Wrap">
+                The selected form appears to contain a responder ID field.
+                To prepopulate this field, select a responder from the list below.
+            </TextBlock>
+            <ComboBox AutomationProperties.Name="Responder"
+                      ItemsSource="{Binding Responders}"
+                      Margin="0,5,0,0"
+                      SelectedItem="{Binding SelectedResponder}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <WrapPanel Style="{StaticResource IconButtonBar}">
+                <Controls:IconButton AccessText="C_ontinue"
+                                     Command="{Binding ContinueCommand}"
+                                     Icon="{StaticResource appbar_arrow_right}" />
+                <Controls:IconButton AccessText="C_ancel"
+                                     Command="{Binding CancelCommand}"
+                                     Icon="{StaticResource appbar_cancel}" />
+            </WrapPanel>
+        </StackPanel>
+    </Border>
 </MahApps.SimpleChildWindow:ChildWindow>
