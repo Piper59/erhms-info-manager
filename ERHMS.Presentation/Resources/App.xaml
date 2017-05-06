@@ -10,9 +10,10 @@
         <ResourceDictionary Source="/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="/MahApps.Metro;component/Styles/Fonts.xaml" />
         <ResourceDictionary Source="/MahApps.Metro;component/Styles/Colors.xaml" />
-        <ResourceDictionary Source="Blue.xaml" />
-        <ResourceDictionary Source="BaseLight.xaml" />
+        <ResourceDictionary Source="Blue508.xaml" />
+        <ResourceDictionary Source="BaseLight508.xaml" />
         <ResourceDictionary Source="IconsNonShared.xaml" />
+        <ResourceDictionary Source="TabControl.xaml" />
         <ResourceDictionary Source="Strings.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -141,6 +142,8 @@
     </Style>
 
     <Style TargetType="TabControl" BasedOn="{StaticResource MetroTabControl}">
+        <Setter Property="MahApps:TabControlHelper.Underlined" Value="SelectedTabItem" />
+        <Setter Property="Padding" Value="9,0,0,0" />
         <Setter Property="TabStripPlacement" Value="Left" />
     </Style>
 

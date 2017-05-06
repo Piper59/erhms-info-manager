@@ -7,15 +7,15 @@
     <i:Interaction.Behaviors>
         <Behaviors:ControlPageNavigationBehavior Selector="{Binding ElementName=TabControl}" />
     </i:Interaction.Behaviors>
-    <UserControl.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
-    </UserControl.Resources>
     <TabControl x:Name="TabControl">
         <TabItem Header="_About">
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
                     <StackPanel TextBlock.FontSize="15"
                                 Margin="0,0,0,50">
                         <Image Margin="0,0,0,5"
@@ -46,6 +46,7 @@
                 <ScrollViewer Grid.Row="0"
                               HorizontalScrollBarVisibility="Auto">
                     <TextBlock FontFamily="{StaticResource MonospaceFontFamily}"
+                               HorizontalAlignment="Center"
                                Text="{StaticResource LICENSE}" />
                 </ScrollViewer>
                 <WrapPanel Grid.Row="1"
