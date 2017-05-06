@@ -99,6 +99,7 @@
     <EmbeddedResource Include="Resources\Sample\Symptoms.cvs7" />
     <EmbeddedResource Include="Resources\View.xml" />
     <EmbeddedResource Include="Scripts\Base.sql" />
+    <EmbeddedResource Include="Scripts\JobTicketing.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

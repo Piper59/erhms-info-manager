@@ -9,9 +9,14 @@ using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.DataAccess
 {
-    // TODO: Add upgrade hooks
     public class DataContext
     {
+        private static void ExecuteScript(IDataDriver driver, string scriptName)
+        {
+            string resourceName = string.Format("ERHMS.DataAccess.Scripts.{0}.sql", scriptName);
+            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName));
+        }
+
         public static DataContext Create(Project project)
         {
             Log.Logger.DebugFormat("Creating data context: {0}", project.FilePath);
@@ -26,7 +31,8 @@ namespace ERHMS.DataAccess
                 project.CollectedData.CreateDataTableForView(view, 1);
             }
             IDataDriver driver = DataDriverFactory.CreateDataDriver(project);
-            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.DataAccess.Scripts.Base.sql"));
+            ExecuteScript(driver, "Base");
+            ExecuteScript(driver, "JobTicketing");
             return new DataContext(project);
         }
 
@@ -52,6 +58,7 @@ namespace ERHMS.DataAccess
             Log.Logger.DebugFormat("Opening data context: {0}", project.FilePath);
             Project = project;
             Driver = DataDriverFactory.CreateDataDriver(project);
+            Upgrade();
             Prefixes = new CodeRepository(Driver, "codeprefix1", "prefix", false);
             Suffixes = new CodeRepository(Driver, "codesuffix1", "suffix", false);
             Genders = new CodeRepository(Driver, "codegender1", "gender", false);
@@ -66,6 +73,14 @@ namespace ERHMS.DataAccess
             PgmLinks = new PgmLinkRepository(project, Driver, Incidents);
             CanvasLinks = new CanvasLinkRepository(project, Driver, Incidents);
             WebSurveys = new WebSurveyRepository(Driver);
+        }
+
+        private void Upgrade()
+        {
+            if (!Driver.TableExists("ERHMS_Jobs"))
+            {
+                ExecuteScript(Driver, "JobTicketing");
+            }
         }
 
         public TemplateInfo CreateNewViewTemplate()
