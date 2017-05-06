@@ -23,6 +23,13 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         }
 
         [Test]
+        public void TableExistsTest()
+        {
+            Assert.IsTrue(driver.TableExists("Person"));
+            Assert.IsFalse(driver.TableExists("People"));
+        }
+
+        [Test]
         public void ExecuteScalarTest()
         {
             string sql = "SELECT [Name] FROM [Gender] WHERE [GenderId] = 1";

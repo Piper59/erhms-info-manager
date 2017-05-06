@@ -14,6 +14,7 @@ namespace ERHMS.EpiInfo.DataAccess
         string GetParameterName(int index);
         bool DatabaseExists();
         void CreateDatabase();
+        bool TableExists(string tableName);
         DataTransaction BeginTransaction();
         DataTable GetSchema(string sql);
         T ExecuteScalar<T>(DataQuery query);

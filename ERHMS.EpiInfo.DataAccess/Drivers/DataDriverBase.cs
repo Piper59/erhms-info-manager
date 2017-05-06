@@ -39,6 +39,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public abstract string GetParameterName(int index);
         public abstract bool DatabaseExists();
         public abstract void CreateDatabase();
+        public abstract bool TableExists(string tableName);
 
         private DbConnection OpenConnection()
         {

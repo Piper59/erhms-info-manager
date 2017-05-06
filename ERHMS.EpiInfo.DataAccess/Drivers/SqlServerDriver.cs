@@ -59,7 +59,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public override bool DatabaseExists()
         {
-            string sql = "SELECT 1 FROM [sys].[databases] WHERE [name] = @name";
+            string sql = "SELECT TOP 1 [name] FROM [sys].[databases] WHERE [name] = @name";
             using (SqlConnection connection = OpenMasterConnection())
             using (SqlCommand command = new SqlCommand(sql, connection))
             {
@@ -75,6 +75,18 @@ namespace ERHMS.EpiInfo.DataAccess
             using (SqlCommand command = new SqlCommand(sql, connection))
             {
                 command.ExecuteNonQuery();
+            }
+        }
+
+        public override bool TableExists(string tableName)
+        {
+            string sql = "SELECT TOP 1 [name] FROM [sys].[tables] WHERE [name] = @name";
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                connection.Open();
+                command.Parameters.AddWithValue("@name", tableName);
+                return command.ExecuteScalar() != null;
             }
         }
     }

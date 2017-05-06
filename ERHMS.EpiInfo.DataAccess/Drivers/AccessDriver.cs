@@ -47,5 +47,19 @@ namespace ERHMS.EpiInfo.DataAccess
             Directory.CreateDirectory(Path.GetDirectoryName(Builder.DataSource));
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.EpiInfo.DataAccess.Drivers.Empty.mdb", Builder.DataSource);
         }
+
+        public override bool TableExists(string tableName)
+        {
+            try
+            {
+                string sql = string.Format("SELECT TOP 1 * FROM {0}", Escape(tableName));
+                ExecuteQuery(sql);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
