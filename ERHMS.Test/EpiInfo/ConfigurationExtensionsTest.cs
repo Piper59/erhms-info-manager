@@ -57,21 +57,5 @@ namespace ERHMS.Test.EpiInfo
                 DirectoryAssert.Exists(configuration.Directories.Templates);
             }
         }
-
-        [Test]
-        public void ChangeUserDirectoriesTest()
-        {
-            using (TempDirectory directory1 = new TempDirectory(nameof(ChangeUserDirectoriesTest) + "1"))
-            using (TempDirectory directory2 = new TempDirectory(nameof(ChangeUserDirectoriesTest) + "2"))
-            {
-                Configuration configuration = ConfigurationExtensions.Create(directory1.Path);
-                configuration.CreateUserDirectories();
-                directory1.CreateFile("Projects", "Test", "Test.prj");
-                directory1.CreateFile("Templates", "Forms", "Test.xml");
-                configuration.ChangeUserDirectories(directory2.Path);
-                FileAssert.Exists(directory2.CombinePaths("Projects", "Test", "Test.prj"));
-                FileAssert.Exists(directory2.CombinePaths("Templates", "Forms", "Test.xml"));
-            }
-        }
     }
 }
