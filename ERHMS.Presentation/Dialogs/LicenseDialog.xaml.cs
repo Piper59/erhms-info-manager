@@ -13,6 +13,7 @@ namespace ERHMS.Presentation.Dialogs
             : base(window)
         {
             InitializeComponent();
+            Resources.MergedDictionaries.Add(App.Current.Accent);
             Title = string.Format("{0} License", App.Title);
         }
 
@@ -30,7 +31,10 @@ namespace ERHMS.Presentation.Dialogs
 
         public async Task<MessageDialogResult> ShowAsync()
         {
-            await OwningWindow.ShowMetroDialogAsync(this);
+            await OwningWindow.ShowMetroDialogAsync(this, new MetroDialogSettings
+            {
+                AnimateHide = false
+            });
             await WaitUntilUnloadedAsync();
             return Result;
         }

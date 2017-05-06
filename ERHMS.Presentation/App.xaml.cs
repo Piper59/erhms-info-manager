@@ -62,6 +62,7 @@ namespace ERHMS.Presentation
             MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+        public ResourceDictionary Accent { get; private set; }
         public new MainWindow MainWindow { get; private set; }
         public Win32Window MainWin32Window { get; private set; }
         public bool ShuttingDown { get; private set; }
@@ -83,6 +84,10 @@ namespace ERHMS.Presentation
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            Accent = new ResourceDictionary
+            {
+                Source = new Uri("pack://application:,,,/ERHMS.Presentation;component/Resources/Blue508.xaml")
+            };
             EventManager.RegisterClassHandler(
                 typeof(TextBox),
                 UIElement.GotKeyboardFocusEvent,

@@ -14,8 +14,8 @@
     <Color x:Key="Gray8">#FFE0E0E0</Color>
     <Color x:Key="Gray10">#FFF7F7F7</Color>
 
-    <Color x:Key="GrayNormal">#FFBEBEBE</Color>
-    <Color x:Key="GrayHover">#FF333333</Color>
+    <Color x:Key="GrayNormal">#FF666666</Color>
+    <Color x:Key="GrayHover">#FF000000</Color>
 
     <Color x:Key="FlyoutColor">#FFFFFFFF</Color>
 
