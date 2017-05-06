@@ -42,11 +42,19 @@ namespace ERHMS.DataAccess
         public CodeRepository Suffixes { get; private set; }
         public CodeRepository Genders { get; private set; }
         public CodeRepository States { get; private set; }
+        public RoleRepository Roles { get; private set; }
         public ResponderRepository Responders { get; private set; }
         public IncidentRepository Incidents { get; private set; }
         public IncidentNoteRepository IncidentNotes { get; private set; }
         public RosterRepository Rosters { get; private set; }
+        public TeamRepository Teams { get; private set; }
+        public TeamResponderRepository TeamResponders { get; private set; }
         public LocationRepository Locations { get; private set; }
+        public JobRepository Jobs { get; private set; }
+        public JobLocationRepository JobLocations { get; private set; }
+        public JobTeamRepository JobTeams { get; private set; }
+        public JobResponderRepository JobResponders { get; private set; }
+        public JobNoteRepository JobNotes { get; private set; }
         public AssignmentRepository Assignments { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
         public PgmLinkRepository PgmLinks { get; private set; }
@@ -63,11 +71,19 @@ namespace ERHMS.DataAccess
             Suffixes = new CodeRepository(Driver, "codesuffix1", "suffix", false);
             Genders = new CodeRepository(Driver, "codegender1", "gender", false);
             States = new CodeRepository(Driver, "codestate1", "state", true);
+            Roles = new RoleRepository(Driver);
             Rosters = new RosterRepository(Driver);
             Responders = new ResponderRepository(Driver, project, Rosters);
             Incidents = new IncidentRepository(Driver);
             IncidentNotes = new IncidentNoteRepository(Driver);
+            Teams = new TeamRepository(Driver);
+            TeamResponders = new TeamResponderRepository(Driver);
             Locations = new LocationRepository(Driver);
+            Jobs = new JobRepository(Driver);
+            JobLocations = new JobLocationRepository(Driver);
+            JobTeams = new JobTeamRepository(Driver);
+            JobResponders = new JobResponderRepository(Driver);
+            JobNotes = new JobNoteRepository(Driver);
             Assignments = new AssignmentRepository(Driver);
             ViewLinks = new ViewLinkRepository(project, Driver, Incidents);
             PgmLinks = new PgmLinkRepository(project, Driver, Incidents);
