@@ -296,6 +296,14 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public void OpenTeamDetailView(Team team)
+        {
+            if (!ActivateDocument<TeamDetailViewModel>(document => document.Team.TeamId.EqualsIgnoreCase(team.TeamId)))
+            {
+                OpenDocument(new TeamDetailViewModel(team));
+            }
+        }
+
         public void OpenLocationDetailView(Location location)
         {
             if (!ActivateDocument<LocationDetailViewModel>(document => document.Location.LocationId.EqualsIgnoreCase(location.LocationId)))

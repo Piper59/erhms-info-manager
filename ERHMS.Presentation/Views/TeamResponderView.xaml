@@ -1,0 +1,65 @@
+﻿<MahApps.SimpleChildWindow:ChildWindow x:Class="ERHMS.Presentation.Views.TeamResponderView"
+                                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                       xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+                                       xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
+                                       xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
+                                       IsOpen="{Binding Active}"
+                                       Style="{StaticResource ChildWindow}"
+                                       Title="Add a Responder">
+    <MahApps.SimpleChildWindow:ChildWindow.Resources>
+        <Converters:ResponderToFullNameConverter x:Key="ResponderToFullNameConverter" />
+    </MahApps.SimpleChildWindow:ChildWindow.Resources>
+    <Border Style="{StaticResource ChildWindowRoot}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Responder</Label>
+                <ComboBox Grid.Row="0" Grid.Column="1"
+                          AutomationProperties.Name="Responder"
+                          ItemsSource="{Binding Responders}"
+                          SelectedItem="{Binding Responder}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Label Grid.Row="1" Grid.Column="0"
+                       Margin="0">
+                    Role
+                </Label>
+                <ComboBox Grid.Row="1" Grid.Column="1"
+                          AutomationProperties.Name="Role"
+                          ItemsSource="{Binding Roles}"
+                          SelectedItem="{Binding Role}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+            <WrapPanel Grid.Row="1"
+                       Style="{StaticResource IconButtonBar}">
+                <Controls:IconButton AccessText="_Add"
+                                     Command="{Binding AddCommand}"
+                                     Icon="{StaticResource appbar_add}" />
+                <Controls:IconButton AccessText="_Cancel"
+                                     Command="{Binding CancelCommand}"
+                                     Icon="{StaticResource appbar_cancel}" />
+            </WrapPanel>
+        </Grid>
+    </Border>
+</MahApps.SimpleChildWindow:ChildWindow>

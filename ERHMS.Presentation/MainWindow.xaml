@@ -186,6 +186,13 @@
                         </i:Interaction.Behaviors>
                     </Views:SettingsView>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:TeamDetailViewModel}">
+                    <Views:TeamDetailView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:TeamDetailView>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:TemplateListViewModel}">
                     <Views:TemplateListView>
                         <i:Interaction.Behaviors>

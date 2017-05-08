@@ -305,6 +305,9 @@
     <Compile Include="ViewModels\RosterViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SurveyViewModel.cs" />
+    <Compile Include="ViewModels\TeamDetailViewModel.cs" />
+    <Compile Include="ViewModels\TeamListViewModel.cs" />
+    <Compile Include="ViewModels\TeamResponderViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
     <Compile Include="ViewModels\ViewLinkViewModel.cs" />
     <Compile Include="ViewModels\ViewListViewModel.cs" />
@@ -383,6 +386,15 @@
     </Compile>
     <Compile Include="Views\SurveyView.xaml.cs">
       <DependentUpon>SurveyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TeamDetailView.xaml.cs">
+      <DependentUpon>TeamDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TeamListView.xaml.cs">
+      <DependentUpon>TeamListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TeamResponderView.xaml.cs">
+      <DependentUpon>TeamResponderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TemplateListView.xaml.cs">
       <DependentUpon>TemplateListView.xaml</DependentUpon>
@@ -585,6 +597,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SurveyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TeamDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TeamListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TeamResponderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
