@@ -287,6 +287,10 @@
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
     <Compile Include="ViewModels\IncidentNotesViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
+    <Compile Include="ViewModels\JobDetailViewModel.cs" />
+    <Compile Include="ViewModels\JobListViewModel.cs" />
+    <Compile Include="ViewModels\JobLocationViewModel.cs" />
+    <Compile Include="ViewModels\JobTeamViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModelBase.cs" />
     <Compile Include="ViewModels\ListViewModelBase.cs" />
     <Compile Include="ViewModels\LocationDetailViewModel.cs" />
@@ -347,6 +351,18 @@
     </Compile>
     <Compile Include="Views\IncidentView.xaml.cs">
       <DependentUpon>IncidentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobDetailView.xaml.cs">
+      <DependentUpon>JobDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobListView.xaml.cs">
+      <DependentUpon>JobListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobLocationView.xaml.cs">
+      <DependentUpon>JobLocationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobTeamView.xaml.cs">
+      <DependentUpon>JobTeamView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LinkView.xaml.cs">
       <DependentUpon>LinkView.xaml</DependentUpon>
@@ -545,6 +561,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\IncidentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobLocationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobTeamView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

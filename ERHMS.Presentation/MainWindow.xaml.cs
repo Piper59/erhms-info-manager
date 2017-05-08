@@ -21,6 +21,8 @@ namespace ERHMS.Presentation
             { typeof(DataSourceViewModel), typeof(DataSourceView) },
             { typeof(CanvasLinkViewModel), typeof(LinkView) },
             { typeof(CanvasViewModel), typeof(AnalysisView) },
+            { typeof(JobLocationViewModel), typeof(JobLocationView) },
+            { typeof(JobTeamViewModel), typeof(JobTeamView) },
             { typeof(PgmLinkViewModel), typeof(LinkView) },
             { typeof(PgmViewModel), typeof(AnalysisView) },
             { typeof(PrepopulateViewModel), typeof(PrepopulateView) },

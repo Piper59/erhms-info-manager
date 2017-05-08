@@ -16,10 +16,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(JobLocationId), value); }
         }
 
-        public string IncidentId
+        public string JobId
         {
-            get { return GetProperty<string>(nameof(IncidentId)); }
-            set { SetProperty(nameof(IncidentId), value); }
+            get { return GetProperty<string>(nameof(JobId)); }
+            set { SetProperty(nameof(JobId), value); }
         }
 
         public string LocationId

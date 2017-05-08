@@ -28,6 +28,9 @@
         <TabItem Header="_Locations" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:LocationListView DataContext="{Binding Locations}" />
         </TabItem>
+        <TabItem Header="_Jobs" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+            <Views:JobListView DataContext="{Binding Jobs}" />
+        </TabItem>
         <TabItem Header="_Forms" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:ViewListView DataContext="{Binding Views}" />
         </TabItem>

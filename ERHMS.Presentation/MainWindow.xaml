@@ -137,6 +137,13 @@
                         </i:Interaction.Behaviors>
                     </Views:IncidentView>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:JobDetailViewModel}">
+                    <Views:JobDetailView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:JobDetailView>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:LocationDetailViewModel}">
                     <Views:LocationDetailView>
                         <i:Interaction.Behaviors>

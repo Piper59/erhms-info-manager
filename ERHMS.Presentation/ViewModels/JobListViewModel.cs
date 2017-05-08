@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TeamListViewModel : ListViewModelBase<Team>
+    public class JobListViewModel : ListViewModelBase<Job>
     {
         public Incident Incident { get; private set; }
 
@@ -16,7 +16,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand RefreshCommand { get; private set; }
 
-        public TeamListViewModel(Incident incident)
+        public JobListViewModel(Incident incident)
         {
             Incident = incident;
             Refresh();
@@ -29,15 +29,15 @@ namespace ERHMS.Presentation.ViewModels
                 EditCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
             };
-            Messenger.Default.Register<RefreshMessage<Team>>(this, msg => Refresh());
+            Messenger.Default.Register<RefreshMessage<Job>>(this, msg => Refresh());
         }
 
-        protected override IEnumerable<Team> GetItems()
+        protected override IEnumerable<Job> GetItems()
         {
-            return DataContext.Teams.SelectByIncidentId(Incident.IncidentId).OrderBy(item => item.Name);
+            return DataContext.Jobs.SelectByIncidentId(Incident.IncidentId).OrderBy(item => item.Name);
         }
 
-        protected override IEnumerable<string> GetFilteredValues(Team item)
+        protected override IEnumerable<string> GetFilteredValues(Job item)
         {
             yield return item.Name;
             yield return item.Description;
@@ -45,14 +45,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Team team = DataContext.Teams.Create();
-            team.IncidentId = Incident.IncidentId;
-            Main.OpenTeamDetailView(team);
+            Job job = DataContext.Jobs.Create();
+            job.IncidentId = Incident.IncidentId;
+            Main.OpenJobDetailView(job);
         }
 
         public void Edit()
         {
-            Main.OpenTeamDetailView((Team)SelectedItem.Clone());
+            Main.OpenJobDetailView((Job)SelectedItem.Clone());
         }
 
         public void Delete()
@@ -60,12 +60,12 @@ namespace ERHMS.Presentation.ViewModels
             ConfirmMessage msg = new ConfirmMessage
             {
                 Verb = "Delete",
-                Message = "Delete the selected team?"
+                Message = "Delete the selected job?"
             };
             msg.Confirmed += (sender, e) =>
             {
-                DataContext.Teams.Delete(SelectedItem);
-                Messenger.Default.Send(new RefreshMessage<Team>());
+                DataContext.Jobs.Delete(SelectedItem);
+                Messenger.Default.Send(new RefreshMessage<Job>());
             };
             Messenger.Default.Send(msg);
         }

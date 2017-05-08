@@ -26,22 +26,8 @@
                                  Icon="{StaticResource appbar_disk}" />
         </WrapPanel>
         <ScrollViewer Grid.Row="2">
-            <ItemsControl ItemsSource="{Binding Notes}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="{StaticResource GrayBrush5}"
-                                BorderThickness="0,1,0,0">
-                            <StackPanel Margin="5">
-                                <TextBlock Margin="0,0,0,5"
-                                           Text="{Binding Content}"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Foreground="{StaticResource GrayBrush2}"
-                                           Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <ItemsControl ItemsSource="{Binding Notes}"
+                          ItemTemplate="{StaticResource NoteTemplate}" />
         </ScrollViewer>
         <WrapPanel Grid.Row="3"
                    Style="{StaticResource IconButtonBar}">

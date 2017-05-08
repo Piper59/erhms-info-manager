@@ -312,6 +312,14 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public void OpenJobDetailView(Job job)
+        {
+            if (!ActivateDocument<JobDetailViewModel>(document => document.Job.JobId.EqualsIgnoreCase(job.JobId)))
+            {
+                OpenDocument(new JobDetailViewModel(job));
+            }
+        }
+
         public void OpenViewListView()
         {
             if (!ActivateDocument<ViewListViewModel>())

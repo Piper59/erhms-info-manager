@@ -38,7 +38,7 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         public Team Team { get; private set; }
-        public TeamResponderListViewModel TeamResponders { get; private set; }
+        public TeamResponderListViewModel Responders { get; private set; }
 
         public RelayCommand SaveCommand { get; private set; }
         public RelayCommand AddCommand { get; private set; }
@@ -51,13 +51,13 @@ namespace ERHMS.Presentation.ViewModels
             Team = team;
             AddDirtyCheck(team);
             Refresh();
-            TeamResponders = new TeamResponderListViewModel(team);
-            TeamResponders.Refresh();
+            Responders = new TeamResponderListViewModel(team);
+            Responders.Refresh();
             SaveCommand = new RelayCommand(Save);
             AddCommand = new RelayCommand(Add);
-            RemoveCommand = new RelayCommand(Remove, TeamResponders.HasAnySelectedItems);
-            EmailCommand = new RelayCommand(Email, TeamResponders.HasAnySelectedItems);
-            RefreshCommand = new RelayCommand(TeamResponders.Refresh);
+            RemoveCommand = new RelayCommand(Remove, Responders.HasAnySelectedItems);
+            EmailCommand = new RelayCommand(Email, Responders.HasAnySelectedItems);
+            RefreshCommand = new RelayCommand(Responders.Refresh);
         }
 
         private void Refresh()
@@ -119,9 +119,9 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
-                foreach (TeamResponderViewModel teamResponder in TeamResponders.SelectedItems)
+                foreach (TeamResponderViewModel responder in Responders.SelectedItems)
                 {
-                    DataContext.TeamResponders.Delete(teamResponder.TeamResponder);
+                    DataContext.TeamResponders.Delete(responder.TeamResponder);
                 }
                 Messenger.Default.Send(new RefreshMessage<TeamResponder>());
             };
@@ -130,7 +130,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Email()
         {
-            Main.OpenEmailView(new EmailViewModel(TeamResponders.TypedSelectedItems.Select(teamResponder => teamResponder.Responder)));
+            Main.OpenEmailView(new EmailViewModel(Responders.TypedSelectedItems.Select(responder => responder.Responder)));
         }
     }
 }

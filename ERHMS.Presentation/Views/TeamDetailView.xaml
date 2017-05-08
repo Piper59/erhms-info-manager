@@ -54,7 +54,7 @@
             Responders
         </TextBlock>
         <DataGrid Grid.Row="3"
-                  DataContext="{Binding TeamResponders}"
+                  DataContext="{Binding Responders}"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}"
                   Visibility="{Binding Team.New, Converter={StaticResource BooleanToVisibilityInverter}}">

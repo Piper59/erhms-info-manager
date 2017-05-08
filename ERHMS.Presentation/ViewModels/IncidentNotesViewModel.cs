@@ -54,7 +54,7 @@ namespace ERHMS.Presentation.ViewModels
             Note.IncidentId = Incident.IncidentId;
             Note.PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName != nameof(IncidentNote.Content))
+                if (e.PropertyName == nameof(IncidentNote.Content))
                 {
                     SaveCommand.RaiseCanExecuteChanged();
                 }

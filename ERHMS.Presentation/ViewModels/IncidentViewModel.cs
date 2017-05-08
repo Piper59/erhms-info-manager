@@ -12,6 +12,7 @@ namespace ERHMS.Presentation.ViewModels
         public RosterListViewModel Rosters { get; private set; }
         public TeamListViewModel Teams { get; private set; }
         public LocationListViewModel Locations { get; private set; }
+        public JobListViewModel Jobs { get; private set; }
         public ViewListViewModel Views { get; private set; }
         public TemplateListViewModel Templates { get; private set; }
         public AssignmentListViewModel Assignments { get; private set; }
@@ -33,6 +34,7 @@ namespace ERHMS.Presentation.ViewModels
             Rosters = new RosterListViewModel(incident);
             Teams = new TeamListViewModel(incident);
             Locations = new LocationListViewModel(incident);
+            Jobs = new JobListViewModel(incident);
             Views = new ViewListViewModel(incident);
             Templates = new TemplateListViewModel(incident);
             Assignments = new AssignmentListViewModel(incident);

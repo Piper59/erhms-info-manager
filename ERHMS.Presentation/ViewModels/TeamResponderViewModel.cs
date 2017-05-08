@@ -1,6 +1,6 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Utility;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
