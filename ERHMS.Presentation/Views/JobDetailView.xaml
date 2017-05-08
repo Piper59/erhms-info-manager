@@ -59,7 +59,6 @@
                     <StackPanel Margin="0,0,0,5"
                                 Orientation="Horizontal">
                         <Controls:RemovableItemsControl ItemsSource="{Binding Locations.Items}"
-                                                        Margin="0,0,0,5"
                                                         RemoveCommand="{Binding RemoveLocationCommand}">
                             <Controls:RemovableItemsControl.ItemContentTemplate>
                                 <DataTemplate>
@@ -74,10 +73,9 @@
                         </Button>
                     </StackPanel>
                     <TextBlock Style="{StaticResource Heading}">Teams</TextBlock>
-                    <StackPanel Margin="0,0,0,5"
+                    <StackPanel Margin="0,0,0,10"
                                 Orientation="Horizontal">
                         <Controls:RemovableItemsControl ItemsSource="{Binding Teams.Items}"
-                                                        Margin="0,0,0,10"
                                                         RemoveCommand="{Binding RemoveTeamCommand}">
                             <Controls:RemovableItemsControl.ItemContentTemplate>
                                 <DataTemplate>
