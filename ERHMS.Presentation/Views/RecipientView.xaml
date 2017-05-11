@@ -31,6 +31,7 @@
                     Responder
                 </RadioButton>
                 <ComboBox Grid.Row="0" Grid.Column="1"
+                          AutomationProperties.Name="Responder"
                           IsEnabled="{Binding IsResponder}"
                           ItemsSource="{Binding Responders}"
                           Margin="5,0,0,5"
@@ -46,6 +47,7 @@
                     Email Address
                 </RadioButton>
                 <TextBox Grid.Row="1" Grid.Column="1"
+                         AutomationProperties.Name="Email Address"
                          IsEnabled="{Binding IsResponder, Converter={StaticResource BooleanInverter}}"
                          Margin="5,0,0,5"
                          Text="{Binding EmailAddress}" />
