@@ -85,10 +85,9 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     responders[responder.ResponderId] = responder;
                 }
-                foreach (Roster roster in rosters)
-                {
-                    yield return new RosterViewModel(roster, responders[roster.ResponderId]);
-                }
+                return rosters.Select(roster => new RosterViewModel(roster, responders[roster.ResponderId]))
+                    .OrderBy(item => item.Responder.LastName)
+                    .ThenBy(item => item.Responder.FirstName);
             }
 
             protected override IEnumerable<string> GetFilteredValues(RosterViewModel item)
