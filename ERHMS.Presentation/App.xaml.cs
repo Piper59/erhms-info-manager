@@ -16,6 +16,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using Xceed.Wpf.AvalonDock.Controls;
 using Action = System.Action;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using Settings = ERHMS.Utility.Settings;
@@ -107,6 +109,10 @@ namespace ERHMS.Presentation
                 typeof(TextBox),
                 UIElement.LostKeyboardFocusEvent,
                 new KeyboardFocusChangedEventHandler(TextBox_LostKeyboardFocus));
+            EventManager.RegisterClassHandler(
+                typeof(TabItem),
+                UIElement.GotKeyboardFocusEvent,
+                new KeyboardFocusChangedEventHandler(TabItem_GotKeyboardFocus));
             MainWindow = new MainWindow();
             MainWin32Window = new Win32Window(MainWindow);
             MainWindow.ContentRendered += MainWindow_ContentRendered;
@@ -126,6 +132,15 @@ namespace ERHMS.Presentation
             if (e.KeyboardDevice.IsKeyDown(Key.Tab))
             {
                 ((TextBox)sender).Select(0, 0);
+            }
+        }
+
+        private void TabItem_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            TabItem tabItem = e.OriginalSource as TabItem;
+            if (tabItem != null && VisualTreeHelper.GetParent(tabItem).GetType() == typeof(DocumentPaneTabPanel))
+            {
+                Keyboard.ClearFocus();
             }
         }
 
