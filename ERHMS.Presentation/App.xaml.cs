@@ -123,7 +123,10 @@ namespace ERHMS.Presentation
 
         private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            ((TextBox)sender).Select(0, 0);
+            if (e.KeyboardDevice.IsKeyDown(Key.Tab))
+            {
+                ((TextBox)sender).Select(0, 0);
+            }
         }
 
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
