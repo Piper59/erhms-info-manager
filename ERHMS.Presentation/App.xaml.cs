@@ -27,6 +27,9 @@ namespace ERHMS.Presentation
         public const string BareTitle = "ERHMS Info Manager";
         public static readonly string Title = BareTitle + "\u2122";
 
+        private static bool errored;
+        private static object erroredLock = new object();
+
         public new static App Current
         {
             get { return (App)Application.Current; }
@@ -58,8 +61,16 @@ namespace ERHMS.Presentation
         private static void HandleError(Exception ex)
         {
             Log.Logger.Fatal("Fatal error", ex);
-            string message = string.Format("{0} encountered an error and must shut down.", Title);
-            MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            lock (erroredLock)
+            {
+                if (errored)
+                {
+                    return;
+                }
+                errored = true;
+                string message = string.Format("{0} encountered an error and must shut down.", Title);
+                MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public ResourceDictionary Accent { get; private set; }
