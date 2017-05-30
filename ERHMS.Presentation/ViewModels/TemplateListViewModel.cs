@@ -53,9 +53,17 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (e.Type == WrapperEventType.ViewCreated)
                 {
+                    if (Incident != null)
+                    {
+                        ViewLink viewLink = DataContext.ViewLinks.Create();
+                        viewLink.ViewId = e.Properties.Id;
+                        viewLink.IncidentId = Incident.IncidentId;
+                        DataContext.ViewLinks.Save(viewLink);
+                    }
                     Messenger.Default.Send(new RefreshMessage<View>());
                 }
             };
+            wrapper.Invoke();
         }
 
         public void Delete()
