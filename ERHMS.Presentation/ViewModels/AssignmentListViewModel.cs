@@ -204,11 +204,12 @@ namespace ERHMS.Presentation.ViewModels
         public void Email()
         {
             EmailViewModel email = new EmailViewModel(TypedSelectedItems.Select(item => item.Responder));
-            if (SelectedItem.ViewDeepLink.Item.IsWebSurvey())
+            View selectedView = DataContext.Project.GetViewById(SelectedItem.ViewDeepLink.Item.Id);
+            if (selectedView.IsWebSurvey())
             {
                 email.AppendWebSurveyUrl = true;
-                email.Views.SelectItem(view => view.Id == SelectedItem.ViewDeepLink.Item.Id);
-                if (DataContext.IsResponderLinkedView(SelectedItem.ViewDeepLink.Item))
+                email.Views.SelectItem(view => view.Id == selectedView.Id);
+                if (DataContext.IsResponderLinkedView(selectedView))
                 {
                     email.PrepopulateResponderId = true;
                 }
