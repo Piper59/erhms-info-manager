@@ -151,19 +151,25 @@ namespace ERHMS.Presentation.ViewModels
             }
             Attachments = new ObservableCollection<string>();
             Views = new ViewListViewModel();
+            SetCanAppendWebSurveyUrl();
+            SetCanPrepopulateResponderId();
             AddRecipientCommand = new RelayCommand(AddRecipient);
             RemoveRecipientCommand = new RelayCommand<RecipientViewModel>(RemoveRecipient);
             AddAttachmentCommand = new RelayCommand(AddAttachment);
             RemoveAttachmentCommand = new RelayCommand<string>(RemoveAttachment);
             SendCommand = new RelayCommand(Send);
-            Views.Refreshed += (sender, e) =>
-            {
-                CanAppendWebSurveyUrl = !Views.Items.IsEmpty;
-            };
-            Views.SelectedItemChanged += (sender, e) =>
-            {
-                CanPrepopulateResponderId = Views.SelectedItem != null && DataContext.IsResponderLinkedView(Views.SelectedItem);
-            };
+            Views.Refreshed += (sender, e) => SetCanAppendWebSurveyUrl();
+            Views.SelectedItemChanged += (sender, e) => SetCanPrepopulateResponderId();
+        }
+
+        private void SetCanAppendWebSurveyUrl()
+        {
+            CanAppendWebSurveyUrl = !Views.Items.IsEmpty;
+        }
+
+        private void SetCanPrepopulateResponderId()
+        {
+            CanPrepopulateResponderId = Views.SelectedItem != null && DataContext.IsResponderLinkedView(Views.SelectedItem);
         }
 
         public void AddRecipient()
@@ -299,10 +305,8 @@ namespace ERHMS.Presentation.ViewModels
                                     body.AppendLine();
                                     if (recipient.IsResponder && PrepopulateResponderId)
                                     {
-                                        Record record = new Record(new
-                                        {
-                                            ResponderId = recipient.Responder.ResponderId
-                                        });
+                                        Record record = new Record();
+                                        record[Views.SelectedItem.Fields[nameof(Responder.ResponderId)].Name] = recipient.Responder.ResponderId;
                                         if (!Service.TryAddRecord(Views.SelectedItem, survey, record))
                                         {
                                             failures.Add(recipient);

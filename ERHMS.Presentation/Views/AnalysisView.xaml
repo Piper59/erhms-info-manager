@@ -24,7 +24,7 @@
                 <TextBox Grid.Column="1"
                          AutomationProperties.Name="Name"
                          Margin="0"
-                         Text="{Binding BindingGroupName, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
             <WrapPanel Grid.Row="1"
                        Style="{StaticResource IconButtonBar}">

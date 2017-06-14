@@ -55,7 +55,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public new void Refresh()
         {
-            GuiMediator.Instance.Canvas.Render(RecordStatus.IsDeleted(View.RecStatusField.CurrentRecordValue));
+            GuiMediator.Instance.Canvas.Render(!RecordStatus.IsDeleted(View.RecStatusField.CurrentRecordValue));
         }
     }
 }

@@ -35,6 +35,18 @@ namespace ERHMS.Utility
             return null;
         }
 
+        public static string ReadNextText(this XmlReader @this)
+        {
+            while (@this.Read())
+            {
+                if (@this.NodeType == XmlNodeType.Text)
+                {
+                    return @this.ReadContentAsString();
+                }
+            }
+            return null;
+        }
+
         public static IEnumerable<XmlElement> SelectElements(this XmlNode @this, string xpath)
         {
             return @this.SelectNodes(xpath).OfType<XmlElement>();

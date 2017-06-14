@@ -19,7 +19,7 @@
             <ComboBox AutomationProperties.Name="Responder"
                       ItemsSource="{Binding Responders}"
                       Margin="0,5,0,0"
-                      SelectedItem="{Binding SelectedResponder}">
+                      SelectedItem="{Binding Responder}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameConverter}}" />

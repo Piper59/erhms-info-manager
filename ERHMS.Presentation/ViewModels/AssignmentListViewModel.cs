@@ -204,7 +204,7 @@ namespace ERHMS.Presentation.ViewModels
         public void Email()
         {
             EmailViewModel email = new EmailViewModel(TypedSelectedItems.Select(item => item.Responder));
-            View selectedView = DataContext.Project.GetViewById(SelectedItem.ViewDeepLink.Item.Id);
+            View selectedView = DataContext.Project.Metadata.GetViewById(SelectedItem.ViewDeepLink.Item.Id);
             if (selectedView.IsWebSurvey())
             {
                 email.AppendWebSurveyUrl = true;
