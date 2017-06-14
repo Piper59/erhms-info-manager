@@ -1,6 +1,8 @@
 ﻿<UserControl x:Class="ERHMS.Presentation.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
@@ -61,6 +63,9 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="Label"
@@ -75,14 +80,25 @@
                         <TextBox Grid.Row="1" Grid.Column="1"
                                  AutomationProperties.Name="SMTP Port"
                                  Text="{Binding Port, TargetNullValue=''}" />
-                        <Label Grid.Row="2" Grid.Column="0"
-                               Margin="0">
-                            Sender Address
-                        </Label>
-                        <TextBox Grid.Row="2" Grid.Column="1"
+                        <Label Grid.Row="2" Grid.Column="0">Use SSL</Label>
+                        <CheckBox Grid.Row="2" Grid.Column="1"
+                                  AutomationProperties.Name="Use SSL"
+                                  IsChecked="{Binding Ssl}" />
+                        <Label Grid.Row="3" Grid.Column="0">Sender Address</Label>
+                        <TextBox Grid.Row="3" Grid.Column="1"
                                  AutomationProperties.Name="Sender Address"
-                                 Margin="0"
                                  Text="{Binding Sender}" />
+                        <Label Grid.Row="4" Grid.Column="0">Sender Password</Label>
+                        <PasswordBox Grid.Row="4" Grid.Column="1"
+                                     AutomationProperties.Name="Sender Password">
+                            <i:Interaction.Behaviors>
+                                <Behaviors:BindPasswordBehavior Password="{Binding Password, TargetNullValue=''}" />
+                            </i:Interaction.Behaviors>
+                        </PasswordBox>
+                        <TextBlock Grid.Row="5" Grid.Column="1"
+                                   TextWrapping="Wrap">
+                            <Run FontWeight="SemiBold">Note:</Run> Leave the password field blank to authenticate using the default credentials of the currently logged on user.
+                        </TextBlock>
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Mapping">

@@ -325,8 +325,9 @@ namespace ERHMS.Presentation.ViewModels
                                 }
                                 client.Send(message);
                             }
-                            catch
+                            catch (Exception ex)
                             {
+                                Log.Logger.Warn("Failed to send email", ex);
                                 failures.Add(recipient);
                             }
                         }
