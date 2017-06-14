@@ -1,0 +1,44 @@
+﻿<MahApps.Dialogs:CustomDialog x:Class="ERHMS.Presentation.Dialogs.WelcomeDialog"
+                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                              xmlns:MahApps.Dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro">
+    <MahApps.Dialogs:CustomDialog.Content>
+        <Grid Margin="0,10,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Margin="0,5,0,5"
+                           FontSize="{StaticResource DialogMessageFontSize}"
+                           TextWrapping="Wrap">
+                        Welcome to <Run Text="{StaticResource ApplicationTitle}" />!
+                        To get started, select a data source from the list and click Open.
+                        To add a new data source to the list, click Add &gt; New.
+                        To add an existing data source to the list, click Add &gt; Existing.
+                    </TextBlock>
+                    <TextBlock Margin="0,5,0,0"
+                           FontSize="{StaticResource DialogMessageFontSize}"
+                           TextWrapping="Wrap">
+                        <!-- TODO: Update URL -->
+                        For more information, consult the <Hyperlink NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" RequestNavigate="UserManual_RequestNavigate"><Run Text="{StaticResource ApplicationTitle}" /> User Manual</Hyperlink>.
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Grid.Row="1"
+                        Height="85"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button Click="OK_Click"
+                        Height="35"
+                        Margin="0,0,5,0"
+                        MinWidth="80"
+                        Style="{StaticResource AccentedDialogSquareButton}">
+                    OK
+                </Button>
+            </StackPanel>
+        </Grid>
+    </MahApps.Dialogs:CustomDialog.Content>
+</MahApps.Dialogs:CustomDialog>

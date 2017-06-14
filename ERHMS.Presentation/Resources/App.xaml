@@ -14,7 +14,6 @@
         <ResourceDictionary Source="BaseLight508.xaml" />
         <ResourceDictionary Source="IconsNonShared.xaml" />
         <ResourceDictionary Source="TabControl.xaml" />
-        <ResourceDictionary Source="Strings.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource AccentedSquareButtonStyle}">
@@ -24,6 +23,12 @@
         <Setter Property="Padding" Value="5,-1,5,1" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
+
+    <System:String x:Key="ChangeRootDirectoryText">
+        Change the root directory?
+        This may cause existing data sources to stop working properly.
+        {0} will attempt to copy your documents and restart when settings are saved.
+    </System:String>
 
     <Style TargetType="CheckBox" BasedOn="{StaticResource MetroCheckBox}">
         <Setter Property="Margin" Value="0,0,0,5" />

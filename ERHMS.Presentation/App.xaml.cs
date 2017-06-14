@@ -83,6 +83,7 @@ namespace ERHMS.Presentation
         public App()
         {
             InitializeComponent();
+            Resources.Add("ApplicationTitle", Title);
             AddTextFileResource("COPYRIGHT");
             AddTextFileResource("LICENSE");
             AddTextFileResource("NOTICE");
@@ -160,8 +161,7 @@ namespace ERHMS.Presentation
             else
             {
                 Log.Logger.Debug("Showing license");
-                LicenseDialog dialog = new LicenseDialog(MainWindow);
-                if (await dialog.ShowAsync() == MessageDialogResult.Affirmative)
+                if (await LicenseDialog.ShowAsync(MainWindow) == MessageDialogResult.Affirmative)
                 {
                     Log.Logger.Debug("License accepted");
                     Settings.Default.LicenseAccepted = true;
@@ -169,11 +169,7 @@ namespace ERHMS.Presentation
                     if (LoadSettings())
                     {
                         MainViewModel.Instance.OpenDataSourceListView();
-                        Messenger.Default.Send(new AlertMessage
-                        {
-                            Title = "Welcome",
-                            Message = string.Format((string)FindResource("WelcomeText"), Title)
-                        });
+                        await WelcomeDialog.ShowAsync(MainWindow);
                     }
                     else
                     {
