@@ -199,7 +199,15 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToTemplate()
         {
-            MakeView.CreateTemplate.Create(DataContext.Project.FilePath, SelectedItem.Item.Name).Invoke();
+            Wrapper wrapper = MakeView.CreateTemplate.Create(DataContext.Project.FilePath, SelectedItem.Item.Name);
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == WrapperEventType.TemplateCreated)
+                {
+                    Messenger.Default.Send(new RefreshMessage<TemplateInfo>());
+                }
+            };
+            wrapper.Invoke();
         }
 
         private void ShowUnsupportedMessage(string message, IEnumerable<Field> fields)
