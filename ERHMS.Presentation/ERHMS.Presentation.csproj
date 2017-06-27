@@ -249,6 +249,9 @@
       <DependentUpon>LicenseDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\RootDirectoryDialog.cs" />
+    <Compile Include="Dialogs\WelcomeDialog.xaml.cs">
+      <DependentUpon>WelcomeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
     <Compile Include="Infrastructure\PrintExtensions.cs" />
     <Compile Include="Infrastructure\WaitCursor.cs" />
@@ -484,6 +487,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\WelcomeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -505,10 +512,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\IconsNonShared.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Strings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

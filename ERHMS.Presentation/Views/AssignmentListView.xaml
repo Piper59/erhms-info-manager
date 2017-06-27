@@ -109,7 +109,7 @@
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding ViewDeepLink.Incident.Name}"
                                     Header="Incident"
-                                    Visibility="{Binding Incident, Source={StaticResource Proxy}, Converter={StaticResource NullToVisibilityInverter}}"
+                                    Visibility="{Binding DataContext.Incident, Source={StaticResource Proxy}, Converter={StaticResource NullToVisibilityInverter}}"
                                     Width="*" />
             </DataGrid.Columns>
         </DataGrid>

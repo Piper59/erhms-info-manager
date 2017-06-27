@@ -15,6 +15,30 @@ namespace ERHMS.Test.EpiInfo
         }
 
         [Test]
+        public void EncryptSafeTest()
+        {
+            using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest)))
+            {
+                ConfigurationExtensions.Create(directory.Path).Save();
+                ConfigurationExtensions.Load();
+                Assert.AreEqual("Hello, world!", Configuration.Decrypt(ConfigurationExtensions.EncryptSafe("Hello, world!")));
+                Assert.IsNull(ConfigurationExtensions.EncryptSafe(null));
+            }
+        }
+
+        [Test]
+        public void DecryptSafeTest()
+        {
+            using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest)))
+            {
+                ConfigurationExtensions.Create(directory.Path).Save();
+                ConfigurationExtensions.Load();
+                Assert.AreEqual("Hello, world!", ConfigurationExtensions.DecryptSafe(Configuration.Encrypt("Hello, world!")));
+                Assert.IsNull(ConfigurationExtensions.DecryptSafe(null));
+            }
+        }
+
+        [Test]
         public void CreateAndSaveTest()
         {
             using (TempDirectory directory = new TempDirectory(nameof(CreateAndSaveTest)))

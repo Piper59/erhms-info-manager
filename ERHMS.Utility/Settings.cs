@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 
@@ -13,7 +14,9 @@ namespace ERHMS.Utility
         public HashSet<string> DataSources { get; set; }
         public string EmailHost { get; set; }
         public int? EmailPort { get; set; }
+        public bool EmailSsl { get; set; }
         public string EmailSender { get; set; }
+        public string EmailPassword { get; set; }
         public string MapLicenseKey { get; set; }
         public string OrganizationName { get; set; }
         public string OrganizationKey { get; set; }
@@ -32,7 +35,9 @@ namespace ERHMS.Utility
             DataSources = new HashSet<string>();
             EmailHost = null;
             EmailPort = 25;
+            EmailSsl = false;
             EmailSender = null;
+            EmailPassword = null;
             MapLicenseKey = "Aua5s8kFcEZMx5lsd8Vkerz3frboU1CwzvOyzX_vgSnzsnbqV7xlQ4WTRUlN19_Q";
             OrganizationName = null;
             OrganizationKey = null;
@@ -45,7 +50,21 @@ namespace ERHMS.Utility
 
         public SmtpClient GetSmtpClient()
         {
-            return new SmtpClient(EmailHost, EmailPort.Value);
+            SmtpClient client = new SmtpClient(EmailHost, EmailPort.Value)
+            {
+                EnableSsl = EmailSsl,
+                DeliveryMethod = SmtpDeliveryMethod.Network
+            };
+            if (string.IsNullOrEmpty(EmailPassword))
+            {
+                client.UseDefaultCredentials = true;
+            }
+            else
+            {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(EmailSender, EmailPassword);
+            }
+            return client;
         }
 
         public MailMessage GetMailMessage()

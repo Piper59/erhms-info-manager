@@ -100,7 +100,10 @@ namespace ERHMS.EpiInfo.Wrappers
                         document.Save(tempTemplatePath);
                         Template template = new Template(form.Mediator);
                         template.InstantiateTemplate(tempTemplatePath);
-                        RaiseEvent(WrapperEventType.ViewCreated);
+                        RaiseEvent(WrapperEventType.ViewCreated, new
+                        {
+                            Id = project.GetViewByName(dialog.ViewName).Id
+                        });
                         form.TryClose("Form has been created.");
                     }
                     else

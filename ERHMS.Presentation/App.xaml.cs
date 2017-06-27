@@ -16,6 +16,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using Xceed.Wpf.AvalonDock.Controls;
 using Action = System.Action;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using Settings = ERHMS.Utility.Settings;
@@ -26,6 +28,9 @@ namespace ERHMS.Presentation
     {
         public const string BareTitle = "ERHMS Info Manager";
         public static readonly string Title = BareTitle + "\u2122";
+
+        private static bool errored;
+        private static object erroredLock = new object();
 
         public new static App Current
         {
@@ -58,8 +63,16 @@ namespace ERHMS.Presentation
         private static void HandleError(Exception ex)
         {
             Log.Logger.Fatal("Fatal error", ex);
-            string message = string.Format("{0} encountered an error and must shut down.", Title);
-            MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            lock (erroredLock)
+            {
+                if (errored)
+                {
+                    return;
+                }
+                errored = true;
+                string message = string.Format("{0} encountered an error and must shut down.", Title);
+                MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public ResourceDictionary Accent { get; private set; }
@@ -70,6 +83,7 @@ namespace ERHMS.Presentation
         public App()
         {
             InitializeComponent();
+            Resources.Add("ApplicationTitle", Title);
             AddTextFileResource("COPYRIGHT");
             AddTextFileResource("LICENSE");
             AddTextFileResource("NOTICE");
@@ -96,6 +110,10 @@ namespace ERHMS.Presentation
                 typeof(TextBox),
                 UIElement.LostKeyboardFocusEvent,
                 new KeyboardFocusChangedEventHandler(TextBox_LostKeyboardFocus));
+            EventManager.RegisterClassHandler(
+                typeof(TabItem),
+                UIElement.GotKeyboardFocusEvent,
+                new KeyboardFocusChangedEventHandler(TabItem_GotKeyboardFocus));
             MainWindow = new MainWindow();
             MainWin32Window = new Win32Window(MainWindow);
             MainWindow.ContentRendered += MainWindow_ContentRendered;
@@ -112,7 +130,19 @@ namespace ERHMS.Presentation
 
         private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            ((TextBox)sender).Select(0, 0);
+            if (e.KeyboardDevice.IsKeyDown(Key.Tab))
+            {
+                ((TextBox)sender).Select(0, 0);
+            }
+        }
+
+        private void TabItem_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            TabItem tabItem = e.OriginalSource as TabItem;
+            if (tabItem != null && VisualTreeHelper.GetParent(tabItem).GetType() == typeof(DocumentPaneTabPanel))
+            {
+                Keyboard.ClearFocus();
+            }
         }
 
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
@@ -131,8 +161,7 @@ namespace ERHMS.Presentation
             else
             {
                 Log.Logger.Debug("Showing license");
-                LicenseDialog dialog = new LicenseDialog(MainWindow);
-                if (await dialog.ShowAsync() == MessageDialogResult.Affirmative)
+                if (await LicenseDialog.ShowAsync(MainWindow) == MessageDialogResult.Affirmative)
                 {
                     Log.Logger.Debug("License accepted");
                     Settings.Default.LicenseAccepted = true;
@@ -140,11 +169,7 @@ namespace ERHMS.Presentation
                     if (LoadSettings())
                     {
                         MainViewModel.Instance.OpenDataSourceListView();
-                        Messenger.Default.Send(new AlertMessage
-                        {
-                            Title = "Welcome",
-                            Message = string.Format((string)FindResource("WelcomeText"), Title)
-                        });
+                        await WelcomeDialog.ShowAsync(MainWindow);
                     }
                     else
                     {

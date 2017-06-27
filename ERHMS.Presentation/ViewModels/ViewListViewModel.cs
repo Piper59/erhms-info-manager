@@ -126,6 +126,13 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (e.Type == WrapperEventType.ViewCreated)
                 {
+                    if (Incident != null)
+                    {
+                        ViewLink viewLink = DataContext.ViewLinks.Create();
+                        viewLink.ViewId = e.Properties.Id;
+                        viewLink.IncidentId = Incident.IncidentId;
+                        DataContext.ViewLinks.Save(viewLink);
+                    }
                     Messenger.Default.Send(new RefreshMessage<View>());
                 }
             };
@@ -192,7 +199,15 @@ namespace ERHMS.Presentation.ViewModels
 
         public void PublishToTemplate()
         {
-            MakeView.CreateTemplate.Create(DataContext.Project.FilePath, SelectedItem.Item.Name).Invoke();
+            Wrapper wrapper = MakeView.CreateTemplate.Create(DataContext.Project.FilePath, SelectedItem.Item.Name);
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == WrapperEventType.TemplateCreated)
+                {
+                    Messenger.Default.Send(new RefreshMessage<TemplateInfo>());
+                }
+            };
+            wrapper.Invoke();
         }
 
         private void ShowUnsupportedMessage(string message, IEnumerable<Field> fields)

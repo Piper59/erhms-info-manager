@@ -237,7 +237,7 @@ namespace ERHMS.EpiInfo.Web
                                 }
                                 if (element.Name == "ResponseDetail")
                                 {
-                                    record[element.GetAttribute("QuestionName")] = element.InnerText;
+                                    record[element.GetAttribute("QuestionName")] = reader.ReadNextText();
                                 }
                             }
                         }

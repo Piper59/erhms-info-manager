@@ -37,11 +37,25 @@ namespace ERHMS.Presentation.ViewModels
                 set { Set(nameof(Port), ref port, value); }
             }
 
+            private bool ssl;
+            public bool Ssl
+            {
+                get { return ssl; }
+                set { Set(nameof(Ssl), ref ssl, value); }
+            }
+
             private string sender;
             public string Sender
             {
                 get { return sender; }
                 set { Set(nameof(Sender), ref sender, value); }
+            }
+
+            private string password;
+            public string Password
+            {
+                get { return password; }
+                set { Set(nameof(Password), ref password, value); }
             }
         }
 
@@ -150,7 +164,9 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Host = Settings.Default.EmailHost,
                 Port = Settings.Default.EmailPort,
-                Sender = Settings.Default.EmailSender
+                Ssl = Settings.Default.EmailSsl,
+                Sender = Settings.Default.EmailSender,
+                Password = ConfigurationExtensions.DecryptSafe(Settings.Default.EmailPassword)
             };
             AddDirtyCheck(EmailSettings);
             MapLicenseKey = Settings.Default.MapLicenseKey;
@@ -231,7 +247,9 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.LogLevel = LogLevel;
             Settings.Default.EmailHost = EmailSettings.Host;
             Settings.Default.EmailPort = EmailSettings.Port;
+            Settings.Default.EmailSsl = EmailSettings.Ssl;
             Settings.Default.EmailSender = EmailSettings.Sender;
+            Settings.Default.EmailPassword = ConfigurationExtensions.EncryptSafe(EmailSettings.Password);
             Settings.Default.MapLicenseKey = MapLicenseKey;
             Configuration configuration = Configuration.GetNewInstance();
             configuration.Settings.WebServiceEndpointAddress = WebSurveySettings.Address;

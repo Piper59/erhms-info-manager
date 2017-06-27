@@ -10,6 +10,7 @@ using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Media;
 
 namespace ERHMS.Presentation
@@ -118,6 +119,10 @@ namespace ERHMS.Presentation
             };
             msg.Confirmed += (_sender, _e) =>
             {
+                foreach (ViewModelBase document in MainViewModel.Instance.Documents.ToList())
+                {
+                    MainViewModel.Instance.Documents.Remove(document);
+                }
                 closing = true;
                 Close();
                 closing = false;

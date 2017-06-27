@@ -13,6 +13,37 @@ namespace ERHMS.EpiInfo
     {
         public static readonly string FilePath = Configuration.DefaultConfigurationPath;
 
+        public static string EncryptSafe(string text)
+        {
+            if (text == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Configuration.Encrypt(text);
+            }
+        }
+
+        public static string DecryptSafe(string text)
+        {
+            if (text == null)
+            {
+                return null;
+            }
+            else
+            {
+                try
+                {
+                    return Configuration.Decrypt(text);
+                }
+                catch (CryptographicException)
+                {
+                    return null;
+                }
+            }
+        }
+
         public static Configuration Create(string userDirectoryPath)
         {
             Log.Logger.DebugFormat("Creating configuration: {0}", userDirectoryPath);

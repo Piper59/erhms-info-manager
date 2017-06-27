@@ -7,6 +7,12 @@ namespace ERHMS.Presentation.Dialogs
 {
     public partial class LicenseDialog : CustomDialog
     {
+        public static async Task<MessageDialogResult> ShowAsync(MetroWindow window)
+        {
+            LicenseDialog dialog = new LicenseDialog(window);
+            return await dialog.ShowAsync();
+        }
+
         public MessageDialogResult Result { get; private set; }
 
         public LicenseDialog(MetroWindow window)
