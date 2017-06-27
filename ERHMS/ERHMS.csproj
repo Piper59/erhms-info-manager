@@ -15,8 +15,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <ManifestCertificateThumbprint>4D6DC7ED8964D314BA9C76F1312B998D2DF22B76</ManifestCertificateThumbprint>
-    <ManifestKeyFile>ERHMS.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>BDFE829F4DBCA70ED3784FABF331C8F92348180D</ManifestCertificateThumbprint>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
