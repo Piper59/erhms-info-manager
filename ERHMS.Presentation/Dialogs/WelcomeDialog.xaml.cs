@@ -1,9 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Navigation;
 
 namespace ERHMS.Presentation.Dialogs
 {
@@ -35,11 +33,6 @@ namespace ERHMS.Presentation.Dialogs
                 AnimateHide = false
             });
             await WaitUntilUnloadedAsync();
-        }
-
-        private void UserManual_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(e.Uri.AbsoluteUri);
         }
     }
 }

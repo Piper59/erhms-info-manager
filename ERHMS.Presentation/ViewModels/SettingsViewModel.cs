@@ -9,7 +9,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -149,7 +148,6 @@ namespace ERHMS.Presentation.ViewModels
         public WebSurveySettingsViewModel WebSurveySettings { get; private set; }
 
         public RelayCommand BrowseCommand { get; private set; }
-        public RelayCommand GetMapLicenseKeyCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
         public SettingsViewModel()
@@ -181,7 +179,6 @@ namespace ERHMS.Presentation.ViewModels
             AddDirtyCheck(WebSurveySettings);
             Dirty = false;
             BrowseCommand = new RelayCommand(Browse);
-            GetMapLicenseKeyCommand = new RelayCommand(GetMapLicenseKey);
             SaveCommand = new RelayCommand(Save);
         }
 
@@ -208,11 +205,6 @@ namespace ERHMS.Presentation.ViewModels
                     }
                 }
             }
-        }
-
-        public void GetMapLicenseKey()
-        {
-            Process.Start("https://www.bingmapsportal.com/");
         }
 
         private bool Validate()

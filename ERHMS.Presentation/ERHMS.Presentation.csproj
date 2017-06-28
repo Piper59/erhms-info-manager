@@ -223,6 +223,7 @@
     <Compile Include="Controls\RemovableItemsControl.xaml.cs">
       <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WebHyperlink.cs" />
     <Compile Include="Controls\Win32Window.cs" />
     <Compile Include="Converters\AccessTextToPlainTextConverter.cs" />
     <Compile Include="Converters\BindingTypeToDescriptionConverter.cs" />

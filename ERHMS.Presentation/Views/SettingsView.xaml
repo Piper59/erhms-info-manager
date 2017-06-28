@@ -119,7 +119,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="1"
                                    TextWrapping="Wrap">
                             <Run FontWeight="SemiBold">Note:</Run> The default mapping license key should only be used for demonstration purposes.
-                            For optimal performance, please replace the default key with one retrieved from the <Hyperlink Command="{Binding GetMapLicenseKeyCommand}">Bing Maps Dev Center</Hyperlink>.
+                            For optimal performance, please replace the default key with one retrieved from the <Controls:WebHyperlink NavigateUri="https://www.bingmapsportal.com/">Bing Maps Dev Center</Controls:WebHyperlink>.
                         </TextBlock>
                     </Grid>
                 </GroupBox>
