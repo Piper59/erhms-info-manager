@@ -223,6 +223,9 @@
     <Compile Include="Controls\RemovableItemsControl.xaml.cs">
       <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UserManualTabItem.xaml.cs">
+      <DependentUpon>UserManualTabItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WebHyperlink.cs" />
     <Compile Include="Controls\Win32Window.cs" />
     <Compile Include="Converters\AccessTextToPlainTextConverter.cs" />
@@ -453,6 +456,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RemovableItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UserManualTabItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

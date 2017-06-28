@@ -8,10 +8,5 @@ namespace ERHMS.Presentation.Views
         {
             InitializeComponent();
         }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TabControl.SelectedIndex = 0;
-        }
     }
 }
