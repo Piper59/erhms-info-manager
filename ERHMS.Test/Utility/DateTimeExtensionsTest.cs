@@ -9,9 +9,9 @@ namespace ERHMS.Test.Utility
         [Test]
         public void RemoveMillisecondsTest()
         {
-            DateTime value = new DateTime(2000, 1, 1, 0, 0, 0, 1);
-            Assert.AreNotEqual(0, value.Millisecond);
-            Assert.AreEqual(0, value.RemoveMilliseconds().Millisecond);
+            DateTime date = new DateTime(2000, 1, 1, 0, 0, 0, 1);
+            Assert.AreNotEqual(0, date.Millisecond);
+            Assert.AreEqual(0, date.RemoveMilliseconds().Millisecond);
         }
     }
 }

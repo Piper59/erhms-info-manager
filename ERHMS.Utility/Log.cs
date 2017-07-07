@@ -3,7 +3,7 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -12,22 +12,32 @@ namespace ERHMS.Utility
 {
     public static class Log
     {
-        public static readonly IEnumerable<string> LevelNames = new string[]
+        public static readonly ReadOnlyCollection<string> LevelNames = new string[]
         {
             "DEBUG",
             "INFO",
             "WARN",
             "ERROR",
             "FATAL"
-        };
+        }.AsReadOnly();
         public static readonly string FilePath;
 
         private static string name;
         private static Hierarchy hierarchy;
 
-        public static ILog Logger
+        public static ILog Logger { get; private set; }
+
+        public static string LevelName
         {
-            get { return LogManager.GetLogger(name); }
+            get
+            {
+                return hierarchy.Root.Level.Name;
+            }
+            set
+            {
+                hierarchy.Root.Level = hierarchy.LevelMap[value];
+                hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
+            }
         }
 
         static Log()
@@ -47,17 +57,7 @@ namespace ERHMS.Utility
             appender.ActivateOptions();
             hierarchy.Root.AddAppender(appender);
             hierarchy.Configured = true;
-        }
-
-        public static string GetLevelName()
-        {
-            return hierarchy.Root.Level.Name;
-        }
-
-        public static void SetLevelName(string levelName)
-        {
-            hierarchy.Root.Level = hierarchy.LevelMap[levelName];
-            hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
+            Logger = LogManager.GetLogger(name);
         }
     }
 }

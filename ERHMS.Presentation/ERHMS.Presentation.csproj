@@ -246,7 +246,6 @@
     <Compile Include="Converters\ResponderToFullNameAndEmailAddressConverter.cs" />
     <Compile Include="Converters\ResponderToFullNameConverter.cs" />
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
-    <Compile Include="Converters\SizeToHumanReadableSizeConverter.cs" />
     <Compile Include="Converters\ViewToWebSurveyUrlConverter.cs" />
     <Compile Include="Dialogs\FileDialogExtensions.cs" />
     <Compile Include="Dialogs\LicenseDialog.xaml.cs">

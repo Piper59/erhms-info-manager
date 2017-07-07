@@ -4,36 +4,34 @@ using System.Reflection;
 
 namespace ERHMS.Test
 {
-    using IOPath = Path;
-
     public class TempDirectory : IDisposable
     {
-        public string Path { get; private set; }
+        public string FullName { get; private set; }
 
         public TempDirectory(string directoryName)
         {
-            Path = IOPath.Combine(IOPath.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name, directoryName);
+            FullName = Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name, directoryName);
             DeleteIfExists();
-            Directory.CreateDirectory(Path);
+            Directory.CreateDirectory(FullName);
         }
 
         private void DeleteIfExists()
         {
-            if (Directory.Exists(Path))
+            if (Directory.Exists(FullName))
             {
-                Directory.Delete(Path, true);
+                Directory.Delete(FullName, true);
             }
         }
 
         public string CombinePaths(params string[] paths)
         {
-            return IOPath.Combine(Path, IOPath.Combine(paths));
+            return Path.Combine(FullName, Path.Combine(paths));
         }
 
         public string CreateFile(params string[] paths)
         {
             string path = CombinePaths(paths);
-            Directory.CreateDirectory(IOPath.GetDirectoryName(path));
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
             using (File.Create(path)) { }
             return path;
         }

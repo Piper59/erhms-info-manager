@@ -18,7 +18,7 @@ namespace ERHMS.Test.EpiInfo
         public void OneTimeSetUp()
         {
             directory = new TempDirectory(nameof(ProjectInfoTest));
-            ConfigurationExtensions.Create(directory.Path).Save();
+            ConfigurationExtensions.Create(directory.FullName).Save();
             ConfigurationExtensions.Load();
         }
 
@@ -33,7 +33,7 @@ namespace ERHMS.Test.EpiInfo
         public void TryReadTest()
         {
             string path = directory.CombinePaths("TryReadTest.prj");
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.prj", path);
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", path);
             ProjectInfo projectInfo;
             Assert.IsTrue(ProjectInfo.TryRead(path, out projectInfo));
             Assert.AreEqual(new Version(1, 0, 0, 0), projectInfo.Version);
@@ -45,7 +45,7 @@ namespace ERHMS.Test.EpiInfo
         public void SetAccessConnectionStringTest()
         {
             string path = directory.CombinePaths("SetAccessConnectionStringTest.prj");
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.prj", path);
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", path);
             ProjectInfo projectInfo = ProjectInfo.Get(path);
             projectInfo.SetAccessConnectionString();
             XmlDocument document = new XmlDocument();

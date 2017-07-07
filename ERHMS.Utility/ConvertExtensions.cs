@@ -7,22 +7,42 @@ namespace ERHMS.Utility
 {
     public static class ConvertExtensions
     {
+        private static IFormatter GetFormatter()
+        {
+            return new BinaryFormatter();
+        }
+
         public static string ToBase64String(object value)
         {
-            using (MemoryStream stream = new MemoryStream())
+            byte[] data;
+            if (value == null)
             {
-                IFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, value);
-                return Convert.ToBase64String(stream.ToArray());
+                data = new byte[0];
             }
+            else
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    GetFormatter().Serialize(stream, value);
+                    data = stream.ToArray();
+                }
+            }
+            return Convert.ToBase64String(data);
         }
 
         public static object FromBase64String(string value)
         {
-            using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(value)))
+            byte[] data = Convert.FromBase64String(value);
+            if (data.Length == 0)
             {
-                IFormatter formatter = new BinaryFormatter();
-                return formatter.Deserialize(stream);
+                return null;
+            }
+            else
+            {
+                using (MemoryStream stream = new MemoryStream(data))
+                {
+                    return GetFormatter().Deserialize(stream);
+                }
             }
         }
 

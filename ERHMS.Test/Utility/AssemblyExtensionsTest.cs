@@ -26,15 +26,10 @@ namespace ERHMS.Test.Utility
         [Test]
         public void CopyManifestResourceToTest()
         {
-            string path = Path.GetTempFileName();
-            try
+            using (TempFile file = new TempFile())
             {
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo(ResourceName, path);
-                Assert.AreEqual(ResourceContent, File.ReadAllText(path));
-            }
-            finally
-            {
-                File.Delete(path);
+                Assembly.GetExecutingAssembly().CopyManifestResourceTo(ResourceName, file.FullName);
+                Assert.AreEqual(ResourceContent, File.ReadAllText(file.FullName));
             }
         }
     }

@@ -9,12 +9,11 @@ namespace ERHMS.Test.Utility
         [Test]
         public void GetCensoredConnectionStringTest()
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+            string connectionString = new SqlConnectionStringBuilder
             {
                 UserID = "jdoe",
                 Password = "1234"
-            };
-            string connectionString = builder.GetCensoredConnectionString();
+            }.GetCensoredConnectionString();
             StringAssert.Contains("jdoe", connectionString);
             StringAssert.DoesNotContain("1234", connectionString);
         }

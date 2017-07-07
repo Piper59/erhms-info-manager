@@ -45,11 +45,22 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             if (ProjectExplorer.IsProjectLoaded)
             {
-                ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "CloseCurrentProject");
+                new Invoker
+                {
+                    Object = this,
+                    DeclaringType = typeof(MakeViewMainForm),
+                    MethodName = "CloseCurrentProject"
+                }.Invoke();
             }
             try
             {
-                ReflectionExtensions.Invoke(this, typeof(MakeViewMainForm), "OpenProject", new Type[] { typeof(Epi.Project) }, new object[] { project });
+                new Invoker
+                {
+                    Object = this,
+                    DeclaringType = typeof(MakeViewMainForm),
+                    MethodName = "OpenProject",
+                    ArgTypes = new Type[] { typeof(Epi.Project) }
+                }.Invoke(project);
             }
             catch (TargetInvocationException ex)
             {

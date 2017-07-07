@@ -1,34 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ERHMS.Utility
 {
     public static class StringExtensions
     {
-        private const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
         private static readonly Regex NewLinePattern = new Regex(@"\r\n|(?<!\r)\n|\r(?!\n)");
 
         public static bool EqualsIgnoreCase(this string @this, string value)
         {
-            return string.Equals(@this, value, IgnoreCase);
+            return string.Equals(@this, value, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool ContainsIgnoreCase(this string @this, string value)
         {
-            return @this.IndexOf(value, IgnoreCase) >= 0;
+            return @this.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         public static bool ContainsIgnoreCase(this IEnumerable<string> @this, string value)
         {
-            foreach (string item in @this)
-            {
-                if (string.Equals(item, value, IgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return @this.Contains(value, StringComparer.OrdinalIgnoreCase);
         }
 
         public static string Strip(this string @this, Regex pattern)
@@ -52,10 +45,10 @@ namespace ERHMS.Utility
             {
                 for (int count = 2; ; count++)
                 {
-                    string value = string.Format(format, @this, count);
-                    if (!exists(value))
+                    string result = string.Format(format, @this, count);
+                    if (!exists(result))
                     {
-                        return value;
+                        return result;
                     }
                 }
             }

@@ -18,15 +18,15 @@ namespace ERHMS.Test.EpiInfo
         public void OneTimeSetUp()
         {
             directory = new TempDirectory(GetType().Name);
-            ConfigurationExtensions.Create(directory.Path).Save();
+            ConfigurationExtensions.Create(directory.FullName).Save();
             configuration = ConfigurationExtensions.Load();
             configuration.CreateUserDirectories();
             string location = Path.Combine(configuration.Directories.Project, "Sample");
             Directory.CreateDirectory(location);
             string projectPath = Path.Combine(location, "Sample.prj");
             Assembly assembly = Assembly.GetExecutingAssembly();
-            assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.prj", projectPath);
-            assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.mdb", Path.ChangeExtension(projectPath, ".mdb"));
+            assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", projectPath);
+            assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.mdb", Path.ChangeExtension(projectPath, ".mdb"));
             ProjectInfo.Get(projectPath).SetAccessConnectionString();
             project = new Project(projectPath);
         }

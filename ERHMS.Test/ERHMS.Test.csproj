@@ -147,6 +147,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlClientExtensions.cs" />
     <Compile Include="TempDirectory.cs" />
+    <Compile Include="TempFile.cs" />
     <Compile Include="Utility\AssemblyExtensionsTest.cs" />
     <Compile Include="Utility\AttributeExtensionsTest.cs" />
     <Compile Include="Utility\ConvertExtensionsTest.cs" />
@@ -155,27 +156,27 @@
     <Compile Include="Utility\DynamicExtensionsTest.cs" />
     <Compile Include="Utility\EnumerableExtensionsTest.cs" />
     <Compile Include="Utility\EnumExtensionsTest.cs" />
+    <Compile Include="Utility\InvokerTest.cs" />
     <Compile Include="Utility\IOExtensionsTest.cs" />
     <Compile Include="Utility\LogTest.cs" />
     <Compile Include="Utility\MailExtensionsTest.cs" />
     <Compile Include="Utility\ObjectExtensionsTest.cs" />
-    <Compile Include="Utility\ReflectionExtensionsTest.cs" />
     <Compile Include="Utility\StringExtensionsTest.cs" />
     <Compile Include="Utility\XmlExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ADDFull\Project.xml" />
-    <EmbeddedResource Include="Resources\ADDFull\View.xml" />
     <EmbeddedResource Include="Resources\Empty.mdb" />
     <EmbeddedResource Include="Resources\Message.txt" />
     <EmbeddedResource Include="Resources\People.xml" />
     <EmbeddedResource Include="Resources\Person.sql" />
-    <EmbeddedResource Include="Resources\SampleSurveillance.cvs7" />
-    <EmbeddedResource Include="Resources\Sample.mdb" />
-    <EmbeddedResource Include="Resources\Sample.prj" />
-    <EmbeddedResource Include="Resources\Surveillance\All.csv" />
-    <EmbeddedResource Include="Resources\Surveillance\Append.csv" />
-    <EmbeddedResource Include="Resources\Surveillance\Update.csv" />
+    <EmbeddedResource Include="Resources\Sample\ADDFull\Project.xml" />
+    <EmbeddedResource Include="Resources\Sample\ADDFull\View.xml" />
+    <EmbeddedResource Include="Resources\Sample\SampleSurveillance.cvs7" />
+    <EmbeddedResource Include="Resources\Sample\Sample.mdb" />
+    <EmbeddedResource Include="Resources\Sample\Sample.prj" />
+    <EmbeddedResource Include="Resources\Sample\Surveillance\All.csv" />
+    <EmbeddedResource Include="Resources\Sample\Surveillance\Append.csv" />
+    <EmbeddedResource Include="Resources\Sample\Surveillance\Update.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

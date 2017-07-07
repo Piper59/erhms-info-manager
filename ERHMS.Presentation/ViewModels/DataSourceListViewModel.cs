@@ -40,7 +40,7 @@ namespace ERHMS.Presentation.ViewModels
         protected override IEnumerable<ProjectInfo> GetItems()
         {
             ICollection<ProjectInfo> items = new List<ProjectInfo>();
-            foreach (string path in Settings.Default.DataSources.ToList())
+            foreach (string path in Settings.Default.DataSourcePaths.ToList())
             {
                 ProjectInfo projectInfo;
                 if (ProjectInfo.TryRead(path, out projectInfo))

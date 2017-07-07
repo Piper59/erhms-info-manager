@@ -8,8 +8,6 @@ using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
-    using IOPath = Path;
-
     public class TemplateInfo
     {
         public const string FileExtension = ".xml";
@@ -17,7 +15,7 @@ namespace ERHMS.EpiInfo
         public static string GetPath(TemplateLevel level, string templateName)
         {
             Configuration configuration = Configuration.GetNewInstance();
-            return IOPath.Combine(configuration.Directories.Templates, level.ToDirectoryName(), templateName + FileExtension);
+            return System.IO.Path.Combine(configuration.Directories.Templates, level.ToDirectoryName(), templateName + FileExtension);
         }
 
         public static bool TryRead(string path, out TemplateInfo result)
@@ -72,7 +70,7 @@ namespace ERHMS.EpiInfo
         {
             if (element.Name != "Template" || !element.HasAllAttributes("Name", "Description", "Level"))
             {
-                throw new ArgumentException("Element is not a valid template.");
+                throw new ArgumentException("Element is not a valid template.", nameof(element));
             }
             Path = path;
             Name = element.GetAttribute("Name");

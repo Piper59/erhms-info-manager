@@ -15,23 +15,24 @@ namespace ERHMS.Test.Utility
         }
 
         [Test]
-        public void Base64StringTest()
+        public void ToAndFromBase64StringTest()
         {
+            Assert.AreEqual("", ConvertExtensions.ToBase64String(null));
+            Assert.AreEqual(null, ConvertExtensions.FromBase64String(""));
             Person original = new Person
             {
                 Name = "John Doe",
                 Age = 20,
                 Male = true
             };
-            string value = ConvertExtensions.ToBase64String(original);
-            Person converted = (Person)ConvertExtensions.FromBase64String(value);
-            Assert.AreEqual("John Doe", converted.Name);
-            Assert.AreEqual(20, converted.Age);
-            Assert.AreEqual(true, converted.Male);
+            Person converted = (Person)ConvertExtensions.FromBase64String(ConvertExtensions.ToBase64String(original));
+            Assert.AreEqual(original.Name, converted.Name);
+            Assert.AreEqual(original.Age, converted.Age);
+            Assert.AreEqual(original.Male, converted.Male);
         }
 
         [Test]
-        public void NullableGuidTest()
+        public void ToNullableGuidTest()
         {
             Assert.IsNull(ConvertExtensions.ToNullableGuid(null));
             Assert.IsNull(ConvertExtensions.ToNullableGuid(""));

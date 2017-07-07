@@ -17,7 +17,7 @@ namespace ERHMS.Test.DataAccess
         public void OneTimeSetUp()
         {
             directory = new TempDirectory(nameof(SampleDataContextTest));
-            ConfigurationExtensions.Create(directory.Path).Save();
+            ConfigurationExtensions.Create(directory.FullName).Save();
             Configuration configuration = ConfigurationExtensions.Load();
             configuration.CreateUserDirectories();
             dataContext = SampleDataContext.Create();

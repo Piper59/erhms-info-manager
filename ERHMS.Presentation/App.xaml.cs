@@ -40,7 +40,7 @@ namespace ERHMS.Presentation
         {
             try
             {
-                Log.SetLevelName(Settings.Default.LogLevel);
+                Log.SetLevelName(Settings.Default.LogLevelName);
                 Log.Logger.Debug("Starting up");
                 App app = new App();
                 app.DispatcherUnhandledException += (sender, e) =>
@@ -193,9 +193,9 @@ namespace ERHMS.Presentation
                     Settings.Default.Save();
                 }
             }
-            if (!File.Exists(ConfigurationExtensions.FilePath) && File.Exists(Settings.Default.ConfigurationFile))
+            if (!File.Exists(ConfigurationExtensions.FilePath) && File.Exists(Settings.Default.ConfigurationFilePath))
             {
-                File.Copy(Settings.Default.ConfigurationFile, ConfigurationExtensions.FilePath);
+                File.Copy(Settings.Default.ConfigurationFilePath, ConfigurationExtensions.FilePath);
             }
             Configuration configuration;
             if (!ConfigurationExtensions.TryLoad(out configuration) || !Directory.Exists(configuration.Directories.Project))
@@ -226,7 +226,7 @@ namespace ERHMS.Presentation
                                     if (!SampleDataContext.Exists())
                                     {
                                         DataContext sampleDataContext = SampleDataContext.Create();
-                                        Settings.Default.DataSources.Add(sampleDataContext.Project.FilePath);
+                                        Settings.Default.DataSourcePaths.Add(sampleDataContext.Project.FilePath);
                                         Settings.Default.Save();
                                     }
                                 }
@@ -251,7 +251,7 @@ namespace ERHMS.Presentation
                     }
                 }
             }
-            Settings.Default.ConfigurationFile = ConfigurationExtensions.FilePath;
+            Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
             return true;
         }

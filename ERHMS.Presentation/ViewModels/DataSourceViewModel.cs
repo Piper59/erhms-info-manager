@@ -74,14 +74,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public static void AddDataSource(string path)
         {
-            Settings.Default.DataSources.Add(path);
+            Settings.Default.DataSourcePaths.Add(path);
             Settings.Default.Save();
             Messenger.Default.Send(new RefreshMessage<ProjectInfo>());
         }
 
         public static void RemoveDataSource(string path)
         {
-            Settings.Default.DataSources.RemoveWhere(dataSource => dataSource.EqualsIgnoreCase(path));
+            Settings.Default.DataSourcePaths.RemoveWhere(dataSource => dataSource.EqualsIgnoreCase(path));
             Settings.Default.Save();
             Messenger.Default.Send(new RefreshMessage<ProjectInfo>());
         }

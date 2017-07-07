@@ -1,5 +1,7 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System;
+using System.Collections.ObjectModel;
 
 namespace ERHMS.Test.Utility
 {
@@ -7,6 +9,12 @@ namespace ERHMS.Test.Utility
     {
         private class Person
         {
+            private static readonly ReadOnlyCollection<Func<Person, object>> Identifiers = new Func<Person, object>[]
+            {
+                @this => @this.FirstName,
+                @this => @this.LastName
+            }.AsReadOnly();
+
             public string FirstName { get; set; }
             public string LastName { get; set; }
 
@@ -20,21 +28,33 @@ namespace ERHMS.Test.Utility
 
             public override int GetHashCode()
             {
-                return ObjectExtensions.GetHashCode(FirstName, LastName);
+                return ObjectExtensions.GetHashCode(this, Identifiers);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return ObjectExtensions.Equals(this, obj, Identifiers);
             }
         }
 
         [Test]
-        public void GetHashCodeTest()
+        public void GetHashCodeAndEqualsTest()
         {
-            Person person1 = new Person();
-            Person person2 = new Person();
+            Person person1 = null;
+            Person person2 = null;
+            Assert.IsTrue(Equals(person1, person2));
+            person1 = new Person();
+            Assert.IsFalse(person1.Equals(person2));
+            person2 = new Person();
             Assert.AreEqual(person1.GetHashCode(), person2.GetHashCode());
+            Assert.IsTrue(person1.Equals(person2));
             person1 = new Person("John", "Doe");
             person2 = new Person("John", "Doe");
             Assert.AreEqual(person1.GetHashCode(), person2.GetHashCode());
+            Assert.IsTrue(person1.Equals(person2));
             person2.FirstName = "Jane";
             Assert.AreNotEqual(person1.GetHashCode(), person2.GetHashCode());
+            Assert.IsFalse(person1.Equals(person2));
         }
     }
 }

@@ -25,7 +25,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             Canvas canvas = new Canvas
             {
                 Name = "SampleSurveillance",
-                Content = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.SampleSurveillance.cvs7")
+                Content = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Sample.SampleSurveillance.cvs7")
             };
             canvas.SetProjectPath(project.FilePath);
             project.InsertCanvas(canvas);

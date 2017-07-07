@@ -154,7 +154,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Settings";
             LogLevels = Log.LevelNames.ToList();
-            LogLevel = Settings.Default.LogLevel;
+            LogLevel = Settings.Default.LogLevelName;
             Configuration configuration = Configuration.GetNewInstance();
             rootDirectoryInit = new DirectoryInfo(configuration.Directories.Project).Parent.FullName;
             RootDirectory = rootDirectoryInit;
@@ -162,12 +162,12 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Host = Settings.Default.EmailHost,
                 Port = Settings.Default.EmailPort,
-                Ssl = Settings.Default.EmailSsl,
-                Sender = Settings.Default.EmailSender,
+                Ssl = Settings.Default.EmailEnableSsl,
+                Sender = Settings.Default.EmailFrom,
                 Password = ConfigurationExtensions.DecryptSafe(Settings.Default.EmailPassword)
             };
             AddDirtyCheck(EmailSettings);
-            MapLicenseKey = Settings.Default.MapLicenseKey;
+            MapLicenseKey = Settings.Default.MapApplicationId;
             WebSurveySettings = new WebSurveySettingsViewModel
             {
                 Address = configuration.Settings.WebServiceEndpointAddress,
@@ -236,13 +236,13 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            Settings.Default.LogLevel = LogLevel;
+            Settings.Default.LogLevelName = LogLevel;
             Settings.Default.EmailHost = EmailSettings.Host;
             Settings.Default.EmailPort = EmailSettings.Port;
-            Settings.Default.EmailSsl = EmailSettings.Ssl;
-            Settings.Default.EmailSender = EmailSettings.Sender;
+            Settings.Default.EmailEnableSsl = EmailSettings.Ssl;
+            Settings.Default.EmailFrom = EmailSettings.Sender;
             Settings.Default.EmailPassword = ConfigurationExtensions.EncryptSafe(EmailSettings.Password);
-            Settings.Default.MapLicenseKey = MapLicenseKey;
+            Settings.Default.MapApplicationId = MapLicenseKey;
             Configuration configuration = Configuration.GetNewInstance();
             configuration.Settings.WebServiceEndpointAddress = WebSurveySettings.Address;
             configuration.Settings.WebServiceAuthMode = WebSurveySettings.WindowsAuthentication ? 1 : 0;
@@ -255,12 +255,12 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     IOExtensions.CopyDirectory(rootDirectoryInit, RootDirectory);
                     configuration.SetUserDirectories(RootDirectory);
-                    ICollection<string> paths = Settings.Default.DataSources.ToList();
-                    Settings.Default.DataSources.Clear();
+                    ICollection<string> paths = Settings.Default.DataSourcePaths.ToList();
+                    Settings.Default.DataSourcePaths.Clear();
                     Regex rootDirectoryInitPattern = new Regex("^" + Regex.Escape(rootDirectoryInit), RegexOptions.IgnoreCase);
                     foreach (string path in paths)
                     {
-                        Settings.Default.DataSources.Add(rootDirectoryInitPattern.Replace(path, RootDirectory));
+                        Settings.Default.DataSourcePaths.Add(rootDirectoryInitPattern.Replace(path, RootDirectory));
                     }
                 }
                 catch (Exception ex)
@@ -283,7 +283,7 @@ namespace ERHMS.Presentation.ViewModels
             Dirty = false;
             if (RootDirectory.EqualsIgnoreCase(rootDirectoryInit))
             {
-                Log.SetLevelName(Settings.Default.LogLevel);
+                Log.SetLevelName(Settings.Default.LogLevelName);
                 ConfigurationExtensions.Load();
                 Messenger.Default.Send(new ToastMessage
                 {

@@ -8,23 +8,34 @@ namespace ERHMS.Utility
     {
         public static string Serialize(object value)
         {
-            IDictionary<string, object> properties = new Dictionary<string, object>();
-            foreach (PropertyInfo property in value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            IDictionary<string, object> properties = value as IDictionary<string, object>;
+            if (properties == null)
             {
-                properties.Add(property.Name, property.GetValue(value, null));
+                properties = new Dictionary<string, object>();
+                foreach (PropertyInfo property in value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    if (property.GetIndexParameters().Length > 0)
+                    {
+                        continue;
+                    }
+                    properties.Add(property.Name, property.GetValue(value, null));
+                }
+            }
+            else
+            {
+                properties = new Dictionary<string, object>(properties);
             }
             return ConvertExtensions.ToBase64String(properties);
         }
 
         public static ExpandoObject Deserialize(string value)
         {
-            ExpandoObject expandoObj = new ExpandoObject();
-            IDictionary<string, object> properties = (IDictionary<string, object>)ConvertExtensions.FromBase64String(value);
-            foreach (KeyValuePair<string, object> property in properties)
+            IDictionary<string, object> result = new ExpandoObject();
+            foreach (KeyValuePair<string, object> property in (IDictionary<string, object>)ConvertExtensions.FromBase64String(value))
             {
-                ((IDictionary<string, object>)expandoObj).Add(property.Key, property.Value);
+                result.Add(property.Key, property.Value);
             }
-            return expandoObj;
+            return (ExpandoObject)result;
         }
     }
 }

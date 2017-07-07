@@ -31,7 +31,7 @@ namespace ERHMS.Test.EpiInfo
         public void OneTimeSetUp()
         {
             directory = new TempDirectory(nameof(ProjectTestBase));
-            ConfigurationExtensions.Create(directory.Path).Save();
+            ConfigurationExtensions.Create(directory.FullName).Save();
             configuration = ConfigurationExtensions.Load();
             configuration.CreateUserDirectories();
         }

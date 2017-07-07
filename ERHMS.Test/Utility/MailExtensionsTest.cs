@@ -8,9 +8,9 @@ namespace ERHMS.Test.Utility
     public class MailExtensionsTest
     {
         [Test]
-        public void IsValidAddressTestValid()
+        public void IsValidAddressTest()
         {
-            ICollection<string> addresses = new string[]
+            IsValidAddressTest(true, new string[]
             {
                 "prettyandsimple@example.com",
                 "very.common@example.com",
@@ -30,14 +30,8 @@ namespace ERHMS.Test.Utility
                 "user@localserver",
                 "user@tt",
                 "user@[IPv6:2001:DB8::1]"
-            };
-            IsValidAddressTest(addresses, true);
-        }
-
-        [Test]
-        public void IsValidAddressTestInvalid()
-        {
-            ICollection<string> addresses = new string[]
+            });
+            IsValidAddressTest(false, new string[]
             {
                 "Abc.example.com",
                 "A@b@c@example.com",
@@ -51,11 +45,10 @@ namespace ERHMS.Test.Utility
                 "john.doe@example..com",
                 " john.doe@example.com",
                 "john.doe@example.com "*/
-            };
-            IsValidAddressTest(addresses, false);
+            });
         }
 
-        private void IsValidAddressTest(IEnumerable<string> addresses, bool expected)
+        private void IsValidAddressTest(bool expected, IEnumerable<string> addresses)
         {
             foreach (string address in addresses)
             {

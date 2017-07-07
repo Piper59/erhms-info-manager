@@ -9,69 +9,64 @@ namespace ERHMS.Utility
     {
         public string Version { get; set; }
         public bool LicenseAccepted { get; set; }
-        public string ConfigurationFile { get; set; }
-        public string LogLevel { get; set; }
-        public HashSet<string> DataSources { get; set; }
+        public string ConfigurationFilePath { get; set; }
+        public string LogLevelName { get; set; }
         public string EmailHost { get; set; }
         public int? EmailPort { get; set; }
-        public bool EmailSsl { get; set; }
-        public string EmailSender { get; set; }
+        public bool EmailEnableSsl { get; set; }
+        public string EmailFrom { get; set; }
         public string EmailPassword { get; set; }
-        public string MapLicenseKey { get; set; }
+        public string MapApplicationId { get; set; }
         public string OrganizationName { get; set; }
         public string OrganizationKey { get; set; }
-
-        public Settings()
-        {
-            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            LicenseAccepted = false;
-            ConfigurationFile = null;
-            Reset();
-        }
+        public HashSet<string> DataSourcePaths { get; set; }
 
         public void Reset()
         {
-            LogLevel = "DEBUG";
-            DataSources = new HashSet<string>();
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            LicenseAccepted = false;
+            ConfigurationFilePath = null;
+            LogLevelName = "DEBUG";
             EmailHost = null;
             EmailPort = 25;
-            EmailSsl = false;
-            EmailSender = null;
+            EmailEnableSsl = false;
+            EmailFrom = null;
             EmailPassword = null;
-            MapLicenseKey = "Aua5s8kFcEZMx5lsd8Vkerz3frboU1CwzvOyzX_vgSnzsnbqV7xlQ4WTRUlN19_Q";
+            MapApplicationId = "Aua5s8kFcEZMx5lsd8Vkerz3frboU1CwzvOyzX_vgSnzsnbqV7xlQ4WTRUlN19_Q";
             OrganizationName = null;
             OrganizationKey = null;
+            DataSourcePaths = new HashSet<string>();
         }
 
         public bool IsEmailConfigured()
         {
-            return !string.IsNullOrWhiteSpace(EmailHost) && EmailPort.HasValue && MailExtensions.IsValidAddress(EmailSender);
+            return !string.IsNullOrWhiteSpace(EmailHost) && EmailPort.HasValue && MailExtensions.IsValidAddress(EmailFrom);
         }
 
         public SmtpClient GetSmtpClient()
         {
-            SmtpClient client = new SmtpClient(EmailHost, EmailPort.Value)
+            SmtpClient smtpClient = new SmtpClient(EmailHost, EmailPort.Value)
             {
-                EnableSsl = EmailSsl,
+                EnableSsl = EmailEnableSsl,
                 DeliveryMethod = SmtpDeliveryMethod.Network
             };
             if (string.IsNullOrEmpty(EmailPassword))
             {
-                client.UseDefaultCredentials = true;
+                smtpClient.UseDefaultCredentials = true;
             }
             else
             {
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(EmailSender, EmailPassword);
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = new NetworkCredential(EmailFrom, EmailPassword);
             }
-            return client;
+            return smtpClient;
         }
 
         public MailMessage GetMailMessage()
         {
             return new MailMessage
             {
-                From = new MailAddress(EmailSender)
+                From = new MailAddress(EmailFrom)
             };
         }
     }

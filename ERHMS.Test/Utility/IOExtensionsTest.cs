@@ -1,7 +1,6 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -12,35 +11,29 @@ namespace ERHMS.Test.Utility
         [Test]
         public void GetTempFileNameTest()
         {
-            string path1 = null;
-            string path2 = null;
+            GetTempFileNameTest("temp_{0:N}.txt");
+            GetTempFileNameTest("{1}{0:N}{2}", "temp_", ".txt");
+        }
+
+        private void GetTempFileNameTest(string format, params object[] args)
+        {
+            string path = null;
             try
             {
-                path1 = IOExtensions.GetTempFileName("temp_{0:N}.txt");
-                path2 = IOExtensions.GetTempFileName("{1}{0:N}{2}", "temp_", ".txt");
-                GetTempFileNameTest(path1);
-                GetTempFileNameTest(path2);
+                path = IOExtensions.GetTempFileName(format, args);
+                FileInfo file = new FileInfo(path);
+                FileAssert.Exists(file);
+                Assert.LessOrEqual(DateTime.Now - file.CreationTime, TimeSpan.FromSeconds(1.0));
+                Assert.AreEqual(0, file.Length);
+                StringAssert.IsMatch(@"^temp_[0-9a-f]{32}\.txt$", file.Name);
             }
             finally
             {
-                if (path1 != null)
+                if (path != null)
                 {
-                    File.Delete(path1);
-                }
-                if (path2 != null)
-                {
-                    File.Delete(path2);
+                    File.Delete(path);
                 }
             }
-        }
-
-        private void GetTempFileNameTest(string path)
-        {
-            FileInfo file = new FileInfo(path);
-            FileAssert.Exists(file);
-            Assert.LessOrEqual(DateTime.Now - file.CreationTime, TimeSpan.FromSeconds(1.0));
-            Assert.AreEqual(0, file.Length);
-            StringAssert.IsMatch(@"^temp_[0-9a-f]{32}\.txt$", file.Name);
         }
 
         private void CreateFiles(TempDirectory directory)
@@ -54,30 +47,29 @@ namespace ERHMS.Test.Utility
         [Test]
         public void CopyDirectoryTest()
         {
-            using (TempDirectory directory1 = new TempDirectory(nameof(CopyDirectoryTest) + "1"))
-            using (TempDirectory directory2 = new TempDirectory(nameof(CopyDirectoryTest) + "2"))
+            using (TempDirectory original = new TempDirectory(nameof(CopyDirectoryTest)))
+            using (TempDirectory copy = new TempDirectory(nameof(CopyDirectoryTest) + "Copy"))
             {
-                CreateFiles(directory1);
-                IOExtensions.CopyDirectory(directory1.Path, directory2.Path);
-                FileAssert.Exists(directory2.CombinePaths("file1.txt"));
-                FileAssert.Exists(directory2.CombinePaths("file2.csv"));
-                FileAssert.Exists(directory2.CombinePaths("subdirectory", "file3.txt"));
-                FileAssert.Exists(directory2.CombinePaths("subdirectory", "file4.csv"));
+                CreateFiles(original);
+                IOExtensions.CopyDirectory(original.FullName, copy.FullName);
+                FileAssert.Exists(copy.CombinePaths("file1.txt"));
+                FileAssert.Exists(copy.CombinePaths("file2.csv"));
+                FileAssert.Exists(copy.CombinePaths("subdirectory", "file3.txt"));
+                FileAssert.Exists(copy.CombinePaths("subdirectory", "file4.csv"));
             }
         }
 
         [Test]
-        public void SearchTest()
+        public void SearchByExtensionTest()
         {
-            using (TempDirectory directory = new TempDirectory(nameof(SearchTest)))
+            using (TempDirectory directory = new TempDirectory(nameof(SearchByExtensionTest)))
             {
                 CreateFiles(directory);
-                ICollection<string> paths = new string[]
+                CollectionAssert.AreEquivalent(new string[]
                 {
                     directory.CombinePaths("file1.txt"),
                     directory.CombinePaths("subdirectory", "file3.txt")
-                };
-                CollectionAssert.AreEqual(paths, new DirectoryInfo(directory.Path).SearchByExtension(".txt").Select(file => file.FullName));
+                }, new DirectoryInfo(directory.FullName).SearchByExtension(".txt").Select(file => file.FullName));
             }
         }
     }

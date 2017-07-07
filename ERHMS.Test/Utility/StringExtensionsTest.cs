@@ -11,7 +11,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void EqualsIgnoreCaseTest()
         {
-            Assert.IsTrue("string".EqualsIgnoreCase("STRING"));
+            Assert.IsTrue("test".EqualsIgnoreCase("TEST"));
             Assert.IsTrue(StringExtensions.EqualsIgnoreCase(null, null));
         }
 
@@ -19,7 +19,7 @@ namespace ERHMS.Test.Utility
         public void ContainsIgnoreCaseTest()
         {
             Assert.IsTrue("Hello, world!".ContainsIgnoreCase("WORLD"));
-            Assert.IsTrue("ONE TWO THREE".Split().ContainsIgnoreCase("two"));
+            Assert.IsTrue("one two three".Split().ContainsIgnoreCase("TWO"));
         }
 
         [Test]
@@ -27,18 +27,26 @@ namespace ERHMS.Test.Utility
         {
             Assert.AreEqual("abcdef", "123abc456def".Strip(new Regex(@"[0-9]")));
             Assert.AreEqual("abcdefghij", "a!b@c#d$e%f^g&h*i(j)".Strip(new Regex(@"[^a-z]")));
-            Assert.AreEqual("abcdef", "   abcdef".Strip(new Regex(@"^[^a-z]+")));
+            Assert.AreEqual("abcdef   ", "   abcdef   ".Strip(new Regex(@"^[^a-z]+")));
+        }
+
+        private string GetMultiLineString(string newLine)
+        {
+            return string.Format("Line 1{0}Line 2{0}{0}Line 3{0}{0}{0}Line 4", newLine);
+        }
+
+        private IEnumerable<string> GetMultiLineStrings()
+        {
+            yield return GetMultiLineString("\r\n");
+            yield return GetMultiLineString("\n");
+            yield return GetMultiLineString("\r");
+            yield return "Line 1\r\nLine 2\r\n\nLine 3\r\n\n\rLine 4";
         }
 
         [Test]
         public void SplitLinesTest()
         {
-            string format = "Line 1{0}Line 2{0}{0}Line 3{0}{0}{0}Line 4";
-            string windows = string.Format(format, "\r\n");
-            string unix = string.Format(format, "\n");
-            string mac = string.Format(format, "\r");
-            string mixed = "Line 1\r\nLine 2\r\n\nLine 3\r\n\n\rLine 4";
-            ICollection<string> expected = new string[]
+            ICollection<string> lines = new string[]
             {
                 "Line 1",
                 "Line 2",
@@ -48,25 +56,20 @@ namespace ERHMS.Test.Utility
                 "",
                 "Line 4"
             };
-            CollectionAssert.AreEqual(expected, windows.SplitLines());
-            CollectionAssert.AreEqual(expected, unix.SplitLines());
-            CollectionAssert.AreEqual(expected, mac.SplitLines());
-            CollectionAssert.AreEqual(expected, mixed.SplitLines());
+            foreach (string multiLineString in GetMultiLineStrings())
+            {
+                CollectionAssert.AreEqual(lines, multiLineString.SplitLines());
+            }
         }
 
         [Test]
         public void NormalizeNewLinesTest()
         {
-            string format = "Line 1{0}Line 2{0}{0}Line 3{0}{0}{0}Line 4";
-            string windows = string.Format(format, "\r\n");
-            string unix = string.Format(format, "\n");
-            string mac = string.Format(format, "\r");
-            string mixed = "Line 1\r\nLine 2\r\n\nLine 3\r\n\n\rLine 4";
-            string normalized = string.Format(format, Environment.NewLine);
-            Assert.AreEqual(normalized, windows.NormalizeNewLines());
-            Assert.AreEqual(normalized, unix.NormalizeNewLines());
-            Assert.AreEqual(normalized, mac.NormalizeNewLines());
-            Assert.AreEqual(normalized, mixed.NormalizeNewLines());
+            string normalized = GetMultiLineString(Environment.NewLine);
+            foreach (string multiLineString in GetMultiLineStrings())
+            {
+                Assert.AreEqual(normalized, multiLineString.NormalizeNewLines());
+            }
         }
 
         [Test]

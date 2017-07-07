@@ -7,19 +7,19 @@ namespace ERHMS.Utility
 {
     public static class DataExtensions
     {
-        private static bool IsCensored(KeyValuePair<string, object> property)
+        private static bool IsCensorable(KeyValuePair<string, object> property)
         {
             return property.Key.ContainsIgnoreCase("Password") || property.Key.EqualsIgnoreCase("Pwd");
         }
 
-        private static string FormatProperty(KeyValuePair<string, object> property)
+        private static string FormatCensored(KeyValuePair<string, object> property)
         {
-            return string.Format("{0}={1}", property.Key, IsCensored(property) ? "?" : property.Value);
+            return string.Format("{0}={1}", property.Key, IsCensorable(property) ? "?" : property.Value);
         }
 
         public static string GetCensoredConnectionString(this DbConnectionStringBuilder @this)
         {
-            return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => FormatProperty(property)));
+            return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => FormatCensored(property)));
         }
 
         public static bool IsEditable(this DataColumn @this)

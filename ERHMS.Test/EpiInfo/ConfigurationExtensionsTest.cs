@@ -19,7 +19,7 @@ namespace ERHMS.Test.EpiInfo
         {
             using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest)))
             {
-                ConfigurationExtensions.Create(directory.Path).Save();
+                ConfigurationExtensions.Create(directory.FullName).Save();
                 ConfigurationExtensions.Load();
                 Assert.AreEqual("Hello, world!", Configuration.Decrypt(ConfigurationExtensions.EncryptSafe("Hello, world!")));
                 Assert.IsNull(ConfigurationExtensions.EncryptSafe(null));
@@ -31,7 +31,7 @@ namespace ERHMS.Test.EpiInfo
         {
             using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest)))
             {
-                ConfigurationExtensions.Create(directory.Path).Save();
+                ConfigurationExtensions.Create(directory.FullName).Save();
                 ConfigurationExtensions.Load();
                 Assert.AreEqual("Hello, world!", ConfigurationExtensions.DecryptSafe(Configuration.Encrypt("Hello, world!")));
                 Assert.IsNull(ConfigurationExtensions.DecryptSafe(null));
@@ -43,15 +43,15 @@ namespace ERHMS.Test.EpiInfo
         {
             using (TempDirectory directory = new TempDirectory(nameof(CreateAndSaveTest)))
             {
-                Configuration configuration = ConfigurationExtensions.Create(directory.Path);
+                Configuration configuration = ConfigurationExtensions.Create(directory.FullName);
                 FileAssert.DoesNotExist(ConfigurationExtensions.FilePath);
                 configuration.Save();
                 FileAssert.Exists(ConfigurationExtensions.FilePath);
                 XmlDocument document = new XmlDocument();
                 document.Load(ConfigurationExtensions.FilePath);
                 XmlNode directoriesNode = document.SelectSingleNode("/Config/Directories");
-                StringAssert.Contains(directory.Path, directoriesNode.SelectSingleNode("Project").InnerText);
-                StringAssert.Contains(directory.Path, directoriesNode.SelectSingleNode("Templates").InnerText);
+                StringAssert.Contains(directory.FullName, directoriesNode.SelectSingleNode("Project").InnerText);
+                StringAssert.Contains(directory.FullName, directoriesNode.SelectSingleNode("Templates").InnerText);
             }
         }
 
@@ -63,10 +63,10 @@ namespace ERHMS.Test.EpiInfo
                 Configuration configuration;
                 Assert.IsFalse(ConfigurationExtensions.TryLoad(out configuration));
                 Assert.IsNull(configuration);
-                ConfigurationExtensions.Create(directory.Path).Save();
+                ConfigurationExtensions.Create(directory.FullName).Save();
                 Assert.IsTrue(ConfigurationExtensions.TryLoad(out configuration));
-                StringAssert.Contains(directory.Path, configuration.Directories.Project);
-                StringAssert.Contains(directory.Path, configuration.Directories.Templates);
+                StringAssert.Contains(directory.FullName, configuration.Directories.Project);
+                StringAssert.Contains(directory.FullName, configuration.Directories.Templates);
             }
         }
 
@@ -75,7 +75,7 @@ namespace ERHMS.Test.EpiInfo
         {
             using (TempDirectory directory = new TempDirectory(nameof(CreateUserDirectoriesTest)))
             {
-                Configuration configuration = ConfigurationExtensions.Create(directory.Path);
+                Configuration configuration = ConfigurationExtensions.Create(directory.FullName);
                 configuration.CreateUserDirectories();
                 DirectoryAssert.Exists(configuration.Directories.Project);
                 DirectoryAssert.Exists(configuration.Directories.Templates);

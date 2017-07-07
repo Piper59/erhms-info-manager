@@ -34,7 +34,7 @@ namespace ERHMS.EpiInfo
             }
             else
             {
-                throw new ArgumentException(string.Format("Requested value '{0}' was not found.", value));
+                throw new ArgumentException(string.Format("Requested value '{0}' was not found.", value), nameof(value));
             }
         }
 

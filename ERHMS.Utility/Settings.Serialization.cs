@@ -9,8 +9,6 @@ namespace ERHMS.Utility
     {
         public static readonly string FilePath;
 
-        private static XmlSerializer serializer;
-
         public static Settings Default { get; private set; }
 
         static Settings()
@@ -20,22 +18,27 @@ namespace ERHMS.Utility
             string product = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product ?? assembly.GetName().Name;
             string fileName = typeof(Settings).FullName + ".xml";
             FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), company, product, fileName);
-            serializer = new XmlSerializer(typeof(Settings));
-            Default = Load();
+            Load();
         }
 
-        private static Settings Load()
+        private static XmlSerializer GetSerializer()
+        {
+            return new XmlSerializer(typeof(Settings));
+        }
+
+        private static void Load()
         {
             try
             {
                 using (Stream stream = File.OpenRead(FilePath))
                 {
-                    return (Settings)serializer.Deserialize(stream);
+                    Default = (Settings)GetSerializer().Deserialize(stream);
                 }
             }
             catch
             {
-                return new Settings();
+                Default = new Settings();
+                Default.Reset();
             }
         }
 
@@ -44,7 +47,7 @@ namespace ERHMS.Utility
             Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
             using (Stream stream = File.Create(FilePath))
             {
-                serializer.Serialize(stream, this);
+                GetSerializer().Serialize(stream, this);
             }
         }
     }

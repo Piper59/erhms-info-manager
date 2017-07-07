@@ -22,13 +22,23 @@ namespace ERHMS.EpiInfo.Wrappers
         public void InstantiateTemplate(string path)
         {
             Log.Logger.DebugFormat("Instantiating template: {0}", path);
-            ReflectionExtensions.Invoke(@base, "CreateFromTemplate", new Type[] { typeof(string) }, new object[] { path });
+            new Invoker
+            {
+                Object = @base,
+                MethodName = "CreateFromTemplate",
+                ArgTypes = new Type[] { typeof(string) }
+            }.Invoke(path);
         }
 
         public void CreateTemplate(View view, string templateName, string description)
         {
             Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
-            ReflectionExtensions.Invoke(@base, "CreateViewTemplate", new Type[] { typeof(string), typeof(View) }, new object[] { templateName, view });
+            new Invoker
+            {
+                Object = @base,
+                MethodName = "CreateViewTemplate",
+                ArgTypes = new Type[] { typeof(string), typeof(View) }
+            }.Invoke(templateName, view);
             string path = TemplateInfo.GetPath(TemplateLevel.View, templateName);
             XmlDocument document = new XmlDocument();
             document.Load(path);
@@ -39,7 +49,11 @@ namespace ERHMS.EpiInfo.Wrappers
         public string CreateWebTemplate()
         {
             Log.Logger.Debug("Creating web template");
-            return (string)ReflectionExtensions.Invoke(@base, "CreateWebSurveyTemplate");
+            return (string)new Invoker
+            {
+                Object = @base,
+                MethodName = "CreateWebSurveyTemplate"
+            }.Invoke();
         }
     }
 }

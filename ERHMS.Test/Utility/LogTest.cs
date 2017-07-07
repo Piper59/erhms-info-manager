@@ -6,10 +6,10 @@ namespace ERHMS.Test.Utility
 {
     public class LogTest
     {
-        private int GetLineCount(string path)
+        private int GetLineCount()
         {
-            using (Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (StreamReader reader = new StreamReader(stream))
+            using (Stream stream = new FileStream(Log.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (TextReader reader = new StreamReader(stream))
             {
                 int lineCount = 0;
                 while (reader.ReadLine() != null)
@@ -24,38 +24,37 @@ namespace ERHMS.Test.Utility
         public void LoggerTest()
         {
             FileAssert.Exists(Log.FilePath);
-            int lineCount = GetLineCount(Log.FilePath);
-            Log.Logger.Fatal(null);
-            Assert.AreEqual(lineCount + 1, GetLineCount(Log.FilePath));
-            Log.Logger.Fatal(null);
-            Assert.AreEqual(lineCount + 2, GetLineCount(Log.FilePath));
-            Log.Logger.Fatal(null);
-            Assert.AreEqual(lineCount + 3, GetLineCount(Log.FilePath));
+            int lineCount = GetLineCount();
+            Log.Logger.Debug(null);
+            Assert.AreEqual(lineCount + 1, GetLineCount());
+            Log.Logger.Debug(null);
+            Assert.AreEqual(lineCount + 2, GetLineCount());
+            Log.Logger.Debug(null);
+            Assert.AreEqual(lineCount + 3, GetLineCount());
         }
 
         [Test]
-        public void GetAndSetLevelNameTest()
+        public void LevelNameTest()
         {
-            string levelName = Log.GetLevelName();
-            Log.SetLevelName("WARN");
+            string levelName = Log.LevelName;
+            Log.LevelName = "WARN";
             try
             {
-                Assert.AreEqual("WARN", Log.GetLevelName());
-                int lineCount = GetLineCount(Log.FilePath);
+                int lineCount = GetLineCount();
                 Log.Logger.Debug(null);
-                Assert.AreEqual(lineCount, GetLineCount(Log.FilePath));
+                Assert.AreEqual(lineCount, GetLineCount());
                 Log.Logger.Info(null);
-                Assert.AreEqual(lineCount, GetLineCount(Log.FilePath));
+                Assert.AreEqual(lineCount, GetLineCount());
                 Log.Logger.Warn(null);
-                Assert.AreEqual(lineCount + 1, GetLineCount(Log.FilePath));
+                Assert.AreEqual(lineCount + 1, GetLineCount());
                 Log.Logger.Error(null);
-                Assert.AreEqual(lineCount + 2, GetLineCount(Log.FilePath));
+                Assert.AreEqual(lineCount + 2, GetLineCount());
                 Log.Logger.Fatal(null);
-                Assert.AreEqual(lineCount + 3, GetLineCount(Log.FilePath));
+                Assert.AreEqual(lineCount + 3, GetLineCount());
             }
             finally
             {
-                Log.SetLevelName(levelName);
+                Log.LevelName = levelName;
             }
         }
     }

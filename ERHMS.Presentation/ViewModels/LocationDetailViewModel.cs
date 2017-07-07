@@ -88,7 +88,7 @@ namespace ERHMS.Presentation.ViewModels
             };
             AddDirtyCheck(location);
             Refresh();
-            CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapLicenseKey);
+            CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapApplicationId);
             Pins = new ObservableCollection<Coordinates>();
             LocateCommand = new RelayCommand(Locate, HasAddress);
             DropPinCommand = new RelayCommand(DropPin);
@@ -161,7 +161,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Credentials = new Credentials
                 {
-                    ApplicationId = Settings.Default.MapLicenseKey
+                    ApplicationId = Settings.Default.MapApplicationId
                 },
                 Query = Location.Address,
                 Options = new GeocodeOptions

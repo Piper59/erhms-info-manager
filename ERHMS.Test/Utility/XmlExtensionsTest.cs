@@ -29,15 +29,21 @@ namespace ERHMS.Test.Utility
         {
             using (XmlReader reader = XmlReader.Create(GetResource()))
             {
-                XmlElement element;
-                element = reader.ReadNextElement();
-                Assert.AreEqual("people", element.Name);
-                element = reader.ReadNextElement();
-                Assert.AreEqual("johnd", element.GetAttribute("id"));
-                element = reader.ReadNextElement();
-                Assert.AreEqual("janed", element.GetAttribute("id"));
-                element = reader.ReadNextElement();
-                Assert.IsNull(element);
+                Assert.AreEqual("people", reader.ReadNextElement().Name);
+                Assert.AreEqual("johnd", reader.ReadNextElement().GetAttribute("id"));
+                Assert.AreEqual("janed", reader.ReadNextElement().GetAttribute("id"));
+                Assert.IsNull(reader.ReadNextElement());
+            }
+        }
+
+        [Test]
+        public void ReadNextTextTest()
+        {
+            using (XmlReader reader = XmlReader.Create(GetResource()))
+            {
+                Assert.AreEqual("Hello, John!", reader.ReadNextText());
+                Assert.AreEqual("Hello, Jane!", reader.ReadNextText());
+                Assert.IsNull(reader.ReadNextText());
             }
         }
 

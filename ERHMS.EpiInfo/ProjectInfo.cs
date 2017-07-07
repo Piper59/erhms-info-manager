@@ -8,8 +8,6 @@ using System.Xml;
 
 namespace ERHMS.EpiInfo
 {
-    using IOPath = Path;
-
     public class ProjectInfo
     {
         public static bool TryRead(string path, out ProjectInfo result)
@@ -59,7 +57,7 @@ namespace ERHMS.EpiInfo
         {
             if (element.Name != "Project" || !element.HasAllAttributes("name", "description"))
             {
-                throw new ArgumentException("Element is not a valid project.");
+                throw new ArgumentException("Element is not a valid project.", nameof(element));
             }
             Path = path;
             Version version;
@@ -76,7 +74,7 @@ namespace ERHMS.EpiInfo
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
                 Provider = "Microsoft.Jet.OLEDB.4.0",
-                DataSource = IOPath.ChangeExtension(Path, ".mdb")
+                DataSource = System.IO.Path.ChangeExtension(Path, ".mdb")
             };
             XmlDocument document = new XmlDocument();
             document.Load(Path);

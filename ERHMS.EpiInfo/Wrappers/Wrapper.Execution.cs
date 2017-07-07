@@ -16,7 +16,7 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             try
             {
-                Log.SetLevelName(Settings.Default.LogLevel);
+                Log.LevelName = Settings.Default.LogLevelName;
                 Log.Logger.Debug("Starting up");
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
                 {
@@ -34,8 +34,8 @@ namespace ERHMS.EpiInfo.Wrappers
                 int separatorIndex = args[0].LastIndexOf('.');
                 string typeName = args[0].Substring(0, separatorIndex);
                 string methodName = args[0].Substring(separatorIndex + 1);
-                BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-                MethodInfo method = Assembly.GetCallingAssembly().GetType(typeName).GetMethod(methodName, flags);
+                BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+                MethodInfo method = Assembly.GetCallingAssembly().GetType(typeName).GetMethod(methodName, bindingFlags);
                 method.Invoke(null, ReceiveArgs());
                 Log.Logger.Debug("Exiting");
             }
