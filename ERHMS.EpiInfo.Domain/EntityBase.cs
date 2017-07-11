@@ -37,20 +37,20 @@ namespace ERHMS.EpiInfo.Domain
         {
             PropertyChanged?.Invoke(this, e);
         }
-        protected void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged(string name)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            OnPropertyChanged(new PropertyChangedEventArgs(name));
         }
 
-        public bool TryGetProperty(string propertyName, out object value)
+        public bool TryGetProperty(string name, out object value)
         {
-            return properties.TryGetValue(propertyName, out value);
+            return properties.TryGetValue(name, out value);
         }
 
-        public bool TryGetProperty<T>(string propertyName, out T value)
+        public bool TryGetProperty<T>(string name, out T value)
         {
             object obj;
-            if (TryGetProperty(propertyName, out obj))
+            if (TryGetProperty(name, out obj))
             {
                 value = (T)obj;
                 return true;
@@ -62,24 +62,24 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        public object GetProperty(string propertyName)
+        public object GetProperty(string name)
         {
             object value;
-            TryGetProperty(propertyName, out value);
+            TryGetProperty(name, out value);
             return value;
         }
 
-        public T GetProperty<T>(string propertyName)
+        public T GetProperty<T>(string name)
         {
-            return (T)GetProperty(propertyName);
+            return (T)GetProperty(name);
         }
 
-        public bool PropertyEquals(string propertyName, object value)
+        public bool PropertyEquals(string name, object value)
         {
-            object currentValue;
-            if (TryGetProperty(propertyName, out currentValue))
+            object obj;
+            if (TryGetProperty(name, out obj))
             {
-                return Equals(value, currentValue);
+                return Equals(value, obj);
             }
             else
             {
@@ -87,16 +87,16 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        public bool SetProperty(string propertyName, object value)
+        public bool SetProperty(string name, object value)
         {
-            if (PropertyEquals(propertyName, value))
+            if (PropertyEquals(name, value))
             {
                 return false;
             }
             else
             {
-                properties[propertyName] = value;
-                OnPropertyChanged(propertyName);
+                properties[name] = value;
+                OnPropertyChanged(name);
                 return true;
             }
         }
@@ -133,14 +133,14 @@ namespace ERHMS.EpiInfo.Domain
             foreach (KeyValuePair<string, object> property in properties)
             {
                 object value = property.Value;
-                ICloneable cloneableValue = value as ICloneable;
-                if (cloneableValue == null)
+                ICloneable cloneable = value as ICloneable;
+                if (cloneable == null)
                 {
                     clone.SetProperty(property.Key, value);
                 }
                 else
                 {
-                    clone.SetProperty(property.Key, cloneableValue.Clone());
+                    clone.SetProperty(property.Key, cloneable.Clone());
                 }
             }
             return clone;

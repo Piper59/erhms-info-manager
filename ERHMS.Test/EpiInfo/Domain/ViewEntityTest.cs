@@ -11,8 +11,8 @@ namespace ERHMS.Test.EpiInfo.Domain
         [Test]
         public void PropertiesTest()
         {
-            ICollection<string> actual = new List<string>();
             ViewEntity entity = new ViewEntity();
+            ICollection<string> actual = new List<string>();
             entity.PropertyChanged += (sender, e) =>
             {
                 actual.Add(e.PropertyName);
@@ -21,7 +21,7 @@ namespace ERHMS.Test.EpiInfo.Domain
             person.FirstName = "John";
             person.LastName = "Doe";
             entity.SetAuditProperties(true, true);
-            ICollection<string> expected = new HashSet<string>
+            ICollection<string> expected = new List<string>
             {
                 "FirstName",
                 "LastName",
@@ -34,6 +34,12 @@ namespace ERHMS.Test.EpiInfo.Domain
                 ColumnNames.RECORD_LAST_SAVE_LOGON_NAME,
                 ColumnNames.RECORD_LAST_SAVE_TIME
             };
+            CollectionAssert.AreEquivalent(expected, actual);
+            actual.Clear();
+            expected.Clear();
+            person.FirstName = "Jane";
+            person.LastName = "Doe";
+            expected.Add("FirstName");
             CollectionAssert.AreEquivalent(expected, actual);
             Assert.IsFalse(entity.Deleted);
             entity.Deleted = true;
