@@ -12,10 +12,9 @@ namespace ERHMS.EpiInfo
     {
         public const string FileExtension = ".xml";
 
-        public static string GetPath(TemplateLevel level, string templateName)
+        public static string GetPath(TemplateLevel level, string name)
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            return System.IO.Path.Combine(configuration.Directories.Templates, level.ToDirectoryName(), templateName + FileExtension);
+            return Path.Combine(Configuration.GetNewInstance().Directories.Templates, level.ToDirectoryName(), name + FileExtension);
         }
 
         public static bool TryRead(string path, out TemplateInfo result)
@@ -37,21 +36,20 @@ namespace ERHMS.EpiInfo
 
         public static TemplateInfo Get(string path)
         {
-            TemplateInfo templateInfo;
-            TryRead(path, out templateInfo);
-            return templateInfo;
+            TemplateInfo result;
+            TryRead(path, out result);
+            return result;
         }
 
         public static IEnumerable<TemplateInfo> GetAll()
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Templates);
+            DirectoryInfo directory = new DirectoryInfo(Configuration.GetNewInstance().Directories.Templates);
             foreach (FileInfo file in directory.SearchByExtension(FileExtension))
             {
-                TemplateInfo templateInfo;
-                if (TryRead(file.FullName, out templateInfo))
+                TemplateInfo result;
+                if (TryRead(file.FullName, out result))
                 {
-                    yield return templateInfo;
+                    yield return result;
                 }
             }
         }
@@ -61,7 +59,7 @@ namespace ERHMS.EpiInfo
             return GetAll().Where(template => template.Level == level);
         }
 
-        public string Path { get; private set; }
+        public string FilePath { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public TemplateLevel Level { get; private set; }
@@ -72,7 +70,7 @@ namespace ERHMS.EpiInfo
             {
                 throw new ArgumentException("Element is not a valid template.", nameof(element));
             }
-            Path = path;
+            FilePath = path;
             Name = element.GetAttribute("Name");
             Description = element.GetAttribute("Description");
             Level = TemplateLevelExtensions.Parse(element.GetAttribute("Level"));
@@ -80,7 +78,7 @@ namespace ERHMS.EpiInfo
 
         public void Delete()
         {
-            IOExtensions.RecycleFile(Path);
+            IOExtensions.RecycleFile(FilePath);
         }
     }
 }

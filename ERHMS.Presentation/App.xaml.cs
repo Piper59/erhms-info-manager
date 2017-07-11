@@ -40,7 +40,7 @@ namespace ERHMS.Presentation
         {
             try
             {
-                Log.SetLevelName(Settings.Default.LogLevelName);
+                Log.LevelName = Settings.Default.LogLevelName;
                 Log.Logger.Debug("Starting up");
                 App app = new App();
                 app.DispatcherUnhandledException += (sender, e) =>
@@ -235,12 +235,12 @@ namespace ERHMS.Presentation
                             catch (Exception ex)
                             {
                                 Log.Logger.Warn("Failed to initialize root directory", ex);
-                                StringBuilder builder = new StringBuilder();
-                                builder.AppendFormat("{0} failed to initialize the following folder. Please choose another location.", Title);
-                                builder.AppendLine();
-                                builder.AppendLine();
-                                builder.Append(path);
-                                MessageBox.Show(builder.ToString(), Title, MessageBoxButton.OK, MessageBoxImage.Error);
+                                StringBuilder message = new StringBuilder();
+                                message.AppendFormat("{0} failed to initialize the following folder. Please choose another location.", Title);
+                                message.AppendLine();
+                                message.AppendLine();
+                                message.Append(path);
+                                MessageBox.Show(message.ToString(), Title, MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
                         else

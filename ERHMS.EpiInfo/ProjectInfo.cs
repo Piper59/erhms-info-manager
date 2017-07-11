@@ -29,26 +29,25 @@ namespace ERHMS.EpiInfo
 
         public static ProjectInfo Get(string path)
         {
-            ProjectInfo projectInfo;
-            TryRead(path, out projectInfo);
-            return projectInfo;
+            ProjectInfo result;
+            TryRead(path, out result);
+            return result;
         }
 
         public static IEnumerable<ProjectInfo> GetAll()
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.Project);
+            DirectoryInfo directory = new DirectoryInfo(Configuration.GetNewInstance().Directories.Project);
             foreach (FileInfo file in directory.SearchByExtension(Project.FileExtension))
             {
-                ProjectInfo projectInfo;
-                if (TryRead(file.FullName, out projectInfo))
+                ProjectInfo result;
+                if (TryRead(file.FullName, out result))
                 {
-                    yield return projectInfo;
+                    yield return result;
                 }
             }
         }
 
-        public string Path { get; private set; }
+        public string FilePath { get; private set; }
         public Version Version { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
@@ -59,7 +58,7 @@ namespace ERHMS.EpiInfo
             {
                 throw new ArgumentException("Element is not a valid project.", nameof(element));
             }
-            Path = path;
+            FilePath = path;
             Version version;
             if (Version.TryParse(element.GetAttribute("erhmsVersion"), out version))
             {
@@ -71,16 +70,16 @@ namespace ERHMS.EpiInfo
 
         public void SetAccessConnectionString()
         {
+            XmlDocument document = new XmlDocument();
+            document.Load(FilePath);
+            XmlElement element = document.SelectSingleElement("/Project/CollectedData/Database");
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
                 Provider = "Microsoft.Jet.OLEDB.4.0",
-                DataSource = System.IO.Path.ChangeExtension(Path, ".mdb")
+                DataSource = Path.ChangeExtension(FilePath, ".mdb")
             };
-            XmlDocument document = new XmlDocument();
-            document.Load(Path);
-            XmlElement databaseElement = document.SelectSingleElement("/Project/CollectedData/Database");
-            databaseElement.SetAttribute("connectionString", Configuration.Encrypt(builder.ConnectionString));
-            document.Save(Path);
+            element.SetAttribute("connectionString", Configuration.Encrypt(builder.ConnectionString));
+            document.Save(FilePath);
         }
     }
 }

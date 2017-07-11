@@ -44,31 +44,55 @@ namespace ERHMS.Test.Utility
         {
             Counter counter = new Counter();
             Assert.AreEqual(0, counter.Value);
-            new Invoker
-            {
-                Object = counter,
-                MethodName = "Increment"
-            }.Invoke();
+            Increment(counter);
             Assert.AreEqual(1, counter.Value);
-            new Invoker
-            {
-                Object = counter,
-                MethodName = "Increment",
-                ArgTypes = new Type[] { typeof(int) }
-            }.Invoke(2);
+            Increment(counter, 2);
             Assert.AreEqual(3, counter.Value);
-            new Invoker
+            Reset(counter);
+            Assert.AreEqual(0, counter.Value);
+            Assert.AreEqual(1, GetStep());
+        }
+
+        private int GetStep()
+        {
+            Invoker invoker = new Invoker
+            {
+                DeclaringType = typeof(Counter),
+                MethodName = "GetStep"
+            };
+            return (int)invoker.Invoke();
+        }
+
+        private void Reset(Counter counter)
+        {
+            Invoker invoker = new Invoker
             {
                 Object = counter,
                 DeclaringType = typeof(Number),
                 MethodName = "Reset"
-            }.Invoke();
-            Assert.AreEqual(0, counter.Value);
-            Assert.AreEqual(1, new Invoker
+            };
+            invoker.Invoke();
+        }
+
+        private void Increment(Counter counter)
+        {
+            Invoker invoker = new Invoker
             {
-                DeclaringType = typeof(Counter),
-                MethodName = "GetStep"
-            }.Invoke());
+                Object = counter,
+                MethodName = "Increment"
+            };
+            invoker.Invoke();
+        }
+
+        private void Increment(Counter counter, int step)
+        {
+            Invoker invoker = new Invoker
+            {
+                Object = counter,
+                MethodName = "Increment",
+                ArgTypes = new Type[] { typeof(int) }
+            };
+            invoker.Invoke(step);
         }
     }
 }

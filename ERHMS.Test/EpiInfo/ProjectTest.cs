@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Configuration = Epi.Configuration;
 using Project = ERHMS.EpiInfo.Project;
@@ -24,7 +25,7 @@ namespace ERHMS.Test.EpiInfo
     {
         protected TempDirectory directory;
         protected Configuration configuration;
-        protected ProjectCreationInfo creationInfo;
+        protected ProjectCreationInfo info;
         protected Project project;
 
         [OneTimeSetUp]
@@ -54,11 +55,21 @@ namespace ERHMS.Test.EpiInfo
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             Assert.AreEqual(version.ToString(), projectElement.GetAttribute("erhmsVersion"));
             Assert.AreEqual(version, project.Version);
-            Assert.AreEqual(creationInfo.Name, projectElement.GetAttribute("name"));
-            Assert.AreEqual(creationInfo.Location, projectElement.GetAttribute("location"));
+            Assert.AreEqual(info.Name, projectElement.GetAttribute("name"));
+            Assert.AreEqual(info.Location, projectElement.GetAttribute("location"));
             XmlElement databaseElement = projectElement.SelectSingleElement("CollectedData/Database");
-            Assert.AreEqual(creationInfo.Builder.ConnectionString, Configuration.Decrypt(databaseElement.GetAttribute("connectionString")));
+            Assert.AreEqual(info.Builder.ConnectionString, Configuration.Decrypt(databaseElement.GetAttribute("connectionString")));
             Assert.IsTrue(project.Driver.TableExists("metaCanvases"));
+        }
+
+        [Test]
+        public void GetViewsTest()
+        {
+            int count = project.GetViews().Count();
+            string name = "GetViewsTest_View";
+            View view = project.CreateView(name);
+            Assert.AreEqual(count + 1, project.GetViews().Count());
+            Assert.AreEqual(name, project.GetViewById(view.Id).Name);
         }
 
         [Test]
@@ -69,7 +80,7 @@ namespace ERHMS.Test.EpiInfo
             IsValidViewNameTest("", InvalidViewNameReason.Empty);
             IsValidViewNameTest(" ", InvalidViewNameReason.Empty);
             IsValidViewNameTest("IsValidViewNameTest-View", InvalidViewNameReason.InvalidChar);
-            IsValidViewNameTest("_IsValidViewNameTest_View", InvalidViewNameReason.InvalidFirstChar);
+            IsValidViewNameTest("_IsValidViewNameTest_View", InvalidViewNameReason.InvalidBeginning);
             IsValidViewNameTest(new string('A', 65), InvalidViewNameReason.TooLong);
             IsValidViewNameTest("ISVALIDVIEWNAMETEST_VIEW", InvalidViewNameReason.ViewExists);
             IsValidViewNameTest("METADBINFO", InvalidViewNameReason.TableExists);
@@ -84,11 +95,19 @@ namespace ERHMS.Test.EpiInfo
         }
 
         [Test]
+        public void SanitizeNameTest()
+        {
+            Assert.AreEqual("ValidName_View", "ValidName_View");
+            Assert.AreEqual("InvalidName_View", ViewExtensions.SanitizeName("1234_InvalidName_!@#$%^&*()View"));
+        }
+
+        [Test]
         public void SuggestViewNameTest()
         {
-            project.CreateView("SuggestViewNameTest_View");
-            Assert.AreEqual("SUGGESTVIEWNAMETEST_View_2", project.SuggestViewName("1234_SUGGESTVIEWNAMETEST_!@#$%^&*()View"));
+            project.CreateView("SuggestViewNameTest_ViewA");
+            Assert.AreEqual("SUGGESTVIEWNAMETEST_ViewA_2", project.SuggestViewName("1234_SUGGESTVIEWNAMETEST_!@#$%^&*()ViewA"));
             Assert.AreEqual("metaDbInfo_2", project.SuggestViewName("metaDbInfo"));
+            Assert.AreEqual("SuggestViewNameTest_ViewB", project.SuggestViewName("SuggestViewNameTest_ViewB"));
         }
 
         [Test]
@@ -97,7 +116,6 @@ namespace ERHMS.Test.EpiInfo
             View view = project.CreateView("WebSurveyTest_View");
             Assert.IsFalse(view.IsWebSurvey());
             view.WebSurveyId = Guid.Empty.ToString();
-            view.SaveToDb();
             Assert.IsTrue(view.IsWebSurvey());
             configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerServiceV2.svc";
             configuration.Save();
@@ -162,9 +180,9 @@ namespace ERHMS.Test.EpiInfo
                 childView.TableName,
                 childPage.TableName
             };
-            foreach (string tableName in tableNames)
+            foreach (string name in tableNames)
             {
-                Assert.IsTrue(project.Driver.TableExists(tableName), tableName);
+                Assert.IsTrue(project.Driver.TableExists(name), name);
             }
         }
 
@@ -217,11 +235,15 @@ namespace ERHMS.Test.EpiInfo
             Assert.AreEqual(1, project.GetCanvases().Count());
             Canvas retrieved = project.GetCanvasById(original.CanvasId);
             Assert.AreEqual(original, retrieved);
-            retrieved.Content = "";
+            string path = Path.Combine(Path.GetTempPath(), Path.GetFileName(project.FilePath));
+            retrieved.SetProjectPath(path);
             project.UpdateCanvas(retrieved);
             retrieved = project.GetCanvasById(original.CanvasId);
             Assert.AreNotEqual(original, retrieved);
-            Assert.AreEqual("", retrieved.Content);
+            Regex whitespacePattern = new Regex(@"\s+");
+            string expected = original.Content.Strip(whitespacePattern).Replace(project.FilePath, path);
+            string actual = retrieved.Content.Strip(whitespacePattern);
+            Assert.AreEqual(expected, actual);
             project.DeleteCanvas(retrieved);
             Assert.AreEqual(0, project.GetCanvases().Count());
         }
@@ -229,39 +251,38 @@ namespace ERHMS.Test.EpiInfo
 
     public class AccessProjectTest : ProjectTestBase
     {
-        private static Project Create(string projectName, out ProjectCreationInfo creationInfo)
+        private static Project Create(string name, out ProjectCreationInfo info)
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            string location = Path.Combine(configuration.Directories.Project, projectName);
+            string location = Path.Combine(Configuration.GetNewInstance().Directories.Project, name);
             Directory.CreateDirectory(location);
-            string databasePath = Path.Combine(location, projectName + ".mdb");
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", databasePath);
-            creationInfo = new ProjectCreationInfo
+            string dataSource = Path.Combine(location, name + ".mdb");
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", dataSource);
+            info = new ProjectCreationInfo
             {
-                Name = projectName,
+                Name = name,
                 Location = location,
                 Driver = Configuration.AccessDriver,
                 Builder = new OleDbConnectionStringBuilder
                 {
                     Provider = "Microsoft.Jet.OLEDB.4.0",
-                    DataSource = databasePath
+                    DataSource = dataSource
                 },
-                DatabaseName = projectName,
+                DatabaseName = name,
                 Initialize = true
             };
-            return Project.Create(creationInfo);
+            return Project.Create(info);
         }
 
-        public static Project Create(string projectName)
+        public static Project Create(string name)
         {
-            ProjectCreationInfo creationInfo;
-            return Create(projectName, out creationInfo);
+            ProjectCreationInfo info;
+            return Create(name, out info);
         }
 
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            project = Create("AccessTest", out creationInfo);
+            project = Create(nameof(AccessProjectTest), out info);
         }
     }
 
@@ -275,23 +296,23 @@ namespace ERHMS.Test.EpiInfo
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            string projectName = "SqlServerTest";
+            string name = nameof(SqlServerProjectTest);
             builder = new SqlConnectionStringBuilder(ConnectionString)
             {
                 Pooling = false
             };
             SqlClientExtensions.ExecuteMaster(ConnectionString, "CREATE DATABASE {0}", builder.InitialCatalog);
             created = true;
-            creationInfo = new ProjectCreationInfo
+            info = new ProjectCreationInfo
             {
-                Name = projectName,
-                Location = Path.Combine(configuration.Directories.Project, projectName),
+                Name = name,
+                Location = Path.Combine(configuration.Directories.Project, name),
                 Driver = Configuration.SqlDriver,
                 Builder = builder,
                 DatabaseName = builder.InitialCatalog,
                 Initialize = true
             };
-            project = Project.Create(creationInfo);
+            project = Project.Create(info);
         }
 
         [OneTimeTearDown]

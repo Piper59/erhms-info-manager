@@ -8,34 +8,50 @@ namespace ERHMS.Utility
     {
         public static string Serialize(object value)
         {
-            IDictionary<string, object> properties = value as IDictionary<string, object>;
-            if (properties == null)
+            IDictionary<string, object> properties;
+            if (value == null)
             {
-                properties = new Dictionary<string, object>();
-                foreach (PropertyInfo property in value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                {
-                    if (property.GetIndexParameters().Length > 0)
-                    {
-                        continue;
-                    }
-                    properties.Add(property.Name, property.GetValue(value, null));
-                }
+                properties = null;
             }
             else
             {
-                properties = new Dictionary<string, object>(properties);
+                properties = value as IDictionary<string, object>;
+                if (properties == null)
+                {
+                    properties = new Dictionary<string, object>();
+                    foreach (PropertyInfo property in value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        if (property.GetIndexParameters().Length > 0)
+                        {
+                            continue;
+                        }
+                        properties.Add(property.Name, property.GetValue(value, null));
+                    }
+                }
+                else
+                {
+                    properties = new Dictionary<string, object>(properties);
+                }
             }
             return ConvertExtensions.ToBase64String(properties);
         }
 
         public static ExpandoObject Deserialize(string value)
         {
-            IDictionary<string, object> result = new ExpandoObject();
-            foreach (KeyValuePair<string, object> property in (IDictionary<string, object>)ConvertExtensions.FromBase64String(value))
+            IDictionary<string, object> properties = (IDictionary<string, object>)ConvertExtensions.FromBase64String(value);
+            if (properties == null)
             {
-                result.Add(property.Key, property.Value);
+                return null;
             }
-            return (ExpandoObject)result;
+            else
+            {
+                IDictionary<string, object> result = new ExpandoObject();
+                foreach (KeyValuePair<string, object> property in properties)
+                {
+                    result.Add(property.Key, property.Value);
+                }
+                return (ExpandoObject)result;
+            }
         }
     }
 }

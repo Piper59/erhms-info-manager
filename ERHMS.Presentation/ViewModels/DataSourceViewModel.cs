@@ -136,8 +136,7 @@ namespace ERHMS.Presentation.ViewModels
                 DataProvider.Access,
                 DataProvider.SqlServer
             };
-            Configuration configuration = Configuration.GetNewInstance();
-            Location = configuration.Directories.Project;
+            Location = Configuration.GetNewInstance().Directories.Project;
             Provider = DataProvider.Access;
             SqlServerOptions = new SqlServerOptionsViewModel();
             BrowseCommand = new RelayCommand(Browse);

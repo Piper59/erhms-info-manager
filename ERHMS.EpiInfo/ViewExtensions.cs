@@ -22,9 +22,9 @@ namespace ERHMS.EpiInfo
                 reason = InvalidViewNameReason.InvalidChar;
                 return false;
             }
-            else if (!char.IsLetter(viewName[0]))
+            else if (InvalidNameBeginningPattern.IsMatch(viewName))
             {
-                reason = InvalidViewNameReason.InvalidFirstChar;
+                reason = InvalidViewNameReason.InvalidBeginning;
                 return false;
             }
             else if (viewName.Length > 64)
@@ -39,9 +39,9 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static string SanitizeName(string viewName)
+        public static string SanitizeName(string name)
         {
-            return viewName.Strip(InvalidNameCharPattern).Strip(InvalidNameBeginningPattern);
+            return name.Strip(InvalidNameCharPattern).Strip(InvalidNameBeginningPattern);
         }
 
         public static bool IsWebSurvey(this View @this)
@@ -51,8 +51,7 @@ namespace ERHMS.EpiInfo
 
         public static Uri GetWebSurveyUrl(this View @this)
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            Uri endpoint = new Uri(configuration.Settings.WebServiceEndpointAddress);
+            Uri endpoint = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
             return new Uri(endpoint, string.Format("Home/{0}", @this.WebSurveyId));
         }
     }

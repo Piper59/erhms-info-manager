@@ -11,12 +11,12 @@ namespace ERHMS.Test.Utility
             using (Stream stream = new FileStream(Log.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (TextReader reader = new StreamReader(stream))
             {
-                int lineCount = 0;
+                int count = 0;
                 while (reader.ReadLine() != null)
                 {
-                    lineCount++;
+                    count++;
                 }
-                return lineCount;
+                return count;
             }
         }
 
@@ -24,13 +24,13 @@ namespace ERHMS.Test.Utility
         public void LoggerTest()
         {
             FileAssert.Exists(Log.FilePath);
-            int lineCount = GetLineCount();
+            int count = GetLineCount();
             Log.Logger.Debug(null);
-            Assert.AreEqual(lineCount + 1, GetLineCount());
+            Assert.AreEqual(count + 1, GetLineCount());
             Log.Logger.Debug(null);
-            Assert.AreEqual(lineCount + 2, GetLineCount());
+            Assert.AreEqual(count + 2, GetLineCount());
             Log.Logger.Debug(null);
-            Assert.AreEqual(lineCount + 3, GetLineCount());
+            Assert.AreEqual(count + 3, GetLineCount());
         }
 
         [Test]
@@ -40,17 +40,17 @@ namespace ERHMS.Test.Utility
             Log.LevelName = "WARN";
             try
             {
-                int lineCount = GetLineCount();
+                int count = GetLineCount();
                 Log.Logger.Debug(null);
-                Assert.AreEqual(lineCount, GetLineCount());
+                Assert.AreEqual(count, GetLineCount());
                 Log.Logger.Info(null);
-                Assert.AreEqual(lineCount, GetLineCount());
+                Assert.AreEqual(count, GetLineCount());
                 Log.Logger.Warn(null);
-                Assert.AreEqual(lineCount + 1, GetLineCount());
+                Assert.AreEqual(count + 1, GetLineCount());
                 Log.Logger.Error(null);
-                Assert.AreEqual(lineCount + 2, GetLineCount());
+                Assert.AreEqual(count + 2, GetLineCount());
                 Log.Logger.Fatal(null);
-                Assert.AreEqual(lineCount + 3, GetLineCount());
+                Assert.AreEqual(count + 3, GetLineCount());
             }
             finally
             {

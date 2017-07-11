@@ -18,7 +18,7 @@ namespace ERHMS.Test.Utility
         public void ToAndFromBase64StringTest()
         {
             Assert.AreEqual("", ConvertExtensions.ToBase64String(null));
-            Assert.AreEqual(null, ConvertExtensions.FromBase64String(""));
+            Assert.IsNull(ConvertExtensions.FromBase64String(""));
             Person original = new Person
             {
                 Name = "John Doe",

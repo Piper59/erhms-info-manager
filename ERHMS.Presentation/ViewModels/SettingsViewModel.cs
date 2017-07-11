@@ -162,8 +162,8 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Host = Settings.Default.EmailHost,
                 Port = Settings.Default.EmailPort,
-                Ssl = Settings.Default.EmailEnableSsl,
-                Sender = Settings.Default.EmailFrom,
+                Ssl = Settings.Default.EmailUseSsl,
+                Sender = Settings.Default.EmailSender,
                 Password = ConfigurationExtensions.DecryptSafe(Settings.Default.EmailPassword)
             };
             AddDirtyCheck(EmailSettings);
@@ -239,8 +239,8 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.LogLevelName = LogLevel;
             Settings.Default.EmailHost = EmailSettings.Host;
             Settings.Default.EmailPort = EmailSettings.Port;
-            Settings.Default.EmailEnableSsl = EmailSettings.Ssl;
-            Settings.Default.EmailFrom = EmailSettings.Sender;
+            Settings.Default.EmailUseSsl = EmailSettings.Ssl;
+            Settings.Default.EmailSender = EmailSettings.Sender;
             Settings.Default.EmailPassword = ConfigurationExtensions.EncryptSafe(EmailSettings.Password);
             Settings.Default.MapApplicationId = MapLicenseKey;
             Configuration configuration = Configuration.GetNewInstance();
@@ -266,14 +266,14 @@ namespace ERHMS.Presentation.ViewModels
                 catch (Exception ex)
                 {
                     Log.Logger.Warn("Failed to initialize root directory", ex);
-                    StringBuilder builder = new StringBuilder();
-                    builder.AppendFormat("{0} failed to initialize the following folder. Settings have not been saved.", App.Title);
-                    builder.AppendLine();
-                    builder.AppendLine();
-                    builder.Append(RootDirectory);
+                    StringBuilder message = new StringBuilder();
+                    message.AppendFormat("{0} failed to initialize the following folder. Settings have not been saved.", App.Title);
+                    message.AppendLine();
+                    message.AppendLine();
+                    message.Append(RootDirectory);
                     Messenger.Default.Send(new AlertMessage
                     {
-                        Message = builder.ToString()
+                        Message = message.ToString()
                     });
                     return;
                 }
@@ -283,7 +283,7 @@ namespace ERHMS.Presentation.ViewModels
             Dirty = false;
             if (RootDirectory.EqualsIgnoreCase(rootDirectoryInit))
             {
-                Log.SetLevelName(Settings.Default.LogLevelName);
+                Log.LevelName = Settings.Default.LogLevelName;
                 ConfigurationExtensions.Load();
                 Messenger.Default.Send(new ToastMessage
                 {

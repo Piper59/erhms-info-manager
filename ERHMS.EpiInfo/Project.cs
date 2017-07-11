@@ -14,29 +14,29 @@ namespace ERHMS.EpiInfo
     {
         public new const string FileExtension = ".prj";
 
-        public static Project Create(ProjectCreationInfo creationInfo)
+        public static Project Create(ProjectCreationInfo info)
         {
-            Log.Logger.DebugFormat("Creating project: {0}", creationInfo);
-            Directory.CreateDirectory(creationInfo.Location);
+            Log.Logger.DebugFormat("Creating project: {0}", info);
+            Directory.CreateDirectory(info.Location);
             Project project = new Project
             {
                 Id = Guid.NewGuid(),
                 Version = Assembly.GetExecutingAssembly().GetName().Version,
-                Name = creationInfo.Name,
-                Description = creationInfo.Description,
-                Location = creationInfo.Location,
-                CollectedDataDriver = creationInfo.Driver,
-                CollectedDataConnectionString = creationInfo.Builder.ConnectionString
+                Name = info.Name,
+                Description = info.Description,
+                Location = info.Location,
+                CollectedDataDriver = info.Driver,
+                CollectedDataConnectionString = info.Builder.ConnectionString
             };
             project.CollectedDataDbInfo = new DbDriverInfo
             {
-                DBCnnStringBuilder = creationInfo.Builder,
-                DBName = creationInfo.DatabaseName
+                DBCnnStringBuilder = info.Builder,
+                DBName = info.DatabaseName
             };
-            project.CollectedData.Initialize(project.CollectedDataDbInfo, creationInfo.Driver, false);
+            project.CollectedData.Initialize(project.CollectedDataDbInfo, info.Driver, false);
             project.MetadataSource = MetadataSource.SameDb;
             project.Metadata.AttachDbDriver(project.Driver);
-            if (creationInfo.Initialize)
+            if (info.Initialize)
             {
                 Log.Logger.DebugFormat("Initializing project: {0}", project.FilePath);
                 project.Metadata.CreateMetadataTables();

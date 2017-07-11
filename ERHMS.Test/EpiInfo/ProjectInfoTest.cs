@@ -50,10 +50,10 @@ namespace ERHMS.Test.EpiInfo
             projectInfo.SetAccessConnectionString();
             XmlDocument document = new XmlDocument();
             document.Load(path);
-            XmlElement databaseElement = document.SelectSingleElement("/Project/CollectedData/Database");
+            XmlElement element = document.SelectSingleElement("/Project/CollectedData/Database");
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
-                ConnectionString = Configuration.Decrypt(databaseElement.GetAttribute("connectionString"))
+                ConnectionString = Configuration.Decrypt(element.GetAttribute("connectionString"))
             };
             Assert.AreEqual(Path.ChangeExtension(path, ".mdb"), builder.DataSource);
         }

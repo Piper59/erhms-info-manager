@@ -51,6 +51,7 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="ConvertExtensions.cs" />
+    <Compile Include="CryptographyExtensions.cs" />
     <Compile Include="DataExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DynamicExtensions.cs" />

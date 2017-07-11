@@ -13,8 +13,8 @@ namespace ERHMS.Utility
         public string LogLevelName { get; set; }
         public string EmailHost { get; set; }
         public int? EmailPort { get; set; }
-        public bool EmailEnableSsl { get; set; }
-        public string EmailFrom { get; set; }
+        public bool EmailUseSsl { get; set; }
+        public string EmailSender { get; set; }
         public string EmailPassword { get; set; }
         public string MapApplicationId { get; set; }
         public string OrganizationName { get; set; }
@@ -29,8 +29,8 @@ namespace ERHMS.Utility
             LogLevelName = "DEBUG";
             EmailHost = null;
             EmailPort = 25;
-            EmailEnableSsl = false;
-            EmailFrom = null;
+            EmailUseSsl = false;
+            EmailSender = null;
             EmailPassword = null;
             MapApplicationId = "Aua5s8kFcEZMx5lsd8Vkerz3frboU1CwzvOyzX_vgSnzsnbqV7xlQ4WTRUlN19_Q";
             OrganizationName = null;
@@ -40,33 +40,33 @@ namespace ERHMS.Utility
 
         public bool IsEmailConfigured()
         {
-            return !string.IsNullOrWhiteSpace(EmailHost) && EmailPort.HasValue && MailExtensions.IsValidAddress(EmailFrom);
+            return !string.IsNullOrWhiteSpace(EmailHost) && EmailPort.HasValue && MailExtensions.IsValidAddress(EmailSender);
         }
 
         public SmtpClient GetSmtpClient()
         {
-            SmtpClient smtpClient = new SmtpClient(EmailHost, EmailPort.Value)
+            SmtpClient client = new SmtpClient(EmailHost, EmailPort.Value)
             {
-                EnableSsl = EmailEnableSsl,
+                EnableSsl = EmailUseSsl,
                 DeliveryMethod = SmtpDeliveryMethod.Network
             };
             if (string.IsNullOrEmpty(EmailPassword))
             {
-                smtpClient.UseDefaultCredentials = true;
+                client.UseDefaultCredentials = true;
             }
             else
             {
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new NetworkCredential(EmailFrom, EmailPassword);
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(EmailSender, EmailPassword);
             }
-            return smtpClient;
+            return client;
         }
 
         public MailMessage GetMailMessage()
         {
             return new MailMessage
             {
-                From = new MailAddress(EmailFrom)
+                From = new MailAddress(EmailSender)
             };
         }
     }

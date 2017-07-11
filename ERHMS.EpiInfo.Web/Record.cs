@@ -67,8 +67,7 @@ namespace ERHMS.EpiInfo.Web
 
         public Uri GetUrl()
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            Uri endpoint = new Uri(configuration.Settings.WebServiceEndpointAddress);
+            Uri endpoint = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
             return new Uri(endpoint, string.Format("Survey/{0}", GlobalRecordId));
         }
     }

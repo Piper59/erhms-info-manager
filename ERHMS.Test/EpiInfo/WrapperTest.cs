@@ -91,11 +91,12 @@ namespace ERHMS.Test.EpiInfo
         }
 
         [Test]
-        public void LongArgTest()
+        public void ArgLengthTest()
         {
-            wrapper = Test.LongArgTest.Create(new string('A', 10000));
+            int length = 10000;
+            wrapper = Test.ArgLengthTest.Create(new string('A', length));
             wrapper.Invoke();
-            Assert.AreEqual("10000", wrapper.ReadLine());
+            Assert.AreEqual(length.ToString(), wrapper.ReadLine());
         }
 
         [Test]
@@ -107,6 +108,7 @@ namespace ERHMS.Test.EpiInfo
             {
                 raised = true;
                 Assert.AreEqual(WrapperEventType.Default, e.Type);
+                Assert.IsNull(e.Properties);
             };
             wrapper.Invoke();
             wrapper.Exited.WaitOne();

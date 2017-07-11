@@ -67,7 +67,7 @@ namespace ERHMS.Test.Wrappers
             }
         }
 
-        public class LongArgTest : Wrapper
+        public class ArgLengthTest : Wrapper
         {
             public static Wrapper Create(string value)
             {

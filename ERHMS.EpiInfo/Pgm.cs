@@ -1,12 +1,22 @@
 ﻿using Epi;
 using ERHMS.Utility;
 using System;
+using System.Collections.ObjectModel;
+using System.Data;
 
 namespace ERHMS.EpiInfo
 {
     public class Pgm
     {
         public const string FileExtension = ".pgm7";
+        private static readonly ReadOnlyCollection<Func<Pgm, object>> Identifiers = EnumerableExtensions.AsReadOnly(new Func<Pgm, object>[]
+        {
+            @this => @this.PgmId,
+            @this => @this.Name,
+            @this => @this.Content,
+            @this => @this.Comment,
+            @this => @this.Author
+        });
 
         private static string GetContent(string location, string source)
         {
@@ -35,15 +45,23 @@ namespace ERHMS.EpiInfo
             Author = "";
         }
 
-        public override bool Equals(object obj)
+        internal Pgm(DataRow row)
         {
-            Pgm pgm = obj as Pgm;
-            return pgm != null && pgm.PgmId == PgmId && pgm.Name == Name && pgm.Content == Content && pgm.Comment == Comment && pgm.Author == Author;
+            PgmId = row.Field<int>("ProgramId");
+            Name = row.Field<string>("Name");
+            Content = row.Field<string>("Content");
+            Comment = row.Field<string>("Comment");
+            Author = row.Field<string>("Author");
         }
 
         public override int GetHashCode()
         {
-            return ObjectExtensions.GetHashCode(PgmId, Name, Content, Comment, Author);
+            return ObjectExtensions.GetHashCode(this, Identifiers);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ObjectExtensions.Equals(this, obj, Identifiers);
         }
     }
 }

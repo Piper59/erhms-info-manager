@@ -103,14 +103,14 @@ namespace ERHMS.Presentation.ViewModels
 
         private void ShowValidationMessage(IEnumerable<string> fields, string reason)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("The following fields are {0}:", reason);
-            builder.AppendLine();
-            builder.AppendLine();
-            builder.Append(string.Join(", ", fields));
+            StringBuilder message = new StringBuilder();
+            message.AppendFormat("The following fields are {0}:", reason);
+            message.AppendLine();
+            message.AppendLine();
+            message.Append(string.Join(", ", fields));
             AlertMessage msg = new AlertMessage
             {
-                Message = builder.ToString()
+                Message = message.ToString()
             };
             Messenger.Default.Send(msg);
         }

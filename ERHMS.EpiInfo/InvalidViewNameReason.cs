@@ -5,7 +5,7 @@
         None,
         Empty,
         InvalidChar,
-        InvalidFirstChar,
+        InvalidBeginning,
         TooLong,
         ViewExists,
         TableExists

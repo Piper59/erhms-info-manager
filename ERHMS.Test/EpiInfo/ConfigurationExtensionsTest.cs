@@ -14,28 +14,58 @@ namespace ERHMS.Test.EpiInfo
             File.Delete(ConfigurationExtensions.FilePath);
         }
 
+        private void CreateAndLoadConfiguration(string userDirectoryPath, bool fips)
+        {
+            Configuration configuration = ConfigurationExtensions.Create(userDirectoryPath);
+            configuration.SetFipsCrypto(fips);
+            configuration.Save();
+            ConfigurationExtensions.Load();
+        }
+
         [Test]
         public void EncryptSafeTest()
         {
-            using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest)))
+            EncryptSafeTest(false);
+            EncryptSafeTest(true);
+        }
+
+        private void EncryptSafeTest(bool fips)
+        {
+            using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest) + (fips ? "Fips" : "")))
             {
-                ConfigurationExtensions.Create(directory.FullName).Save();
-                ConfigurationExtensions.Load();
-                Assert.AreEqual("Hello, world!", Configuration.Decrypt(ConfigurationExtensions.EncryptSafe("Hello, world!")));
+                CreateAndLoadConfiguration(directory.FullName, fips);
                 Assert.IsNull(ConfigurationExtensions.EncryptSafe(null));
+                EncryptSafeTest("");
+                EncryptSafeTest("Hello, world!");
             }
+        }
+
+        private void EncryptSafeTest(string value)
+        {
+            Assert.AreEqual(value, Configuration.Decrypt(ConfigurationExtensions.EncryptSafe(value)));
         }
 
         [Test]
         public void DecryptSafeTest()
         {
-            using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest)))
+            DecryptSafeTest(false);
+            DecryptSafeTest(true);
+        }
+
+        private void DecryptSafeTest(bool fips)
+        {
+            using (TempDirectory directory = new TempDirectory(nameof(DecryptSafeTest) + (fips ? "Fips" : "")))
             {
-                ConfigurationExtensions.Create(directory.FullName).Save();
-                ConfigurationExtensions.Load();
-                Assert.AreEqual("Hello, world!", ConfigurationExtensions.DecryptSafe(Configuration.Encrypt("Hello, world!")));
-                Assert.IsNull(ConfigurationExtensions.DecryptSafe(null));
+                CreateAndLoadConfiguration(directory.FullName, fips);
+                Assert.IsNull(ConfigurationExtensions.EncryptSafe(null));
+                DecryptSafeTest("");
+                DecryptSafeTest("Hello, world!");
             }
+        }
+
+        private void DecryptSafeTest(string value)
+        {
+            Assert.AreEqual(value, ConfigurationExtensions.DecryptSafe(Configuration.Encrypt(value)));
         }
 
         [Test]

@@ -24,61 +24,49 @@ namespace ERHMS.EpiInfo
                 WHERE F.[ViewId] = @ViewId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
-            DataTable fields = Driver.Select(query);
-            return fields.AsEnumerable()
-                .OrderBy(field => field.IsNull("PageId") ? 1 : 2)
-                .ThenBy(field => field.Field<short?>("Position") ?? field.Field<int>("FieldId"))
-                .ThenBy(field => field.Field<double?>("TabIndex") ?? field.Field<int>("FieldId"))
-                .Select(field => field.Field<int>("FieldId"));
+            return Driver.Select(query).AsEnumerable()
+                .OrderBy(row => row.IsNull("PageId") ? 1 : 2)
+                .ThenBy(row => row.Field<short?>("Position") ?? row.Field<int>("FieldId"))
+                .ThenBy(row => row.Field<double?>("TabIndex") ?? row.Field<int>("FieldId"))
+                .Select(row => row.Field<int>("FieldId"));
         }
 
         public IEnumerable<View> GetViews()
         {
-            return Metadata.GetViews().Cast<View>();
+            LoadViews();
+            return Views.Cast<View>();
         }
 
-        public new View GetViewByName(string viewName)
+        public new View GetViewByName(string name)
         {
-            return GetViews().SingleOrDefault(view => view.Name.EqualsIgnoreCase(viewName));
+            return Metadata.GetViewByFullName(name);
         }
 
         public new IEnumerable<Pgm> GetPgms()
         {
-            foreach (DataRow row in Metadata.GetPgms().Rows)
-            {
-                yield return new Pgm
-                {
-                    PgmId = row.Field<int>("ProgramId"),
-                    Name = row.Field<string>("Name"),
-                    Content = row.Field<string>("Content"),
-                    Comment = row.Field<string>("Comment"),
-                    Author = row.Field<string>("Author")
-                };
-            }
+            return Metadata.GetPgms().AsEnumerable().Select(row => new Pgm(row));
         }
 
         public Pgm GetPgmById(int pgmId)
         {
-            return GetPgms().SingleOrDefault(pgm => pgm.PgmId == pgmId);
+            string sql = "SELECT * FROM [metaPrograms] WHERE [ProgramId] = @PgmId";
+            Query query = Driver.CreateQuery(sql);
+            query.Parameters.Add(new QueryParameter("@PgmId", DbType.Int32, pgmId));
+            return new Pgm(Driver.Select(query).AsEnumerable().SingleOrDefault());
         }
 
         public IEnumerable<Canvas> GetCanvases()
         {
             string sql = "SELECT * FROM [metaCanvases]";
-            foreach (DataRow row in Driver.Select(Driver.CreateQuery(sql)).Rows)
-            {
-                yield return new Canvas
-                {
-                    CanvasId = row.Field<int>("CanvasId"),
-                    Name = row.Field<string>("Name"),
-                    Content = row.Field<string>("Content")
-                };
-            }
+            return Driver.Select(Driver.CreateQuery(sql)).AsEnumerable().Select(row => new Canvas(row));
         }
 
         public Canvas GetCanvasById(int canvasId)
         {
-            return GetCanvases().SingleOrDefault(canvas => canvas.CanvasId == canvasId);
+            string sql = "SELECT * FROM [metaCanvases] WHERE [CanvasId] = @CanvasId";
+            Query query = Driver.CreateQuery(sql);
+            query.Parameters.Add(new QueryParameter("@CanvasId", DbType.Int32, canvasId));
+            return new Canvas(Driver.Select(query).AsEnumerable().SingleOrDefault());
         }
 
         public void InsertPgm(Pgm pgm)

@@ -12,14 +12,14 @@ namespace ERHMS.Utility
 {
     public static class Log
     {
-        public static readonly ReadOnlyCollection<string> LevelNames = new string[]
+        public static readonly ReadOnlyCollection<string> LevelNames = EnumerableExtensions.AsReadOnly(new string[]
         {
             "DEBUG",
             "INFO",
             "WARN",
             "ERROR",
             "FATAL"
-        }.AsReadOnly();
+        });
         public static readonly string FilePath;
 
         private static string name;

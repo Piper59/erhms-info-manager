@@ -1,8 +1,7 @@
 ﻿using Epi;
 using Epi.DataSets;
 using ERHMS.Utility;
-using System;
-using System.Data;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -12,22 +11,29 @@ namespace ERHMS.EpiInfo
     public static class ConfigurationExtensions
     {
         public static readonly string FilePath = Configuration.DefaultConfigurationPath;
-
-        public static string EncryptSafe(string text)
+        private static readonly ReadOnlyCollection<string> TemplateSubdirectoryNames = EnumerableExtensions.AsReadOnly(new string[]
         {
-            if (text == null)
+            "Fields",
+            "Forms",
+            "Pages",
+            "Projects"
+        });
+
+        public static string EncryptSafe(string value)
+        {
+            if (value == null)
             {
                 return null;
             }
             else
             {
-                return Configuration.Encrypt(text);
+                return Configuration.Encrypt(value);
             }
         }
 
-        public static string DecryptSafe(string text)
+        public static string DecryptSafe(string value)
         {
-            if (text == null)
+            if (value == null)
             {
                 return null;
             }
@@ -35,7 +41,7 @@ namespace ERHMS.EpiInfo
             {
                 try
                 {
-                    return Configuration.Decrypt(text);
+                    return Configuration.Decrypt(value);
                 }
                 catch (CryptographicException)
                 {
@@ -88,26 +94,17 @@ namespace ERHMS.EpiInfo
 
         private static void SetSettings(Config config)
         {
-            if (RequiresFipsCrypto())
-            {
-                DataRow row = config.TextEncryptionModule.NewRow();
-                row.SetField("FileName", Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "FipsCrypto.dll"));
-                config.TextEncryptionModule.Rows.Add(row);
-            }
+            SetFipsCrypto(config, CryptographyExtensions.IsFipsCryptoRequired());
             Config.SettingsRow settings = config.Settings.Single();
             settings.CheckForUpdates = false;
         }
 
-        private static bool RequiresFipsCrypto()
+        private static void SetFipsCrypto(Config config, bool required)
         {
-            try
+            config.TextEncryptionModule.Clear();
+            if (required)
             {
-                new MD5CryptoServiceProvider();
-                return false;
-            }
-            catch (InvalidOperationException)
-            {
-                return true;
+                config.TextEncryptionModule.AddTextEncryptionModuleRow(null, null, "FipsCrypto.dll");
             }
         }
 
@@ -116,8 +113,7 @@ namespace ERHMS.EpiInfo
             Log.Logger.DebugFormat("Loading configuration: {0}", FilePath);
             Configuration.Load(FilePath);
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
-            Configuration configuration = Configuration.GetNewInstance();
-            return configuration;
+            return Configuration.GetNewInstance();
         }
 
         public static bool TryLoad(out Configuration configuration)
@@ -134,6 +130,11 @@ namespace ERHMS.EpiInfo
             }
         }
 
+        public static void SetFipsCrypto(this Configuration @this, bool required)
+        {
+            SetFipsCrypto(@this.ConfigDataSet, required);
+        }
+
         public static void Save(this Configuration @this)
         {
             Log.Logger.DebugFormat("Saving configuration: {0}", @this.ConfigFilePath);
@@ -145,10 +146,10 @@ namespace ERHMS.EpiInfo
             Log.Logger.Debug("Creating user directories");
             Directory.CreateDirectory(@this.Directories.Project);
             DirectoryInfo templates = Directory.CreateDirectory(@this.Directories.Templates);
-            templates.CreateSubdirectory("Fields");
-            templates.CreateSubdirectory("Forms");
-            templates.CreateSubdirectory("Pages");
-            templates.CreateSubdirectory("Projects");
+            foreach (string name in TemplateSubdirectoryNames)
+            {
+                templates.CreateSubdirectory(name);
+            }
         }
 
         public static void SetUserDirectories(this Configuration @this, string userDirectoryPath)

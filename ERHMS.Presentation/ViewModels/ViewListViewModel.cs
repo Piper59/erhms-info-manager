@@ -121,7 +121,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             TemplateInfo template = DataContext.CreateNewViewTemplate();
             string namePrefix = Incident == null ? null : Incident.Name + "_";
-            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(DataContext.Project.FilePath, template.Path, namePrefix);
+            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(DataContext.Project.FilePath, template.FilePath, namePrefix);
             wrapper.Event += (sender, e) =>
             {
                 if (e.Type == WrapperEventType.ViewCreated)

@@ -16,15 +16,13 @@ namespace ERHMS.DataAccess
 
         public static bool Exists()
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            return File.Exists(Path.Combine(configuration.Directories.Project, "Sample", "Sample" + Project.FileExtension));
+            return File.Exists(Path.Combine(Configuration.GetNewInstance().Directories.Project, "Sample", "Sample" + Project.FileExtension));
         }
 
         public static DataContext Create()
         {
             Log.Logger.DebugFormat("Creating sample data context");
-            Configuration configuration = Configuration.GetNewInstance();
-            string projectPath = Path.Combine(configuration.Directories.Project, "Sample", "Sample" + Project.FileExtension);
+            string projectPath = Path.Combine(Configuration.GetNewInstance().Directories.Project, "Sample", "Sample" + Project.FileExtension);
             Directory.CreateDirectory(Path.GetDirectoryName(projectPath));
             Assembly assembly = Assembly.GetExecutingAssembly();
             assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.prj", projectPath);

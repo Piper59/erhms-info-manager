@@ -63,7 +63,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Open()
         {
-            Main.OpenDataSource(SelectedItem.Path);
+            Main.OpenDataSource(SelectedItem.FilePath);
         }
 
         public void AddNew()
@@ -82,8 +82,7 @@ namespace ERHMS.Presentation.ViewModels
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.Title = "Add Existing Data Source";
-                Configuration configuration = Configuration.GetNewInstance();
-                dialog.InitialDirectory = configuration.Directories.Project;
+                dialog.InitialDirectory = Configuration.GetNewInstance().Directories.Project;
                 dialog.Filter = FileDialogExtensions.GetFilter("Data Sources", Project.FileExtension);
                 if (dialog.ShowDialog(App.Current.MainWin32Window) == DialogResult.OK)
                 {
@@ -101,7 +100,7 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
-                DataSourceViewModel.RemoveDataSource(SelectedItem.Path);
+                DataSourceViewModel.RemoveDataSource(SelectedItem.FilePath);
             };
             Messenger.Default.Send(msg);
         }

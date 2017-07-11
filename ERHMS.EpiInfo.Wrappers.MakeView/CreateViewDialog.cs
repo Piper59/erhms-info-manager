@@ -54,7 +54,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     return "Please enter a form name.";
                 case InvalidViewNameReason.InvalidChar:
                     return "Please enter a form name that contains only letters, numbers, and underscores.";
-                case InvalidViewNameReason.InvalidFirstChar:
+                case InvalidViewNameReason.InvalidBeginning:
                     return "Please enter a form name that begins with a letter.";
                 case InvalidViewNameReason.TooLong:
                     return "Please enter a form name that is no longer than 64 characters.";

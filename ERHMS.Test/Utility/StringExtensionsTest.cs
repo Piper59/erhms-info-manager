@@ -46,7 +46,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void SplitLinesTest()
         {
-            ICollection<string> lines = new string[]
+            ICollection<string> expected = new string[]
             {
                 "Line 1",
                 "Line 2",
@@ -56,19 +56,19 @@ namespace ERHMS.Test.Utility
                 "",
                 "Line 4"
             };
-            foreach (string multiLineString in GetMultiLineStrings())
+            foreach (string lines in GetMultiLineStrings())
             {
-                CollectionAssert.AreEqual(lines, multiLineString.SplitLines());
+                CollectionAssert.AreEqual(expected, lines.SplitLines());
             }
         }
 
         [Test]
         public void NormalizeNewLinesTest()
         {
-            string normalized = GetMultiLineString(Environment.NewLine);
-            foreach (string multiLineString in GetMultiLineStrings())
+            string expected = GetMultiLineString(Environment.NewLine);
+            foreach (string lines in GetMultiLineStrings())
             {
-                Assert.AreEqual(normalized, multiLineString.NormalizeNewLines());
+                Assert.AreEqual(expected, lines.NormalizeNewLines());
             }
         }
 

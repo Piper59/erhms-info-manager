@@ -44,8 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
         protected override IEnumerable<FileInfo> GetItems()
         {
-            Configuration configuration = Configuration.GetNewInstance();
-            DirectoryInfo directory = new DirectoryInfo(configuration.Directories.LogDir);
+            DirectoryInfo directory = new DirectoryInfo(Configuration.GetNewInstance().Directories.LogDir);
             return directory.SearchByExtension(Path.GetExtension(Log.FilePath)).OrderBy(item => item.FullName);
         }
 

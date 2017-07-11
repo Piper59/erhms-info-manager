@@ -1,6 +1,7 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -65,11 +66,13 @@ namespace ERHMS.Test.Utility
             using (TempDirectory directory = new TempDirectory(nameof(SearchByExtensionTest)))
             {
                 CreateFiles(directory);
-                CollectionAssert.AreEquivalent(new string[]
+                ICollection<string> expected = new string[]
                 {
                     directory.CombinePaths("file1.txt"),
                     directory.CombinePaths("subdirectory", "file3.txt")
-                }, new DirectoryInfo(directory.FullName).SearchByExtension(".txt").Select(file => file.FullName));
+                };
+                IEnumerable<string> actual = new DirectoryInfo(directory.FullName).SearchByExtension(".txt").Select(file => file.FullName);
+                CollectionAssert.AreEquivalent(expected, actual);
             }
         }
     }

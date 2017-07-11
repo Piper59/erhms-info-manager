@@ -24,11 +24,10 @@ namespace ERHMS.EpiInfo.Web
         public static bool IsConfigured(out ConfigurationError error, bool local = false)
         {
             Log.Logger.Debug("Checking web configuration");
-            Configuration configuration = Configuration.GetNewInstance();
             Uri endpointUrl;
             try
             {
-                endpointUrl = new Uri(configuration.Settings.WebServiceEndpointAddress);
+                endpointUrl = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
             }
             catch
             {

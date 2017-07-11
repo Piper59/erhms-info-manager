@@ -16,6 +16,7 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             try
             {
+                SetStreams();
                 Log.LevelName = Settings.Default.LogLevelName;
                 Log.Logger.Debug("Starting up");
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
@@ -25,17 +26,8 @@ namespace ERHMS.EpiInfo.Wrappers
                 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
                 Application.EnableVisualStyles();
                 ConfigurationExtensions.Load();
-                In = Console.In;
-                Out = Console.Out;
-                Error = Console.Error;
-                Console.SetIn(new StreamReader(Stream.Null));
-                Console.SetOut(new StreamWriter(Stream.Null));
-                Console.SetError(new StreamWriter(Stream.Null));
-                int separatorIndex = args[0].LastIndexOf('.');
-                string typeName = args[0].Substring(0, separatorIndex);
-                string methodName = args[0].Substring(separatorIndex + 1);
-                BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-                MethodInfo method = Assembly.GetCallingAssembly().GetType(typeName).GetMethod(methodName, bindingFlags);
+                BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+                MethodInfo method = Assembly.GetCallingAssembly().GetType(args[0]).GetMethod(args[1], flags);
                 method.Invoke(null, ReceiveArgs());
                 Log.Logger.Debug("Exiting");
             }
@@ -45,20 +37,29 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
+        private static void SetStreams()
+        {
+            In = Console.In;
+            Out = Console.Out;
+            Error = Console.Error;
+            Console.SetIn(new StreamReader(Stream.Null));
+            Console.SetOut(new StreamWriter(Stream.Null));
+            Console.SetError(new StreamWriter(Stream.Null));
+        }
+
         private static object[] ReceiveArgs()
         {
             int count = int.Parse(In.ReadLine());
             if (count == 0)
             {
-                return null;
+                return new object[] { };
             }
             else
             {
                 object[] args = new object[count];
                 for (int index = 0; index < count; index++)
                 {
-                    string line = In.ReadLine();
-                    args[index] = line == "" ? null : ConvertExtensions.FromBase64String(line);
+                    args[index] = ConvertExtensions.FromBase64String(In.ReadLine());
                 }
                 return args;
             }
@@ -73,7 +74,7 @@ namespace ERHMS.EpiInfo.Wrappers
         protected static void RaiseEvent(WrapperEventType type, object properties = null)
         {
             Log.Logger.DebugFormat("Raising event: {0}", type);
-            Error.WriteLine(WrapperEventArgs.GetData(type, properties));
+            Error.WriteLine(WrapperEventArgs.Serialize(type, properties));
         }
     }
 }

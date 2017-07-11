@@ -41,11 +41,11 @@ namespace ERHMS.Presentation.Dialogs
 
         private static bool Confirm(this FolderBrowserDialog @this)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine("The following folder already exists. Are you sure you want to use this location?");
-            builder.AppendLine();
-            builder.Append(@this.GetRootDirectory());
-            return MessageBox.Show(builder.ToString(), App.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
+            StringBuilder message = new StringBuilder();
+            message.AppendLine("The following folder already exists. Are you sure you want to use this location?");
+            message.AppendLine();
+            message.Append(@this.GetRootDirectory());
+            return MessageBox.Show(message.ToString(), App.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
         }
 
         public static string GetRootDirectory(this FolderBrowserDialog @this)

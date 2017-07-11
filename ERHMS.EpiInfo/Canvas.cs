@@ -1,6 +1,9 @@
 ﻿using Epi;
 using ERHMS.EpiInfo.Templates;
 using ERHMS.Utility;
+using System;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Text;
 using System.Xml;
 
@@ -9,6 +12,12 @@ namespace ERHMS.EpiInfo
     public class Canvas
     {
         public const string FileExtension = ".cvs7";
+        private static readonly ReadOnlyCollection<Func<Canvas, object>> Identifiers = EnumerableExtensions.AsReadOnly(new Func<Canvas, object>[]
+        {
+            @this => @this.CanvasId,
+            @this => @this.Name,
+            @this => @this.Content
+        });
 
         public static string GetContentForView(View view)
         {
@@ -24,34 +33,41 @@ namespace ERHMS.EpiInfo
         public string Name { get; set; }
         public string Content { get; set; }
 
-        public void SetProjectPath(string projectPath)
+        public Canvas() { }
+
+        internal Canvas(DataRow row)
+        {
+            CanvasId = row.Field<int>("CanvasId");
+            Name = row.Field<string>("Name");
+            Content = row.Field<string>("Content");
+        }
+
+        public void SetProjectPath(string path)
         {
             XmlDocument document = new XmlDocument();
             document.LoadXml(Content);
-            XmlNode projectPathNode = document.SelectSingleNode("/DashboardCanvas/dashboardHelper/projectPath");
-            projectPathNode.InnerText = projectPath;
-            StringBuilder builder = new StringBuilder();
-            XmlWriterSettings settings = new XmlWriterSettings
+            XmlNode node = document.SelectSingleNode("/DashboardCanvas/dashboardHelper/projectPath");
+            node.InnerText = path;
+            StringBuilder content = new StringBuilder();
+            using (XmlWriter writer = XmlWriter.Create(content, new XmlWriterSettings
             {
                 OmitXmlDeclaration = true,
                 ConformanceLevel = ConformanceLevel.Fragment
-            };
-            using (XmlWriter writer = XmlWriter.Create(builder, settings))
+            }))
             {
                 document.WriteContentTo(writer);
             }
-            Content = builder.ToString();
-        }
-
-        public override bool Equals(object obj)
-        {
-            Canvas canvas = obj as Canvas;
-            return canvas != null && canvas.CanvasId == CanvasId && canvas.Name == Name && canvas.Content == Content;
+            Content = content.ToString();
         }
 
         public override int GetHashCode()
         {
-            return ObjectExtensions.GetHashCode(CanvasId, Name, Content);
+            return ObjectExtensions.GetHashCode(this, Identifiers);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ObjectExtensions.Equals(this, obj, Identifiers);
         }
     }
 }
