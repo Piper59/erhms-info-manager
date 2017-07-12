@@ -6,7 +6,7 @@
              xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
     <UserControl.Resources>
-        <Converters:SizeToHumanReadableSizeConverter x:Key="SizeToHumanReadableSizeConverter" />
+        <Converters:MemorySizeToHumanReadableSizeConverter x:Key="MemorySizeToHumanReadableSizeConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -33,7 +33,7 @@
                 <DataGridTextColumn Binding="{Binding DirectoryName}"
                                     Header="Location"
                                     Width="4*" />
-                <DataGridTextColumn Binding="{Binding Length, Converter={StaticResource SizeToHumanReadableSizeConverter}}"
+                <DataGridTextColumn Binding="{Binding Length, Converter={StaticResource MemorySizeToHumanReadableSizeConverter}}"
                                     Header="Size"
                                     Width="*" />
             </DataGrid.Columns>
