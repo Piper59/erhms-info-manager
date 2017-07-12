@@ -9,7 +9,7 @@ namespace ERHMS
     public class Program
     {
         [STAThread]
-        public static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             try
             {
