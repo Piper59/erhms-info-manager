@@ -83,7 +83,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         public new void OneTimeSetUp()
         {
             IDataDriver driver = DataDriverFactory.CreateDataDriver(project);
-            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Person.sql"));
+            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.People.sql"));
             people = new PersonRepository(driver);
         }
 

@@ -167,8 +167,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Empty.mdb" />
     <EmbeddedResource Include="Resources\Message.txt" />
+    <EmbeddedResource Include="Resources\People.sql" />
     <EmbeddedResource Include="Resources\People.xml" />
-    <EmbeddedResource Include="Resources\Person.sql" />
     <EmbeddedResource Include="Resources\Sample\ADDFull\Project.xml" />
     <EmbeddedResource Include="Resources\Sample\ADDFull\View.xml" />
     <EmbeddedResource Include="Resources\Sample\SampleSurveillance.cvs7" />

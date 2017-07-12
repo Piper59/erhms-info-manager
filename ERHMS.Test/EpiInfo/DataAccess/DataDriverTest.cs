@@ -19,7 +19,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             Assert.IsFalse(driver.DatabaseExists());
             driver.CreateDatabase();
             Assert.IsTrue(driver.DatabaseExists());
-            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Person.sql"));
+            driver.ExecuteScript(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.People.sql"));
         }
 
         [Test]
