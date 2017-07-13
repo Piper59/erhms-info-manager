@@ -3,7 +3,7 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -12,14 +12,14 @@ namespace ERHMS.Utility
 {
     public static class Log
     {
-        public static readonly ReadOnlyCollection<string> LevelNames = EnumerableExtensions.AsReadOnly(new string[]
+        public static readonly ICollection<string> LevelNames = new string[]
         {
             "DEBUG",
             "INFO",
             "WARN",
             "ERROR",
             "FATAL"
-        });
+        };
         public static readonly string FilePath;
 
         private static string name;

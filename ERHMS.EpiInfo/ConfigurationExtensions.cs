@@ -1,7 +1,7 @@
 ﻿using Epi;
 using Epi.DataSets;
 using ERHMS.Utility;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -11,13 +11,13 @@ namespace ERHMS.EpiInfo
     public static class ConfigurationExtensions
     {
         public static readonly string FilePath = Configuration.DefaultConfigurationPath;
-        private static readonly ReadOnlyCollection<string> TemplateSubdirectoryNames = EnumerableExtensions.AsReadOnly(new string[]
+        private static readonly ICollection<string> TemplateSubdirectoryNames = new string[]
         {
             "Fields",
             "Forms",
             "Pages",
             "Projects"
-        });
+        };
 
         public static string EncryptSafe(string value)
         {

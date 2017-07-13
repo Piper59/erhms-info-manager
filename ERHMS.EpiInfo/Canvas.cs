@@ -2,7 +2,7 @@
 using ERHMS.EpiInfo.Templates;
 using ERHMS.Utility;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Xml;
@@ -12,12 +12,12 @@ namespace ERHMS.EpiInfo
     public class Canvas
     {
         public const string FileExtension = ".cvs7";
-        private static readonly ReadOnlyCollection<Func<Canvas, object>> Identifiers = EnumerableExtensions.AsReadOnly(new Func<Canvas, object>[]
+        private static readonly ICollection<Func<Canvas, object>> Identifiers = new Func<Canvas, object>[]
         {
             @this => @this.CanvasId,
             @this => @this.Name,
             @this => @this.Content
-        });
+        };
 
         public static string GetContentForView(View view)
         {

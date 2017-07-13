@@ -1,7 +1,7 @@
 ﻿using Epi;
 using ERHMS.Utility;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Data;
 
 namespace ERHMS.EpiInfo
@@ -9,14 +9,14 @@ namespace ERHMS.EpiInfo
     public class Pgm
     {
         public const string FileExtension = ".pgm7";
-        private static readonly ReadOnlyCollection<Func<Pgm, object>> Identifiers = EnumerableExtensions.AsReadOnly(new Func<Pgm, object>[]
+        private static readonly ICollection<Func<Pgm, object>> Identifiers = new Func<Pgm, object>[]
         {
             @this => @this.PgmId,
             @this => @this.Name,
             @this => @this.Content,
             @this => @this.Comment,
             @this => @this.Author
-        });
+        };
 
         private static string GetContent(string location, string source)
         {

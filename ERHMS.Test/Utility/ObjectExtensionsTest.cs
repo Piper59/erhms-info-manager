@@ -1,7 +1,7 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace ERHMS.Test.Utility
 {
@@ -9,11 +9,11 @@ namespace ERHMS.Test.Utility
     {
         private class Person
         {
-            private static readonly ReadOnlyCollection<Func<Person, object>> Identifiers = new ReadOnlyCollection<Func<Person, object>>(new Func<Person, object>[]
+            private static readonly ICollection<Func<Person, object>> Identifiers = new Func<Person, object>[]
             {
                 @this => @this.FirstName,
                 @this => @this.LastName
-            });
+            };
 
             public string FirstName { get; set; }
             public string LastName { get; set; }
