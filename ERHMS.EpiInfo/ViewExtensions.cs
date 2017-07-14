@@ -41,7 +41,9 @@ namespace ERHMS.EpiInfo
 
         public static string SanitizeName(string name)
         {
-            return name.Strip(InvalidNameCharPattern).Strip(InvalidNameBeginningPattern);
+            name = InvalidNameCharPattern.Replace(name, "");
+            name = InvalidNameBeginningPattern.Replace(name, "");
+            return name;
         }
 
         public static bool IsWebSurvey(this View @this)

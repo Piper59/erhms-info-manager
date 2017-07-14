@@ -241,8 +241,8 @@ namespace ERHMS.Test.EpiInfo
             retrieved = project.GetCanvasById(original.CanvasId);
             Assert.AreNotEqual(original, retrieved);
             Regex whitespacePattern = new Regex(@"\s+");
-            string expected = original.Content.Strip(whitespacePattern).Replace(project.FilePath, path);
-            string actual = retrieved.Content.Strip(whitespacePattern);
+            string expected = whitespacePattern.Replace(original.Content, "").Replace(project.FilePath, path);
+            string actual = whitespacePattern.Replace(retrieved.Content, "");
             Assert.AreEqual(expected, actual);
             project.DeleteCanvas(retrieved);
             Assert.AreEqual(0, project.GetCanvases().Count());

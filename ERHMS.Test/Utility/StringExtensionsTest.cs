@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace ERHMS.Test.Utility
 {
@@ -20,14 +19,6 @@ namespace ERHMS.Test.Utility
         {
             Assert.IsTrue("Hello, world!".ContainsIgnoreCase("WORLD"));
             Assert.IsTrue("one two three".Split().ContainsIgnoreCase("TWO"));
-        }
-
-        [Test]
-        public void StripTest()
-        {
-            Assert.AreEqual("abcdef", "123abc456def".Strip(new Regex(@"[0-9]")));
-            Assert.AreEqual("abcdefghij", "a!b@c#d$e%f^g&h*i(j)".Strip(new Regex(@"[^a-z]")));
-            Assert.AreEqual("abcdef   ", "   abcdef   ".Strip(new Regex(@"^[^a-z]+")));
         }
 
         private string GetMultiLineString(string newLine)

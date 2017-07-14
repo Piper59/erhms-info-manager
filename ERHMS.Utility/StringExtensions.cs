@@ -24,11 +24,6 @@ namespace ERHMS.Utility
             return @this.Contains(value, StringComparer.OrdinalIgnoreCase);
         }
 
-        public static string Strip(this string @this, Regex pattern)
-        {
-            return pattern.Replace(@this, "");
-        }
-
         public static string[] SplitLines(this string @this)
         {
             return NewLinePattern.Split(@this);
