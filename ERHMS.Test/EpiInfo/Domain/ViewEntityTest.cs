@@ -20,7 +20,7 @@ namespace ERHMS.Test.EpiInfo.Domain
             dynamic person = entity;
             person.FirstName = "John";
             person.LastName = "Doe";
-            entity.SetAuditProperties(true, true);
+            entity.Touch(true, true);
             ICollection<string> expected = new List<string>
             {
                 "FirstName",

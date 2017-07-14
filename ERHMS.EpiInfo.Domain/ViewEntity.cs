@@ -73,7 +73,7 @@ namespace ERHMS.EpiInfo.Domain
             AddSynonym(ColumnNames.REC_STATUS, nameof(Deleted));
         }
 
-        public void SetAuditProperties(bool first, bool last, IIdentity user = null)
+        public void Touch(bool first, bool last, IIdentity user = null)
         {
             if (user == null)
             {

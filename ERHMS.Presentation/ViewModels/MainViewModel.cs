@@ -176,7 +176,7 @@ namespace ERHMS.Presentation.ViewModels
             ActiveDocument.Close();
         }
 
-        private void OpenDataSourceInternal(string path)
+        private void OpenDataSourceImpl(string path)
         {
             try
             {
@@ -218,13 +218,13 @@ namespace ERHMS.Presentation.ViewModels
                 };
                 msg.Confirmed += (sender, e) =>
                 {
-                    OpenDataSourceInternal(path);
+                    OpenDataSourceImpl(path);
                 };
                 Messenger.Default.Send(msg);
             }
             else
             {
-                OpenDataSourceInternal(path);
+                OpenDataSourceImpl(path);
             }
         }
 

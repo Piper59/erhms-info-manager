@@ -14,7 +14,7 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class SurveyViewModel : ViewModelBase
     {
-        private static void RequestConfigurationInternal(string message)
+        private static void RequestConfigurationImpl(string message)
         {
             AlertMessage msg = new AlertMessage
             {
@@ -29,12 +29,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public static void RequestConfiguration()
         {
-            RequestConfigurationInternal("Please configure web survey settings.");
+            RequestConfigurationImpl("Please configure web survey settings.");
         }
 
         public static void RequestConfiguration(string reason)
         {
-            RequestConfigurationInternal(string.Format("{0} Please verify web survey settings.", reason));
+            RequestConfigurationImpl(string.Format("{0} Please verify web survey settings.", reason));
         }
 
         private static string GetErrorMessage(ConfigurationError error)

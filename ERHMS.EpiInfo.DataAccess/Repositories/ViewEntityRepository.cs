@@ -152,7 +152,7 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 entity.Deleted = false;
             }
-            entity.SetAuditProperties(true, true, user);
+            entity.Touch(true, true, user);
             using (DataTransaction transaction = Driver.BeginTransaction())
             {
                 Insert(BaseSchema, entity, transaction);
@@ -175,7 +175,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public virtual void Update(TEntity entity, IIdentity user = null)
         {
-            entity.SetAuditProperties(false, true, user);
+            entity.Touch(false, true, user);
             using (DataTransaction transaction = Driver.BeginTransaction())
             {
                 Update(UpdatableBaseSchema, entity, transaction);
