@@ -6,7 +6,7 @@ namespace ERHMS.Test.Utility
 {
     public class LogTest
     {
-        private int GetLineCount()
+        public static int GetLineCount()
         {
             using (Stream stream = new FileStream(Log.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (TextReader reader = new StreamReader(stream))
@@ -26,11 +26,14 @@ namespace ERHMS.Test.Utility
             FileAssert.Exists(Log.FilePath);
             int count = GetLineCount();
             Log.Logger.Debug(null);
-            Assert.AreEqual(count + 1, GetLineCount());
+            count++;
+            Assert.AreEqual(count, GetLineCount());
             Log.Logger.Debug(null);
-            Assert.AreEqual(count + 2, GetLineCount());
+            count++;
+            Assert.AreEqual(count, GetLineCount());
             Log.Logger.Debug(null);
-            Assert.AreEqual(count + 3, GetLineCount());
+            count++;
+            Assert.AreEqual(count, GetLineCount());
         }
 
         [Test]
@@ -46,11 +49,14 @@ namespace ERHMS.Test.Utility
                 Log.Logger.Info(null);
                 Assert.AreEqual(count, GetLineCount());
                 Log.Logger.Warn(null);
-                Assert.AreEqual(count + 1, GetLineCount());
+                count++;
+                Assert.AreEqual(count, GetLineCount());
                 Log.Logger.Error(null);
-                Assert.AreEqual(count + 2, GetLineCount());
+                count++;
+                Assert.AreEqual(count, GetLineCount());
                 Log.Logger.Fatal(null);
-                Assert.AreEqual(count + 3, GetLineCount());
+                count++;
+                Assert.AreEqual(count, GetLineCount());
             }
             finally
             {

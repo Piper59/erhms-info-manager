@@ -94,6 +94,7 @@
     <Compile Include="Dapper\Constant.cs" />
     <Compile Include="Dapper\Gender.cs" />
     <Compile Include="Dapper\IDbConnectionExtensionsTest.cs" />
+    <Compile Include="Dapper\LoggingConnectionTest.cs" />
     <Compile Include="Dapper\Person.cs" />
     <Compile Include="Dapper\TypeMaps.cs" />
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />

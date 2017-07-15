@@ -31,7 +31,7 @@ namespace ERHMS.Test.EpiInfo
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            directory = new TempDirectory(nameof(ProjectTestBase));
+            directory = new TempDirectory(GetType().Name);
             ConfigurationExtensions.Create(directory.FullName).Save();
             configuration = ConfigurationExtensions.Load();
             configuration.CreateUserDirectories();
@@ -68,7 +68,8 @@ namespace ERHMS.Test.EpiInfo
             int count = project.GetViews().Count();
             string name = "GetViewsTest_View";
             View view = project.CreateView(name);
-            Assert.AreEqual(count + 1, project.GetViews().Count());
+            count++;
+            Assert.AreEqual(count, project.GetViews().Count());
             Assert.AreEqual(name, project.GetViewById(view.Id).Name);
         }
 
