@@ -115,6 +115,7 @@ namespace ERHMS.Test.Dapper
                 {
                     GenderId = genders.Single(gender => gender.Name == "Male").GenderId,
                     Name = "Doe",
+                    BirthDate = DateTime.Now
                 };
                 connection.Insert(person, transaction);
                 Assert.AreEqual(person.Name, connection.SelectById<Person>(person.PersonId, transaction).Name);

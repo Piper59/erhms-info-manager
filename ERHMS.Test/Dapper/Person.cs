@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 
 namespace ERHMS.Test.Dapper
 {
@@ -8,7 +9,14 @@ namespace ERHMS.Test.Dapper
         public string GenderId { get; set; }
         public Gender Gender { get; set; }
         public string Name { get; set; }
-        public DateTime? BirthDate { get; set; }
+
+        private DateTime? birthDate;
+        public DateTime? BirthDate
+        {
+            get { return birthDate; }
+            set { birthDate = value?.RemoveMilliseconds(); }
+        }
+
         public double Height { get; set; }
         public double Weight { get; set; }
 
