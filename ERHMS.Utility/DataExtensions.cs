@@ -7,6 +7,8 @@ namespace ERHMS.Utility
 {
     public static class DataExtensions
     {
+        public const string AccessProvider = "Microsoft.Jet.OLEDB.4.0";
+
         private static bool IsCensorable(KeyValuePair<string, object> property)
         {
             return property.Key.ContainsIgnoreCase("Password") || property.Key.EqualsIgnoreCase("Pwd");

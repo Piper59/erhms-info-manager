@@ -264,7 +264,7 @@ namespace ERHMS.Test.EpiInfo
                 Driver = Configuration.AccessDriver,
                 Builder = new OleDbConnectionStringBuilder
                 {
-                    Provider = "Microsoft.Jet.OLEDB.4.0",
+                    Provider = DataExtensions.AccessProvider,
                     DataSource = dataSource
                 },
                 DatabaseName = name,
