@@ -1,4 +1,5 @@
-﻿using Epi;
+﻿using Dapper;
+using Epi;
 using Epi.Fields;
 using ERHMS.EpiInfo;
 using ERHMS.Utility;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.IO;
@@ -265,7 +267,7 @@ namespace ERHMS.Test.EpiInfo
                 Driver = Configuration.AccessDriver,
                 Builder = new OleDbConnectionStringBuilder
                 {
-                    Provider = DataExtensions.AccessProvider,
+                    Provider = OleDbExtensions.AccessProvider,
                     DataSource = dataSource
                 },
                 DatabaseName = name,
@@ -302,8 +304,10 @@ namespace ERHMS.Test.EpiInfo
             {
                 Pooling = false
             };
-            string sql = string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog);
-            SqlClientExtensions.ExecuteMaster(ConnectionString, sql);
+            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+            {
+                connection.Execute(string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog));
+            }
             created = true;
             info = new ProjectCreationInfo
             {
@@ -322,8 +326,10 @@ namespace ERHMS.Test.EpiInfo
         {
             if (created)
             {
-                string sql = string.Format("DROP DATABASE [{0}]", builder.InitialCatalog);
-                SqlClientExtensions.ExecuteMaster(ConnectionString, sql);
+                using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+                {
+                    connection.Execute(string.Format("DROP DATABASE [{0}]", builder.InitialCatalog));
+                }
             }
             else
             {

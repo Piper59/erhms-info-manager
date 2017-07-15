@@ -20,7 +20,7 @@ namespace ERHMS.Test.Dapper
                 Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", path);
                 OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
                 {
-                    Provider = DataExtensions.AccessProvider,
+                    Provider = OleDbExtensions.AccessProvider,
                     DataSource = path
                 };
                 using (IDbConnection connection = new LoggingConnection(new OleDbConnection(builder.ConnectionString)))

@@ -195,7 +195,7 @@ namespace ERHMS.Test.Dapper
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", path);
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
-                Provider = DataExtensions.AccessProvider,
+                Provider = OleDbExtensions.AccessProvider,
                 DataSource = path
             };
             connection = new OleDbConnection(builder.ConnectionString);
@@ -221,8 +221,10 @@ namespace ERHMS.Test.Dapper
             {
                 Pooling = false
             };
-            string sql = string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog);
-            SqlClientExtensions.ExecuteMaster(builder.ConnectionString, sql);
+            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+            {
+                connection.Execute(string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog));
+            }
             connection = new SqlConnection(builder.ConnectionString);
             connection.Open();
         }
@@ -231,8 +233,10 @@ namespace ERHMS.Test.Dapper
         public void OneTimeTearDown()
         {
             connection.Dispose();
-            string sql = string.Format("DROP DATABASE [{0}]", builder.InitialCatalog);
-            SqlClientExtensions.ExecuteMaster(builder.ConnectionString, sql);
+            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+            {
+                connection.Execute(string.Format("DROP DATABASE [{0}]", builder.InitialCatalog));
+            }
         }
     }
 }
