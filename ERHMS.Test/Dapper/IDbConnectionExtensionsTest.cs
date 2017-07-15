@@ -15,72 +15,13 @@ namespace ERHMS.Test.Dapper
 {
     public abstract class IDbConnectionExtensionsTestBase
     {
-        private class Constant
-        {
-            public int ConstantId { get; set; }
-            public string Name { get; set; }
-            public string Value { get; set; }
-        }
-
-        private class Gender
-        {
-            public string GenderId { get; set; }
-            public string Name { get; set; }
-            public string Pronouns { get; set; }
-
-            public Gender()
-            {
-                GenderId = Guid.NewGuid().ToString();
-            }
-        }
-
-        private class Person
-        {
-            public string PersonId { get; set; }
-            public string GenderId { get; set; }
-            public Gender Gender { get; set; }
-            public string Name { get; set; }
-            public DateTime? BirthDate { get; set; }
-            public double Height { get; set; }
-            public double Weight { get; set; }
-
-            public double Bmi
-            {
-                get { return Weight / (Height * Height * 144.0) * 703.0; }
-            }
-
-            public Person()
-            {
-                PersonId = Guid.NewGuid().ToString();
-            }
-        }
-
         protected IDbConnection connection;
         private ICollection<Gender> genders;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            {
-                TypeMap typeMap = new TypeMap(typeof(Constant))
-                {
-                    TableName = "Global"
-                };
-                typeMap.Set(nameof(Constant.ConstantId), "Identity").SetId().SetComputed();
-                SqlMapper.SetTypeMap(typeof(Constant), typeMap);
-            }
-            {
-                TypeMap typeMap = new TypeMap(typeof(Gender));
-                typeMap.Get(nameof(Gender.GenderId)).SetId();
-                SqlMapper.SetTypeMap(typeof(Gender), typeMap);
-            }
-            {
-                TypeMap typeMap = new TypeMap(typeof(Person));
-                typeMap.Get(nameof(Person.PersonId)).SetId();
-                typeMap.Get(nameof(Person.Gender)).SetComputed();
-                typeMap.Get(nameof(Person.Bmi)).SetComputed();
-                SqlMapper.SetTypeMap(typeof(Person), typeMap);
-            }
+            TypeMaps.Initialize();
         }
 
         private int Count(string tableName, IDbTransaction transaction = null)
