@@ -301,7 +301,8 @@ namespace ERHMS.Test.EpiInfo
             {
                 Pooling = false
             };
-            SqlClientExtensions.ExecuteMaster(ConnectionString, "CREATE DATABASE {0}", builder.InitialCatalog);
+            string sql = string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog);
+            SqlClientExtensions.ExecuteMaster(ConnectionString, sql);
             created = true;
             info = new ProjectCreationInfo
             {
@@ -320,7 +321,8 @@ namespace ERHMS.Test.EpiInfo
         {
             if (created)
             {
-                SqlClientExtensions.ExecuteMaster(ConnectionString, "DROP DATABASE {0}", builder.InitialCatalog);
+                string sql = string.Format("DROP DATABASE [{0}]", builder.InitialCatalog);
+                SqlClientExtensions.ExecuteMaster(ConnectionString, sql);
             }
             else
             {
