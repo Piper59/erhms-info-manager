@@ -11,8 +11,7 @@ namespace ERHMS.Dapper
 {
     public class TypeMap : SqlMapper.ITypeMap, IEnumerable<PropertyMap>
     {
-        private static readonly Regex TablePrefixPattern = new Regex(@"^.+\.");
-        private static readonly Regex TrailingDigitPattern = new Regex(@"\d$");
+        private static readonly Regex PrefixPattern = new Regex(@"^.+\.");
 
         private DefaultTypeMap @base;
         private IDictionary<PropertyInfo, PropertyMap> maps;
@@ -97,23 +96,11 @@ namespace ERHMS.Dapper
             {
                 return map;
             }
-            if (TablePrefixPattern.IsMatch(columnName))
+            if (PrefixPattern.IsMatch(columnName))
             {
-                columnName = TablePrefixPattern.Replace(columnName, "");
-                if (TryGetMember(columnName, out map))
+                if (TryGetMember(PrefixPattern.Replace(columnName, ""), out map))
                 {
                     return map;
-                }
-            }
-            else
-            {
-                while (TrailingDigitPattern.IsMatch(columnName))
-                {
-                    columnName = TrailingDigitPattern.Replace(columnName, "");
-                    if (TryGetMember(columnName, out map))
-                    {
-                        return map;
-                    }
                 }
             }
             return null;
