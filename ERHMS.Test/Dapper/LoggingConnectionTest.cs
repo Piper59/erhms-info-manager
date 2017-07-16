@@ -26,10 +26,10 @@ namespace ERHMS.Test.Dapper
                 using (IDbConnection connection = new LoggingConnection(new OleDbConnection(builder.ConnectionString)))
                 {
                     int count = LogTest.GetLineCount();
-                    connection.Execute("CREATE TABLE Test (TestId INT NOT NULL PRIMARY KEY)");
+                    connection.Execute("CREATE TABLE Test (Id INT NOT NULL PRIMARY KEY)");
                     count++;
                     Assert.AreEqual(count, LogTest.GetLineCount());
-                    connection.Execute("INSERT INTO Test (TestId) VALUES (1)");
+                    connection.Execute("INSERT INTO Test (Id) VALUES (1)");
                     count++;
                     Assert.AreEqual(count, LogTest.GetLineCount());
                     connection.Query("SELECT * FROM Test");
