@@ -17,12 +17,6 @@ namespace ERHMS.Test.Dapper
         protected IDbConnection connection;
         private ICollection<Gender> genders;
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            TypeMaps.Initialize();
-        }
-
         protected void PostSetUp()
         {
             connection.Open();
@@ -197,7 +191,7 @@ namespace ERHMS.Test.Dapper
         private TempDirectory directory;
 
         [OneTimeSetUp]
-        public new void OneTimeSetUp()
+        public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
             DatabaseTestBase.Access.SetUp(nameof(OleDbConnectionExtensionsTest), out directory, out builder);
@@ -216,7 +210,7 @@ namespace ERHMS.Test.Dapper
     public class SqlConnectionExtensionsTest : IDbConnectionExtensionsTestBase
     {
         [OneTimeSetUp]
-        public new void OneTimeSetUp()
+        public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
             DatabaseTestBase.SqlServer.SetUp(out builder);
