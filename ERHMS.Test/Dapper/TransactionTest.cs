@@ -1,39 +1,25 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
-using ERHMS.Utility;
 using NUnit.Framework;
 using System.Data;
 using System.Data.OleDb;
-using System.Reflection;
+using System.Data.SqlClient;
 
 namespace ERHMS.Test.Dapper
 {
-    public class TransactionTest
+    public abstract class TransactionTestBase
     {
-        private TempDirectory directory;
-        private IDbConnection connection;
+        protected IDbConnection connection;
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        protected void PostSetUp()
         {
-            directory = new TempDirectory(nameof(TransactionTest));
-            string path = directory.CombinePaths(nameof(TransactionTest) + ".mdb");
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", path);
-            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
-            {
-                Provider = OleDbExtensions.AccessProvider,
-                DataSource = path
-            };
-            connection = new OleDbConnection(builder.ConnectionString);
             connection.Open();
             connection.Execute("CREATE TABLE Test (Id NVARCHAR(255) NOT NULL PRIMARY KEY)");
         }
 
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
+        protected void PreTearDown()
         {
             connection.Dispose();
-            directory.Dispose();
         }
 
         private void Insert(string id, Transaction transaction = null)
@@ -92,6 +78,46 @@ namespace ERHMS.Test.Dapper
         public void ImplicitRollbackTest()
         {
             Test(nameof(ImplicitRollbackTest), false, false);
+        }
+    }
+
+    public class OleDbTransactionTest : TransactionTestBase
+    {
+        private TempDirectory directory;
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            OleDbConnectionStringBuilder builder;
+            DatabaseTestBase.Access.SetUp(nameof(OleDbTransactionTest), out directory, out builder);
+            connection = new OleDbConnection(builder.ConnectionString);
+            PostSetUp();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            PreTearDown();
+            directory.Dispose();
+        }
+    }
+
+    public class SqlTransactionTest : TransactionTestBase
+    {
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            SqlConnectionStringBuilder builder;
+            DatabaseTestBase.SqlServer.SetUp(out builder);
+            connection = new SqlConnection(builder.ConnectionString);
+            PostSetUp();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            PreTearDown();
+            DatabaseTestBase.SqlServer.TearDown();
         }
     }
 }

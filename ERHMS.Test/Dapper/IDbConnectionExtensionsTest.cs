@@ -4,7 +4,6 @@ using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
@@ -22,6 +21,16 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             TypeMaps.Initialize();
+        }
+
+        protected void PostSetUp()
+        {
+            connection.Open();
+        }
+
+        protected void PreTearDown()
+        {
+            connection.Dispose();
         }
 
         private int Count(string tableName, IDbTransaction transaction = null)
@@ -190,53 +199,36 @@ namespace ERHMS.Test.Dapper
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            directory = new TempDirectory(nameof(OleDbConnectionExtensionsTest));
-            string path = directory.CombinePaths(nameof(OleDbConnectionExtensionsTest) + ".mdb");
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", path);
-            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
-            {
-                Provider = OleDbExtensions.AccessProvider,
-                DataSource = path
-            };
+            OleDbConnectionStringBuilder builder;
+            DatabaseTestBase.Access.SetUp(nameof(OleDbConnectionExtensionsTest), out directory, out builder);
             connection = new OleDbConnection(builder.ConnectionString);
-            connection.Open();
+            PostSetUp();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            connection.Dispose();
+            PreTearDown();
             directory.Dispose();
         }
     }
 
     public class SqlConnectionExtensionsTest : IDbConnectionExtensionsTestBase
     {
-        private SqlConnectionStringBuilder builder;
-
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString)
-            {
-                Pooling = false
-            };
-            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
-            {
-                connection.Execute(string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog));
-            }
+            SqlConnectionStringBuilder builder;
+            DatabaseTestBase.SqlServer.SetUp(out builder);
             connection = new SqlConnection(builder.ConnectionString);
-            connection.Open();
+            PostSetUp();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            connection.Dispose();
-            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
-            {
-                connection.Execute(string.Format("DROP DATABASE [{0}]", builder.InitialCatalog));
-            }
+            PreTearDown();
+            DatabaseTestBase.SqlServer.TearDown();
         }
     }
 }

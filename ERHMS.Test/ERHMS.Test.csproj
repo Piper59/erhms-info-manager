@@ -92,6 +92,7 @@
     </Compile>
     <None Include="DataAccess\SampleDataContextTest.cs" />
     <Compile Include="Dapper\Constant.cs" />
+    <Compile Include="Dapper\DatabaseTestBase.cs" />
     <Compile Include="Dapper\Gender.cs" />
     <Compile Include="Dapper\IDbConnectionExtensionsTest.cs" />
     <Compile Include="Dapper\LoggingConnectionTest.cs" />
