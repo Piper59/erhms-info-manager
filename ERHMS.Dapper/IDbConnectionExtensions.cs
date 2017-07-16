@@ -29,15 +29,23 @@ namespace ERHMS.Dapper
                 }
                 using (IDbTransaction transaction = @this.BeginTransaction())
                 {
-                    foreach (string sql in script)
+                    try
                     {
-                        if (string.IsNullOrWhiteSpace(sql))
+                        foreach (string sql in script)
                         {
-                            continue;
+                            if (string.IsNullOrWhiteSpace(sql))
+                            {
+                                continue;
+                            }
+                            @this.Execute(sql, transaction: transaction);
                         }
-                        @this.Execute(sql, transaction: transaction);
+                        transaction.Commit();
                     }
-                    transaction.Commit();
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
             }
             finally
