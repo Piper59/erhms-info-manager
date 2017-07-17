@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.Dapper
 {
-    public class Repository<TEntity, TId> : IRepository<TEntity, TId>
+    public class Repository<TEntity> : IRepository<TEntity>
     {
         protected TypeMap TypeMap { get; private set; }
         public IDatabase Database { get; private set; }
@@ -31,7 +31,7 @@ namespace ERHMS.Dapper
             });
         }
 
-        public virtual TEntity SelectById(TId id)
+        public virtual TEntity SelectById(object id)
         {
             return Database.Invoke((connection, transaction) =>
             {
@@ -63,7 +63,7 @@ namespace ERHMS.Dapper
             });
         }
 
-        public virtual void DeleteById(TId id)
+        public virtual void DeleteById(object id)
         {
             Database.Invoke((connection, transaction) =>
             {

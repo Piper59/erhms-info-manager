@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ERHMS.Test.Dapper
 {
-    public class PersonRepository : Repository<Person, string>
+    public class PersonRepository : Repository<Person>
     {
         public PersonRepository(IDatabase database)
             : base(database) { }
@@ -30,7 +30,7 @@ namespace ERHMS.Test.Dapper
             });
         }
 
-        public override Person SelectById(string id)
+        public override Person SelectById(object id)
         {
             string sql = string.Format("WHERE Person.PersonId = @Id");
             DynamicParameters parameters = new DynamicParameters();

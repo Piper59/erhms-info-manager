@@ -5,15 +5,15 @@ namespace ERHMS.Test.Dapper
     public class DataContext
     {
         public IDatabase Database { get; private set; }
-        public Repository<Constant, int> Constants { get; private set; }
-        public Repository<Gender, string> Genders { get; private set; }
-        public PersonRepository People { get; private set; }
+        public IRepository<Constant> Constants { get; private set; }
+        public IRepository<Gender> Genders { get; private set; }
+        public IRepository<Person> People { get; private set; }
 
         public DataContext(IDatabase database)
         {
             Database = database;
-            Constants = new Repository<Constant, int>(database);
-            Genders = new Repository<Gender, string>(database);
+            Constants = new Repository<Constant>(database);
+            Genders = new Repository<Gender>(database);
             People = new PersonRepository(database);
         }
     }
