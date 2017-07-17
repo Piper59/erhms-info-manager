@@ -73,6 +73,10 @@
       <Project>{db2a0170-d0e9-40b3-a270-d4a47f2f7fe7}</Project>
       <Name>ERHMS.Dapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
+      <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
+      <Name>ERHMS.EpiInfo.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
       <Name>ERHMS.EpiInfo</Name>
@@ -107,7 +111,7 @@
     <None Include="EpiInfo\DataAccess\DataDriverTest.cs" />
     <None Include="EpiInfo\DataAccess\TableEntityRepositoryTest.cs" />
     <None Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
-    <None Include="EpiInfo\Domain\ViewEntityTest.cs" />
+    <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <None Include="EpiInfo\SampleTestBase.cs" />

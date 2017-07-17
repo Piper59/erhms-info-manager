@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace ERHMS.EpiInfo.Domain
 {
-    public class EntityBase : DynamicObject, INotifyPropertyChanged, ICloneable
+    public class Entity : DynamicObject, INotifyPropertyChanged, ICloneable
     {
         private IDictionary<string, object> properties;
 
@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        protected EntityBase()
+        protected Entity()
         {
             properties = new Dictionary<string, object>();
             New = true;
@@ -128,7 +128,7 @@ namespace ERHMS.EpiInfo.Domain
 
         public object Clone()
         {
-            EntityBase clone = (EntityBase)Activator.CreateInstance(GetType());
+            Entity clone = (Entity)Activator.CreateInstance(GetType());
             clone.New = New;
             foreach (KeyValuePair<string, object> property in properties)
             {

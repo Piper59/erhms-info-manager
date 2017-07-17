@@ -1,10 +1,11 @@
 ﻿using Epi;
+using ERHMS.Utility;
 using System;
 using System.Security.Principal;
 
 namespace ERHMS.EpiInfo.Domain
 {
-    public class ViewEntity : EntityBase
+    public class ViewEntity : Entity
     {
         public int? UniqueKey
         {
@@ -30,28 +31,28 @@ namespace ERHMS.EpiInfo.Domain
             set { SetProperty(ColumnNames.REC_STATUS, value); }
         }
 
-        public string FirstSaveUserName
+        public string CreatedBy
         {
             get { return GetProperty<string>(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME); }
             set { SetProperty(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, value); }
         }
 
-        public DateTime? FirstSaveStamp
+        public DateTime? CreatedOn
         {
             get { return GetProperty<DateTime?>(ColumnNames.RECORD_FIRST_SAVE_TIME); }
-            set { SetProperty(ColumnNames.RECORD_FIRST_SAVE_TIME, value); }
+            set { SetProperty(ColumnNames.RECORD_FIRST_SAVE_TIME, value?.RemoveMilliseconds()); }
         }
 
-        public string LastSaveUserName
+        public string ModifiedBy
         {
             get { return GetProperty<string>(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME); }
             set { SetProperty(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, value); }
         }
 
-        public DateTime? LastSaveStamp
+        public DateTime? ModifiedOn
         {
             get { return GetProperty<DateTime?>(ColumnNames.RECORD_LAST_SAVE_TIME); }
-            set { SetProperty(ColumnNames.RECORD_LAST_SAVE_TIME, value); }
+            set { SetProperty(ColumnNames.RECORD_LAST_SAVE_TIME, value?.RemoveMilliseconds()); }
         }
 
         public bool Deleted
@@ -66,30 +67,27 @@ namespace ERHMS.EpiInfo.Domain
             AddSynonym(ColumnNames.GLOBAL_RECORD_ID, nameof(GlobalRecordId));
             AddSynonym(ColumnNames.FOREIGN_KEY, nameof(ForeignKey));
             AddSynonym(ColumnNames.REC_STATUS, nameof(RecordStatus));
-            AddSynonym(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, nameof(FirstSaveUserName));
-            AddSynonym(ColumnNames.RECORD_FIRST_SAVE_TIME, nameof(FirstSaveStamp));
-            AddSynonym(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, nameof(LastSaveUserName));
-            AddSynonym(ColumnNames.RECORD_LAST_SAVE_TIME, nameof(LastSaveStamp));
+            AddSynonym(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, nameof(CreatedBy));
+            AddSynonym(ColumnNames.RECORD_FIRST_SAVE_TIME, nameof(CreatedOn));
+            AddSynonym(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, nameof(ModifiedBy));
+            AddSynonym(ColumnNames.RECORD_LAST_SAVE_TIME, nameof(ModifiedOn));
             AddSynonym(ColumnNames.REC_STATUS, nameof(Deleted));
         }
 
-        public void Touch(bool first, bool last, IIdentity user = null)
+        public void Touch(IIdentity user = null)
         {
             if (user == null)
             {
                 user = WindowsIdentity.GetCurrent();
             }
             DateTime now = DateTime.Now;
-            if (first)
+            if (New)
             {
-                FirstSaveUserName = user.Name;
-                FirstSaveStamp = now;
+                CreatedBy = user.Name;
+                CreatedOn = now;
             }
-            if (last)
-            {
-                LastSaveUserName = user.Name;
-                LastSaveStamp = now;
-            }
+            ModifiedBy = user.Name;
+            ModifiedOn = now;
         }
     }
 }
