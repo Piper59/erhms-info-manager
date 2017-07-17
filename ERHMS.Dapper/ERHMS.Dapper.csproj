@@ -56,14 +56,23 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Databases\AccessDatabase.cs" />
+    <Compile Include="Databases\DatabaseBase.cs" />
+    <Compile Include="Databases\IDatabase.cs" />
+    <Compile Include="Databases\SqlServerDatabase.cs" />
     <Compile Include="IDbConnectionExtensions.cs" />
     <Compile Include="LoggingCommand.cs" />
     <Compile Include="LoggingConnection.cs" />
     <Compile Include="Maps\PropertyMap.cs" />
     <Compile Include="Maps\TypeMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="Transaction.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Databases\Empty.mdb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

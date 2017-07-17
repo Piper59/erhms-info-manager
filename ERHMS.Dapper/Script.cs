@@ -42,7 +42,7 @@ namespace ERHMS.Dapper
         public Script(string text)
         {
             Text = text;
-            sqls = Split(CommentPattern.Replace(text, "")).ToList();
+            sqls = Split(CommentPattern.Replace(text, "")).Select(sql => sql.Trim()).ToList();
         }
 
         public IEnumerator<string> GetEnumerator()

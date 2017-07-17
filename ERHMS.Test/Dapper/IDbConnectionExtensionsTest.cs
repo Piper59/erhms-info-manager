@@ -15,7 +15,6 @@ namespace ERHMS.Test.Dapper
     public abstract class IDbConnectionExtensionsTestBase
     {
         protected IDbConnection connection;
-        private ICollection<Gender> genders;
 
         protected void PostSetUp()
         {
@@ -37,13 +36,11 @@ namespace ERHMS.Test.Dapper
         [Order(1)]
         public void ExecuteTest()
         {
-            Script script = new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.People.sql"));
-            connection.Execute(script);
+            connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.People.sql")));
             Assert.AreEqual(1, Count("Global"));
             Assert.AreEqual(2, Count("Gender"));
             Assert.AreEqual(100, Count("Person"));
-            genders = connection.Query<Gender>("SELECT * FROM Gender").ToList();
-            foreach (Gender gender in genders)
+            foreach (Gender gender in connection.Query<Gender>("SELECT * FROM Gender"))
             {
                 Assert.AreEqual(4, gender.Pronouns.Split(';').Length);
             }
@@ -53,10 +50,10 @@ namespace ERHMS.Test.Dapper
         public void QueryTest()
         {
             string sql = @"
-                SELECT P.*, NULL AS Separator, G.*
-                FROM Person AS P
-                INNER JOIN Gender AS G ON P.GenderId = G.GenderId
-                WHERE P.Weight >= @Weight";
+                SELECT Person.*, NULL AS Separator, Gender.*
+                FROM Person
+                INNER JOIN Gender ON Person.GenderId = Gender.GenderId
+                WHERE Person.Weight >= @Weight";
             Func<Person, Gender, Person> map = (person, gender) =>
             {
                 person.Gender = gender;
@@ -77,7 +74,7 @@ namespace ERHMS.Test.Dapper
             Assert.AreEqual(100, connection.Select<Person>().Count());
             string sql = "WHERE GenderId = @GenderId";
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@GenderId", genders.Single(gender => gender.Name == "Male").GenderId);
+            parameters.Add("@GenderId", "273c6d62-be89-48df-9e04-775125bc4f6a");
             Assert.AreEqual(51, connection.Select<Person>(sql, parameters).Count());
             Person person = connection.Select<Person>("ORDER BY BirthDate").First();
             Assert.AreEqual("Sims", person.Name);
@@ -95,7 +92,7 @@ namespace ERHMS.Test.Dapper
             Person person = connection.SelectById<Person>("999181b4-8445-e585-5178-74a9e11e75fa");
             Assert.AreEqual("Graham", person.Name);
             Assert.AreEqual(new DateTime(1986, 9, 14), person.BirthDate);
-            Assert.IsNull(connection.SelectById<Person>(Guid.Empty));
+            Assert.IsNull(connection.SelectById<Person>(Guid.Empty.ToString()));
         }
 
         [Test]
@@ -116,7 +113,7 @@ namespace ERHMS.Test.Dapper
             {
                 Person person = new Person
                 {
-                    GenderId = genders.Single(gender => gender.Name == "Male").GenderId,
+                    GenderId = "273c6d62-be89-48df-9e04-775125bc4f6a",
                     Name = "Doe",
                     BirthDate = DateTime.Now
                 };
@@ -131,13 +128,21 @@ namespace ERHMS.Test.Dapper
         {
             Constant constant = connection.SelectById<Constant>(1);
             Assert.AreEqual("1.0", constant.Value);
-            constant.Value = "2.0";
-            connection.Update(constant);
+            using (IDbTransaction transaction = connection.BeginTransaction())
+            {
+                constant.Value = "2.0";
+                connection.Update(constant, transaction);
+                transaction.Commit();
+            }
             Assert.AreEqual(constant.Value, connection.SelectById<Constant>(constant.ConstantId).Value);
             Person person = connection.SelectById<Person>("999181b4-8445-e585-5178-74a9e11e75fa");
             Assert.AreEqual(180.5, person.Weight);
-            person.Weight -= 10.0;
-            connection.Update(person);
+            using (IDbTransaction transaction = connection.BeginTransaction())
+            {
+                person.Weight -= 10.0;
+                connection.Update(person, transaction);
+                transaction.Commit();
+            }
             Assert.AreEqual(person.Weight, connection.SelectById<Person>(person.PersonId).Weight);
         }
 

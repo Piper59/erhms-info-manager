@@ -35,7 +35,7 @@ namespace ERHMS.Test.Dapper
             string sql = "SELECT COUNT(*) FROM Test WHERE Id = @Id";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
-            return connection.ExecuteScalar<int>(sql, parameters, transaction?.Base) != 0;
+            return connection.ExecuteScalar<int>(sql, parameters, transaction?.Base) > 0;
         }
 
         private void Test(string id, bool commit, bool rollback)
