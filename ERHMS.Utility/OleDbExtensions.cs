@@ -4,7 +4,7 @@
     {
         public static class Providers
         {
-            public const string Access = "Microsoft.Jet.OLEDB.4.0";
+            public const string Jet4 = "Microsoft.Jet.OLEDB.4.0";
         }
 
         public static class Errors

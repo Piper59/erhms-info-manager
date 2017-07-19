@@ -75,7 +75,7 @@ namespace ERHMS.EpiInfo
             XmlElement element = document.SelectSingleElement("/Project/CollectedData/Database");
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
-                Provider = OleDbExtensions.Providers.Access,
+                Provider = OleDbExtensions.Providers.Jet4,
                 DataSource = Path.ChangeExtension(FilePath, ".mdb")
             };
             element.SetAttribute("connectionString", Configuration.Encrypt(builder.ConnectionString));
