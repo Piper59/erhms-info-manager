@@ -22,25 +22,22 @@ namespace ERHMS.EpiInfo.Wrappers
         public class OpenPgm : Wrapper
         {
             private static Project Project { get; set; }
-            private static string PgmName { get; set; }
             private static string Content { get; set; }
             private static bool Execute { get; set; }
             private static MainForm Form { get; set; }
 
-            public static Wrapper Create(string projectPath, string pgmName, string content, bool execute)
+            public static Wrapper Create(string projectPath, string content, bool execute)
             {
-                return Create(() => MainInternal(projectPath, pgmName, content, execute));
+                return Create(() => MainInternal(projectPath, content, execute));
             }
 
-            private static void MainInternal(string projectPath, string pgmName, string content, bool execute)
+            private static void MainInternal(string projectPath, string content, bool execute)
             {
                 Project = new Project(projectPath);
-                PgmName = pgmName;
-                Content = content.Trim().NormalizeNewLines();
+                Content = content;
                 Execute = execute;
                 Form = new MainForm();
                 Form.Shown += Form_Shown;
-                Form.FormClosing += Form_FormClosing;
                 Application.Run(Form);
             }
 
@@ -50,31 +47,6 @@ namespace ERHMS.EpiInfo.Wrappers
                 if (Execute)
                 {
                     Form.ExecuteCommands(true);
-                }
-            }
-
-            private static void Form_FormClosing(object sender, FormClosingEventArgs e)
-            {
-                string commands = Form.Commands.Trim().NormalizeNewLines();
-                if (e.CloseReason == CloseReason.UserClosing && commands != Content)
-                {
-                    string message = "Save changes to this program before exiting?";
-                    DialogResult result = MessageBox.Show(Form, message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Yes)
-                    {
-                        if (Form.SavePgm(Project, PgmName))
-                        {
-                            RaiseEvent(WrapperEventType.PgmSaved);
-                        }
-                        else
-                        {
-                            e.Cancel = true;
-                        }
-                    }
-                    else if (result == DialogResult.Cancel)
-                    {
-                        e.Cancel = true;
-                    }
                 }
             }
         }
@@ -174,7 +146,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 string csvPath = IOExtensions.GetTempFileName("ERHMS_{0:N}.csv");
                 Form.AddCommand(Commands.WriteCsv(csvPath, mappings.GetTargets()));
                 Form.AddCommand(Commands.Read(ProjectPath, ViewName));
-                Form.AddCommand(Commands.MergeCsv(csvPath, mappings.GetKeyTarget()));
+                Form.AddCommand(Commands.MergeCsv(csvPath, mappings.GetIdTarget()));
                 Form.ExecuteCommands(true, Step4);
             }
 

@@ -107,31 +107,16 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             project.InsertPgm(pgm);
 
             // Invoke wrapper
-            wrapper = Analysis.OpenPgm.Create(project.FilePath, pgm.Name, pgm.Content, true);
+            wrapper = Analysis.OpenPgm.Create(project.FilePath, pgm.Content, true);
             WrapperEventCollection events = new WrapperEventCollection(wrapper);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
 
-            Assert.AreEqual(content.ToString().Trim(), mainForm.txtTextArea.Text.DocumentRange.GetText(-1).Trim().NormalizeNewLines());
             StringAssert.Contains(message, File.ReadAllText(outputPath));
 
-            // Change PGM
-            message = "Goodbye, world!";
-            mainForm.txtTextArea.Text.Set(Commands.Type(message));
-
-            // Attempt to close window
+            // Close window
             mainForm.Window.Close();
-
-            // Save PGM
-            mainForm.GetSaveDialogScreen().Dialog.Close(DialogResult.Yes);
-            PgmDialogScreen pgmDialog = mainForm.GetPgmDialogScreen();
-            pgmDialog.btnOK.Invoke.Invoke();
-            wrapper.Exited.WaitOne();
-
-            StringAssert.Contains(message, project.GetPgmById(pgm.PgmId).Content);
-            Assert.AreEqual(1, events.Count);
-            Assert.AreEqual(WrapperEventType.PgmSaved, events[0].Type);
         }
 
         private void ImportCsv(string resourceName, string fileName)

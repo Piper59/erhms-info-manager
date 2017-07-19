@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
@@ -17,7 +18,7 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
-                Provider = "Microsoft.Jet.OLEDB.4.0",
+                Provider = OleDbExtensions.Providers.Jet4,
                 DataSource = Path.GetDirectoryName(path)
             };
             builder["Extended Properties"] = "text;HDR=Yes;FMT=Delimited";
@@ -39,10 +40,14 @@ namespace ERHMS.EpiInfo.Wrappers
             return string.Format("DEFINE {0}", variableName);
         }
 
-        public static string MergeCsv(string path, string key)
+        public static string MergeCsv(string path, string id)
         {
-            string format = "MERGE {{{0}}}:{1} {2} :: {3}";
-            return string.Format(format, GetCsvConnectionString(path), GetCsvFileName(path), ColumnNames.GLOBAL_RECORD_ID, key);
+            return string.Format(
+                "MERGE {{{0}}}:{1} {2} :: {3}",
+                GetCsvConnectionString(path),
+                GetCsvFileName(path),
+                ColumnNames.GLOBAL_RECORD_ID,
+                id);
         }
 
         public static string Read(string projectPath, string viewName)
@@ -52,9 +57,11 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public static string WriteCsv(string path, IEnumerable<string> variableNames)
         {
-            string format = "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}";
-            string escapedVariableNames = string.Join(" ", variableNames.Select(variableName => Escape(variableName)));
-            return string.Format(format, GetCsvConnectionString(path), GetCsvFileName(path), escapedVariableNames);
+            return string.Format(
+                "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}",
+                GetCsvConnectionString(path),
+                GetCsvFileName(path),
+                string.Join(" ", variableNames.Select(variableName => Escape(variableName))));
         }
     }
 }

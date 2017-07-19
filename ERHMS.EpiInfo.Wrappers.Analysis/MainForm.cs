@@ -1,12 +1,10 @@
 ﻿using Epi;
 using Epi.Analysis.Dialogs;
-using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
 using ERHMS.Utility;
 using System;
 using System.ComponentModel;
 using System.Data;
-using System.Windows.Forms;
 using Action = System.Action;
 
 namespace ERHMS.EpiInfo.Wrappers
@@ -21,6 +19,12 @@ namespace ERHMS.EpiInfo.Wrappers
             set { ProgramEditor.txtTextArea.Text = value; }
         }
 
+        public MainForm()
+        {
+            this.Initialize();
+            waitDialog = new WaitDialog();
+        }
+
         protected override object GetService(Type serviceType)
         {
             if (serviceType == typeof(AnalysisMainForm))
@@ -33,12 +37,6 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        public MainForm()
-        {
-            this.Initialize();
-            waitDialog = new WaitDialog();
-        }
-
         public BackgroundWorker GetBackgroundWorker(string message, bool showDialog)
         {
             BackgroundWorker worker = new BackgroundWorker();
@@ -47,18 +45,18 @@ namespace ERHMS.EpiInfo.Wrappers
                 Invoke(new Action(() =>
                 {
                     UpdateStatus(message, false);
-                    Enabled = false;
                     if (showDialog)
                     {
                         waitDialog.Prompt = message;
                         waitDialog.Show(this);
                     }
+                    Enabled = false;
                 }));
             };
             worker.RunWorkerCompleted += (sender, e) =>
             {
-                waitDialog.Hide();
                 Enabled = true;
+                waitDialog.Hide();
                 UpdateStatus(SharedStrings.READY, false);
             };
             return worker;
@@ -99,19 +97,6 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             EpiInterpreter.Context.GetOutput();
             return EpiInterpreter.Context.DataSet.Tables["Output"].Clone();
-        }
-
-        public bool SavePgm(Project project, string pgmName)
-        {
-            Epi.Project currentProject = EpiInterpreter.Context.CurrentProject;
-            EpiInterpreter.Context.CurrentProject = project;
-            using (PgmDialog dialog = new PgmDialog(this, pgmName, Commands, PgmDialog.PgmDialogMode.SaveProgram))
-            {
-                dialog.StartPosition = FormStartPosition.CenterParent;
-                DialogResult result = dialog.ShowDialog(this);
-                EpiInterpreter.Context.CurrentProject = currentProject;
-                return result == DialogResult.OK;
-            }
         }
     }
 }

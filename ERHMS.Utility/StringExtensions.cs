@@ -29,11 +29,6 @@ namespace ERHMS.Utility
             return NewLinePattern.Split(@this);
         }
 
-        public static string NormalizeNewLines(this string @this)
-        {
-            return NewLinePattern.Replace(@this, Environment.NewLine);
-        }
-
         public static string MakeUnique(this string @this, string format, Predicate<string> exists)
         {
             if (exists(@this))

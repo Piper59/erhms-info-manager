@@ -54,16 +54,6 @@ namespace ERHMS.Test.Utility
         }
 
         [Test]
-        public void NormalizeNewLinesTest()
-        {
-            string expected = GetMultiLineString(Environment.NewLine);
-            foreach (string lines in GetMultiLineStrings())
-            {
-                Assert.AreEqual(expected, lines.NormalizeNewLines());
-            }
-        }
-
-        [Test]
         public void MakeUniqueTest()
         {
             ICollection<string> values = new string[]

@@ -7,7 +7,6 @@
         ViewCreated,
         ViewDataImported,
         TemplateCreated,
-        PgmSaved,
         CanvasSaved
     }
 }

@@ -18,14 +18,14 @@ namespace ERHMS.EpiInfo.Wrappers
             return this.Any(mapping => mapping.Target.EqualsIgnoreCase(target));
         }
 
-        private bool ContainsKeyMapping()
+        private bool ContainsIdMapping()
         {
             return ContainsTarget(ColumnNames.GLOBAL_RECORD_ID);
         }
 
-        public string GetKeyTarget()
+        public string GetIdTarget()
         {
-            if (ContainsKeyMapping())
+            if (ContainsIdMapping())
             {
                 return ColumnNames.GLOBAL_RECORD_ID;
             }
@@ -37,9 +37,9 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public IEnumerable<string> GetTargets()
         {
-            if (!ContainsKeyMapping())
+            if (!ContainsIdMapping())
             {
-                yield return GetKeyTarget();
+                yield return GetIdTarget();
             }
             foreach (Mapping mapping in this)
             {
@@ -50,9 +50,9 @@ namespace ERHMS.EpiInfo.Wrappers
         public string GetCommands()
         {
             StringBuilder commands = new StringBuilder();
-            if (!ContainsKeyMapping())
+            if (!ContainsIdMapping())
             {
-                commands.AppendLine(Commands.Define(GetKeyTarget()));
+                commands.AppendLine(Commands.Define(GetIdTarget()));
             }
             foreach (Mapping mapping in this)
             {
