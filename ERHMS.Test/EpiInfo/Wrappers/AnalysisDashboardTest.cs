@@ -31,8 +31,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             project.InsertCanvas(canvas);
 
             // Invoke wrapper
-            wrapper = AnalysisDashboard.OpenCanvas.Create(project.FilePath, canvas.Content);
-            WrapperEventCollection events = new WrapperEventCollection(wrapper);
+            wrapper = AnalysisDashboard.OpenCanvas.Create(project.FilePath, canvas.CanvasId, canvas.Content);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
 
@@ -52,10 +51,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
             wrapper.Exited.WaitOne();
 
-            CollectionAssert.IsNotEmpty(events);
-            WrapperEventArgs @event = events[events.Count - 1];
-            Assert.AreEqual(WrapperEventType.CanvasSaved, @event.Type);
-            StringAssert.Contains(message, @event.Properties.Content);
+            StringAssert.Contains(message, project.GetCanvasById(canvas.CanvasId).Content);
         }
     }
 }

@@ -6,7 +6,6 @@
         RecordSaved,
         ViewCreated,
         ViewDataImported,
-        TemplateCreated,
-        CanvasSaved
+        TemplateCreated
     }
 }

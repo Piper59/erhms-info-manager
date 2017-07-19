@@ -17,18 +17,22 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class OpenCanvas : Wrapper
         {
+            private static Project Project { get; set; }
+            private static Canvas Canvas { get; set; }
             private static string CanvasPath { get; set; }
             private static DashboardMainForm Form { get; set; }
 
-            public static Wrapper Create(string projectPath, string content)
+            public static Wrapper Create(string projectPath, int canvasId, string content)
             {
                 string canvasPath = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", Canvas.FileExtension);
                 File.WriteAllText(canvasPath, content);
-                return Create(() => MainInternal(projectPath, canvasPath));
+                return Create(() => MainInternal(projectPath, canvasId, canvasPath));
             }
 
-            private static void MainInternal(string projectPath, string canvasPath)
+            private static void MainInternal(string projectPath, int canvasId, string canvasPath)
             {
+                Project = new Project(projectPath);
+                Canvas = Project.GetCanvasById(canvasId);
                 CanvasPath = canvasPath;
                 using (FileSystemWatcher watcher = new FileSystemWatcher(Path.GetDirectoryName(canvasPath), Path.GetFileName(canvasPath)))
                 {
@@ -49,11 +53,9 @@ namespace ERHMS.EpiInfo.Wrappers
                 using (FileStream stream = new FileStream(CanvasPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    RaiseEvent(WrapperEventType.CanvasSaved, new
-                    {
-                        Content = reader.ReadToEnd()
-                    });
+                    Canvas.Content = reader.ReadToEnd();
                 }
+                Project.UpdateCanvas(Canvas);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
