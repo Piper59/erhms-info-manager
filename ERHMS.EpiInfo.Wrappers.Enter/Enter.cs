@@ -16,25 +16,25 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class OpenRecord : Wrapper
         {
-            private static string projectPath;
-            private static string viewName;
-            private static int uniqueKey;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static int UniqueKey { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string viewName, int uniqueKey)
             {
-                return Create(() => Execute(projectPath, viewName, uniqueKey));
+                return Create(() => MainInternal(projectPath, viewName, uniqueKey));
             }
 
-            private static void Execute(string projectPath, string viewName, int uniqueKey)
+            private static void MainInternal(string projectPath, string viewName, int uniqueKey)
             {
-                OpenRecord.projectPath = projectPath;
-                OpenRecord.viewName = viewName;
-                OpenRecord.uniqueKey = uniqueKey;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                form.RecordSaved += Form_RecordSaved;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                UniqueKey = uniqueKey;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Form.RecordSaved += Form_RecordSaved;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
@@ -42,9 +42,9 @@ namespace ERHMS.EpiInfo.Wrappers
                 using (SplashScreenForm splash = new SplashScreenForm())
                 {
                     splash.ShowInTaskbar = false;
-                    splash.Show(form);
+                    splash.Show(Form);
                     Application.DoEvents();
-                    form.OpenRecord(projectPath, viewName, uniqueKey);
+                    Form.OpenRecord(ProjectPath, ViewName, UniqueKey);
                     splash.Close();
                 }
             }
@@ -57,13 +57,13 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class OpenNewRecord : Wrapper
         {
-            private static string projectPath;
-            private static string viewName;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string viewName, object record = null)
             {
-                Wrapper wrapper = Create(() => Execute(projectPath, viewName));
+                Wrapper wrapper = Create(() => MainInternal(projectPath, viewName));
                 wrapper.Invoked += (sender, e) =>
                 {
                     if (record != null)
@@ -79,14 +79,14 @@ namespace ERHMS.EpiInfo.Wrappers
                 return wrapper;
             }
 
-            private static void Execute(string projectPath, string viewName)
+            private static void MainInternal(string projectPath, string viewName)
             {
-                OpenNewRecord.projectPath = projectPath;
-                OpenNewRecord.viewName = viewName;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                form.RecordSaved += Form_RecordSaved;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Form.RecordSaved += Form_RecordSaved;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
@@ -94,9 +94,9 @@ namespace ERHMS.EpiInfo.Wrappers
                 using (SplashScreenForm splash = new SplashScreenForm())
                 {
                     splash.ShowInTaskbar = false;
-                    splash.Show(form);
+                    splash.Show(Form);
                     Application.DoEvents();
-                    form.OpenNewRecord(projectPath, viewName);
+                    Form.OpenNewRecord(ProjectPath, ViewName);
                     bool refresh = false;
                     while (true)
                     {
@@ -106,14 +106,14 @@ namespace ERHMS.EpiInfo.Wrappers
                         {
                             break;
                         }
-                        if (form.TrySetValue(fieldName, value))
+                        if (Form.TrySetValue(fieldName, value))
                         {
                             refresh = true;
                         }
                     }
                     if (refresh)
                     {
-                        form.Refresh();
+                        Form.Refresh();
                     }
                     splash.Close();
                 }

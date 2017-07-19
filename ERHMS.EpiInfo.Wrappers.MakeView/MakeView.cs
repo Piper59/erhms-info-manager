@@ -17,29 +17,29 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class OpenView : Wrapper
         {
-            private static string projectPath;
-            private static string viewName;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string viewName)
             {
-                return Create(() => Execute(projectPath, viewName));
+                return Create(() => MainInternal(projectPath, viewName));
             }
 
-            private static void Execute(string projectPath, string viewName)
+            private static void MainInternal(string projectPath, string viewName)
             {
-                OpenView.projectPath = projectPath;
-                OpenView.viewName = viewName;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
             {
                 Application.DoEvents();
-                form.OpenProject(projectPath);
-                form.ProjectExplorer.SelectView(viewName);
+                Form.OpenProject(ProjectPath);
+                Form.ProjectExplorer.SelectView(ViewName);
             }
         }
 
@@ -47,10 +47,10 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             public static Wrapper Create(string projectPath, string templatePath)
             {
-                return Create(() => Execute(projectPath, templatePath));
+                return Create(() => MainInternal(projectPath, templatePath));
             }
 
-            private static void Execute(string projectPath, string templatePath)
+            private static void MainInternal(string projectPath, string templatePath)
             {
                 MainForm form = new MainForm(false);
                 form.OpenProject(projectPath);
@@ -61,54 +61,54 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class InstantiateViewTemplate : Wrapper
         {
-            private static string projectPath;
-            private static string templatePath;
-            private static string namePrefix;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string TemplatePath { get; set; }
+            private static string ViewNamePrefix { get; set; }
+            private static MainForm Form { get; set; }
 
-            public static Wrapper Create(string projectPath, string templatePath, string namePrefix)
+            public static Wrapper Create(string projectPath, string templatePath, string viewNamePrefix)
             {
-                return Create(() => Execute(projectPath, templatePath, namePrefix));
+                return Create(() => MainInternal(projectPath, templatePath, viewNamePrefix));
             }
 
-            private static void Execute(string projectPath, string templatePath, string namePrefix)
+            private static void MainInternal(string projectPath, string templatePath, string viewNamePrefix)
             {
-                InstantiateViewTemplate.projectPath = projectPath;
-                InstantiateViewTemplate.templatePath = templatePath;
-                InstantiateViewTemplate.namePrefix = namePrefix;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                TemplatePath = templatePath;
+                ViewNamePrefix = viewNamePrefix;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
             {
                 Application.DoEvents();
-                Project project = new Project(projectPath);
-                form.OpenProject(project);
+                Project project = new Project(ProjectPath);
+                Form.OpenProject(project);
                 XmlDocument document = new XmlDocument();
-                document.Load(templatePath);
+                document.Load(TemplatePath);
                 XmlElement viewElement = document.SelectSingleElement("/Template/Project/View");
-                string viewName = project.SuggestViewName(namePrefix + viewElement.GetAttribute("Name"));
+                string viewName = project.SuggestViewName(ViewNamePrefix + viewElement.GetAttribute("Name"));
                 using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                 {
                     dialog.StartPosition = FormStartPosition.CenterParent;
-                    if (dialog.ShowDialog(form) == DialogResult.OK)
+                    if (dialog.ShowDialog(Form) == DialogResult.OK)
                     {
                         viewElement.SetAttribute("Name", dialog.ViewName);
                         string tempTemplatePath = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
                         document.Save(tempTemplatePath);
-                        Template template = new Template(form.Mediator);
+                        Template template = new Template(Form.Mediator);
                         template.InstantiateTemplate(tempTemplatePath);
                         RaiseEvent(WrapperEventType.ViewCreated, new
                         {
                             Id = project.GetViewByName(dialog.ViewName).Id
                         });
-                        form.TryClose("Form has been created.");
+                        Form.TryClose("Form has been created.");
                     }
                     else
                     {
-                        form.TryClose("Form has not been created.", MessageBoxIcon.Warning);
+                        Form.TryClose("Form has not been created.", MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -116,43 +116,43 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class CreateTemplate : Wrapper
         {
-            private static string projectPath;
-            private static string viewName;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string viewName)
             {
-                return Create(() => Execute(projectPath, viewName));
+                return Create(() => MainInternal(projectPath, viewName));
             }
 
-            private static void Execute(string projectPath, string viewName)
+            private static void MainInternal(string projectPath, string viewName)
             {
-                CreateTemplate.projectPath = projectPath;
-                CreateTemplate.viewName = viewName;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
             {
                 Application.DoEvents();
-                form.OpenProject(projectPath);
-                form.ProjectExplorer.SelectView(viewName);
-                using (CreateTemplateDialog dialog = new CreateTemplateDialog(viewName))
+                Form.OpenProject(ProjectPath);
+                Form.ProjectExplorer.SelectView(ViewName);
+                using (CreateTemplateDialog dialog = new CreateTemplateDialog(ViewName))
                 {
                     dialog.StartPosition = FormStartPosition.CenterParent;
-                    if (dialog.ShowDialog(form) == DialogResult.OK)
+                    if (dialog.ShowDialog(Form) == DialogResult.OK)
                     {
-                        Template template = new Template(form.Mediator);
-                        template.CreateTemplate(form.CurrentView, dialog.TemplateName, dialog.Description);
+                        Template template = new Template(Form.Mediator);
+                        template.CreateTemplate(Form.CurrentView, dialog.TemplateName, dialog.Description);
                         RaiseEvent(WrapperEventType.TemplateCreated);
-                        form.ProjectExplorer.UpdateTemplates();
-                        form.TryClose("Template has been created.");
+                        Form.ProjectExplorer.UpdateTemplates();
+                        Form.TryClose("Template has been created.");
                     }
                     else
                     {
-                        form.TryClose("Template has not been created.", MessageBoxIcon.Warning);
+                        Form.TryClose("Template has not been created.", MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -162,10 +162,10 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             public static Wrapper Create(string projectPath, string viewName)
             {
-                return Create(() => Execute(projectPath, viewName));
+                return Create(() => MainInternal(projectPath, viewName));
             }
 
-            private static void Execute(string projectPath, string viewName)
+            private static void MainInternal(string projectPath, string viewName)
             {
                 MainForm form = new MainForm(false);
                 form.OpenProject(projectPath);
@@ -177,22 +177,22 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class PublishToMobile : Wrapper
         {
-            private static string projectPath;
-            private static string viewName;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string viewName)
             {
-                return Create(() => Execute(projectPath, viewName));
+                return Create(() => MainInternal(projectPath, viewName));
             }
 
-            private static void Execute(string projectPath, string viewName)
+            private static void MainInternal(string projectPath, string viewName)
             {
-                PublishToMobile.projectPath = projectPath;
-                PublishToMobile.viewName = viewName;
-                form = new MainForm(false);
-                form.Shown += Form_Shown;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                Form = new MainForm(false);
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
@@ -200,19 +200,19 @@ namespace ERHMS.EpiInfo.Wrappers
                 using (SplashScreenForm splash = new SplashScreenForm())
                 {
                     splash.ShowInTaskbar = false;
-                    splash.Show(form);
+                    splash.Show(Form);
                     Application.DoEvents();
-                    form.OpenProject(projectPath);
-                    form.ProjectExplorer.SelectView(viewName);
+                    Form.OpenProject(ProjectPath);
+                    Form.ProjectExplorer.SelectView(ViewName);
                     splash.Close();
                 };
-                using (CopyToAndroid dialog = new CopyToAndroid(form.CurrentView, form.Mediator))
+                using (CopyToAndroid dialog = new CopyToAndroid(Form.CurrentView, Form.Mediator))
                 {
                     dialog.ShowInTaskbar = false;
                     dialog.StartPosition = FormStartPosition.CenterScreen;
-                    dialog.ShowDialog(form);
+                    dialog.ShowDialog(Form);
                 }
-                form.Close();
+                Form.Close();
             }
         }
     }

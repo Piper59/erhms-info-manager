@@ -14,10 +14,10 @@ namespace ERHMS.Test.Wrappers
         {
             public static Wrapper Create()
             {
-                return Create(() => Execute());
+                return Create(() => MainInternal());
             }
 
-            private static void Execute()
+            private static void MainInternal()
             {
                 Console.Out.WriteLine("Standard output should be redirected to a null stream.");
                 Out.WriteLine("Hello, world!");
@@ -28,10 +28,10 @@ namespace ERHMS.Test.Wrappers
         {
             public static Wrapper Create()
             {
-                return Create(() => Execute());
+                return Create(() => MainInternal());
             }
 
-            private static void Execute()
+            private static void MainInternal()
             {
                 if (Console.In.Peek() != -1)
                 {
@@ -53,10 +53,10 @@ namespace ERHMS.Test.Wrappers
         {
             public static Wrapper Create(string id, string name, double age, bool male)
             {
-                return Create(() => Execute(id, name, age, male));
+                return Create(() => MainInternal(id, name, age, male));
             }
 
-            private static void Execute(string id, string name, double age, bool male)
+            private static void MainInternal(string id, string name, double age, bool male)
             {
                 int ageYears = Convert.ToInt32(Math.Truncate(age));
                 int ageMonths = Convert.ToInt32(Math.Truncate((age - ageYears) * 12));
@@ -71,10 +71,10 @@ namespace ERHMS.Test.Wrappers
         {
             public static Wrapper Create(string value)
             {
-                return Create(() => Execute(value));
+                return Create(() => MainInternal(value));
             }
 
-            private static void Execute(string value)
+            private static void MainInternal(string value)
             {
                 Out.WriteLine(value.Length);
             }
@@ -84,10 +84,10 @@ namespace ERHMS.Test.Wrappers
         {
             public static Wrapper Create()
             {
-                return Create(() => Execute());
+                return Create(() => MainInternal());
             }
 
-            private static void Execute()
+            private static void MainInternal()
             {
                 Console.Error.WriteLine("Standard error should be redirected to a null stream.");
                 RaiseEvent(WrapperEventType.Default);
@@ -98,10 +98,10 @@ namespace ERHMS.Test.Wrappers
         {
             public static Wrapper Create()
             {
-                return Create(() => Execute());
+                return Create(() => MainInternal());
             }
 
-            private static void Execute()
+            private static void MainInternal()
             {
                 RaiseEvent(WrapperEventType.Default, new
                 {

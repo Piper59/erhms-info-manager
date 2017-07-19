@@ -84,6 +84,22 @@
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.AnalysisDashboard\ERHMS.EpiInfo.Wrappers.AnalysisDashboard.csproj">
+      <Project>{0545c649-4922-4c42-89b1-518c056fb483}</Project>
+      <Name>ERHMS.EpiInfo.Wrappers.AnalysisDashboard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.Analysis\ERHMS.EpiInfo.Wrappers.Analysis.csproj">
+      <Project>{02554b6e-557d-4c58-ae39-4ac674755d71}</Project>
+      <Name>ERHMS.EpiInfo.Wrappers.Analysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.Enter\ERHMS.EpiInfo.Wrappers.Enter.csproj">
+      <Project>{1f323f8b-ac7b-4dba-94cc-9b9c2e7d7652}</Project>
+      <Name>ERHMS.EpiInfo.Wrappers.Enter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.MakeView\ERHMS.EpiInfo.Wrappers.MakeView.csproj">
+      <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
+      <Name>ERHMS.EpiInfo.Wrappers.MakeView</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{3c13eecd-caf7-4de2-a93d-65f791318baa}</Project>
       <Name>ERHMS.EpiInfo</Name>
@@ -117,17 +133,17 @@
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
     <None Include="EpiInfo\Web\RecordTest.cs" />
     <None Include="EpiInfo\Web\ServiceTest.cs" />
-    <None Include="EpiInfo\Wrappers\AnalysisDashboardTest.cs" />
-    <None Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
-    <None Include="EpiInfo\Wrappers\AnalysisTest.cs" />
-    <None Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
-    <None Include="EpiInfo\Wrappers\AutomationElementX.cs" />
-    <None Include="EpiInfo\Wrappers\AutomationExtensions.cs" />
-    <None Include="EpiInfo\Wrappers\EnterTest.cs" />
-    <None Include="EpiInfo\Wrappers\EnterTest.Screens.cs" />
-    <None Include="EpiInfo\Wrappers\MakeViewTest.cs" />
-    <None Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
-    <None Include="EpiInfo\Wrappers\WrapperTestBase.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
+    <Compile Include="EpiInfo\Wrappers\AutomationElementX.cs" />
+    <Compile Include="EpiInfo\Wrappers\AutomationExtensions.cs" />
+    <Compile Include="EpiInfo\Wrappers\EnterTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\EnterTest.Screens.cs" />
+    <Compile Include="EpiInfo\Wrappers\MakeViewTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
+    <Compile Include="EpiInfo\Wrappers\WrapperTestBase.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
     <Compile Include="Infrastructure\Constant.cs" />
     <Compile Include="Infrastructure\Gender.cs" />

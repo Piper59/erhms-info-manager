@@ -21,48 +21,48 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class OpenPgm : Wrapper
         {
-            private static Project project;
-            private static string pgmName;
-            private static string content;
-            private static bool execute;
-            private static MainForm form;
+            private static Project Project { get; set; }
+            private static string PgmName { get; set; }
+            private static string Content { get; set; }
+            private static bool Execute { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string pgmName, string content, bool execute)
             {
-                return Create(() => Execute(projectPath, pgmName, content, execute));
+                return Create(() => MainInternal(projectPath, pgmName, content, execute));
             }
 
-            private static void Execute(string projectPath, string pgmName, string content, bool execute)
+            private static void MainInternal(string projectPath, string pgmName, string content, bool execute)
             {
-                project = new Project(projectPath);
-                OpenPgm.pgmName = pgmName;
-                OpenPgm.content = content.Trim().NormalizeNewLines();
-                OpenPgm.execute = execute;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                form.FormClosing += Form_FormClosing;
-                Application.Run(form);
+                Project = new Project(projectPath);
+                PgmName = pgmName;
+                Content = content.Trim().NormalizeNewLines();
+                Execute = execute;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Form.FormClosing += Form_FormClosing;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
             {
-                form.Commands = content;
-                if (execute)
+                Form.Commands = Content;
+                if (Execute)
                 {
-                    form.ExecuteCommands(true);
+                    Form.ExecuteCommands(true);
                 }
             }
 
             private static void Form_FormClosing(object sender, FormClosingEventArgs e)
             {
-                string commands = form.Commands.Trim().NormalizeNewLines();
-                if (e.CloseReason == CloseReason.UserClosing && commands != content)
+                string commands = Form.Commands.Trim().NormalizeNewLines();
+                if (e.CloseReason == CloseReason.UserClosing && commands != Content)
                 {
                     string message = "Save changes to this program before exiting?";
-                    DialogResult result = MessageBox.Show(form, message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    DialogResult result = MessageBox.Show(Form, message, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
-                        if (form.SavePgm(project, pgmName))
+                        if (Form.SavePgm(Project, PgmName))
                         {
                             RaiseEvent(WrapperEventType.PgmSaved);
                         }
@@ -81,28 +81,28 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class Import : Wrapper
         {
-            private static string projectPath;
-            private static string viewName;
-            private static View view;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static View View { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string viewName)
             {
-                return Create(() => Execute(projectPath, viewName));
+                return Create(() => MainInternal(projectPath, viewName));
             }
 
-            private static void Execute(string projectPath, string viewName)
+            private static void MainInternal(string projectPath, string viewName)
             {
-                Import.projectPath = projectPath;
-                Import.viewName = viewName;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
             {
-                BackgroundWorker worker = form.GetBackgroundWorker("Loading...", true);
+                BackgroundWorker worker = Form.GetBackgroundWorker("Loading...", true);
                 worker.DoWork += Step1;
                 worker.RunWorkerCompleted += Step2;
                 worker.RunWorkerAsync();
@@ -110,48 +110,48 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void Step1(object sender, DoWorkEventArgs e)
             {
-                Project project = new Project(projectPath);
-                view = project.Views[viewName];
+                Project project = new Project(ProjectPath);
+                View = project.Views[ViewName];
             }
 
             private static void Step2(object sender, RunWorkerCompletedEventArgs e)
             {
                 if (e.Error != null)
                 {
-                    form.Panic("An error occurred while loading the project.", e.Error);
+                    Form.Panic("An error occurred while loading the project.", e.Error);
                     return;
                 }
                 string command;
-                using (ReadDialog dialog = new ReadDialog(form))
+                using (ReadDialog dialog = new ReadDialog(Form))
                 {
                     dialog.StartPosition = FormStartPosition.CenterParent;
-                    if (dialog.ShowDialog(form) != DialogResult.OK)
+                    if (dialog.ShowDialog(Form) != DialogResult.OK)
                     {
-                        form.TryClose("No data source was selected. Import has been canceled.", MessageBoxIcon.Warning);
+                        Form.TryClose("No data source was selected. Import has been canceled.", MessageBoxIcon.Warning);
                         return;
                     }
                     command = dialog.CommandText;
                 }
-                form.AddCommand(command);
-                form.ExecuteCommand(command, true, Step3);
+                Form.AddCommand(command);
+                Form.ExecuteCommand(command, true, Step3);
             }
 
             private static void Step3(Exception ex)
             {
                 if (ex != null)
                 {
-                    form.Panic("An error occurred while reading data.", ex);
+                    Form.Panic("An error occurred while reading data.", ex);
                     return;
                 }
-                ICollection<string> sources = form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
-                ICollection<string> targets = view.Fields.TableColumnFields.Cast<Field>().Select(field => field.Name).ToList();
+                ICollection<string> sources = Form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
+                ICollection<string> targets = View.Fields.TableColumnFields.Cast<Field>().Select(field => field.Name).ToList();
                 MappingCollection mappings = null;
                 while (true)
                 {
-                    using (MappingDialog dialog = new MappingDialog(form, sources, targets))
+                    using (MappingDialog dialog = new MappingDialog(Form, sources, targets))
                     {
                         dialog.StartPosition = FormStartPosition.CenterParent;
-                        if (dialog.ShowDialog(form) == DialogResult.OK)
+                        if (dialog.ShowDialog(Form) == DialogResult.OK)
                         {
                             mappings = dialog.GetMappings();
                         }
@@ -159,9 +159,9 @@ namespace ERHMS.EpiInfo.Wrappers
                     if (mappings == null || mappings.Count == 0)
                     {
                         string message = "No variables were mapped. Retry mapping or cancel import?";
-                        if (MessageBox.Show(form, message, "Retry?", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                        if (MessageBox.Show(Form, message, "Retry?", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                         {
-                            form.Close();
+                            Form.Close();
                             return;
                         }
                     }
@@ -170,75 +170,75 @@ namespace ERHMS.EpiInfo.Wrappers
                         break;
                     }
                 }
-                form.AddCommand(mappings.GetCommands());
+                Form.AddCommand(mappings.GetCommands());
                 string csvPath = IOExtensions.GetTempFileName("ERHMS_{0:N}.csv");
-                form.AddCommand(Commands.WriteCsv(csvPath, mappings.GetTargets()));
-                form.AddCommand(Commands.Read(projectPath, viewName));
-                form.AddCommand(Commands.MergeCsv(csvPath, mappings.GetKeyTarget()));
-                form.ExecuteCommands(true, Step4);
+                Form.AddCommand(Commands.WriteCsv(csvPath, mappings.GetTargets()));
+                Form.AddCommand(Commands.Read(ProjectPath, ViewName));
+                Form.AddCommand(Commands.MergeCsv(csvPath, mappings.GetKeyTarget()));
+                Form.ExecuteCommands(true, Step4);
             }
 
             private static void Step4(Exception ex)
             {
                 if (ex != null)
                 {
-                    form.Panic("An error occurred while importing data.", ex);
+                    Form.Panic("An error occurred while importing data.", ex);
                     return;
                 }
                 RaiseEvent(WrapperEventType.ViewDataImported);
-                form.TryClose("Data has been imported.");
+                Form.TryClose("Data has been imported.");
             }
         }
 
         public class Export : Wrapper
         {
-            private static string projectPath;
-            private static string viewName;
-            private static MainForm form;
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, string viewName)
             {
-                return Create(() => Execute(projectPath, viewName));
+                return Create(() => MainInternal(projectPath, viewName));
             }
 
-            private static void Execute(string projectPath, string viewName)
+            private static void MainInternal(string projectPath, string viewName)
             {
-                Export.projectPath = projectPath;
-                Export.viewName = viewName;
-                form = new MainForm();
-                form.Shown += Form_Shown;
-                Application.Run(form);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                Form = new MainForm();
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
             }
 
             private static void Form_Shown(object sender, EventArgs e)
             {
-                string command = Commands.Read(projectPath, viewName);
-                form.AddCommand(command);
-                form.ExecuteCommand(command, true, Step1);
+                string command = Commands.Read(ProjectPath, ViewName);
+                Form.AddCommand(command);
+                Form.ExecuteCommand(command, true, Step1);
             }
 
             private static void Step1(Exception ex)
             {
                 if (ex != null)
                 {
-                    form.Panic("An error occurred while reading data.", ex);
+                    Form.Panic("An error occurred while reading data.", ex);
                     return;
                 }
-                using (WriteDialog dialog = new WriteDialog(form))
+                using (WriteDialog dialog = new WriteDialog(Form))
                 {
                     dialog.StartPosition = FormStartPosition.CenterParent;
-                    DialogResult result = dialog.ShowDialog(form);
+                    DialogResult result = dialog.ShowDialog(Form);
                     if (result == DialogResult.OK)
                     {
-                        form.AddCommand(dialog.CommandText);
+                        Form.AddCommand(dialog.CommandText);
                         if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)
                         {
-                            form.ExecuteCommand(dialog.CommandText, false, Step2);
+                            Form.ExecuteCommand(dialog.CommandText, false, Step2);
                         }
                     }
                     else
                     {
-                        form.TryClose("Export has been canceled.", MessageBoxIcon.Warning);
+                        Form.TryClose("Export has been canceled.", MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -247,10 +247,10 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 if (ex != null)
                 {
-                    form.Panic("An error occurred while exporting data.", ex);
+                    Form.Panic("An error occurred while exporting data.", ex);
                     return;
                 }
-                form.TryClose("Data has been exported.");
+                Form.TryClose("Data has been exported.");
             }
         }
     }
