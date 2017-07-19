@@ -1,5 +1,4 @@
-﻿using Dapper;
-using Epi;
+﻿using Epi;
 using Epi.Fields;
 using ERHMS.EpiInfo;
 using ERHMS.Utility;
@@ -62,6 +61,32 @@ namespace ERHMS.Test.EpiInfo
             XmlElement databaseElement = projectElement.SelectSingleElement("CollectedData/Database");
             Assert.AreEqual(info.Builder.ConnectionString, Configuration.Decrypt(databaseElement.GetAttribute("connectionString")));
             Assert.IsTrue(project.Driver.TableExists("metaCanvases"));
+        }
+
+        [Test]
+        public void GetCodesTest()
+        {
+            string tableName = "codegender1";
+            string columnName = "gender";
+            DataTable genders = new DataTable(tableName);
+            genders.Columns.Add(columnName);
+            genders.Rows.Add("Male");
+            genders.Rows.Add("Female");
+            project.CreateCodeTable(tableName, columnName);
+            project.SaveCodeTableData(genders, tableName, columnName);
+            ICollection<string> expected;
+            expected = new string[]
+            {
+                "Male",
+                "Female"
+            };
+            CollectionAssert.AreEqual(expected, project.GetCodes(tableName, columnName, false));
+            expected = new string[]
+            {
+                "Female",
+                "Male"
+            };
+            CollectionAssert.AreEqual(expected, project.GetCodes(tableName, columnName, true));
         }
 
         [Test]
@@ -267,7 +292,7 @@ namespace ERHMS.Test.EpiInfo
                 Driver = Configuration.AccessDriver,
                 Builder = new OleDbConnectionStringBuilder
                 {
-                    Provider = OleDbExtensions.AccessProvider,
+                    Provider = OleDbExtensions.Providers.Access,
                     DataSource = dataSource
                 },
                 DatabaseName = name,
@@ -304,9 +329,10 @@ namespace ERHMS.Test.EpiInfo
             {
                 Pooling = false
             };
-            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+            using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
             {
-                connection.Execute(string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog));
+                connection.Open();
+                connection.ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
             }
             created = true;
             info = new ProjectCreationInfo
@@ -326,9 +352,10 @@ namespace ERHMS.Test.EpiInfo
         {
             if (created)
             {
-                using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+                using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
                 {
-                    connection.Execute(string.Format("DROP DATABASE [{0}]", builder.InitialCatalog));
+                    connection.Open();
+                    connection.ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
                 }
             }
             else

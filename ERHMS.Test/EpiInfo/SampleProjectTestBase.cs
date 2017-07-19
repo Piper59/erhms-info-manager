@@ -8,7 +8,7 @@ using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Test.EpiInfo
 {
-    public class SampleTestBase
+    public class SampleProjectTestBase
     {
         protected TempDirectory directory;
         protected Configuration configuration;

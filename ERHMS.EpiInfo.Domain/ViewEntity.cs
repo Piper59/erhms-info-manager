@@ -57,8 +57,8 @@ namespace ERHMS.EpiInfo.Domain
 
         public bool Deleted
         {
-            get { return RecordStatus.HasValue && EpiInfo.RecordStatus.IsDeleted(RecordStatus.Value); }
-            set { RecordStatus = value ? EpiInfo.RecordStatus.Deleted : EpiInfo.RecordStatus.Undeleted; }
+            get { return RecordStatus.HasValue && RecordStatus.Value == 0; }
+            set { RecordStatus = (short)(value ? 0 : 1); }
         }
 
         public ViewEntity()
@@ -72,6 +72,8 @@ namespace ERHMS.EpiInfo.Domain
             AddSynonym(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, nameof(ModifiedBy));
             AddSynonym(ColumnNames.RECORD_LAST_SAVE_TIME, nameof(ModifiedOn));
             AddSynonym(ColumnNames.REC_STATUS, nameof(Deleted));
+            GlobalRecordId = Guid.NewGuid().ToString();
+            Deleted = false;
         }
 
         public void Touch(IIdentity user = null)

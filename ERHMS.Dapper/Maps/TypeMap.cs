@@ -14,7 +14,7 @@ namespace ERHMS.Dapper
         private static readonly Regex PrefixPattern = new Regex(@"^.+\.");
 
         private DefaultTypeMap @base;
-        private IDictionary<PropertyInfo, PropertyMap> maps;
+        private IDictionary<PropertyInfo, PropertyMap> propertyMaps;
 
         public Type Type { get; private set; }
         public string TableName { get; set; }
@@ -24,7 +24,7 @@ namespace ERHMS.Dapper
             @base = new DefaultTypeMap(type);
             Type = type;
             TableName = type.Name;
-            maps = new Dictionary<PropertyInfo, PropertyMap>();
+            propertyMaps = new Dictionary<PropertyInfo, PropertyMap>();
             foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 Set(property, property.Name);
@@ -33,9 +33,9 @@ namespace ERHMS.Dapper
 
         public PropertyMap Set(PropertyInfo property, string columnName)
         {
-            PropertyMap map = new PropertyMap(columnName, property);
-            maps[property] = map;
-            return map;
+            PropertyMap propertyMap = new PropertyMap(columnName, property);
+            propertyMaps[property] = propertyMap;
+            return propertyMap;
         }
 
         public PropertyMap Set(string propertyName, string columnName)
@@ -45,7 +45,7 @@ namespace ERHMS.Dapper
 
         public PropertyMap Get(PropertyInfo property)
         {
-            return maps[property];
+            return propertyMaps[property];
         }
 
         public PropertyMap Get(string propertyName)
@@ -55,17 +55,17 @@ namespace ERHMS.Dapper
 
         public PropertyMap GetId()
         {
-            return maps.Values.Single(map => map.Id);
+            return propertyMaps.Values.Single(propertyMap => propertyMap.Id);
         }
 
         public IEnumerable<PropertyMap> GetInsertable()
         {
-            return maps.Values.Where(map => !map.Computed);
+            return propertyMaps.Values.Where(propertyMap => !propertyMap.Computed);
         }
 
         public IEnumerable<PropertyMap> GetUpdatable()
         {
-            return maps.Values.Where(map => !map.Id && !map.Computed);
+            return propertyMaps.Values.Where(propertyMap => !propertyMap.Id && !propertyMap.Computed);
         }
 
         public ConstructorInfo FindConstructor(string[] names, Type[] types)
@@ -85,22 +85,22 @@ namespace ERHMS.Dapper
 
         private bool TryGetMember(string columnName, out SqlMapper.IMemberMap result)
         {
-            result = maps.Values.SingleOrDefault(map => map.ColumnName.EqualsIgnoreCase(columnName));
+            result = propertyMaps.Values.SingleOrDefault(propertyMap => propertyMap.ColumnName.EqualsIgnoreCase(columnName));
             return result != null;
         }
 
         public SqlMapper.IMemberMap GetMember(string columnName)
         {
-            SqlMapper.IMemberMap map;
-            if (TryGetMember(columnName, out map))
+            SqlMapper.IMemberMap propertyMap;
+            if (TryGetMember(columnName, out propertyMap))
             {
-                return map;
+                return propertyMap;
             }
             if (PrefixPattern.IsMatch(columnName))
             {
-                if (TryGetMember(PrefixPattern.Replace(columnName, ""), out map))
+                if (TryGetMember(PrefixPattern.Replace(columnName, ""), out propertyMap))
                 {
-                    return map;
+                    return propertyMap;
                 }
             }
             return null;
@@ -108,7 +108,7 @@ namespace ERHMS.Dapper
 
         public IEnumerator<PropertyMap> GetEnumerator()
         {
-            return maps.Values.GetEnumerator();
+            return propertyMaps.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

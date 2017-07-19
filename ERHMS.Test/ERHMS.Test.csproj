@@ -73,6 +73,10 @@
       <Project>{db2a0170-d0e9-40b3-a270-d4a47f2f7fe7}</Project>
       <Name>ERHMS.Dapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.DataAccess\ERHMS.EpiInfo.DataAccess.csproj">
+      <Project>{af729d69-3971-45ee-b351-1fc9bfd6ed7d}</Project>
+      <Name>ERHMS.EpiInfo.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Domain\ERHMS.EpiInfo.Domain.csproj">
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
@@ -94,27 +98,19 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <None Include="DataAccess\SampleDataContextTest.cs" />
-    <Compile Include="Dapper\Constant.cs" />
-    <Compile Include="Dapper\DatabaseTestBase.cs" />
-    <Compile Include="Dapper\DataContext.cs" />
-    <Compile Include="Dapper\DataContextTest.cs" />
-    <Compile Include="Dapper\Gender.cs" />
+    <Compile Include="Dapper\DatabaseBaseTest.cs" />
+    <Compile Include="Dapper\EmptyDatabaseTestBase.cs" />
     <Compile Include="Dapper\IDbConnectionExtensionsTest.cs" />
     <Compile Include="Dapper\LoggingConnectionTest.cs" />
-    <Compile Include="Dapper\Person.cs" />
-    <Compile Include="Dapper\PersonRepository.cs" />
+    <Compile Include="Dapper\RepositoryTest.cs" />
     <Compile Include="Dapper\TransactionTest.cs" />
-    <Compile Include="Dapper\TypeMaps.cs" />
+    <None Include="DataAccess\SampleDataContextTest.cs" />
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
-    <None Include="EpiInfo\DataAccess\CodeRepositoryTest.cs" />
-    <None Include="EpiInfo\DataAccess\DataDriverTest.cs" />
-    <None Include="EpiInfo\DataAccess\TableEntityRepositoryTest.cs" />
-    <None Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
+    <Compile Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
     <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
-    <None Include="EpiInfo\SampleTestBase.cs" />
+    <Compile Include="EpiInfo\SampleProjectTestBase.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
     <None Include="EpiInfo\Web\RecordTest.cs" />
     <None Include="EpiInfo\Web\ServiceTest.cs" />
@@ -130,20 +126,26 @@
     <None Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
     <None Include="EpiInfo\Wrappers\WrapperTestBase.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
+    <Compile Include="Infrastructure\Constant.cs" />
+    <Compile Include="Infrastructure\Gender.cs" />
+    <Compile Include="Infrastructure\Person.cs" />
+    <Compile Include="Infrastructure\PersonRepository.cs" />
+    <Compile Include="Infrastructure\Surveillance.cs" />
+    <Compile Include="Infrastructure\TempDirectory.cs" />
+    <Compile Include="Infrastructure\TempFile.cs" />
+    <Compile Include="Infrastructure\TypeMaps.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TempDirectory.cs" />
-    <Compile Include="TempFile.cs" />
     <Compile Include="Utility\AssemblyExtensionsTest.cs" />
     <Compile Include="Utility\AttributeExtensionsTest.cs" />
     <Compile Include="Utility\ConvertExtensionsTest.cs" />
-    <Compile Include="Utility\DataExtensionsTest.cs" />
     <Compile Include="Utility\DateTimeExtensionsTest.cs" />
+    <Compile Include="Utility\DbConnectionStringBuilderExtensionsTest.cs" />
     <Compile Include="Utility\DynamicExtensionsTest.cs" />
     <Compile Include="Utility\EnumerableExtensionsTest.cs" />
     <Compile Include="Utility\EnumExtensionsTest.cs" />
-    <Compile Include="Utility\InvokerTest.cs" />
     <Compile Include="Utility\IOExtensionsTest.cs" />
+    <Compile Include="Utility\InvokerTest.cs" />
     <Compile Include="Utility\LogTest.cs" />
     <Compile Include="Utility\MailExtensionsTest.cs" />
     <Compile Include="Utility\ObjectExtensionsTest.cs" />

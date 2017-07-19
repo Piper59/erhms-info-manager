@@ -52,8 +52,8 @@
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="ConvertExtensions.cs" />
     <Compile Include="CryptographyExtensions.cs" />
-    <Compile Include="DataExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="DbConnectionStringBuilderExtensions.cs" />
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />

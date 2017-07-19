@@ -1,10 +1,16 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 
 namespace ERHMS.Dapper
 {
     public class Repository<TEntity> : IRepository<TEntity>
     {
+        protected static string Escape(string identifier)
+        {
+            return IDbConnectionExtensions.Escape(identifier);
+        }
+
         protected TypeMap TypeMap { get; private set; }
         public IDatabase Database { get; private set; }
 
@@ -14,20 +20,20 @@ namespace ERHMS.Dapper
             Database = database;
         }
 
-        public virtual int Count(string sql = null, object parameters = null)
+        public virtual int Count(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                sql = string.Format("SELECT COUNT(*) FROM {0} {1}", IDbConnectionExtensions.Escape(TypeMap.TableName), sql);
+                string sql = string.Format("SELECT COUNT(*) FROM {0} {1}", Escape(TypeMap.TableName), clauses);
                 return connection.ExecuteScalar<int>(sql, parameters, transaction);
             });
         }
 
-        public virtual IEnumerable<TEntity> Select(string sql = null, object parameters = null)
+        public virtual IEnumerable<TEntity> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                return connection.Select<TEntity>(sql, parameters, transaction);
+                return connection.Select<TEntity>(clauses, parameters, transaction);
             });
         }
 
@@ -55,11 +61,16 @@ namespace ERHMS.Dapper
             });
         }
 
-        public virtual void Delete(string sql = null, object parameters = null)
+        public virtual void Save(TEntity entity)
+        {
+            throw new NotSupportedException();
+        }
+
+        public virtual void Delete(string clauses = null, object parameters = null)
         {
             Database.Invoke((connection, transaction) =>
             {
-                connection.Delete<TEntity>(sql, parameters, transaction);
+                connection.Delete<TEntity>(clauses, parameters, transaction);
             });
         }
 

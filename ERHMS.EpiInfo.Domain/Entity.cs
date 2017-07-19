@@ -1,12 +1,17 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Dynamic;
+using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo.Domain
 {
     public class Entity : DynamicObject, INotifyPropertyChanged, ICloneable
     {
+        private static readonly Regex PrefixPattern = new Regex(@"^.+\.");
+
         private IDictionary<string, object> properties;
 
         private bool @new;
@@ -101,6 +106,16 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
+        public void SetProperties(IDataRecord record)
+        {
+            for (int index = 0; index < record.FieldCount; index++)
+            {
+                string name = PrefixPattern.Replace(record.GetName(index), "");
+                object value = record.IsDBNull(index) ? null : record.GetValue(index);
+                SetProperty(name, value);
+            }
+        }
+
         protected void AddSynonym(string sourceName, string targetName)
         {
             if (sourceName != targetName)
@@ -144,6 +159,33 @@ namespace ERHMS.EpiInfo.Domain
                 }
             }
             return clone;
+        }
+
+        public override int GetHashCode()
+        {
+            return ObjectExtensions.GetHashCode(properties.Values);
+        }
+
+        public override bool Equals(object obj)
+        {
+            Entity entity = obj as Entity;
+            if (entity == null)
+            {
+                return false;
+            }
+            foreach (KeyValuePair<string, object> property in properties)
+            {
+                object value;
+                if (!entity.properties.TryGetValue(property.Key, out value))
+                {
+                    return false;
+                }
+                if (!Equals(value, property.Value))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

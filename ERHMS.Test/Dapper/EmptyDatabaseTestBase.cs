@@ -1,14 +1,12 @@
-﻿using Dapper;
-using ERHMS.Utility;
+﻿using ERHMS.Utility;
 using System.Configuration;
-using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Reflection;
 
 namespace ERHMS.Test.Dapper
 {
-    public static class DatabaseTestBase
+    public static class EmptyDatabaseTestBase
     {
         public static class Access
         {
@@ -19,7 +17,7 @@ namespace ERHMS.Test.Dapper
                 Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", path);
                 builder = new OleDbConnectionStringBuilder
                 {
-                    Provider = OleDbExtensions.AccessProvider,
+                    Provider = OleDbExtensions.Providers.Access,
                     DataSource = path
                 };
             }
@@ -38,18 +36,20 @@ namespace ERHMS.Test.Dapper
             public static void SetUp(out SqlConnectionStringBuilder builder)
             {
                 builder = GetBuilder();
-                using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+                using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
                 {
-                    connection.Execute(string.Format("CREATE DATABASE [{0}]", builder.InitialCatalog));
+                    connection.Open();
+                    connection.ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
                 }
             }
 
             public static void TearDown()
             {
                 SqlConnectionStringBuilder builder = GetBuilder();
-                using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+                using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
                 {
-                    connection.Execute(string.Format("DROP DATABASE [{0}]", builder.InitialCatalog));
+                    connection.Open();
+                    connection.ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace ERHMS.Test.Dapper
 
         private int Count(string tableName, IDbTransaction transaction = null)
         {
-            string sql = string.Format("SELECT COUNT(*) FROM [{0}]", tableName);
+            string sql = string.Format("SELECT COUNT(*) FROM {0}", IDbConnectionExtensions.Escape(tableName));
             return connection.ExecuteScalar<int>(sql, transaction: transaction);
         }
 
@@ -72,10 +72,10 @@ namespace ERHMS.Test.Dapper
         {
             Assert.AreEqual(1, connection.Select<Constant>().Count());
             Assert.AreEqual(100, connection.Select<Person>().Count());
-            string sql = "WHERE GenderId = @GenderId";
+            string clauses = "WHERE GenderId = @GenderId";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@GenderId", "273c6d62-be89-48df-9e04-775125bc4f6a");
-            Assert.AreEqual(51, connection.Select<Person>(sql, parameters).Count());
+            Assert.AreEqual(51, connection.Select<Person>(clauses, parameters).Count());
             Person person = connection.Select<Person>("ORDER BY BirthDate").First();
             Assert.AreEqual("Sims", person.Name);
             Assert.AreEqual(new DateTime(1980, 3, 2), person.BirthDate);
@@ -157,10 +157,10 @@ namespace ERHMS.Test.Dapper
             Assert.AreEqual(1, Count("Global"));
             using (IDbTransaction transaction = connection.BeginTransaction())
             {
-                string sql = "WHERE Height >= @Height";
+                string clauses = "WHERE Height >= @Height";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Height", 6.0);
-                connection.Delete<Person>(sql, parameters, transaction);
+                connection.Delete<Person>(clauses, parameters, transaction);
                 Assert.AreEqual(86, Count("Person", transaction));
             }
             Assert.AreEqual(100, Count("Person"));
@@ -199,7 +199,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            DatabaseTestBase.Access.SetUp(nameof(OleDbConnectionExtensionsTest), out directory, out builder);
+            EmptyDatabaseTestBase.Access.SetUp(nameof(OleDbConnectionExtensionsTest), out directory, out builder);
             connection = new OleDbConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -218,7 +218,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
-            DatabaseTestBase.SqlServer.SetUp(out builder);
+            EmptyDatabaseTestBase.SqlServer.SetUp(out builder);
             connection = new SqlConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -227,7 +227,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeTearDown()
         {
             PreTearDown();
-            DatabaseTestBase.SqlServer.TearDown();
+            EmptyDatabaseTestBase.SqlServer.TearDown();
         }
     }
 }

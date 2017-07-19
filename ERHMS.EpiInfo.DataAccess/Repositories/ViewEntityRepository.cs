@@ -1,214 +1,260 @@
-﻿using Epi;
+﻿using Dapper;
+using Epi;
+using Epi.Fields;
+using ERHMS.Dapper;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public class ViewEntityRepository<TEntity> : EntityRepositoryBase<TEntity> where TEntity : ViewEntity, new()
+    public class ViewEntityRepository<TEntity> : IRepository<TEntity> where TEntity : ViewEntity, new()
     {
+        protected static string Escape(string identifier)
+        {
+            return IDbConnectionExtensions.Escape(identifier);
+        }
+
+        protected static string GetParameterName(int index)
+        {
+            return IDbConnectionExtensions.GetParameterName(index);
+        }
+
+        public IDataContext Context { get; private set; }
+
+        public IDatabase Database
+        {
+            get { return Context.Database; }
+        }
+
+        public Project Project
+        {
+            get { return Context.Project; }
+        }
+
         public View View { get; private set; }
-        protected DataTable BaseSchema { get; private set; }
-        protected DataTable UpdatableBaseSchema { get; private set; }
-        protected DataSet PageSchemas { get; private set; }
-        protected ViewEntityMapper<TEntity> Mapper { get; private set; }
 
-        protected string BaseTableName
+        public ViewEntityRepository(IDataContext context, View view)
         {
-            get { return BaseSchema.TableName; }
-        }
-
-        protected IEnumerable<string> PageTableNames
-        {
-            get
-            {
-                return PageSchemas.Tables
-                    .Cast<DataTable>()
-                    .Select(schema => schema.TableName);
-            }
-        }
-
-        public ViewEntityRepository(IDataDriver driver, View view)
-            : base(driver)
-        {
-            Log.Logger.DebugFormat("Opening view repository: {0}", view.Name);
+            Context = context;
             View = view;
-            BaseSchema = GetSchema(view.TableName);
-            UpdatableBaseSchema = BaseSchema.Clone();
-            UpdatableBaseSchema.Columns.Remove(ColumnNames.GLOBAL_RECORD_ID);
-            PageSchemas = new DataSet();
-            foreach (Page page in view.Pages)
-            {
-                PageSchemas.Tables.Add(GetSchema(page.TableName));
-            }
-            Mapper = new ViewEntityMapper<TEntity>();
         }
 
-        public Type GetDataType(string columnName)
+        private string GetSelectSql(string selectClause, string clauses)
         {
-            foreach (DataTable pageSchema in PageSchemas.Tables)
+            StringBuilder fromClause = new StringBuilder();
+            fromClause.Append(Escape(View.TableName));
+            foreach (Page page in View.Pages)
             {
-                if (pageSchema.Columns.Contains(columnName))
-                {
-                    return pageSchema.Columns[columnName].DataType;
-                }
-            }
-            return null;
-        }
-
-        public virtual TEntity Create()
-        {
-            TEntity entity = new TEntity();
-            foreach (DataColumn column in BaseSchema.Columns)
-            {
-                entity.SetProperty(column.ColumnName, null);
-            }
-            foreach (DataTable pageSchema in PageSchemas.Tables)
-            {
-                foreach (DataColumn column in pageSchema.Columns)
-                {
-                    entity.SetProperty(column.ColumnName, null);
-                }
-            }
-            entity.GlobalRecordId = Guid.NewGuid().ToString();
-            return entity;
-        }
-
-        public virtual IEnumerable<TEntity> Select()
-        {
-            ICollection<TEntity> entities;
-            {
-                string sql = string.Format("SELECT * FROM {0}", Driver.Escape(BaseTableName));
-                entities = Mapper.Create(Driver.ExecuteQuery(sql)).ToList();
-            }
-            foreach (string pageTableName in PageTableNames)
-            {
-                string sql = string.Format("SELECT * FROM {0}", Driver.Escape(pageTableName));
-                Mapper.Update(Driver.ExecuteQuery(sql), entities);
-            }
-            return entities;
-        }
-
-        protected virtual IEnumerable<TEntity> Select(string predicate, params object[] values)
-        {
-            StringBuilder source = new StringBuilder();
-            source.Append(Driver.Escape(BaseTableName));
-            foreach (string pageTableName in PageTableNames)
-            {
-                source.Insert(0, "(");
-                source.AppendFormat(
+                fromClause.Insert(0, "(");
+                fromClause.AppendFormat(
                     " INNER JOIN {1} ON {0}.{2} = {1}.{2})",
-                    Driver.Escape(BaseTableName),
-                    Driver.Escape(pageTableName),
-                    Driver.Escape(ColumnNames.GLOBAL_RECORD_ID));
+                    Escape(View.TableName),
+                    Escape(page.TableName),
+                    Escape(ColumnNames.GLOBAL_RECORD_ID));
             }
-            ICollection<TEntity> entities;
+            return string.Format("SELECT {0} FROM {1} {2}", selectClause, fromClause, clauses);
+        }
+
+        public int Count(string clauses = null, object parameters = null)
+        {
+            return Database.Invoke((connection, transaction) =>
             {
-                DataQueryBuilder builder = new DataQueryBuilder(Driver);
-                builder.Sql.AppendFormat("SELECT {0}.* FROM {1} WHERE {2}", Driver.Escape(BaseTableName), source, predicate);
-                foreach (object value in values)
-                {
-                    builder.Values.Add(value);
-                }
-                entities = Mapper.Create(Driver.ExecuteQuery(builder.GetQuery())).ToList();
-            }
-            foreach (string pageTableName in PageTableNames)
+                string sql = GetSelectSql("COUNT(*)", clauses);
+                return connection.ExecuteScalar<int>(sql, parameters, transaction);
+            });
+        }
+
+        private ICollection<TEntity> SelectSingleQuery(IDbConnection connection, string clauses, object parameters, IDbTransaction transaction)
+        {
+            ICollection<TEntity> entities = new List<TEntity>();
+            string sql = GetSelectSql("*", clauses);
+            using (IDataReader reader = connection.ExecuteReader(sql, parameters, transaction))
             {
-                DataQueryBuilder builder = new DataQueryBuilder(Driver);
-                builder.Sql.AppendFormat("SELECT {0}.* FROM {1} WHERE {2}", Driver.Escape(pageTableName), source, predicate);
-                foreach (object value in values)
+                while (reader.Read())
                 {
-                    builder.Values.Add(value);
+                    TEntity entity = new TEntity();
+                    entity.New = false;
+                    entity.SetProperties(reader);
+                    entities.Add(entity);
                 }
-                Mapper.Update(Driver.ExecuteQuery(builder.GetQuery()), entities);
             }
             return entities;
         }
 
-        public virtual IEnumerable<TEntity> SelectUndeleted()
+        private ICollection<TEntity> SelectMultiQuery(IDbConnection connection, string clauses, object parameters, IDbTransaction transaction)
         {
-            string predicate = string.Format("{0}.{1} <> {2}", Driver.Escape(BaseTableName), ColumnNames.REC_STATUS, RecordStatus.Deleted);
-            return Select(predicate);
-        }
-
-        public virtual TEntity SelectByGlobalRecordId(string globalRecordId)
-        {
-            string predicate = string.Format("{0}.{1} = {{@}}", Driver.Escape(BaseTableName), ColumnNames.GLOBAL_RECORD_ID);
-            return Select(predicate, globalRecordId).SingleOrDefault();
-        }
-
-        public virtual void Insert(TEntity entity, IIdentity user = null)
-        {
-            if (entity.GlobalRecordId == null)
+            IDictionary<string, TEntity> entities = new Dictionary<string, TEntity>(StringComparer.OrdinalIgnoreCase);
+            string sql = GetSelectSql(Escape(View.TableName) + ".*", clauses);
+            using (IDataReader reader = connection.ExecuteReader(sql, parameters, transaction))
             {
-                entity.GlobalRecordId = Guid.NewGuid().ToString();
-            }
-            if (!entity.RecordStatus.HasValue)
-            {
-                entity.Deleted = false;
-            }
-            entity.Touch(true, true, user);
-            using (DataTransaction transaction = Driver.BeginTransaction())
-            {
-                Insert(BaseSchema, entity, transaction);
-                foreach (DataTable pageSchema in PageSchemas.Tables)
+                while (reader.Read())
                 {
-                    Insert(pageSchema, entity, transaction);
+                    TEntity entity = new TEntity();
+                    entity.New = false;
+                    entity.SetProperties(reader);
+                    entities.Add(entity.GlobalRecordId, entity);
                 }
-                transaction.Commit();
             }
-            DataQueryBuilder builder = new DataQueryBuilder(Driver);
-            builder.Sql.AppendFormat(
-                "SELECT {0} FROM {1} WHERE {2} = {{@}}",
-                Driver.Escape(ColumnNames.UNIQUE_KEY),
-                Driver.Escape(BaseTableName),
-                Driver.Escape(ColumnNames.GLOBAL_RECORD_ID));
-            builder.Values.Add(entity.GlobalRecordId);
-            entity.UniqueKey = Driver.ExecuteScalar<int>(builder.GetQuery());
+            foreach (Page page in View.Pages)
+            {
+                sql = GetSelectSql(Escape(page.TableName) + ".*", clauses);
+                using (IDataReader reader = connection.ExecuteReader(sql, parameters, transaction))
+                {
+                    while (reader.Read())
+                    {
+                        int index = reader.GetOrdinal(ColumnNames.GLOBAL_RECORD_ID);
+                        TEntity entity = entities[reader.GetString(index)];
+                        entity.SetProperties(reader);
+                    }
+                }
+            }
+            return entities.Values;
+        }
+
+        public IEnumerable<TEntity> Select(string clauses = null, object parameters = null)
+        {
+            return Database.Invoke((connection, transaction) =>
+            {
+                try
+                {
+                    return SelectSingleQuery(connection, clauses, parameters, transaction);
+                }
+                catch (OleDbException ex)
+                {
+                    if (ex.Errors.Count == 1 && ex.Errors[0].SQLState == OleDbExtensions.Errors.TooManyFieldsDefined)
+                    {
+                        return SelectMultiQuery(connection, clauses, parameters, transaction);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            });
+        }
+
+        public TEntity SelectById(object id)
+        {
+            string clauses = string.Format("WHERE {0}.{1} = @Id", Escape(View.TableName), Escape(ColumnNames.GLOBAL_RECORD_ID));
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Id", id);
+            return Select(clauses, parameters).SingleOrDefault();
+        }
+
+        private IEnumerable<string> GetViewColumnNames(bool includeId)
+        {
+            if (includeId)
+            {
+                yield return ColumnNames.UNIQUE_KEY;
+            }
+            yield return ColumnNames.REC_STATUS;
+            yield return ColumnNames.GLOBAL_RECORD_ID;
+            yield return ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME;
+            yield return ColumnNames.RECORD_FIRST_SAVE_TIME;
+            yield return ColumnNames.RECORD_LAST_SAVE_LOGON_NAME;
+            yield return ColumnNames.RECORD_LAST_SAVE_TIME;
+            yield return ColumnNames.FOREIGN_KEY;
+        }
+
+        private IEnumerable<string> GetPageColumnNames(Page page, bool includeId)
+        {
+            if (includeId)
+            {
+                yield return ColumnNames.GLOBAL_RECORD_ID;
+            }
+            foreach (INamedObject field in page.Fields.OfType<IInputField>())
+            {
+                yield return field.Name;
+            }
+        }
+
+        private void Insert(IDbConnection connection, TEntity entity, string tableName, IEnumerable<string> columnNames, IDbTransaction transaction)
+        {
+            connection.Insert(
+                tableName,
+                columnNames,
+                columnName => columnName,
+                columnName => entity.GetProperty(columnName),
+                transaction);
+        }
+
+        public void Insert(TEntity entity)
+        {
+            entity.Touch();
+            Database.Transact((connection, transaction) =>
+            {
+                Insert(connection, entity, View.TableName, GetViewColumnNames(false), transaction);
+                foreach (Page page in View.Pages)
+                {
+                    Insert(connection, entity, page.TableName, GetPageColumnNames(page, true), transaction);
+                }
+                string sql = string.Format(
+                    "SELECT {0} FROM {1} WHERE {2} = @Id",
+                    Escape(ColumnNames.UNIQUE_KEY),
+                    Escape(View.TableName),
+                    Escape(ColumnNames.GLOBAL_RECORD_ID));
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", entity.GlobalRecordId);
+                entity.UniqueKey = connection.ExecuteScalar<int>(sql, parameters, transaction);
+            });
             entity.New = false;
         }
 
-        public virtual void Update(TEntity entity, IIdentity user = null)
+        private void Update(IDbConnection connection, TEntity entity, string tableName, string idColumnName, IEnumerable<string> columnNames, IDbTransaction transaction)
         {
-            entity.Touch(false, true, user);
-            using (DataTransaction transaction = Driver.BeginTransaction())
-            {
-                Update(UpdatableBaseSchema, entity, transaction);
-                foreach (DataTable pageSchema in PageSchemas.Tables)
-                {
-                    Update(pageSchema, entity, transaction);
-                }
-                transaction.Commit();
-            }
+            connection.Update(
+                tableName,
+                idColumnName,
+                columnNames,
+                columnName => columnName,
+                columnName => entity.GetProperty(columnName),
+                transaction);
         }
 
-        public virtual void Save(TEntity entity, IIdentity user = null)
+        public void Update(TEntity entity)
+        {
+            entity.Touch();
+            Database.Transact((connection, transaction) =>
+            {
+                Update(connection, entity, View.TableName, ColumnNames.UNIQUE_KEY, GetViewColumnNames(false), transaction);
+                foreach (Page page in View.Pages)
+                {
+                    Update(connection, entity, page.TableName, ColumnNames.GLOBAL_RECORD_ID, GetPageColumnNames(page, false), transaction);
+                }
+            });
+        }
+
+        public void Save(TEntity entity)
         {
             if (entity.New)
             {
-                Insert(entity, user);
+                Insert(entity);
             }
             else
             {
-                Update(entity, user);
+                Update(entity);
             }
         }
 
-        public virtual void Delete(TEntity entity, IIdentity user = null)
+        public void Delete(string clauses = null, object parameters = null)
         {
-            entity.Deleted = true;
-            Save(entity, user);
+            throw new NotSupportedException();
         }
 
-        public virtual void Undelete(TEntity entity, IIdentity user = null)
+        public void DeleteById(object id)
         {
-            entity.Deleted = false;
-            Save(entity, user);
+            throw new NotSupportedException();
+        }
+
+        public void Delete(TEntity entity)
+        {
+            throw new NotSupportedException();
         }
     }
 }

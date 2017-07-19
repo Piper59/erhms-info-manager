@@ -10,14 +10,19 @@ namespace ERHMS.Utility
         private const int Prime = 16777619;
 
         // http://www.isthe.com/chongo/tech/comp/fnv/#FNV-1a
-        public static int GetHashCode<T>(T @this, IEnumerable<Func<T, object>> identifiers)
+        public static int GetHashCode(IEnumerable<object> values)
         {
             int hash = OffsetBasis;
-            foreach (Func<T, object> identifier in identifiers)
+            foreach (object value in values)
             {
-                hash = (hash ^ (identifier(@this)?.GetHashCode()).GetValueOrDefault()) * Prime;
+                hash = (hash ^ (value?.GetHashCode() ?? 0)) * Prime;
             }
             return hash;
+        }
+
+        public static int GetHashCode<T>(T @this, IEnumerable<Func<T, object>> identifiers)
+        {
+            return GetHashCode(identifiers.Select(identifier => identifier(@this)));
         }
 
         public static bool Equals<T>(T @this, object obj, IEnumerable<Func<T, object>> identifiers) where T : class

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace ERHMS.Test.Utility
 {
-    public class DataExtensionsTest
+    public class DbConnectionStringBuilderExtensionsTest
     {
         [Test]
         public void GetCensoredConnectionStringTest()

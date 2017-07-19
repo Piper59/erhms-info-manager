@@ -10,7 +10,7 @@ namespace ERHMS.Dapper
         public string CommandText
         {
             get { return @base.CommandText; }
-            set { @base.CommandText = value; }
+            set { @base.CommandText = value.Trim(); }
         }
 
         public int CommandTimeout

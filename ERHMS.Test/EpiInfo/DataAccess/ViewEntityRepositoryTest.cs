@@ -1,125 +1,130 @@
-﻿using ERHMS.EpiInfo;
+﻿using Dapper;
+using ERHMS.Dapper;
 using ERHMS.EpiInfo.DataAccess;
-using ERHMS.EpiInfo.Domain;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Test.EpiInfo.DataAccess
 {
-    public class ViewEntityRepositoryTest : SampleTestBase
+    public class ViewEntityRepositoryTest : SampleProjectTestBase
     {
-        private class Surveillance : ViewEntity
+        private class DataContext : DataContextBase
         {
-            public string CaseId
-            {
-                get { return GetProperty<string>("CaseID"); }
-                set { SetProperty("CaseID", value); }
-            }
+            public IRepository<Surveillance> Surveillances { get; private set; }
 
-            public string LastName
+            public DataContext(Project project)
+                : base(project)
             {
-                get { return GetProperty<string>(nameof(LastName)); }
-                set { SetProperty(nameof(LastName), value); }
-            }
-
-            public string FirstName
-            {
-                get { return GetProperty<string>(nameof(FirstName)); }
-                set { SetProperty(nameof(FirstName), value); }
-            }
-
-            public int? Hospitalized
-            {
-                get { return GetProperty<int?>(nameof(Hospitalized)); }
-                set { SetProperty(nameof(Hospitalized), value); }
-            }
-
-            public DateTime? Entered
-            {
-                get { return GetProperty<DateTime?>(nameof(Entered)); }
-                set { SetProperty(nameof(Entered), value); }
-            }
-
-            public Surveillance()
-            {
-                AddSynonym("CaseID", nameof(CaseId));
+                Surveillances = new ViewEntityRepository<Surveillance>(this, project.Views["Surveillance"]);
             }
         }
 
-        private class SurveillanceRepository : ViewEntityRepository<Surveillance>
-        {
-            public SurveillanceRepository(IDataDriver driver, Project project)
-                : base(driver, project.Views["Surveillance"]) { }
-
-            public IEnumerable<Surveillance> SelectByEnteredMonth(int year, int month)
-            {
-                DateTime start = new DateTime(year, month, 1);
-                DateTime end = start.AddMonths(1);
-                return Select("[Entered] >= {@} AND [Entered] < {@}", start, end);
-            }
-        }
-
-        private SurveillanceRepository surveillances;
+        private DataContext context;
 
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            IDataDriver driver = DataDriverFactory.CreateDataDriver(project);
-            surveillances = new SurveillanceRepository(driver, project);
+            context = new DataContext(project);
         }
 
         [Test]
-        [Order(1)]
-        public void SelectTest()
+        public void CountTest()
         {
-            Assert.AreEqual(20, surveillances.Select().Count());
-            Assert.AreEqual(3, surveillances.SelectByEnteredMonth(2014, 6).Count());
+            Assert.AreEqual(20, context.Surveillances.Count());
+            string clauses = "WHERE ZipCode = @ZipCode";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ZipCode", "31061");
+            Assert.AreEqual(4, context.Surveillances.Count(clauses, parameters));
         }
 
-        [Test]
-        [Order(2)]
-        public void SelectByGlobalRecordIdTest()
+        private void SelectTest()
         {
-            Surveillance surveillance = surveillances.SelectByGlobalRecordId("993974ab-a5c8-4177-b81d-a060b2e5b9e1");
-            Assert.AreEqual("100", surveillance.CaseId);
-            Assert.AreEqual("John", surveillance.FirstName);
+            Assert.AreEqual(20, context.Surveillances.Select().Count());
+            Surveillance surveillance = context.Surveillances.Select("ORDER BY Entered").First();
+            Assert.IsFalse(surveillance.New);
             Assert.AreEqual("Smith", surveillance.LastName);
+            Assert.AreEqual("John", surveillance.FirstName);
         }
 
         [Test]
-        [Order(3)]
+        public void SelectSingleQueryTest()
+        {
+            SelectTest();
+        }
+
+        private void ExecuteForEach(string format, IEnumerable<string> args)
+        {
+            using (IDbConnection connection = context.Database.GetConnection())
+            {
+                connection.Open();
+                foreach (string arg in args)
+                {
+                    connection.Execute(string.Format(format, arg));
+                }
+            }
+        }
+
+        [Test]
+        public void SelectMultiQueryTest()
+        {
+            ICollection<string> columnNames = Enumerable.Range(1, 200)
+                .Select(index => "Test" + index)
+                .ToList();
+            ExecuteForEach("ALTER TABLE Surveillance ADD {0} INTEGER", columnNames);
+            try
+            {
+                SelectTest();
+            }
+            finally
+            {
+                ExecuteForEach("ALTER TABLE Surveillance DROP COLUMN {0}", columnNames);
+            }
+        }
+
+        [Test]
+        public void SelectByIdTest()
+        {
+            string globalRecordId = "993974ab-a5c8-4177-b81d-a060b2e5b9e1";
+            Surveillance surveillance = context.Surveillances.SelectById(globalRecordId);
+            Assert.IsFalse(surveillance.New);
+            Assert.AreEqual(globalRecordId, surveillance.GlobalRecordId);
+            Assert.AreEqual("100", surveillance.CaseId);
+            Assert.AreEqual(0, surveillance.Hospitalized);
+            Assert.AreEqual(new DateTime(2007, 1, 7), surveillance.Entered);
+            Assert.IsNull(context.Surveillances.SelectById(Guid.Empty.ToString()));
+        }
+
+        [Test]
         public void SaveTest()
         {
-            Surveillance surveillance = surveillances.Create();
-            surveillance.CaseId = "2100";
-            surveillance.FirstName = "John";
-            surveillance.LastName = "Doe";
-            surveillance.Hospitalized = 0;
-            surveillance.Entered = DateTime.Today;
-            Assert.IsTrue(surveillance.New);
-            Assert.IsNull(surveillance.UniqueKey);
-            Assert.IsNull(surveillance.FirstSaveStamp);
-            surveillances.Save(surveillance);
-            Assert.IsFalse(surveillance.New);
-            Assert.IsNotNull(surveillance.UniqueKey);
-            Assert.IsNotNull(surveillance.FirstSaveStamp);
-            Assert.AreEqual(surveillance.FirstSaveStamp, surveillance.LastSaveStamp);
-            Assert.AreEqual(21, surveillances.Select().Count());
-            surveillances.Save(surveillance);
-            Assert.AreNotEqual(surveillance.FirstSaveStamp, surveillance.LastSaveStamp);
-        }
-
-        [Test]
-        [Order(4)]
-        public void DeleteTest()
-        {
-            Surveillance surveillance = surveillances.SelectByGlobalRecordId("993974ab-a5c8-4177-b81d-a060b2e5b9e1");
-            Assert.IsFalse(surveillance.Deleted);
-            surveillances.Delete(surveillance);
-            Assert.IsTrue(surveillance.Deleted);
-            Assert.AreEqual(20, surveillances.SelectUndeleted().Count());
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                Surveillance original = new Surveillance
+                {
+                    CaseId = "2100",
+                    LastName = "Doe",
+                    FirstName = "John",
+                    Hospitalized = 0,
+                    Entered = DateTime.Now
+                };
+                Assert.IsTrue(original.New);
+                Assert.IsNull(original.UniqueKey);
+                Assert.IsNull(original.CreatedOn);
+                context.Surveillances.Save(original);
+                Assert.IsFalse(original.New);
+                Assert.IsNotNull(original.UniqueKey);
+                Assert.IsNotNull(original.CreatedOn);
+                Assert.AreEqual(original.CreatedOn, original.ModifiedOn);
+                Assert.AreEqual(21, context.Surveillances.Count());
+                original.FirstName = "Jane";
+                context.Surveillances.Save(original);
+                Assert.AreNotEqual(original.CreatedBy, original.ModifiedOn);
+                Assert.AreEqual(original, context.Surveillances.SelectById(original.GlobalRecordId));
+            }
         }
     }
 }

@@ -89,7 +89,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            DatabaseTestBase.Access.SetUp(nameof(OleDbTransactionTest), out directory, out builder);
+            EmptyDatabaseTestBase.Access.SetUp(nameof(OleDbTransactionTest), out directory, out builder);
             connection = new OleDbConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -108,7 +108,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
-            DatabaseTestBase.SqlServer.SetUp(out builder);
+            EmptyDatabaseTestBase.SqlServer.SetUp(out builder);
             connection = new SqlConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -117,7 +117,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeTearDown()
         {
             PreTearDown();
-            DatabaseTestBase.SqlServer.TearDown();
+            EmptyDatabaseTestBase.SqlServer.TearDown();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Data;
 using Epi.Data.Services;
+using ERHMS.Dapper;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,19 @@ namespace ERHMS.EpiInfo
             : base(path)
         {
             Log.Logger.DebugFormat("Opening project: {0}", path);
+        }
+
+        public IDatabase GetDatabase()
+        {
+            switch (CollectedDataDriver)
+            {
+                case Configuration.AccessDriver:
+                    return new AccessDatabase(CollectedDataConnectionString);
+                case Configuration.SqlDriver:
+                    return new SqlServerDatabase(CollectedDataConnectionString);
+                default:
+                    throw new InvalidOperationException(string.Format("Unrecognized data driver '{0}'.", CollectedDataDriver));
+            }
         }
 
         public bool IsValidViewName(string viewName, out InvalidViewNameReason reason)

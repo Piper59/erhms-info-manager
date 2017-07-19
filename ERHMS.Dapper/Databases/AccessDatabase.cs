@@ -11,7 +11,7 @@ namespace ERHMS.Dapper
         public static AccessDatabase Construct(string dataSource, string password = null)
         {
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
-            builder.Provider = OleDbExtensions.AccessProvider;
+            builder.Provider = OleDbExtensions.Providers.Access;
             builder.DataSource = dataSource;
             if (password != null)
             {
@@ -26,6 +26,9 @@ namespace ERHMS.Dapper
         {
             Builder = builder;
         }
+
+        public AccessDatabase(string connectionString)
+            : this(new OleDbConnectionStringBuilder(connectionString)) { }
 
         public override bool Exists()
         {

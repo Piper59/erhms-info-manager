@@ -69,19 +69,21 @@ namespace ERHMS.Test.EpiInfo.Domain
         [Test]
         public void CloneTest()
         {
-            dynamic entity = new ViewEntity();
-            entity.Value = 1;
-            entity.Subobject = new ExpandoObject();
-            entity.Subobject.Value = 1;
-            entity.Subentity = new ViewEntity();
-            entity.Subentity.Value = 1;
-            dynamic clone = entity.Clone();
+            dynamic original = new ViewEntity();
+            original.Value = 1;
+            original.Subobject = new ExpandoObject();
+            original.Subobject.Value = 1;
+            original.Subentity = new ViewEntity();
+            original.Subentity.Value = 1;
+            dynamic clone = original.Clone();
             Assert.AreEqual(1, clone.Value);
             Assert.AreEqual(1, clone.Subobject.Value);
             Assert.AreEqual(1, clone.Subentity.Value);
-            entity.Value = 2;
-            entity.Subobject.Value = 2;
-            entity.Subentity.Value = 2;
+            Assert.IsFalse(ReferenceEquals(original, clone));
+            Assert.IsTrue(Equals(original, clone));
+            original.Value = 2;
+            original.Subobject.Value = 2;
+            original.Subentity.Value = 2;
             Assert.AreEqual(1, clone.Value);
             Assert.AreEqual(2, clone.Subobject.Value);
             Assert.AreEqual(1, clone.Subentity.Value);

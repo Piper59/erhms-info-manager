@@ -12,8 +12,24 @@ using System.Reflection;
 
 namespace ERHMS.Test.Dapper
 {
-    public abstract class DataContextTestBase
+    public abstract class RepositoryTestBase
     {
+        protected class DataContext
+        {
+            public IDatabase Database { get; private set; }
+            public IRepository<Constant> Constants { get; private set; }
+            public IRepository<Gender> Genders { get; private set; }
+            public IRepository<Person> People { get; private set; }
+
+            public DataContext(IDatabase database)
+            {
+                Database = database;
+                Constants = new Repository<Constant>(database);
+                Genders = new Repository<Gender>(database);
+                People = new PersonRepository(database);
+            }
+        }
+
         protected DataContext context;
 
         protected void PostSetUp()
@@ -29,10 +45,10 @@ namespace ERHMS.Test.Dapper
         {
             Assert.AreEqual(1, context.Constants.Count());
             Assert.AreEqual(100, context.People.Count());
-            string sql = "WHERE Person.Weight >= @Weight";
+            string clauses = "WHERE Person.Weight >= @Weight";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Weight", 200.0);
-            ICollection<Person> people = context.People.Select(sql, parameters).ToList();
+            ICollection<Person> people = context.People.Select(clauses, parameters).ToList();
             Assert.AreEqual(11, people.Count);
             Assert.AreEqual(2, people.Count(person => person.Gender.Name == "Female"));
         }
@@ -55,7 +71,7 @@ namespace ERHMS.Test.Dapper
         [Test]
         public void InsertTest()
         {
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 Constant constant = new Constant
                 {
@@ -66,7 +82,7 @@ namespace ERHMS.Test.Dapper
                 Assert.AreEqual(constant.Name, context.Constants.SelectById(2).Name);
             }
             Assert.AreEqual(1, context.Constants.Count());
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 Person person = new Person
                 {
@@ -85,7 +101,7 @@ namespace ERHMS.Test.Dapper
         {
             Constant constant = context.Constants.SelectById(1);
             Assert.AreEqual("1.0", constant.Value);
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 constant.Value = "2.0";
                 context.Constants.Update(constant);
@@ -94,7 +110,7 @@ namespace ERHMS.Test.Dapper
             Assert.AreEqual(constant.Value, context.Constants.SelectById(constant.ConstantId).Value);
             Person person = context.People.SelectById("999181b4-8445-e585-5178-74a9e11e75fa");
             Assert.AreEqual(180.5, person.Weight);
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 person.Weight -= 10.0;
                 context.People.Update(person);
@@ -106,22 +122,22 @@ namespace ERHMS.Test.Dapper
         [Test]
         public void DeleteTest()
         {
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 context.Constants.Delete();
                 Assert.AreEqual(0, context.Constants.Count());
             }
             Assert.AreEqual(1, context.Constants.Count());
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
-                string sql = "WHERE Height >= @Height";
+                string clauses = "WHERE Height >= @Height";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Height", 6.0);
-                context.People.Delete(sql, parameters);
+                context.People.Delete(clauses, parameters);
                 Assert.AreEqual(86, context.People.Count());
             }
             Assert.AreEqual(100, context.People.Count());
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 Person person = context.People.SelectById("999181b4-8445-e585-5178-74a9e11e75fa");
                 context.People.Delete(person);
@@ -133,13 +149,13 @@ namespace ERHMS.Test.Dapper
         [Test]
         public void DeleteByIdTest()
         {
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 context.Constants.DeleteById(1);
                 Assert.AreEqual(0, context.Constants.Count());
             }
             Assert.AreEqual(1, context.Constants.Count());
-            using (IDbTransaction transaction = context.Database.BeginTransaction())
+            using (Transaction transaction = context.Database.BeginTransaction())
             {
                 context.People.DeleteById("999181b4-8445-e585-5178-74a9e11e75fa");
                 Assert.AreEqual(99, context.People.Count());
@@ -148,7 +164,7 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class OleDbDataContextTest : DataContextTestBase
+    public class OleDbRepositoryTest : RepositoryTestBase
     {
         private TempDirectory directory;
 
@@ -156,7 +172,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            DatabaseTestBase.Access.SetUp(nameof(OleDbDataContextTest), out directory, out builder);
+            EmptyDatabaseTestBase.Access.SetUp(nameof(OleDbRepositoryTest), out directory, out builder);
             context = new DataContext(new AccessDatabase(builder));
             PostSetUp();
         }
@@ -168,13 +184,13 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class SqlDataContextTest : DataContextTestBase
+    public class SqlRepositoryTest : RepositoryTestBase
     {
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
-            DatabaseTestBase.SqlServer.SetUp(out builder);
+            EmptyDatabaseTestBase.SqlServer.SetUp(out builder);
             context = new DataContext(new SqlServerDatabase(builder));
             PostSetUp();
         }
@@ -182,7 +198,7 @@ namespace ERHMS.Test.Dapper
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            DatabaseTestBase.SqlServer.TearDown();
+            EmptyDatabaseTestBase.SqlServer.TearDown();
         }
     }
 }

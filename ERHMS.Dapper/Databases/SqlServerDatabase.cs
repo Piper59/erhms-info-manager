@@ -37,6 +37,9 @@ namespace ERHMS.Dapper
             Builder = builder;
         }
 
+        public SqlServerDatabase(string connectionString)
+            : this(new SqlConnectionStringBuilder(connectionString)) { }
+
         public override bool Exists()
         {
             using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(Builder.ConnectionString))
@@ -52,7 +55,7 @@ namespace ERHMS.Dapper
         {
             using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(Builder.ConnectionString))
             {
-                string sql = string.Format("CREATE DATABASE {0}", IDbConnectionExtensions.Escape(Builder.InitialCatalog));
+                string sql = string.Format("CREATE DATABASE {0}", Escape(Builder.InitialCatalog));
                 connection.Execute(sql);
             }
         }

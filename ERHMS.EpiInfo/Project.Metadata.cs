@@ -4,6 +4,7 @@ using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 
 namespace ERHMS.EpiInfo
 {
@@ -29,6 +30,18 @@ namespace ERHMS.EpiInfo
                 .ThenBy(row => row.Field<short?>("Position") ?? row.Field<int>("FieldId"))
                 .ThenBy(row => row.Field<double?>("TabIndex") ?? row.Field<int>("FieldId"))
                 .Select(row => row.Field<int>("FieldId"));
+        }
+
+        public IEnumerable<string> GetCodes(string tableName, string columnName, bool sorted)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat("SELECT {0} FROM {1}", Driver.InsertInEscape(columnName), Driver.InsertInEscape(tableName));
+            if (sorted)
+            {
+                sql.AppendFormat(" ORDER BY {0}", Driver.InsertInEscape(columnName));
+            }
+            Query query = Driver.CreateQuery(sql.ToString());
+            return Driver.Select(query).AsEnumerable().Select(row => row.Field<string>(columnName));
         }
 
         public IEnumerable<View> GetViews()

@@ -11,7 +11,7 @@ namespace ERHMS.Test.Dapper
         public PersonRepository(IDatabase database)
             : base(database) { }
 
-        public override IEnumerable<Person> Select(string sql = null, object parameters = null)
+        public override IEnumerable<Person> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
@@ -20,7 +20,7 @@ namespace ERHMS.Test.Dapper
                     FROM Person
                     INNER JOIN Gender ON Person.GenderId = Gender.GenderId
                     {0}";
-                sql = string.Format(format, sql);
+                string sql = string.Format(format, clauses);
                 Func<Person, Gender, Person> map = (person, gender) =>
                 {
                     person.Gender = gender;
@@ -32,10 +32,10 @@ namespace ERHMS.Test.Dapper
 
         public override Person SelectById(object id)
         {
-            string sql = string.Format("WHERE Person.PersonId = @Id");
+            string clauses = "WHERE Person.PersonId = @Id";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
-            return Select(sql, parameters).SingleOrDefault();
+            return Select(clauses, parameters).SingleOrDefault();
         }
     }
 }

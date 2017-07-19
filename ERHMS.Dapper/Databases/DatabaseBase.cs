@@ -5,6 +5,11 @@ namespace ERHMS.Dapper
 {
     public abstract class DatabaseBase : IDatabase
     {
+        protected static string Escape(string identifier)
+        {
+            return IDbConnectionExtensions.Escape(identifier);
+        }
+
         private Transaction transaction;
 
         public abstract bool Exists();
@@ -35,23 +40,48 @@ namespace ERHMS.Dapper
 
         public T Invoke<T>(Func<IDbConnection, IDbTransaction, T> action)
         {
-            IDbConnection connection = transaction?.Connection ?? GetConnection();
-            try
+            if (transaction == null)
             {
-                return action(connection, transaction?.Base);
-            }
-            finally
-            {
-                if (transaction == null)
+                using (IDbConnection connection = GetConnection())
                 {
-                    connection.Dispose();
+                    return action(connection, null);
                 }
+            }
+            else
+            {
+                return action(transaction.Connection, transaction.Base);
             }
         }
 
         public void Invoke(Action<IDbConnection, IDbTransaction> action)
         {
             Invoke((connection, transaction) =>
+            {
+                action(connection, transaction);
+                return (object)null;
+            });
+        }
+
+        public T Transact<T>(Func<IDbConnection, IDbTransaction, T> action)
+        {
+            if (transaction == null)
+            {
+                using (Transaction transaction = BeginTransaction())
+                {
+                    T result = action(transaction.Connection, transaction.Base);
+                    transaction.Commit();
+                    return result;
+                }
+            }
+            else
+            {
+                return action(transaction.Connection, transaction.Base);
+            }
+        }
+
+        public void Transact(Action<IDbConnection, IDbTransaction> action)
+        {
+            Transact((connection, transaction) =>
             {
                 action(connection, transaction);
                 return (object)null;

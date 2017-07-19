@@ -20,13 +20,13 @@ namespace ERHMS.Test.Dapper
                 Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", path);
                 OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
                 {
-                    Provider = OleDbExtensions.AccessProvider,
+                    Provider = OleDbExtensions.Providers.Access,
                     DataSource = path
                 };
                 using (IDbConnection connection = new LoggingConnection(new OleDbConnection(builder.ConnectionString)))
                 {
                     int count = LogTest.GetLineCount();
-                    connection.Execute("CREATE TABLE Test (Id INT NOT NULL PRIMARY KEY)");
+                    connection.Execute("CREATE TABLE Test (Id INTEGER NOT NULL PRIMARY KEY)");
                     count++;
                     Assert.AreEqual(count, LogTest.GetLineCount());
                     connection.Execute("INSERT INTO Test (Id) VALUES (1)");

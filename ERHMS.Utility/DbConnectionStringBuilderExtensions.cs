@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ERHMS.Utility
 {
-    public static class DataExtensions
+    public static class DbConnectionStringBuilderExtensions
     {
         private static bool IsCensorable(KeyValuePair<string, object> property)
         {
@@ -20,11 +20,6 @@ namespace ERHMS.Utility
         public static string GetCensoredConnectionString(this DbConnectionStringBuilder @this)
         {
             return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => FormatCensored(property)));
-        }
-
-        public static bool IsEditable(this DataColumn @this)
-        {
-            return !@this.AutoIncrement && !@this.ReadOnly;
         }
     }
 }
