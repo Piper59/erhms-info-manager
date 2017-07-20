@@ -8,12 +8,12 @@ namespace ERHMS.EpiInfo
 {
     public static class ImportExport
     {
-        private static bool ShowDialog(Form form)
+        private static bool ShowDialog(IWin32Window owner, Form form)
         {
             try
             {
                 form.StartPosition = FormStartPosition.CenterParent;
-                return form.ShowDialog() == DialogResult.OK;
+                return form.ShowDialog(owner) == DialogResult.OK;
             }
             finally
             {
@@ -21,28 +21,28 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static bool ImportFromView(View target)
+        public static bool ImportFromView(IWin32Window owner, View target)
         {
             Log.Logger.DebugFormat("Importing from view: {0}", target.Name);
-            return ShowDialog(new ImportDataForm(target));
+            return ShowDialog(owner, new ImportDataForm(target));
         }
 
-        public static bool ImportFromPackage(View target)
+        public static bool ImportFromPackage(IWin32Window owner, View target)
         {
             Log.Logger.DebugFormat("Importing from package: {0}", target.Name);
-            return ShowDialog(new ImportEncryptedDataPackageDialog(target));
+            return ShowDialog(owner, new ImportEncryptedDataPackageDialog(target));
         }
 
-        public static bool ImportFromMobile(View target)
+        public static bool ImportFromMobile(IWin32Window owner, View target)
         {
             Log.Logger.DebugFormat("Importing from mobile: {0}", target.Name);
-            return ShowDialog(new ImportPhoneDataForm(target));
+            return ShowDialog(owner, new ImportPhoneDataForm(target));
         }
 
-        public static bool ExportToPackage(View source)
+        public static bool ExportToPackage(IWin32Window owner, View source)
         {
             Log.Logger.DebugFormat("Exporting to package: {0}", source.Name);
-            return ShowDialog(new PackageForTransportDialog(source.Project.FilePath, source));
+            return ShowDialog(owner, new PackageForTransportDialog(source.Project.FilePath, source));
         }
     }
 }

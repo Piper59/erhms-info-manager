@@ -208,9 +208,9 @@ namespace ERHMS.Test.EpiInfo
                 childView.TableName,
                 childPage.TableName
             };
-            foreach (string name in tableNames)
+            foreach (string tableName in tableNames)
             {
-                Assert.IsTrue(project.Driver.TableExists(name), name);
+                Assert.IsTrue(project.Driver.TableExists(tableName), tableName);
             }
         }
 

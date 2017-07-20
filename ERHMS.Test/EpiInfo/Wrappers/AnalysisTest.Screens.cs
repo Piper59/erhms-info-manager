@@ -34,19 +34,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 return new MappingDialogScreen(FindFirst(TreeScope.Children, id: "MappingDialog"));
             }
 
-            public PgmDialogScreen GetPgmDialogScreen()
-            {
-                return new PgmDialogScreen(FindFirst(TreeScope.Children, id: "PgmDialog"));
-            }
-
             public ReadDialogScreen GetReadDialogScreen()
             {
                 return new ReadDialogScreen(FindFirst(TreeScope.Children, id: "ReadDialog"));
-            }
-
-            public AutomationElementX GetSaveDialogScreen()
-            {
-                return FindFirstX(TreeScope.Children, name: "Save?");
             }
 
             public WriteDialogScreen GetWriteDialogScreen()
@@ -92,17 +82,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                         cells[1].Value.SetValue(target);
                     }
                 }
-            }
-        }
-
-        private class PgmDialogScreen : AutomationElementX
-        {
-            public readonly AutomationElementX btnOK;
-
-            public PgmDialogScreen(AutomationElement element)
-                : base(element)
-            {
-                btnOK = FindFirstX(TreeScope.Descendants, id: "btnOK");
             }
         }
 

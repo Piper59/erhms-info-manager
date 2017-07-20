@@ -7,6 +7,11 @@ namespace ERHMS.EpiInfo.Wrappers
 {
     internal class MainForm : EnterMainForm
     {
+        public GuiMediator Mediator
+        {
+            get { return GuiMediator.Instance; }
+        }
+
         public MainForm()
         {
             this.Initialize();
@@ -40,11 +45,11 @@ namespace ERHMS.EpiInfo.Wrappers
             OpenRecord(projectPath, viewName, "*");
         }
 
-        public bool TrySetValue(string fieldName, string value)
+        public bool TrySetField(string name, string value)
         {
-            if (View.Fields.TableColumnFields.Contains(fieldName))
+            if (View.Fields.DataFields.Contains(name))
             {
-                View.Fields.TableColumnFields[fieldName].CurrentRecordValueString = value;
+                View.Fields.DataFields[name].CurrentRecordValueString = value;
                 return true;
             }
             else
@@ -55,7 +60,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public new void Refresh()
         {
-            GuiMediator.Instance.Canvas.Render(View.RecStatusField.CurrentRecordValue != 0);
+            Mediator.Canvas.Render(View.RecStatusField.CurrentRecordValue != 0);
         }
     }
 }

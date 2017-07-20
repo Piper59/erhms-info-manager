@@ -24,7 +24,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private void CreateViewDialog_Load(object sender, EventArgs e)
         {
-            txtViewName.Select(ViewName.Length, 0);
+            txtViewName.Select(txtViewName.Text.Length, 0);
         }
 
         private void btnOk_Click(object sender, EventArgs e)

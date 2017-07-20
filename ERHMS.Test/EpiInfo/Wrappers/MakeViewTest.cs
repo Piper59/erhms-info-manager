@@ -41,10 +41,10 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public void InstantiateProjectTemplateTest()
         {
             string templatePath = TemplateInfo.GetPath(TemplateLevel.Project, "ADDFull");
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.ADDFull.Project.xml", templatePath);
             try
             {
                 Project project = AccessProjectTest.Create("ADDFull");
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.ADDFull.Project.xml", templatePath);
                 wrapper = MakeView.InstantiateProjectTemplate.Create(project.FilePath, templatePath);
                 wrapper.Invoke();
                 wrapper.Exited.WaitOne();
@@ -61,11 +61,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public void InstantiateViewTemplateTest()
         {
             string templatePath = TemplateInfo.GetPath(TemplateLevel.View, "ADDFull");
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.ADDFull.View.xml", templatePath);
             try
             {
-                // Create template
-                Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.ADDFull.View.xml", templatePath);
-
                 // Invoke wrapper
                 wrapper = MakeView.InstantiateViewTemplate.Create(project.FilePath, templatePath, "");
                 WrapperEventCollection events = new WrapperEventCollection(wrapper);
@@ -84,6 +82,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 Assert.IsTrue(project.Views.Contains("ADDFull_2"));
                 Assert.AreEqual(1, events.Count);
                 Assert.AreEqual(WrapperEventType.ViewCreated, events[0].Type);
+                Assert.AreEqual(events[0].Properties.Id, project.Views["ADDFull_2"].Id);
             }
             finally
             {
@@ -93,10 +92,28 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
         private void TemplateTest(XmlDocument document)
         {
-            ICollection<string> fieldNames = new string[] { "AddFull", "ThisViewIs", "GENDER", "REPEAT", "ENGL", "ENGG", "OLMAT", "KF", "GPA", "SOCPROB", "SCORE2", "SCORE4", "SCORE5", "DROPOUT", "ADDSC", "IQ" };
-            foreach (XmlElement fieldElement in document.SelectElements("/Template/Project/View/Page/Field"))
+            ICollection<string> fieldNames = new string[]
             {
-                CollectionAssert.Contains(fieldNames, fieldElement.GetAttribute("Name"));
+                "AddFull",
+                "ThisViewIs",
+                "GENDER",
+                "REPEAT",
+                "ENGL",
+                "ENGG",
+                "OLMAT",
+                "KF",
+                "GPA",
+                "SOCPROB",
+                "SCORE2",
+                "SCORE4",
+                "SCORE5",
+                "DROPOUT",
+                "ADDSC",
+                "IQ"
+            };
+            foreach (XmlElement element in document.SelectElements("/Template/Project/View/Page/Field"))
+            {
+                CollectionAssert.Contains(fieldNames, element.GetAttribute("Name"));
             }
         }
 
@@ -130,6 +147,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 TemplateTest(document);
                 Assert.AreEqual(1, events.Count);
                 Assert.AreEqual(WrapperEventType.TemplateCreated, events[0].Type);
+                Assert.AreEqual(templatePath, events[0].Properties.Path);
             }
             finally
             {

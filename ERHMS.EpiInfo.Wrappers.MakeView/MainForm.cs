@@ -41,26 +41,38 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
+        private void CloseProject()
+        {
+            Invoker invoker = new Invoker
+            {
+                Object = this,
+                DeclaringType = typeof(MakeViewMainForm),
+                MethodName = "CloseCurrentProject"
+            };
+            invoker.Invoke();
+        }
+
+        private void OpenProjectInternal(Project project)
+        {
+            Invoker invoker = new Invoker
+            {
+                Object = this,
+                DeclaringType = typeof(MakeViewMainForm),
+                MethodName = "OpenProject",
+                ArgTypes = new Type[] { typeof(Epi.Project) }
+            };
+            invoker.Invoke(project);
+        }
+
         public void OpenProject(Project project)
         {
             if (ProjectExplorer.IsProjectLoaded)
             {
-                new Invoker
-                {
-                    Object = this,
-                    DeclaringType = typeof(MakeViewMainForm),
-                    MethodName = "CloseCurrentProject"
-                }.Invoke();
+                CloseProject();
             }
             try
             {
-                new Invoker
-                {
-                    Object = this,
-                    DeclaringType = typeof(MakeViewMainForm),
-                    MethodName = "OpenProject",
-                    ArgTypes = new Type[] { typeof(Epi.Project) }
-                }.Invoke(project);
+                OpenProjectInternal(project);
             }
             catch (TargetInvocationException ex)
             {

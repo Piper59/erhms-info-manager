@@ -49,11 +49,12 @@ namespace ERHMS.EpiInfo
             XmlNode node = document.SelectSingleNode("/DashboardCanvas/dashboardHelper/projectPath");
             node.InnerText = path;
             StringBuilder content = new StringBuilder();
-            using (XmlWriter writer = XmlWriter.Create(content, new XmlWriterSettings
+            XmlWriterSettings settings = new XmlWriterSettings
             {
                 OmitXmlDeclaration = true,
                 ConformanceLevel = ConformanceLevel.Fragment
-            }))
+            };
+            using (XmlWriter writer = XmlWriter.Create(content, settings))
             {
                 document.WriteContentTo(writer);
             }

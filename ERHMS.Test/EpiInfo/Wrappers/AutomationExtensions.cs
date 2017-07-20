@@ -14,14 +14,14 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
         public static bool TryWait(Func<bool> done)
         {
-            DateTime waitStart = DateTime.Now;
+            DateTime start = DateTime.Now;
             while (true)
             {
                 if (done())
                 {
                     return true;
                 }
-                else if ((DateTime.Now - waitStart) > WaitMax)
+                else if ((DateTime.Now - start) > WaitMax)
                 {
                     return false;
                 }

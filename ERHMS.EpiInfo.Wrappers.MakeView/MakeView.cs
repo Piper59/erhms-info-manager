@@ -88,21 +88,21 @@ namespace ERHMS.EpiInfo.Wrappers
                 Form.OpenProject(project);
                 XmlDocument document = new XmlDocument();
                 document.Load(TemplatePath);
-                XmlElement viewElement = document.SelectSingleElement("/Template/Project/View");
-                string viewName = project.SuggestViewName(ViewNamePrefix + viewElement.GetAttribute("Name"));
+                XmlElement element = document.SelectSingleElement("/Template/Project/View");
+                string viewName = project.SuggestViewName(ViewNamePrefix + element.GetAttribute("Name"));
                 using (CreateViewDialog dialog = new CreateViewDialog(project, viewName))
                 {
                     dialog.StartPosition = FormStartPosition.CenterParent;
                     if (dialog.ShowDialog(Form) == DialogResult.OK)
                     {
-                        viewElement.SetAttribute("Name", dialog.ViewName);
-                        string tempTemplatePath = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
-                        document.Save(tempTemplatePath);
+                        element.SetAttribute("Name", dialog.ViewName);
+                        string templatePath = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
+                        document.Save(templatePath);
                         Template template = new Template(Form.Mediator);
-                        template.InstantiateTemplate(tempTemplatePath);
+                        int id = template.InstantiateTemplate(templatePath);
                         RaiseEvent(WrapperEventType.ViewCreated, new
                         {
-                            Id = project.GetViewByName(dialog.ViewName).Id
+                            Id = id
                         });
                         Form.TryClose("Form has been created.");
                     }
@@ -145,8 +145,11 @@ namespace ERHMS.EpiInfo.Wrappers
                     if (dialog.ShowDialog(Form) == DialogResult.OK)
                     {
                         Template template = new Template(Form.Mediator);
-                        template.CreateTemplate(Form.CurrentView, dialog.TemplateName, dialog.Description);
-                        RaiseEvent(WrapperEventType.TemplateCreated);
+                        string path = template.CreateTemplate(Form.CurrentView, dialog.TemplateName, dialog.Description);
+                        RaiseEvent(WrapperEventType.TemplateCreated, new
+                        {
+                            Path = path
+                        });
                         Form.ProjectExplorer.UpdateTemplates();
                         Form.TryClose("Template has been created.");
                     }

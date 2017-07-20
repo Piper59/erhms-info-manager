@@ -61,7 +61,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 message = "Please enter a template name.";
                 return false;
             }
-            else if (TemplateName.Any(@char => InvalidChars.Contains(@char)))
+            else if (TemplateName.Intersect(InvalidChars).Any())
             {
                 StringBuilder builder = new StringBuilder();
                 builder.AppendLine("Please enter a template name that does not contain any of the following characters:");

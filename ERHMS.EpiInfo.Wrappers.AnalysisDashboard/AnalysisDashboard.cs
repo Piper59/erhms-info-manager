@@ -1,5 +1,4 @@
 ﻿using Epi.Windows;
-using Epi.Windows.AnalysisDashboard;
 using ERHMS.Utility;
 using System;
 using System.IO;
@@ -20,7 +19,7 @@ namespace ERHMS.EpiInfo.Wrappers
             private static Project Project { get; set; }
             private static Canvas Canvas { get; set; }
             private static string CanvasPath { get; set; }
-            private static DashboardMainForm Form { get; set; }
+            private static MainForm Form { get; set; }
 
             public static Wrapper Create(string projectPath, int canvasId, string content)
             {
@@ -39,10 +38,11 @@ namespace ERHMS.EpiInfo.Wrappers
                     watcher.NotifyFilter = NotifyFilters.LastWrite;
                     watcher.Changed += Watcher_Changed;
                     watcher.EnableRaisingEvents = true;
-                    Form = new DashboardMainForm();
-                    Form.Initialize();
-                    Form.WindowState = FormWindowState.Minimized;
-                    Form.ShowInTaskbar = false;
+                    Form = new MainForm
+                    {
+                        WindowState = FormWindowState.Minimized,
+                        ShowInTaskbar = false
+                    };
                     Form.Shown += Form_Shown;
                     Application.Run(Form);
                 }

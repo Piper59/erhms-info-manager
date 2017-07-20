@@ -10,50 +10,58 @@ namespace ERHMS.EpiInfo.Wrappers
 {
     internal class Template
     {
-        object @base;
+        private object @base;
+
+        public GuiMediator Mediator { get; private set; }
 
         public Template(GuiMediator mediator)
         {
             Type type = Assembly.GetAssembly(typeof(MakeViewWindowsModule)).GetType("Epi.Windows.MakeView.Template");
             ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(GuiMediator) });
             @base = constructor.Invoke(new object[] { mediator });
+            Mediator = mediator;
         }
 
-        public void InstantiateTemplate(string path)
+        public int InstantiateTemplate(string path)
         {
             Log.Logger.DebugFormat("Instantiating template: {0}", path);
-            new Invoker
+            Invoker invoker = new Invoker
             {
                 Object = @base,
                 MethodName = "CreateFromTemplate",
                 ArgTypes = new Type[] { typeof(string) }
-            }.Invoke(path);
+            };
+            invoker.Invoke(path);
+            return Mediator.ProjectExplorer.CurrentView.Id;
         }
 
-        public void CreateTemplate(View view, string templateName, string description)
+        public string CreateTemplate(View view, string templateName, string description)
         {
             Log.Logger.DebugFormat("Creating template: {0}, {1}", view.Name, templateName);
-            new Invoker
+            Invoker invoker = new Invoker
             {
                 Object = @base,
                 MethodName = "CreateViewTemplate",
                 ArgTypes = new Type[] { typeof(string), typeof(View) }
-            }.Invoke(templateName, view);
+            };
+            invoker.Invoke(templateName, view);
             string path = TemplateInfo.GetPath(TemplateLevel.View, templateName);
             XmlDocument document = new XmlDocument();
             document.Load(path);
             document.DocumentElement.SetAttribute("Description", description);
             document.Save(path);
+            return path;
         }
 
         public string CreateWebTemplate()
         {
             Log.Logger.Debug("Creating web template");
-            return (string)new Invoker
+            Invoker invoker = new Invoker
             {
                 Object = @base,
                 MethodName = "CreateWebSurveyTemplate"
-            }.Invoke();
+            };
+            return (string)invoker.Invoke();
         }
     }
 }

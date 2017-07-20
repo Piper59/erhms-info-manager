@@ -18,7 +18,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         {
             // Invoke wrapper
             wrapper = Enter.OpenRecord.Create(project.FilePath, "Surveillance", 1);
-            WrapperEventCollection events = new WrapperEventCollection(wrapper);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
@@ -41,11 +40,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             wrapper.Exited.WaitOne();
             View view = project.Views["Surveillance"];
             view.LoadRecord(1);
-            NamedObjectCollection<IDataField> fields = view.Fields.TableColumnFields;
+            NamedObjectCollection<IInputField> fields = view.Fields.InputFields;
             Assert.AreEqual("Doe", fields["LastName"].CurrentRecordValueObject);
             Assert.AreEqual(new DateTime(1980, 1, 1), fields["BirthDate"].CurrentRecordValueObject);
-            Assert.AreEqual(1, events.Count);
-            Assert.AreEqual(WrapperEventType.RecordSaved, events[0].Type);
         }
 
         [Test]
@@ -60,7 +57,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 BirthDate = new DateTime(1980, 1, 1)
             };
             wrapper = Enter.OpenNewRecord.Create(project.FilePath, "Surveillance", record);
-            WrapperEventCollection events = new WrapperEventCollection(wrapper);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
@@ -74,14 +70,12 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             wrapper.Exited.WaitOne();
             View view = project.Views["Surveillance"];
             Assert.AreEqual(21, view.GetRecordCount());
-            view.LoadLastRecord();
-            NamedObjectCollection<IDataField> fields = view.Fields.TableColumnFields;
+            view.LoadRecord(21);
+            NamedObjectCollection<IInputField> fields = view.Fields.InputFields;
             Assert.AreEqual(record.CaseID, fields["CaseID"].CurrentRecordValueObject);
             Assert.AreEqual(record.FirstName, fields["FirstName"].CurrentRecordValueObject);
             Assert.AreEqual(record.LastName, fields["LastName"].CurrentRecordValueObject);
             Assert.AreEqual(record.BirthDate, fields["BirthDate"].CurrentRecordValueObject);
-            Assert.AreEqual(1, events.Count);
-            Assert.AreEqual(WrapperEventType.RecordSaved, events[0].Type);
         }
     }
 }

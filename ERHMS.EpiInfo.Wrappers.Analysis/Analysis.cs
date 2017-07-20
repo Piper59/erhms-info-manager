@@ -1,4 +1,4 @@
-﻿using Epi.Fields;
+﻿using Epi;
 using Epi.Windows.Analysis.Dialogs;
 using ERHMS.Utility;
 using System;
@@ -21,19 +21,17 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class OpenPgm : Wrapper
         {
-            private static Project Project { get; set; }
             private static string Content { get; set; }
             private static bool Execute { get; set; }
             private static MainForm Form { get; set; }
 
-            public static Wrapper Create(string projectPath, string content, bool execute)
+            public static Wrapper Create(string content, bool execute)
             {
-                return Create(() => MainInternal(projectPath, content, execute));
+                return Create(() => MainInternal(content, execute));
             }
 
-            private static void MainInternal(string projectPath, string content, bool execute)
+            private static void MainInternal(string content, bool execute)
             {
-                Project = new Project(projectPath);
                 Content = content;
                 Execute = execute;
                 Form = new MainForm();
@@ -115,8 +113,12 @@ namespace ERHMS.EpiInfo.Wrappers
                     Form.Panic("An error occurred while reading data.", ex);
                     return;
                 }
-                ICollection<string> sources = Form.GetOutput().Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
-                ICollection<string> targets = View.Fields.TableColumnFields.Cast<Field>().Select(field => field.Name).ToList();
+                ICollection<string> sources = Form.GetOutput().Columns.Cast<DataColumn>()
+                    .Select(column => column.ColumnName)
+                    .ToList();
+                ICollection<string> targets = View.Fields.TableColumnFields.Cast<INamedObject>()
+                    .Select(field => field.Name)
+                    .ToList();
                 MappingCollection mappings = null;
                 while (true)
                 {
@@ -157,7 +159,6 @@ namespace ERHMS.EpiInfo.Wrappers
                     Form.Panic("An error occurred while importing data.", ex);
                     return;
                 }
-                RaiseEvent(WrapperEventType.ViewDataImported);
                 Form.TryClose("Data has been imported.");
             }
         }
@@ -199,8 +200,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 using (WriteDialog dialog = new WriteDialog(Form))
                 {
                     dialog.StartPosition = FormStartPosition.CenterParent;
-                    DialogResult result = dialog.ShowDialog(Form);
-                    if (result == DialogResult.OK)
+                    if (dialog.ShowDialog(Form) == DialogResult.OK)
                     {
                         Form.AddCommand(dialog.CommandText);
                         if (dialog.ProcessingMode == CommandDesignDialog.CommandProcessingMode.Save_And_Execute)

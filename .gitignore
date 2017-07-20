@@ -4,5 +4,6 @@ obj/
 packages/
 publish/
 .vs/
+TestResult.xml
 *.suo
 *.user

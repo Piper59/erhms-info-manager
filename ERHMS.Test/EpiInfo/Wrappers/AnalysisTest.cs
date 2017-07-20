@@ -107,8 +107,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             project.InsertPgm(pgm);
 
             // Invoke wrapper
-            wrapper = Analysis.OpenPgm.Create(project.FilePath, pgm.Content, true);
-            WrapperEventCollection events = new WrapperEventCollection(wrapper);
+            wrapper = Analysis.OpenPgm.Create(pgm.Content, true);
             wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
@@ -128,7 +127,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             // Invoke wrapper
             wrapper = Analysis.Import.Create(project.FilePath, "Surveillance");
             wrapper.Invoke();
-            WrapperEventCollection events = new WrapperEventCollection(wrapper);
             MainFormScreen mainForm = new MainFormScreen();
 
             // Select CSV
@@ -152,14 +150,11 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
             // Close window
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
-
-            Assert.AreEqual(1, events.Count);
-            Assert.AreEqual(WrapperEventType.ViewDataImported, events[0].Type);
         }
 
         private void RecordTest(View view, string lastName, string firstName, DateTime entered, DateTime updated)
         {
-            NamedObjectCollection<IDataField> fields = view.Fields.TableColumnFields;
+            NamedObjectCollection<IInputField> fields = view.Fields.InputFields;
             Assert.AreEqual(lastName, fields["LastName"].CurrentRecordValueObject);
             Assert.AreEqual(firstName, fields["FirstName"].CurrentRecordValueObject);
             Assert.AreEqual(entered, fields["Entered"].CurrentRecordValueObject);
@@ -172,7 +167,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             ImportCsv("ERHMS.Test.Resources.Sample.Surveillance.Append.csv", "Surveillance_Append.csv");
             View view = project.Views["Surveillance"];
             Assert.AreEqual(21, view.GetRecordCount());
-            view.LoadLastRecord();
+            view.LoadRecord(21);
             RecordTest(view, "Doe", "Jane", new DateTime(2010, 1, 1), new DateTime(2010, 1, 1));
         }
 

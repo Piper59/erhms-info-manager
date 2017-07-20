@@ -15,16 +15,6 @@ namespace ERHMS.EpiInfo.Wrappers
         private ICollection<string> sources;
         private ICollection<string> targets;
 
-        public IEnumerable<string> Sources
-        {
-            get { return sources; }
-        }
-
-        public IEnumerable<string> Targets
-        {
-            get { return targets; }
-        }
-
         public MappingDialog(AnalysisMainForm form, IEnumerable<string> sources, IEnumerable<string> targets)
             : base(form)
         {
@@ -64,8 +54,8 @@ namespace ERHMS.EpiInfo.Wrappers
             MappingCollection mappings = new MappingCollection();
             foreach (DataGridViewRow row in dgvMappings.Rows)
             {
-                string source = (string)row.Cells["colSource"].Value;
-                string target = (string)row.Cells["colTarget"].Value;
+                string source = (string)row.Cells[nameof(colSource)].Value;
+                string target = (string)row.Cells[nameof(colTarget)].Value;
                 if (target.EqualsIgnoreCase(EmptyTarget))
                 {
                     continue;

@@ -1,5 +1,4 @@
-﻿using Epi;
-using Epi.Windows;
+﻿using Epi.Windows;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -33,7 +32,6 @@ namespace ERHMS.EpiInfo.Wrappers
                 UniqueKey = uniqueKey;
                 Form = new MainForm();
                 Form.Shown += Form_Shown;
-                Form.RecordSaved += Form_RecordSaved;
                 Application.Run(Form);
             }
 
@@ -47,11 +45,6 @@ namespace ERHMS.EpiInfo.Wrappers
                     Form.OpenRecord(ProjectPath, ViewName, UniqueKey);
                     splash.Close();
                 }
-            }
-
-            private static void Form_RecordSaved(object sender, SaveRecordEventArgs e)
-            {
-                RaiseEvent(WrapperEventType.RecordSaved);
             }
         }
 
@@ -85,7 +78,6 @@ namespace ERHMS.EpiInfo.Wrappers
                 ViewName = viewName;
                 Form = new MainForm();
                 Form.Shown += Form_Shown;
-                Form.RecordSaved += Form_RecordSaved;
                 Application.Run(Form);
             }
 
@@ -100,13 +92,13 @@ namespace ERHMS.EpiInfo.Wrappers
                     bool refresh = false;
                     while (true)
                     {
-                        string fieldName = In.ReadLine();
+                        string name = In.ReadLine();
                         string value = In.ReadLine();
-                        if (fieldName == null || value == null)
+                        if (name == null || value == null)
                         {
                             break;
                         }
-                        if (Form.TrySetValue(fieldName, value))
+                        if (Form.TrySetField(name, value))
                         {
                             refresh = true;
                         }
@@ -117,11 +109,6 @@ namespace ERHMS.EpiInfo.Wrappers
                     }
                     splash.Close();
                 }
-            }
-
-            private static void Form_RecordSaved(object sender, SaveRecordEventArgs e)
-            {
-                RaiseEvent(WrapperEventType.RecordSaved);
             }
         }
     }
