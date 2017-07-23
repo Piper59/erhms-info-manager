@@ -8,6 +8,31 @@ namespace ERHMS.Dapper
 {
     public static class IDbConnectionExtensions
     {
+        private class ConnectionOpener : IDisposable
+        {
+            private bool closed;
+
+            public IDbConnection Connection { get; private set; }
+
+            public ConnectionOpener(IDbConnection connection)
+            {
+                Connection = connection;
+                closed = connection.State == ConnectionState.Closed;
+                if (closed)
+                {
+                    connection.Open();
+                }
+            }
+
+            public void Dispose()
+            {
+                if (closed && Connection.State != ConnectionState.Closed)
+                {
+                    Connection.Close();
+                }
+            }
+        }
+
         public static string Escape(string identifier)
         {
             return string.Format("[{0}]", identifier.Replace("]", "]]"));
@@ -20,39 +45,42 @@ namespace ERHMS.Dapper
 
         public static void Execute(this IDbConnection @this, Script script)
         {
-            bool closed = @this.State == ConnectionState.Closed;
-            try
+            using (new ConnectionOpener(@this))
+            using (IDbTransaction transaction = @this.BeginTransaction())
             {
-                if (closed)
+                try
                 {
-                    @this.Open();
-                }
-                using (IDbTransaction transaction = @this.BeginTransaction())
-                {
-                    try
+                    foreach (string sql in script)
                     {
-                        foreach (string sql in script)
+                        if (string.IsNullOrWhiteSpace(sql))
                         {
-                            if (string.IsNullOrWhiteSpace(sql))
-                            {
-                                continue;
-                            }
-                            @this.Execute(sql, transaction: transaction);
+                            continue;
                         }
-                        transaction.Commit();
+                        @this.Execute(sql, transaction: transaction);
                     }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
                 }
             }
-            finally
+        }
+
+        public static DataTable GetSchema(this IDbConnection @this, string tableName, IDbTransaction transaction = null)
+        {
+            using (new ConnectionOpener(@this))
+            using (IDbCommand command = @this.CreateCommand())
             {
-                if (closed)
+                command.CommandText = string.Format("SELECT * FROM {0} WHERE 1 = 0", Escape(tableName));
+                command.Transaction = transaction;
+                using (IDataReader reader = command.ExecuteReader())
                 {
-                    @this.Close();
+                    DataTable schema = new DataTable();
+                    schema.TableName = tableName;
+                    schema.Load(reader);
+                    return schema;
                 }
             }
         }

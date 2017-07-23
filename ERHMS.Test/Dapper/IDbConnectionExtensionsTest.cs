@@ -47,6 +47,16 @@ namespace ERHMS.Test.Dapper
         }
 
         [Test]
+        public void GetSchemaTest()
+        {
+            DataTable schema = connection.GetSchema("Person");
+            Assert.AreEqual("Person", schema.TableName);
+            Assert.AreEqual(typeof(string), schema.Columns["Name"].DataType);
+            Assert.AreEqual(typeof(DateTime), schema.Columns["BirthDate"].DataType);
+            Assert.AreEqual(typeof(double), schema.Columns["Height"].DataType);
+        }
+
+        [Test]
         public void QueryTest()
         {
             string sql = @"
