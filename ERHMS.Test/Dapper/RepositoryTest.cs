@@ -164,7 +164,7 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class OleDbRepositoryTest : RepositoryTestBase
+    public class AccessRepositoryTest : RepositoryTestBase
     {
         private TempDirectory directory;
 
@@ -172,7 +172,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.Access.SetUp(nameof(OleDbRepositoryTest), out directory, out builder);
+            EmptyDatabaseTestBase.Access.SetUp(nameof(AccessRepositoryTest), out directory, out builder);
             context = new DataContext(new AccessDatabase(builder));
             PostSetUp();
         }
@@ -184,7 +184,7 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class SqlRepositoryTest : RepositoryTestBase
+    public class SqlServerRepositoryTest : RepositoryTestBase
     {
         [OneTimeSetUp]
         public void OneTimeSetUp()
