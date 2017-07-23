@@ -5,7 +5,7 @@ using System;
 
 namespace ERHMS.Test.EpiInfo.Web
 {
-    public class RecordTest : SampleTestBase
+    public class RecordTest : SampleProjectTestBase
     {
         [Test]
         public void GetValueTest()
@@ -23,12 +23,14 @@ namespace ERHMS.Test.EpiInfo.Web
             });
             Assert.AreEqual("John Doe", record.GetValue("Name", typeof(string)));
             Assert.AreEqual(30, record.GetValue("Age", typeof(int)));
-            Assert.AreEqual(true, record.GetValue("Male1", typeof(bool)));
-            Assert.AreEqual(true, record.GetValue("Male2", typeof(bool)));
-            Assert.AreEqual(true, record.GetValue("Male3", typeof(bool)));
-            Assert.AreEqual(false, record.GetValue("Female1", typeof(bool)));
-            Assert.AreEqual(false, record.GetValue("Female2", typeof(bool)));
-            Assert.AreEqual(false, record.GetValue("Female3", typeof(bool)));
+            for (int index = 1; index <= 3; index++)
+            {
+                Assert.AreEqual(true, record.GetValue("Male" + index, typeof(bool)));
+            }
+            for (int index = 1; index <= 3; index++)
+            {
+                Assert.AreEqual(false, record.GetValue("Female" + index, typeof(bool)));
+            }
             Assert.IsNull(record.GetValue("Name", typeof(int)));
             Assert.IsNull(record.GetValue("Name", typeof(bool)));
         }

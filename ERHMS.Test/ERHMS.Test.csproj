@@ -84,6 +84,10 @@
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Web\ERHMS.EpiInfo.Web.csproj">
+      <Project>{05366c9d-7568-4c45-9c80-c77b18eb69e8}</Project>
+      <Name>ERHMS.EpiInfo.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.AnalysisDashboard\ERHMS.EpiInfo.Wrappers.AnalysisDashboard.csproj">
       <Project>{0545c649-4922-4c42-89b1-518c056fb483}</Project>
       <Name>ERHMS.EpiInfo.Wrappers.AnalysisDashboard</Name>
@@ -131,8 +135,8 @@
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <Compile Include="EpiInfo\SampleProjectTestBase.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
-    <None Include="EpiInfo\Web\RecordTest.cs" />
-    <None Include="EpiInfo\Web\ServiceTest.cs" />
+    <Compile Include="EpiInfo\Web\RecordTest.cs" />
+    <Compile Include="EpiInfo\Web\ServiceTest.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.cs" />
@@ -170,6 +174,7 @@
     <Compile Include="Utility\ObjectExtensionsTest.cs" />
     <Compile Include="Utility\SqlClientExtensionsTest.cs" />
     <Compile Include="Utility\StringExtensionsTest.cs" />
+    <Compile Include="Utility\TwoWayDictionaryTest.cs" />
     <Compile Include="Utility\XmlExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>

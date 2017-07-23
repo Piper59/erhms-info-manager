@@ -39,14 +39,7 @@ namespace ERHMS.EpiInfo
             }
             else
             {
-                try
-                {
-                    return Configuration.Decrypt(value);
-                }
-                catch (CryptographicException)
-                {
-                    return null;
-                }
+                return Configuration.Decrypt(value);
             }
         }
 

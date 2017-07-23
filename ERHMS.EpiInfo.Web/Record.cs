@@ -10,13 +10,13 @@ namespace ERHMS.EpiInfo.Web
     {
         private static readonly ICollection<string> TrueValues = new string[]
         {
-            bool.TrueString,
+            "True",
             "1",
             "Yes"
         };
         private static readonly ICollection<string> FalseValues = new string[]
         {
-            bool.FalseString,
+            "False",
             "0",
             "No"
         };

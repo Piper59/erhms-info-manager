@@ -1,14 +1,14 @@
-﻿using Epi;
+﻿using Dapper;
+using Epi;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
-using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Test.EpiInfo.Web
@@ -16,7 +16,7 @@ namespace ERHMS.Test.EpiInfo.Web
 #if IGNORE_LONG_TESTS
     [TestFixture(Ignore = "IGNORE_LONG_TESTS")]
 #endif
-    public class ServiceTest : SampleTestBase
+    public class ServiceTest : SampleProjectTestBase
     {
         private View view;
 
@@ -29,33 +29,12 @@ namespace ERHMS.Test.EpiInfo.Web
         [OneTimeTearDown]
         public new void OneTimeTearDown()
         {
-            if (view.IsWebSurvey())
+            using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
             {
-                Execute("DELETE FROM dbo.SurveyResponse WHERE SurveyId = @SurveyId", new
-                {
-                    SurveyId = view.WebSurveyId
-                });
-                Execute("DELETE FROM dbo.SurveyMetaData WHERE SurveyId = @SurveyId", new
-                {
-                    SurveyId = view.WebSurveyId
-                });
-            }
-        }
-
-        private void Execute(string sql, object parameters = null)
-        {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
-            using (SqlCommand command = new SqlCommand(sql, connection))
-            {
-                connection.Open();
-                if (parameters != null)
-                {
-                    foreach (PropertyInfo property in parameters.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                    {
-                        command.Parameters.AddWithValue("@" + property.Name, property.GetValue(parameters, null));
-                    }
-                }
-                command.ExecuteNonQuery();
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@SurveyId", view.WebSurveyId);
+                connection.Execute("DELETE FROM SurveyResponse WHERE SurveyId = @SurveyId", parameters);
+                connection.Execute("DELETE FROM SurveyMetaData WHERE SurveyId = @SurveyId", parameters);
             }
         }
 
@@ -63,19 +42,19 @@ namespace ERHMS.Test.EpiInfo.Web
         [Order(1)]
         public void IsConfiguredTest()
         {
-            IsConfiguredTest(ConfigurationError.EndpointAddress);
-            Uri endpointUrl = new Uri(ConfigurationManager.AppSettings["EndpointAddress"]);
-            IsConfiguredTest(new Uri(endpointUrl, "SurveyManagerService.html"), ConfigurationError.EndpointAddress);
-            IsConfiguredTest(new Uri(endpointUrl, "SurveyManagerService.svc"), ConfigurationError.Version);
-            IsConfiguredTest(endpointUrl, ConfigurationError.OrganizationKey);
+            IsConfiguredTest(ConfigurationError.Address);
+            Uri endpoint = new Uri(ConfigurationManager.AppSettings["Endpoint"]);
+            IsConfiguredTest(new Uri(endpoint, "SurveyManagerService.html"), ConfigurationError.Address);
+            IsConfiguredTest(new Uri(endpoint, "SurveyManagerService.svc"), ConfigurationError.Version);
+            IsConfiguredTest(endpoint, ConfigurationError.OrganizationKey);
             IsConfiguredTest(Guid.Empty, ConfigurationError.OrganizationKey);
             Guid organizationKey = new Guid(ConfigurationManager.AppSettings["OrganizationKey"]);
             IsConfiguredTest(organizationKey, ConfigurationError.None);
         }
 
-        private void IsConfiguredTest(Uri endpointUrl, ConfigurationError expected)
+        private void IsConfiguredTest(Uri endpoint, ConfigurationError expected)
         {
-            configuration.Settings.WebServiceEndpointAddress = endpointUrl.ToString();
+            configuration.Settings.WebServiceEndpointAddress = endpoint.ToString();
             configuration.Save();
             IsConfiguredTest(expected);
         }
@@ -97,12 +76,12 @@ namespace ERHMS.Test.EpiInfo.Web
         [Order(2)]
         public void PublishTest()
         {
-            DateTime today = DateTime.Today;
+            DateTime now = DateTime.Now;
             Survey survey = new Survey
             {
                 Title = view.Name,
-                StartDate = today,
-                EndDate = today.Add(new TimeSpan(1, 0, 0, 0)),
+                StartDate = now,
+                EndDate = now.Add(new TimeSpan(1, 0, 0, 0)),
                 ResponseType = ResponseType.Single,
                 Draft = true
             };
@@ -132,9 +111,10 @@ namespace ERHMS.Test.EpiInfo.Web
                 Assert.IsTrue(Service.TryAddRecord(view, survey, original));
                 originals.Add(original);
             }
+            ICollection<string> ids = originals.Select(original => original.GlobalRecordId).ToList();
             foreach (Record retrieved in Service.GetRecords(survey))
             {
-                Assert.AreEqual(1, originals.Count(original => original.GlobalRecordId.EqualsIgnoreCase(retrieved.GlobalRecordId)));
+                CollectionAssert.Contains(ids, retrieved.GlobalRecordId);
             }
         }
     }

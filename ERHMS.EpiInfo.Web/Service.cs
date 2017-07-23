@@ -24,23 +24,23 @@ namespace ERHMS.EpiInfo.Web
         public static bool IsConfigured(out ConfigurationError error, bool local = false)
         {
             Log.Logger.Debug("Checking web configuration");
-            Uri endpointUrl;
+            Uri endpoint;
             try
             {
-                endpointUrl = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
+                endpoint = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
             }
             catch
             {
-                error = ConfigurationError.EndpointAddress;
+                error = ConfigurationError.Address;
                 return false;
             }
-            Match match = NamePattern.Match(endpointUrl.Segments[endpointUrl.Segments.Length - 1]);
-            if (!match.Success)
+            Match nameMatch = NamePattern.Match(endpoint.Segments[endpoint.Segments.Length - 1]);
+            if (!nameMatch.Success)
             {
-                error = ConfigurationError.EndpointAddress;
+                error = ConfigurationError.Address;
                 return false;
             }
-            Group version = match.Groups["version"];
+            Group version = nameMatch.Groups["version"];
             if (!version.Success || int.Parse(version.Value) < 2)
             {
                 error = ConfigurationError.Version;
@@ -101,7 +101,7 @@ namespace ERHMS.EpiInfo.Web
                         Criteria = new SurveyInfoCriteria
                         {
                             OrganizationKey = OrganizationKey.Value,
-                            SurveyType = ResponseType.Unspecified.ToEpiInfoValue(),
+                            SurveyType = ResponseTypeExtensions.EpiInfoValues.Forward(ResponseType.Unspecified),
                             SurveyIdList = new string[]
                             {
                                 view.WebSurveyId
@@ -141,7 +141,7 @@ namespace ERHMS.EpiInfo.Web
                 {
                     PublishRequest request = new PublishRequest
                     {
-                        SurveyInfo = survey.GetSurveyInfo(view)
+                        SurveyInfo = survey.GetInfo(view)
                     };
                     PublishResponse response = client.PublishSurvey(request);
                     if (response.PublishInfo.IsPulished)
@@ -176,7 +176,7 @@ namespace ERHMS.EpiInfo.Web
                     PublishRequest request = new PublishRequest
                     {
                         Action = "Update",
-                        SurveyInfo = survey.GetSurveyInfo(view)
+                        SurveyInfo = survey.GetInfo(view)
                     };
                     PublishResponse response = client.RePublishSurvey(request);
                     return response.PublishInfo.IsPulished;
@@ -191,7 +191,7 @@ namespace ERHMS.EpiInfo.Web
 
         public static IEnumerable<Record> GetRecords(Survey survey)
         {
-            Log.Logger.DebugFormat("Getting web records: {0}", survey.SurveyId);
+            Log.Logger.DebugFormat("Getting web survey records: {0}", survey.SurveyId);
             using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
             {
                 SurveyAnswerRequest request = new SurveyAnswerRequest
@@ -236,7 +236,9 @@ namespace ERHMS.EpiInfo.Web
                                 }
                                 if (element.Name == "ResponseDetail")
                                 {
-                                    record[element.GetAttribute("QuestionName")] = reader.ReadNextText();
+                                    string name = element.GetAttribute("QuestionName");
+                                    string value = reader.ReadNextText();
+                                    record[name] = value;
                                 }
                             }
                         }
@@ -248,7 +250,7 @@ namespace ERHMS.EpiInfo.Web
 
         public static bool TryAddRecord(View view, Survey survey, Record record)
         {
-            Log.Logger.DebugFormat("Adding web record: {0}", view.Name);
+            Log.Logger.DebugFormat("Adding web survey record: {0}", view.Name);
             try
             {
                 using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
@@ -280,7 +282,7 @@ namespace ERHMS.EpiInfo.Web
             }
             catch (Exception ex)
             {
-                Log.Logger.Warn("Failed to add web record", ex);
+                Log.Logger.Warn("Failed to add web survey record", ex);
                 return false;
             }
         }

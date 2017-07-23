@@ -49,6 +49,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private static object[] ReceiveArgs()
         {
+            Log.Logger.Debug("Receiving args");
             int count = int.Parse(In.ReadLine());
             if (count == 0)
             {

@@ -2,7 +2,6 @@
 using Epi.SurveyManagerServiceV2;
 using ERHMS.EpiInfo.Wrappers;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Settings = ERHMS.Utility.Settings;
 
@@ -75,17 +74,17 @@ namespace ERHMS.EpiInfo.Web
 
         public Survey() { }
 
-        internal Survey(SurveyInfoDTO surveyInfo)
+        internal Survey(SurveyInfoDTO info)
         {
-            SurveyId = surveyInfo.SurveyId;
-            Title = surveyInfo.SurveyName;
-            StartDate = surveyInfo.StartDate;
-            EndDate = surveyInfo.ClosingDate;
-            ResponseType = ResponseTypeExtensions.FromEpiInfoValue(surveyInfo.SurveyType);
-            Intro = surveyInfo.IntroductionText;
-            Outro = surveyInfo.ExitText;
-            Draft = surveyInfo.IsDraftMode;
-            PublishKey = surveyInfo.UserPublishKey;
+            SurveyId = info.SurveyId;
+            Title = info.SurveyName;
+            StartDate = info.StartDate;
+            EndDate = info.ClosingDate;
+            ResponseType = ResponseTypeExtensions.EpiInfoValues.Reverse(info.SurveyType);
+            Intro = info.IntroductionText;
+            Outro = info.ExitText;
+            Draft = info.IsDraftMode;
+            PublishKey = info.UserPublishKey;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -93,26 +92,26 @@ namespace ERHMS.EpiInfo.Web
         {
             PropertyChanged?.Invoke(this, e);
         }
-        private void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(string name)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            OnPropertyChanged(new PropertyChangedEventArgs(name));
         }
 
-        private bool SetProperty<T>(string propertyName, ref T field, T value)
+        private bool SetProperty<T>(string name, ref T field, T value)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value))
+            if (Equals(value, field))
             {
                 return false;
             }
             else
             {
                 field = value;
-                OnPropertyChanged(propertyName);
+                OnPropertyChanged(name);
                 return true;
             }
         }
 
-        internal SurveyInfoDTO GetSurveyInfo(View view)
+        internal SurveyInfoDTO GetInfo(View view)
         {
             Wrapper wrapper = MakeView.CreateWebTemplate.Create(view.Project.FilePath, view.Name);
             wrapper.Invoke();
@@ -124,7 +123,7 @@ namespace ERHMS.EpiInfo.Web
                 SurveyName = Title,
                 StartDate = StartDate,
                 ClosingDate = EndDate,
-                SurveyType = ResponseType.ToEpiInfoValue(),
+                SurveyType = ResponseTypeExtensions.EpiInfoValues.Forward(ResponseType),
                 IntroductionText = Intro,
                 ExitText = Outro,
                 IsDraftMode = Draft,

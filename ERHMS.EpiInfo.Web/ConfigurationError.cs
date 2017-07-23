@@ -3,7 +3,7 @@
     public enum ConfigurationError
     {
         None,
-        EndpointAddress,
+        Address,
         Version,
         OrganizationKey,
         Connection,

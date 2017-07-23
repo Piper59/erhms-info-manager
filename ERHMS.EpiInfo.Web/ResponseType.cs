@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ERHMS.Utility;
 using System.ComponentModel;
-using System.Linq;
 
 namespace ERHMS.EpiInfo.Web
 {
@@ -18,21 +17,11 @@ namespace ERHMS.EpiInfo.Web
 
     public static class ResponseTypeExtensions
     {
-        private static readonly IDictionary<ResponseType, int> EpiInfoValues = new Dictionary<ResponseType, int>
+        public static readonly TwoWayDictionary<ResponseType, int> EpiInfoValues = new TwoWayDictionary<ResponseType, int>
         {
             { ResponseType.Unspecified, -1 },
             { ResponseType.Single, 1 },
             { ResponseType.Multiple, 2 }
         };
-
-        public static int ToEpiInfoValue(this ResponseType @this)
-        {
-            return EpiInfoValues.Single(pair => pair.Key == @this).Value;
-        }
-
-        public static ResponseType FromEpiInfoValue(int value)
-        {
-            return EpiInfoValues.Single(pair => pair.Value == value).Key;
-        }
     }
 }
