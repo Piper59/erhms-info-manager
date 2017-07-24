@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.EpiInfo.Domain;
+using ERHMS.Utility;
 using System;
 
 namespace ERHMS.Domain
@@ -51,7 +52,7 @@ namespace ERHMS.Domain
         public DateTime? BirthDate
         {
             get { return GetProperty<DateTime?>(nameof(BirthDate)); }
-            set { SetProperty(nameof(BirthDate), value); }
+            set { SetProperty(nameof(BirthDate), value?.RemoveMilliseconds()); }
         }
 
         public string Gender

@@ -1,16 +1,11 @@
 ﻿using ERHMS.EpiInfo.Domain;
+using ERHMS.Utility;
 using System;
 
 namespace ERHMS.Domain
 {
-    public class IncidentNote : TableEntity
+    public class IncidentNote : Entity
     {
-        public override string Guid
-        {
-            get { return IncidentNoteId; }
-            set { IncidentNoteId = value; }
-        }
-
         public string IncidentNoteId
         {
             get { return GetProperty<string>(nameof(IncidentNoteId)); }
@@ -23,6 +18,13 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(IncidentId), value); }
         }
 
+        private Incident incident;
+        public Incident Incident
+        {
+            get { return incident; }
+            set { SetProperty(nameof(Incident), ref incident, value); }
+        }
+
         public string Content
         {
             get { return GetProperty<string>(nameof(Content)); }
@@ -32,12 +34,7 @@ namespace ERHMS.Domain
         public DateTime Date
         {
             get { return GetProperty<DateTime>(nameof(Date)); }
-            set { SetProperty(nameof(Date), value); }
-        }
-
-        public IncidentNote()
-        {
-            AddSynonym(nameof(IncidentNoteId), nameof(Guid));
+            set { SetProperty(nameof(Date), value.RemoveMilliseconds()); }
         }
     }
 }

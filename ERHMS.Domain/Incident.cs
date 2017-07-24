@@ -1,16 +1,11 @@
 ﻿using ERHMS.EpiInfo.Domain;
+using ERHMS.Utility;
 using System;
 
 namespace ERHMS.Domain
 {
-    public class Incident : TableEntity
+    public class Incident : Entity
     {
-        public override string Guid
-        {
-            get { return IncidentId; }
-            set { IncidentId = value; }
-        }
-
         public string IncidentId
         {
             get { return GetProperty<string>(nameof(IncidentId)); }
@@ -31,37 +26,32 @@ namespace ERHMS.Domain
 
         public Phase Phase
         {
-            get { return (Phase)Enum.Parse(typeof(Phase), GetProperty<string>(nameof(Phase))); }
+            get { return EnumExtensions.Parse<Phase>(GetProperty<string>(nameof(Phase))); }
             set { SetProperty(nameof(Phase), value.ToString()); }
         }
 
         public DateTime? StartDate
         {
             get { return GetProperty<DateTime?>(nameof(StartDate)); }
-            set { SetProperty(nameof(StartDate), value); }
+            set { SetProperty(nameof(StartDate), value?.RemoveMilliseconds()); }
         }
 
         public DateTime? EndDateEstimate
         {
             get { return GetProperty<DateTime?>(nameof(EndDateEstimate)); }
-            set { SetProperty(nameof(EndDateEstimate), value); }
+            set { SetProperty(nameof(EndDateEstimate), value?.RemoveMilliseconds()); }
         }
 
         public DateTime? EndDateActual
         {
             get { return GetProperty<DateTime?>(nameof(EndDateActual)); }
-            set { SetProperty(nameof(EndDateActual), value); }
+            set { SetProperty(nameof(EndDateActual), value?.RemoveMilliseconds()); }
         }
 
         public bool Deleted
         {
             get { return GetProperty<bool>(nameof(Deleted)); }
             set { SetProperty(nameof(Deleted), value); }
-        }
-
-        public Incident()
-        {
-            AddSynonym(nameof(IncidentId), nameof(Guid));
         }
     }
 }

@@ -2,14 +2,8 @@
 
 namespace ERHMS.Domain
 {
-    public class Assignment : TableEntity
+    public class Assignment : Entity
     {
-        public override string Guid
-        {
-            get { return AssignmentId; }
-            set { AssignmentId = value; }
-        }
-
         public string AssignmentId
         {
             get { return GetProperty<string>(nameof(AssignmentId)); }
@@ -22,15 +16,24 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(ViewId), value); }
         }
 
+        private View view;
+        public View View
+        {
+            get { return view; }
+            set { SetProperty(nameof(View), ref view, value); }
+        }
+
         public string ResponderId
         {
             get { return GetProperty<string>(nameof(ResponderId)); }
             set { SetProperty(nameof(ResponderId), value); }
         }
 
-        public Assignment()
+        private Responder responder;
+        public Responder Responder
         {
-            AddSynonym(nameof(AssignmentId), nameof(Guid));
+            get { return responder; }
+            set { SetProperty(nameof(Responder), ref responder, value); }
         }
     }
 }

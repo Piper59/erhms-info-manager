@@ -1,15 +1,9 @@
-﻿using Epi;
+﻿using ERHMS.EpiInfo.Domain;
 
 namespace ERHMS.Domain
 {
-    public class ViewLink : Link<View>
+    public class ViewLink : Entity
     {
-        public override string Guid
-        {
-            get { return ViewLinkId; }
-            set { ViewLinkId = value; }
-        }
-
         public string ViewLinkId
         {
             get { return GetProperty<string>(nameof(ViewLinkId)); }
@@ -22,14 +16,17 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(ViewId), value); }
         }
 
-        public ViewLink()
+        public string IncidentId
         {
-            AddSynonym(nameof(ViewLinkId), nameof(Guid));
+            get { return GetProperty<string>(nameof(IncidentId)); }
+            set { SetProperty(nameof(IncidentId), value); }
         }
 
-        public override bool IsEqual(View item)
+        private Incident incident;
+        public Incident Incident
         {
-            return ViewId == item.Id;
+            get { return incident; }
+            set { SetProperty(nameof(Incident), ref incident, value); }
         }
     }
 }

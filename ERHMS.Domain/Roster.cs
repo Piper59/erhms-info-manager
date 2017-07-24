@@ -2,14 +2,8 @@
 
 namespace ERHMS.Domain
 {
-    public class Roster : TableEntity
+    public class Roster : Entity
     {
-        public override string Guid
-        {
-            get { return RosterId; }
-            set { RosterId = value; }
-        }
-
         public string RosterId
         {
             get { return GetProperty<string>(nameof(RosterId)); }
@@ -22,15 +16,24 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(ResponderId), value); }
         }
 
+        private Responder responder;
+        public Responder Responder
+        {
+            get { return responder; }
+            set { SetProperty(nameof(Responder), ref responder, value); }
+        }
+
         public string IncidentId
         {
             get { return GetProperty<string>(nameof(IncidentId)); }
             set { SetProperty(nameof(IncidentId), value); }
         }
 
-        public Roster()
+        private Incident incident;
+        public Incident Incident
         {
-            AddSynonym(nameof(RosterId), nameof(Guid));
+            get { return incident; }
+            set { SetProperty(nameof(Incident), ref incident, value); }
         }
     }
 }

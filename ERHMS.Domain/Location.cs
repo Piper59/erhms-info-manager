@@ -2,14 +2,8 @@
 
 namespace ERHMS.Domain
 {
-    public class Location : TableEntity
+    public class Location : Entity
     {
-        public override string Guid
-        {
-            get { return LocationId; }
-            set { LocationId = value; }
-        }
-
         public string LocationId
         {
             get { return GetProperty<string>(nameof(LocationId)); }
@@ -20,6 +14,13 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>(nameof(IncidentId)); }
             set { SetProperty(nameof(IncidentId), value); }
+        }
+
+        private Incident incident;
+        public Incident Incident
+        {
+            get { return incident; }
+            set { SetProperty(nameof(Incident), ref incident, value); }
         }
 
         public string Name
@@ -50,11 +51,6 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<double?>(nameof(Longitude)); }
             set { SetProperty(nameof(Longitude), value); }
-        }
-
-        public Location()
-        {
-            AddSynonym(nameof(LocationId), nameof(Guid));
         }
     }
 }

@@ -106,6 +106,20 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
+        protected bool SetProperty<T>(string name, ref T field, T value)
+        {
+            if (Equals(value, field))
+            {
+                return false;
+            }
+            else
+            {
+                field = value;
+                OnPropertyChanged(name);
+                return true;
+            }
+        }
+
         public void SetProperties(IDataRecord record)
         {
             for (int index = 0; index < record.FieldCount; index++)
