@@ -1,5 +1,5 @@
-﻿using Epi;
-using ERHMS.EpiInfo.Domain;
+﻿using ERHMS.EpiInfo.Domain;
+using System;
 
 namespace ERHMS.Domain
 {
@@ -28,6 +28,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<string>(nameof(PublishKey)); }
             set { SetProperty(nameof(PublishKey), value); }
+        }
+
+        public WebSurvey()
+        {
+            WebSurveyId = Guid.NewGuid().ToString();
         }
     }
 }

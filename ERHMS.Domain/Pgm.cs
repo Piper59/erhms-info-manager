@@ -51,5 +51,17 @@ namespace ERHMS.Domain
         {
             get { return PgmLink?.Incident; }
         }
+
+        public EpiInfo.Pgm ToEpiInfo()
+        {
+            return new EpiInfo.Pgm
+            {
+                PgmId = PgmId,
+                Name = Name,
+                Content = Content,
+                Comment = Comment,
+                Author = Author
+            };
+        }
     }
 }

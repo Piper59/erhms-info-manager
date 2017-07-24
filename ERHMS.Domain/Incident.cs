@@ -53,5 +53,12 @@ namespace ERHMS.Domain
             get { return GetProperty<bool>(nameof(Deleted)); }
             set { SetProperty(nameof(Deleted), value); }
         }
+
+        public Incident()
+        {
+            IncidentId = Guid.NewGuid().ToString();
+            Phase = Phase.PreDeployment;
+            Deleted = false;
+        }
     }
 }

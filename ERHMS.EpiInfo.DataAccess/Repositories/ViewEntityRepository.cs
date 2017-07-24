@@ -42,6 +42,11 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public View View { get; private set; }
 
+        public IEnumerable<string> TableNames
+        {
+            get { return View.Pages.Select(page => page.TableName).Prepend(View.TableName); }
+        }
+
         public ViewEntityRepository(IDataContext context, View view)
         {
             Context = context;
@@ -147,6 +152,11 @@ namespace ERHMS.EpiInfo.DataAccess
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
             return Select(clauses, parameters).SingleOrDefault();
+        }
+
+        public IEnumerable<TEntity> SelectUndeleted()
+        {
+            return Select("WHERE [RECSTATUS] <> 0");
         }
 
         private IEnumerable<string> GetViewColumnNames(bool includeId)

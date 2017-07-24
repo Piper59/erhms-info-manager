@@ -39,5 +39,15 @@ namespace ERHMS.Domain
         {
             get { return CanvasLink?.Incident; }
         }
+
+        public EpiInfo.Canvas ToEpiInfo()
+        {
+            return new EpiInfo.Canvas
+            {
+                CanvasId = CanvasId,
+                Name = Name,
+                Content = Content
+            };
+        }
     }
 }

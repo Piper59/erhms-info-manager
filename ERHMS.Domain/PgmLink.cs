@@ -1,8 +1,8 @@
-﻿using ERHMS.EpiInfo.Domain;
+﻿using System;
 
 namespace ERHMS.Domain
 {
-    public class PgmLink : Entity
+    public class PgmLink : Link
     {
         public string PgmLinkId
         {
@@ -16,17 +16,9 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(PgmId), value); }
         }
 
-        public string IncidentId
+        public PgmLink()
         {
-            get { return GetProperty<string>(nameof(IncidentId)); }
-            set { SetProperty(nameof(IncidentId), value); }
-        }
-
-        private Incident incident;
-        public Incident Incident
-        {
-            get { return incident; }
-            set { SetProperty(nameof(Incident), ref incident, value); }
+            PgmLinkId = Guid.NewGuid().ToString();
         }
     }
 }

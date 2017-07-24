@@ -296,7 +296,8 @@ namespace ERHMS.Domain
 
         public Responder()
         {
-            AddSynonym(ColumnNames.GLOBAL_RECORD_ID, nameof(ResponderId));
+            AddSynonym(nameof(GlobalRecordId), nameof(ResponderId));
+            IsVolunteer = false;
         }
     }
 }

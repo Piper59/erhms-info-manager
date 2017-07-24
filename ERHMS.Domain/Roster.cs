@@ -1,8 +1,8 @@
-﻿using ERHMS.EpiInfo.Domain;
+﻿using System;
 
 namespace ERHMS.Domain
 {
-    public class Roster : Entity
+    public class Roster : Link
     {
         public string RosterId
         {
@@ -23,17 +23,9 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Responder), ref responder, value); }
         }
 
-        public string IncidentId
+        public Roster()
         {
-            get { return GetProperty<string>(nameof(IncidentId)); }
-            set { SetProperty(nameof(IncidentId), value); }
-        }
-
-        private Incident incident;
-        public Incident Incident
-        {
-            get { return incident; }
-            set { SetProperty(nameof(Incident), ref incident, value); }
+            RosterId = Guid.NewGuid().ToString();
         }
     }
 }

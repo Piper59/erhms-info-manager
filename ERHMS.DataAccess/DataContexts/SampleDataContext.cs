@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Canvas = ERHMS.EpiInfo.Canvas;
+using Pgm = ERHMS.EpiInfo.Pgm;
 using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.DataAccess
@@ -22,18 +24,18 @@ namespace ERHMS.DataAccess
         public static DataContext Create()
         {
             Log.Logger.DebugFormat("Creating sample data context");
-            string projectPath = Path.Combine(Configuration.GetNewInstance().Directories.Project, "Sample", "Sample" + Project.FileExtension);
-            Directory.CreateDirectory(Path.GetDirectoryName(projectPath));
+            string path = Path.Combine(Configuration.GetNewInstance().Directories.Project, "Sample", "Sample" + Project.FileExtension);
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
             Assembly assembly = Assembly.GetExecutingAssembly();
-            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.prj", projectPath);
-            ProjectInfo projectInfo = ProjectInfo.Get(projectPath);
+            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.prj", path);
+            ProjectInfo projectInfo = ProjectInfo.Get(path);
             projectInfo.SetAccessConnectionString();
-            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.mdb", Path.ChangeExtension(projectPath, ".mdb"));
-            SampleDataContext dataContext = new SampleDataContext(new Project(projectPath));
-            dataContext.InsertPgm("Safety Messages", "ERHMS.DataAccess.Resources.Sample.SafetyMessages.pgm7");
-            dataContext.InsertCanvas("Air Quality", "ERHMS.DataAccess.Resources.Sample.AirQuality.cvs7");
-            dataContext.InsertCanvas("Symptoms", "ERHMS.DataAccess.Resources.Sample.Symptoms.cvs7");
-            return dataContext;
+            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.mdb", Path.ChangeExtension(path, ".mdb"));
+            SampleDataContext context = new SampleDataContext(new Project(path));
+            context.InsertPgm("Safety Messages", "ERHMS.DataAccess.Resources.Sample.SafetyMessages.pgm7");
+            context.InsertCanvas("Air Quality", "ERHMS.DataAccess.Resources.Sample.AirQuality.cvs7");
+            context.InsertCanvas("Symptoms", "ERHMS.DataAccess.Resources.Sample.Symptoms.cvs7");
+            return context;
         }
 
         private Incident Incident { get; set; }
@@ -53,10 +55,11 @@ namespace ERHMS.DataAccess
             };
             pgm.Content = ReadCommandPattern.Replace(pgm.Content, Project.FilePath);
             Project.InsertPgm(pgm);
-            PgmLink pgmLink = PgmLinks.Create();
-            pgmLink.PgmId = pgm.PgmId;
-            pgmLink.IncidentId = Incident.IncidentId;
-            PgmLinks.Save(pgmLink);
+            PgmLinks.Save(new PgmLink
+            {
+                PgmId = pgm.PgmId,
+                IncidentId = Incident.IncidentId
+            });
         }
 
         private void InsertCanvas(string canvasName, string resourceName)
@@ -68,10 +71,11 @@ namespace ERHMS.DataAccess
             };
             canvas.SetProjectPath(Project.FilePath);
             Project.InsertCanvas(canvas);
-            CanvasLink canvasLink = CanvasLinks.Create();
-            canvasLink.CanvasId = canvas.CanvasId;
-            canvasLink.IncidentId = Incident.IncidentId;
-            CanvasLinks.Save(canvasLink);
+            CanvasLinks.Save(new CanvasLink
+            {
+                CanvasId = canvas.CanvasId,
+                IncidentId = Incident.IncidentId
+            });
         }
     }
 }

@@ -1,26 +1,13 @@
-﻿using ERHMS.EpiInfo.Domain;
+﻿using System;
 
 namespace ERHMS.Domain
 {
-    public class Location : Entity
+    public class Location : Link
     {
         public string LocationId
         {
             get { return GetProperty<string>(nameof(LocationId)); }
             set { SetProperty(nameof(LocationId), value); }
-        }
-
-        public string IncidentId
-        {
-            get { return GetProperty<string>(nameof(IncidentId)); }
-            set { SetProperty(nameof(IncidentId), value); }
-        }
-
-        private Incident incident;
-        public Incident Incident
-        {
-            get { return incident; }
-            set { SetProperty(nameof(Incident), ref incident, value); }
         }
 
         public string Name
@@ -51,6 +38,11 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<double?>(nameof(Longitude)); }
             set { SetProperty(nameof(Longitude), value); }
+        }
+
+        public Location()
+        {
+            LocationId = Guid.NewGuid().ToString();
         }
     }
 }

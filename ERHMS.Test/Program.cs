@@ -8,7 +8,7 @@ namespace ERHMS.Test
     {
         internal static int Main(string[] args)
         {
-            TypeMaps.Initialize();
+            TypeMaps.Configure();
             Settings.Default.Reset();
             return new AutoRun().Execute(args);
         }

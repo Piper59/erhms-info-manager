@@ -1,4 +1,5 @@
 ﻿using ERHMS.EpiInfo.Domain;
+using System;
 
 namespace ERHMS.Domain
 {
@@ -34,6 +35,11 @@ namespace ERHMS.Domain
         {
             get { return responder; }
             set { SetProperty(nameof(Responder), ref responder, value); }
+        }
+
+        public Assignment()
+        {
+            AssignmentId = Guid.NewGuid().ToString();
         }
     }
 }

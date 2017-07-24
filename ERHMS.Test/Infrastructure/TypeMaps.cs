@@ -5,7 +5,7 @@ namespace ERHMS.Test.Dapper
 {
     public static class TypeMaps
     {
-        public static void Initialize()
+        public static void Configure()
         {
             {
                 TypeMap typeMap = new TypeMap(typeof(Constant))
