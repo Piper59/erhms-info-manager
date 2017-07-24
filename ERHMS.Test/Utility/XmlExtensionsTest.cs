@@ -37,17 +37,6 @@ namespace ERHMS.Test.Utility
         }
 
         [Test]
-        public void ReadNextTextTest()
-        {
-            using (XmlReader reader = XmlReader.Create(GetResource()))
-            {
-                Assert.AreEqual("Hello, John!", reader.ReadNextText());
-                Assert.AreEqual("Hello, Jane!", reader.ReadNextText());
-                Assert.IsNull(reader.ReadNextText());
-            }
-        }
-
-        [Test]
         public void SelectElementsTest()
         {
             XmlDocument document = new XmlDocument();

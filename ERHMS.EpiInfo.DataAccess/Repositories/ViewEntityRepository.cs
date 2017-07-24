@@ -3,6 +3,7 @@ using Epi;
 using Epi.Fields;
 using ERHMS.Dapper;
 using ERHMS.EpiInfo.Domain;
+using ERHMS.EpiInfo.Web;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace ERHMS.EpiInfo.DataAccess
         {
             return IDbConnectionExtensions.GetParameterName(index);
         }
+
+        private IDictionary<string, Type> types;
 
         public IDataContext Context { get; private set; }
 
@@ -240,6 +243,48 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 Update(entity);
             }
+        }
+
+        public void Save(Record record)
+        {
+            Database.Transact((connection, transaction) =>
+            {
+                if (types == null)
+                {
+                    types = new Dictionary<string, Type>();
+                    try
+                    {
+                        foreach (string tableName in View.Pages.Select(page => page.TableName).Prepend(View.TableName))
+                        {
+                            foreach (DataColumn column in connection.GetSchema(tableName, transaction).Columns)
+                            {
+                                types[column.ColumnName] = column.DataType;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        types = null;
+                        throw;
+                    }
+                }
+                TEntity entity = SelectById(record.GlobalRecordId);
+                if (entity == null)
+                {
+                    entity = new TEntity();
+                    entity.GlobalRecordId = record.GlobalRecordId;
+                }
+                foreach (string key in record.Keys)
+                {
+                    Type type;
+                    if (!types.TryGetValue(key, out type))
+                    {
+                        continue;
+                    }
+                    entity.SetProperty(key, record.GetValue(key, type));
+                }
+                Save(entity);
+            });
         }
 
         public void Delete(string clauses = null, object parameters = null)

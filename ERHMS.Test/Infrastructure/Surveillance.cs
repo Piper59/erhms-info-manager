@@ -30,15 +30,16 @@ namespace ERHMS.Test
             set { SetProperty(nameof(Hospitalized), value); }
         }
 
-        public DateTime? Entered
+        public DateTime? EnteredOn
         {
-            get { return GetProperty<DateTime?>(nameof(Entered)); }
-            set { SetProperty(nameof(Entered), value?.RemoveMilliseconds()); }
+            get { return GetProperty<DateTime?>("Entered"); }
+            set { SetProperty("Entered", value?.RemoveMilliseconds()); }
         }
 
         public Surveillance()
         {
             AddSynonym("CaseID", nameof(CaseId));
+            AddSynonym("Entered", nameof(EnteredOn));
         }
     }
 }

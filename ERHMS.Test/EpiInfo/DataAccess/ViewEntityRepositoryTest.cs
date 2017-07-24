@@ -1,12 +1,19 @@
 ﻿using Dapper;
+using Epi;
 using ERHMS.Dapper;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
+using ERHMS.EpiInfo.Domain;
+using ERHMS.EpiInfo.Web;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using Project = ERHMS.EpiInfo.Project;
+using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Test.EpiInfo.DataAccess
 {
@@ -24,11 +31,26 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         }
 
         private DataContext context;
+        private View view;
 
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
             context = new DataContext(project);
+            view = project.Views["Surveillance"];
+        }
+
+        [OneTimeTearDown]
+        public new void OneTimeTearDown()
+        {
+            Settings.Default.Reset();
+            using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@SurveyId", view.WebSurveyId);
+                connection.Execute("DELETE FROM SurveyResponse WHERE SurveyId = @SurveyId", parameters);
+                connection.Execute("DELETE FROM SurveyMetaData WHERE SurveyId = @SurveyId", parameters);
+            }
         }
 
         [Test]
@@ -94,12 +116,12 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             Assert.AreEqual(globalRecordId, surveillance.GlobalRecordId);
             Assert.AreEqual("100", surveillance.CaseId);
             Assert.AreEqual(0, surveillance.Hospitalized);
-            Assert.AreEqual(new DateTime(2007, 1, 7), surveillance.Entered);
+            Assert.AreEqual(new DateTime(2007, 1, 7), surveillance.EnteredOn);
             Assert.IsNull(context.Surveillances.SelectById(Guid.Empty.ToString()));
         }
 
         [Test]
-        public void SaveTest()
+        public void SaveEntityTest()
         {
             using (Transaction transaction = context.Database.BeginTransaction())
             {
@@ -109,7 +131,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                     LastName = "Doe",
                     FirstName = "John",
                     Hospitalized = 0,
-                    Entered = DateTime.Now
+                    EnteredOn = DateTime.Now
                 };
                 Assert.IsTrue(original.New);
                 Assert.IsNull(original.UniqueKey);
@@ -124,6 +146,57 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                 context.Surveillances.Save(original);
                 Assert.AreNotEqual(original.CreatedBy, original.ModifiedOn);
                 Assert.AreEqual(original, context.Surveillances.SelectById(original.GlobalRecordId));
+            }
+        }
+
+        private int SaveRecords(Survey survey)
+        {
+            ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(context, view);
+            ICollection<Record> records = Service.GetRecords(survey).ToList();
+            foreach (Record record in records)
+            {
+                entities.Save(record);
+            }
+            return records.Count;
+        }
+
+        [Test]
+        public void SaveRecordTest()
+        {
+            configuration.Settings.WebServiceEndpointAddress = ConfigurationManager.AppSettings["Endpoint"];
+            configuration.Save();
+            Settings.Default.OrganizationKey = ConfigurationManager.AppSettings["OrganizationKey"];
+            DateTime now = DateTime.Now;
+            Survey survey = new Survey
+            {
+                Title = view.Name,
+                StartDate = now,
+                EndDate = now.Add(new TimeSpan(1, 0, 0, 0)),
+                ResponseType = ResponseType.Single,
+                Draft = false
+            };
+            Assert.IsTrue(Service.Publish(view, survey));
+            Record original = new Record(new
+            {
+                CaseID = "2100",
+                LastName = "Doe",
+                FirstName = "John",
+                Hospitalized = 0,
+                Entered = DateTime.Now
+            });
+            Assert.IsTrue(Service.TryAddRecord(view, survey, original));
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                Assert.AreEqual(1, SaveRecords(survey));
+                Assert.AreEqual(21, context.Surveillances.Count());
+                Surveillance retrieved = context.Surveillances.SelectById(original.GlobalRecordId);
+                Assert.AreEqual(original["CaseID"], retrieved.CaseId);
+                Assert.AreEqual(original["LastName"], retrieved.LastName);
+                Assert.AreEqual(original["FirstName"], Convert.ToString(retrieved.FirstName));
+                Assert.AreEqual(original["Hospitalized"], Convert.ToString(retrieved.Hospitalized));
+                Assert.AreEqual(original["Entered"], Convert.ToString(retrieved.EnteredOn));
+                Assert.AreEqual(1, SaveRecords(survey));
+                Assert.AreEqual(21, context.Surveillances.Count());
             }
         }
     }

@@ -37,7 +37,11 @@ namespace ERHMS.EpiInfo.Web
         public object GetValue(string key, Type type)
         {
             string value = this[key];
-            if (type == typeof(bool))
+            if (type == typeof(string))
+            {
+                return value ?? "";
+            }
+            else if (type == typeof(bool))
             {
                 if (TrueValues.ContainsIgnoreCase(value))
                 {

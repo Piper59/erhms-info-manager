@@ -11,12 +11,13 @@ namespace ERHMS.Utility
             return names.All(name => @this.HasAttribute(name));
         }
 
-        public static XmlElement ReadNextElement(this XmlReader @this)
+        public static XmlElement ReadNextElement(this XmlReader @this, out bool empty)
         {
             while (@this.Read())
             {
                 if (@this.NodeType == XmlNodeType.Element)
                 {
+                    empty = @this.IsEmptyElement;
                     XmlElement element = new XmlDocument().CreateElement(@this.Name);
                     while (@this.MoveToNextAttribute())
                     {
@@ -25,19 +26,14 @@ namespace ERHMS.Utility
                     return element;
                 }
             }
+            empty = false;
             return null;
         }
 
-        public static string ReadNextText(this XmlReader @this)
+        public static XmlElement ReadNextElement(this XmlReader @this)
         {
-            while (@this.Read())
-            {
-                if (@this.NodeType == XmlNodeType.Text)
-                {
-                    return @this.ReadContentAsString();
-                }
-            }
-            return null;
+            bool empty;
+            return @this.ReadNextElement(out empty);
         }
 
         public static IEnumerable<XmlElement> SelectElements(this XmlNode @this, string xpath)

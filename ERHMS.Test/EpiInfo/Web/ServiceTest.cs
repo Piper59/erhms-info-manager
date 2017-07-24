@@ -29,6 +29,7 @@ namespace ERHMS.Test.EpiInfo.Web
         [OneTimeTearDown]
         public new void OneTimeTearDown()
         {
+            Settings.Default.Reset();
             using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
             {
                 DynamicParameters parameters = new DynamicParameters();
@@ -104,18 +105,14 @@ namespace ERHMS.Test.EpiInfo.Web
         public void TryAddAndGetRecordsTest()
         {
             Survey survey = Service.GetSurvey(view);
-            ICollection<Record> originals = new List<Record>();
+            ICollection<string> ids = new List<string>();
             for (int index = 0; index < 3; index++)
             {
-                Record original = new Record();
-                Assert.IsTrue(Service.TryAddRecord(view, survey, original));
-                originals.Add(original);
+                Record record = new Record();
+                Assert.IsTrue(Service.TryAddRecord(view, survey, record));
+                ids.Add(record.GlobalRecordId);
             }
-            ICollection<string> ids = originals.Select(original => original.GlobalRecordId).ToList();
-            foreach (Record retrieved in Service.GetRecords(survey))
-            {
-                CollectionAssert.Contains(ids, retrieved.GlobalRecordId);
-            }
+            CollectionAssert.AreEquivalent(ids, Service.GetRecords(survey).Select(record => record.GlobalRecordId));
         }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Settings = ERHMS.Utility.Settings;
@@ -229,16 +230,34 @@ namespace ERHMS.EpiInfo.Web
                         {
                             while (true)
                             {
-                                XmlElement element = reader.ReadNextElement();
+                                bool empty;
+                                XmlElement element = reader.ReadNextElement(out empty);
                                 if (element == null)
                                 {
                                     break;
                                 }
                                 if (element.Name == "ResponseDetail")
                                 {
-                                    string name = element.GetAttribute("QuestionName");
-                                    string value = reader.ReadNextText();
-                                    record[name] = value;
+                                    string key = element.GetAttribute("QuestionName");
+                                    string value = null;
+                                    if (!empty)
+                                    {
+                                        StringBuilder builder = new StringBuilder();
+                                        while (true)
+                                        {
+                                            reader.Read();
+                                            if (reader.NodeType == XmlNodeType.EndElement && reader.Name == element.Name)
+                                            {
+                                                break;
+                                            }
+                                            if (reader.NodeType == XmlNodeType.Text)
+                                            {
+                                                builder.Append(reader.Value);
+                                            }
+                                        }
+                                        value = builder.ToString();
+                                    }
+                                    record[key] = value;
                                 }
                             }
                         }
