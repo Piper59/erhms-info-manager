@@ -56,10 +56,9 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 fromClause.Insert(0, "(");
                 fromClause.AppendFormat(
-                    " INNER JOIN {1} ON {0}.{2} = {1}.{2})",
-                    Escape(View.TableName),
+                    " INNER JOIN {0} ON {1}.[GlobalRecordId] = {0}.[GlobalRecordId])",
                     Escape(page.TableName),
-                    Escape(ColumnNames.GLOBAL_RECORD_ID));
+                    Escape(View.TableName));
             }
             return string.Format("SELECT {0} FROM {1} {2}", selectClause, fromClause, clauses);
         }
@@ -144,7 +143,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public TEntity SelectById(object id)
         {
-            string clauses = string.Format("WHERE {0}.{1} = @Id", Escape(View.TableName), Escape(ColumnNames.GLOBAL_RECORD_ID));
+            string clauses = string.Format("WHERE {0}.[GlobalRecordId] = @Id", Escape(View.TableName));
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
             return Select(clauses, parameters).SingleOrDefault();
@@ -197,11 +196,7 @@ namespace ERHMS.EpiInfo.DataAccess
                 {
                     Insert(connection, entity, page.TableName, GetPageColumnNames(page, true), transaction);
                 }
-                string sql = string.Format(
-                    "SELECT {0} FROM {1} WHERE {2} = @Id",
-                    Escape(ColumnNames.UNIQUE_KEY),
-                    Escape(View.TableName),
-                    Escape(ColumnNames.GLOBAL_RECORD_ID));
+                string sql = string.Format("SELECT [UniqueKey] FROM {0} WHERE [GlobalRecordId] = @Id", Escape(View.TableName));
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Id", entity.GlobalRecordId);
                 entity.UniqueKey = connection.ExecuteScalar<int>(sql, parameters, transaction);

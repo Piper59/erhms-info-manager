@@ -43,10 +43,9 @@ namespace ERHMS.EpiInfo.Wrappers
         public static string MergeCsv(string path, string id)
         {
             return string.Format(
-                "MERGE {{{0}}}:{1} {2} :: {3}",
+                "MERGE {{{0}}}:{1} GlobalRecordId :: {2}",
                 GetCsvConnectionString(path),
                 GetCsvFileName(path),
-                ColumnNames.GLOBAL_RECORD_ID,
                 id);
         }
 
