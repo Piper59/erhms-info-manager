@@ -29,7 +29,7 @@ namespace ERHMS.Dapper
             }
             IDbConnection connection = GetConnection();
             connection.Open();
-            transaction = new Transaction(connection.BeginTransaction());
+            transaction = new Transaction(connection);
             transaction.Closed += (sender, e) =>
             {
                 connection.Dispose();

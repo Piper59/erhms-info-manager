@@ -41,7 +41,7 @@ namespace ERHMS.Test.Dapper
         private void Test(string id, bool commit, bool rollback)
         {
             bool raised = false;
-            using (Transaction transaction = new Transaction(connection.BeginTransaction()))
+            using (Transaction transaction = new Transaction(connection))
             {
                 transaction.Closed += (sender, e) =>
                 {

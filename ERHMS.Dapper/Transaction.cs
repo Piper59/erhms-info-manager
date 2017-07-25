@@ -7,21 +7,18 @@ namespace ERHMS.Dapper
     {
         private bool open;
 
+        public IDbConnection Connection { get; private set; }
         public IDbTransaction Base { get; private set; }
-
-        public IDbConnection Connection
-        {
-            get { return Base.Connection; }
-        }
 
         public IsolationLevel IsolationLevel
         {
             get { return Base.IsolationLevel; }
         }
 
-        public Transaction(IDbTransaction @base)
+        public Transaction(IDbConnection connection)
         {
-            Base = @base;
+            Connection = connection;
+            Base = connection.BeginTransaction();
             open = true;
         }
 
