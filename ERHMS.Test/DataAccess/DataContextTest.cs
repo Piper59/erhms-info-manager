@@ -41,6 +41,19 @@ namespace ERHMS.Test.DataAccess
         }
 
         [Test]
+        public void CreateTest()
+        {
+            foreach (ERHMS.EpiInfo.Pgm pgm in context.Project.GetPgms())
+            {
+                StringAssert.Contains(context.Project.FilePath, pgm.Content);
+            }
+            foreach (ERHMS.EpiInfo.Canvas canvas in context.Project.GetCanvases())
+            {
+                StringAssert.Contains(context.Project.FilePath, canvas.Content);
+            }
+        }
+
+        [Test]
         public void AssignmentRepositoryTest()
         {
             {
