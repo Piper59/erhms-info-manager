@@ -76,6 +76,14 @@
       <Project>{db2a0170-d0e9-40b3-a270-d4a47f2f7fe7}</Project>
       <Name>ERHMS.Dapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.DataAccess\ERHMS.DataAccess.csproj">
+      <Project>{66fd6304-c5e0-4502-9ea2-dc326c470154}</Project>
+      <Name>ERHMS.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
+      <Project>{f979d2bb-289f-443f-bfe4-ab3cb877c521}</Project>
+      <Name>ERHMS.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.DataAccess\ERHMS.EpiInfo.DataAccess.csproj">
       <Project>{af729d69-3971-45ee-b351-1fc9bfd6ed7d}</Project>
       <Name>ERHMS.EpiInfo.DataAccess</Name>
@@ -127,7 +135,7 @@
     <Compile Include="Dapper\LoggingConnectionTest.cs" />
     <Compile Include="Dapper\RepositoryTest.cs" />
     <Compile Include="Dapper\TransactionTest.cs" />
-    <None Include="DataAccess\SampleDataContextTest.cs" />
+    <Compile Include="DataAccess\DataContextTest.cs" />
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
     <Compile Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
     <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />

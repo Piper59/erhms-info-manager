@@ -18,6 +18,7 @@ namespace ERHMS.DataAccess
                 TableName = "ERHMS_Rosters"
             };
             typeMap.Get(nameof(Roster.RosterId)).SetId();
+            typeMap.Get(nameof(Roster.New)).SetComputed();
             typeMap.Get(nameof(Roster.Responder)).SetComputed();
             typeMap.Get(nameof(Roster.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Roster), typeMap);

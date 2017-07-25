@@ -13,6 +13,7 @@ namespace ERHMS.DataAccess
                 TableName = "ERHMS_CanvasLinks"
             };
             typeMap.Get(nameof(CanvasLink.CanvasLinkId)).SetId();
+            typeMap.Get(nameof(CanvasLink.New)).SetComputed();
             typeMap.Get(nameof(CanvasLink.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(CanvasLink), typeMap);
         }

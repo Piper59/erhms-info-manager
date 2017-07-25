@@ -25,7 +25,8 @@ namespace ERHMS.Utility
             return GetHashCode(identifiers.Select(identifier => identifier(@this)));
         }
 
-        public static bool Equals<T>(T @this, object obj, IEnumerable<Func<T, object>> identifiers) where T : class
+        public static bool Equals<T>(T @this, object obj, IEnumerable<Func<T, object>> identifiers)
+            where T : class
         {
             T t = obj as T;
             return t != null && identifiers.All(identifier => Equals(identifier(t), identifier(@this)));

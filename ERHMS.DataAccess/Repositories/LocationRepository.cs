@@ -13,6 +13,7 @@ namespace ERHMS.DataAccess
                 TableName = "ERHMS_Locations"
             };
             typeMap.Get(nameof(Location.LocationId)).SetId();
+            typeMap.Get(nameof(Location.New)).SetComputed();
             typeMap.Get(nameof(Location.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Location), typeMap);
         }

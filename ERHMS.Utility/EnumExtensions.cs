@@ -8,12 +8,14 @@ namespace ERHMS.Utility
 {
     public static class EnumExtensions
     {
-        public static TEnum Parse<TEnum>(string value) where TEnum : struct
+        public static TEnum Parse<TEnum>(string value)
+            where TEnum : struct
         {
             return (TEnum)Enum.Parse(typeof(TEnum), value);
         }
 
-        public static IEnumerable<TEnum> GetValues<TEnum>() where TEnum : struct
+        public static IEnumerable<TEnum> GetValues<TEnum>()
+            where TEnum : struct
         {
             return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
         }
@@ -28,7 +30,8 @@ namespace ERHMS.Utility
             return GetDescription(value.GetType().GetField(value.ToString()));
         }
 
-        public static TEnum FromDescription<TEnum>(string description) where TEnum : struct
+        public static TEnum FromDescription<TEnum>(string description)
+            where TEnum : struct
         {
             return (TEnum)typeof(TEnum).GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Where(field => field.FieldType == typeof(TEnum))

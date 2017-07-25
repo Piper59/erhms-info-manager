@@ -27,5 +27,12 @@ namespace ERHMS.Domain
         {
             RosterId = Guid.NewGuid().ToString();
         }
+
+        public override object Clone()
+        {
+            Roster clone = (Roster)base.Clone();
+            clone.Responder = (Responder)Responder.Clone();
+            return clone;
+        }
     }
 }

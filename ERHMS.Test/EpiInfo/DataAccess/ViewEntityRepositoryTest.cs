@@ -21,7 +21,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
     {
         private class DataContext : DataContextBase
         {
-            public IRepository<Surveillance> Surveillances { get; private set; }
+            public ViewEntityRepository<Surveillance> Surveillances { get; private set; }
 
             public DataContext(Project project)
                 : base(project)
@@ -43,6 +43,9 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         [OneTimeTearDown]
         public new void OneTimeTearDown()
         {
+#if IGNORE_LONG_TESTS
+            return;
+#endif
             Settings.Default.Reset();
             using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
             {
@@ -121,6 +124,19 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         }
 
         [Test]
+        public void SelectUndeletedTest()
+        {
+            Assert.AreEqual(20, context.Surveillances.SelectUndeleted().Count());
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                Surveillance surveillance = context.Surveillances.SelectById("993974ab-a5c8-4177-b81d-a060b2e5b9e1");
+                surveillance.Deleted = true;
+                context.Surveillances.Save(surveillance);
+                Assert.AreEqual(19, context.Surveillances.SelectUndeleted().Count());
+            }
+        }
+
+        [Test]
         public void SaveEntityTest()
         {
             using (Transaction transaction = context.Database.BeginTransaction())
@@ -161,6 +177,9 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         }
 
         [Test]
+#if IGNORE_LONG_TESTS
+        [Ignore("IGNORE_LONG_TESTS")]
+#endif
         public void SaveRecordTest()
         {
             configuration.Settings.WebServiceEndpointAddress = ConfigurationManager.AppSettings["Endpoint"];
@@ -173,7 +192,8 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                 StartDate = now,
                 EndDate = now.Add(new TimeSpan(1, 0, 0, 0)),
                 ResponseType = ResponseType.Single,
-                Draft = false
+                Draft = false,
+                PublishKey = Guid.NewGuid()
             };
             Assert.IsTrue(Service.Publish(view, survey));
             Record original = new Record(new

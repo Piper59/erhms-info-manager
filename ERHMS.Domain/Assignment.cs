@@ -41,5 +41,13 @@ namespace ERHMS.Domain
         {
             AssignmentId = Guid.NewGuid().ToString();
         }
+
+        public override object Clone()
+        {
+            Assignment clone = (Assignment)base.Clone();
+            clone.View = (View)View.Clone();
+            clone.Responder = (Responder)Responder.Clone();
+            return clone;
+        }
     }
 }

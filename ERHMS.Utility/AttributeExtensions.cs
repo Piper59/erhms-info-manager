@@ -7,17 +7,20 @@ namespace ERHMS.Utility
 {
     public static class AttributeExtensions
     {
-        public static IEnumerable<TAttribute> GetCustomAttributes<TAttribute>(this ICustomAttributeProvider @this) where TAttribute : Attribute
+        public static IEnumerable<TAttribute> GetCustomAttributes<TAttribute>(this ICustomAttributeProvider @this)
+            where TAttribute : Attribute
         {
             return @this.GetCustomAttributes(false).OfType<TAttribute>();
         }
 
-        public static TAttribute GetCustomAttribute<TAttribute>(this ICustomAttributeProvider @this) where TAttribute : Attribute
+        public static TAttribute GetCustomAttribute<TAttribute>(this ICustomAttributeProvider @this)
+            where TAttribute : Attribute
         {
             return @this.GetCustomAttributes<TAttribute>().SingleOrDefault();
         }
 
-        public static bool HasCustomAttribute<TAttribute>(this ICustomAttributeProvider @this) where TAttribute : Attribute
+        public static bool HasCustomAttribute<TAttribute>(this ICustomAttributeProvider @this)
+            where TAttribute : Attribute
         {
             return @this.GetCustomAttributes<TAttribute>().Any();
         }

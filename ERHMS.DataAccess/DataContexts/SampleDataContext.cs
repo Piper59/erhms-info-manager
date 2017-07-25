@@ -6,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Canvas = ERHMS.EpiInfo.Canvas;
-using Pgm = ERHMS.EpiInfo.Pgm;
 using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.DataAccess
@@ -48,7 +46,7 @@ namespace ERHMS.DataAccess
 
         private void InsertPgm(string pgmName, string resourceName)
         {
-            Pgm pgm = new Pgm
+            EpiInfo.Pgm pgm = new EpiInfo.Pgm
             {
                 Name = pgmName,
                 Content = Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)
@@ -64,7 +62,7 @@ namespace ERHMS.DataAccess
 
         private void InsertCanvas(string canvasName, string resourceName)
         {
-            Canvas canvas = new Canvas
+            EpiInfo.Canvas canvas = new EpiInfo.Canvas
             {
                 Name = canvasName,
                 Content = Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)

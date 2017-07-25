@@ -2,16 +2,23 @@
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
-using ERHMS.EpiInfo.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ERHMS.DataAccess
 {
-    public abstract class LinkedEntityRepository<TEntity, TLink> : EntityRepository<TEntity> where TEntity : Entity where TLink : Link
+    public class LinkedEntityRepository<TEntity, TLink> : EntityRepository<TEntity>
+        where TEntity : LinkedEntity<TLink>
+        where TLink : Link
     {
         protected TypeMap LinkTypeMap { get; private set; }
+
+        protected virtual PropertyMap LinkedId
+        {
+            get { return LinkTypeMap.Get(TypeMap.GetId().Property.Name); }
+        }
+
         public new DataContext Context { get; private set; }
 
         protected LinkedEntityRepository(DataContext context)
@@ -21,8 +28,6 @@ namespace ERHMS.DataAccess
             Context = context;
         }
 
-        protected abstract void SetLink(TEntity entity, TLink link);
-
         public override IEnumerable<TEntity> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
@@ -30,22 +35,26 @@ namespace ERHMS.DataAccess
                 string format = @"
                     SELECT {0}.*, NULL AS Separator1, {1}.*, NULL AS Separator2, [ERHMS_Incidents].*
                     FROM ({0}
-                    LEFT OUTER JOIN {1} ON {0}.{2} = {1}.{2})
+                    LEFT OUTER JOIN {1} ON {0}.{2} = {1}.{3})
                     LEFT OUTER JOIN [ERHMS_Incidents] ON {1}.[IncidentId] = [ERHMS_Incidents].[IncidentId]
-                    {3}";
+                    {4}";
                 string sql = string.Format(
                     format,
                     Escape(TypeMap.TableName),
                     Escape(LinkTypeMap.TableName),
                     Escape(TypeMap.GetId().ColumnName),
+                    Escape(LinkedId.ColumnName),
                     clauses);
                 Func<TEntity, TLink, Incident, TEntity> map = (entity, link, incident) =>
                 {
                     entity.New = false;
                     link.New = false;
                     incident.New = false;
-                    SetLink(entity, link);
-                    link.Incident = incident;
+                    if (link.GetProperty(LinkedId.ColumnName) != null)
+                    {
+                        entity.Link = link;
+                        link.Incident = incident;
+                    }
                     return entity;
                 };
                 return connection.Query(sql, map, parameters, transaction, splitOn: "Separator1, Separator2");

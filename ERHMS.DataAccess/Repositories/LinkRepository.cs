@@ -8,7 +8,8 @@ using System.Linq;
 
 namespace ERHMS.DataAccess
 {
-    public class LinkRepository<TLink> : EntityRepository<TLink> where TLink : Link
+    public class LinkRepository<TLink> : EntityRepository<TLink>
+        where TLink : Link
     {
         public new DataContext Context { get; private set; }
 

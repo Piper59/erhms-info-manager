@@ -18,5 +18,12 @@ namespace ERHMS.Domain
         }
 
         protected Link() { }
+
+        public override object Clone()
+        {
+            Link clone = (Link)base.Clone();
+            clone.Incident = (Incident)Incident.Clone();
+            return clone;
+        }
     }
 }

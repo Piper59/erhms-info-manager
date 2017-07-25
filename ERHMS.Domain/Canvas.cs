@@ -1,8 +1,6 @@
-﻿using ERHMS.EpiInfo.Domain;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
-    public class Canvas : Entity
+    public class Canvas : LinkedEntity<CanvasLink>
     {
         public int CanvasId
         {
@@ -28,16 +26,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(CanvasLinkId), value); }
         }
 
-        private CanvasLink canvasLink;
-        public CanvasLink CanvasLink
+        private CanvasLink link;
+        public override CanvasLink Link
         {
-            get { return canvasLink; }
-            set { SetProperty(nameof(CanvasLink), ref canvasLink, value); }
-        }
-
-        public Incident Incident
-        {
-            get { return CanvasLink?.Incident; }
+            get { return link; }
+            set { SetProperty(nameof(Link), ref link, value); }
         }
 
         public EpiInfo.Canvas ToEpiInfo()

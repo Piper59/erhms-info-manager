@@ -55,6 +55,11 @@ namespace ERHMS.EpiInfo
             return Metadata.GetViewByFullName(name);
         }
 
+        public new View GetViewById(int viewId)
+        {
+            return Metadata.GetViewById(viewId);
+        }
+
         public new IEnumerable<Pgm> GetPgms()
         {
             return Metadata.GetPgms().AsEnumerable().Select(row => new Pgm(row));

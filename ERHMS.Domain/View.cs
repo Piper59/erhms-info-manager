@@ -1,8 +1,6 @@
-﻿using ERHMS.EpiInfo.Domain;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
-    public class View : Entity
+    public class View : LinkedEntity<ViewLink>
     {
         public int ViewId
         {
@@ -22,16 +20,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(ViewLinkId), value); }
         }
 
-        private ViewLink viewLink;
-        public ViewLink ViewLink
+        private ViewLink link;
+        public override ViewLink Link
         {
-            get { return viewLink; }
-            set { SetProperty(nameof(ViewLink), ref viewLink, value); }
-        }
-
-        public Incident Incident
-        {
-            get { return ViewLink?.Incident; }
+            get { return link; }
+            set { SetProperty(nameof(Link), ref link, value); }
         }
     }
 }

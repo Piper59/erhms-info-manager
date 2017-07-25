@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
 
@@ -12,18 +13,19 @@ namespace ERHMS.DataAccess
             {
                 TableName = "metaPrograms"
             };
-            typeMap.Get(nameof(Pgm.PgmId)).SetId();
-            typeMap.Get(nameof(Pgm.PgmLink)).SetComputed();
+            typeMap.Set(nameof(Pgm.PgmId), ColumnNames.PROGRAM_ID).SetId();
+            typeMap.Get(nameof(Pgm.New)).SetComputed();
+            typeMap.Get(nameof(Pgm.Link)).SetComputed();
             typeMap.Get(nameof(Pgm.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Pgm), typeMap);
         }
 
+        protected override PropertyMap LinkedId
+        {
+            get { return LinkTypeMap.Get(nameof(PgmLink.PgmId)); }
+        }
+
         public PgmRepository(DataContext context)
             : base(context) { }
-
-        protected override void SetLink(Pgm entity, PgmLink link)
-        {
-            entity.PgmLink = link;
-        }
     }
 }

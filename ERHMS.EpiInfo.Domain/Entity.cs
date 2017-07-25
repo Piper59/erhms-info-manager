@@ -155,7 +155,7 @@ namespace ERHMS.EpiInfo.Domain
             return true;
         }
 
-        public object Clone()
+        public virtual object Clone()
         {
             Entity clone = (Entity)Activator.CreateInstance(GetType());
             clone.New = New;

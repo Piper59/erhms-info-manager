@@ -14,7 +14,8 @@ using System.Text;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public class ViewEntityRepository<TEntity> : IRepository<TEntity> where TEntity : ViewEntity, new()
+    public class ViewEntityRepository<TEntity> : IRepository<TEntity>
+        where TEntity : ViewEntity, new()
     {
         protected static string Escape(string identifier)
         {

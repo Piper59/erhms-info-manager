@@ -26,11 +26,11 @@ namespace ERHMS.EpiInfo.Web
 
         public Record() { }
 
-        public Record(object record)
+        public Record(object obj)
         {
-            foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (PropertyInfo property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                this[property.Name] = Convert.ToString(property.GetValue(record, null));
+                this[property.Name] = Convert.ToString(property.GetValue(obj, null));
             }
         }
 

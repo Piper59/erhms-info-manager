@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace ERHMS.EpiInfo.DataAccess
 {
-    public class EntityRepository<TEntity> : Repository<TEntity> where TEntity : Entity
+    public class EntityRepository<TEntity> : Repository<TEntity>
+        where TEntity : Entity
     {
         public IDataContext Context { get; private set; }
 

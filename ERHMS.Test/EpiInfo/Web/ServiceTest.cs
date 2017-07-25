@@ -84,9 +84,14 @@ namespace ERHMS.Test.EpiInfo.Web
                 StartDate = now,
                 EndDate = now.Add(new TimeSpan(1, 0, 0, 0)),
                 ResponseType = ResponseType.Single,
-                Draft = true
+                Draft = true,
+                PublishKey = Guid.NewGuid()
             };
+            Assert.IsNull(survey.SurveyId);
+            Assert.AreEqual("", project.GetViewById(view.Id).WebSurveyId);
             Assert.IsTrue(Service.Publish(view, survey));
+            Assert.IsNotNull(survey.SurveyId);
+            Assert.AreEqual(survey.SurveyId, project.GetViewById(view.Id).WebSurveyId);
             Assert.IsTrue(Service.GetSurvey(view).Draft);
         }
 

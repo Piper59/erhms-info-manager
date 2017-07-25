@@ -34,5 +34,12 @@ namespace ERHMS.Domain
         {
             WebSurveyId = Guid.NewGuid().ToString();
         }
+
+        public override object Clone()
+        {
+            WebSurvey clone = (WebSurvey)base.Clone();
+            clone.View = (View)View.Clone();
+            return clone;
+        }
     }
 }

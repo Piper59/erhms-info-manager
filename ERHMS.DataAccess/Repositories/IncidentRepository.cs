@@ -15,6 +15,7 @@ namespace ERHMS.DataAccess
                 TableName = "ERHMS_Incidents"
             };
             typeMap.Get(nameof(Incident.IncidentId)).SetId();
+            typeMap.Get(nameof(Incident.New)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Incident), typeMap);
         }
 

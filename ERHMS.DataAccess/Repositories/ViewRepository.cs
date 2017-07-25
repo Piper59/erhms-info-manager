@@ -13,17 +13,13 @@ namespace ERHMS.DataAccess
                 TableName = "metaViews"
             };
             typeMap.Get(nameof(View.ViewId)).SetId();
-            typeMap.Get(nameof(View.ViewLink)).SetComputed();
+            typeMap.Get(nameof(View.New)).SetComputed();
+            typeMap.Get(nameof(View.Link)).SetComputed();
             typeMap.Get(nameof(View.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(View), typeMap);
         }
 
         public ViewRepository(DataContext context)
             : base(context) { }
-
-        protected override void SetLink(View entity, ViewLink link)
-        {
-            entity.ViewLink = link;
-        }
     }
 }

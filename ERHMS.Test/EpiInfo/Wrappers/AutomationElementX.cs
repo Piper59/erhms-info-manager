@@ -101,7 +101,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             return new AutomationElementX(Element.FindFirst(scope, id, name, immediate));
         }
 
-        private TPattern GetPattern<TPattern>(AutomationPattern patternId) where TPattern : BasePattern
+        private TPattern GetPattern<TPattern>(AutomationPattern patternId)
+            where TPattern : BasePattern
         {
             BasePattern pattern;
             if (!patterns.TryGetValue(patternId, out pattern))

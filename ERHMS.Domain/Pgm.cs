@@ -1,8 +1,6 @@
-﻿using ERHMS.EpiInfo.Domain;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
-    public class Pgm : Entity
+    public class Pgm : LinkedEntity<PgmLink>
     {
         public int PgmId
         {
@@ -40,16 +38,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(PgmLinkId), value); }
         }
 
-        private PgmLink pgmLink;
-        public PgmLink PgmLink
+        private PgmLink link;
+        public override PgmLink Link
         {
-            get { return pgmLink; }
-            set { SetProperty(nameof(PgmLink), ref pgmLink, value); }
-        }
-
-        public Incident Incident
-        {
-            get { return PgmLink?.Incident; }
+            get { return link; }
+            set { SetProperty(nameof(Link), ref link, value); }
         }
 
         public EpiInfo.Pgm ToEpiInfo()

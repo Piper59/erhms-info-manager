@@ -13,6 +13,7 @@ namespace ERHMS.DataAccess
                 TableName = "ERHMS_PgmLinks"
             };
             typeMap.Get(nameof(PgmLink.PgmLinkId)).SetId();
+            typeMap.Get(nameof(PgmLink.New)).SetComputed();
             typeMap.Get(nameof(PgmLink.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(PgmLink), typeMap);
         }

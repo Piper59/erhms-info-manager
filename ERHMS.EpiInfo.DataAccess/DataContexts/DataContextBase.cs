@@ -7,7 +7,7 @@ namespace ERHMS.EpiInfo.DataAccess
         public IDatabase Database { get; private set; }
         public Project Project { get; private set; }
 
-        public DataContextBase(Project project)
+        protected DataContextBase(Project project)
         {
             Database = project.GetDatabase();
             Project = project;

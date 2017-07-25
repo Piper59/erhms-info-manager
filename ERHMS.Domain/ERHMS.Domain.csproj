@@ -65,6 +65,7 @@
     <Compile Include="Incident.cs" />
     <Compile Include="IncidentNote.cs" />
     <Compile Include="Link.cs" />
+    <Compile Include="LinkedEntity.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Pgm.cs" />
     <Compile Include="PgmLink.cs" />
