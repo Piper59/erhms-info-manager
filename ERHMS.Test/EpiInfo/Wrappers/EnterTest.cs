@@ -13,6 +13,11 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 #endif
     public partial class EnterTest : WrapperTestBase
     {
+        private void FieldTest(View view, string name, object value)
+        {
+            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueObject);
+        }
+
         [Test]
         public void OpenRecordTest()
         {
@@ -40,9 +45,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             wrapper.Exited.WaitOne();
             View view = project.Views["Surveillance"];
             view.LoadRecord(1);
-            NamedObjectCollection<IInputField> fields = view.Fields.InputFields;
-            Assert.AreEqual("Doe", fields["LastName"].CurrentRecordValueObject);
-            Assert.AreEqual(new DateTime(1980, 1, 1), fields["BirthDate"].CurrentRecordValueObject);
+            FieldTest(view, "LastName", "Doe");
+            FieldTest(view, "BirthDate", new DateTime(1980, 1, 1));
         }
 
         [Test]
@@ -71,11 +75,10 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             View view = project.Views["Surveillance"];
             Assert.AreEqual(21, view.GetRecordCount());
             view.LoadRecord(21);
-            NamedObjectCollection<IInputField> fields = view.Fields.InputFields;
-            Assert.AreEqual(record.CaseID, fields["CaseID"].CurrentRecordValueObject);
-            Assert.AreEqual(record.FirstName, fields["FirstName"].CurrentRecordValueObject);
-            Assert.AreEqual(record.LastName, fields["LastName"].CurrentRecordValueObject);
-            Assert.AreEqual(record.BirthDate, fields["BirthDate"].CurrentRecordValueObject);
+            FieldTest(view, "CaseID", record.CaseID);
+            FieldTest(view, "FirstName", record.FirstName);
+            FieldTest(view, "LastName", record.LastName);
+            FieldTest(view, "BirthDate", record.BirthDate);
         }
     }
 }

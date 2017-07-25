@@ -116,7 +116,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 ICollection<string> sources = Form.GetOutput().Columns.Cast<DataColumn>()
                     .Select(column => column.ColumnName)
                     .ToList();
-                ICollection<string> targets = View.Fields.TableColumnFields.Cast<INamedObject>()
+                ICollection<string> targets = View.Fields.DataFields.Cast<INamedObject>()
                     .Select(field => field.Name)
                     .ToList();
                 MappingCollection mappings = null;

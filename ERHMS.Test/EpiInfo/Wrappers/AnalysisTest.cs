@@ -152,13 +152,17 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
         }
 
+        private void FieldTest(View view, string name, object value)
+        {
+            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueObject);
+        }
+
         private void RecordTest(View view, string lastName, string firstName, DateTime entered, DateTime updated)
         {
-            NamedObjectCollection<IInputField> fields = view.Fields.InputFields;
-            Assert.AreEqual(lastName, fields["LastName"].CurrentRecordValueObject);
-            Assert.AreEqual(firstName, fields["FirstName"].CurrentRecordValueObject);
-            Assert.AreEqual(entered, fields["Entered"].CurrentRecordValueObject);
-            Assert.AreEqual(updated, fields["Updated"].CurrentRecordValueObject);
+            FieldTest(view, "LastName", lastName);
+            FieldTest(view, "FirstName", firstName);
+            FieldTest(view, "Entered", entered);
+            FieldTest(view, "Updated", updated);
         }
 
         [Test]
