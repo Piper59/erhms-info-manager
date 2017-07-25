@@ -47,12 +47,15 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             return;
 #endif
             Settings.Default.Reset();
-            using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
+            if (view.IsWebSurvey())
             {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@SurveyId", view.WebSurveyId);
-                connection.Execute("DELETE FROM SurveyResponse WHERE SurveyId = @SurveyId", parameters);
-                connection.Execute("DELETE FROM SurveyMetaData WHERE SurveyId = @SurveyId", parameters);
+                using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
+                {
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@SurveyId", view.WebSurveyId);
+                    connection.Execute("DELETE FROM SurveyResponse WHERE SurveyId = @SurveyId", parameters);
+                    connection.Execute("DELETE FROM SurveyMetaData WHERE SurveyId = @SurveyId", parameters);
+                }
             }
         }
 
