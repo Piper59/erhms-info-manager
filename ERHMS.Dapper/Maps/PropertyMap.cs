@@ -43,5 +43,10 @@ namespace ERHMS.Dapper
             Computed = true;
             return this;
         }
+
+        public object GetValue(object obj)
+        {
+            return Property.GetValue(obj, null);
+        }
     }
 }

@@ -132,7 +132,7 @@ namespace ERHMS.Dapper
                 typeMap.TableName,
                 typeMap.GetInsertable(),
                 propertyMap => propertyMap.ColumnName,
-                propertyMap => propertyMap.Property.GetValue(entity, null),
+                propertyMap => propertyMap.GetValue(entity),
                 transaction);
         }
 
@@ -164,7 +164,7 @@ namespace ERHMS.Dapper
                 typeMap.GetId(),
                 typeMap.GetUpdatable(),
                 propertyMap => propertyMap.ColumnName,
-                propertyMap => propertyMap.Property.GetValue(entity, null),
+                propertyMap => propertyMap.GetValue(entity),
                 transaction);
         }
 
@@ -184,7 +184,7 @@ namespace ERHMS.Dapper
 
         public static void Delete<TEntity>(this IDbConnection @this, TEntity entity, IDbTransaction transaction = null)
         {
-            @this.DeleteById<TEntity>(GetTypeMap<TEntity>().GetId().Property.GetValue(entity, null), transaction);
+            @this.DeleteById<TEntity>(GetTypeMap<TEntity>().GetId().GetValue(entity), transaction);
         }
     }
 }
