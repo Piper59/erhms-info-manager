@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 
 namespace ERHMS.Dapper
 {
     public interface IDatabase
     {
+        DbConnectionStringBuilder Builder { get; }
+        string Name { get; }
+
         bool Exists();
         void Create();
         IDbConnection GetConnection();

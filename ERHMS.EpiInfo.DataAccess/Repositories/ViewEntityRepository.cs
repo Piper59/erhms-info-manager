@@ -157,17 +157,16 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public IEnumerable<TEntity> SelectUndeleted()
         {
-            return Select("WHERE [RECSTATUS] <> 0");
+            return Select(string.Format("WHERE {0}.[RECSTATUS] <> 0", Escape(View.TableName)));
         }
 
         private IEnumerable<string> GetViewColumnNames(bool includeId)
         {
+            yield return ColumnNames.REC_STATUS;
             if (includeId)
             {
-                yield return ColumnNames.UNIQUE_KEY;
+                yield return ColumnNames.GLOBAL_RECORD_ID;
             }
-            yield return ColumnNames.REC_STATUS;
-            yield return ColumnNames.GLOBAL_RECORD_ID;
             yield return ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME;
             yield return ColumnNames.RECORD_FIRST_SAVE_TIME;
             yield return ColumnNames.RECORD_LAST_SAVE_LOGON_NAME;
@@ -202,7 +201,7 @@ namespace ERHMS.EpiInfo.DataAccess
             entity.Touch();
             Database.Transact((connection, transaction) =>
             {
-                Insert(connection, entity, View.TableName, GetViewColumnNames(false), transaction);
+                Insert(connection, entity, View.TableName, GetViewColumnNames(true), transaction);
                 foreach (Page page in View.Pages)
                 {
                     Insert(connection, entity, page.TableName, GetPageColumnNames(page, true), transaction);

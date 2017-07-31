@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.Utility;
 using System;
 using System.Text.RegularExpressions;
 
@@ -46,15 +45,25 @@ namespace ERHMS.EpiInfo
             return name;
         }
 
+        public static bool IsWebSurvey(string webSurveyId)
+        {
+            return !string.IsNullOrWhiteSpace(webSurveyId);
+        }
+
         public static bool IsWebSurvey(this View @this)
         {
-            return !string.IsNullOrWhiteSpace(@this.WebSurveyId);
+            return IsWebSurvey(@this.WebSurveyId);
+        }
+
+        public static Uri GetWebSurveyUrl(string webSurveyId)
+        {
+            Uri endpoint = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
+            return new Uri(endpoint, string.Format("Home/{0}", webSurveyId));
         }
 
         public static Uri GetWebSurveyUrl(this View @this)
         {
-            Uri endpoint = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
-            return new Uri(endpoint, string.Format("Home/{0}", @this.WebSurveyId));
+            return GetWebSurveyUrl(@this.WebSurveyId);
         }
     }
 }

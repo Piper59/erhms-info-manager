@@ -4,15 +4,14 @@ using ERHMS.Utility;
 using NUnit.Framework;
 using System.IO;
 using System.Reflection;
-using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Test.EpiInfo
 {
-    public class SampleProjectTestBase
+    public class SampleProjectTest
     {
         protected TempDirectory directory;
         protected Configuration configuration;
-        protected Project project;
+        protected ERHMS.EpiInfo.Project project;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -28,7 +27,7 @@ namespace ERHMS.Test.EpiInfo
             assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", path);
             assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.mdb", Path.ChangeExtension(path, ".mdb"));
             ProjectInfo.Get(path).SetAccessConnectionString();
-            project = new Project(path);
+            project = new ERHMS.EpiInfo.Project(path);
         }
 
         [OneTimeTearDown]

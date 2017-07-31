@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace ERHMS.Test.Dapper
 {
-    public static class EmptyDatabaseTestBase
+    public static class EmptyDatabaseTest
     {
         public static class Access
         {

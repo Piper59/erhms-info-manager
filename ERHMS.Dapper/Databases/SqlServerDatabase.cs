@@ -1,11 +1,12 @@
 ﻿using Dapper;
 using ERHMS.Utility;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace ERHMS.Dapper
 {
-    public class SqlServerDatabase : DatabaseBase
+    public class SqlServerDatabase : Database
     {
         public static SqlServerDatabase Construct(string dataSource, string initialCatalog, string userId = null, string password = null)
         {
@@ -30,11 +31,20 @@ namespace ERHMS.Dapper
             return new SqlServerDatabase(builder);
         }
 
-        public SqlConnectionStringBuilder Builder { get; private set; }
+        private SqlConnectionStringBuilder builder;
+        public override DbConnectionStringBuilder Builder
+        {
+            get { return builder; }
+        }
+
+        public override string Name
+        {
+            get { return builder.InitialCatalog; }
+        }
 
         public SqlServerDatabase(SqlConnectionStringBuilder builder)
         {
-            Builder = builder;
+            this.builder = builder;
         }
 
         public SqlServerDatabase(string connectionString)
@@ -42,27 +52,27 @@ namespace ERHMS.Dapper
 
         public override bool Exists()
         {
-            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(Builder.ConnectionString))
+            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
             {
                 string sql = "SELECT COUNT(*) FROM sys.databases WHERE name = @name";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@name", Builder.InitialCatalog);
+                parameters.Add("@name", builder.InitialCatalog);
                 return connection.ExecuteScalar<int>(sql, parameters) > 0;
             }
         }
 
         public override void Create()
         {
-            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(Builder.ConnectionString))
+            using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
             {
-                string sql = string.Format("CREATE DATABASE {0}", Escape(Builder.InitialCatalog));
+                string sql = string.Format("CREATE DATABASE {0}", Escape(builder.InitialCatalog));
                 connection.Execute(sql);
             }
         }
 
         protected override IDbConnection GetConnectionInternal()
         {
-            return new SqlConnection(Builder.ConnectionString);
+            return new SqlConnection(builder.ConnectionString);
         }
     }
 }

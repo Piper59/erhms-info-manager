@@ -1,11 +1,11 @@
 ﻿using Dapper;
+using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ERHMS.DataAccess
 {
@@ -36,30 +36,34 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
-                ICollection<string> tableNames = Context.Responders.TableNames.ToList();
-                StringBuilder format = new StringBuilder();
-                format.AppendFormat(
-                    "SELECT [ERHMS_Rosters].*, NULL AS [Separator1], [ERHMS_Incidents].*, NULL AS [Separator2], {0}",
-                    string.Join(", ", tableNames.Select(tableName => string.Format("{0}.*", Escape(tableName)))));
-                format.AppendFormat(" FROM {0}", new string('(', tableNames.Count));
-                format.Append("[ERHMS_Rosters] INNER JOIN [ERHMS_Incidents] ON [ERHMS_Rosters].[IncidentId] = [ERHMS_Incidents].[IncidentId]");
-                foreach (string tableName in tableNames)
+                SqlBuilder sql = new SqlBuilder();
+                sql.AddTable("ERHMS_Rosters");
+                sql.AddSeparator();
+                foreach (string tableName in Context.Responders.TableNames)
                 {
-                    format.AppendFormat(") INNER JOIN {0} ON [ERHMS_Rosters].[ResponderId] = {0}.[GlobalRecordId]", Escape(tableName));
+                    sql.AddTable(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Rosters", "ResponderId");
                 }
-                format.Append(" {0}");
-                string sql = string.Format(format.ToString(), clauses);
-                Func<Roster, Incident, Responder, Roster> map = (roster, incident, responder) =>
+                sql.AddSeparator();
+                sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "IncidentId", "ERHMS_Rosters");
+                sql.OtherClauses = clauses;
+                Func<Roster, Responder, Incident, Roster> map = (roster, responder, incident) =>
                 {
                     roster.New = false;
-                    incident.New = false;
                     responder.New = false;
-                    roster.Incident = incident;
+                    incident.New = false;
                     roster.Responder = responder;
+                    roster.Incident = incident;
                     return roster;
                 };
-                return connection.Query(sql, map, parameters, transaction, splitOn: "Separator1, Separator2");
+                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
             });
+        }
+
+        public IEnumerable<Roster> SelectUndeleted()
+        {
+            return Select(string.Format(
+                "WHERE [ERHMS_Incidents].[Deleted] = 0 AND {0}.[RECSTATUS] <> 0",
+                Escape(Context.Responders.View.TableName)));
         }
 
         public override Roster SelectById(object id)
@@ -70,12 +74,24 @@ namespace ERHMS.DataAccess
             return Select(clauses, parameters).SingleOrDefault();
         }
 
-        public IEnumerable<Roster> SelectByIncidentId(string incidentId)
+        private IEnumerable<Roster> SelectByIncidentIdInternal(string clauses, string incidentId)
         {
-            string clauses = "WHERE [ERHMS_Rosters].[IncidentId] = @IncidentId";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@IncidentId", incidentId);
             return Select(clauses, parameters);
+        }
+
+        public IEnumerable<Roster> SelectByIncidentId(string incidentId)
+        {
+            return SelectByIncidentIdInternal("WHERE [ERHMS_Rosters].[IncidentId] = @IncidentId", incidentId);
+        }
+
+        public IEnumerable<Roster> SelectUndeletedByIncidentId(string incidentId)
+        {
+            string clauses = string.Format(
+                "WHERE [ERHMS_Rosters].[IncidentId] = @IncidentId AND {0}.[RECSTATUS] <> 0",
+                Escape(Context.Responders.View.TableName));
+            return SelectByIncidentIdInternal(clauses, incidentId);
         }
     }
 }

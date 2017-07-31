@@ -5,7 +5,6 @@ using ERHMS.EpiInfo.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using View = ERHMS.Domain.View;
 
 namespace ERHMS.DataAccess
 {
@@ -35,20 +34,31 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
-                string format = @"
-                    SELECT [ERHMS_WebSurveys].*, NULL AS [Separator], [metaViews].*
-                    FROM [ERHMS_WebSurveys]
-                    INNER JOIN [metaViews] ON [ERHMS_WebSurveys].[ViewId] = [metaViews].[ViewId]
-                    {0}";
-                string sql = string.Format(format, clauses);
-                Func<WebSurvey, View, WebSurvey> map = (webSurvey, view) =>
+                SqlBuilder sql = new SqlBuilder();
+                sql.AddTable("ERHMS_WebSurveys");
+                sql.AddSeparator();
+                sql.AddTable(JoinType.Inner, "metaViews", "ViewId", "ERHMS_WebSurveys");
+                sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
+                sql.AddSeparator();
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews");
+                sql.AddSeparator();
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks");
+                sql.OtherClauses = clauses;
+                Func<WebSurvey, View, ViewLink, Incident, WebSurvey> map = (webSurvey, view, viewLink, incident) =>
                 {
                     webSurvey.New = false;
                     view.New = false;
+                    viewLink.New = false;
+                    incident.New = false;
                     webSurvey.View = view;
+                    if (viewLink.GetProperty(nameof(ViewLink.ViewId)) != null)
+                    {
+                        view.Link = viewLink;
+                        viewLink.Incident = incident;
+                    }
                     return webSurvey;
                 };
-                return connection.Query(sql, map, parameters, transaction, splitOn: "Separator");
+                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
             });
         }
 
@@ -57,6 +67,14 @@ namespace ERHMS.DataAccess
             string clauses = "WHERE [ERHMS_WebSurveys].[WebSurveyId] = @Id";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
+            return Select(clauses, parameters).SingleOrDefault();
+        }
+
+        public WebSurvey SelectByViewId(int viewId)
+        {
+            string clauses = "WHERE [ERHMS_WebSurveys].[ViewId] = @ViewId";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ViewId", viewId);
             return Select(clauses, parameters).SingleOrDefault();
         }
 

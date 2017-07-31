@@ -1,6 +1,4 @@
 ﻿using Epi;
-using Epi.Collections;
-using Epi.Fields;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
@@ -18,7 +16,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 #if IGNORE_LONG_TESTS
     [TestFixture(Ignore = "IGNORE_LONG_TESTS")]
 #endif
-    public partial class AnalysisTest : WrapperTestBase
+    public partial class AnalysisTest : WrapperTest
     {
         private static class Commands
         {

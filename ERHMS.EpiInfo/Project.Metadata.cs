@@ -128,26 +128,26 @@ namespace ERHMS.EpiInfo
             Driver.ExecuteNonQuery(query);
         }
 
-        public void DeleteView(View view)
+        public void DeleteView(int viewId)
         {
-            Log.Logger.DebugFormat("Deleting view: {0}", view.Name);
+            Log.Logger.DebugFormat("Deleting view: {0}", viewId);
             ViewDeleter deleter = new ViewDeleter(this);
-            deleter.DeleteViewAndDescendants(view.Id);
+            deleter.DeleteViewAndDescendants(viewId);
             LoadViews();
         }
 
-        public void DeletePgm(Pgm pgm)
+        public void DeletePgm(int pgmId)
         {
-            Log.Logger.DebugFormat("Deleting PGM: {0}", pgm.Name);
-            Metadata.DeletePgm(pgm.PgmId);
+            Log.Logger.DebugFormat("Deleting PGM: {0}", pgmId);
+            Metadata.DeletePgm(pgmId);
         }
 
-        public void DeleteCanvas(Canvas canvas)
+        public void DeleteCanvas(int canvasId)
         {
-            Log.Logger.DebugFormat("Deleting canvas: {0}", canvas.Name);
+            Log.Logger.DebugFormat("Deleting canvas: {0}", canvasId);
             string sql = "DELETE FROM [metaCanvases] WHERE [CanvasId] = @CanvasId";
             Query query = Driver.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@CanvasId", DbType.Int32, canvas.CanvasId));
+            query.Parameters.Add(new QueryParameter("@CanvasId", DbType.Int32, canvasId));
             Driver.ExecuteNonQuery(query);
         }
     }

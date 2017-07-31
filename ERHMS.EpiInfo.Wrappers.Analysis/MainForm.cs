@@ -64,7 +64,10 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public void AddCommand(string command)
         {
-            ProgramEditor.AddCommand(command);
+            if (!string.IsNullOrWhiteSpace(command))
+            {
+                ProgramEditor.AddCommand(command);
+            }
         }
 
         public void ExecuteCommand(string command, bool showDialog, Action<Exception> callback)

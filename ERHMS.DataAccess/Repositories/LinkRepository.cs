@@ -23,12 +23,11 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
-                string format = @"
-                    SELECT {0}.*, NULL AS [Separator], [ERHMS_Incidents].*
-                    FROM {0}
-                    INNER JOIN [ERHMS_Incidents] ON {0}.[IncidentId] = [ERHMS_Incidents].[IncidentId]
-                    {1}";
-                string sql = string.Format(format, Escape(TypeMap.TableName), clauses);
+                SqlBuilder sql = new SqlBuilder();
+                sql.AddTable(TypeMap.TableName);
+                sql.AddSeparator();
+                sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "IncidentId", TypeMap.TableName);
+                sql.OtherClauses = clauses;
                 Func<TLink, Incident, TLink> map = (link, incident) =>
                 {
                     link.New = false;
@@ -36,8 +35,13 @@ namespace ERHMS.DataAccess
                     link.Incident = incident;
                     return link;
                 };
-                return connection.Query(sql, map, parameters, transaction, splitOn: "Separator");
+                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
             });
+        }
+
+        public IEnumerable<TLink> SelectUndeleted()
+        {
+            return Select("WHERE [ERHMS_Incidents].[Deleted] = 0");
         }
 
         public override TLink SelectById(object id)

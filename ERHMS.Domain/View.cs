@@ -14,6 +14,18 @@
             set { SetProperty(nameof(Name), value); }
         }
 
+        public string WebSurveyId
+        {
+            get { return GetProperty<string>(nameof(WebSurveyId)); }
+            set { SetProperty(nameof(WebSurveyId), value); }
+        }
+
+        public bool HasResponderIdField
+        {
+            get { return GetProperty<bool>(nameof(HasResponderIdField)); }
+            set { SetProperty(nameof(HasResponderIdField), value); }
+        }
+
         public string ViewLinkId
         {
             get { return GetProperty<string>(nameof(ViewLinkId)); }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    public class WrapperTestBase : SampleProjectTestBase
+    public class WrapperTest : SampleProjectTest
     {
         protected class WrapperEventCollection : List<WrapperEventArgs>
         {

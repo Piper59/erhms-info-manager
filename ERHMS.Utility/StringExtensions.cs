@@ -29,7 +29,7 @@ namespace ERHMS.Utility
             return NewLinePattern.Split(@this);
         }
 
-        public static string MakeUnique(this string @this, string format, Predicate<string> exists)
+        public static string MakeUnique(this string @this, string format, Func<string, bool> exists)
         {
             if (exists(@this))
             {

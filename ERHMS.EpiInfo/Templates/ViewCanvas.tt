@@ -2,8 +2,8 @@
 <#@ template visibility="internal" #>
 <DashboardCanvas>
   <dashboardHelper>
-    <projectPath><#= View.Project.FilePath #></projectPath>
-    <viewName><#= View.Name #></viewName>
+    <projectPath><#= ProjectPath #></projectPath>
+    <viewName><#= ViewName #></viewName>
     <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
     <advancedDataFilterCondition>
     </advancedDataFilterCondition>
@@ -37,10 +37,12 @@
   </CanvasSettings>
 </DashboardCanvas>
 <#+
-    public View View { get; set; }
+    public string ProjectPath { get; set; }
+    public string ViewName { get; set; }
 
-    public ViewCanvas(View view)
+    public ViewCanvas(string projectPath, string viewName)
     {
-        View = view;
+        ProjectPath = projectPath;
+        ViewName = viewName;
     }
 #>

@@ -28,23 +28,23 @@ namespace ERHMS.DataAccess
             Context = context;
         }
 
+        protected virtual SqlBuilder GetSelectSql()
+        {
+            SqlBuilder sql = new SqlBuilder();
+            sql.AddTable(TypeMap.TableName);
+            sql.AddSeparator();
+            sql.AddTable(JoinType.LeftOuter, LinkTypeMap.TableName, LinkedId.ColumnName, TypeMap.TableName, TypeMap.GetId().ColumnName);
+            sql.AddSeparator();
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", LinkTypeMap.TableName);
+            return sql;
+        }
+
         public override IEnumerable<TEntity> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                string format = @"
-                    SELECT {0}.*, NULL AS Separator1, {1}.*, NULL AS Separator2, [ERHMS_Incidents].*
-                    FROM ({0}
-                    LEFT OUTER JOIN {1} ON {0}.{2} = {1}.{3})
-                    LEFT OUTER JOIN [ERHMS_Incidents] ON {1}.[IncidentId] = [ERHMS_Incidents].[IncidentId]
-                    {4}";
-                string sql = string.Format(
-                    format,
-                    Escape(TypeMap.TableName),
-                    Escape(LinkTypeMap.TableName),
-                    Escape(TypeMap.GetId().ColumnName),
-                    Escape(LinkedId.ColumnName),
-                    clauses);
+                SqlBuilder sql = GetSelectSql();
+                sql.OtherClauses = clauses;
                 Func<TEntity, TLink, Incident, TEntity> map = (entity, link, incident) =>
                 {
                     entity.New = false;
@@ -57,8 +57,13 @@ namespace ERHMS.DataAccess
                     }
                     return entity;
                 };
-                return connection.Query(sql, map, parameters, transaction, splitOn: "Separator1, Separator2");
+                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
             });
+        }
+
+        public IEnumerable<TEntity> SelectUndeleted()
+        {
+            return Select("WHERE [ERHMS_Incidents].[Deleted] = 0");
         }
 
         public override TEntity SelectById(object id)

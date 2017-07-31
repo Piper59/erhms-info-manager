@@ -22,7 +22,7 @@ namespace ERHMS.Test.EpiInfo
 #if IGNORE_LONG_TESTS
     [TestFixture(Ignore = "IGNORE_LONG_TESTS")]
 #endif
-    public abstract class ProjectTestBase
+    public abstract class ProjectTest
     {
         protected TempDirectory directory;
         protected Configuration configuration;
@@ -191,13 +191,13 @@ namespace ERHMS.Test.EpiInfo
             project.CollectedData.CreateDataTableForView(view, 1);
             project.CollectedData.CreateDataTableForView(childView, 1);
             Assert.IsTrue(parentView.Fields.Contains("Relate"));
-            project.DeleteView(view);
+            project.DeleteView(view.Id);
             Assert.IsTrue(project.Views.Contains(parentView.Name));
             Assert.IsFalse(project.Views.Contains(view.Name));
             Assert.IsFalse(project.Views.Contains(childView.Name));
             parentView.MustRefreshFieldCollection = true;
             Assert.IsFalse(parentView.Fields.Contains("Relate"));
-            project.DeleteView(parentView);
+            project.DeleteView(parentView.Id);
             Assert.IsFalse(project.Views.Contains(parentView.Name));
             ICollection<string> tableNames = new string[]
             {
@@ -229,7 +229,7 @@ namespace ERHMS.Test.EpiInfo
             Pgm original = new Pgm
             {
                 Name = "PgmTest_Pgm",
-                Content = Pgm.GetContentForView(view)
+                Content = Pgm.GetContentForView(project.FilePath, view.Name)
             };
             Assert.AreEqual(0, original.PgmId);
             Assert.AreEqual(0, project.GetPgms().Count());
@@ -243,7 +243,7 @@ namespace ERHMS.Test.EpiInfo
             retrieved = project.GetPgmById(original.PgmId);
             Assert.AreNotEqual(original, retrieved);
             Assert.AreEqual("", retrieved.Content);
-            project.DeletePgm(retrieved);
+            project.DeletePgm(retrieved.PgmId);
             Assert.AreEqual(0, project.GetPgms().Count());
         }
 
@@ -254,7 +254,7 @@ namespace ERHMS.Test.EpiInfo
             Canvas original = new Canvas
             {
                 Name = "CanvasTest_Canvas",
-                Content = Canvas.GetContentForView(view)
+                Content = Canvas.GetContentForView(project.FilePath, view.Name)
             };
             Assert.AreEqual(0, original.CanvasId);
             Assert.AreEqual(0, project.GetCanvases().Count());
@@ -272,12 +272,12 @@ namespace ERHMS.Test.EpiInfo
             string expected = whitespacePattern.Replace(original.Content, "").Replace(project.FilePath, path);
             string actual = whitespacePattern.Replace(retrieved.Content, "");
             Assert.AreEqual(expected, actual);
-            project.DeleteCanvas(retrieved);
+            project.DeleteCanvas(retrieved.CanvasId);
             Assert.AreEqual(0, project.GetCanvases().Count());
         }
     }
 
-    public class AccessProjectTest : ProjectTestBase
+    public class AccessProjectTest : ProjectTest
     {
         private static Project Create(string name, out ProjectCreationInfo info)
         {
@@ -314,7 +314,7 @@ namespace ERHMS.Test.EpiInfo
         }
     }
 
-    public class SqlServerProjectTest : ProjectTestBase
+    public class SqlServerProjectTest : ProjectTest
     {
         private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString;
 

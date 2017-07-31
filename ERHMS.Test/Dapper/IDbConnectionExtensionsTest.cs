@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace ERHMS.Test.Dapper
 {
-    public abstract class IDbConnectionExtensionsTestBase
+    public abstract class IDbConnectionExtensionsTest
     {
         protected IDbConnection connection;
 
@@ -201,7 +201,7 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class OleDbConnectionExtensionsTest : IDbConnectionExtensionsTestBase
+    public class OleDbConnectionExtensionsTest : IDbConnectionExtensionsTest
     {
         private TempDirectory directory;
 
@@ -209,7 +209,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.Access.SetUp(nameof(OleDbConnectionExtensionsTest), out directory, out builder);
+            EmptyDatabaseTest.Access.SetUp(nameof(OleDbConnectionExtensionsTest), out directory, out builder);
             connection = new OleDbConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -222,13 +222,13 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class SqlConnectionExtensionsTest : IDbConnectionExtensionsTestBase
+    public class SqlConnectionExtensionsTest : IDbConnectionExtensionsTest
     {
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.SqlServer.SetUp(out builder);
+            EmptyDatabaseTest.SqlServer.SetUp(out builder);
             connection = new SqlConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -237,7 +237,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeTearDown()
         {
             PreTearDown();
-            EmptyDatabaseTestBase.SqlServer.TearDown();
+            EmptyDatabaseTest.SqlServer.TearDown();
         }
     }
 }

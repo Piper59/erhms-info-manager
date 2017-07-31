@@ -5,7 +5,7 @@ using System;
 
 namespace ERHMS.Test.EpiInfo.Web
 {
-    public class RecordTest : SampleProjectTestBase
+    public class RecordTest : SampleProjectTest
     {
         [Test]
         public void GetValueTest()

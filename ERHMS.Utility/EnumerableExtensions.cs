@@ -19,5 +19,13 @@ namespace ERHMS.Utility
         {
             return Yield(item).Concat(@this);
         }
+
+        public static void AddRange<T>(this ICollection<T> @this, IEnumerable<T> items)
+        {
+            foreach (T item in items)
+            {
+                @this.Add(item);
+            }
+        }
     }
 }

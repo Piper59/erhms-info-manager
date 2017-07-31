@@ -1,12 +1,11 @@
 ﻿using Dapper;
+using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using View = ERHMS.Domain.View;
 
 namespace ERHMS.DataAccess
 {
@@ -37,30 +36,46 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
-                ICollection<string> tableNames = Context.Responders.TableNames.ToList();
-                StringBuilder format = new StringBuilder();
-                format.AppendFormat(
-                    "SELECT [ERHMS_Assignments].*, NULL AS [Separator1], [metaViews].*, NULL AS [Separator2], {0}",
-                    string.Join(", ", tableNames.Select(tableName => string.Format("{0}.*", Escape(tableName)))));
-                format.AppendFormat(" FROM {0}", new string('(', tableNames.Count));
-                format.Append("[ERHMS_Assignments] INNER JOIN [metaViews] ON [ERHMS_Assignments].[ViewId] = [metaViews].[ViewId]");
-                foreach (string tableName in tableNames)
+                SqlBuilder sql = new SqlBuilder();
+                sql.AddTable("ERHMS_Assignments");
+                sql.AddSeparator();
+                sql.AddTable(JoinType.Inner, "metaViews", "ViewId", "ERHMS_Assignments");
+                sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
+                sql.AddSeparator();
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews");
+                sql.AddSeparator();
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks");
+                sql.AddSeparator();
+                foreach (string tableName in Context.Responders.TableNames)
                 {
-                    format.AppendFormat(") INNER JOIN {0} ON [ERHMS_Assignments].[ResponderId] = {0}.[GlobalRecordId]", Escape(tableName));
+                    sql.AddTable(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Assignments", "ResponderId");
                 }
-                format.Append(" {0}");
-                string sql = string.Format(format.ToString(), clauses);
-                Func<Assignment, View, Responder, Assignment> map = (assignment, view, responder) =>
+                sql.OtherClauses = clauses;
+                Func<Assignment, Domain.View, ViewLink, Incident, Responder, Assignment> map = (assignment, view, viewLink, incident, responder) =>
                 {
                     assignment.New = false;
                     view.New = false;
+                    viewLink.New = false;
+                    incident.New = false;
                     responder.New = false;
                     assignment.View = view;
+                    if (viewLink.GetProperty(nameof(ViewLink.ViewId)) != null)
+                    {
+                        view.Link = viewLink;
+                        viewLink.Incident = incident;
+                    }
                     assignment.Responder = responder;
                     return assignment;
                 };
-                return connection.Query(sql, map, parameters, transaction, splitOn: "Separator1, Separator2");
+                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
             });
+        }
+
+        public IEnumerable<Assignment> SelectUndeleted()
+        {
+            return Select(string.Format(
+                "WHERE ([ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0) AND {0}.[RECSTATUS] <> 0",
+                Escape(Context.Responders.View.TableName)));
         }
 
         public override Assignment SelectById(object id)
@@ -69,6 +84,26 @@ namespace ERHMS.DataAccess
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
             return Select(clauses, parameters).SingleOrDefault();
+        }
+
+        private IEnumerable<Assignment> SelectByIncidentIdInternal(string clauses, string incidentId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IncidentId", incidentId);
+            return Select(clauses, parameters);
+        }
+
+        public IEnumerable<Assignment> SelectByIncidentId(string incidentId)
+        {
+            return SelectByIncidentIdInternal("WHERE [ERHMS_ViewLinks].[IncidentId] = @IncidentId", incidentId);
+        }
+
+        public IEnumerable<Assignment> SelectUndeletedByIncidentId(string incidentId)
+        {
+            string clauses = string.Format(
+                "WHERE [ERHMS_ViewLinks].[IncidentId] = @IncidentId AND {0}.[RECSTATUS] <> 0",
+                Escape(Context.Responders.View.TableName));
+            return SelectByIncidentIdInternal(clauses, incidentId);
         }
 
         public void DeleteByViewId(int viewId)

@@ -53,11 +53,20 @@ namespace ERHMS.Test.DataAccess
             }
         }
 
+        private void DeleteIncident()
+        {
+            Incident incident = (Incident)this.incident.Clone();
+            incident.Deleted = true;
+            context.Incidents.Save(incident);
+        }
+
         [Test]
         public void AssignmentRepositoryTest()
         {
+            int count;
             {
                 ICollection<Assignment> assignments = context.Assignments.Select().ToList();
+                count = assignments.Count;
                 Assert.IsTrue(assignments.All(assignment => assignment.View.Name == view.Name));
                 ICollection<string> lastNames = new string[]
                 {
@@ -67,17 +76,31 @@ namespace ERHMS.Test.DataAccess
                 };
                 CollectionAssert.AreEquivalent(lastNames, assignments.Select(assignment => assignment.Responder.LastName));
             }
+            Responder responder;
             {
                 Assignment assignment = context.Assignments.SelectById("195397a3-a0e9-4f0e-9325-8fe0f6dac74f");
+                responder = (Responder)assignment.Responder.Clone();
                 Assert.AreEqual(view.Name, assignment.View.Name);
                 Assert.AreEqual("Adkins", assignment.Responder.LastName);
             }
             {
-                using (Transaction transaction = context.Database.BeginTransaction())
-                {
-                    context.Assignments.DeleteByViewId(view.Id);
-                    Assert.AreEqual(0, context.Assignments.Count());
-                }
+                Assert.AreEqual(context.Assignments.Count(), context.Assignments.SelectByIncidentId(incident.IncidentId).Count());
+            }
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                DeleteIncident();
+                Assert.AreEqual(0, context.Assignments.SelectUndeleted().Count());
+            }
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                responder.Deleted = true;
+                context.Responders.Save(responder);
+                Assert.AreEqual(count - 1, context.Assignments.SelectUndeleted().Count());
+            }
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                context.Assignments.DeleteByViewId(view.Id);
+                Assert.AreEqual(0, context.Assignments.Count());
             }
         }
 
@@ -93,6 +116,11 @@ namespace ERHMS.Test.DataAccess
                 context.CanvasLinks.DeleteByCanvasId(canvas.CanvasId);
                 Assert.IsNull(context.Canvases.SelectById(canvas.CanvasId).Incident);
             }
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                DeleteIncident();
+                Assert.AreEqual(0, context.Canvases.SelectUndeleted().Count());
+            }
         }
 
         [Test]
@@ -101,9 +129,7 @@ namespace ERHMS.Test.DataAccess
             Assert.AreEqual(1, context.Incidents.SelectUndeleted().Count());
             using (Transaction transaction = context.Database.BeginTransaction())
             {
-                Incident incident = (Incident)this.incident.Clone();
-                incident.Deleted = true;
-                context.Incidents.Save(incident);
+                DeleteIncident();
                 Assert.AreEqual(0, context.Incidents.SelectUndeleted().Count());
             }
         }
@@ -112,12 +138,22 @@ namespace ERHMS.Test.DataAccess
         public void IncidentNoteRepositoryTest()
         {
             Assert.IsTrue(context.IncidentNotes.Select().All(incidentNote => incidentNote.Incident.Name == incident.Name));
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                DeleteIncident();
+                Assert.AreEqual(0, context.IncidentNotes.SelectUndeleted().Count());
+            }
         }
 
         [Test]
         public void LocationRepositoryTest()
         {
             Assert.IsTrue(context.Locations.Select().All(location => location.Incident.Name == incident.Name));
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                DeleteIncident();
+                Assert.AreEqual(0, context.Locations.SelectUndeleted().Count());
+            }
         }
 
         [Test]
@@ -132,13 +168,20 @@ namespace ERHMS.Test.DataAccess
                 context.PgmLinks.DeleteByPgmId(pgm.PgmId);
                 Assert.IsNull(context.Pgms.SelectById(pgm.PgmId).Incident);
             }
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                DeleteIncident();
+                Assert.AreEqual(0, context.Pgms.SelectUndeleted().Count());
+            }
         }
 
         [Test]
         public void RosterRepositoryTest()
         {
+            int count;
             {
                 ICollection<Roster> rosters = context.Rosters.Select().ToList();
+                count = rosters.Count;
                 ICollection<string> lastNames = new string[]
                 {
                     "Adkins",
@@ -173,13 +216,26 @@ namespace ERHMS.Test.DataAccess
                 CollectionAssert.AreEquivalent(lastNames, rosters.Select(roster => roster.Responder.LastName));
                 Assert.IsTrue(rosters.All(roster => roster.Incident.Name == incident.Name));
             }
+            Responder responder;
             {
                 Roster roster = context.Rosters.SelectById("2b8db049-3daa-4907-a473-f9ce4ef26362");
+                responder = (Responder)roster.Responder.Clone();
                 Assert.AreEqual("Adkins", roster.Responder.LastName);
                 Assert.AreEqual(incident.Name, roster.Incident.Name);
             }
             {
                 Assert.AreEqual(context.Rosters.Count(), context.Rosters.SelectByIncidentId(incident.IncidentId).Count());
+            }
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                DeleteIncident();
+                Assert.AreEqual(0, context.Assignments.SelectUndeleted().Count());
+            }
+            using (Transaction transaction = context.Database.BeginTransaction())
+            {
+                responder.Deleted = true;
+                context.Responders.Save(responder);
+                Assert.AreEqual(count - 1, context.Rosters.SelectUndeleted().Count());
             }
         }
 
@@ -189,8 +245,10 @@ namespace ERHMS.Test.DataAccess
             string clauses = "WHERE [metaViews].[Name] <> @Name";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Name", context.Responders.View.Name);
-            Assert.IsTrue(context.Views.Select(clauses, parameters).All(view => view.Incident?.Name == incident.Name));
+            ICollection<View> views = context.Views.Select(clauses, parameters).ToList();
+            Assert.IsTrue(views.All(view => view.Incident?.Name == incident.Name));
             Assert.IsTrue(context.ViewLinks.Select().All(viewLink => viewLink.Incident.Name == incident.Name));
+            Assert.AreEqual(1, views.Count(view => view.HasResponderIdField));
             using (Transaction transaction = context.Database.BeginTransaction())
             {
                 View view = context.Views.Select(clauses, parameters).First();
@@ -210,6 +268,7 @@ namespace ERHMS.Test.DataAccess
             context.WebSurveys.Insert(webSurvey);
             Assert.AreEqual(view.Name, context.WebSurveys.Select().Single().View.Name);
             Assert.AreEqual(view.Name, context.WebSurveys.SelectById(webSurvey.WebSurveyId).View.Name);
+            Assert.AreEqual(view.Name, context.WebSurveys.SelectByViewId(view.Id).View.Name);
             context.WebSurveys.DeleteByViewId(view.Id);
             Assert.AreEqual(0, context.WebSurveys.Count());
         }

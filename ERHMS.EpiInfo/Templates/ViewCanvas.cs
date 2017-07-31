@@ -16,7 +16,7 @@ namespace ERHMS.EpiInfo.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
+    #line 1 "C:\Work\Projects\ERHMS Info Manager\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     internal partial class ViewCanvas : ViewCanvasBase
     {
@@ -28,15 +28,15 @@ namespace ERHMS.EpiInfo.Templates
         {
             this.Write("<DashboardCanvas>\r\n  <dashboardHelper>\r\n    <projectPath>");
             
-            #line 5 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(View.Project.FilePath));
+            #line 5 "C:\Work\Projects\ERHMS Info Manager\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ProjectPath));
             
             #line default
             #line hidden
             this.Write("</projectPath>\r\n    <viewName>");
             
-            #line 6 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(View.Name));
+            #line 6 "C:\Work\Projects\ERHMS Info Manager\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ViewName));
             
             #line default
             #line hidden
@@ -77,13 +77,15 @@ namespace ERHMS.EpiInfo.Templates
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 39 "C:\Work\Projects\ERHMS\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
+        #line 39 "C:\Work\Projects\ERHMS Info Manager\ERHMS.EpiInfo\Templates\ViewCanvas.tt"
 
-    public View View { get; set; }
+    public string ProjectPath { get; set; }
+    public string ViewName { get; set; }
 
-    public ViewCanvas(View view)
+    public ViewCanvas(string projectPath, string viewName)
     {
-        View = view;
+        ProjectPath = projectPath;
+        ViewName = viewName;
     }
 
         

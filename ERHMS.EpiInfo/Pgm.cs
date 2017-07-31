@@ -23,9 +23,9 @@ namespace ERHMS.EpiInfo
             return string.Format("READ {{{0}}}:[{1}]{2}", location, source, Environment.NewLine);
         }
 
-        public static string GetContentForView(View view)
+        public static string GetContentForView(string projectPath, string viewName)
         {
-            return GetContent(view.Project.FilePath, view.Name);
+            return GetContent(projectPath, viewName);
         }
 
         public static string GetContentForTable(string connectionString, string tableName)

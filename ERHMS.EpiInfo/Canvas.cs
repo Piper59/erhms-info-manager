@@ -19,9 +19,9 @@ namespace ERHMS.EpiInfo
             @this => @this.Content
         };
 
-        public static string GetContentForView(View view)
+        public static string GetContentForView(string projectPath, string viewName)
         {
-            return new ViewCanvas(view).TransformText();
+            return new ViewCanvas(projectPath, viewName).TransformText();
         }
 
         public static string GetContentForTable(string connectionString, string tableName)

@@ -1,12 +1,13 @@
 ﻿using ERHMS.Utility;
 using System.Data;
+using System.Data.Common;
 using System.Data.OleDb;
 using System.IO;
 using System.Reflection;
 
 namespace ERHMS.Dapper
 {
-    public class AccessDatabase : DatabaseBase
+    public class AccessDatabase : Database
     {
         public static AccessDatabase Construct(string dataSource, string password = null)
         {
@@ -20,11 +21,20 @@ namespace ERHMS.Dapper
             return new AccessDatabase(builder);
         }
 
-        public OleDbConnectionStringBuilder Builder { get; private set; }
+        private OleDbConnectionStringBuilder builder;
+        public override DbConnectionStringBuilder Builder
+        {
+            get { return builder; }
+        }
+
+        public override string Name
+        {
+            get { return Path.GetFileNameWithoutExtension(builder.DataSource); }
+        }
 
         public AccessDatabase(OleDbConnectionStringBuilder builder)
         {
-            Builder = builder;
+            this.builder = builder;
         }
 
         public AccessDatabase(string connectionString)
@@ -32,18 +42,18 @@ namespace ERHMS.Dapper
 
         public override bool Exists()
         {
-            return File.Exists(Builder.DataSource);
+            return File.Exists(builder.DataSource);
         }
 
         public override void Create()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(Builder.DataSource));
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Dapper.Databases.Empty.mdb", Builder.DataSource);
+            Directory.CreateDirectory(Path.GetDirectoryName(builder.DataSource));
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Dapper.Databases.Empty.mdb", builder.DataSource);
         }
 
         protected override IDbConnection GetConnectionInternal()
         {
-            return new OleDbConnection(Builder.ConnectionString);
+            return new OleDbConnection(builder.ConnectionString);
         }
     }
 }

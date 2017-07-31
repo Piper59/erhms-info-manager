@@ -1,6 +1,4 @@
-﻿using Epi.Collections;
-using Epi.Fields;
-using ERHMS.EpiInfo.Wrappers;
+﻿using ERHMS.EpiInfo.Wrappers;
 using NUnit.Framework;
 using System;
 using System.Windows.Forms;
@@ -11,7 +9,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 #if IGNORE_LONG_TESTS
     [TestFixture(Ignore = "IGNORE_LONG_TESTS")]
 #endif
-    public partial class EnterTest : WrapperTestBase
+    public partial class EnterTest : WrapperTest
     {
         private void FieldTest(View view, string name, object value)
         {

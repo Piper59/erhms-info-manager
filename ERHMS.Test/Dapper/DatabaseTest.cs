@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace ERHMS.Test.Dapper
 {
-    public abstract class DatabaseBaseTestBase
+    public abstract class DatabaseTest
     {
         protected IDatabase database;
 
@@ -106,7 +106,7 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class AccessDatabaseTest : DatabaseBaseTestBase
+    public class AccessDatabaseTest : DatabaseTest
     {
         private TempDirectory directory;
 
@@ -114,7 +114,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.Access.SetUp(nameof(AccessDatabaseTest), out directory, out builder);
+            EmptyDatabaseTest.Access.SetUp(nameof(AccessDatabaseTest), out directory, out builder);
             database = new AccessDatabase(builder);
             PostSetUp();
         }
@@ -126,13 +126,13 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class SqlServerDatabaseTest : DatabaseBaseTestBase
+    public class SqlServerDatabaseTest : DatabaseTest
     {
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.SqlServer.SetUp(out builder);
+            EmptyDatabaseTest.SqlServer.SetUp(out builder);
             database = new SqlServerDatabase(builder);
             PostSetUp();
         }
@@ -140,7 +140,7 @@ namespace ERHMS.Test.Dapper
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            EmptyDatabaseTestBase.SqlServer.TearDown();
+            EmptyDatabaseTest.SqlServer.TearDown();
         }
     }
 }

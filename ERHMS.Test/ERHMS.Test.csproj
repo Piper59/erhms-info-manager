@@ -129,8 +129,8 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Dapper\DatabaseBaseTest.cs" />
-    <Compile Include="Dapper\EmptyDatabaseTestBase.cs" />
+    <Compile Include="Dapper\DatabaseTest.cs" />
+    <Compile Include="Dapper\EmptyDatabaseTest.cs" />
     <Compile Include="Dapper\IDbConnectionExtensionsTest.cs" />
     <Compile Include="Dapper\LoggingConnectionTest.cs" />
     <Compile Include="Dapper\RepositoryTest.cs" />
@@ -141,7 +141,7 @@
     <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
-    <Compile Include="EpiInfo\SampleProjectTestBase.cs" />
+    <Compile Include="EpiInfo\SampleProjectTest.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
     <Compile Include="EpiInfo\Web\RecordTest.cs" />
     <Compile Include="EpiInfo\Web\ServiceTest.cs" />
@@ -155,7 +155,7 @@
     <Compile Include="EpiInfo\Wrappers\EnterTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\MakeViewTest.cs" />
     <Compile Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
-    <Compile Include="EpiInfo\Wrappers\WrapperTestBase.cs" />
+    <Compile Include="EpiInfo\Wrappers\WrapperTest.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
     <Compile Include="Infrastructure\Constant.cs" />
     <Compile Include="Infrastructure\Gender.cs" />

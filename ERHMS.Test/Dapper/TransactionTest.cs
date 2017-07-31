@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace ERHMS.Test.Dapper
 {
-    public abstract class TransactionTestBase
+    public abstract class TransactionTest
     {
         protected IDbConnection connection;
 
@@ -81,7 +81,7 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class OleDbTransactionTest : TransactionTestBase
+    public class OleDbTransactionTest : TransactionTest
     {
         private TempDirectory directory;
 
@@ -89,7 +89,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.Access.SetUp(nameof(OleDbTransactionTest), out directory, out builder);
+            EmptyDatabaseTest.Access.SetUp(nameof(OleDbTransactionTest), out directory, out builder);
             connection = new OleDbConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -102,13 +102,13 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class SqlTransactionTest : TransactionTestBase
+    public class SqlTransactionTest : TransactionTest
     {
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.SqlServer.SetUp(out builder);
+            EmptyDatabaseTest.SqlServer.SetUp(out builder);
             connection = new SqlConnection(builder.ConnectionString);
             PostSetUp();
         }
@@ -117,7 +117,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeTearDown()
         {
             PreTearDown();
-            EmptyDatabaseTestBase.SqlServer.TearDown();
+            EmptyDatabaseTest.SqlServer.TearDown();
         }
     }
 }

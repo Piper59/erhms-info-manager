@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 
 namespace ERHMS.Dapper
 {
-    public abstract class DatabaseBase : IDatabase
+    public abstract class Database : IDatabase
     {
         protected static string Escape(string identifier)
         {
             return IDbConnectionExtensions.Escape(identifier);
         }
+
+        public abstract DbConnectionStringBuilder Builder { get; }
+        public abstract string Name { get; }
 
         private Transaction transaction;
 

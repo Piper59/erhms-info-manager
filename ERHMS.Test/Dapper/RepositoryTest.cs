@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace ERHMS.Test.Dapper
 {
-    public abstract class RepositoryTestBase
+    public abstract class RepositoryTest
     {
         protected class DataContext
         {
@@ -164,7 +164,7 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class AccessRepositoryTest : RepositoryTestBase
+    public class AccessRepositoryTest : RepositoryTest
     {
         private TempDirectory directory;
 
@@ -172,7 +172,7 @@ namespace ERHMS.Test.Dapper
         public void OneTimeSetUp()
         {
             OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.Access.SetUp(nameof(AccessRepositoryTest), out directory, out builder);
+            EmptyDatabaseTest.Access.SetUp(nameof(AccessRepositoryTest), out directory, out builder);
             context = new DataContext(new AccessDatabase(builder));
             PostSetUp();
         }
@@ -184,13 +184,13 @@ namespace ERHMS.Test.Dapper
         }
     }
 
-    public class SqlServerRepositoryTest : RepositoryTestBase
+    public class SqlServerRepositoryTest : RepositoryTest
     {
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             SqlConnectionStringBuilder builder;
-            EmptyDatabaseTestBase.SqlServer.SetUp(out builder);
+            EmptyDatabaseTest.SqlServer.SetUp(out builder);
             context = new DataContext(new SqlServerDatabase(builder));
             PostSetUp();
         }
@@ -198,7 +198,7 @@ namespace ERHMS.Test.Dapper
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            EmptyDatabaseTestBase.SqlServer.TearDown();
+            EmptyDatabaseTest.SqlServer.TearDown();
         }
     }
 }

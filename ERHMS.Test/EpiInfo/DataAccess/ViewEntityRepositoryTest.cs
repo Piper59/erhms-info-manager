@@ -17,7 +17,7 @@ using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Test.EpiInfo.DataAccess
 {
-    public class ViewEntityRepositoryTest : SampleProjectTestBase
+    public class ViewEntityRepositoryTest : SampleProjectTest
     {
         private class DataContext : DataContextBase
         {
