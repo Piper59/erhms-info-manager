@@ -4,7 +4,6 @@ using ERHMS.EpiInfo.Wrappers;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -20,11 +19,7 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(Responder), ref responder, value); }
         }
 
-        private RelayCommand continueCommand;
-        public ICommand ContinueCommand
-        {
-            get { return continueCommand ?? (continueCommand = new RelayCommand(Continue)); }
-        }
+        public RelayCommand ContinueCommand { get; private set; }
 
         public PrepopulateViewModel(IServiceManager services, View view)
             : base(services)
@@ -41,6 +36,7 @@ namespace ERHMS.Presentation.ViewModels
                 responders = Context.Rosters.SelectUndeletedByIncidentId(view.Incident.IncidentId).Select(roster => roster.Responder);
             }
             Responders = responders.OrderBy(responder => responder.FullName).ToList();
+            ContinueCommand = new RelayCommand(Continue);
         }
 
         public void Continue()

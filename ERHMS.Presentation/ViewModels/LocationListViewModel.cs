@@ -3,7 +3,6 @@ using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -11,35 +10,24 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
 
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
-        }
-
-        private RelayCommand editCommand;
-        public ICommand EditCommand
-        {
-            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
-        }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand EditCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
 
         public LocationListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Locations";
             Incident = incident;
+            Refresh();
+            CreateCommand = new RelayCommand(Create);
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                editCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<Location> GetItems()

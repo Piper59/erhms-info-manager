@@ -3,7 +3,6 @@ using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -33,17 +32,8 @@ namespace ERHMS.Presentation.ViewModels
         public TEntity Entity { get; private set; }
         public IncidentListChildViewModel Incidents { get; private set; }
 
-        private RelayCommand linkCommand;
-        public ICommand LinkCommand
-        {
-            get { return linkCommand ?? (linkCommand = new RelayCommand(Link, Incidents.HasSelectedItem)); }
-        }
-
-        private RelayCommand unlinkCommand;
-        public ICommand UnlinkCommand
-        {
-            get { return unlinkCommand ?? (unlinkCommand = new RelayCommand(Unlink)); }
-        }
+        public RelayCommand LinkCommand { get; private set; }
+        public RelayCommand UnlinkCommand { get; private set; }
 
         protected LinkViewModel(IServiceManager services, TEntity entity)
             : base(services)
@@ -55,9 +45,11 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Incidents.Select(entity.Incident.IncidentId);
             }
+            LinkCommand = new RelayCommand(Link, Incidents.HasSelectedItem);
+            UnlinkCommand = new RelayCommand(Unlink);
             Incidents.SelectionChanged += (sender, e) =>
             {
-                linkCommand.RaiseCanExecuteChanged();
+                LinkCommand.RaiseCanExecuteChanged();
             };
         }
 

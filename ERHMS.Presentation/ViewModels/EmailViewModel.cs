@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Settings = ERHMS.Utility.Settings;
 using View = ERHMS.Domain.View;
 
@@ -127,35 +126,11 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        private RelayCommand addRecipientCommand;
-        public ICommand AddRecipientCommand
-        {
-            get { return addRecipientCommand ?? (addRecipientCommand = new RelayCommand(AddRecipient)); }
-        }
-
-        private RelayCommand<RecipientViewModel> removeRecipientCommand;
-        public ICommand RemoveRecipientCommand
-        {
-            get { return removeRecipientCommand ?? (removeRecipientCommand = new RelayCommand<RecipientViewModel>(RemoveRecipient)); }
-        }
-
-        private RelayCommand addAttachmentCommand;
-        public ICommand AddAttachmentCommand
-        {
-            get { return addAttachmentCommand ?? (addAttachmentCommand = new RelayCommand(AddAttachment)); }
-        }
-
-        private RelayCommand<string> removeAttachmentCommand;
-        public ICommand RemoveAttachmentCommand
-        {
-            get { return removeAttachmentCommand ?? (removeAttachmentCommand = new RelayCommand<string>(RemoveAttachment)); }
-        }
-
-        private RelayCommand sendCommand;
-        public ICommand SendCommand
-        {
-            get { return sendCommand ?? (sendCommand = new RelayCommand(Send)); }
-        }
+        public RelayCommand AddRecipientCommand { get; private set; }
+        public RelayCommand<RecipientViewModel> RemoveRecipientCommand { get; private set; }
+        public RelayCommand AddAttachmentCommand { get; private set; }
+        public RelayCommand<string> RemoveAttachmentCommand { get; private set; }
+        public RelayCommand SendCommand { get; private set; }
 
         public EmailViewModel(IServiceManager services, IEnumerable<Responder> recipients)
             : base(services)
@@ -171,13 +146,18 @@ namespace ERHMS.Presentation.ViewModels
             }
             Attachments = new ObservableCollection<string>();
             Views = new ViewListChildViewModel(services);
+            SetCanAppendUrl();
+            SetCanPrepopulate();
+            AddRecipientCommand = new RelayCommand(AddRecipient);
+            RemoveRecipientCommand = new RelayCommand<RecipientViewModel>(RemoveRecipient);
+            AddAttachmentCommand = new RelayCommand(AddAttachment);
+            RemoveAttachmentCommand = new RelayCommand<string>(RemoveAttachment);
+            SendCommand = new RelayCommand(Send);
             Views.SelectionChanged += (sender, e) =>
             {
                 SetCanAppendUrl();
                 SetCanPrepopulate();
             };
-            SetCanAppendUrl();
-            SetCanPrepopulate();
         }
 
         private void SetCanAppendUrl()

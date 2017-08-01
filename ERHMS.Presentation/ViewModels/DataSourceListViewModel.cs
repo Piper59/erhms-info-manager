@@ -6,7 +6,6 @@ using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
@@ -14,40 +13,25 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class DataSourceListViewModel : ListViewModel<ProjectInfo>
     {
-        private RelayCommand openCommand;
-        public ICommand OpenCommand
-        {
-            get { return openCommand ?? (openCommand = new RelayCommand(Open, HasSelectedItem)); }
-        }
-
-        private RelayCommand addNewCommand;
-        public ICommand AddNewCommand
-        {
-            get { return addNewCommand ?? (addNewCommand = new RelayCommand(AddNew)); }
-        }
-
-        private RelayCommand addExistingCommand;
-        public ICommand AddExistingCommand
-        {
-            get { return addExistingCommand ?? (addExistingCommand = new RelayCommand(AddExisting)); }
-        }
-
-        private RelayCommand removeCommand;
-        public ICommand RemoveCommand
-        {
-            get { return removeCommand ?? (removeCommand = new RelayCommand(Remove, HasSelectedItem)); }
-        }
+        public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand AddNewCommand { get; private set; }
+        public RelayCommand AddExistingCommand { get; private set; }
+        public RelayCommand RemoveCommand { get; private set; }
 
         public DataSourceListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Data Sources";
+            Refresh();
+            OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            AddNewCommand = new RelayCommand(AddNew);
+            AddExistingCommand = new RelayCommand(AddExisting);
+            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                openCommand.RaiseCanExecuteChanged();
-                removeCommand.RaiseCanExecuteChanged();
+                OpenCommand.RaiseCanExecuteChanged();
+                RemoveCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<ProjectInfo> GetItems()

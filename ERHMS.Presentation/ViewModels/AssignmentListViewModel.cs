@@ -4,7 +4,6 @@ using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -39,19 +38,16 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            private RelayCommand editCommand;
-            public ICommand EditCommand
-            {
-                get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
-            }
+            public RelayCommand EditCommand { get; private set; }
 
             public ResponderListChildViewModel(IServiceManager services, Incident incident)
                 : base(services)
             {
                 Incident = incident;
+                EditCommand = new RelayCommand(Edit, HasSelectedItem);
                 SelectionChanged += (sender, e) =>
                 {
-                    editCommand.RaiseCanExecuteChanged();
+                    EditCommand.RaiseCanExecuteChanged();
                 };
             }
 
@@ -90,23 +86,9 @@ namespace ERHMS.Presentation.ViewModels
         public ViewListChildViewModel Views { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
 
-        private RelayCommand addCommand;
-        public ICommand AddCommand
-        {
-            get { return addCommand ?? (addCommand = new RelayCommand(Add, CanAdd)); }
-        }
-
-        private RelayCommand removeCommand;
-        public ICommand RemoveCommand
-        {
-            get { return removeCommand ?? (removeCommand = new RelayCommand(Remove, HasSelectedItem)); }
-        }
-
-        private RelayCommand emailCommand;
-        public ICommand EmailCommand
-        {
-            get { return emailCommand ?? (emailCommand = new RelayCommand(Email, CanEmail)); }
-        }
+        public RelayCommand AddCommand { get; private set; }
+        public RelayCommand RemoveCommand { get; private set; }
+        public RelayCommand EmailCommand { get; private set; }
 
         public AssignmentListViewModel(IServiceManager services, Incident incident)
             : base(services)
@@ -114,21 +96,24 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Assignments";
             Incident = incident;
             Views = new ViewListChildViewModel(services, incident);
+            Responders = new ResponderListChildViewModel(services, incident);
+            Refresh();
+            AddCommand = new RelayCommand(Add, CanAdd);
+            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
+            EmailCommand = new RelayCommand(Email, CanEmail);
             Views.SelectionChanged += (sender, e) =>
             {
-                addCommand.RaiseCanExecuteChanged();
+                AddCommand.RaiseCanExecuteChanged();
             };
-            Responders = new ResponderListChildViewModel(services, incident);
             Responders.SelectionChanged += (sender, e) =>
             {
-                addCommand.RaiseCanExecuteChanged();
+                AddCommand.RaiseCanExecuteChanged();
             };
             SelectionChanged += (sender, e) =>
             {
-                removeCommand.RaiseCanExecuteChanged();
-                emailCommand.RaiseCanExecuteChanged();
+                RemoveCommand.RaiseCanExecuteChanged();
+                EmailCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         public bool CanAdd()

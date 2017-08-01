@@ -6,7 +6,6 @@ using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Presentation.ViewModels
@@ -39,7 +38,7 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         Log.Logger.DebugFormat("Activating tab: {0}", value);
                     }
-                    closeCommand.RaiseCanExecuteChanged();
+                    CloseCommand.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -53,119 +52,56 @@ namespace ERHMS.Presentation.ViewModels
             private set
             {
                 Services.Context = value;
-                showRespondersCommand.RaiseCanExecuteChanged();
-                showNewResponderCommand.RaiseCanExecuteChanged();
-                showIncidentsCommand.RaiseCanExecuteChanged();
-                showNewIncidentCommand.RaiseCanExecuteChanged();
-                showViewsCommand.RaiseCanExecuteChanged();
-                showTemplatesCommand.RaiseCanExecuteChanged();
-                showAssignmentsCommand.RaiseCanExecuteChanged();
-                showPgmsCommand.RaiseCanExecuteChanged();
-                showCanvasesCommand.RaiseCanExecuteChanged();
+                ShowRespondersCommand.RaiseCanExecuteChanged();
+                ShowNewResponderCommand.RaiseCanExecuteChanged();
+                ShowIncidentsCommand.RaiseCanExecuteChanged();
+                ShowNewIncidentCommand.RaiseCanExecuteChanged();
+                ShowViewsCommand.RaiseCanExecuteChanged();
+                ShowTemplatesCommand.RaiseCanExecuteChanged();
+                ShowAssignmentsCommand.RaiseCanExecuteChanged();
+                ShowPgmsCommand.RaiseCanExecuteChanged();
+                ShowCanvasesCommand.RaiseCanExecuteChanged();
             }
         }
 
-        private RelayCommand showDataSourcesCommand;
-        public ICommand ShowDataSourcesCommand
-        {
-            get { return showDataSourcesCommand ?? (showDataSourcesCommand = new RelayCommand(ShowDataSources)); }
-        }
-
-        private RelayCommand showRespondersCommand;
-        public ICommand ShowRespondersCommand
-        {
-            get { return showRespondersCommand ?? (showRespondersCommand = new RelayCommand(ShowResponders, HasContext)); }
-        }
-
-        private RelayCommand showNewResponderCommand;
-        public ICommand ShowNewResponderCommand
-        {
-            get { return showNewResponderCommand ?? (showNewResponderCommand = new RelayCommand(ShowNewResponder, HasContext)); }
-        }
-
-        private RelayCommand showIncidentsCommand;
-        public ICommand ShowIncidentsCommand
-        {
-            get { return showIncidentsCommand ?? (showIncidentsCommand = new RelayCommand(ShowIncidents, HasContext)); }
-        }
-
-        private RelayCommand showNewIncidentCommand;
-        public ICommand ShowNewIncidentCommand
-        {
-            get { return showNewIncidentCommand ?? (showNewIncidentCommand = new RelayCommand(ShowNewIncident, HasContext)); }
-        }
-
-        private RelayCommand showViewsCommand;
-        public ICommand ShowViewsCommand
-        {
-            get { return showViewsCommand ?? (showViewsCommand = new RelayCommand(ShowViews, HasContext)); }
-        }
-
-        private RelayCommand showTemplatesCommand;
-        public ICommand ShowTemplatesCommand
-        {
-            get { return showTemplatesCommand ?? (showTemplatesCommand = new RelayCommand(ShowTemplates, HasContext)); }
-        }
-
-        private RelayCommand showAssignmentsCommand;
-        public ICommand ShowAssignmentsCommand
-        {
-            get { return showAssignmentsCommand ?? (showAssignmentsCommand = new RelayCommand(ShowAssignments, HasContext)); }
-        }
-
-        private RelayCommand showPgmsCommand;
-        public ICommand ShowPgmsCommand
-        {
-            get { return showPgmsCommand ?? (showPgmsCommand = new RelayCommand(ShowPgms, HasContext)); }
-        }
-
-        private RelayCommand showCanvasesCommand;
-        public ICommand ShowCanvasesCommand
-        {
-            get { return showCanvasesCommand ?? (showCanvasesCommand = new RelayCommand(ShowCanvases, HasContext)); }
-        }
-
-        private RelayCommand showSettingsCommand;
-        public ICommand ShowSettingsCommand
-        {
-            get { return showSettingsCommand ?? (showSettingsCommand = new RelayCommand(ShowSettings)); }
-        }
-
-        private RelayCommand showLogsCommand;
-        public ICommand ShowLogsCommand
-        {
-            get { return showLogsCommand ?? (showLogsCommand = new RelayCommand(ShowLogs)); }
-        }
-
-        private RelayCommand showHelpCommand;
-        public ICommand ShowHelpCommand
-        {
-            get { return showHelpCommand ?? (showHelpCommand = new RelayCommand(ShowHelp)); }
-        }
-
-        private RelayCommand showAboutCommand;
-        public ICommand ShowAboutCommand
-        {
-            get { return showAboutCommand ?? (showAboutCommand = new RelayCommand(ShowAbout)); }
-        }
-
-        private RelayCommand closeCommand;
-        public ICommand CloseCommand
-        {
-            get { return closeCommand ?? (closeCommand = new RelayCommand(Close, HasActiveDocument)); }
-        }
-
-        private RelayCommand exitCommand;
-        public ICommand ExitCommand
-        {
-            get { return exitCommand ?? (exitCommand = new RelayCommand(Exit)); }
-        }
+        public RelayCommand ShowDataSourcesCommand { get; private set; }
+        public RelayCommand ShowRespondersCommand { get; private set; }
+        public RelayCommand ShowNewResponderCommand { get; private set; }
+        public RelayCommand ShowIncidentsCommand { get; private set; }
+        public RelayCommand ShowNewIncidentCommand { get; private set; }
+        public RelayCommand ShowViewsCommand { get; private set; }
+        public RelayCommand ShowTemplatesCommand { get; private set; }
+        public RelayCommand ShowAssignmentsCommand { get; private set; }
+        public RelayCommand ShowPgmsCommand { get; private set; }
+        public RelayCommand ShowCanvasesCommand { get; private set; }
+        public RelayCommand ShowSettingsCommand { get; private set; }
+        public RelayCommand ShowLogsCommand { get; private set; }
+        public RelayCommand ShowHelpCommand { get; private set; }
+        public RelayCommand ShowAboutCommand { get; private set; }
+        public RelayCommand CloseCommand { get; private set; }
+        public RelayCommand ExitCommand { get; private set; }
 
         public MainViewModel(IServiceManager services)
         {
             Services = services;
             Title = App.Title;
             Documents = new ObservableCollection<ViewModelBase>();
+            ShowDataSourcesCommand = new RelayCommand(ShowDataSources);
+            ShowRespondersCommand = new RelayCommand(ShowResponders, HasContext);
+            ShowNewResponderCommand = new RelayCommand(ShowNewResponder, HasContext);
+            ShowIncidentsCommand = new RelayCommand(ShowIncidents, HasContext);
+            ShowNewIncidentCommand = new RelayCommand(ShowNewIncident, HasContext);
+            ShowViewsCommand = new RelayCommand(ShowViews, HasContext);
+            ShowTemplatesCommand = new RelayCommand(ShowTemplates, HasContext);
+            ShowAssignmentsCommand = new RelayCommand(ShowAssignments, HasContext);
+            ShowPgmsCommand = new RelayCommand(ShowPgms, HasContext);
+            ShowCanvasesCommand = new RelayCommand(ShowCanvases, HasContext);
+            ShowSettingsCommand = new RelayCommand(ShowSettings);
+            ShowLogsCommand = new RelayCommand(ShowLogs);
+            ShowHelpCommand = new RelayCommand(ShowHelp);
+            ShowAboutCommand = new RelayCommand(ShowAbout);
+            CloseCommand = new RelayCommand(Close, HasActiveDocument);
+            ExitCommand = new RelayCommand(Exit);
         }
 
         public bool HasActiveDocument()

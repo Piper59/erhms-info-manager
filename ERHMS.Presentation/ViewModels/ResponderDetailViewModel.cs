@@ -5,7 +5,6 @@ using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -17,22 +16,19 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<string> Genders { get; private set; }
         public ICollection<string> States { get; private set; }
 
-        private RelayCommand saveCommand;
-        public ICommand SaveCommand
-        {
-            get { return saveCommand ?? (saveCommand = new RelayCommand(Save)); }
-        }
+        public RelayCommand SaveCommand { get; private set; }
 
         public ResponderDetailViewModel(IServiceManager services, Responder responder)
             : base(services)
         {
             Title = responder.New ? "New Responder" : responder.FullName;
             Responder = responder;
-            AddDirtyCheck(responder);
             Prefixes = Context.Prefixes.ToList();
             Suffixes = Context.Suffixes.ToList();
             Genders = Context.Genders.ToList();
             States = Context.States.ToList();
+            SaveCommand = new RelayCommand(Save);
+            AddDirtyCheck(responder);
         }
 
         private bool Validate()

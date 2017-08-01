@@ -4,7 +4,6 @@ using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -12,36 +11,25 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
 
-        private RelayCommand openCommand;
-        public ICommand OpenCommand
-        {
-            get { return openCommand ?? (openCommand = new RelayCommand(Open, HasSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
-        }
-
-        private RelayCommand linkCommand;
-        public ICommand LinkCommand
-        {
-            get { return linkCommand ?? (linkCommand = new RelayCommand(Link, HasSelectedItem)); }
-        }
+        public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand LinkCommand { get; private set; }
 
         public CanvasListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Dashboards";
             Incident = incident;
+            Refresh();
+            OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
+            LinkCommand = new RelayCommand(Link, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                openCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
-                linkCommand.RaiseCanExecuteChanged();
+                OpenCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                LinkCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<Canvas> GetItems()

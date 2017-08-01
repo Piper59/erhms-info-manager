@@ -3,7 +3,6 @@ using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -13,19 +12,16 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            private RelayCommand editCommand;
-            public ICommand EditCommand
-            {
-                get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
-            }
+            public RelayCommand EditCommand { get; private set; }
 
             public ResponderListChildViewModel(IServiceManager services, Incident incident)
                 : base(services)
             {
                 Incident = incident;
+                EditCommand = new RelayCommand(Edit, HasSelectedItem);
                 SelectionChanged += (sender, e) =>
                 {
-                    editCommand.RaiseCanExecuteChanged();
+                    EditCommand.RaiseCanExecuteChanged();
                 };
             }
 
@@ -54,46 +50,31 @@ namespace ERHMS.Presentation.ViewModels
         public Incident Incident { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
 
-        private RelayCommand addCommand;
-        public ICommand AddCommand
-        {
-            get { return addCommand ?? (addCommand = new RelayCommand(Add, Responders.HasSelectedItem)); }
-        }
-
-        private RelayCommand removeCommand;
-        public ICommand RemoveCommand
-        {
-            get { return removeCommand ?? (removeCommand = new RelayCommand(Remove, HasSelectedItem)); }
-        }
-
-        private RelayCommand editCommand;
-        public ICommand EditCommand
-        {
-            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
-        }
-
-        private RelayCommand emailCommand;
-        public ICommand EmailCommand
-        {
-            get { return emailCommand ?? (emailCommand = new RelayCommand(Email, HasSelectedItem)); }
-        }
+        public RelayCommand AddCommand { get; private set; }
+        public RelayCommand RemoveCommand { get; private set; }
+        public RelayCommand EditCommand { get; private set; }
+        public RelayCommand EmailCommand { get; private set; }
 
         public RosterListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Incident = incident;
             Responders = new ResponderListChildViewModel(services, incident);
+            Refresh();
+            AddCommand = new RelayCommand(Add, Responders.HasSelectedItem);
+            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
+            EmailCommand = new RelayCommand(Email, HasSelectedItem);
             Responders.SelectionChanged += (sender, e) =>
             {
-                addCommand.RaiseCanExecuteChanged();
+                AddCommand.RaiseCanExecuteChanged();
             };
             SelectionChanged += (sender, e) =>
             {
-                removeCommand.RaiseCanExecuteChanged();
-                editCommand.RaiseCanExecuteChanged();
-                emailCommand.RaiseCanExecuteChanged();
+                RemoveCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
+                EmailCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<Roster> GetItems()

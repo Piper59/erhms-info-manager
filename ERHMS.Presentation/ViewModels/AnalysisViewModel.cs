@@ -1,6 +1,5 @@
 ﻿using ERHMS.Domain;
 using GalaSoft.MvvmLight.Command;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -19,21 +18,18 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Set(nameof(Name), ref name, value))
                 {
-                    createCommand.RaiseCanExecuteChanged();
+                    CreateCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create, HasName)); }
-        }
+        public RelayCommand CreateCommand { get; private set; }
 
         protected AnalysisViewModel(IServiceManager services, View view)
             : base(services)
         {
             View = view;
+            CreateCommand = new RelayCommand(Create, HasName);
         }
 
         public bool HasName()

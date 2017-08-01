@@ -1,7 +1,6 @@
 ﻿using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System.Reflection;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -11,11 +10,7 @@ namespace ERHMS.Presentation.ViewModels
         public string Version { get; private set; }
         public string BuildDate { get; private set; }
 
-        private RelayCommand printCommand;
-        public ICommand PrintCommand
-        {
-            get { return printCommand ?? (printCommand = new RelayCommand(Print)); }
-        }
+        public RelayCommand PrintCommand { get; private set; }
 
         public AboutViewModel(IServiceManager services)
             : base(services)
@@ -25,6 +20,7 @@ namespace ERHMS.Presentation.ViewModels
             Assembly assembly = Assembly.GetExecutingAssembly();
             Version = assembly.GetName().Version.ToString();
             BuildDate = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            PrintCommand = new RelayCommand(Print);
         }
 
         public void Print()

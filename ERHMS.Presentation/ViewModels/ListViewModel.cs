@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace ERHMS.Presentation.ViewModels
@@ -75,11 +74,7 @@ namespace ERHMS.Presentation.ViewModels
             get { yield return typeof(T); }
         }
 
-        private RelayCommand refreshCommand;
-        public ICommand RefreshCommand
-        {
-            get { return refreshCommand ?? (refreshCommand = new RelayCommand(Refresh, CanRefresh)); }
-        }
+        public RelayCommand RefreshCommand { get; private set; }
 
         protected ListViewModel(IServiceManager services)
             : base(services)
@@ -99,6 +94,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 OnSelectionChanged();
             };
+            RefreshCommand = new RelayCommand(Refresh, CanRefresh);
             MessengerInstance.Register<RefreshMessage>(this, msg =>
             {
                 if (RefreshTypes.Contains(msg.Type))

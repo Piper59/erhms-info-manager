@@ -7,7 +7,6 @@ using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -44,11 +43,7 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(Survey), ref survey, value); }
         }
 
-        private RelayCommand publishCommand;
-        public ICommand PublishCommand
-        {
-            get { return publishCommand ?? (publishCommand = new RelayCommand(Publish)); }
-        }
+        public RelayCommand PublishCommand { get; private set; }
 
         public SurveyViewModel(IServiceManager services, Epi.View view)
             : base(services)
@@ -58,6 +53,7 @@ namespace ERHMS.Presentation.ViewModels
             ResponseTypes = EnumExtensions.GetValues<ResponseType>()
                 .Where(responseType => responseType != ResponseType.Unspecified)
                 .ToList();
+            PublishCommand = new RelayCommand(Publish);
         }
 
         public void Open()

@@ -11,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
@@ -140,17 +139,8 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(OrganizationKey), ref organizationKey, value); }
         }
 
-        private RelayCommand browseCommand;
-        public ICommand BrowseCommand
-        {
-            get { return browseCommand ?? (browseCommand = new RelayCommand(Browse)); }
-        }
-
-        private RelayCommand saveCommand;
-        public ICommand SaveCommand
-        {
-            get { return saveCommand ?? (saveCommand = new RelayCommand(Save)); }
-        }
+        public RelayCommand BrowseCommand { get; private set; }
+        public RelayCommand SaveCommand { get; private set; }
 
         public SettingsViewModel(IServiceManager services)
             : base(services)
@@ -172,6 +162,8 @@ namespace ERHMS.Presentation.ViewModels
             OrganizationName = Settings.Default.OrganizationName;
             OrganizationKey = ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey);
             Dirty = false;
+            BrowseCommand = new RelayCommand(Browse);
+            SaveCommand = new RelayCommand(Save);
         }
 
         public void Browse()

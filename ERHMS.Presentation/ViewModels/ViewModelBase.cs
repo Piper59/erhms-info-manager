@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -48,15 +47,12 @@ namespace ERHMS.Presentation.ViewModels
             protected set { Set(nameof(Dirty), ref dirty, value); }
         }
 
-        private RelayCommand closeCommand;
-        public ICommand CloseCommand
-        {
-            get { return closeCommand ?? (closeCommand = new RelayCommand(Close, CanClose)); }
-        }
+        public RelayCommand CloseCommand { get; private set; }
 
         protected ViewModelBase(IServiceManager services)
         {
             Services = services;
+            CloseCommand = new RelayCommand(Close, CanClose);
             PropertyChanged += (sender, e) =>
             {
                 if (GetType().GetProperty(e.PropertyName).HasCustomAttribute<DirtyCheckAttribute>())

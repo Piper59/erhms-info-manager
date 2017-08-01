@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
@@ -42,6 +41,7 @@ namespace ERHMS.Presentation.ViewModels
                 return false;
             }
         }
+
 
         private string name;
         public string Name
@@ -126,18 +126,8 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(Password), ref password, value); }
         }
 
-        private RelayCommand browseCommand;
-        public ICommand BrowseCommand
-        {
-            get { return browseCommand ?? (browseCommand = new RelayCommand(Browse)); }
-        }
-
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
-        }
-
+        public RelayCommand BrowseCommand { get; private set; }
+        public RelayCommand CreateCommand { get; private set; }
         public DataSourceViewModel(IServiceManager services)
             : base(services)
         {
@@ -149,6 +139,8 @@ namespace ERHMS.Presentation.ViewModels
                 DbProvider.SqlServer
             };
             Provider = DbProvider.Access;
+            BrowseCommand = new RelayCommand(Browse);
+            CreateCommand = new RelayCommand(Create);
         }
 
         private bool Validate()

@@ -6,7 +6,6 @@ using Microsoft.Maps.MapControl.WPF;
 using Microsoft.Maps.MapControl.WPF.Core;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using Coordinates = Microsoft.Maps.MapControl.WPF.Location;
 using Location = ERHMS.Domain.Location;
 
@@ -52,77 +51,29 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Set(nameof(ZoomLevel), ref zoomLevel, value))
                 {
-                    zoomInCommand.RaiseCanExecuteChanged();
-                    zoomOutCommand.RaiseCanExecuteChanged();
+                    ZoomInCommand.RaiseCanExecuteChanged();
+                    ZoomOutCommand.RaiseCanExecuteChanged();
+                    CenterAndZoomInCommand.RaiseCanExecuteChanged();
+                    CenterAndZoomOutCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
         public ObservableCollection<Coordinates> Pins { get; private set; }
 
-        private RelayCommand locateCommand;
-        public ICommand LocateCommand
-        {
-            get { return locateCommand ?? (locateCommand = new RelayCommand(Locate, HasAddress)); }
-        }
-
-        private RelayCommand dropPinCommand;
-        public ICommand DropPinCommand
-        {
-            get { return dropPinCommand ?? (dropPinCommand = new RelayCommand(DropPin)); }
-        }
-
-        private RelayCommand zoomInCommand;
-        public ICommand ZoomInCommand
-        {
-            get { return zoomInCommand ?? (zoomInCommand = new RelayCommand(ZoomIn, CanZoomIn)); }
-        }
-
-        private RelayCommand zoomOutCommand;
-        public ICommand ZoomOutCommand
-        {
-            get { return zoomOutCommand ?? (zoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut)); }
-        }
-
-        private RelayCommand centerAndZoomInCommand;
-        public ICommand CenterAndZoomInCommand
-        {
-            get { return centerAndZoomInCommand ?? (centerAndZoomInCommand = new RelayCommand(CenterAndZoomIn, CanZoomIn)); }
-        }
-
-        private RelayCommand centerAndZoomOutCommand;
-        public ICommand CenterAndZoomOutCommand
-        {
-            get { return centerAndZoomOutCommand ?? (centerAndZoomOutCommand = new RelayCommand(CenterAndZoomOut, CanZoomOut)); }
-        }
-
-        private RelayCommand saveCommand;
-        public ICommand SaveCommand
-        {
-            get { return saveCommand ?? (saveCommand = new RelayCommand(Save)); }
-        }
+        public RelayCommand LocateCommand { get; private set; }
+        public RelayCommand DropPinCommand { get; private set; }
+        public RelayCommand ZoomInCommand { get; private set; }
+        public RelayCommand ZoomOutCommand { get; private set; }
+        public RelayCommand CenterAndZoomInCommand { get; private set; }
+        public RelayCommand CenterAndZoomOutCommand { get; private set; }
+        public RelayCommand SaveCommand { get; private set; }
 
         public LocationDetailViewModel(IServiceManager services, Location location)
             : base(services)
         {
             Title = location.New ? "New Location" : location.Name;
             Location = location;
-            AddDirtyCheck(location);
-            location.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(Location.Address))
-                {
-                    locateCommand.RaiseCanExecuteChanged();
-                }
-                else if (e.PropertyName == nameof(Location.Latitude) || e.PropertyName == nameof(Location.Longitude))
-                {
-                    Pins.Clear();
-                    if (HasCoordinates())
-                    {
-                        Pins.Add(GetCoordinates());
-                    }
-                }
-            };
             CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapApplicationId);
             Pins = new ObservableCollection<Coordinates>();
             if (HasCoordinates())
@@ -136,6 +87,28 @@ namespace ERHMS.Presentation.ViewModels
             {
                 LoadState();
             }
+            LocateCommand = new RelayCommand(Locate, HasAddress);
+            DropPinCommand = new RelayCommand(DropPin);
+            ZoomInCommand = new RelayCommand(ZoomIn, CanZoomIn);
+            ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
+            CenterAndZoomInCommand = new RelayCommand(CenterAndZoomIn, CanZoomIn);
+            CenterAndZoomOutCommand = new RelayCommand(CenterAndZoomOut, CanZoomOut);
+            AddDirtyCheck(location);
+            location.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(Location.Address))
+                {
+                    LocateCommand.RaiseCanExecuteChanged();
+                }
+                else if (e.PropertyName == nameof(Location.Latitude) || e.PropertyName == nameof(Location.Longitude))
+                {
+                    Pins.Clear();
+                    if (HasCoordinates())
+                    {
+                        Pins.Add(GetCoordinates());
+                    }
+                }
+            };
         }
 
         public void SaveState()

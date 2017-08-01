@@ -6,7 +6,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -36,29 +35,22 @@ namespace ERHMS.Presentation.ViewModels
 
         public Incident Incident { get; private set; }
 
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create, HasSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
-        }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
 
         public TemplateListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Templates";
             Incident = incident;
+            Refresh();
+            CreateCommand = new RelayCommand(Create, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                createCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
+                CreateCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<TemplateInfo> GetItems()

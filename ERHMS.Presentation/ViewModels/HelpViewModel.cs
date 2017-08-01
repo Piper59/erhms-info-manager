@@ -1,51 +1,27 @@
 ﻿using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class HelpViewModel : ViewModelBase
     {
-        private RelayCommand showRespondersCommand;
-        public ICommand ShowRespondersCommand
-        {
-            get { return showRespondersCommand ?? (showRespondersCommand = new RelayCommand(ShowResponders)); }
-        }
-
-        private RelayCommand showIncidentsCommand;
-        public ICommand ShowIncidentsCommand
-        {
-            get { return showIncidentsCommand ?? (showIncidentsCommand = new RelayCommand(ShowIncidents)); }
-        }
-
-        private RelayCommand showViewsCommand;
-        public ICommand ShowViewsCommand
-        {
-            get { return showViewsCommand ?? (showViewsCommand = new RelayCommand(ShowViews)); }
-        }
-
-        private RelayCommand showTemplatesCommand;
-        public ICommand ShowTemplatesCommand
-        {
-            get { return showTemplatesCommand ?? (showTemplatesCommand = new RelayCommand(ShowTemplates)); }
-        }
-
-        private RelayCommand showPgmsCommand;
-        public ICommand ShowPgmsCommand
-        {
-            get { return showPgmsCommand ?? (showPgmsCommand = new RelayCommand(ShowPgms)); }
-        }
-
-        private RelayCommand showCanvasesCommand;
-        public ICommand ShowCanvasesCommand
-        {
-            get { return showCanvasesCommand ?? (showCanvasesCommand = new RelayCommand(ShowCanvases)); }
-        }
+        public RelayCommand ShowRespondersCommand { get; private set; }
+        public RelayCommand ShowIncidentsCommand { get; private set; }
+        public RelayCommand ShowViewsCommand { get; private set; }
+        public RelayCommand ShowTemplatesCommand { get; private set; }
+        public RelayCommand ShowPgmsCommand { get; private set; }
+        public RelayCommand ShowCanvasesCommand { get; private set; }
 
         public HelpViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Help";
+            ShowRespondersCommand = new RelayCommand(ShowResponders);
+            ShowIncidentsCommand = new RelayCommand(ShowIncidents);
+            ShowViewsCommand = new RelayCommand(ShowViews);
+            ShowTemplatesCommand = new RelayCommand(ShowTemplates);
+            ShowPgmsCommand = new RelayCommand(ShowPgms);
+            ShowCanvasesCommand = new RelayCommand(ShowCanvases);
         }
 
         private bool Validate()

@@ -5,7 +5,6 @@ using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -50,11 +49,7 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(EmailAddress), ref emailAddress, value); }
         }
 
-        private RelayCommand addCommand;
-        public ICommand AddCommand
-        {
-            get { return addCommand ?? (addCommand = new RelayCommand(Add)); }
-        }
+        public RelayCommand AddCommand { get; private set; }
 
         public RecipientViewModel(IServiceManager services, bool editable)
             : base(services)
@@ -65,6 +60,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 Responders = Context.Responders.SelectUndeleted().ToList();
             }
+            AddCommand = new RelayCommand(Add);
         }
 
         public event EventHandler Added;

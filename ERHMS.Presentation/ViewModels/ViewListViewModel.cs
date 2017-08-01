@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -21,140 +20,69 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
 
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create, HasSelectedItem)); }
-        }
-
-        private RelayCommand editCommand;
-        public ICommand EditCommand
-        {
-            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasNonSystemSelectedItem)); }
-        }
-
-        private RelayCommand linkCommand;
-        public ICommand LinkCommand
-        {
-            get { return linkCommand ?? (linkCommand = new RelayCommand(Link, HasNonSystemSelectedItem)); }
-        }
-
-        private RelayCommand enterDataCommand;
-        public ICommand EnterDataCommand
-        {
-            get { return enterDataCommand ?? (enterDataCommand = new RelayCommand(EnterData, HasSelectedItem)); }
-        }
-
-        private RelayCommand viewDataCommand;
-        public ICommand ViewDataCommand
-        {
-            get { return viewDataCommand ?? (viewDataCommand = new RelayCommand(ViewData, HasSelectedItem)); }
-        }
-
-        private RelayCommand publishToTemplateCommand;
-        public ICommand PublishToTemplateCommand
-        {
-            get { return publishToTemplateCommand ?? (publishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedItem)); }
-        }
-
-        private RelayCommand publishToWebCommand;
-        public ICommand PublishToWebCommand
-        {
-            get { return publishToWebCommand ?? (publishToWebCommand = new RelayCommand(PublishToWeb, HasSelectedItem)); }
-        }
-
-        private RelayCommand publishToMobileCommand;
-        public ICommand PublishToMobileCommand
-        {
-            get { return publishToMobileCommand ?? (publishToMobileCommand = new RelayCommand(PublishToMobile, HasSelectedItem)); }
-        }
-
-        private RelayCommand importFromProjectCommand;
-        public ICommand ImportFromProjectCommand
-        {
-            get { return importFromProjectCommand ?? (importFromProjectCommand = new RelayCommand(ImportFromProject, HasSelectedItem)); }
-        }
-
-        private RelayCommand importFromPackageCommand;
-        public ICommand ImportFromPackageCommand
-        {
-            get { return importFromPackageCommand ?? (importFromPackageCommand = new RelayCommand(ImportFromPackage, HasSelectedItem)); }
-        }
-
-        private RelayCommand importFromFileCommand;
-        public ICommand ImportFromFileCommand
-        {
-            get { return importFromFileCommand ?? (importFromFileCommand = new RelayCommand(ImportFromFile, HasSelectedItem)); }
-        }
-
-        private RelayCommand importFromWebCommand;
-        public ICommand ImportFromWebCommand
-        {
-            get { return importFromWebCommand ?? (importFromWebCommand = new RelayCommand(ImportFromWeb, HasSelectedItem)); }
-        }
-
-        private RelayCommand importFromMobileCommand;
-        public ICommand ImportFromMobileCommand
-        {
-            get { return importFromMobileCommand ?? (importFromMobileCommand = new RelayCommand(ImportFromMobile, HasSelectedItem)); }
-        }
-
-        private RelayCommand exportToPackageCommand;
-        public ICommand ExportToPackageCommand
-        {
-            get { return exportToPackageCommand ?? (exportToPackageCommand = new RelayCommand(ExportToPackage, HasSelectedItem)); }
-        }
-
-        private RelayCommand exportToFileCommand;
-        public ICommand ExportToFileCommand
-        {
-            get { return exportToFileCommand ?? (exportToFileCommand = new RelayCommand(ExportToFile, HasSelectedItem)); }
-        }
-
-        private RelayCommand analyzeClassicCommand;
-        public ICommand AnalyzeClassicCommand
-        {
-            get { return analyzeClassicCommand ?? (analyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasSelectedItem)); }
-        }
-
-        private RelayCommand analyzeVisualCommand;
-        public ICommand AnalyzeVisualCommand
-        {
-            get { return analyzeVisualCommand ?? (analyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasSelectedItem)); }
-        }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand EditCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand LinkCommand { get; private set; }
+        public RelayCommand EnterDataCommand { get; private set; }
+        public RelayCommand ViewDataCommand { get; private set; }
+        public RelayCommand PublishToTemplateCommand { get; private set; }
+        public RelayCommand PublishToWebCommand { get; private set; }
+        public RelayCommand PublishToMobileCommand { get; private set; }
+        public RelayCommand ImportFromProjectCommand { get; private set; }
+        public RelayCommand ImportFromPackageCommand { get; private set; }
+        public RelayCommand ImportFromFileCommand { get; private set; }
+        public RelayCommand ImportFromWebCommand { get; private set; }
+        public RelayCommand ImportFromMobileCommand { get; private set; }
+        public RelayCommand ExportToPackageCommand { get; private set; }
+        public RelayCommand ExportToFileCommand { get; private set; }
+        public RelayCommand AnalyzeClassicCommand { get; private set; }
+        public RelayCommand AnalyzeVisualCommand { get; private set; }
 
         public ViewListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Forms";
             Incident = incident;
+            CreateCommand = new RelayCommand(Create);
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasNonSystemSelectedItem);
+            LinkCommand = new RelayCommand(Link, HasNonSystemSelectedItem);
+            EnterDataCommand = new RelayCommand(EnterData, HasSelectedItem);
+            ViewDataCommand = new RelayCommand(ViewData, HasSelectedItem);
+            PublishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedItem);
+            PublishToWebCommand = new RelayCommand(PublishToWeb, HasSelectedItem);
+            PublishToMobileCommand = new RelayCommand(PublishToMobile, HasSelectedItem);
+            ImportFromProjectCommand = new RelayCommand(ImportFromProject, HasSelectedItem);
+            ImportFromPackageCommand = new RelayCommand(ImportFromPackage, HasSelectedItem);
+            ImportFromFileCommand = new RelayCommand(ImportFromFile, HasSelectedItem);
+            ImportFromWebCommand = new RelayCommand(ImportFromWeb, HasSelectedItem);
+            ImportFromMobileCommand = new RelayCommand(ImportFromMobile, HasSelectedItem);
+            ExportToPackageCommand = new RelayCommand(ExportToPackage, HasSelectedItem);
+            ExportToFileCommand = new RelayCommand(ExportToFile, HasSelectedItem);
+            AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasSelectedItem);
+            AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasSelectedItem);
+            Refresh();
             SelectionChanged += (sender, e) =>
             {
-                editCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
-                linkCommand.RaiseCanExecuteChanged();
-                enterDataCommand.RaiseCanExecuteChanged();
-                viewDataCommand.RaiseCanExecuteChanged();
-                publishToTemplateCommand.RaiseCanExecuteChanged();
-                publishToWebCommand.RaiseCanExecuteChanged();
-                publishToMobileCommand.RaiseCanExecuteChanged();
-                importFromProjectCommand.RaiseCanExecuteChanged();
-                importFromPackageCommand.RaiseCanExecuteChanged();
-                importFromFileCommand.RaiseCanExecuteChanged();
-                importFromWebCommand.RaiseCanExecuteChanged();
-                importFromMobileCommand.RaiseCanExecuteChanged();
-                exportToPackageCommand.RaiseCanExecuteChanged();
-                exportToFileCommand.RaiseCanExecuteChanged();
-                analyzeClassicCommand.RaiseCanExecuteChanged();
-                analyzeVisualCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                LinkCommand.RaiseCanExecuteChanged();
+                EnterDataCommand.RaiseCanExecuteChanged();
+                ViewDataCommand.RaiseCanExecuteChanged();
+                PublishToTemplateCommand.RaiseCanExecuteChanged();
+                PublishToWebCommand.RaiseCanExecuteChanged();
+                PublishToMobileCommand.RaiseCanExecuteChanged();
+                ImportFromProjectCommand.RaiseCanExecuteChanged();
+                ImportFromPackageCommand.RaiseCanExecuteChanged();
+                ImportFromFileCommand.RaiseCanExecuteChanged();
+                ImportFromWebCommand.RaiseCanExecuteChanged();
+                ImportFromMobileCommand.RaiseCanExecuteChanged();
+                ExportToPackageCommand.RaiseCanExecuteChanged();
+                ExportToFileCommand.RaiseCanExecuteChanged();
+                AnalyzeClassicCommand.RaiseCanExecuteChanged();
+                AnalyzeVisualCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         public bool HasNonSystemSelectedItem()

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -29,29 +28,10 @@ namespace ERHMS.Presentation.ViewModels
             get { yield break; }
         }
 
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
-        }
-
-        private RelayCommand editCommand;
-        public ICommand EditCommand
-        {
-            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSingleSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
-        }
-
-        private RelayCommand undeleteCommand;
-        public ICommand UndeleteCommand
-        {
-            get { return undeleteCommand ?? (undeleteCommand = new RelayCommand(Undelete, HasSelectedItem)); }
-        }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand EditCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand UndeleteCommand { get; private set; }
 
         public RecordListViewModel(IServiceManager services, View view)
             : base(services)
@@ -68,13 +48,17 @@ namespace ERHMS.Presentation.ViewModels
                     Binding = new Binding(field.Name)
                 })
                 .ToList();
+            Refresh();
+            CreateCommand = new RelayCommand(Create);
+            EditCommand = new RelayCommand(Edit, HasSingleSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
+            UndeleteCommand = new RelayCommand(Undelete, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                editCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
-                undeleteCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                UndeleteCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<ViewEntity> GetItems()

@@ -4,7 +4,6 @@ using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -13,19 +12,16 @@ namespace ERHMS.Presentation.ViewModels
         public Incident Incident { get; private set; }
         public ICollection<Phase> Phases { get; private set; }
 
-        private RelayCommand saveCommand;
-        public ICommand SaveCommand
-        {
-            get { return saveCommand ?? (saveCommand = new RelayCommand(Save)); }
-        }
+        public RelayCommand SaveCommand { get; private set; }
 
         public IncidentDetailViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = incident.New ? "New Incident" : incident.Name;
             Incident = incident;
-            AddDirtyCheck(incident);
             Phases = EnumExtensions.GetValues<Phase>().ToList();
+            SaveCommand = new RelayCommand(Save);
+            AddDirtyCheck(incident);
         }
 
         private bool Validate()

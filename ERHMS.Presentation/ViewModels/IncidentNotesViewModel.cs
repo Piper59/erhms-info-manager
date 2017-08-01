@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -20,19 +19,16 @@ namespace ERHMS.Presentation.ViewModels
             private set { Set(nameof(Note), ref note, value); }
         }
 
-        private RelayCommand saveCommand;
-        public ICommand SaveCommand
-        {
-            get { return saveCommand ?? (saveCommand = new RelayCommand(Save, HasContent)); }
-        }
+        public RelayCommand SaveCommand { get; private set; }
 
         public IncidentNotesViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Notes";
             Incident = incident;
-            Reset();
             Refresh();
+            SaveCommand = new RelayCommand(Save, HasContent);
+            Reset();
         }
 
         public bool HasContent()
@@ -64,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (e.PropertyName == nameof(IncidentNote.Content))
             {
-                saveCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
             }
         }
 

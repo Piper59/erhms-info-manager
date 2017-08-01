@@ -4,40 +4,28 @@ using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class IncidentListViewModel : ListViewModel<Incident>
     {
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
-        }
-
-        private RelayCommand openCommand;
-        public ICommand OpenCommand
-        {
-            get { return openCommand ?? (openCommand = new RelayCommand(Open, HasSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
-        }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
 
         public IncidentListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Incidents";
+            Refresh();
+            CreateCommand = new RelayCommand(Create);
+            OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                openCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
+                OpenCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<Incident> GetItems()

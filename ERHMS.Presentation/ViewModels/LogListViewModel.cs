@@ -10,41 +10,29 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class LogListViewModel : ListViewModel<FileInfo>
     {
-        private RelayCommand openCommand;
-        public ICommand OpenCommand
-        {
-            get { return openCommand ?? (openCommand = new RelayCommand(Open, HasSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
-        }
-
-        private RelayCommand packageCommand;
-        public ICommand PackageCommand
-        {
-            get { return packageCommand ?? (packageCommand = new RelayCommand(Package, HasSelectedItem)); }
-        }
+        public RelayCommand OpenCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand PackageCommand { get; private set; }
 
         public LogListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Logs";
+            Refresh();
+            OpenCommand = new RelayCommand(Open, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
+            PackageCommand = new RelayCommand(Package, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                openCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
-                packageCommand.RaiseCanExecuteChanged();
+                OpenCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                PackageCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<FileInfo> GetItems()

@@ -3,47 +3,31 @@ using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class ResponderListViewModel : ListViewModel<Responder>
     {
-        private RelayCommand createCommand;
-        public ICommand CreateCommand
-        {
-            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
-        }
-
-        private RelayCommand editCommand;
-        public ICommand EditCommand
-        {
-            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSingleSelectedItem)); }
-        }
-
-        private RelayCommand deleteCommand;
-        public ICommand DeleteCommand
-        {
-            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSingleSelectedItem)); }
-        }
-
-        private RelayCommand emailCommand;
-        public ICommand EmailCommand
-        {
-            get { return emailCommand ?? (emailCommand = new RelayCommand(Email, HasSelectedItem)); }
-        }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand EditCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand EmailCommand { get; private set; }
 
         public ResponderListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Responders";
+            Refresh();
+            CreateCommand = new RelayCommand(Create);
+            EditCommand = new RelayCommand(Edit, HasSingleSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSingleSelectedItem);
+            EmailCommand = new RelayCommand(Email, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
-                editCommand.RaiseCanExecuteChanged();
-                deleteCommand.RaiseCanExecuteChanged();
-                emailCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
+                DeleteCommand.RaiseCanExecuteChanged();
+                EmailCommand.RaiseCanExecuteChanged();
             };
-            Refresh();
         }
 
         protected override IEnumerable<Responder> GetItems()
