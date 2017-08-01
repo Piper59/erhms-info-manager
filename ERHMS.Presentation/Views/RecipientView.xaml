@@ -6,7 +6,7 @@
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
                                        Style="{StaticResource ChildWindow}"
-                                       Title="Add a Recipient">
+                                       Title="{Binding Title}">
     <MahApps.SimpleChildWindow:ChildWindow.Resources>
         <Converters:BooleanInverter x:Key="BooleanInverter" />
         <Converters:ResponderToFullNameAndEmailAddressConverter x:Key="ResponderToFullNameAndEmailAddressConverter" />
@@ -58,7 +58,7 @@
                                      Command="{Binding AddCommand}"
                                      Icon="{StaticResource appbar_add}" />
                 <Controls:IconButton AccessText="_Cancel"
-                                     Command="{Binding CancelCommand}"
+                                     Command="{Binding CloseCommand}"
                                      Icon="{StaticResource appbar_cancel}" />
             </WrapPanel>
         </Grid>

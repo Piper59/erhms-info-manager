@@ -26,11 +26,7 @@ namespace ERHMS.EpiInfo.Web
         {
             Log.Logger.Debug("Checking web configuration");
             Uri endpoint;
-            try
-            {
-                endpoint = new Uri(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress);
-            }
-            catch
+            if (!Uri.TryCreate(Configuration.GetNewInstance().Settings.WebServiceEndpointAddress, UriKind.Absolute, out endpoint))
             {
                 error = ConfigurationError.Address;
                 return false;
@@ -90,9 +86,9 @@ namespace ERHMS.EpiInfo.Web
             }
         }
 
-        public static Survey GetSurvey(View view)
+        public static Survey GetSurvey(string surveyId)
         {
-            Log.Logger.DebugFormat("Getting web survey: {0}", view.Name);
+            Log.Logger.DebugFormat("Getting web survey: {0}", surveyId);
             try
             {
                 using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
@@ -105,7 +101,7 @@ namespace ERHMS.EpiInfo.Web
                             SurveyType = ResponseTypeExtensions.EpiInfoValues.Forward(ResponseType.Unspecified),
                             SurveyIdList = new string[]
                             {
-                                view.WebSurveyId
+                                surveyId
                             }
                         }
                     };
@@ -267,9 +263,9 @@ namespace ERHMS.EpiInfo.Web
             }
         }
 
-        public static bool TryAddRecord(View view, Survey survey, Record record)
+        public static bool TryAddRecord(Survey survey, Record record)
         {
-            Log.Logger.DebugFormat("Adding web survey record: {0}", view.Name);
+            Log.Logger.DebugFormat("Adding web survey record: {0}", survey.SurveyId);
             try
             {
                 using (ManagerServiceV2Client client = ServiceClient.GetClientV2())

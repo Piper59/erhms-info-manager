@@ -1,6 +1,4 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -23,25 +21,27 @@ namespace ERHMS.Presentation.ViewModels
             protected set { base.Dirty = value; }
         }
 
-        public IncidentViewModel(Incident incident)
+        public IncidentViewModel(IServiceManager services, Incident incident)
+            : base(services)
         {
             Incident = incident;
-            Refresh();
-            Detail = new IncidentDetailViewModel(incident);
-            Notes = new IncidentNotesViewModel(incident);
-            Rosters = new RosterListViewModel(incident);
-            Locations = new LocationListViewModel(incident);
-            Views = new ViewListViewModel(incident);
-            Templates = new TemplateListViewModel(incident);
-            Assignments = new AssignmentListViewModel(incident);
-            Pgms = new PgmListViewModel(incident);
-            Canvases = new CanvasListViewModel(incident);
-            Messenger.Default.Register<RefreshMessage<Incident>>(this, msg => Refresh());
-        }
-
-        private void Refresh()
-        {
-            Title = Incident.New ? "New Incident" : Incident.Name;
+            Detail = new IncidentDetailViewModel(services, incident);
+            Notes = new IncidentNotesViewModel(services, incident);
+            Rosters = new RosterListViewModel(services, incident);
+            Locations = new LocationListViewModel(services, incident);
+            Views = new ViewListViewModel(services, incident);
+            Templates = new TemplateListViewModel(services, incident);
+            Assignments = new AssignmentListViewModel(services, incident);
+            Pgms = new PgmListViewModel(services, incident);
+            Canvases = new CanvasListViewModel(services, incident);
+            Title = Detail.Title;
+            Detail.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(Title))
+                {
+                    Title = Detail.Title;
+                }
+            };
         }
     }
 }

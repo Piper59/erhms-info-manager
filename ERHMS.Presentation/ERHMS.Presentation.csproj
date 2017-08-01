@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
     </Reference>
+    <Reference Include="EpiInfo.Plugin">
+      <HintPath>..\Epi Info 7\EpiInfo.Plugin.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19038, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
@@ -148,6 +151,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.Dapper\ERHMS.Dapper.csproj">
+      <Project>{db2a0170-d0e9-40b3-a270-d4a47f2f7fe7}</Project>
+      <Name>ERHMS.Dapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.DataAccess\ERHMS.DataAccess.csproj">
       <Project>{66fd6304-c5e0-4502-9ea2-dc326c470154}</Project>
       <Name>ERHMS.DataAccess</Name>
@@ -208,6 +215,7 @@
     <Compile Include="Behaviors\BindColumnsBehavior.cs" />
     <Compile Include="Behaviors\BindPasswordBehavior.cs" />
     <Compile Include="Behaviors\BindSelectedItemsBehavior.cs" />
+    <Compile Include="Behaviors\BridgeBindingBehavior.cs" />
     <Compile Include="Behaviors\ControlPageNavigationBehavior.cs" />
     <Compile Include="Behaviors\FixKeyboardCuesBehavior.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClickBehavior.cs" />
@@ -223,8 +231,8 @@
     <Compile Include="Controls\RemovableItemsControl.xaml.cs">
       <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\UserManualTabItem.xaml.cs">
-      <DependentUpon>UserManualTabItem.xaml</DependentUpon>
+    <Compile Include="Controls\UserGuideTabItem.xaml.cs">
+      <DependentUpon>UserGuideTabItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\WebHyperlink.cs" />
     <Compile Include="Controls\Win32Window.cs" />
@@ -232,8 +240,8 @@
     <Compile Include="Converters\BindingTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\BooleanInverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
-    <Compile Include="Converters\DataProviderToDescriptionConverter.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
+    <Compile Include="Converters\DbProviderToDescriptionConverter.cs" />
     <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
@@ -247,16 +255,24 @@
     <Compile Include="Converters\ResponderToFullNameConverter.cs" />
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />
     <Compile Include="Converters\ViewToWebSurveyUrlConverter.cs" />
+    <Compile Include="Dialogs\ErrorDialog.xaml.cs">
+      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\FileDialogExtensions.cs" />
     <Compile Include="Dialogs\LicenseDialog.xaml.cs">
       <DependentUpon>LicenseDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\RootDirectoryDialog.cs" />
+    <Compile Include="Dialogs\RootPathDialog.cs" />
     <Compile Include="Dialogs\WelcomeDialog.xaml.cs">
       <DependentUpon>WelcomeDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\DbProvider.cs" />
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
+    <Compile Include="Infrastructure\IDialogManager.cs" />
+    <Compile Include="Infrastructure\IDocumentManager.cs" />
+    <Compile Include="Infrastructure\IServiceManager.cs" />
     <Compile Include="Infrastructure\PrintExtensions.cs" />
+    <Compile Include="Infrastructure\ValidationError.cs" />
     <Compile Include="Infrastructure\WaitCursor.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -268,7 +284,7 @@
     <Compile Include="Messages\ConfirmMessage.cs" />
     <Compile Include="Messages\ExitMessage.cs" />
     <Compile Include="Messages\RefreshMessage.cs" />
-    <Compile Include="Messages\ShowMessage.cs" />
+    <Compile Include="Messages\ShutdownMessage.cs" />
     <Compile Include="Messages\ToastMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -281,20 +297,20 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AnalysisViewModel.cs" />
     <Compile Include="ViewModels\AssignmentListViewModel.cs" />
-    <Compile Include="ViewModels\AssignmentViewModel.cs" />
     <Compile Include="ViewModels\CanvasLinkViewModel.cs" />
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\CanvasViewModel.cs" />
     <Compile Include="ViewModels\DataSourceListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
+    <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\EmailViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
     <Compile Include="ViewModels\IncidentNotesViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
-    <Compile Include="ViewModels\LinkViewModelBase.cs" />
-    <Compile Include="ViewModels\ListViewModelBase.cs" />
+    <Compile Include="ViewModels\LinkViewModel.cs" />
+    <Compile Include="ViewModels\ListViewModel.cs" />
     <Compile Include="ViewModels\LocationDetailViewModel.cs" />
     <Compile Include="ViewModels\LocationListViewModel.cs" />
     <Compile Include="ViewModels\LogListViewModel.cs" />
@@ -308,7 +324,6 @@
     <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
     <Compile Include="ViewModels\RosterListViewModel.cs" />
-    <Compile Include="ViewModels\RosterViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SurveyViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
@@ -458,7 +473,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\UserManualTabItem.xaml">
+    <Page Include="Controls\UserGuideTabItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ErrorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

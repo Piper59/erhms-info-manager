@@ -94,30 +94,31 @@ namespace ERHMS.Test.EpiInfo.Web
             Assert.AreEqual("", project.GetViewById(view.Id).WebSurveyId);
             Assert.IsTrue(Service.Publish(view, survey));
             Assert.IsNotNull(survey.SurveyId);
+            Assert.AreEqual(survey.SurveyId, view.WebSurveyId);
             Assert.AreEqual(survey.SurveyId, project.GetViewById(view.Id).WebSurveyId);
-            Assert.IsTrue(Service.GetSurvey(view).Draft);
+            Assert.IsTrue(Service.GetSurvey(survey.SurveyId).Draft);
         }
 
         [Test]
         [Order(3)]
         public void RepublishTest()
         {
-            Survey survey = Service.GetSurvey(view);
+            Survey survey = Service.GetSurvey(view.WebSurveyId);
             survey.Draft = false;
             Assert.IsTrue(Service.Republish(view, survey));
-            Assert.IsFalse(Service.GetSurvey(view).Draft);
+            Assert.IsFalse(Service.GetSurvey(view.WebSurveyId).Draft);
         }
 
         [Test]
         [Order(4)]
         public void TryAddAndGetRecordsTest()
         {
-            Survey survey = Service.GetSurvey(view);
+            Survey survey = Service.GetSurvey(view.WebSurveyId);
             ICollection<string> ids = new List<string>();
             for (int index = 0; index < 3; index++)
             {
                 Record record = new Record();
-                Assert.IsTrue(Service.TryAddRecord(view, survey, record));
+                Assert.IsTrue(Service.TryAddRecord(survey, record));
                 ids.Add(record.GlobalRecordId);
             }
             CollectionAssert.AreEquivalent(ids, Service.GetRecords(survey).Select(record => record.GlobalRecordId));

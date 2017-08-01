@@ -5,7 +5,7 @@
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
                                        Style="{StaticResource ChildWindow}"
-                                       Title="Link to Incident">
+                                       Title="{Binding Title}">
     <Border Style="{StaticResource ChildWindowRoot}">
         <Grid>
             <Grid.RowDefinitions>
@@ -37,7 +37,7 @@
                                      Command="{Binding UnlinkCommand}"
                                      Icon="{StaticResource appbar_close}" />
                 <Controls:IconButton AccessText="_Cancel"
-                                     Command="{Binding CancelCommand}"
+                                     Command="{Binding CloseCommand}"
                                      Icon="{StaticResource appbar_cancel}" />
             </WrapPanel>
         </Grid>

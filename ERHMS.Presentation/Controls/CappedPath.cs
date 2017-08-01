@@ -66,8 +66,8 @@ namespace ERHMS.Presentation.Controls
 
         private void RenderLineCap(DrawingContext drawingContext, Pen pen, bool start)
         {
-            Geometry lineCap = start ? StrokeStartLineCap : StrokeEndLineCap;
-            if (lineCap == null)
+            Geometry cap = start ? StrokeStartLineCap : StrokeEndLineCap;
+            if (cap == null)
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace ERHMS.Presentation.Controls
             transforms.Children.Add(new RotateTransform(GetRotation(tangent, start)));
             transforms.Children.Add(new TranslateTransform(point.X, point.Y));
             drawingContext.PushTransform(transforms);
-            drawingContext.DrawGeometry(Stroke, pen, lineCap);
+            drawingContext.DrawGeometry(Stroke, pen, cap);
             drawingContext.Pop();
         }
 

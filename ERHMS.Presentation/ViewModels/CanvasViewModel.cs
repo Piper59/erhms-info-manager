@@ -1,49 +1,39 @@
-﻿using Epi;
-using ERHMS.Domain;
+﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class CanvasViewModel : AnalysisViewModel
     {
-        public CanvasViewModel(DeepLink<View> viewDeepLink)
-            : base(viewDeepLink)
+        public CanvasViewModel(IServiceManager services, View view)
+            : base(services, view)
         {
             Title = "Create a Dashboard";
         }
 
         public override void Create()
         {
-            Canvas canvas = new Canvas
+            EpiInfo.Canvas canvas = new EpiInfo.Canvas
             {
                 Name = Name,
-                Content = Canvas.GetContentForView(ViewDeepLink.Item)
+                Content = EpiInfo.Canvas.GetContentForView(Context.Project.FilePath, View.Name)
             };
-            DataContext.Project.InsertCanvas(canvas);
-            if (ViewDeepLink.Incident != null)
+            Context.Project.InsertCanvas(canvas);
+            if (View.Incident != null)
             {
-                CanvasLink canvasLink = DataContext.CanvasLinks.Create();
-                canvasLink.CanvasId = canvas.CanvasId;
-                canvasLink.IncidentId = ViewDeepLink.Incident.IncidentId;
-                DataContext.CanvasLinks.Save(canvasLink);
-            }
-            Messenger.Default.Send(new RefreshMessage<Canvas>());
-            DataContext.Project.CollectedData.EnsureDataTablesExist(ViewDeepLink.Item);
-            Wrapper wrapper = AnalysisDashboard.OpenCanvas.Create(DataContext.Project.FilePath, canvas.Content);
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == WrapperEventType.CanvasSaved)
+                CanvasLink canvasLink = new CanvasLink
                 {
-                    canvas.Content = e.Properties.Content;
-                    DataContext.Project.UpdateCanvas(canvas);
-                    Messenger.Default.Send(new RefreshMessage<Canvas>());
+                    CanvasId = canvas.CanvasId,
+                    IncidentId = View.Incident.IncidentId
                 };
-            };
-            wrapper.Invoke();
-            Active = false;
+                Context.CanvasLinks.Save(canvasLink);
+            }
+            MessengerInstance.Send(new RefreshMessage(typeof(Domain.Canvas)));
+            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
+            AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content).Invoke();
+            Close();
         }
     }
 }

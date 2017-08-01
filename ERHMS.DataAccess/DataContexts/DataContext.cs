@@ -4,6 +4,7 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
@@ -50,6 +51,13 @@ namespace ERHMS.DataAccess
             return context;
         }
 
+        public static TemplateInfo GetNewViewTemplate()
+        {
+            string path = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.DataAccess.Resources.View.xml", path);
+            return TemplateInfo.Get(path);
+        }
+
         public AssignmentRepository Assignments { get; private set; }
         public CanvasRepository Canvases { get; private set; }
         public CanvasLinkRepository CanvasLinks { get; private set; }
@@ -63,6 +71,26 @@ namespace ERHMS.DataAccess
         public ViewRepository Views { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
         public WebSurveyRepository WebSurveys { get; private set; }
+
+        public IEnumerable<string> Prefixes
+        {
+            get { return Project.GetCodes("codeprefix1", "prefix", false); }
+        }
+
+        public IEnumerable<string> Suffixes
+        {
+            get { return Project.GetCodes("codesuffix1", "suffix", false); }
+        }
+
+        public IEnumerable<string> Genders
+        {
+            get { return Project.GetCodes("codegender1", "gender", false); }
+        }
+
+        public IEnumerable<string> States
+        {
+            get { return Project.GetCodes("codestate1", "state", false); }
+        }
 
         public DataContext(Project project)
             : base(project)

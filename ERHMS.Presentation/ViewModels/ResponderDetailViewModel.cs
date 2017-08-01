@@ -1,12 +1,11 @@
 ﻿using ERHMS.Domain;
-using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -18,29 +17,22 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<string> Genders { get; private set; }
         public ICollection<string> States { get; private set; }
 
-        public RelayCommand SaveCommand { get; private set; }
-
-        public ResponderDetailViewModel(Responder responder)
+        private RelayCommand saveCommand;
+        public ICommand SaveCommand
         {
+            get { return saveCommand ?? (saveCommand = new RelayCommand(Save)); }
+        }
+
+        public ResponderDetailViewModel(IServiceManager services, Responder responder)
+            : base(services)
+        {
+            Title = responder.New ? "New Responder" : responder.FullName;
             Responder = responder;
             AddDirtyCheck(responder);
-            Refresh();
-            Prefixes = GetCodes(DataContext.Prefixes);
-            Suffixes = GetCodes(DataContext.Suffixes);
-            Genders = GetCodes(DataContext.Genders);
-            States = GetCodes(DataContext.States);
-            SaveCommand = new RelayCommand(Save);
-            Messenger.Default.Register<RefreshMessage<Responder>>(this, msg => Refresh());
-        }
-
-        private void Refresh()
-        {
-            Title = Responder.New ? "New Responder" : Responder.FullName;
-        }
-
-        private ICollection<string> GetCodes(CodeRepository codes)
-        {
-            return codes.Select().Prepend("").ToList();
+            Prefixes = Context.Prefixes.ToList();
+            Suffixes = Context.Suffixes.ToList();
+            Genders = Context.Genders.ToList();
+            States = Context.States.ToList();
         }
 
         private bool Validate()
@@ -60,37 +52,31 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowRequiredMessage(fields);
+                ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            else
+            if (Responder.BirthDate.HasValue && Responder.BirthDate.Value.Date > DateTime.Today)
             {
-                if (Responder.BirthDate.HasValue && Responder.BirthDate.Value.Date > DateTime.Today)
-                {
-                    fields.Add("Birth Date");
-                }
-                if (!MailExtensions.IsValidAddress(Responder.EmailAddress))
-                {
-                    fields.Add("Email Address");
-                }
-                if (!string.IsNullOrWhiteSpace(Responder.ContactEmailAddress) && !MailExtensions.IsValidAddress(Responder.ContactEmailAddress))
-                {
-                    fields.Add("Emergency Contact Email Address");
-                }
-                if (!string.IsNullOrWhiteSpace(Responder.OrganizationEmailAddress) && !MailExtensions.IsValidAddress(Responder.OrganizationEmailAddress))
-                {
-                    fields.Add("Organization Email Address");
-                }
-                if (fields.Count > 0)
-                {
-                    ShowInvalidMessage(fields);
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                fields.Add("Birth Date");
             }
+            if (!MailExtensions.IsValidAddress(Responder.EmailAddress))
+            {
+                fields.Add("Email Address");
+            }
+            if (!string.IsNullOrWhiteSpace(Responder.ContactEmailAddress) && !MailExtensions.IsValidAddress(Responder.ContactEmailAddress))
+            {
+                fields.Add("Emergency Contact Email Address");
+            }
+            if (!string.IsNullOrWhiteSpace(Responder.OrganizationEmailAddress) && !MailExtensions.IsValidAddress(Responder.OrganizationEmailAddress))
+            {
+                fields.Add("Organization Email Address");
+            }
+            if (fields.Count > 0)
+            {
+                ShowValidationMessage(ValidationError.Invalid, fields);
+                return false;
+            }
+            return true;
         }
 
         public void Save()
@@ -99,13 +85,14 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            DataContext.Responders.Save(Responder);
-            Dirty = false;
-            Messenger.Default.Send(new ToastMessage
+            Context.Responders.Save(Responder);
+            MessengerInstance.Send(new ToastMessage
             {
                 Message = "Responder has been saved."
             });
-            Messenger.Default.Send(new RefreshMessage<Responder>());
+            MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+            Title = Responder.FullName;
+            Dirty = false;
         }
     }
 }

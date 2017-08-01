@@ -2,10 +2,9 @@
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -14,19 +13,19 @@ namespace ERHMS.Presentation.ViewModels
         public Incident Incident { get; private set; }
         public ICollection<Phase> Phases { get; private set; }
 
-        public RelayCommand SaveCommand { get; private set; }
-
-        public IncidentDetailViewModel(Incident incident)
+        private RelayCommand saveCommand;
+        public ICommand SaveCommand
         {
+            get { return saveCommand ?? (saveCommand = new RelayCommand(Save)); }
+        }
+
+        public IncidentDetailViewModel(IServiceManager services, Incident incident)
+            : base(services)
+        {
+            Title = incident.New ? "New Incident" : incident.Name;
             Incident = incident;
             AddDirtyCheck(incident);
             Phases = EnumExtensions.GetValues<Phase>().ToList();
-            SaveCommand = new RelayCommand(Save);
-        }
-
-        private bool ValidateDates(DateTime? startDate, DateTime? endDate)
-        {
-            return !startDate.HasValue || !endDate.HasValue || endDate.Value >= startDate.Value;
         }
 
         private bool Validate()
@@ -38,29 +37,26 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowRequiredMessage(fields);
+                ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            else if (!ValidateDates(Incident.StartDate, Incident.EndDateEstimate))
+            if (!ValidateDateRange(Incident.StartDate, Incident.EndDateEstimate))
             {
-                Messenger.Default.Send(new AlertMessage
+                MessengerInstance.Send(new AlertMessage
                 {
                     Message = "Estimated end date must be later than start date."
                 });
                 return false;
             }
-            else if (!ValidateDates(Incident.StartDate, Incident.EndDateActual))
+            if (!ValidateDateRange(Incident.StartDate, Incident.EndDateActual))
             {
-                Messenger.Default.Send(new AlertMessage
+                MessengerInstance.Send(new AlertMessage
                 {
                     Message = "Actual end date must be later than start date."
                 });
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
         public void Save()
@@ -69,13 +65,14 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            DataContext.Incidents.Save(Incident);
-            Dirty = false;
-            Messenger.Default.Send(new ToastMessage
+            Context.Incidents.Save(Incident);
+            MessengerInstance.Send(new ToastMessage
             {
                 Message = "Incident has been saved."
             });
-            Messenger.Default.Send(new RefreshMessage<Incident>());
+            MessengerInstance.Send(new RefreshMessage(typeof(Incident)));
+            Title = Incident.Name;
+            Dirty = false;
         }
     }
 }

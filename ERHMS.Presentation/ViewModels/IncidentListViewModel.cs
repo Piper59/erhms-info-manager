@@ -2,38 +2,49 @@
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentListViewModel : ListViewModelBase<Incident>
+    public class IncidentListViewModel : ListViewModel<Incident>
     {
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand OpenCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        private RelayCommand createCommand;
+        public ICommand CreateCommand
+        {
+            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
+        }
 
-        public IncidentListViewModel()
+        private RelayCommand openCommand;
+        public ICommand OpenCommand
+        {
+            get { return openCommand ?? (openCommand = new RelayCommand(Open, HasSelectedItem)); }
+        }
+
+        private RelayCommand deleteCommand;
+        public ICommand DeleteCommand
+        {
+            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
+        }
+
+        public IncidentListViewModel(IServiceManager services)
+            : base(services)
         {
             Title = "Incidents";
-            Refresh();
-            CreateCommand = new RelayCommand(Create);
-            OpenCommand = new RelayCommand(Open, HasOneSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasOneSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            SelectedItemChanged += (sender, e) =>
+            SelectionChanged += (sender, e) =>
             {
-                OpenCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
+                openCommand.RaiseCanExecuteChanged();
+                deleteCommand.RaiseCanExecuteChanged();
             };
-            Messenger.Default.Register<RefreshMessage<Incident>>(this, msg => Refresh());
+            Refresh();
         }
 
         protected override IEnumerable<Incident> GetItems()
         {
-            return DataContext.Incidents.SelectUndeleted().OrderBy(incident => incident.Name);
+            return Context.Incidents.SelectUndeleted()
+                .OrderByDescending(incident => incident.StartDate)
+                .ThenBy(incident => incident.Name);
         }
 
         protected override IEnumerable<string> GetFilteredValues(Incident item)
@@ -49,12 +60,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Main.OpenIncidentView(DataContext.Incidents.Create());
+            Documents.ShowNewIncident();
         }
 
         public void Open()
         {
-            Main.OpenIncidentView((Incident)SelectedItem.Clone());
+            Documents.ShowIncident((Incident)SelectedItem.Clone());
         }
 
         public void Delete()
@@ -67,10 +78,10 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 SelectedItem.Deleted = true;
-                DataContext.Incidents.Save(SelectedItem);
-                Messenger.Default.Send(new RefreshMessage<Incident>());
+                Context.Incidents.Save(SelectedItem);
+                MessengerInstance.Send(new RefreshMessage(typeof(Incident)));
             };
-            Messenger.Default.Send(msg);
+            MessengerInstance.Send(msg);
         }
     }
 }

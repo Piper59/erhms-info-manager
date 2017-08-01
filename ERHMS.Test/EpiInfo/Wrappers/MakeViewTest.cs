@@ -82,7 +82,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 Assert.IsTrue(project.Views.Contains("ADDFull_2"));
                 Assert.AreEqual(1, events.Count);
                 Assert.AreEqual(WrapperEventType.ViewCreated, events[0].Type);
-                Assert.AreEqual(events[0].Properties.Id, project.Views["ADDFull_2"].Id);
+                Assert.AreEqual(events[0].Properties.ViewId, project.Views["ADDFull_2"].Id);
             }
             finally
             {

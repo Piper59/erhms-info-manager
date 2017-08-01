@@ -6,9 +6,10 @@ namespace ERHMS.EpiInfo
 {
     public static class CollectedDataProviderExtensions
     {
-        public static void EnsureDataTablesExist(this CollectedDataProvider @this, View view)
+        public static void EnsureDataTablesExist(this CollectedDataProvider @this, int viewId)
         {
-            Log.Logger.DebugFormat("Ensuring data tables exist: {0}", view.Name);
+            Log.Logger.DebugFormat("Ensuring data tables exist: {0}", viewId);
+            View view = @this.Project.Metadata.GetViewById(viewId);
             if (!@this.TableExists(view.TableName))
             {
                 @this.CreateDataTableForView(view, 1);

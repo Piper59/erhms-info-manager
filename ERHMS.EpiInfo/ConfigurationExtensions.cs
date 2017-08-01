@@ -39,7 +39,14 @@ namespace ERHMS.EpiInfo
             }
             else
             {
-                return Configuration.Decrypt(value);
+                try
+                {
+                    return Configuration.Decrypt(value);
+                }
+                catch (CryptographicException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -149,6 +156,11 @@ namespace ERHMS.EpiInfo
         {
             Log.Logger.DebugFormat("Setting user directories: {0}", userDirectoryPath);
             SetUserDirectories(@this.ConfigDataSet.Directories[0], userDirectoryPath);
+        }
+
+        public static string GetRootPath(this Configuration @this)
+        {
+            return new DirectoryInfo(@this.Directories.Project).Parent.FullName;
         }
     }
 }

@@ -26,7 +26,7 @@
                                        DataContext="{Binding}" />
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Item.Name}"
+                <DataGridTextColumn Binding="{Binding Name}"
                                     Header="Name"
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding Incident.Name}"

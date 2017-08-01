@@ -1,47 +1,39 @@
-﻿using Epi;
-using ERHMS.Domain;
+﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class PgmViewModel : AnalysisViewModel
     {
-        public PgmViewModel(DeepLink<View> viewDeepLink)
-            : base(viewDeepLink)
+        public PgmViewModel(IServiceManager services, View view)
+            : base(services, view)
         {
             Title = "Create an Analysis";
         }
 
         public override void Create()
         {
-            Pgm pgm = new Pgm
+            EpiInfo.Pgm pgm = new EpiInfo.Pgm
             {
                 Name = Name,
-                Content = Pgm.GetContentForView(ViewDeepLink.Item)
+                Content = EpiInfo.Pgm.GetContentForView(Context.Project.FilePath, View.Name)
             };
-            DataContext.Project.InsertPgm(pgm);
-            if (ViewDeepLink.Incident != null)
+            Context.Project.InsertPgm(pgm);
+            if (View.Incident != null)
             {
-                PgmLink pgmLink = DataContext.PgmLinks.Create();
-                pgmLink.PgmId = pgm.PgmId;
-                pgmLink.IncidentId = ViewDeepLink.Incident.IncidentId;
-                DataContext.PgmLinks.Save(pgmLink);
-            }
-            Messenger.Default.Send(new RefreshMessage<Pgm>());
-            DataContext.Project.CollectedData.EnsureDataTablesExist(ViewDeepLink.Item);
-            Wrapper wrapper = Analysis.OpenPgm.Create(DataContext.Project.FilePath, pgm.Name, pgm.Content, true);
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == WrapperEventType.PgmSaved)
+                PgmLink pgmLink = new PgmLink
                 {
-                    Messenger.Default.Send(new RefreshMessage<Pgm>());
-                }
-            };
-            wrapper.Invoke();
-            Active = false;
+                    PgmId = pgm.PgmId,
+                    IncidentId = View.Incident.IncidentId
+                };
+                Context.PgmLinks.Save(pgmLink);
+            }
+            MessengerInstance.Send(new RefreshMessage(typeof(Domain.Pgm)));
+            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
+            Analysis.OpenPgm.Create(pgm.Content, true).Invoke();
+            Close();
         }
     }
 }

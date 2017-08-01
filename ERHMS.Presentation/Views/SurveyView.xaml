@@ -8,7 +8,7 @@
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
                                        Style="{StaticResource ChildWindow}"
-                                       Title="Publish to Web">
+                                       Title="{Binding Title}">
     <MahApps.SimpleChildWindow:ChildWindow.Resources>
         <Converters:ResponseTypeToDescriptionConverter x:Key="ResponseTypeToDescriptionConverter" />
         <Converters:ViewToWebSurveyUrlConverter x:Key="ViewToWebSurveyUrlConverter" />
@@ -85,7 +85,7 @@
                                      Command="{Binding PublishCommand}"
                                      Icon="{StaticResource appbar_page_upload}" />
                 <Controls:IconButton AccessText="_Cancel"
-                                     Command="{Binding CancelCommand}"
+                                     Command="{Binding CloseCommand}"
                                      Icon="{StaticResource appbar_cancel}" />
             </WrapPanel>
         </Grid>

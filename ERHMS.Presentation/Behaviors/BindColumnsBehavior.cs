@@ -15,7 +15,7 @@ namespace ERHMS.Presentation.Behaviors
 
         private static void ColumnsProperty_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((BindColumnsBehavior)sender).OnColumnsChanged();
+            ((BindColumnsBehavior)sender).Push();
         }
 
         public ICollection<DataGridColumn> Columns
@@ -24,15 +24,20 @@ namespace ERHMS.Presentation.Behaviors
             set { SetValue(ColumnsProperty, value); }
         }
 
-        private void OnColumnsChanged()
+        private void Push()
         {
-            AssociatedObject.Columns.Clear();
-            if (Columns != null)
+            if (AssociatedObject?.Columns == null)
             {
-                foreach (DataGridColumn column in Columns)
-                {
-                    AssociatedObject.Columns.Add(column);
-                }
+                return;
+            }
+            AssociatedObject.Columns.Clear();
+            if (Columns == null)
+            {
+                return;
+            }
+            foreach (DataGridColumn column in Columns)
+            {
+                AssociatedObject.Columns.Add(column);
             }
         }
     }

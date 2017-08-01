@@ -1,80 +1,41 @@
-﻿using Epi;
-using ERHMS.Domain;
+﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class SurveyViewModel : ViewModelBase
+    public class SurveyViewModel : DialogViewModel
     {
-        private static void RequestConfigurationImpl(string message)
+        private static string GetErrorMessageInternal(string reason)
         {
-            AlertMessage msg = new AlertMessage
-            {
-                Message = message
-            };
-            msg.Dismissed += (sender, e) =>
-            {
-                MainViewModel.Instance.OpenSettingsView();
-            };
-            Messenger.Default.Send(msg);
+            return string.Format("{0} Please verify web survey settings.", reason);
         }
 
-        public static void RequestConfiguration()
+        public static string GetErrorMessage(string reason)
         {
-            RequestConfigurationImpl("Please configure web survey settings.");
+            return GetErrorMessageInternal(reason);
         }
 
-        public static void RequestConfiguration(string reason)
+        public static string GetErrorMessage(ConfigurationError error)
         {
-            RequestConfigurationImpl(string.Format("{0} Please verify web survey settings.", reason));
+            return GetErrorMessageInternal(error.GetErrorMessage());
         }
 
-        private static string GetErrorMessage(ConfigurationError error)
-        {
-            switch (error)
-            {
-                case ConfigurationError.EndpointAddress:
-                    return "Invalid endpoint address.";
-                case ConfigurationError.Version:
-                    return "Endpoint address must be version 2 (SurveyManagerServiceV2.svc) or later.";
-                case ConfigurationError.OrganizationKey:
-                    return "Invalid organization key.";
-                case ConfigurationError.Connection:
-                    return "Failed to connect to service.";
-                case ConfigurationError.Unknown:
-                    return "Configuration error.";
-                default:
-                    throw new InvalidEnumValueException(error);
-            }
-        }
-        public static void RequestConfiguration(ConfigurationError error)
-        {
-            RequestConfiguration(GetErrorMessage(error));
-        }
-
-        public ICollection<ResponseType> ResponseTypes { get; private set; }
-
-        private bool active;
-        public bool Active
-        {
-            get { return active; }
-            set { Set(nameof(Active), ref active, value); }
-        }
-
-        private View view;
-        public View View
+        private Epi.View view;
+        public Epi.View View
         {
             get { return view; }
             private set { Set(nameof(View), ref view, value); }
         }
+
+        public ICollection<ResponseType> ResponseTypes { get; private set; }
 
         private Survey survey;
         public Survey Survey
@@ -83,20 +44,23 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(Survey), ref survey, value); }
         }
 
-        public RelayCommand PublishCommand { get; private set; }
-        public RelayCommand CancelCommand { get; private set; }
-
-        public SurveyViewModel(View view)
+        private RelayCommand publishCommand;
+        public ICommand PublishCommand
         {
+            get { return publishCommand ?? (publishCommand = new RelayCommand(Publish)); }
+        }
+
+        public SurveyViewModel(IServiceManager services, Epi.View view)
+            : base(services)
+        {
+            Title = "Publish to Web";
+            View = view;
             ResponseTypes = EnumExtensions.GetValues<ResponseType>()
                 .Where(responseType => responseType != ResponseType.Unspecified)
                 .ToList();
-            View = view;
-            PublishCommand = new RelayCommand(Publish);
-            CancelCommand = new RelayCommand(Cancel);
         }
 
-        public void Activate()
+        public void Open()
         {
             if (View.IsWebSurvey())
             {
@@ -109,25 +73,25 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     if (Service.IsConfigured(out error))
                     {
-                        Survey = Service.GetSurvey(View);
+                        Survey = Service.GetSurvey(View.WebSurveyId);
                     }
                 };
                 msg.Executed += (sender, e) =>
                 {
                     if (error != ConfigurationError.None)
                     {
-                        RequestConfiguration(error);
+                        Documents.ShowSettings(GetErrorMessage(error));
                     }
                     else if (Survey == null)
                     {
-                        RequestConfiguration("Failed to retrieve web survey details.");
+                        Documents.ShowSettings(GetErrorMessage("Failed to retrieve web survey details."));
                     }
                     else
                     {
-                        Active = true;
+                        Dialogs.ShowAsync(this);
                     }
                 };
-                Messenger.Default.Send(msg);
+                MessengerInstance.Send(msg);
             }
             else
             {
@@ -138,12 +102,9 @@ namespace ERHMS.Presentation.ViewModels
                     StartDate = now,
                     EndDate = now.AddDays(10.0),
                     ResponseType = ResponseType.Single,
-                    Intro = null,
-                    Outro = null,
-                    Draft = false,
                     PublishKey = Guid.NewGuid()
                 };
-                Active = true;
+                Dialogs.ShowAsync(this);
             }
         }
 
@@ -156,13 +117,10 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowRequiredMessage(fields);
+                ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
         public void Publish()
@@ -192,11 +150,12 @@ namespace ERHMS.Presentation.ViewModels
                     success = Service.Publish(View, Survey);
                     if (success)
                     {
-                        WebSurvey webSurvey = DataContext.WebSurveys.Create();
-                        webSurvey.WebSurveyId = Survey.SurveyId;
-                        webSurvey.ViewId = View.Id;
-                        webSurvey.PublishKey = Survey.PublishKey.ToString();
-                        DataContext.WebSurveys.Save(webSurvey);
+                        Context.WebSurveys.Save(new WebSurvey
+                        {
+                            WebSurveyId = Survey.SurveyId,
+                            ViewId = View.Id,
+                            PublishKey = Survey.PublishKey.ToString()
+                        });
                     }
                 }
             };
@@ -204,27 +163,22 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (error != ConfigurationError.None)
                 {
-                    RequestConfiguration(error);
+                    Documents.ShowSettings(GetErrorMessage(error));
                 }
                 else if (!success)
                 {
-                    RequestConfiguration("Failed to publish form to web.");
+                    Documents.ShowSettings(GetErrorMessage("Failed to publish form to web."));
                 }
                 else
                 {
-                    Messenger.Default.Send(new ToastMessage
+                    MessengerInstance.Send(new ToastMessage
                     {
                         Message = "Form has been published to web."
                     });
                 }
-                Active = false;
+                Close();
             };
-            Messenger.Default.Send(msg);
-        }
-
-        public void Cancel()
-        {
-            Active = false;
+            MessengerInstance.Send(msg);
         }
     }
 }

@@ -32,7 +32,7 @@
                                      Command="{Binding CreateCommand}"
                                      Icon="{StaticResource appbar_add}" />
                 <Controls:IconButton AccessText="C_ancel"
-                                     Command="{Binding CancelCommand}"
+                                     Command="{Binding CloseCommand}"
                                      Icon="{StaticResource appbar_cancel}" />
             </WrapPanel>
         </Grid>

@@ -23,7 +23,7 @@
                                Stretch="None" />
                         <TextBlock Text="{Binding AppTitle, Mode=OneTime}" />
                         <TextBlock>Version <Run Text="{Binding Version, Mode=OneTime}" /></TextBlock>
-                        <TextBlock Text="{Binding InformationalVersion, Mode=OneTime}" />
+                        <TextBlock Text="{Binding BuildDate, Mode=OneTime}" />
                     </StackPanel>
                     <StackPanel TextBlock.FontSize="15"
                                 Margin="0,0,0,50">

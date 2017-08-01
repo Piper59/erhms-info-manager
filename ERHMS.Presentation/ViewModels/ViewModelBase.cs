@@ -1,26 +1,37 @@
 ﻿using ERHMS.DataAccess;
-using ERHMS.Presentation.Infrastructure;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class ViewModelBase : GalaSoft.MvvmLight.ViewModelBase
     {
-        protected MainViewModel Main
+        protected static bool ValidateDateRange(DateTime? start, DateTime? end)
         {
-            get { return MainViewModel.Instance; }
+            return !start.HasValue || !end.HasValue || start.Value <= end.Value;
         }
 
-        protected DataContext DataContext
+        public IServiceManager Services { get; private set; }
+
+        public IDocumentManager Documents
         {
-            get { return Main.DataContext; }
+            get { return Services.Documents; }
+        }
+
+        public IDialogManager Dialogs
+        {
+            get { return Services.Dialogs; }
+        }
+
+        public DataContext Context
+        {
+            get { return Services.Context; }
         }
 
         private string title;
@@ -37,52 +48,61 @@ namespace ERHMS.Presentation.ViewModels
             protected set { Set(nameof(Dirty), ref dirty, value); }
         }
 
-        public RelayCommand CloseCommand { get; private set; }
-
-        protected ViewModelBase()
+        private RelayCommand closeCommand;
+        public ICommand CloseCommand
         {
-            CloseCommand = new RelayCommand(Close);
+            get { return closeCommand ?? (closeCommand = new RelayCommand(Close, CanClose)); }
+        }
+
+        protected ViewModelBase(IServiceManager services)
+        {
+            Services = services;
             PropertyChanged += (sender, e) =>
             {
                 if (GetType().GetProperty(e.PropertyName).HasCustomAttribute<DirtyCheckAttribute>())
                 {
-                    OnDirtyCheckPropertyChanged(sender, e);
+                    Dirty = true;
                 }
             };
         }
 
-        public event EventHandler Closing;
-        private void OnClosing(EventArgs e)
+        public event EventHandler Closed;
+        protected virtual void OnClosed(EventArgs e)
         {
-            Closing?.Invoke(this, e);
+            Closed?.Invoke(this, e);
         }
-        private void OnClosing()
+        protected virtual void OnClosed()
         {
-            OnClosing(EventArgs.Empty);
+            OnClosed(EventArgs.Empty);
         }
 
-        private void OnDirtyCheckPropertyChanged(object sender, EventArgs e)
+        protected virtual bool CanClose()
+        {
+            return true;
+        }
+
+        protected void AddDirtyCheck(INotifyPropertyChanged child)
+        {
+            child.PropertyChanged += Child_PropertyChanged;
+            Closed += (sender, e) =>
+            {
+                RemoveDirtyCheck(child);
+            };
+        }
+
+        protected void RemoveDirtyCheck(INotifyPropertyChanged child)
+        {
+            child.PropertyChanged -= Child_PropertyChanged;
+        }
+
+        private void Child_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Dirty = true;
         }
 
-        protected void AddDirtyCheck(INotifyPropertyChanged entity)
+        public void Close(bool confirm)
         {
-            entity.PropertyChanged += OnDirtyCheckPropertyChanged;
-            Closing += (sender, e) =>
-            {
-                entity.PropertyChanged -= OnDirtyCheckPropertyChanged;
-            };
-        }
-
-        protected void RemoveDirtyCheck(INotifyPropertyChanged entity)
-        {
-            entity.PropertyChanged -= OnDirtyCheckPropertyChanged;
-        }
-
-        public void Close()
-        {
-            if (Dirty)
+            if (Dirty && confirm)
             {
                 ConfirmMessage msg = new ConfirmMessage
                 {
@@ -91,38 +111,37 @@ namespace ERHMS.Presentation.ViewModels
                 };
                 msg.Confirmed += (sender, e) =>
                 {
-                    OnClosing();
+                    OnClosed();
                 };
-                Messenger.Default.Send(msg);
+                MessengerInstance.Send(msg);
             }
             else
             {
-                OnClosing();
+                OnClosed();
             }
         }
 
-        private void ShowValidationMessage(IEnumerable<string> fields, string reason)
+        public virtual void Close()
+        {
+            Close(true);
+        }
+
+        protected void ShowValidationMessage(ValidationError error, IEnumerable<string> fields)
         {
             StringBuilder message = new StringBuilder();
-            message.AppendFormat("The following fields are {0}:", reason);
+            message.AppendFormat("The following fields are {0}:", error.ToString().ToLower());
             message.AppendLine();
             message.AppendLine();
             message.Append(string.Join(", ", fields));
-            AlertMessage msg = new AlertMessage
+            MessengerInstance.Send(new AlertMessage
             {
                 Message = message.ToString()
-            };
-            Messenger.Default.Send(msg);
+            });
         }
 
-        protected void ShowRequiredMessage(IEnumerable<string> fields)
+        public override string ToString()
         {
-            ShowValidationMessage(fields, "required");
-        }
-
-        protected void ShowInvalidMessage(IEnumerable<string> fields)
-        {
-            ShowValidationMessage(fields, "invalid");
+            return string.Format("{0} [{1}]", GetType(), Title);
         }
     }
 }

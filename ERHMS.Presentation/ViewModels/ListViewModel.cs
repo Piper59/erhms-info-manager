@@ -1,17 +1,20 @@
-﻿using ERHMS.Utility;
+﻿using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
+using GalaSoft.MvvmLight.Command;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public abstract class ListViewModelBase<T> : ViewModelBase
+    public abstract class ListViewModel<T> : ViewModelBase
     {
-        private static readonly TimeSpan TimerInterval = TimeSpan.FromMilliseconds(500.0);
+        private static readonly TimeSpan TimerInterval = TimeSpan.FromSeconds(0.5);
 
         private DispatcherTimer timer;
 
@@ -38,21 +41,16 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Set(nameof(SelectedItem), ref selectedItem, value))
                 {
-                    OnSelectedItemChanged();
+                    OnSelectionChanged();
                 }
             }
         }
 
-        private IList selectedItems;
-        public IList SelectedItems
-        {
-            get { return selectedItems; }
-            set { Set(nameof(SelectedItems), ref selectedItems, value); }
-        }
+        public ObservableCollection<object> SelectedItems;
 
         public IEnumerable<T> TypedSelectedItems
         {
-            get { return SelectedItems?.Cast<T>(); }
+            get { return SelectedItems.Cast<T>(); }
         }
 
         private string filter;
@@ -66,16 +64,25 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Set(nameof(Filter), ref filter, value))
                 {
-                    if (timer.IsEnabled)
-                    {
-                        timer.Stop();
-                    }
+                    timer.Stop();
                     timer.Start();
                 }
             }
         }
 
-        protected ListViewModelBase()
+        protected virtual IEnumerable<Type> RefreshTypes
+        {
+            get { yield return typeof(T); }
+        }
+
+        private RelayCommand refreshCommand;
+        public ICommand RefreshCommand
+        {
+            get { return refreshCommand ?? (refreshCommand = new RelayCommand(Refresh, CanRefresh)); }
+        }
+
+        protected ListViewModel(IServiceManager services)
+            : base(services)
         {
             timer = new DispatcherTimer
             {
@@ -86,53 +93,54 @@ namespace ERHMS.Presentation.ViewModels
                 timer.Stop();
                 Items.Refresh();
             };
+            Items = CollectionViewSource.GetDefaultView(Enumerable.Empty<T>());
+            SelectedItems = new ObservableCollection<object>();
+            SelectedItems.CollectionChanged += (sender, e) =>
+            {
+                OnSelectionChanged();
+            };
+            MessengerInstance.Register<RefreshMessage>(this, msg =>
+            {
+                if (RefreshTypes.Contains(msg.Type))
+                {
+                    Refresh();
+                }
+            });
         }
 
-        public event EventHandler Refreshed;
-        private void OnRefreshed(EventArgs e)
+        public event EventHandler SelectionChanged;
+        private void OnSelectionChanged(EventArgs e)
         {
-            Refreshed?.Invoke(this, e);
+            SelectionChanged?.Invoke(this, e);
         }
-        private void OnRefreshed()
+        private void OnSelectionChanged()
         {
-            OnRefreshed(EventArgs.Empty);
-        }
-
-        public event EventHandler SelectedItemChanged;
-        private void OnSelectedItemChanged(EventArgs e)
-        {
-            SelectedItemChanged?.Invoke(this, e);
-        }
-        private void OnSelectedItemChanged()
-        {
-            OnSelectedItemChanged(EventArgs.Empty);
+            OnSelectionChanged(EventArgs.Empty);
         }
 
-        public bool HasOneSelectedItem()
+        public virtual bool CanRefresh()
         {
-            return SelectedItems == null ? SelectedItem != null : SelectedItems.Count == 1;
+            return true;
         }
 
-        public bool HasAnySelectedItems()
+        public bool HasSelectedItem()
         {
-            return SelectedItems == null ? SelectedItem != null : SelectedItems.Count > 0;
+            return SelectedItem != null || (SelectedItems != null && SelectedItems.Count > 0);
+        }
+
+        public bool HasSingleSelectedItem()
+        {
+            return (SelectedItem != null && SelectedItems == null) || SelectedItems.Count == 1;
         }
 
         protected abstract IEnumerable<T> GetItems();
 
         protected virtual IEnumerable<string> GetFilteredValues(T item)
         {
-            return Enumerable.Empty<string>();
+            yield break;
         }
 
-        public virtual void Refresh()
-        {
-            Items = CollectionViewSource.GetDefaultView(GetItems());
-            Items.Filter = MatchesFilter;
-            OnRefreshed();
-        }
-
-        private bool MatchesFilter(object item)
+        protected virtual bool IsMatch(object item)
         {
             if (string.IsNullOrWhiteSpace(Filter))
             {
@@ -148,9 +156,10 @@ namespace ERHMS.Presentation.ViewModels
             return false;
         }
 
-        public void SelectItem(Predicate<T> predicate)
+        public virtual void Refresh()
         {
-            SelectedItem = TypedItems.FirstOrDefault(item => predicate(item));
+            Items = CollectionViewSource.GetDefaultView(GetItems());
+            Items.Filter = IsMatch;
         }
     }
 }

@@ -2,6 +2,7 @@
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
+using System;
 using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
@@ -30,6 +31,21 @@ namespace ERHMS.DataAccess
         public IEnumerable<Incident> SelectUndeleted()
         {
             return Select("WHERE [Deleted] = 0");
+        }
+
+        public override void Delete(string clauses = null, object parameters = null)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void DeleteById(object id)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void Delete(Incident entity)
+        {
+            throw new NotSupportedException();
         }
     }
 }

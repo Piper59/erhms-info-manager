@@ -90,21 +90,21 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <CheckBox Grid.Column="0"
-                              IsChecked="{Binding AppendWebSurveyUrl}"
-                              IsEnabled="{Binding CanAppendWebSurveyUrl}">
+                              IsChecked="{Binding AppendUrl}"
+                              IsEnabled="{Binding CanAppendUrl}">
                         Append web survey URL
                     </CheckBox>
                     <ComboBox Grid.Column="1"
                               AutomationProperties.Name="Append web survey URL"
                               DisplayMemberPath="Name"
-                              IsEnabled="{Binding AppendWebSurveyUrl}"
+                              IsEnabled="{Binding AppendUrl}"
                               ItemsSource="{Binding Views.Items}"
                               Margin="5,0,0,5"
                               SelectedItem="{Binding Views.SelectedItem}" />
                 </Grid>
                 <CheckBox Grid.Row="5" Grid.Column="1"
-                          IsChecked="{Binding PrepopulateResponderId}"
-                          IsEnabled="{Binding CanPrepopulateResponderId}">
+                          IsChecked="{Binding Prepopulate}"
+                          IsEnabled="{Binding CanPrepopulate}">
                     Prepopulate responder ID field
                 </CheckBox>
             </Grid>

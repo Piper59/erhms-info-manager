@@ -207,7 +207,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                 Hospitalized = 0,
                 Entered = DateTime.Now
             });
-            Assert.IsTrue(Service.TryAddRecord(view, survey, original));
+            Assert.IsTrue(Service.TryAddRecord(survey, original));
             using (Transaction transaction = context.Database.BeginTransaction())
             {
                 Assert.AreEqual(1, SaveRecords(survey));

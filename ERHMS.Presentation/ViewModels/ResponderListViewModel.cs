@@ -1,43 +1,56 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class ResponderListViewModel : ListViewModelBase<Responder>
+    public class ResponderListViewModel : ListViewModel<Responder>
     {
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand EmailCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        private RelayCommand createCommand;
+        public ICommand CreateCommand
+        {
+            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
+        }
 
-        public ResponderListViewModel()
+        private RelayCommand editCommand;
+        public ICommand EditCommand
+        {
+            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSingleSelectedItem)); }
+        }
+
+        private RelayCommand deleteCommand;
+        public ICommand DeleteCommand
+        {
+            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSingleSelectedItem)); }
+        }
+
+        private RelayCommand emailCommand;
+        public ICommand EmailCommand
+        {
+            get { return emailCommand ?? (emailCommand = new RelayCommand(Email, HasSelectedItem)); }
+        }
+
+        public ResponderListViewModel(IServiceManager services)
+            : base(services)
         {
             Title = "Responders";
-            Refresh();
-            CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasOneSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasOneSelectedItem);
-            EmailCommand = new RelayCommand(Email, HasAnySelectedItems);
-            RefreshCommand = new RelayCommand(Refresh);
-            SelectedItemChanged += (sender, e) =>
+            SelectionChanged += (sender, e) =>
             {
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                EmailCommand.RaiseCanExecuteChanged();
+                editCommand.RaiseCanExecuteChanged();
+                deleteCommand.RaiseCanExecuteChanged();
+                emailCommand.RaiseCanExecuteChanged();
             };
-            Messenger.Default.Register<RefreshMessage<Responder>>(this, msg => Refresh());
+            Refresh();
         }
 
         protected override IEnumerable<Responder> GetItems()
         {
-            return DataContext.Responders.SelectUndeleted()
-                .OrderBy(item => item.LastName)
-                .ThenBy(item => item.FirstName);
+            return Context.Responders.SelectUndeleted()
+                .OrderBy(responder => responder.FullName)
+                .ThenBy(responder => responder.EmailAddress);
         }
 
         protected override IEnumerable<string> GetFilteredValues(Responder item)
@@ -53,12 +66,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Main.OpenResponderDetailView(DataContext.Responders.Create());
+            Documents.ShowNewResponder();
         }
 
         public void Edit()
         {
-            Main.OpenResponderDetailView((Responder)SelectedItem.Clone());
+            Documents.ShowResponder((Responder)SelectedItem.Clone());
         }
 
         public void Delete()
@@ -70,15 +83,18 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
-                DataContext.Responders.Delete(SelectedItem);
-                Messenger.Default.Send(new RefreshMessage<Responder>());
+                SelectedItem.Deleted = true;
+                Context.Responders.Save(SelectedItem);
+                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
             };
-            Messenger.Default.Send(msg);
+            MessengerInstance.Send(msg);
         }
 
         public void Email()
         {
-            Main.OpenEmailView(new EmailViewModel(TypedSelectedItems));
+            Documents.Show(
+                () => new EmailViewModel(Services, TypedSelectedItems),
+                document => false);
         }
     }
 }

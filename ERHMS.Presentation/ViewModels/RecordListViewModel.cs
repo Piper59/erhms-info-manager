@@ -1,20 +1,20 @@
 ﻿using Epi;
 using Epi.Fields;
-using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Wrappers;
 using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class RecordListViewModel : ListViewModelBase<ViewEntity>
+    public class RecordListViewModel : ListViewModel<ViewEntity>
     {
-        public View View { get; private set; }
         public ViewEntityRepository<ViewEntity> Entities { get; private set; }
 
         private ICollection<DataGridColumn> columns;
@@ -24,20 +24,42 @@ namespace ERHMS.Presentation.ViewModels
             private set { Set(nameof(Columns), ref columns, value); }
         }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand UndeleteCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        protected override IEnumerable<Type> RefreshTypes
+        {
+            get { yield break; }
+        }
 
-        public RecordListViewModel(View view)
+        private RelayCommand createCommand;
+        public ICommand CreateCommand
+        {
+            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
+        }
+
+        private RelayCommand editCommand;
+        public ICommand EditCommand
+        {
+            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSingleSelectedItem)); }
+        }
+
+        private RelayCommand deleteCommand;
+        public ICommand DeleteCommand
+        {
+            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
+        }
+
+        private RelayCommand undeleteCommand;
+        public ICommand UndeleteCommand
+        {
+            get { return undeleteCommand ?? (undeleteCommand = new RelayCommand(Undelete, HasSelectedItem)); }
+        }
+
+        public RecordListViewModel(IServiceManager services, View view)
+            : base(services)
         {
             Title = view.Name;
-            View = view;
-            DataContext.Project.CollectedData.EnsureDataTablesExist(view);
-            Entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, view);
-            List<int> fieldIds = DataContext.Project.GetSortedFieldIds(view.Id).ToList();
-            Columns = view.Fields.TableColumnFields
+            Entities = new ViewEntityRepository<ViewEntity>(Context, view);
+            List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id).ToList();
+            Columns = view.Fields.DataFields
                 .Cast<Field>()
                 .OrderBy(field => fieldIds.IndexOf(field.Id))
                 .Select(field => (DataGridColumn)new DataGridTextColumn
@@ -46,18 +68,13 @@ namespace ERHMS.Presentation.ViewModels
                     Binding = new Binding(field.Name)
                 })
                 .ToList();
-            Refresh();
-            CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasOneSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasAnySelectedItems);
-            UndeleteCommand = new RelayCommand(Undelete, HasAnySelectedItems);
-            RefreshCommand = new RelayCommand(Refresh);
-            SelectedItemChanged += (sender, e) =>
+            SelectionChanged += (sender, e) =>
             {
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                UndeleteCommand.RaiseCanExecuteChanged();
+                editCommand.RaiseCanExecuteChanged();
+                deleteCommand.RaiseCanExecuteChanged();
+                undeleteCommand.RaiseCanExecuteChanged();
             };
+            Refresh();
         }
 
         protected override IEnumerable<ViewEntity> GetItems()
@@ -65,48 +82,37 @@ namespace ERHMS.Presentation.ViewModels
             return Entities.Select();
         }
 
-        private void Invoke(Wrapper wrapper)
-        {
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == WrapperEventType.RecordSaved)
-                {
-                    Refresh();
-                }
-            };
-            wrapper.Invoke();
-        }
-
         public void Create()
         {
-            Invoke(Enter.OpenNewRecord.Create(DataContext.Project.FilePath, View.Name));
+            Enter.OpenNewRecord.Create(Context.Project.FilePath, Entities.View.Name).Invoke();
         }
 
         public void Edit()
         {
-            Invoke(Enter.OpenRecord.Create(DataContext.Project.FilePath, View.Name, SelectedItem.UniqueKey.Value));
+            Enter.OpenRecord.Create(Context.Project.FilePath, Entities.View.Name, SelectedItem.UniqueKey.Value).Invoke();
         }
 
-        public void Delete()
+        private void SetDeleted(bool deleted)
         {
             foreach (ViewEntity entity in SelectedItems)
             {
                 if (!entity.Deleted)
                 {
-                    Entities.Delete(entity);
+                    entity.Deleted = deleted;
+                    Entities.Save(entity);
                 }
             }
+            Refresh();
+        }
+
+        public void Delete()
+        {
+            SetDeleted(true);
         }
 
         public void Undelete()
         {
-            foreach (ViewEntity entity in SelectedItems)
-            {
-                if (entity.Deleted)
-                {
-                    Entities.Undelete(entity);
-                }
-            }
+            SetDeleted(false);
         }
     }
 }

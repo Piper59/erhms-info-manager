@@ -99,10 +99,11 @@ namespace ERHMS.EpiInfo.Wrappers
                         string templatePath = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
                         document.Save(templatePath);
                         Template template = new Template(Form.Mediator);
-                        int id = template.InstantiateTemplate(templatePath);
+                        template.InstantiateTemplate(templatePath);
+                        int viewId = Form.Mediator.ProjectExplorer.CurrentView.Id;
                         RaiseEvent(WrapperEventType.ViewCreated, new
                         {
-                            Id = id
+                            ViewId = viewId
                         });
                         Form.TryClose("Form has been created.");
                     }

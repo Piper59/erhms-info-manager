@@ -1,4 +1,4 @@
-﻿using Epi;
+﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using System;
 using System.Globalization;
@@ -11,8 +11,8 @@ namespace ERHMS.Presentation.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            View view = (View)value;
-            return view.IsWebSurvey() ? view.GetWebSurveyUrl() : null;
+            string webSurveyId = ((View)value).WebSurveyId;
+            return ViewExtensions.IsWebSurvey(webSurveyId) ? ViewExtensions.GetWebSurveyUrl(webSurveyId) : null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

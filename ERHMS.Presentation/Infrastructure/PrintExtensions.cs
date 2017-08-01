@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace ERHMS.Presentation.Infrastructure
+namespace ERHMS.Presentation
 {
     public static class PrintExtensions
     {

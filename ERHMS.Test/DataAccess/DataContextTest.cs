@@ -225,6 +225,9 @@ namespace ERHMS.Test.DataAccess
             }
             {
                 Assert.AreEqual(context.Rosters.Count(), context.Rosters.SelectByIncidentId(incident.IncidentId).Count());
+                Assert.AreEqual(
+                    context.Responders.Count() - context.Rosters.Count(),
+                    context.Responders.SelectUnrostered(incident.IncidentId).Count());
             }
             using (Transaction transaction = context.Database.BeginTransaction())
             {

@@ -103,7 +103,6 @@
     <Compile Include="Repositories\ViewRepository.cs" />
     <Compile Include="Repositories\WebSurveyRepository.cs" />
     <Compile Include="SqlBuilder.cs" />
-    <Compile Include="ViewExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\Forms\ARC_HSR.xml">

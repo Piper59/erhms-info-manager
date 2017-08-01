@@ -1,5 +1,5 @@
-﻿<UserControl x:Name="Root"
-             x:Class="ERHMS.Presentation.Controls.Filter"
+﻿<UserControl x:Class="ERHMS.Presentation.Controls.Filter"
+             x:Name="Root"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">

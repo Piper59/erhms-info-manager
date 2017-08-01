@@ -27,9 +27,9 @@
             <Label Grid.Column="0">Form</Label>
             <ComboBox Grid.Column="1"
                       AutomationProperties.Name="Form"
-                      DisplayMemberPath="Item.Name"
-                      ItemsSource="{Binding ViewDeepLinks.Items}"
-                      SelectedItem="{Binding ViewDeepLinks.SelectedItem}" />
+                      DisplayMemberPath="Name"
+                      ItemsSource="{Binding Views.Items}"
+                      SelectedItem="{Binding Views.SelectedItem}" />
         </Grid>
         <Controls:Filter Grid.Row="1"
                          Value="{Binding Responders.Filter}" />
@@ -91,13 +91,13 @@
                                        DataContext="{Binding}" />
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding ViewDeepLink.Item.Name}"
+                <DataGridTextColumn Binding="{Binding View.Name}"
                                     Header="Form"
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding Responder, Converter={StaticResource ResponderToFullNameConverter}}"
                                     Header="Responder"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding ViewDeepLink.Incident.Name}"
+                <DataGridTextColumn Binding="{Binding View.Incident.Name}"
                                     Header="Incident"
                                     Visibility="{Binding DataContext.Incident, Source={StaticResource Proxy}, Converter={StaticResource NullToVisibilityInverter}}"
                                     Width="*" />

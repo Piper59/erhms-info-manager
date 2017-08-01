@@ -1,30 +1,17 @@
-﻿using Epi;
-using ERHMS.Domain;
+﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class PrepopulateViewModel : ViewModelBase
+    public class PrepopulateViewModel : DialogViewModel
     {
-        private bool active;
-        public bool Active
-        {
-            get { return active; }
-            set { Set(nameof(Active), ref active, value); }
-        }
-
         public View View { get; private set; }
-
-        private ICollection<Responder> responders;
-        public ICollection<Responder> Responders
-        {
-            get { return responders; }
-            set { Set(nameof(Responders), ref responders, value); }
-        }
+        public ICollection<Responder> Responders { get; private set; }
 
         private Responder responder;
         public Responder Responder
@@ -33,24 +20,27 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(Responder), ref responder, value); }
         }
 
-        public RelayCommand ContinueCommand { get; private set; }
-        public RelayCommand CancelCommand { get; private set; }
-
-        public PrepopulateViewModel(DeepLink<View> viewDeepLink)
+        private RelayCommand continueCommand;
+        public ICommand ContinueCommand
         {
-            View = viewDeepLink.Item;
+            get { return continueCommand ?? (continueCommand = new RelayCommand(Continue)); }
+        }
+
+        public PrepopulateViewModel(IServiceManager services, View view)
+            : base(services)
+        {
+            Title = "Prepopulate Responder ID Field";
+            View = view;
             IEnumerable<Responder> responders;
-            if (viewDeepLink.Incident == null)
+            if (view.Incident == null)
             {
-                responders = DataContext.Responders.SelectUndeleted();
+                responders = Context.Responders.SelectUndeleted();
             }
             else
             {
-                responders = DataContext.Responders.SelectByIncidentId(viewDeepLink.Incident.IncidentId);
+                responders = Context.Rosters.SelectUndeletedByIncidentId(view.Incident.IncidentId).Select(roster => roster.Responder);
             }
             Responders = responders.OrderBy(responder => responder.FullName).ToList();
-            ContinueCommand = new RelayCommand(Continue);
-            CancelCommand = new RelayCommand(Cancel);
         }
 
         public void Continue()
@@ -60,17 +50,12 @@ namespace ERHMS.Presentation.ViewModels
             {
                 record = new
                 {
-                    ResponderId = Responder.ResponderId
+                    ResponderID = Responder.ResponderId
                 };
             }
-            DataContext.Project.CollectedData.EnsureDataTablesExist(View);
-            Enter.OpenNewRecord.Create(DataContext.Project.FilePath, View.Name, record).Invoke();
-            Active = false;
-        }
-
-        public void Cancel()
-        {
-            Active = false;
+            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
+            Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, record).Invoke();
+            Close();
         }
     }
 }

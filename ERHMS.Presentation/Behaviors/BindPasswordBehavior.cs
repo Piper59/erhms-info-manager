@@ -1,11 +1,9 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
 
 namespace ERHMS.Presentation.Behaviors
 {
-    public class BindPasswordBehavior : Behavior<PasswordBox>
+    public class BindPasswordBehavior : BridgeBindingBehavior<PasswordBox>
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register(
             "Password",
@@ -15,10 +13,8 @@ namespace ERHMS.Presentation.Behaviors
 
         private static void PasswordProperty_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((BindPasswordBehavior)sender).OnPasswordChanged();
+            ((BindPasswordBehavior)sender).Push();
         }
-
-        private bool updating;
 
         public string Password
         {
@@ -38,18 +34,7 @@ namespace ERHMS.Presentation.Behaviors
             AssociatedObject.PasswordChanged -= AssociatedObject_PasswordChanged;
         }
 
-        private void Update(Action action)
-        {
-            if (updating)
-            {
-                return;
-            }
-            updating = true;
-            action();
-            updating = false;
-        }
-
-        private void OnPasswordChanged()
+        private void Push()
         {
             Update(() =>
             {

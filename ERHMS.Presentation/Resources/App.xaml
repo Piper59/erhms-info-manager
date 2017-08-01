@@ -3,8 +3,7 @@
                     xmlns:AvalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
                     xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
                     xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
-                    xmlns:System="clr-namespace:System;assembly=mscorlib">
+                    xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml" />
         <ResourceDictionary Source="/MahApps.Metro;component/Styles/Controls.xaml" />
@@ -23,12 +22,6 @@
         <Setter Property="Padding" Value="5,-1,5,1" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
-
-    <System:String x:Key="ChangeRootDirectoryText">
-        Change the root directory?
-        This may cause existing data sources to stop working properly.
-        {0} will attempt to copy your documents and restart when settings are saved.
-    </System:String>
 
     <Style TargetType="CheckBox" BasedOn="{StaticResource MetroCheckBox}">
         <Setter Property="Margin" Value="0,0,0,5" />

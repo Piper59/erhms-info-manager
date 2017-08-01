@@ -1,32 +1,56 @@
 ﻿using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class HelpViewModel : ViewModelBase
     {
-        public RelayCommand OpenResponderListViewCommand { get; private set; }
-        public RelayCommand OpenIncidentListViewCommand { get; private set; }
-        public RelayCommand OpenViewListViewCommand { get; private set; }
-        public RelayCommand OpenTemplateListViewCommand { get; private set; }
-        public RelayCommand OpenPgmListViewCommand { get; private set; }
-        public RelayCommand OpenCanvasListViewCommand { get; private set; }
+        private RelayCommand showRespondersCommand;
+        public ICommand ShowRespondersCommand
+        {
+            get { return showRespondersCommand ?? (showRespondersCommand = new RelayCommand(ShowResponders)); }
+        }
 
-        public HelpViewModel()
+        private RelayCommand showIncidentsCommand;
+        public ICommand ShowIncidentsCommand
+        {
+            get { return showIncidentsCommand ?? (showIncidentsCommand = new RelayCommand(ShowIncidents)); }
+        }
+
+        private RelayCommand showViewsCommand;
+        public ICommand ShowViewsCommand
+        {
+            get { return showViewsCommand ?? (showViewsCommand = new RelayCommand(ShowViews)); }
+        }
+
+        private RelayCommand showTemplatesCommand;
+        public ICommand ShowTemplatesCommand
+        {
+            get { return showTemplatesCommand ?? (showTemplatesCommand = new RelayCommand(ShowTemplates)); }
+        }
+
+        private RelayCommand showPgmsCommand;
+        public ICommand ShowPgmsCommand
+        {
+            get { return showPgmsCommand ?? (showPgmsCommand = new RelayCommand(ShowPgms)); }
+        }
+
+        private RelayCommand showCanvasesCommand;
+        public ICommand ShowCanvasesCommand
+        {
+            get { return showCanvasesCommand ?? (showCanvasesCommand = new RelayCommand(ShowCanvases)); }
+        }
+
+        public HelpViewModel(IServiceManager services)
+            : base(services)
         {
             Title = "Help";
-            OpenResponderListViewCommand = new RelayCommand(OpenResponderListView);
-            OpenIncidentListViewCommand = new RelayCommand(OpenIncidentListView);
-            OpenViewListViewCommand = new RelayCommand(OpenViewListView);
-            OpenTemplateListViewCommand = new RelayCommand(OpenTemplateListView);
-            OpenPgmListViewCommand = new RelayCommand(OpenPgmListView);
-            OpenCanvasListViewCommand = new RelayCommand(OpenCanvasListView);
         }
 
         private bool Validate()
         {
-            if (DataContext == null)
+            if (Context == null)
             {
                 AlertMessage msg = new AlertMessage
                 {
@@ -34,63 +58,66 @@ namespace ERHMS.Presentation.ViewModels
                 };
                 msg.Dismissed += (sender, e) =>
                 {
-                    Main.OpenDataSourceListView();
+                    Documents.ShowDataSources();
                 };
-                Messenger.Default.Send(msg);
+                MessengerInstance.Send(msg);
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
-        public void OpenResponderListView()
+        public void ShowResponders()
         {
-            if (Validate())
+            if (!Validate())
             {
-                Main.OpenResponderListView();
+                return;
             }
+            Documents.ShowResponders();
         }
 
-        public void OpenIncidentListView()
+        public void ShowIncidents()
         {
-            if (Validate())
+            if (!Validate())
             {
-                Main.OpenIncidentListView();
+                return;
             }
+            Documents.ShowIncidents();
         }
 
-        public void OpenViewListView()
+        public void ShowViews()
         {
-            if (Validate())
+            if (!Validate())
             {
-                Main.OpenViewListView();
+                return;
             }
+            Documents.ShowViews();
         }
 
-        public void OpenTemplateListView()
+        public void ShowTemplates()
         {
-            if (Validate())
+            if (!Validate())
             {
-                Main.OpenTemplateListView();
+                return;
             }
+            Documents.ShowTemplates();
         }
 
-        public void OpenPgmListView()
+        public void ShowPgms()
         {
-            if (Validate())
+            if (!Validate())
             {
-                Main.OpenPgmListView();
+                return;
             }
+            Documents.ShowPgms();
         }
 
-        public void OpenCanvasListView()
+        public void ShowCanvases()
         {
-            if (Validate())
+            if (!Validate())
             {
-                Main.OpenCanvasListView();
+                return;
             }
+            Documents.ShowCanvases();
         }
     }
 }

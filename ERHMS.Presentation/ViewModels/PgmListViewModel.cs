@@ -1,79 +1,73 @@
 ﻿using ERHMS.Domain;
-using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class PgmListViewModel : ListViewModelBase<DeepLink<Pgm>>
+    public class PgmListViewModel : ListViewModel<Pgm>
     {
         public Incident Incident { get; private set; }
 
-        public RelayCommand OpenCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand LinkCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        private RelayCommand openCommand;
+        public ICommand OpenCommand
+        {
+            get { return openCommand ?? (openCommand = new RelayCommand(Open, HasSelectedItem)); }
+        }
 
-        public PgmListViewModel(Incident incident)
+        private RelayCommand deleteCommand;
+        public ICommand DeleteCommand
+        {
+            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
+        }
+
+        private RelayCommand linkCommand;
+        public ICommand LinkCommand
+        {
+            get { return linkCommand ?? (linkCommand = new RelayCommand(Link, HasSelectedItem)); }
+        }
+
+        public PgmListViewModel(IServiceManager services, Incident incident)
+            : base(services)
         {
             Title = "Analyses";
             Incident = incident;
-            Refresh();
-            OpenCommand = new RelayCommand(Open, HasOneSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasOneSelectedItem);
-            LinkCommand = new RelayCommand(Link, HasOneSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            SelectedItemChanged += (sender, e) =>
+            SelectionChanged += (sender, e) =>
             {
-                OpenCommand.RaiseCanExecuteChanged();
-                LinkCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
+                openCommand.RaiseCanExecuteChanged();
+                deleteCommand.RaiseCanExecuteChanged();
+                linkCommand.RaiseCanExecuteChanged();
             };
-            Messenger.Default.Register<RefreshMessage<Pgm>>(this, msg => Refresh());
-            Messenger.Default.Register<RefreshMessage<Incident>>(this, msg => Refresh());
+            Refresh();
         }
 
-        protected override IEnumerable<DeepLink<Pgm>> GetItems()
+        protected override IEnumerable<Pgm> GetItems()
         {
-            IEnumerable<DeepLink<Pgm>> items;
+            IEnumerable<Pgm> pgms;
             if (Incident == null)
             {
-                items = DataContext.PgmLinks.SelectDeepLinks();
+                pgms = Context.Pgms.SelectUndeleted();
             }
             else
             {
-                items = DataContext.PgmLinks.SelectDeepLinksByIncidentId(Incident.IncidentId);
+                pgms = Context.Pgms.SelectByIncidentId(Incident.IncidentId);
             }
-            return items.OrderBy(item => item.Item.Name);
+            return pgms.OrderBy(pgm => pgm.Name).ThenBy(pgm => pgm.Incident?.Name);
         }
 
-        protected override IEnumerable<string> GetFilteredValues(DeepLink<Pgm> item)
+        protected override IEnumerable<string> GetFilteredValues(Pgm item)
         {
-            yield return item.Item.Name;
-            yield return item.Item.Comment;
-            yield return item.Item.Author;
-            if (Incident == null)
-            {
-                yield return item.Incident?.Name;
-            }
+            yield return item.Name;
+            yield return item.Incident?.Name;
         }
 
         public void Open()
         {
-            Pgm pgm = DataContext.Project.GetPgmById(SelectedItem.Item.PgmId);
-            Wrapper wrapper = Analysis.OpenPgm.Create(DataContext.Project.FilePath, pgm.Name, pgm.Content, false);
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == WrapperEventType.PgmSaved)
-                {
-                    Messenger.Default.Send(new RefreshMessage<Pgm>());
-                }
-            };
-            wrapper.Invoke();
+            Pgm pgm = Context.Pgms.SelectById(SelectedItem.PgmId);
+            Analysis.OpenPgm.Create(pgm.Content, false).Invoke();
         }
 
         public void Delete()
@@ -85,22 +79,16 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
-                DataContext.PgmLinks.DeleteByPgmId(SelectedItem.Item.PgmId);
-                DataContext.Project.DeletePgm(SelectedItem.Item);
-                Messenger.Default.Send(new RefreshMessage<Pgm>());
+                Context.PgmLinks.DeleteByPgmId(SelectedItem.PgmId);
+                Context.Project.DeletePgm(SelectedItem.PgmId);
+                MessengerInstance.Send(new RefreshMessage(typeof(Pgm)));
             };
-            Messenger.Default.Send(msg);
+            MessengerInstance.Send(msg);
         }
 
         public void Link()
         {
-            Messenger.Default.Send(new ShowMessage
-            {
-                ViewModel = new PgmLinkViewModel(SelectedItem)
-                {
-                    Active = true
-                }
-            });
+            Dialogs.ShowAsync(new PgmLinkViewModel(Services, SelectedItem));
         }
     }
 }

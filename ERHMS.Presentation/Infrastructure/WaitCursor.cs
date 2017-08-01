@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace ERHMS.Presentation.Infrastructure
+namespace ERHMS.Presentation
 {
     public class WaitCursor : IDisposable
     {

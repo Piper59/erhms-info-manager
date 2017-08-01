@@ -1,22 +1,36 @@
-﻿using System.Collections;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Interactivity;
 
 namespace ERHMS.Presentation.Behaviors
 {
-    public class BindSelectedItemsBehavior : Behavior<MultiSelector>
+    public class BindSelectedItemsBehavior : BridgeBindingBehavior<MultiSelector>
     {
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
             "SelectedItems",
-            typeof(IList),
+            typeof(ObservableCollection<object>),
             typeof(BindSelectedItemsBehavior),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata(SelectedItemsProperty_PropertyChanged));
 
-        public IList SelectedItems
+        private static void SelectedItemsProperty_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            get { return (IList)GetValue(SelectedItemsProperty); }
+            BindSelectedItemsBehavior @this = (BindSelectedItemsBehavior)sender;
+            if (e.OldValue != null)
+            {
+                ((ObservableCollection<object>)e.OldValue).CollectionChanged -= @this.SelectedItems_CollectionChanged;
+            }
+            if (e.NewValue != null)
+            {
+                ((ObservableCollection<object>)e.NewValue).CollectionChanged += @this.SelectedItems_CollectionChanged;
+            }
+            @this.Push();
+        }
+
+        public ObservableCollection<object> SelectedItems
+        {
+            get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
             set { SetValue(SelectedItemsProperty, value); }
         }
 
@@ -24,6 +38,7 @@ namespace ERHMS.Presentation.Behaviors
         {
             base.OnAttached();
             AssociatedObject.SelectionChanged += AssociatedObject_SelectionChanged;
+            Pull();
         }
 
         protected override void OnDetaching()
@@ -34,7 +49,52 @@ namespace ERHMS.Presentation.Behaviors
 
         private void AssociatedObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedItems = AssociatedObject.SelectedItems;
+            Pull();
+        }
+
+        private void SelectedItems_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Push();
+        }
+
+        private void Pull()
+        {
+            if (SelectedItems == null)
+            {
+                return;
+            }
+            Update(() =>
+            {
+                SelectedItems.Clear();
+                if (AssociatedObject?.SelectedItems == null)
+                {
+                    return;
+                }
+                foreach (object item in AssociatedObject.SelectedItems)
+                {
+                    SelectedItems.Add(item);
+                }
+            });
+        }
+
+        private void Push()
+        {
+            if (AssociatedObject == null)
+            {
+                return;
+            }
+            Update(() =>
+            {
+                AssociatedObject.SelectedItems.Clear();
+                if (SelectedItems == null)
+                {
+                    return;
+                }
+                foreach (object item in SelectedItems)
+                {
+                    AssociatedObject.SelectedItems.Add(item);
+                }
+            });
         }
     }
 }

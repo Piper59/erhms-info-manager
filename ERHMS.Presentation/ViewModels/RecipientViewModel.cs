@@ -2,29 +2,15 @@
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class RecipientViewModel : ViewModelBase
+    public class RecipientViewModel : DialogViewModel
     {
-        private bool active;
-        public bool Active
-        {
-            get { return active; }
-            set { Set(nameof(Active), ref active, value); }
-        }
-
-        private ICollection<Responder> responders;
-        public ICollection<Responder> Responders
-        {
-            get { return responders; }
-            set { Set(nameof(Responders), ref responders, value); }
-        }
-
         private bool isResponder;
         public bool IsResponder
         {
@@ -48,6 +34,8 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public ICollection<Responder> Responders { get; private set; }
+
         private Responder responder;
         public Responder Responder
         {
@@ -62,69 +50,57 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(EmailAddress), ref emailAddress, value); }
         }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand CancelCommand { get; private set; }
-
-        public RecipientViewModel()
+        private RelayCommand addCommand;
+        public ICommand AddCommand
         {
-            Responders = DataContext.Responders.SelectUndeleted()
-                .OrderBy(responder => responder.FullName)
-                .ToList();
+            get { return addCommand ?? (addCommand = new RelayCommand(Add)); }
+        }
+
+        public RecipientViewModel(IServiceManager services, bool editable)
+            : base(services)
+        {
+            Title = "Add a Recipient";
             IsResponder = true;
-            AddCommand = new RelayCommand(Add);
-            CancelCommand = new RelayCommand(Cancel);
+            if (editable)
+            {
+                Responders = Context.Responders.SelectUndeleted().ToList();
+            }
         }
 
-        public RecipientViewModel(Responder responder)
+        public event EventHandler Added;
+        private void OnAdded(EventArgs e)
         {
-            IsResponder = true;
-            Responder = responder;
+            Added?.Invoke(this, e);
         }
-
-        public event EventHandler Adding;
-        private void OnAdding(EventArgs e)
+        private void OnAdded()
         {
-            Adding?.Invoke(this, e);
-        }
-        private void OnAdding()
-        {
-            OnAdding(EventArgs.Empty);
+            OnAdded(EventArgs.Empty);
         }
 
         public string GetEmailAddress()
         {
-            if (IsResponder)
-            {
-                return Responder?.EmailAddress;
-            }
-            else
-            {
-                return EmailAddress;
-            }
+            return IsResponder ? Responder?.EmailAddress : EmailAddress;
         }
 
         private bool Validate()
         {
             if (Responder == null && string.IsNullOrWhiteSpace(EmailAddress))
             {
-                Messenger.Default.Send(new AlertMessage
+                MessengerInstance.Send(new AlertMessage
                 {
                     Message = "Please select a responder or enter an email address."
                 });
                 return false;
             }
-            else if (!IsResponder && !MailExtensions.IsValidAddress(EmailAddress))
+            if (!IsResponder && !MailExtensions.IsValidAddress(EmailAddress))
             {
-                Messenger.Default.Send(new AlertMessage
+                MessengerInstance.Send(new AlertMessage
                 {
                     Message = "Please enter a valid email address."
                 });
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
         public void Add()
@@ -133,25 +109,13 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            OnAdding();
-            Active = false;
-        }
-
-        public void Cancel()
-        {
-            Active = false;
+            OnAdded();
+            Close();
         }
 
         public override string ToString()
         {
-            if (IsResponder)
-            {
-                return Responder?.FullName;
-            }
-            else
-            {
-                return EmailAddress;
-            }
+            return IsResponder ? Responder?.FullName : EmailAddress;
         }
     }
 }

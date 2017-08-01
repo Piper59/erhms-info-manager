@@ -26,7 +26,7 @@
                                  Icon="{StaticResource appbar_disk}" />
         </WrapPanel>
         <ScrollViewer Grid.Row="2">
-            <ItemsControl ItemsSource="{Binding Notes}">
+            <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="{StaticResource GrayBrush5}"

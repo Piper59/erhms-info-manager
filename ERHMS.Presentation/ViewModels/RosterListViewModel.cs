@@ -1,44 +1,37 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class RosterListViewModel : ViewModelBase
+    public class RosterListViewModel : ListViewModel<Roster>
     {
-        public class UnrosteredListViewModel : ListViewModelBase<Responder>
+        public class ResponderListChildViewModel : ListViewModel<Responder>
         {
             public Incident Incident { get; private set; }
 
-            public RelayCommand EditCommand { get; private set; }
+            private RelayCommand editCommand;
+            public ICommand EditCommand
+            {
+                get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
+            }
 
-            public UnrosteredListViewModel(Incident incident)
+            public ResponderListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
             {
                 Incident = incident;
-                Refresh();
-                EditCommand = new RelayCommand(Edit, HasOneSelectedItem);
-                SelectedItemChanged += (sender, e) =>
+                SelectionChanged += (sender, e) =>
                 {
-                    EditCommand.RaiseCanExecuteChanged();
+                    editCommand.RaiseCanExecuteChanged();
                 };
-                Messenger.Default.Register<RefreshMessage<Responder>>(this, msg => Refresh());
-                Messenger.Default.Register<RefreshMessage<Roster>>(this, msg => Refresh());
             }
 
             protected override IEnumerable<Responder> GetItems()
             {
-                ICollection<string> responderIds = DataContext.Rosters.SelectByIncidentId(Incident.IncidentId)
-                    .Select(roster => roster.ResponderId)
-                    .ToList();
-                return DataContext.Responders.SelectUndeleted()
-                    .Where(item => !responderIds.ContainsIgnoreCase(item.ResponderId))
-                    .OrderBy(item => item.LastName)
-                    .ThenBy(item => item.FirstName);
+                return Context.Responders.SelectUnrostered(Incident.IncidentId).OrderBy(responder => responder.FullName);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
@@ -54,117 +47,109 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Main.OpenResponderDetailView(SelectedItem);
-            }
-        }
-
-        public class RosteredListViewModel : ListViewModelBase<RosterViewModel>
-        {
-            public Incident Incident { get; private set; }
-
-            public RelayCommand EditCommand { get; private set; }
-
-            public RosteredListViewModel(Incident incident)
-            {
-                Incident = incident;
-                Refresh();
-                EditCommand = new RelayCommand(Edit, HasOneSelectedItem);
-                SelectedItemChanged += (sender, e) =>
-                {
-                    EditCommand.RaiseCanExecuteChanged();
-                };
-                Messenger.Default.Register<RefreshMessage<Responder>>(this, msg => Refresh());
-                Messenger.Default.Register<RefreshMessage<Roster>>(this, msg => Refresh());
-            }
-
-            protected override IEnumerable<RosterViewModel> GetItems()
-            {
-                ICollection<Roster> rosters = DataContext.Rosters.SelectByIncidentId(Incident.IncidentId).ToList();
-                IDictionary<string, Responder> responders = new Dictionary<string, Responder>(StringComparer.OrdinalIgnoreCase);
-                foreach (Responder responder in DataContext.Responders.SelectUndeleted())
-                {
-                    responders[responder.ResponderId] = responder;
-                }
-                return rosters.Select(roster => new RosterViewModel(roster, responders[roster.ResponderId]))
-                    .OrderBy(item => item.Responder.LastName)
-                    .ThenBy(item => item.Responder.FirstName);
-            }
-
-            protected override IEnumerable<string> GetFilteredValues(RosterViewModel item)
-            {
-                yield return item.Responder.LastName;
-                yield return item.Responder.FirstName;
-                yield return item.Responder.EmailAddress;
-                yield return item.Responder.City;
-                yield return item.Responder.State;
-                yield return item.Responder.OrganizationName;
-                yield return item.Responder.Occupation;
-            }
-
-            public void Edit()
-            {
-                Main.OpenResponderDetailView(SelectedItem.Responder);
+                Documents.ShowResponder((Responder)SelectedItem.Clone());
             }
         }
 
         public Incident Incident { get; private set; }
-        public UnrosteredListViewModel Responders { get; private set; }
-        public RosteredListViewModel Rosters { get; private set; }
+        public ResponderListChildViewModel Responders { get; private set; }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand RemoveCommand { get; private set; }
-        public RelayCommand EmailCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        private RelayCommand addCommand;
+        public ICommand AddCommand
+        {
+            get { return addCommand ?? (addCommand = new RelayCommand(Add, Responders.HasSelectedItem)); }
+        }
 
-        public RosterListViewModel(Incident incident)
+        private RelayCommand removeCommand;
+        public ICommand RemoveCommand
+        {
+            get { return removeCommand ?? (removeCommand = new RelayCommand(Remove, HasSelectedItem)); }
+        }
+
+        private RelayCommand editCommand;
+        public ICommand EditCommand
+        {
+            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
+        }
+
+        private RelayCommand emailCommand;
+        public ICommand EmailCommand
+        {
+            get { return emailCommand ?? (emailCommand = new RelayCommand(Email, HasSelectedItem)); }
+        }
+
+        public RosterListViewModel(IServiceManager services, Incident incident)
+            : base(services)
         {
             Incident = incident;
-            Responders = new UnrosteredListViewModel(incident);
-            Rosters = new RosteredListViewModel(incident);
-            AddCommand = new RelayCommand(Add, Responders.HasAnySelectedItems);
-            RemoveCommand = new RelayCommand(Remove, Rosters.HasAnySelectedItems);
-            EmailCommand = new RelayCommand(Email, Rosters.HasAnySelectedItems);
-            RefreshCommand = new RelayCommand(Refresh);
-            Responders.SelectedItemChanged += (sender, e) =>
+            Responders = new ResponderListChildViewModel(services, incident);
+            Responders.SelectionChanged += (sender, e) =>
             {
-                AddCommand.RaiseCanExecuteChanged();
+                addCommand.RaiseCanExecuteChanged();
             };
-            Rosters.SelectedItemChanged += (sender, e) =>
+            SelectionChanged += (sender, e) =>
             {
-                RemoveCommand.RaiseCanExecuteChanged();
+                removeCommand.RaiseCanExecuteChanged();
+                editCommand.RaiseCanExecuteChanged();
+                emailCommand.RaiseCanExecuteChanged();
             };
+            Refresh();
+        }
+
+        protected override IEnumerable<Roster> GetItems()
+        {
+            return Context.Rosters.SelectUndeletedByIncidentId(Incident.IncidentId).OrderBy(roster => roster.Responder.FullName);
+        }
+
+        protected override IEnumerable<string> GetFilteredValues(Roster item)
+        {
+            yield return item.Responder.LastName;
+            yield return item.Responder.FirstName;
+            yield return item.Responder.EmailAddress;
+            yield return item.Responder.City;
+            yield return item.Responder.State;
+            yield return item.Responder.OrganizationName;
+            yield return item.Responder.Occupation;
         }
 
         public void Add()
         {
             foreach (Responder responder in Responders.SelectedItems)
             {
-                Roster roster = DataContext.Rosters.Create();
-                roster.ResponderId = responder.ResponderId;
-                roster.IncidentId = Incident.IncidentId;
-                DataContext.Rosters.Save(roster);
+                Context.Rosters.Save(new Roster
+                {
+                    ResponderId = responder.ResponderId,
+                    IncidentId = Incident.IncidentId
+                });
             }
-            Messenger.Default.Send(new RefreshMessage<Roster>());
+            MessengerInstance.Send(new RefreshMessage(typeof(Roster)));
         }
 
         public void Remove()
         {
-            foreach (RosterViewModel roster in Rosters.SelectedItems)
+            foreach (Roster roster in SelectedItems)
             {
-                DataContext.Rosters.Delete(roster.Roster);
+                Context.Rosters.Delete(roster);
             }
-            Messenger.Default.Send(new RefreshMessage<Roster>());
+            MessengerInstance.Send(new RefreshMessage(typeof(Roster)));
+        }
+
+        public void Edit()
+        {
+            Documents.ShowResponder((Responder)SelectedItem.Responder.Clone());
         }
 
         public void Email()
         {
-            Main.OpenEmailView(new EmailViewModel(Rosters.TypedSelectedItems.Select(roster => roster.Responder)));
+            Documents.Show(
+                () => new EmailViewModel(Services, TypedSelectedItems.Select(roster => roster.Responder)),
+                document => false);
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             Responders.Refresh();
-            Rosters.Refresh();
+            base.Refresh();
         }
     }
 }

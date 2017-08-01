@@ -41,16 +41,16 @@ namespace ERHMS.Utility
             reverse = new Dictionary<T2, T1>();
         }
 
-        public void Add(T1 item1, T2 item2)
+        public void Add(T1 key, T2 value)
         {
-            forward.Add(item1, item2);
+            forward.Add(key, value);
             try
             {
-                reverse.Add(item2, item1);
+                reverse.Add(value, key);
             }
             catch
             {
-                forward.Remove(item1);
+                forward.Remove(key);
                 throw;
             }
         }
@@ -101,14 +101,14 @@ namespace ERHMS.Utility
             }
         }
 
-        public T2 Forward(T1 item1)
+        public T2 Forward(T1 key)
         {
-            return forward[item1];
+            return forward[key];
         }
 
-        public T1 Reverse(T2 item2)
+        public T1 Reverse(T2 value)
         {
-            return reverse[item2];
+            return reverse[value];
         }
 
         public IEnumerator<Tuple<T1, T2>> GetEnumerator()

@@ -6,7 +6,7 @@
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
                                        Style="{StaticResource ChildWindow}"
-                                       Title="Prepopulate Responder ID Field">
+                                       Title="{Binding Title}">
     <MahApps.SimpleChildWindow:ChildWindow.Resources>
         <Converters:ResponderToFullNameConverter x:Key="ResponderToFullNameConverter" />
     </MahApps.SimpleChildWindow:ChildWindow.Resources>
@@ -31,7 +31,7 @@
                                      Command="{Binding ContinueCommand}"
                                      Icon="{StaticResource appbar_arrow_right}" />
                 <Controls:IconButton AccessText="C_ancel"
-                                     Command="{Binding CancelCommand}"
+                                     Command="{Binding CloseCommand}"
                                      Icon="{StaticResource appbar_cancel}" />
             </WrapPanel>
         </StackPanel>

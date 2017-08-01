@@ -1,7 +1,7 @@
-﻿using ERHMS.Presentation.Infrastructure;
-using ERHMS.Utility;
+﻿using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -9,25 +9,29 @@ namespace ERHMS.Presentation.ViewModels
     {
         public string AppTitle { get; private set; }
         public string Version { get; private set; }
-        public string InformationalVersion { get; private set; }
+        public string BuildDate { get; private set; }
 
-        public RelayCommand PrintCommand { get; private set; }
+        private RelayCommand printCommand;
+        public ICommand PrintCommand
+        {
+            get { return printCommand ?? (printCommand = new RelayCommand(Print)); }
+        }
 
-        public AboutViewModel()
+        public AboutViewModel(IServiceManager services)
+            : base(services)
         {
             Title = "About";
             AppTitle = App.Title;
             Assembly assembly = Assembly.GetExecutingAssembly();
             Version = assembly.GetName().Version.ToString();
-            InformationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            PrintCommand = new RelayCommand(Print);
+            BuildDate = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         }
 
         public void Print()
         {
-            string title = string.Format("{0} License", App.Title);
-            string content = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Presentation.LICENSE.txt");
-            PrintExtensions.PrintPlainText(title, content);
+            PrintExtensions.PrintPlainText(
+                string.Format("{0} License", App.Title),
+                Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Presentation.LICENSE.txt"));
         }
     }
 }

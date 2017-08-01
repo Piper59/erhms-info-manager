@@ -1,4 +1,6 @@
-﻿using ERHMS.Presentation.Messages;
+﻿using ERHMS.Presentation.Controls;
+using ERHMS.Presentation.Dialogs;
+using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
 using ERHMS.Presentation.Views;
 using ERHMS.Utility;
@@ -11,17 +13,19 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Media;
 
 namespace ERHMS.Presentation
 {
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow : MetroWindow, IDialogManager
     {
         private static readonly IDictionary<Type, Type> DialogTypes = new Dictionary<Type, Type>
         {
-            { typeof(DataSourceViewModel), typeof(DataSourceView) },
             { typeof(CanvasLinkViewModel), typeof(LinkView) },
             { typeof(CanvasViewModel), typeof(AnalysisView) },
+            { typeof(DataSourceViewModel), typeof(DataSourceView) },
             { typeof(PgmLinkViewModel), typeof(LinkView) },
             { typeof(PgmViewModel), typeof(AnalysisView) },
             { typeof(PrepopulateViewModel), typeof(PrepopulateView) },
@@ -32,17 +36,26 @@ namespace ERHMS.Presentation
 
         private bool closing;
 
-        public MainWindow()
+        public IWin32Window Win32Window
         {
-            DataContext = MainViewModel.Instance;
+            get { return new Win32Window(this); }
+        }
+
+        public new MainViewModel DataContext
+        {
+            get { return (MainViewModel)base.DataContext; }
+        }
+
+        public MainWindow(MainViewModel dataContext)
+        {
+            InitializeComponent();
+            base.DataContext = dataContext;
             Closing += MainWindow_Closing;
             Messenger.Default.Register<AlertMessage>(this, msg => AlertAsync(msg));
             Messenger.Default.Register<BlockMessage>(this, msg => BlockAsync(msg));
             Messenger.Default.Register<ConfirmMessage>(this, msg => ConfirmAsync(msg));
-            Messenger.Default.Register<ToastMessage>(this, msg => Toast(msg));
-            Messenger.Default.Register<ShowMessage>(this, msg => ShowAsync(msg));
             Messenger.Default.Register<ExitMessage>(this, msg => Close());
-            InitializeComponent();
+            Messenger.Default.Register<ToastMessage>(this, msg => Toast(msg));
         }
 
         private async void AlertAsync(AlertMessage msg)
@@ -116,9 +129,9 @@ namespace ERHMS.Presentation
             };
             msg.Confirmed += (_sender, _e) =>
             {
-                foreach (ViewModelBase document in MainViewModel.Instance.Documents.ToList())
+                foreach (ViewModelBase document in DataContext.Documents.ToList())
                 {
-                    MainViewModel.Instance.Documents.Remove(document);
+                    DataContext.Documents.Remove(document);
                 }
                 closing = true;
                 Close();
@@ -127,11 +140,17 @@ namespace ERHMS.Presentation
             Messenger.Default.Send(msg);
         }
 
-        private async void ShowAsync(ShowMessage msg)
+        public async Task ShowAsync(DialogViewModel dataContext)
         {
-            ChildWindow dialog = (ChildWindow)Activator.CreateInstance(DialogTypes[msg.ViewModel.GetType()]);
-            dialog.DataContext = msg.ViewModel;
+            dataContext.Active = true;
+            ChildWindow dialog = (ChildWindow)Activator.CreateInstance(DialogTypes[dataContext.GetType()]);
+            dialog.DataContext = dataContext;
             await this.ShowChildWindowAsync(dialog, ChildWindowManager.OverlayFillBehavior.FullWindow);
+        }
+
+        public async Task ShowErrorAsync(string message, Exception exception)
+        {
+            await ErrorDialog.ShowAsync(this, message, exception);
         }
 
         private void Toast(ToastMessage msg)

@@ -13,17 +13,17 @@
                           VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <TextBlock Margin="0,5,0,5"
-                           FontSize="{StaticResource DialogMessageFontSize}"
-                           TextWrapping="Wrap">
-                        Welcome to <Run Text="{StaticResource ApplicationTitle}" />!
+                               FontSize="{StaticResource DialogMessageFontSize}"
+                               TextWrapping="Wrap">
+                        Welcome to <Run Text="{StaticResource AppTitle}" />!
                         To get started, select a data source from the list and click Open.
                         To add a new data source to the list, click Add &gt; New.
                         To add an existing data source to the list, click Add &gt; Existing.
                     </TextBlock>
                     <TextBlock Margin="0,5,0,0"
-                           FontSize="{StaticResource DialogMessageFontSize}"
-                           TextWrapping="Wrap">
-                        For more information, consult the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/topics/erhms/"><Run Text="{StaticResource ApplicationTitle}" /> User Manual</Controls:WebHyperlink>.
+                               FontSize="{StaticResource DialogMessageFontSize}"
+                               TextWrapping="Wrap">
+                        For more information, consult the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/topics/erhms/"><Run Text="{StaticResource AppTitle}" /> User Guide</Controls:WebHyperlink>.
                     </TextBlock>
                 </StackPanel>
             </ScrollViewer>

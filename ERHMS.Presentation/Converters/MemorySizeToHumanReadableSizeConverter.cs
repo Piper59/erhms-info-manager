@@ -23,15 +23,15 @@ namespace ERHMS.Presentation.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            long memorySize = (long)value;
+            long size = (long)value;
             for (int index = Units.Count - 1; index > 0; index--)
             {
-                if (memorySize > Sizes[index])
+                if (size > Sizes[index])
                 {
-                    return string.Format("{0:n1} {1}", (double)memorySize / Sizes[index], Units[index]);
+                    return string.Format("{0:n1} {1}", (double)size / Sizes[index], Units[index]);
                 }
             }
-            return string.Format("{0} B", memorySize);
+            return string.Format("{0} B", size);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -164,7 +164,7 @@ namespace ERHMS.Test.EpiInfo
             {
                 Assert.IsFalse(project.Driver.TableExists(page.TableName));
             }
-            project.CollectedData.EnsureDataTablesExist(view);
+            project.CollectedData.EnsureDataTablesExist(view.Id);
             Assert.IsTrue(project.Driver.TableExists(view.TableName));
             foreach (Page page in pages)
             {
@@ -172,7 +172,7 @@ namespace ERHMS.Test.EpiInfo
             }
             Assert.DoesNotThrow(() =>
             {
-                project.CollectedData.EnsureDataTablesExist(view);
+                project.CollectedData.EnsureDataTablesExist(view.Id);
             });
         }
 

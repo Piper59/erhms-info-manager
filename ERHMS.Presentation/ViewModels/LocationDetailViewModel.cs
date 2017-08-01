@@ -2,11 +2,11 @@
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Maps.MapControl.WPF;
 using Microsoft.Maps.MapControl.WPF.Core;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Coordinates = Microsoft.Maps.MapControl.WPF.Location;
 using Location = ERHMS.Domain.Location;
 
@@ -19,7 +19,7 @@ namespace ERHMS.Presentation.ViewModels
         private const double ZoomLevelIncrement = 1.2;
         private const double UnpinnedZoomLevel = 6.0;
         private const double PinnedZoomLevel = 14.0;
-        private static readonly Coordinates DistrictOfColumbia = new Coordinates(38.904722, -77.016389);
+        private static readonly Coordinates DistrictOfColumbia = new Coordinates(38.895, -77.036389);
 
         private static Coordinates LastCenter { get; set; }
         private static double? LastZoomLevel { get; set; }
@@ -52,30 +52,67 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Set(nameof(ZoomLevel), ref zoomLevel, value))
                 {
-                    ZoomInCommand.RaiseCanExecuteChanged();
-                    ZoomOutCommand.RaiseCanExecuteChanged();
+                    zoomInCommand.RaiseCanExecuteChanged();
+                    zoomOutCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
         public ObservableCollection<Coordinates> Pins { get; private set; }
 
-        public RelayCommand LocateCommand { get; private set; }
-        public RelayCommand DropPinCommand { get; private set; }
-        public RelayCommand ZoomInCommand { get; private set; }
-        public RelayCommand ZoomOutCommand { get; private set; }
-        public RelayCommand CenterAndZoomInCommand { get; private set; }
-        public RelayCommand CenterAndZoomOutCommand { get; private set; }
-        public RelayCommand SaveCommand { get; private set; }
-
-        public LocationDetailViewModel(Location location)
+        private RelayCommand locateCommand;
+        public ICommand LocateCommand
         {
+            get { return locateCommand ?? (locateCommand = new RelayCommand(Locate, HasAddress)); }
+        }
+
+        private RelayCommand dropPinCommand;
+        public ICommand DropPinCommand
+        {
+            get { return dropPinCommand ?? (dropPinCommand = new RelayCommand(DropPin)); }
+        }
+
+        private RelayCommand zoomInCommand;
+        public ICommand ZoomInCommand
+        {
+            get { return zoomInCommand ?? (zoomInCommand = new RelayCommand(ZoomIn, CanZoomIn)); }
+        }
+
+        private RelayCommand zoomOutCommand;
+        public ICommand ZoomOutCommand
+        {
+            get { return zoomOutCommand ?? (zoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut)); }
+        }
+
+        private RelayCommand centerAndZoomInCommand;
+        public ICommand CenterAndZoomInCommand
+        {
+            get { return centerAndZoomInCommand ?? (centerAndZoomInCommand = new RelayCommand(CenterAndZoomIn, CanZoomIn)); }
+        }
+
+        private RelayCommand centerAndZoomOutCommand;
+        public ICommand CenterAndZoomOutCommand
+        {
+            get { return centerAndZoomOutCommand ?? (centerAndZoomOutCommand = new RelayCommand(CenterAndZoomOut, CanZoomOut)); }
+        }
+
+        private RelayCommand saveCommand;
+        public ICommand SaveCommand
+        {
+            get { return saveCommand ?? (saveCommand = new RelayCommand(Save)); }
+        }
+
+        public LocationDetailViewModel(IServiceManager services, Location location)
+            : base(services)
+        {
+            Title = location.New ? "New Location" : location.Name;
             Location = location;
+            AddDirtyCheck(location);
             location.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(Location.Address))
                 {
-                    LocateCommand.RaiseCanExecuteChanged();
+                    locateCommand.RaiseCanExecuteChanged();
                 }
                 else if (e.PropertyName == nameof(Location.Latitude) || e.PropertyName == nameof(Location.Longitude))
                 {
@@ -86,17 +123,8 @@ namespace ERHMS.Presentation.ViewModels
                     }
                 }
             };
-            AddDirtyCheck(location);
-            Refresh();
             CredentialsProvider = new ApplicationIdCredentialsProvider(Settings.Default.MapApplicationId);
             Pins = new ObservableCollection<Coordinates>();
-            LocateCommand = new RelayCommand(Locate, HasAddress);
-            DropPinCommand = new RelayCommand(DropPin);
-            ZoomInCommand = new RelayCommand(ZoomIn, CanZoomIn);
-            ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
-            CenterAndZoomInCommand = new RelayCommand(CenterAndZoomIn, CanZoomIn);
-            CenterAndZoomOutCommand = new RelayCommand(CenterAndZoomOut, CanZoomOut);
-            SaveCommand = new RelayCommand(Save);
             if (HasCoordinates())
             {
                 Center = GetCoordinates();
@@ -108,11 +136,6 @@ namespace ERHMS.Presentation.ViewModels
             {
                 LoadState();
             }
-        }
-
-        private void Refresh()
-        {
-            Title = Location.New ? "New Location" : Location.Name;
         }
 
         public void SaveState()
@@ -155,6 +178,32 @@ namespace ERHMS.Presentation.ViewModels
             SetCoordinates(coordinates.Latitude, coordinates.Longitude);
         }
 
+        public bool CanZoomIn()
+        {
+            return ZoomLevel < ZoomLevelMax;
+        }
+
+        public bool CanZoomOut()
+        {
+            return ZoomLevel > ZoomLevelMin;
+        }
+
+        public void SetZoomLevel(double zoomLevel)
+        {
+            if (zoomLevel < ZoomLevelMin)
+            {
+                ZoomLevel = ZoomLevelMin;
+            }
+            else if (zoomLevel > ZoomLevelMax)
+            {
+                ZoomLevel = ZoomLevelMax;
+            }
+            else
+            {
+                ZoomLevel = zoomLevel;
+            }
+        }
+
         public void Locate()
         {
             GeocodeRequest request = new GeocodeRequest
@@ -187,7 +236,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                Messenger.Default.Send(new AlertMessage
+                MessengerInstance.Send(new AlertMessage
                 {
                     Message = "Address could not be found."
                 });
@@ -200,32 +249,6 @@ namespace ERHMS.Presentation.ViewModels
             {
                 SetCoordinates(Target);
                 SaveState();
-            }
-        }
-
-        public bool CanZoomIn()
-        {
-            return ZoomLevel < ZoomLevelMax;
-        }
-
-        public bool CanZoomOut()
-        {
-            return ZoomLevel > ZoomLevelMin;
-        }
-
-        public void SetZoomLevel(double zoomLevel)
-        {
-            if (zoomLevel < ZoomLevelMin)
-            {
-                ZoomLevel = ZoomLevelMin;
-            }
-            else if (zoomLevel > ZoomLevelMax)
-            {
-                ZoomLevel = ZoomLevelMax;
-            }
-            else
-            {
-                ZoomLevel = zoomLevel;
             }
         }
 
@@ -266,13 +289,10 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowRequiredMessage(fields);
+                ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
         public void Save()
@@ -281,15 +301,15 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            DataContext.Locations.Save(Location);
-            Dirty = false;
-            Messenger.Default.Send(new ToastMessage
+            Context.Locations.Save(Location);
+            MessengerInstance.Send(new ToastMessage
             {
                 Message = "Location has been saved."
             });
-            Messenger.Default.Send(new RefreshMessage<Location>());
+            MessengerInstance.Send(new RefreshMessage(typeof(Location)));
+            Title = Location.Name;
             SaveState();
-            Refresh();
+            Dirty = false;
         }
     }
 }

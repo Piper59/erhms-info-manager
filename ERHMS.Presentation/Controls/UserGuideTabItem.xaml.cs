@@ -5,12 +5,12 @@ using System.Windows.Controls;
 
 namespace ERHMS.Presentation.Controls
 {
-    public partial class UserManualTabItem : TabItem
+    public partial class UserGuideTabItem : TabItem
     {
         public static readonly DependencyProperty NavigateUriProperty = DependencyProperty.Register(
             "NavigateUri",
             typeof(Uri),
-            typeof(UserManualTabItem));
+            typeof(UserGuideTabItem));
 
         public Uri NavigateUri
         {
@@ -18,10 +18,10 @@ namespace ERHMS.Presentation.Controls
             set { SetValue(NavigateUriProperty, value); }
         }
 
-        public UserManualTabItem()
+        public UserGuideTabItem()
         {
-            SetResourceReference(StyleProperty, typeof(TabItem));
             InitializeComponent();
+            SetResourceReference(StyleProperty, typeof(TabItem));
         }
 
         protected override void OnSelected(RoutedEventArgs e)

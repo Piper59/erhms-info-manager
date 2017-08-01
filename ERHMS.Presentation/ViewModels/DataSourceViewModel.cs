@@ -1,98 +1,46 @@
 ﻿using Epi;
+using ERHMS.Dapper;
+using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class DataSourceViewModel : ViewModelBase
+    public class DataSourceViewModel : DialogViewModel
     {
-        public class SqlServerOptionsViewModel : ViewModelBase
+        public static bool Add(string path)
         {
-            private string dataSource;
-            public string DataSource
+            if (Settings.Default.DataSourcePaths.Add(path))
             {
-                get { return dataSource; }
-                set { Set(nameof(DataSource), ref dataSource, value); }
+                Settings.Default.Save();
+                return true;
             }
-
-            private string initialCatalog;
-            public string InitialCatalog
+            else
             {
-                get { return initialCatalog; }
-                set { Set(nameof(InitialCatalog), ref initialCatalog, value); }
-            }
-
-            private bool integratedSecurity;
-            public bool IntegratedSecurity
-            {
-                get
-                {
-                    return integratedSecurity;
-                }
-                set
-                {
-                    if (Set(nameof(IntegratedSecurity), ref integratedSecurity, value))
-                    {
-                        if (IntegratedSecurity)
-                        {
-                            UserId = null;
-                            Password = null;
-                        }
-                    }
-                }
-            }
-
-            private string userId;
-            public string UserId
-            {
-                get { return userId; }
-                set { Set(nameof(UserId), ref userId, value); }
-            }
-
-            private string password;
-            public string Password
-            {
-                get { return password; }
-                set { Set(nameof(Password), ref password, value); }
-            }
-
-            public IDataDriver CreateDriver()
-            {
-                return SqlServerDriver.Create(DataSource, InitialCatalog, UserId, Password);
+                return false;
             }
         }
 
-        public static void AddDataSource(string path)
+        public static bool Remove(string path)
         {
-            Settings.Default.DataSourcePaths.Add(path);
-            Settings.Default.Save();
-            Messenger.Default.Send(new RefreshMessage<ProjectInfo>());
-        }
-
-        public static void RemoveDataSource(string path)
-        {
-            Settings.Default.DataSourcePaths.RemoveWhere(dataSource => dataSource.EqualsIgnoreCase(path));
-            Settings.Default.Save();
-            Messenger.Default.Send(new RefreshMessage<ProjectInfo>());
-        }
-
-        public ICollection<DataProvider> Providers { get; private set; }
-
-        private bool active;
-        public bool Active
-        {
-            get { return active; }
-            set { Set(nameof(Active), ref active, value); }
+            if (Settings.Default.DataSourcePaths.Remove(path))
+            {
+                Settings.Default.Save();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private string name;
@@ -116,43 +64,91 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(Location), ref location, value); }
         }
 
-        private DataProvider provider;
-        public DataProvider Provider
+        public string FullName
+        {
+            get { return Path.Combine(Location, Name, Path.ChangeExtension(Name, Project.FileExtension)); }
+        }
+
+        public ICollection<DbProvider> Providers { get; private set; }
+
+        private DbProvider provider;
+        public DbProvider Provider
         {
             get { return provider; }
             set { Set(nameof(Provider), ref provider, value); }
         }
 
-        public SqlServerOptionsViewModel SqlServerOptions { get; private set; }
-
-        public RelayCommand BrowseCommand { get; private set; }
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand CancelCommand { get; private set; }
-
-        public DataSourceViewModel()
+        private string dataSource;
+        public string DataSource
         {
-            Providers = new DataProvider[]
-            {
-                DataProvider.Access,
-                DataProvider.SqlServer
-            };
-            Location = Configuration.GetNewInstance().Directories.Project;
-            Provider = DataProvider.Access;
-            SqlServerOptions = new SqlServerOptionsViewModel();
-            BrowseCommand = new RelayCommand(Browse);
-            CreateCommand = new RelayCommand(Create);
-            CancelCommand = new RelayCommand(Cancel);
+            get { return dataSource; }
+            set { Set(nameof(DataSource), ref dataSource, value); }
         }
 
-        public void Browse()
+        private string initialCatalog;
+        public string InitialCatalog
         {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            get { return initialCatalog; }
+            set { Set(nameof(InitialCatalog), ref initialCatalog, value); }
+        }
+
+        private bool integratedSecurity;
+        public bool IntegratedSecurity
+        {
+            get
             {
-                if (dialog.ShowDialog(App.Current.MainWin32Window) == DialogResult.OK)
+                return integratedSecurity;
+            }
+            set
+            {
+                if (Set(nameof(IntegratedSecurity), ref integratedSecurity, value))
                 {
-                    Location = dialog.SelectedPath;
+                    if (value)
+                    {
+                        UserId = null;
+                        Password = null;
+                    }
                 }
             }
+        }
+
+        private string userId;
+        public string UserId
+        {
+            get { return userId; }
+            set { Set(nameof(UserId), ref userId, value); }
+        }
+
+        private string password;
+        public string Password
+        {
+            get { return password; }
+            set { Set(nameof(Password), ref password, value); }
+        }
+
+        private RelayCommand browseCommand;
+        public ICommand BrowseCommand
+        {
+            get { return browseCommand ?? (browseCommand = new RelayCommand(Browse)); }
+        }
+
+        private RelayCommand createCommand;
+        public ICommand CreateCommand
+        {
+            get { return createCommand ?? (createCommand = new RelayCommand(Create)); }
+        }
+
+        public DataSourceViewModel(IServiceManager services)
+            : base(services)
+        {
+            Title = "Create a Data Source";
+            Location = Configuration.GetNewInstance().Directories.Project;
+            Providers = new DbProvider[]
+            {
+                DbProvider.Access,
+                DbProvider.SqlServer
+            };
+            Provider = DbProvider.Access;
         }
 
         private bool Validate()
@@ -162,72 +158,49 @@ namespace ERHMS.Presentation.ViewModels
             {
                 fields.Add("Name");
             }
-            if (Provider == DataProvider.SqlServer)
+            if (Provider == DbProvider.SqlServer)
             {
-                if (string.IsNullOrWhiteSpace(SqlServerOptions.DataSource))
+                if (string.IsNullOrWhiteSpace(DataSource))
                 {
                     fields.Add("Server Name");
                 }
-                if (string.IsNullOrWhiteSpace(SqlServerOptions.InitialCatalog))
+                if (string.IsNullOrWhiteSpace(InitialCatalog))
                 {
                     fields.Add("Database Name");
                 }
             }
             if (fields.Count > 0)
             {
-                ShowRequiredMessage(fields);
+                ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            else
+            if (Name.IndexOfAny(Path.GetInvalidPathChars()) != -1 || Name.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
             {
-                if (Name.IndexOfAny(Path.GetInvalidPathChars()) != -1 || Name.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+                fields.Add("Name");
+            }
+            if (fields.Count > 0)
+            {
+                ShowValidationMessage(ValidationError.Invalid, fields);
+                return false;
+            }
+            return true;
+        }
+
+        public void Browse()
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                if (dialog.ShowDialog(Dialogs.Win32Window) == DialogResult.OK)
                 {
-                    fields.Add("Name");
-                }
-                if (fields.Count > 0)
-                {
-                    ShowInvalidMessage(fields);
-                    return false;
-                }
-                else
-                {
-                    return true;
+                    Location = dialog.SelectedPath;
                 }
             }
         }
 
-        private void Create(IDataDriver driver, bool initialize)
+        public void Add()
         {
-            try
-            {
-                if (initialize)
-                {
-                    driver.CreateDatabase();
-                }
-                Project project = Project.Create(new ProjectCreationInfo
-                {
-                    Name = Name,
-                    Description = Description,
-                    Location = Path.Combine(Location, Name),
-                    Driver = driver.Provider.ToEpiInfoName(),
-                    Builder = driver.Builder,
-                    DatabaseName = driver.DatabaseName,
-                    Initialize = initialize
-                });
-                if (initialize)
-                {
-                    DataAccess.DataContext.Create(project);
-                }
-                AddDataSource(project.FilePath);
-            }
-            catch (Exception ex)
-            {
-                Log.Logger.Warn("Failed to create data source", ex);
-                Messenger.Default.Send(new AlertMessage
-                {
-                    Message = "Failed to create data source."
-                });
-            }
+            Add(FullName);
+            MessengerInstance.Send(new RefreshMessage(typeof(ProjectInfo)));
         }
 
         public void Create()
@@ -238,8 +211,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             try
             {
-                string path = Path.Combine(Location, Name, Path.ChangeExtension(Name, Project.FileExtension));
-                if (File.Exists(path))
+                if (File.Exists(FullName))
                 {
                     ConfirmMessage msg = new ConfirmMessage
                     {
@@ -248,26 +220,26 @@ namespace ERHMS.Presentation.ViewModels
                     };
                     msg.Confirmed += (sender, e) =>
                     {
-                        AddDataSource(path);
-                        Active = false;
+                        Add();
+                        Close();
                     };
-                    Messenger.Default.Send(msg);
+                    MessengerInstance.Send(msg);
                 }
                 else
                 {
-                    IDataDriver driver;
+                    IDatabase database;
                     switch (Provider)
                     {
-                        case DataProvider.Access:
-                            driver = AccessDriver.Create(Path.ChangeExtension(path, ".mdb"));
+                        case DbProvider.Access:
+                            database = AccessDatabase.Construct(Path.ChangeExtension(FullName, ".mdb"));
                             break;
-                        case DataProvider.SqlServer:
-                            driver = SqlServerOptions.CreateDriver();
+                        case DbProvider.SqlServer:
+                            database = SqlServerDatabase.Construct(DataSource, InitialCatalog, UserId, Password);
                             break;
                         default:
                             throw new InvalidEnumValueException(Provider);
                     }
-                    if (driver.DatabaseExists())
+                    if (database.Exists())
                     {
                         ConfirmMessage msg = new ConfirmMessage
                         {
@@ -276,10 +248,10 @@ namespace ERHMS.Presentation.ViewModels
                         };
                         msg.Confirmed += (sender, e) =>
                         {
-                            Create(driver, false);
-                            Active = false;
+                            Create(database, false);
+                            Close();
                         };
-                        Messenger.Default.Send(msg);
+                        MessengerInstance.Send(msg);
                     }
                     else
                     {
@@ -289,33 +261,56 @@ namespace ERHMS.Presentation.ViewModels
                         };
                         msg.Executing += (sender, e) =>
                         {
-                            Create(driver, true);
-                            Active = false;
+                            Create(database, true);
+                            Close();
                         };
                         msg.Executed += (sender, e) =>
                         {
-                            Messenger.Default.Send(new ToastMessage
+                            MessengerInstance.Send(new ToastMessage
                             {
                                 Message = "Data source has been created."
                             });
                         };
-                        Messenger.Default.Send(msg);
+                        MessengerInstance.Send(msg);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Log.Logger.Warn("Failed to create data source", ex);
-                Messenger.Default.Send(new AlertMessage
-                {
-                    Message = "Failed to create data source."
-                });
+                Dialogs.ShowErrorAsync("Failed to create data source.", ex);
             }
         }
 
-        public void Cancel()
+        private void Create(IDatabase database, bool initialize)
         {
-            Active = false;
+            try
+            {
+                if (initialize)
+                {
+                    database.Create();
+                }
+                Project project = Project.Create(new ProjectCreationInfo
+                {
+                    Name = Name,
+                    Description = Description,
+                    Location = Path.Combine(Location, Name),
+                    Driver = DbProviderExtensions.EpiInfoNames.Forward(Provider),
+                    Builder = database.Builder,
+                    DatabaseName = database.Name,
+                    Initialize = initialize
+                });
+                if (initialize)
+                {
+                    DataContext.Create(project);
+                }
+                Add();
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Warn("Failed to create data source", ex);
+                Dialogs.ShowErrorAsync("Failed to create data source.", ex);
+            }
         }
     }
 }

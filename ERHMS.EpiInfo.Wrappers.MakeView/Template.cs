@@ -22,7 +22,7 @@ namespace ERHMS.EpiInfo.Wrappers
             Mediator = mediator;
         }
 
-        public int InstantiateTemplate(string path)
+        public void InstantiateTemplate(string path)
         {
             Log.Logger.DebugFormat("Instantiating template: {0}", path);
             Invoker invoker = new Invoker
@@ -32,7 +32,6 @@ namespace ERHMS.EpiInfo.Wrappers
                 ArgTypes = new Type[] { typeof(string) }
             };
             invoker.Invoke(path);
-            return Mediator.ProjectExplorer.CurrentView.Id;
         }
 
         public string CreateTemplate(View view, string templateName, string description)

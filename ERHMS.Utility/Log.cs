@@ -12,6 +12,7 @@ namespace ERHMS.Utility
 {
     public static class Log
     {
+        public const string FileExtension = ".txt";
         public static readonly ICollection<string> LevelNames = new string[]
         {
             "DEBUG",
@@ -44,7 +45,7 @@ namespace ERHMS.Utility
         {
             GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
             name = Assembly.GetEntryAssembly().GetName().Name;
-            FilePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Logs", name + ".txt");
+            FilePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Logs", name + FileExtension);
             hierarchy = (Hierarchy)LogManager.GetRepository();
             PatternLayout layout = new PatternLayout("%date %10property{process} %-5level - %message%newline");
             layout.ActivateOptions();

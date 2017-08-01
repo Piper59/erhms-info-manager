@@ -18,10 +18,8 @@
                          Value="{Binding Filter}" />
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
-            <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
-            </i:Interaction.Behaviors>
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectionMode="Single">
             <DataGrid.Resources>
                 <Controls:BindingProxy x:Key="Proxy"
                                        DataContext="{Binding}" />
@@ -31,7 +29,7 @@
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Item.Name}"
+                <DataGridTextColumn Binding="{Binding Name}"
                                     Header="Name"
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding Incident.Name}"

@@ -115,27 +115,27 @@
                 </Canvas>
             </ScrollViewer>
         </TabItem>
-        <Controls:UserManualTabItem Header="_Data Sources"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Responders"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Incidents"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Notes"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Roster"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Locations"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Forms"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Templates"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Assignments"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Analyses"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
-        <Controls:UserManualTabItem Header="_Dashboards"
-                                    NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Data Sources"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Responders"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Incidents"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Notes"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Roster"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Locations"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Forms"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Templates"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Assignments"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Analyses"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
+        <Controls:UserGuideTabItem Header="_Dashboards"
+                                   NavigateUri="https://www.cdc.gov/niosh/topics/erhms/" />
     </TabControl>
 </UserControl>

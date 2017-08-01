@@ -9,23 +9,18 @@ namespace ERHMS.Presentation.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
-            AssociatedObject.PreviewMouseDown += AssociatedObject_PreviewMouseDown;
-            AssociatedObject.Click += AssociatedObject_Click;
+            AssociatedObject.PreviewMouseDown += AssociatedObject_MouseEvent;
+            AssociatedObject.Click += AssociatedObject_MouseEvent;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            AssociatedObject.PreviewMouseDown -= AssociatedObject_PreviewMouseDown;
+            AssociatedObject.PreviewMouseDown -= AssociatedObject_MouseEvent;
+            AssociatedObject.Click -= AssociatedObject_MouseEvent;
         }
 
-        private void AssociatedObject_PreviewMouseDown(object sender, RoutedEventArgs e)
-        {
-            OpenContextMenu();
-            e.Handled = true;
-        }
-
-        private void AssociatedObject_Click(object sender, RoutedEventArgs e)
+        private void AssociatedObject_MouseEvent(object sender, RoutedEventArgs e)
         {
             OpenContextMenu();
             e.Handled = true;
@@ -33,12 +28,13 @@ namespace ERHMS.Presentation.Behaviors
 
         private void OpenContextMenu()
         {
-            if (AssociatedObject.ContextMenu != null)
+            if (AssociatedObject.ContextMenu == null)
             {
-                AssociatedObject.ContextMenu.DataContext = AssociatedObject.DataContext;
-                AssociatedObject.ContextMenu.PlacementTarget = AssociatedObject;
-                AssociatedObject.ContextMenu.IsOpen = true;
+                return;
             }
+            AssociatedObject.ContextMenu.DataContext = AssociatedObject.DataContext;
+            AssociatedObject.ContextMenu.PlacementTarget = AssociatedObject;
+            AssociatedObject.ContextMenu.IsOpen = true;
         }
     }
 }

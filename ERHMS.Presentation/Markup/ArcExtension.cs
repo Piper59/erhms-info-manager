@@ -14,33 +14,33 @@ namespace ERHMS.Presentation.Markup
         [ConstructorArgument("radius")]
         public double Radius { get; set; }
 
-        [ConstructorArgument("startAngle")]
-        public double StartAngle { get; set; }
+        [ConstructorArgument("start")]
+        public double Start { get; set; }
 
-        [ConstructorArgument("endAngle")]
-        public double EndAngle { get; set; }
+        [ConstructorArgument("end")]
+        public double End { get; set; }
 
-        [ConstructorArgument("sweepDirection")]
-        public SweepDirection SweepDirection { get; set; }
+        [ConstructorArgument("direction")]
+        public SweepDirection Direction { get; set; }
 
         public ArcExtension() { }
 
-        public ArcExtension(Point center, double radius, double startAngle, double endAngle, SweepDirection sweepDirection)
+        public ArcExtension(Point center, double radius, double start, double end, SweepDirection direction)
         {
             Center = center;
             Radius = radius;
-            StartAngle = startAngle;
-            EndAngle = endAngle;
-            SweepDirection = sweepDirection;
+            Start = start;
+            End = end;
+            Direction = direction;
         }
 
-        private Point GetPoint(double angle)
+        private Point GetPoint(double degrees)
         {
-            double angleInRadians = angle * Math.PI / 180.0;
+            double radians = degrees * Math.PI / 180.0;
             return new Point
             {
-                X = Center.X + Radius * Math.Cos(angleInRadians),
-                Y = Center.Y - Radius * Math.Sin(angleInRadians)
+                X = Center.X + Radius * Math.Cos(radians),
+                Y = Center.Y - Radius * Math.Sin(radians)
             };
         }
 
@@ -50,14 +50,14 @@ namespace ERHMS.Presentation.Markup
             {
                 new PathFigure
                 {
-                    StartPoint = GetPoint(StartAngle),
+                    StartPoint = GetPoint(Start),
                     Segments = new PathSegmentCollection
                     {
                         new ArcSegment
                         {
                             Size = new Size(Radius, Radius),
-                            Point = GetPoint(EndAngle),
-                            SweepDirection = SweepDirection
+                            Point = GetPoint(End),
+                            SweepDirection = Direction
                         }
                     }
                 }

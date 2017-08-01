@@ -1,19 +1,12 @@
-﻿using Epi;
-using ERHMS.Domain;
+﻿using ERHMS.Domain;
 using GalaSoft.MvvmLight.Command;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public abstract class AnalysisViewModel : ViewModelBase
+    public abstract class AnalysisViewModel : DialogViewModel
     {
-        public DeepLink<View> ViewDeepLink { get; private set; }
-
-        private bool active;
-        public bool Active
-        {
-            get { return active; }
-            set { Set(nameof(Active), ref active, value); }
-        }
+        public View View { get; private set; }
 
         private string name;
         public string Name
@@ -26,19 +19,21 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Set(nameof(Name), ref name, value))
                 {
-                    CreateCommand.RaiseCanExecuteChanged();
+                    createCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand CancelCommand { get; private set; }
-
-        protected AnalysisViewModel(DeepLink<View> viewDeepLink)
+        private RelayCommand createCommand;
+        public ICommand CreateCommand
         {
-            ViewDeepLink = viewDeepLink;
-            CreateCommand = new RelayCommand(Create, HasName);
-            CancelCommand = new RelayCommand(Cancel);
+            get { return createCommand ?? (createCommand = new RelayCommand(Create, HasName)); }
+        }
+
+        protected AnalysisViewModel(IServiceManager services, View view)
+            : base(services)
+        {
+            View = view;
         }
 
         public bool HasName()
@@ -47,10 +42,5 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         public abstract void Create();
-
-        public void Cancel()
-        {
-            Active = false;
-        }
     }
 }

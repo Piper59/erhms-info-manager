@@ -3,9 +3,10 @@ using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
 using ERHMS.Presentation.Controls;
 using ERHMS.Presentation.Dialogs;
-using ERHMS.Presentation.Infrastructure;
+using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
 using ERHMS.Utility;
+using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.IO;
@@ -22,7 +23,7 @@ using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation
 {
-    public partial class App : Application
+    public partial class App : Application, IServiceManager
     {
         public const string BareTitle = "ERHMS Info Manager";
         public static readonly string Title = BareTitle + "\u2122";
@@ -42,6 +43,7 @@ namespace ERHMS.Presentation
             {
                 Log.LevelName = Settings.Default.LogLevelName;
                 Log.Logger.Debug("Starting up");
+                DataContext.Configure();
                 App app = new App();
                 app.DispatcherUnhandledException += (sender, e) =>
                 {
@@ -74,14 +76,26 @@ namespace ERHMS.Presentation
         }
 
         public ResourceDictionary Accent { get; private set; }
+        public MainViewModel MainViewModel { get; private set; }
         public new MainWindow MainWindow { get; private set; }
-        public Win32Window MainWin32Window { get; private set; }
+
+        public IDocumentManager Documents
+        {
+            get { return MainViewModel; }
+        }
+
+        public IDialogManager Dialogs
+        {
+            get { return MainWindow; }
+        }
+
+        public DataContext Context { get; set; }
         public bool ShuttingDown { get; private set; }
 
         public App()
         {
             InitializeComponent();
-            Resources.Add("ApplicationTitle", Title);
+            Resources.Add("AppTitle", Title);
             AddTextFileResource("COPYRIGHT");
             AddTextFileResource("LICENSE");
             AddTextFileResource("NOTICE");
@@ -91,6 +105,13 @@ namespace ERHMS.Presentation
         {
             string resourceName = string.Format("ERHMS.Presentation.{0}.txt", key);
             Resources.Add(key, Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName));
+        }
+
+        private void CopyTextFileResource(string key, string directoryPath)
+        {
+            string fileName = key + ".txt";
+            string resourceName = "ERHMS.Presentation." + fileName;
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, Path.Combine(directoryPath, fileName));
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -112,8 +133,16 @@ namespace ERHMS.Presentation
                 typeof(TabItem),
                 UIElement.GotKeyboardFocusEvent,
                 new KeyboardFocusChangedEventHandler(TabItem_GotKeyboardFocus));
-            MainWindow = new MainWindow();
-            MainWin32Window = new Win32Window(MainWindow);
+            Messenger.Default.Register<ShutdownMessage>(this, msg =>
+            {
+                Shutdown();
+                if (msg.Restart)
+                {
+                    System.Windows.Forms.Application.Restart();
+                }
+            });
+            MainViewModel = new MainViewModel(this);
+            MainWindow = new MainWindow(MainViewModel);
             MainWindow.ContentRendered += MainWindow_ContentRendered;
             MainWindow.Show();
         }
@@ -147,9 +176,9 @@ namespace ERHMS.Presentation
         {
             if (Settings.Default.LicenseAccepted)
             {
-                if (LoadSettings())
+                if (LoadConfiguration())
                 {
-                    MainViewModel.Instance.OpenDataSourceListView();
+                    Documents.ShowDataSources();
                 }
                 else
                 {
@@ -164,9 +193,9 @@ namespace ERHMS.Presentation
                     Log.Logger.Debug("License accepted");
                     Settings.Default.LicenseAccepted = true;
                     Settings.Default.Save();
-                    if (LoadSettings())
+                    if (LoadConfiguration())
                     {
-                        MainViewModel.Instance.OpenDataSourceListView();
+                        Documents.ShowDataSources();
                         await WelcomeDialog.ShowAsync(MainWindow);
                     }
                     else
@@ -182,7 +211,7 @@ namespace ERHMS.Presentation
             }
         }
 
-        private bool LoadSettings()
+        private bool LoadConfiguration()
         {
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
             {
@@ -198,17 +227,17 @@ namespace ERHMS.Presentation
                 File.Copy(Settings.Default.ConfigurationFilePath, ConfigurationExtensions.FilePath);
             }
             Configuration configuration;
-            if (!ConfigurationExtensions.TryLoad(out configuration) || !Directory.Exists(configuration.Directories.Project))
+            if (!ConfigurationExtensions.TryLoad(out configuration) || !Directory.Exists(configuration.GetRootPath()))
             {
                 while (true)
                 {
-                    Log.Logger.Debug("Prompting for root directory");
-                    using (FolderBrowserDialog dialog = RootDirectoryDialog.GetDialog())
+                    Log.Logger.Debug("Prompting for root path");
+                    using (FolderBrowserDialog dialog = RootPathDialog.GetDialog())
                     {
-                        if (dialog.Show(MainWin32Window))
+                        if (dialog.Show(MainWindow.Win32Window))
                         {
-                            string path = dialog.GetRootDirectory();
-                            Log.Logger.DebugFormat("Root directory chosen: {0}", path);
+                            string path = dialog.GetRootPath();
+                            Log.Logger.DebugFormat("Root path chosen: {0}", path);
                             try
                             {
                                 using (new WaitCursor())
@@ -225,8 +254,8 @@ namespace ERHMS.Presentation
                                     ConfigurationExtensions.Load();
                                     if (!SampleDataContext.Exists())
                                     {
-                                        DataContext sampleDataContext = SampleDataContext.Create();
-                                        Settings.Default.DataSourcePaths.Add(sampleDataContext.Project.FilePath);
+                                        DataContext context = SampleDataContext.Create();
+                                        Settings.Default.DataSourcePaths.Add(context.Project.FilePath);
                                         Settings.Default.Save();
                                     }
                                 }
@@ -234,9 +263,9 @@ namespace ERHMS.Presentation
                             }
                             catch (Exception ex)
                             {
-                                Log.Logger.Warn("Failed to initialize root directory", ex);
+                                Log.Logger.Warn("Failed to initialize root path", ex);
                                 StringBuilder message = new StringBuilder();
-                                message.AppendFormat("{0} failed to initialize the following folder. Please choose another location.", Title);
+                                message.AppendFormat("{0} failed to initialize the following directory. Please choose another location.", Title);
                                 message.AppendLine();
                                 message.AppendLine();
                                 message.Append(path);
@@ -245,7 +274,7 @@ namespace ERHMS.Presentation
                         }
                         else
                         {
-                            Log.Logger.Debug("Root directory not chosen");
+                            Log.Logger.Debug("Root path not chosen");
                             return false;
                         }
                     }
@@ -254,25 +283,6 @@ namespace ERHMS.Presentation
             Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
             return true;
-        }
-
-        private void CopyTextFileResource(string key, string directoryPath)
-        {
-            string fileName = key + ".txt";
-            string resourceName = "ERHMS.Presentation." + fileName;
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, Path.Combine(directoryPath, fileName));
-        }
-
-        public void Invoke(Action action)
-        {
-            if (Dispatcher.CheckAccess())
-            {
-                action();
-            }
-            else
-            {
-                Dispatcher.Invoke(action);
-            }
         }
 
         public new void Shutdown()

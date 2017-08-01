@@ -46,7 +46,7 @@
                                      AutomationProperties.Name="Root Directory"
                                      IsReadOnly="True"
                                      Margin="0"
-                                     Text="{Binding RootDirectory}" />
+                                     Text="{Binding RootPath}" />
                             <Button Grid.Column="1"
                                     Command="{Binding BrowseCommand}"
                                     Margin="5,0,0,0"
@@ -56,8 +56,7 @@
                         </Grid>
                     </Grid>
                 </GroupBox>
-                <GroupBox DataContext="{Binding EmailSettings}"
-                          Header="Email">
+                <GroupBox Header="Email">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -75,24 +74,24 @@
                         <Label Grid.Row="0" Grid.Column="0">SMTP Host</Label>
                         <TextBox Grid.Row="0" Grid.Column="1"
                                  AutomationProperties.Name="SMTP Host"
-                                 Text="{Binding Host}" />
+                                 Text="{Binding EmailHost}" />
                         <Label Grid.Row="1" Grid.Column="0">SMTP Port</Label>
                         <TextBox Grid.Row="1" Grid.Column="1"
                                  AutomationProperties.Name="SMTP Port"
-                                 Text="{Binding Port, TargetNullValue=''}" />
+                                 Text="{Binding EmailPort, TargetNullValue=''}" />
                         <Label Grid.Row="2" Grid.Column="0">Use SSL</Label>
                         <CheckBox Grid.Row="2" Grid.Column="1"
                                   AutomationProperties.Name="Use SSL"
-                                  IsChecked="{Binding Ssl}" />
+                                  IsChecked="{Binding EmailUseSsl}" />
                         <Label Grid.Row="3" Grid.Column="0">Sender Address</Label>
                         <TextBox Grid.Row="3" Grid.Column="1"
                                  AutomationProperties.Name="Sender Address"
-                                 Text="{Binding Sender}" />
+                                 Text="{Binding EmailSender}" />
                         <Label Grid.Row="4" Grid.Column="0">Sender Password</Label>
                         <PasswordBox Grid.Row="4" Grid.Column="1"
                                      AutomationProperties.Name="Sender Password">
                             <i:Interaction.Behaviors>
-                                <Behaviors:BindPasswordBehavior Password="{Binding Password, TargetNullValue=''}" />
+                                <Behaviors:BindPasswordBehavior Password="{Binding EmailPassword, TargetNullValue=''}" />
                             </i:Interaction.Behaviors>
                         </PasswordBox>
                         <TextBlock Grid.Row="5" Grid.Column="1"
@@ -115,7 +114,7 @@
                         <Label Grid.Row="0" Grid.Column="0">License Key</Label>
                         <TextBox Grid.Row="0" Grid.Column="1"
                                  AutomationProperties.Name="License Key"
-                                 Text="{Binding MapLicenseKey}" />
+                                 Text="{Binding MapApplicationId}" />
                         <TextBlock Grid.Row="1" Grid.Column="1"
                                    TextWrapping="Wrap">
                             <Run FontWeight="SemiBold">Note:</Run> The default mapping license key should only be used for demonstration purposes.
@@ -123,8 +122,7 @@
                         </TextBlock>
                     </Grid>
                 </GroupBox>
-                <GroupBox DataContext="{Binding WebSurveySettings}"
-                          Header="Web Survey"
+                <GroupBox Header="Web Survey"
                           Margin="0">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -142,7 +140,7 @@
                         <Label Grid.Row="0" Grid.Column="0">Endpoint Address</Label>
                         <TextBox Grid.Row="0" Grid.Column="1"
                                  AutomationProperties.Name="Endpoint Address"
-                                 Text="{Binding Address}" />
+                                 Text="{Binding EndpointAddress}" />
                         <Label Grid.Row="1" Grid.Column="0">Windows Authentication</Label>
                         <CheckBox Grid.Row="1" Grid.Column="1"
                                   AutomationProperties.Name="Windows Authentication"

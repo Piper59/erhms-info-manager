@@ -1,23 +1,17 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentNotesViewModel : ViewModelBase
+    public class IncidentNotesViewModel : ListViewModel<IncidentNote>
     {
         public Incident Incident { get; private set; }
-
-        private ICollection<IncidentNote> notes;
-        public ICollection<IncidentNote> Notes
-        {
-            get { return notes; }
-            private set { Set(nameof(Notes), ref notes, value); }
-        }
 
         private IncidentNote note;
         public IncidentNote Note
@@ -26,17 +20,19 @@ namespace ERHMS.Presentation.ViewModels
             private set { Set(nameof(Note), ref note, value); }
         }
 
-        public RelayCommand SaveCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
-
-        public IncidentNotesViewModel(Incident incident)
+        private RelayCommand saveCommand;
+        public ICommand SaveCommand
         {
+            get { return saveCommand ?? (saveCommand = new RelayCommand(Save, HasContent)); }
+        }
+
+        public IncidentNotesViewModel(IServiceManager services, Incident incident)
+            : base(services)
+        {
+            Title = "Notes";
             Incident = incident;
-            ResetNote();
+            Reset();
             Refresh();
-            SaveCommand = new RelayCommand(Save, HasContent);
-            RefreshCommand = new RelayCommand(Refresh);
-            Messenger.Default.Register<RefreshMessage<IncidentNote>>(this, msg => Refresh());
         }
 
         public bool HasContent()
@@ -44,38 +40,41 @@ namespace ERHMS.Presentation.ViewModels
             return !string.IsNullOrWhiteSpace(Note.Content);
         }
 
-        private void ResetNote()
+        protected override IEnumerable<IncidentNote> GetItems()
+        {
+            return Context.IncidentNotes.SelectByIncidentId(Incident.IncidentId).OrderByDescending(note => note.Date);
+        }
+
+        private void Reset()
         {
             if (Note != null)
             {
                 RemoveDirtyCheck(Note);
+                Note.PropertyChanged -= Note_PropertyChanged;
             }
-            Note = DataContext.IncidentNotes.Create();
-            Note.IncidentId = Incident.IncidentId;
-            Note.PropertyChanged += (sender, e) =>
+            Note = new IncidentNote
             {
-                if (e.PropertyName != nameof(IncidentNote.Content))
-                {
-                    SaveCommand.RaiseCanExecuteChanged();
-                }
+                IncidentId = Incident.IncidentId
             };
             AddDirtyCheck(Note);
+            Note.PropertyChanged += Note_PropertyChanged;
         }
 
-        public void Refresh()
+        private void Note_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Notes = DataContext.IncidentNotes.SelectByIncidentId(Incident.IncidentId)
-                .OrderByDescending(note => note.Date)
-                .ToList();
+            if (e.PropertyName == nameof(IncidentNote.Content))
+            {
+                saveCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public void Save()
         {
             Note.Date = DateTime.Now;
-            DataContext.IncidentNotes.Save(Note);
+            Context.IncidentNotes.Save(Note);
+            MessengerInstance.Send(new RefreshMessage(typeof(IncidentNote)));
+            Reset();
             Dirty = false;
-            Messenger.Default.Send(new RefreshMessage<IncidentNote>());
-            ResetNote();
         }
     }
 }

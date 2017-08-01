@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.Domain;
+﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Messages;
@@ -7,31 +6,59 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TemplateListViewModel : ListViewModelBase<TemplateInfo>
+    public class TemplateListViewModel : ListViewModel<TemplateInfo>
     {
+        public static void Create(IServiceManager services, TemplateInfo template, Incident incident)
+        {
+            string prefix = incident == null ? "" : incident.Name + "_";
+            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(services.Context.Project.FilePath, template.FilePath, prefix);
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == WrapperEventType.ViewCreated)
+                {
+                    if (incident != null)
+                    {
+                        services.Context.ViewLinks.Save(new ViewLink
+                        {
+                            ViewId = e.Properties.ViewId,
+                            IncidentId = incident.IncidentId
+                        });
+                    }
+                    Messenger.Default.Send(new RefreshMessage(typeof(View)));
+                }
+            };
+            wrapper.Invoke();
+        }
+
         public Incident Incident { get; private set; }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        private RelayCommand createCommand;
+        public ICommand CreateCommand
+        {
+            get { return createCommand ?? (createCommand = new RelayCommand(Create, HasSelectedItem)); }
+        }
 
-        public TemplateListViewModel(Incident incident)
+        private RelayCommand deleteCommand;
+        public ICommand DeleteCommand
+        {
+            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasSelectedItem)); }
+        }
+
+        public TemplateListViewModel(IServiceManager services, Incident incident)
+            : base(services)
         {
             Title = "Templates";
             Incident = incident;
-            Refresh();
-            CreateCommand = new RelayCommand(Create, HasOneSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasOneSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            SelectedItemChanged += (sender, e) =>
+            SelectionChanged += (sender, e) =>
             {
-                CreateCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
+                createCommand.RaiseCanExecuteChanged();
+                deleteCommand.RaiseCanExecuteChanged();
             };
-            Messenger.Default.Register<RefreshMessage<TemplateInfo>>(this, msg => Refresh());
+            Refresh();
         }
 
         protected override IEnumerable<TemplateInfo> GetItems()
@@ -47,23 +74,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            string namePrefix = Incident == null ? "" : Incident.Name + "_";
-            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(DataContext.Project.FilePath, SelectedItem.FilePath, namePrefix);
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == WrapperEventType.ViewCreated)
-                {
-                    if (Incident != null)
-                    {
-                        ViewLink viewLink = DataContext.ViewLinks.Create();
-                        viewLink.ViewId = e.Properties.Id;
-                        viewLink.IncidentId = Incident.IncidentId;
-                        DataContext.ViewLinks.Save(viewLink);
-                    }
-                    Messenger.Default.Send(new RefreshMessage<View>());
-                }
-            };
-            wrapper.Invoke();
+            Create(Services, SelectedItem, Incident);
         }
 
         public void Delete()
@@ -76,9 +87,9 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 SelectedItem.Delete();
-                Messenger.Default.Send(new RefreshMessage<TemplateInfo>());
+                MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
             };
-            Messenger.Default.Send(msg);
+            MessengerInstance.Send(msg);
         }
     }
 }

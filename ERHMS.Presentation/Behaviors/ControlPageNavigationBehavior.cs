@@ -14,8 +14,8 @@ namespace ERHMS.Presentation.Behaviors
 
         private static int Mod(int dividend, int divisor)
         {
-            int result = dividend % divisor;
-            return result < 0 ? result + divisor : result;
+            int remainder = dividend % divisor;
+            return remainder < 0 ? remainder + divisor : remainder;
         }
 
         private static int GetIncrement(Key key)
@@ -68,7 +68,8 @@ namespace ERHMS.Presentation.Behaviors
                 {
                     break;
                 }
-                else if (((UIElement)Selector.Items[index]).IsEnabled)
+                UIElement element = Selector.Items[index] as UIElement;
+                if (element != null && element.IsEnabled)
                 {
                     Selector.SelectedIndex = index;
                     break;

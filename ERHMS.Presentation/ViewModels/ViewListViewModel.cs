@@ -1,5 +1,5 @@
-﻿using Epi;
-using Epi.Fields;
+﻿using Epi.Fields;
+using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
@@ -9,139 +9,187 @@ using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class ViewListViewModel : ListViewModelBase<DeepLink<View>>
+    public class ViewListViewModel : ListViewModel<View>
     {
         public Incident Incident { get; private set; }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand LinkCommand { get; private set; }
-        public RelayCommand EnterDataCommand { get; private set; }
-        public RelayCommand ViewDataCommand { get; private set; }
-        public RelayCommand PublishToTemplateCommand { get; private set; }
-        public RelayCommand PublishToWebCommand { get; private set; }
-        public RelayCommand PublishToMobileCommand { get; private set; }
-        public RelayCommand ImportFromProjectCommand { get; private set; }
-        public RelayCommand ImportFromPackageCommand { get; private set; }
-        public RelayCommand ImportFromFileCommand { get; private set; }
-        public RelayCommand ImportFromWebCommand { get; private set; }
-        public RelayCommand ImportFromMobileCommand { get; private set; }
-        public RelayCommand ExportToPackageCommand { get; private set; }
-        public RelayCommand ExportToFileCommand { get; private set; }
-        public RelayCommand AnalyzeClassicCommand { get; private set; }
-        public RelayCommand AnalyzeVisualCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        private RelayCommand createCommand;
+        public ICommand CreateCommand
+        {
+            get { return createCommand ?? (createCommand = new RelayCommand(Create, HasSelectedItem)); }
+        }
 
-        public ViewListViewModel(Incident incident)
+        private RelayCommand editCommand;
+        public ICommand EditCommand
+        {
+            get { return editCommand ?? (editCommand = new RelayCommand(Edit, HasSelectedItem)); }
+        }
+
+        private RelayCommand deleteCommand;
+        public ICommand DeleteCommand
+        {
+            get { return deleteCommand ?? (deleteCommand = new RelayCommand(Delete, HasNonSystemSelectedItem)); }
+        }
+
+        private RelayCommand linkCommand;
+        public ICommand LinkCommand
+        {
+            get { return linkCommand ?? (linkCommand = new RelayCommand(Link, HasNonSystemSelectedItem)); }
+        }
+
+        private RelayCommand enterDataCommand;
+        public ICommand EnterDataCommand
+        {
+            get { return enterDataCommand ?? (enterDataCommand = new RelayCommand(EnterData, HasSelectedItem)); }
+        }
+
+        private RelayCommand viewDataCommand;
+        public ICommand ViewDataCommand
+        {
+            get { return viewDataCommand ?? (viewDataCommand = new RelayCommand(ViewData, HasSelectedItem)); }
+        }
+
+        private RelayCommand publishToTemplateCommand;
+        public ICommand PublishToTemplateCommand
+        {
+            get { return publishToTemplateCommand ?? (publishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedItem)); }
+        }
+
+        private RelayCommand publishToWebCommand;
+        public ICommand PublishToWebCommand
+        {
+            get { return publishToWebCommand ?? (publishToWebCommand = new RelayCommand(PublishToWeb, HasSelectedItem)); }
+        }
+
+        private RelayCommand publishToMobileCommand;
+        public ICommand PublishToMobileCommand
+        {
+            get { return publishToMobileCommand ?? (publishToMobileCommand = new RelayCommand(PublishToMobile, HasSelectedItem)); }
+        }
+
+        private RelayCommand importFromProjectCommand;
+        public ICommand ImportFromProjectCommand
+        {
+            get { return importFromProjectCommand ?? (importFromProjectCommand = new RelayCommand(ImportFromProject, HasSelectedItem)); }
+        }
+
+        private RelayCommand importFromPackageCommand;
+        public ICommand ImportFromPackageCommand
+        {
+            get { return importFromPackageCommand ?? (importFromPackageCommand = new RelayCommand(ImportFromPackage, HasSelectedItem)); }
+        }
+
+        private RelayCommand importFromFileCommand;
+        public ICommand ImportFromFileCommand
+        {
+            get { return importFromFileCommand ?? (importFromFileCommand = new RelayCommand(ImportFromFile, HasSelectedItem)); }
+        }
+
+        private RelayCommand importFromWebCommand;
+        public ICommand ImportFromWebCommand
+        {
+            get { return importFromWebCommand ?? (importFromWebCommand = new RelayCommand(ImportFromWeb, HasSelectedItem)); }
+        }
+
+        private RelayCommand importFromMobileCommand;
+        public ICommand ImportFromMobileCommand
+        {
+            get { return importFromMobileCommand ?? (importFromMobileCommand = new RelayCommand(ImportFromMobile, HasSelectedItem)); }
+        }
+
+        private RelayCommand exportToPackageCommand;
+        public ICommand ExportToPackageCommand
+        {
+            get { return exportToPackageCommand ?? (exportToPackageCommand = new RelayCommand(ExportToPackage, HasSelectedItem)); }
+        }
+
+        private RelayCommand exportToFileCommand;
+        public ICommand ExportToFileCommand
+        {
+            get { return exportToFileCommand ?? (exportToFileCommand = new RelayCommand(ExportToFile, HasSelectedItem)); }
+        }
+
+        private RelayCommand analyzeClassicCommand;
+        public ICommand AnalyzeClassicCommand
+        {
+            get { return analyzeClassicCommand ?? (analyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasSelectedItem)); }
+        }
+
+        private RelayCommand analyzeVisualCommand;
+        public ICommand AnalyzeVisualCommand
+        {
+            get { return analyzeVisualCommand ?? (analyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasSelectedItem)); }
+        }
+
+        public ViewListViewModel(IServiceManager services, Incident incident)
+            : base(services)
         {
             Title = "Forms";
             Incident = incident;
-            Refresh();
-            CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasOneSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasNonSystemSelectedItem);
-            LinkCommand = new RelayCommand(Link, HasNonSystemSelectedItem);
-            EnterDataCommand = new RelayCommand(EnterData, HasOneSelectedItem);
-            ViewDataCommand = new RelayCommand(ViewData, HasOneSelectedItem);
-            PublishToTemplateCommand = new RelayCommand(PublishToTemplate, HasOneSelectedItem);
-            PublishToWebCommand = new RelayCommand(PublishToWeb, HasOneSelectedItem);
-            PublishToMobileCommand = new RelayCommand(PublishToMobile, HasOneSelectedItem);
-            ImportFromProjectCommand = new RelayCommand(ImportFromProject, HasOneSelectedItem);
-            ImportFromPackageCommand = new RelayCommand(ImportFromPackage, HasOneSelectedItem);
-            ImportFromFileCommand = new RelayCommand(ImportFromFile, HasOneSelectedItem);
-            ImportFromWebCommand = new RelayCommand(ImportFromWeb, HasOneSelectedItem);
-            ImportFromMobileCommand = new RelayCommand(ImportFromMobile, HasOneSelectedItem);
-            ExportToPackageCommand = new RelayCommand(ExportToPackage, HasOneSelectedItem);
-            ExportToFileCommand = new RelayCommand(ExportToFile, HasOneSelectedItem);
-            AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasOneSelectedItem);
-            AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasOneSelectedItem);
-            RefreshCommand = new RelayCommand(Refresh);
-            SelectedItemChanged += (sender, e) =>
+            SelectionChanged += (sender, e) =>
             {
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                LinkCommand.RaiseCanExecuteChanged();
-                EnterDataCommand.RaiseCanExecuteChanged();
-                ViewDataCommand.RaiseCanExecuteChanged();
-                PublishToTemplateCommand.RaiseCanExecuteChanged();
-                PublishToWebCommand.RaiseCanExecuteChanged();
-                PublishToMobileCommand.RaiseCanExecuteChanged();
-                ImportFromProjectCommand.RaiseCanExecuteChanged();
-                ImportFromPackageCommand.RaiseCanExecuteChanged();
-                ImportFromFileCommand.RaiseCanExecuteChanged();
-                ImportFromWebCommand.RaiseCanExecuteChanged();
-                ImportFromMobileCommand.RaiseCanExecuteChanged();
-                ExportToPackageCommand.RaiseCanExecuteChanged();
-                ExportToFileCommand.RaiseCanExecuteChanged();
-                AnalyzeClassicCommand.RaiseCanExecuteChanged();
-                AnalyzeVisualCommand.RaiseCanExecuteChanged();
+                editCommand.RaiseCanExecuteChanged();
+                deleteCommand.RaiseCanExecuteChanged();
+                linkCommand.RaiseCanExecuteChanged();
+                enterDataCommand.RaiseCanExecuteChanged();
+                viewDataCommand.RaiseCanExecuteChanged();
+                publishToTemplateCommand.RaiseCanExecuteChanged();
+                publishToWebCommand.RaiseCanExecuteChanged();
+                publishToMobileCommand.RaiseCanExecuteChanged();
+                importFromProjectCommand.RaiseCanExecuteChanged();
+                importFromPackageCommand.RaiseCanExecuteChanged();
+                importFromFileCommand.RaiseCanExecuteChanged();
+                importFromWebCommand.RaiseCanExecuteChanged();
+                importFromMobileCommand.RaiseCanExecuteChanged();
+                exportToPackageCommand.RaiseCanExecuteChanged();
+                exportToFileCommand.RaiseCanExecuteChanged();
+                analyzeClassicCommand.RaiseCanExecuteChanged();
+                analyzeVisualCommand.RaiseCanExecuteChanged();
             };
-            Messenger.Default.Register<RefreshMessage<View>>(this, msg => Refresh());
-            Messenger.Default.Register<RefreshMessage<Incident>>(this, msg => Refresh());
-        }
-
-        protected override IEnumerable<DeepLink<View>> GetItems()
-        {
-            IEnumerable<DeepLink<View>> items;
-            if (Incident == null)
-            {
-                items = DataContext.ViewLinks.SelectDeepLinks();
-            }
-            else
-            {
-                items = DataContext.ViewLinks.SelectDeepLinksByIncidentId(Incident.IncidentId);
-            }
-            return items.OrderBy(item => item.Item.Name);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(DeepLink<View> item)
-        {
-            yield return item.Item.Name;
-            if (Incident == null)
-            {
-                yield return item.Incident?.Name;
-            }
+            Refresh();
         }
 
         public bool HasNonSystemSelectedItem()
         {
-            return HasOneSelectedItem() && !DataContext.IsResponderView(SelectedItem.Item);
+            return HasSelectedItem() && SelectedItem.Name != Context.Responders.View.Name;
+        }
+
+        protected override IEnumerable<View> GetItems()
+        {
+            IEnumerable<View> views;
+            if (Incident == null)
+            {
+                views = Context.Views.SelectUndeleted();
+            }
+            else
+            {
+                views = Context.Views.SelectByIncidentId(Incident.IncidentId);
+            }
+            return views.OrderBy(view => view.Name);
+        }
+
+        protected override IEnumerable<string> GetFilteredValues(View item)
+        {
+            yield return item.Name;
+            yield return item.Incident?.Name;
         }
 
         public void Create()
         {
-            TemplateInfo template = DataContext.CreateNewViewTemplate();
-            string namePrefix = Incident == null ? null : Incident.Name + "_";
-            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(DataContext.Project.FilePath, template.FilePath, namePrefix);
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == WrapperEventType.ViewCreated)
-                {
-                    if (Incident != null)
-                    {
-                        ViewLink viewLink = DataContext.ViewLinks.Create();
-                        viewLink.ViewId = e.Properties.Id;
-                        viewLink.IncidentId = Incident.IncidentId;
-                        DataContext.ViewLinks.Save(viewLink);
-                    }
-                    Messenger.Default.Send(new RefreshMessage<View>());
-                }
-            };
-            wrapper.Invoke();
+            TemplateListViewModel.Create(Services, DataContext.GetNewViewTemplate(), Incident);
         }
 
         public void Edit()
         {
-            MakeView.OpenView.Create(DataContext.Project.FilePath, SelectedItem.Item.Name).Invoke();
+            MakeView.OpenView.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
         }
 
         public void Delete()
@@ -153,149 +201,140 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
-                DataContext.Assignments.DeleteByViewId(SelectedItem.Item.Id);
-                DataContext.ViewLinks.DeleteByViewId(SelectedItem.Item.Id);
-                DataContext.WebSurveys.DeleteByViewId(SelectedItem.Item.Id);
-                DataContext.Project.DeleteView(SelectedItem.Item);
-                Messenger.Default.Send(new RefreshMessage<View>());
+                Context.Assignments.DeleteByViewId(SelectedItem.ViewId);
+                Context.ViewLinks.DeleteByViewId(SelectedItem.ViewId);
+                Context.WebSurveys.DeleteByViewId(SelectedItem.ViewId);
+                Context.Project.DeleteView(SelectedItem.ViewId);
+                MessengerInstance.Send(new RefreshMessage(typeof(View)));
             };
-            Messenger.Default.Send(msg);
+            MessengerInstance.Send(msg);
         }
 
         public void Link()
         {
-            Messenger.Default.Send(new ShowMessage
-            {
-                ViewModel = new ViewLinkViewModel(SelectedItem)
-                {
-                    Active = true
-                }
-            });
+            Dialogs.ShowAsync(new ViewLinkViewModel(Services, SelectedItem));
         }
 
         public void EnterData()
         {
-            if (DataContext.IsResponderLinkedView(SelectedItem.Item))
+            if (SelectedItem.HasResponderIdField)
             {
-                Messenger.Default.Send(new ShowMessage
-                {
-                    ViewModel = new PrepopulateViewModel(SelectedItem)
-                    {
-                        Active = true
-                    }
-                });
+                Dialogs.ShowAsync(new PrepopulateViewModel(Services, SelectedItem));
             }
             else
             {
-                DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-                Enter.OpenNewRecord.Create(DataContext.Project.FilePath, SelectedItem.Item.Name).Invoke();
+                Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+                Enter.OpenNewRecord.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
             }
         }
 
         public void ViewData()
         {
-            Main.OpenRecordListView(SelectedItem.Item);
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+            Documents.ShowRecords(Context.Project.GetViewById(SelectedItem.ViewId));
         }
 
         public void PublishToTemplate()
         {
-            Wrapper wrapper = MakeView.CreateTemplate.Create(DataContext.Project.FilePath, SelectedItem.Item.Name);
+            Wrapper wrapper = MakeView.CreateTemplate.Create(Context.Project.FilePath, SelectedItem.Name);
             wrapper.Event += (sender, e) =>
             {
                 if (e.Type == WrapperEventType.TemplateCreated)
                 {
-                    Messenger.Default.Send(new RefreshMessage<TemplateInfo>());
+                    MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
                 }
             };
             wrapper.Invoke();
         }
 
-        private void ShowUnsupportedMessage(string message, IEnumerable<Field> fields)
+        private bool Validate(string target, Epi.View view, Func<Field, bool> unsupported)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine(message);
-            builder.AppendLine();
-            builder.Append(string.Join(", ", fields.Select(field => string.Format("{0} ({1})", field.Name, field.FieldType))));
-            Messenger.Default.Send(new AlertMessage
+            ICollection<Field> fields = view.Fields.Cast<Field>()
+                .Where(unsupported)
+                .ToList();
+            if (fields.Count > 0)
             {
-                Message = builder.ToString()
-            });
+                StringBuilder message = new StringBuilder();
+                message.AppendFormat("The following fields are unsupported for publication to {0}:", target);
+                message.AppendLine();
+                message.AppendLine();
+                message.Append(string.Join(", ", fields.Select(field => string.Format("{0} ({1})", field.Name, field.FieldType))));
+                MessengerInstance.Send(new AlertMessage
+                {
+                    Message = message.ToString()
+                });
+                return false;
+            }
+            return true;
         }
 
         public void PublishToWeb()
         {
-            ICollection<Field> fields = SelectedItem.Item.Fields.Cast<Field>()
-                .Where(field => !field.FieldType.IsWebSupported())
-                .ToList();
-            if (fields.Count > 0)
+            Epi.View view = Context.Project.GetViewById(SelectedItem.ViewId);
+            if (!Validate("web", view, field => !field.FieldType.IsWebSupported()))
             {
-                ShowUnsupportedMessage("The following fields are not supported for publication to web:", fields);
+                return;
+            }
+            ConfigurationError error;
+            if (Service.IsConfigured(out error, true))
+            {
+                SurveyViewModel survey = new SurveyViewModel(Services, view);
+                survey.Open();
             }
             else
             {
-                ConfigurationError error;
-                if (Service.IsConfigured(out error, true))
-                {
-                    SurveyViewModel survey = new SurveyViewModel(SelectedItem.Item);
-                    survey.Activate();
-                    Messenger.Default.Send(new ShowMessage
-                    {
-                        ViewModel = survey
-                    });
-                }
-                else
-                {
-                    SurveyViewModel.RequestConfiguration(error);
-                }
+                Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
             }
         }
 
         public void PublishToMobile()
         {
-            ICollection<Field> fields = SelectedItem.Item.Fields.Cast<Field>()
-                .Where(field => !field.FieldType.IsMobileSupported())
-                .ToList();
-            if (fields.Count > 0)
+            Epi.View view = Context.Project.GetViewById(SelectedItem.ViewId);
+            if (!Validate("mobile", view, field => !field.FieldType.IsMobileSupported()))
             {
-                ShowUnsupportedMessage("The following fields are not supported for publication to mobile:", fields);
+                return;
             }
-            else
-            {
-                MakeView.PublishToMobile.Create(DataContext.Project.FilePath, SelectedItem.Item.Name).Invoke();
-            }
+            MakeView.PublishToMobile.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
         }
 
         public void ImportFromProject()
         {
-            DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-            ImportExport.ImportFromView(SelectedItem.Item);
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+            ImportExport.ImportFromView(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
         }
 
         public void ImportFromPackage()
         {
-            DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-            ImportExport.ImportFromPackage(SelectedItem.Item);
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+            ImportExport.ImportFromPackage(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
         }
 
         public void ImportFromFile()
         {
-            DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-            Analysis.Import.Create(DataContext.Project.FilePath, SelectedItem.Item.Name).Invoke();
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+            Analysis.Import.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
         }
 
         public void ImportFromWeb()
         {
-            DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-            if (!SelectedItem.Item.IsWebSurvey())
+            Epi.View view = Context.Project.GetViewById(SelectedItem.ViewId);
+            if (!view.IsWebSurvey())
             {
-                Messenger.Default.Send(new AlertMessage
+                MessengerInstance.Send(new AlertMessage
                 {
                     Message = "Form has not been published to web."
                 });
                 return;
             }
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
             ConfigurationError error = ConfigurationError.None;
+            if (!Service.IsConfigured(out error, true))
+            {
+                Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
+                return;
+            }
             Survey survey = null;
+            Exception exception = null;
             bool success = false;
             BlockMessage msg = new BlockMessage
             {
@@ -307,99 +346,77 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     return;
                 }
-                survey = Service.GetSurvey(SelectedItem.Item);
+                survey = Service.GetSurvey(view.WebSurveyId);
                 if (survey == null)
                 {
                     return;
                 }
-                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(DataContext.Driver, SelectedItem.Item);
+                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context, view);
                 try
                 {
                     foreach (Record record in Service.GetRecords(survey))
                     {
-                        ViewEntity entity = entities.SelectByGlobalRecordId(record.GlobalRecordId);
-                        if (entity == null)
-                        {
-                            entity = entities.Create();
-                            entity.GlobalRecordId = record.GlobalRecordId;
-                        }
-                        foreach (string key in record.Keys)
-                        {
-                            Type type = entities.GetDataType(key);
-                            entity.SetProperty(key, record.GetValue(key, type));
-                        }
-                        entities.Save(entity);
+                        entities.Save(record);
                     }
                     success = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Logger.Warn("Failed to import data from web", ex);
+                    exception = ex;
                 }
             };
             msg.Executed += (sender, e) =>
             {
                 if (error != ConfigurationError.None)
                 {
-                    SurveyViewModel.RequestConfiguration(error);
+                    Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
                 }
                 else if (survey == null)
                 {
-                    SurveyViewModel.RequestConfiguration("Failed to retrieve web survey details.");
+                    Documents.ShowSettings(SurveyViewModel.GetErrorMessage("Failed to retrieve web survey details."));
                 }
                 else if (!success)
                 {
-                    SurveyViewModel.RequestConfiguration("Failed to import data from web.");
+                    Documents.ShowSettings("Failed to import data from web.", exception);
                 }
                 else
                 {
-                    Messenger.Default.Send(new ToastMessage
+                    MessengerInstance.Send(new ToastMessage
                     {
                         Message = "Data has been imported from web."
                     });
                 }
             };
-            Messenger.Default.Send(msg);
+            MessengerInstance.Send(msg);
         }
 
         public void ImportFromMobile()
         {
-            DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-            ImportExport.ImportFromMobile(SelectedItem.Item);
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+            ImportExport.ImportFromMobile(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
         }
 
         public void ExportToPackage()
         {
-            DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-            ImportExport.ExportToPackage(SelectedItem.Item);
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+            ImportExport.ExportToPackage(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
         }
 
         public void ExportToFile()
         {
-            DataContext.Project.CollectedData.EnsureDataTablesExist(SelectedItem.Item);
-            Analysis.Export.Create(DataContext.Project.FilePath, SelectedItem.Item.Name).Invoke();
+            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
+            Analysis.Export.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
         }
 
         public void AnalyzeClassic()
         {
-            Messenger.Default.Send(new ShowMessage
-            {
-                ViewModel = new PgmViewModel(SelectedItem)
-                {
-                    Active = true
-                }
-            });
+            Dialogs.ShowAsync(new PgmViewModel(Services, SelectedItem));
         }
 
         public void AnalyzeVisual()
         {
-            Messenger.Default.Send(new ShowMessage
-            {
-                ViewModel = new CanvasViewModel(SelectedItem)
-                {
-                    Active = true
-                }
-            });
+            Dialogs.ShowAsync(new CanvasViewModel(Services, SelectedItem));
         }
     }
 }
