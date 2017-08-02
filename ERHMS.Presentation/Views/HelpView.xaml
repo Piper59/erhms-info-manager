@@ -46,8 +46,8 @@
                             &#x2022; Health and safety training<LineBreak />
                             <LineBreak />
                             Modules:
-                            <Hyperlink Command="{Binding OpenResponderListViewCommand}">Responders</Hyperlink>,
-                            <Hyperlink Command="{Binding OpenTemplateListViewCommand}">Templates</Hyperlink>
+                            <Hyperlink Command="{Binding ShowRespondersCommand}">Responders</Hyperlink>,
+                            <Hyperlink Command="{Binding ShowTemplatesCommand}">Templates</Hyperlink>
                         </TextBlock>
                     </Grid>
                     <Grid Canvas.Left="150"
@@ -66,8 +66,8 @@
                             &#x2022; Communication of exposure and health<LineBreak />monitoring and surveillance data<LineBreak />
                             <LineBreak />
                             Modules:
-                            <Hyperlink Command="{Binding OpenIncidentListViewCommand}">Incidents</Hyperlink>,
-                            <Hyperlink Command="{Binding OpenViewListViewCommand}">Forms</Hyperlink>
+                            <Hyperlink Command="{Binding ShowIncidentsCommand}">Incidents</Hyperlink>,
+                            <Hyperlink Command="{Binding ShowViewsCommand}">Forms</Hyperlink>
                         </TextBlock>
                     </Grid>
                     <Grid Canvas.Left="300"
@@ -82,8 +82,8 @@
                             &#x2022; Post-event health tracking<LineBreak />
                             &#x2022; After-action reporting<LineBreak /><LineBreak />
                             Modules:
-                            <Hyperlink Command="{Binding OpenPgmListViewCommand}">Analyses</Hyperlink>,
-                            <Hyperlink Command="{Binding OpenCanvasListViewCommand}">Dashboards</Hyperlink>
+                            <Hyperlink Command="{Binding ShowPgmsCommand}">Analyses</Hyperlink>,
+                            <Hyperlink Command="{Binding ShowCanvasesCommand}">Dashboards</Hyperlink>
                         </TextBlock>
                     </Grid>
                     <Grid Canvas.Left="250"

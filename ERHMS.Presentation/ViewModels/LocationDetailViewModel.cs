@@ -43,20 +43,8 @@ namespace ERHMS.Presentation.ViewModels
         private double zoomLevel;
         public double ZoomLevel
         {
-            get
-            {
-                return zoomLevel;
-            }
-            set
-            {
-                if (Set(nameof(ZoomLevel), ref zoomLevel, value))
-                {
-                    ZoomInCommand.RaiseCanExecuteChanged();
-                    ZoomOutCommand.RaiseCanExecuteChanged();
-                    CenterAndZoomInCommand.RaiseCanExecuteChanged();
-                    CenterAndZoomOutCommand.RaiseCanExecuteChanged();
-                }
-            }
+            get { return zoomLevel; }
+            set { Set(nameof(ZoomLevel), ref zoomLevel, value); }
         }
 
         public ObservableCollection<Coordinates> Pins { get; private set; }
@@ -93,7 +81,18 @@ namespace ERHMS.Presentation.ViewModels
             ZoomOutCommand = new RelayCommand(ZoomOut, CanZoomOut);
             CenterAndZoomInCommand = new RelayCommand(CenterAndZoomIn, CanZoomIn);
             CenterAndZoomOutCommand = new RelayCommand(CenterAndZoomOut, CanZoomOut);
+            SaveCommand = new RelayCommand(Save);
             AddDirtyCheck(location);
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ZoomLevel))
+                {
+                    ZoomInCommand.RaiseCanExecuteChanged();
+                    ZoomOutCommand.RaiseCanExecuteChanged();
+                    CenterAndZoomInCommand.RaiseCanExecuteChanged();
+                    CenterAndZoomOutCommand.RaiseCanExecuteChanged();
+                }
+            };
             location.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(Location.Address))

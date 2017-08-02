@@ -23,58 +23,58 @@
         <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Command="{Binding CloseActiveDocumentCommand}"
+        <KeyBinding Command="{Binding CloseCommand}"
                     Key="W"
                     Modifiers="Ctrl" />
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Command="{Binding OpenDataSourceListViewCommand}"
+                <MenuItem Command="{Binding ShowDataSourcesCommand}"
                           Header="_Data Sources" />
                 <Separator />
-                <MenuItem Command="{Binding CloseActiveDocumentCommand}"
+                <MenuItem Command="{Binding CloseCommand}"
                           Header="_Close Tab"
                           InputGestureText="Ctrl+W" />
                 <MenuItem Command="{Binding ExitCommand}"
                           Header="E_xit" />
             </MenuItem>
             <MenuItem Header="_Responders"
-                      Visibility="{Binding DataContext, Converter={StaticResource NullToVisibilityConverter}}">
-                <MenuItem Command="{Binding OpenResponderListViewCommand}"
+                      Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                <MenuItem Command="{Binding ShowRespondersCommand}"
                           Header="Show _All" />
-                <MenuItem Command="{Binding CreateResponderCommand}"
+                <MenuItem Command="{Binding ShowNewResponderCommand}"
                           Header="Create _New" />
             </MenuItem>
             <MenuItem Header="Incidents"
-                      Visibility="{Binding DataContext, Converter={StaticResource NullToVisibilityConverter}}">
-                <MenuItem Command="{Binding OpenIncidentListViewCommand}"
+                      Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                <MenuItem Command="{Binding ShowIncidentsCommand}"
                           Header="Show _All" />
-                <MenuItem Command="{Binding CreateIncidentCommand}"
+                <MenuItem Command="{Binding ShowNewIncidentCommand}"
                           Header="Create _New" />
             </MenuItem>
             <MenuItem Header="_Data"
-                      Visibility="{Binding DataContext, Converter={StaticResource NullToVisibilityConverter}}">
-                <MenuItem Command="{Binding OpenViewListViewCommand}"
+                      Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                <MenuItem Command="{Binding ShowViewsCommand}"
                           Header="_Forms" />
-                <MenuItem Command="{Binding OpenTemplateListViewCommand}"
+                <MenuItem Command="{Binding ShowTemplatesCommand}"
                           Header="_Templates" />
-                <MenuItem Command="{Binding OpenAssignmentListViewCommand}"
+                <MenuItem Command="{Binding ShowAssignmentsCommand}"
                           Header="A_ssignments" />
-                <MenuItem Command="{Binding OpenPgmListViewCommand}"
+                <MenuItem Command="{Binding ShowPgmsCommand}"
                           Header="A_nalyses" />
-                <MenuItem Command="{Binding OpenCanvasListViewCommand}"
+                <MenuItem Command="{Binding ShowCanvasesCommand}"
                           Header="_Dashboards" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Command="{Binding OpenSettingsViewCommand}"
+                <MenuItem Command="{Binding ShowSettingsCommand}"
                           Header="_Settings" />
-                <MenuItem Command="{Binding OpenLogListViewCommand}"
+                <MenuItem Command="{Binding ShowLogsCommand}"
                           Header="_Logs" />
-                <MenuItem Command="{Binding OpenHelpViewCommand}"
+                <MenuItem Command="{Binding ShowHelpCommand}"
                           Header="_Help" />
                 <Separator />
-                <MenuItem Command="{Binding OpenAboutViewCommand}"
+                <MenuItem Command="{Binding ShowAboutCommand}"
                           Header="_About" />
             </MenuItem>
         </Menu>

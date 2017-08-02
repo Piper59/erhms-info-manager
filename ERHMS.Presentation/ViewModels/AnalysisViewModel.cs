@@ -10,17 +10,8 @@ namespace ERHMS.Presentation.ViewModels
         private string name;
         public string Name
         {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                if (Set(nameof(Name), ref name, value))
-                {
-                    CreateCommand.RaiseCanExecuteChanged();
-                }
-            }
+            get { return name; }
+            set { Set(nameof(Name), ref name, value); }
         }
 
         public RelayCommand CreateCommand { get; private set; }
@@ -30,6 +21,13 @@ namespace ERHMS.Presentation.ViewModels
         {
             View = view;
             CreateCommand = new RelayCommand(Create, HasName);
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(Name))
+                {
+                    CreateCommand.RaiseCanExecuteChanged();
+                }
+            };
         }
 
         public bool HasName()

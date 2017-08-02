@@ -74,6 +74,7 @@ namespace ERHMS.Presentation.ViewModels
                     if (!value)
                     {
                         Views.SelectedItem = null;
+                        CanPrepopulate = false;
                     }
                 }
             }
@@ -167,7 +168,7 @@ namespace ERHMS.Presentation.ViewModels
 
         private void SetCanPrepopulate()
         {
-            CanPrepopulate = Views.SelectedItem != null && Views.SelectedItem.HasResponderIdField;
+            CanPrepopulate = AppendUrl && Views.SelectedItem != null && Views.SelectedItem.HasResponderIdField;
         }
 
         public void AddRecipient()
@@ -256,7 +257,7 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             ConfigurationError error = ConfigurationError.None;
-            if (!Service.IsConfigured(out error, true))
+            if (Prepopulate && !Service.IsConfigured(out error, true))
             {
                 Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
                 return;
@@ -293,7 +294,7 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         message.Attachments.Add(new Attachment(path));
                     }
-                    using (SmtpClient client = Settings.Default.GetSmtpClient())
+                    using (SmtpClient client = Settings.Default.GetSmtpClient(ConfigurationExtensions.DecryptSafe))
                     {
                         foreach (RecipientViewModel recipient in Recipients)
                         {

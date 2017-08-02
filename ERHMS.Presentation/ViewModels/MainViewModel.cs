@@ -38,7 +38,6 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         Log.Logger.DebugFormat("Activating tab: {0}", value);
                     }
-                    CloseCommand.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -52,15 +51,7 @@ namespace ERHMS.Presentation.ViewModels
             private set
             {
                 Services.Context = value;
-                ShowRespondersCommand.RaiseCanExecuteChanged();
-                ShowNewResponderCommand.RaiseCanExecuteChanged();
-                ShowIncidentsCommand.RaiseCanExecuteChanged();
-                ShowNewIncidentCommand.RaiseCanExecuteChanged();
-                ShowViewsCommand.RaiseCanExecuteChanged();
-                ShowTemplatesCommand.RaiseCanExecuteChanged();
-                ShowAssignmentsCommand.RaiseCanExecuteChanged();
-                ShowPgmsCommand.RaiseCanExecuteChanged();
-                ShowCanvasesCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(Context));
             }
         }
 
@@ -102,6 +93,25 @@ namespace ERHMS.Presentation.ViewModels
             ShowAboutCommand = new RelayCommand(ShowAbout);
             CloseCommand = new RelayCommand(Close, HasActiveDocument);
             ExitCommand = new RelayCommand(Exit);
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ActiveDocument))
+                {
+                    CloseCommand.RaiseCanExecuteChanged();
+                }
+                else if (e.PropertyName == nameof(Context))
+                {
+                    ShowRespondersCommand.RaiseCanExecuteChanged();
+                    ShowNewResponderCommand.RaiseCanExecuteChanged();
+                    ShowIncidentsCommand.RaiseCanExecuteChanged();
+                    ShowNewIncidentCommand.RaiseCanExecuteChanged();
+                    ShowViewsCommand.RaiseCanExecuteChanged();
+                    ShowTemplatesCommand.RaiseCanExecuteChanged();
+                    ShowAssignmentsCommand.RaiseCanExecuteChanged();
+                    ShowPgmsCommand.RaiseCanExecuteChanged();
+                    ShowCanvasesCommand.RaiseCanExecuteChanged();
+                }
+            };
         }
 
         public bool HasActiveDocument()

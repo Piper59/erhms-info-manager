@@ -63,7 +63,7 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<TEntity> SelectUndeleted()
         {
-            return Select("WHERE [ERHMS_Incidents].[Deleted] = 0");
+            return Select("WHERE [ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0");
         }
 
         public override TEntity SelectById(object id)

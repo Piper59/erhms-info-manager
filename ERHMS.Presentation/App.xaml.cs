@@ -1,7 +1,6 @@
 ﻿using Epi;
 using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
-using ERHMS.Presentation.Controls;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
@@ -17,7 +16,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Xceed.Wpf.AvalonDock.Controls;
-using Action = System.Action;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using Settings = ERHMS.Utility.Settings;
 

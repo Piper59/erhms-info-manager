@@ -24,7 +24,7 @@ namespace ERHMS.Presentation.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             long size = (long)value;
-            for (int index = Units.Count - 1; index > 0; index--)
+            for (int index = Units.Count - 1; index >= 0; index--)
             {
                 if (size > Sizes[index])
                 {

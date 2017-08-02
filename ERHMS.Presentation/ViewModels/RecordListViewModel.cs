@@ -80,13 +80,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (ViewEntity entity in SelectedItems)
             {
-                if (!entity.Deleted)
+                if (entity.Deleted != deleted)
                 {
                     entity.Deleted = deleted;
                     Entities.Save(entity);
                 }
             }
-            Refresh();
         }
 
         public void Delete()

@@ -45,7 +45,7 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public ObservableCollection<object> SelectedItems;
+        public ObservableCollection<object> SelectedItems { get; private set; }
 
         public IEnumerable<T> TypedSelectedItems
         {

@@ -31,8 +31,8 @@
                         <Label Grid.Row="0" Grid.Column="0">Logging Level</Label>
                         <ComboBox Grid.Row="0" Grid.Column="1"
                                   AutomationProperties.Name="Logging Level"
-                                  ItemsSource="{Binding LogLevels}"
-                                  SelectedItem="{Binding LogLevel}" />
+                                  ItemsSource="{Binding LogLevelNames}"
+                                  SelectedItem="{Binding LogLevelName}" />
                         <Label Grid.Row="1" Grid.Column="0"
                                Margin="0">
                             Root Directory

@@ -21,7 +21,7 @@ namespace ERHMS.Presentation.Dialogs
             Resources.MergedDictionaries.Add(App.Current.Accent);
             Title = "Error";
             Message.Text = message;
-            Exception.Text = exception.ToString();
+            Exception.Text = string.Format("{0}: {1}", exception.GetType().FullName, exception.Message);
         }
 
         private async void OK_Click(object sender, RoutedEventArgs e)

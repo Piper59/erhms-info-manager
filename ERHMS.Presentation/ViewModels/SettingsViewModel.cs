@@ -158,6 +158,7 @@ namespace ERHMS.Presentation.ViewModels
             MapApplicationId = Settings.Default.MapApplicationId;
             EndpointAddress = configuration.Settings.WebServiceEndpointAddress;
             WindowsAuthentication = configuration.Settings.WebServiceAuthMode == 1;
+            BindingTypes = EnumExtensions.GetValues<BindingType>().ToList();
             BindingType = BindingTypeExtensions.EpiInfoNames.Reverse(configuration.Settings.WebServiceBindingMode);
             OrganizationName = Settings.Default.OrganizationName;
             OrganizationKey = ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey);

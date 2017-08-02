@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
@@ -133,11 +134,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Create a Data Source";
             Location = Configuration.GetNewInstance().Directories.Project;
-            Providers = new DbProvider[]
-            {
-                DbProvider.Access,
-                DbProvider.SqlServer
-            };
+            Providers = EnumExtensions.GetValues<DbProvider>().ToList();
             Provider = DbProvider.Access;
             BrowseCommand = new RelayCommand(Browse);
             CreateCommand = new RelayCommand(Create);

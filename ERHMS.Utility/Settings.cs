@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
@@ -43,7 +44,7 @@ namespace ERHMS.Utility
             return !string.IsNullOrWhiteSpace(EmailHost) && EmailPort.HasValue && MailExtensions.IsValidAddress(EmailSender);
         }
 
-        public SmtpClient GetSmtpClient()
+        public SmtpClient GetSmtpClient(Func<string, string> decrypt)
         {
             SmtpClient client = new SmtpClient(EmailHost, EmailPort.Value)
             {
@@ -57,7 +58,7 @@ namespace ERHMS.Utility
             else
             {
                 client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(EmailSender, EmailPassword);
+                client.Credentials = new NetworkCredential(EmailSender, decrypt(EmailPassword));
             }
             return client;
         }
