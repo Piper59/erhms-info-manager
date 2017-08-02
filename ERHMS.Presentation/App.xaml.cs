@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -41,6 +42,7 @@ namespace ERHMS.Presentation
             {
                 Log.LevelName = Settings.Default.LogLevelName;
                 Log.Logger.Debug("Starting up");
+                LoadSettings();
                 DataContext.Configure();
                 App app = new App();
                 app.DispatcherUnhandledException += (sender, e) =>
@@ -55,6 +57,34 @@ namespace ERHMS.Presentation
             catch (Exception ex)
             {
                 HandleError(ex);
+            }
+        }
+
+        private static void LoadSettings()
+        {
+            bool reset;
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                string message = string.Format("Reset settings for {0}?", Title);
+                reset = MessageBox.Show(message, Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+            }
+            else
+            {
+                Version version;
+                reset = Version.TryParse(Settings.Default.Version, out version)
+                    && version < Assembly.GetExecutingAssembly().GetName().Version
+                    && version.Major == 0;
+            }
+            if (reset)
+            {
+                Settings.Default.Reset();
+                Settings.Default.Save();
+                try
+                {
+                    File.Copy(ConfigurationExtensions.FilePath, ConfigurationExtensions.FilePath + ".bak", true);
+                    File.Delete(ConfigurationExtensions.FilePath);
+                }
+                catch { }
             }
         }
 
@@ -172,6 +202,11 @@ namespace ERHMS.Presentation
 
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
         {
+            await ShowLicense();
+        }
+
+        private async Task ShowLicense()
+        {
             if (Settings.Default.LicenseAccepted)
             {
                 if (LoadConfiguration())
@@ -211,15 +246,6 @@ namespace ERHMS.Presentation
 
         private bool LoadConfiguration()
         {
-            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            {
-                string message = string.Format("Reset settings for {0}?", Title);
-                if (MessageBox.Show(message, Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    Settings.Default.Reset();
-                    Settings.Default.Save();
-                }
-            }
             if (!File.Exists(ConfigurationExtensions.FilePath) && File.Exists(Settings.Default.ConfigurationFilePath))
             {
                 File.Copy(Settings.Default.ConfigurationFilePath, ConfigurationExtensions.FilePath);
@@ -240,22 +266,7 @@ namespace ERHMS.Presentation
                             {
                                 using (new WaitCursor())
                                 {
-                                    configuration = ConfigurationExtensions.Create(path);
-                                    configuration.CreateUserDirectories();
-                                    IOExtensions.CopyDirectory(
-                                        Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
-                                        configuration.Directories.Templates);
-                                    CopyTextFileResource("COPYRIGHT", path);
-                                    CopyTextFileResource("LICENSE", path);
-                                    CopyTextFileResource("NOTICE", path);
-                                    configuration.Save();
-                                    ConfigurationExtensions.Load();
-                                    if (!SampleDataContext.Exists())
-                                    {
-                                        DataContext context = SampleDataContext.Create();
-                                        Settings.Default.DataSourcePaths.Add(context.Project.FilePath);
-                                        Settings.Default.Save();
-                                    }
+                                    configuration = CreateConfiguration(path);
                                 }
                                 break;
                             }
@@ -288,6 +299,27 @@ namespace ERHMS.Presentation
             Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
             return true;
+        }
+
+        private Configuration CreateConfiguration(string path)
+        {
+            Configuration configuration = ConfigurationExtensions.Create(path);
+            configuration.CreateUserDirectories();
+            IOExtensions.CopyDirectory(
+                Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
+                configuration.Directories.Templates);
+            CopyTextFileResource("COPYRIGHT", path);
+            CopyTextFileResource("LICENSE", path);
+            CopyTextFileResource("NOTICE", path);
+            configuration.Save();
+            ConfigurationExtensions.Load();
+            if (!SampleDataContext.Exists())
+            {
+                SampleDataContext.Create();
+            }
+            Settings.Default.DataSourcePaths.Add(SampleDataContext.GetFilePath());
+            Settings.Default.Save();
+            return configuration;
         }
 
         public new void Shutdown()
