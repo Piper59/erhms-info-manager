@@ -27,8 +27,8 @@ namespace ERHMS.EpiInfo
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
             return Driver.Select(query).AsEnumerable()
                 .OrderBy(row => row.IsNull("PageId") ? 1 : 2)
-                .ThenBy(row => row.Field<short?>("Position") ?? row.Field<int>("FieldId"))
-                .ThenBy(row => row.Field<double?>("TabIndex") ?? row.Field<int>("FieldId"))
+                .ThenBy(row => row.IsNull("Position") ? row["FieldId"] : row["Position"])
+                .ThenBy(row => row.IsNull("TabIndex") ? row["FieldId"] : row["TabIndex"])
                 .Select(row => row.Field<int>("FieldId"));
         }
 

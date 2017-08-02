@@ -160,6 +160,11 @@ namespace ERHMS.EpiInfo.DataAccess
             return Select(string.Format("WHERE {0}.[RECSTATUS] <> 0", Escape(View.TableName)));
         }
 
+        public IEnumerable<TEntity> SelectOrdered()
+        {
+            return Select(string.Format("ORDER BY {0}.[UniqueKey]", Escape(View.TableName)));
+        }
+
         private IEnumerable<string> GetViewColumnNames(bool includeId)
         {
             yield return ColumnNames.REC_STATUS;

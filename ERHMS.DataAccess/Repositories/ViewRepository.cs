@@ -9,7 +9,7 @@ namespace ERHMS.DataAccess
     public class ViewRepository : LinkedEntityRepository<View, ViewLink>
     {
         internal const string HasResponderIdFieldSql = @"(
-                SELECT COUNT(*) > 0
+                SELECT COUNT(*)
                 FROM [metaFields]
                 WHERE [metaFields].[ViewId] = [metaViews].[ViewId]
                 AND [metaFields].[Name] = 'ResponderID'

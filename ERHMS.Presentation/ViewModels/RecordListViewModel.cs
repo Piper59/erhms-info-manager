@@ -63,7 +63,7 @@ namespace ERHMS.Presentation.ViewModels
 
         protected override IEnumerable<ViewEntity> GetItems()
         {
-            return Entities.Select();
+            return Entities.SelectOrdered();
         }
 
         public void Create()
