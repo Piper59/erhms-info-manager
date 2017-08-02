@@ -19,7 +19,7 @@
                  Style="{StaticResource MultiLineTextBox}"
                  Text="{Binding Note.Content, UpdateSourceTrigger=PropertyChanged}" />
         <WrapPanel Grid.Row="1"
-                   Margin="0,10,0,10"
+                   Margin="0,10,0,5"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Save"
                                  Command="{Binding SaveCommand}"

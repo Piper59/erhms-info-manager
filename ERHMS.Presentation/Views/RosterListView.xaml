@@ -51,7 +51,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <WrapPanel Grid.Row="2"
-                   Margin="0,10,0,10"
+                   Margin="0,10,0,5"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Add"
                                  Command="{Binding AddCommand}"
