@@ -27,13 +27,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://www.cdc.gov/niosh-rtecs/test-erhms/</InstallUrl>
+    <InstallUrl>https://www.cdc.gov/niosh/software/ERHMS-Info-Manager/</InstallUrl>
     <ProductName>ERHMS Info Manager</ProductName>
     <PublisherName>NIOSH</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>Default.html</WebPage>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.9.6.0</ApplicationVersion>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
