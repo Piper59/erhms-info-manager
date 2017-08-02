@@ -42,7 +42,6 @@ namespace ERHMS.EpiInfo.Wrappers
                     splash.ShowInTaskbar = false;
                     splash.Show(Form);
                     Application.DoEvents();
-                    Form.BringToFront();
                     Form.OpenRecord(ProjectPath, ViewName, UniqueKey);
                     splash.Close();
                 }
@@ -89,7 +88,6 @@ namespace ERHMS.EpiInfo.Wrappers
                     splash.ShowInTaskbar = false;
                     splash.Show(Form);
                     Application.DoEvents();
-                    Form.BringToFront();
                     Form.OpenNewRecord(ProjectPath, ViewName);
                     bool refresh = false;
                     while (true)

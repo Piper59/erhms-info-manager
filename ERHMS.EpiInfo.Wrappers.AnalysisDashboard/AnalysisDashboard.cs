@@ -65,7 +65,6 @@ namespace ERHMS.EpiInfo.Wrappers
                     splash.ShowInTaskbar = false;
                     splash.Show(Form);
                     Application.DoEvents();
-                    Form.BringToFront();
                     Form.OpenCanvas(CanvasPath);
                     splash.Close();
                     Form.WindowState = FormWindowState.Maximized;
