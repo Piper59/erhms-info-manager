@@ -23,7 +23,7 @@
                     <TextBlock Margin="0,5,0,0"
                                FontSize="{StaticResource DialogMessageFontSize}"
                                TextWrapping="Wrap">
-                        For more information, consult the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/topics/erhms/"><Run Text="{StaticResource AppTitle}" /> User Guide</Controls:WebHyperlink>.
+                        For more information, consult the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/"><Run Text="{StaticResource AppTitle}" /> User Guide</Controls:WebHyperlink>.
                     </TextBlock>
                 </StackPanel>
             </ScrollViewer>
