@@ -284,6 +284,7 @@ namespace ERHMS.Presentation
                 writer.WriteLine();
                 writer.WriteLine(AssemblyExtensions.GetEntryDirectoryPath());
             }
+            Settings.Default.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
             return true;
