@@ -116,6 +116,14 @@ namespace ERHMS.Presentation.ViewModels
                 ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
+            if (!ValidateDateRange(Survey.StartDate, Survey.EndDate))
+            {
+                MessengerInstance.Send(new AlertMessage
+                {
+                    Message = "End date must be later than start date."
+                });
+                return false;
+            }
             return true;
         }
 

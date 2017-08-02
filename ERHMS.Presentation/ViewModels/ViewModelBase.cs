@@ -128,10 +128,13 @@ namespace ERHMS.Presentation.ViewModels
             message.AppendFormat("The following fields are {0}:", error.ToString().ToLower());
             message.AppendLine();
             message.AppendLine();
-            message.Append(string.Join(", ", fields));
+            foreach (string field in fields)
+            {
+                message.AppendLine(field);
+            }
             MessengerInstance.Send(new AlertMessage
             {
-                Message = message.ToString()
+                Message = message.ToString().Trim()
             });
         }
 

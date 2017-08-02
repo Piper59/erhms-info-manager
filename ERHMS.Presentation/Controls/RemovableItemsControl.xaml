@@ -18,6 +18,9 @@
                     <MouseBinding Command="{Binding RemoveCommand, ElementName=Root}"
                                   CommandParameter="{Binding}"
                                   MouseAction="MiddleClick" />
+                    <MouseBinding Command="{Binding RemoveCommand, ElementName=Root}"
+                                  CommandParameter="{Binding}"
+                                  MouseAction="MiddleDoubleClick" />
                 </Border.InputBindings>
                 <Border.Style>
                     <Style TargetType="Border">

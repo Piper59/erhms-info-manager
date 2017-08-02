@@ -187,10 +187,14 @@ namespace ERHMS.Presentation.ViewModels
                 message.AppendFormat("The following fields are unsupported for publication to {0}:", target);
                 message.AppendLine();
                 message.AppendLine();
-                message.Append(string.Join(", ", fields.Select(field => string.Format("{0} ({1})", field.Name, field.FieldType))));
+                foreach (Field field in fields)
+                {
+                    message.AppendFormat("{0} ({1})", field.Name, field.FieldType);
+                    message.AppendLine();
+                }
                 MessengerInstance.Send(new AlertMessage
                 {
-                    Message = message.ToString()
+                    Message = message.ToString().Trim()
                 });
                 return false;
             }

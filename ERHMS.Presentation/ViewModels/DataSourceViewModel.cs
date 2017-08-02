@@ -43,7 +43,6 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-
         private string name;
         public string Name
         {

@@ -58,7 +58,9 @@ namespace ERHMS.Presentation.ViewModels
             IsResponder = true;
             if (editable)
             {
-                Responders = Context.Responders.SelectUndeleted().ToList();
+                Responders = Context.Responders.SelectUndeleted()
+                    .OrderBy(responder => responder.FullName)
+                    .ToList();
             }
             AddCommand = new RelayCommand(Add);
         }

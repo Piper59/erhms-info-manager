@@ -363,10 +363,13 @@ namespace ERHMS.Presentation.ViewModels
                     StringBuilder message = new StringBuilder();
                     message.AppendLine("Delivery to the following recipients failed:");
                     message.AppendLine();
-                    message.Append(string.Join("; ", failures));
+                    foreach (RecipientViewModel failure in failures)
+                    {
+                        message.AppendLine(failure.ToString());
+                    }
                     MessengerInstance.Send(new AlertMessage
                     {
-                        Message = message.ToString()
+                        Message = message.ToString().Trim()
                     });
                 }
                 else if (!success)
