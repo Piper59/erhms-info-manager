@@ -74,22 +74,22 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<string> Prefixes
         {
-            get { return Project.GetCodes("codeprefix1", "prefix", false); }
+            get { return GetCodes("codeprefix1", "prefix"); }
         }
 
         public IEnumerable<string> Suffixes
         {
-            get { return Project.GetCodes("codesuffix1", "suffix", false); }
+            get { return GetCodes("codesuffix1", "suffix"); }
         }
 
         public IEnumerable<string> Genders
         {
-            get { return Project.GetCodes("codegender1", "gender", false); }
+            get { return GetCodes("codegender1", "gender"); }
         }
 
         public IEnumerable<string> States
         {
-            get { return Project.GetCodes("codestate1", "state", false); }
+            get { return GetCodes("codestate1", "state"); }
         }
 
         public DataContext(Project project)
@@ -108,6 +108,11 @@ namespace ERHMS.DataAccess
             Views = new ViewRepository(this);
             ViewLinks = new ViewLinkRepository(this);
             WebSurveys = new WebSurveyRepository(this);
+        }
+
+        private IEnumerable<string> GetCodes(string tableName, string columnName)
+        {
+            return Project.GetCodes(tableName, columnName, false).Prepend("");
         }
     }
 }

@@ -76,7 +76,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Link()
         {
-            Dialogs.ShowAsync(new PgmLinkViewModel(Services, SelectedItem));
+            Dialogs.ShowAsync(new PgmLinkViewModel(Services, Context.Pgms.SelectById(SelectedItem.PgmId)));
         }
     }
 }

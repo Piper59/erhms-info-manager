@@ -140,19 +140,20 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Link()
         {
-            Dialogs.ShowAsync(new ViewLinkViewModel(Services, SelectedItem));
+            Dialogs.ShowAsync(new ViewLinkViewModel(Services, Context.Views.SelectById(SelectedItem.ViewId)));
         }
 
         public void EnterData()
         {
-            if (SelectedItem.HasResponderIdField)
+            View view = Context.Views.SelectById(SelectedItem.ViewId);
+            if (view.HasResponderIdField)
             {
-                Dialogs.ShowAsync(new PrepopulateViewModel(Services, SelectedItem));
+                Dialogs.ShowAsync(new PrepopulateViewModel(Services, view));
             }
             else
             {
-                Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-                Enter.OpenNewRecord.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
+                Context.Project.CollectedData.EnsureDataTablesExist(view.ViewId);
+                Enter.OpenNewRecord.Create(Context.Project.FilePath, view.Name).Invoke();
             }
         }
 

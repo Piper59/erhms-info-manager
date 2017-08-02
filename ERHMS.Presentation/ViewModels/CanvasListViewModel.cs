@@ -76,7 +76,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Link()
         {
-            Dialogs.ShowAsync(new CanvasLinkViewModel(Services, SelectedItem));
+            Dialogs.ShowAsync(new CanvasLinkViewModel(Services, Context.Canvases.SelectById(SelectedItem.CanvasId)));
         }
     }
 }
