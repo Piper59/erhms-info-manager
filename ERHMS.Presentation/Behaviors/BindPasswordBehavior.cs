@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace ERHMS.Presentation.Behaviors
 {
-    public class BindPasswordBehavior : BridgeBindingBehavior<PasswordBox>
+    public class BindPasswordBehavior : BridgeBehavior<PasswordBox>
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register(
             "Password",
@@ -34,6 +34,11 @@ namespace ERHMS.Presentation.Behaviors
             AssociatedObject.PasswordChanged -= AssociatedObject_PasswordChanged;
         }
 
+        private void AssociatedObject_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            Pull();
+        }
+
         private void Push()
         {
             Update(() =>
@@ -42,7 +47,7 @@ namespace ERHMS.Presentation.Behaviors
             });
         }
 
-        private void AssociatedObject_PasswordChanged(object sender, RoutedEventArgs e)
+        private void Pull()
         {
             Update(() =>
             {

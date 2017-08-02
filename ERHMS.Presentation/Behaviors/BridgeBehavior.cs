@@ -4,12 +4,12 @@ using System.Windows.Interactivity;
 
 namespace ERHMS.Presentation.Behaviors
 {
-    public class BridgeBindingBehavior<T> : Behavior<T>
+    public class BridgeBehavior<T> : Behavior<T>
         where T : DependencyObject
     {
         private bool updating;
 
-        protected BridgeBindingBehavior() { }
+        protected BridgeBehavior() { }
 
         protected void Update(Action action)
         {

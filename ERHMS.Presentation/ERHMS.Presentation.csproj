@@ -215,7 +215,7 @@
     <Compile Include="Behaviors\BindColumnsBehavior.cs" />
     <Compile Include="Behaviors\BindPasswordBehavior.cs" />
     <Compile Include="Behaviors\BindSelectedItemsBehavior.cs" />
-    <Compile Include="Behaviors\BridgeBindingBehavior.cs" />
+    <Compile Include="Behaviors\BridgeBehavior.cs" />
     <Compile Include="Behaviors\ControlPageNavigationBehavior.cs" />
     <Compile Include="Behaviors\FixKeyboardCuesBehavior.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClickBehavior.cs" />

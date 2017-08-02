@@ -2,6 +2,7 @@
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -45,7 +46,21 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public ObservableCollection<object> SelectedItems { get; private set; }
+        private IList selectedItems;
+        public IList SelectedItems
+        {
+            get
+            {
+                return selectedItems;
+            }
+            set
+            {
+                if (Set(nameof(SelectedItems), ref selectedItems, value))
+                {
+                    OnSelectionChanged();
+                }
+            }
+        }
 
         public IEnumerable<T> TypedSelectedItems
         {
@@ -89,11 +104,7 @@ namespace ERHMS.Presentation.ViewModels
                 Items.Refresh();
             };
             Items = CollectionViewSource.GetDefaultView(Enumerable.Empty<T>());
-            SelectedItems = new ObservableCollection<object>();
-            SelectedItems.CollectionChanged += (sender, e) =>
-            {
-                OnSelectionChanged();
-            };
+            SelectedItems = new List<T>();
             RefreshCommand = new RelayCommand(Refresh, CanRefresh);
             MessengerInstance.Register<RefreshMessage>(this, msg =>
             {
