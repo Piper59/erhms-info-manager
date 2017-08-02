@@ -278,6 +278,12 @@ namespace ERHMS.Presentation
                     }
                 }
             }
+            using (TextWriter writer = new StreamWriter(Path.Combine(configuration.GetRootPath(), "INSTALL.txt")))
+            {
+                writer.WriteLine("{0} is installed in the following directory:", Title);
+                writer.WriteLine();
+                writer.WriteLine(AssemblyExtensions.GetEntryDirectoryPath());
+            }
             Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
             return true;
