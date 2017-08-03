@@ -216,7 +216,7 @@
     <EmbeddedResource Include="Resources\Sample\Sample.prj" />
     <EmbeddedResource Include="Resources\Sample\Symptoms.cvs7" />
     <EmbeddedResource Include="Resources\View.xml" />
-    <EmbeddedResource Include="Scripts\Create.sql" />
+    <EmbeddedResource Include="Scripts\Base.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

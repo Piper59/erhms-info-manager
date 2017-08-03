@@ -46,7 +46,7 @@ namespace ERHMS.DataAccess
             DataContext context = new DataContext(project);
             using (IDbConnection connection = context.Database.GetConnection())
             {
-                connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.DataAccess.Scripts.Create.sql")));
+                connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.DataAccess.Scripts.Base.sql")));
             }
             return context;
         }
