@@ -89,6 +89,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -104,20 +105,24 @@
                                      AutomationProperties.Name="Database Name"
                                      MahApps:TextBoxHelper.Watermark="Required"
                                      Text="{Binding InitialCatalog}" />
-                            <Label Grid.Row="2" Grid.Column="0">Windows Authentication</Label>
+                            <Label Grid.Row="2" Grid.Column="0">Encrypted Connection</Label>
                             <CheckBox Grid.Row="2" Grid.Column="1"
+                                      AutomationProperties.Name="Encrypted Connection"
+                                      IsChecked="{Binding Encrypt}" />
+                            <Label Grid.Row="3" Grid.Column="0">Windows Authentication</Label>
+                            <CheckBox Grid.Row="3" Grid.Column="1"
                                       AutomationProperties.Name="Windows Authentication"
                                       IsChecked="{Binding IntegratedSecurity}" />
-                            <Label Grid.Row="3" Grid.Column="0">User Name</Label>
-                            <TextBox Grid.Row="3" Grid.Column="1"
+                            <Label Grid.Row="4" Grid.Column="0">User Name</Label>
+                            <TextBox Grid.Row="4" Grid.Column="1"
                                      AutomationProperties.Name="User Name"
                                      IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BooleanInverter}}"
                                      Text="{Binding UserId,TargetNullValue=''}" />
-                            <Label Grid.Row="4" Grid.Column="0"
+                            <Label Grid.Row="5" Grid.Column="0"
                                    Margin="0">
                                 Password
                             </Label>
-                            <PasswordBox Grid.Row="4" Grid.Column="1"
+                            <PasswordBox Grid.Row="5" Grid.Column="1"
                                          AutomationProperties.Name="Password"
                                          IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BooleanInverter}}"
                                          Margin="0">

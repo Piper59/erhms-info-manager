@@ -8,11 +8,12 @@ namespace ERHMS.Dapper
 {
     public class SqlServerDatabase : Database
     {
-        public static SqlServerDatabase Construct(string dataSource, string initialCatalog, string userId = null, string password = null)
+        public static SqlServerDatabase Construct(string dataSource, string initialCatalog, bool encrypt = false, string userId = null, string password = null)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
             builder.DataSource = dataSource;
             builder.InitialCatalog = initialCatalog;
+            builder.Encrypt = encrypt;
             if (userId == null && password == null)
             {
                 builder.IntegratedSecurity = true;

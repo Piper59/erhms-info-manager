@@ -92,6 +92,13 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(InitialCatalog), ref initialCatalog, value); }
         }
 
+        private bool encrypt;
+        public bool Encrypt
+        {
+            get { return encrypt; }
+            set { Set(nameof(Encrypt), ref encrypt, value); }
+        }
+
         private bool integratedSecurity;
         public bool IntegratedSecurity
         {
@@ -222,7 +229,7 @@ namespace ERHMS.Presentation.ViewModels
                             database = AccessDatabase.Construct(Path.ChangeExtension(FullName, ".mdb"));
                             break;
                         case DbProvider.SqlServer:
-                            database = SqlServerDatabase.Construct(DataSource, InitialCatalog, UserId, Password);
+                            database = SqlServerDatabase.Construct(DataSource, InitialCatalog, Encrypt, UserId, Password);
                             break;
                         default:
                             throw new InvalidEnumValueException(Provider);
