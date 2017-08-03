@@ -13,13 +13,19 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <TextBlock Grid.Row="0"
+                   Style="{StaticResource Heading}">
+            New Assignment
+        </TextBlock>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -31,9 +37,9 @@
                       ItemsSource="{Binding Views.Items}"
                       SelectedItem="{Binding Views.SelectedItem}" />
         </Grid>
-        <Controls:Filter Grid.Row="1"
+        <Controls:Filter Grid.Row="2"
                          Value="{Binding Responders.Filter}" />
-        <DataGrid Grid.Row="2"
+        <DataGrid Grid.Row="3"
                   DataContext="{Binding Responders}"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
@@ -68,7 +74,7 @@
                                     Width="2*" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="3"
+        <WrapPanel Grid.Row="4"
                    Margin="0,10,0,5"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Add"
@@ -78,9 +84,13 @@
                                  Command="{Binding RemoveCommand}"
                                  Icon="{StaticResource appbar_arrow_up}" />
         </WrapPanel>
-        <Controls:Filter Grid.Row="4"
+        <TextBlock Grid.Row="5"
+                   Style="{StaticResource Heading}">
+            Existing Assignments
+        </TextBlock>
+        <Controls:Filter Grid.Row="6"
                          Value="{Binding Filter}" />
-        <DataGrid Grid.Row="5"
+        <DataGrid Grid.Row="7"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
             <i:Interaction.Behaviors>
@@ -103,7 +113,7 @@
                                     Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="6"
+        <WrapPanel Grid.Row="8"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Email"
                                  Command="{Binding EmailCommand}"

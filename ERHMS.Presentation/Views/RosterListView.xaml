@@ -7,15 +7,21 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Controls:Filter Grid.Row="0"
+        <TextBlock Grid.Row="0"
+                   Style="{StaticResource Heading}">
+            Unrostered Responders
+        </TextBlock>
+        <Controls:Filter Grid.Row="1"
                          Value="{Binding Responders.Filter}" />
-        <DataGrid Grid.Row="1"
+        <DataGrid Grid.Row="2"
                   DataContext="{Binding Responders}"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
@@ -50,7 +56,7 @@
                                     Width="2*" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="2"
+        <WrapPanel Grid.Row="3"
                    Margin="0,10,0,5"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Add"
@@ -60,9 +66,13 @@
                                  Command="{Binding RemoveCommand}"
                                  Icon="{StaticResource appbar_arrow_up}" />
         </WrapPanel>
-        <Controls:Filter Grid.Row="3"
+        <TextBlock Grid.Row="4"
+                   Style="{StaticResource Heading}">
+            Rostered Responders
+        </TextBlock>
+        <Controls:Filter Grid.Row="5"
                          Value="{Binding Rosters.Filter}" />
-        <DataGrid Grid.Row="4"
+        <DataGrid Grid.Row="6"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
             <i:Interaction.Behaviors>
@@ -96,7 +106,7 @@
                                     Width="2*" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="5"
+        <WrapPanel Grid.Row="7"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Email"
                                  Command="{Binding EmailCommand}"
