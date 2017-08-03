@@ -20,6 +20,13 @@ namespace ERHMS.Test.Dapper
         }
 
         [Test]
+        public void TableExistsTest()
+        {
+            Assert.IsTrue(database.TableExists("Test"));
+            Assert.IsFalse(database.TableExists("Test2"));
+        }
+
+        [Test]
         public void BeginTransactionTest()
         {
             using (Transaction transaction = database.BeginTransaction())

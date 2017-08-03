@@ -71,6 +71,17 @@ namespace ERHMS.Dapper
             }
         }
 
+        public override bool TableExists(string name)
+        {
+            using (IDbConnection connection = GetConnection())
+            {
+                string sql = "SELECT COUNT(*) FROM sys.tables WHERE name = @name";
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@name", name);
+                return connection.ExecuteScalar<int>(sql, parameters) > 0;
+            }
+        }
+
         protected override IDbConnection GetConnectionInternal()
         {
             return new SqlConnection(builder.ConnectionString);

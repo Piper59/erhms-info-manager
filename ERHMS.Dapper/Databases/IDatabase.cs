@@ -11,6 +11,7 @@ namespace ERHMS.Dapper
 
         bool Exists();
         void Create();
+        bool TableExists(string name);
         IDbConnection GetConnection();
         Transaction BeginTransaction();
         T Invoke<T>(Func<IDbConnection, IDbTransaction, T> action);

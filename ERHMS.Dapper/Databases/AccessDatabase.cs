@@ -1,4 +1,5 @@
-﻿using ERHMS.Utility;
+﻿using Dapper;
+using ERHMS.Utility;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
@@ -49,6 +50,23 @@ namespace ERHMS.Dapper
         {
             Directory.CreateDirectory(Path.GetDirectoryName(builder.DataSource));
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Dapper.Databases.Empty.mdb", builder.DataSource);
+        }
+
+        public override bool TableExists(string name)
+        {
+            try
+            {
+                using (IDbConnection connection = GetConnection())
+                {
+                    string sql = string.Format("SELECT * FROM {0} WHERE 1 = 0", Escape(name));
+                    connection.Query(sql);
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         protected override IDbConnection GetConnectionInternal()

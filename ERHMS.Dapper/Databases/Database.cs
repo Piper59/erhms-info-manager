@@ -18,6 +18,7 @@ namespace ERHMS.Dapper
 
         public abstract bool Exists();
         public abstract void Create();
+        public abstract bool TableExists(string name);
         protected abstract IDbConnection GetConnectionInternal();
 
         public IDbConnection GetConnection()
