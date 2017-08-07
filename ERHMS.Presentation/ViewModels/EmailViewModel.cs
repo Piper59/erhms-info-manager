@@ -374,6 +374,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else if (!success)
                 {
+                    Log.Logger.Warn("Failed to send email", exception);
                     Documents.ShowSettings("Failed to send email. Please verify settings.", exception);
                 }
                 else

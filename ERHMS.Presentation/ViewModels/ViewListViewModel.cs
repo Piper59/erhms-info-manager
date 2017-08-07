@@ -311,6 +311,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else if (!success)
                 {
+                    Log.Logger.Warn("Failed to import data from web", exception);
                     Documents.ShowSettings("Failed to import data from web.", exception);
                 }
                 else
