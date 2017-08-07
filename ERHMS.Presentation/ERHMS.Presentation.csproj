@@ -114,6 +114,7 @@
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
@@ -289,11 +290,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Service References\GeocodeService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AnalysisViewModel.cs" />
     <Compile Include="ViewModels\AssignmentListViewModel.cs" />
@@ -429,32 +425,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Service References\GeocodeService\configuration91.svcinfo" />
-    <None Include="Service References\GeocodeService\configuration.svcinfo" />
-    <None Include="Service References\GeocodeService\ERHMS.Presentation.GeocodeService.GeocodeResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\GeocodeService\GeocodeService.wsdl" />
-    <None Include="Service References\GeocodeService\GeocodeService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\GeocodeService\GeocodeService1.wsdl" />
-    <None Include="Service References\GeocodeService\GeocodeService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\GeocodeService\GeocodeService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\GeocodeService\GeocodeService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\GeocodeService\GeocodeService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\GeocodeService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
@@ -635,12 +605,6 @@
     <Resource Include="Resources\Entypo-license.txt" />
     <Resource Include="Resources\Entypo.ttf" />
     <Resource Include="Resources\WindowsIcons-license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\GeocodeService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

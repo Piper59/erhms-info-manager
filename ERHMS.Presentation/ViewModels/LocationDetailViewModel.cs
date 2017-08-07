@@ -1,11 +1,15 @@
-﻿using ERHMS.Presentation.GeocodeService;
-using ERHMS.Presentation.Messages;
+﻿using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Maps.MapControl.WPF;
 using Microsoft.Maps.MapControl.WPF.Core;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Net;
+using System.Web;
+using System.Xml;
 using Coordinates = Microsoft.Maps.MapControl.WPF.Location;
 using Location = ERHMS.Domain.Location;
 
@@ -178,40 +182,45 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Locate()
         {
-            GeocodeRequest request = new GeocodeRequest
+            NameValueCollection queryString = HttpUtility.ParseQueryString("");
+            queryString["userLocation"] = string.Format("{0},{1}", Center.Latitude, Center.Longitude);
+            queryString["query"] = Location.Address;
+            queryString["output"] = "xml";
+            queryString["maxResults"] = "1";
+            queryString["key"] = Settings.Default.MapApplicationId;
+            WebRequest request = WebRequest.Create("http://dev.virtualearth.net/REST/v1/Locations?" + queryString.ToString());
+            try
             {
-                Credentials = new Credentials
+                using (new WaitCursor())
+                using (WebResponse response = request.GetResponse())
                 {
-                    ApplicationId = Settings.Default.MapApplicationId
-                },
-                Query = Location.Address,
-                Options = new GeocodeOptions
-                {
-                    Filters = new ConfidenceFilter[]
+                    XmlDocument document = new XmlDocument();
+                    document.Load(response.GetResponseStream());
+                    XmlNamespaceManager manager = new XmlNamespaceManager(document.NameTable);
+                    manager.AddNamespace("v1", "http://schemas.microsoft.com/search/local/ws/rest/v1");
+                    XmlElement point = document.SelectSingleElement("/v1:Response/v1:ResourceSets/v1:ResourceSet/v1:Resources/v1:Location/v1:Point", manager);
+                    if (point == null)
                     {
-                        new ConfidenceFilter
+                        MessengerInstance.Send(new AlertMessage
                         {
-                            MinimumConfidence = Confidence.High
-                        }
+                            Message = "Address could not be found."
+                        });
+                    }
+                    else
+                    {
+                        double latitude = double.Parse(point.SelectSingleElement("v1:Latitude", manager).InnerText);
+                        double longitude = double.Parse(point.SelectSingleElement("v1:Longitude", manager).InnerText);
+                        SetCoordinates(latitude, longitude);
+                        Center = GetCoordinates();
+                        ZoomLevel = PinnedZoomLevel;
+                        SaveState();
                     }
                 }
-            };
-            GeocodeServiceClient client = new GeocodeServiceClient();
-            GeocodeResponse response = client.Geocode(request);
-            if (response.Results.Length > 0)
-            {
-                GeocodeLocation result = response.Results[0].Locations[0];
-                SetCoordinates(result.Latitude, result.Longitude);
-                Center = GetCoordinates();
-                ZoomLevel = PinnedZoomLevel;
-                SaveState();
             }
-            else
+            catch (Exception ex)
             {
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = "Address could not be found."
-                });
+                Log.Logger.Warn("Failed to locate address", ex);
+                Documents.ShowSettings("Failed to locate address. Please verify mapping settings.", ex);
             }
         }
 
