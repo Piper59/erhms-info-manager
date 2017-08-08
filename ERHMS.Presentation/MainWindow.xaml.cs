@@ -1,4 +1,5 @@
-﻿using ERHMS.Presentation.Controls;
+﻿using ERHMS.EpiInfo.Wrappers;
+using ERHMS.Presentation.Controls;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 
@@ -137,6 +139,21 @@ namespace ERHMS.Presentation
             {
                 Log.Logger.Debug("Canceled");
                 msg.OnCanceled();
+            }
+        }
+
+        public async Task InvokeAsync(Wrapper wrapper)
+        {
+            WindowState state = WindowState;
+            WindowState = WindowState.Minimized;
+            wrapper.Invoke();
+            await Task.Factory.StartNew(() =>
+            {
+                wrapper.Exited.WaitOne();
+            });
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = state;
             }
         }
 

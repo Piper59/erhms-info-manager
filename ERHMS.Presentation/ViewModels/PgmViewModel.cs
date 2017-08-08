@@ -32,7 +32,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             MessengerInstance.Send(new RefreshMessage(typeof(Domain.Pgm)));
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            Analysis.OpenPgm.Create(pgm.Content, true).Invoke();
+            Dialogs.InvokeAsync(Analysis.OpenPgm.Create(pgm.Content, true));
             Close();
         }
     }

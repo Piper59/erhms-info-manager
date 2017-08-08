@@ -50,7 +50,7 @@ namespace ERHMS.Presentation.ViewModels
                 };
             }
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, record).Invoke();
+            Dialogs.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, record));
             Close();
         }
     }

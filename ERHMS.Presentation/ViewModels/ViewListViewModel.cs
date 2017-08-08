@@ -117,7 +117,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Edit()
         {
-            MakeView.OpenView.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
+            Dialogs.InvokeAsync(MakeView.OpenView.Create(Context.Project.FilePath, SelectedItem.Name));
         }
 
         public void Delete()
@@ -153,7 +153,7 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 Context.Project.CollectedData.EnsureDataTablesExist(view.ViewId);
-                Enter.OpenNewRecord.Create(Context.Project.FilePath, view.Name).Invoke();
+                Dialogs.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, view.Name));
             }
         }
 
@@ -173,7 +173,7 @@ namespace ERHMS.Presentation.ViewModels
                     MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
                 }
             };
-            wrapper.Invoke();
+            Dialogs.InvokeAsync(wrapper);
         }
 
         private bool Validate(string target, Epi.View view, Func<Field, bool> unsupported)
@@ -245,7 +245,7 @@ namespace ERHMS.Presentation.ViewModels
         public void ImportFromFile()
         {
             Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            Analysis.Import.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
+            Dialogs.InvokeAsync(Analysis.Import.Create(Context.Project.FilePath, SelectedItem.Name));
         }
 
         public void ImportFromWeb()
@@ -340,7 +340,7 @@ namespace ERHMS.Presentation.ViewModels
         public void ExportToFile()
         {
             Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            Analysis.Export.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
+            Dialogs.InvokeAsync(Analysis.Export.Create(Context.Project.FilePath, SelectedItem.Name));
         }
 
         public void AnalyzeClassic()

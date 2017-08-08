@@ -55,7 +55,7 @@ namespace ERHMS.Presentation.ViewModels
         public void Open()
         {
             Canvas canvas = Context.Canvases.SelectById(SelectedItem.CanvasId);
-            AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content).Invoke();
+            Dialogs.InvokeAsync(AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content));
         }
 
         public void Delete()

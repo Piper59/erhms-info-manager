@@ -30,7 +30,7 @@ namespace ERHMS.Presentation.ViewModels
                     Messenger.Default.Send(new RefreshMessage(typeof(View)));
                 }
             };
-            wrapper.Invoke();
+            services.Dialogs.InvokeAsync(wrapper);
         }
 
         public Incident Incident { get; private set; }
