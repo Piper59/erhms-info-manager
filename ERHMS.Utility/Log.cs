@@ -36,8 +36,11 @@ namespace ERHMS.Utility
             }
             set
             {
-                hierarchy.Root.Level = hierarchy.LevelMap[value];
-                hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
+                if (LevelNames.Contains(value))
+                {
+                    hierarchy.Root.Level = hierarchy.LevelMap[value];
+                    hierarchy.RaiseConfigurationChanged(EventArgs.Empty);
+                }
             }
         }
 

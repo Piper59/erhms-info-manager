@@ -68,12 +68,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Enter.OpenNewRecord.Create(Context.Project.FilePath, Entities.View.Name).Invoke();
+            Dialogs.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, Entities.View.Name));
         }
 
         public void Edit()
         {
-            Enter.OpenRecord.Create(Context.Project.FilePath, Entities.View.Name, SelectedItem.UniqueKey.Value).Invoke();
+            Dialogs.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, Entities.View.Name, SelectedItem.UniqueKey.Value));
         }
 
         private void SetDeleted(bool deleted)

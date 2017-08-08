@@ -1,4 +1,5 @@
-﻿using ERHMS.Presentation.Controls;
+﻿using ERHMS.EpiInfo.Wrappers;
+using ERHMS.Presentation.Controls;
 using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Messages;
 using ERHMS.Presentation.ViewModels;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 
@@ -56,6 +58,31 @@ namespace ERHMS.Presentation
             Messenger.Default.Register<ConfirmMessage>(this, msg => ConfirmAsync(msg));
             Messenger.Default.Register<ExitMessage>(this, msg => Close());
             Messenger.Default.Register<ToastMessage>(this, msg => Toast(msg));
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (App.Current.ShuttingDown || closing)
+            {
+                return;
+            }
+            e.Cancel = true;
+            ConfirmMessage msg = new ConfirmMessage
+            {
+                Verb = "Exit",
+                Message = string.Format("Are you sure you want to exit {0}?", App.Title)
+            };
+            msg.Confirmed += (_sender, _e) =>
+            {
+                foreach (ViewModelBase document in DataContext.Documents.ToList())
+                {
+                    DataContext.Documents.Remove(document);
+                }
+                closing = true;
+                Close();
+                closing = false;
+            };
+            Messenger.Default.Send(msg);
         }
 
         private async void AlertAsync(AlertMessage msg)
@@ -115,29 +142,19 @@ namespace ERHMS.Presentation
             }
         }
 
-        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        public async Task InvokeAsync(Wrapper wrapper)
         {
-            if (App.Current.ShuttingDown || closing)
+            WindowState state = WindowState;
+            WindowState = WindowState.Minimized;
+            wrapper.Invoke();
+            await Task.Factory.StartNew(() =>
             {
-                return;
+                wrapper.Exited.WaitOne();
+            });
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = state;
             }
-            e.Cancel = true;
-            ConfirmMessage msg = new ConfirmMessage
-            {
-                Verb = "Exit",
-                Message = string.Format("Are you sure you want to exit {0}?", App.Title)
-            };
-            msg.Confirmed += (_sender, _e) =>
-            {
-                foreach (ViewModelBase document in DataContext.Documents.ToList())
-                {
-                    DataContext.Documents.Remove(document);
-                }
-                closing = true;
-                Close();
-                closing = false;
-            };
-            Messenger.Default.Send(msg);
         }
 
         public async Task ShowAsync(DialogViewModel dataContext)

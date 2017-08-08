@@ -15,7 +15,7 @@ namespace ERHMS.EpiInfo
 
         public override string ToString()
         {
-            return string.Join(", ", Name, Location, Driver, Builder.GetCensoredConnectionString(), DatabaseName);
+            return string.Format("{0}, {1}, {2}, {3}, {4}", Name, Location, Driver, Builder.GetCensoredConnectionString(), DatabaseName);
         }
     }
 }

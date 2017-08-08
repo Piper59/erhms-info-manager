@@ -1,0 +1,11 @@
+Ensure that the code signing certificate is installed on your machine.
+If it is not, request that the project owner export a copy of the certificate and provide it to you.
+Update the version number and build date in SolutionInfo.cs.
+Update the version number on the Publish tab of the ERHMS project's Properties.
+Select the Release build configuration.
+Clean the solution.
+Build the ERHMS.Presentation project (into the Build directory).
+Publish the ERHMS project (into the ERHMS\publish directory).
+Scan the published files in VirusTotal.
+Copy the published files to the web server.
+Do not delete the existing Application Files directory as part of this step.

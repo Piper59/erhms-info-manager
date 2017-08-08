@@ -29,7 +29,19 @@
       </PublishFile>
     </ItemGroup>
   </Target>
+  <Target Name="CreateZipDeployment" AfterTargets="AfterPublish">
+    <PropertyGroup>
+      <WorkingDir>$(BuildDir)..\</WorkingDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <DeployedFile Include="$(WorkingDir)**" />
+    </ItemGroup>
+    <Zip Files="@(DeployedFile)" WorkingDirectory="$(WorkingDir)" ZipFileName="publish\ERHMSInfoManager.zip" />
+  </Target>
   <Target Name="CleanEpiInfoFiles" AfterTargets="Clean">
     <RemoveDir Directories="Projects;Templates" />
+  </Target>
+  <Target Name="CleanPublishDir" AfterTargets="Clean">
+    <RemoveDir Directories="publish" />
   </Target>
 </Project>

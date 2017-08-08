@@ -32,7 +32,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             MessengerInstance.Send(new RefreshMessage(typeof(Domain.Canvas)));
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content).Invoke();
+            Dialogs.InvokeAsync(AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content));
             Close();
         }
     }

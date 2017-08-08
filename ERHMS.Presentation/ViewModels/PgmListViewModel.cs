@@ -55,7 +55,7 @@ namespace ERHMS.Presentation.ViewModels
         public void Open()
         {
             Pgm pgm = Context.Pgms.SelectById(SelectedItem.PgmId);
-            Analysis.OpenPgm.Create(pgm.Content, false).Invoke();
+            Dialogs.InvokeAsync(Analysis.OpenPgm.Create(pgm.Content, false));
         }
 
         public void Delete()

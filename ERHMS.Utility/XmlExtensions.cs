@@ -41,9 +41,19 @@ namespace ERHMS.Utility
             return @this.SelectNodes(xpath).OfType<XmlElement>();
         }
 
+        public static IEnumerable<XmlElement> SelectElements(this XmlNode @this, string xpath, XmlNamespaceManager nsmgr)
+        {
+            return @this.SelectNodes(xpath, nsmgr).OfType<XmlElement>();
+        }
+
         public static XmlElement SelectSingleElement(this XmlNode @this, string xpath)
         {
             return @this.SelectElements(xpath).FirstOrDefault();
+        }
+
+        public static XmlElement SelectSingleElement(this XmlNode @this, string xpath, XmlNamespaceManager nsmgr)
+        {
+            return @this.SelectElements(xpath, nsmgr).FirstOrDefault();
         }
     }
 }

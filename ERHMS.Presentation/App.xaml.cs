@@ -40,9 +40,9 @@ namespace ERHMS.Presentation
         {
             try
             {
+                LoadSettings();
                 Log.LevelName = Settings.Default.LogLevelName;
                 Log.Logger.Debug("Starting up");
-                LoadSettings();
                 DataContext.Configure();
                 App app = new App();
                 app.DispatcherUnhandledException += (sender, e) =>
