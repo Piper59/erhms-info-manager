@@ -30,8 +30,7 @@
     <InstallUrl>https://www.cdc.gov/niosh/software/ERHMS-Info-Manager/</InstallUrl>
     <ProductName>ERHMS Info Manager</ProductName>
     <PublisherName>NIOSH</PublisherName>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
-    <WebPage>Default.html</WebPage>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.1.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
