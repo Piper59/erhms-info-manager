@@ -30,6 +30,12 @@ namespace ERHMS.DataAccess
             WebSurveyRepository.Configure();
         }
 
+        private static void ExecuteScript(IDbConnection connection, string name)
+        {
+            string resourceName = string.Format("ERHMS.DataAccess.Scripts.{0}.sql", name);
+            connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)));
+        }
+
         public static DataContext Create(Project project)
         {
             Log.Logger.DebugFormat("Creating data context: {0}", project.FilePath);
@@ -46,7 +52,8 @@ namespace ERHMS.DataAccess
             DataContext context = new DataContext(project);
             using (IDbConnection connection = context.Database.GetConnection())
             {
-                connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.DataAccess.Scripts.Base.sql")));
+                ExecuteScript(connection, "Base");
+                ExecuteScript(connection, "JobTicketing");
             }
             return context;
         }
@@ -113,6 +120,27 @@ namespace ERHMS.DataAccess
         private IEnumerable<string> GetCodes(string tableName, string columnName)
         {
             return Project.GetCodes(tableName, columnName, false).Prepend("");
+        }
+
+        public bool NeedsUpgrade()
+        {
+            if (!Database.TableExists("ERHMS_Jobs"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void Upgrade()
+        {
+            Log.Logger.DebugFormat("Upgrading data context: {0}", Project.FilePath);
+            using (IDbConnection connection = Database.GetConnection())
+            {
+                if (!Database.TableExists("ERHMS_Jobs"))
+                {
+                    ExecuteScript(connection, "JobTicketing");
+                }
+            }
         }
     }
 }
