@@ -39,25 +39,21 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_Assignments");
                 sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "metaViews", "ViewId", "ERHMS_Assignments");
+                sql.AddTable(new JoinInfo(JoinType.Inner, "metaViews", "ViewId", "ERHMS_Assignments"));
                 sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
                 sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews");
+                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews"));
                 sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks");
+                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks"));
                 sql.AddSeparator();
                 foreach (string tableName in Context.Responders.TableNames)
                 {
-                    sql.AddTable(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Assignments", "ResponderId");
+                    sql.AddTable(new JoinInfo(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Assignments", "ResponderId"));
                 }
                 sql.OtherClauses = clauses;
                 Func<Assignment, Domain.View, ViewLink, Incident, Responder, Assignment> map = (assignment, view, viewLink, incident, responder) =>
                 {
-                    assignment.New = false;
-                    view.New = false;
-                    viewLink.New = false;
-                    incident.New = false;
-                    responder.New = false;
+                    SetOld(assignment, view, viewLink, incident, responder);
                     assignment.View = view;
                     if (viewLink.GetProperty(nameof(ViewLink.ViewId)) != null)
                     {

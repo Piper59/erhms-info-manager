@@ -22,13 +22,8 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(WebSurvey), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
-
         public WebSurveyRepository(DataContext context)
-            : base(context)
-        {
-            Context = context;
-        }
+            : base(context) { }
 
         public override IEnumerable<WebSurvey> Select(string clauses = null, object parameters = null)
         {
@@ -37,19 +32,16 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_WebSurveys");
                 sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "metaViews", "ViewId", "ERHMS_WebSurveys");
+                sql.AddTable(new JoinInfo(JoinType.Inner, "metaViews", "ViewId", "ERHMS_WebSurveys"));
                 sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
                 sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews");
+                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews"));
                 sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks");
+                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks"));
                 sql.OtherClauses = clauses;
                 Func<WebSurvey, View, ViewLink, Incident, WebSurvey> map = (webSurvey, view, viewLink, incident) =>
                 {
-                    webSurvey.New = false;
-                    view.New = false;
-                    viewLink.New = false;
-                    incident.New = false;
+                    SetOld(webSurvey, view, viewLink, incident);
                     webSurvey.View = view;
                     if (viewLink.GetProperty(nameof(ViewLink.ViewId)) != null)
                     {

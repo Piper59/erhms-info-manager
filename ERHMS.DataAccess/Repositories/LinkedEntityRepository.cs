@@ -19,13 +19,10 @@ namespace ERHMS.DataAccess
             get { return LinkTypeMap.Get(TypeMap.GetId().Property.Name); }
         }
 
-        public new DataContext Context { get; private set; }
-
         protected LinkedEntityRepository(DataContext context)
             : base(context)
         {
             LinkTypeMap = (TypeMap)SqlMapper.GetTypeMap(typeof(TLink));
-            Context = context;
         }
 
         protected virtual SqlBuilder GetSelectSql()
@@ -33,9 +30,9 @@ namespace ERHMS.DataAccess
             SqlBuilder sql = new SqlBuilder();
             sql.AddTable(TypeMap.TableName);
             sql.AddSeparator();
-            sql.AddTable(JoinType.LeftOuter, LinkTypeMap.TableName, LinkedId.ColumnName, TypeMap.TableName, TypeMap.GetId().ColumnName);
+            sql.AddTable(new JoinInfo(JoinType.LeftOuter, LinkTypeMap.TableName, LinkedId.ColumnName, TypeMap.TableName, TypeMap.GetId().ColumnName));
             sql.AddSeparator();
-            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", LinkTypeMap.TableName);
+            sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", LinkTypeMap.TableName));
             return sql;
         }
 

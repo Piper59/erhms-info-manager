@@ -20,13 +20,8 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(Incident), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
-
         public IncidentRepository(DataContext context)
-            : base(context)
-        {
-            Context = context;
-        }
+            : base(context) { }
 
         public IEnumerable<Incident> SelectUndeleted()
         {

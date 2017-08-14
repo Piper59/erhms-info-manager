@@ -39,9 +39,9 @@ namespace ERHMS.DataAccess
             sql.AddTable(TypeMap.TableName);
             sql.SelectClauses.Add(HasResponderIdFieldSql);
             sql.AddSeparator();
-            sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews");
+            sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews"));
             sql.AddSeparator();
-            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks");
+            sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks"));
             return sql;
         }
     }

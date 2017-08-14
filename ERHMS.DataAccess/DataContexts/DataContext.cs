@@ -20,11 +20,20 @@ namespace ERHMS.DataAccess
             CanvasLinkRepository.Configure();
             IncidentRepository.Configure();
             IncidentNoteRepository.Configure();
+            IncidentRoleRepository.Configure();
+            JobRepository.Configure();
+            JobLocationRepository.Configure();
+            JobNoteRepository.Configure();
+            JobResponderRepository.Configure();
+            JobTeamRepository.Configure();
             LocationRepository.Configure();
             PgmRepository.Configure();
             PgmLinkRepository.Configure();
             ResponderRepository.Configure();
+            RoleRepository.Configure();
             RosterRepository.Configure();
+            TeamRepository.Configure();
+            TeamResponderRepository.Configure();
             ViewRepository.Configure();
             ViewLinkRepository.Configure();
             WebSurveyRepository.Configure();
@@ -70,11 +79,20 @@ namespace ERHMS.DataAccess
         public CanvasLinkRepository CanvasLinks { get; private set; }
         public IncidentRepository Incidents { get; private set; }
         public IncidentNoteRepository IncidentNotes { get; private set; }
+        public IncidentRoleRepository IncidentRoles { get; private set; }
+        public JobRepository Jobs { get; private set; }
+        public JobLocationRepository JobLocations { get; private set; }
+        public JobNoteRepository JobNotes { get; private set; }
+        public JobResponderRepository JobResponders { get; private set; }
+        public JobTeamRepository JobTeams { get; private set; }
         public LocationRepository Locations { get; private set; }
         public PgmRepository Pgms { get; private set; }
         public PgmLinkRepository PgmLinks { get; private set; }
         public ResponderRepository Responders { get; private set; }
+        public RoleRepository Roles { get; private set; }
         public RosterRepository Rosters { get; private set; }
+        public TeamRepository Teams { get; private set; }
+        public TeamResponderRepository TeamResponders { get; private set; }
         public ViewRepository Views { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
         public WebSurveyRepository WebSurveys { get; private set; }
@@ -107,11 +125,20 @@ namespace ERHMS.DataAccess
             CanvasLinks = new CanvasLinkRepository(this);
             Incidents = new IncidentRepository(this);
             IncidentNotes = new IncidentNoteRepository(this);
+            IncidentRoles = new IncidentRoleRepository(this);
+            Jobs = new JobRepository(this);
+            JobLocations = new JobLocationRepository(this);
+            JobNotes = new JobNoteRepository(this);
+            JobResponders = new JobResponderRepository(this);
+            JobTeams = new JobTeamRepository(this);
             Locations = new LocationRepository(this);
             Pgms = new PgmRepository(this);
             PgmLinks = new PgmLinkRepository(this);
             Responders = new ResponderRepository(this);
+            Roles = new RoleRepository(this);
             Rosters = new RosterRepository(this);
+            Teams = new TeamRepository(this);
+            TeamResponders = new TeamResponderRepository(this);
             Views = new ViewRepository(this);
             ViewLinks = new ViewLinkRepository(this);
             WebSurveys = new WebSurveyRepository(this);

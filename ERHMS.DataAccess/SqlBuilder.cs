@@ -30,22 +30,28 @@ namespace ERHMS.DataAccess
             separators = new List<string>();
         }
 
-        public void AddTable(string tableName)
+        private string EscapeTableName(string tableName, string alias)
         {
-            SelectClauses.Add(Escape(tableName) + ".*");
-            FromClauses.Add(Escape(tableName));
+            return alias == null ? Escape(tableName) : string.Format("{0} AS {1}", Escape(tableName), Escape(alias));
         }
 
-        public void AddTable(JoinType joinType, string tableNameTo, string columnNameTo, string tableNameFrom, string columnNameFrom = null)
+        public void AddTable(string tableName, string alias = null)
         {
-            SelectClauses.Add(Escape(tableNameTo) + ".*");
+            SelectClauses.Add(Escape(alias ?? tableName) + ".*");
+            FromClauses.Add(EscapeTableName(tableName, alias));
+        }
+
+        public void AddTable(JoinInfo join)
+        {
+            SelectClauses.Add(Escape(join.AliasTo ?? join.TableNameTo) + ".*");
             FromClauses.Add(string.Format(
-                "{0} JOIN {1} ON {1}.{2} = {3}.{4}",
-                joinType.ToSql(),
-                Escape(tableNameTo),
-                Escape(columnNameTo),
-                Escape(tableNameFrom),
-                Escape(columnNameFrom ?? columnNameTo)));
+                "{0} JOIN {1} ON {2}.{3} = {4}.{5}",
+                join.JoinType.ToSql(),
+                EscapeTableName(join.TableNameTo, join.AliasTo),
+                Escape(join.AliasTo ?? join.TableNameTo),
+                Escape(join.ColumnNameTo),
+                Escape(join.TableNameOrAliasFrom),
+                Escape(join.ColumnNameFrom)));
         }
 
         public void AddSeparator()

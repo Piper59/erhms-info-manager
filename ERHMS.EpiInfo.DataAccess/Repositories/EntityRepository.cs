@@ -7,6 +7,14 @@ namespace ERHMS.EpiInfo.DataAccess
     public class EntityRepository<TEntity> : Repository<TEntity>
         where TEntity : Entity
     {
+        protected static void SetOld(params Entity[] entities)
+        {
+            foreach (Entity entity in entities)
+            {
+                entity.New = false;
+            }
+        }
+
         public IDataContext Context { get; private set; }
 
         public Project Project

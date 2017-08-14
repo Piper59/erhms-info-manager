@@ -41,16 +41,14 @@ namespace ERHMS.DataAccess
                 sql.AddSeparator();
                 foreach (string tableName in Context.Responders.TableNames)
                 {
-                    sql.AddTable(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Rosters", "ResponderId");
+                    sql.AddTable(new JoinInfo(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Rosters", "ResponderId"));
                 }
                 sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "IncidentId", "ERHMS_Rosters");
+                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", "ERHMS_Rosters"));
                 sql.OtherClauses = clauses;
                 Func<Roster, Responder, Incident, Roster> map = (roster, responder, incident) =>
                 {
-                    roster.New = false;
-                    responder.New = false;
-                    incident.New = false;
+                    SetOld(roster, responder, incident);
                     roster.Responder = responder;
                     roster.Incident = incident;
                     return roster;

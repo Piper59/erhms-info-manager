@@ -27,7 +27,7 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<Responder> GetItems()
             {
-                return Context.Responders.SelectUnrostered(Incident.IncidentId).OrderBy(responder => responder.FullName);
+                return Context.Responders.SelectRosterable(Incident.IncidentId).OrderBy(responder => responder.FullName);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)

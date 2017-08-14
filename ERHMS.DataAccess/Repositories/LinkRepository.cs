@@ -11,13 +11,8 @@ namespace ERHMS.DataAccess
     public class LinkRepository<TLink> : EntityRepository<TLink>
         where TLink : Link
     {
-        public new DataContext Context { get; private set; }
-
         protected LinkRepository(DataContext context)
-            : base(context)
-        {
-            Context = context;
-        }
+            : base(context) { }
 
         public override IEnumerable<TLink> Select(string clauses = null, object parameters = null)
         {
@@ -26,12 +21,11 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable(TypeMap.TableName);
                 sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "IncidentId", TypeMap.TableName);
+                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", TypeMap.TableName));
                 sql.OtherClauses = clauses;
                 Func<TLink, Incident, TLink> map = (link, incident) =>
                 {
-                    link.New = false;
-                    incident.New = false;
+                    SetOld(link, incident);
                     link.Incident = incident;
                     return link;
                 };

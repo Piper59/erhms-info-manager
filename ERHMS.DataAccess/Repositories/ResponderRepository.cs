@@ -14,15 +14,10 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(Responder), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
-
         public ResponderRepository(DataContext context)
-            : base(context, context.Project.Views["Responders"])
-        {
-            Context = context;
-        }
+            : base(context, context.Project.Views["Responders"]) { }
 
-        public IEnumerable<Responder> SelectUnrostered(string incidentId)
+        public IEnumerable<Responder> SelectRosterable(string incidentId)
         {
             string format = @"
                 WHERE {0}.[RECSTATUS] <> 0
@@ -34,6 +29,21 @@ namespace ERHMS.DataAccess
             string clauses = string.Format(format, Escape(View.TableName));
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@IncidentId", incidentId);
+            return Select(clauses, parameters);
+        }
+
+        public IEnumerable<Responder> SelectTeamable(string teamId)
+        {
+            string format = @"
+                WHERE {0}.[RECSTATUS] <> 0
+                AND {0}.[GlobalRecordId] NOT IN (
+                    SELECT [ResponderId]
+                    FROM [ERHMS_TeamResponders]
+                    WHERE [TeamId] = @TeamId
+                )";
+            string clauses = string.Format(format, Escape(View.TableName));
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add(@"TeamId", teamId);
             return Select(clauses, parameters);
         }
     }
