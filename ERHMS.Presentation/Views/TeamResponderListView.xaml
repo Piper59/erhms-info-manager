@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.TeamResponderListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
+    <UserControl.Resources>
+        <Converters:ResponderToFullNameConverter x:Key="ResponderToFullNameConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Style="{StaticResource Heading}">
+            New Responder
+        </TextBlock>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0">Role</Label>
+            <ComboBox Grid.Column="1"
+                      AutomationProperties.Name="Role"
+                      MahApps:TextBoxHelper.ClearTextButton="True"
+                      DisplayMemberPath="Name"
+                      ItemsSource="{Binding IncidentRoles.Items}"
+                      SelectedItem="{Binding IncidentRoles.SelectedItem}" />
+        </Grid>
+        <Controls:Filter Grid.Row="2"
+                         Value="{Binding Responders.Filter}" />
+        <DataGrid Grid.Row="3"
+                  DataContext="{Binding Responders}"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}">
+            <i:Interaction.Behaviors>
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+            </i:Interaction.Behaviors>
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding EditCommand}"
+                              MouseAction="LeftDoubleClick" />
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding LastName}"
+                                    Header="Last Name"
+                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding FirstName}"
+                                    Header="First Name"
+                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding EmailAddress}"
+                                    Header="Email Address"
+                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding City}"
+                                    Header="City"
+                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding State}"
+                                    Header="State"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding OrganizationName}"
+                                    Header="Organization Name"
+                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding Occupation}"
+                                    Header="Occupation"
+                                    Width="2*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <WrapPanel Grid.Row="4"
+                   Margin="0,10,0,5"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Add"
+                                 Command="{Binding AddCommand}"
+                                 Icon="{StaticResource appbar_arrow_down}" />
+            <Controls:IconButton AccessText="Re_move"
+                                 Command="{Binding RemoveCommand}"
+                                 Icon="{StaticResource appbar_arrow_up}" />
+        </WrapPanel>
+        <TextBlock Grid.Row="5"
+                   Style="{StaticResource Heading}">
+            Existing Responders
+        </TextBlock>
+        <Controls:Filter Grid.Row="6"
+                         Value="{Binding Filter}" />
+        <DataGrid Grid.Row="7"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}">
+            <i:Interaction.Behaviors>
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+            </i:Interaction.Behaviors>
+            <DataGrid.Resources>
+                <Controls:BindingProxy x:Key="Proxy"
+                                       DataContext="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Responder, Converter={StaticResource ResponderToFullNameConverter}}"
+                                    Header="Responder"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding IncidentRole.Name}"
+                                    Header="Role"
+                                    Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <WrapPanel Grid.Row="8"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Email"
+                                 Command="{Binding EmailCommand}"
+                                 Icon="{StaticResource appbar_email}" />
+            <Controls:IconButton AccessText="_Refresh"
+                                 Command="{Binding RefreshCommand}"
+                                 Icon="{StaticResource appbar_refresh_clockwise_down}" />
+        </WrapPanel>
+    </Grid>
+</UserControl>

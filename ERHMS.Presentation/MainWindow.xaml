@@ -137,6 +137,13 @@
                         </i:Interaction.Behaviors>
                     </Views:IncidentView>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:TeamViewModel}">
+                    <Views:TeamView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:TeamView>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:LocationDetailViewModel}">
                     <Views:LocationDetailView>
                         <i:Interaction.Behaviors>

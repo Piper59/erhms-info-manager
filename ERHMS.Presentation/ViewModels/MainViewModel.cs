@@ -310,6 +310,13 @@ namespace ERHMS.Presentation.ViewModels
             ShowIncident(new Incident());
         }
 
+        public void ShowTeam(Team team)
+        {
+            Show(
+                () => new TeamViewModel(Services, team),
+                document => document.Team.TeamId.EqualsIgnoreCase(team.TeamId));
+        }
+
         public void ShowLocation(Location location)
         {
             Show(

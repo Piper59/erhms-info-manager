@@ -19,6 +19,7 @@ namespace ERHMS.Presentation
         void ShowIncidents();
         void ShowIncident(Incident incident);
         void ShowNewIncident();
+        void ShowTeam(Team team);
         void ShowLocation(Location location);
         void ShowViews();
         void ShowRecords(Epi.View view);

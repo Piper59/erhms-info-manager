@@ -6,18 +6,35 @@ using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class RosterListViewModel : ListViewModel<Roster>
+    public class TeamResponderListViewModel : ListViewModel<TeamResponder>
     {
-        public class ResponderListChildViewModel : ListViewModel<Responder>
+        public class IncidentRoleListChildViewModel : ListViewModel<IncidentRole>
         {
             public Incident Incident { get; private set; }
 
-            public RelayCommand EditCommand { get; private set; }
-
-            public ResponderListChildViewModel(IServiceManager services, Incident incident)
+            public IncidentRoleListChildViewModel(IServiceManager services, Incident incident)
                 : base(services)
             {
                 Incident = incident;
+            }
+
+            protected override IEnumerable<IncidentRole> GetItems()
+            {
+                return Context.IncidentRoles.SelectByIncidentId(Incident.IncidentId)
+                    .OrderBy(incidentRole => incidentRole.Name);
+            }
+        }
+
+        public class ResponderListChildViewModel : ListViewModel<Responder>
+        {
+            public Team Team { get; private set; }
+
+            public RelayCommand EditCommand { get; private set; }
+
+            public ResponderListChildViewModel(IServiceManager services, Team team)
+                : base(services)
+            {
+                Team = team;
                 EditCommand = new RelayCommand(Edit, HasSelectedItem);
                 SelectionChanged += (sender, e) =>
                 {
@@ -27,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<Responder> GetItems()
             {
-                return Context.Responders.SelectRosterable(Incident.IncidentId).OrderBy(responder => responder.FullName);
+                return Context.Responders.SelectTeamable(Team.IncidentId, Team.TeamId).OrderBy(responder => responder.FullName);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
@@ -47,24 +64,24 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public Incident Incident { get; private set; }
+        public Team Team { get; private set; }
+        public IncidentRoleListChildViewModel IncidentRoles { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
 
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand RemoveCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
 
-        public RosterListViewModel(IServiceManager services, Incident incident)
+        public TeamResponderListViewModel(IServiceManager services, Team team)
             : base(services)
         {
-            Title = "Roster";
-            Incident = incident;
-            Responders = new ResponderListChildViewModel(services, incident);
+            Title = "Responders";
+            Team = team;
+            IncidentRoles = new IncidentRoleListChildViewModel(services, team.Incident);
+            Responders = new ResponderListChildViewModel(services, team);
             Refresh();
             AddCommand = new RelayCommand(Add, Responders.HasSelectedItem);
             RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            EditCommand = new RelayCommand(Edit, HasSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             Responders.SelectionChanged += (sender, e) =>
             {
@@ -73,63 +90,63 @@ namespace ERHMS.Presentation.ViewModels
             SelectionChanged += (sender, e) =>
             {
                 RemoveCommand.RaiseCanExecuteChanged();
-                EditCommand.RaiseCanExecuteChanged();
                 EmailCommand.RaiseCanExecuteChanged();
             };
         }
 
-        protected override IEnumerable<Roster> GetItems()
+        protected override IEnumerable<TeamResponder> GetItems()
         {
-            return Context.Rosters.SelectUndeletedByIncidentId(Incident.IncidentId).OrderBy(roster => roster.Responder.FullName);
+            return Context.TeamResponders.SelectUndeletedByTeamId(Team.TeamId).OrderBy(teamResponder => teamResponder.Responder.FullName);
         }
 
-        protected override IEnumerable<string> GetFilteredValues(Roster item)
+        protected override IEnumerable<string> GetFilteredValues(TeamResponder item)
         {
-            yield return item.Responder.LastName;
-            yield return item.Responder.FirstName;
-            yield return item.Responder.EmailAddress;
-            yield return item.Responder.City;
-            yield return item.Responder.State;
-            yield return item.Responder.OrganizationName;
-            yield return item.Responder.Occupation;
+            yield return item.Responder.FullName;
+            yield return item.IncidentRole?.Name;
         }
 
         public void Add()
         {
             foreach (Responder responder in Responders.SelectedItems)
             {
-                Context.Rosters.Save(new Roster
+                Context.TeamResponders.Save(new TeamResponder
                 {
+                    TeamId = Team.TeamId,
                     ResponderId = responder.ResponderId,
-                    IncidentId = Incident.IncidentId
+                    IncidentRoleId = IncidentRoles.SelectedItem?.IncidentRoleId
                 });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(Roster)));
+            MessengerInstance.Send(new RefreshMessage(typeof(TeamResponder)));
         }
 
         public void Remove()
         {
-            foreach (Roster roster in SelectedItems)
+            ConfirmMessage msg = new ConfirmMessage
             {
-                Context.Rosters.Delete(roster);
-            }
-            MessengerInstance.Send(new RefreshMessage(typeof(Roster)));
-        }
-
-        public void Edit()
-        {
-            Documents.ShowResponder((Responder)SelectedItem.Responder.Clone());
+                Verb = "Remove",
+                Message = "Remove the selected responders?"
+            };
+            msg.Confirmed += (sender, e) =>
+            {
+                foreach (TeamResponder teamResponder in SelectedItems)
+                {
+                    Context.TeamResponders.Delete(teamResponder);
+                }
+                MessengerInstance.Send(new RefreshMessage(typeof(TeamResponder)));
+            };
+            MessengerInstance.Send(msg);
         }
 
         public void Email()
         {
             Documents.Show(
-                () => new EmailViewModel(Services, TypedSelectedItems.Select(roster => roster.Responder)),
+                () => new EmailViewModel(Services, TypedSelectedItems.Select(teamResponder => teamResponder.Responder)),
                 document => false);
         }
 
         public override void Refresh()
         {
+            IncidentRoles.Refresh();
             Responders.Refresh();
             base.Refresh();
         }

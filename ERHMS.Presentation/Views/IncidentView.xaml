@@ -3,7 +3,6 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:Views="clr-namespace:ERHMS.Presentation.Views">
     <i:Interaction.Behaviors>
@@ -21,6 +20,9 @@
         </TabItem>
         <TabItem Header="_Roster" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:RosterListView DataContext="{Binding Rosters}" />
+        </TabItem>
+        <TabItem Header="_Teams" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+            <Views:TeamListView DataContext="{Binding Teams}" />
         </TabItem>
         <TabItem Header="_Locations" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:LocationListView DataContext="{Binding Locations}" />
