@@ -319,6 +319,7 @@
     <Compile Include="ViewModels\RecordListViewModel.cs" />
     <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
+    <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\RosterListViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SurveyViewModel.cs" />
@@ -395,6 +396,9 @@
     </Compile>
     <Compile Include="Views\ResponderListView.xaml.cs">
       <DependentUpon>ResponderListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleView.xaml.cs">
+      <DependentUpon>RoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RosterListView.xaml.cs">
       <DependentUpon>RosterListView.xaml</DependentUpon>
@@ -588,6 +592,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ResponderListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

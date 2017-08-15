@@ -1,4 +1,6 @@
 ﻿using Epi;
+using ERHMS.Dapper;
+using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Dialogs;
@@ -7,6 +9,7 @@ using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -36,6 +39,8 @@ namespace ERHMS.Presentation.ViewModels
             get { return rootPath; }
             set { Set(nameof(RootPath), ref rootPath, value); }
         }
+
+        public ObservableCollection<Role> Roles { get; private set; }
 
         private string emailHost;
         [DirtyCheck]
@@ -140,6 +145,9 @@ namespace ERHMS.Presentation.ViewModels
         }
 
         public RelayCommand BrowseCommand { get; private set; }
+        public RelayCommand ShowDataSourcesCommand { get; private set; }
+        public RelayCommand AddRoleCommand { get; private set; }
+        public RelayCommand<Role> RemoveRoleCommand { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
         public SettingsViewModel(IServiceManager services)
@@ -150,6 +158,11 @@ namespace ERHMS.Presentation.ViewModels
             LogLevelNames = Log.LevelNames;
             LogLevelName = Settings.Default.LogLevelName;
             RootPath = configuration.GetRootPath();
+            Roles = new ObservableCollection<Role>();
+            if (Context != null)
+            {
+                Roles.AddRange(Context.Roles.Select().OrderBy(role => role.Name));
+            }
             EmailHost = Settings.Default.EmailHost;
             EmailPort = Settings.Default.EmailPort;
             EmailUseSsl = Settings.Default.EmailUseSsl;
@@ -164,7 +177,14 @@ namespace ERHMS.Presentation.ViewModels
             OrganizationKey = ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey);
             Dirty = false;
             BrowseCommand = new RelayCommand(Browse);
+            ShowDataSourcesCommand = new RelayCommand(ShowDataSources);
+            AddRoleCommand = new RelayCommand(AddRole);
+            RemoveRoleCommand = new RelayCommand<Role>(RemoveRole);
             SaveCommand = new RelayCommand(Save);
+            Roles.CollectionChanged += (sender, e) =>
+            {
+                Dirty = true;
+            };
         }
 
         public void Browse()
@@ -196,9 +216,36 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public void ShowDataSources()
+        {
+            Services.Documents.ShowDataSources();
+        }
+
+        public void AddRole()
+        {
+            RoleViewModel role = new RoleViewModel(Services);
+            role.Added += (sender, e) =>
+            {
+                Roles.Add(new Role
+                {
+                    Name = role.Name
+                });
+            };
+            Dialogs.ShowAsync(role);
+        }
+
+        public void RemoveRole(Role role)
+        {
+            Roles.Remove(role);
+        }
+
         private bool Validate()
         {
             ICollection<string> fields = new List<string>();
+            if (Context != null && Roles.Count == 0)
+            {
+                fields.Add("Roles");
+            }
             if (!string.IsNullOrWhiteSpace(EmailSender) && !MailExtensions.IsValidAddress(EmailSender))
             {
                 fields.Add("Sender Address");
@@ -223,6 +270,18 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             Settings.Default.LogLevelName = LogLevelName;
+            if (Context != null)
+            {
+                using (Transaction transaction = Context.Database.BeginTransaction())
+                {
+                    Context.Roles.Delete();
+                    foreach (Role role in Roles)
+                    {
+                        Context.Roles.Insert(role);
+                    }
+                    transaction.Commit();
+                }
+            }
             Settings.Default.EmailHost = EmailHost;
             Settings.Default.EmailPort = EmailPort;
             Settings.Default.EmailUseSsl = EmailUseSsl;

@@ -9,6 +9,8 @@
     <UserControl.Resources>
         <Converters:BindingTypeToDescriptionConverter x:Key="BindingTypeToDescriptionConverter" />
         <Converters:BooleanInverter x:Key="BooleanInverter" />
+        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <Converters:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -54,6 +56,43 @@
                                 Browse
                             </Button>
                         </Grid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Roles"
+                          Visibility="{Binding Context, Converter={StaticResource NullToVisibilityInverter}}">
+                    <TextBlock TextWrapping="Wrap">
+                        To customize roles, <Hyperlink Command="{Binding ShowDataSourcesCommand}">open a data source</Hyperlink>.
+                    </TextBlock>
+                </GroupBox>
+                <GroupBox Header="Roles"
+                          Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ScrollViewer Grid.Column="0"
+                                          Margin="0,0,0,5"
+                                          MaxHeight="100">
+                                <Controls:RemovableItemsControl ItemsSource="{Binding Roles}"
+                                                                RemoveCommand="{Binding RemoveRoleCommand}" />
+                            </ScrollViewer>
+                            <Button Grid.Column="1"
+                                    Command="{Binding AddRoleCommand}"
+                                    Margin="0,0,0,5"
+                                    Style="{StaticResource AccentButton}">
+                                Add
+                            </Button>
+                        </Grid>
+                        <TextBlock Grid.Row="1"
+                                   TextWrapping="Wrap">
+                            <Run FontWeight="SemiBold">Note:</Run> Changes made here do not affect existing incidents.
+                        </TextBlock>
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Email">

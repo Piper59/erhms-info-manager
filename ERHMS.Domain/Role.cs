@@ -21,5 +21,10 @@ namespace ERHMS.Domain
         {
             RoleId = Guid.NewGuid().ToString();
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
