@@ -168,6 +168,8 @@ namespace ERHMS.DataAccess
                     ExecuteScript(connection, "JobTicketing");
                 }
             }
+            Project.Version = Assembly.GetExecutingAssembly().GetName().Version;
+            Project.Save();
         }
     }
 }

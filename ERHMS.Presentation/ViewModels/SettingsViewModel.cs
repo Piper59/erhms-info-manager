@@ -176,14 +176,14 @@ namespace ERHMS.Presentation.ViewModels
                     string path = dialog.GetRootPath();
                     if (!path.EqualsIgnoreCase(configuration.GetRootPath()))
                     {
-                        StringBuilder message = new StringBuilder();
-                        message.Append("Change the root directory?");
-                        message.Append(" This may cause existing data sources to stop working properly.");
-                        message.AppendFormat(" {0} will attempt to copy your documents and restart when settings are saved.", App.Title);
+                        ICollection<string> message = new List<string>();
+                        message.Add("Change the root directory?");
+                        message.Add("This may cause existing data sources to stop working properly.");
+                        message.Add(string.Format("{0} will attempt to copy your documents and restart when settings are saved.", App.Title));
                         ConfirmMessage msg = new ConfirmMessage
                         {
                             Verb = "Change",
-                            Message = message.ToString()
+                            Message = string.Join(" ", message)
                         };
                         msg.Confirmed += (sender, e) =>
                         {

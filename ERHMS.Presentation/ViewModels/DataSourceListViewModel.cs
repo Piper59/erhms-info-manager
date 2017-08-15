@@ -60,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Open()
         {
-            Documents.OpenDataSource(SelectedItem.FilePath);
+            Documents.OpenDataSource(ProjectInfo.Get(SelectedItem.FilePath));
         }
 
         public void AddNew()

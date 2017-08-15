@@ -34,10 +34,14 @@ namespace ERHMS.DataAccess
             ProjectInfo projectInfo = ProjectInfo.Get(path);
             projectInfo.SetAccessConnectionString();
             assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.mdb", Path.ChangeExtension(path, ".mdb"));
-            SampleDataContext context = new SampleDataContext(new Project(path));
+            Project project = new Project(path);
+            project.Version = assembly.GetName().Version;
+            project.Save();
+            SampleDataContext context = new SampleDataContext(project);
             context.InsertPgm("Safety Messages", "ERHMS.DataAccess.Resources.Sample.SafetyMessages.pgm7");
             context.InsertCanvas("Air Quality", "ERHMS.DataAccess.Resources.Sample.AirQuality.cvs7");
             context.InsertCanvas("Symptoms", "ERHMS.DataAccess.Resources.Sample.Symptoms.cvs7");
+            context.Upgrade();
             return context;
         }
 

@@ -1,11 +1,14 @@
 ﻿using ERHMS.DataAccess;
 using ERHMS.Domain;
+using ERHMS.EpiInfo;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Presentation.ViewModels
@@ -124,34 +127,21 @@ namespace ERHMS.Presentation.ViewModels
             return Context != null;
         }
 
-        private void OpenDataSourceInternal(string path)
+        public void OpenDataSource(ProjectInfo dataSource)
         {
-            try
+            if (dataSource.Version > Assembly.GetExecutingAssembly().GetName().Version)
             {
-                foreach (ViewModelBase document in Documents.ToList())
+                ICollection<string> message = new List<string>();
+                message.Add(string.Format("The selected data source was created in a newer version of {0}.", App.Title));
+                message.Add(string.Format("Please upgrade to the latest version of {0} to open this data source.", App.Title));
+                MessengerInstance.Send(new AlertMessage
                 {
-                    document.Close(false);
-                }
-                using (new WaitCursor())
-                {
-                    Context = new DataContext(new Project(path));
-                }
-                Title = string.Format("{0} - {1}", App.Title, Context.Project.Name);
-                ShowHelp();
+                    Message = string.Join(" ", message)
+                });
             }
-            catch (Exception ex)
+            else if (HasContext())
             {
-                Log.Logger.Warn("Failed to open data source", ex);
-                Services.Dialogs.ShowErrorAsync("Failed to open data source.", ex);
-                ShowDataSources();
-            }
-        }
-
-        public void OpenDataSource(string path)
-        {
-            if (HasContext())
-            {
-                if (Context.Project.FilePath.EqualsIgnoreCase(path))
+                if (Context.Project.FilePath.EqualsIgnoreCase(dataSource.FilePath))
                 {
                     Get<DataSourceListViewModel>()?.Close();
                     return;
@@ -163,14 +153,71 @@ namespace ERHMS.Presentation.ViewModels
                 };
                 msg.Confirmed += (sender, e) =>
                 {
-                    OpenDataSourceInternal(path);
+                    OnDataSourceOpening(dataSource);
                 };
                 MessengerInstance.Send(msg);
             }
             else
             {
-                OpenDataSourceInternal(path);
+                OnDataSourceOpening(dataSource);
             }
+        }
+
+        private void OnDataSourceOpening(ProjectInfo dataSource)
+        {
+            try
+            {
+                foreach (ViewModelBase document in Documents.ToList())
+                {
+                    document.Close(false);
+                }
+                using (new WaitCursor())
+                {
+                    Context = new DataContext(new Project(dataSource.FilePath));
+                }
+                if (Context.NeedsUpgrade())
+                {
+                    ICollection<string> message = new List<string>();
+                    message.Add(string.Format("The selected data source was created in an older version of {0}.", App.Title));
+                    message.Add("Upgrade this data source?");
+                    ConfirmMessage msg = new ConfirmMessage
+                    {
+                        Verb = "Upgrade",
+                        Message = string.Join(" ", message)
+                    };
+                    msg.Confirmed += (sender, e) =>
+                    {
+                        Context.Upgrade();
+                        MessengerInstance.Send(new ToastMessage
+                        {
+                            Message = "Data source has been upgraded."
+                        });
+                        OnDataSourceOpened();
+                    };
+                    msg.Canceled += (sender, e) =>
+                    {
+                        Context = null;
+                        ShowDataSources();
+                    };
+                    MessengerInstance.Send(msg);
+                }
+                else
+                {
+                    OnDataSourceOpened();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Warn("Failed to open data source", ex);
+                Services.Dialogs.ShowErrorAsync("Failed to open data source.", ex);
+                ShowDataSources();
+            }
+        }
+
+        private void OnDataSourceOpened()
+        {
+            Title = string.Format("{0} - {1}", App.Title, Context.Project.Name);
+            ShowHelp();
         }
 
         private TViewModel Get<TViewModel>(Func<TViewModel, bool> predicate = null)

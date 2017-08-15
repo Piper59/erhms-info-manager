@@ -1,4 +1,5 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo;
 using ERHMS.Presentation.ViewModels;
 using System;
 
@@ -8,7 +9,7 @@ namespace ERHMS.Presentation
     {
         ViewModelBase ActiveDocument { get; }
 
-        void OpenDataSource(string path);
+        void OpenDataSource(ProjectInfo dataSource);
         void Show<TViewModel>(Func<TViewModel> constructor, Func<TViewModel, bool> predicate = null)
             where TViewModel : ViewModelBase;
         void ShowDataSources();
