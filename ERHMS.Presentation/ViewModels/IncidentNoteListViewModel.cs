@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentNotesViewModel : ListViewModel<IncidentNote>
+    public class IncidentNoteListViewModel : ListViewModel<IncidentNote>
     {
         public Incident Incident { get; private set; }
 
@@ -21,7 +21,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public RelayCommand SaveCommand { get; private set; }
 
-        public IncidentNotesViewModel(IServiceManager services, Incident incident)
+        public IncidentNoteListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Notes";

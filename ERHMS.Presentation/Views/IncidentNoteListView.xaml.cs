@@ -2,9 +2,9 @@
 
 namespace ERHMS.Presentation.Views
 {
-    public partial class IncidentNotesView : UserControl
+    public partial class IncidentNoteListView : UserControl
     {
-        public IncidentNotesView()
+        public IncidentNoteListView()
         {
             InitializeComponent();
         }

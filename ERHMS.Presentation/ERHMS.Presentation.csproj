@@ -303,7 +303,7 @@
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
-    <Compile Include="ViewModels\IncidentNotesViewModel.cs" />
+    <Compile Include="ViewModels\IncidentNoteListViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\ListViewModel.cs" />
@@ -361,8 +361,8 @@
     <Compile Include="Views\IncidentListView.xaml.cs">
       <DependentUpon>IncidentListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\IncidentNotesView.xaml.cs">
-      <DependentUpon>IncidentNotesView.xaml</DependentUpon>
+    <Compile Include="Views\IncidentNoteListView.xaml.cs">
+      <DependentUpon>IncidentNoteListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\IncidentView.xaml.cs">
       <DependentUpon>IncidentView.xaml</DependentUpon>
@@ -547,7 +547,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\IncidentNotesView.xaml">
+    <Page Include="Views\IncidentNoteListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

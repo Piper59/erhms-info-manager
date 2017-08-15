@@ -6,7 +6,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
         public IncidentDetailViewModel Detail { get; private set; }
-        public IncidentNotesViewModel Notes { get; private set; }
+        public IncidentNoteListViewModel Notes { get; private set; }
         public RosterListViewModel Rosters { get; private set; }
         public TeamListViewModel Teams { get; private set; }
         public LocationListViewModel Locations { get; private set; }
@@ -27,7 +27,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Incident = incident;
             Detail = new IncidentDetailViewModel(services, incident);
-            Notes = new IncidentNotesViewModel(services, incident);
+            Notes = new IncidentNoteListViewModel(services, incident);
             Rosters = new RosterListViewModel(services, incident);
             Teams = new TeamListViewModel(services, incident);
             Locations = new LocationListViewModel(services, incident);
