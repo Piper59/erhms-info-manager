@@ -17,7 +17,7 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_TeamResponders"
             };
-            typeMap.Get(nameof(TeamResponder.TeamId)).SetId();
+            typeMap.Get(nameof(TeamResponder.TeamResponderId)).SetId();
             typeMap.Get(nameof(TeamResponder.New)).SetComputed();
             typeMap.Get(nameof(TeamResponder.Team)).SetComputed();
             typeMap.Get(nameof(TeamResponder.Responder)).SetComputed();
