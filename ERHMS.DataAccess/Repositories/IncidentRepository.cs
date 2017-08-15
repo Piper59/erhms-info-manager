@@ -20,12 +20,23 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(Incident), typeMap);
         }
 
+        public new DataContext Context { get; private set; }
+
         public IncidentRepository(DataContext context)
-            : base(context) { }
+            : base(context)
+        {
+            Context = context;
+        }
 
         public IEnumerable<Incident> SelectUndeleted()
         {
             return Select("WHERE [Deleted] = 0");
+        }
+
+        public override void Insert(Incident entity)
+        {
+            base.Insert(entity);
+            Context.IncidentRoles.InsertAll(entity.IncidentId);
         }
 
         public override void Delete(string clauses = null, object parameters = null)

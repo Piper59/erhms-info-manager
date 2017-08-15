@@ -1,13 +1,10 @@
-﻿using Epi;
-using ERHMS.Dapper;
+﻿using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
 
@@ -41,10 +38,10 @@ namespace ERHMS.DataAccess
             WebSurveyRepository.Configure();
         }
 
-        private static void ExecuteScript(IDbConnection connection, string name, IDbTransaction transaction = null)
+        private static Script GetScript(string name)
         {
             string resourceName = string.Format("ERHMS.DataAccess.Scripts.{0}.sql", name);
-            connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)), transaction);
+            return new Script(Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName));
         }
 
         public static DataContext Create(Project project)
@@ -61,11 +58,11 @@ namespace ERHMS.DataAccess
                 project.CollectedData.CreateDataTableForView(view, 1);
             }
             DataContext context = new DataContext(project);
-            using (IDbConnection connection = context.Database.GetConnection())
+            context.Database.Invoke((connection, transaction) =>
             {
-                ExecuteScript(connection, "Base");
-                ExecuteScript(connection, "JobTicketing");
-            }
+                connection.Execute(GetScript("Base"), transaction);
+                context.Upgrade();
+            });
             return context;
         }
 
@@ -167,18 +164,10 @@ namespace ERHMS.DataAccess
             {
                 if (!Database.TableExists("ERHMS_Jobs"))
                 {
-                    ExecuteScript(connection, "JobTicketing", transaction);
-                }
-                ICollection<Role> roles = Roles.Select().ToList();
-                foreach (Incident incident in Incidents.Select())
-                {
-                    foreach (Role role in roles)
+                    connection.Execute(GetScript("JobTicketing"), transaction);
+                    foreach (Incident incident in Incidents.Select())
                     {
-                        IncidentRoles.Save(new IncidentRole
-                        {
-                            IncidentId = incident.IncidentId,
-                            Name = role.Name
-                        });
+                        IncidentRoles.InsertAll(incident.IncidentId);
                     }
                 }
             });

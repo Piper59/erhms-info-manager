@@ -18,7 +18,24 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(IncidentRole), typeMap);
         }
 
+        public new DataContext Context { get; private set; }
+
         public IncidentRoleRepository(DataContext context)
-            : base(context) { }
+            : base(context)
+        {
+            Context = context;
+        }
+
+        public void InsertAll(string incidentId)
+        {
+            foreach (Role role in Context.Roles.Select())
+            {
+                Save(new IncidentRole
+                {
+                    IncidentId = incidentId,
+                    Name = role.Name
+                });
+            }
+        }
     }
 }
