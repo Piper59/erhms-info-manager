@@ -32,10 +32,15 @@ namespace ERHMS.DataAccess
             return Select(clauses, parameters);
         }
 
-        public IEnumerable<Responder> SelectTeamable(string teamId)
+        public IEnumerable<Responder> SelectTeamable(string incidentId, string teamId)
         {
             string format = @"
                 WHERE {0}.[RECSTATUS] <> 0
+                AND {0}.[GlobalRecordId] IN (
+                    SELECT [ResponderId]
+                    FROM [ERHMS_Rosters]
+                    WHERE [IncidentId] = @IncidentId
+                )
                 AND {0}.[GlobalRecordId] NOT IN (
                     SELECT [ResponderId]
                     FROM [ERHMS_TeamResponders]
@@ -43,6 +48,7 @@ namespace ERHMS.DataAccess
                 )";
             string clauses = string.Format(format, Escape(View.TableName));
             DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IncidentId", incidentId);
             parameters.Add(@"TeamId", teamId);
             return Select(clauses, parameters);
         }
