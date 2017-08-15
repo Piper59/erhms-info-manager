@@ -169,6 +169,18 @@ namespace ERHMS.DataAccess
                 {
                     ExecuteScript(connection, "JobTicketing", transaction);
                 }
+                ICollection<Role> roles = Roles.Select().ToList();
+                foreach (Incident incident in Incidents.Select())
+                {
+                    foreach (Role role in roles)
+                    {
+                        IncidentRoles.Save(new IncidentRole
+                        {
+                            IncidentId = incident.IncidentId,
+                            Name = role.Name
+                        });
+                    }
+                }
             });
             Project.Version = Assembly.GetExecutingAssembly().GetName().Version;
             Project.Save();
