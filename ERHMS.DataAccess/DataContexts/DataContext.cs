@@ -1,11 +1,13 @@
 ﻿using Epi;
 using ERHMS.Dapper;
+using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
 
@@ -39,10 +41,10 @@ namespace ERHMS.DataAccess
             WebSurveyRepository.Configure();
         }
 
-        private static void ExecuteScript(IDbConnection connection, string name)
+        private static void ExecuteScript(IDbConnection connection, string name, IDbTransaction transaction = null)
         {
             string resourceName = string.Format("ERHMS.DataAccess.Scripts.{0}.sql", name);
-            connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)));
+            connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)), transaction);
         }
 
         public static DataContext Create(Project project)
@@ -54,7 +56,7 @@ namespace ERHMS.DataAccess
             Wrapper wrapper = MakeView.InstantiateProjectTemplate.Create(project.FilePath, path);
             wrapper.Invoke();
             wrapper.Exited.WaitOne();
-            foreach (View view in project.Views)
+            foreach (Epi.View view in project.Views)
             {
                 project.CollectedData.CreateDataTableForView(view, 1);
             }
@@ -161,13 +163,13 @@ namespace ERHMS.DataAccess
         public void Upgrade()
         {
             Log.Logger.DebugFormat("Upgrading data context: {0}", Project.FilePath);
-            using (IDbConnection connection = Database.GetConnection())
+            Database.Transact((connection, transaction) =>
             {
                 if (!Database.TableExists("ERHMS_Jobs"))
                 {
-                    ExecuteScript(connection, "JobTicketing");
+                    ExecuteScript(connection, "JobTicketing", transaction);
                 }
-            }
+            });
             Project.Version = Assembly.GetExecutingAssembly().GetName().Version;
             Project.Save();
         }

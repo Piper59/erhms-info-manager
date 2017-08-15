@@ -43,28 +43,40 @@ namespace ERHMS.Dapper
             return "@P" + index;
         }
 
-        public static void Execute(this IDbConnection @this, Script script)
+        private static void ExecuteInternal(this IDbConnection @this, Script script, IDbTransaction transaction)
         {
-            using (new ConnectionOpener(@this))
-            using (IDbTransaction transaction = @this.BeginTransaction())
+            foreach (string sql in script)
             {
-                try
+                if (string.IsNullOrWhiteSpace(sql))
                 {
-                    foreach (string sql in script)
+                    continue;
+                }
+                @this.Execute(sql, transaction: transaction);
+            }
+        }
+
+        public static void Execute(this IDbConnection @this, Script script, IDbTransaction transaction = null)
+        {
+            if (transaction == null)
+            {
+                using (new ConnectionOpener(@this))
+                using (transaction = @this.BeginTransaction())
+                {
+                    try
                     {
-                        if (string.IsNullOrWhiteSpace(sql))
-                        {
-                            continue;
-                        }
-                        @this.Execute(sql, transaction: transaction);
+                        @this.ExecuteInternal(script, transaction);
+                        transaction.Commit();
                     }
-                    transaction.Commit();
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
-                catch
-                {
-                    transaction.Rollback();
-                    throw;
-                }
+            }
+            else
+            {
+                @this.ExecuteInternal(script, transaction);
             }
         }
 

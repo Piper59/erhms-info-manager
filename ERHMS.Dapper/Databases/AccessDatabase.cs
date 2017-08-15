@@ -54,19 +54,19 @@ namespace ERHMS.Dapper
 
         public override bool TableExists(string name)
         {
-            try
+            return Invoke((connection, transaction) =>
             {
-                using (IDbConnection connection = GetConnection())
+                string sql = string.Format("SELECT * FROM {0} WHERE 1 = 0", Escape(name));
+                try
                 {
-                    string sql = string.Format("SELECT * FROM {0} WHERE 1 = 0", Escape(name));
-                    connection.Query(sql);
+                    connection.Query(sql, transaction: transaction);
                     return true;
                 }
-            }
-            catch
-            {
-                return false;
-            }
+                catch
+                {
+                    return false;
+                }
+            });
         }
 
         protected override IDbConnection GetConnectionInternal()
