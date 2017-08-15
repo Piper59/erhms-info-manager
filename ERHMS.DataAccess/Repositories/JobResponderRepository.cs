@@ -56,11 +56,11 @@ namespace ERHMS.DataAccess
                     sql.AddTable(new JoinInfo(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_JobResponders", "ResponderId"));
                 }
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_IncidentRoles", "IncidentRoleId", "ERHMS_JobResponders"));
+                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_IncidentRoles", "IncidentRoleId", "ERHMS_JobResponders"));
                 sql.AddSeparator();
                 sql.AddTable(new JoinInfo
                 {
-                    JoinType = JoinType.Inner,
+                    JoinType = JoinType.LeftOuter,
                     TableNameTo = "ERHMS_Incidents",
                     AliasTo = "ERHMS_IncidentRoleIncidents",
                     ColumnNameTo = "IncidentId",
@@ -73,8 +73,11 @@ namespace ERHMS.DataAccess
                     jobResponder.Job = job;
                     job.Incident = jobIncident;
                     jobResponder.Responder = responder;
-                    jobResponder.IncidentRole = incidentRole;
-                    incidentRole.Incident = incidentRoleIncident;
+                    if (incidentRole.GetProperty(nameof(IncidentRole.IncidentId)) != null)
+                    {
+                        jobResponder.IncidentRole = incidentRole;
+                        incidentRole.Incident = incidentRoleIncident;
+                    }
                     return jobResponder;
                 };
                 return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
