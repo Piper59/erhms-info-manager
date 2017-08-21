@@ -28,9 +28,9 @@
             </Grid>
             <WrapPanel Grid.Row="1"
                        Style="{StaticResource IconButtonBar}">
-                <Controls:IconButton AccessText="_Add"
-                                     Command="{Binding AddCommand}"
-                                     Icon="{StaticResource appbar_add}" />
+                <Controls:IconButton AccessText="_Save"
+                                     Command="{Binding SaveCommand}"
+                                     Icon="{StaticResource appbar_disk}" />
                 <Controls:IconButton AccessText="_Cancel"
                                      Command="{Binding CloseCommand}"
                                      Icon="{StaticResource appbar_cancel}" />

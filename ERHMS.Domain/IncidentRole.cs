@@ -16,9 +16,20 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Name), value); }
         }
 
+        public bool IsInUse
+        {
+            get { return GetProperty<bool>(nameof(IsInUse)); }
+            set { SetProperty(nameof(IsInUse), value); }
+        }
+
         public IncidentRole()
         {
             IncidentRoleId = Guid.NewGuid().ToString();
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

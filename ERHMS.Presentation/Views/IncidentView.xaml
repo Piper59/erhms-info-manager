@@ -21,6 +21,9 @@
         <TabItem Header="_Roster" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:RosterListView DataContext="{Binding Rosters}" />
         </TabItem>
+        <TabItem Header="_Roles" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+            <Views:IncidentRoleListView DataContext="{Binding Roles}" />
+        </TabItem>
         <TabItem Header="_Teams" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:TeamListView DataContext="{Binding Teams}" />
         </TabItem>

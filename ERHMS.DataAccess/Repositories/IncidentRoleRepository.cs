@@ -14,6 +14,7 @@ namespace ERHMS.DataAccess
             };
             typeMap.Get(nameof(IncidentRole.IncidentRoleId)).SetId();
             typeMap.Get(nameof(IncidentRole.New)).SetComputed();
+            typeMap.Get(nameof(IncidentRole.IsInUse)).SetComputed();
             typeMap.Get(nameof(IncidentRole.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(IncidentRole), typeMap);
         }
@@ -24,6 +25,24 @@ namespace ERHMS.DataAccess
             : base(context)
         {
             Context = context;
+        }
+
+        protected override SqlBuilder GetSelectSql()
+        {
+            SqlBuilder sql = new SqlBuilder();
+            sql.AddTable("ERHMS_IncidentRoles");
+            sql.SelectClauses.Add(@"(
+                    SELECT COUNT(*)
+                    FROM [ERHMS_TeamResponders]
+                    WHERE [ERHMS_TeamResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
+                ) + (
+                    SELECT COUNT(*)
+                    FROM [ERHMS_JobResponders]
+                    WHERE [ERHMS_JobResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
+                ) AS [IsInUse]");
+            sql.AddSeparator();
+            sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", "ERHMS_IncidentRoles"));
+            return sql;
         }
 
         public void InsertAll(string incidentId)

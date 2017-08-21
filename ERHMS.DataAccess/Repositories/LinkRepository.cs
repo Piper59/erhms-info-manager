@@ -14,14 +14,20 @@ namespace ERHMS.DataAccess
         protected LinkRepository(DataContext context)
             : base(context) { }
 
+        protected virtual SqlBuilder GetSelectSql()
+        {
+            SqlBuilder sql = new SqlBuilder();
+            sql.AddTable(TypeMap.TableName);
+            sql.AddSeparator();
+            sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", TypeMap.TableName));
+            return sql;
+        }
+
         public override IEnumerable<TLink> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                SqlBuilder sql = new SqlBuilder();
-                sql.AddTable(TypeMap.TableName);
-                sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", TypeMap.TableName));
+                SqlBuilder sql = GetSelectSql();
                 sql.OtherClauses = clauses;
                 Func<TLink, Incident, TLink> map = (link, incident) =>
                 {

@@ -12,13 +12,13 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(Name), ref name, value); }
         }
 
-        public RelayCommand AddCommand { get; private set; }
+        public RelayCommand SaveCommand { get; private set; }
 
-        public RoleViewModel(IServiceManager services)
+        public RoleViewModel(IServiceManager services, string verb)
             : base(services)
         {
-            Title = "Add a Role";
-            AddCommand = new RelayCommand(Add, HasName);
+            Title = verb + " a Role";
+            SaveCommand = new RelayCommand(Save, HasName);
         }
 
         public bool HasName()
@@ -26,19 +26,19 @@ namespace ERHMS.Presentation.ViewModels
             return !string.IsNullOrWhiteSpace(Name);
         }
 
-        public event EventHandler Added;
-        private void OnAdded(EventArgs e)
+        public event EventHandler Saved;
+        private void OnSaved(EventArgs e)
         {
-            Added?.Invoke(this, e);
+            Saved?.Invoke(this, e);
         }
-        private void OnAdded()
+        private void OnSaved()
         {
-            OnAdded(EventArgs.Empty);
+            OnSaved(EventArgs.Empty);
         }
 
-        public void Add()
+        public void Save()
         {
-            OnAdded();
+            OnSaved();
             Close();
         }
     }

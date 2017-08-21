@@ -223,8 +223,8 @@ namespace ERHMS.Presentation.ViewModels
 
         public void AddRole()
         {
-            RoleViewModel role = new RoleViewModel(Services);
-            role.Added += (sender, e) =>
+            RoleViewModel role = new RoleViewModel(Services, "Add");
+            role.Saved += (sender, e) =>
             {
                 Roles.Add(new Role
                 {
@@ -242,10 +242,6 @@ namespace ERHMS.Presentation.ViewModels
         private bool Validate()
         {
             ICollection<string> fields = new List<string>();
-            if (Context != null && Roles.Count == 0)
-            {
-                fields.Add("Roles");
-            }
             if (!string.IsNullOrWhiteSpace(EmailSender) && !MailExtensions.IsValidAddress(EmailSender))
             {
                 fields.Add("Sender Address");

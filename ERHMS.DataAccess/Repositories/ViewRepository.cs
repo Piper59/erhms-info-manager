@@ -36,7 +36,7 @@ namespace ERHMS.DataAccess
         protected override SqlBuilder GetSelectSql()
         {
             SqlBuilder sql = new SqlBuilder();
-            sql.AddTable(TypeMap.TableName);
+            sql.AddTable("metaViews");
             sql.SelectClauses.Add(HasResponderIdFieldSql);
             sql.AddSeparator();
             sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews"));
