@@ -61,12 +61,17 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
+            bool created = Incident.New;
             Context.Incidents.Save(Incident);
             MessengerInstance.Send(new ToastMessage
             {
                 Message = "Incident has been saved."
             });
             MessengerInstance.Send(new RefreshMessage(typeof(Incident)));
+            if (created)
+            {
+                MessengerInstance.Send(new RefreshMessage(typeof(IncidentRole)));
+            }
             Title = Incident.Name;
             Dirty = false;
         }
