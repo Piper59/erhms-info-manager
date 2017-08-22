@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
     public class Team : Link
     {
+        protected override string Guid
+        {
+            get { return TeamId; }
+            set { TeamId = value; }
+        }
+
         public string TeamId
         {
             get { return GetProperty<string>(nameof(TeamId)); }
@@ -22,9 +26,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Description), value); }
         }
 
+        public Team(bool @new)
+            : base(@new) { }
+
         public Team()
-        {
-            TeamId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
     }
 }

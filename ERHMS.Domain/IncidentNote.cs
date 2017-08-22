@@ -5,6 +5,12 @@ namespace ERHMS.Domain
 {
     public class IncidentNote : Link
     {
+        protected override string Guid
+        {
+            get { return IncidentNoteId; }
+            set { IncidentNoteId = value; }
+        }
+
         public string IncidentNoteId
         {
             get { return GetProperty<string>(nameof(IncidentNoteId)); }
@@ -23,9 +29,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Date), value.RemoveMilliseconds()); }
         }
 
+        public IncidentNote(bool @new)
+            : base(@new) { }
+
         public IncidentNote()
-        {
-            IncidentNoteId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
     }
 }

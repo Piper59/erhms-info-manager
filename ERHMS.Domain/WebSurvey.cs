@@ -1,10 +1,15 @@
 ﻿using ERHMS.EpiInfo.Domain;
-using System;
 
 namespace ERHMS.Domain
 {
-    public class WebSurvey : Entity
+    public class WebSurvey : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return WebSurveyId; }
+            set { WebSurveyId = value; }
+        }
+
         public string WebSurveyId
         {
             get { return GetProperty<string>(nameof(WebSurveyId)); }
@@ -30,10 +35,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(PublishKey), value); }
         }
 
+        public WebSurvey(bool @new)
+            : base(@new) { }
+
         public WebSurvey()
-        {
-            WebSurveyId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override object Clone()
         {

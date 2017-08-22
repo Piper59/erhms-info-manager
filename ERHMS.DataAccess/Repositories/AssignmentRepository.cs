@@ -53,9 +53,8 @@ namespace ERHMS.DataAccess
                 sql.OtherClauses = clauses;
                 Func<Assignment, Domain.View, ViewLink, Incident, Responder, Assignment> map = (assignment, view, viewLink, incident, responder) =>
                 {
-                    SetOld(assignment, view, viewLink, incident, responder);
                     assignment.View = view;
-                    if (viewLink.GetProperty(nameof(ViewLink.ViewId)) != null)
+                    if (viewLink.ViewLinkId != null)
                     {
                         view.Link = viewLink;
                         viewLink.Incident = incident;

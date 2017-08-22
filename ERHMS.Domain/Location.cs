@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
     public class Location : Link
     {
+        protected override string Guid
+        {
+            get { return LocationId; }
+            set { LocationId = value; }
+        }
+
         public string LocationId
         {
             get { return GetProperty<string>(nameof(LocationId)); }
@@ -40,9 +44,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Longitude), value); }
         }
 
+        public Location(bool @new)
+            : base(@new) { }
+
         public Location()
-        {
-            LocationId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
     }
 }

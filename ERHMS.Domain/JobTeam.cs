@@ -1,10 +1,15 @@
 ﻿using ERHMS.EpiInfo.Domain;
-using System;
 
 namespace ERHMS.Domain
 {
-    public class JobTeam : Entity
+    public class JobTeam : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return JobTeamId; }
+            set { JobTeamId = value; }
+        }
+
         public string JobTeamId
         {
             get { return GetProperty<string>(nameof(JobTeamId)); }
@@ -37,10 +42,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Team), ref team, value); }
         }
 
+        public JobTeam(bool @new)
+            : base(@new) { }
+
         public JobTeam()
-        {
-            JobTeamId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override object Clone()
         {

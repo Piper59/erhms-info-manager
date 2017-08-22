@@ -4,8 +4,14 @@ using System;
 
 namespace ERHMS.Domain
 {
-    public class JobNote : Entity
+    public class JobNote : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return JobNoteId; }
+            set { JobNoteId = value; }
+        }
+
         public string JobNoteId
         {
             get { return GetProperty<string>(nameof(JobNoteId)); }
@@ -37,10 +43,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Date), value.RemoveMilliseconds()); }
         }
 
+        public JobNote(bool @new)
+            : base(@new) { }
+
         public JobNote()
-        {
-            JobNoteId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override object Clone()
         {

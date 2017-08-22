@@ -2,6 +2,11 @@
 {
     public class Canvas : LinkedEntity<CanvasLink>
     {
+        protected override object Id
+        {
+            get { return CanvasId; }
+        }
+
         public int CanvasId
         {
             get { return GetProperty<int>(nameof(CanvasId)); }
@@ -32,6 +37,12 @@
             get { return link; }
             set { SetProperty(nameof(Link), ref link, value); }
         }
+
+        public Canvas(bool @new)
+            : base(@new) { }
+
+        public Canvas()
+            : this(false) { }
 
         public EpiInfo.Canvas ToEpiInfo()
         {

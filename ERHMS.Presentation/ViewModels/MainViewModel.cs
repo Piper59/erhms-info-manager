@@ -290,7 +290,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ShowNewResponder()
         {
-            ShowResponder(new Responder());
+            ShowResponder(new Responder(true));
         }
 
         public void ShowIncidents()
@@ -307,7 +307,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ShowNewIncident()
         {
-            ShowIncident(new Incident());
+            ShowIncident(new Incident(true));
         }
 
         public void ShowTeam(Team team)

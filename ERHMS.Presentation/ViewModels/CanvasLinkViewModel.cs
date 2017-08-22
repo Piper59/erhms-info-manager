@@ -11,7 +11,7 @@ namespace ERHMS.Presentation.ViewModels
         public override void Link()
         {
             Context.CanvasLinks.DeleteByCanvasId(Entity.CanvasId);
-            Context.CanvasLinks.Save(new CanvasLink
+            Context.CanvasLinks.Save(new CanvasLink(true)
             {
                 CanvasId = Entity.CanvasId,
                 IncidentId = Incidents.SelectedItem.IncidentId

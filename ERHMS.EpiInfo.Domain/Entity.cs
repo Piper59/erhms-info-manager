@@ -1,5 +1,4 @@
-﻿using ERHMS.Utility;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo.Domain
 {
-    public class Entity : DynamicObject, INotifyPropertyChanged, ICloneable
+    public abstract class Entity : DynamicObject, INotifyPropertyChanged, ICloneable
     {
         private static readonly Regex PrefixPattern = new Regex(@"^.+\.");
 
@@ -31,10 +30,12 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        protected Entity()
+        protected abstract object Id { get; }
+
+        protected Entity(bool @new)
         {
             properties = new Dictionary<string, object>();
-            New = true;
+            New = @new;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -177,29 +178,13 @@ namespace ERHMS.EpiInfo.Domain
 
         public override int GetHashCode()
         {
-            return ObjectExtensions.GetHashCode(properties.Values);
+            return Id == null ? 0 : Id.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             Entity entity = obj as Entity;
-            if (entity == null)
-            {
-                return false;
-            }
-            foreach (KeyValuePair<string, object> property in properties)
-            {
-                object value;
-                if (!entity.properties.TryGetValue(property.Key, out value))
-                {
-                    return false;
-                }
-                if (!Equals(value, property.Value))
-                {
-                    return false;
-                }
-            }
-            return true;
+            return entity != null && entity.Id != null && entity.Id == Id;
         }
     }
 }

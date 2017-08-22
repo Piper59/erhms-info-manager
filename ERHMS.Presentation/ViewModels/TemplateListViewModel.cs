@@ -21,7 +21,7 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     if (incident != null)
                     {
-                        services.Context.ViewLinks.Save(new ViewLink
+                        services.Context.ViewLinks.Save(new ViewLink(true)
                         {
                             ViewId = e.Properties.ViewId,
                             IncidentId = incident.IncidentId

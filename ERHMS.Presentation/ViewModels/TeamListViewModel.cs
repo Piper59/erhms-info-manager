@@ -43,7 +43,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Documents.ShowTeam(new Team
+            Documents.ShowTeam(new Team(true)
             {
                 IncidentId = Incident.IncidentId,
                 Incident = Incident

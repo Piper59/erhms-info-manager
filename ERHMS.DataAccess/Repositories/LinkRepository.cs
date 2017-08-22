@@ -31,7 +31,6 @@ namespace ERHMS.DataAccess
                 sql.OtherClauses = clauses;
                 Func<TLink, Incident, TLink> map = (link, incident) =>
                 {
-                    SetOld(link, incident);
                     link.Incident = incident;
                     return link;
                 };

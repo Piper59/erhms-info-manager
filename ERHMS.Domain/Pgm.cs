@@ -2,6 +2,11 @@
 {
     public class Pgm : LinkedEntity<PgmLink>
     {
+        protected override object Id
+        {
+            get { return PgmId; }
+        }
+
         public int PgmId
         {
             get { return GetProperty<int>(nameof(PgmId)); }
@@ -44,6 +49,12 @@
             get { return link; }
             set { SetProperty(nameof(Link), ref link, value); }
         }
+
+        public Pgm(bool @new)
+            : base(@new) { }
+
+        public Pgm()
+            : this(false) { }
 
         public EpiInfo.Pgm ToEpiInfo()
         {

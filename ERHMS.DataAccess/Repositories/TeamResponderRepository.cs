@@ -69,11 +69,10 @@ namespace ERHMS.DataAccess
                 sql.OtherClauses = clauses;
                 Func<TeamResponder, Team, Incident, Responder, IncidentRole, Incident, TeamResponder> map = (teamResponder, team, teamIncident, responder, incidentRole, incidentRoleIncident) =>
                 {
-                    SetOld(teamResponder, team, teamIncident, responder, incidentRole, incidentRoleIncident);
                     teamResponder.Team = team;
                     team.Incident = teamIncident;
                     teamResponder.Responder = responder;
-                    if (incidentRole.GetProperty(nameof(IncidentRole.IncidentId)) != null)
+                    if (incidentRole.IncidentRoleId != null)
                     {
                         teamResponder.IncidentRole = incidentRole;
                         incidentRole.Incident = incidentRoleIncident;

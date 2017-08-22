@@ -5,8 +5,14 @@ using System.Security.Principal;
 
 namespace ERHMS.EpiInfo.Domain
 {
-    public class ViewEntity : Entity
+    public class ViewEntity : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return GlobalRecordId; }
+            set { GlobalRecordId = value; }
+        }
+
         public int? UniqueKey
         {
             get { return GetProperty<int?>(ColumnNames.UNIQUE_KEY); }
@@ -61,7 +67,8 @@ namespace ERHMS.EpiInfo.Domain
             set { RecordStatus = (short)(value ? 0 : 1); }
         }
 
-        public ViewEntity()
+        public ViewEntity(bool @new)
+            : base(@new)
         {
             AddSynonym(ColumnNames.UNIQUE_KEY, nameof(UniqueKey));
             AddSynonym(ColumnNames.GLOBAL_RECORD_ID, nameof(GlobalRecordId));
@@ -72,9 +79,11 @@ namespace ERHMS.EpiInfo.Domain
             AddSynonym(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, nameof(ModifiedBy));
             AddSynonym(ColumnNames.RECORD_LAST_SAVE_TIME, nameof(ModifiedOn));
             AddSynonym(ColumnNames.REC_STATUS, nameof(Deleted));
-            GlobalRecordId = Guid.NewGuid().ToString();
             Deleted = false;
         }
+
+        public ViewEntity()
+            : this(false) { }
 
         public void Touch(IIdentity user = null)
         {

@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
     public class Roster : Link
     {
+        protected override string Guid
+        {
+            get { return RosterId; }
+            set { RosterId = value; }
+        }
+
         public string RosterId
         {
             get { return GetProperty<string>(nameof(RosterId)); }
@@ -23,10 +27,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Responder), ref responder, value); }
         }
 
+        public Roster(bool @new)
+            : base(@new) { }
+
         public Roster()
-        {
-            RosterId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override object Clone()
         {

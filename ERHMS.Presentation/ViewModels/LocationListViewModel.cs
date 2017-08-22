@@ -46,7 +46,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Documents.ShowLocation(new Location
+            Documents.ShowLocation(new Location(true)
             {
                 IncidentId = Incident.IncidentId
             });

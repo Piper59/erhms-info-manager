@@ -226,7 +226,7 @@ namespace ERHMS.Presentation.ViewModels
             RoleViewModel role = new RoleViewModel(Services, "Add");
             role.Saved += (sender, e) =>
             {
-                Roles.Add(new Role
+                Roles.Add(new Role(true)
                 {
                     Name = role.Name
                 });

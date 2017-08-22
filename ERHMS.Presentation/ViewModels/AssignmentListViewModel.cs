@@ -159,7 +159,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (Responder responder in Responders.SelectedItems)
             {
-                Context.Assignments.Save(new Assignment
+                Context.Assignments.Save(new Assignment(true)
                 {
                     ViewId = Views.SelectedItem.ViewId,
                     ResponderId = responder.ResponderId

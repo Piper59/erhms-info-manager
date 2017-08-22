@@ -20,7 +20,7 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(Pgm), typeMap);
         }
 
-        protected override PropertyMap LinkedId
+        protected override PropertyMap LinkPropertyMap
         {
             get { return LinkTypeMap.Get(nameof(PgmLink.PgmId)); }
         }

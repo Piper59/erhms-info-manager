@@ -40,7 +40,7 @@ namespace ERHMS.Presentation.ViewModels
             RoleViewModel role = new RoleViewModel(Services, "Add");
             role.Saved += (sender, e) =>
             {
-                Context.IncidentRoles.Save(new IncidentRole
+                Context.IncidentRoles.Save(new IncidentRole(true)
                 {
                     IncidentId = Incident.IncidentId,
                     Name = role.Name

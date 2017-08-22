@@ -1,8 +1,4 @@
-﻿using Epi;
-using ERHMS.EpiInfo.Templates;
-using ERHMS.Utility;
-using System;
-using System.Collections.Generic;
+﻿using ERHMS.EpiInfo.Templates;
 using System.Data;
 using System.Text;
 using System.Xml;
@@ -12,12 +8,6 @@ namespace ERHMS.EpiInfo
     public class Canvas
     {
         public const string FileExtension = ".cvs7";
-        private static readonly ICollection<Func<Canvas, object>> Identifiers = new Func<Canvas, object>[]
-        {
-            @this => @this.CanvasId,
-            @this => @this.Name,
-            @this => @this.Content
-        };
 
         public static string GetContentForView(string projectPath, string viewName)
         {
@@ -63,12 +53,13 @@ namespace ERHMS.EpiInfo
 
         public override int GetHashCode()
         {
-            return ObjectExtensions.GetHashCode(this, Identifiers);
+            return CanvasId;
         }
 
         public override bool Equals(object obj)
         {
-            return ObjectExtensions.Equals(this, obj, Identifiers);
+            Canvas canvas = obj as Canvas;
+            return canvas != null && canvas.CanvasId != 0 && canvas.CanvasId == CanvasId;
         }
     }
 }

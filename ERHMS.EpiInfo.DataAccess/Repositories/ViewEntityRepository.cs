@@ -87,7 +87,6 @@ namespace ERHMS.EpiInfo.DataAccess
                 while (reader.Read())
                 {
                     TEntity entity = new TEntity();
-                    entity.New = false;
                     entity.SetProperties(reader);
                     entities.Add(entity);
                 }
@@ -104,7 +103,6 @@ namespace ERHMS.EpiInfo.DataAccess
                 while (reader.Read())
                 {
                     TEntity entity = new TEntity();
-                    entity.New = false;
                     entity.SetProperties(reader);
                     entities.Add(entity.GlobalRecordId, entity);
                 }
@@ -114,9 +112,9 @@ namespace ERHMS.EpiInfo.DataAccess
                 sql = GetSelectSql(Escape(page.TableName) + ".*", clauses);
                 using (IDataReader reader = connection.ExecuteReader(sql, parameters, transaction))
                 {
+                    int index = reader.GetOrdinal(ColumnNames.GLOBAL_RECORD_ID);
                     while (reader.Read())
                     {
-                        int index = reader.GetOrdinal(ColumnNames.GLOBAL_RECORD_ID);
                         TEntity entity = entities[reader.GetString(index)];
                         entity.SetProperties(reader);
                     }

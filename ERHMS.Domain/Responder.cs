@@ -293,10 +293,14 @@ namespace ERHMS.Domain
             get { return string.Format("{0}, {1}", LastName, FirstName); }
         }
 
-        public Responder()
+        public Responder(bool @new)
+            : base(@new)
         {
             AddSynonym(nameof(GlobalRecordId), nameof(ResponderId));
             IsVolunteer = false;
         }
+
+        public Responder()
+            : this(false) { }
     }
 }

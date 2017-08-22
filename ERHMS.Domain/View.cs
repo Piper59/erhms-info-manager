@@ -2,6 +2,11 @@
 {
     public class View : LinkedEntity<ViewLink>
     {
+        protected override object Id
+        {
+            get { return ViewId; }
+        }
+
         public int ViewId
         {
             get { return GetProperty<int>(nameof(ViewId)); }
@@ -31,6 +36,12 @@
             get { return GetProperty<string>(nameof(ViewLinkId)); }
             set { SetProperty(nameof(ViewLinkId), value); }
         }
+
+        public View(bool @new)
+            : base(@new) { }
+
+        public View()
+            : this(false) { }
 
         private ViewLink link;
         public override ViewLink Link

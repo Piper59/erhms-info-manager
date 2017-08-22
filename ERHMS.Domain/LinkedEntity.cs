@@ -12,6 +12,9 @@ namespace ERHMS.Domain
             get { return Link?.Incident; }
         }
 
+        protected LinkedEntity(bool @new)
+            : base(@new) { }
+
         public override object Clone()
         {
             LinkedEntity<TLink> clone = (LinkedEntity<TLink>)base.Clone();

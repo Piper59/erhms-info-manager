@@ -38,7 +38,6 @@ namespace ERHMS.DataAccess
                 sql.OtherClauses = clauses;
                 Func<JobNote, Job, Incident, JobNote> map = (jobNote, job, incident) =>
                 {
-                    SetOld(jobNote, job, incident);
                     jobNote.Job = job;
                     job.Incident = incident;
                     return jobNote;

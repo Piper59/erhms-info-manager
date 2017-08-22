@@ -23,7 +23,7 @@ namespace ERHMS.Presentation.ViewModels
             Context.Project.InsertPgm(pgm);
             if (View.Incident != null)
             {
-                PgmLink pgmLink = new PgmLink
+                PgmLink pgmLink = new PgmLink(true)
                 {
                     PgmId = pgm.PgmId,
                     IncidentId = View.Incident.IncidentId

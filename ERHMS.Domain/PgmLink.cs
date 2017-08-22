@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
     public class PgmLink : Link
     {
+        protected override string Guid
+        {
+            get { return PgmLinkId; }
+            set { PgmLinkId = value; }
+        }
+
         public string PgmLinkId
         {
             get { return GetProperty<string>(nameof(PgmLinkId)); }
@@ -16,9 +20,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(PgmId), value); }
         }
 
+        public PgmLink(bool @new)
+            : base(@new) { }
+
         public PgmLink()
-        {
-            PgmLinkId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
     }
 }

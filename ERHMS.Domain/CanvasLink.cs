@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
     public class CanvasLink : Link
     {
+        protected override string Guid
+        {
+            get { return CanvasLinkId; }
+            set { CanvasLinkId = value; }
+        }
+
         public string CanvasLinkId
         {
             get { return GetProperty<string>(nameof(CanvasLinkId)); }
@@ -16,9 +20,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(CanvasId), value); }
         }
 
+        public CanvasLink(bool @new)
+            : base(@new) { }
+
         public CanvasLink()
-        {
-            CanvasLinkId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
     }
 }

@@ -263,7 +263,7 @@ namespace ERHMS.Test.DataAccess
         [Test]
         public void WebSurveyRepositoryTest()
         {
-            WebSurvey webSurvey = new WebSurvey
+            WebSurvey webSurvey = new WebSurvey(true)
             {
                 ViewId = view.Id,
                 PublishKey = Guid.NewGuid().ToString()

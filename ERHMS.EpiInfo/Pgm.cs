@@ -1,7 +1,4 @@
-﻿using Epi;
-using ERHMS.Utility;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 
 namespace ERHMS.EpiInfo
@@ -9,14 +6,6 @@ namespace ERHMS.EpiInfo
     public class Pgm
     {
         public const string FileExtension = ".pgm7";
-        private static readonly ICollection<Func<Pgm, object>> Identifiers = new Func<Pgm, object>[]
-        {
-            @this => @this.PgmId,
-            @this => @this.Name,
-            @this => @this.Content,
-            @this => @this.Comment,
-            @this => @this.Author
-        };
 
         private static string GetContent(string location, string source)
         {
@@ -56,12 +45,13 @@ namespace ERHMS.EpiInfo
 
         public override int GetHashCode()
         {
-            return ObjectExtensions.GetHashCode(this, Identifiers);
+            return PgmId;
         }
 
         public override bool Equals(object obj)
         {
-            return ObjectExtensions.Equals(this, obj, Identifiers);
+            Pgm pgm = obj as Pgm;
+            return pgm != null && pgm.PgmId != 0 && pgm.PgmId == PgmId;
         }
     }
 }

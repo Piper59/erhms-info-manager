@@ -48,7 +48,7 @@ namespace ERHMS.Presentation.ViewModels
                 RemoveDirtyCheck(Note);
                 Note.PropertyChanged -= Note_PropertyChanged;
             }
-            Note = new IncidentNote
+            Note = new IncidentNote(true)
             {
                 IncidentId = Incident.IncidentId
             };

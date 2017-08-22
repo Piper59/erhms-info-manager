@@ -62,7 +62,7 @@ namespace ERHMS.DataAccess
             };
             pgm.Content = ReadCommandPattern.Replace(pgm.Content, Project.FilePath);
             Project.InsertPgm(pgm);
-            PgmLinks.Save(new PgmLink
+            PgmLinks.Save(new PgmLink(true)
             {
                 PgmId = pgm.PgmId,
                 IncidentId = Incident.IncidentId
@@ -78,7 +78,7 @@ namespace ERHMS.DataAccess
             };
             canvas.SetProjectPath(Project.FilePath);
             Project.InsertCanvas(canvas);
-            CanvasLinks.Save(new CanvasLink
+            CanvasLinks.Save(new CanvasLink(true)
             {
                 CanvasId = canvas.CanvasId,
                 IncidentId = Incident.IncidentId

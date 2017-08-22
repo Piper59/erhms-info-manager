@@ -1,10 +1,15 @@
 ﻿using ERHMS.EpiInfo.Domain;
-using System;
 
 namespace ERHMS.Domain
 {
-    public class JobLocation : Entity
+    public class JobLocation : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return JobLocationId; }
+            set { JobLocationId = value; }
+        }
+
         public string JobLocationId
         {
             get { return GetProperty<string>(nameof(JobLocationId)); }
@@ -37,10 +42,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Location), ref location, value); }
         }
 
+        public JobLocation(bool @new)
+            : base(@new) { }
+
         public JobLocation()
-        {
-            JobLocationId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override object Clone()
         {

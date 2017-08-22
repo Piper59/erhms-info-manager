@@ -109,7 +109,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (Responder responder in Responders.SelectedItems)
             {
-                Context.TeamResponders.Save(new TeamResponder
+                Context.TeamResponders.Save(new TeamResponder(true)
                 {
                     TeamId = Team.TeamId,
                     ResponderId = responder.ResponderId,

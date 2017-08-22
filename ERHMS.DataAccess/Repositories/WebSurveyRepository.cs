@@ -41,9 +41,8 @@ namespace ERHMS.DataAccess
                 sql.OtherClauses = clauses;
                 Func<WebSurvey, View, ViewLink, Incident, WebSurvey> map = (webSurvey, view, viewLink, incident) =>
                 {
-                    SetOld(webSurvey, view, viewLink, incident);
                     webSurvey.View = view;
-                    if (viewLink.GetProperty(nameof(ViewLink.ViewId)) != null)
+                    if (viewLink.ViewLinkId != null)
                     {
                         view.Link = viewLink;
                         viewLink.Incident = incident;

@@ -14,7 +14,7 @@ namespace ERHMS.DataAccess
     {
         protected TypeMap LinkTypeMap { get; private set; }
 
-        protected virtual PropertyMap LinkedId
+        protected virtual PropertyMap LinkPropertyMap
         {
             get { return LinkTypeMap.Get(TypeMap.GetId().Property.Name); }
         }
@@ -30,7 +30,7 @@ namespace ERHMS.DataAccess
             SqlBuilder sql = new SqlBuilder();
             sql.AddTable(TypeMap.TableName);
             sql.AddSeparator();
-            sql.AddTable(new JoinInfo(JoinType.LeftOuter, LinkTypeMap.TableName, LinkedId.ColumnName, TypeMap.TableName, TypeMap.GetId().ColumnName));
+            sql.AddTable(new JoinInfo(JoinType.LeftOuter, LinkTypeMap.TableName, LinkPropertyMap.ColumnName, TypeMap.TableName, TypeMap.GetId().ColumnName));
             sql.AddSeparator();
             sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", LinkTypeMap.TableName));
             return sql;
@@ -44,10 +44,7 @@ namespace ERHMS.DataAccess
                 sql.OtherClauses = clauses;
                 Func<TEntity, TLink, Incident, TEntity> map = (entity, link, incident) =>
                 {
-                    entity.New = false;
-                    link.New = false;
-                    incident.New = false;
-                    if (link.GetProperty(LinkedId.ColumnName) != null)
+                    if (link.GetProperty(LinkTypeMap.GetId().ColumnName) != null)
                     {
                         entity.Link = link;
                         link.Incident = incident;

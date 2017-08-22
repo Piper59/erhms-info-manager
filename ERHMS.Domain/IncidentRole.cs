@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace ERHMS.Domain
+﻿namespace ERHMS.Domain
 {
     public class IncidentRole : Link
     {
+        protected override string Guid
+        {
+            get { return IncidentRoleId; }
+            set { IncidentRoleId = value; }
+        }
+
         public string IncidentRoleId
         {
             get { return GetProperty<string>(nameof(IncidentRoleId)); }
@@ -22,10 +26,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(IsInUse), value); }
         }
 
+        public IncidentRole(bool @new)
+            : base(@new) { }
+
         public IncidentRole()
-        {
-            IncidentRoleId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override string ToString()
         {

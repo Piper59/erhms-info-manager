@@ -179,7 +179,6 @@
     <Compile Include="Utility\InvokerTest.cs" />
     <Compile Include="Utility\LogTest.cs" />
     <Compile Include="Utility\MailExtensionsTest.cs" />
-    <Compile Include="Utility\ObjectExtensionsTest.cs" />
     <Compile Include="Utility\SqlClientExtensionsTest.cs" />
     <Compile Include="Utility\StringExtensionsTest.cs" />
     <Compile Include="Utility\TwoWayDictionaryTest.cs" />

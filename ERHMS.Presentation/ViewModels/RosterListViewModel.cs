@@ -98,7 +98,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (Responder responder in Responders.SelectedItems)
             {
-                Context.Rosters.Save(new Roster
+                Context.Rosters.Save(new Roster(true)
                 {
                     ResponderId = responder.ResponderId,
                     IncidentId = Incident.IncidentId

@@ -11,7 +11,7 @@ namespace ERHMS.Presentation.ViewModels
         public override void Link()
         {
             Context.PgmLinks.DeleteByPgmId(Entity.PgmId);
-            Context.PgmLinks.Save(new PgmLink
+            Context.PgmLinks.Save(new PgmLink(true)
             {
                 PgmId = Entity.PgmId,
                 IncidentId = Incidents.SelectedItem.IncidentId

@@ -4,8 +4,14 @@ using System;
 
 namespace ERHMS.Domain
 {
-    public class Incident : Entity
+    public class Incident : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return IncidentId; }
+            set { IncidentId = value; }
+        }
+
         public string IncidentId
         {
             get { return GetProperty<string>(nameof(IncidentId)); }
@@ -54,11 +60,14 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Deleted), value); }
         }
 
-        public Incident()
+        public Incident(bool @new)
+            : base(@new)
         {
-            IncidentId = Guid.NewGuid().ToString();
             Phase = Phase.PreDeployment;
             Deleted = false;
         }
+
+        public Incident()
+            : this(false) { }
     }
 }

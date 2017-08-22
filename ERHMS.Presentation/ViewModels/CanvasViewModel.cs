@@ -23,7 +23,7 @@ namespace ERHMS.Presentation.ViewModels
             Context.Project.InsertCanvas(canvas);
             if (View.Incident != null)
             {
-                CanvasLink canvasLink = new CanvasLink
+                CanvasLink canvasLink = new CanvasLink(true)
                 {
                     CanvasId = canvas.CanvasId,
                     IncidentId = View.Incident.IncidentId

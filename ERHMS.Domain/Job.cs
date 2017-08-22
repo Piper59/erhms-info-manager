@@ -5,6 +5,12 @@ namespace ERHMS.Domain
 {
     public class Job : Link
     {
+        protected override string Guid
+        {
+            get { return JobId; }
+            set { JobId = value; }
+        }
+
         public string JobId
         {
             get { return GetProperty<string>(nameof(JobId)); }
@@ -35,9 +41,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(EndDate), value?.RemoveMilliseconds()); }
         }
 
+        public Job(bool @new)
+            : base(@new) { }
+
         public Job()
-        {
-            JobId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
     }
 }

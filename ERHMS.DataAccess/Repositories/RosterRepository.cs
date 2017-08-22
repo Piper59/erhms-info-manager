@@ -48,7 +48,6 @@ namespace ERHMS.DataAccess
                 sql.OtherClauses = clauses;
                 Func<Roster, Responder, Incident, Roster> map = (roster, responder, incident) =>
                 {
-                    SetOld(roster, responder, incident);
                     roster.Responder = responder;
                     roster.Incident = incident;
                     return roster;

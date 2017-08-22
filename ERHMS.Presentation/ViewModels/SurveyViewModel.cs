@@ -154,7 +154,7 @@ namespace ERHMS.Presentation.ViewModels
                     success = Service.Publish(View, Survey);
                     if (success)
                     {
-                        Context.WebSurveys.Save(new WebSurvey
+                        Context.WebSurveys.Save(new WebSurvey(true)
                         {
                             WebSurveyId = Survey.SurveyId,
                             ViewId = View.Id,

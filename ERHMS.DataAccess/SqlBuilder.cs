@@ -12,6 +12,11 @@ namespace ERHMS.DataAccess
             return IDbConnectionExtensions.Escape(identifier);
         }
 
+        private static string EscapeTableName(string tableName, string alias)
+        {
+            return alias == null ? Escape(tableName) : string.Format("{0} AS {1}", Escape(tableName), Escape(alias));
+        }
+
         private ICollection<string> separators;
 
         public IList<string> SelectClauses { get; private set; }
@@ -28,11 +33,6 @@ namespace ERHMS.DataAccess
             SelectClauses = new List<string>();
             FromClauses = new List<string>();
             separators = new List<string>();
-        }
-
-        private string EscapeTableName(string tableName, string alias)
-        {
-            return alias == null ? Escape(tableName) : string.Format("{0} AS {1}", Escape(tableName), Escape(alias));
         }
 
         public void AddTable(string tableName, string alias = null)

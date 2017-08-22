@@ -11,7 +11,7 @@ namespace ERHMS.Presentation.ViewModels
         public override void Link()
         {
             Context.ViewLinks.DeleteByViewId(Entity.ViewId);
-            Context.ViewLinks.Save(new ViewLink
+            Context.ViewLinks.Save(new ViewLink(true)
             {
                 ViewId = Entity.ViewId,
                 IncidentId = Incidents.SelectedItem.IncidentId

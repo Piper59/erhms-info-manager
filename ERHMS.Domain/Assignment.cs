@@ -1,10 +1,15 @@
 ﻿using ERHMS.EpiInfo.Domain;
-using System;
 
 namespace ERHMS.Domain
 {
-    public class Assignment : Entity
+    public class Assignment : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return AssignmentId; }
+            set { AssignmentId = value; }
+        }
+
         public string AssignmentId
         {
             get { return GetProperty<string>(nameof(AssignmentId)); }
@@ -37,10 +42,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Responder), ref responder, value); }
         }
 
+        public Assignment(bool @new)
+            : base(@new) { }
+
         public Assignment()
-        {
-            AssignmentId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override object Clone()
         {

@@ -1,10 +1,15 @@
 ﻿using ERHMS.EpiInfo.Domain;
-using System;
 
 namespace ERHMS.Domain
 {
-    public class Role : Entity
+    public class Role : GuidEntity
     {
+        protected override string Guid
+        {
+            get { return RoleId; }
+            set { RoleId = value; }
+        }
+
         public string RoleId
         {
             get { return GetProperty<string>(nameof(RoleId)); }
@@ -17,10 +22,11 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Name), value); }
         }
 
+        public Role(bool @new)
+            : base(@new) { }
+
         public Role()
-        {
-            RoleId = Guid.NewGuid().ToString();
-        }
+            : this(false) { }
 
         public override string ToString()
         {
