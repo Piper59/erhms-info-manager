@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
 using ERHMS.Domain;
+using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
@@ -20,5 +21,20 @@ namespace ERHMS.DataAccess
 
         public LocationRepository(DataContext context)
             : base(context) { }
+
+        public IEnumerable<Location> SelectJobbable(string incidentId, string jobId)
+        {
+            string clauses = @"
+                WHERE [ERHMS_Locations].[LocationId] NOT IN (
+                    SELECT [LocationId]
+                    FROM [ERHMS_JobLocations]
+                    WHERE [JobId] = @JobId
+                )
+                AND [ERHMS_Locations].[IncidentId] = @IncidentId";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@JobId", jobId);
+            parameters.Add("@IncidentId", incidentId);
+            return Select(clauses, parameters);
+        }
     }
 }

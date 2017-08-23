@@ -138,5 +138,13 @@ namespace ERHMS.DataAccess
                 Escape(Context.Responders.View.TableName));
             return SelectByJobIdInternal(clauses, jobId);
         }
+
+        public void DeleteByJobId(string jobId)
+        {
+            string clauses = "WHERE [JobId] = @JobId";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@JobId", jobId);
+            Delete(clauses, parameters);
+        }
     }
 }

@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:AvalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
                     xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+                    xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
                     xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow">
     <ResourceDictionary.MergedDictionaries>
@@ -122,6 +123,22 @@
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
+
+    <DataTemplate x:Key="NoteTemplate">
+        <DataTemplate.Resources>
+            <Converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+        </DataTemplate.Resources>
+        <Border BorderBrush="{StaticResource GrayBrush5}"
+                BorderThickness="0,1,0,0">
+            <StackPanel Margin="5">
+                <TextBlock Margin="0,0,0,5"
+                            Text="{Binding Content}"
+                            TextWrapping="Wrap" />
+                <TextBlock Foreground="{StaticResource GrayBrush2}"
+                            Text="{Binding Date, Converter={StaticResource DateTimeToStringConverter}}" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
 
     <Style x:Key="NumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource MetroDataGridCell}">
         <Setter Property="HorizontalContentAlignment" Value="Right" />

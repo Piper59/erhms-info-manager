@@ -66,6 +66,7 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
+                Context.JobLocations.DeleteByLocationId(SelectedItem.LocationId);
                 Context.Locations.Delete(SelectedItem);
                 MessengerInstance.Send(new RefreshMessage(typeof(Location)));
             };

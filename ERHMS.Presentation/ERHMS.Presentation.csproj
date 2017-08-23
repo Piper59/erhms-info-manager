@@ -306,6 +306,13 @@
     <Compile Include="ViewModels\IncidentNoteListViewModel.cs" />
     <Compile Include="ViewModels\IncidentRoleListViewModel.cs" />
     <Compile Include="ViewModels\IncidentViewModel.cs" />
+    <Compile Include="ViewModels\JobDetailViewModel.cs" />
+    <Compile Include="ViewModels\JobListViewModel.cs" />
+    <Compile Include="ViewModels\JobLocationListViewModel.cs" />
+    <Compile Include="ViewModels\JobNoteListViewModel.cs" />
+    <Compile Include="ViewModels\JobResponderListViewModel.cs" />
+    <Compile Include="ViewModels\JobTeamListViewModel.cs" />
+    <Compile Include="ViewModels\JobViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\ListViewModel.cs" />
     <Compile Include="ViewModels\LocationDetailViewModel.cs" />
@@ -370,6 +377,27 @@
     </Compile>
     <Compile Include="Views\IncidentView.xaml.cs">
       <DependentUpon>IncidentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobDetailView.xaml.cs">
+      <DependentUpon>JobDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobListView.xaml.cs">
+      <DependentUpon>JobListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobLocationListView.xaml.cs">
+      <DependentUpon>JobLocationListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobNoteListView.xaml.cs">
+      <DependentUpon>JobNoteListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobResponderListView.xaml.cs">
+      <DependentUpon>JobResponderListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobTeamListView.xaml.cs">
+      <DependentUpon>JobTeamListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\JobView.xaml.cs">
+      <DependentUpon>JobView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LinkView.xaml.cs">
       <DependentUpon>LinkView.xaml</DependentUpon>
@@ -560,6 +588,34 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\IncidentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobLocationListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobNoteListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobResponderListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobTeamListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
                    Style="{StaticResource Heading}">
-            New Responder
+            Responder to Add
         </TextBlock>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -87,7 +87,7 @@
         </WrapPanel>
         <TextBlock Grid.Row="5"
                    Style="{StaticResource Heading}">
-            Existing Responders
+            Existing Responders for This Team
         </TextBlock>
         <Controls:Filter Grid.Row="6"
                          Value="{Binding Filter}" />
@@ -97,10 +97,6 @@
             <i:Interaction.Behaviors>
                 <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
             </i:Interaction.Behaviors>
-            <DataGrid.Resources>
-                <Controls:BindingProxy x:Key="Proxy"
-                                       DataContext="{Binding}" />
-            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Responder, Converter={StaticResource ResponderToFullNameConverter}}"
                                     Header="Responder"

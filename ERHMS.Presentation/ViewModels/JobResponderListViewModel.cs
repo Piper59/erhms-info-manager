@@ -6,35 +6,35 @@ using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TeamResponderListViewModel : ListViewModel<TeamResponder>
+    public class JobResponderListViewModel : ListViewModel<JobResponder>
     {
         public class IncidentRoleListChildViewModel : ListViewModel<IncidentRole>
         {
-            public Team Team { get; private set; }
+            public Job Job { get; private set; }
 
-            public IncidentRoleListChildViewModel(IServiceManager services, Team team)
+            public IncidentRoleListChildViewModel(IServiceManager services, Job job)
                 : base(services)
             {
-                Team = team;
+                Job = job;
             }
 
             protected override IEnumerable<IncidentRole> GetItems()
             {
-                return Context.IncidentRoles.SelectByIncidentId(Team.IncidentId)
+                return Context.IncidentRoles.SelectByIncidentId(Job.IncidentId)
                     .OrderBy(incidentRole => incidentRole.Name);
             }
         }
 
         public class ResponderListChildViewModel : ListViewModel<Responder>
         {
-            public Team Team { get; private set; }
+            public Job Job { get; private set; }
 
             public RelayCommand EditCommand { get; private set; }
 
-            public ResponderListChildViewModel(IServiceManager services, Team team)
+            public ResponderListChildViewModel(IServiceManager services, Job job)
                 : base(services)
             {
-                Team = team;
+                Job = job;
                 EditCommand = new RelayCommand(Edit, HasSelectedItem);
                 SelectionChanged += (sender, e) =>
                 {
@@ -44,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<Responder> GetItems()
             {
-                return Context.Responders.SelectTeamable(Team.IncidentId, Team.TeamId).OrderBy(responder => responder.FullName);
+                return Context.Responders.SelectJobbable(Job.IncidentId, Job.JobId).OrderBy(responder => responder.FullName);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
@@ -64,24 +64,26 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public Team Team { get; private set; }
+        public Job Job { get; private set; }
         public IncidentRoleListChildViewModel IncidentRoles { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
 
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand RemoveCommand { get; private set; }
+        public RelayCommand EditCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
 
-        public TeamResponderListViewModel(IServiceManager services, Team team)
+        public JobResponderListViewModel(IServiceManager services, Job job)
             : base(services)
         {
             Title = "Responders";
-            Team = team;
-            IncidentRoles = new IncidentRoleListChildViewModel(services, team);
-            Responders = new ResponderListChildViewModel(services, team);
+            Job = job;
+            IncidentRoles = new IncidentRoleListChildViewModel(services, job);
+            Responders = new ResponderListChildViewModel(services, job);
             Refresh();
             AddCommand = new RelayCommand(Add, Responders.HasSelectedItem);
             RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             Responders.SelectionChanged += (sender, e) =>
             {
@@ -90,16 +92,17 @@ namespace ERHMS.Presentation.ViewModels
             SelectionChanged += (sender, e) =>
             {
                 RemoveCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
                 EmailCommand.RaiseCanExecuteChanged();
             };
         }
 
-        protected override IEnumerable<TeamResponder> GetItems()
+        protected override IEnumerable<JobResponder> GetItems()
         {
-            return Context.TeamResponders.SelectUndeletedByTeamId(Team.TeamId).OrderBy(teamResponder => teamResponder.Responder.FullName);
+            return Context.JobResponders.SelectUndeletedByJobId(Job.JobId).OrderBy(jobResponder => jobResponder.Responder.FullName);
         }
 
-        protected override IEnumerable<string> GetFilteredValues(TeamResponder item)
+        protected override IEnumerable<string> GetFilteredValues(JobResponder item)
         {
             yield return item.Responder.FullName;
             yield return item.IncidentRole?.Name;
@@ -109,14 +112,14 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (Responder responder in Responders.SelectedItems)
             {
-                Context.TeamResponders.Save(new TeamResponder(true)
+                Context.JobResponders.Save(new JobResponder(true)
                 {
-                    TeamId = Team.TeamId,
+                    JobId = Job.JobId,
                     ResponderId = responder.ResponderId,
                     IncidentRoleId = IncidentRoles.SelectedItem?.IncidentRoleId
                 });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(TeamResponder)));
+            MessengerInstance.Send(new RefreshMessage(typeof(JobResponder)));
         }
 
         public void Remove()
@@ -128,19 +131,24 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Confirmed += (sender, e) =>
             {
-                foreach (TeamResponder teamResponder in SelectedItems)
+                foreach (JobResponder jobResponder in SelectedItems)
                 {
-                    Context.TeamResponders.Delete(teamResponder);
+                    Context.JobResponders.Delete(jobResponder);
                 }
-                MessengerInstance.Send(new RefreshMessage(typeof(TeamResponder)));
+                MessengerInstance.Send(new RefreshMessage(typeof(JobResponder)));
             };
             MessengerInstance.Send(msg);
+        }
+
+        public void Edit()
+        {
+            Documents.ShowResponder((Responder)SelectedItem.Responder.Clone());
         }
 
         public void Email()
         {
             Documents.Show(
-                () => new EmailViewModel(Services, TypedSelectedItems.Select(teamResponder => teamResponder.Responder)),
+                () => new EmailViewModel(Services, TypedSelectedItems.Select(jobResponder => jobResponder.Responder)),
                 document => false);
         }
 

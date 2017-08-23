@@ -324,6 +324,13 @@ namespace ERHMS.Presentation.ViewModels
                 document => document.Location.LocationId.EqualsIgnoreCase(location.LocationId));
         }
 
+        public void ShowJob(Job job)
+        {
+            Show(
+                () => new JobViewModel(Services, job),
+                document => document.Job.JobId.EqualsIgnoreCase(job.JobId));
+        }
+
         public void ShowViews()
         {
             Show(() => new ViewListViewModel(Services, null));

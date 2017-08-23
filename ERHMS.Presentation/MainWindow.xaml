@@ -137,12 +137,12 @@
                         </i:Interaction.Behaviors>
                     </Views:IncidentView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type ViewModels:TeamViewModel}">
-                    <Views:TeamView>
+                <DataTemplate DataType="{x:Type ViewModels:JobViewModel}">
+                    <Views:JobView>
                         <i:Interaction.Behaviors>
                             <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
-                    </Views:TeamView>
+                    </Views:JobView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:LocationDetailViewModel}">
                     <Views:LocationDetailView>
@@ -192,6 +192,13 @@
                             <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
                     </Views:SettingsView>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:TeamViewModel}">
+                    <Views:TeamView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:TeamView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:TemplateListViewModel}">
                     <Views:TemplateListView>

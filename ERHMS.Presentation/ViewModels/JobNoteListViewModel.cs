@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentNoteListViewModel : ListViewModel<IncidentNote>
+    public class JobNoteListViewModel : ListViewModel<JobNote>
     {
-        public Incident Incident { get; private set; }
+        public Job Job { get; private set; }
 
         private string content;
         [DirtyCheck]
@@ -21,11 +21,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public RelayCommand SaveCommand { get; private set; }
 
-        public IncidentNoteListViewModel(IServiceManager services, Incident incident)
+        public JobNoteListViewModel(IServiceManager services, Job job)
             : base(services)
         {
             Title = "Notes";
-            Incident = incident;
+            Job = job;
             Refresh();
             SaveCommand = new RelayCommand(Save, HasContent);
             PropertyChanged += (sender, e) =>
@@ -42,20 +42,20 @@ namespace ERHMS.Presentation.ViewModels
             return !string.IsNullOrWhiteSpace(Content);
         }
 
-        protected override IEnumerable<IncidentNote> GetItems()
+        protected override IEnumerable<JobNote> GetItems()
         {
-            return Context.IncidentNotes.SelectByIncidentId(Incident.IncidentId).OrderByDescending(note => note.Date);
+            return Context.JobNotes.SelectByJobId(Job.JobId).OrderByDescending(note => note.Date);
         }
 
         public void Save()
         {
-            Context.IncidentNotes.Save(new IncidentNote(true)
+            Context.JobNotes.Save(new JobNote(true)
             {
-                IncidentId = Incident.IncidentId,
+                JobId = Job.JobId,
                 Content = Content,
                 Date = DateTime.Now
             });
-            MessengerInstance.Send(new RefreshMessage(typeof(IncidentNote)));
+            MessengerInstance.Send(new RefreshMessage(typeof(JobNote)));
             Content = "";
             Dirty = false;
         }

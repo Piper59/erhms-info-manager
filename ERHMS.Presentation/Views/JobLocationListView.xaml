@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ERHMS.Presentation.Views.RosterListView"
+﻿<UserControl x:Class="ERHMS.Presentation.Views.JobLocationListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,12 +17,12 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
                    Style="{StaticResource Heading}">
-            Unrostered Responders
+            Location to Add
         </TextBlock>
         <Controls:Filter Grid.Row="1"
-                         Value="{Binding Responders.Filter}" />
+                         Value="{Binding Locations.Filter}" />
         <DataGrid Grid.Row="2"
-                  DataContext="{Binding Responders}"
+                  DataContext="{Binding Locations}"
                   ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem}">
             <i:Interaction.Behaviors>
@@ -33,27 +33,23 @@
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding LastName}"
-                                    Header="Last Name"
+                <DataGridTextColumn Binding="{Binding Name}"
+                                    Header="Name"
                                     Width="2*" />
-                <DataGridTextColumn Binding="{Binding FirstName}"
-                                    Header="First Name"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding EmailAddress}"
-                                    Header="Email Address"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding City}"
-                                    Header="City"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding State}"
-                                    Header="State"
+                <DataGridTextColumn Binding="{Binding Description}"
+                                    Header="Description"
+                                    Width="4*" />
+                <DataGridTextColumn Binding="{Binding Address}"
+                                    Header="Address"
+                                    Width="4*" />
+                <DataGridTextColumn Binding="{Binding Latitude, StringFormat='n3'}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Latitude"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding OrganizationName}"
-                                    Header="Organization Name"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding Occupation}"
-                                    Header="Occupation"
-                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding Longitude, StringFormat='n3'}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Longitude"
+                                    Width="*" />
             </DataGrid.Columns>
         </DataGrid>
         <WrapPanel Grid.Row="3"
@@ -68,7 +64,7 @@
         </WrapPanel>
         <TextBlock Grid.Row="4"
                    Style="{StaticResource Heading}">
-            Rostered Responders
+            Existing Locations for This Job
         </TextBlock>
         <Controls:Filter Grid.Row="5"
                          Value="{Binding Filter}" />
@@ -83,34 +79,27 @@
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Responder.LastName}"
-                                    Header="Last Name"
+                <DataGridTextColumn Binding="{Binding Location.Name}"
+                                    Header="Name"
                                     Width="2*" />
-                <DataGridTextColumn Binding="{Binding Responder.FirstName}"
-                                    Header="First Name"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding Responder.EmailAddress}"
-                                    Header="Email Address"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding Responder.City}"
-                                    Header="City"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding Responder.State}"
-                                    Header="State"
+                <DataGridTextColumn Binding="{Binding Location.Description}"
+                                    Header="Description"
+                                    Width="4*" />
+                <DataGridTextColumn Binding="{Binding Location.Address}"
+                                    Header="Address"
+                                    Width="4*" />
+                <DataGridTextColumn Binding="{Binding Location.Latitude, StringFormat='n3'}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Latitude"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding Responder.OrganizationName}"
-                                    Header="Organization Name"
-                                    Width="2*" />
-                <DataGridTextColumn Binding="{Binding Responder.Occupation}"
-                                    Header="Occupation"
-                                    Width="2*" />
+                <DataGridTextColumn Binding="{Binding Location.Longitude, StringFormat='n3'}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Longitude"
+                                    Width="*" />
             </DataGrid.Columns>
         </DataGrid>
         <WrapPanel Grid.Row="7"
                    Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="_Email"
-                                 Command="{Binding EmailCommand}"
-                                 Icon="{StaticResource appbar_email}" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />

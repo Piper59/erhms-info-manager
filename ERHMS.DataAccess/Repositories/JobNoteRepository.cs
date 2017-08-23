@@ -74,5 +74,13 @@ namespace ERHMS.DataAccess
             parameters.Add("@JobId", jobId);
             return Select(clauses, parameters);
         }
+
+        public void DeleteByJobId(string jobId)
+        {
+            string clauses = "WHERE [JobId] = @JobId";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@JobId", jobId);
+            Delete(clauses, parameters);
+        }
     }
 }
