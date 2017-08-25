@@ -16,6 +16,7 @@ namespace ERHMS.Presentation
         void ShowResponders();
         void ShowResponder(Responder responder);
         void ShowNewResponder();
+        void ShowMerge(Responder responder1, Responder responder2);
         void ShowIncidents();
         void ShowIncident(Incident incident);
         void ShowNewIncident();

@@ -158,6 +158,13 @@
                         </i:Interaction.Behaviors>
                     </Views:LogListView>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:MergeViewModel}">
+                    <Views:MergeView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:MergeView>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:PgmListViewModel}">
                     <Views:PgmListView>
                         <i:Interaction.Behaviors>

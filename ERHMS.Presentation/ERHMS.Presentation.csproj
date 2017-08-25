@@ -319,6 +319,7 @@
     <Compile Include="ViewModels\LocationListViewModel.cs" />
     <Compile Include="ViewModels\LogListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MergeViewModel.cs" />
     <Compile Include="ViewModels\PgmLinkViewModel.cs" />
     <Compile Include="ViewModels\PgmListViewModel.cs" />
     <Compile Include="ViewModels\PgmViewModel.cs" />
@@ -410,6 +411,9 @@
     </Compile>
     <Compile Include="Views\LogListView.xaml.cs">
       <DependentUpon>LogListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MergeView.xaml.cs">
+      <DependentUpon>MergeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PgmListView.xaml.cs">
       <DependentUpon>PgmListView.xaml</DependentUpon>
@@ -632,6 +636,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LogListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MergeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

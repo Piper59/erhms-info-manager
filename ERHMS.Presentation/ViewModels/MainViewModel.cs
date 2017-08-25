@@ -293,6 +293,13 @@ namespace ERHMS.Presentation.ViewModels
             ShowResponder(new Responder(true));
         }
 
+        public void ShowMerge(Responder responder1, Responder responder2)
+        {
+            Show(
+                () => new MergeViewModel(Services, responder1, responder2),
+                document => false);
+        }
+
         public void ShowIncidents()
         {
             Show(() => new IncidentListViewModel(Services));
