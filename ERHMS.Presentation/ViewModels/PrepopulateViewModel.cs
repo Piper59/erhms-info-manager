@@ -24,7 +24,7 @@ namespace ERHMS.Presentation.ViewModels
         public PrepopulateViewModel(IServiceManager services, View view)
             : base(services)
         {
-            Title = "Prepopulate Responder ID Field";
+            Title = "Prepopulate Responder Data Fields";
             View = view;
             IEnumerable<Responder> responders;
             if (view.Incident == null)
@@ -46,7 +46,10 @@ namespace ERHMS.Presentation.ViewModels
             {
                 record = new
                 {
-                    ResponderID = Responder.ResponderId
+                    ResponderID = Responder.ResponderId,
+                    ResponderEmailAddress = Responder.EmailAddress,
+                    ResponderFirstName = Responder.FirstName,
+                    ResponderLastName = Responder.LastName
                 };
             }
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);

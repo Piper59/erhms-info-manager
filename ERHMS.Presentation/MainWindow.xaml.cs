@@ -32,6 +32,7 @@ namespace ERHMS.Presentation
             { typeof(PgmViewModel), typeof(AnalysisView) },
             { typeof(PrepopulateViewModel), typeof(PrepopulateView) },
             { typeof(RecipientViewModel), typeof(RecipientView) },
+            { typeof(ResponderLinkViewModel), typeof(ResponderLinkView) },
             { typeof(RoleViewModel), typeof(RoleView) },
             { typeof(SurveyViewModel), typeof(SurveyView) },
             { typeof(ViewLinkViewModel), typeof(LinkView) }

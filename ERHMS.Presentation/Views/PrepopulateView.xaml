@@ -13,8 +13,8 @@
     <Border Style="{StaticResource ChildWindowRoot}">
         <StackPanel>
             <TextBlock TextWrapping="Wrap">
-                The selected form appears to contain a responder ID field.
-                To prepopulate this field, select a responder from the list below.
+                The selected form appears to contain responder data fields.
+                To prepopulate these fields, select a responder from the list below.
             </TextBlock>
             <ComboBox AutomationProperties.Name="Responder"
                       ItemsSource="{Binding Responders}"

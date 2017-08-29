@@ -30,6 +30,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
+        public RelayCommand LinkCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand UndeleteCommand { get; private set; }
 
@@ -51,6 +52,7 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSingleSelectedItem);
+            LinkCommand = new RelayCommand(Link, CanLink);
             DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             UndeleteCommand = new RelayCommand(Undelete, HasSelectedItem);
             SelectionChanged += (sender, e) =>
@@ -59,6 +61,11 @@ namespace ERHMS.Presentation.ViewModels
                 DeleteCommand.RaiseCanExecuteChanged();
                 UndeleteCommand.RaiseCanExecuteChanged();
             };
+        }
+
+        public bool CanLink()
+        {
+            return Entities.View.Name != "Responders" && Entities.View.Fields.Contains("ResponderID") && HasSingleSelectedItem();
         }
 
         protected override IEnumerable<ViewEntity> GetItems()
@@ -74,6 +81,11 @@ namespace ERHMS.Presentation.ViewModels
         public void Edit()
         {
             Dialogs.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, Entities.View.Name, SelectedItem.UniqueKey.Value));
+        }
+
+        public void Link()
+        {
+            Dialogs.ShowAsync(new ResponderLinkViewModel(Services, Entities, SelectedItem));
         }
 
         private void SetDeleted(bool deleted)

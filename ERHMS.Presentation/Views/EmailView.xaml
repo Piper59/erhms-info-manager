@@ -20,7 +20,6 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -91,7 +90,8 @@
                     </Grid.ColumnDefinitions>
                     <CheckBox Grid.Column="0"
                               IsChecked="{Binding AppendUrl}"
-                              IsEnabled="{Binding CanAppendUrl}">
+                              IsEnabled="{Binding CanAppendUrl}"
+                              Margin="0">
                         Append web survey URL
                     </CheckBox>
                     <ComboBox Grid.Column="1"
@@ -99,15 +99,9 @@
                               DisplayMemberPath="Name"
                               IsEnabled="{Binding AppendUrl}"
                               ItemsSource="{Binding Views.Items}"
-                              Margin="5,0,0,5"
+                              Margin="5,0,0,0"
                               SelectedItem="{Binding Views.SelectedItem}" />
                 </Grid>
-                <CheckBox Grid.Row="5" Grid.Column="1"
-                          IsChecked="{Binding Prepopulate}"
-                          IsEnabled="{Binding CanPrepopulate}"
-                          Margin="0">
-                    Prepopulate responder ID field
-                </CheckBox>
             </Grid>
         </ScrollViewer>
         <WrapPanel Grid.Row="1"

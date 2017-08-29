@@ -24,9 +24,11 @@ namespace ERHMS.EpiInfo.Web
         public string GlobalRecordId { get; set; }
         public string Passcode { get; set; }
 
-        public Record() { }
+        public Record()
+            : base(StringComparer.OrdinalIgnoreCase) { }
 
         public Record(object obj)
+            : this()
         {
             foreach (PropertyInfo property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {

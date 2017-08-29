@@ -268,6 +268,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             Survey survey = null;
             Exception exception = null;
+            bool unlinked = false;
             bool success = false;
             BlockMessage msg = new BlockMessage
             {
@@ -284,11 +285,25 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     return;
                 }
+                ILookup<string, Responder> responders = Context.Responders.Select()
+                    .ToLookup(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
                 ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context, view);
                 try
                 {
                     foreach (Record record in Service.GetRecords(survey))
                     {
+                        if (record.ContainsKey("ResponderID") && record.ContainsKey("ResponderEmailAddress"))
+                        {
+                            Responder responder = responders[record["ResponderEmailAddress"]].FirstOrDefault();
+                            if (responder == null)
+                            {
+                                unlinked = true;
+                            }
+                            else
+                            {
+                                record["ResponderID"] = responder.ResponderId;
+                            }
+                        }
                         entities.Save(record);
                     }
                     success = true;
@@ -320,7 +335,25 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         Message = "Data has been imported from web."
                     });
+                    if (unlinked)
+                    {
+                        ShowUnlinkedMessage(view);
+                    }
                 }
+            };
+            MessengerInstance.Send(msg);
+        }
+
+        private void ShowUnlinkedMessage(Epi.View view)
+        {
+            ConfirmMessage msg = new ConfirmMessage
+            {
+                Verb = "Review",
+                Message = "One or more records could not be linked to a responder. Review these records?"
+            };
+            msg.Confirmed += (sender, e) =>
+            {
+                Documents.ShowRecords(view);
             };
             MessengerInstance.Send(msg);
         }

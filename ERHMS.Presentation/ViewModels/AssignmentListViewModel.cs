@@ -196,10 +196,6 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         document.AppendUrl = true;
                         document.Views.Select(SelectedItem.ViewId);
-                        if (document.Views.SelectedItem.HasResponderIdField)
-                        {
-                            document.Prepopulate = true;
-                        }
                     }
                     return document;
                 },

@@ -328,6 +328,7 @@
     <Compile Include="ViewModels\RecipientViewModel.cs" />
     <Compile Include="ViewModels\RecordListViewModel.cs" />
     <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
+    <Compile Include="ViewModels\ResponderLinkViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\RosterListViewModel.cs" />
@@ -433,6 +434,9 @@
     </Compile>
     <Compile Include="Views\ResponderDetailView.xaml.cs">
       <DependentUpon>ResponderDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ResponderLinkView.xaml.cs">
+      <DependentUpon>ResponderLinkView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ResponderListView.xaml.cs">
       <DependentUpon>ResponderListView.xaml</DependentUpon>
@@ -668,6 +672,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ResponderDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResponderLinkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

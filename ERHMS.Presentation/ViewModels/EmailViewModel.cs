@@ -74,7 +74,6 @@ namespace ERHMS.Presentation.ViewModels
                     if (!value)
                     {
                         Views.SelectedItem = null;
-                        CanPrepopulate = false;
                     }
                 }
             }
@@ -101,32 +100,6 @@ namespace ERHMS.Presentation.ViewModels
 
         public ViewListChildViewModel Views { get; private set; }
 
-        private bool prepopulate;
-        public bool Prepopulate
-        {
-            get { return prepopulate; }
-            set { Set(nameof(Prepopulate), ref prepopulate, value); }
-        }
-
-        private bool canPrepopulate;
-        public bool CanPrepopulate
-        {
-            get
-            {
-                return canPrepopulate;
-            }
-            private set
-            {
-                if (Set(nameof(CanPrepopulate), ref canPrepopulate, value))
-                {
-                    if (!value)
-                    {
-                        Prepopulate = false;
-                    }
-                }
-            }
-        }
-
         public RelayCommand AddRecipientCommand { get; private set; }
         public RelayCommand<RecipientViewModel> RemoveRecipientCommand { get; private set; }
         public RelayCommand AddAttachmentCommand { get; private set; }
@@ -148,7 +121,6 @@ namespace ERHMS.Presentation.ViewModels
             Attachments = new ObservableCollection<string>();
             Views = new ViewListChildViewModel(services);
             SetCanAppendUrl();
-            SetCanPrepopulate();
             AddRecipientCommand = new RelayCommand(AddRecipient);
             RemoveRecipientCommand = new RelayCommand<RecipientViewModel>(RemoveRecipient);
             AddAttachmentCommand = new RelayCommand(AddAttachment);
@@ -157,18 +129,12 @@ namespace ERHMS.Presentation.ViewModels
             Views.SelectionChanged += (sender, e) =>
             {
                 SetCanAppendUrl();
-                SetCanPrepopulate();
             };
         }
 
         private void SetCanAppendUrl()
         {
             CanAppendUrl = !Views.Items.IsEmpty;
-        }
-
-        private void SetCanPrepopulate()
-        {
-            CanPrepopulate = AppendUrl && Views.SelectedItem != null && Views.SelectedItem.HasResponderIdField;
         }
 
         public void AddRecipient()
@@ -238,13 +204,6 @@ namespace ERHMS.Presentation.ViewModels
             return true;
         }
 
-        private Record GetRecord(Responder responder, FieldCollectionMaster fields)
-        {
-            Record record = new Record();
-            record[fields["ResponderID"].Name] = responder.ResponderId;
-            return record;
-        }
-
         public void Send()
         {
             if (!Validate())
@@ -256,13 +215,6 @@ namespace ERHMS.Presentation.ViewModels
                 Documents.ShowSettings("Please configure email settings.");
                 return;
             }
-            ConfigurationError error = ConfigurationError.None;
-            if (Prepopulate && !Service.IsConfigured(out error, true))
-            {
-                Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
-                return;
-            }
-            Survey survey = null;
             ICollection<RecipientViewModel> failures = new List<RecipientViewModel>();
             Exception exception = null;
             bool success = false;
@@ -272,20 +224,6 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Executing += (sender, e) =>
             {
-                FieldCollectionMaster fields = null;
-                if (Prepopulate)
-                {
-                    if (!Service.IsConfigured(out error))
-                    {
-                        return;
-                    }
-                    survey = Service.GetSurvey(Views.SelectedItem.WebSurveyId);
-                    if (survey == null)
-                    {
-                        return;
-                    }
-                    fields = Context.Project.GetViewById(Views.SelectedItem.ViewId).Fields;
-                }
                 try
                 {
                     MailMessage message = Settings.Default.GetMailMessage();
@@ -308,23 +246,7 @@ namespace ERHMS.Presentation.ViewModels
                                     body.Append(Body.Trim());
                                     body.AppendLine();
                                     body.AppendLine();
-                                    if (recipient.IsResponder && Prepopulate)
-                                    {
-                                        Record record = GetRecord(recipient.Responder, fields);
-                                        if (!Service.TryAddRecord(survey, record))
-                                        {
-                                            failures.Add(recipient);
-                                            continue;
-                                        }
-                                        body.AppendFormat("URL: {0}", record.GetUrl());
-                                        body.AppendLine();
-                                        body.AppendFormat("Passcode: {0}", record.Passcode);
-                                        message.Body = body.ToString();
-                                    }
-                                    else
-                                    {
-                                        body.AppendFormat(ViewExtensions.GetWebSurveyUrl(Views.SelectedItem.WebSurveyId).ToString());
-                                    }
+                                    body.AppendFormat(ViewExtensions.GetWebSurveyUrl(Views.SelectedItem.WebSurveyId).ToString());
                                     message.Body = body.ToString();
                                 }
                                 else
@@ -350,15 +272,7 @@ namespace ERHMS.Presentation.ViewModels
             };
             msg.Executed += (sender, e) =>
             {
-                if (error != ConfigurationError.None)
-                {
-                    Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
-                }
-                else if (Prepopulate && survey == null)
-                {
-                    Documents.ShowSettings(SurveyViewModel.GetErrorMessage("Failed to retrieve web survey details."));
-                }
-                else if (failures.Count > 0)
+                if (failures.Count > 0)
                 {
                     StringBuilder message = new StringBuilder();
                     message.AppendLine("Delivery to the following recipients failed:");
