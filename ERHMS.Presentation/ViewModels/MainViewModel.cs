@@ -182,6 +182,7 @@ namespace ERHMS.Presentation.ViewModels
                     ICollection<string> message = new List<string>();
                     message.Add(string.Format("The selected data source was created in an older version of {0}.", App.Title));
                     message.Add("Upgrade this data source?");
+                    message.Add(string.Format("This may make the data source inaccessible to other users with older versions of {0}.", App.Title));
                     ConfirmMessage msg = new ConfirmMessage
                     {
                         Verb = "Upgrade",
