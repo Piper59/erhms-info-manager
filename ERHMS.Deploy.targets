@@ -36,7 +36,7 @@
     <ItemGroup>
       <DeployedFile Include="$(WorkingDir)**" />
     </ItemGroup>
-    <Zip Files="@(DeployedFile)" WorkingDirectory="$(WorkingDir)" ZipFileName="publish\ERHMSInfoManager.zip" />
+    <Zip Files="@(DeployedFile)" WorkingDirectory="$(WorkingDir)" ZipFileName="$(ZipFile)" />
   </Target>
   <Target Name="CleanEpiInfoFiles" AfterTargets="Clean">
     <RemoveDir Directories="Projects;Templates" />

@@ -51,6 +51,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS", "ERHMS\ERHMS.csproj
 		{7D000598-61C2-42F5-9C9E-25DA05B2C90D} = {7D000598-61C2-42F5-9C9E-25DA05B2C90D}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Beta", "ERHMS.Beta\ERHMS.Beta.csproj", "{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7D000598-61C2-42F5-9C9E-25DA05B2C90D} = {7D000598-61C2-42F5-9C9E-25DA05B2C90D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug.IgnoreLongTests|x86 = Debug.IgnoreLongTests|x86
@@ -154,6 +159,12 @@ Global
 		{5AB92A6D-4845-4AC0-A8AC-2C79EEF212DF}.Debug|x86.Build.0 = Debug|x86
 		{5AB92A6D-4845-4AC0-A8AC-2C79EEF212DF}.Release|x86.ActiveCfg = Release|x86
 		{5AB92A6D-4845-4AC0-A8AC-2C79EEF212DF}.Release|x86.Build.0 = Release|x86
+		{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}.Debug.IgnoreLongTests|x86.ActiveCfg = Debug|x86
+		{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}.Debug.IgnoreLongTests|x86.Build.0 = Debug|x86
+		{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}.Debug|x86.ActiveCfg = Debug|x86
+		{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}.Debug|x86.Build.0 = Debug|x86
+		{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}.Release|x86.ActiveCfg = Release|x86
+		{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">x86</Platform>
-    <ProjectGuid>{5AB92A6D-4845-4AC0-A8AC-2C79EEF212DF}</ProjectGuid>
+    <ProjectGuid>{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ERHMS</RootNamespace>
-    <AssemblyName>ERHMS</AssemblyName>
+    <AssemblyName>ERHMS.Beta</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>ERHMS.ico</ApplicationIcon>
@@ -17,7 +17,7 @@
     <SignManifests>true</SignManifests>
     <ManifestCertificateThumbprint>BDFE829F4DBCA70ED3784FABF331C8F92348180D</ManifestCertificateThumbprint>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ZipFile>publish\ERHMSInfoManager.zip</ZipFile>
+    <ZipFile>publish\ERHMSInfoManagerBeta.zip</ZipFile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -28,12 +28,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://www.cdc.gov/niosh/software/ERHMS-Info-Manager/</InstallUrl>
-    <ProductName>ERHMS Info Manager</ProductName>
+    <InstallUrl>http://erhmsdev.cdc.gov/</InstallUrl>
+    <ProductName>ERHMS Info Manager Beta</ProductName>
     <PublisherName>NIOSH</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.1.0</ApplicationVersion>
+    <ApplicationVersion>2.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -88,9 +88,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
