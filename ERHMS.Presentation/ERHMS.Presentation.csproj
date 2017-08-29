@@ -270,6 +270,7 @@
     <Compile Include="Infrastructure\DbProvider.cs" />
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
     <Compile Include="Infrastructure\IDialogManager.cs" />
+    <Compile Include="Infrastructure\IDispatcher.cs" />
     <Compile Include="Infrastructure\IDocumentManager.cs" />
     <Compile Include="Infrastructure\IServiceManager.cs" />
     <Compile Include="Infrastructure\PrintExtensions.cs" />

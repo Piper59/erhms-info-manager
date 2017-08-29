@@ -22,7 +22,7 @@ using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation
 {
-    public partial class App : Application, IServiceManager
+    public partial class App : Application, IServiceManager, IDispatcher
     {
         public const string BareTitle = "ERHMS Info Manager";
         public static readonly string Title = BareTitle + "\u2122";
@@ -107,6 +107,11 @@ namespace ERHMS.Presentation
         public MainViewModel MainViewModel { get; private set; }
         public new MainWindow MainWindow { get; private set; }
 
+        public new IDispatcher Dispatcher
+        {
+            get { return this; }
+        }
+
         public IDocumentManager Documents
         {
             get { return MainViewModel; }
@@ -127,6 +132,11 @@ namespace ERHMS.Presentation
             AddTextFileResource("COPYRIGHT");
             AddTextFileResource("LICENSE");
             AddTextFileResource("NOTICE");
+        }
+
+        public void Invoke(System.Action action)
+        {
+            base.Dispatcher.Invoke(action);
         }
 
         private void AddTextFileResource(string key)

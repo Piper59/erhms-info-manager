@@ -28,6 +28,10 @@ namespace ERHMS.Presentation.ViewModels
                         });
                     }
                     Messenger.Default.Send(new RefreshMessage(typeof(View)));
+                    services.Dispatcher.Invoke(() =>
+                    {
+                        services.Documents.ShowViews();
+                    });
                 }
             };
             services.Dialogs.InvokeAsync(wrapper);

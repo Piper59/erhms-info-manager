@@ -14,7 +14,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             get
             {
-                views.SelectedItem = views.TypedItems.Single(view => view.Name == Context.Responders.View.Name);
+                views.SelectedItem = views.TypedItems.SingleOrDefault(view => view.Name == Context.Responders.View.Name);
                 return views;
             }
         }
