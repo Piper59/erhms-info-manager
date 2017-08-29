@@ -272,6 +272,7 @@ namespace ERHMS.Presentation
         {
             if (!File.Exists(ConfigurationExtensions.FilePath) && File.Exists(Settings.Default.ConfigurationFilePath))
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(ConfigurationExtensions.FilePath));
                 File.Copy(Settings.Default.ConfigurationFilePath, ConfigurationExtensions.FilePath);
             }
             Configuration configuration;
