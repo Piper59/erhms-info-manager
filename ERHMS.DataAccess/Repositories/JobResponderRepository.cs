@@ -86,7 +86,7 @@ namespace ERHMS.DataAccess
         public IEnumerable<JobResponder> SelectUndeleted()
         {
             return Select(string.Format(
-                "WHERE [ERHMS_JobIncidents].[Deleted] = 0 AND [ERHMS_IncidentRoleIncidents].[Deleted] = 0 AND {0}.[REC_STATUS] <> 0",
+                "WHERE [ERHMS_JobIncidents].[Deleted] = 0 AND ([ERHMS_IncidentRoleIncidents].[Deleted] IS NULL OR [ERHMS_IncidentRoleIncidents].[Deleted] = 0) AND {0}.[RECSTATUS] <> 0",
                 Escape(Context.Responders.View.TableName)));
         }
 
