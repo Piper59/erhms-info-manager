@@ -18,7 +18,7 @@ namespace ERHMS.Presentation.Messages
 
         public async Task OnExecuting()
         {
-            await Task.Factory.StartNew(() =>
+            await TaskEx.Run(() =>
             {
                 Executing?.Invoke(this, EventArgs.Empty);
             });

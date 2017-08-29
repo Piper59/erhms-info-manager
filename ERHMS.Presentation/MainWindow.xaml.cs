@@ -148,7 +148,7 @@ namespace ERHMS.Presentation
             WindowState state = WindowState;
             WindowState = WindowState.Minimized;
             wrapper.Invoke();
-            await Task.Factory.StartNew(() =>
+            await TaskEx.Run(() =>
             {
                 wrapper.Exited.WaitOne();
             });
