@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,8 @@ namespace ERHMS.Presentation.ViewModels
     {
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
-        public RelayCommand MergeCommand { get; private set; }
+        public RelayCommand MergeAutomatedCommand { get; private set; }
+        public RelayCommand MergeSelectedCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
 
@@ -21,21 +23,17 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSingleSelectedItem);
-            MergeCommand = new RelayCommand(Merge, CanMerge);
+            MergeAutomatedCommand = new RelayCommand(MergeAutomated);
+            MergeSelectedCommand = new RelayCommand(MergeSelected);
             DeleteCommand = new RelayCommand(Delete, HasSingleSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
                 EditCommand.RaiseCanExecuteChanged();
-                MergeCommand.RaiseCanExecuteChanged();
+                MergeSelectedCommand.RaiseCanExecuteChanged();
                 DeleteCommand.RaiseCanExecuteChanged();
                 EmailCommand.RaiseCanExecuteChanged();
             };
-        }
-
-        public bool CanMerge()
-        {
-            return SelectedItems.Count == 2;
         }
 
         protected override IEnumerable<Responder> GetItems()
@@ -66,9 +64,68 @@ namespace ERHMS.Presentation.ViewModels
             Documents.ShowResponder((Responder)SelectedItem.Clone());
         }
 
-        public void Merge()
+        public void MergeAutomated()
         {
-            Documents.ShowMerge((Responder)SelectedItems[0], (Responder)SelectedItems[1]);
+            ICollection<Tuple<Responder, Responder>> duplicates = new List<Tuple<Responder, Responder>>();
+            BlockMessage msg = new BlockMessage
+            {
+                Message = "Searching for potentially duplicate responders \u2026"
+            };
+            msg.Executing += (sender, e) =>
+            {
+                IList<Responder> responders = Context.Responders.SelectUndeleted()
+                    .OrderBy(responder => responder.FullName)
+                    .ToList();
+                ILookup<string, string> uniquePairs = Context.UniquePairs.SelectLookup();
+                for (int index1 = 0; index1 < responders.Count; index1++)
+                {
+                    Responder responder1 = responders[index1];
+                    for (int index2 = index1 + 1; index2 < responders.Count; index2++)
+                    {
+                        Responder responder2 = responders[index2];
+                        if (uniquePairs[responder1.ResponderId].Contains(responder2.ResponderId, StringComparer.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+                        if (responder1.IsSimilar(responder2))
+                        {
+                            duplicates.Add(new Tuple<Responder, Responder>(responder1, responder2));
+                        }
+                    }
+                }
+            };
+            msg.Executed += (sender, e) =>
+            {
+                if (duplicates.Count == 0)
+                {
+                    MessengerInstance.Send(new AlertMessage
+                    {
+                        Message = "No potentially duplicate responders found."
+                    });
+                }
+                else
+                {
+                    Documents.Show(
+                        () => new MergeAutomatedViewModel(Services, duplicates),
+                        document => false);
+                }
+            };
+            MessengerInstance.Send(msg);
+        }
+
+        public void MergeSelected()
+        {
+            if (SelectedItems.Count != 2)
+            {
+                MessengerInstance.Send(new AlertMessage
+                {
+                    Message = "Please select two responders to merge."
+                });
+                return;
+            }
+            Documents.Show(
+                () => new MergeSelectedViewModel(Services, (Responder)SelectedItems[0], (Responder)SelectedItems[1]),
+                document => false);
         }
 
         public void Delete()

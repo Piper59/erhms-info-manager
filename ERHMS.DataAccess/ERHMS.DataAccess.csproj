@@ -109,6 +109,7 @@
     <Compile Include="DataContexts\SampleDataContext.cs" />
     <Compile Include="Repositories\TeamRepository.cs" />
     <Compile Include="Repositories\TeamResponderRepository.cs" />
+    <Compile Include="Repositories\UniquePairRepository.cs" />
     <Compile Include="Repositories\ViewLinkRepository.cs" />
     <Compile Include="Repositories\ViewRepository.cs" />
     <Compile Include="Repositories\WebSurveyRepository.cs" />
@@ -227,6 +228,7 @@
     <EmbeddedResource Include="Resources\Sample\Symptoms.cvs7" />
     <EmbeddedResource Include="Resources\View.xml" />
     <EmbeddedResource Include="Scripts\Base.sql" />
+    <EmbeddedResource Include="Scripts\Deduplication.sql" />
     <EmbeddedResource Include="Scripts\JobTicketing.sql" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class MergeViewModel : ViewModelBase
+    public class MergeSelectedViewModel : ViewModelBase
     {
         public class PropertyChildViewModel : ViewModelBase
         {
@@ -90,7 +90,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand SelectAll2Command { get; private set; }
         public RelayCommand SaveCommand { get; private set; }
 
-        public MergeViewModel(IServiceManager services, Responder responder1, Responder responder2)
+        public MergeSelectedViewModel(IServiceManager services, Responder responder1, Responder responder2)
             : base(services)
         {
             Title = "Merge";
@@ -110,6 +110,16 @@ namespace ERHMS.Presentation.ViewModels
             SelectAll1Command = new RelayCommand(SelectAll1);
             SelectAll2Command = new RelayCommand(SelectAll2);
             SaveCommand = new RelayCommand(Save);
+        }
+
+        public event EventHandler Saved;
+        private void OnSaved(EventArgs e)
+        {
+            Saved?.Invoke(this, e);
+        }
+        private void OnSaved()
+        {
+            OnSaved(EventArgs.Empty);
         }
 
         public void SelectAll1()
@@ -163,6 +173,7 @@ namespace ERHMS.Presentation.ViewModels
             responder = Properties[0].IsSelected1 ? Responder2 : Responder1;
             responder.Deleted = true;
             Context.Responders.Save(responder);
+            OnSaved();
             MessengerInstance.Send(new ToastMessage
             {
                 Message = "Responders have been merged."

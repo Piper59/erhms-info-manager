@@ -10,13 +10,12 @@ namespace ERHMS.Presentation
         ViewModelBase ActiveDocument { get; }
 
         void OpenDataSource(ProjectInfo dataSource);
-        void Show<TViewModel>(Func<TViewModel> constructor, Func<TViewModel, bool> predicate = null)
+        TViewModel Show<TViewModel>(Func<TViewModel> constructor, Func<TViewModel, bool> predicate = null)
             where TViewModel : ViewModelBase;
         void ShowDataSources();
         void ShowResponders();
         void ShowResponder(Responder responder);
         void ShowNewResponder();
-        void ShowMerge(Responder responder1, Responder responder2);
         void ShowIncidents();
         void ShowIncident(Incident incident);
         void ShowNewIncident();

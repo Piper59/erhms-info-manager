@@ -233,19 +233,15 @@ namespace ERHMS.Presentation.ViewModels
             return null;
         }
 
-        private bool Activate<TViewModel>(Func<TViewModel, bool> predicate = null)
+        private TViewModel Activate<TViewModel>(Func<TViewModel, bool> predicate = null)
             where TViewModel : ViewModelBase
         {
             TViewModel document = Get(predicate);
-            if (document == null)
-            {
-                return false;
-            }
-            else
+            if (document != null)
             {
                 ActiveDocument = document;
-                return true;
             }
+            return document;
         }
 
         private void Open(ViewModelBase document)
@@ -259,16 +255,19 @@ namespace ERHMS.Presentation.ViewModels
             ActiveDocument = document;
         }
 
-        public void Show<TViewModel>(Func<TViewModel> constructor, Func<TViewModel, bool> predicate = null)
+        public TViewModel Show<TViewModel>(Func<TViewModel> constructor, Func<TViewModel, bool> predicate = null)
             where TViewModel : ViewModelBase
         {
-            if (!Activate(predicate))
+            TViewModel document = Activate(predicate);
+            if (document == null)
             {
                 using (new WaitCursor())
                 {
-                    Open(constructor());
+                    document = constructor();
+                    Open(document);
                 }
             }
+            return document;
         }
 
         public void ShowDataSources()
@@ -291,13 +290,6 @@ namespace ERHMS.Presentation.ViewModels
         public void ShowNewResponder()
         {
             ShowResponder(new Responder(true));
-        }
-
-        public void ShowMerge(Responder responder1, Responder responder2)
-        {
-            Show(
-                () => new MergeViewModel(Services, responder1, responder2),
-                document => false);
         }
 
         public void ShowIncidents()

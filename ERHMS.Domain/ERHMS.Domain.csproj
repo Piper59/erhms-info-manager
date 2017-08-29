@@ -82,6 +82,7 @@
     <Compile Include="Roster.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="TeamResponder.cs" />
+    <Compile Include="UniquePair.cs" />
     <Compile Include="View.cs" />
     <Compile Include="ViewLink.cs" />
     <Compile Include="WebSurvey.cs" />

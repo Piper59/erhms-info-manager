@@ -55,8 +55,19 @@
                                  Command="{Binding EditCommand}"
                                  Icon="{StaticResource appbar_edit}" />
             <Controls:IconButton AccessText="Mer_ge"
-                                 Command="{Binding MergeCommand}"
-                                 Icon="{StaticResource appbar_cell_merge}" />
+                                 Icon="{StaticResource appbar_cell_merge}">
+                <i:Interaction.Behaviors>
+                    <Behaviors:OpenContextMenuOnClickBehavior />
+                </i:Interaction.Behaviors>
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding MergeAutomatedCommand}"
+                                  Header="_Automated" />
+                        <MenuItem Command="{Binding MergeSelectedCommand}"
+                                  Header="_Selected" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Controls:IconButton>
             <Controls:IconButton AccessText="_Delete"
                                  Command="{Binding DeleteCommand}"
                                  Icon="{StaticResource appbar_delete}" />

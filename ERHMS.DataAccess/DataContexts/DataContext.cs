@@ -33,6 +33,7 @@ namespace ERHMS.DataAccess
             RosterRepository.Configure();
             TeamRepository.Configure();
             TeamResponderRepository.Configure();
+            UniquePairRepository.Configure();
             ViewRepository.Configure();
             ViewLinkRepository.Configure();
             WebSurveyRepository.Configure();
@@ -92,6 +93,7 @@ namespace ERHMS.DataAccess
         public RosterRepository Rosters { get; private set; }
         public TeamRepository Teams { get; private set; }
         public TeamResponderRepository TeamResponders { get; private set; }
+        public UniquePairRepository UniquePairs { get; private set; }
         public ViewRepository Views { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
         public WebSurveyRepository WebSurveys { get; private set; }
@@ -138,6 +140,7 @@ namespace ERHMS.DataAccess
             Rosters = new RosterRepository(this);
             Teams = new TeamRepository(this);
             TeamResponders = new TeamResponderRepository(this);
+            UniquePairs = new UniquePairRepository(this);
             Views = new ViewRepository(this);
             ViewLinks = new ViewLinkRepository(this);
             WebSurveys = new WebSurveyRepository(this);
@@ -151,6 +154,10 @@ namespace ERHMS.DataAccess
         public bool NeedsUpgrade()
         {
             if (!Database.TableExists("ERHMS_Jobs"))
+            {
+                return true;
+            }
+            if (!Database.TableExists("ERHMS_UniquePairs"))
             {
                 return true;
             }
@@ -169,6 +176,10 @@ namespace ERHMS.DataAccess
                     {
                         IncidentRoles.InsertAll(incident.IncidentId);
                     }
+                }
+                if (!Database.TableExists("ERHMS_UniquePairs"))
+                {
+                    connection.Execute(GetScript("Deduplication"), transaction);
                 }
             });
             Project.Version = Assembly.GetExecutingAssembly().GetName().Version;

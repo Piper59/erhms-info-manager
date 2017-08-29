@@ -6,6 +6,18 @@ namespace ERHMS.Domain
 {
     public class Responder : ViewEntity
     {
+        private static bool IsSimilar(string property1, string property2, int threshold)
+        {
+            if (string.IsNullOrEmpty(property1) || string.IsNullOrEmpty(property2))
+            {
+                return false;
+            }
+            else
+            {
+                return StringExtensions.GetEditDistance(property1, property2) <= threshold;
+            }
+        }
+
         public string ResponderId
         {
             get { return GlobalRecordId; }
@@ -302,5 +314,26 @@ namespace ERHMS.Domain
 
         public Responder()
             : this(false) { }
+
+        public bool IsSimilar(Responder responder)
+        {
+            if (IsSimilar(FullName, responder.FullName, 5))
+            {
+                return true;
+            }
+            if (BirthDate.HasValue && responder.BirthDate.HasValue && BirthDate.Value == responder.BirthDate.Value)
+            {
+                return true;
+            }
+            if (IsSimilar(EmailAddress, responder.EmailAddress, 1))
+            {
+                return true;
+            }
+            if (IsSimilar(PassportNumber, responder.PassportNumber, 1))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace ERHMS.Presentation.Views
 {
-    public partial class MergeView : UserControl
+    public partial class MergeSelectedView : UserControl
     {
-        public MergeView()
+        public MergeSelectedView()
         {
             InitializeComponent();
         }
