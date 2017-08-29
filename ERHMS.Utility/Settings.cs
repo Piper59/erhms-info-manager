@@ -21,6 +21,7 @@ namespace ERHMS.Utility
         public string OrganizationName { get; set; }
         public string OrganizationKey { get; set; }
         public HashSet<string> DataSourcePaths { get; set; }
+        public string LastDataSourcePath { get; set; }
 
         public void Reset()
         {
@@ -37,6 +38,7 @@ namespace ERHMS.Utility
             OrganizationName = null;
             OrganizationKey = null;
             DataSourcePaths = new HashSet<string>();
+            LastDataSourcePath = null;
         }
 
         public bool IsEmailConfigured()

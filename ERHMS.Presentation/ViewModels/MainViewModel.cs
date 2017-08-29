@@ -174,6 +174,8 @@ namespace ERHMS.Presentation.ViewModels
                 using (new WaitCursor())
                 {
                     Context = new DataContext(new Project(dataSource.FilePath));
+                    Settings.Default.LastDataSourcePath = dataSource.FilePath;
+                    Settings.Default.Save();
                 }
                 if (Context.NeedsUpgrade())
                 {

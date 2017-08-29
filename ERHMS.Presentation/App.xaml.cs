@@ -212,6 +212,20 @@ namespace ERHMS.Presentation
                 if (LoadConfiguration())
                 {
                     Documents.ShowDataSources();
+                    ProjectInfo projectInfo;
+                    if (ProjectInfo.TryRead(Settings.Default.LastDataSourcePath, out projectInfo))
+                    {
+                        ConfirmMessage msg = new ConfirmMessage
+                        {
+                            Verb = "Reopen",
+                            Message = string.Format("Reopen the previously used data source {0}?", projectInfo.Name)
+                        };
+                        msg.Confirmed += (sender, e) =>
+                        {
+                            Documents.OpenDataSource(projectInfo);
+                        };
+                        Messenger.Default.Send(msg);
+                    }
                 }
                 else
                 {
