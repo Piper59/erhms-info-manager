@@ -34,9 +34,9 @@
             <Controls:IconButton AccessText="_Edit"
                                  Command="{Binding EditCommand}"
                                  Icon="{StaticResource appbar_edit}" />
-            <Controls:IconButton AccessText="_Link"
+            <Controls:IconButton AccessText="Re_sponder"
                                  Command="{Binding LinkCommand}"
-                                 Icon="{StaticResource appbar_link}" />
+                                 Icon="{StaticResource appbar_user}" />
             <Controls:IconButton AccessText="_Delete"
                                  Command="{Binding DeleteCommand}"
                                  Icon="{StaticResource appbar_page_delete}" />
