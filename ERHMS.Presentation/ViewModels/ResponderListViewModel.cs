@@ -9,17 +9,37 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ResponderListViewModel : ListViewModel<Responder>
     {
+        private ViewListViewModel views;
+        private ViewListViewModel Views
+        {
+            get
+            {
+                views.SelectedItem = views.TypedItems.Single(view => view.Name == Context.Responders.View.Name);
+                return views;
+            }
+        }
+
         public RelayCommand CreateCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
         public RelayCommand MergeAutomatedCommand { get; private set; }
         public RelayCommand MergeSelectedCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
+        public RelayCommand ImportFromProjectCommand { get; private set; }
+        public RelayCommand ImportFromPackageCommand { get; private set; }
+        public RelayCommand ImportFromFileCommand { get; private set; }
+        public RelayCommand ImportFromWebCommand { get; private set; }
+        public RelayCommand ImportFromMobileCommand { get; private set; }
+        public RelayCommand ExportToPackageCommand { get; private set; }
+        public RelayCommand ExportToFileCommand { get; private set; }
+        public RelayCommand AnalyzeClassicCommand { get; private set; }
+        public RelayCommand AnalyzeVisualCommand { get; private set; }
 
         public ResponderListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Responders";
+            views = new ViewListViewModel(services, null);
             Refresh();
             CreateCommand = new RelayCommand(Create);
             EditCommand = new RelayCommand(Edit, HasSingleSelectedItem);
@@ -27,6 +47,15 @@ namespace ERHMS.Presentation.ViewModels
             MergeSelectedCommand = new RelayCommand(MergeSelected);
             DeleteCommand = new RelayCommand(Delete, HasSingleSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
+            ImportFromProjectCommand = new RelayCommand(ImportFromProject);
+            ImportFromPackageCommand = new RelayCommand(ImportFromPackage);
+            ImportFromFileCommand = new RelayCommand(ImportFromFile);
+            ImportFromWebCommand = new RelayCommand(ImportFromWeb);
+            ImportFromMobileCommand = new RelayCommand(ImportFromMobile);
+            ExportToPackageCommand = new RelayCommand(ExportToPackage);
+            ExportToFileCommand = new RelayCommand(ExportToFile);
+            AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic);
+            AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual);
             SelectionChanged += (sender, e) =>
             {
                 EditCommand.RaiseCanExecuteChanged();
@@ -150,5 +179,51 @@ namespace ERHMS.Presentation.ViewModels
                 () => new EmailViewModel(Services, TypedSelectedItems),
                 document => false);
         }
+
+        public void ImportFromProject()
+        {
+            Views.ImportFromProject();
+        }
+
+        public void ImportFromPackage()
+        {
+            Views.ImportFromPackage();
+        }
+
+        public void ImportFromFile()
+        {
+            Views.ImportFromFile();
+        }
+
+        public void ImportFromWeb()
+        {
+            Views.ImportFromWeb();
+        }
+
+        public void ImportFromMobile()
+        {
+            Views.ImportFromMobile();
+        }
+
+        public void ExportToPackage()
+        {
+            Views.ExportToPackage();
+        }
+
+        public void ExportToFile()
+        {
+            Views.ExportToFile();
+        }
+
+        public void AnalyzeClassic()
+        {
+            Views.AnalyzeClassic();
+        }
+
+        public void AnalyzeVisual()
+        {
+            Views.AnalyzeVisual();
+        }
+
     }
 }

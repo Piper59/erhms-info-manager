@@ -74,6 +74,54 @@
             <Controls:IconButton AccessText="E_mail"
                                  Command="{Binding EmailCommand}"
                                  Icon="{StaticResource appbar_email}" />
+            <Controls:IconButton AccessText="_Import"
+                                 Icon="{StaticResource appbar_door_enter}">
+                <i:Interaction.Behaviors>
+                    <Behaviors:OpenContextMenuOnClickBehavior />
+                </i:Interaction.Behaviors>
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding ImportFromProjectCommand}"
+                                  Header="From P_roject" />
+                        <MenuItem Command="{Binding ImportFromPackageCommand}"
+                                  Header="From P_ackage" />
+                        <MenuItem Command="{Binding ImportFromFileCommand}"
+                                  Header="From _File" />
+                        <MenuItem Command="{Binding ImportFromWebCommand}"
+                                  Header="From _Web" />
+                        <MenuItem Command="{Binding ImportFromMobileCommand}"
+                                  Header="From _Mobile" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Controls:IconButton>
+            <Controls:IconButton AccessText="E_xport"
+                                 Icon="{StaticResource appbar_door_leave}">
+                <i:Interaction.Behaviors>
+                    <Behaviors:OpenContextMenuOnClickBehavior />
+                </i:Interaction.Behaviors>
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding ExportToPackageCommand}"
+                                  Header="To _Package" />
+                        <MenuItem Command="{Binding ExportToFileCommand}"
+                                  Header="To _File" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Controls:IconButton>
+            <Controls:IconButton AccessText="_Analyze"
+                                 Icon="{StaticResource appbar_graph_bar}">
+                <i:Interaction.Behaviors>
+                    <Behaviors:OpenContextMenuOnClickBehavior />
+                </i:Interaction.Behaviors>
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding AnalyzeClassicCommand}"
+                                  Header="_Classic" />
+                        <MenuItem Command="{Binding AnalyzeVisualCommand}"
+                                  Header="_Visual" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Controls:IconButton>
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />

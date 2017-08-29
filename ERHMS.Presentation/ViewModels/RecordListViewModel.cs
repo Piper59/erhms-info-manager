@@ -65,7 +65,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public bool CanLink()
         {
-            return Entities.View.Name != "Responders" && Entities.View.Fields.Contains("ResponderID") && HasSingleSelectedItem();
+            return Entities.View.Fields.Contains("ResponderID") && HasSingleSelectedItem();
         }
 
         protected override IEnumerable<ViewEntity> GetItems()
