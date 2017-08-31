@@ -96,8 +96,7 @@ namespace ERHMS.Presentation
                 settings: new MetroDialogSettings
                 {
                     CustomResourceDictionary = App.Current.Accent,
-                    AffirmativeButtonText = "OK",
-                    AnimateHide = false
+                    AffirmativeButtonText = "OK"
                 });
             msg.OnDismissed();
         }
@@ -110,8 +109,7 @@ namespace ERHMS.Presentation
                 msg.Message,
                 settings: new MetroDialogSettings
                 {
-                    CustomResourceDictionary = App.Current.Accent,
-                    AnimateHide = false
+                    CustomResourceDictionary = App.Current.Accent
                 });
             await msg.OnExecuting();
             await dialog.CloseAsync();
@@ -129,8 +127,7 @@ namespace ERHMS.Presentation
                 {
                     CustomResourceDictionary = App.Current.Accent,
                     AffirmativeButtonText = msg.Verb,
-                    NegativeButtonText = string.Format("Don't {0}", msg.Verb),
-                    AnimateHide = false
+                    NegativeButtonText = string.Format("Don't {0}", msg.Verb)
                 });
             if (result == MessageDialogResult.Affirmative)
             {
