@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
@@ -39,19 +38,20 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_Assignments");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "metaViews", "ViewId", "ERHMS_Assignments"));
+                sql.AddTable(JoinType.Inner, "metaViews", "ERHMS_Assignments", "ViewId");
                 sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews"));
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "metaViews", "ViewId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks"));
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "ERHMS_ViewLinks", "IncidentId");
                 sql.AddSeparator();
                 foreach (string tableName in Context.Responders.TableNames)
                 {
-                    sql.AddTable(new JoinInfo(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Assignments", "ResponderId"));
+                    sql.AddTableSelectClause(tableName);
+                    sql.FromClauses.Add(string.Format("INNER JOIN {0} ON [ERHMS_Assignments].[ResponderId] = {0}.[GlobalRecordId]", Escape(tableName)));
                 }
                 sql.OtherClauses = clauses;
-                Func<Assignment, Domain.View, ViewLink, Incident, Responder, Assignment> map = (assignment, view, viewLink, incident, responder) =>
+                Func<Assignment, View, ViewLink, Incident, Responder, Assignment> map = (assignment, view, viewLink, incident, responder) =>
                 {
                     assignment.View = view;
                     if (viewLink.ViewLinkId != null)
@@ -68,9 +68,10 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Assignment> SelectUndeleted()
         {
-            return Select(string.Format(
-                "WHERE ([ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0) AND {0}.[RECSTATUS] <> 0",
-                Escape(Context.Responders.View.TableName)));
+            string format = @"
+                WHERE ([ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0)
+                AND {0}.[RECSTATUS] <> 0";
+            return Select(string.Format(format, Escape(Context.Responders.View.TableName)));
         }
 
         public override Assignment SelectById(object id)
@@ -95,9 +96,10 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Assignment> SelectUndeletedByIncidentId(string incidentId)
         {
-            string clauses = string.Format(
-                "WHERE [ERHMS_ViewLinks].[IncidentId] = @IncidentId AND {0}.[RECSTATUS] <> 0",
-                Escape(Context.Responders.View.TableName));
+            string format = @"
+                WHERE [ERHMS_ViewLinks].[IncidentId] = @IncidentId
+                AND {0}.[RECSTATUS] <> 0";
+            string clauses = string.Format(format, Escape(Context.Responders.View.TableName));
             return SelectByIncidentIdInternal(clauses, incidentId);
         }
 

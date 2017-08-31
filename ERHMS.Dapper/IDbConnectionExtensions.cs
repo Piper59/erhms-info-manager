@@ -148,7 +148,7 @@ namespace ERHMS.Dapper
                 transaction);
         }
 
-        public static void Update<TColumn>(this IDbConnection @this, string tableName, TColumn idColumn, IEnumerable<TColumn> columns, Func<TColumn, string> name, Func<TColumn, object> value, IDbTransaction transaction = null)
+        public static void Update<TColumn>(this IDbConnection @this, string tableName, TColumn id, IEnumerable<TColumn> columns, Func<TColumn, string> name, Func<TColumn, object> value, IDbTransaction transaction = null)
         {
             ICollection<string> assignments = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
@@ -163,8 +163,8 @@ namespace ERHMS.Dapper
                 "UPDATE {0} SET {1} WHERE {2} = @Id",
                 Escape(tableName),
                 string.Join(", ", assignments),
-                Escape(name(idColumn)));
-            parameters.Add("@Id", value(idColumn));
+                Escape(name(id)));
+            parameters.Add("@Id", value(id));
             @this.Execute(sql, parameters, transaction);
         }
 

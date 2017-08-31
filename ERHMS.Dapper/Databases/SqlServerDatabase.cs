@@ -55,7 +55,7 @@ namespace ERHMS.Dapper
         {
             using (IDbConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
             {
-                string sql = "SELECT COUNT(*) FROM sys.databases WHERE name = @name";
+                string sql = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@name", builder.InitialCatalog);
                 return connection.ExecuteScalar<int>(sql, parameters) > 0;
@@ -75,7 +75,7 @@ namespace ERHMS.Dapper
         {
             return Invoke((connection, transaction) =>
             {
-                string sql = "SELECT COUNT(*) FROM sys.tables WHERE name = @name";
+                string sql = "SELECT COUNT(*) FROM [sys].[tables] WHERE [name] = @name";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@name", name);
                 return connection.ExecuteScalar<int>(sql, parameters, transaction) > 0;

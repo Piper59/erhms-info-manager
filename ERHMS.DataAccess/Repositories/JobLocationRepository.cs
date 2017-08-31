@@ -33,27 +33,15 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_JobLocations");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Jobs", "JobId", "ERHMS_JobLocations"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Jobs", "ERHMS_JobLocations", "JobId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo
-                {
-                    JoinType = JoinType.Inner,
-                    TableNameTo = "ERHMS_Incidents",
-                    AliasTo = "ERHMS_JobIncidents",
-                    ColumnNameTo = "IncidentId",
-                    TableNameOrAliasFrom = "ERHMS_Jobs"
-                });
+                sql.AddTableSelectClause("ERHMS_JobIncidents");
+                sql.FromClauses.Add("INNER JOIN [ERHMS_Incidents] AS [ERHMS_JobIncidents] ON [ERHMS_Jobs].[IncidentId] = [ERHMS_JobIncidents].[IncidentId]");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Locations", "LocationId", "ERHMS_JobLocations"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Locations", "ERHMS_JobLocations", "LocationId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo
-                {
-                    JoinType = JoinType.Inner,
-                    TableNameTo = "ERHMS_Incidents",
-                    AliasTo = "ERHMS_LocationIncidents",
-                    ColumnNameTo = "IncidentId",
-                    TableNameOrAliasFrom = "ERHMS_Locations"
-                });
+                sql.AddTableSelectClause("ERHMS_LocationIncidents");
+                sql.FromClauses.Add("INNER JOIN [ERHMS_Incidents] AS [ERHMS_LocationIncidents] ON [ERHMS_Locations].[IncidentId] = [ERHMS_LocationIncidents].[IncidentId]");
                 sql.OtherClauses = clauses;
                 Func<JobLocation, Job, Incident, Location, Incident, JobLocation> map = (jobLocation, job, jobIncident, location, locationIncident) =>
                 {

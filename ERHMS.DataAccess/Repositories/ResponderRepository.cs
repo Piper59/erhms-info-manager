@@ -71,8 +71,7 @@ namespace ERHMS.DataAccess
         public IEnumerable<Responder> SelectJobbable(string incidentId, string jobId)
         {
             string format = @"
-                WHERE {0}.[RECSTATUS] <> 0
-                AND {0}.[GlobalRecordId] IN (
+                WHERE {0}.[GlobalRecordId] IN (
                     SELECT [ResponderId]
                     FROM [ERHMS_Rosters]
                     WHERE [IncidentId] = @IncidentId
@@ -81,7 +80,8 @@ namespace ERHMS.DataAccess
                     SELECT [ResponderId]
                     FROM [ERHMS_JobResponders]
                     WHERE [JobId] = @JobId
-                )";
+                )
+                AND {0}.[RECSTATUS] <> 0";
             string clauses = string.Format(format, Escape(View.TableName));
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@IncidentId", incidentId);

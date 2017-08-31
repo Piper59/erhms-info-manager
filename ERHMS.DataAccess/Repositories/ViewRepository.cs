@@ -8,7 +8,8 @@ namespace ERHMS.DataAccess
 {
     public class ViewRepository : LinkedEntityRepository<View, ViewLink>
     {
-        internal const string HasResponderIdFieldSql = @"(
+        internal const string HasResponderIdFieldSql = @"
+            (
                 SELECT COUNT(*)
                 FROM [metaFields]
                 WHERE [metaFields].[ViewId] = [metaViews].[ViewId]
@@ -33,15 +34,15 @@ namespace ERHMS.DataAccess
         public ViewRepository(DataContext context)
             : base(context) { }
 
-        protected override SqlBuilder GetSelectSql()
+        protected override SqlBuilder GetSqlBuilder()
         {
             SqlBuilder sql = new SqlBuilder();
             sql.AddTable("metaViews");
             sql.SelectClauses.Add(HasResponderIdFieldSql);
             sql.AddSeparator();
-            sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews"));
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "metaViews", "ViewId");
             sql.AddSeparator();
-            sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks"));
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "ERHMS_ViewLinks", "IncidentId");
             return sql;
         }
     }

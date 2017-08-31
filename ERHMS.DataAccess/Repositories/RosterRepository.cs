@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
@@ -41,10 +40,11 @@ namespace ERHMS.DataAccess
                 sql.AddSeparator();
                 foreach (string tableName in Context.Responders.TableNames)
                 {
-                    sql.AddTable(new JoinInfo(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Rosters", "ResponderId"));
+                    sql.AddTableSelectClause(tableName);
+                    sql.FromClauses.Add(string.Format("INNER JOIN {0} ON [ERHMS_Rosters].[ResponderId] = {0}.[GlobalRecordId]", Escape(tableName)));
                 }
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", "ERHMS_Rosters"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "ERHMS_Rosters", "IncidentId");
                 sql.OtherClauses = clauses;
                 Func<Roster, Responder, Incident, Roster> map = (roster, responder, incident) =>
                 {

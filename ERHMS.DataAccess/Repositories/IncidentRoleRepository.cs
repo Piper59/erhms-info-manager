@@ -6,7 +6,8 @@ namespace ERHMS.DataAccess
 {
     public class IncidentRoleRepository : LinkRepository<IncidentRole>
     {
-        internal const string IsInUseSql = @"(
+        internal const string IsInUseSql = @"
+            (
                 SELECT COUNT(*)
                 FROM [ERHMS_TeamResponders]
                 WHERE [ERHMS_TeamResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
@@ -37,13 +38,13 @@ namespace ERHMS.DataAccess
             Context = context;
         }
 
-        protected override SqlBuilder GetSelectSql()
+        protected override SqlBuilder GetSqlBuilder()
         {
             SqlBuilder sql = new SqlBuilder();
             sql.AddTable("ERHMS_IncidentRoles");
             sql.SelectClauses.Add(IsInUseSql);
             sql.AddSeparator();
-            sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", "ERHMS_IncidentRoles"));
+            sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "ERHMS_IncidentRoles", "IncidentId");
             return sql;
         }
 
@@ -51,7 +52,7 @@ namespace ERHMS.DataAccess
         {
             foreach (Role role in Context.Roles.Select())
             {
-                Save(new IncidentRole(true)
+                Insert(new IncidentRole(true)
                 {
                     IncidentId = incidentId,
                     Name = role.Name

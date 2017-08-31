@@ -1,7 +1,5 @@
 ﻿using ERHMS.Dapper;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ERHMS.DataAccess
 {
@@ -10,11 +8,6 @@ namespace ERHMS.DataAccess
         private static string Escape(string identifier)
         {
             return IDbConnectionExtensions.Escape(identifier);
-        }
-
-        private static string EscapeTableName(string tableName, string alias)
-        {
-            return alias == null ? Escape(tableName) : string.Format("{0} AS {1}", Escape(tableName), Escape(alias));
         }
 
         private ICollection<string> separators;
@@ -35,52 +28,43 @@ namespace ERHMS.DataAccess
             separators = new List<string>();
         }
 
-        public void AddTable(string tableName, string alias = null)
+        public void AddTableSelectClause(string tableName)
         {
-            SelectClauses.Add(Escape(alias ?? tableName) + ".*");
-            FromClauses.Add(EscapeTableName(tableName, alias));
+            SelectClauses.Add(Escape(tableName) + ".*");
         }
 
-        public void AddTable(JoinInfo join)
+        public void AddTable(string tableName)
         {
-            SelectClauses.Add(Escape(join.AliasTo ?? join.TableNameTo) + ".*");
+            AddTableSelectClause(tableName);
+            FromClauses.Add(Escape(tableName));
+        }
+
+        public void AddTable(JoinType joinType, string tableNameTo, string tableNameFrom, string columnName)
+        {
+            AddTableSelectClause(tableNameTo);
             FromClauses.Add(string.Format(
-                "{0} JOIN {1} ON {2}.{3} = {4}.{5}",
-                join.JoinType.ToSql(),
-                EscapeTableName(join.TableNameTo, join.AliasTo),
-                Escape(join.AliasTo ?? join.TableNameTo),
-                Escape(join.ColumnNameTo),
-                Escape(join.TableNameOrAliasFrom),
-                Escape(join.ColumnNameFrom)));
+                "{0} JOIN {1} ON {2}.{3} = {1}.{3}",
+                joinType.ToSql(),
+                Escape(tableNameTo),
+                Escape(tableNameFrom),
+                Escape(columnName)));
         }
 
         public void AddSeparator()
         {
-            string separator = "Separator" + (separators.Count + 1);
-            SelectClauses.Add("NULL AS " + Escape(separator));
-            separators.Add(separator);
-        }
-
-        private string FormatSelectClauses()
-        {
-            return string.Join(", ", SelectClauses);
-        }
-
-        private string FormatFromClauses()
-        {
-            StringBuilder result = new StringBuilder();
-            result.Append(string.Join(" ", FromClauses.Take(2)));
-            for (int index = 2; index < FromClauses.Count; index++)
-            {
-                result.Insert(0, "(");
-                result.Append(") " + FromClauses[index]);
-            }
-            return result.ToString();
+            string columnName = "Separator" + (separators.Count + 1);
+            SelectClauses.Add("NULL AS " + Escape(columnName));
+            separators.Add(columnName);
         }
 
         public override string ToString()
         {
-            return string.Format("SELECT {0} FROM {1} {2}", FormatSelectClauses(), FormatFromClauses(), OtherClauses).Trim();
+            return string.Format(
+                "SELECT {0} FROM {1}{2} {3}",
+                string.Join(", ", SelectClauses),
+                new string('(', FromClauses.Count - 1),
+                string.Join(") ", FromClauses),
+                OtherClauses);
         }
     }
 }

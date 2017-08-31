@@ -54,7 +54,7 @@ namespace ERHMS.EpiInfo.DataAccess
             View = view;
         }
 
-        private string GetSelectSql(string selectClause, string clauses)
+        private string GetSelectSql(string selectClause, string otherClauses)
         {
             StringBuilder fromClause = new StringBuilder();
             fromClause.Append(Escape(View.TableName));
@@ -66,7 +66,7 @@ namespace ERHMS.EpiInfo.DataAccess
                     Escape(page.TableName),
                     Escape(View.TableName));
             }
-            return string.Format("SELECT {0} FROM {1} {2}", selectClause, fromClause, clauses);
+            return string.Format("SELECT {0} FROM {1} {2}", selectClause, fromClause, otherClauses);
         }
 
         public int Count(string clauses = null, object parameters = null)

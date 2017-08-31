@@ -25,14 +25,20 @@ namespace ERHMS.DataAccess
             LinkTypeMap = (TypeMap)SqlMapper.GetTypeMap(typeof(TLink));
         }
 
-        protected virtual SqlBuilder GetSelectSql()
+        protected virtual SqlBuilder GetSqlBuilder()
         {
             SqlBuilder sql = new SqlBuilder();
             sql.AddTable(TypeMap.TableName);
             sql.AddSeparator();
-            sql.AddTable(new JoinInfo(JoinType.LeftOuter, LinkTypeMap.TableName, LinkPropertyMap.ColumnName, TypeMap.TableName, TypeMap.GetId().ColumnName));
+            sql.AddTableSelectClause(LinkTypeMap.TableName);
+            sql.FromClauses.Add(string.Format(
+                "LEFT OUTER JOIN {0} ON {1}.{2} = {0}.{3}",
+                Escape(LinkTypeMap.TableName),
+                Escape(TypeMap.TableName),
+                Escape(TypeMap.GetId().ColumnName),
+                Escape(LinkPropertyMap.ColumnName)));
             sql.AddSeparator();
-            sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", LinkTypeMap.TableName));
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", LinkTypeMap.TableName, "IncidentId");
             return sql;
         }
 
@@ -40,7 +46,7 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
-                SqlBuilder sql = GetSelectSql();
+                SqlBuilder sql = GetSqlBuilder();
                 sql.OtherClauses = clauses;
                 Func<TEntity, TLink, Incident, TEntity> map = (entity, link, incident) =>
                 {

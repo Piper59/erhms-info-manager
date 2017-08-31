@@ -83,7 +83,6 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="JoinInfo.cs" />
     <Compile Include="JoinType.cs" />
     <Compile Include="Repositories\AssignmentRepository.cs" />
     <Compile Include="Repositories\CanvasLinkRepository.cs" />

@@ -32,9 +32,9 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_JobNotes");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Jobs", "JobId", "ERHMS_JobNotes"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Jobs", "ERHMS_JobNotes", "JobId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Incidents", "IncidentId", "ERHMS_Jobs"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "ERHMS_Jobs", "IncidentId");
                 sql.OtherClauses = clauses;
                 Func<JobNote, Job, Incident, JobNote> map = (jobNote, job, incident) =>
                 {

@@ -32,12 +32,12 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_WebSurveys");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "metaViews", "ViewId", "ERHMS_WebSurveys"));
+                sql.AddTable(JoinType.Inner, "metaViews", "ERHMS_WebSurveys", "ViewId");
                 sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_ViewLinks", "ViewId", "metaViews"));
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "metaViews", "ViewId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", "ERHMS_ViewLinks"));
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "ERHMS_ViewLinks", "IncidentId");
                 sql.OtherClauses = clauses;
                 Func<WebSurvey, View, ViewLink, Incident, WebSurvey> map = (webSurvey, view, viewLink, incident) =>
                 {

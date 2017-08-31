@@ -40,32 +40,21 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_TeamResponders");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Teams", "TeamId", "ERHMS_TeamResponders"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Teams", "ERHMS_TeamResponders", "TeamId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo
-                {
-                    JoinType = JoinType.Inner,
-                    TableNameTo = "ERHMS_Incidents",
-                    AliasTo = "ERHMS_TeamIncidents",
-                    ColumnNameTo = "IncidentId",
-                    TableNameOrAliasFrom = "ERHMS_Teams"
-                });
+                sql.AddTableSelectClause("ERHMS_TeamIncidents");
+                sql.FromClauses.Add("INNER JOIN [ERHMS_Incidents] AS [ERHMS_TeamIncidents] ON [ERHMS_Teams].[IncidentId] = [ERHMS_TeamIncidents].[IncidentId]");
                 sql.AddSeparator();
                 foreach (string tableName in Context.Responders.TableNames)
                 {
-                    sql.AddTable(new JoinInfo(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_TeamResponders", "ResponderId"));
+                    sql.AddTableSelectClause(tableName);
+                    sql.FromClauses.Add(string.Format("INNER JOIN {0} ON [ERHMS_TeamResponders].[ResponderId] = {0}.[GlobalRecordId]", Escape(tableName)));
                 }
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.LeftOuter, "ERHMS_IncidentRoles", "IncidentRoleId", "ERHMS_TeamResponders"));
+                sql.AddTable(JoinType.LeftOuter, "ERHMS_IncidentRoles", "ERHMS_TeamResponders", "IncidentRoleId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo
-                {
-                    JoinType = JoinType.LeftOuter,
-                    TableNameTo = "ERHMS_Incidents",
-                    AliasTo = "ERHMS_IncidentRoleIncidents",
-                    ColumnNameTo = "IncidentId",
-                    TableNameOrAliasFrom = "ERHMS_IncidentRoles"
-                });
+                sql.AddTableSelectClause("ERHMS_IncidentRoleIncidents");
+                sql.FromClauses.Add("LEFT OUTER JOIN [ERHMS_Incidents] AS [ERHMS_IncidentRoleIncidents] ON [ERHMS_IncidentRoles].[IncidentId] = [ERHMS_IncidentRoleIncidents].[IncidentId]");
                 sql.OtherClauses = clauses;
                 Func<TeamResponder, Team, Incident, Responder, IncidentRole, Incident, TeamResponder> map = (teamResponder, team, teamIncident, responder, incidentRole, incidentRoleIncident) =>
                 {
@@ -85,9 +74,11 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<TeamResponder> SelectUndeleted()
         {
-            return Select(string.Format(
-                "WHERE [ERHMS_TeamIncidents].[Deleted] = 0 AND ([ERHMS_IncidentRoleIncidents].[Deleted] IS NULL OR [ERHMS_IncidentRoleIncidents].[Deleted] = 0) AND {0}.[RECSTATUS] <> 0",
-                Escape(Context.Responders.View.TableName)));
+            string format = @"
+                WHERE [ERHMS_TeamIncidents].[Deleted] = 0
+                AND ([ERHMS_IncidentRoleIncidents].[Deleted] IS NULL OR [ERHMS_IncidentRoleIncidents].[Deleted] = 0)
+                AND {0}.[RECSTATUS] <> 0";
+            return Select(string.Format(format, Escape(Context.Responders.View.TableName)));
         }
 
         public override TeamResponder SelectById(object id)
@@ -113,9 +104,10 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<TeamResponder> SelectUndeletedByIncidentId(string incidentId)
         {
-            string clauses = string.Format(
-                "WHERE ([ERHMS_Teams].[IncidentId] = @IncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentId) AND {0}.[RECSTATUS] <> 0",
-                Escape(Context.Responders.View.TableName));
+            string format = @"
+                WHERE ([ERHMS_Teams].[IncidentId] = @IncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentId)
+                AND {0}.[RECSTATUS] <> 0";
+            string clauses = string.Format(format, Escape(Context.Responders.View.TableName));
             return SelectByIncidentIdInternal(clauses, incidentId);
         }
 

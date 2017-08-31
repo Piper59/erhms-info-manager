@@ -33,27 +33,15 @@ namespace ERHMS.DataAccess
                 SqlBuilder sql = new SqlBuilder();
                 sql.AddTable("ERHMS_JobTeams");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Jobs", "JobId", "ERHMS_JobTeams"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Jobs", "ERHMS_JobTeams", "JobId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo
-                {
-                    JoinType = JoinType.Inner,
-                    TableNameTo = "ERHMS_Incidents",
-                    AliasTo = "ERHMS_JobIncidents",
-                    ColumnNameTo = "IncidentId",
-                    TableNameOrAliasFrom = "ERHMS_Jobs"
-                });
+                sql.AddTableSelectClause("ERHMS_JobIncidents");
+                sql.FromClauses.Add("INNER JOIN [ERHMS_Incidents] AS [ERHMS_JobIncidents] ON [ERHMS_Jobs].[IncidentId] = [ERHMS_JobIncidents].[IncidentId]");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo(JoinType.Inner, "ERHMS_Teams", "TeamId", "ERHMS_JobTeams"));
+                sql.AddTable(JoinType.Inner, "ERHMS_Teams", "ERHMS_JobTeams", "TeamId");
                 sql.AddSeparator();
-                sql.AddTable(new JoinInfo
-                {
-                    JoinType = JoinType.Inner,
-                    TableNameTo = "ERHMS_Incidents",
-                    AliasTo = "ERHMS_TeamIncidents",
-                    ColumnNameTo = "IncidentId",
-                    TableNameOrAliasFrom = "ERHMS_Teams"
-                });
+                sql.AddTableSelectClause("ERHMS_TeamIncidents");
+                sql.FromClauses.Add("INNER JOIN [ERHMS_Incidents] AS [ERHMS_TeamIncidents] ON [ERHMS_Teams].[IncidentId] = [ERHMS_TeamIncidents].[IncidentId]");
                 sql.OtherClauses = clauses;
                 Func<JobTeam, Job, Incident, Team, Incident, JobTeam> map = (jobTeam, job, jobIncident, team, teamIncident) =>
                 {
