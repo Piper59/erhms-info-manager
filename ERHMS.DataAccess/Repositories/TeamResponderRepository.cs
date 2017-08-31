@@ -138,5 +138,13 @@ namespace ERHMS.DataAccess
                 Escape(Context.Responders.View.TableName));
             return SelectByTeamIdInternal(clauses, teamId);
         }
+
+        public void DeleteByTeamId(string teamId)
+        {
+            string clauses = "WHERE [TeamId] = @TeamId";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@TeamId", teamId);
+            Delete(clauses, parameters);
+        }
     }
 }

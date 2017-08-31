@@ -65,6 +65,7 @@ namespace ERHMS.Presentation.ViewModels
             msg.Confirmed += (sender, e) =>
             {
                 Context.JobTeams.DeleteByTeamId(SelectedItem.TeamId);
+                Context.TeamResponders.DeleteByTeamId(SelectedItem.TeamId);
                 Context.Teams.Delete(SelectedItem);
                 MessengerInstance.Send(new RefreshMessage(typeof(Team)));
             };
