@@ -36,11 +36,6 @@ namespace ERHMS.EpiInfo.DataAccess
             get { return Context.Database; }
         }
 
-        public Project Project
-        {
-            get { return Context.Project; }
-        }
-
         public View View { get; private set; }
 
         public IEnumerable<string> TableNames

@@ -29,8 +29,6 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        private string fieldName;
-
         public ViewEntityRepository<ViewEntity> Entities { get; private set; }
         public ViewEntity Entity { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
@@ -44,9 +42,8 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Link to Responder";
             Entities = entities;
             Entity = entity;
-            fieldName = entities.View.Fields["ResponderID"].Name;
             Responders = new ResponderListChildViewModel(services);
-            string responderId = entity.GetProperty(fieldName) as string;
+            string responderId = entity.GetProperty("ResponderID") as string;
             if (responderId != null)
             {
                 Responders.Select(responderId);
@@ -61,14 +58,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Link()
         {
-            Entity.SetProperty(fieldName, Responders.SelectedItem.ResponderId);
+            Entity.SetProperty("ResponderID", Responders.SelectedItem.ResponderId);
             Entities.Save(Entity);
             Close();
         }
 
         public void Unlink()
         {
-            Entity.SetProperty(fieldName, null);
+            Entity.SetProperty("ResponderID", null);
             Entities.Save(Entity);
             Close();
         }

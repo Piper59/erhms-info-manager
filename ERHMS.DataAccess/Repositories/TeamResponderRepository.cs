@@ -131,6 +131,17 @@ namespace ERHMS.DataAccess
             return SelectByTeamIdInternal(clauses, teamId);
         }
 
+        public IEnumerable<TeamResponder> SelectUndeletedByResponderId(string responderId)
+        {
+            string clauses = @"
+                WHERE [ERHMS_TeamResponders].[ResponderId] = @ResponderId
+                AND [ERHMS_TeamIncidents].[Deleted] = 0
+                AND ([ERHMS_IncidentRoleIncidents].[Deleted] IS NULL OR [ERHMS_IncidentRoleIncidents].[Deleted] = 0)";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ResponderId", responderId);
+            return Select(clauses, parameters);
+        }
+
         public void DeleteByTeamId(string teamId)
         {
             string clauses = "WHERE [TeamId] = @TeamId";

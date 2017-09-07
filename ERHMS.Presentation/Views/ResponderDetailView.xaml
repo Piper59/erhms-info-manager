@@ -5,7 +5,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
+    <UserControl.Resources>
+        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <Converters:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
+    </UserControl.Resources>
     <i:Interaction.Behaviors>
         <Behaviors:ControlPageNavigationBehavior Selector="{Binding ElementName=TabControl}" />
     </i:Interaction.Behaviors>
@@ -14,9 +19,9 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TabControl x:Name="TabControl"
-                    DataContext="{Binding Responder}">
-            <TabItem Header="_Personal">
+        <TabControl x:Name="TabControl">
+            <TabItem DataContext="{Binding Responder}"
+                     Header="_Personal">
                 <ScrollViewer>
                     <StackPanel Grid.IsSharedSizeScope="True">
                         <GroupBox Header="Identity">
@@ -169,7 +174,8 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="_Emergency Contact">
+            <TabItem DataContext="{Binding Responder}"
+                     Header="_Emergency Contact">
                 <ScrollViewer>
                     <StackPanel Grid.IsSharedSizeScope="True">
                         <GroupBox Header="Identity">
@@ -278,7 +284,8 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="_Organization">
+            <TabItem DataContext="{Binding Responder}"
+                     Header="_Organization">
                 <ScrollViewer>
                     <StackPanel Grid.IsSharedSizeScope="True">
                         <GroupBox Header="Role">
@@ -391,6 +398,88 @@
                                          Margin="0"
                                          Text="{Binding UnionLocalNumber}" />
                             </Grid>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem DataContext="{Binding Report}"
+                     Header="_Report"
+                     IsSelected="{Binding IsSelected}">
+                <ScrollViewer>
+                    <StackPanel>
+                        <GroupBox Header="Incidents">
+                            <StackPanel>
+                                <MahApps:ProgressRing Visibility="{Binding Incidents, Converter={StaticResource NullToVisibilityInverter}}" />
+                                <DataGrid ItemsSource="{Binding Incidents}"
+                                          Visibility="{Binding Incidents, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Name}"
+                                                            Header="Name"
+                                                            Width="*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Teams">
+                            <StackPanel>
+                                <MahApps:ProgressRing Visibility="{Binding TeamResponders, Converter={StaticResource NullToVisibilityInverter}}" />
+                                <DataGrid ItemsSource="{Binding TeamResponders}"
+                                          Visibility="{Binding TeamResponders, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Team.Incident.Name}"
+                                                            Header="Incident"
+                                                            Width="*" />
+                                        <DataGridTextColumn Binding="{Binding Team.Name}"
+                                                            Header="Name"
+                                                            Width="*" />
+                                        <DataGridTextColumn Binding="{Binding IncidentRole.Name}"
+                                                            Header="Role"
+                                                            Width="*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Jobs">
+                            <StackPanel>
+                                <MahApps:ProgressRing Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityInverter}}" />
+                                <DataGrid ItemsSource="{Binding JobTickets}"
+                                          Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Incident.Name}"
+                                                            Header="Incident"
+                                                            Width="*" />
+                                        <DataGridTextColumn Binding="{Binding Job.Name}"
+                                                            Header="Name"
+                                                            Width="*" />
+                                        <DataGridTextColumn Binding="{Binding Team.Name}"
+                                                            Header="Team"
+                                                            Width="*" />
+                                        <DataGridTextColumn Binding="{Binding IncidentRole.Name}"
+                                                            Header="Role"
+                                                            Width="*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Forms"
+                                  Margin="0">
+                            <StackPanel>
+                                <MahApps:ProgressRing Visibility="{Binding Records, Converter={StaticResource NullToVisibilityInverter}}" />
+                                <DataGrid ItemsSource="{Binding Records}"
+                                          Visibility="{Binding Records, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding View.Incident.Name}"
+                                                            Header="Incident"
+                                                            Width="*" />
+                                        <DataGridTextColumn Binding="{Binding View.Name}"
+                                                            Header="Name"
+                                                            Width="*" />
+                                        <DataGridTextColumn Binding="{Binding CreatedOn}"
+                                                            Header="Date"
+                                                            Width="*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
                         </GroupBox>
                     </StackPanel>
                 </ScrollViewer>

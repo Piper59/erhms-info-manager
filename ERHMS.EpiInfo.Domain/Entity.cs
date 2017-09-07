@@ -34,7 +34,7 @@ namespace ERHMS.EpiInfo.Domain
 
         protected Entity(bool @new)
         {
-            properties = new Dictionary<string, object>();
+            properties = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             New = @new;
         }
 

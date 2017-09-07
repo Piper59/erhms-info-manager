@@ -82,24 +82,26 @@ namespace ERHMS.Dapper
 
         public static DataTable GetSchema(this IDbConnection @this, string tableName, IDbTransaction transaction = null)
         {
-            using (new ConnectionOpener(@this))
-            using (IDbCommand command = @this.CreateCommand())
+            string sql = string.Format("SELECT * FROM {0} WHERE 1 = 0", Escape(tableName));
+            using (IDataReader reader = @this.ExecuteReader(sql, transaction: transaction))
             {
-                command.CommandText = string.Format("SELECT * FROM {0} WHERE 1 = 0", Escape(tableName));
-                command.Transaction = transaction;
-                using (IDataReader reader = command.ExecuteReader())
-                {
-                    DataTable schema = new DataTable();
-                    schema.TableName = tableName;
-                    schema.Load(reader);
-                    return schema;
-                }
+                return reader.GetSchemaTable();
             }
         }
 
         private static TypeMap GetTypeMap<TEntity>()
         {
             return (TypeMap)SqlMapper.GetTypeMap(typeof(TEntity));
+        }
+
+        public static DataTable Select(this IDbConnection @this, string sql, object parameters = null, IDbTransaction transaction = null)
+        {
+            using (IDataReader reader = @this.ExecuteReader(sql, parameters, transaction))
+            {
+                DataTable table = new DataTable();
+                table.Load(reader);
+                return table;
+            }
         }
 
         public static IEnumerable<TEntity> Select<TEntity>(this IDbConnection @this, string clauses = null, object parameters = null, IDbTransaction transaction = null)

@@ -33,21 +33,31 @@ namespace ERHMS.DataAccess
             SelectClauses.Add(Escape(tableName) + ".*");
         }
 
-        public void AddTable(string tableName)
+        public void AddTableFromClause(string tableName)
         {
-            AddTableSelectClause(tableName);
             FromClauses.Add(Escape(tableName));
         }
 
-        public void AddTable(JoinType joinType, string tableNameTo, string tableNameFrom, string columnName)
+        public void AddTableFromClause(JoinType joinType, string tableNameTo, string tableNameFrom, string columnName)
         {
-            AddTableSelectClause(tableNameTo);
             FromClauses.Add(string.Format(
                 "{0} JOIN {1} ON {2}.{3} = {1}.{3}",
                 joinType.ToSql(),
                 Escape(tableNameTo),
                 Escape(tableNameFrom),
                 Escape(columnName)));
+        }
+
+        public void AddTable(string tableName)
+        {
+            AddTableSelectClause(tableName);
+            AddTableFromClause(tableName);
+        }
+
+        public void AddTable(JoinType joinType, string tableNameTo, string tableNameFrom, string columnName)
+        {
+            AddTableSelectClause(tableNameTo);
+            AddTableFromClause(joinType, tableNameTo, tableNameFrom, columnName);
         }
 
         public void AddSeparator()

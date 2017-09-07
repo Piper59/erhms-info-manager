@@ -25,10 +25,10 @@ namespace ERHMS.DataAccess
             JobNoteRepository.Configure();
             JobResponderRepository.Configure();
             JobTeamRepository.Configure();
+            JobTicketRepository.Configure();
             LocationRepository.Configure();
             PgmRepository.Configure();
             PgmLinkRepository.Configure();
-            ResponderRepository.Configure();
             RoleRepository.Configure();
             RosterRepository.Configure();
             TeamRepository.Configure();
@@ -85,10 +85,12 @@ namespace ERHMS.DataAccess
         public JobNoteRepository JobNotes { get; private set; }
         public JobResponderRepository JobResponders { get; private set; }
         public JobTeamRepository JobTeams { get; private set; }
+        public JobTicketRepository JobTickets { get; private set; }
         public LocationRepository Locations { get; private set; }
         public PgmRepository Pgms { get; private set; }
         public PgmLinkRepository PgmLinks { get; private set; }
         public ResponderRepository Responders { get; private set; }
+        public ResponderViewEntityRepository ResponderViewEntities { get; private set; }
         public RoleRepository Roles { get; private set; }
         public RosterRepository Rosters { get; private set; }
         public TeamRepository Teams { get; private set; }
@@ -132,10 +134,12 @@ namespace ERHMS.DataAccess
             JobNotes = new JobNoteRepository(this);
             JobResponders = new JobResponderRepository(this);
             JobTeams = new JobTeamRepository(this);
+            JobTickets = new JobTicketRepository(this);
             Locations = new LocationRepository(this);
             Pgms = new PgmRepository(this);
             PgmLinks = new PgmLinkRepository(this);
             Responders = new ResponderRepository(this);
+            ResponderViewEntities = new ResponderViewEntityRepository(this);
             Roles = new RoleRepository(this);
             Rosters = new RosterRepository(this);
             Teams = new TeamRepository(this);
