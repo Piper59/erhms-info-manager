@@ -410,8 +410,15 @@
                         <GroupBox Header="Incidents">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding Incidents, Converter={StaticResource NullToVisibilityInverter}}" />
-                                <DataGrid ItemsSource="{Binding Incidents}"
+                                <DataGrid x:Name="IncidentsDataGrid"
+                                          ItemsSource="{Binding Incidents}"
+                                          SelectionMode="Single"
                                           Visibility="{Binding Incidents, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.InputBindings>
+                                        <MouseBinding Command="{Binding EditIncidentCommand}"
+                                                      CommandParameter="{Binding SelectedItem, ElementName=IncidentsDataGrid}"
+                                                      MouseAction="LeftDoubleClick" />
+                                    </DataGrid.InputBindings>
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Binding="{Binding Name}"
                                                             Header="Name"
@@ -423,8 +430,15 @@
                         <GroupBox Header="Teams">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding TeamResponders, Converter={StaticResource NullToVisibilityInverter}}" />
-                                <DataGrid ItemsSource="{Binding TeamResponders}"
+                                <DataGrid x:Name="TeamRespondersDataGrid"
+                                          ItemsSource="{Binding TeamResponders}"
+                                          SelectionMode="Single"
                                           Visibility="{Binding TeamResponders, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.InputBindings>
+                                        <MouseBinding Command="{Binding EditTeamCommand}"
+                                                      CommandParameter="{Binding SelectedItem, ElementName=TeamRespondersDataGrid}"
+                                                      MouseAction="LeftDoubleClick" />
+                                    </DataGrid.InputBindings>
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Binding="{Binding Team.Incident.Name}"
                                                             Header="Incident"
@@ -442,8 +456,15 @@
                         <GroupBox Header="Jobs">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityInverter}}" />
-                                <DataGrid ItemsSource="{Binding JobTickets}"
+                                <DataGrid x:Name="JobTicketsDataGrid"
+                                          ItemsSource="{Binding JobTickets}"
+                                          SelectionMode="Single"
                                           Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.InputBindings>
+                                        <MouseBinding Command="{Binding EditJobCommand}"
+                                                      CommandParameter="{Binding SelectedItem, ElementName=JobTicketsDataGrid}"
+                                                      MouseAction="LeftDoubleClick" />
+                                    </DataGrid.InputBindings>
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Binding="{Binding Incident.Name}"
                                                             Header="Incident"
@@ -465,8 +486,15 @@
                                   Margin="0">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding Records, Converter={StaticResource NullToVisibilityInverter}}" />
-                                <DataGrid ItemsSource="{Binding Records}"
+                                <DataGrid x:Name="RecordsDataGrid"
+                                          ItemsSource="{Binding Records}"
+                                          SelectionMode="Single"
                                           Visibility="{Binding Records, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid.InputBindings>
+                                        <MouseBinding Command="{Binding EditRecordCommand}"
+                                                      CommandParameter="{Binding SelectedItem, ElementName=RecordsDataGrid}"
+                                                      MouseAction="LeftDoubleClick" />
+                                    </DataGrid.InputBindings>
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Binding="{Binding View.Incident.Name}"
                                                             Header="Incident"

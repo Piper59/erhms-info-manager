@@ -1,4 +1,5 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Messages;
 using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
@@ -50,10 +51,19 @@ namespace ERHMS.Presentation.ViewModels
                 set { Set(nameof(Records), ref records, value); }
             }
 
+            public RelayCommand<Incident> EditIncidentCommand { get; private set; }
+            public RelayCommand<TeamResponder> EditTeamCommand { get; private set; }
+            public RelayCommand<JobTicket> EditJobCommand { get; private set; }
+            public RelayCommand<ResponderViewEntity> EditRecordCommand { get; private set; }
+
             public ReportChildViewModel(IServiceManager services, Responder responder)
                 : base(services)
             {
                 Responder = responder;
+                EditIncidentCommand = new RelayCommand<Incident>(EditIncident);
+                EditTeamCommand = new RelayCommand<TeamResponder>(EditTeam);
+                EditJobCommand = new RelayCommand<JobTicket>(EditJob);
+                EditRecordCommand = new RelayCommand<ResponderViewEntity>(EditRecord);
                 PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == nameof(IsSelected))
@@ -87,6 +97,26 @@ namespace ERHMS.Presentation.ViewModels
                         .ThenBy(record => record.CreatedOn)
                         .ToList();
                 });
+            }
+
+            public void EditIncident(Incident incident)
+            {
+                Documents.ShowIncident(incident);
+            }
+
+            public void EditTeam(TeamResponder teamResponder)
+            {
+                Documents.ShowTeam(teamResponder.Team);
+            }
+
+            public void EditJob(JobTicket jobTicket)
+            {
+                Documents.ShowJob(jobTicket.Job);
+            }
+
+            public void EditRecord(ResponderViewEntity record)
+            {
+                Dialogs.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, record.View.Name, record.UniqueKey.Value));
             }
         }
 
