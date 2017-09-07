@@ -2,7 +2,7 @@
 
 namespace ERHMS.Domain
 {
-    public class ResponderViewEntity : ViewEntity
+    public class Response : ViewEntity
     {
         private View view;
         public View View

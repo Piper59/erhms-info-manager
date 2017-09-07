@@ -44,26 +44,26 @@ namespace ERHMS.Presentation.ViewModels
                 set { Set(nameof(JobTickets), ref jobTickets, value); }
             }
 
-            private ICollection<ResponderViewEntity> records;
-            public ICollection<ResponderViewEntity> Records
+            private ICollection<Response> responses;
+            public ICollection<Response> Responses
             {
-                get { return records; }
-                set { Set(nameof(Records), ref records, value); }
+                get { return responses; }
+                set { Set(nameof(Responses), ref responses, value); }
             }
 
             public RelayCommand<Incident> EditIncidentCommand { get; private set; }
             public RelayCommand<TeamResponder> EditTeamCommand { get; private set; }
             public RelayCommand<JobTicket> EditJobCommand { get; private set; }
-            public RelayCommand<ResponderViewEntity> EditRecordCommand { get; private set; }
+            public RelayCommand<Response> EditResponseCommand { get; private set; }
 
             public ReportChildViewModel(IServiceManager services, Responder responder)
-                : base(services)
+                    : base(services)
             {
                 Responder = responder;
                 EditIncidentCommand = new RelayCommand<Incident>(EditIncident);
                 EditTeamCommand = new RelayCommand<TeamResponder>(EditTeam);
                 EditJobCommand = new RelayCommand<JobTicket>(EditJob);
-                EditRecordCommand = new RelayCommand<ResponderViewEntity>(EditRecord);
+                EditResponseCommand = new RelayCommand<Response>(EditResponse);
                 PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == nameof(IsSelected))
@@ -92,9 +92,9 @@ namespace ERHMS.Presentation.ViewModels
                         .ThenBy(jobTicket => jobTicket.Job.Name)
                         .ThenBy(jobTicket => jobTicket.Team?.Name)
                         .ToList();
-                    Records = Context.ResponderViewEntities.SelectByResponderId(Responder.ResponderId)
-                        .OrderBy(record => record.View.Name)
-                        .ThenBy(record => record.CreatedOn)
+                    Responses = Context.Responses.SelectByResponderId(Responder.ResponderId)
+                        .OrderBy(response => response.View.Name)
+                        .ThenBy(response => response.CreatedOn)
                         .ToList();
                 });
             }
@@ -114,9 +114,9 @@ namespace ERHMS.Presentation.ViewModels
                 Documents.ShowJob(jobTicket.Job);
             }
 
-            public void EditRecord(ResponderViewEntity record)
+            public void EditResponse(Response response)
             {
-                Dialogs.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, record.View.Name, record.UniqueKey.Value));
+                Dialogs.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, response.View.Name, response.UniqueKey.Value));
             }
         }
 

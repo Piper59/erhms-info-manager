@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ERHMS.DataAccess
 {
-    public class ResponderViewEntityRepository : IRepository<ResponderViewEntity>
+    public class ResponseRepository : IRepository<Response>
     {
         private static string Escape(string identifier)
         {
@@ -23,7 +23,7 @@ namespace ERHMS.DataAccess
             get { return Context.Database; }
         }
 
-        public ResponderViewEntityRepository(DataContext context)
+        public ResponseRepository(DataContext context)
         {
             Context = context;
         }
@@ -33,12 +33,12 @@ namespace ERHMS.DataAccess
             throw new NotSupportedException();
         }
 
-        public IEnumerable<ResponderViewEntity> Select(string clauses = null, object parameters = null)
+        public IEnumerable<Response> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
                 IDictionary<int, Domain.View> views = Context.Views.Select().ToDictionary(view => view.ViewId);
-                ICollection<ResponderViewEntity> entities = new List<ResponderViewEntity>();
+                ICollection<Response> responses = new List<Response>();
                 DataTable fields = connection.Select("SELECT * FROM [metaFields]");
                 foreach (DataRow field in fields.Select("Name = 'ResponderID'"))
                 {
@@ -58,25 +58,25 @@ namespace ERHMS.DataAccess
                     {
                         while (reader.Read())
                         {
-                            ResponderViewEntity entity = new ResponderViewEntity
+                            Response response = new Response
                             {
                                 View = view
                             };
-                            entity.SetProperties(reader);
-                            entities.Add(entity);
+                            response.SetProperties(reader);
+                            responses.Add(response);
                         }
                     }
                 }
-                return entities;
+                return responses;
             });
         }
 
-        public ResponderViewEntity SelectById(object id)
+        public Response SelectById(object id)
         {
             throw new NotSupportedException();
         }
 
-        public IEnumerable<ResponderViewEntity> SelectByResponderId(string responderId)
+        public IEnumerable<Response> SelectByResponderId(string responderId)
         {
             string clauses = "WHERE [ResponderID] = @ResponderId";
             DynamicParameters parameters = new DynamicParameters();
@@ -84,17 +84,17 @@ namespace ERHMS.DataAccess
             return Select(clauses, parameters);
         }
 
-        public void Insert(ResponderViewEntity entity)
+        public void Insert(Response entity)
         {
             throw new NotSupportedException();
         }
 
-        public void Update(ResponderViewEntity entity)
+        public void Update(Response entity)
         {
             throw new NotSupportedException();
         }
 
-        public void Save(ResponderViewEntity entity)
+        public void Save(Response entity)
         {
             throw new NotSupportedException();
         }
@@ -109,7 +109,7 @@ namespace ERHMS.DataAccess
             throw new NotSupportedException();
         }
 
-        public void Delete(ResponderViewEntity entity)
+        public void Delete(Response entity)
         {
             throw new NotSupportedException();
         }
