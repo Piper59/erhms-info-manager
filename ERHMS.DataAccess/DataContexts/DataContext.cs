@@ -29,6 +29,8 @@ namespace ERHMS.DataAccess
             LocationRepository.Configure();
             PgmRepository.Configure();
             PgmLinkRepository.Configure();
+            ResponderRepository.Configure();
+            ResponseRepository.Configure();
             RoleRepository.Configure();
             RosterRepository.Configure();
             TeamRepository.Configure();

@@ -17,6 +17,7 @@ namespace ERHMS.Presentation.ViewModels
         public AssignmentListViewModel Assignments { get; private set; }
         public PgmListViewModel Pgms { get; private set; }
         public CanvasListViewModel Canvases { get; private set; }
+        public IncidentReportViewModel Report { get; private set; }
 
         public override bool Dirty
         {
@@ -40,6 +41,7 @@ namespace ERHMS.Presentation.ViewModels
             Assignments = new AssignmentListViewModel(services, incident);
             Pgms = new PgmListViewModel(services, incident);
             Canvases = new CanvasListViewModel(services, incident);
+            Report = new IncidentReportViewModel(services, incident);
             Title = Detail.Title;
             Detail.PropertyChanged += (sender, e) =>
             {

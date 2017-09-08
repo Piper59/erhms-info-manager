@@ -15,38 +15,53 @@
         <TabItem Header="_Details">
             <Views:IncidentDetailView DataContext="{Binding Detail}" />
         </TabItem>
-        <TabItem Header="_Notes" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Notes"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:IncidentNoteListView DataContext="{Binding Notes}" />
         </TabItem>
-        <TabItem Header="_Roster" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Roster"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:RosterListView DataContext="{Binding Rosters}" />
         </TabItem>
-        <TabItem Header="_Roles" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Roles"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:IncidentRoleListView DataContext="{Binding Roles}" />
         </TabItem>
-        <TabItem Header="_Teams" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Teams"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:TeamListView DataContext="{Binding Teams}" />
         </TabItem>
-        <TabItem Header="_Locations" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Locations"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:LocationListView DataContext="{Binding Locations}" />
         </TabItem>
-        <TabItem Header="_Jobs" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Jobs"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:JobListView DataContext="{Binding Jobs}" />
         </TabItem>
-        <TabItem Header="_Forms" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Forms"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:ViewListView DataContext="{Binding Views}" />
         </TabItem>
-        <TabItem Header="_Templates" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Templates"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:TemplateListView DataContext="{Binding Templates}" />
         </TabItem>
-        <TabItem Header="_Assignments" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Assignments"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:AssignmentListView DataContext="{Binding Assignments}" />
         </TabItem>
-        <TabItem Header="_Analyses" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Analyses"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:PgmListView DataContext="{Binding Pgms}" />
         </TabItem>
-        <TabItem Header="_Dashboards" Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+        <TabItem Header="_Dashboards"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:CanvasListView DataContext="{Binding Canvases}" />
+        </TabItem>
+        <TabItem Header="_Report"
+                 Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
+            <Views:IncidentReportView DataContext="{Binding Report}" />
         </TabItem>
     </TabControl>
 </UserControl>

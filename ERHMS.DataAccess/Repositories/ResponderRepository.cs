@@ -8,6 +8,12 @@ namespace ERHMS.DataAccess
 {
     public class ResponderRepository : ViewEntityRepository<Responder>
     {
+        public static void Configure()
+        {
+            TypeMap typeMap = new TypeMap(typeof(Responder));
+            SqlMapper.SetTypeMap(typeof(Responder), typeMap);
+        }
+
         public ResponderRepository(DataContext context)
             : base(context, context.Project.Views["Responders"]) { }
 

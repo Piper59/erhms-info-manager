@@ -16,14 +16,15 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(JobTicket), typeMap);
         }
 
-        private static JobTicket Map(Incident incident, Job job, Team team, Responder responder, IncidentRole incidentRole)
+        private static JobTicket Map(Incident incident, Job job, Team team, Responder responder, IncidentRole incidentRole, ILookup<string, Location> locations)
         {
             JobTicket jobTicket = new JobTicket
             {
                 Incident = incident,
                 Job = job,
                 Team = team,
-                Responder = responder
+                Responder = responder,
+                Locations = locations[job.JobId].ToList()
             };
             if (incidentRole.IncidentRoleId != null)
             {
@@ -49,6 +50,10 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
+                ILookup<string, Location> locations = Context.JobLocations.Select().ToLookup(
+                    jobLocation => jobLocation.JobId,
+                    jobLocation => jobLocation.Location,
+                    StringComparer.OrdinalIgnoreCase);
                 IEnumerable<JobTicket> result1;
                 {
                     SqlBuilder sql = new SqlBuilder();
@@ -70,7 +75,7 @@ namespace ERHMS.DataAccess
                     sql.OtherClauses = clauses;
                     Func<Incident, Job, Team, Responder, IncidentRole, JobTicket> map = (incident, job, team, responder, incidentRole) =>
                     {
-                        return Map(incident, job, team, responder, incidentRole);
+                        return Map(incident, job, team, responder, incidentRole, locations);
                     };
                     result1 = connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
                 }
@@ -92,7 +97,7 @@ namespace ERHMS.DataAccess
                     sql.OtherClauses = clauses;
                     Func<Incident, Job, Responder, IncidentRole, JobTicket> map = (incident, job, responder, incidentRole) =>
                     {
-                        return Map(incident, job, null, responder, incidentRole);
+                        return Map(incident, job, null, responder, incidentRole, locations);
                     };
                     result2 = connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
                 }
@@ -103,6 +108,16 @@ namespace ERHMS.DataAccess
         public override JobTicket SelectById(object id)
         {
             throw new NotSupportedException();
+        }
+
+        public IEnumerable<JobTicket> SelectUndeletedByIncidentId(string incidentId)
+        {
+            string clauses = string.Format(
+                "WHERE [ERHMS_Incidents].[IncidentId] = @IncidentId AND {0}.[RECSTATUS] <> 0",
+                Escape(Context.Responders.View.TableName));
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IncidentId", incidentId);
+            return Select(clauses, parameters);
         }
 
         public IEnumerable<JobTicket> SelectUndeletedByResponderId(string responderId)

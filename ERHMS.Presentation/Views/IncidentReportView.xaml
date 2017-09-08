@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.IncidentReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Controls:Filter Grid.Row="0"
+                         Value="{Binding Filter}" />
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}">
+            <i:Interaction.Behaviors>
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+            </i:Interaction.Behaviors>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Responder.FullName}"
+                                    Header="Responder"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding Job.Name}"
+                                    Header="Job"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding Team.Name}"
+                                    Header="Team"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding IncidentRole.Name}"
+                                    Header="Role"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding LocationNames}"
+                                    Header="Locations"
+                                    Width="3*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <WrapPanel Grid.Row="2"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Email"
+                                 Command="{Binding EmailCommand}"
+                                 Icon="{StaticResource appbar_email}" />
+            <Controls:IconButton AccessText="_Refresh"
+                                 Command="{Binding RefreshCommand}"
+                                 Icon="{StaticResource appbar_refresh_clockwise_down}" />
+        </WrapPanel>
+    </Grid>
+</UserControl>

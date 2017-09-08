@@ -11,6 +11,12 @@ namespace ERHMS.DataAccess
 {
     public class ResponseRepository : IRepository<Response>
     {
+        public static void Configure()
+        {
+            TypeMap typeMap = new TypeMap(typeof(Response));
+            SqlMapper.SetTypeMap(typeof(Response), typeMap);
+        }
+
         private static string Escape(string identifier)
         {
             return IDbConnectionExtensions.Escape(identifier);
