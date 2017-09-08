@@ -9,6 +9,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
 
+        public RelayCommand EditCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
 
         public IncidentReportViewModel(IServiceManager services, Incident incident)
@@ -17,6 +18,7 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Report";
             Incident = incident;
             Refresh();
+            EditCommand = new RelayCommand(Edit, HasSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
@@ -38,6 +40,11 @@ namespace ERHMS.Presentation.ViewModels
             yield return item.Team?.Name;
             yield return item.IncidentRole?.Name;
             yield return item.LocationNames;
+        }
+
+        public void Edit()
+        {
+            Documents.ShowJob(SelectedItem.Job);
         }
 
         public void Email()

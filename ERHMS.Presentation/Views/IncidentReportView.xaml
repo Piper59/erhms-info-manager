@@ -18,6 +18,10 @@
             <i:Interaction.Behaviors>
                 <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
             </i:Interaction.Behaviors>
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding EditCommand}"
+                              MouseAction="LeftDoubleClick" />
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Responder.FullName}"
                                     Header="Responder"
