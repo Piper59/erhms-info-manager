@@ -9,8 +9,14 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
 
+        public IEnumerable<Responder> SelectedResponders
+        {
+            get { return TypedSelectedItems.Select(jobTicket => jobTicket.Responder).Distinct(); }
+        }
+
         public RelayCommand EditCommand { get; private set; }
         public RelayCommand EmailCommand { get; private set; }
+        public RelayCommand AssignCommand { get; private set; }
 
         public IncidentReportViewModel(IServiceManager services, Incident incident)
             : base(services)
@@ -20,9 +26,12 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
             EmailCommand = new RelayCommand(Email, HasSelectedItem);
+            AssignCommand = new RelayCommand(Assign, HasSelectedItem);
             SelectionChanged += (sender, e) =>
             {
                 EmailCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
+                AssignCommand.RaiseCanExecuteChanged();
             };
         }
 
@@ -50,8 +59,13 @@ namespace ERHMS.Presentation.ViewModels
         public void Email()
         {
             Documents.Show(
-                () => new EmailViewModel(Services, TypedSelectedItems.Select(jobTicket => jobTicket.Responder).Distinct()),
+                () => new EmailViewModel(Services, SelectedResponders),
                 document => false);
+        }
+
+        public void Assign()
+        {
+            Dialogs.ShowAsync(new AssignViewModel(Services, Incident, SelectedResponders));
         }
     }
 }

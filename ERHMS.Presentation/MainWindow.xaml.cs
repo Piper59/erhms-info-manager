@@ -25,6 +25,7 @@ namespace ERHMS.Presentation
     {
         private static readonly IDictionary<Type, Type> DialogTypes = new Dictionary<Type, Type>
         {
+            { typeof(AssignViewModel), typeof(AssignView) },
             { typeof(CanvasLinkViewModel), typeof(LinkView) },
             { typeof(CanvasViewModel), typeof(AnalysisView) },
             { typeof(DataSourceViewModel), typeof(DataSourceView) },

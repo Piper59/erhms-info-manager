@@ -1,4 +1,4 @@
-﻿<MahApps.SimpleChildWindow:ChildWindow x:Class="ERHMS.Presentation.Views.LinkView"
+﻿<MahApps.SimpleChildWindow:ChildWindow x:Class="ERHMS.Presentation.Views.AssignView"
                                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                        xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
@@ -19,24 +19,21 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0"
                        Margin="0">
-                    Incident
+                    Form
                 </Label>
                 <ComboBox Grid.Column="1"
-                          AutomationProperties.Name="Incident"
+                          AutomationProperties.Name="Form"
                           DisplayMemberPath="Name"
-                          ItemsSource="{Binding Incidents.Items}"
+                          ItemsSource="{Binding Views}"
                           Margin="0"
-                          SelectedItem="{Binding Incidents.SelectedItem}" />
+                          SelectedItem="{Binding View}" />
             </Grid>
             <WrapPanel Grid.Row="1"
                        Style="{StaticResource IconButtonBar}">
-                <Controls:IconButton AccessText="_Link"
-                                     Command="{Binding LinkCommand}"
-                                     Icon="{StaticResource appbar_link}" />
-                <Controls:IconButton AccessText="_Unlink"
-                                     Command="{Binding UnlinkCommand}"
-                                     Icon="{StaticResource appbar_close}" />
-                <Controls:IconButton AccessText="_Cancel"
+                <Controls:IconButton AccessText="C_reate"
+                                     Command="{Binding CreateCommand}"
+                                     Icon="{StaticResource appbar_add}" />
+                <Controls:IconButton AccessText="C_ancel"
                                      Command="{Binding CloseCommand}"
                                      Icon="{StaticResource appbar_cancel}" />
             </WrapPanel>

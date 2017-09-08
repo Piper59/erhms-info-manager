@@ -294,6 +294,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AnalysisViewModel.cs" />
     <Compile Include="ViewModels\AssignmentListViewModel.cs" />
+    <Compile Include="ViewModels\AssignViewModel.cs" />
     <Compile Include="ViewModels\CanvasLinkViewModel.cs" />
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\CanvasViewModel.cs" />
@@ -353,6 +354,9 @@
     </Compile>
     <Compile Include="Views\AssignmentListView.xaml.cs">
       <DependentUpon>AssignmentListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AssignView.xaml.cs">
+      <DependentUpon>AssignView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CanvasListView.xaml.cs">
       <DependentUpon>CanvasListView.xaml</DependentUpon>
@@ -566,6 +570,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AssignmentListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AssignView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

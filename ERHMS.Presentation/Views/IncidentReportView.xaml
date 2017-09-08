@@ -45,6 +45,9 @@
             <Controls:IconButton AccessText="_Email"
                                  Command="{Binding EmailCommand}"
                                  Icon="{StaticResource appbar_email}" />
+            <Controls:IconButton AccessText="_Assign"
+                                 Command="{Binding AssignCommand}"
+                                 Icon="{StaticResource appbar_user_add}" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
