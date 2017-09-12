@@ -85,7 +85,10 @@ namespace ERHMS.Dapper
             string sql = string.Format("SELECT * FROM {0} WHERE 1 = 0", Escape(tableName));
             using (IDataReader reader = @this.ExecuteReader(sql, transaction: transaction))
             {
-                return reader.GetSchemaTable();
+                DataTable schema = new DataTable();
+                schema.TableName = tableName;
+                schema.Load(reader);
+                return schema;
             }
         }
 

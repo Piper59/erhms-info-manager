@@ -274,8 +274,11 @@ namespace ERHMS.EpiInfo.DataAccess
                 TEntity entity = SelectById(record.GlobalRecordId);
                 if (entity == null)
                 {
-                    entity = new TEntity();
-                    entity.GlobalRecordId = record.GlobalRecordId;
+                    entity = new TEntity
+                    {
+                        New = true,
+                        GlobalRecordId = record.GlobalRecordId
+                    };
                 }
                 foreach (string key in record.Keys)
                 {
