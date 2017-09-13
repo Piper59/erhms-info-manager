@@ -170,6 +170,7 @@
     <Compile Include="Utility\AssemblyExtensionsTest.cs" />
     <Compile Include="Utility\AttributeExtensionsTest.cs" />
     <Compile Include="Utility\ConvertExtensionsTest.cs" />
+    <Compile Include="Utility\DamerauLevenshteinTest.cs" />
     <Compile Include="Utility\DateTimeExtensionsTest.cs" />
     <Compile Include="Utility\DbConnectionStringBuilderExtensionsTest.cs" />
     <Compile Include="Utility\DynamicExtensionsTest.cs" />

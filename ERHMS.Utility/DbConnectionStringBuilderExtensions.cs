@@ -12,14 +12,14 @@ namespace ERHMS.Utility
             return property.Key.ContainsIgnoreCase("Password") || property.Key.EqualsIgnoreCase("Pwd");
         }
 
-        private static string FormatCensored(KeyValuePair<string, object> property)
+        private static string ToCensoredString(KeyValuePair<string, object> property)
         {
             return string.Format("{0}={1}", property.Key, IsCensorable(property) ? "?" : property.Value);
         }
 
         public static string GetCensoredConnectionString(this DbConnectionStringBuilder @this)
         {
-            return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => FormatCensored(property)));
+            return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => ToCensoredString(property)));
         }
     }
 }

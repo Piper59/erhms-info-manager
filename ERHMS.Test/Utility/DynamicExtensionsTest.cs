@@ -20,6 +20,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void SerializeAndDeserializeTest()
         {
+            Assert.IsNull(DynamicExtensions.Deserialize(DynamicExtensions.Serialize(null)));
             SerializeAndDeserializeTest(new Person
             {
                 Name = Name,

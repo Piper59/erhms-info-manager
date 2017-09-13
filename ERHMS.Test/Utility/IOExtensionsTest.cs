@@ -9,6 +9,14 @@ namespace ERHMS.Test.Utility
 {
     public class IOExtensionsTest
     {
+        private static readonly ICollection<string[]> PathArrays = new string[][]
+        {
+            new string[] { "file1.txt" },
+            new string[] { "file2.csv" },
+            new string[] { "subdirectory", "file3.txt" },
+            new string[] { "subdirectory", "file4.csv" }
+        };
+
         [Test]
         public void GetTempFileNameTest()
         {
@@ -39,10 +47,10 @@ namespace ERHMS.Test.Utility
 
         private void CreateFiles(TempDirectory directory)
         {
-            directory.CreateFile("file1.txt");
-            directory.CreateFile("file2.csv");
-            directory.CreateFile("subdirectory", "file3.txt");
-            directory.CreateFile("subdirectory", "file4.csv");
+            foreach (string[] paths in PathArrays)
+            {
+                directory.CreateFile(paths);
+            }
         }
 
         [Test]
@@ -53,10 +61,10 @@ namespace ERHMS.Test.Utility
             {
                 CreateFiles(original);
                 IOExtensions.CopyDirectory(original.FullName, copy.FullName);
-                FileAssert.Exists(copy.CombinePaths("file1.txt"));
-                FileAssert.Exists(copy.CombinePaths("file2.csv"));
-                FileAssert.Exists(copy.CombinePaths("subdirectory", "file3.txt"));
-                FileAssert.Exists(copy.CombinePaths("subdirectory", "file4.csv"));
+                foreach (string[] paths in PathArrays)
+                {
+                    FileAssert.Exists(copy.CombinePaths(paths));
+                }
             }
         }
 

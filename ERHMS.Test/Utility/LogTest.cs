@@ -28,10 +28,16 @@ namespace ERHMS.Test.Utility
             Log.Logger.Debug(null);
             count++;
             Assert.AreEqual(count, GetLineCount());
-            Log.Logger.Debug(null);
+            Log.Logger.Info(null);
             count++;
             Assert.AreEqual(count, GetLineCount());
-            Log.Logger.Debug(null);
+            Log.Logger.Warn(null);
+            count++;
+            Assert.AreEqual(count, GetLineCount());
+            Log.Logger.Error(null);
+            count++;
+            Assert.AreEqual(count, GetLineCount());
+            Log.Logger.Fatal(null);
             count++;
             Assert.AreEqual(count, GetLineCount());
         }

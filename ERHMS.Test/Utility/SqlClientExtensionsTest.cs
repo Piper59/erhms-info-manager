@@ -17,6 +17,21 @@ namespace ERHMS.Test.Utility
             {
                 Pooling = false
             };
+            using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+            {
+                connection.Open();
+                connection.ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
+            }
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+            {
+                connection.Open();
+                connection.ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
+            }
         }
 
         [Test]
@@ -24,23 +39,22 @@ namespace ERHMS.Test.Utility
         {
             using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
             {
-                connection.Open();
-                connection.ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
-                string sql = "SELECT COUNT(*) FROM sys.databases WHERE name = @name";
+                string sql = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@name", builder.InitialCatalog);
                 Assert.AreEqual(1, connection.ExecuteScalar<int>(sql, parameters));
-                ExecuteNonQueryTest();
-                connection.ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
             }
         }
 
-        private void ExecuteNonQueryTest()
+        [Test]
+        public void ExecuteNonQueryTest()
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
                 connection.ExecuteNonQuery("CREATE TABLE {0} ({1} INTEGER NOT NULL IDENTITY PRIMARY KEY)", "Table", "Column");
+                string sql = "SELECT COUNT(*) FROM [Table]";
+                Assert.AreEqual(0, connection.ExecuteScalar<int>(sql));
                 connection.ExecuteNonQuery("DROP TABLE {0}", "Table");
             }
         }
