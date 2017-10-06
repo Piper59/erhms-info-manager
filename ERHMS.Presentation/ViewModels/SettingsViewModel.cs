@@ -268,15 +268,14 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.LogLevelName = LogLevelName;
             if (Context != null)
             {
-                using (Transaction transaction = Context.Database.BeginTransaction())
+                Context.Database.Transact((connection, transaction) =>
                 {
                     Context.Roles.Delete();
                     foreach (Role role in Roles)
                     {
                         Context.Roles.Insert(role);
                     }
-                    transaction.Commit();
-                }
+                });
             }
             Settings.Default.EmailHost = EmailHost;
             Settings.Default.EmailPort = EmailPort;

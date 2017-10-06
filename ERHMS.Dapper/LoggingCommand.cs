@@ -10,7 +10,7 @@ namespace ERHMS.Dapper
         public string CommandText
         {
             get { return @base.CommandText; }
-            set { @base.CommandText = value.Trim(); }
+            set { @base.CommandText = value; }
         }
 
         public int CommandTimeout
@@ -68,27 +68,32 @@ namespace ERHMS.Dapper
             @base.Dispose();
         }
 
+        private void PreExecute()
+        {
+            Log.Logger.DebugFormat("Executing SQL: {0}", CommandText.Trim());
+        }
+
         public int ExecuteNonQuery()
         {
-            Log.Logger.DebugFormat("Executing SQL: {0}", CommandText);
+            PreExecute();
             return @base.ExecuteNonQuery();
         }
 
         public IDataReader ExecuteReader()
         {
-            Log.Logger.DebugFormat("Executing SQL: {0}", CommandText);
+            PreExecute();
             return @base.ExecuteReader();
         }
 
         public IDataReader ExecuteReader(CommandBehavior behavior)
         {
-            Log.Logger.DebugFormat("Executing SQL: {0}", CommandText);
+            PreExecute();
             return @base.ExecuteReader(behavior);
         }
 
         public object ExecuteScalar()
         {
-            Log.Logger.DebugFormat("Executing SQL: {0}", CommandText);
+            PreExecute();
             return @base.ExecuteScalar();
         }
 

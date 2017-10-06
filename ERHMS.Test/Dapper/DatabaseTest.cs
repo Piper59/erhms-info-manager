@@ -1,62 +1,71 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
 using NUnit.Framework;
+using System;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 
 namespace ERHMS.Test.Dapper
 {
     public abstract class DatabaseTest
     {
-        protected IDatabase database;
+        private IDatabaseCreator creator;
+        private IDatabase database;
 
-        protected void PostSetUp()
+        protected abstract IDatabaseCreator GetCreator();
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
-            using (IDbConnection connection = database.GetConnection())
-            {
-                connection.Execute("CREATE TABLE Test (Id NVARCHAR(255) NOT NULL PRIMARY KEY)");
-            }
+            creator = GetCreator();
+            database = creator.GetDatabase();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            creator.TearDown();
         }
 
         [Test]
+        [Order(1)]
+        public void ExistsAndCreateTest()
+        {
+            Assert.IsFalse(database.Exists());
+            database.Create();
+            Assert.IsTrue(database.Exists());
+        }
+
+        [Test]
+        [Order(2)]
         public void TableExistsTest()
         {
-            Assert.IsTrue(database.TableExists("Test"));
-            Assert.IsFalse(database.TableExists("Test2"));
-        }
-
-        [Test]
-        public void BeginTransactionTest()
-        {
-            using (Transaction transaction = database.BeginTransaction())
+            Assert.IsFalse(database.TableExists("Test"));
+            using (IDbConnection connection = creator.GetConnection())
             {
-                Assert.Catch(() =>
-                {
-                    using (database.BeginTransaction()) { }
-                });
+                connection.Execute("CREATE TABLE [Test] ([Id] NVARCHAR(255) NOT NULL PRIMARY KEY)");
             }
+            Assert.IsTrue(database.TableExists("Test"));
         }
 
         private int Count(IDbConnection connection, IDbTransaction transaction)
         {
-            string sql = "SELECT COUNT(*) FROM Test";
+            string sql = "SELECT COUNT(*) FROM [Test]";
             return connection.ExecuteScalar<int>(sql, transaction: transaction);
         }
 
         private int Count()
         {
-            using (IDbConnection connection = database.GetConnection())
+            using (IDbConnection connection = creator.GetConnection())
             {
                 return Count(connection, null);
             }
         }
 
-        private void Insert(IDbConnection connection, string id, IDbTransaction transaction)
+        private void Insert(IDbConnection connection, IDbTransaction transaction)
         {
-            string sql = "INSERT INTO Test (Id) VALUES (@Id)";
+            string sql = "INSERT INTO [Test] ([Id]) VALUES (@Id)";
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@Id", id);
+            parameters.Add("@Id", Guid.NewGuid().ToString());
             connection.Execute(sql, parameters, transaction);
         }
 
@@ -64,25 +73,29 @@ namespace ERHMS.Test.Dapper
         public void InvokeTest()
         {
             int count = Count();
-            database.Invoke((connection, transaction) =>
+            database.Invoke((connectionOuter, transactionOuter) =>
             {
-                Assert.IsNull(transaction);
-                Insert(connection, "Invoke1", transaction);
+                Assert.IsNull(transactionOuter);
+                Insert(connectionOuter, transactionOuter);
                 count++;
-                Assert.AreEqual(count, Count(connection, transaction));
-            });
-            Assert.AreEqual(count, Count());
-            using (Transaction transaction = database.BeginTransaction())
-            {
-                database.Invoke((connection, transactionBase) =>
+                Assert.AreEqual(count, Count(connectionOuter, transactionOuter));
+                database.Invoke((connectionInner, transactionInner) =>
                 {
-                    Assert.AreEqual(transaction.Base, transactionBase);
-                    Insert(connection, "Invoke2", transactionBase);
+                    Assert.AreEqual(connectionOuter, connectionInner);
+                    Assert.IsNull(transactionInner);
+                    Insert(connectionInner, transactionInner);
                     count++;
-                    Assert.AreEqual(count, Count(connection, transactionBase));
+                    Assert.AreEqual(count, Count(connectionInner, transactionInner));
                 });
-                transaction.Commit();
-            }
+                database.Transact((connectionInner, transactionInner) =>
+                {
+                    Assert.AreEqual(connectionOuter, connectionInner);
+                    Assert.IsNotNull(transactionInner);
+                    Insert(connectionInner, transactionInner);
+                    count++;
+                    Assert.AreEqual(count, Count(connectionInner, transactionInner));
+                });
+            });
             Assert.AreEqual(count, Count());
         }
 
@@ -90,64 +103,46 @@ namespace ERHMS.Test.Dapper
         public void TransactTest()
         {
             int count = Count();
-            database.Transact((connection, transaction) =>
+            database.Transact((connectionOuter, transactionOuter) =>
             {
-                Assert.IsNotNull(transaction);
-                Insert(connection, "Transact1", transaction);
+                Assert.IsNotNull(transactionOuter);
+                Insert(connectionOuter, transactionOuter);
                 count++;
-                Assert.AreEqual(count, Count(connection, transaction));
-            });
-            Assert.AreEqual(count, Count());
-            using (Transaction transaction = database.BeginTransaction())
-            {
-                database.Transact((connection, transactionBase) =>
+                Assert.AreEqual(count, Count(connectionOuter, transactionOuter));
+                database.Invoke((connectionInner, transactionInner) =>
                 {
-                    Assert.AreEqual(transaction.Base, transactionBase);
-                    Insert(connection, "Transact2", transactionBase);
+                    Assert.AreEqual(connectionOuter, connectionInner);
+                    Assert.AreEqual(transactionOuter, transactionInner);
+                    Insert(connectionInner, transactionInner);
                     count++;
-                    Assert.AreEqual(count, Count(connection, transactionBase));
+                    Assert.AreEqual(count, Count(connectionInner, transactionInner));
                 });
-                transaction.Commit();
-            }
+                database.Transact((connectionInner, transactionInner) =>
+                {
+                    Assert.AreEqual(connectionOuter, connectionInner);
+                    Assert.AreEqual(transactionOuter, transactionInner);
+                    Insert(connectionInner, transactionInner);
+                    count++;
+                    Assert.AreEqual(count, Count(connectionInner, transactionInner));
+                });
+            });
             Assert.AreEqual(count, Count());
         }
     }
 
     public class AccessDatabaseTest : DatabaseTest
     {
-        private TempDirectory directory;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        protected override IDatabaseCreator GetCreator()
         {
-            OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTest.Access.SetUp(nameof(AccessDatabaseTest), out directory, out builder);
-            database = new AccessDatabase(builder);
-            PostSetUp();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            directory.Dispose();
+            return new AccessDatabaseCreator(nameof(AccessDatabaseTest));
         }
     }
 
     public class SqlServerDatabaseTest : DatabaseTest
     {
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        protected override IDatabaseCreator GetCreator()
         {
-            SqlConnectionStringBuilder builder;
-            EmptyDatabaseTest.SqlServer.SetUp(out builder);
-            database = new SqlServerDatabase(builder);
-            PostSetUp();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            EmptyDatabaseTest.SqlServer.TearDown();
+            return new SqlServerDatabaseCreator();
         }
     }
 }

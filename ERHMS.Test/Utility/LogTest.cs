@@ -45,7 +45,6 @@ namespace ERHMS.Test.Utility
         [Test]
         public void LevelNameTest()
         {
-            string levelName = Log.LevelName;
             Log.LevelName = "WARN";
             try
             {
@@ -66,7 +65,7 @@ namespace ERHMS.Test.Utility
             }
             finally
             {
-                Log.LevelName = levelName;
+                Log.LevelName = "DEBUG";
             }
         }
     }

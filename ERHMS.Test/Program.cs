@@ -1,4 +1,3 @@
-using ERHMS.Test.Dapper;
 using ERHMS.Utility;
 using NUnitLite;
 

@@ -31,6 +31,16 @@ namespace ERHMS.Dapper
             }
         }
 
+        public PropertyMap Get(PropertyInfo property)
+        {
+            return propertyMaps[property];
+        }
+
+        public PropertyMap Get(string propertyName)
+        {
+            return Get(Type.GetProperty(propertyName));
+        }
+
         public PropertyMap Set(PropertyInfo property, string columnName)
         {
             PropertyMap propertyMap = new PropertyMap(columnName, property);
@@ -43,29 +53,19 @@ namespace ERHMS.Dapper
             return Set(Type.GetProperty(propertyName), columnName);
         }
 
-        public PropertyMap Get(PropertyInfo property)
-        {
-            return propertyMaps[property];
-        }
-
-        public PropertyMap Get(string propertyName)
-        {
-            return Get(Type.GetProperty(propertyName));
-        }
-
         public PropertyMap GetId()
         {
-            return propertyMaps.Values.Single(propertyMap => propertyMap.Id);
+            return this.Single(propertyMap => propertyMap.Id);
         }
 
         public IEnumerable<PropertyMap> GetInsertable()
         {
-            return propertyMaps.Values.Where(propertyMap => !propertyMap.Computed);
+            return this.Where(propertyMap => !propertyMap.Computed);
         }
 
         public IEnumerable<PropertyMap> GetUpdatable()
         {
-            return propertyMaps.Values.Where(propertyMap => !propertyMap.Id && !propertyMap.Computed);
+            return this.Where(propertyMap => !propertyMap.Id && !propertyMap.Computed);
         }
 
         public ConstructorInfo FindConstructor(string[] names, Type[] types)
@@ -83,24 +83,24 @@ namespace ERHMS.Dapper
             return @base.GetConstructorParameter(constructor, columnName);
         }
 
-        private bool TryGetMember(string columnName, out SqlMapper.IMemberMap result)
+        private bool TryGetMember(string columnName, out SqlMapper.IMemberMap member)
         {
-            result = propertyMaps.Values.SingleOrDefault(propertyMap => propertyMap.ColumnName.EqualsIgnoreCase(columnName));
-            return result != null;
+            member = this.SingleOrDefault(propertyMap => propertyMap.ColumnName.EqualsIgnoreCase(columnName));
+            return member != null;
         }
 
         public SqlMapper.IMemberMap GetMember(string columnName)
         {
-            SqlMapper.IMemberMap propertyMap;
-            if (TryGetMember(columnName, out propertyMap))
+            SqlMapper.IMemberMap member;
+            if (TryGetMember(columnName, out member))
             {
-                return propertyMap;
+                return member;
             }
             if (PrefixPattern.IsMatch(columnName))
             {
-                if (TryGetMember(PrefixPattern.Replace(columnName, ""), out propertyMap))
+                if (TryGetMember(PrefixPattern.Replace(columnName, ""), out member))
                 {
-                    return propertyMap;
+                    return member;
                 }
             }
             return null;

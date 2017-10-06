@@ -8,31 +8,6 @@ namespace ERHMS.Dapper
 {
     public static class IDbConnectionExtensions
     {
-        private class ConnectionOpener : IDisposable
-        {
-            private bool closed;
-
-            public IDbConnection Connection { get; private set; }
-
-            public ConnectionOpener(IDbConnection connection)
-            {
-                Connection = connection;
-                closed = connection.State == ConnectionState.Closed;
-                if (closed)
-                {
-                    connection.Open();
-                }
-            }
-
-            public void Dispose()
-            {
-                if (closed && Connection.State != ConnectionState.Closed)
-                {
-                    Connection.Close();
-                }
-            }
-        }
-
         public static string Escape(string identifier)
         {
             return string.Format("[{0}]", identifier.Replace("]", "]]"));
@@ -43,14 +18,15 @@ namespace ERHMS.Dapper
             return "@P" + index;
         }
 
+        private static TypeMap GetTypeMap<TEntity>()
+        {
+            return (TypeMap)SqlMapper.GetTypeMap(typeof(TEntity));
+        }
+
         private static void ExecuteInternal(this IDbConnection @this, Script script, IDbTransaction transaction)
         {
             foreach (string sql in script)
             {
-                if (string.IsNullOrWhiteSpace(sql))
-                {
-                    continue;
-                }
                 @this.Execute(sql, transaction: transaction);
             }
         }
@@ -92,11 +68,6 @@ namespace ERHMS.Dapper
             }
         }
 
-        private static TypeMap GetTypeMap<TEntity>()
-        {
-            return (TypeMap)SqlMapper.GetTypeMap(typeof(TEntity));
-        }
-
         public static DataTable Select(this IDbConnection @this, string sql, object parameters = null, IDbTransaction transaction = null)
         {
             using (IDataReader reader = @this.ExecuteReader(sql, parameters, transaction))
@@ -126,13 +97,14 @@ namespace ERHMS.Dapper
             ICollection<string> columnNames = new List<string>();
             ICollection<string> parameterNames = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
-            int parameterIndex = 0;
+            int index = 0;
             foreach (TColumn column in columns)
             {
                 columnNames.Add(Escape(name(column)));
-                string parameterName = GetParameterName(parameterIndex++);
+                string parameterName = GetParameterName(index);
                 parameterNames.Add(parameterName);
                 parameters.Add(parameterName, value(column));
+                index++;
             }
             string sql = string.Format(
                 "INSERT INTO {0} ({1}) VALUES ({2})",
@@ -153,23 +125,24 @@ namespace ERHMS.Dapper
                 transaction);
         }
 
-        public static void Update<TColumn>(this IDbConnection @this, string tableName, TColumn id, IEnumerable<TColumn> columns, Func<TColumn, string> name, Func<TColumn, object> value, IDbTransaction transaction = null)
+        public static void Update<TColumn>(this IDbConnection @this, string tableName, TColumn idColumn, IEnumerable<TColumn> columns, Func<TColumn, string> name, Func<TColumn, object> value, IDbTransaction transaction = null)
         {
             ICollection<string> assignments = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
-            int parameterIndex = 0;
+            int index = 0;
             foreach (TColumn column in columns)
             {
-                string parameterName = GetParameterName(parameterIndex++);
+                string parameterName = GetParameterName(index);
                 assignments.Add(string.Format("{0} = {1}", Escape(name(column)), parameterName));
                 parameters.Add(parameterName, value(column));
+                index++;
             }
             string sql = string.Format(
                 "UPDATE {0} SET {1} WHERE {2} = @Id",
                 Escape(tableName),
                 string.Join(", ", assignments),
-                Escape(name(id)));
-            parameters.Add("@Id", value(id));
+                Escape(name(idColumn)));
+            parameters.Add("@Id", value(idColumn));
             @this.Execute(sql, parameters, transaction);
         }
 

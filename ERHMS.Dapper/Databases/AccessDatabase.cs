@@ -12,9 +12,11 @@ namespace ERHMS.Dapper
     {
         public static AccessDatabase Construct(string dataSource, string password = null)
         {
-            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
-            builder.Provider = OleDbExtensions.Providers.Jet4;
-            builder.DataSource = dataSource;
+            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
+            {
+                Provider = OleDbExtensions.Providers.Jet4,
+                DataSource = dataSource
+            };
             if (password != null)
             {
                 builder["Jet OLEDB:Database Password"] = password;

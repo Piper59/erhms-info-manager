@@ -33,6 +33,12 @@ CREATE TABLE Person (
 	Weight FLOAT
 );
 
+/*
+foo;
+bar;
+baz;
+*/
+
 INSERT INTO [Global] (Name, [Value]) VALUES ('Version', '1.0');
 
 INSERT INTO Gender (GenderId, Name, Pronouns) VALUES ('273c6d62-be89-48df-9e04-775125bc4f6a', 'Male', 'he;him;his;his');

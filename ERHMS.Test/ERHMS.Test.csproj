@@ -129,15 +129,15 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Dapper\ConnectionOpenerTest.cs" />
     <Compile Include="Dapper\DatabaseTest.cs" />
-    <Compile Include="Dapper\EmptyDatabaseTest.cs" />
     <Compile Include="Dapper\IDbConnectionExtensionsTest.cs" />
     <Compile Include="Dapper\LoggingConnectionTest.cs" />
     <Compile Include="Dapper\RepositoryTest.cs" />
-    <Compile Include="Dapper\TransactionTest.cs" />
-    <Compile Include="DataAccess\DataContextTest.cs" />
+    <Compile Include="Dapper\TypeMapTest.cs" />
+    <None Include="DataAccess\DataContextTest.cs" />
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
-    <Compile Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
+    <None Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
     <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
@@ -157,10 +157,15 @@
     <Compile Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\WrapperTest.cs" />
     <Compile Include="EpiInfo\WrapperTest.cs" />
+    <Compile Include="Infrastructure\AccessDatabaseCreator.cs" />
     <Compile Include="Infrastructure\Constant.cs" />
+    <Compile Include="Infrastructure\ConstantRepository.cs" />
+    <Compile Include="Infrastructure\IDatabaseCreator.cs" />
     <Compile Include="Infrastructure\Gender.cs" />
+    <Compile Include="Infrastructure\GenderRepository.cs" />
     <Compile Include="Infrastructure\Person.cs" />
     <Compile Include="Infrastructure\PersonRepository.cs" />
+    <Compile Include="Infrastructure\SqlServerDatabaseCreator.cs" />
     <Compile Include="Infrastructure\Surveillance.cs" />
     <Compile Include="Infrastructure\TempDirectory.cs" />
     <Compile Include="Infrastructure\TempFile.cs" />

@@ -1,7 +1,7 @@
 ﻿using ERHMS.Utility;
 using System;
 
-namespace ERHMS.Test.Dapper
+namespace ERHMS.Test
 {
     public class Person
     {
@@ -23,11 +23,6 @@ namespace ERHMS.Test.Dapper
         public double Bmi
         {
             get { return Weight / (Height * Height * 144.0) * 703.0; }
-        }
-
-        public Person()
-        {
-            PersonId = Guid.NewGuid().ToString();
         }
     }
 }

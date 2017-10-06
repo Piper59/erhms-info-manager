@@ -5,8 +5,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 
@@ -14,7 +12,7 @@ namespace ERHMS.Test.Dapper
 {
     public abstract class RepositoryTest
     {
-        protected class DataContext
+        private class DataContext
         {
             public IDatabase Database { get; private set; }
             public IRepository<Constant> Constants { get; private set; }
@@ -30,22 +28,36 @@ namespace ERHMS.Test.Dapper
             }
         }
 
-        protected DataContext context;
+        private IDatabaseCreator creator;
+        private DataContext context;
 
-        protected void PostSetUp()
+        protected abstract IDatabaseCreator GetCreator();
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
-            using (IDbConnection connection = context.Database.GetConnection())
+            creator = GetCreator();
+            creator.SetUp();
+            using (IDbConnection connection = creator.GetConnection())
             {
                 connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.People.sql")));
             }
+            context = new DataContext(creator.GetDatabase());
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            creator.TearDown();
         }
 
         [Test]
+        [Order(1)]
         public void SelectTest()
         {
             Assert.AreEqual(1, context.Constants.Count());
             Assert.AreEqual(100, context.People.Count());
-            string clauses = "WHERE Person.Weight >= @Weight";
+            string clauses = "WHERE [Person].[Weight] >= @Weight";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Weight", 200.0);
             ICollection<Person> people = context.People.Select(clauses, parameters).ToList();
@@ -54,6 +66,7 @@ namespace ERHMS.Test.Dapper
         }
 
         [Test]
+        [Order(2)]
         public void SelectByIdTest()
         {
             Constant constant = context.Constants.SelectById(1);
@@ -71,29 +84,22 @@ namespace ERHMS.Test.Dapper
         [Test]
         public void InsertTest()
         {
-            using (Transaction transaction = context.Database.BeginTransaction())
+            Constant constant = new Constant
             {
-                Constant constant = new Constant
-                {
-                    Name = "Message",
-                    Value = "Hello, world!"
-                };
-                context.Constants.Insert(constant);
-                Assert.AreEqual(constant.Name, context.Constants.SelectById(2).Name);
-            }
-            Assert.AreEqual(1, context.Constants.Count());
-            using (Transaction transaction = context.Database.BeginTransaction())
+                Name = "Message",
+                Value = "Hello, world!"
+            };
+            context.Constants.Insert(constant);
+            Assert.AreEqual(constant.Name, context.Constants.SelectById(2).Name);
+            Person person = new Person
             {
-                Person person = new Person
-                {
-                    GenderId = "273c6d62-be89-48df-9e04-775125bc4f6a",
-                    Name = "Doe",
-                    BirthDate = DateTime.Now
-                };
-                context.People.Insert(person);
-                Assert.AreEqual(person.Name, context.People.SelectById(person.PersonId).Name);
-            }
-            Assert.AreEqual(100, context.People.Count());
+                PersonId = Guid.NewGuid().ToString(),
+                GenderId = "273c6d62-be89-48df-9e04-775125bc4f6a",
+                Name = "Doe",
+                BirthDate = DateTime.Now
+            };
+            context.People.Insert(person);
+            Assert.AreEqual(person.Name, context.People.SelectById(person.PersonId).Name);
         }
 
         [Test]
@@ -101,104 +107,99 @@ namespace ERHMS.Test.Dapper
         {
             Constant constant = context.Constants.SelectById(1);
             Assert.AreEqual("1.0", constant.Value);
-            using (Transaction transaction = context.Database.BeginTransaction())
-            {
-                constant.Value = "2.0";
-                context.Constants.Update(constant);
-                transaction.Commit();
-            }
+            constant.Value = "2.0";
+            context.Constants.Update(constant);
             Assert.AreEqual(constant.Value, context.Constants.SelectById(constant.ConstantId).Value);
             Person person = context.People.SelectById("999181b4-8445-e585-5178-74a9e11e75fa");
             Assert.AreEqual(180.5, person.Weight);
-            using (Transaction transaction = context.Database.BeginTransaction())
-            {
-                person.Weight -= 10.0;
-                context.People.Update(person);
-                transaction.Commit();
-            }
+            person.Weight -= 10.0;
+            context.People.Update(person);
             Assert.AreEqual(person.Weight, context.People.SelectById(person.PersonId).Weight);
         }
 
         [Test]
         public void DeleteTest()
         {
-            using (Transaction transaction = context.Database.BeginTransaction())
+            try
             {
-                context.Constants.Delete();
-                Assert.AreEqual(0, context.Constants.Count());
+                context.Database.Transact((connection, transaction) =>
+                {
+                    context.Constants.Delete();
+                    Assert.AreEqual(0, context.Constants.Count());
+                    throw new OperationCanceledException();
+                });
             }
+            catch (OperationCanceledException) { }
             Assert.AreEqual(1, context.Constants.Count());
-            using (Transaction transaction = context.Database.BeginTransaction())
+            try
             {
-                string clauses = "WHERE Height >= @Height";
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@Height", 6.0);
-                context.People.Delete(clauses, parameters);
-                Assert.AreEqual(86, context.People.Count());
+                context.Database.Transact((connection, transaction) =>
+                {
+                    string clauses = "WHERE [Height] >= @Height";
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@Height", 6.0);
+                    context.People.Delete(clauses, parameters);
+                    Assert.AreEqual(86, context.People.Count());
+                    throw new OperationCanceledException();
+                });
             }
+            catch (OperationCanceledException) { }
             Assert.AreEqual(100, context.People.Count());
-            using (Transaction transaction = context.Database.BeginTransaction())
+            try
             {
-                Person person = context.People.SelectById("999181b4-8445-e585-5178-74a9e11e75fa");
-                context.People.Delete(person);
-                Assert.AreEqual(99, context.People.Count());
+                context.Database.Transact((connection, transaction) =>
+                {
+                    Person person = context.People.SelectById("999181b4-8445-e585-5178-74a9e11e75fa");
+                    context.People.Delete(person);
+                    Assert.AreEqual(99, context.People.Count());
+                    throw new OperationCanceledException();
+                });
             }
+            catch (OperationCanceledException) { }
             Assert.AreEqual(100, context.People.Count());
         }
 
         [Test]
         public void DeleteByIdTest()
         {
-            using (Transaction transaction = context.Database.BeginTransaction())
+            try
             {
-                context.Constants.DeleteById(1);
-                Assert.AreEqual(0, context.Constants.Count());
+                context.Database.Transact((connection, transaction) =>
+                {
+                    context.Constants.DeleteById(1);
+                    Assert.AreEqual(0, context.Constants.Count());
+                    throw new OperationCanceledException();
+                });
             }
+            catch (OperationCanceledException) { }
             Assert.AreEqual(1, context.Constants.Count());
-            using (Transaction transaction = context.Database.BeginTransaction())
+            try
             {
-                context.People.DeleteById("999181b4-8445-e585-5178-74a9e11e75fa");
-                Assert.AreEqual(99, context.People.Count());
+                context.Database.Transact((connection, transaction) =>
+                {
+                    context.People.DeleteById("999181b4-8445-e585-5178-74a9e11e75fa");
+                    Assert.AreEqual(99, context.People.Count());
+                    throw new OperationCanceledException();
+                });
             }
+            catch (OperationCanceledException) { }
             Assert.AreEqual(100, context.People.Count());
         }
     }
 
     public class AccessRepositoryTest : RepositoryTest
     {
-        private TempDirectory directory;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        protected override IDatabaseCreator GetCreator()
         {
-            OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTest.Access.SetUp(nameof(AccessRepositoryTest), out directory, out builder);
-            context = new DataContext(new AccessDatabase(builder));
-            PostSetUp();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            directory.Dispose();
+            return new AccessDatabaseCreator(nameof(AccessRepositoryTest));
         }
     }
 
     public class SqlServerRepositoryTest : RepositoryTest
     {
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        protected override IDatabaseCreator GetCreator()
         {
-            SqlConnectionStringBuilder builder;
-            EmptyDatabaseTest.SqlServer.SetUp(out builder);
-            context = new DataContext(new SqlServerDatabase(builder));
-            PostSetUp();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            EmptyDatabaseTest.SqlServer.TearDown();
+            return new SqlServerDatabaseCreator();
         }
     }
 }

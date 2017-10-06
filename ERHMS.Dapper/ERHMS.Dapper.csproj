@@ -56,6 +56,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="ConnectionOpener.cs" />
     <Compile Include="Databases\AccessDatabase.cs" />
     <Compile Include="Databases\Database.cs" />
     <Compile Include="Databases\IDatabase.cs" />
@@ -69,7 +70,6 @@
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Script.cs" />
-    <Compile Include="Transaction.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Databases\Empty.mdb" />

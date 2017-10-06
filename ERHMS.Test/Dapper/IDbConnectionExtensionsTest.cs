@@ -5,8 +5,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 
@@ -14,16 +12,25 @@ namespace ERHMS.Test.Dapper
 {
     public abstract class IDbConnectionExtensionsTest
     {
-        protected IDbConnection connection;
+        private IDatabaseCreator creator;
+        private IDbConnection connection;
 
-        protected void PostSetUp()
+        protected abstract IDatabaseCreator GetCreator();
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
+            creator = GetCreator();
+            creator.SetUp();
+            connection = creator.GetConnection();
             connection.Open();
         }
 
-        protected void PreTearDown()
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
         {
             connection.Dispose();
+            creator.TearDown();
         }
 
         private int Count(string tableName, IDbTransaction transaction = null)
@@ -40,7 +47,7 @@ namespace ERHMS.Test.Dapper
             Assert.AreEqual(1, Count("Global"));
             Assert.AreEqual(2, Count("Gender"));
             Assert.AreEqual(100, Count("Person"));
-            foreach (Gender gender in connection.Query<Gender>("SELECT * FROM Gender"))
+            foreach (Gender gender in connection.Query<Gender>("SELECT * FROM [Gender]"))
             {
                 Assert.AreEqual(4, gender.Pronouns.Split(';').Length);
             }
@@ -60,10 +67,10 @@ namespace ERHMS.Test.Dapper
         public void QueryTest()
         {
             string sql = @"
-                SELECT Person.*, NULL AS Separator, Gender.*
-                FROM Person
-                INNER JOIN Gender ON Person.GenderId = Gender.GenderId
-                WHERE Person.Weight >= @Weight";
+                SELECT [Person].*, NULL AS [Separator], [Gender].*
+                FROM [Person]
+                INNER JOIN [Gender] ON [Person].[GenderId] = [Gender].[GenderId]
+                WHERE [Person].[Weight] >= @Weight";
             Func<Person, Gender, Person> map = (person, gender) =>
             {
                 person.Gender = gender;
@@ -82,11 +89,11 @@ namespace ERHMS.Test.Dapper
         {
             Assert.AreEqual(1, connection.Select<Constant>().Count());
             Assert.AreEqual(100, connection.Select<Person>().Count());
-            string clauses = "WHERE GenderId = @GenderId";
+            string clauses = "WHERE [GenderId] = @GenderId";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@GenderId", "273c6d62-be89-48df-9e04-775125bc4f6a");
             Assert.AreEqual(51, connection.Select<Person>(clauses, parameters).Count());
-            Person person = connection.Select<Person>("ORDER BY BirthDate").First();
+            Person person = connection.Select<Person>("ORDER BY [BirthDate]").First();
             Assert.AreEqual("Sims", person.Name);
             Assert.AreEqual(new DateTime(1980, 3, 2), person.BirthDate);
         }
@@ -123,6 +130,7 @@ namespace ERHMS.Test.Dapper
             {
                 Person person = new Person
                 {
+                    PersonId = Guid.NewGuid().ToString(),
                     GenderId = "273c6d62-be89-48df-9e04-775125bc4f6a",
                     Name = "Doe",
                     BirthDate = DateTime.Now
@@ -167,7 +175,7 @@ namespace ERHMS.Test.Dapper
             Assert.AreEqual(1, Count("Global"));
             using (IDbTransaction transaction = connection.BeginTransaction())
             {
-                string clauses = "WHERE Height >= @Height";
+                string clauses = "WHERE [Height] >= @Height";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Height", 6.0);
                 connection.Delete<Person>(clauses, parameters, transaction);
@@ -203,41 +211,17 @@ namespace ERHMS.Test.Dapper
 
     public class OleDbConnectionExtensionsTest : IDbConnectionExtensionsTest
     {
-        private TempDirectory directory;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        protected override IDatabaseCreator GetCreator()
         {
-            OleDbConnectionStringBuilder builder;
-            EmptyDatabaseTest.Access.SetUp(nameof(OleDbConnectionExtensionsTest), out directory, out builder);
-            connection = new OleDbConnection(builder.ConnectionString);
-            PostSetUp();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            PreTearDown();
-            directory.Dispose();
+            return new AccessDatabaseCreator(nameof(OleDbConnectionExtensionsTest));
         }
     }
 
     public class SqlConnectionExtensionsTest : IDbConnectionExtensionsTest
     {
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        protected override IDatabaseCreator GetCreator()
         {
-            SqlConnectionStringBuilder builder;
-            EmptyDatabaseTest.SqlServer.SetUp(out builder);
-            connection = new SqlConnection(builder.ConnectionString);
-            PostSetUp();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            PreTearDown();
-            EmptyDatabaseTest.SqlServer.TearDown();
+            return new SqlServerDatabaseCreator();
         }
     }
 }

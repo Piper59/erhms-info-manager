@@ -14,47 +14,38 @@ namespace ERHMS.Dapper
         public abstract DbConnectionStringBuilder Builder { get; }
         public abstract string Name { get; }
 
-        private Transaction transaction;
+        private IDbConnection connection;
+        private IDbTransaction transaction;
 
         public abstract bool Exists();
         public abstract void Create();
         public abstract bool TableExists(string name);
         protected abstract IDbConnection GetConnectionInternal();
 
-        public IDbConnection GetConnection()
+        protected IDbConnection GetConnection()
         {
             return new LoggingConnection(GetConnectionInternal());
         }
 
-        public Transaction BeginTransaction()
-        {
-            if (transaction != null)
-            {
-                throw new InvalidOperationException("Parallel transactions are not supported.");
-            }
-            IDbConnection connection = GetConnection();
-            connection.Open();
-            transaction = new Transaction(connection);
-            transaction.Closed += (sender, e) =>
-            {
-                connection.Dispose();
-                transaction = null;
-            };
-            return transaction;
-        }
-
         public T Invoke<T>(Func<IDbConnection, IDbTransaction, T> action)
         {
-            if (transaction == null)
+            if (connection == null)
             {
-                using (IDbConnection connection = GetConnection())
+                try
                 {
-                    return action(connection, null);
+                    using (connection = GetConnection())
+                    {
+                        return action(connection, null);
+                    }
+                }
+                finally
+                {
+                    connection = null;
                 }
             }
             else
             {
-                return action(transaction.Connection, transaction.Base);
+                return action(connection, transaction);
             }
         }
 
@@ -67,20 +58,58 @@ namespace ERHMS.Dapper
             });
         }
 
+        private T TransactInternal<T>(Func<IDbConnection, IDbTransaction, T> action)
+        {
+            try
+            {
+                using (transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        T result = action(connection, transaction);
+                        transaction.Commit();
+                        return result;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+            finally
+            {
+                transaction = null;
+            }
+        }
+
         public T Transact<T>(Func<IDbConnection, IDbTransaction, T> action)
         {
-            if (transaction == null)
+            if (connection == null)
             {
-                using (Transaction transaction = BeginTransaction())
+                try
                 {
-                    T result = action(transaction.Connection, transaction.Base);
-                    transaction.Commit();
-                    return result;
+                    using (connection = GetConnection())
+                    {
+                        connection.Open();
+                        return TransactInternal(action);
+                    }
+                }
+                finally
+                {
+                    connection = null;
+                }
+            }
+            else if (transaction == null)
+            {
+                using (new ConnectionOpener(connection))
+                {
+                    return TransactInternal(action);
                 }
             }
             else
             {
-                return action(transaction.Connection, transaction.Base);
+                return action(connection, transaction);
             }
         }
 

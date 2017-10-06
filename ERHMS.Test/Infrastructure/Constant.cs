@@ -1,4 +1,4 @@
-﻿namespace ERHMS.Test.Dapper
+﻿namespace ERHMS.Test
 {
     public class Constant
     {
