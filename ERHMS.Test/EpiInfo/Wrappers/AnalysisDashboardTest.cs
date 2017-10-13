@@ -7,9 +7,6 @@ using System.Windows.Forms;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-#if IGNORE_LONG_TESTS
-    [TestFixture(Ignore = "IGNORE_LONG_TESTS")]
-#endif
     public partial class AnalysisDashboardTest : WrapperTest
     {
         [OneTimeSetUp]

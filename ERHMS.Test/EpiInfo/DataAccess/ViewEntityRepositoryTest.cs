@@ -43,9 +43,6 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         [OneTimeTearDown]
         public new void OneTimeTearDown()
         {
-#if IGNORE_LONG_TESTS
-            return;
-#endif
             Settings.Default.Reset();
             if (view.IsWebSurvey())
             {
@@ -180,9 +177,6 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         }
 
         [Test]
-#if IGNORE_LONG_TESTS
-        [Ignore("IGNORE_LONG_TESTS")]
-#endif
         public void SaveRecordTest()
         {
             configuration.Settings.WebServiceEndpointAddress = ConfigurationManager.AppSettings["Endpoint"];

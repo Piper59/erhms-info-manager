@@ -17,9 +17,6 @@ using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Test.EpiInfo
 {
-#if IGNORE_LONG_TESTS
-    [TestFixture(Ignore = "IGNORE_LONG_TESTS")]
-#endif
     public abstract class ProjectTest
     {
         private Configuration configuration;
