@@ -30,7 +30,7 @@ namespace ERHMS.DataAccess
 
         public void AddTableSelectClause(string tableName)
         {
-            SelectClauses.Add(Escape(tableName) + ".*");
+            SelectClauses.Add(string.Format("{0}.*", Escape(tableName)));
         }
 
         public void AddTableFromClause(string tableName)
@@ -63,7 +63,7 @@ namespace ERHMS.DataAccess
         public void AddSeparator()
         {
             string columnName = "Separator" + (separators.Count + 1);
-            SelectClauses.Add("NULL AS " + Escape(columnName));
+            SelectClauses.Add(string.Format("NULL AS {0}", Escape(columnName)));
             separators.Add(columnName);
         }
 

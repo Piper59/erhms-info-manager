@@ -104,7 +104,6 @@
     <Compile Include="Wrappers\Wrapper.Execution.cs" />
     <Compile Include="Wrappers\Wrapper.Invocation.cs" />
     <Compile Include="Wrappers\WrapperEventArgs.cs" />
-    <Compile Include="Wrappers\WrapperEventType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\TableCanvas.tt">

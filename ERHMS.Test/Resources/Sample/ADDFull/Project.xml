@@ -1,4 +1,4 @@
-﻿<Template Name="ADDFull" Description="" CreateDate="" Level="Project">
+﻿<Template Name="ADDFull" Description="Description for ADDFull template" CreateDate="" Level="Project">
   <Project Id="" Name="ADDFull" Location="" Description="" EpiVersion="" CreateDate="" ControlFontBold="False" ControlFontItalics="False" ControlFontName="Arial" ControlFontSize="10.25" DefaultLabelAlign="Vertical" DefaultPageHeight="1016" DefaultPageOrientation="Portrait" DefaultPageWidth="780" EditorFontBold="False" EditorFontItalics="False" EditorFontName="Verdana" EditorFontSize="8.25">
     <CollectedData>
       <Database Source="" DataDriver="" />

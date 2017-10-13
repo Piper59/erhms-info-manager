@@ -50,13 +50,14 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static Configuration Create(string userDirectoryPath)
+        public static Configuration Create(string userDirectoryPath, bool? isFipsCryptoRequired = null)
         {
             Log.Logger.DebugFormat("Creating configuration: {0}", userDirectoryPath);
             Config config = (Config)Configuration.CreateDefaultConfiguration().ConfigDataSet.Copy();
             ClearRecents(config);
             ClearDatabases(config);
             SetDirectories(config, userDirectoryPath);
+            SetCrypto(config, isFipsCryptoRequired ?? CryptographyExtensions.IsFipsCryptoRequired());
             SetSettings(config);
             return new Configuration(FilePath, config);
         }
@@ -92,20 +93,19 @@ namespace ERHMS.EpiInfo
             directories.Templates = Path.Combine(userDirectoryPath, "Templates");
         }
 
-        private static void SetSettings(Config config)
-        {
-            SetFipsCrypto(config, CryptographyExtensions.IsFipsCryptoRequired());
-            Config.SettingsRow settings = config.Settings.Single();
-            settings.CheckForUpdates = false;
-        }
-
-        private static void SetFipsCrypto(Config config, bool required)
+        private static void SetCrypto(Config config, bool isFipsCryptoRequired)
         {
             config.TextEncryptionModule.Clear();
-            if (required)
+            if (isFipsCryptoRequired)
             {
                 config.TextEncryptionModule.AddTextEncryptionModuleRow(null, null, "FipsCrypto.dll");
             }
+        }
+
+        private static void SetSettings(Config config)
+        {
+            Config.SettingsRow settings = config.Settings.Single();
+            settings.CheckForUpdates = false;
         }
 
         public static Configuration Load()
@@ -130,15 +130,16 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static void SetFipsCrypto(this Configuration @this, bool required)
-        {
-            SetFipsCrypto(@this.ConfigDataSet, required);
-        }
-
         public static void Save(this Configuration @this)
         {
             Log.Logger.DebugFormat("Saving configuration: {0}", @this.ConfigFilePath);
             Configuration.Save(@this);
+        }
+
+        public static void SetUserDirectories(this Configuration @this, string userDirectoryPath)
+        {
+            Log.Logger.DebugFormat("Setting user directories: {0}", userDirectoryPath);
+            SetUserDirectories(@this.ConfigDataSet.Directories[0], userDirectoryPath);
         }
 
         public static void CreateUserDirectories(this Configuration @this)
@@ -150,12 +151,6 @@ namespace ERHMS.EpiInfo
             {
                 templates.CreateSubdirectory(name);
             }
-        }
-
-        public static void SetUserDirectories(this Configuration @this, string userDirectoryPath)
-        {
-            Log.Logger.DebugFormat("Setting user directories: {0}", userDirectoryPath);
-            SetUserDirectories(@this.ConfigDataSet.Directories[0], userDirectoryPath);
         }
 
         public static string GetRootPath(this Configuration @this)

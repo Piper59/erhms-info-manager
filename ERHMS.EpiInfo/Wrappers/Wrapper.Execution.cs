@@ -47,32 +47,25 @@ namespace ERHMS.EpiInfo.Wrappers
             Console.SetError(new StreamWriter(Stream.Null));
         }
 
-        private static object[] ReceiveArgs()
-        {
-            Log.Logger.Debug("Receiving args");
-            int count = int.Parse(In.ReadLine());
-            if (count == 0)
-            {
-                return new object[] { };
-            }
-            else
-            {
-                object[] args = new object[count];
-                for (int index = 0; index < count; index++)
-                {
-                    args[index] = ConvertExtensions.FromBase64String(In.ReadLine());
-                }
-                return args;
-            }
-        }
-
         protected static void HandleError(Exception ex)
         {
             Log.Logger.Fatal("Fatal error", ex);
             MessageBox.Show("Epi Info\u2122 encountered an error and must shut down.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        protected static void RaiseEvent(WrapperEventType type, object properties = null)
+        private static object[] ReceiveArgs()
+        {
+            Log.Logger.Debug("Receiving args");
+            int count = int.Parse(In.ReadLine());
+            object[] args = new object[count];
+            for (int index = 0; index < count; index++)
+            {
+                args[index] = ConvertExtensions.FromBase64String(In.ReadLine());
+            }
+            return args;
+        }
+
+        protected static void RaiseEvent(string type, object properties = null)
         {
             Log.Logger.DebugFormat("Raising event: {0}", type);
             Error.WriteLine(WrapperEventArgs.Serialize(type, properties));

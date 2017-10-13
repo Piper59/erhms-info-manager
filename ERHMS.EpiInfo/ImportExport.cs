@@ -10,39 +10,44 @@ namespace ERHMS.EpiInfo
     {
         private static bool ShowDialog(IWin32Window owner, Form form)
         {
-            try
-            {
-                form.StartPosition = FormStartPosition.CenterParent;
-                return form.ShowDialog(owner) == DialogResult.OK;
-            }
-            finally
-            {
-                form.Dispose();
-            }
+            form.StartPosition = FormStartPosition.CenterParent;
+            return form.ShowDialog(owner) == DialogResult.OK;
         }
 
         public static bool ImportFromView(IWin32Window owner, View target)
         {
             Log.Logger.DebugFormat("Importing from view: {0}", target.Name);
-            return ShowDialog(owner, new ImportDataForm(target));
+            using (Form form = new ImportDataForm(target))
+            {
+                return ShowDialog(owner, form);
+            }
         }
 
         public static bool ImportFromPackage(IWin32Window owner, View target)
         {
             Log.Logger.DebugFormat("Importing from package: {0}", target.Name);
-            return ShowDialog(owner, new ImportEncryptedDataPackageDialog(target));
+            using (Form form = new ImportEncryptedDataPackageDialog(target))
+            {
+                return ShowDialog(owner, form);
+            }
         }
 
         public static bool ImportFromMobile(IWin32Window owner, View target)
         {
             Log.Logger.DebugFormat("Importing from mobile: {0}", target.Name);
-            return ShowDialog(owner, new ImportPhoneDataForm(target));
+            using (Form form = new ImportPhoneDataForm(target))
+            {
+                return ShowDialog(owner, form);
+            }
         }
 
         public static bool ExportToPackage(IWin32Window owner, View source)
         {
             Log.Logger.DebugFormat("Exporting to package: {0}", source.Name);
-            return ShowDialog(owner, new PackageForTransportDialog(source.Project.FilePath, source));
+            using (Form form = new PackageForTransportDialog(source.Project.FilePath, source))
+            {
+                return ShowDialog(owner, form);
+            }
         }
     }
 }

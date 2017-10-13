@@ -7,7 +7,7 @@ using System.IO;
 
 namespace ERHMS.Test.EpiInfo
 {
-    using Test = Test.Wrappers.Test;
+    using Test = Wrappers.Test;
 
     public class WrapperTest
     {
@@ -50,9 +50,9 @@ namespace ERHMS.Test.EpiInfo
         [Test]
         public void InAndOutTest()
         {
+            Random random = new Random();
             wrapper = Test.InAndOutTest.Create();
             wrapper.Invoke();
-            Random random = new Random();
             try
             {
                 for (int index = 0; index < 10; index++)
@@ -100,29 +100,14 @@ namespace ERHMS.Test.EpiInfo
         }
 
         [Test]
-        public void EventTypeTest()
+        public void EventTest()
         {
-            wrapper = Test.EventTypeTest.Create();
+            wrapper = Test.EventTest.Create();
             bool raised = false;
             wrapper.Event += (sender, e) =>
             {
                 raised = true;
-                Assert.AreEqual(WrapperEventType.Default, e.Type);
-                Assert.IsNull(e.Properties);
-            };
-            wrapper.Invoke();
-            wrapper.Exited.WaitOne();
-            Assert.IsTrue(raised);
-        }
-
-        [Test]
-        public void EventPropertiesTest()
-        {
-            wrapper = Test.EventPropertiesTest.Create();
-            bool raised = false;
-            wrapper.Event += (sender, e) =>
-            {
-                raised = true;
+                Assert.AreEqual("Default", e.Type);
                 Assert.AreEqual("John Doe", e.Properties.Name);
                 Assert.AreEqual(20, e.Properties.Age);
                 Assert.AreEqual(true, e.Properties.Male);

@@ -115,7 +115,7 @@ namespace ERHMS.Test.EpiInfo.Web
         {
             Survey survey = Service.GetSurvey(view.WebSurveyId);
             ICollection<string> ids = new List<string>();
-            for (int index = 0; index < 3; index++)
+            for (int index = 0; index < 10; index++)
             {
                 Record record = new Record();
                 Assert.IsTrue(Service.TryAddRecord(survey, record));

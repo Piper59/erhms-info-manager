@@ -168,7 +168,7 @@ namespace ERHMS.Presentation.ViewModels
             Wrapper wrapper = MakeView.CreateTemplate.Create(Context.Project.FilePath, SelectedItem.Name);
             wrapper.Event += (sender, e) =>
             {
-                if (e.Type == WrapperEventType.TemplateCreated)
+                if (e.Type == "TemplateCreated")
                 {
                     MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
                 }

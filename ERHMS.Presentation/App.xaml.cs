@@ -148,7 +148,7 @@ namespace ERHMS.Presentation
         private void CopyTextFileResource(string key, string directoryPath)
         {
             string fileName = key + ".txt";
-            string resourceName = "ERHMS.Presentation." + fileName;
+            string resourceName = string.Format("ERHMS.Presentation.{0}.txt", key);
             Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, Path.Combine(directoryPath, fileName));
         }
 

@@ -68,18 +68,24 @@ namespace ERHMS.EpiInfo
             Description = element.GetAttribute("description");
         }
 
-        public void SetAccessConnectionString()
+        public void SetDatabase(string connectionString, string driver)
         {
             XmlDocument document = new XmlDocument();
             document.Load(FilePath);
             XmlElement element = document.SelectSingleElement("/Project/CollectedData/Database");
+            element.SetAttribute("connectionString", Configuration.Encrypt(connectionString));
+            element.SetAttribute("dataDriver", driver);
+            document.Save(FilePath);
+        }
+
+        public void SetAccessDatabase()
+        {
             OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder
             {
                 Provider = OleDbExtensions.Providers.Jet4,
-                DataSource = Path.ChangeExtension(FilePath, ".mdb")
+                DataSource = Path.ChangeExtension(FilePath, OleDbExtensions.FileExtensions.Access)
             };
-            element.SetAttribute("connectionString", Configuration.Encrypt(builder.ConnectionString));
-            document.Save(FilePath);
+            SetDatabase(builder.ConnectionString, Configuration.AccessDriver);
         }
     }
 }

@@ -101,7 +101,7 @@ namespace ERHMS.EpiInfo.Wrappers
                         Template template = new Template(Form.Mediator);
                         template.InstantiateTemplate(templatePath);
                         int viewId = Form.Mediator.ProjectExplorer.CurrentView.Id;
-                        RaiseEvent(WrapperEventType.ViewCreated, new
+                        RaiseEvent("ViewCreated", new
                         {
                             ViewId = viewId
                         });
@@ -147,7 +147,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     {
                         Template template = new Template(Form.Mediator);
                         string path = template.CreateTemplate(Form.CurrentView, dialog.TemplateName, dialog.Description);
-                        RaiseEvent(WrapperEventType.TemplateCreated, new
+                        RaiseEvent("TemplateCreated", new
                         {
                             Path = path
                         });

@@ -15,7 +15,6 @@ namespace ERHMS.EpiInfo
                 case MetaFieldType.Image:
                 case MetaFieldType.Mirror:
                 case MetaFieldType.Grid:
-                case MetaFieldType.Codes:
                 case MetaFieldType.Relate:
                 case MetaFieldType.GUID:
                     return false;
@@ -33,7 +32,6 @@ namespace ERHMS.EpiInfo
                 case MetaFieldType.Mirror:
                 case MetaFieldType.Grid:
                 case MetaFieldType.Codes:
-                case MetaFieldType.Relate:
                 case MetaFieldType.GUID:
                     return false;
                 default:

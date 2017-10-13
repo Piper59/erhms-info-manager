@@ -17,7 +17,7 @@ namespace ERHMS.Presentation.ViewModels
         public RoleViewModel(IServiceManager services, string verb)
             : base(services)
         {
-            Title = verb + " a Role";
+            Title = string.Format("{0} a Role", verb);
             SaveCommand = new RelayCommand(Save, HasName);
         }
 

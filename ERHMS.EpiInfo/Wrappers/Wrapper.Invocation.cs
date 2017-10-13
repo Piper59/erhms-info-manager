@@ -20,6 +20,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private Process process;
         private ICollection<object> args;
+        private EventWaitHandle closed;
         private EventWaitHandle exited;
 
         public WaitHandle Exited
@@ -48,26 +49,11 @@ namespace ERHMS.EpiInfo.Wrappers
                     Arguments = string.Format("{0} {1}", method.DeclaringType.FullName, method.Name)
                 }
             };
+            process.ErrorDataReceived += Process_ErrorDataReceived;
+            process.Exited += Process_Exited;
             this.args = args.ToList();
-            EventWaitHandle closed = new ManualResetEvent(false);
+            closed = new ManualResetEvent(false);
             exited = new ManualResetEvent(false);
-            process.ErrorDataReceived += (sender, e) =>
-            {
-                if (e.Data == null)
-                {
-                    closed.Set();
-                }
-                else
-                {
-                    OnEvent(e.Data);
-                }
-            };
-            process.Exited += (sender, e) =>
-            {
-                Log.Logger.DebugFormat("Wrapper {0} exited", process.Id);
-                closed.WaitOne();
-                exited.Set();
-            };
         }
 
         public event EventHandler Invoked;
@@ -86,15 +72,34 @@ namespace ERHMS.EpiInfo.Wrappers
             Log.Logger.DebugFormat("Event raised by wrapper {0}: {1}", process.Id, e.Type);
             Event?.Invoke(this, e);
         }
-        private void OnEvent(string value)
+        private void OnEvent(string data)
         {
-            OnEvent(WrapperEventArgs.Deserialize(value));
+            OnEvent(WrapperEventArgs.Deserialize(data));
+        }
+
+        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data == null)
+            {
+                closed.Set();
+            }
+            else
+            {
+                OnEvent(e.Data);
+            }
+        }
+
+        private void Process_Exited(object sender, EventArgs e)
+        {
+            Log.Logger.DebugFormat("Wrapper {0} exited", process.Id);
+            closed.WaitOne();
+            exited.Set();
         }
 
         public void Invoke()
         {
             process.Start();
-            Log.Logger.DebugFormat("Invoked wrapper {0}: {1} {2}", process.Id, process.StartInfo.FileName, process.StartInfo.Arguments);
+            Log.Logger.DebugFormat("Wrapper {0} invoked: {1} {2}", process.Id, process.StartInfo.FileName, process.StartInfo.Arguments);
             SendArgs();
             OnInvoked();
             process.BeginErrorReadLine();

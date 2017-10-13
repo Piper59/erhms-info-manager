@@ -19,16 +19,17 @@ namespace ERHMS.EpiInfo
         public IEnumerable<int> GetSortedFieldIds(int viewId)
         {
             string sql = @"
-                SELECT F.[FieldId], F.[TabIndex], F.[PageId], P.[Position]
+                SELECT F.[FieldId], F.[TabIndex], P.[Position]
                 FROM [metaFields] AS F
                 LEFT OUTER JOIN [metaPages] AS P ON F.[PageId] = P.[PageId]
                 WHERE F.[ViewId] = @ViewId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
+            short prepend = -1;
             return Driver.Select(query).AsEnumerable()
-                .OrderBy(row => row.IsNull("PageId") ? 1 : 2)
-                .ThenBy(row => row.IsNull("Position") ? row["FieldId"] : row["Position"])
-                .ThenBy(row => row.IsNull("TabIndex") ? row["FieldId"] : row["TabIndex"])
+                .OrderBy(row => row.IsNull("Position") ? prepend : row["Position"])
+                .ThenBy(row => row.IsNull("TabIndex") ? prepend : row["TabIndex"])
+                .ThenBy(row => row["FieldId"])
                 .Select(row => row.Field<int>("FieldId"));
         }
 
@@ -50,14 +51,14 @@ namespace ERHMS.EpiInfo
             return Views.Cast<View>();
         }
 
-        public new View GetViewByName(string name)
-        {
-            return Metadata.GetViewByFullName(name);
-        }
-
         public new View GetViewById(int viewId)
         {
             return Metadata.GetViewById(viewId);
+        }
+
+        public new View GetViewByName(string name)
+        {
+            return Metadata.GetViewByFullName(name);
         }
 
         public new IEnumerable<Pgm> GetPgms()

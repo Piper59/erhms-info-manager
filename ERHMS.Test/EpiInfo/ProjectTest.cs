@@ -1,14 +1,12 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.Dapper;
 using ERHMS.EpiInfo;
 using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,86 +22,62 @@ namespace ERHMS.Test.EpiInfo
 #endif
     public abstract class ProjectTest
     {
-        protected TempDirectory directory;
-        protected Configuration configuration;
-        protected ProjectCreationInfo info;
-        protected Project project;
+        private Configuration configuration;
+        private IProjectCreator creator;
+
+        private Project Project
+        {
+            get { return creator.Project; }
+        }
+
+        protected abstract IProjectCreator GetCreator();
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            directory = new TempDirectory(GetType().Name);
-            ConfigurationExtensions.Create(directory.FullName).Save();
+            ConfigurationExtensions.Create(AssemblyExtensions.GetEntryDirectoryPath()).Save();
             configuration = ConfigurationExtensions.Load();
-            configuration.CreateUserDirectories();
+            creator = GetCreator();
+            creator.SetUp();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
+            creator.TearDown();
             File.Delete(ConfigurationExtensions.FilePath);
-            directory.Dispose();
         }
 
         [Test]
         public void CreateTest()
         {
-            FileAssert.Exists(project.FilePath);
+            FileAssert.Exists(Project.FilePath);
             XmlDocument document = new XmlDocument();
-            document.Load(project.FilePath);
+            document.Load(Project.FilePath);
             XmlElement projectElement = document.DocumentElement;
             Assert.AreEqual("Project", projectElement.Name);
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
             Assert.AreEqual(version.ToString(), projectElement.GetAttribute("erhmsVersion"));
-            Assert.AreEqual(version, project.Version);
-            Assert.AreEqual(info.Name, projectElement.GetAttribute("name"));
-            Assert.AreEqual(info.Location, projectElement.GetAttribute("location"));
+            Assert.AreEqual(version, Project.Version);
+            Assert.AreEqual(creator.Info.Name, projectElement.GetAttribute("name"));
+            Assert.AreEqual(creator.Info.Location, projectElement.GetAttribute("location"));
             XmlElement databaseElement = projectElement.SelectSingleElement("CollectedData/Database");
-            Assert.AreEqual(info.Builder.ConnectionString, Configuration.Decrypt(databaseElement.GetAttribute("connectionString")));
-            Assert.IsTrue(project.Driver.TableExists("metaCanvases"));
+            Assert.AreEqual(creator.Info.Builder.ConnectionString, Configuration.Decrypt(databaseElement.GetAttribute("connectionString")));
+            Assert.IsTrue(Project.Driver.TableExists("metaCanvases"));
         }
 
         [Test]
-        public void GetCodesTest()
+        public void GetDatabaseTest()
         {
-            string tableName = "codegender1";
-            string columnName = "gender";
-            DataTable genders = new DataTable(tableName);
-            genders.Columns.Add(columnName);
-            genders.Rows.Add("Male");
-            genders.Rows.Add("Female");
-            project.CreateCodeTable(tableName, columnName);
-            project.SaveCodeTableData(genders, tableName, columnName);
-            ICollection<string> expected;
-            expected = new string[]
-            {
-                "Male",
-                "Female"
-            };
-            CollectionAssert.AreEqual(expected, project.GetCodes(tableName, columnName, false));
-            expected = new string[]
-            {
-                "Female",
-                "Male"
-            };
-            CollectionAssert.AreEqual(expected, project.GetCodes(tableName, columnName, true));
-        }
-
-        [Test]
-        public void GetViewsTest()
-        {
-            int count = project.GetViews().Count();
-            string name = "GetViewsTest_View";
-            View view = project.CreateView(name);
-            count++;
-            Assert.AreEqual(count, project.GetViews().Count());
-            Assert.AreEqual(name, project.GetViewById(view.Id).Name);
+            IDatabase database = Project.GetDatabase();
+            Assert.IsTrue(database.Exists());
+            Assert.IsTrue(database.TableExists("metaDbInfo"));
         }
 
         [Test]
         public void IsValidViewNameTest()
         {
-            project.CreateView("IsValidViewNameTest_View");
+            Project.CreateView("IsValidViewNameTest_View");
             IsValidViewNameTest(null, InvalidViewNameReason.Empty);
             IsValidViewNameTest("", InvalidViewNameReason.Empty);
             IsValidViewNameTest(" ", InvalidViewNameReason.Empty);
@@ -118,87 +92,161 @@ namespace ERHMS.Test.EpiInfo
         private void IsValidViewNameTest(string viewName, InvalidViewNameReason expected)
         {
             InvalidViewNameReason actual;
-            Assert.AreEqual(expected == InvalidViewNameReason.None, project.IsValidViewName(viewName, out actual));
+            Assert.AreEqual(expected == InvalidViewNameReason.None, Project.IsValidViewName(viewName, out actual));
             Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void SanitizeNameTest()
-        {
-            Assert.AreEqual("ValidName_View", "ValidName_View");
-            Assert.AreEqual("InvalidName_View", ViewExtensions.SanitizeName("1234_InvalidName_!@#$%^&*()View"));
         }
 
         [Test]
         public void SuggestViewNameTest()
         {
-            project.CreateView("SuggestViewNameTest_ViewA");
-            Assert.AreEqual("SUGGESTVIEWNAMETEST_ViewA_2", project.SuggestViewName("1234_SUGGESTVIEWNAMETEST_!@#$%^&*()ViewA"));
-            Assert.AreEqual("metaDbInfo_2", project.SuggestViewName("metaDbInfo"));
-            Assert.AreEqual("SuggestViewNameTest_ViewB", project.SuggestViewName("SuggestViewNameTest_ViewB"));
+            Project.CreateView("SuggestViewNameTest_ViewA");
+            Assert.AreEqual("SUGGESTVIEWNAMETEST_ViewA_2", Project.SuggestViewName("1234_SUGGESTVIEWNAMETEST_!@#$%^&*()ViewA"));
+            Assert.AreEqual("metaDbInfo_2", Project.SuggestViewName("metaDbInfo"));
+            Assert.AreEqual("SuggestViewNameTest_ViewB", Project.SuggestViewName("SuggestViewNameTest_ViewB"));
         }
 
         [Test]
-        public void WebSurveyTest()
+        public void GetFieldsAsDataTableTest()
         {
-            View view = project.CreateView("WebSurveyTest_View");
-            Assert.IsFalse(view.IsWebSurvey());
-            view.WebSurveyId = Guid.Empty.ToString();
-            Assert.IsTrue(view.IsWebSurvey());
-            configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerServiceV2.svc";
-            configuration.Save();
-            Assert.AreEqual("http://example.com/EIWS/Home/00000000-0000-0000-0000-000000000000", view.GetWebSurveyUrl().ToString());
+            View view = Project.CreateView("GetFieldsAsDataTableTest_View");
+            ICollection<string> expected = new List<string>
+            {
+                ColumnNames.UNIQUE_KEY,
+                ColumnNames.REC_STATUS,
+                ColumnNames.GLOBAL_RECORD_ID
+            };
+            Page page = view.CreatePage("New Page", 0);
+            for (int index = 0; index < 10; index++)
+            {
+                Field field = page.CreateField(MetaFieldType.Text);
+                field.Name = "Text" + index;
+                field.SaveToDb();
+                expected.Add(field.Name);
+            }
+            IEnumerable<string> actual = Project.GetFieldsAsDataTable().AsEnumerable()
+                .Where(row => row.Field<int>("ViewId") == view.Id)
+                .Select(row => row.Field<string>("Name"));
+            CollectionAssert.AreEquivalent(expected, actual);
+        }
+
+        [Test]
+        public void GetSortedFieldIdsTest()
+        {
+            Random random = new Random();
+            View view = Project.CreateView("GetSortedFieldIdsTest_View");
+            ICollection<Field> viewFields = new Field[]
+            {
+                view.UniqueKeyField,
+                view.RecStatusField,
+                view.GlobalRecordIdField
+            };
+            ICollection<RenderableField> pageFields = new List<RenderableField>();
+            for (int pageIndex = 0; pageIndex < 3; pageIndex++)
+            {
+                Page page = view.CreatePage("Page" + pageIndex, random.Next(1000));
+                for (int fieldIndex = 0; fieldIndex < 10; fieldIndex++)
+                {
+                    RenderableField field = (RenderableField)page.CreateField(MetaFieldType.Text);
+                    field.Name = "Text" + fieldIndex;
+                    field.TabIndex = random.Next(1000);
+                    field.SaveToDb();
+                    pageFields.Add(field);
+                }
+            }
+            pageFields = pageFields.OrderBy(field => field.Page.Position)
+                .ThenBy(field => field.TabIndex)
+                .ThenBy(field => field.Id)
+                .ToList();
+            CollectionAssert.AreEqual(viewFields.Concat(pageFields).Select(field => field.Id), Project.GetSortedFieldIds(view.Id));
+        }
+
+        [Test]
+        public void GetCodesTest()
+        {
+            string tableName = "codegender1";
+            string columnName = "gender";
+            DataTable genders = new DataTable(tableName);
+            genders.Columns.Add(columnName);
+            genders.Rows.Add("Male");
+            genders.Rows.Add("Female");
+            Project.CreateCodeTable(tableName, columnName);
+            Project.SaveCodeTableData(genders, tableName, columnName);
+            ICollection<string> expected;
+            expected = new string[]
+            {
+                "Male",
+                "Female"
+            };
+            CollectionAssert.AreEqual(expected, Project.GetCodes(tableName, columnName, false));
+            expected = new string[]
+            {
+                "Female",
+                "Male"
+            };
+            CollectionAssert.AreEqual(expected, Project.GetCodes(tableName, columnName, true));
+        }
+
+        [Test]
+        public void GetViewsTest()
+        {
+            int count = Project.GetViews().Count();
+            string name = "GetViewsTest_View";
+            View view = Project.CreateView(name);
+            count++;
+            Assert.AreEqual(count, Project.GetViews().Count());
+            Assert.AreEqual(view.Id, Project.GetViewByName(name).Id);
+            Assert.AreEqual(name, Project.GetViewById(view.Id).Name);
         }
 
         [Test]
         public void EnsureDataTablesExistTest()
         {
-            View view = project.CreateView("EnsureDataTablesExistTest_View");
+            View view = Project.CreateView("EnsureDataTablesExistTest_View");
             ICollection<Page> pages = new List<Page>();
             for (int index = 0; index < 3; index++)
             {
-                pages.Add(view.CreatePage(string.Format("Page {0}", index + 1), index));
+                pages.Add(view.CreatePage("Page" + index, index));
             }
-            Assert.IsFalse(project.Driver.TableExists(view.TableName));
+            Assert.IsFalse(Project.Driver.TableExists(view.TableName));
             foreach (Page page in pages)
             {
-                Assert.IsFalse(project.Driver.TableExists(page.TableName));
+                Assert.IsFalse(Project.Driver.TableExists(page.TableName));
             }
-            project.CollectedData.EnsureDataTablesExist(view.Id);
-            Assert.IsTrue(project.Driver.TableExists(view.TableName));
+            Project.CollectedData.EnsureDataTablesExist(view.Id);
+            Assert.IsTrue(Project.Driver.TableExists(view.TableName));
             foreach (Page page in pages)
             {
-                Assert.IsTrue(project.Driver.TableExists(page.TableName));
+                Assert.IsTrue(Project.Driver.TableExists(page.TableName));
             }
             Assert.DoesNotThrow(() =>
             {
-                project.CollectedData.EnsureDataTablesExist(view.Id);
+                Project.CollectedData.EnsureDataTablesExist(view.Id);
             });
         }
 
         [Test]
         public void DeleteViewTest()
         {
-            View parentView = project.CreateView("DeleteViewTest_ParentView");
-            Page parentPage = parentView.CreatePage("Page 1", 0);
-            View view = project.CreateView("DeleteViewTest_View", true);
-            Page page = view.CreatePage("Page 1", 0);
-            View childView = project.CreateView("DeleteViewTest_ChildView");
-            Page childPage = childView.CreatePage("Page 1", 0);
+            View parentView = Project.CreateView("DeleteViewTest_ParentView");
+            Page parentPage = parentView.CreatePage("New Page", 0);
+            View view = Project.CreateView("DeleteViewTest_View", true);
+            Page page = view.CreatePage("New Page", 0);
+            View childView = Project.CreateView("DeleteViewTest_ChildView");
+            Page childPage = childView.CreatePage("New Page", 0);
             CreateRelateField(parentPage, view);
             CreateRelateField(page, childView);
-            project.CollectedData.CreateDataTableForView(parentView, 1);
-            project.CollectedData.CreateDataTableForView(view, 1);
-            project.CollectedData.CreateDataTableForView(childView, 1);
+            Project.CollectedData.CreateDataTableForView(parentView, 1);
+            Project.CollectedData.CreateDataTableForView(view, 1);
+            Project.CollectedData.CreateDataTableForView(childView, 1);
             Assert.IsTrue(parentView.Fields.Contains("Relate"));
-            project.DeleteView(view.Id);
-            Assert.IsTrue(project.Views.Contains(parentView.Name));
-            Assert.IsFalse(project.Views.Contains(view.Name));
-            Assert.IsFalse(project.Views.Contains(childView.Name));
+            Project.DeleteView(view.Id);
+            Assert.IsTrue(Project.Views.Contains(parentView.Name));
+            Assert.IsFalse(Project.Views.Contains(view.Name));
+            Assert.IsFalse(Project.Views.Contains(childView.Name));
             parentView.MustRefreshFieldCollection = true;
             Assert.IsFalse(parentView.Fields.Contains("Relate"));
-            project.DeleteView(parentView.Id);
-            Assert.IsFalse(project.Views.Contains(parentView.Name));
+            Project.DeleteView(parentView.Id);
+            Assert.IsFalse(Project.Views.Contains(parentView.Name));
             ICollection<string> tableNames = new string[]
             {
                 parentView.TableName,
@@ -210,7 +258,7 @@ namespace ERHMS.Test.EpiInfo
             };
             foreach (string tableName in tableNames)
             {
-                Assert.IsTrue(project.Driver.TableExists(tableName), tableName);
+                Assert.IsTrue(Project.Driver.TableExists(tableName), tableName);
             }
         }
 
@@ -223,145 +271,92 @@ namespace ERHMS.Test.EpiInfo
         }
 
         [Test]
+        public void SanitizeNameTest()
+        {
+            Assert.AreEqual("ValidName_View", "ValidName_View");
+            Assert.AreEqual("InvalidName_View", ViewExtensions.SanitizeName("1234_InvalidName_!@#$%^&*()View"));
+        }
+
+        [Test]
+        public void WebSurveyTest()
+        {
+            View view = Project.CreateView("WebSurveyTest_View");
+            Assert.IsFalse(view.IsWebSurvey());
+            view.WebSurveyId = Guid.Empty.ToString();
+            Assert.IsTrue(view.IsWebSurvey());
+            configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerServiceV2.svc";
+            configuration.Save();
+            Assert.AreEqual("http://example.com/EIWS/Home/00000000-0000-0000-0000-000000000000", view.GetWebSurveyUrl().ToString());
+        }
+
+        [Test]
         public void PgmTest()
         {
-            View view = project.CreateView("PgmTest_View");
+            View view = Project.CreateView("PgmTest_View");
             Pgm original = new Pgm
             {
                 Name = "PgmTest_Pgm",
-                Content = Pgm.GetContentForView(project.FilePath, view.Name)
+                Content = Pgm.GetContentForView(Project.FilePath, view.Name)
             };
             Assert.AreEqual(0, original.PgmId);
-            Assert.AreEqual(0, project.GetPgms().Count());
-            project.InsertPgm(original);
+            Assert.AreEqual(0, Project.GetPgms().Count());
+            Project.InsertPgm(original);
             Assert.AreEqual(1, original.PgmId);
-            Assert.AreEqual(1, project.GetPgms().Count());
-            Pgm retrieved = project.GetPgmById(original.PgmId);
+            Assert.AreEqual(1, Project.GetPgms().Count());
+            Pgm retrieved = Project.GetPgmById(original.PgmId);
             Assert.AreEqual(original, retrieved);
             retrieved.Content = "";
-            project.UpdatePgm(retrieved);
-            retrieved = project.GetPgmById(original.PgmId);
-            Assert.AreNotEqual(original, retrieved);
+            Project.UpdatePgm(retrieved);
+            retrieved = Project.GetPgmById(original.PgmId);
+            Assert.AreEqual(original, retrieved);
             Assert.AreEqual("", retrieved.Content);
-            project.DeletePgm(retrieved.PgmId);
-            Assert.AreEqual(0, project.GetPgms().Count());
+            Project.DeletePgm(retrieved.PgmId);
+            Assert.AreEqual(0, Project.GetPgms().Count());
         }
 
         [Test]
         public void CanvasTest()
         {
-            View view = project.CreateView("CanvasTest_Canvas");
+            View view = Project.CreateView("CanvasTest_Canvas");
             Canvas original = new Canvas
             {
                 Name = "CanvasTest_Canvas",
-                Content = Canvas.GetContentForView(project.FilePath, view.Name)
+                Content = Canvas.GetContentForView(Project.FilePath, view.Name)
             };
             Assert.AreEqual(0, original.CanvasId);
-            Assert.AreEqual(0, project.GetCanvases().Count());
-            project.InsertCanvas(original);
+            Assert.AreEqual(0, Project.GetCanvases().Count());
+            Project.InsertCanvas(original);
             Assert.AreEqual(1, original.CanvasId);
-            Assert.AreEqual(1, project.GetCanvases().Count());
-            Canvas retrieved = project.GetCanvasById(original.CanvasId);
+            Assert.AreEqual(1, Project.GetCanvases().Count());
+            Canvas retrieved = Project.GetCanvasById(original.CanvasId);
             Assert.AreEqual(original, retrieved);
-            string path = Path.Combine(Path.GetTempPath(), Path.GetFileName(project.FilePath));
+            string path = Path.Combine(Path.GetTempPath(), Path.GetFileName(Project.FilePath));
             retrieved.SetProjectPath(path);
-            project.UpdateCanvas(retrieved);
-            retrieved = project.GetCanvasById(original.CanvasId);
-            Assert.AreNotEqual(original, retrieved);
+            Project.UpdateCanvas(retrieved);
+            retrieved = Project.GetCanvasById(original.CanvasId);
+            Assert.AreEqual(original, retrieved);
             Regex whitespacePattern = new Regex(@"\s+");
-            string expected = whitespacePattern.Replace(original.Content, "").Replace(project.FilePath, path);
+            string expected = whitespacePattern.Replace(original.Content, "").Replace(Project.FilePath, path);
             string actual = whitespacePattern.Replace(retrieved.Content, "");
             Assert.AreEqual(expected, actual);
-            project.DeleteCanvas(retrieved.CanvasId);
-            Assert.AreEqual(0, project.GetCanvases().Count());
+            Project.DeleteCanvas(retrieved.CanvasId);
+            Assert.AreEqual(0, Project.GetCanvases().Count());
         }
     }
 
     public class AccessProjectTest : ProjectTest
     {
-        private static Project Create(string name, out ProjectCreationInfo info)
+        protected override IProjectCreator GetCreator()
         {
-            string location = Path.Combine(Configuration.GetNewInstance().Directories.Project, name);
-            Directory.CreateDirectory(location);
-            string dataSource = Path.Combine(location, name + ".mdb");
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Empty.mdb", dataSource);
-            info = new ProjectCreationInfo
-            {
-                Name = name,
-                Location = location,
-                Driver = Configuration.AccessDriver,
-                Builder = new OleDbConnectionStringBuilder
-                {
-                    Provider = OleDbExtensions.Providers.Jet4,
-                    DataSource = dataSource
-                },
-                DatabaseName = name,
-                Initialize = true
-            };
-            return Project.Create(info);
-        }
-
-        public static Project Create(string name)
-        {
-            ProjectCreationInfo info;
-            return Create(name, out info);
-        }
-
-        [OneTimeSetUp]
-        public new void OneTimeSetUp()
-        {
-            project = Create(nameof(AccessProjectTest), out info);
+            return new AccessProjectCreator(nameof(AccessProjectTest));
         }
     }
 
     public class SqlServerProjectTest : ProjectTest
     {
-        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString;
-
-        private SqlConnectionStringBuilder builder;
-        private bool created;
-
-        [OneTimeSetUp]
-        public new void OneTimeSetUp()
+        protected override IProjectCreator GetCreator()
         {
-            string name = nameof(SqlServerProjectTest);
-            builder = new SqlConnectionStringBuilder(ConnectionString)
-            {
-                Pooling = false
-            };
-            using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
-            {
-                connection.Open();
-                connection.ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
-            }
-            created = true;
-            info = new ProjectCreationInfo
-            {
-                Name = name,
-                Location = Path.Combine(configuration.Directories.Project, name),
-                Driver = Configuration.SqlDriver,
-                Builder = builder,
-                DatabaseName = builder.InitialCatalog,
-                Initialize = true
-            };
-            project = Project.Create(info);
-        }
-
-        [OneTimeTearDown]
-        public new void OneTimeTearDown()
-        {
-            if (created)
-            {
-                using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
-                {
-                    connection.Open();
-                    connection.ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
-                }
-            }
-            else
-            {
-                TestContext.Error.WriteLine("Database '{0}' may need to be manually dropped.", builder.InitialCatalog);
-            }
+            return new SqlServerProjectCreator(nameof(SqlServerProjectTest));
         }
     }
 }

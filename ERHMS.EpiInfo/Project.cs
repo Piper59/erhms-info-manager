@@ -27,12 +27,12 @@ namespace ERHMS.EpiInfo
                 Description = info.Description,
                 Location = info.Location,
                 CollectedDataDriver = info.Driver,
-                CollectedDataConnectionString = info.Builder.ConnectionString
-            };
-            project.CollectedDataDbInfo = new DbDriverInfo
-            {
-                DBCnnStringBuilder = info.Builder,
-                DBName = info.DatabaseName
+                CollectedDataConnectionString = info.Builder.ConnectionString,
+                CollectedDataDbInfo = new DbDriverInfo
+                {
+                    DBCnnStringBuilder = info.Builder,
+                    DBName = info.DatabaseName
+                }
             };
             project.CollectedData.Initialize(project.CollectedDataDbInfo, info.Driver, false);
             project.MetadataSource = MetadataSource.SameDb;

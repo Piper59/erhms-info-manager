@@ -80,7 +80,7 @@ namespace ERHMS.Test.Wrappers
             }
         }
 
-        public class EventTypeTest : Wrapper
+        public class EventTest : Wrapper
         {
             public static Wrapper Create()
             {
@@ -90,20 +90,7 @@ namespace ERHMS.Test.Wrappers
             private static void MainInternal()
             {
                 Console.Error.WriteLine("Standard error should be redirected to a null stream.");
-                RaiseEvent(WrapperEventType.Default);
-            }
-        }
-
-        public class EventPropertiesTest : Wrapper
-        {
-            public static Wrapper Create()
-            {
-                return Create(() => MainInternal());
-            }
-
-            private static void MainInternal()
-            {
-                RaiseEvent(WrapperEventType.Default, new
+                RaiseEvent("Default", new
                 {
                     Name = "John Doe",
                     Age = 20,

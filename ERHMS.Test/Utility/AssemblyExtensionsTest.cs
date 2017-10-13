@@ -12,7 +12,7 @@ namespace ERHMS.Test.Utility
         private const string ResourceContent = "Hello, world!";
 
         [Test]
-        public void GetEntryDirectoryPath()
+        public void GetEntryDirectoryPathTest()
         {
             Assert.AreEqual(Environment.CurrentDirectory, AssemblyExtensions.GetEntryDirectoryPath());
         }

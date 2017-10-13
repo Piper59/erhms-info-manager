@@ -92,7 +92,7 @@ namespace ERHMS.EpiInfo.DataAccess
         private ICollection<TEntity> SelectMultiQuery(IDbConnection connection, string clauses, object parameters, IDbTransaction transaction)
         {
             IDictionary<string, TEntity> entities = new Dictionary<string, TEntity>(StringComparer.OrdinalIgnoreCase);
-            string sql = GetSelectSql(Escape(View.TableName) + ".*", clauses);
+            string sql = GetSelectSql(string.Format("{0}.*", Escape(View.TableName)), clauses);
             using (IDataReader reader = connection.ExecuteReader(sql, parameters, transaction))
             {
                 while (reader.Read())
@@ -104,7 +104,7 @@ namespace ERHMS.EpiInfo.DataAccess
             }
             foreach (Page page in View.Pages)
             {
-                sql = GetSelectSql(Escape(page.TableName) + ".*", clauses);
+                sql = GetSelectSql(string.Format("{0}.*", Escape(page.TableName)), clauses);
                 using (IDataReader reader = connection.ExecuteReader(sql, parameters, transaction))
                 {
                     int index = reader.GetOrdinal(ColumnNames.GLOBAL_RECORD_ID);

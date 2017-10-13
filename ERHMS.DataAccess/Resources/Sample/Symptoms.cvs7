@@ -1,13 +1,13 @@
 ﻿<DashboardCanvas>
   <dashboardHelper>
-    <projectPath>%ROOT_DIRECTORY%\Projects\Sample\Sample.prj</projectPath>
+    <projectPath>Projects\Sample\Sample.prj</projectPath>
     <viewName>GreensburgTornado_Symptoms</viewName>
     <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
     <advancedDataFilterCondition>
     </advancedDataFilterCondition>
     <relatedDataConnections>
       <relatedDataConnection>
-        <projectPath>C:\Users\gev3\Desktop\scratch\ERHMS Info Manager\Projects\Sample\Sample.prj</projectPath>
+        <projectPath>Projects\Sample\Sample.prj</projectPath>
         <viewName>Responders</viewName>
         <connectionString>
         </connectionString>

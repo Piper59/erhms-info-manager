@@ -14,10 +14,9 @@ namespace ERHMS.Test.EpiInfo
             File.Delete(ConfigurationExtensions.FilePath);
         }
 
-        private void CreateAndLoadConfiguration(string userDirectoryPath, bool fips)
+        private void CreateAndLoadConfiguration(string userDirectoryPath, bool isFipsCryptoRequired)
         {
-            Configuration configuration = ConfigurationExtensions.Create(userDirectoryPath);
-            configuration.SetFipsCrypto(fips);
+            Configuration configuration = ConfigurationExtensions.Create(userDirectoryPath, isFipsCryptoRequired);
             configuration.Save();
             ConfigurationExtensions.Load();
         }
@@ -29,11 +28,11 @@ namespace ERHMS.Test.EpiInfo
             EncryptSafeTest(true);
         }
 
-        private void EncryptSafeTest(bool fips)
+        private void EncryptSafeTest(bool isFipsCryptoRequired)
         {
-            using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest) + (fips ? "Fips" : "")))
+            using (TempDirectory directory = new TempDirectory(nameof(EncryptSafeTest) + isFipsCryptoRequired))
             {
-                CreateAndLoadConfiguration(directory.FullName, fips);
+                CreateAndLoadConfiguration(directory.FullName, isFipsCryptoRequired);
                 Assert.IsNull(ConfigurationExtensions.EncryptSafe(null));
                 EncryptSafeTest("");
                 EncryptSafeTest("Hello, world!");
@@ -52,12 +51,12 @@ namespace ERHMS.Test.EpiInfo
             DecryptSafeTest(true);
         }
 
-        private void DecryptSafeTest(bool fips)
+        private void DecryptSafeTest(bool isFipsCryptoRequired)
         {
-            using (TempDirectory directory = new TempDirectory(nameof(DecryptSafeTest) + (fips ? "Fips" : "")))
+            using (TempDirectory directory = new TempDirectory(nameof(DecryptSafeTest) + isFipsCryptoRequired))
             {
-                CreateAndLoadConfiguration(directory.FullName, fips);
-                Assert.IsNull(ConfigurationExtensions.EncryptSafe(null));
+                CreateAndLoadConfiguration(directory.FullName, isFipsCryptoRequired);
+                Assert.IsNull(ConfigurationExtensions.DecryptSafe(null));
                 DecryptSafeTest("");
                 DecryptSafeTest("Hello, world!");
             }
@@ -101,6 +100,21 @@ namespace ERHMS.Test.EpiInfo
         }
 
         [Test]
+        public void SetUserDirectoriesTest()
+        {
+            using (TempDirectory directory1 = new TempDirectory(nameof(SetUserDirectoriesTest) + 1))
+            using (TempDirectory directory2 = new TempDirectory(nameof(SetUserDirectoriesTest) + 2))
+            {
+                Configuration configuration = ConfigurationExtensions.Create(directory1.FullName);
+                StringAssert.DoesNotContain(directory2.FullName, configuration.Directories.Project);
+                StringAssert.DoesNotContain(directory2.FullName, configuration.Directories.Templates);
+                configuration.SetUserDirectories(directory2.FullName);
+                StringAssert.Contains(directory2.FullName, configuration.Directories.Project);
+                StringAssert.Contains(directory2.FullName, configuration.Directories.Templates);
+            }
+        }
+
+        [Test]
         public void CreateUserDirectoriesTest()
         {
             using (TempDirectory directory = new TempDirectory(nameof(CreateUserDirectoriesTest)))
@@ -109,6 +123,16 @@ namespace ERHMS.Test.EpiInfo
                 configuration.CreateUserDirectories();
                 DirectoryAssert.Exists(configuration.Directories.Project);
                 DirectoryAssert.Exists(configuration.Directories.Templates);
+            }
+        }
+
+        [Test]
+        public void GetRootPathTest()
+        {
+            using (TempDirectory directory = new TempDirectory(nameof(GetRootPathTest)))
+            {
+                Configuration configuration = ConfigurationExtensions.Create(directory.FullName);
+                Assert.AreEqual(directory.FullName, configuration.GetRootPath());
             }
         }
     }

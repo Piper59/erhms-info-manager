@@ -36,8 +36,10 @@ namespace ERHMS.EpiInfo
         {
             XmlDocument document = new XmlDocument();
             document.LoadXml(Content);
-            XmlNode node = document.SelectSingleNode("/DashboardCanvas/dashboardHelper/projectPath");
-            node.InnerText = path;
+            foreach (XmlNode node in document.SelectNodes("//projectPath"))
+            {
+                node.InnerText = path;
+            }
             StringBuilder content = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings
             {

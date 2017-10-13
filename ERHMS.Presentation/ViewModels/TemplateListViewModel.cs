@@ -17,7 +17,7 @@ namespace ERHMS.Presentation.ViewModels
             Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(services.Context.Project.FilePath, template.FilePath, prefix);
             wrapper.Event += (sender, e) =>
             {
-                if (e.Type == WrapperEventType.ViewCreated)
+                if (e.Type == "ViewCreated")
                 {
                     if (incident != null)
                     {

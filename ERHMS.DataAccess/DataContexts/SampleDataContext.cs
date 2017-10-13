@@ -27,14 +27,15 @@ namespace ERHMS.DataAccess
         public static DataContext Create()
         {
             Log.Logger.DebugFormat("Creating sample data context");
-            string path = GetFilePath();
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            string projectPath = GetFilePath();
+            Directory.CreateDirectory(Path.GetDirectoryName(projectPath));
             Assembly assembly = Assembly.GetExecutingAssembly();
-            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.prj", path);
-            ProjectInfo projectInfo = ProjectInfo.Get(path);
-            projectInfo.SetAccessConnectionString();
-            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.mdb", Path.ChangeExtension(path, ".mdb"));
-            Project project = new Project(path);
+            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.prj", projectPath);
+            ProjectInfo projectInfo = ProjectInfo.Get(projectPath);
+            projectInfo.SetAccessDatabase();
+            string databasePath = Path.ChangeExtension(projectPath, OleDbExtensions.FileExtensions.Access);
+            assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.mdb", databasePath);
+            Project project = new Project(projectPath);
             project.Version = assembly.GetName().Version;
             project.Save();
             SampleDataContext context = new SampleDataContext(project);

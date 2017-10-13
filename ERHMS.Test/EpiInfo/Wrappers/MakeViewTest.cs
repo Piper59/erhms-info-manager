@@ -81,7 +81,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 wrapper.Exited.WaitOne();
                 Assert.IsTrue(project.Views.Contains("ADDFull_2"));
                 Assert.AreEqual(1, events.Count);
-                Assert.AreEqual(WrapperEventType.ViewCreated, events[0].Type);
+                Assert.AreEqual("ViewCreated", events[0].Type);
                 Assert.AreEqual(events[0].Properties.ViewId, project.Views["ADDFull_2"].Id);
             }
             finally
@@ -146,7 +146,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 Assert.AreEqual(description, templateElement.GetAttribute("Description"));
                 TemplateTest(document);
                 Assert.AreEqual(1, events.Count);
-                Assert.AreEqual(WrapperEventType.TemplateCreated, events[0].Type);
+                Assert.AreEqual("TemplateCreated", events[0].Type);
                 Assert.AreEqual(templatePath, events[0].Properties.Path);
             }
             finally

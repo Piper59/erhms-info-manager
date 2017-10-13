@@ -226,7 +226,7 @@ namespace ERHMS.Presentation.ViewModels
                     switch (Provider)
                     {
                         case DbProvider.Access:
-                            database = AccessDatabase.Construct(Path.ChangeExtension(FullName, ".mdb"));
+                            database = AccessDatabase.Construct(Path.ChangeExtension(FullName, OleDbExtensions.FileExtensions.Access));
                             break;
                         case DbProvider.SqlServer:
                             database = SqlServerDatabase.Construct(DataSource, InitialCatalog, Encrypt, UserId, Password);

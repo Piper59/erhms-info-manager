@@ -7,14 +7,16 @@ using System.Data;
 
 namespace ERHMS.Test.Dapper
 {
-    public class LoggingConnectionTest
+    public abstract class LoggingConnectionTest
     {
         private IDatabaseCreator creator;
+
+        protected abstract IDatabaseCreator GetCreator();
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            creator = new AccessDatabaseCreator(nameof(LoggingConnectionTest));
+            creator = GetCreator();
             creator.SetUp();
         }
 
@@ -45,6 +47,22 @@ namespace ERHMS.Test.Dapper
                 count++;
                 Assert.AreEqual(count, LogTest.GetLineCount());
             }
+        }
+    }
+
+    public class AccessLoggingConnectionTest : LoggingConnectionTest
+    {
+        protected override IDatabaseCreator GetCreator()
+        {
+            return new AccessDatabaseCreator(nameof(AccessLoggingConnectionTest));
+        }
+    }
+
+    public class SqlServerLoggingConnectionTest : LoggingConnectionTest
+    {
+        protected override IDatabaseCreator GetCreator()
+        {
+            return new SqlServerDatabaseCreator();
         }
     }
 }
