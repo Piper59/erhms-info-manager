@@ -6,7 +6,6 @@ namespace ERHMS.EpiInfo.Web
     {
         None,
         Address,
-        Version,
         OrganizationKey,
         Connection,
         Unknown
@@ -20,8 +19,6 @@ namespace ERHMS.EpiInfo.Web
             {
                 case ConfigurationError.Address:
                     return "Invalid endpoint address.";
-                case ConfigurationError.Version:
-                    return "Endpoint address must be version 2 (SurveyManagerServiceV2.svc) or later.";
                 case ConfigurationError.OrganizationKey:
                     return "Invalid organization key.";
                 case ConfigurationError.Connection:

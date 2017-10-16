@@ -15,7 +15,7 @@ namespace ERHMS.Presentation
 
     public static class DbProviderExtensions
     {
-        public static readonly TwoWayDictionary<DbProvider, string> EpiInfoNames = new TwoWayDictionary<DbProvider, string>
+        public static readonly TwoWayDictionary<DbProvider, string> EpiInfoValues = new TwoWayDictionary<DbProvider, string>
         {
             { DbProvider.Access, Configuration.AccessDriver },
             { DbProvider.SqlServer, Configuration.SqlDriver }

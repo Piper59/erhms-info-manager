@@ -1,5 +1,5 @@
 ﻿using Epi;
-using Epi.SurveyManagerServiceV2;
+using Epi.SurveyManagerService;
 using ERHMS.EpiInfo.Wrappers;
 using System;
 using System.ComponentModel;

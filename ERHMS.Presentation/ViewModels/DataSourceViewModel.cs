@@ -290,7 +290,7 @@ namespace ERHMS.Presentation.ViewModels
                     Name = Name,
                     Description = Description,
                     Location = Path.Combine(Location, Name),
-                    Driver = DbProviderExtensions.EpiInfoNames.Forward(Provider),
+                    Driver = DbProviderExtensions.EpiInfoValues.Forward(Provider),
                     Builder = database.Builder,
                     DatabaseName = database.Name,
                     Initialize = initialize

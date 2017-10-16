@@ -75,18 +75,18 @@ namespace ERHMS.Test.EpiInfo
         public void IsValidViewNameTest()
         {
             Project.CreateView("IsValidViewNameTest_View");
-            IsValidViewNameTest(null, InvalidViewNameReason.Empty);
-            IsValidViewNameTest("", InvalidViewNameReason.Empty);
-            IsValidViewNameTest(" ", InvalidViewNameReason.Empty);
-            IsValidViewNameTest("IsValidViewNameTest-View", InvalidViewNameReason.InvalidChar);
-            IsValidViewNameTest("_IsValidViewNameTest_View", InvalidViewNameReason.InvalidBeginning);
-            IsValidViewNameTest(new string('A', 65), InvalidViewNameReason.TooLong);
-            IsValidViewNameTest("ISVALIDVIEWNAMETEST_VIEW", InvalidViewNameReason.ViewExists);
-            IsValidViewNameTest("METADBINFO", InvalidViewNameReason.TableExists);
-            IsValidViewNameTest("IsValidViewNameTest_View_2", InvalidViewNameReason.None);
+            IsValidViewNameTest(InvalidViewNameReason.Empty, null);
+            IsValidViewNameTest(InvalidViewNameReason.Empty, "");
+            IsValidViewNameTest(InvalidViewNameReason.Empty, " ");
+            IsValidViewNameTest(InvalidViewNameReason.InvalidChar, "IsValidViewNameTest-View");
+            IsValidViewNameTest(InvalidViewNameReason.InvalidBeginning, "_IsValidViewNameTest_View");
+            IsValidViewNameTest(InvalidViewNameReason.TooLong, new string('A', 65));
+            IsValidViewNameTest(InvalidViewNameReason.ViewExists, "ISVALIDVIEWNAMETEST_VIEW");
+            IsValidViewNameTest(InvalidViewNameReason.TableExists, "METADBINFO");
+            IsValidViewNameTest(InvalidViewNameReason.None, "IsValidViewNameTest_View_2");
         }
 
-        private void IsValidViewNameTest(string viewName, InvalidViewNameReason expected)
+        private void IsValidViewNameTest(InvalidViewNameReason expected, string viewName)
         {
             InvalidViewNameReason actual;
             Assert.AreEqual(expected == InvalidViewNameReason.None, Project.IsValidViewName(viewName, out actual));

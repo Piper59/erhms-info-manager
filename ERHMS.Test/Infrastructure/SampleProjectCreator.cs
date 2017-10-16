@@ -1,9 +1,11 @@
-﻿using ERHMS.Dapper;
-using ERHMS.EpiInfo;
+﻿using ERHMS.EpiInfo;
 using ERHMS.Utility;
-using System.Data;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
+using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
+using Configuration = Epi.Configuration;
 
 namespace ERHMS.Test
 {
@@ -44,29 +46,34 @@ namespace ERHMS.Test
 
     public class SqlServerSampleProjectCreator : ISampleProjectCreator
     {
-        public SqlServerProjectCreator Creator { get; private set; }
-
-        public Project Project
-        {
-            get { return Creator.Project; }
-        }
+        public TempDirectory Directory { get; private set; }
+        public SqlServerDatabaseCreator Creator { get; private set; }
+        public Project Project { get; private set; }
 
         public SqlServerSampleProjectCreator(string name)
         {
-            Creator = new SqlServerProjectCreator(name);
+            Directory = new TempDirectory(name);
+            Creator = new SqlServerDatabaseCreator();
         }
 
         public void SetUp()
         {
             Creator.SetUp();
-            using (IDbConnection connection = Creator.Project.Driver.GetConnection())
+            using (SqlConnection connection = new SqlConnection(Creator.Builder.ConnectionString))
             {
-                connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Sample.Sample.sql")));
+                Server server = new Server(new ServerConnection(connection));
+                string script = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Sample.Sample.sql");
+                server.ConnectionContext.ExecuteNonQuery(script);
             }
+            string path = Directory.CombinePaths("Sample" + Project.FileExtension);
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", path);
+            ProjectInfo.Get(path).SetDatabase(Creator.Builder.ConnectionString, Configuration.SqlDriver);
+            Project = new Project(path);
         }
 
         public void TearDown()
         {
+            Directory.Dispose();
             Creator.TearDown();
         }
     }

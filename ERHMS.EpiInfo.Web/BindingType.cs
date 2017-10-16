@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo.Web
 
     public static class BindingTypeExtensions
     {
-        public static readonly TwoWayDictionary<BindingType, string> EpiInfoNames = new TwoWayDictionary<BindingType, string>
+        public static readonly TwoWayDictionary<BindingType, string> EpiInfoValues = new TwoWayDictionary<BindingType, string>
         {
             { BindingType.BasicHttp, "BASIC" },
             { BindingType.WsHttp, "WSHTTP" }

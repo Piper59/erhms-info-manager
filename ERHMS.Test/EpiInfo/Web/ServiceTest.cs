@@ -1,40 +1,64 @@
 ﻿using Dapper;
 using Epi;
+using Epi.Core.ServiceClient;
+using Epi.SurveyManagerServiceV2;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
+using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using Configuration = Epi.Configuration;
+using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Test.EpiInfo.Web
 {
-    public class ServiceTest : SampleProjectTest
+    public abstract class ServiceTest
     {
-        private View view;
+        private Configuration configuration;
+        private ISampleProjectCreator creator;
+
+        private Project Project
+        {
+            get { return creator.Project; }
+        }
+
+        private View View
+        {
+            get { return Project.Views["ADDFull"]; }
+        }
+
+        protected abstract ISampleProjectCreator GetCreator();
 
         [OneTimeSetUp]
-        public new void OneTimeSetUp()
+        public void OneTimeSetUp()
         {
-            view = project.Views["ADDFull"];
+            ConfigurationExtensions.Create(AssemblyExtensions.GetEntryDirectoryPath()).Save();
+            configuration = ConfigurationExtensions.Load();
+            creator = GetCreator();
+            creator.SetUp();
         }
 
         [OneTimeTearDown]
-        public new void OneTimeTearDown()
+        public void OneTimeTearDown()
         {
+            creator.TearDown();
+            File.Delete(ConfigurationExtensions.FilePath);
             Settings.Default.Reset();
-            if (view.IsWebSurvey())
+            if (View.IsWebSurvey())
             {
                 using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
                 {
                     DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("@SurveyId", view.WebSurveyId);
-                    connection.Execute("DELETE FROM SurveyResponse WHERE SurveyId = @SurveyId", parameters);
-                    connection.Execute("DELETE FROM SurveyMetaData WHERE SurveyId = @SurveyId", parameters);
+                    parameters.Add("@SurveyId", View.WebSurveyId);
+                    connection.Execute("DELETE FROM [SurveyResponse] WHERE [SurveyId] = @SurveyId", parameters);
+                    connection.Execute("DELETE FROM [SurveyMetaData] WHERE [SurveyId] = @SurveyId", parameters);
                 }
             }
         }
@@ -45,22 +69,24 @@ namespace ERHMS.Test.EpiInfo.Web
         {
             IsConfiguredTest(ConfigurationError.Address);
             Uri endpoint = new Uri(ConfigurationManager.AppSettings["Endpoint"]);
-            IsConfiguredTest(new Uri(endpoint, "SurveyManagerService.html"), ConfigurationError.Address);
-            IsConfiguredTest(new Uri(endpoint, "SurveyManagerService.svc"), ConfigurationError.Version);
-            IsConfiguredTest(endpoint, ConfigurationError.OrganizationKey);
-            IsConfiguredTest(Guid.Empty, ConfigurationError.OrganizationKey);
+            IsConfiguredTest(ConfigurationError.Address, new Uri(endpoint, "Default.html"));
+            IsConfiguredTest(ConfigurationError.Address, new Uri(endpoint, "SurveyManagerService.html"));
+            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(endpoint, "SurveyManagerService.svc"));
+            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(endpoint, "SurveyManagerServiceV2.svc"));
+            IsConfiguredTest(ConfigurationError.OrganizationKey, endpoint);
+            IsConfiguredTest(ConfigurationError.OrganizationKey, Guid.Empty);
             Guid organizationKey = new Guid(ConfigurationManager.AppSettings["OrganizationKey"]);
-            IsConfiguredTest(organizationKey, ConfigurationError.None);
+            IsConfiguredTest(ConfigurationError.None, organizationKey);
         }
 
-        private void IsConfiguredTest(Uri endpoint, ConfigurationError expected)
+        private void IsConfiguredTest(ConfigurationError expected, Uri endpoint)
         {
             configuration.Settings.WebServiceEndpointAddress = endpoint.ToString();
             configuration.Save();
             IsConfiguredTest(expected);
         }
 
-        private void IsConfiguredTest(Guid organizationKey, ConfigurationError expected)
+        private void IsConfiguredTest(ConfigurationError expected, Guid organizationKey)
         {
             Settings.Default.OrganizationKey = organizationKey.ToString();
             IsConfiguredTest(expected);
@@ -80,7 +106,7 @@ namespace ERHMS.Test.EpiInfo.Web
             DateTime now = DateTime.Now;
             Survey survey = new Survey
             {
-                Title = view.Name,
+                Title = View.Name,
                 StartDate = now,
                 EndDate = now.Add(new TimeSpan(1, 0, 0, 0)),
                 ResponseType = ResponseType.Single,
@@ -88,11 +114,11 @@ namespace ERHMS.Test.EpiInfo.Web
                 PublishKey = Guid.NewGuid()
             };
             Assert.IsNull(survey.SurveyId);
-            Assert.AreEqual("", project.GetViewById(view.Id).WebSurveyId);
-            Assert.IsTrue(Service.Publish(view, survey));
+            Assert.AreEqual("", Project.GetViewById(View.Id).WebSurveyId);
+            Assert.IsTrue(Service.Publish(View, survey));
             Assert.IsNotNull(survey.SurveyId);
-            Assert.AreEqual(survey.SurveyId, view.WebSurveyId);
-            Assert.AreEqual(survey.SurveyId, project.GetViewById(view.Id).WebSurveyId);
+            Assert.AreEqual(survey.SurveyId, View.WebSurveyId);
+            Assert.AreEqual(survey.SurveyId, Project.GetViewById(View.Id).WebSurveyId);
             Assert.IsTrue(Service.GetSurvey(survey.SurveyId).Draft);
         }
 
@@ -100,25 +126,68 @@ namespace ERHMS.Test.EpiInfo.Web
         [Order(3)]
         public void RepublishTest()
         {
-            Survey survey = Service.GetSurvey(view.WebSurveyId);
+            Survey survey = Service.GetSurvey(View.WebSurveyId);
             survey.Draft = false;
-            Assert.IsTrue(Service.Republish(view, survey));
-            Assert.IsFalse(Service.GetSurvey(view.WebSurveyId).Draft);
+            Assert.IsTrue(Service.Republish(View, survey));
+            Assert.IsFalse(Service.GetSurvey(View.WebSurveyId).Draft);
         }
 
         [Test]
         [Order(4)]
-        public void TryAddAndGetRecordsTest()
+        public void GetRecordsTest()
         {
-            Survey survey = Service.GetSurvey(view.WebSurveyId);
-            ICollection<string> ids = new List<string>();
-            for (int index = 0; index < 10; index++)
+            Survey survey = Service.GetSurvey(View.WebSurveyId);
+            IDictionary<string, Record> records = AddRecords(survey).ToDictionary(record => record.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
+            foreach (Record record in Service.GetRecords(survey))
             {
-                Record record = new Record();
-                Assert.IsTrue(Service.TryAddRecord(survey, record));
-                ids.Add(record.GlobalRecordId);
+                Assert.IsTrue(records.ContainsKey(record.GlobalRecordId));
+                Assert.AreEqual(records[record.GlobalRecordId]["GENDER"], record["GENDER"]);
             }
-            CollectionAssert.AreEquivalent(ids, Service.GetRecords(survey).Select(record => record.GlobalRecordId));
+        }
+
+        private IEnumerable<Record> AddRecords(Survey survey)
+        {
+            Random random = new Random();
+            Guid organizationKey = new Guid(Settings.Default.OrganizationKey);
+            Guid surveyId = new Guid(survey.SurveyId);
+            using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
+            {
+                for (int index = 0; index < 10; index++)
+                {
+                    Record record = new Record(Guid.NewGuid().ToString());
+                    record["GENDER"] = random.NextDouble() < 0.5 ? "1" : "2";
+                    PreFilledAnswerRequest request = new PreFilledAnswerRequest
+                    {
+                        AnswerInfo = new PreFilledAnswerDTO
+                        {
+                            OrganizationKey = organizationKey,
+                            SurveyId = surveyId,
+                            UserPublishKey = survey.PublishKey,
+                            SurveyQuestionAnswerList = record
+                        }
+                    };
+                    PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
+                    Assert.AreEqual("Success", response.Status);
+                    record.GlobalRecordId = response.SurveyResponseID;
+                    yield return record;
+                }
+            }
+        }
+    }
+
+    public class AccessServiceTest : ServiceTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new AccessSampleProjectCreator(nameof(AccessServiceTest));
+        }
+    }
+
+    public class SqlServerServiceTest : ServiceTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new SqlServerSampleProjectCreator(nameof(SqlServerServiceTest));
         }
     }
 }

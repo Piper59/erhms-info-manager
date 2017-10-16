@@ -2,7 +2,9 @@
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.IO;
+using System.Text;
+using System.Xml;
 
 namespace ERHMS.EpiInfo.Web
 {
@@ -22,18 +24,14 @@ namespace ERHMS.EpiInfo.Web
         };
 
         public string GlobalRecordId { get; set; }
-        public string Passcode { get; set; }
 
         public Record()
             : base(StringComparer.OrdinalIgnoreCase) { }
 
-        public Record(object obj)
+        public Record(string globalRecordId)
             : this()
         {
-            foreach (PropertyInfo property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                this[property.Name] = Convert.ToString(property.GetValue(obj, null));
-            }
+            GlobalRecordId = globalRecordId;
         }
 
         public object GetValue(string key, Type type)
@@ -67,6 +65,45 @@ namespace ERHMS.EpiInfo.Web
                 catch
                 {
                     return null;
+                }
+            }
+        }
+
+        public void SetValues(string xml)
+        {
+            using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
+            {
+                while (true)
+                {
+                    bool empty;
+                    XmlElement element = reader.ReadNextElement(out empty);
+                    if (element == null)
+                    {
+                        break;
+                    }
+                    if (element.Name == "ResponseDetail")
+                    {
+                        string key = element.GetAttribute("QuestionName");
+                        string value = "";
+                        if (!empty)
+                        {
+                            StringBuilder builder = new StringBuilder();
+                            while (true)
+                            {
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.EndElement && reader.Name == element.Name)
+                                {
+                                    break;
+                                }
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    builder.Append(reader.Value);
+                                }
+                            }
+                            value = builder.ToString();
+                        }
+                        this[key] = value;
+                    }
                 }
             }
         }

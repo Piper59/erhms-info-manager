@@ -1,21 +1,18 @@
 ﻿using Epi;
 using Epi.Core.ServiceClient;
-using Epi.SurveyManagerServiceV2;
+using Epi.SurveyManagerService;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.ServiceModel;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.EpiInfo.Web
 {
     public static class Service
     {
-        private static readonly Regex NamePattern = new Regex(@"^SurveyManagerService(?:V(?<version>\d+))?\.svc$", RegexOptions.IgnoreCase);
+        private static readonly Regex NamePattern = new Regex(@"^SurveyManagerService(?:V\d+)?\.svc$", RegexOptions.IgnoreCase);
 
         private static Guid? OrganizationKey
         {
@@ -37,12 +34,6 @@ namespace ERHMS.EpiInfo.Web
                 error = ConfigurationError.Address;
                 return false;
             }
-            Group version = nameMatch.Groups["version"];
-            if (!version.Success || int.Parse(version.Value) < 2)
-            {
-                error = ConfigurationError.Version;
-                return false;
-            }
             if (!OrganizationKey.HasValue)
             {
                 error = ConfigurationError.OrganizationKey;
@@ -55,7 +46,7 @@ namespace ERHMS.EpiInfo.Web
             }
             try
             {
-                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
+                using (ManagerServiceClient client = ServiceClient.GetClient())
                 {
                     SurveyInfoRequest request = new SurveyInfoRequest
                     {
@@ -91,7 +82,7 @@ namespace ERHMS.EpiInfo.Web
             Log.Logger.DebugFormat("Getting web survey: {0}", surveyId);
             try
             {
-                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
+                using (ManagerServiceClient client = ServiceClient.GetClient())
                 {
                     SurveyInfoRequest request = new SurveyInfoRequest
                     {
@@ -134,7 +125,7 @@ namespace ERHMS.EpiInfo.Web
             Log.Logger.DebugFormat("Publishing to web: {0}", view.Name);
             try
             {
-                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
+                using (ManagerServiceClient client = ServiceClient.GetClient())
                 {
                     PublishRequest request = new PublishRequest
                     {
@@ -168,7 +159,7 @@ namespace ERHMS.EpiInfo.Web
             Log.Logger.DebugFormat("Republishing to web: {0}, {1}", view.Name, survey.SurveyId);
             try
             {
-                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
+                using (ManagerServiceClient client = ServiceClient.GetClient())
                 {
                     PublishRequest request = new PublishRequest
                     {
@@ -189,7 +180,7 @@ namespace ERHMS.EpiInfo.Web
         public static IEnumerable<Record> GetRecords(Survey survey)
         {
             Log.Logger.DebugFormat("Getting web survey records: {0}", survey.SurveyId);
-            using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
+            using (ManagerServiceClient client = ServiceClient.GetClient())
             {
                 SurveyAnswerRequest request = new SurveyAnswerRequest
                 {
@@ -218,87 +209,11 @@ namespace ERHMS.EpiInfo.Web
                     SurveyAnswerResponse response = client.GetSurveyAnswer(request);
                     foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
                     {
-                        Record record = new Record
-                        {
-                            GlobalRecordId = answer.ResponseId
-                        };
-                        using (XmlReader reader = XmlReader.Create(new StringReader(answer.XML)))
-                        {
-                            while (true)
-                            {
-                                bool empty;
-                                XmlElement element = reader.ReadNextElement(out empty);
-                                if (element == null)
-                                {
-                                    break;
-                                }
-                                if (element.Name == "ResponseDetail")
-                                {
-                                    string key = element.GetAttribute("QuestionName");
-                                    string value = null;
-                                    if (!empty)
-                                    {
-                                        StringBuilder builder = new StringBuilder();
-                                        while (true)
-                                        {
-                                            reader.Read();
-                                            if (reader.NodeType == XmlNodeType.EndElement && reader.Name == element.Name)
-                                            {
-                                                break;
-                                            }
-                                            if (reader.NodeType == XmlNodeType.Text)
-                                            {
-                                                builder.Append(reader.Value);
-                                            }
-                                        }
-                                        value = builder.ToString();
-                                    }
-                                    record[key] = value;
-                                }
-                            }
-                        }
+                        Record record = new Record(answer.ResponseId);
+                        record.SetValues(answer.XML);
                         yield return record;
                     }
                 }
-            }
-        }
-
-        public static bool TryAddRecord(Survey survey, Record record)
-        {
-            Log.Logger.DebugFormat("Adding web survey record: {0}", survey.SurveyId);
-            try
-            {
-                using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
-                {
-                    PreFilledAnswerRequest request = new PreFilledAnswerRequest
-                    {
-                        AnswerInfo = new PreFilledAnswerDTO
-                        {
-                            OrganizationKey = OrganizationKey.Value,
-                            SurveyId = new Guid(survey.SurveyId),
-                            UserPublishKey = survey.PublishKey,
-                            SurveyQuestionAnswerList = record
-                        }
-                    };
-                    PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
-                    switch (response.Status)
-                    {
-                        case "Success":
-                            record.GlobalRecordId = response.SurveyResponseID;
-                            record.Passcode = response.SurveyResponsePassCode;
-                            return true;
-                        case "Failed":
-                            return false;
-                        default:
-                            Log.Logger.WarnFormat("Unrecognized status: {0}", response.Status);
-                            return false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Logger.Warn("Failed to add web survey record", ex);
-                return false;
             }
         }
     }

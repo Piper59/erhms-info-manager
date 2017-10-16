@@ -172,7 +172,7 @@ namespace ERHMS.Presentation.ViewModels
             EndpointAddress = configuration.Settings.WebServiceEndpointAddress;
             WindowsAuthentication = configuration.Settings.WebServiceAuthMode == 1;
             BindingTypes = EnumExtensions.GetValues<BindingType>().ToList();
-            BindingType = BindingTypeExtensions.EpiInfoNames.Reverse(configuration.Settings.WebServiceBindingMode);
+            BindingType = BindingTypeExtensions.EpiInfoValues.Reverse(configuration.Settings.WebServiceBindingMode);
             OrganizationName = Settings.Default.OrganizationName;
             OrganizationKey = ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey);
             Dirty = false;
@@ -285,7 +285,7 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.MapApplicationId = MapApplicationId;
             configuration.Settings.WebServiceEndpointAddress = EndpointAddress;
             configuration.Settings.WebServiceAuthMode = WindowsAuthentication ? 1 : 0;
-            configuration.Settings.WebServiceBindingMode = BindingTypeExtensions.EpiInfoNames.Forward(BindingType);
+            configuration.Settings.WebServiceBindingMode = BindingTypeExtensions.EpiInfoValues.Forward(BindingType);
             Settings.Default.OrganizationName = OrganizationName;
             Settings.Default.OrganizationKey = OrganizationKey?.ToString();
             string rootPathInit = configuration.GetRootPath();
