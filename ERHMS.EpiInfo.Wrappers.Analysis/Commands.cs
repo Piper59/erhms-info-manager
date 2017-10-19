@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.Utility;
+﻿using ERHMS.Utility;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
@@ -35,18 +34,18 @@ namespace ERHMS.EpiInfo.Wrappers
             return string.Format("ASSIGN {0} = {1}", target, Escape(source));
         }
 
-        public static string Define(string variableName)
+        public static string Define(string variable)
         {
-            return string.Format("DEFINE {0}", variableName);
+            return string.Format("DEFINE {0}", variable);
         }
 
-        public static string MergeCsv(string path, string id)
+        public static string Merge(string path, string idVariable)
         {
             return string.Format(
                 "MERGE {{{0}}}:{1} GlobalRecordId :: {2}",
                 GetCsvConnectionString(path),
                 GetCsvFileName(path),
-                id);
+                idVariable);
         }
 
         public static string Read(string projectPath, string viewName)
@@ -54,13 +53,13 @@ namespace ERHMS.EpiInfo.Wrappers
             return string.Format("READ {{{0}}}:{1}", projectPath, viewName);
         }
 
-        public static string WriteCsv(string path, IEnumerable<string> variableNames)
+        public static string Write(string path, IEnumerable<string> variables)
         {
             return string.Format(
                 "WRITE REPLACE \"TEXT\" {{{0}}} : [{1}] {2}",
                 GetCsvConnectionString(path),
                 GetCsvFileName(path),
-                string.Join(" ", variableNames.Select(variableName => Escape(variableName))));
+                string.Join(" ", variables.Select(variable => Escape(variable))));
         }
     }
 }

@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Automation;
 using System.Windows.Forms;
 
-namespace ERHMS.Test.EpiInfo.Wrappers
+namespace ERHMS.Test
 {
     public static class AutomationExtensions
     {
         private static readonly TimeSpan WaitMax = TimeSpan.FromSeconds(30.0);
-        private static readonly TimeSpan Timeout = TimeSpan.FromMilliseconds(100.0);
+        private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(0.1);
 
-        public static bool TryWait(Func<bool> done)
+        public static bool Wait(Func<bool> done)
         {
             DateTime start = DateTime.Now;
             while (true)
@@ -29,11 +30,10 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, AutomationProperty propertyId, object value, bool immediate = false)
+        public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, Condition condition, bool immediate = false)
         {
             AutomationElement element = null;
-            Condition condition = new PropertyCondition(propertyId, value);
-            TryWait(() =>
+            Wait(() =>
             {
                 element = @this.FindFirst(scope, condition);
                 return immediate || element != null;
@@ -41,25 +41,27 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             return element;
         }
 
+        public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, AutomationProperty property, object value, bool immediate = false)
+        {
+            return @this.FindFirst(scope, new PropertyCondition(property, value), immediate);
+        }
+
         public static AutomationElement FindFirst(this AutomationElement @this, TreeScope scope, string id = null, string name = null, bool immediate = false)
         {
-            AutomationProperty propertyId;
-            object value;
+            Condition condition;
             if (id != null)
             {
-                propertyId = AutomationElement.AutomationIdProperty;
-                value = id;
+                condition = new PropertyCondition(AutomationElement.AutomationIdProperty, id);
             }
             else if (name != null)
             {
-                propertyId = AutomationElement.NameProperty;
-                value = name;
+                condition = new PropertyCondition(AutomationElement.NameProperty, name);
             }
             else
             {
-                throw new ArgumentException("At least one optional argument must be non-null.");
+                condition = Condition.TrueCondition;
             }
-            return @this.FindFirst(scope, propertyId, value, immediate);
+            return @this.FindFirst(scope, condition, immediate);
         }
 
         public static AutomationElement GetParent(this AutomationElement @this)
@@ -75,6 +77,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
     public static class TextPatternExtensions
     {
+        private static readonly Regex SpecialCharPattern = new Regex(@"[\+\^\%\~\(\)\{\}\[\]]");
+
         public static void Clear(this TextPattern @this)
         {
             @this.DocumentRange.Select();
@@ -86,10 +90,15 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             return @this.DocumentRange.GetText(-1);
         }
 
-        public static void Set(this TextPattern @this, string keys)
+        public static void Set(this TextPattern @this, string text)
         {
             @this.Clear();
-            SendKeys.SendWait(keys);
+            SendKeys.SendWait(Escape(text));
+        }
+
+        private static string Escape(string text)
+        {
+            return SpecialCharPattern.Replace(text, match => string.Format("{{{0}}}", match.Value));
         }
     }
 
@@ -97,7 +106,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
     {
         public static bool WaitForReady(this WindowPattern @this)
         {
-            return AutomationExtensions.TryWait(() => @this.Current.WindowInteractionState == WindowInteractionState.ReadyForUserInteraction);
+            return AutomationExtensions.Wait(() => @this.Current.WindowInteractionState == WindowInteractionState.ReadyForUserInteraction);
         }
     }
 }

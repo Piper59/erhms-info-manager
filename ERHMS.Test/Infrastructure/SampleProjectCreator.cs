@@ -2,6 +2,7 @@
 using ERHMS.Utility;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
+using NUnit.Framework;
 using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
@@ -46,6 +47,8 @@ namespace ERHMS.Test
 
     public class SqlServerSampleProjectCreator : ISampleProjectCreator
     {
+        private bool created;
+
         public TempDirectory Directory { get; private set; }
         public SqlServerDatabaseCreator Creator { get; private set; }
         public Project Project { get; private set; }
@@ -59,6 +62,7 @@ namespace ERHMS.Test
         public void SetUp()
         {
             Creator.SetUp();
+            created = true;
             using (SqlConnection connection = new SqlConnection(Creator.Builder.ConnectionString))
             {
                 Server server = new Server(new ServerConnection(connection));
@@ -73,8 +77,15 @@ namespace ERHMS.Test
 
         public void TearDown()
         {
-            Directory.Dispose();
-            Creator.TearDown();
+            if (created)
+            {
+                Directory.Dispose();
+                Creator.TearDown();
+            }
+            else
+            {
+                TestContext.Error.WriteLine("Database '{0}' may need to be manually dropped.", Creator.Builder.InitialCatalog);
+            }
         }
     }
 }

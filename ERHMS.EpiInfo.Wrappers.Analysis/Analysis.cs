@@ -145,10 +145,10 @@ namespace ERHMS.EpiInfo.Wrappers
                     }
                 }
                 Form.AddCommand(mappings.GetCommands());
-                string csvPath = IOExtensions.GetTempFileName("ERHMS_{0:N}.csv");
-                Form.AddCommand(Commands.WriteCsv(csvPath, mappings.GetTargets()));
+                string path = IOExtensions.GetTempFileName("ERHMS_{0:N}.csv");
+                Form.AddCommand(Commands.Write(path, mappings.GetTargets()));
                 Form.AddCommand(Commands.Read(ProjectPath, ViewName));
-                Form.AddCommand(Commands.MergeCsv(csvPath, mappings.GetIdTarget()));
+                Form.AddCommand(Commands.Merge(path, mappings.GetIdTarget()));
                 Form.ExecuteCommands(true, Step4);
             }
 

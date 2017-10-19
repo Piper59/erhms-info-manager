@@ -49,11 +49,6 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-        }
-
         private bool HasValidTemplateName(out string message)
         {
             if (TemplateName == "")

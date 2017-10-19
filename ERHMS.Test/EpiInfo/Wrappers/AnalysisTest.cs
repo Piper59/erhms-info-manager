@@ -13,7 +13,7 @@ using View = Epi.View;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    public partial class AnalysisTest : WrapperTest
+    public abstract partial class AnalysisTest : WrapperTest
     {
         private static class Commands
         {
@@ -27,7 +27,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 return string.Format("ROUTEOUT \"{0}\" REPLACE", path);
             }
 
-            public static string Type(string value)
+            public static string TypeOut(string value)
             {
                 return string.Format("TYPEOUT \"{0}\"", value.Replace("\"", ""));
             }
@@ -38,7 +38,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            csvDriverName = configuration.DataDrivers.Single(driver => driver.Type == Configuration.CsvDriver).DisplayName;
+            csvDriverName = Configuration.DataDrivers.Single(driver => driver.Type == Configuration.CsvDriver).DisplayName;
         }
 
         [Test]
@@ -46,8 +46,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public void ExportTest()
         {
             // Invoke wrapper
-            wrapper = Analysis.Export.Create(project.FilePath, "Surveillance");
-            wrapper.Invoke();
+            Wrapper = Analysis.Export.Create(Project.FilePath, "Surveillance");
+            Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
 
@@ -66,12 +66,12 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             // Select CSV
             writeDialog.btnGetFile.Invoke.Invoke();
             CsvExistingFileDialogScreen csvExistingFileDialog = writeDialog.GetCsvExistingFileDialogScreen();
-            csvExistingFileDialog.txtFileName.Value.SetValue(directory.FullName);
+            csvExistingFileDialog.txtFileName.Value.SetValue(Project.Location);
             csvExistingFileDialog.btnOK.Invoke.Invoke();
-            string csvPath = directory.CombinePaths("Surveillance.csv");
             writeDialog.Window.WaitForReady();
             writeDialog.txtFileName.Element.SetFocus();
-            SendKeys.SendWait(Path.GetFileName(csvPath));
+            string fileName = "Surveillance.csv";
+            SendKeys.SendWait(fileName);
 
             // Run export
             writeDialog.btnOK.Invoke.Invoke();
@@ -80,34 +80,34 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             // Close window
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
 
-            string csvContent = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Sample.Surveillance.All.csv");
-            Assert.AreEqual(csvContent, File.ReadAllText(csvPath));
+            string content = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Sample.Surveillance.All.csv");
+            Assert.AreEqual(content, File.ReadAllText(Path.Combine(Project.Location, fileName)));
         }
 
         [Test]
         public void OpenPgmTest()
         {
             // Create PGM
-            string outputPath = Path.Combine(configuration.Directories.Output, "OpenPgmTest_output.html");
+            string path = Path.Combine(Configuration.Directories.Output, "OpenPgmTest.html");
             string message = "Hello, world!";
             StringBuilder content = new StringBuilder();
-            content.AppendLine(Commands.RouteOut(outputPath));
-            content.AppendLine(Commands.Type(message));
+            content.AppendLine(Commands.RouteOut(path));
+            content.AppendLine(Commands.TypeOut(message));
             content.AppendLine(Commands.CloseOut());
             Pgm pgm = new Pgm
             {
                 Name = "OpenPgmTest_Pgm",
                 Content = content.ToString()
             };
-            project.InsertPgm(pgm);
+            Project.InsertPgm(pgm);
 
             // Invoke wrapper
-            wrapper = Analysis.OpenPgm.Create(pgm.Content, true);
-            wrapper.Invoke();
+            Wrapper = Analysis.OpenPgm.Create(pgm.Content, true);
+            Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
 
-            StringAssert.Contains(message, File.ReadAllText(outputPath));
+            StringAssert.Contains(message, File.ReadAllText(path));
 
             // Close window
             mainForm.Window.Close();
@@ -116,12 +116,12 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         private void ImportCsv(string resourceName, string fileName)
         {
             // Create CSV
-            string path = directory.CombinePaths(fileName);
+            string path = Path.Combine(Project.Location, fileName);
             Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, path);
 
             // Invoke wrapper
-            wrapper = Analysis.Import.Create(project.FilePath, "Surveillance");
-            wrapper.Invoke();
+            Wrapper = Analysis.Import.Create(Project.FilePath, "Surveillance");
+            Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
 
             // Select CSV
@@ -129,7 +129,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             readDialog.cmbDataSourcePlugIns.Selection.Set(csvDriverName);
             readDialog.btnFindDataSource.Invoke.Invoke();
             CsvExistingFileDialogScreen csvExistingFileDialog = readDialog.GetCsvExistingFileDialogScreen();
-            csvExistingFileDialog.txtFileName.Value.SetValue(directory.FullName);
+            csvExistingFileDialog.txtFileName.Value.SetValue(Project.Location);
             csvExistingFileDialog.btnOK.Invoke.Invoke();
             readDialog.lvDataSourceObjects.Selection.Set(Path.GetFileNameWithoutExtension(fileName) + "#csv");
             readDialog.btnOK.Invoke.Invoke();
@@ -164,7 +164,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public void ImportAppendTest()
         {
             ImportCsv("ERHMS.Test.Resources.Sample.Surveillance.Append.csv", "Surveillance_Append.csv");
-            View view = project.Views["Surveillance"];
+            View view = Project.Views["Surveillance"];
             Assert.AreEqual(21, view.GetRecordCount());
             view.LoadRecord(21);
             RecordTest(view, "Doe", "Jane", new DateTime(2010, 1, 1), new DateTime(2010, 1, 1));
@@ -174,9 +174,25 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public void ImportUpdateTest()
         {
             ImportCsv("ERHMS.Test.Resources.Sample.Surveillance.Update.csv", "Surveillance_Update.csv");
-            View view = project.Views["Surveillance"];
+            View view = Project.Views["Surveillance"];
             view.LoadRecord(1);
             RecordTest(view, "Doe", "John", new DateTime(2007, 1, 7), new DateTime(2010, 1, 1));
+        }
+    }
+
+    public class AccessAnalysisTest : AnalysisTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new AccessSampleProjectCreator(nameof(AccessAnalysisTest));
+        }
+    }
+
+    public class SqlServerAnalysisTest : AnalysisTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new SqlServerSampleProjectCreator(nameof(SqlServerAnalysisTest));
         }
     }
 }

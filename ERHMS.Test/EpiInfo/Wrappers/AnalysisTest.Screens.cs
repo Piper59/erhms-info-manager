@@ -9,19 +9,17 @@ namespace ERHMS.Test.EpiInfo.Wrappers
     {
         private class MainFormScreen : AutomationElementX
         {
-            public readonly AutomationElementX txtTextArea;
             public readonly AutomationElementX statusStrip1;
 
             public MainFormScreen()
                 : base(AutomationElement.RootElement.FindFirst(TreeScope.Children, id: "AnalysisMainForm"))
             {
-                txtTextArea = FindFirstX(TreeScope.Descendants, id: "txtTextArea");
                 statusStrip1 = FindFirstX(TreeScope.Descendants, id: "statusStrip1");
             }
 
             public void WaitForReady()
             {
-                AutomationExtensions.TryWait(() => statusStrip1.Element.GetChildren().Any(child => child.Current.Name == SharedStrings.READY));
+                AutomationExtensions.Wait(() => statusStrip1.Element.GetChildren().Any(child => child.Current.Name == SharedStrings.READY));
             }
 
             public AutomationElementX GetCloseDialogScreen()
@@ -80,6 +78,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                     if (cells[0].Element.Current.Name.StartsWith("Source Row") && cells[0].Value.Current.Value == source)
                     {
                         cells[1].Value.SetValue(target);
+                        return;
                     }
                 }
             }

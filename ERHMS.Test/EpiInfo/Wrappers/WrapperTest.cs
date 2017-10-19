@@ -1,10 +1,16 @@
-﻿using ERHMS.EpiInfo.Wrappers;
+﻿using Epi;
+using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Wrappers;
+using ERHMS.Utility;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    public class WrapperTest : SampleProjectTest
+    public abstract class WrapperTest
     {
         protected class WrapperEventCollection : List<WrapperEventArgs>
         {
@@ -17,18 +23,44 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        protected Wrapper wrapper;
+        private ISampleProjectCreator creator;
+
+        protected Configuration Configuration { get; private set; }
+        protected Wrapper Wrapper { get; set; }
+
+        protected Project Project
+        {
+            get { return creator.Project; }
+        }
+
+        protected abstract ISampleProjectCreator GetCreator();
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            ConfigurationExtensions.Create(AssemblyExtensions.GetEntryDirectoryPath()).Save();
+            Configuration = ConfigurationExtensions.Load();
+            creator = GetCreator();
+            creator.SetUp();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            creator.TearDown();
+            File.Delete(ConfigurationExtensions.FilePath);
+        }
 
         [TearDown]
         public void TearDown()
         {
-            if (wrapper != null)
+            if (Wrapper != null)
             {
-                if (!wrapper.Exited.WaitOne(10000))
+                if (!Wrapper.Exited.WaitOne(TimeSpan.FromSeconds(10.0)))
                 {
                     TestContext.Error.WriteLine("Wrapper is not responding.");
                 }
-                wrapper = null;
+                Wrapper = null;
             }
         }
     }

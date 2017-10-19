@@ -145,11 +145,11 @@
             this.colSource,
             this.colTarget});
             this.dgvMappings.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvMappings.Location = new System.Drawing.Point(13, 13);
+            this.dgvMappings.Location = new System.Drawing.Point(12, 12);
             this.dgvMappings.Name = "dgvMappings";
             this.dgvMappings.RowHeadersVisible = false;
             this.dgvMappings.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgvMappings.Size = new System.Drawing.Size(359, 308);
+            this.dgvMappings.Size = new System.Drawing.Size(360, 308);
             this.dgvMappings.TabIndex = 0;
             // 
             // colSource
@@ -167,25 +167,24 @@
             // btnOk
             // 
             this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnOk.Location = new System.Drawing.Point(114, 327);
+            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOk.Location = new System.Drawing.Point(114, 326);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 1;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(195, 327);
+            this.btnCancel.Location = new System.Drawing.Point(195, 326);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // MappingDialog
             // 
@@ -193,7 +192,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(384, 362);
+            this.ClientSize = new System.Drawing.Size(384, 361);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.dgvMappings);

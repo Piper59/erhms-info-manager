@@ -1,7 +1,6 @@
 ﻿using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
 using ERHMS.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -22,16 +21,6 @@ namespace ERHMS.EpiInfo.Wrappers
             this.sources = sources.ToList();
             this.targets = targets.ToList();
             BindMappings();
-        }
-
-        private void btnOk_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-        }
-
-        private new void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
         }
 
         private void BindMappings()

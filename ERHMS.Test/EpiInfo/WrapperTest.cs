@@ -7,7 +7,7 @@ using System.IO;
 
 namespace ERHMS.Test.EpiInfo
 {
-    using Test = Wrappers.Test;
+    using Test = Test.Wrappers.Test;
 
     public class WrapperTest
     {

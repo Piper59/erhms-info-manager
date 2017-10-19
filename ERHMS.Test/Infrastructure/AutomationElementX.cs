@@ -2,7 +2,7 @@
 using System.Windows.Automation;
 using System.Windows.Forms;
 
-namespace ERHMS.Test.EpiInfo.Wrappers
+namespace ERHMS.Test
 {
     public class AutomationElementX
     {
@@ -52,7 +52,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        private IDictionary<AutomationPattern, BasePattern> patterns;
+        private IDictionary<AutomationPattern, object> patterns;
 
         public AutomationElement Element { get; protected set; }
         public DialogExtensions Dialog { get; private set; }
@@ -88,7 +88,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             Element = element;
             Dialog = new DialogExtensions(this);
             Selection = new SelectionExtensions(this);
-            patterns = new Dictionary<AutomationPattern, BasePattern>();
+            patterns = new Dictionary<AutomationPattern, object>();
         }
 
         public AutomationElement FindFirst(TreeScope scope, string id = null, string name = null, bool immediate = false)
@@ -101,16 +101,15 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             return new AutomationElementX(Element.FindFirst(scope, id, name, immediate));
         }
 
-        private TPattern GetPattern<TPattern>(AutomationPattern patternId)
-            where TPattern : BasePattern
+        private TPattern GetPattern<TPattern>(AutomationPattern pattern)
         {
-            BasePattern pattern;
-            if (!patterns.TryGetValue(patternId, out pattern))
+            object value;
+            if (!patterns.TryGetValue(pattern, out value))
             {
-                pattern = (BasePattern)Element.GetCurrentPattern(patternId);
-                patterns.Add(patternId, pattern);
+                value = Element.GetCurrentPattern(pattern);
+                patterns.Add(pattern, value);
             }
-            return (TPattern)pattern;
+            return (TPattern)value;
         }
     }
 }

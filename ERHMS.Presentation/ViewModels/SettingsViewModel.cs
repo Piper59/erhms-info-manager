@@ -299,7 +299,7 @@ namespace ERHMS.Presentation.ViewModels
                         configuration.SetUserDirectories(RootPath);
                         ICollection<string> paths = Settings.Default.DataSourcePaths.ToList();
                         Settings.Default.DataSourcePaths.Clear();
-                        Regex rootPathInitPattern = new Regex("^" + Regex.Escape(rootPathInit), RegexOptions.IgnoreCase);
+                        Regex rootPathInitPattern = new Regex(@"^" + Regex.Escape(rootPathInit), RegexOptions.IgnoreCase);
                         foreach (string path in paths)
                         {
                             Settings.Default.DataSourcePaths.Add(rootPathInitPattern.Replace(path, RootPath));
