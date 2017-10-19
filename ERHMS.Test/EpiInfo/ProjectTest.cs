@@ -19,6 +19,7 @@ namespace ERHMS.Test.EpiInfo
 {
     public abstract class ProjectTest
     {
+        private TempDirectory directory;
         private Configuration configuration;
         private IProjectCreator creator;
 
@@ -32,8 +33,10 @@ namespace ERHMS.Test.EpiInfo
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            ConfigurationExtensions.Create(AssemblyExtensions.GetEntryDirectoryPath()).Save();
+            directory = new TempDirectory(GetType().Name);
+            ConfigurationExtensions.Create(directory.FullName).Save();
             configuration = ConfigurationExtensions.Load();
+            configuration.CreateUserDirectories();
             creator = GetCreator();
             creator.SetUp();
         }
@@ -43,6 +46,7 @@ namespace ERHMS.Test.EpiInfo
         {
             creator.TearDown();
             File.Delete(ConfigurationExtensions.FilePath);
+            directory.Dispose();
         }
 
         [Test]

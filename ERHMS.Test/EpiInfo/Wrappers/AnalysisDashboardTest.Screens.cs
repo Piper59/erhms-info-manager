@@ -13,7 +13,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 : base(null)
             {
                 AutomationElement scrollViewerElement = null;
-                AutomationExtensions.TryWait(() =>
+                AutomationExtensions.Wait(() =>
                 {
                     Element = AutomationElement.RootElement.FindFirst(TreeScope.Children, id: "DashboardMainForm");
                     scrollViewerElement = FindFirst(TreeScope.Descendants, id: "scrollViewer", immediate: true);
@@ -26,7 +26,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             public void WaitForReady()
             {
                 AutomationElement loadingPanel = FindFirst(TreeScope.Descendants, id: "loadingPanel");
-                AutomationExtensions.TryWait(() => loadingPanel.Current.IsOffscreen);
+                AutomationExtensions.Wait(() => loadingPanel.Current.IsOffscreen);
             }
 
             public AutomationElementX GetCloseDialogScreen()

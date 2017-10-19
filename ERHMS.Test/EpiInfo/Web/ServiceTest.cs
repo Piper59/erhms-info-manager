@@ -4,7 +4,6 @@ using Epi.Core.ServiceClient;
 using Epi.SurveyManagerServiceV2;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
-using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -21,6 +20,7 @@ namespace ERHMS.Test.EpiInfo.Web
 {
     public abstract class ServiceTest
     {
+        private TempDirectory directory;
         private Configuration configuration;
         private ISampleProjectCreator creator;
 
@@ -39,8 +39,10 @@ namespace ERHMS.Test.EpiInfo.Web
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            ConfigurationExtensions.Create(AssemblyExtensions.GetEntryDirectoryPath()).Save();
+            directory = new TempDirectory(GetType().Name);
+            ConfigurationExtensions.Create(directory.FullName).Save();
             configuration = ConfigurationExtensions.Load();
+            configuration.CreateUserDirectories();
             creator = GetCreator();
             creator.SetUp();
         }
@@ -48,8 +50,6 @@ namespace ERHMS.Test.EpiInfo.Web
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            creator.TearDown();
-            File.Delete(ConfigurationExtensions.FilePath);
             Settings.Default.Reset();
             if (View.IsWebSurvey())
             {
@@ -61,6 +61,9 @@ namespace ERHMS.Test.EpiInfo.Web
                     connection.Execute("DELETE FROM [SurveyMetaData] WHERE [SurveyId] = @SurveyId", parameters);
                 }
             }
+            creator.TearDown();
+            File.Delete(ConfigurationExtensions.FilePath);
+            directory.Dispose();
         }
 
         [Test]
@@ -179,7 +182,7 @@ namespace ERHMS.Test.EpiInfo.Web
     {
         protected override ISampleProjectCreator GetCreator()
         {
-            return new AccessSampleProjectCreator(nameof(AccessServiceTest));
+            return new AccessSampleProjectCreator();
         }
     }
 
@@ -187,7 +190,7 @@ namespace ERHMS.Test.EpiInfo.Web
     {
         protected override ISampleProjectCreator GetCreator()
         {
-            return new SqlServerSampleProjectCreator(nameof(SqlServerServiceTest));
+            return new SqlServerSampleProjectCreator();
         }
     }
 }

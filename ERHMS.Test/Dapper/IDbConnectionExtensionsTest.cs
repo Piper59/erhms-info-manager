@@ -213,7 +213,7 @@ namespace ERHMS.Test.Dapper
     {
         protected override IDatabaseCreator GetCreator()
         {
-            return new AccessDatabaseCreator(nameof(OleDbConnectionExtensionsTest));
+            return AccessDatabaseCreator.ForName(nameof(OleDbConnectionExtensionsTest));
         }
     }
 

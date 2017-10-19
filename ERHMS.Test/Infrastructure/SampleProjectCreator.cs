@@ -20,19 +20,15 @@ namespace ERHMS.Test
 
     public class AccessSampleProjectCreator : ISampleProjectCreator
     {
-        public TempDirectory Directory { get; private set; }
         public Project Project { get; private set; }
-
-        public AccessSampleProjectCreator(string name)
-        {
-            Directory = new TempDirectory(name);
-        }
 
         public void SetUp()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            string projectPath = Directory.CombinePaths("Sample" + Project.FileExtension);
+            string location = Path.Combine(Configuration.GetNewInstance().Directories.Project, "Sample");
+            string projectPath = Path.Combine(location, "Sample" + Project.FileExtension);
             string databasePath = Path.ChangeExtension(projectPath, OleDbExtensions.FileExtensions.Access);
+            Directory.CreateDirectory(location);
             assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", projectPath);
             assembly.CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.mdb", databasePath);
             ProjectInfo.Get(projectPath).SetAccessDatabase();
@@ -41,50 +37,56 @@ namespace ERHMS.Test
 
         public void TearDown()
         {
-            Directory.Dispose();
+            if (Directory.Exists(Project.Location))
+            {
+                Directory.Delete(Project.Location, true);
+            }
         }
     }
 
     public class SqlServerSampleProjectCreator : ISampleProjectCreator
     {
+        private SqlServerDatabaseCreator creator;
         private bool created;
 
-        public TempDirectory Directory { get; private set; }
-        public SqlServerDatabaseCreator Creator { get; private set; }
         public Project Project { get; private set; }
 
-        public SqlServerSampleProjectCreator(string name)
+        public SqlServerSampleProjectCreator()
         {
-            Directory = new TempDirectory(name);
-            Creator = new SqlServerDatabaseCreator();
+            creator = new SqlServerDatabaseCreator();
         }
 
         public void SetUp()
         {
-            Creator.SetUp();
+            creator.SetUp();
             created = true;
-            using (SqlConnection connection = new SqlConnection(Creator.Builder.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(creator.Builder.ConnectionString))
             {
                 Server server = new Server(new ServerConnection(connection));
                 string script = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Sample.Sample.sql");
                 server.ConnectionContext.ExecuteNonQuery(script);
             }
-            string path = Directory.CombinePaths("Sample" + Project.FileExtension);
+            string location = Path.Combine(Configuration.GetNewInstance().Directories.Project, "Sample");
+            string path = Path.Combine(location, "Sample" + Project.FileExtension);
+            Directory.CreateDirectory(location);
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", path);
-            ProjectInfo.Get(path).SetDatabase(Creator.Builder.ConnectionString, Configuration.SqlDriver);
+            ProjectInfo.Get(path).SetDatabase(creator.Builder.ConnectionString, Configuration.SqlDriver);
             Project = new Project(path);
         }
 
         public void TearDown()
         {
+            if (Directory.Exists(Project.Location))
+            {
+                Directory.Delete(Project.Location, true);
+            }
             if (created)
             {
-                Directory.Dispose();
-                Creator.TearDown();
+                creator.TearDown();
             }
             else
             {
-                TestContext.Error.WriteLine("Database '{0}' may need to be manually dropped.", Creator.Builder.InitialCatalog);
+                TestContext.Error.WriteLine("Database '{0}' may need to be manually dropped.", creator.Builder.InitialCatalog);
             }
         }
     }

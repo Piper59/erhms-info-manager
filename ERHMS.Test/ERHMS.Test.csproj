@@ -156,14 +156,14 @@
     <None Include="DataAccess\DataContextTest.cs" />
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
     <None Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
-    <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
+    <None Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
     <Compile Include="EpiInfo\TemplateInfoTest.cs" />
     <Compile Include="EpiInfo\Web\RecordTest.cs" />
     <Compile Include="EpiInfo\Web\ServiceTest.cs" />
-    <None Include="EpiInfo\Wrappers\AnalysisDashboardTest.cs" />
-    <None Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
     <None Include="EpiInfo\Wrappers\EnterTest.cs" />

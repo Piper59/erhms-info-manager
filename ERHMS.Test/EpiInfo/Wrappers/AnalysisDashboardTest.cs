@@ -7,12 +7,12 @@ using System.Windows.Forms;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    public partial class AnalysisDashboardTest : WrapperTest
+    public abstract partial class AnalysisDashboardTest : WrapperTest
     {
         [OneTimeSetUp]
         public new void OneTimeSetUp()
         {
-            project.Metadata.CreateCanvasesTable();
+            Project.Metadata.CreateCanvasesTable();
         }
 
         [Test]
@@ -24,12 +24,12 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 Name = "SampleSurveillance",
                 Content = Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Sample.SampleSurveillance.cvs7")
             };
-            canvas.SetProjectPath(project.FilePath);
-            project.InsertCanvas(canvas);
+            canvas.SetProjectPath(Project.FilePath);
+            Project.InsertCanvas(canvas);
 
             // Invoke wrapper
-            wrapper = AnalysisDashboard.OpenCanvas.Create(project.FilePath, canvas.CanvasId, canvas.Content);
-            wrapper.Invoke();
+            Wrapper = AnalysisDashboard.OpenCanvas.Create(Project.FilePath, canvas.CanvasId, canvas.Content);
+            Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
 
             // Change canvas
@@ -46,9 +46,25 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
             // Save canvas
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
-            wrapper.Exited.WaitOne();
+            Wrapper.Exited.WaitOne();
 
-            StringAssert.Contains(message, project.GetCanvasById(canvas.CanvasId).Content);
+            StringAssert.Contains(message, Project.GetCanvasById(canvas.CanvasId).Content);
+        }
+    }
+
+    public class AccessAnalysisDashboardTest : AnalysisDashboardTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new AccessSampleProjectCreator();
+        }
+    }
+
+    public class SqlServerAnalysisDashboardTest : AnalysisDashboardTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new SqlServerSampleProjectCreator();
         }
     }
 }

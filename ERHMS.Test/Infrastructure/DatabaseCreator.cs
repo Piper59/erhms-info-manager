@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
+using System.IO;
 using System.Reflection;
 
 namespace ERHMS.Test
@@ -18,16 +19,32 @@ namespace ERHMS.Test
 
     public class AccessDatabaseCreator : IDatabaseCreator
     {
-        public TempDirectory Directory { get; private set; }
+        public static AccessDatabaseCreator ForName(string name)
+        {
+            TempDirectory directory = new TempDirectory(name);
+            string path = directory.CombinePaths(name + OleDbExtensions.FileExtensions.Access);
+            AccessDatabaseCreator creator = new AccessDatabaseCreator(path)
+            {
+                directory = directory
+            };
+            return creator;
+        }
+
+        public static AccessDatabaseCreator ForPath(string path)
+        {
+            return new AccessDatabaseCreator(path);
+        }
+
+        private TempDirectory directory;
+
         public OleDbConnectionStringBuilder Builder { get; private set; }
 
-        public AccessDatabaseCreator(string name)
+        private AccessDatabaseCreator(string path)
         {
-            Directory = new TempDirectory(name);
             Builder = new OleDbConnectionStringBuilder
             {
                 Provider = OleDbExtensions.Providers.Jet4,
-                DataSource = Directory.CombinePaths(name + OleDbExtensions.FileExtensions.Access)
+                DataSource = path
             };
         }
 
@@ -38,7 +55,14 @@ namespace ERHMS.Test
 
         public void TearDown()
         {
-            Directory.Dispose();
+            if (directory == null)
+            {
+                File.Delete(Builder.DataSource);
+            }
+            else
+            {
+                directory.Dispose();
+            }
         }
 
         public IDbConnection GetConnection()

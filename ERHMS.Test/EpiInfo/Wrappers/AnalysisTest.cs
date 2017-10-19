@@ -184,7 +184,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
     {
         protected override ISampleProjectCreator GetCreator()
         {
-            return new AccessSampleProjectCreator(nameof(AccessAnalysisTest));
+            return new AccessSampleProjectCreator();
         }
     }
 
@@ -192,7 +192,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
     {
         protected override ISampleProjectCreator GetCreator()
         {
-            return new SqlServerSampleProjectCreator(nameof(SqlServerAnalysisTest));
+            return new SqlServerSampleProjectCreator();
         }
     }
 }

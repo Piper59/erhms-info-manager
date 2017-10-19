@@ -1,7 +1,6 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
-using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -23,6 +22,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
+        private TempDirectory directory;
         private ISampleProjectCreator creator;
 
         protected Configuration Configuration { get; private set; }
@@ -38,8 +38,10 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            ConfigurationExtensions.Create(AssemblyExtensions.GetEntryDirectoryPath()).Save();
+            directory = new TempDirectory(GetType().Name);
+            ConfigurationExtensions.Create(directory.FullName).Save();
             Configuration = ConfigurationExtensions.Load();
+            Configuration.CreateUserDirectories();
             creator = GetCreator();
             creator.SetUp();
         }
@@ -49,6 +51,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         {
             creator.TearDown();
             File.Delete(ConfigurationExtensions.FilePath);
+            directory.Dispose();
         }
 
         [TearDown]

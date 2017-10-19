@@ -134,7 +134,7 @@ namespace ERHMS.Test.Dapper
     {
         protected override IDatabaseCreator GetCreator()
         {
-            return new AccessDatabaseCreator(nameof(AccessDatabaseTest));
+            return AccessDatabaseCreator.ForName(nameof(AccessDatabaseTest));
         }
     }
 
