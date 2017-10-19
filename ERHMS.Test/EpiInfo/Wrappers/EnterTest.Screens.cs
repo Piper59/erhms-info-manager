@@ -13,7 +13,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             {
                 AutomationElement element = null;
                 Condition condition = new PropertyCondition(AutomationElement.ProcessIdProperty, Element.Current.ProcessId);
-                AutomationExtensions.TryWait(() =>
+                AutomationExtensions.Wait(() =>
                 {
                     foreach (AutomationElement window in AutomationElement.RootElement.FindAll(TreeScope.Children, condition))
                     {
@@ -30,29 +30,29 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
             public void WaitForReady()
             {
-                AutomationExtensions.TryWait(() =>
+                AutomationExtensions.Wait(() =>
                 {
                     AutomationElement splashScreen = FindFirst(TreeScope.Children, id: "SplashScreenForm", immediate: true);
                     return splashScreen == null || splashScreen.Current.IsOffscreen;
                 });
             }
 
-            private AutomationElementX GetField(string id)
+            private AutomationElementX GetFieldInternal(string name)
             {
                 Condition condition = new AndCondition(
-                    new PropertyCondition(AutomationElement.AutomationIdProperty, id),
+                    new PropertyCondition(AutomationElement.AutomationIdProperty, name),
                     new PropertyCondition(AutomationElement.IsValuePatternAvailableProperty, true));
                 return new AutomationElementX(Element.FindFirst(TreeScope.Descendants, condition));
             }
 
-            public string GetValue(string id)
+            public string GetField(string name)
             {
-                return GetField(id).Value.Current.Value;
+                return GetFieldInternal(name).Value.Current.Value;
             }
 
-            public void SetValue(string id, string value)
+            public void SetField(string name, string value)
             {
-                GetField(id).Value.SetValue(value);
+                GetFieldInternal(name).Value.SetValue(value);
             }
         }
     }

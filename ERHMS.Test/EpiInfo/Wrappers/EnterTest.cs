@@ -6,7 +6,7 @@ using View = Epi.View;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    public partial class EnterTest : WrapperTest
+    public abstract partial class EnterTest : WrapperTest
     {
         private void FieldTest(View view, string name, object value)
         {
@@ -17,19 +17,19 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public void OpenRecordTest()
         {
             // Invoke wrapper
-            wrapper = Enter.OpenRecord.Create(project.FilePath, "Surveillance", 1);
-            wrapper.Invoke();
+            Wrapper = Enter.OpenRecord.Create(Project.FilePath, "Surveillance", 1);
+            Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
 
-            Assert.AreEqual("100", mainForm.GetValue("CaseID"));
-            Assert.AreEqual("John", mainForm.GetValue("FirstName"));
-            Assert.AreEqual("Smith", mainForm.GetValue("LastName"));
-            Assert.AreEqual("5/20/1968", mainForm.GetValue("BirthDate"));
+            Assert.AreEqual("100", mainForm.GetField("CaseID"));
+            Assert.AreEqual("John", mainForm.GetField("FirstName"));
+            Assert.AreEqual("Smith", mainForm.GetField("LastName"));
+            Assert.AreEqual("5/20/1968", mainForm.GetField("BirthDate"));
 
             // Change record
-            mainForm.SetValue("LastName", "Doe");
-            mainForm.SetValue("BirthDate", "1/1/1980");
+            mainForm.SetField("LastName", "Doe");
+            mainForm.SetField("BirthDate", "1/1/1980");
 
             // Attempt to close window
             mainForm.Window.Close();
@@ -37,8 +37,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             // Save record
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
 
-            wrapper.Exited.WaitOne();
-            View view = project.Views["Surveillance"];
+            Wrapper.Exited.WaitOne();
+            View view = Project.Views["Surveillance"];
             view.LoadRecord(1);
             FieldTest(view, "LastName", "Doe");
             FieldTest(view, "BirthDate", new DateTime(1980, 1, 1));
@@ -55,8 +55,8 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 LastName = "Doe",
                 BirthDate = new DateTime(1980, 1, 1)
             };
-            wrapper = Enter.OpenNewRecord.Create(project.FilePath, "Surveillance", record);
-            wrapper.Invoke();
+            Wrapper = Enter.OpenNewRecord.Create(Project.FilePath, "Surveillance", record);
+            Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
 
@@ -66,14 +66,30 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             // Save record
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
 
-            wrapper.Exited.WaitOne();
-            View view = project.Views["Surveillance"];
+            Wrapper.Exited.WaitOne();
+            View view = Project.Views["Surveillance"];
             Assert.AreEqual(21, view.GetRecordCount());
             view.LoadRecord(21);
             FieldTest(view, "CaseID", record.CaseID);
             FieldTest(view, "FirstName", record.FirstName);
             FieldTest(view, "LastName", record.LastName);
             FieldTest(view, "BirthDate", record.BirthDate);
+        }
+    }
+
+    public class AccessEnterTest : EnterTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new AccessSampleProjectCreator();
+        }
+    }
+
+    public class SqlServerEnterTest : EnterTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new SqlServerSampleProjectCreator();
         }
     }
 }

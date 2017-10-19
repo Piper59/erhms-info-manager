@@ -166,8 +166,8 @@
     <Compile Include="EpiInfo\Wrappers\AnalysisDashboardTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.cs" />
     <Compile Include="EpiInfo\Wrappers\AnalysisTest.Screens.cs" />
-    <None Include="EpiInfo\Wrappers\EnterTest.cs" />
-    <None Include="EpiInfo\Wrappers\EnterTest.Screens.cs" />
+    <Compile Include="EpiInfo\Wrappers\EnterTest.cs" />
+    <Compile Include="EpiInfo\Wrappers\EnterTest.Screens.cs" />
     <None Include="EpiInfo\Wrappers\MakeViewTest.cs" />
     <None Include="EpiInfo\Wrappers\MakeViewTest.Screens.cs" />
     <Compile Include="EpiInfo\Wrappers\WrapperTest.cs" />

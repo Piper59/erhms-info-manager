@@ -93,8 +93,12 @@ namespace ERHMS.EpiInfo.Wrappers
                     while (true)
                     {
                         string name = In.ReadLine();
+                        if (name == null)
+                        {
+                            break;
+                        }
                         string value = In.ReadLine();
-                        if (name == null || value == null)
+                        if (value == null)
                         {
                             break;
                         }
