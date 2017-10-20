@@ -12,14 +12,16 @@ using System.Xml;
 
 namespace ERHMS.Test.EpiInfo.Wrappers
 {
-    public partial class MakeViewTest : WrapperTest
+    public abstract partial class MakeViewTest : WrapperTest
     {
+        protected abstract IProjectCreator GetProjectCreator(string name);
+
         [Test]
         public void OpenViewTest()
         {
             // Invoke wrapper
-            wrapper = MakeView.OpenView.Create(project.FilePath, "ADDFull");
-            wrapper.Invoke();
+            Wrapper = MakeView.OpenView.Create(Project.FilePath, "ADDFull");
+            Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
 
             // Verify current page, view, and project
@@ -39,17 +41,19 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         {
             string templatePath = TemplateInfo.GetPath(TemplateLevel.Project, "ADDFull");
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.ADDFull.Project.xml", templatePath);
+            IProjectCreator creator = GetProjectCreator("ADDFull");
+            creator.SetUp();
             try
             {
-                Project project = AccessProjectTest.Create("ADDFull");
-                wrapper = MakeView.InstantiateProjectTemplate.Create(project.FilePath, templatePath);
-                wrapper.Invoke();
-                wrapper.Exited.WaitOne();
-                Assert.AreEqual(1, project.Views.Count);
-                Assert.IsTrue(project.Views.Contains("ADDFull"));
+                Wrapper = MakeView.InstantiateProjectTemplate.Create(creator.Project.FilePath, templatePath);
+                Wrapper.Invoke();
+                Wrapper.Exited.WaitOne();
+                Assert.AreEqual(1, creator.Project.Views.Count);
+                Assert.IsTrue(creator.Project.Views.Contains("ADDFull"));
             }
             finally
             {
+                creator.TearDown();
                 File.Delete(templatePath);
             }
         }
@@ -62,9 +66,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             try
             {
                 // Invoke wrapper
-                wrapper = MakeView.InstantiateViewTemplate.Create(project.FilePath, templatePath, "");
-                WrapperEventCollection events = new WrapperEventCollection(wrapper);
-                wrapper.Invoke();
+                Wrapper = MakeView.InstantiateViewTemplate.Create(Project.FilePath, templatePath, "");
+                WrapperEventCollection events = new WrapperEventCollection(Wrapper);
+                Wrapper.Invoke();
                 MainFormScreen mainForm = new MainFormScreen();
 
                 // Create view
@@ -75,11 +79,11 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 // Close window
                 mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
 
-                wrapper.Exited.WaitOne();
-                Assert.IsTrue(project.Views.Contains("ADDFull_2"));
+                Wrapper.Exited.WaitOne();
+                Assert.IsTrue(Project.Views.Contains("ADDFull_2"));
                 Assert.AreEqual(1, events.Count);
                 Assert.AreEqual("ViewCreated", events[0].Type);
-                Assert.AreEqual(events[0].Properties.ViewId, project.Views["ADDFull_2"].Id);
+                Assert.AreEqual(events[0].Properties.ViewId, Project.Views["ADDFull_2"].Id);
             }
             finally
             {
@@ -121,9 +125,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             try
             {
                 // Invoke wrapper
-                wrapper = MakeView.CreateTemplate.Create(project.FilePath, "ADDFull");
-                WrapperEventCollection events = new WrapperEventCollection(wrapper);
-                wrapper.Invoke();
+                Wrapper = MakeView.CreateTemplate.Create(Project.FilePath, "ADDFull");
+                WrapperEventCollection events = new WrapperEventCollection(Wrapper);
+                Wrapper.Invoke();
                 MainFormScreen mainForm = new MainFormScreen();
 
                 // Create template
@@ -155,12 +159,38 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         [Test]
         public void CreateWebTemplateTest()
         {
-            wrapper = MakeView.CreateWebTemplate.Create(project.FilePath, "ADDFull");
-            wrapper.Invoke();
+            Wrapper = MakeView.CreateWebTemplate.Create(Project.FilePath, "ADDFull");
+            Wrapper.Invoke();
             XmlDocument document = new XmlDocument();
-            document.LoadXml(wrapper.ReadToEnd());
+            document.LoadXml(Wrapper.ReadToEnd());
             TemplateTest(document);
-            wrapper.Exited.WaitOne();
+            Wrapper.Exited.WaitOne();
+        }
+    }
+
+    public class AccessMakeViewTest : MakeViewTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new AccessSampleProjectCreator();
+        }
+
+        protected override IProjectCreator GetProjectCreator(string name)
+        {
+            return new AccessProjectCreator(name);
+        }
+    }
+
+    public class SqlServerMakeViewTest : MakeViewTest
+    {
+        protected override ISampleProjectCreator GetCreator()
+        {
+            return new SqlServerSampleProjectCreator();
+        }
+
+        protected override IProjectCreator GetProjectCreator(string name)
+        {
+            return new SqlServerProjectCreator(name);
         }
     }
 }

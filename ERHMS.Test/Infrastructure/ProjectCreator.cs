@@ -64,7 +64,7 @@ namespace ERHMS.Test
 
         public SqlServerProjectCreator(string name)
         {
-            creator = new SqlServerDatabaseCreator();
+            creator = new SqlServerDatabaseCreator(name);
             Info = new ProjectCreationInfo
             {
                 Name = name,

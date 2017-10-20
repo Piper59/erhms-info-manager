@@ -45,6 +45,10 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class InstantiateProjectTemplate : Wrapper
         {
+            private static string ProjectPath { get; set; }
+            private static string TemplatePath { get; set; }
+            private static MainForm Form { get; set; }
+
             public static Wrapper Create(string projectPath, string templatePath)
             {
                 return Create(() => MainInternal(projectPath, templatePath));
@@ -52,10 +56,19 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void MainInternal(string projectPath, string templatePath)
             {
-                MainForm form = new MainForm(false);
-                form.OpenProject(projectPath);
-                Template template = new Template(form.Mediator);
-                template.InstantiateTemplate(templatePath);
+                ProjectPath = projectPath;
+                TemplatePath = templatePath;
+                Form = new MainForm(false);
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
+            }
+
+            private static void Form_Shown(object sender, EventArgs e)
+            {
+                Form.OpenProject(ProjectPath);
+                Template template = new Template(Form.Mediator);
+                template.InstantiateTemplate(TemplatePath);
+                Form.Close();
             }
         }
 
@@ -164,6 +177,10 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public class CreateWebTemplate : Wrapper
         {
+            private static string ProjectPath { get; set; }
+            private static string ViewName { get; set; }
+            private static MainForm Form { get; set; }
+
             public static Wrapper Create(string projectPath, string viewName)
             {
                 return Create(() => MainInternal(projectPath, viewName));
@@ -171,11 +188,20 @@ namespace ERHMS.EpiInfo.Wrappers
 
             private static void MainInternal(string projectPath, string viewName)
             {
-                MainForm form = new MainForm(false);
-                form.OpenProject(projectPath);
-                form.ProjectExplorer.SelectView(viewName);
-                Template template = new Template(form.Mediator);
+                ProjectPath = projectPath;
+                ViewName = viewName;
+                Form = new MainForm(false);
+                Form.Shown += Form_Shown;
+                Application.Run(Form);
+            }
+
+            private static void Form_Shown(object sender, EventArgs e)
+            {
+                Form.OpenProject(ProjectPath);
+                Form.ProjectExplorer.SelectView(ViewName);
+                Template template = new Template(Form.Mediator);
                 Out.Write(template.CreateWebTemplate());
+                Form.Close();
             }
         }
 

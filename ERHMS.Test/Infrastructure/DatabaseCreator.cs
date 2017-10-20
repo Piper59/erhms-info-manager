@@ -80,12 +80,16 @@ namespace ERHMS.Test
     {
         public SqlConnectionStringBuilder Builder { get; private set; }
 
-        public SqlServerDatabaseCreator()
+        public SqlServerDatabaseCreator(string name = null)
         {
             Builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString)
             {
                 Pooling = false
             };
+            if (name != null)
+            {
+                Builder.InitialCatalog = name;
+            }
         }
 
         private void ExecuteNonQuery(string format, params string[] identifiers)
