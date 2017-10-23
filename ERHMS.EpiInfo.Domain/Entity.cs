@@ -77,7 +77,9 @@ namespace ERHMS.EpiInfo.Domain
 
         public T GetProperty<T>(string name)
         {
-            return (T)GetProperty(name);
+            T value;
+            TryGetProperty(name, out value);
+            return value;
         }
 
         public bool PropertyEquals(string name, object value)
@@ -184,7 +186,7 @@ namespace ERHMS.EpiInfo.Domain
         public override bool Equals(object obj)
         {
             Entity entity = obj as Entity;
-            return entity != null && entity.Id != null && entity.Id == Id;
+            return entity != null && entity.Id != null && entity.Id.Equals(Id);
         }
     }
 }

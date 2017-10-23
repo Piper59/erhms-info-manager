@@ -1,8 +1,8 @@
 ﻿using Epi;
 using ERHMS.EpiInfo.Domain;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Threading;
 
 namespace ERHMS.Test.EpiInfo.Domain
@@ -12,7 +12,7 @@ namespace ERHMS.Test.EpiInfo.Domain
         [Test]
         public void PropertiesTest()
         {
-            ViewEntity entity = new ViewEntity();
+            ViewEntity entity = new ViewEntity(true);
             dynamic person = entity;
             ICollection<string> actual = new List<string>();
             ICollection<string> expected = new List<string>();
@@ -58,35 +58,12 @@ namespace ERHMS.Test.EpiInfo.Domain
             {
                 entity.New = false;
                 expected.Add(nameof(ViewEntity.New));
-                Thread.Sleep(1000);
+                Thread.Sleep(TimeSpan.FromSeconds(1.0));
                 entity.Touch();
                 expected.Add(nameof(ViewEntity.ModifiedOn));
                 expected.Add(ColumnNames.RECORD_LAST_SAVE_TIME);
                 CollectionAssert.AreEquivalent(expected, actual);
             }
-        }
-
-        [Test]
-        public void CloneTest()
-        {
-            dynamic original = new ViewEntity();
-            original.Value = 1;
-            original.Subobject = new ExpandoObject();
-            original.Subobject.Value = 1;
-            original.Subentity = new ViewEntity();
-            original.Subentity.Value = 1;
-            dynamic clone = original.Clone();
-            Assert.AreEqual(1, clone.Value);
-            Assert.AreEqual(1, clone.Subobject.Value);
-            Assert.AreEqual(1, clone.Subentity.Value);
-            Assert.IsFalse(ReferenceEquals(original, clone));
-            Assert.IsTrue(Equals(original, clone));
-            original.Value = 2;
-            original.Subobject.Value = 2;
-            original.Subentity.Value = 2;
-            Assert.AreEqual(1, clone.Value);
-            Assert.AreEqual(2, clone.Subobject.Value);
-            Assert.AreEqual(1, clone.Subentity.Value);
         }
     }
 }
