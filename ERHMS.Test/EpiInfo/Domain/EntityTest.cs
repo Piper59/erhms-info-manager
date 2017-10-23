@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace ERHMS.Test.EpiInfo.Domain
 {
-    public class GuidEntityTest
+    public class EntityTest
     {
         private class Person : GuidEntity
         {

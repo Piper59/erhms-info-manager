@@ -10,7 +10,7 @@ using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.DataAccess
 {
-    public class DataContext : DataContextBase
+    public class DataContext : IDataContext
     {
         public static void Configure()
         {
@@ -76,6 +76,8 @@ namespace ERHMS.DataAccess
             return TemplateInfo.Get(path);
         }
 
+        public IDatabase Database { get; private set; }
+        public Project Project { get; private set; }
         public AssignmentRepository Assignments { get; private set; }
         public CanvasRepository Canvases { get; private set; }
         public CanvasLinkRepository CanvasLinks { get; private set; }
@@ -123,8 +125,9 @@ namespace ERHMS.DataAccess
         }
 
         public DataContext(Project project)
-            : base(project)
         {
+            Database = project.GetDatabase();
+            Project = project;
             Assignments = new AssignmentRepository(this);
             Canvases = new CanvasRepository(this);
             CanvasLinks = new CanvasLinkRepository(this);
