@@ -172,6 +172,7 @@ namespace ERHMS.Presentation
 
         private void Toast(ToastMessage msg)
         {
+            Log.Logger.DebugFormat("Toasting: {0}", msg.Message);
             ToastPopUp popup = new ToastPopUp(App.Title, msg.Message, msg.Type)
             {
                 Background = Brushes.White,
