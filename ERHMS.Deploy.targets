@@ -30,13 +30,10 @@
     </ItemGroup>
   </Target>
   <Target Name="CreateZipDeployment" AfterTargets="AfterPublish">
-    <PropertyGroup>
-      <WorkingDir>$(BuildDir)..\</WorkingDir>
-    </PropertyGroup>
     <ItemGroup>
-      <DeployedFile Include="$(WorkingDir)**" />
+      <DeployedFile Include="$(BuildContainerDir)**" />
     </ItemGroup>
-    <Zip Files="@(DeployedFile)" WorkingDirectory="$(WorkingDir)" ZipFileName="$(ZipFile)" />
+    <Zip Files="@(DeployedFile)" WorkingDirectory="$(BuildContainerDir)" ZipFileName="$(ZipFile)" />
   </Target>
   <Target Name="CleanEpiInfoFiles" AfterTargets="Clean">
     <RemoveDir Directories="Projects;Templates" />

@@ -26,10 +26,10 @@
     </ItemGroup>
     <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
-  <Target Name="CopyLauncher" AfterTargets="Build" Condition="'$(MainProject)' == 'true'">
-    <Copy SourceFiles="$(SolutionDir)ERHMS Info Manager.bat" DestinationFolder="$(BuildDir).." SkipUnchangedFiles="true" />
+  <Target Name="CreateLauncher" AfterTargets="Build" Condition="'$(MainProject)' == 'true'">
+    <Exec WorkingDirectory="$(BuildContainerDir)" Command="cscript //Nologo &quot;$(SolutionDir)shortcut.vbs&quot; &quot;Launch ERHMS Info Manager.lnk&quot; &quot;$(BuildDir)$(TargetFileName)&quot;" />
   </Target>
-  <Target Name="CleanBuildDir" AfterTargets="Clean" Condition="'$(Rebuilding)' == 'false'">
-    <RemoveDir Directories="$(BuildDir).." />
+  <Target Name="CleanBuildContainerDir" AfterTargets="Clean" Condition="'$(Rebuilding)' == 'false'">
+    <RemoveDir Directories="$(BuildContainerDir)" />
   </Target>
 </Project>
