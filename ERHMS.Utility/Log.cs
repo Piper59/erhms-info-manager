@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.Principal;
 
 namespace ERHMS.Utility
 {
@@ -47,10 +48,11 @@ namespace ERHMS.Utility
         static Log()
         {
             GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
+            GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
             name = Assembly.GetEntryAssembly().GetName().Name;
             FilePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Logs", name + FileExtension);
             hierarchy = (Hierarchy)LogManager.GetRepository();
-            PatternLayout layout = new PatternLayout("%date %10property{process} %-5level - %message%newline");
+            PatternLayout layout = new PatternLayout("%date %10property{process} %-5level - %property{user} - %message%newline");
             layout.ActivateOptions();
             TextWriterAppender appender = new FileAppender
             {
