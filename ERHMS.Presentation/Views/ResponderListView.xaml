@@ -55,16 +55,17 @@
                                  Command="{Binding EditCommand}"
                                  Icon="{StaticResource appbar_edit}" />
             <Controls:IconButton AccessText="Mer_ge"
-                                 Icon="{StaticResource appbar_cell_merge}">
+                                 Icon="{StaticResource appbar_cell_merge}"
+                                 ToolTip="Merge two selected responders or perform an automated search for potentially duplicate responders">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Command="{Binding MergeAutomatedCommand}"
-                                  Header="_Automated" />
                         <MenuItem Command="{Binding MergeSelectedCommand}"
                                   Header="_Selected" />
+                        <MenuItem Command="{Binding MergeAutomatedCommand}"
+                                  Header="_Automated" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Controls:IconButton>

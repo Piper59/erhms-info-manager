@@ -178,4 +178,17 @@
         </Style.Triggers>
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
+
+    <Style TargetType="ToolTip">
+        <Style.Resources>
+            <Style TargetType="ContentPresenter">
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+        </Style.Resources>
+        <Setter Property="MaxWidth" Value="250" />
+    </Style>
 </ResourceDictionary>

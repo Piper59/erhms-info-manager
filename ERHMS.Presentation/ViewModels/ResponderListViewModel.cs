@@ -127,9 +127,13 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (duplicates.Count == 0)
                 {
+                    ICollection<string> message = new List<string>();
+                    message.Add("No potentially duplicate responders found.");
+                    message.Add("You may still merge responders by selecting two of them from the list and clicking Merge > Selected.");
                     MessengerInstance.Send(new AlertMessage
                     {
-                        Message = "No potentially duplicate responders found."
+                        Title = "Done",
+                        Message = string.Join(" ", message)
                     });
                 }
                 else
