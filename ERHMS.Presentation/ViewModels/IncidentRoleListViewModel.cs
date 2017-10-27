@@ -13,6 +13,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
         public RelayCommand RemoveCommand { get; private set; }
+        public RelayCommand ShowSettingsCommand { get; private set; }
 
         public IncidentRoleListViewModel(IServiceManager services, Incident incident)
             : base(services)
@@ -23,6 +24,7 @@ namespace ERHMS.Presentation.ViewModels
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
             RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
+            ShowSettingsCommand = new RelayCommand(ShowSettings);
         }
 
         protected override IEnumerable<IncidentRole> GetItems()
@@ -89,6 +91,11 @@ namespace ERHMS.Presentation.ViewModels
                 };
                 MessengerInstance.Send(msg);
             }
+        }
+
+        public void ShowSettings()
+        {
+            Documents.ShowSettings();
         }
     }
 }

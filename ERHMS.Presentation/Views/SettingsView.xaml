@@ -91,7 +91,8 @@
                         </Grid>
                         <TextBlock Grid.Row="1"
                                    TextWrapping="Wrap">
-                            <Run FontWeight="SemiBold">Note:</Run> Changes made here do not affect existing incidents.
+                            <Run FontWeight="SemiBold">Note:</Run> These roles are automatically added to new incidents when they are created.
+                            Changes made here do not affect existing incidents.
                         </TextBlock>
                     </Grid>
                 </GroupBox>

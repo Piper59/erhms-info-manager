@@ -8,6 +8,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Controls:Filter Grid.Row="0"
                          Value="{Binding Filter}" />
@@ -25,7 +26,13 @@
                                     Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="2"
+        <TextBlock Grid.Row="2"
+                   Margin="0,5,0,0"
+                   TextWrapping="Wrap">
+            <Run FontWeight="SemiBold">Note:</Run> These roles are specific to this incident.
+            Changes made here do not affect other incidents or the global list of roles in <Hyperlink Command="{Binding ShowSettingsCommand}">Settings</Hyperlink>.
+        </TextBlock>
+        <WrapPanel Grid.Row="3"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Add"
                                  Command="{Binding AddCommand}"
