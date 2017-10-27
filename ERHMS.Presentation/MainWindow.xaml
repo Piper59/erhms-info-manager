@@ -46,7 +46,7 @@
                 <MenuItem Command="{Binding ShowNewResponderCommand}"
                           Header="Create _New" />
             </MenuItem>
-            <MenuItem Header="Incidents"
+            <MenuItem Header="_Incidents"
                       Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
                 <MenuItem Command="{Binding ShowIncidentsCommand}"
                           Header="Show _All" />
@@ -67,10 +67,15 @@
                           Header="_Dashboards" />
             </MenuItem>
             <MenuItem Header="_Tools">
+                <MenuItem Command="{Binding ShowStartCommand}"
+                          Header="S_tart"
+                          Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}" />
                 <MenuItem Command="{Binding ShowSettingsCommand}"
-                          Header="_Settings" />
+                          Header="S_ettings" />
                 <MenuItem Command="{Binding ShowLogsCommand}"
                           Header="_Logs" />
+            </MenuItem>
+            <MenuItem Header="_Help">
                 <MenuItem Command="{Binding ShowHelpCommand}"
                           Header="_Help" />
                 <Separator />
@@ -206,6 +211,13 @@
                             <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
                     </Views:SettingsView>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:StartViewModel}">
+                    <Views:StartView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:StartView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:TeamViewModel}">
                     <Views:TeamView>

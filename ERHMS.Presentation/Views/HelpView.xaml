@@ -13,106 +13,115 @@
         <TabItem Header="_Workflow">
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
                           VerticalAlignment="Top">
-                <Canvas Height="600"
-                        Width="600">
-                    <Canvas.Resources>
-                        <Style TargetType="Controls:CappedPath">
-                            <Setter Property="Stroke" Value="#878787" />
-                            <Setter Property="StrokeThickness" Value="5" />
-                            <Setter Property="StrokeEndLineCap" Value="M0,0 L-5,10 L20,0 L-5,-10 Z" />
-                        </Style>
-                        <Style x:Key="Header" TargetType="Run">
-                            <Setter Property="FontWeight" Value="SemiBold" />
-                        </Style>
-                        <Style TargetType="Hyperlink">
-                            <Setter Property="Foreground" Value="#000000" />
-                        </Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontSize" Value="14" />
-                            <Setter Property="TextAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </Canvas.Resources>
-                    <Grid Canvas.Left="0"
-                          Canvas.Top="259.808">
-                        <Ellipse Fill="#26b9f1"
-                                 Height="300"
-                                 Width="300" />
-                        <TextBlock>
-                            <Run Style="{StaticResource Header}">Pre-Deployment Phase</Run><LineBreak />
-                            <LineBreak />
-                            &#x2022; Rostering and credentialing<LineBreak />
-                            &#x2022; Health screening<LineBreak />
-                            &#x2022; Health and safety training<LineBreak />
-                            <LineBreak />
-                            Modules:
-                            <Hyperlink Command="{Binding ShowRespondersCommand}">Responders</Hyperlink>,
-                            <Hyperlink Command="{Binding ShowTemplatesCommand}">Templates</Hyperlink>
-                        </TextBlock>
-                    </Grid>
-                    <Grid Canvas.Left="150"
-                          Canvas.Top="0">
-                        <Ellipse Fill="#ef3e45"
-                                 Height="300"
-                                 Width="300" />
-                        <TextBlock>
-                            <Run Style="{StaticResource Header}">Deployment Phase</Run><LineBreak />
-                            <LineBreak />
-                            &#x2022; On-site responder in-processing<LineBreak />
-                            &#x2022; Health monitoring and surveillance<LineBreak />
-                            &#x2022; Exposure assessment<LineBreak />
-                            &#x2022; Activities documentation<LineBreak />
-                            &#x2022; Controls<LineBreak />
-                            &#x2022; Communication of exposure and health<LineBreak />monitoring and surveillance data<LineBreak />
-                            <LineBreak />
-                            Modules:
-                            <Hyperlink Command="{Binding ShowIncidentsCommand}">Incidents</Hyperlink>,
-                            <Hyperlink Command="{Binding ShowViewsCommand}">Forms</Hyperlink>
-                        </TextBlock>
-                    </Grid>
-                    <Grid Canvas.Left="300"
-                          Canvas.Top="259.808">
-                        <Ellipse Fill="#26b26b"
-                                 Height="300"
-                                 Width="300" />
-                        <TextBlock>
-                            <Run Style="{StaticResource Header}">Post-Deployment Phase</Run><LineBreak />
-                            <LineBreak />
-                            &#x2022; Responder out-processing<LineBreak />
-                            &#x2022; Post-event health tracking<LineBreak />
-                            &#x2022; After-action reporting<LineBreak /><LineBreak />
-                            Modules:
-                            <Hyperlink Command="{Binding ShowPgmsCommand}">Analyses</Hyperlink>,
-                            <Hyperlink Command="{Binding ShowCanvasesCommand}">Dashboards</Hyperlink>
-                        </TextBlock>
-                    </Grid>
-                    <Grid Canvas.Left="250"
-                          Canvas.Top="273.205">
-                        <Ellipse Fill="#f0808080"
-                                 Height="100"
-                                 Width="100" />
-                        <TextBlock FontWeight="SemiBold" Foreground="#ffffffff">
-                            Post-Event<LineBreak />
-                            Tracking<LineBreak />
-                            Decision
-                        </TextBlock>
-                    </Grid>
-                    <Controls:CappedPath>
-                        <Controls:CappedPath.Data>
-                            <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 165, 140, Clockwise}" />
-                        </Controls:CappedPath.Data>
-                    </Controls:CappedPath>
-                    <Controls:CappedPath>
-                        <Controls:CappedPath.Data>
-                            <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 45, 20, Clockwise}" />
-                        </Controls:CappedPath.Data>
-                    </Controls:CappedPath>
-                    <Controls:CappedPath>
-                        <Controls:CappedPath.Data>
-                            <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 285, 260, Clockwise}" />
-                        </Controls:CappedPath.Data>
-                    </Controls:CappedPath>
-                </Canvas>
+                <ScrollViewer.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="TextAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </ScrollViewer.Resources>
+                <StackPanel>
+                    <TextBlock Margin="0,0,0,10">
+                        Click the headings on the left to open the corresponding sections of the User Guide.<LineBreak />
+                        Click the links in the diagram below to open the corresponding modules of the software.
+                    </TextBlock>
+                    <Canvas Height="600"
+                            Width="600">
+                        <Canvas.Resources>
+                            <Style TargetType="Controls:CappedPath">
+                                <Setter Property="Stroke" Value="#808080" />
+                                <Setter Property="StrokeThickness" Value="5" />
+                                <Setter Property="StrokeEndLineCap" Value="M0,0 L-5,10 L20,0 L-5,-10 Z" />
+                            </Style>
+                            <Style x:Key="Header" TargetType="Run">
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Style>
+                            <Style TargetType="Hyperlink">
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="Foreground" Value="#000000" />
+                            </Style>
+                        </Canvas.Resources>
+                        <Grid Canvas.Left="0"
+                              Canvas.Top="259.808">
+                            <Ellipse Fill="#d900adef"
+                                     Height="300"
+                                     Width="300" />
+                            <TextBlock>
+                                <Run Style="{StaticResource Header}">Pre-Deployment Phase</Run><LineBreak />
+                                <LineBreak />
+                                &#x2022; Rostering and credentialing<LineBreak />
+                                &#x2022; Health screening<LineBreak />
+                                &#x2022; Health and safety training<LineBreak />
+                                <LineBreak />
+                                Modules:
+                                <Hyperlink Command="{Binding ShowRespondersCommand}">Responders</Hyperlink>,
+                                <Hyperlink Command="{Binding ShowTemplatesCommand}">Templates</Hyperlink>
+                            </TextBlock>
+                        </Grid>
+                        <Grid Canvas.Left="150"
+                              Canvas.Top="0">
+                            <Ellipse Fill="#d9ec1c24"
+                                     Height="300"
+                                     Width="300" />
+                            <TextBlock>
+                                <Run Style="{StaticResource Header}">Deployment Phase</Run><LineBreak />
+                                <LineBreak />
+                                &#x2022; On-site responder in-processing<LineBreak />
+                                &#x2022; Health monitoring and surveillance<LineBreak />
+                                &#x2022; Exposure assessment<LineBreak />
+                                &#x2022; Activities documentation<LineBreak />
+                                &#x2022; Controls<LineBreak />
+                                &#x2022; Communication of exposure and health<LineBreak />monitoring and surveillance data<LineBreak />
+                                <LineBreak />
+                                Modules:
+                                <Hyperlink Command="{Binding ShowIncidentsCommand}">Incidents</Hyperlink>,
+                                <Hyperlink Command="{Binding ShowViewsCommand}">Forms</Hyperlink>
+                            </TextBlock>
+                        </Grid>
+                        <Grid Canvas.Left="300"
+                              Canvas.Top="259.808">
+                            <Ellipse Fill="#d900a551"
+                                     Height="300"
+                                     Width="300" />
+                            <TextBlock>
+                                <Run Style="{StaticResource Header}">Post-Deployment Phase</Run><LineBreak />
+                                <LineBreak />
+                                &#x2022; Responder out-processing<LineBreak />
+                                &#x2022; Post-event health tracking<LineBreak />
+                                &#x2022; After-action reporting<LineBreak /><LineBreak />
+                                Modules:
+                                <Hyperlink Command="{Binding ShowPgmsCommand}">Analyses</Hyperlink>,
+                                <Hyperlink Command="{Binding ShowCanvasesCommand}">Dashboards</Hyperlink>
+                            </TextBlock>
+                        </Grid>
+                        <Grid Canvas.Left="250"
+                              Canvas.Top="273.205">
+                            <Ellipse Fill="#ee808080"
+                                     Height="100"
+                                     Width="100" />
+                            <TextBlock FontWeight="SemiBold" Foreground="#ffffffff">
+                                Post-Event<LineBreak />
+                                Tracking<LineBreak />
+                                Decision
+                            </TextBlock>
+                        </Grid>
+                        <Controls:CappedPath>
+                            <Controls:CappedPath.Data>
+                                <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 165, 140, Clockwise}" />
+                            </Controls:CappedPath.Data>
+                        </Controls:CappedPath>
+                        <Controls:CappedPath>
+                            <Controls:CappedPath.Data>
+                                <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 45, 20, Clockwise}" />
+                            </Controls:CappedPath.Data>
+                        </Controls:CappedPath>
+                        <Controls:CappedPath>
+                            <Controls:CappedPath.Data>
+                                <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 285, 260, Clockwise}" />
+                            </Controls:CappedPath.Data>
+                        </Controls:CappedPath>
+                    </Canvas>
+                </StackPanel>
             </ScrollViewer>
         </TabItem>
         <Controls:UserGuideTabItem Header="_Data Sources"

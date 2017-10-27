@@ -68,6 +68,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand ShowAssignmentsCommand { get; private set; }
         public RelayCommand ShowPgmsCommand { get; private set; }
         public RelayCommand ShowCanvasesCommand { get; private set; }
+        public RelayCommand ShowStartCommand { get; private set; }
         public RelayCommand ShowSettingsCommand { get; private set; }
         public RelayCommand ShowLogsCommand { get; private set; }
         public RelayCommand ShowHelpCommand { get; private set; }
@@ -90,6 +91,7 @@ namespace ERHMS.Presentation.ViewModels
             ShowAssignmentsCommand = new RelayCommand(ShowAssignments, HasContext);
             ShowPgmsCommand = new RelayCommand(ShowPgms, HasContext);
             ShowCanvasesCommand = new RelayCommand(ShowCanvases, HasContext);
+            ShowStartCommand = new RelayCommand(ShowStart, HasContext);
             ShowSettingsCommand = new RelayCommand(ShowSettings);
             ShowLogsCommand = new RelayCommand(ShowLogs);
             ShowHelpCommand = new RelayCommand(ShowHelp);
@@ -113,6 +115,7 @@ namespace ERHMS.Presentation.ViewModels
                     ShowAssignmentsCommand.RaiseCanExecuteChanged();
                     ShowPgmsCommand.RaiseCanExecuteChanged();
                     ShowCanvasesCommand.RaiseCanExecuteChanged();
+                    ShowStartCommand.RaiseCanExecuteChanged();
                 }
             };
         }
@@ -220,7 +223,7 @@ namespace ERHMS.Presentation.ViewModels
         private void OnDataSourceOpened()
         {
             Title = string.Format("{0} - {1}", App.Title, Context.Project.Name);
-            ShowHelp();
+            ShowStart();
         }
 
         private TViewModel Get<TViewModel>(Func<TViewModel, bool> predicate = null)
@@ -363,6 +366,11 @@ namespace ERHMS.Presentation.ViewModels
         public void ShowCanvases()
         {
             Show(() => new CanvasListViewModel(Services, null));
+        }
+
+        public void ShowStart()
+        {
+            Show(() => new StartViewModel(Services));
         }
 
         public void ShowSettings()
