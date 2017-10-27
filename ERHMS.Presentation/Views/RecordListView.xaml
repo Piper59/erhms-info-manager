@@ -36,7 +36,8 @@
                                  Icon="{StaticResource appbar_edit}" />
             <Controls:IconButton AccessText="Re_sponder"
                                  Command="{Binding LinkCommand}"
-                                 Icon="{StaticResource appbar_user}" />
+                                 Icon="{StaticResource appbar_user}"
+                                 ToolTip="Change the responder this record is linked to" />
             <Controls:IconButton AccessText="_Delete"
                                  Command="{Binding DeleteCommand}"
                                  Icon="{StaticResource appbar_page_delete}" />

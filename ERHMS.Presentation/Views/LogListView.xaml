@@ -48,7 +48,8 @@
                                  Icon="{StaticResource appbar_delete}" />
             <Controls:IconButton AccessText="_Package"
                                  Command="{Binding PackageCommand}"
-                                 Icon="{StaticResource appbar_cabinet_files}" />
+                                 Icon="{StaticResource appbar_cabinet_files}"
+                                 ToolTip="Package logs into a ZIP file" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />

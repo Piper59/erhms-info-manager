@@ -46,7 +46,8 @@
                                  Icon="{StaticResource appbar_delete}" />
             <Controls:IconButton AccessText="_Incident"
                                  Command="{Binding LinkCommand}"
-                                 Icon="{StaticResource appbar_globe}" />
+                                 Icon="{StaticResource appbar_globe}"
+                                 ToolTip="Change the incident this dashboard is linked to" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />

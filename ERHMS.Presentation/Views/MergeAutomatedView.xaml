@@ -42,7 +42,8 @@
                                  Icon="{StaticResource appbar_cell_merge}" />
             <Controls:IconButton AccessText="_Ignore"
                                  Command="{Binding IgnoreCommand}"
-                                 Icon="{StaticResource appbar_close}" />
+                                 Icon="{StaticResource appbar_close}"
+                                 ToolTip="Ignore this pair of responders in future searches for potential duplicates" />
         </WrapPanel>
     </Grid>
 </UserControl>

@@ -189,6 +189,6 @@
                 </Style.Resources>
             </Style>
         </Style.Resources>
-        <Setter Property="MaxWidth" Value="250" />
+        <Setter Property="MaxWidth" Value="200" />
     </Style>
 </ResourceDictionary>

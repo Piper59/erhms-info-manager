@@ -27,7 +27,8 @@
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Create"
                                  Command="{Binding CreateCommand}"
-                                 Icon="{StaticResource appbar_page_add}" />
+                                 Icon="{StaticResource appbar_page_add}"
+                                 ToolTip="Create a form based on this template" />
             <Controls:IconButton AccessText="_Delete"
                                  Command="{Binding DeleteCommand}"
                                  Icon="{StaticResource appbar_delete}" />

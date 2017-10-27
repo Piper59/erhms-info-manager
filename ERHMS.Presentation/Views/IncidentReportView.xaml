@@ -47,7 +47,8 @@
                                  Icon="{StaticResource appbar_email}" />
             <Controls:IconButton AccessText="_Assign"
                                  Command="{Binding AssignCommand}"
-                                 Icon="{StaticResource appbar_user_add}" />
+                                 Icon="{StaticResource appbar_user_add}"
+                                 ToolTip="Assign a form to this responder" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
