@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="ERHMS.Build.targets" />
+  <PropertyGroup>
+    <EpiInfoModuleName>$([System.Text.RegularExpressions.Regex]::Match($(TargetName), "(?%3c=^ERHMS\.EpiInfo\.Wrappers\.)(.+$)"))</EpiInfoModuleName>
+  </PropertyGroup>
+  <Target Name="UpdateConfigurationFile" BeforeTargets="BeforeBuild">
+    <Copy SourceFiles="$(EpiInfoDir)$(EpiInfoModuleName).exe.config" DestinationFiles="App.config" />
+    <Touch Files="App.config" />
+  </Target>
+</Project>

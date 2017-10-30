@@ -76,6 +76,9 @@
   <ItemGroup>
     <EmbeddedResource Include="ComponentArt.Win.DataVisualization.lic" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\ERHMS.Build.targets" />
+  <Import Project="..\ERHMS.Build.Wrappers.targets" />
 </Project>
