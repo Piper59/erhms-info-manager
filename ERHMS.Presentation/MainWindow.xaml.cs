@@ -159,6 +159,7 @@ namespace ERHMS.Presentation
 
         public async Task ShowAsync(DialogViewModel dataContext)
         {
+            Log.Logger.DebugFormat("Showing: {0}", dataContext);
             dataContext.Active = true;
             ChildWindow dialog = (ChildWindow)Activator.CreateInstance(DialogTypes[dataContext.GetType()]);
             dialog.DataContext = dataContext;
