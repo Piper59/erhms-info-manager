@@ -257,10 +257,10 @@ namespace ERHMS.Presentation.ViewModels
                         msg.Executing += (sender, e) =>
                         {
                             Create(database, true);
-                            Close();
                         };
                         msg.Executed += (sender, e) =>
                         {
+                            Close();
                             MessengerInstance.Send(new ToastMessage
                             {
                                 Message = "Data source has been created."
