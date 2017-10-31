@@ -27,9 +27,9 @@ namespace ERHMS.Presentation.ViewModels
                             IncidentId = incident.IncidentId
                         });
                     }
-                    Messenger.Default.Send(new RefreshMessage(typeof(View)));
                     services.Dispatcher.Invoke(() =>
                     {
+                        Messenger.Default.Send(new RefreshMessage(typeof(View)));
                         services.Documents.ShowViews();
                     });
                 }

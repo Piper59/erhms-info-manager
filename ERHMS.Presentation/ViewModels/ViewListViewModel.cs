@@ -170,7 +170,10 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (e.Type == "TemplateCreated")
                 {
-                    MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
+                    Services.Dispatcher.Invoke(() =>
+                    {
+                        MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
+                    });
                 }
             };
             Dialogs.InvokeAsync(wrapper);
