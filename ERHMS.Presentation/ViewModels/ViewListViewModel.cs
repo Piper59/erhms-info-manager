@@ -153,7 +153,19 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 Context.Project.CollectedData.EnsureDataTablesExist(view.ViewId);
-                Dialogs.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, view.Name));
+                Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, view.Name);
+                // TODO: Combine
+                wrapper.Event += (sender, e) =>
+                {
+                    if (e.Type == "RecordSaved" && e.Properties.ViewId == Context.Responders.View.Id)
+                    {
+                        Services.Dispatcher.Invoke(() =>
+                        {
+                            MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+                        });
+                    }
+                };
+                Dialogs.InvokeAsync(wrapper);
             }
         }
 
@@ -236,19 +248,39 @@ namespace ERHMS.Presentation.ViewModels
         public void ImportFromProject()
         {
             Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            ImportExport.ImportFromView(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
+            bool imported = ImportExport.ImportFromView(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
+            if (imported && SelectedItem.ViewId == Context.Responders.View.Id)
+            {
+                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+            }
         }
 
         public void ImportFromPackage()
         {
             Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            ImportExport.ImportFromPackage(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
+            bool imported = ImportExport.ImportFromPackage(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
+            if (imported && SelectedItem.ViewId == Context.Responders.View.Id)
+            {
+                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+            }
         }
 
         public void ImportFromFile()
         {
             Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            Dialogs.InvokeAsync(Analysis.Import.Create(Context.Project.FilePath, SelectedItem.Name));
+            Wrapper wrapper = Analysis.Import.Create(Context.Project.FilePath, SelectedItem.Name);
+            // TODO: Combine
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == "DataImported" && e.Properties.ViewId == Context.Responders.View.Id)
+                {
+                    Services.Dispatcher.Invoke(() =>
+                    {
+                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+                    });
+                }
+            };
+            Dialogs.InvokeAsync(wrapper);
         }
 
         public void ImportFromWeb()
@@ -334,6 +366,10 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else
                 {
+                    if (SelectedItem.ViewId == Context.Responders.View.Id)
+                    {
+                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+                    }
                     MessengerInstance.Send(new ToastMessage
                     {
                         Message = "Data has been imported from web."
@@ -364,7 +400,11 @@ namespace ERHMS.Presentation.ViewModels
         public void ImportFromMobile()
         {
             Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            ImportExport.ImportFromMobile(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
+            bool imported = ImportExport.ImportFromMobile(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
+            if (imported && SelectedItem.ViewId == Context.Responders.View.Id)
+            {
+                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+            }
         }
 
         public void ExportToPackage()

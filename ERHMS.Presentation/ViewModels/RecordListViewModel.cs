@@ -1,14 +1,17 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Wrappers;
+using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
+using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -75,12 +78,36 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Dialogs.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, Entities.View.Name));
+            Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, Entities.View.Name);
+            // TODO: Combine
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == "RecordSaved" && e.Properties.ViewId == Context.Responders.View.Id)
+                {
+                    Services.Dispatcher.Invoke(() =>
+                    {
+                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+                    });
+                }
+            };
+            Dialogs.InvokeAsync(wrapper);
         }
 
         public void Edit()
         {
-            Dialogs.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, Entities.View.Name, SelectedItem.UniqueKey.Value));
+            Wrapper wrapper = Enter.OpenRecord.Create(Context.Project.FilePath, Entities.View.Name, SelectedItem.UniqueKey.Value);
+            // TODO: Combine
+            wrapper.Event += (sender, e) =>
+            {
+                if (e.Type == "RecordSaved" && e.Properties.ViewId == Context.Responders.View.Id)
+                {
+                    Services.Dispatcher.Invoke(() =>
+                    {
+                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
+                    });
+                }
+            };
+            Dialogs.InvokeAsync(wrapper);
         }
 
         public void Link()

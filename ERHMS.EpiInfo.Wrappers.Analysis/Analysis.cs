@@ -159,6 +159,10 @@ namespace ERHMS.EpiInfo.Wrappers
                     Form.Panic("An error occurred while importing data.", ex);
                     return;
                 }
+                RaiseEvent("DataImported", new
+                {
+                    ViewId = View.Id
+                });
                 Form.TryClose("Data has been imported.");
             }
         }

@@ -1,4 +1,5 @@
-﻿using Epi.Windows;
+﻿using Epi;
+using Epi.Windows;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -32,6 +33,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 UniqueKey = uniqueKey;
                 Form = new MainForm();
                 Form.Shown += Form_Shown;
+                Form.RecordSaved += Form_RecordSaved;
                 Application.Run(Form);
             }
 
@@ -45,6 +47,15 @@ namespace ERHMS.EpiInfo.Wrappers
                     Form.OpenRecord(ProjectPath, ViewName, UniqueKey);
                     splash.Close();
                 }
+            }
+
+            private static void Form_RecordSaved(object sender, SaveRecordEventArgs e)
+            {
+                RaiseEvent("RecordSaved", new
+                {
+                    ViewId = e.Form.Id,
+                    GlobalRecordId = e.RecordGuid
+                });
             }
         }
 
@@ -78,6 +89,7 @@ namespace ERHMS.EpiInfo.Wrappers
                 ViewName = viewName;
                 Form = new MainForm();
                 Form.Shown += Form_Shown;
+                Form.RecordSaved += Form_RecordSaved;
                 Application.Run(Form);
             }
 
@@ -113,6 +125,15 @@ namespace ERHMS.EpiInfo.Wrappers
                     }
                     splash.Close();
                 }
+            }
+
+            private static void Form_RecordSaved(object sender, SaveRecordEventArgs e)
+            {
+                RaiseEvent("RecordSaved", new
+                {
+                    ViewId = e.Form.Id,
+                    GlobalRecordId = e.RecordGuid
+                });
             }
         }
     }
