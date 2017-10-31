@@ -129,7 +129,7 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     ICollection<string> message = new List<string>();
                     message.Add("No potentially duplicate responders found.");
-                    message.Add("You may still merge responders by selecting two of them from the list and clicking Merge > Selected.");
+                    message.Add("You may still perform a merge by selecting two responders from the list and clicking Merge > Selected.");
                     MessengerInstance.Send(new AlertMessage
                     {
                         Title = "Done",
