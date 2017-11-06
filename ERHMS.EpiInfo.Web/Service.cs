@@ -53,7 +53,7 @@ namespace ERHMS.EpiInfo.Web
                         Criteria = new SurveyInfoCriteria
                         {
                             OrganizationKey = OrganizationKey.Value,
-                            SurveyIdList = new string[] { }
+                            SurveyIdList = new string[0]
                         }
                     };
                     if (!client.IsValidOrgKey(request))

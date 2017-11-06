@@ -264,9 +264,6 @@
       <DependentUpon>LicenseDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\RootPathDialog.cs" />
-    <Compile Include="Dialogs\WelcomeDialog.xaml.cs">
-      <DependentUpon>WelcomeDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Infrastructure\DbProvider.cs" />
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
     <Compile Include="Infrastructure\IDialogManager.cs" />
@@ -530,10 +527,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\LicenseDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\WelcomeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

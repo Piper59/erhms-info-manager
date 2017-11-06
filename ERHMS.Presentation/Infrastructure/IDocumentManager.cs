@@ -28,6 +28,7 @@ namespace ERHMS.Presentation
         void ShowAssignments();
         void ShowPgms();
         void ShowCanvases();
+        void ShowStart();
         void ShowSettings();
         void ShowSettings(string message, Exception exception = null);
         void ShowLogs();

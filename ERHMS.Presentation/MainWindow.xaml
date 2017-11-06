@@ -68,8 +68,7 @@
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Command="{Binding ShowStartCommand}"
-                          Header="S_tart"
-                          Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}" />
+                          Header="S_tart" />
                 <MenuItem Command="{Binding ShowSettingsCommand}"
                           Header="S_ettings" />
                 <MenuItem Command="{Binding ShowLogsCommand}"

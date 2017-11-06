@@ -1,10 +1,12 @@
 ﻿using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
+using System.Diagnostics;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class HelpViewModel : ViewModelBase
     {
+        public RelayCommand ShowUserGuideCommand { get; private set; }
         public RelayCommand ShowRespondersCommand { get; private set; }
         public RelayCommand ShowIncidentsCommand { get; private set; }
         public RelayCommand ShowViewsCommand { get; private set; }
@@ -16,6 +18,7 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = "Help";
+            ShowUserGuideCommand = new RelayCommand(ShowUserGuide);
             ShowRespondersCommand = new RelayCommand(ShowResponders);
             ShowIncidentsCommand = new RelayCommand(ShowIncidents);
             ShowViewsCommand = new RelayCommand(ShowViews);
@@ -40,6 +43,11 @@ namespace ERHMS.Presentation.ViewModels
                 return false;
             }
             return true;
+        }
+
+        public void ShowUserGuide()
+        {
+            Process.Start("https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf");
         }
 
         public void ShowResponders()

@@ -221,7 +221,7 @@ namespace ERHMS.Presentation
             {
                 if (LoadConfiguration())
                 {
-                    Documents.ShowDataSources();
+                    Documents.ShowStart();
                     ProjectInfo projectInfo;
                     if (ProjectInfo.TryRead(Settings.Default.LastDataSourcePath, out projectInfo))
                     {
@@ -252,8 +252,7 @@ namespace ERHMS.Presentation
                     Settings.Default.Save();
                     if (LoadConfiguration())
                     {
-                        Documents.ShowDataSources();
-                        await WelcomeDialog.ShowAsync(MainWindow);
+                        Documents.ShowStart();
                     }
                     else
                     {

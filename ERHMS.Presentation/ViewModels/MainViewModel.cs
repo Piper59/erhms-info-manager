@@ -91,7 +91,7 @@ namespace ERHMS.Presentation.ViewModels
             ShowAssignmentsCommand = new RelayCommand(ShowAssignments, HasContext);
             ShowPgmsCommand = new RelayCommand(ShowPgms, HasContext);
             ShowCanvasesCommand = new RelayCommand(ShowCanvases, HasContext);
-            ShowStartCommand = new RelayCommand(ShowStart, HasContext);
+            ShowStartCommand = new RelayCommand(ShowStart);
             ShowSettingsCommand = new RelayCommand(ShowSettings);
             ShowLogsCommand = new RelayCommand(ShowLogs);
             ShowHelpCommand = new RelayCommand(ShowHelp);
