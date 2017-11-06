@@ -15,6 +15,15 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class MainViewModel : GalaSoft.MvvmLight.ViewModelBase, IDocumentManager
     {
+        private static ICollection<Type> ContextSafeDocumentTypes = new Type[]
+        {
+            typeof(AboutViewModel),
+            typeof(HelpViewModel),
+            typeof(LogListViewModel),
+            typeof(SettingsViewModel),
+            typeof(StartViewModel)
+        };
+
         public IServiceManager Services { get; private set; }
 
         private string title;
@@ -170,7 +179,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             try
             {
-                foreach (ViewModelBase document in Documents.ToList())
+                foreach (ViewModelBase document in Documents.Where(document => !ContextSafeDocumentTypes.Contains(document.GetType())).ToList())
                 {
                     document.Close(false);
                 }
