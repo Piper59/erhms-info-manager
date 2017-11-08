@@ -33,7 +33,7 @@ namespace ERHMS.Domain
         public Phase Phase
         {
             get { return EnumExtensions.Parse<Phase>(GetProperty<string>(nameof(Phase))); }
-            set { SetProperty(nameof(Phase), value.ToString()); }
+            set { SetProperty(nameof(Phase), (value == Phase.Closed ? Phase.PostDeployment : value).ToString()); }
         }
 
         public DateTime? StartDate
