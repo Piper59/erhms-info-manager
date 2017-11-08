@@ -43,9 +43,10 @@ namespace ERHMS.Presentation.ViewModels
             Title = view.Name;
             Entities = new ViewEntityRepository<ViewEntity>(Context, view);
             List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id).ToList();
+            int append = int.MaxValue;
             Columns = view.Fields.DataFields
                 .Cast<Field>()
-                .OrderBy(field => fieldIds.IndexOf(field.Id))
+                .OrderBy(field => field.Name == ColumnNames.REC_STATUS ? append : fieldIds.IndexOf(field.Id))
                 .Select(field => (DataGridColumn)new DataGridTextColumn
                 {
                     Header = field.Name,
