@@ -31,11 +31,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (Context == null)
             {
-                AlertMessage msg = new AlertMessage
+                ConfirmMessage msg = new ConfirmMessage
                 {
-                    Message = "Please open a data source."
+                    Title = "Help",
+                    Message = "To get started, please create or open a data source."
                 };
-                msg.Dismissed += (sender, e) =>
+                msg.Confirmed += (sender, e) =>
                 {
                     Documents.ShowDataSources();
                 };

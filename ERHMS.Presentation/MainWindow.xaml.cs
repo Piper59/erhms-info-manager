@@ -127,8 +127,8 @@ namespace ERHMS.Presentation
                 new MetroDialogSettings
                 {
                     CustomResourceDictionary = App.Current.Accent,
-                    AffirmativeButtonText = msg.Verb,
-                    NegativeButtonText = string.Format("Don't {0}", msg.Verb)
+                    AffirmativeButtonText = msg.Verb == null ? "OK" : msg.Verb,
+                    NegativeButtonText = msg.Verb == null ? "Cancel" : string.Format("Don't {0}", msg.Verb)
                 });
             if (result == MessageDialogResult.Affirmative)
             {

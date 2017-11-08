@@ -53,6 +53,10 @@ namespace ERHMS.Presentation.ViewModels
         {
             Services = services;
             CloseCommand = new RelayCommand(Close, CanClose);
+            services.ContextChanged += (sender, e) =>
+            {
+                RaisePropertyChanged(nameof(Context));
+            };
             PropertyChanged += (sender, e) =>
             {
                 if (GetType().GetProperty(e.PropertyName).HasCustomAttribute<DirtyCheckAttribute>())

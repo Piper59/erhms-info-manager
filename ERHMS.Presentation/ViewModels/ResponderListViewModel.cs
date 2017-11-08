@@ -132,7 +132,7 @@ namespace ERHMS.Presentation.ViewModels
                     message.Add("You may still perform a merge by selecting two responders from the list and clicking Merge > Selected.");
                     MessengerInstance.Send(new AlertMessage
                     {
-                        Title = "Done",
+                        Title = "Help",
                         Message = string.Join(" ", message)
                     });
                 }

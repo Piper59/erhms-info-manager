@@ -122,7 +122,20 @@ namespace ERHMS.Presentation
             get { return MainWindow; }
         }
 
-        public DataContext Context { get; set; }
+        private DataContext context;
+        public DataContext Context
+        {
+            get
+            {
+                return context;
+            }
+            set
+            {
+                context = value;
+                OnContextChanged();
+            }
+        }
+
         public bool ShuttingDown { get; private set; }
 
         public App()
@@ -132,6 +145,16 @@ namespace ERHMS.Presentation
             AddTextFileResource("COPYRIGHT");
             AddTextFileResource("LICENSE");
             AddTextFileResource("NOTICE");
+        }
+
+        public event EventHandler ContextChanged;
+        private void OnContextChanged(EventArgs e)
+        {
+            ContextChanged?.Invoke(this, e);
+        }
+        private void OnContextChanged()
+        {
+            OnContextChanged(EventArgs.Empty);
         }
 
         public void Invoke(System.Action action)

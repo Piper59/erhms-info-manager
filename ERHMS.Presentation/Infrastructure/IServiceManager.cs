@@ -1,4 +1,5 @@
 ﻿using ERHMS.DataAccess;
+using System;
 
 namespace ERHMS.Presentation
 {
@@ -8,5 +9,7 @@ namespace ERHMS.Presentation
         IDocumentManager Documents { get; }
         IDialogManager Dialogs { get; }
         DataContext Context { get; set; }
+
+        event EventHandler ContextChanged;
     }
 }

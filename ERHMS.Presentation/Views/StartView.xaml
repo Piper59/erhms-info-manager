@@ -56,15 +56,17 @@
     </UserControl.Resources>
     <ScrollViewer>
         <StackPanel VerticalAlignment="Top">
-            <TextBlock FontSize="15"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,5"
-                       TextAlignment="Center"
-                       Visibility="{Binding Context, Converter={StaticResource NullToVisibilityInverter}}">
-                Welcome to <Run Text="{StaticResource AppTitle}" />!<LineBreak />
-                To get started, create or open a <Hyperlink Command="{Binding ShowDataSourcesCommand}">data source</Hyperlink>.<LineBreak />
-                For further assistance, read the <Hyperlink Command="{Binding ShowUserGuideCommand}">User Guide</Hyperlink>.
-            </TextBlock>
+            <StackPanel TextBlock.FontSize="18"
+                        TextBlock.TextAlignment="Center"
+                        Margin="0,0,0,5">
+                <TextBlock FontWeight="SemiBold">
+                    Welcome to <Run Text="{StaticResource AppTitle}" />!
+                </TextBlock>
+                <TextBlock Visibility="{Binding Context, Converter={StaticResource NullToVisibilityInverter}}">
+                    To get started, you must create or open a <Hyperlink Command="{Binding ShowDataSourcesCommand}">data source</Hyperlink>.<LineBreak />
+                    For further assistance, refer the <Hyperlink Command="{Binding ShowUserGuideCommand}">User Guide</Hyperlink>.
+                </TextBlock>
+            </StackPanel>
             <Grid HorizontalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -123,7 +125,7 @@
                             </Rectangle>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Style="{StaticResource Heading}">HELP</TextBlock>
-                                <TextBlock Style="{StaticResource Description}">Review common<LineBreak />tasks and read<LineBreak />the User Guide</TextBlock>
+                                <TextBlock Style="{StaticResource Description}">Review common tasks<LineBreak />and refer to<LineBreak />the User Guide</TextBlock>
                             </StackPanel>
                         </Grid>
                     </Border>

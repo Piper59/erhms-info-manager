@@ -148,6 +148,7 @@ namespace ERHMS.Presentation.ViewModels
                 message.Add(string.Format("Please upgrade to the latest version of {0} to open this data source.", App.Title));
                 MessengerInstance.Send(new AlertMessage
                 {
+                    Title = "Help",
                     Message = string.Join(" ", message)
                 });
             }
