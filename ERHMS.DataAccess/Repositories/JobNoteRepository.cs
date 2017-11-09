@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
 using ERHMS.Domain;
+using ERHMS.Utility;
 using ERHMS.EpiInfo.DataAccess;
 using System;
 using System.Collections.Generic;
@@ -61,10 +62,29 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<JobNote> SelectByIncidentId(string incidentId)
         {
-            string clauses = "WHERE [ERHMS_JobNotes].[IncidentId] = @IncidentId";
+            string clauses = "WHERE [ERHMS_Jobs].[IncidentId] = @IncidentId";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@IncidentId", incidentId);
             return Select(clauses, parameters);
+        }
+
+        public IEnumerable<JobNote> SelectByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
+        {
+            ICollection<string> clauses = new List<string>();
+            DynamicParameters parameters = new DynamicParameters();
+            clauses.Add("[ERHMS_Jobs].[IncidentId] = @IncidentId");
+            parameters.Add("@IncidentId", incidentId);
+            if (start.HasValue)
+            {
+                clauses.Add("[ERHMS_JobNotes].[Date] >= @Start");
+                parameters.Add("@Start", start.Value.RemoveMilliseconds());
+            }
+            if (end.HasValue)
+            {
+                clauses.Add("[ERHMS_JobNotes].[Date] <= @End");
+                parameters.Add("@End", end.Value.RemoveMilliseconds());
+            }
+            return Select(string.Format("WHERE {0}", string.Join(" AND ", clauses)), parameters);
         }
 
         public IEnumerable<JobNote> SelectByJobId(string jobId)

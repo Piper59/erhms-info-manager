@@ -1,6 +1,9 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
 using ERHMS.Domain;
+using ERHMS.Utility;
+using System;
+using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
@@ -20,5 +23,24 @@ namespace ERHMS.DataAccess
 
         public IncidentNoteRepository(DataContext context)
             : base(context) { }
+
+        public IEnumerable<IncidentNote> SelectByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
+        {
+            ICollection<string> clauses = new List<string>();
+            DynamicParameters parameters = new DynamicParameters();
+            clauses.Add("[ERHMS_IncidentNotes].[IncidentId] = @IncidentId");
+            parameters.Add("@IncidentId", incidentId);
+            if (start.HasValue)
+            {
+                clauses.Add("[ERHMS_IncidentNotes].[Date] >= @Start");
+                parameters.Add("@Start", start.Value.RemoveMilliseconds());
+            }
+            if (end.HasValue)
+            {
+                clauses.Add("[ERHMS_IncidentNotes].[Date] <= @End");
+                parameters.Add("@End", end.Value.RemoveMilliseconds());
+            }
+            return Select(string.Format("WHERE {0}", string.Join(" AND ", clauses)), parameters);
+        }
     }
 }

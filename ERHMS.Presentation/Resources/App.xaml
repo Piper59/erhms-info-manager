@@ -61,11 +61,21 @@
     </Style>
 
     <Style TargetType="DatePicker" BasedOn="{StaticResource MetroDatePicker}">
+        <Style.Resources>
+            <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroDatePickerTextBox}">
+                <Setter Property="AutomationProperties.Name" Value="{Binding (AutomationProperties.Name), RelativeSource={RelativeSource FindAncestor, AncestorType=DatePicker}}" />
+            </Style>
+        </Style.Resources>
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
-    <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroDatePickerTextBox}">
-        <Setter Property="AutomationProperties.Name" Value="{Binding (AutomationProperties.Name), RelativeSource={RelativeSource FindAncestor, AncestorType=DatePicker}}" />
+    <Style TargetType="MahApps:DateTimePicker">
+        <Style.Resources>
+            <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroDatePickerTextBox}">
+                <Setter Property="AutomationProperties.Name" Value="{Binding (AutomationProperties.Name), RelativeSource={RelativeSource FindAncestor, AncestorType=MahApps:DateTimePicker}}" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
 
     <Style TargetType="GroupBox" BasedOn="{StaticResource MetroGroupBox}">

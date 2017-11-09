@@ -404,11 +404,11 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem DataContext="{Binding Report}"
-                     Header="_Report"
+                     Header="_Reports"
                      IsSelected="{Binding IsSelected}">
                 <ScrollViewer>
                     <StackPanel>
-                        <GroupBox Header="Incidents">
+                        <GroupBox Header="Incidents Rostered To">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding Incidents, Converter={StaticResource NullToVisibilityInverter}}" />
                                 <StackPanel Visibility="{Binding Incidents, Converter={StaticResource NullToVisibilityConverter}}">
@@ -431,7 +431,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Teams">
+                        <GroupBox Header="Teams Assigned To">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding TeamResponders, Converter={StaticResource NullToVisibilityInverter}}" />
                                 <StackPanel Visibility="{Binding TeamResponders, Converter={StaticResource NullToVisibilityConverter}}">
@@ -460,7 +460,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Jobs">
+                        <GroupBox Header="Jobs Assigned To">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityInverter}}" />
                                 <StackPanel Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityConverter}}">
@@ -492,7 +492,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Forms"
+                        <GroupBox Header="Forms Completed"
                                   Margin="0">
                             <StackPanel>
                                 <MahApps:ProgressRing Visibility="{Binding Responses, Converter={StaticResource NullToVisibilityInverter}}" />

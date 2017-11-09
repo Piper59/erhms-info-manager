@@ -18,7 +18,6 @@
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
-        <Converters:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
         <Style x:Key="Overlay" TargetType="Border">
             <Setter Property="Background">
                 <Setter.Value>
@@ -62,7 +61,7 @@
                 <TextBlock FontWeight="SemiBold">
                     Welcome to <Run Text="{StaticResource AppTitle}" />!
                 </TextBlock>
-                <TextBlock Visibility="{Binding Context, Converter={StaticResource NullToVisibilityInverter}}">
+                <TextBlock>
                     To get started, you must create or open a <Hyperlink Command="{Binding ShowDataSourcesCommand}">data source</Hyperlink>.<LineBreak />
                     For further assistance, refer the <Hyperlink Command="{Binding ShowUserGuideCommand}">User Guide</Hyperlink>.
                 </TextBlock>

@@ -92,20 +92,21 @@ namespace ERHMS.DataAccess
         private IEnumerable<TeamResponder> SelectByIncidentIdInternal(string clauses, string incidentId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@IncidentId", incidentId);
+            parameters.Add("@IncidentIncidentId", incidentId);
+            parameters.Add("@IncidentRolesIncidentId", incidentId);
             return Select(clauses, parameters);
         }
 
         public IEnumerable<TeamResponder> SelectByIncidentId(string incidentId)
         {
-            string clauses = "WHERE [ERHMS_Teams].[IncidentId] = @IncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentId";
+            string clauses = "WHERE [ERHMS_Teams].[IncidentId] = @IncidentIncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentRolesIncidentId";
             return SelectByIncidentIdInternal(clauses, incidentId);
         }
 
         public IEnumerable<TeamResponder> SelectUndeletedByIncidentId(string incidentId)
         {
             string format = @"
-                WHERE ([ERHMS_Teams].[IncidentId] = @IncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentId)
+                WHERE ([ERHMS_Teams].[IncidentId] = @IncidentIncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentRolesIncidentId)
                 AND {0}.[RECSTATUS] <> 0";
             string clauses = string.Format(format, Escape(Context.Responders.View.TableName));
             return SelectByIncidentIdInternal(clauses, incidentId);

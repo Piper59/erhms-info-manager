@@ -70,9 +70,10 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<JobLocation> SelectByIncidentId(string incidentId)
         {
-            string clauses = "WHERE [ERHMS_Jobs].[IncidentId] = @IncidentId OR [ERHMS_Locations].[IncidentId] = @IncidentId";
+            string clauses = "WHERE [ERHMS_Jobs].[IncidentId] = @JobIncidentId OR [ERHMS_Locations].[IncidentId] = @LocationIncidentId";
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@IncidentId", incidentId);
+            parameters.Add("@JobIncidentId", incidentId);
+            parameters.Add("@LocationIncidentId", incidentId);
             return Select(clauses, parameters);
         }
 

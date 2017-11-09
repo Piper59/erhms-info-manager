@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
 using ERHMS.Domain;
+using ERHMS.Utility;
 using ERHMS.EpiInfo.DataAccess;
 using System;
 using System.Collections.Generic;
@@ -118,6 +119,27 @@ namespace ERHMS.DataAccess
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@IncidentId", incidentId);
             return Select(clauses, parameters);
+        }
+
+        public IEnumerable<JobTicket> SelectUndeletedByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
+        {
+            ICollection<string> clauses = new List<string>();
+            DynamicParameters parameters = new DynamicParameters();
+            clauses.Add(string.Format(
+                "[ERHMS_Incidents].[IncidentId] = @IncidentId AND {0}.[RECSTATUS] <> 0",
+                Escape(Context.Responders.View.TableName)));
+            parameters.Add("@IncidentId", incidentId);
+            if (start.HasValue)
+            {
+                clauses.Add("([ERHMS_Jobs].[EndDate] IS NULL OR [ERHMS_Jobs].[EndDate] >= @Start)");
+                parameters.Add("@Start", start.Value.RemoveMilliseconds());
+            }
+            if (end.HasValue)
+            {
+                clauses.Add("([ERHMS_Jobs].[StartDate] IS NULL OR [ERHMS_Jobs].[StartDate] <= @End)");
+                parameters.Add("@End", start.Value.RemoveMilliseconds());
+            }
+            return Select(string.Format("WHERE {0}", string.Join(" AND ", clauses)), parameters);
         }
 
         public IEnumerable<JobTicket> SelectUndeletedByResponderId(string responderId)

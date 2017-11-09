@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
@@ -92,20 +91,21 @@ namespace ERHMS.DataAccess
         private IEnumerable<JobResponder> SelectByIncidentIdInternal(string clauses, string incidentId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@IncidentId", incidentId);
+            parameters.Add("@JobIncidentId", incidentId);
+            parameters.Add("@IncidentRoleIncidentId", incidentId);
             return Select(clauses, parameters);
         }
 
         public IEnumerable<JobResponder> SelectByIncidentId(string incidentId)
         {
-            string clauses = "WHERE [ERHMS_Jobs].[IncidentId] = @IncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentId";
+            string clauses = "WHERE [ERHMS_Jobs].[IncidentId] = @JobIncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentRoleIncidentId";
             return SelectByIncidentIdInternal(clauses, incidentId);
         }
 
         public IEnumerable<JobResponder> SelectUndeletedByIncidentId(string incidentId)
         {
             string format = @"
-                WHERE ([ERHMS_Jobs].[IncidentId] = @IncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentId)
+                WHERE ([ERHMS_Jobs].[IncidentId] = @JobIncidentId OR [ERHMS_IncidentRoles].[IncidentId] = @IncidentRoleIncidentId)
                 AND {0}.[RECSTATUS] <> 0";
             string clauses = string.Format(format, Escape(Context.Responders.View.TableName));
             return SelectByIncidentIdInternal(clauses, incidentId);

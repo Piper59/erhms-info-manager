@@ -3,55 +3,167 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Controls:Filter Grid.Row="0"
-                         Value="{Binding Filter}" />
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
-            <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
-            </i:Interaction.Behaviors>
-            <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding EditCommand}"
-                              MouseAction="LeftDoubleClick" />
-            </DataGrid.InputBindings>
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Responder.FullName}"
-                                    Header="Responder"
-                                    Width="*" />
-                <DataGridTextColumn Binding="{Binding Job.Name}"
-                                    Header="Job"
-                                    Width="*" />
-                <DataGridTextColumn Binding="{Binding Team.Name}"
-                                    Header="Team"
-                                    Width="*" />
-                <DataGridTextColumn Binding="{Binding IncidentRole.Name}"
-                                    Header="Role"
-                                    Width="*" />
-                <DataGridTextColumn Binding="{Binding LocationNames}"
-                                    Header="Locations"
-                                    Width="3*" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <WrapPanel Grid.Row="2"
-                   Style="{StaticResource IconButtonBar}">
-            <Controls:IconButton AccessText="_Email"
-                                 Command="{Binding EmailCommand}"
-                                 Icon="{StaticResource appbar_email}" />
-            <Controls:IconButton AccessText="_Assign"
-                                 Command="{Binding AssignCommand}"
-                                 Icon="{StaticResource appbar_user_add}"
-                                 ToolTip="Assign a form to this responder" />
-            <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
-                                 Icon="{StaticResource appbar_refresh_clockwise_down}" />
-        </WrapPanel>
-    </Grid>
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
+             xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
+    <UserControl.Resources>
+        <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
+        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <Converters:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
+        <Converters:ResponderToFullNameConverter x:Key="ResponderToFullNameConverter" />
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <Grid Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">From</Label>
+                <MahApps:DateTimePicker Grid.Column="1"
+                                        AutomationProperties.Name="Start Date"
+                                        SelectedDate="{Binding StartDate}" />
+                <Label Grid.Column="2">to</Label>
+                <MahApps:DateTimePicker Grid.Column="3"
+                                        AutomationProperties.Name="End Date"
+                                        SelectedDate="{Binding EndDate}" />
+                <Button Grid.Column="4"
+                        Command="{Binding RefreshCommand}"
+                        Style="{StaticResource AccentButton}">
+                    Refresh
+                </Button>
+            </Grid>
+            <GroupBox Header="Incident Notes">
+                <StackPanel>
+                    <MahApps:ProgressRing Visibility="{Binding IncidentNotes, Converter={StaticResource NullToVisibilityInverter}}" />
+                    <StackPanel Visibility="{Binding IncidentNotes, Converter={StaticResource NullToVisibilityConverter}}">
+                        <ItemsControl x:Name="IncidentNotesItemsControl"
+                                      ItemsSource="{Binding IncidentNotes}"
+                                      ItemTemplate="{StaticResource NoteTemplate}"
+                                      Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBlock Visibility="{Binding HasItems, ElementName=IncidentNotesItemsControl, Converter={StaticResource BooleanToVisibilityInverter}}">No incident notes found.</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Active Jobs">
+                <StackPanel>
+                    <MahApps:ProgressRing Visibility="{Binding Jobs, Converter={StaticResource NullToVisibilityInverter}}" />
+                    <StackPanel Visibility="{Binding Jobs, Converter={StaticResource NullToVisibilityConverter}}">
+                        <DataGrid x:Name="JobsDataGrid"
+                                  ItemsSource="{Binding Jobs}"
+                                  SelectionMode="Single"
+                                  Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <DataGrid.InputBindings>
+                                <MouseBinding Command="{Binding EditJobCommand}"
+                                              CommandParameter="{Binding SelectedItem, ElementName=JobsDataGrid}"
+                                              MouseAction="LeftDoubleClick" />
+                            </DataGrid.InputBindings>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Name}"
+                                                    Header="Name"
+                                                    Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock Visibility="{Binding HasItems, ElementName=JobsDataGrid, Converter={StaticResource BooleanToVisibilityInverter}}">No jobs found.</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Job Notes">
+                <StackPanel>
+                    <MahApps:ProgressRing Visibility="{Binding JobNotes, Converter={StaticResource NullToVisibilityInverter}}" />
+                    <StackPanel Visibility="{Binding JobNotes, Converter={StaticResource NullToVisibilityConverter}}">
+                        <ItemsControl x:Name="JobNotesItemsControl"
+                                      ItemsSource="{Binding JobNotes}"
+                                      Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ItemsControl.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource AccentColorBrush4}"
+                                                    Margin="0,0,0,5"
+                                                    Padding="5">
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="{Binding Name.Name}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ItemsControl.GroupStyle>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter ContentTemplate="{StaticResource NoteTemplate}"
+                                                      Margin="-5,0,0,0" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Visibility="{Binding HasItems, ElementName=JobNotesItemsControl, Converter={StaticResource BooleanToVisibilityInverter}}">No job notes found.</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Active Teams">
+                <StackPanel>
+                    <MahApps:ProgressRing Visibility="{Binding JobTeams, Converter={StaticResource NullToVisibilityInverter}}" />
+                    <StackPanel Visibility="{Binding JobTeams, Converter={StaticResource NullToVisibilityConverter}}">
+                        <DataGrid x:Name="JobTeamsDataGrid"
+                                  ItemsSource="{Binding JobTeams}"
+                                  SelectionMode="Single"
+                                  Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <DataGrid.InputBindings>
+                                <MouseBinding Command="{Binding EditTeamCommand}"
+                                              CommandParameter="{Binding SelectedItem, ElementName=JobTeamsDataGrid}"
+                                              MouseAction="LeftDoubleClick" />
+                            </DataGrid.InputBindings>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Job.Name}"
+                                                    Header="Job"
+                                                    Width="*" />
+                                <DataGridTextColumn Binding="{Binding Team.Name}"
+                                                    Header="Name"
+                                                    Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock Visibility="{Binding HasItems, ElementName=JobTeamsDataGrid, Converter={StaticResource BooleanToVisibilityInverter}}">No teams found.</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Active Responders">
+                <StackPanel>
+                    <MahApps:ProgressRing Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityInverter}}" />
+                    <StackPanel Visibility="{Binding JobTickets, Converter={StaticResource NullToVisibilityConverter}}">
+                        <DataGrid x:Name="JobTicketsDataGrid"
+                                  ItemsSource="{Binding JobTickets}"
+                                  SelectionMode="Single"
+                                  Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <DataGrid.InputBindings>
+                                <MouseBinding Command="{Binding EditResponderCommand}"
+                                              CommandParameter="{Binding SelectedItem, ElementName=JobTicketsDataGrid}"
+                                              MouseAction="LeftDoubleClick" />
+                            </DataGrid.InputBindings>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Job.Name}"
+                                                    Header="Job"
+                                                    Width="*" />
+                                <DataGridTextColumn Binding="{Binding Team.Name}"
+                                                    Header="Team"
+                                                    Width="*" />
+                                <DataGridTextColumn Binding="{Binding Responder, Converter={StaticResource ResponderToFullNameConverter}}"
+                                                    Header="Name"
+                                                    Width="*" />
+                                <DataGridTextColumn Binding="{Binding IncidentRole.Name}"
+                                                    Header="Role"
+                                                    Width="*" />
+                                <DataGridTextColumn Binding="{Binding LocationNames}"
+                                                    Header="Locations"
+                                                    Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock Visibility="{Binding HasItems, ElementName=JobTicketsDataGrid, Converter={StaticResource BooleanToVisibilityInverter}}">No responders found.</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

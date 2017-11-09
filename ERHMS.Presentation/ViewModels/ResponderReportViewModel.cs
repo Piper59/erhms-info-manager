@@ -54,7 +54,7 @@ namespace ERHMS.Presentation.ViewModels
         public ResponderReportViewModel(IServiceManager services, Responder responder)
                 : base(services)
         {
-            Title = "Report";
+            Title = "Reports";
             Responder = responder;
             EditIncidentCommand = new RelayCommand<Incident>(EditIncident);
             EditTeamCommand = new RelayCommand<TeamResponder>(EditTeam);
@@ -78,25 +78,22 @@ namespace ERHMS.Presentation.ViewModels
 
         public async void GenerateAsync()
         {
-            await TaskEx.Run(() =>
-            {
-                Incidents = Context.Incidents.SelectUndeletedByResponderId(Responder.ResponderId)
-                    .OrderBy(incident => incident.Name)
-                    .ToList();
-                TeamResponders = Context.TeamResponders.SelectUndeletedByResponderId(Responder.ResponderId)
-                    .OrderBy(teamResponder => teamResponder.Team.Incident.Name)
-                    .ThenBy(teamResponder => teamResponder.Team.Name)
-                    .ToList();
-                JobTickets = Context.JobTickets.SelectUndeletedByResponderId(Responder.ResponderId)
-                    .OrderBy(jobTicket => jobTicket.Incident.Name)
-                    .ThenBy(jobTicket => jobTicket.Job.Name)
-                    .ThenBy(jobTicket => jobTicket.Team?.Name)
-                    .ToList();
-                Responses = Context.Responses.SelectByResponderId(Responder.ResponderId)
-                    .OrderBy(response => response.View.Name)
-                    .ThenBy(response => response.CreatedOn)
-                    .ToList();
-            });
+            Incidents = await TaskEx.Run(() => Context.Incidents.SelectUndeletedByResponderId(Responder.ResponderId)
+                .OrderBy(incident => incident.Name)
+                .ToList());
+            TeamResponders = await TaskEx.Run(() => Context.TeamResponders.SelectUndeletedByResponderId(Responder.ResponderId)
+                .OrderBy(teamResponder => teamResponder.Team.Incident.Name)
+                .ThenBy(teamResponder => teamResponder.Team.Name)
+                .ToList());
+            JobTickets = await TaskEx.Run(() => Context.JobTickets.SelectUndeletedByResponderId(Responder.ResponderId)
+                .OrderBy(jobTicket => jobTicket.Incident.Name)
+                .ThenBy(jobTicket => jobTicket.Job.Name)
+                .ThenBy(jobTicket => jobTicket.Team?.Name)
+                .ToList());
+            Responses = await TaskEx.Run(() => Context.Responses.SelectByResponderId(Responder.ResponderId)
+                .OrderBy(response => response.View.Name)
+                .ThenBy(response => response.CreatedOn)
+                .ToList());
         }
 
         public void Clear()
