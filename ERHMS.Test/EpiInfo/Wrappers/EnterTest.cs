@@ -18,6 +18,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         {
             // Invoke wrapper
             Wrapper = Enter.OpenRecord.Create(Project.FilePath, "Surveillance", 1);
+            WrapperEventCollection events = new WrapperEventCollection(Wrapper);
             Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
@@ -42,6 +43,10 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             view.LoadRecord(1);
             FieldTest(view, "LastName", "Doe");
             FieldTest(view, "BirthDate", new DateTime(1980, 1, 1));
+            Assert.AreEqual(1, events.Count);
+            Assert.AreEqual("RecordSaved", events[0].Type);
+            Assert.AreEqual(events[0].Properties.ViewId, view.Id);
+            Assert.AreEqual(events[0].Properties.GlobalRecordId, view.CurrentGlobalRecordId);
         }
 
         [Test]
@@ -56,6 +61,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
                 BirthDate = new DateTime(1980, 1, 1)
             };
             Wrapper = Enter.OpenNewRecord.Create(Project.FilePath, "Surveillance", record);
+            WrapperEventCollection events = new WrapperEventCollection(Wrapper);
             Wrapper.Invoke();
             MainFormScreen mainForm = new MainFormScreen();
             mainForm.WaitForReady();
@@ -74,6 +80,10 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             FieldTest(view, "FirstName", record.FirstName);
             FieldTest(view, "LastName", record.LastName);
             FieldTest(view, "BirthDate", record.BirthDate);
+            Assert.AreEqual(1, events.Count);
+            Assert.AreEqual("RecordSaved", events[0].Type);
+            Assert.AreEqual(events[0].Properties.ViewId, view.Id);
+            Assert.AreEqual(events[0].Properties.GlobalRecordId, view.CurrentGlobalRecordId);
         }
     }
 
