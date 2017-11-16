@@ -39,7 +39,7 @@
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Merge"
                                  Command="{Binding MergeCommand}"
-                                 Icon="{StaticResource appbar_cell_merge}" />
+                                 Icon="{StaticResource appbar_source_pull}" />
             <Controls:IconButton AccessText="_Ignore"
                                  Command="{Binding IgnoreCommand}"
                                  Icon="{StaticResource appbar_close}"

@@ -83,7 +83,7 @@
                 </Button.ContextMenu>
             </Controls:IconButton>
             <Controls:IconButton AccessText="I_mport"
-                                 Icon="{StaticResource appbar_door_enter}"
+                                 Icon="{StaticResource appbar_inbox_in}"
                                  IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
@@ -104,7 +104,7 @@
                 </Button.ContextMenu>
             </Controls:IconButton>
             <Controls:IconButton AccessText="E_xport"
-                                 Icon="{StaticResource appbar_door_leave}"
+                                 Icon="{StaticResource appbar_inbox_out}"
                                  IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />

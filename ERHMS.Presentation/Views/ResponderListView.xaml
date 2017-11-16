@@ -55,7 +55,7 @@
                                  Command="{Binding EditCommand}"
                                  Icon="{StaticResource appbar_edit}" />
             <Controls:IconButton AccessText="Mer_ge"
-                                 Icon="{StaticResource appbar_cell_merge}"
+                                 Icon="{StaticResource appbar_source_pull}"
                                  ToolTip="Merge two selected responders or perform an automated search for duplicate responders">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
@@ -74,9 +74,9 @@
                                  Icon="{StaticResource appbar_delete}" />
             <Controls:IconButton AccessText="E_mail"
                                  Command="{Binding EmailCommand}"
-                                 Icon="{StaticResource appbar_email}" />
+                                 Icon="{StaticResource appbar_email_hardedge}" />
             <Controls:IconButton AccessText="_Import"
-                                 Icon="{StaticResource appbar_door_enter}">
+                                 Icon="{StaticResource appbar_inbox_in}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>
@@ -96,7 +96,7 @@
                 </Button.ContextMenu>
             </Controls:IconButton>
             <Controls:IconButton AccessText="E_xport"
-                                 Icon="{StaticResource appbar_door_leave}">
+                                 Icon="{StaticResource appbar_inbox_out}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>

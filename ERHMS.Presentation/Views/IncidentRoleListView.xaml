@@ -40,9 +40,9 @@
             <Controls:IconButton AccessText="_Edit"
                                  Command="{Binding EditCommand}"
                                  Icon="{StaticResource appbar_edit}" />
-            <Controls:IconButton AccessText="Re_move"
-                                 Command="{Binding RemoveCommand}"
-                                 Icon="{StaticResource appbar_close}" />
+            <Controls:IconButton AccessText="_Delete"
+                                 Command="{Binding DeleteCommand}"
+                                 Icon="{StaticResource appbar_delete}" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />

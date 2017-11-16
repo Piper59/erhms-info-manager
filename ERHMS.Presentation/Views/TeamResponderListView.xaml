@@ -110,7 +110,7 @@
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Email"
                                  Command="{Binding EmailCommand}"
-                                 Icon="{StaticResource appbar_email}" />
+                                 Icon="{StaticResource appbar_email_hardedge}" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />

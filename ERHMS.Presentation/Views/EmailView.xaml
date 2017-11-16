@@ -108,7 +108,7 @@
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Send"
                                  Command="{Binding SendCommand}"
-                                 Icon="{StaticResource appbar_email}" />
+                                 Icon="{StaticResource appbar_email_hardedge}" />
         </WrapPanel>
     </Grid>
 </UserControl>

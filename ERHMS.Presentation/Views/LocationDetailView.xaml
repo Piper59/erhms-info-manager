@@ -91,10 +91,10 @@
                     <StackPanel HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
                         <Button Command="{Binding ZoomInCommand}"
-                                Content="{StaticResource appbar_add}"
+                                Content="{StaticResource appbar_magnify_add}"
                                 Style="{StaticResource MapButton}" />
                         <Button Command="{Binding ZoomOutCommand}"
-                                Content="{StaticResource appbar_minus}"
+                                Content="{StaticResource appbar_magnify_minus}"
                                 Style="{StaticResource MapButton}" />
                     </StackPanel>
                 </Maps:Map>

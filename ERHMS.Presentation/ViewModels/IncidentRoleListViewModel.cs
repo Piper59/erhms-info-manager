@@ -12,7 +12,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand EditCommand { get; private set; }
-        public RelayCommand RemoveCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand ShowSettingsCommand { get; private set; }
 
         public IncidentRoleListViewModel(IServiceManager services, Incident incident)
@@ -23,7 +23,7 @@ namespace ERHMS.Presentation.ViewModels
             Refresh();
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
+            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
             ShowSettingsCommand = new RelayCommand(ShowSettings);
         }
 
@@ -67,22 +67,22 @@ namespace ERHMS.Presentation.ViewModels
             Dialogs.ShowAsync(role);
         }
 
-        public void Remove()
+        public void Delete()
         {
             IncidentRole role = Context.IncidentRoles.SelectById(SelectedItem.IncidentRoleId);
             if (role.IsInUse)
             {
                 MessengerInstance.Send(new AlertMessage
                 {
-                    Message = "The selected role is in use and may not be removed."
+                    Message = "The selected role is in use and may not be deleted."
                 });
             }
             else
             {
                 ConfirmMessage msg = new ConfirmMessage
                 {
-                    Verb = "Remove",
-                    Message = "Remove the selected role?"
+                    Verb = "Delete",
+                    Message = "Delete the selected role?"
                 };
                 msg.Confirmed += (sender, e) =>
                 {

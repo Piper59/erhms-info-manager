@@ -40,10 +40,10 @@
                                  ToolTip="Change the responder this record is linked to" />
             <Controls:IconButton AccessText="_Delete"
                                  Command="{Binding DeleteCommand}"
-                                 Icon="{StaticResource appbar_page_delete}" />
+                                 Icon="{StaticResource appbar_close}" />
             <Controls:IconButton AccessText="_Undelete"
                                  Command="{Binding UndeleteCommand}"
-                                 Icon="{StaticResource appbar_page_check}" />
+                                 Icon="{StaticResource appbar_check}" />
             <Controls:IconButton AccessText="_Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />

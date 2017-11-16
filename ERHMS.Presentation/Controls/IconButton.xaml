@@ -17,7 +17,8 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Viewbox Grid.Row="0"
-                 Margin="-8">
+                 Margin="-8"
+                 SnapsToDevicePixels="False">
             <ContentPresenter Content="{Binding Icon, ElementName=Root}" />
         </Viewbox>
         <AccessText Grid.Row="1"
