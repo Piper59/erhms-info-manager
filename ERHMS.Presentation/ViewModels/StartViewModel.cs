@@ -1,12 +1,10 @@
 ﻿using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
-using System.Diagnostics;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class StartViewModel : ViewModelBase
     {
-        public RelayCommand ShowUserGuideCommand { get; private set; }
         public RelayCommand ShowDataSourcesCommand { get; private set; }
         public RelayCommand ShowHelpCommand { get; private set; }
         public RelayCommand ShowRespondersCommand { get; private set; }
@@ -20,7 +18,6 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = "Start";
-            ShowUserGuideCommand = new RelayCommand(ShowUserGuide);
             ShowDataSourcesCommand = new RelayCommand(ShowDataSources);
             ShowHelpCommand = new RelayCommand(ShowHelp);
             ShowRespondersCommand = new RelayCommand(ShowResponders);
@@ -48,11 +45,6 @@ namespace ERHMS.Presentation.ViewModels
                 return false;
             }
             return true;
-        }
-
-        public void ShowUserGuide()
-        {
-            Process.Start("https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf");
         }
 
         public void ShowDataSources()

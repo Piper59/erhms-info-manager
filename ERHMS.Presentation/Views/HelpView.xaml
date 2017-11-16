@@ -23,7 +23,7 @@
                 <StackPanel>
                     <TextBlock FontSize="15"
                                Margin="0,0,0,10">
-                        Click the headings on the left to open the corresponding sections of the <Hyperlink Command="{Binding ShowUserGuideCommand}">User Guide</Hyperlink>.<LineBreak />
+                        Click the headings on the left to open the corresponding sections of the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf">User Guide</Controls:WebHyperlink>.<LineBreak />
                         Click the links in the diagram below to open the corresponding modules of the software.
                     </TextBlock>
                     <Canvas Height="600"

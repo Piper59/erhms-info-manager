@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="ERHMS.Presentation.Views.StartView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters">
     <UserControl.Resources>
         <Style x:Key="Background" TargetType="Border">
@@ -63,7 +64,7 @@
                 </TextBlock>
                 <TextBlock>
                     To get started, you must create or open a <Hyperlink Command="{Binding ShowDataSourcesCommand}">data source</Hyperlink>.<LineBreak />
-                    For further assistance, refer the <Hyperlink Command="{Binding ShowUserGuideCommand}">User Guide</Hyperlink>.
+                    For further assistance, refer the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf">User Guide</Controls:WebHyperlink>.
                 </TextBlock>
             </StackPanel>
             <Grid HorizontalAlignment="Center">
