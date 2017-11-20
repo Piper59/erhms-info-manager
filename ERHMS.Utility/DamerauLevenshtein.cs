@@ -1,11 +1,16 @@
-﻿using System;
+﻿using System.Linq;
 
 namespace ERHMS.Utility
 {
     public static class DamerauLevenshtein
     {
+        private static int Min(params int[] values)
+        {
+            return values.Min();
+        }
+
         // https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
-        public static int GetEditDistance(string str1, string str2)
+        public static int GetDistance(string str1, string str2)
         {
             string a = (str1 ?? "").ToLower();
             string b = (str2 ?? "").ToLower();
@@ -40,11 +45,11 @@ namespace ERHMS.Utility
                     int deletion = d[i - 1, j] + 1;
                     int insertion = d[i, j - 1] + 1;
                     int substitution = d[i - 1, j - 1] + cost;
-                    d[i, j] = Math.Min(Math.Min(deletion, insertion), substitution);
+                    d[i, j] = Min(deletion, insertion, substitution);
                     if (i > 1 && j > 1 && a[i - 1] == b[j - 2] && a[i - 2] == b[j - 1])
                     {
                         int transposition = d[i - 2, j - 2] + cost;
-                        d[i, j] = Math.Min(d[i, j], transposition);
+                        d[i, j] = Min(d[i, j], transposition);
                     }
                 }
             }

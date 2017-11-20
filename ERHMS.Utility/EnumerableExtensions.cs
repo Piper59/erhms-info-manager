@@ -10,6 +10,11 @@ namespace ERHMS.Utility
             yield return item;
         }
 
+        public static IEnumerable<Iterator<T>> Iterate<T>(this IEnumerable<T> @this)
+        {
+            return @this.Select((value, index) => new Iterator<T>(value, index));
+        }
+
         public static IEnumerable<T> Append<T>(this IEnumerable<T> @this, T item)
         {
             return @this.Concat(Yield(item));

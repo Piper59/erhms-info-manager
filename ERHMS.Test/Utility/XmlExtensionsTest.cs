@@ -14,12 +14,17 @@ namespace ERHMS.Test.Utility
             return Assembly.GetExecutingAssembly().GetManifestResourceStream("ERHMS.Test.Resources.People.xml");
         }
 
-        [Test]
-        public void HasAllAttributesTest()
+        private XmlDocument GetDocument()
         {
             XmlDocument document = new XmlDocument();
             document.Load(GetResource());
-            XmlElement element = (XmlElement)document.SelectSingleNode("/people/person");
+            return document;
+        }
+
+        [Test]
+        public void HasAllAttributesTest()
+        {
+            XmlElement element = (XmlElement)GetDocument().SelectSingleNode("/people/person");
             Assert.IsTrue(element.HasAllAttributes("firstName", "lastName"));
             Assert.IsFalse(element.HasAllAttributes("firstName", "middleName", "lastName"));
         }
@@ -39,17 +44,13 @@ namespace ERHMS.Test.Utility
         [Test]
         public void SelectElementsTest()
         {
-            XmlDocument document = new XmlDocument();
-            document.Load(GetResource());
-            Assert.AreEqual(2, document.SelectElements("/people/person").Count());
+            Assert.AreEqual(2, GetDocument().SelectElements("/people/person").Count());
         }
 
         [Test]
         public void SelectSingleElementTest()
         {
-            XmlDocument document = new XmlDocument();
-            document.Load(GetResource());
-            Assert.AreEqual("johnd", document.SelectSingleElement("/people/person").GetAttribute("id"));
+            Assert.AreEqual("johnd", GetDocument().SelectSingleElement("/people/person").GetAttribute("id"));
         }
     }
 }

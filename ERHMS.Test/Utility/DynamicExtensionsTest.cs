@@ -17,35 +17,39 @@ namespace ERHMS.Test.Utility
             public bool Male { get; set; }
         }
 
+        private object Initialize(dynamic person)
+        {
+            person.Name = Name;
+            person.Age = Age;
+            person.Male = Male;
+            return person;
+        }
+
+        private object Initialize()
+        {
+            return new
+            {
+                Name = Name,
+                Age = Age,
+                Male = Male
+            };
+        }
+
         [Test]
         public void SerializeAndDeserializeTest()
         {
             Assert.IsNull(DynamicExtensions.Deserialize(DynamicExtensions.Serialize(null)));
-            SerializeAndDeserializeTest(new Person
-            {
-                Name = Name,
-                Age = Age,
-                Male = Male
-            });
-            SerializeAndDeserializeTest(new
-            {
-                Name = Name,
-                Age = Age,
-                Male = Male
-            });
-            dynamic person = new ExpandoObject();
-            person.Name = Name;
-            person.Age = Age;
-            person.Male = Male;
-            SerializeAndDeserializeTest(person);
+            SerializeAndDeserializeTest(Initialize(new Person()));
+            SerializeAndDeserializeTest(Initialize());
+            SerializeAndDeserializeTest(Initialize(new ExpandoObject()));
         }
 
         private void SerializeAndDeserializeTest(object original)
         {
             dynamic converted = DynamicExtensions.Deserialize(DynamicExtensions.Serialize(original));
-            Assert.AreEqual(converted.Name, Name);
-            Assert.AreEqual(converted.Age, Age);
-            Assert.AreEqual(converted.Male, Male);
+            Assert.AreEqual(Name, converted.Name);
+            Assert.AreEqual(Age, converted.Age);
+            Assert.AreEqual(Male, converted.Male);
         }
     }
 }

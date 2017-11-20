@@ -17,14 +17,14 @@ namespace ERHMS.Utility
 
         public static int ExecuteNonQuery(this SqlConnection @this, string format, params string[] identifiers)
         {
+            string sql;
             using (SqlCommandBuilder builder = new SqlCommandBuilder())
             {
-                string[] args = identifiers.Select(identifier => builder.QuoteIdentifier(identifier)).ToArray();
-                string sql = string.Format(format, args);
-                using (SqlCommand command = new SqlCommand(sql, @this))
-                {
-                    return command.ExecuteNonQuery();
-                }
+                sql = string.Format(format, identifiers.Select(builder.QuoteIdentifier).ToArray());
+            }
+            using (SqlCommand command = new SqlCommand(sql, @this))
+            {
+                return command.ExecuteNonQuery();
             }
         }
     }

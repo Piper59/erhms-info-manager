@@ -1,4 +1,5 @@
-﻿using ERHMS.Utility;
+﻿using ERHMS.Test.Infrastructure;
+using ERHMS.Utility;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,15 @@ namespace ERHMS.Test.Utility
         [Test]
         public void YieldTest()
         {
-            CollectionAssert.AreEqual(new int[] { 1 }, EnumerableExtensions.Yield(1));
+            AssertExtensions.AreEqual(EnumerableExtensions.Yield(1), 1);
+        }
+
+        [Test]
+        public void IterateTest()
+        {
+            ICollection<Iterator<int>> numbers = Enumerable.Range(1, 10).Iterate().ToList();
+            CollectionAssert.AreEqual(Enumerable.Range(0, 10), numbers.Select(number => number.Index));
+            CollectionAssert.AreEqual(Enumerable.Range(1, 10), numbers.Select(number => number.Value));
         }
 
         [Test]

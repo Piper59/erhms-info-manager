@@ -19,7 +19,7 @@ namespace ERHMS.Utility
 
         public static string GetCensoredConnectionString(this DbConnectionStringBuilder @this)
         {
-            return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(property => ToCensoredString(property)));
+            return string.Join(";", @this.Cast<KeyValuePair<string, object>>().Select(ToCensoredString));
         }
     }
 }

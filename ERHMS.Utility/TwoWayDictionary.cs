@@ -7,9 +7,14 @@ namespace ERHMS.Utility
 {
     public class TwoWayDictionary<T1, T2> : ICollection<Tuple<T1, T2>>
     {
+        private static Tuple<T1, T2> ToItem(T1 item1, T2 item2)
+        {
+            return Tuple.Create(item1, item2);
+        }
+
         private static Tuple<T1, T2> ToItem(KeyValuePair<T1, T2> pair)
         {
-            return Tuple.Create(pair.Key, pair.Value);
+            return ToItem(pair.Key, pair.Value);
         }
 
         private static KeyValuePair<T1, T2> ToForwardPair(Tuple<T1, T2> item)
@@ -41,16 +46,16 @@ namespace ERHMS.Utility
             reverse = new Dictionary<T2, T1>();
         }
 
-        public void Add(T1 key, T2 value)
+        public void Add(T1 item1, T2 item2)
         {
-            forward.Add(key, value);
+            forward.Add(item1, item2);
             try
             {
-                reverse.Add(value, key);
+                reverse.Add(item2, item1);
             }
             catch
             {
-                forward.Remove(key);
+                forward.Remove(item1);
                 throw;
             }
         }
@@ -73,10 +78,9 @@ namespace ERHMS.Utility
 
         public void CopyTo(Tuple<T1, T2>[] array, int arrayIndex)
         {
-            int index = arrayIndex;
-            foreach (KeyValuePair<T1, T2> pair in forward)
+            foreach (Iterator<KeyValuePair<T1, T2>> pair in forward.Iterate())
             {
-                array[index++] = ToItem(pair);
+                array[arrayIndex + pair.Index] = ToItem(pair.Value);
             }
         }
 
@@ -84,15 +88,7 @@ namespace ERHMS.Utility
         {
             if (forward.Remove(ToForwardPair(item)))
             {
-                try
-                {
-                    reverse.Remove(ToReversePair(item));
-                }
-                catch
-                {
-                    forward.Add(item.Item1, item.Item2);
-                    throw;
-                }
+                reverse.Remove(ToReversePair(item));
                 return true;
             }
             else
@@ -101,14 +97,14 @@ namespace ERHMS.Utility
             }
         }
 
-        public T2 Forward(T1 key)
+        public T2 Forward(T1 item1)
         {
-            return forward[key];
+            return forward[item1];
         }
 
-        public T1 Reverse(T2 value)
+        public T1 Reverse(T2 item2)
         {
-            return reverse[value];
+            return reverse[item2];
         }
 
         public IEnumerator<Tuple<T1, T2>> GetEnumerator()

@@ -33,11 +33,15 @@ namespace ERHMS.Test.Utility
             });
             Assert.Catch(() =>
             {
-                numbers.Add(Tuple.Create(6, ' '));
+                numbers.Add(6, 'F');
             });
             Assert.Catch(() =>
             {
-                numbers.Add(Tuple.Create(0, 'F'));
+                numbers.Add(6, ' ');
+            });
+            Assert.Catch(() =>
+            {
+                numbers.Add(0, 'F');
             });
             Assert.AreEqual(6, numbers.Count);
             Assert.IsTrue(numbers.Contains(six));

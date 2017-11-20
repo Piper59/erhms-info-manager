@@ -1,7 +1,7 @@
 ﻿using Dapper;
+using ERHMS.Test.Infrastructure;
 using ERHMS.Utility;
 using NUnit.Framework;
-using System.Configuration;
 using System.Data.SqlClient;
 
 namespace ERHMS.Test.Utility
@@ -13,24 +13,21 @@ namespace ERHMS.Test.Utility
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString)
+            builder = Configuration.GetTestConnectionStringBuilder();
+            using (SqlConnection connection = Configuration.GetMasterConnection())
             {
-                Pooling = false
-            };
-            using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
-            {
-                connection.Open();
-                connection.ExecuteNonQuery("CREATE DATABASE {0}", builder.InitialCatalog);
+                string sql = string.Format("CREATE DATABASE {0}", DbExtensions.Escape(builder.InitialCatalog));
+                connection.Execute(sql);
             }
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            using (SqlConnection connection = SqlClientExtensions.GetMasterConnection(builder.ConnectionString))
+            using (SqlConnection connection = Configuration.GetMasterConnection())
             {
-                connection.Open();
-                connection.ExecuteNonQuery("DROP DATABASE {0}", builder.InitialCatalog);
+                string sql = string.Format("DROP DATABASE {0}", DbExtensions.Escape(builder.InitialCatalog));
+                connection.Execute(sql);
             }
         }
 

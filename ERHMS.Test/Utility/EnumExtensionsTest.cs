@@ -1,7 +1,7 @@
-﻿using ERHMS.Utility;
+﻿using ERHMS.Test.Infrastructure;
+using ERHMS.Utility;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 namespace ERHMS.Test.Utility
@@ -40,14 +40,7 @@ namespace ERHMS.Test.Utility
         [Test]
         public void GetValuesTest()
         {
-            ICollection<Number> expected = new Number[]
-            {
-                Number.NaN,
-                Number.One,
-                Number.Two,
-                Number.Three
-            };
-            CollectionAssert.AreEquivalent(expected, EnumExtensions.GetValues<Number>());
+            AssertExtensions.AreEqual(EnumExtensions.GetValues<Number>(), Number.NaN, Number.One, Number.Two, Number.Three);
         }
 
         [Test]

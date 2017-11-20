@@ -10,14 +10,13 @@ namespace ERHMS.Utility
     {
         public static string GetTempFileName(string format, params object[] args)
         {
-            object[] argsWithGuid = new object[args.Length + 1];
-            args.CopyTo(argsWithGuid, 1);
+            ArrayExtensions.Resize(ref args, args.Length + 1, 1);
             string directoryPath = Path.GetTempPath();
             string filePath;
             do
             {
-                argsWithGuid[0] = Guid.NewGuid();
-                filePath = Path.Combine(directoryPath, string.Format(format, argsWithGuid));
+                args[0] = Guid.NewGuid();
+                filePath = Path.Combine(directoryPath, string.Format(format, args));
             } while (File.Exists(filePath));
             using (File.Create(filePath)) { }
             return filePath;
@@ -30,7 +29,7 @@ namespace ERHMS.Utility
 
         public static void CopyDirectory(string sourcePath, string targetPath)
         {
-            FileSystem.CopyDirectory(sourcePath, targetPath, UIOption.AllDialogs);
+            FileSystem.CopyDirectory(sourcePath, targetPath, UIOption.AllDialogs, UICancelOption.DoNothing);
         }
 
         public static IEnumerable<FileInfo> SearchByExtension(this DirectoryInfo @this, string extension)

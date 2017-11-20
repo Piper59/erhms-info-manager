@@ -8,7 +8,7 @@ namespace ERHMS.Utility
     {
         public static bool HasAllAttributes(this XmlElement @this, params string[] names)
         {
-            return names.All(name => @this.HasAttribute(name));
+            return names.All(@this.HasAttribute);
         }
 
         public static XmlElement ReadNextElement(this XmlReader @this, out bool empty)
@@ -18,7 +18,8 @@ namespace ERHMS.Utility
                 if (@this.NodeType == XmlNodeType.Element)
                 {
                     empty = @this.IsEmptyElement;
-                    XmlElement element = new XmlDocument().CreateElement(@this.Name);
+                    XmlDocument document = new XmlDocument();
+                    XmlElement element = document.CreateElement(@this.Name);
                     while (@this.MoveToNextAttribute())
                     {
                         element.SetAttribute(@this.Name, @this.Value);

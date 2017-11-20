@@ -6,28 +6,28 @@ namespace ERHMS.Test.Utility
     public class DamerauLevenshteinTest
     {
         [Test]
-        public void GetEditDistanceTest()
+        public void GetDistanceTest()
         {
-            GetEditDistanceTest(0, null, null);
-            GetEditDistanceTest(0, null, "");
-            GetEditDistanceTest(0, "", "");
-            GetEditDistanceTest(0, "test", "test");
-            GetEditDistanceTest(0, "test", "TEST");
-            GetEditDistanceTest(1, "test", "tests");
-            GetEditDistanceTest(2, "test", "mytest");
-            GetEditDistanceTest(3, "test", "mytests");
-            GetEditDistanceTest(1, "test", "teest");
-            GetEditDistanceTest(1, "test", "tst");
-            GetEditDistanceTest(1, "test", "tset");
-            GetEditDistanceTest(2, "test", "tsets");
-            GetEditDistanceTest(1, "banana", "abnana");
-            GetEditDistanceTest(1, "banana", "baanna");
-            GetEditDistanceTest(2, "banana", "baanan");
+            GetDistanceTest(0, null, null);
+            GetDistanceTest(0, null, "");
+            GetDistanceTest(0, "", "");
+            GetDistanceTest(0, "test", "test");
+            GetDistanceTest(0, "test", "TEST");
+            GetDistanceTest(1, "test", "tests");
+            GetDistanceTest(2, "test", "mytest");
+            GetDistanceTest(3, "test", "mytests");
+            GetDistanceTest(1, "test", "teest");
+            GetDistanceTest(1, "test", "tst");
+            GetDistanceTest(1, "test", "tset");
+            GetDistanceTest(2, "test", "tsets");
+            GetDistanceTest(1, "banana", "abnana");
+            GetDistanceTest(1, "banana", "baanna");
+            GetDistanceTest(2, "banana", "baanan");
         }
 
-        private void GetEditDistanceTest(int expected, string str1, string str2)
+        private void GetDistanceTest(int expected, string str1, string str2)
         {
-            Assert.AreEqual(expected, DamerauLevenshtein.GetEditDistance(str1, str2));
+            Assert.AreEqual(expected, DamerauLevenshtein.GetDistance(str1, str2));
         }
     }
 }

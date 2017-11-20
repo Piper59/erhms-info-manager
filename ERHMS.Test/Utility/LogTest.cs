@@ -20,26 +20,26 @@ namespace ERHMS.Test.Utility
             }
         }
 
+        public static void LineCountTest(int expected)
+        {
+            Assert.AreEqual(expected, GetLineCount());
+        }
+
         [Test]
         public void LoggerTest()
         {
             FileAssert.Exists(Log.FilePath);
             int count = GetLineCount();
             Log.Logger.Debug(null);
-            count++;
-            Assert.AreEqual(count, GetLineCount());
+            LineCountTest(++count);
             Log.Logger.Info(null);
-            count++;
-            Assert.AreEqual(count, GetLineCount());
+            LineCountTest(++count);
             Log.Logger.Warn(null);
-            count++;
-            Assert.AreEqual(count, GetLineCount());
+            LineCountTest(++count);
             Log.Logger.Error(null);
-            count++;
-            Assert.AreEqual(count, GetLineCount());
+            LineCountTest(++count);
             Log.Logger.Fatal(null);
-            count++;
-            Assert.AreEqual(count, GetLineCount());
+            LineCountTest(++count);
         }
 
         [Test]
@@ -50,18 +50,15 @@ namespace ERHMS.Test.Utility
             {
                 int count = GetLineCount();
                 Log.Logger.Debug(null);
-                Assert.AreEqual(count, GetLineCount());
+                LineCountTest(count);
                 Log.Logger.Info(null);
-                Assert.AreEqual(count, GetLineCount());
+                LineCountTest(count);
                 Log.Logger.Warn(null);
-                count++;
-                Assert.AreEqual(count, GetLineCount());
+                LineCountTest(++count);
                 Log.Logger.Error(null);
-                count++;
-                Assert.AreEqual(count, GetLineCount());
+                LineCountTest(++count);
                 Log.Logger.Fatal(null);
-                count++;
-                Assert.AreEqual(count, GetLineCount());
+                LineCountTest(++count);
             }
             finally
             {

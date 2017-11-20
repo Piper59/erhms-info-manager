@@ -6,6 +6,13 @@ namespace ERHMS.Test.Utility
 {
     public class StringExtensionsTest
     {
+        private static class NewLines
+        {
+            public const string Windows = "\r\n";
+            public const string Unix = "\n";
+            public const string Mac = "\r";
+        }
+
         [Test]
         public void EqualsIgnoreCaseTest()
         {
@@ -20,47 +27,35 @@ namespace ERHMS.Test.Utility
             Assert.IsTrue("one two three".Split().ContainsIgnoreCase("TWO"));
         }
 
-        private string GetMultiLineString(string newLine)
+        private string GetLines(string newLine1, string newLine2, string newLine3)
         {
-            return string.Format("Line 1{0}Line 2{0}{0}Line 3{0}{0}{0}Line 4", newLine);
+            return string.Format("A{0}B{0}{1}C{0}{1}{2}D", newLine1, newLine2, newLine3);
         }
 
-        private IEnumerable<string> GetMultiLineStrings()
+        private string GetLines(string newLine)
         {
-            yield return GetMultiLineString("\r\n");
-            yield return GetMultiLineString("\n");
-            yield return GetMultiLineString("\r");
-            yield return "Line 1\r\nLine 2\r\n\nLine 3\r\n\n\rLine 4";
+            return GetLines(newLine, newLine, newLine);
         }
 
         [Test]
         public void SplitLinesTest()
         {
-            ICollection<string> expected = new string[]
-            {
-                "Line 1",
-                "Line 2",
-                "",
-                "Line 3",
-                "",
-                "",
-                "Line 4"
-            };
-            foreach (string lines in GetMultiLineStrings())
-            {
-                CollectionAssert.AreEqual(expected, lines.SplitLines());
-            }
+            ICollection<string> expected = new string[] { "A", "B", "", "C", "", "", "D" };
+            SplitLinesTest(expected, GetLines(NewLines.Windows));
+            SplitLinesTest(expected, GetLines(NewLines.Unix));
+            SplitLinesTest(expected, GetLines(NewLines.Mac));
+            SplitLinesTest(expected, GetLines(NewLines.Windows, NewLines.Unix, NewLines.Mac));
+        }
+
+        private void SplitLinesTest(IEnumerable<string> expected, string lines)
+        {
+            CollectionAssert.AreEqual(expected, lines.SplitLines());
         }
 
         [Test]
         public void MakeUniqueTest()
         {
-            ICollection<string> values = new string[]
-            {
-                "test",
-                "test (2)",
-                "TEST (3)"
-            };
+            ICollection<string> values = new string[] { "test", "test (2)", "TEST (3)" };
             string format = "{0} ({1})";
             Assert.AreEqual("test", "test".MakeUnique(format, value => false));
             Assert.AreEqual("test (3)", "test".MakeUnique(format, value => values.Contains(value)));

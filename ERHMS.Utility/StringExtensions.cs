@@ -7,7 +7,7 @@ namespace ERHMS.Utility
 {
     public static class StringExtensions
     {
-        private static readonly Regex NewLinePattern = new Regex(@"\r\n|(?<!\r)\n|\r(?!\n)");
+        private static readonly Regex NewLinePattern = new Regex(@"\r\n|\r(?!\n)|(?<!\r)\n");
 
         public static bool EqualsIgnoreCase(this string @this, string value)
         {

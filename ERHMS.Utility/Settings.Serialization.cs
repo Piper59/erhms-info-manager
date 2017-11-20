@@ -44,11 +44,15 @@ namespace ERHMS.Utility
 
         public void Save()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
-            using (Stream stream = File.Create(FilePath))
+            try
             {
-                GetSerializer().Serialize(stream, this);
+                Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+                using (Stream stream = File.Create(FilePath))
+                {
+                    GetSerializer().Serialize(stream, this);
+                }
             }
+            catch { }
         }
     }
 }

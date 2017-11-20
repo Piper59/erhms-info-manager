@@ -48,6 +48,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="ArrayExtensions.cs" />
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="ConvertExtensions.cs" />
@@ -55,12 +56,14 @@
     <Compile Include="DamerauLevenshtein.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DbConnectionStringBuilderExtensions.cs" />
+    <Compile Include="DbExtensions.cs" />
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="InvalidEnumValueException.cs" />
     <Compile Include="Invoker.cs" />
     <Compile Include="IOExtensions.cs" />
+    <Compile Include="Iterator.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MailExtensions.cs" />
     <Compile Include="OleDbExtensions.cs" />

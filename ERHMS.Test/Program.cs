@@ -13,7 +13,8 @@ namespace ERHMS.Test
             Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             TypeMaps.Configure();
             Settings.Default.Reset();
-            return new AutoRun().Execute(args);
+            AutoRun application = new AutoRun();
+            return application.Execute(args);
         }
     }
 }
