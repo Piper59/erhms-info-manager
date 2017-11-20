@@ -7,12 +7,9 @@ using ERHMS.EpiInfo.Web;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using Configuration = Epi.Configuration;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
@@ -21,7 +18,7 @@ namespace ERHMS.Test.EpiInfo.Web
     public abstract class ServiceTest
     {
         private TempDirectory directory;
-        private Configuration configuration;
+        private Epi.Configuration configuration;
         private ISampleProjectCreator creator;
 
         private Project Project
@@ -53,7 +50,7 @@ namespace ERHMS.Test.EpiInfo.Web
             Settings.Default.Reset();
             if (View.IsWebSurvey())
             {
-                using (IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EIWS"].ConnectionString))
+                using (IDbConnection connection = Infrastructure.Configuration.GetWebConnection())
                 {
                     DynamicParameters parameters = new DynamicParameters();
                     parameters.Add("@SurveyId", View.WebSurveyId);
@@ -71,15 +68,13 @@ namespace ERHMS.Test.EpiInfo.Web
         public void IsConfiguredTest()
         {
             IsConfiguredTest(ConfigurationError.Address);
-            Uri endpoint = new Uri(ConfigurationManager.AppSettings["Endpoint"]);
-            IsConfiguredTest(ConfigurationError.Address, new Uri(endpoint, "Default.html"));
-            IsConfiguredTest(ConfigurationError.Address, new Uri(endpoint, "SurveyManagerService.html"));
-            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(endpoint, "SurveyManagerService.svc"));
-            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(endpoint, "SurveyManagerServiceV2.svc"));
-            IsConfiguredTest(ConfigurationError.OrganizationKey, endpoint);
+            IsConfiguredTest(ConfigurationError.Address, new Uri(Infrastructure.Configuration.Endpoint, "Default.html"));
+            IsConfiguredTest(ConfigurationError.Address, new Uri(Infrastructure.Configuration.Endpoint, "SurveyManagerService.html"));
+            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(Infrastructure.Configuration.Endpoint, "SurveyManagerService.svc"));
+            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(Infrastructure.Configuration.Endpoint, "SurveyManagerServiceV2.svc"));
+            IsConfiguredTest(ConfigurationError.OrganizationKey, Infrastructure.Configuration.Endpoint);
             IsConfiguredTest(ConfigurationError.OrganizationKey, Guid.Empty);
-            Guid organizationKey = new Guid(ConfigurationManager.AppSettings["OrganizationKey"]);
-            IsConfiguredTest(ConfigurationError.None, organizationKey);
+            IsConfiguredTest(ConfigurationError.None, Infrastructure.Configuration.OrganizationKey);
         }
 
         private void IsConfiguredTest(ConfigurationError expected, Uri endpoint)

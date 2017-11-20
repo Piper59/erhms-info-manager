@@ -1,4 +1,4 @@
-﻿using ERHMS.Dapper;
+﻿using ERHMS.Utility;
 using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
@@ -7,7 +7,7 @@ namespace ERHMS.DataAccess
     {
         private static string Escape(string identifier)
         {
-            return IDbConnectionExtensions.Escape(identifier);
+            return DbExtensions.Escape(identifier);
         }
 
         private ICollection<string> separators;

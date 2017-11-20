@@ -14,7 +14,7 @@ namespace ERHMS.Domain
             }
             else
             {
-                return DamerauLevenshtein.GetEditDistance(property1, property2) <= threshold;
+                return DamerauLevenshtein.GetDistance(property1, property2) <= threshold;
             }
         }
 

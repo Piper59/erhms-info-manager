@@ -2,6 +2,7 @@
 using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,11 +16,6 @@ namespace ERHMS.DataAccess
         {
             TypeMap typeMap = new TypeMap(typeof(Response));
             SqlMapper.SetTypeMap(typeof(Response), typeMap);
-        }
-
-        private static string Escape(string identifier)
-        {
-            return IDbConnectionExtensions.Escape(identifier);
         }
 
         public DataContext Context { get; private set; }
@@ -57,7 +53,7 @@ namespace ERHMS.DataAccess
                     }
                     SqlBuilder sql = new SqlBuilder();
                     sql.AddTable(viewTableName);
-                    sql.SelectClauses.Add(string.Format("{0}.[ResponderID]", Escape(pageTableName)));
+                    sql.SelectClauses.Add(string.Format("{0}.[ResponderID]", DbExtensions.Escape(pageTableName)));
                     sql.AddTableFromClause(JoinType.Inner, pageTableName, viewTableName, ColumnNames.GLOBAL_RECORD_ID);
                     sql.OtherClauses = clauses;
                     using (IDataReader reader = connection.ExecuteReader(sql.ToString(), parameters, transaction))

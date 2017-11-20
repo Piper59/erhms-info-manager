@@ -19,12 +19,7 @@ namespace ERHMS.EpiInfo.DataAccess
     {
         protected static string Escape(string identifier)
         {
-            return IDbConnectionExtensions.Escape(identifier);
-        }
-
-        protected static string GetParameterName(int index)
-        {
-            return IDbConnectionExtensions.GetParameterName(index);
+            return DbExtensions.Escape(identifier);
         }
 
         private IDictionary<string, Type> types;
