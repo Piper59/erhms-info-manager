@@ -20,7 +20,7 @@ namespace ERHMS.Utility
             string sql;
             using (SqlCommandBuilder builder = new SqlCommandBuilder())
             {
-                sql = string.Format(format, identifiers.Select(builder.QuoteIdentifier).ToArray());
+                sql = string.Format(format, identifiers.Select(identifier => builder.QuoteIdentifier(identifier)).ToArray());
             }
             using (SqlCommand command = new SqlCommand(sql, @this))
             {

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace ERHMS.Dapper
     {
         protected static string Escape(string identifier)
         {
-            return IDbConnectionExtensions.Escape(identifier);
+            return DbExtensions.Escape(identifier);
         }
 
         protected TypeMap TypeMap { get; private set; }

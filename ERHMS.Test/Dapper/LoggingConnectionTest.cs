@@ -34,18 +34,15 @@ namespace ERHMS.Test.Dapper
             {
                 int count = LogTest.GetLineCount();
                 connection.Execute("CREATE TABLE [Test] ([Id] INTEGER NOT NULL PRIMARY KEY)");
-                count++;
-                Assert.AreEqual(count, LogTest.GetLineCount());
+                LogTest.LineCountTest(++count);
                 connection.Execute("INSERT INTO [Test] ([Id]) VALUES (1)");
-                count++;
-                Assert.AreEqual(count, LogTest.GetLineCount());
+                LogTest.LineCountTest(++count);
                 Log.LevelName = "WARN";
                 connection.Query("SELECT * FROM [Test]");
-                Assert.AreEqual(count, LogTest.GetLineCount());
+                LogTest.LineCountTest(count);
                 Log.LevelName = "DEBUG";
                 connection.Execute("DROP TABLE [Test]");
-                count++;
-                Assert.AreEqual(count, LogTest.GetLineCount());
+                LogTest.LineCountTest(++count);
             }
         }
     }

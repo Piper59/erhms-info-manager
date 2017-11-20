@@ -34,7 +34,7 @@ namespace ERHMS.Test.Dapper
                 nameof(Person.Height),
                 nameof(Person.Weight)
             };
-            CollectionAssert.AreEquivalent(expected, typeMap.GetInsertable().Select(propertyMap => propertyMap.Property.Name));
+            PropertyMapsTest(expected, typeMap.GetInsertable());
         }
 
         [Test]
@@ -48,7 +48,12 @@ namespace ERHMS.Test.Dapper
                 nameof(Person.Height),
                 nameof(Person.Weight)
             };
-            CollectionAssert.AreEquivalent(expected, typeMap.GetUpdatable().Select(propertyMap => propertyMap.Property.Name));
+            PropertyMapsTest(expected, typeMap.GetUpdatable());
+        }
+
+        private void PropertyMapsTest(IEnumerable<string> expected, IEnumerable<PropertyMap> actual)
+        {
+            CollectionAssert.AreEquivalent(expected, actual.Select(propertyMap => propertyMap.Property.Name));
         }
 
         [Test]
@@ -60,9 +65,9 @@ namespace ERHMS.Test.Dapper
             GetMemberTest(propertyName, "P.PersonId");
         }
 
-        private void GetMemberTest(string propertyName, string columnName)
+        private void GetMemberTest(string expected, string actual)
         {
-            Assert.AreEqual(propertyName, typeMap.GetMember(columnName).Property.Name);
+            Assert.AreEqual(expected, typeMap.GetMember(actual).Property.Name);
         }
     }
 }

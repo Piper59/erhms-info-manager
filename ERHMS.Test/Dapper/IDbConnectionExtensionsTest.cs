@@ -35,7 +35,7 @@ namespace ERHMS.Test.Dapper
 
         private int Count(string tableName, IDbTransaction transaction = null)
         {
-            string sql = string.Format("SELECT COUNT(*) FROM {0}", IDbConnectionExtensions.Escape(tableName));
+            string sql = string.Format("SELECT COUNT(*) FROM {0}", DbExtensions.Escape(tableName));
             return connection.ExecuteScalar<int>(sql, transaction: transaction);
         }
 

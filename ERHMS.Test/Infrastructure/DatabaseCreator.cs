@@ -1,6 +1,6 @@
 ﻿using ERHMS.Dapper;
+using ERHMS.Test.Infrastructure;
 using ERHMS.Utility;
-using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
@@ -82,10 +82,7 @@ namespace ERHMS.Test
 
         public SqlServerDatabaseCreator(string name = null)
         {
-            Builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["ERHMS_Test"].ConnectionString)
-            {
-                Pooling = false
-            };
+            Builder = Configuration.GetTestConnectionStringBuilder();
             if (name != null)
             {
                 Builder.InitialCatalog = name;

@@ -8,7 +8,7 @@ namespace ERHMS.Utility
     {
         public static bool HasAllAttributes(this XmlElement @this, params string[] names)
         {
-            return names.All(@this.HasAttribute);
+            return names.All(name => @this.HasAttribute(name));
         }
 
         public static XmlElement ReadNextElement(this XmlReader @this, out bool empty)

@@ -53,10 +53,16 @@ namespace ERHMS.Test.Dapper
 
         [Test]
         [Order(1)]
-        public void SelectTest()
+        public void CountTest()
         {
             Assert.AreEqual(1, context.Constants.Count());
             Assert.AreEqual(100, context.People.Count());
+        }
+
+        [Test]
+        [Order(2)]
+        public void SelectTest()
+        {
             string clauses = "WHERE [Person].[Weight] >= @Weight";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Weight", 200.0);
@@ -66,7 +72,7 @@ namespace ERHMS.Test.Dapper
         }
 
         [Test]
-        [Order(2)]
+        [Order(3)]
         public void SelectByIdTest()
         {
             Constant constant = context.Constants.SelectById(1);

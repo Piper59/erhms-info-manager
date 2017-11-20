@@ -68,32 +68,32 @@ namespace ERHMS.Dapper
             @base.Dispose();
         }
 
-        private void PreExecute()
+        private void OnExecuting()
         {
             Log.Logger.DebugFormat("Executing SQL: {0}", CommandText.Trim());
         }
 
         public int ExecuteNonQuery()
         {
-            PreExecute();
+            OnExecuting();
             return @base.ExecuteNonQuery();
         }
 
         public IDataReader ExecuteReader()
         {
-            PreExecute();
+            OnExecuting();
             return @base.ExecuteReader();
         }
 
         public IDataReader ExecuteReader(CommandBehavior behavior)
         {
-            PreExecute();
+            OnExecuting();
             return @base.ExecuteReader(behavior);
         }
 
         public object ExecuteScalar()
         {
-            PreExecute();
+            OnExecuting();
             return @base.ExecuteScalar();
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.Data;
 using System.Data.Common;
 
@@ -8,7 +9,7 @@ namespace ERHMS.Dapper
     {
         protected static string Escape(string identifier)
         {
-            return IDbConnectionExtensions.Escape(identifier);
+            return DbExtensions.Escape(identifier);
         }
 
         public abstract DbConnectionStringBuilder Builder { get; }

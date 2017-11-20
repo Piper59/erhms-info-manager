@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,14 +9,9 @@ namespace ERHMS.Dapper
 {
     public static class IDbConnectionExtensions
     {
-        public static string Escape(string identifier)
+        private static string Escape(string identifier)
         {
-            return string.Format("[{0}]", identifier.Replace("]", "]]"));
-        }
-
-        public static string GetParameterName(int index)
-        {
-            return "@P" + index;
+            return DbExtensions.Escape(identifier);
         }
 
         private static TypeMap GetTypeMap<TEntity>()
@@ -78,7 +74,11 @@ namespace ERHMS.Dapper
             }
         }
 
-        public static IEnumerable<TEntity> Select<TEntity>(this IDbConnection @this, string clauses = null, object parameters = null, IDbTransaction transaction = null)
+        public static IEnumerable<TEntity> Select<TEntity>(
+            this IDbConnection @this,
+            string clauses = null,
+            object parameters = null,
+            IDbTransaction transaction = null)
         {
             string sql = string.Format("SELECT * FROM {0} {1}", Escape(GetTypeMap<TEntity>().TableName), clauses);
             return @this.Query<TEntity>(sql, parameters, transaction);
@@ -92,19 +92,23 @@ namespace ERHMS.Dapper
             return @this.Select<TEntity>(clauses, parameters, transaction).SingleOrDefault();
         }
 
-        public static void Insert<TColumn>(this IDbConnection @this, string tableName, IEnumerable<TColumn> columns, Func<TColumn, string> name, Func<TColumn, object> value, IDbTransaction transaction = null)
+        public static void Insert<TColumn>(
+            this IDbConnection @this,
+            string tableName,
+            IEnumerable<TColumn> columns,
+            Func<TColumn, string> name,
+            Func<TColumn, object> value,
+            IDbTransaction transaction = null)
         {
             ICollection<string> columnNames = new List<string>();
             ICollection<string> parameterNames = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
-            int index = 0;
-            foreach (TColumn column in columns)
+            foreach (Iterator<TColumn> column in columns.Iterate())
             {
-                columnNames.Add(Escape(name(column)));
-                string parameterName = GetParameterName(index);
+                columnNames.Add(Escape(name(column.Value)));
+                string parameterName = DbExtensions.GetParameterName(column.Index);
                 parameterNames.Add(parameterName);
-                parameters.Add(parameterName, value(column));
-                index++;
+                parameters.Add(parameterName, value(column.Value));
             }
             string sql = string.Format(
                 "INSERT INTO {0} ({1}) VALUES ({2})",
@@ -125,17 +129,22 @@ namespace ERHMS.Dapper
                 transaction);
         }
 
-        public static void Update<TColumn>(this IDbConnection @this, string tableName, TColumn idColumn, IEnumerable<TColumn> columns, Func<TColumn, string> name, Func<TColumn, object> value, IDbTransaction transaction = null)
+        public static void Update<TColumn>(
+            this IDbConnection @this,
+            string tableName,
+            TColumn idColumn,
+            IEnumerable<TColumn> columns,
+            Func<TColumn, string> name,
+            Func<TColumn, object> value,
+            IDbTransaction transaction = null)
         {
             ICollection<string> assignments = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
-            int index = 0;
-            foreach (TColumn column in columns)
+            foreach (Iterator<TColumn> column in columns.Iterate())
             {
-                string parameterName = GetParameterName(index);
-                assignments.Add(string.Format("{0} = {1}", Escape(name(column)), parameterName));
-                parameters.Add(parameterName, value(column));
-                index++;
+                string parameterName = DbExtensions.GetParameterName(column.Index);
+                assignments.Add(string.Format("{0} = {1}", Escape(name(column.Value)), parameterName));
+                parameters.Add(parameterName, value(column.Value));
             }
             string sql = string.Format(
                 "UPDATE {0} SET {1} WHERE {2} = @Id",
@@ -158,7 +167,11 @@ namespace ERHMS.Dapper
                 transaction);
         }
 
-        public static void Delete<TEntity>(this IDbConnection @this, string clauses = null, object parameters = null, IDbTransaction transaction = null)
+        public static void Delete<TEntity>(
+            this IDbConnection @this,
+            string clauses = null,
+            object parameters = null,
+            IDbTransaction transaction = null)
         {
             string sql = string.Format("DELETE FROM {0} {1}", Escape(GetTypeMap<TEntity>().TableName), clauses);
             @this.Execute(sql, parameters, transaction);
