@@ -4,9 +4,18 @@
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters">
     <UserControl.Resources>
-        <Style x:Key="Background" TargetType="Border">
+        <Style x:Key="Background" TargetType="Button">
             <Setter Property="Margin" Value="5" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="Description" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
@@ -78,14 +87,12 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.Row="0" Grid.Column="0"
+                <Button Grid.Row="0" Grid.Column="0"
+                        AutomationProperties.Name="Data Sources"
                         Background="#d900adef"
+                        Command="{Binding ShowDataSourcesCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowDataSourcesCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -103,15 +110,13 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
-                <Border Grid.Row="0" Grid.Column="1"
+                </Button>
+                <Button Grid.Row="0" Grid.Column="1"
+                        AutomationProperties.Name="Help"
                         Background="#d9ec1c24"
+                        Command="{Binding ShowHelpCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowHelpCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -129,15 +134,13 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="0"
+                </Button>
+                <Button Grid.Row="1" Grid.Column="0"
+                        AutomationProperties.Name="Responders"
                         Background="#d900a551"
+                        Command="{Binding ShowRespondersCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowRespondersCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -155,15 +158,13 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="1"
+                </Button>
+                <Button Grid.Row="1" Grid.Column="1"
+                        AutomationProperties.Name="Incidents"
                         Background="#d900adef"
+                        Command="{Binding ShowIncidentsCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowIncidentsCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -181,15 +182,13 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
-                <Border Grid.Row="2" Grid.Column="0"
+                </Button>
+                <Button Grid.Row="2" Grid.Column="0"
+                        AutomationProperties.Name="Forms"
                         Background="#d9ec1c24"
+                        Command="{Binding ShowViewsCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowViewsCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -207,15 +206,13 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
-                <Border Grid.Row="2" Grid.Column="1"
+                </Button>
+                <Button Grid.Row="2" Grid.Column="1"
+                        AutomationProperties.Name="Templates"
                         Background="#d900a551"
+                        Command="{Binding ShowTemplatesCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowTemplatesCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -233,15 +230,13 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="0"
+                </Button>
+                <Button Grid.Row="3" Grid.Column="0"
+                        AutomationProperties.Name="Analyses"
                         Background="#d900adef"
+                        Command="{Binding ShowPgmsCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowPgmsCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -259,15 +254,13 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="1"
+                </Button>
+                <Button Grid.Row="3" Grid.Column="1"
+                        AutomationProperties.Name="Dashboards"
                         Background="#d9ec1c24"
+                        Command="{Binding ShowCanvasesCommand}"
                         Style="{StaticResource Background}">
                     <Border Style="{StaticResource Overlay}">
-                        <Border.InputBindings>
-                            <MouseBinding Command="{Binding ShowCanvasesCommand}"
-                                          MouseAction="LeftClick" />
-                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -285,7 +278,7 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-                </Border>
+                </Button>
             </Grid>
         </StackPanel>
     </ScrollViewer>
