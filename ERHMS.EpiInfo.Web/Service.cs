@@ -4,6 +4,7 @@ using Epi.SurveyManagerService;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.Text.RegularExpressions;
 using Settings = ERHMS.Utility.Settings;
@@ -70,8 +71,9 @@ namespace ERHMS.EpiInfo.Web
                 error = ConfigurationError.Connection;
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                Log.Logger.Warn("Failed to check organization key", ex);
                 error = ConfigurationError.Unknown;
                 return false;
             }
@@ -179,41 +181,51 @@ namespace ERHMS.EpiInfo.Web
 
         public static IEnumerable<Record> GetRecords(Survey survey)
         {
-            Log.Logger.DebugFormat("Getting web survey records: {0}", survey.SurveyId);
-            using (ManagerServiceClient client = ServiceClient.GetClient())
+            Log.Logger.DebugFormat("Getting web records: {0}", survey.SurveyId);
+            try
             {
-                SurveyAnswerRequest request = new SurveyAnswerRequest
+                using (ManagerServiceClient client = ServiceClient.GetClient())
                 {
-                    Criteria = new SurveyAnswerCriteria
+                    SurveyAnswerRequest request = new SurveyAnswerRequest
                     {
-                        OrganizationKey = OrganizationKey.Value,
-                        SurveyId = survey.SurveyId,
-                        IsDraftMode = survey.Draft,
-                        UserPublishKey = survey.PublishKey,
-                        StatusId = -1,
-                        ReturnSizeInfoOnly = true,
-                        SurveyAnswerIdList = new List<string>()
-                    },
-                    SurveyAnswerList = new List<SurveyAnswerDTO>()
-                };
-                int pageCount;
-                {
-                    SurveyAnswerResponse response = client.GetSurveyAnswer(request);
-                    request.Criteria.PageSize = response.PageSize;
-                    pageCount = response.NumberOfPages;
-                }
-                request.Criteria.ReturnSizeInfoOnly = false;
-                for (int page = 1; page <= pageCount; page++)
-                {
-                    request.Criteria.PageNumber = page;
-                    SurveyAnswerResponse response = client.GetSurveyAnswer(request);
-                    foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
+                        Criteria = new SurveyAnswerCriteria
+                        {
+                            OrganizationKey = OrganizationKey.Value,
+                            SurveyId = survey.SurveyId,
+                            IsDraftMode = survey.Draft,
+                            UserPublishKey = survey.PublishKey,
+                            StatusId = -1,
+                            ReturnSizeInfoOnly = true,
+                            SurveyAnswerIdList = new List<string>()
+                        },
+                        SurveyAnswerList = new List<SurveyAnswerDTO>()
+                    };
+                    int pageCount;
                     {
-                        Record record = new Record(answer.ResponseId);
-                        record.SetValues(answer.XML);
-                        yield return record;
+                        SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                        request.Criteria.PageSize = response.PageSize;
+                        pageCount = response.NumberOfPages;
                     }
+                    request.Criteria.ReturnSizeInfoOnly = false;
+                    ICollection<Record> records = new List<Record>();
+                    for (int page = 1; page <= pageCount; page++)
+                    {
+                        request.Criteria.PageNumber = page;
+                        SurveyAnswerResponse response = client.GetSurveyAnswer(request);
+                        foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
+                        {
+                            Record record = new Record(answer.ResponseId);
+                            record.SetValues(answer.XML);
+                            records.Add(record);
+                        }
+                    }
+                    return records;
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Warn("Failed to get web records", ex);
+                return Enumerable.Empty<Record>();
             }
         }
     }

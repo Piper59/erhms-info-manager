@@ -18,7 +18,7 @@ namespace ERHMS.Test.EpiInfo.Web
     public abstract class ServiceTest
     {
         private TempDirectory directory;
-        private Epi.Configuration configuration;
+        private Configuration configuration;
         private ISampleProjectCreator creator;
 
         private Project Project
@@ -68,17 +68,22 @@ namespace ERHMS.Test.EpiInfo.Web
         public void IsConfiguredTest()
         {
             IsConfiguredTest(ConfigurationError.Address);
-            IsConfiguredTest(ConfigurationError.Address, new Uri(Infrastructure.Configuration.Endpoint, "Default.html"));
-            IsConfiguredTest(ConfigurationError.Address, new Uri(Infrastructure.Configuration.Endpoint, "SurveyManagerService.html"));
-            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(Infrastructure.Configuration.Endpoint, "SurveyManagerService.svc"));
-            IsConfiguredTest(ConfigurationError.OrganizationKey, new Uri(Infrastructure.Configuration.Endpoint, "SurveyManagerServiceV2.svc"));
-            IsConfiguredTest(ConfigurationError.OrganizationKey, Infrastructure.Configuration.Endpoint);
+            IsConfiguredTest(ConfigurationError.Address, "Default.html");
+            IsConfiguredTest(ConfigurationError.Address, "SurveyManagerService.html");
+            IsConfiguredTest(ConfigurationError.OrganizationKey, "SurveyManagerService.svc");
+            IsConfiguredTest(ConfigurationError.OrganizationKey, "SurveyManagerServiceV2.svc");
+            IsConfiguredTest(ConfigurationError.OrganizationKey, null);
             IsConfiguredTest(ConfigurationError.OrganizationKey, Guid.Empty);
             IsConfiguredTest(ConfigurationError.None, Infrastructure.Configuration.OrganizationKey);
         }
 
-        private void IsConfiguredTest(ConfigurationError expected, Uri endpoint)
+        private void IsConfiguredTest(ConfigurationError expected, string relativeUrl)
         {
+            Uri endpoint = Infrastructure.Configuration.Endpoint;
+            if (relativeUrl != null)
+            {
+                endpoint = new Uri(endpoint, relativeUrl);
+            }
             configuration.Settings.WebServiceEndpointAddress = endpoint.ToString();
             configuration.Save();
             IsConfiguredTest(expected);
