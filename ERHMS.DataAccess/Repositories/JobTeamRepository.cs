@@ -25,7 +25,7 @@ namespace ERHMS.DataAccess
         }
 
         public JobTeamRepository(DataContext context)
-            : base(context) { }
+            : base(context.Database) { }
 
         public override IEnumerable<JobTeam> Select(string clauses = null, object parameters = null)
         {

@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 
@@ -7,11 +6,6 @@ namespace ERHMS.Dapper
 {
     public class Repository<TEntity> : IRepository<TEntity>
     {
-        protected static string Escape(string identifier)
-        {
-            return DbExtensions.Escape(identifier);
-        }
-
         protected TypeMap TypeMap { get; private set; }
         public IDatabase Database { get; private set; }
 
@@ -19,6 +13,11 @@ namespace ERHMS.Dapper
         {
             TypeMap = (TypeMap)SqlMapper.GetTypeMap(typeof(TEntity));
             Database = database;
+        }
+
+        protected string Escape(string identifier)
+        {
+            return Database.Escape(identifier);
         }
 
         public virtual int Count(string clauses = null, object parameters = null)

@@ -30,7 +30,7 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(IncidentRole), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
+        public DataContext Context { get; private set; }
 
         public IncidentRoleRepository(DataContext context)
             : base(context)

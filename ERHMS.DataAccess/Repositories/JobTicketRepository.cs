@@ -34,10 +34,10 @@ namespace ERHMS.DataAccess
             return jobTicket;
         }
 
-        public new DataContext Context { get; private set; }
+        public DataContext Context { get; private set; }
 
         public JobTicketRepository(DataContext context)
-            : base(context)
+            : base(context.Database)
         {
             Context = context;
         }

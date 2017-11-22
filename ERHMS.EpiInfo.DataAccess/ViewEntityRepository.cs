@@ -17,20 +17,9 @@ namespace ERHMS.EpiInfo.DataAccess
     public class ViewEntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : ViewEntity, new()
     {
-        protected static string Escape(string identifier)
-        {
-            return DbExtensions.Escape(identifier);
-        }
-
         private IDictionary<string, Type> types;
 
-        public IDataContext Context { get; private set; }
-
-        public IDatabase Database
-        {
-            get { return Context.Database; }
-        }
-
+        public IDatabase Database { get; private set; }
         public View View { get; private set; }
 
         public IEnumerable<string> TableNames
@@ -38,10 +27,15 @@ namespace ERHMS.EpiInfo.DataAccess
             get { return View.Pages.Select(page => page.TableName).Prepend(View.TableName); }
         }
 
-        public ViewEntityRepository(IDataContext context, View view)
+        public ViewEntityRepository(IDatabase database, View view)
         {
-            Context = context;
+            Database = database;
             View = view;
+        }
+
+        protected string Escape(string identifier)
+        {
+            return Database.Escape(identifier);
         }
 
         private string GetSelectSql(string selectClause, string otherClauses)
@@ -179,25 +173,17 @@ namespace ERHMS.EpiInfo.DataAccess
             }
         }
 
-        private void Insert(IDbConnection connection, TEntity entity, string tableName, IEnumerable<string> columnNames, IDbTransaction transaction)
-        {
-            connection.Insert(
-                tableName,
-                columnNames,
-                columnName => columnName,
-                columnName => entity.GetProperty(columnName),
-                transaction);
-        }
-
         public void Insert(TEntity entity)
         {
             entity.Touch();
             Database.Transact((connection, transaction) =>
             {
-                Insert(connection, entity, View.TableName, GetViewColumnNames(true), transaction);
+                Func<string, string> name = columnName => columnName;
+                Func<string, object> value = columnName => entity.GetProperty(columnName);
+                connection.Insert(View.TableName, GetViewColumnNames(true), name, value, transaction);
                 foreach (Page page in View.Pages)
                 {
-                    Insert(connection, entity, page.TableName, GetPageColumnNames(page, true), transaction);
+                    connection.Insert(page.TableName, GetPageColumnNames(page, true), name, value, transaction);
                 }
                 string sql = string.Format("SELECT [UniqueKey] FROM {0} WHERE [GlobalRecordId] = @Id", Escape(View.TableName));
                 DynamicParameters parameters = new DynamicParameters();
@@ -207,26 +193,17 @@ namespace ERHMS.EpiInfo.DataAccess
             entity.New = false;
         }
 
-        private void Update(IDbConnection connection, TEntity entity, string tableName, string idColumnName, IEnumerable<string> columnNames, IDbTransaction transaction)
-        {
-            connection.Update(
-                tableName,
-                idColumnName,
-                columnNames,
-                columnName => columnName,
-                columnName => entity.GetProperty(columnName),
-                transaction);
-        }
-
         public void Update(TEntity entity)
         {
             entity.Touch();
             Database.Transact((connection, transaction) =>
             {
-                Update(connection, entity, View.TableName, ColumnNames.UNIQUE_KEY, GetViewColumnNames(false), transaction);
+                Func<string, string> name = columnName => columnName;
+                Func<string, object> value = columnName => entity.GetProperty(columnName);
+                connection.Update(View.TableName, ColumnNames.UNIQUE_KEY, GetViewColumnNames(false), name, value, transaction);
                 foreach (Page page in View.Pages)
                 {
-                    Update(connection, entity, page.TableName, ColumnNames.GLOBAL_RECORD_ID, GetPageColumnNames(page, false), transaction);
+                    connection.Update(page.TableName, ColumnNames.GLOBAL_RECORD_ID, GetPageColumnNames(page, false), name, value, transaction);
                 }
             });
         }

@@ -15,7 +15,7 @@ namespace ERHMS.DataAccess
         }
 
         public ResponderRepository(DataContext context)
-            : base(context, context.Project.Views["Responders"]) { }
+            : base(context.Database, context.Project.Views["Responders"]) { }
 
         public IEnumerable<Responder> SelectByTeamId(string teamId)
         {

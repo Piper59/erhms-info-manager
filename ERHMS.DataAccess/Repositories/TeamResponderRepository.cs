@@ -25,10 +25,10 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(TeamResponder), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
+        public DataContext Context { get; private set; }
 
         public TeamResponderRepository(DataContext context)
-            : base(context)
+            : base(context.Database)
         {
             Context = context;
         }

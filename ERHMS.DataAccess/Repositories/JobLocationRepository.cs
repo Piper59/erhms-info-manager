@@ -24,7 +24,7 @@ namespace ERHMS.DataAccess
         }
 
         public JobLocationRepository(DataContext context)
-            : base(context) { }
+            : base(context.Database) { }
 
         public override IEnumerable<JobLocation> Select(string clauses = null, object parameters = null)
         {

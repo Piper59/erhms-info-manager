@@ -1,7 +1,6 @@
 ﻿using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.DataAccess
 {
-    public class DataContext : IDataContext
+    public class DataContext
     {
         public static void Configure()
         {

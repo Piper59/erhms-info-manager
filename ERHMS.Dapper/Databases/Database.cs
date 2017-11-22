@@ -7,16 +7,16 @@ namespace ERHMS.Dapper
 {
     public abstract class Database : IDatabase
     {
-        protected static string Escape(string identifier)
-        {
-            return DbExtensions.Escape(identifier);
-        }
-
         public abstract DbConnectionStringBuilder Builder { get; }
         public abstract string Name { get; }
 
         private IDbConnection connection;
         private IDbTransaction transaction;
+
+        public string Escape(string identifier)
+        {
+            return DbExtensions.Escape(identifier);
+        }
 
         public abstract bool Exists();
         public abstract void Create();

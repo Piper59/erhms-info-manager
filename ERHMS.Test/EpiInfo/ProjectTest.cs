@@ -183,8 +183,7 @@ namespace ERHMS.Test.EpiInfo
             int count = Project.GetViews().Count();
             string name = "GetViewsTest_View";
             View view = Project.CreateView(name);
-            count++;
-            Assert.AreEqual(count, Project.GetViews().Count());
+            Assert.AreEqual(++count, Project.GetViews().Count());
             Assert.AreEqual(view.Id, Project.GetViewByName(name).Id);
             Assert.AreEqual(name, Project.GetViewById(view.Id).Name);
         }

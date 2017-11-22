@@ -24,10 +24,10 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(JobResponder), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
+        public DataContext Context { get; private set; }
 
         public JobResponderRepository(DataContext context)
-            : base(context)
+            : base(context.Database)
         {
             Context = context;
         }

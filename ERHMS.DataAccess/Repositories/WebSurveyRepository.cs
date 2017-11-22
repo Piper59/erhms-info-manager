@@ -23,7 +23,7 @@ namespace ERHMS.DataAccess
         }
 
         public WebSurveyRepository(DataContext context)
-            : base(context) { }
+            : base(context.Database) { }
 
         public override IEnumerable<WebSurvey> Select(string clauses = null, object parameters = null)
         {

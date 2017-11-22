@@ -6,18 +6,8 @@ namespace ERHMS.EpiInfo.DataAccess
     public class EntityRepository<TEntity> : Repository<TEntity>
         where TEntity : Entity
     {
-        public IDataContext Context { get; private set; }
-
-        public Project Project
-        {
-            get { return Context.Project; }
-        }
-
-        public EntityRepository(IDataContext context)
-            : base(context.Database)
-        {
-            Context = context;
-        }
+        public EntityRepository(IDatabase database)
+            : base(database) { }
 
         public override void Insert(TEntity entity)
         {

@@ -41,7 +41,7 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = view.Name;
-            Entities = new ViewEntityRepository<ViewEntity>(Context, view);
+            Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
             List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id).ToList();
             int append = int.MaxValue;
             Columns = view.Fields.DataFields

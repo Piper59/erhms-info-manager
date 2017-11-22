@@ -322,7 +322,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 ILookup<string, Responder> responders = Context.Responders.Select()
                     .ToLookup(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
-                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context, view);
+                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
                 try
                 {
                     foreach (Record record in Service.GetRecords(survey))

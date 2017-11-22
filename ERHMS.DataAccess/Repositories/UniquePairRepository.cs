@@ -22,7 +22,7 @@ namespace ERHMS.DataAccess
         }
 
         public UniquePairRepository(DataContext context)
-            : base(context) { }
+            : base(context.Database) { }
 
         private IEnumerable<Tuple<string, string>> SelectTuples()
         {

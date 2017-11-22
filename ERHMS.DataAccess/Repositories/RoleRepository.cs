@@ -19,6 +19,6 @@ namespace ERHMS.DataAccess
         }
 
         public RoleRepository(DataContext context)
-            : base(context) { }
+            : base(context.Database) { }
     }
 }

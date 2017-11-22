@@ -20,10 +20,10 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(Incident), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
+        public DataContext Context { get; private set; }
 
         public IncidentRepository(DataContext context)
-            : base(context)
+            : base(context.Database)
         {
             Context = context;
         }

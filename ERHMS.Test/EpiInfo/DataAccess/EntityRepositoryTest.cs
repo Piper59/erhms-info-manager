@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
-using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.Utility;
@@ -39,7 +38,10 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             }
 
             public Gender(bool @new)
-                : base(@new) { }
+                : base(@new)
+            {
+                AddSynonym(nameof(GenderId), nameof(Guid));
+            }
 
             public Gender()
                 : this(false) { }
@@ -55,49 +57,26 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                 SqlMapper.SetTypeMap(typeof(Gender), typeMap);
             }
 
-            public GenderRepository(IDataContext context)
-                : base(context) { }
-        }
-
-        private class DataContext : IDataContext
-        {
-            public static void Configure()
-            {
-                GenderRepository.Configure();
-            }
-
-            public IDatabase Database { get; private set; }
-
-            public Project Project
-            {
-                get { return null; }
-            }
-
-            public EntityRepository<Gender> Genders { get; private set; }
-
-            public DataContext(IDatabase database)
-            {
-                Database = database;
-                Genders = new EntityRepository<Gender>(this);
-            }
+            public GenderRepository(IDatabase database)
+                : base(database) { }
         }
 
         private IDatabaseCreator creator;
-        private DataContext context;
+        private GenderRepository genders;
 
         protected abstract IDatabaseCreator GetCreator();
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            DataContext.Configure();
+            GenderRepository.Configure();
             creator = GetCreator();
             creator.SetUp();
             using (IDbConnection connection = creator.GetConnection())
             {
                 connection.Execute(new Script(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.People.sql")));
             }
-            context = new DataContext(creator.GetDatabase());
+            genders = new GenderRepository(creator.GetDatabase());
         }
 
         [OneTimeTearDown]
@@ -109,20 +88,19 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         [Test]
         public void SaveTest()
         {
-            int count = context.Genders.Count();
+            int count = genders.Count();
             Gender gender = new Gender(true)
             {
                 Name = "Neuter",
                 Pronouns = ""
             };
             Assert.IsTrue(gender.New);
-            context.Genders.Save(gender);
-            count++;
-            Assert.AreEqual(count, context.Genders.Count());
+            genders.Save(gender);
+            Assert.AreEqual(++count, genders.Count());
             Assert.IsFalse(gender.New);
             gender.Pronouns = "it;it;its;its";
-            context.Genders.Save(gender);
-            Assert.AreEqual(count, context.Genders.Count());
+            genders.Save(gender);
+            Assert.AreEqual(count, genders.Count());
             Assert.IsFalse(gender.New);
         }
     }

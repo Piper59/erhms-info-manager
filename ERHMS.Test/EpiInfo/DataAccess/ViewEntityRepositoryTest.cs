@@ -61,24 +61,11 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                 : this(false) { }
         }
 
-        private class DataContext : IDataContext
-        {
-            public IDatabase Database { get; private set; }
-            public Project Project { get; private set; }
-            public ViewEntityRepository<Surveillance> Surveillances { get; private set; }
-
-            public DataContext(Project project)
-            {
-                Database = project.GetDatabase();
-                Project = project;
-                Surveillances = new ViewEntityRepository<Surveillance>(this, project.Views["Surveillance"]);
-            }
-        }
-
         private TempDirectory directory;
         private Configuration configuration;
         private ISampleProjectCreator creator;
-        private DataContext context;
+        private IDatabase database;
+        private ViewEntityRepository<Surveillance> surveillances;
 
         protected abstract ISampleProjectCreator GetCreator();
 
@@ -91,7 +78,9 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             configuration.CreateUserDirectories();
             creator = GetCreator();
             creator.SetUp();
-            context = new DataContext(creator.Project);
+            Project project = creator.Project;
+            database = project.GetDatabase();
+            surveillances = new ViewEntityRepository<Surveillance>(database, project.Views["Surveillance"]);
         }
 
         [OneTimeTearDown]
@@ -105,17 +94,17 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         [Test]
         public void CountTest()
         {
-            Assert.AreEqual(20, context.Surveillances.Count());
+            Assert.AreEqual(20, surveillances.Count());
             string clauses = "WHERE [ZipCode] = @ZipCode";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@ZipCode", "31061");
-            Assert.AreEqual(4, context.Surveillances.Count(clauses, parameters));
+            Assert.AreEqual(4, surveillances.Count(clauses, parameters));
         }
 
         private void SelectTest()
         {
-            Assert.AreEqual(20, context.Surveillances.Select().Count());
-            Surveillance surveillance = context.Surveillances.Select("ORDER BY [Entered]").First();
+            Assert.AreEqual(20, surveillances.Select().Count());
+            Surveillance surveillance = surveillances.Select("ORDER BY [Entered]").First();
             Assert.IsFalse(surveillance.New);
             Assert.AreEqual("Smith", surveillance.LastName);
             Assert.AreEqual("John", surveillance.FirstName);
@@ -129,7 +118,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
 
         private void ExecuteForEach(string format, IEnumerable<string> args)
         {
-            context.Database.Invoke((connection, transaction) =>
+            database.Invoke((connection, transaction) =>
             {
                 connection.Open();
                 foreach (string arg in args)
@@ -157,27 +146,27 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         public void SelectByIdTest()
         {
             string id = "993974ab-a5c8-4177-b81d-a060b2e5b9e1";
-            Surveillance surveillance = context.Surveillances.SelectById(id);
+            Surveillance surveillance = surveillances.SelectById(id);
             Assert.IsFalse(surveillance.New);
             Assert.AreEqual(id, surveillance.GlobalRecordId);
             Assert.AreEqual("100", surveillance.CaseId);
             Assert.AreEqual(0, surveillance.Hospitalized);
             Assert.AreEqual(new DateTime(2007, 1, 7), surveillance.EnteredOn);
-            Assert.IsNull(context.Surveillances.SelectById(Guid.Empty.ToString()));
+            Assert.IsNull(surveillances.SelectById(Guid.Empty.ToString()));
         }
 
         [Test]
         public void SelectUndeletedTest()
         {
-            Assert.AreEqual(20, context.Surveillances.SelectUndeleted().Count());
+            Assert.AreEqual(20, surveillances.SelectUndeleted().Count());
             try
             {
-                context.Database.Transact((connection, transaction) =>
+                database.Transact((connection, transaction) =>
                 {
-                    Surveillance surveillance = context.Surveillances.SelectById("993974ab-a5c8-4177-b81d-a060b2e5b9e1");
+                    Surveillance surveillance = surveillances.SelectById("993974ab-a5c8-4177-b81d-a060b2e5b9e1");
                     surveillance.Deleted = true;
-                    context.Surveillances.Save(surveillance);
-                    Assert.AreEqual(19, context.Surveillances.SelectUndeleted().Count());
+                    surveillances.Save(surveillance);
+                    Assert.AreEqual(19, surveillances.SelectUndeleted().Count());
                     throw new OperationCanceledException();
                 });
             }
@@ -189,7 +178,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         {
             try
             {
-                context.Database.Transact((connection, transaction) =>
+                database.Transact((connection, transaction) =>
                 {
                     Surveillance surveillance = new Surveillance(true)
                     {
@@ -202,16 +191,16 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                     Assert.IsTrue(surveillance.New);
                     Assert.IsNull(surveillance.UniqueKey);
                     Assert.IsNull(surveillance.CreatedOn);
-                    context.Surveillances.Save(surveillance);
+                    surveillances.Save(surveillance);
                     Assert.IsFalse(surveillance.New);
                     Assert.IsNotNull(surveillance.UniqueKey);
                     Assert.IsNotNull(surveillance.CreatedOn);
                     Assert.AreEqual(surveillance.CreatedOn, surveillance.ModifiedOn);
-                    Assert.AreEqual(21, context.Surveillances.Count());
+                    Assert.AreEqual(21, surveillances.Count());
                     surveillance.FirstName = "Jane";
-                    context.Surveillances.Save(surveillance);
+                    surveillances.Save(surveillance);
                     Assert.AreNotEqual(surveillance.CreatedBy, surveillance.ModifiedOn);
-                    Assert.AreEqual(surveillance, context.Surveillances.SelectById(surveillance.GlobalRecordId));
+                    Assert.AreEqual(surveillance, surveillances.SelectById(surveillance.GlobalRecordId));
                     throw new OperationCanceledException();
                 });
             }
@@ -223,7 +212,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
         {
             try
             {
-                context.Database.Transact((connection, transaction) =>
+                database.Transact((connection, transaction) =>
                 {
                     Record record = new Record(Guid.NewGuid().ToString());
                     record["CaseID"] = "2100";
@@ -231,15 +220,15 @@ namespace ERHMS.Test.EpiInfo.DataAccess
                     record["FirstName"] = "John";
                     record["Hospitalized"] = "0";
                     record["Entered"] = DateTime.Now.ToShortDateString();
-                    context.Surveillances.Save(record);
-                    Assert.AreEqual(21, context.Surveillances.Count());
-                    Surveillance surveillance = context.Surveillances.SelectById(record.GlobalRecordId);
+                    surveillances.Save(record);
+                    Assert.AreEqual(21, surveillances.Count());
+                    Surveillance surveillance = surveillances.SelectById(record.GlobalRecordId);
                     Assert.AreEqual(record["CaseID"], surveillance.CaseId);
                     Assert.AreEqual(record["LastName"], surveillance.LastName);
                     Assert.AreEqual(record["FirstName"], surveillance.FirstName);
                     Assert.AreEqual(record["Hospitalized"], surveillance.Hospitalized?.ToString());
                     Assert.AreEqual(record["Entered"], surveillance.EnteredOn?.ToShortDateString());
-                    Assert.AreEqual(21, context.Surveillances.Count());
+                    Assert.AreEqual(21, surveillances.Count());
                     throw new OperationCanceledException();
                 });
             }

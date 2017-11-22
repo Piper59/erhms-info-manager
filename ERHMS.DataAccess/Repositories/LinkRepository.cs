@@ -12,7 +12,7 @@ namespace ERHMS.DataAccess
         where TLink : Link
     {
         protected LinkRepository(DataContext context)
-            : base(context) { }
+            : base(context.Database) { }
 
         protected virtual SqlBuilder GetSqlBuilder()
         {

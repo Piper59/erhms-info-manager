@@ -23,10 +23,10 @@ namespace ERHMS.DataAccess
             SqlMapper.SetTypeMap(typeof(Roster), typeMap);
         }
 
-        public new DataContext Context { get; private set; }
+        public DataContext Context { get; private set; }
 
         public RosterRepository(DataContext context)
-            : base(context)
+            : base(context.Database)
         {
             Context = context;
         }

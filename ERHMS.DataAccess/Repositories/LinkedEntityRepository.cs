@@ -20,7 +20,7 @@ namespace ERHMS.DataAccess
         }
 
         protected LinkedEntityRepository(DataContext context)
-            : base(context)
+            : base(context.Database)
         {
             LinkTypeMap = (TypeMap)SqlMapper.GetTypeMap(typeof(TLink));
         }

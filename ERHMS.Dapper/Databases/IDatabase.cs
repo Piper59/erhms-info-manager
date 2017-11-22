@@ -9,6 +9,7 @@ namespace ERHMS.Dapper
         DbConnectionStringBuilder Builder { get; }
         string Name { get; }
 
+        string Escape(string identifier);
         bool Exists();
         void Create();
         bool TableExists(string name);

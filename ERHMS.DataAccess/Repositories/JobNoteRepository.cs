@@ -24,7 +24,7 @@ namespace ERHMS.DataAccess
         }
 
         public JobNoteRepository(DataContext context)
-            : base(context) { }
+            : base(context.Database) { }
 
         public override IEnumerable<JobNote> Select(string clauses = null, object parameters = null)
         {
