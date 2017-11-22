@@ -8,11 +8,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 {
     public abstract partial class EnterTest : WrapperTest
     {
-        private void FieldTest(View view, string name, object value)
-        {
-            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueObject);
-        }
-
         [Test]
         public void OpenRecordTest()
         {
@@ -43,10 +38,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             view.LoadRecord(1);
             FieldTest(view, "LastName", "Doe");
             FieldTest(view, "BirthDate", new DateTime(1980, 1, 1));
-            Assert.AreEqual(1, events.Count);
-            Assert.AreEqual("RecordSaved", events[0].Type);
-            Assert.AreEqual(events[0].Properties.ViewId, view.Id);
-            Assert.AreEqual(events[0].Properties.GlobalRecordId, view.CurrentGlobalRecordId);
+            EventsTest(events, view);
         }
 
         [Test]
@@ -80,6 +72,16 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             FieldTest(view, "FirstName", record.FirstName);
             FieldTest(view, "LastName", record.LastName);
             FieldTest(view, "BirthDate", record.BirthDate);
+            EventsTest(events, view);
+        }
+
+        private void FieldTest(View view, string name, object value)
+        {
+            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueObject);
+        }
+
+        private void EventsTest(WrapperEventCollection events, View view)
+        {
             Assert.AreEqual(1, events.Count);
             Assert.AreEqual("RecordSaved", events[0].Type);
             Assert.AreEqual(events[0].Properties.ViewId, view.Id);

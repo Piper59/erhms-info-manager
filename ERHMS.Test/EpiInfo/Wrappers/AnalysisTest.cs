@@ -5,7 +5,6 @@ using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -33,14 +32,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        private string csvDriverName;
-
-        [OneTimeSetUp]
-        public new void OneTimeSetUp()
-        {
-            csvDriverName = Configuration.DataDrivers.Single(driver => driver.Type == Configuration.CsvDriver).DisplayName;
-        }
-
         [Test]
         [Order(1)]
         public void ExportTest()
@@ -61,7 +52,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
             // Set export options
             writeDialog.rdbReplace.SelectionItem.Select();
-            writeDialog.cmbOutputFormat.Selection.Set(csvDriverName);
+            writeDialog.cmbOutputFormat.Selection.Set("CSV File");
 
             // Select CSV
             writeDialog.btnGetFile.Invoke.Invoke();
@@ -113,7 +104,26 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             mainForm.Window.Close();
         }
 
-        private WrapperEventCollection ImportCsv(string resourceName, string fileName)
+        [Test]
+        public void ImportAppendTest()
+        {
+            View view = Project.Views["Surveillance"];
+            ImportTest("ERHMS.Test.Resources.Sample.Surveillance.Append.csv", "Surveillance_Append.csv", view);
+            Assert.AreEqual(21, view.GetRecordCount());
+            view.LoadRecord(21);
+            RecordTest(view, "Doe", "Jane", new DateTime(2010, 1, 1), new DateTime(2010, 1, 1));
+        }
+
+        [Test]
+        public void ImportUpdateTest()
+        {
+            View view = Project.Views["Surveillance"];
+            ImportTest("ERHMS.Test.Resources.Sample.Surveillance.Update.csv", "Surveillance_Update.csv", view);
+            view.LoadRecord(1);
+            RecordTest(view, "Doe", "John", new DateTime(2007, 1, 7), new DateTime(2010, 1, 1));
+        }
+
+        private void ImportTest(string resourceName, string fileName, View view)
         {
             // Create CSV
             string path = Path.Combine(Project.Location, fileName);
@@ -127,7 +137,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
 
             // Select CSV
             ReadDialogScreen readDialog = mainForm.GetReadDialogScreen();
-            readDialog.cmbDataSourcePlugIns.Selection.Set(csvDriverName);
+            readDialog.cmbDataSourcePlugIns.Selection.Set("CSV File");
             readDialog.btnFindDataSource.Invoke.Invoke();
             CsvExistingFileDialogScreen csvExistingFileDialog = readDialog.GetCsvExistingFileDialogScreen();
             csvExistingFileDialog.txtFileName.Value.SetValue(Project.Location);
@@ -148,12 +158,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             mainForm.GetCloseDialogScreen().Dialog.Close(DialogResult.Yes);
 
             Wrapper.Exited.WaitOne();
-            return events;
-        }
-
-        private void FieldTest(View view, string name, object value)
-        {
-            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueObject);
+            Assert.AreEqual(1, events.Count);
+            Assert.AreEqual("DataImported", events[0].Type);
+            Assert.AreEqual(events[0].Properties.ViewId, view.Id);
         }
 
         private void RecordTest(View view, string lastName, string firstName, DateTime entered, DateTime updated)
@@ -164,29 +171,9 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             FieldTest(view, "Updated", updated);
         }
 
-        [Test]
-        public void ImportAppendTest()
+        private void FieldTest(View view, string name, object value)
         {
-            WrapperEventCollection events = ImportCsv("ERHMS.Test.Resources.Sample.Surveillance.Append.csv", "Surveillance_Append.csv");
-            View view = Project.Views["Surveillance"];
-            Assert.AreEqual(21, view.GetRecordCount());
-            view.LoadRecord(21);
-            RecordTest(view, "Doe", "Jane", new DateTime(2010, 1, 1), new DateTime(2010, 1, 1));
-            Assert.AreEqual(1, events.Count);
-            Assert.AreEqual("DataImported", events[0].Type);
-            Assert.AreEqual(events[0].Properties.ViewId, view.Id);
-        }
-
-        [Test]
-        public void ImportUpdateTest()
-        {
-            WrapperEventCollection events = ImportCsv("ERHMS.Test.Resources.Sample.Surveillance.Update.csv", "Surveillance_Update.csv");
-            View view = Project.Views["Surveillance"];
-            view.LoadRecord(1);
-            RecordTest(view, "Doe", "John", new DateTime(2007, 1, 7), new DateTime(2010, 1, 1));
-            Assert.AreEqual(1, events.Count);
-            Assert.AreEqual("DataImported", events[0].Type);
-            Assert.AreEqual(events[0].Properties.ViewId, view.Id);
+            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueObject);
         }
     }
 

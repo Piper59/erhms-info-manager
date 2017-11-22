@@ -91,33 +91,6 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             }
         }
 
-        private void TemplateTest(XmlDocument document)
-        {
-            ICollection<string> fieldNames = new string[]
-            {
-                "AddFull",
-                "ThisViewIs",
-                "GENDER",
-                "REPEAT",
-                "ENGL",
-                "ENGG",
-                "OLMAT",
-                "KF",
-                "GPA",
-                "SOCPROB",
-                "SCORE2",
-                "SCORE4",
-                "SCORE5",
-                "DROPOUT",
-                "ADDSC",
-                "IQ"
-            };
-            foreach (XmlElement element in document.SelectElements("/Template/Project/View/Page/Field"))
-            {
-                CollectionAssert.Contains(fieldNames, element.GetAttribute("Name"));
-            }
-        }
-
         [Test]
         public void CreateTemplateTest()
         {
@@ -165,6 +138,33 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             document.LoadXml(Wrapper.ReadToEnd());
             TemplateTest(document);
             Wrapper.Exited.WaitOne();
+        }
+
+        private void TemplateTest(XmlDocument document)
+        {
+            ICollection<string> fieldNames = new string[]
+            {
+                "AddFull",
+                "ThisViewIs",
+                "GENDER",
+                "REPEAT",
+                "ENGL",
+                "ENGG",
+                "OLMAT",
+                "KF",
+                "GPA",
+                "SOCPROB",
+                "SCORE2",
+                "SCORE4",
+                "SCORE5",
+                "DROPOUT",
+                "ADDSC",
+                "IQ"
+            };
+            foreach (XmlElement element in document.SelectElements("/Template/Project/View/Page/Field"))
+            {
+                CollectionAssert.Contains(fieldNames, element.GetAttribute("Name"));
+            }
         }
     }
 
