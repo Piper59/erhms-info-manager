@@ -30,7 +30,7 @@ namespace ERHMS.Test.EpiInfo
         {
             if (wrapper != null)
             {
-                if (!wrapper.Exited.WaitOne(10000))
+                if (!wrapper.Exited.WaitOne(TimeSpan.FromSeconds(10.0)))
                 {
                     TestContext.Error.WriteLine("Wrapper is not responding.");
                 }

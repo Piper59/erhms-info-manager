@@ -31,8 +31,10 @@ namespace ERHMS.Test.EpiInfo
             paths[level] = new List<string>();
             for (int index = 0; index < 3; index++)
             {
-                string directoryPath = Path.Combine(configuration.Directories.Templates, level.ToDirectoryName());
-                paths[level].Add(Create(directoryPath, level, nameof(TemplateInfoTest) + index));
+                string name = nameof(TemplateInfoTest) + index;
+                string path = Path.Combine(configuration.Directories.Templates, level.ToDirectoryName(), name + TemplateInfo.FileExtension);
+                Create(level, path);
+                paths[level].Add(path);
             }
         }
 
@@ -43,24 +45,10 @@ namespace ERHMS.Test.EpiInfo
             directory.Dispose();
         }
 
-        private string Create(string directoryPath, TemplateLevel level, string name)
+        private void Create(TemplateLevel level, string path)
         {
             string resourceName = string.Format("ERHMS.Test.Resources.Sample.ADDFull.{0}.xml", level);
-            string path = Path.Combine(directoryPath, name + TemplateInfo.FileExtension);
             Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, path);
-            return path;
-        }
-
-        private void PropertiesTest(TemplateInfo templateInfo)
-        {
-            Assert.AreEqual("ADDFull", templateInfo.Name);
-            Assert.AreEqual("Description for ADDFull template", templateInfo.Description);
-        }
-
-        private void PropertiesTest(TemplateInfo templateInfo, TemplateLevel level)
-        {
-            PropertiesTest(templateInfo);
-            Assert.AreEqual(level, templateInfo.Level);
         }
 
         [Test]
@@ -72,10 +60,13 @@ namespace ERHMS.Test.EpiInfo
 
         private void TryReadTest(TemplateLevel level)
         {
-            string path = Create(directory.FullName, level, nameof(TryReadTest));
-            TemplateInfo templateInfo;
-            Assert.IsTrue(TemplateInfo.TryRead(path, out templateInfo));
-            PropertiesTest(templateInfo, level);
+            using (TempFile file = new TempFile())
+            {
+                Create(level, file.FullName);
+                TemplateInfo templateInfo;
+                Assert.IsTrue(TemplateInfo.TryRead(file.FullName, out templateInfo));
+                PropertiesTest(templateInfo, level);
+            }
         }
 
         [Test]
@@ -87,8 +78,11 @@ namespace ERHMS.Test.EpiInfo
 
         private void GetTest(TemplateLevel level)
         {
-            string path = Create(directory.FullName, level, nameof(GetTest));
-            PropertiesTest(TemplateInfo.Get(path), level);
+            using (TempFile file = new TempFile())
+            {
+                Create(level, file.FullName);
+                PropertiesTest(TemplateInfo.Get(file.FullName), level);
+            }
         }
 
         [Test]
@@ -117,6 +111,18 @@ namespace ERHMS.Test.EpiInfo
             {
                 PropertiesTest(templateInfo, level);
             }
+        }
+
+        private void PropertiesTest(TemplateInfo templateInfo)
+        {
+            Assert.AreEqual("ADDFull", templateInfo.Name);
+            Assert.AreEqual("Description for ADDFull template", templateInfo.Description);
+        }
+
+        private void PropertiesTest(TemplateInfo templateInfo, TemplateLevel level)
+        {
+            PropertiesTest(templateInfo);
+            Assert.AreEqual(level, templateInfo.Level);
         }
     }
 }

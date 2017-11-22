@@ -28,7 +28,11 @@ namespace ERHMS.Test.EpiInfo
             paths = new List<string>();
             for (int index = 0; index < 3; index++)
             {
-                paths.Add(Create(configuration.Directories.Project, nameof(ProjectInfoTest) + index));
+                string name = nameof(ProjectInfoTest) + index;
+                DirectoryInfo directory = Directory.CreateDirectory(Path.Combine(configuration.Directories.Project, name));
+                string path = Path.Combine(directory.FullName, name + Project.FileExtension);
+                Create(path);
+                paths.Add(path);
             }
         }
 
@@ -39,34 +43,31 @@ namespace ERHMS.Test.EpiInfo
             directory.Dispose();
         }
 
-        private string Create(string directoryPath, string name)
+        private void Create(string path)
         {
-            string path = Path.Combine(directoryPath, name + Project.FileExtension);
             Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Test.Resources.Sample.Sample.prj", path);
-            return path;
-        }
-
-        private void PropertiesTest(ProjectInfo projectInfo)
-        {
-            Assert.AreEqual(new Version(1, 0, 0, 0), projectInfo.Version);
-            Assert.AreEqual("Sample", projectInfo.Name);
-            Assert.AreEqual("Description for Sample project", projectInfo.Description);
         }
 
         [Test]
         public void TryReadTest()
         {
-            string path = Create(directory.FullName, nameof(TryReadTest));
-            ProjectInfo projectInfo;
-            Assert.IsTrue(ProjectInfo.TryRead(path, out projectInfo));
-            PropertiesTest(projectInfo);
+            using (TempFile file = new TempFile())
+            {
+                Create(file.FullName);
+                ProjectInfo projectInfo;
+                Assert.IsTrue(ProjectInfo.TryRead(file.FullName, out projectInfo));
+                PropertiesTest(projectInfo);
+            }
         }
 
         [Test]
         public void GetTest()
         {
-            string path = Create(directory.FullName, nameof(GetTest));
-            PropertiesTest(ProjectInfo.Get(path));
+            using (TempFile file = new TempFile())
+            {
+                Create(file.FullName);
+                PropertiesTest(ProjectInfo.Get(file.FullName));
+            }
         }
 
         [Test]
@@ -80,18 +81,29 @@ namespace ERHMS.Test.EpiInfo
             }
         }
 
+        private void PropertiesTest(ProjectInfo projectInfo)
+        {
+            Assert.AreEqual(new Version(1, 0, 0, 0), projectInfo.Version);
+            Assert.AreEqual("Sample", projectInfo.Name);
+            Assert.AreEqual("Description for Sample project", projectInfo.Description);
+        }
+
         [Test]
         public void SetAccessDatabaseTest()
         {
-            ProjectInfo projectInfo = ProjectInfo.Get(Create(directory.FullName, nameof(SetAccessDatabaseTest)));
-            projectInfo.SetAccessDatabase();
-            XmlDocument document = new XmlDocument();
-            document.Load(projectInfo.FilePath);
-            XmlElement element = document.SelectSingleElement("/Project/CollectedData/Database");
-            string connectionString = Configuration.Decrypt(element.GetAttribute("connectionString"));
-            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder(connectionString);
-            Assert.AreEqual(Path.ChangeExtension(projectInfo.FilePath, OleDbExtensions.FileExtensions.Access), builder.DataSource);
-            Assert.AreEqual(Configuration.AccessDriver, element.GetAttribute("dataDriver"));
+            using (TempFile file = new TempFile())
+            {
+                Create(file.FullName);
+                ProjectInfo projectInfo = ProjectInfo.Get(file.FullName);
+                projectInfo.SetAccessDatabase();
+                XmlDocument document = new XmlDocument();
+                document.Load(projectInfo.FilePath);
+                XmlElement element = document.SelectSingleElement("/Project/CollectedData/Database");
+                string connectionString = Configuration.Decrypt(element.GetAttribute("connectionString"));
+                OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder(connectionString);
+                Assert.AreEqual(Path.ChangeExtension(projectInfo.FilePath, OleDbExtensions.FileExtensions.Access), builder.DataSource);
+                Assert.AreEqual(Configuration.AccessDriver, element.GetAttribute("dataDriver"));
+            }
         }
     }
 }

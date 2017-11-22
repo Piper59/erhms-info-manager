@@ -120,6 +120,8 @@ namespace ERHMS.Test.EpiInfo
             using (TempDirectory directory = new TempDirectory(nameof(CreateUserDirectoriesTest)))
             {
                 Configuration configuration = ConfigurationExtensions.Create(directory.FullName);
+                DirectoryAssert.DoesNotExist(configuration.Directories.Project);
+                DirectoryAssert.DoesNotExist(configuration.Directories.Templates);
                 configuration.CreateUserDirectories();
                 DirectoryAssert.Exists(configuration.Directories.Project);
                 DirectoryAssert.Exists(configuration.Directories.Templates);

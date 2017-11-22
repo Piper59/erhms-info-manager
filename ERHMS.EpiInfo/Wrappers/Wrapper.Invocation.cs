@@ -35,6 +35,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private Wrapper(MethodInfo method, IEnumerable<object> args)
         {
+            string fileName = method.DeclaringType.Assembly.Location;
             process = new Process
             {
                 EnableRaisingEvents = true,
@@ -44,8 +45,8 @@ namespace ERHMS.EpiInfo.Wrappers
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = Path.GetDirectoryName(method.DeclaringType.Assembly.Location),
-                    FileName = method.DeclaringType.Assembly.Location,
+                    WorkingDirectory = Path.GetDirectoryName(fileName),
+                    FileName = fileName,
                     Arguments = string.Format("{0} {1}", method.DeclaringType.FullName, method.Name)
                 }
             };

@@ -2,6 +2,7 @@
 using Epi.Fields;
 using ERHMS.Dapper;
 using ERHMS.EpiInfo;
+using ERHMS.Test.Infrastructure;
 using ERHMS.Utility;
 using NUnit.Framework;
 using System;
@@ -172,19 +173,8 @@ namespace ERHMS.Test.EpiInfo
             genders.Rows.Add("Female");
             Project.CreateCodeTable(tableName, columnName);
             Project.SaveCodeTableData(genders, tableName, columnName);
-            ICollection<string> expected;
-            expected = new string[]
-            {
-                "Male",
-                "Female"
-            };
-            CollectionAssert.AreEqual(expected, Project.GetCodes(tableName, columnName, false));
-            expected = new string[]
-            {
-                "Female",
-                "Male"
-            };
-            CollectionAssert.AreEqual(expected, Project.GetCodes(tableName, columnName, true));
+            AssertExtensions.AreEqual(Project.GetCodes(tableName, columnName, false), "Male", "Female");
+            AssertExtensions.AreEqual(Project.GetCodes(tableName, columnName, true), "Female", "Male");
         }
 
         [Test]
