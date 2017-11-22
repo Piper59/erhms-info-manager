@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace ERHMS.Test.EpiInfo.Domain
 {
-    public class EntityTest
+    public class GuidEntityTest
     {
         private class Person : GuidEntity
         {
@@ -60,7 +60,7 @@ namespace ERHMS.Test.EpiInfo.Domain
             public Person(bool @new)
                 : base(@new)
             {
-                AddSynonym(nameof(PersonId), "Guid");
+                AddSynonym(nameof(PersonId), nameof(Guid));
             }
 
             public Person()

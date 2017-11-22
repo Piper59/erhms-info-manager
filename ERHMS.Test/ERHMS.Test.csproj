@@ -157,7 +157,7 @@
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
     <Compile Include="EpiInfo\DataAccess\EntityRepositoryTest.cs" />
     <Compile Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />
-    <Compile Include="EpiInfo\Domain\EntityTest.cs" />
+    <Compile Include="EpiInfo\Domain\GuidEntityTest.cs" />
     <Compile Include="EpiInfo\Domain\ViewEntityTest.cs" />
     <Compile Include="EpiInfo\ProjectInfoTest.cs" />
     <Compile Include="EpiInfo\ProjectTest.cs" />
