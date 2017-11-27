@@ -10,12 +10,12 @@ using System.Linq;
 
 namespace ERHMS.DataAccess
 {
-    public class ResponseRepository : IRepository<Response>
+    public class ResponseRepository : IRepository<Record>
     {
         public static void Configure()
         {
-            TypeMap typeMap = new TypeMap(typeof(Response));
-            SqlMapper.SetTypeMap(typeof(Response), typeMap);
+            TypeMap typeMap = new TypeMap(typeof(Record));
+            SqlMapper.SetTypeMap(typeof(Record), typeMap);
         }
 
         public DataContext Context { get; private set; }
@@ -35,12 +35,12 @@ namespace ERHMS.DataAccess
             throw new NotSupportedException();
         }
 
-        public IEnumerable<Response> Select(string clauses = null, object parameters = null)
+        public IEnumerable<Record> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
                 IDictionary<int, Domain.View> views = Context.Views.Select().ToDictionary(view => view.ViewId);
-                ICollection<Response> responses = new List<Response>();
+                ICollection<Record> responses = new List<Record>();
                 DataTable fields = connection.Select("SELECT * FROM [metaFields]");
                 foreach (DataRow field in fields.Select("Name = 'ResponderID'"))
                 {
@@ -60,7 +60,7 @@ namespace ERHMS.DataAccess
                     {
                         while (reader.Read())
                         {
-                            Response response = new Response
+                            Record response = new Record
                             {
                                 View = view
                             };
@@ -73,12 +73,12 @@ namespace ERHMS.DataAccess
             });
         }
 
-        public Response SelectById(object id)
+        public Record SelectById(object id)
         {
             throw new NotSupportedException();
         }
 
-        public IEnumerable<Response> SelectByResponderId(string responderId)
+        public IEnumerable<Record> SelectByResponderId(string responderId)
         {
             string clauses = "WHERE [ResponderID] = @ResponderId";
             DynamicParameters parameters = new DynamicParameters();
@@ -86,17 +86,17 @@ namespace ERHMS.DataAccess
             return Select(clauses, parameters);
         }
 
-        public void Insert(Response entity)
+        public void Insert(Record entity)
         {
             throw new NotSupportedException();
         }
 
-        public void Update(Response entity)
+        public void Update(Record entity)
         {
             throw new NotSupportedException();
         }
 
-        public void Save(Response entity)
+        public void Save(Record entity)
         {
             throw new NotSupportedException();
         }
@@ -111,7 +111,7 @@ namespace ERHMS.DataAccess
             throw new NotSupportedException();
         }
 
-        public void Delete(Response entity)
+        public void Delete(Record entity)
         {
             throw new NotSupportedException();
         }

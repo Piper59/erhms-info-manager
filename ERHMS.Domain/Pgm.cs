@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Domain
 {
-    public class Pgm : LinkedEntity<PgmLink>
+    public class Pgm : EpiInfoEntity<PgmLink>
     {
         protected override object Id
         {

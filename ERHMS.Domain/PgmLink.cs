@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Domain
 {
-    public class PgmLink : Link
+    public class PgmLink : IncidentEntity
     {
         protected override string Guid
         {

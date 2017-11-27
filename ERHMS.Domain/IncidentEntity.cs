@@ -2,7 +2,7 @@
 
 namespace ERHMS.Domain
 {
-    public abstract class Link : GuidEntity
+    public abstract class IncidentEntity : GuidEntity
     {
         public string IncidentId
         {
@@ -17,12 +17,12 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Incident), ref incident, value); }
         }
 
-        protected Link(bool @new)
+        protected IncidentEntity(bool @new)
             : base(@new) { }
 
         public override object Clone()
         {
-            Link clone = (Link)base.Clone();
+            IncidentEntity clone = (IncidentEntity)base.Clone();
             clone.Incident = (Incident)Incident.Clone();
             return clone;
         }

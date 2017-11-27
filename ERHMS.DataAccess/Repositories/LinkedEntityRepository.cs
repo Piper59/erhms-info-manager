@@ -9,8 +9,8 @@ using System.Linq;
 namespace ERHMS.DataAccess
 {
     public class LinkedEntityRepository<TEntity, TLink> : EntityRepository<TEntity>
-        where TEntity : LinkedEntity<TLink>
-        where TLink : Link
+        where TEntity : EpiInfoEntity<TLink>
+        where TLink : IncidentEntity
     {
         protected TypeMap LinkTypeMap { get; private set; }
 

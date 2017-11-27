@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Domain
 {
-    public class Canvas : LinkedEntity<CanvasLink>
+    public class Canvas : EpiInfoEntity<CanvasLink>
     {
         protected override object Id
         {

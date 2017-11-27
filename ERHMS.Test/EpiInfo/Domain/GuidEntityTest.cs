@@ -58,10 +58,7 @@ namespace ERHMS.Test.EpiInfo.Domain
             }
 
             public Person(bool @new)
-                : base(@new)
-            {
-                AddSynonym(nameof(PersonId), nameof(Guid));
-            }
+                : base(@new) { }
 
             public Person()
                 : this(false) { }
@@ -200,7 +197,6 @@ namespace ERHMS.Test.EpiInfo.Domain
             };
             person.PersonId = Guid.NewGuid().ToString();
             expected.Add(nameof(Person.PersonId));
-            expected.Add("Guid");
             CollectionAssert.AreEquivalent(expected, actual);
         }
 

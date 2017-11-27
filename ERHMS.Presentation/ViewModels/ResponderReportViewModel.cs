@@ -39,8 +39,8 @@ namespace ERHMS.Presentation.ViewModels
             set { Set(nameof(JobTickets), ref jobTickets, value); }
         }
 
-        private ICollection<Response> responses;
-        public ICollection<Response> Responses
+        private ICollection<Record> responses;
+        public ICollection<Record> Responses
         {
             get { return responses; }
             set { Set(nameof(Responses), ref responses, value); }
@@ -49,7 +49,7 @@ namespace ERHMS.Presentation.ViewModels
         public RelayCommand<Incident> EditIncidentCommand { get; private set; }
         public RelayCommand<TeamResponder> EditTeamCommand { get; private set; }
         public RelayCommand<JobTicket> EditJobCommand { get; private set; }
-        public RelayCommand<Response> EditResponseCommand { get; private set; }
+        public RelayCommand<Record> EditResponseCommand { get; private set; }
 
         public ResponderReportViewModel(IServiceManager services, Responder responder)
                 : base(services)
@@ -59,7 +59,7 @@ namespace ERHMS.Presentation.ViewModels
             EditIncidentCommand = new RelayCommand<Incident>(EditIncident);
             EditTeamCommand = new RelayCommand<TeamResponder>(EditTeam);
             EditJobCommand = new RelayCommand<JobTicket>(EditJob);
-            EditResponseCommand = new RelayCommand<Response>(EditResponse);
+            EditResponseCommand = new RelayCommand<Record>(EditResponse);
             PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(IsSelected))
@@ -119,7 +119,7 @@ namespace ERHMS.Presentation.ViewModels
             Documents.ShowJob(jobTicket.Job);
         }
 
-        public void EditResponse(Response response)
+        public void EditResponse(Record response)
         {
             Dialogs.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, response.View.Name, response.UniqueKey.Value));
         }

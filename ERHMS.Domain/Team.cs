@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Domain
 {
-    public class Team : Link
+    public class Team : IncidentEntity
     {
         protected override string Guid
         {

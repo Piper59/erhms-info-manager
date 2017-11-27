@@ -9,7 +9,7 @@ using System.Linq;
 namespace ERHMS.DataAccess
 {
     public class LinkRepository<TLink> : EntityRepository<TLink>
-        where TLink : Link
+        where TLink : IncidentEntity
     {
         protected LinkRepository(DataContext context)
             : base(context.Database) { }

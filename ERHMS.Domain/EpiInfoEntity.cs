@@ -2,8 +2,8 @@
 
 namespace ERHMS.Domain
 {
-    public abstract class LinkedEntity<TLink> : Entity
-        where TLink : Link
+    public abstract class EpiInfoEntity<TLink> : Entity
+        where TLink : IncidentEntity
     {
         public abstract TLink Link { get; set; }
 
@@ -12,12 +12,12 @@ namespace ERHMS.Domain
             get { return Link?.Incident; }
         }
 
-        protected LinkedEntity(bool @new)
+        protected EpiInfoEntity(bool @new)
             : base(@new) { }
 
         public override object Clone()
         {
-            LinkedEntity<TLink> clone = (LinkedEntity<TLink>)base.Clone();
+            EpiInfoEntity<TLink> clone = (EpiInfoEntity<TLink>)base.Clone();
             clone.Link = (TLink)Link.Clone();
             return clone;
         }

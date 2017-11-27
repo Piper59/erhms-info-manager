@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Domain
 {
-    public class CanvasLink : Link
+    public class CanvasLink : IncidentEntity
     {
         protected override string Guid
         {

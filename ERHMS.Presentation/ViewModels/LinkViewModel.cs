@@ -7,8 +7,8 @@ using System.Linq;
 namespace ERHMS.Presentation.ViewModels
 {
     public abstract class LinkViewModel<TEntity, TLink> : DialogViewModel
-        where TEntity : LinkedEntity<TLink>
-        where TLink : Link
+        where TEntity : EpiInfoEntity<TLink>
+        where TLink : IncidentEntity
     {
         public class IncidentListChildViewModel : ListViewModel<Incident>
         {

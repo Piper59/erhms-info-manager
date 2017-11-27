@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Domain
 {
-    public class View : LinkedEntity<ViewLink>
+    public class View : EpiInfoEntity<ViewLink>
     {
         protected override object Id
         {
@@ -37,17 +37,17 @@
             set { SetProperty(nameof(ViewLinkId), value); }
         }
 
-        public View(bool @new)
-            : base(@new) { }
-
-        public View()
-            : this(false) { }
-
         private ViewLink link;
         public override ViewLink Link
         {
             get { return link; }
             set { SetProperty(nameof(Link), ref link, value); }
         }
+
+        public View(bool @new)
+            : base(@new) { }
+
+        public View()
+            : this(false) { }
     }
 }

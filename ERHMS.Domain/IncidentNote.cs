@@ -3,7 +3,7 @@ using System;
 
 namespace ERHMS.Domain
 {
-    public class IncidentNote : Link
+    public class IncidentNote : IncidentEntity
     {
         protected override string Guid
         {

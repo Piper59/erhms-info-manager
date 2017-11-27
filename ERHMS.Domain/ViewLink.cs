@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Domain
 {
-    public class ViewLink : Link
+    public class ViewLink : IncidentEntity
     {
         protected override string Guid
         {
