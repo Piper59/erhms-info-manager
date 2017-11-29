@@ -4,7 +4,7 @@ using ERHMS.Domain;
 
 namespace ERHMS.DataAccess
 {
-    public class CanvasLinkRepository : LinkRepository<CanvasLink>
+    public class CanvasLinkRepository : IncidentEntityRepository<CanvasLink>
     {
         public static void Configure()
         {

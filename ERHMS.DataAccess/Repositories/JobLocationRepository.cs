@@ -2,7 +2,6 @@
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,38 +25,39 @@ namespace ERHMS.DataAccess
         public JobLocationRepository(DataContext context)
             : base(context.Database) { }
 
+        private SqlBuilder GetSqlBuilder()
+        {
+            SqlBuilder sql = new SqlBuilder();
+            sql.AddTable("ERHMS_JobLocations");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "ERHMS_Jobs.JobId", "ERHMS_JobLocations.JobId");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "ERHMS_Incidents.IncidentId", "ERHMS_Jobs.IncidentId", "ERHMS_JobIncidents");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "ERHMS_Locations.LocationId", "ERHMS_JobLocations.LocationId");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "ERHMS_Incidents.IncidentId", "ERHMS_Locations.IncidentId", "ERHMS_LocationIncidents");
+            return sql;
+        }
+
+        private JobLocation Map(JobLocation jobLocation, Job job, Incident jobIncident, Location location, Incident locationIncident)
+        {
+            jobLocation.Job = job;
+            job.Incident = jobIncident;
+            jobLocation.Location = location;
+            location.Incident = locationIncident;
+            return jobLocation;
+        }
+
         public override IEnumerable<JobLocation> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                SqlBuilder sql = new SqlBuilder();
-                sql.AddTable("ERHMS_JobLocations");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "ERHMS_Jobs", "ERHMS_JobLocations", "JobId");
-                sql.AddSeparator();
-                sql.AddTableSelectClause("ERHMS_JobIncidents");
-                sql.FromClauses.Add("INNER JOIN [ERHMS_Incidents] AS [ERHMS_JobIncidents] ON [ERHMS_Jobs].[IncidentId] = [ERHMS_JobIncidents].[IncidentId]");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "ERHMS_Locations", "ERHMS_JobLocations", "LocationId");
-                sql.AddSeparator();
-                sql.AddTableSelectClause("ERHMS_LocationIncidents");
-                sql.FromClauses.Add("INNER JOIN [ERHMS_Incidents] AS [ERHMS_LocationIncidents] ON [ERHMS_Locations].[IncidentId] = [ERHMS_LocationIncidents].[IncidentId]");
+                SqlBuilder sql = GetSqlBuilder();
                 sql.OtherClauses = clauses;
-                Func<JobLocation, Job, Incident, Location, Incident, JobLocation> map = (jobLocation, job, jobIncident, location, locationIncident) =>
-                {
-                    jobLocation.Job = job;
-                    job.Incident = jobIncident;
-                    jobLocation.Location = location;
-                    location.Incident = locationIncident;
-                    return jobLocation;
-                };
-                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
+                return connection.Query<JobLocation, Job, Incident, Location, Incident, JobLocation>(
+                    sql.ToString(), Map, parameters, transaction, splitOn: sql.SplitOn);
             });
-        }
-
-        public IEnumerable<JobLocation> SelectUndeleted()
-        {
-            return Select("WHERE [ERHMS_JobIncidents].[Deleted] = 0 AND [ERHMS_LocationIncidents].[Deleted] = 0");
         }
 
         public override JobLocation SelectById(object id)
@@ -66,15 +66,6 @@ namespace ERHMS.DataAccess
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
             return Select(clauses, parameters).SingleOrDefault();
-        }
-
-        public IEnumerable<JobLocation> SelectByIncidentId(string incidentId)
-        {
-            string clauses = "WHERE [ERHMS_Jobs].[IncidentId] = @JobIncidentId OR [ERHMS_Locations].[IncidentId] = @LocationIncidentId";
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@JobIncidentId", incidentId);
-            parameters.Add("@LocationIncidentId", incidentId);
-            return Select(clauses, parameters);
         }
 
         public IEnumerable<JobLocation> SelectByJobId(string jobId)

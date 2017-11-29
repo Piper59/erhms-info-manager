@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Canvas = ERHMS.EpiInfo.Canvas;
+using Pgm = ERHMS.EpiInfo.Pgm;
 using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.DataAccess
@@ -36,8 +38,6 @@ namespace ERHMS.DataAccess
             string databasePath = Path.ChangeExtension(projectPath, OleDbExtensions.FileExtensions.Access);
             assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.mdb", databasePath);
             Project project = new Project(projectPath);
-            project.Version = assembly.GetName().Version;
-            project.Save();
             SampleDataContext context = new SampleDataContext(project);
             context.InsertPgm("Safety Messages", "ERHMS.DataAccess.Resources.Sample.SafetyMessages.pgm7");
             context.InsertCanvas("Air Quality", "ERHMS.DataAccess.Resources.Sample.AirQuality.cvs7");
@@ -56,7 +56,7 @@ namespace ERHMS.DataAccess
 
         private void InsertPgm(string pgmName, string resourceName)
         {
-            EpiInfo.Pgm pgm = new EpiInfo.Pgm
+            Pgm pgm = new Pgm
             {
                 Name = pgmName,
                 Content = Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)
@@ -72,7 +72,7 @@ namespace ERHMS.DataAccess
 
         private void InsertCanvas(string canvasName, string resourceName)
         {
-            EpiInfo.Canvas canvas = new EpiInfo.Canvas
+            Canvas canvas = new Canvas
             {
                 Name = canvasName,
                 Content = Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName)

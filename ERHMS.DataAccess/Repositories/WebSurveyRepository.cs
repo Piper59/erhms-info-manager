@@ -2,7 +2,6 @@
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,31 +24,39 @@ namespace ERHMS.DataAccess
         public WebSurveyRepository(DataContext context)
             : base(context.Database) { }
 
+        private SqlBuilder GetSqlBuilder()
+        {
+            SqlBuilder sql = new SqlBuilder();
+            sql.AddTable("ERHMS_WebSurveys");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "metaViews.ViewId", "ERHMS_WebSurveys.ViewId");
+            sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
+            sql.AddSeparator();
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks.ViewId", "metaViews.ViewId");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents.IncidentId", "ERHMS_ViewLinks.IncidentId");
+            return sql;
+        }
+
+        private WebSurvey Map(WebSurvey webSurvey, View view, ViewLink viewLink, Incident incident)
+        {
+            webSurvey.View = view;
+            if (viewLink.ViewLinkId != null)
+            {
+                view.Link = viewLink;
+                viewLink.Incident = incident;
+            }
+            return webSurvey;
+        }
+
         public override IEnumerable<WebSurvey> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                SqlBuilder sql = new SqlBuilder();
-                sql.AddTable("ERHMS_WebSurveys");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "metaViews", "ERHMS_WebSurveys", "ViewId");
-                sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
-                sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "metaViews", "ViewId");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "ERHMS_ViewLinks", "IncidentId");
+                SqlBuilder sql = GetSqlBuilder();
                 sql.OtherClauses = clauses;
-                Func<WebSurvey, View, ViewLink, Incident, WebSurvey> map = (webSurvey, view, viewLink, incident) =>
-                {
-                    webSurvey.View = view;
-                    if (viewLink.ViewLinkId != null)
-                    {
-                        view.Link = viewLink;
-                        viewLink.Incident = incident;
-                    }
-                    return webSurvey;
-                };
-                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
+                return connection.Query<WebSurvey, View, ViewLink, Incident, WebSurvey>(
+                    sql.ToString(), Map, parameters, transaction, splitOn: sql.SplitOn);
             });
         }
 
@@ -58,14 +65,6 @@ namespace ERHMS.DataAccess
             string clauses = "WHERE [ERHMS_WebSurveys].[WebSurveyId] = @Id";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
-            return Select(clauses, parameters).SingleOrDefault();
-        }
-
-        public WebSurvey SelectByViewId(int viewId)
-        {
-            string clauses = "WHERE [ERHMS_WebSurveys].[ViewId] = @ViewId";
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ViewId", viewId);
             return Select(clauses, parameters).SingleOrDefault();
         }
 

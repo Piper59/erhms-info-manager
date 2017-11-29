@@ -4,7 +4,7 @@ using ERHMS.Domain;
 
 namespace ERHMS.DataAccess
 {
-    public class PgmLinkRepository : LinkRepository<PgmLink>
+    public class PgmLinkRepository : IncidentEntityRepository<PgmLink>
     {
         public static void Configure()
         {

@@ -88,6 +88,8 @@
     <Compile Include="Repositories\CanvasLinkRepository.cs" />
     <Compile Include="Repositories\CanvasRepository.cs" />
     <Compile Include="DataContexts\DataContext.cs" />
+    <Compile Include="Repositories\EpiInfoEntityRepository.cs" />
+    <Compile Include="Repositories\IncidentEntityRepository.cs" />
     <Compile Include="Repositories\IncidentNoteRepository.cs" />
     <Compile Include="Repositories\IncidentRepository.cs" />
     <Compile Include="Repositories\IncidentRoleRepository.cs" />
@@ -97,14 +99,12 @@
     <Compile Include="Repositories\JobResponderRepository.cs" />
     <Compile Include="Repositories\JobTeamRepository.cs" />
     <Compile Include="Repositories\JobTicketRepository.cs" />
-    <Compile Include="Repositories\LinkedEntityRepository.cs" />
-    <Compile Include="Repositories\LinkRepository.cs" />
     <Compile Include="Repositories\LocationRepository.cs" />
     <Compile Include="Repositories\PgmLinkRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\PgmRepository.cs" />
+    <Compile Include="Repositories\RecordRepository.cs" />
     <Compile Include="Repositories\ResponderRepository.cs" />
-    <Compile Include="Repositories\ResponseRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\RosterRepository.cs" />
     <Compile Include="DataContexts\SampleDataContext.cs" />

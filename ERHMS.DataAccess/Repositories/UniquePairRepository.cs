@@ -3,7 +3,6 @@ using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ERHMS.DataAccess
@@ -24,18 +23,11 @@ namespace ERHMS.DataAccess
         public UniquePairRepository(DataContext context)
             : base(context.Database) { }
 
-        private IEnumerable<Tuple<string, string>> SelectTuples()
-        {
-            foreach (UniquePair uniquePair in Select())
-            {
-                yield return new Tuple<string, string>(uniquePair.Responder1Id, uniquePair.Responder2Id);
-                yield return new Tuple<string, string>(uniquePair.Responder2Id, uniquePair.Responder1Id);
-            }
-        }
-
         public ILookup<string, string> SelectLookup()
         {
-            return SelectTuples().ToLookup(tuple => tuple.Item1, tuple => tuple.Item2, StringComparer.OrdinalIgnoreCase);
+            return Select()
+                .SelectMany(uniquePair => uniquePair.ToTuples())
+                .ToLookup(tuple => tuple.Item1, tuple => tuple.Item2, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

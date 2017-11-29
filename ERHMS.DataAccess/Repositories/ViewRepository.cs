@@ -6,7 +6,7 @@ using View = ERHMS.Domain.View;
 
 namespace ERHMS.DataAccess
 {
-    public class ViewRepository : LinkedEntityRepository<View, ViewLink>
+    public class ViewRepository : EpiInfoEntityRepository<View, ViewLink>
     {
         internal const string HasResponderIdFieldSql = @"
             (
@@ -40,9 +40,9 @@ namespace ERHMS.DataAccess
             sql.AddTable("metaViews");
             sql.SelectClauses.Add(HasResponderIdFieldSql);
             sql.AddSeparator();
-            sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "metaViews", "ViewId");
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks.ViewId", "metaViews.ViewId");
             sql.AddSeparator();
-            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "ERHMS_ViewLinks", "IncidentId");
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents.IncidentId", "ERHMS_ViewLinks.IncidentId");
             return sql;
         }
     }

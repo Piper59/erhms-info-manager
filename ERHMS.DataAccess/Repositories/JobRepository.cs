@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
-    public class JobRepository : LinkRepository<Job>
+    public class JobRepository : IncidentEntityRepository<Job>
     {
         public static void Configure()
         {
@@ -26,21 +26,21 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Job> SelectByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
         {
-            ICollection<string> clauses = new List<string>();
+            ICollection<string> conditions = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
-            clauses.Add("[ERHMS_Jobs].[IncidentId] = @IncidentId");
+            conditions.Add("[ERHMS_Jobs].[IncidentId] = @IncidentId");
             parameters.Add("@IncidentId", incidentId);
             if (start.HasValue)
             {
-                clauses.Add("([ERHMS_Jobs].[EndDate] IS NULL OR [ERHMS_Jobs].[EndDate] >= @Start)");
+                conditions.Add("([ERHMS_Jobs].[EndDate] IS NULL OR [ERHMS_Jobs].[EndDate] >= @Start)");
                 parameters.Add("@Start", start.Value.RemoveMilliseconds());
             }
             if (end.HasValue)
             {
-                clauses.Add("([ERHMS_Jobs].[StartDate] IS NULL OR [ERHMS_Jobs].[StartDate] <= @End)");
+                conditions.Add("([ERHMS_Jobs].[StartDate] IS NULL OR [ERHMS_Jobs].[StartDate] <= @End)");
                 parameters.Add("@End", start.Value.RemoveMilliseconds());
             }
-            return Select(string.Format("WHERE {0}", string.Join(" AND ", clauses)), parameters);
+            return Select(SqlBuilder.GetWhereClause(conditions), parameters);
         }
     }
 }

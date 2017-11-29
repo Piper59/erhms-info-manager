@@ -1,10 +1,11 @@
 ﻿using Dapper;
+using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using View = ERHMS.Domain.View;
 
 namespace ERHMS.DataAccess
 {
@@ -31,47 +32,55 @@ namespace ERHMS.DataAccess
             Context = context;
         }
 
+        private SqlBuilder GetSqlBuilder()
+        {
+            SqlBuilder sql = new SqlBuilder();
+            sql.AddTable("ERHMS_Assignments");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "metaViews.ViewId", "ERHMS_Assignments.ViewId");
+            sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
+            sql.AddSeparator();
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks.ViewId", "metaViews.ViewId");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents.IncidentId", "ERHMS_ViewLinks.IncidentId");
+            sql.AddSeparator();
+            foreach (string tableName in Context.Responders.TableNames)
+            {
+                sql.AddTable(JoinType.Inner, tableName, ColumnNames.GLOBAL_RECORD_ID, "ERHMS_Assignments", "ResponderId");
+            }
+            return sql;
+        }
+
+        private Assignment Map(Assignment assignment, View view, ViewLink viewLink, Incident incident, Responder responder)
+        {
+            assignment.View = view;
+            if (viewLink.ViewLinkId != null)
+            {
+                view.Link = viewLink;
+                viewLink.Incident = incident;
+            }
+            assignment.Responder = responder;
+            return assignment;
+        }
+
         public override IEnumerable<Assignment> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                SqlBuilder sql = new SqlBuilder();
-                sql.AddTable("ERHMS_Assignments");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "metaViews", "ERHMS_Assignments", "ViewId");
-                sql.SelectClauses.Add(ViewRepository.HasResponderIdFieldSql);
-                sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_ViewLinks", "metaViews", "ViewId");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "ERHMS_ViewLinks", "IncidentId");
-                sql.AddSeparator();
-                foreach (string tableName in Context.Responders.TableNames)
-                {
-                    sql.AddTableSelectClause(tableName);
-                    sql.FromClauses.Add(string.Format("INNER JOIN {0} ON [ERHMS_Assignments].[ResponderId] = {0}.[GlobalRecordId]", Escape(tableName)));
-                }
+                SqlBuilder sql = GetSqlBuilder();
                 sql.OtherClauses = clauses;
-                Func<Assignment, View, ViewLink, Incident, Responder, Assignment> map = (assignment, view, viewLink, incident, responder) =>
-                {
-                    assignment.View = view;
-                    if (viewLink.ViewLinkId != null)
-                    {
-                        view.Link = viewLink;
-                        viewLink.Incident = incident;
-                    }
-                    assignment.Responder = responder;
-                    return assignment;
-                };
-                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
+                return connection.Query<Assignment, View, ViewLink, Incident, Responder, Assignment>(
+                    sql.ToString(), Map, parameters, transaction, splitOn: sql.SplitOn);
             });
         }
 
         public IEnumerable<Assignment> SelectUndeleted()
         {
-            string format = @"
-                WHERE ([ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0)
-                AND {0}.[RECSTATUS] <> 0";
-            return Select(string.Format(format, Escape(Context.Responders.View.TableName)));
+            string clauses = string.Format(
+                "WHERE ([ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0) AND {0}.{1} <> 0",
+                Escape(Context.Responders.View.TableName),
+                Escape(ColumnNames.REC_STATUS));
+            return Select(clauses);
         }
 
         public override Assignment SelectById(object id)
@@ -82,25 +91,15 @@ namespace ERHMS.DataAccess
             return Select(clauses, parameters).SingleOrDefault();
         }
 
-        private IEnumerable<Assignment> SelectByIncidentIdInternal(string clauses, string incidentId)
+        public IEnumerable<Assignment> SelectUndeletedByIncidentId(string incidentId)
         {
+            string clauses = string.Format(
+                "WHERE [ERHMS_ViewLinks].[IncidentId] = @IncidentId AND {0}.{1} <> 0",
+                Escape(Context.Responders.View.TableName),
+                Escape(ColumnNames.REC_STATUS));
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@IncidentId", incidentId);
             return Select(clauses, parameters);
-        }
-
-        public IEnumerable<Assignment> SelectByIncidentId(string incidentId)
-        {
-            return SelectByIncidentIdInternal("WHERE [ERHMS_ViewLinks].[IncidentId] = @IncidentId", incidentId);
-        }
-
-        public IEnumerable<Assignment> SelectUndeletedByIncidentId(string incidentId)
-        {
-            string format = @"
-                WHERE [ERHMS_ViewLinks].[IncidentId] = @IncidentId
-                AND {0}.[RECSTATUS] <> 0";
-            string clauses = string.Format(format, Escape(Context.Responders.View.TableName));
-            return SelectByIncidentIdInternal(clauses, incidentId);
         }
 
         public void DeleteByViewId(int viewId)

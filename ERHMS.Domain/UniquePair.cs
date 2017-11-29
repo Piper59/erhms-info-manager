@@ -1,4 +1,6 @@
 ﻿using ERHMS.EpiInfo.Domain;
+using System;
+using System.Collections.Generic;
 
 namespace ERHMS.Domain
 {
@@ -33,5 +35,11 @@ namespace ERHMS.Domain
 
         public UniquePair()
             : this(false) { }
+
+        public IEnumerable<Tuple<string, string>> ToTuples()
+        {
+            yield return Tuple.Create(Responder1Id, Responder2Id);
+            yield return Tuple.Create(Responder2Id, Responder1Id);
+        }
     }
 }

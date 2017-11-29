@@ -113,7 +113,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            TemplateListViewModel.Create(Services, DataContext.GetNewViewTemplate(), Incident);
+            TemplateListViewModel.Create(Services, DataContext.GetViewTemplate(), Incident);
         }
 
         public void Edit()

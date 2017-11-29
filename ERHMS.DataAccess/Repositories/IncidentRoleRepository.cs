@@ -4,19 +4,8 @@ using ERHMS.Domain;
 
 namespace ERHMS.DataAccess
 {
-    public class IncidentRoleRepository : LinkRepository<IncidentRole>
+    public class IncidentRoleRepository : IncidentEntityRepository<IncidentRole>
     {
-        internal const string IsInUseSql = @"
-            (
-                SELECT COUNT(*)
-                FROM [ERHMS_TeamResponders]
-                WHERE [ERHMS_TeamResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
-            ) + (
-                SELECT COUNT(*)
-                FROM [ERHMS_JobResponders]
-                WHERE [ERHMS_JobResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
-            ) AS [IsInUse]";
-
         public static void Configure()
         {
             TypeMap typeMap = new TypeMap(typeof(IncidentRole))
@@ -42,9 +31,18 @@ namespace ERHMS.DataAccess
         {
             SqlBuilder sql = new SqlBuilder();
             sql.AddTable("ERHMS_IncidentRoles");
-            sql.SelectClauses.Add(IsInUseSql);
+            sql.SelectClauses.Add(@"
+                (
+                    SELECT COUNT(*)
+                    FROM [ERHMS_TeamResponders]
+                    WHERE [ERHMS_TeamResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
+                ) + (
+                    SELECT COUNT(*)
+                    FROM [ERHMS_JobResponders]
+                    WHERE [ERHMS_JobResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
+                ) AS [IsInUse]");
             sql.AddSeparator();
-            sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "ERHMS_IncidentRoles", "IncidentId");
+            sql.AddTable(JoinType.Inner, "ERHMS_Incidents.IncidentId", "ERHMS_IncidentRoles.IncidentId");
             return sql;
         }
 

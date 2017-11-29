@@ -3,41 +3,33 @@ using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Project = ERHMS.EpiInfo.Project;
+using View = Epi.View;
 
 namespace ERHMS.DataAccess
 {
     public class DataContext
     {
+        private static bool IsRepositoryType(Type type)
+        {
+            return type.GetInterfaces()
+                .Any(@interface => @interface.IsGenericType && @interface.GetGenericTypeDefinition() == typeof(IRepository<>));
+        }
+
         public static void Configure()
         {
-            AssignmentRepository.Configure();
-            CanvasRepository.Configure();
-            CanvasLinkRepository.Configure();
-            IncidentRepository.Configure();
-            IncidentNoteRepository.Configure();
-            IncidentRoleRepository.Configure();
-            JobRepository.Configure();
-            JobLocationRepository.Configure();
-            JobNoteRepository.Configure();
-            JobResponderRepository.Configure();
-            JobTeamRepository.Configure();
-            JobTicketRepository.Configure();
-            LocationRepository.Configure();
-            PgmRepository.Configure();
-            PgmLinkRepository.Configure();
-            ResponderRepository.Configure();
-            ResponseRepository.Configure();
-            RoleRepository.Configure();
-            RosterRepository.Configure();
-            TeamRepository.Configure();
-            TeamResponderRepository.Configure();
-            UniquePairRepository.Configure();
-            ViewRepository.Configure();
-            ViewLinkRepository.Configure();
-            WebSurveyRepository.Configure();
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(type => IsRepositoryType(type)))
+            {
+                MethodInfo method = type.GetMethod("Configure", BindingFlags.Public | BindingFlags.Static, null, Type.EmptyTypes, null);
+                if (method != null)
+                {
+                    method.Invoke(null, null);
+                }
+            }
         }
 
         private static Script GetScript(string name)
@@ -46,33 +38,34 @@ namespace ERHMS.DataAccess
             return new Script(Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName));
         }
 
+        private static TemplateInfo GetTemplate(TemplateLevel level)
+        {
+            string resourceName = string.Format("ERHMS.DataAccess.Resources.{0}.xml", level);
+            string path = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
+            Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, path);
+            return TemplateInfo.Get(path);
+        }
+
+        public static TemplateInfo GetViewTemplate()
+        {
+            return GetTemplate(TemplateLevel.View);
+        }
+
         public static DataContext Create(Project project)
         {
             Log.Logger.DebugFormat("Creating data context: {0}", project.FilePath);
-            string path = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.DataAccess.Resources.Project.xml", path);
-            TemplateInfo templateInfo = TemplateInfo.Get(path);
-            Wrapper wrapper = MakeView.InstantiateProjectTemplate.Create(project.FilePath, path);
+            TemplateInfo templateInfo = GetTemplate(TemplateLevel.Project);
+            Wrapper wrapper = MakeView.InstantiateProjectTemplate.Create(project.FilePath, templateInfo.FilePath);
             wrapper.Invoke();
             wrapper.Exited.WaitOne();
-            foreach (Epi.View view in project.Views)
+            foreach (View view in project.Views)
             {
                 project.CollectedData.CreateDataTableForView(view, 1);
             }
             DataContext context = new DataContext(project);
-            context.Database.Invoke((connection, transaction) =>
-            {
-                connection.Execute(GetScript("Base"), transaction);
-                context.Upgrade();
-            });
+            context.Initialize();
+            context.Upgrade();
             return context;
-        }
-
-        public static TemplateInfo GetNewViewTemplate()
-        {
-            string path = IOExtensions.GetTempFileName("ERHMS_{0:N}{1}", TemplateInfo.FileExtension);
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.DataAccess.Resources.View.xml", path);
-            return TemplateInfo.Get(path);
         }
 
         public IDatabase Database { get; private set; }
@@ -93,7 +86,7 @@ namespace ERHMS.DataAccess
         public PgmRepository Pgms { get; private set; }
         public PgmLinkRepository PgmLinks { get; private set; }
         public ResponderRepository Responders { get; private set; }
-        public ResponseRepository Responses { get; private set; }
+        public RecordRepository Responses { get; private set; }
         public RoleRepository Roles { get; private set; }
         public RosterRepository Rosters { get; private set; }
         public TeamRepository Teams { get; private set; }
@@ -143,7 +136,7 @@ namespace ERHMS.DataAccess
             Pgms = new PgmRepository(this);
             PgmLinks = new PgmLinkRepository(this);
             Responders = new ResponderRepository(this);
-            Responses = new ResponseRepository(this);
+            Responses = new RecordRepository(this);
             Roles = new RoleRepository(this);
             Rosters = new RosterRepository(this);
             Teams = new TeamRepository(this);
@@ -157,6 +150,14 @@ namespace ERHMS.DataAccess
         private IEnumerable<string> GetCodes(string tableName, string columnName)
         {
             return Project.GetCodes(tableName, columnName, false).Prepend("");
+        }
+
+        private void Initialize()
+        {
+            Database.Invoke((connection, transaction) =>
+            {
+                connection.Execute(GetScript("Base"), transaction);
+            });
         }
 
         public bool NeedsUpgrade()

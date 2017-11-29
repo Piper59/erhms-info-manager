@@ -8,18 +8,13 @@ using System.Linq;
 
 namespace ERHMS.DataAccess
 {
-    public class LinkedEntityRepository<TEntity, TLink> : EntityRepository<TEntity>
+    public class EpiInfoEntityRepository<TEntity, TLink> : EntityRepository<TEntity>
         where TEntity : EpiInfoEntity<TLink>
         where TLink : IncidentEntity
     {
         protected TypeMap LinkTypeMap { get; private set; }
 
-        protected virtual PropertyMap LinkPropertyMap
-        {
-            get { return LinkTypeMap.Get(TypeMap.GetId().Property.Name); }
-        }
-
-        protected LinkedEntityRepository(DataContext context)
+        protected EpiInfoEntityRepository(DataContext context)
             : base(context.Database)
         {
             LinkTypeMap = (TypeMap)SqlMapper.GetTypeMap(typeof(TLink));
@@ -30,16 +25,25 @@ namespace ERHMS.DataAccess
             SqlBuilder sql = new SqlBuilder();
             sql.AddTable(TypeMap.TableName);
             sql.AddSeparator();
-            sql.AddTableSelectClause(LinkTypeMap.TableName);
-            sql.FromClauses.Add(string.Format(
-                "LEFT OUTER JOIN {0} ON {1}.{2} = {0}.{3}",
-                Escape(LinkTypeMap.TableName),
-                Escape(TypeMap.TableName),
-                Escape(TypeMap.GetId().ColumnName),
-                Escape(LinkPropertyMap.ColumnName)));
+            sql.AddTable(
+                JoinType.LeftOuter,
+                LinkTypeMap.TableName,
+                LinkTypeMap.Get(TypeMap.GetId().Property.Name).ColumnName,
+                TypeMap.TableName,
+                TypeMap.GetId().ColumnName);
             sql.AddSeparator();
-            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", LinkTypeMap.TableName, "IncidentId");
+            sql.AddTable(JoinType.LeftOuter, "ERHMS_Incidents", "IncidentId", LinkTypeMap.TableName, "IncidentId");
             return sql;
+        }
+
+        protected virtual TEntity Map(TEntity entity, TLink link, Incident incident)
+        {
+            if (link.GetProperty(LinkTypeMap.GetId().ColumnName) != null)
+            {
+                entity.Link = link;
+                link.Incident = incident;
+            }
+            return entity;
         }
 
         public override IEnumerable<TEntity> Select(string clauses = null, object parameters = null)
@@ -48,22 +52,14 @@ namespace ERHMS.DataAccess
             {
                 SqlBuilder sql = GetSqlBuilder();
                 sql.OtherClauses = clauses;
-                Func<TEntity, TLink, Incident, TEntity> map = (entity, link, incident) =>
-                {
-                    if (link.GetProperty(LinkTypeMap.GetId().ColumnName) != null)
-                    {
-                        entity.Link = link;
-                        link.Incident = incident;
-                    }
-                    return entity;
-                };
-                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
+                return connection.Query<TEntity, TLink, Incident, TEntity>(sql.ToString(), Map, parameters, transaction, splitOn: sql.SplitOn);
             });
         }
 
         public IEnumerable<TEntity> SelectUndeleted()
         {
-            return Select("WHERE [ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0");
+            string clauses = "WHERE [ERHMS_Incidents].[Deleted] IS NULL OR [ERHMS_Incidents].[Deleted] = 0";
+            return Select(clauses);
         }
 
         public override TEntity SelectById(object id)

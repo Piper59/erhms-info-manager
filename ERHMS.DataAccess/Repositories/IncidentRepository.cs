@@ -30,18 +30,13 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Incident> SelectUndeleted()
         {
-            return Select("WHERE [Deleted] = 0");
+            string clauses = "WHERE [Deleted] = 0";
+            return Select(clauses);
         }
 
         public IEnumerable<Incident> SelectUndeletedByResponderId(string responderId)
         {
-            string clauses = @"
-                WHERE [IncidentId] IN (
-                    SELECT [IncidentId]
-                    FROM [ERHMS_Rosters]
-                    WHERE [ResponderId] = @ResponderId
-                )
-                AND [Deleted] = 0";
+            string clauses = "WHERE [IncidentId] IN (SELECT [IncidentId] FROM [ERHMS_Rosters] WHERE [ResponderId] = @ResponderId) AND [Deleted] = 0";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@ResponderId", responderId);
             return Select(clauses, parameters);

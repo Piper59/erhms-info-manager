@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
-    public class TeamRepository : LinkRepository<Team>
+    public class TeamRepository : IncidentEntityRepository<Team>
     {
         public static void Configure()
         {

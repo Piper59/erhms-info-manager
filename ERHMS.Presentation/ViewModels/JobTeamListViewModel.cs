@@ -123,10 +123,10 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Email()
         {
-            ICollection<Responder> responders = new List<Responder>();
+            ISet<Responder> responders = new HashSet<Responder>();
             foreach (JobTeam jobTeam in SelectedItems)
             {
-                responders.AddRange(Context.Responders.SelectByTeamId(jobTeam.TeamId));
+                responders.AddRange(Context.TeamResponders.SelectUndeletedByTeamId(jobTeam.TeamId).Select(teamResponder => teamResponder.Responder));
             }
             Documents.Show(
                 () => new EmailViewModel(Services, responders.OrderBy(responder => responder.FullName)),

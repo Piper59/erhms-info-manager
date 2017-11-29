@@ -5,7 +5,7 @@ using ERHMS.Domain;
 
 namespace ERHMS.DataAccess
 {
-    public class PgmRepository : LinkedEntityRepository<Pgm, PgmLink>
+    public class PgmRepository : EpiInfoEntityRepository<Pgm, PgmLink>
     {
         public static void Configure()
         {
@@ -18,11 +18,6 @@ namespace ERHMS.DataAccess
             typeMap.Get(nameof(Pgm.Link)).SetComputed();
             typeMap.Get(nameof(Pgm.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Pgm), typeMap);
-        }
-
-        protected override PropertyMap LinkPropertyMap
-        {
-            get { return LinkTypeMap.Get(nameof(PgmLink.PgmId)); }
         }
 
         public PgmRepository(DataContext context)

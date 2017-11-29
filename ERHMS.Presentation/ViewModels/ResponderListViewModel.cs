@@ -118,7 +118,7 @@ namespace ERHMS.Presentation.ViewModels
                         }
                         if (responder1.IsSimilar(responder2))
                         {
-                            duplicates.Add(new Tuple<Responder, Responder>(responder1, responder2));
+                            duplicates.Add(Tuple.Create(responder1, responder2));
                         }
                     }
                 }

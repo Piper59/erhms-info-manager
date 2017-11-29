@@ -46,9 +46,10 @@ namespace ERHMS.EpiInfo.DataAccess
             {
                 fromClause.Insert(0, "(");
                 fromClause.AppendFormat(
-                    " INNER JOIN {0} ON {1}.[GlobalRecordId] = {0}.[GlobalRecordId])",
+                    " INNER JOIN {0} ON {0}.{2} = {1}.{2})",
                     Escape(page.TableName),
-                    Escape(View.TableName));
+                    Escape(View.TableName),
+                    Escape(ColumnNames.GLOBAL_RECORD_ID));
             }
             return string.Format("SELECT {0} FROM {1} {2}", selectClause, fromClause, otherClauses);
         }
@@ -131,7 +132,7 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public TEntity SelectById(object id)
         {
-            string clauses = string.Format("WHERE {0}.[GlobalRecordId] = @Id", Escape(View.TableName));
+            string clauses = string.Format("WHERE {0}.{1} = @Id", Escape(View.TableName), Escape(ColumnNames.GLOBAL_RECORD_ID));
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Id", id);
             return Select(clauses, parameters).SingleOrDefault();
@@ -139,12 +140,14 @@ namespace ERHMS.EpiInfo.DataAccess
 
         public IEnumerable<TEntity> SelectUndeleted()
         {
-            return Select(string.Format("WHERE {0}.[RECSTATUS] <> 0", Escape(View.TableName)));
+            string clauses = string.Format("WHERE {0}.{1} <> 0", Escape(View.TableName), Escape(ColumnNames.REC_STATUS));
+            return Select(clauses);
         }
 
         public IEnumerable<TEntity> SelectOrdered()
         {
-            return Select(string.Format("ORDER BY {0}.[UniqueKey]", Escape(View.TableName)));
+            string clauses = string.Format("ORDER BY {0}.{1}", Escape(View.TableName), Escape(ColumnNames.UNIQUE_KEY));
+            return Select(clauses);
         }
 
         private IEnumerable<string> GetViewColumnNames(bool includeId)
@@ -185,7 +188,11 @@ namespace ERHMS.EpiInfo.DataAccess
                 {
                     connection.Insert(page.TableName, GetPageColumnNames(page, true), name, value, transaction);
                 }
-                string sql = string.Format("SELECT [UniqueKey] FROM {0} WHERE [GlobalRecordId] = @Id", Escape(View.TableName));
+                string sql = string.Format(
+                    "SELECT {0} FROM {1} WHERE {2} = @Id",
+                    Escape(ColumnNames.UNIQUE_KEY),
+                    Escape(View.TableName),
+                    Escape(ColumnNames.GLOBAL_RECORD_ID));
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Id", entity.GlobalRecordId);
                 entity.UniqueKey = connection.ExecuteScalar<int>(sql, parameters, transaction);

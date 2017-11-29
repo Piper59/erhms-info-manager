@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using ERHMS.Dapper;
 using ERHMS.Domain;
-using ERHMS.Utility;
 using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,30 +26,32 @@ namespace ERHMS.DataAccess
         public JobNoteRepository(DataContext context)
             : base(context.Database) { }
 
+        private SqlBuilder GetSqlBuilder()
+        {
+            SqlBuilder sql = new SqlBuilder();
+            sql.AddTable("ERHMS_JobNotes");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "ERHMS_Jobs.JobId", "ERHMS_JobNotes.JobId");
+            sql.AddSeparator();
+            sql.AddTable(JoinType.Inner, "ERHMS_Incidents.IncidentId", "ERHMS_Jobs.IncidentId");
+            return sql;
+        }
+
+        private JobNote Map(JobNote jobNote, Job job, Incident incident)
+        {
+            jobNote.Job = job;
+            job.Incident = incident;
+            return jobNote;
+        }
+
         public override IEnumerable<JobNote> Select(string clauses = null, object parameters = null)
         {
             return Database.Invoke((connection, transaction) =>
             {
-                SqlBuilder sql = new SqlBuilder();
-                sql.AddTable("ERHMS_JobNotes");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "ERHMS_Jobs", "ERHMS_JobNotes", "JobId");
-                sql.AddSeparator();
-                sql.AddTable(JoinType.Inner, "ERHMS_Incidents", "ERHMS_Jobs", "IncidentId");
+                SqlBuilder sql = GetSqlBuilder();
                 sql.OtherClauses = clauses;
-                Func<JobNote, Job, Incident, JobNote> map = (jobNote, job, incident) =>
-                {
-                    jobNote.Job = job;
-                    job.Incident = incident;
-                    return jobNote;
-                };
-                return connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
+                return connection.Query<JobNote, Job, Incident, JobNote>(sql.ToString(), Map, parameters, transaction, splitOn: sql.SplitOn);
             });
-        }
-
-        public IEnumerable<JobNote> SelectUndeleted()
-        {
-            return Select("WHERE [ERHMS_Incidents].[Deleted] = 0");
         }
 
         public override JobNote SelectById(object id)
@@ -60,31 +62,23 @@ namespace ERHMS.DataAccess
             return Select(clauses, parameters).SingleOrDefault();
         }
 
-        public IEnumerable<JobNote> SelectByIncidentId(string incidentId)
-        {
-            string clauses = "WHERE [ERHMS_Jobs].[IncidentId] = @IncidentId";
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@IncidentId", incidentId);
-            return Select(clauses, parameters);
-        }
-
         public IEnumerable<JobNote> SelectByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
         {
-            ICollection<string> clauses = new List<string>();
+            ICollection<string> conditions = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
-            clauses.Add("[ERHMS_Jobs].[IncidentId] = @IncidentId");
+            conditions.Add("[ERHMS_Jobs].[IncidentId] = @IncidentId");
             parameters.Add("@IncidentId", incidentId);
             if (start.HasValue)
             {
-                clauses.Add("[ERHMS_JobNotes].[Date] >= @Start");
+                conditions.Add("[ERHMS_JobNotes].[Date] >= @Start");
                 parameters.Add("@Start", start.Value.RemoveMilliseconds());
             }
             if (end.HasValue)
             {
-                clauses.Add("[ERHMS_JobNotes].[Date] <= @End");
+                conditions.Add("[ERHMS_JobNotes].[Date] <= @End");
                 parameters.Add("@End", end.Value.RemoveMilliseconds());
             }
-            return Select(string.Format("WHERE {0}", string.Join(" AND ", clauses)), parameters);
+            return Select(SqlBuilder.GetWhereClause(conditions), parameters);
         }
 
         public IEnumerable<JobNote> SelectByJobId(string jobId)

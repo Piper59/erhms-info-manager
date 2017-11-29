@@ -2,15 +2,15 @@
 using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
-using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using View = ERHMS.Domain.View;
 
 namespace ERHMS.DataAccess
 {
-    public class ResponseRepository : IRepository<Record>
+    public class RecordRepository : IRepository<Record>
     {
         public static void Configure()
         {
@@ -25,7 +25,7 @@ namespace ERHMS.DataAccess
             get { return Context.Database; }
         }
 
-        public ResponseRepository(DataContext context)
+        public RecordRepository(DataContext context)
         {
             Context = context;
         }
@@ -39,12 +39,16 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
-                IDictionary<int, Domain.View> views = Context.Views.Select().ToDictionary(view => view.ViewId);
-                ICollection<Record> responses = new List<Record>();
-                DataTable fields = connection.Select("SELECT * FROM [metaFields]");
+                ICollection<Record> records = new List<Record>();
+                IDictionary<int, View> views = Context.Views.Select().ToDictionary(view => view.ViewId);
+                DataTable fields;
+                {
+                    string sql = "SELECT * FROM [metaFields]";
+                    fields = connection.Select(sql, transaction: transaction);
+                }
                 foreach (DataRow field in fields.Select("Name = 'ResponderID'"))
                 {
-                    Domain.View view = views[field.Field<int>("ViewId")];
+                    View view = views[field.Field<int>("ViewId")];
                     string viewTableName = view.Name;
                     string pageTableName = viewTableName + field.Field<int>("PageId");
                     if (!Database.TableExists(viewTableName))
@@ -53,23 +57,23 @@ namespace ERHMS.DataAccess
                     }
                     SqlBuilder sql = new SqlBuilder();
                     sql.AddTable(viewTableName);
-                    sql.SelectClauses.Add(string.Format("{0}.[ResponderID]", Database.Escape(pageTableName)));
-                    sql.AddTableFromClause(JoinType.Inner, pageTableName, viewTableName, ColumnNames.GLOBAL_RECORD_ID);
+                    sql.SelectClauses.Add("[ResponderID]");
+                    sql.AddTableFromClause(JoinType.Inner, pageTableName, ColumnNames.GLOBAL_RECORD_ID, viewTableName, ColumnNames.GLOBAL_RECORD_ID);
                     sql.OtherClauses = clauses;
                     using (IDataReader reader = connection.ExecuteReader(sql.ToString(), parameters, transaction))
                     {
                         while (reader.Read())
                         {
-                            Record response = new Record
+                            Record record = new Record
                             {
                                 View = view
                             };
-                            response.SetProperties(reader);
-                            responses.Add(response);
+                            record.SetProperties(reader);
+                            records.Add(record);
                         }
                     }
                 }
-                return responses;
+                return records;
             });
         }
 

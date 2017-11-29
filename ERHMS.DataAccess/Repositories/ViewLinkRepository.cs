@@ -4,7 +4,7 @@ using ERHMS.Domain;
 
 namespace ERHMS.DataAccess
 {
-    public class ViewLinkRepository : LinkRepository<ViewLink>
+    public class ViewLinkRepository : IncidentEntityRepository<ViewLink>
     {
         public static void Configure()
         {

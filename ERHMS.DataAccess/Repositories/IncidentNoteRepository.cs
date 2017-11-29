@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
-    public class IncidentNoteRepository : LinkRepository<IncidentNote>
+    public class IncidentNoteRepository : IncidentEntityRepository<IncidentNote>
     {
         public static void Configure()
         {
@@ -26,21 +26,21 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<IncidentNote> SelectByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
         {
-            ICollection<string> clauses = new List<string>();
+            ICollection<string> conditions = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
-            clauses.Add("[ERHMS_IncidentNotes].[IncidentId] = @IncidentId");
+            conditions.Add("[ERHMS_IncidentNotes].[IncidentId] = @IncidentId");
             parameters.Add("@IncidentId", incidentId);
             if (start.HasValue)
             {
-                clauses.Add("[ERHMS_IncidentNotes].[Date] >= @Start");
+                conditions.Add("[ERHMS_IncidentNotes].[Date] >= @Start");
                 parameters.Add("@Start", start.Value.RemoveMilliseconds());
             }
             if (end.HasValue)
             {
-                clauses.Add("[ERHMS_IncidentNotes].[Date] <= @End");
+                conditions.Add("[ERHMS_IncidentNotes].[Date] <= @End");
                 parameters.Add("@End", end.Value.RemoveMilliseconds());
             }
-            return Select(string.Format("WHERE {0}", string.Join(" AND ", clauses)), parameters);
+            return Select(SqlBuilder.GetWhereClause(conditions), parameters);
         }
     }
 }

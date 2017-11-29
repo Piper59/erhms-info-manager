@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.DataAccess
 {
-    public class LocationRepository : LinkRepository<Location>
+    public class LocationRepository : IncidentEntityRepository<Location>
     {
         public static void Configure()
         {
