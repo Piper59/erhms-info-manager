@@ -44,9 +44,10 @@ namespace ERHMS.Dapper
             return this;
         }
 
-        public object GetValue(object obj)
+        internal object GetValue(object obj)
         {
-            return Property.GetValue(obj, null);
+            object value = Property.GetValue(obj, null);
+            return value is Enum ? value.ToString() : value;
         }
     }
 }
