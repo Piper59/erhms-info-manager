@@ -24,21 +24,21 @@ namespace ERHMS.DataAccess
         public JobRepository(DataContext context)
             : base(context) { }
 
-        public IEnumerable<Job> SelectByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
+        public IEnumerable<Job> SelectByIncidentIdAndDateRange(string incidentId, DateTime? startDate, DateTime? endDate)
         {
             ICollection<string> conditions = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
             conditions.Add("[ERHMS_Jobs].[IncidentId] = @IncidentId");
             parameters.Add("@IncidentId", incidentId);
-            if (start.HasValue)
+            if (startDate.HasValue)
             {
-                conditions.Add("([ERHMS_Jobs].[EndDate] IS NULL OR [ERHMS_Jobs].[EndDate] >= @Start)");
-                parameters.Add("@Start", start.Value.RemoveMilliseconds());
+                conditions.Add("([ERHMS_Jobs].[EndDate] IS NULL OR [ERHMS_Jobs].[EndDate] >= @StartDate)");
+                parameters.Add("@StartDate", startDate.Value.RemoveMilliseconds());
             }
-            if (end.HasValue)
+            if (endDate.HasValue)
             {
-                conditions.Add("([ERHMS_Jobs].[StartDate] IS NULL OR [ERHMS_Jobs].[StartDate] <= @End)");
-                parameters.Add("@End", start.Value.RemoveMilliseconds());
+                conditions.Add("([ERHMS_Jobs].[StartDate] IS NULL OR [ERHMS_Jobs].[StartDate] <= @EndDate)");
+                parameters.Add("@EndDate", endDate.Value.RemoveMilliseconds());
             }
             return Select(SqlBuilder.GetWhereClause(conditions), parameters);
         }

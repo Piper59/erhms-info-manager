@@ -24,21 +24,21 @@ namespace ERHMS.DataAccess
         public IncidentNoteRepository(DataContext context)
             : base(context) { }
 
-        public IEnumerable<IncidentNote> SelectByIncidentIdAndDateRange(string incidentId, DateTime? start, DateTime? end)
+        public IEnumerable<IncidentNote> SelectByIncidentIdAndDateRange(string incidentId, DateTime? startDate, DateTime? endDate)
         {
             ICollection<string> conditions = new List<string>();
             DynamicParameters parameters = new DynamicParameters();
             conditions.Add("[ERHMS_IncidentNotes].[IncidentId] = @IncidentId");
             parameters.Add("@IncidentId", incidentId);
-            if (start.HasValue)
+            if (startDate.HasValue)
             {
-                conditions.Add("[ERHMS_IncidentNotes].[Date] >= @Start");
-                parameters.Add("@Start", start.Value.RemoveMilliseconds());
+                conditions.Add("[ERHMS_IncidentNotes].[Date] >= @StartDate");
+                parameters.Add("@StartDate", startDate.Value.RemoveMilliseconds());
             }
-            if (end.HasValue)
+            if (endDate.HasValue)
             {
-                conditions.Add("[ERHMS_IncidentNotes].[Date] <= @End");
-                parameters.Add("@End", end.Value.RemoveMilliseconds());
+                conditions.Add("[ERHMS_IncidentNotes].[Date] <= @EndDate");
+                parameters.Add("@EndDate", endDate.Value.RemoveMilliseconds());
             }
             return Select(SqlBuilder.GetWhereClause(conditions), parameters);
         }

@@ -11,9 +11,9 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ViewModelBase : GalaSoft.MvvmLight.ViewModelBase
     {
-        protected static bool ValidateDateRange(DateTime? start, DateTime? end)
+        protected static bool ValidateDateRange(DateTime? startDate, DateTime? endDate)
         {
-            return !start.HasValue || !end.HasValue || start.Value <= end.Value;
+            return !startDate.HasValue || !endDate.HasValue || startDate.Value <= endDate.Value;
         }
 
         public IServiceManager Services { get; private set; }
