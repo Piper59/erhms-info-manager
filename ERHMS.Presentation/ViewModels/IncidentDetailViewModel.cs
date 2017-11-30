@@ -19,9 +19,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = incident.New ? "New Incident" : incident.Name;
             Incident = incident;
-            Phases = EnumExtensions.GetValues<Phase>()
-                .Where(phase => phase != Phase.Closed)
-                .ToList();
+            Phases = EnumExtensions.GetValues<Phase>().ToList();
             SaveCommand = new RelayCommand(Save);
             AddDirtyCheck(incident);
         }

@@ -10,6 +10,7 @@ namespace ERHMS.Test.Utility
     {
         private enum Number
         {
+            [Obsolete]
             NaN,
 
             [Description("1")]
@@ -22,6 +23,7 @@ namespace ERHMS.Test.Utility
             Three
         }
 
+#pragma warning disable 612
         [Test]
         public void ParseTest()
         {
@@ -40,7 +42,8 @@ namespace ERHMS.Test.Utility
         [Test]
         public void GetValuesTest()
         {
-            AssertExtensions.AreEqual(EnumExtensions.GetValues<Number>(), Number.NaN, Number.One, Number.Two, Number.Three);
+            AssertExtensions.AreEqual(EnumExtensions.GetValues<Number>(), Number.One, Number.Two, Number.Three);
+            AssertExtensions.AreEqual(EnumExtensions.GetValues<Number>(true), Number.NaN, Number.One, Number.Two, Number.Three);
         }
 
         [Test]
@@ -64,5 +67,6 @@ namespace ERHMS.Test.Utility
                 EnumExtensions.FromDescription<DayOfWeek>(null);
             });
         }
+#pragma warning restore 612
     }
 }

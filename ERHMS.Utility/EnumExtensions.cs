@@ -14,10 +14,13 @@ namespace ERHMS.Utility
             return (TEnum)Enum.Parse(typeof(TEnum), value);
         }
 
-        public static IEnumerable<TEnum> GetValues<TEnum>()
+        public static IEnumerable<TEnum> GetValues<TEnum>(bool obsolete = false)
             where TEnum : struct
         {
-            return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
+            return typeof(TEnum).GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Where(field => obsolete || !field.HasCustomAttribute<ObsoleteAttribute>())
+                .Select(field => field.GetValue(null))
+                .Cast<TEnum>();
         }
 
         private static string GetDescription(FieldInfo field)

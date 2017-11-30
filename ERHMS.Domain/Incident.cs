@@ -33,7 +33,9 @@ namespace ERHMS.Domain
         public Phase Phase
         {
             get { return EnumExtensions.Parse<Phase>(GetProperty<string>(nameof(Phase))); }
+#pragma warning disable 618
             set { SetProperty(nameof(Phase), (value == Phase.Closed ? Phase.PostDeployment : value).ToString()); }
+#pragma warning restore 618
         }
 
         public DateTime? StartDate

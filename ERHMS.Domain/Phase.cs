@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace ERHMS.Domain
 {
@@ -13,6 +14,7 @@ namespace ERHMS.Domain
         [Description("Post-deployment")]
         PostDeployment,
 
+        [Obsolete("Use 'Phase.PostDeployment' instead.")]
         [Description("Closed")]
         Closed
     }
