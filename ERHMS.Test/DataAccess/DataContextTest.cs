@@ -47,7 +47,6 @@ namespace ERHMS.Test.DataAccess
         }
 
         private TempDirectory directory;
-        private Configuration configuration;
         private IProjectCreator creator;
         private DataContext context;
         private Role teamRole;
@@ -64,7 +63,7 @@ namespace ERHMS.Test.DataAccess
         {
             directory = new TempDirectory(GetType().Name);
             ConfigurationExtensions.Create(directory.FullName).Save();
-            configuration = ConfigurationExtensions.Load();
+            Configuration configuration = ConfigurationExtensions.Load();
             configuration.CreateUserDirectories();
             creator = GetCreator();
             creator.SetUp();
