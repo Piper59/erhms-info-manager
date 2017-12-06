@@ -43,7 +43,7 @@
             <Controls:IconButton AccessText="_Ignore"
                                  Command="{Binding IgnoreCommand}"
                                  Icon="{StaticResource appbar_close}"
-                                 ToolTip="Ignore this pair of responders in future searches for duplicates" />
+                                 ToolTip="Ignore this pair of responders in future searches for potential duplicates" />
         </WrapPanel>
     </Grid>
 </UserControl>

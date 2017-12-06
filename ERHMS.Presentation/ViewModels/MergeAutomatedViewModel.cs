@@ -59,7 +59,7 @@ namespace ERHMS.Presentation.ViewModels
             ConfirmMessage msg = new ConfirmMessage
             {
                 Verb = "Ignore",
-                Message = "Ignore the selected pairs of responders?"
+                Message = "Ignore the selected potentially duplicate responders?"
             };
             msg.Confirmed += (sender, e) =>
             {

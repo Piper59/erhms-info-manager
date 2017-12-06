@@ -56,7 +56,7 @@
                                  Icon="{StaticResource appbar_edit}" />
             <Controls:IconButton AccessText="Mer_ge"
                                  Icon="{StaticResource appbar_source_pull}"
-                                 ToolTip="Merge two selected responders or perform an automated search for duplicate responders">
+                                 ToolTip="Merge two selected responders or perform an automated search for potentially duplicate responders">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>

@@ -98,7 +98,7 @@ namespace ERHMS.Presentation.ViewModels
             ICollection<Tuple<Responder, Responder>> duplicates = new List<Tuple<Responder, Responder>>();
             BlockMessage msg = new BlockMessage
             {
-                Message = "Searching for duplicate responders \u2026"
+                Message = "Searching for potentially duplicate responders \u2026"
             };
             msg.Executing += (sender, e) =>
             {
@@ -128,7 +128,7 @@ namespace ERHMS.Presentation.ViewModels
                 if (duplicates.Count == 0)
                 {
                     ICollection<string> message = new List<string>();
-                    message.Add("No duplicate responders found.");
+                    message.Add("No potentially duplicate responders found.");
                     message.Add("You may still perform a merge by selecting two responders from the list and clicking Merge > Selected.");
                     MessengerInstance.Send(new AlertMessage
                     {
