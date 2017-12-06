@@ -264,7 +264,6 @@
       <DependentUpon>LicenseDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\RootPathDialog.cs" />
-    <Compile Include="Infrastructure\DbProvider.cs" />
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
     <Compile Include="Infrastructure\IDialogManager.cs" />
     <Compile Include="Infrastructure\IDispatcher.cs" />

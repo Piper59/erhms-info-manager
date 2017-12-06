@@ -2,7 +2,7 @@
 using ERHMS.Utility;
 using System.ComponentModel;
 
-namespace ERHMS.Presentation
+namespace ERHMS.EpiInfo
 {
     public enum DbProvider
     {

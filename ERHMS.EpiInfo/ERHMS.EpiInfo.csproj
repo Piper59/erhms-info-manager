@@ -76,6 +76,7 @@
     <Compile Include="Canvas.cs" />
     <Compile Include="CollectedDataProviderExtensions.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
+    <Compile Include="DbProvider.cs" />
     <Compile Include="ImportExport.cs" />
     <Compile Include="InvalidViewNameReason.cs" />
     <Compile Include="MetadataDbProviderExtensions.cs" />
