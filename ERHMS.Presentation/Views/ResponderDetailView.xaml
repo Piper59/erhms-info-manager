@@ -495,15 +495,15 @@
                         <GroupBox Header="Forms Completed"
                                   Margin="0">
                             <StackPanel>
-                                <MahApps:ProgressRing Visibility="{Binding Responses, Converter={StaticResource NullToVisibilityInverter}}" />
-                                <StackPanel Visibility="{Binding Responses, Converter={StaticResource NullToVisibilityConverter}}">
-                                    <DataGrid x:Name="ResponsesDataGrid"
-                                              ItemsSource="{Binding Responses}"
+                                <MahApps:ProgressRing Visibility="{Binding Records, Converter={StaticResource NullToVisibilityInverter}}" />
+                                <StackPanel Visibility="{Binding Records, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <DataGrid x:Name="RecordsDataGrid"
+                                              ItemsSource="{Binding Records}"
                                               SelectionMode="Single"
                                               Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <DataGrid.InputBindings>
                                             <MouseBinding Command="{Binding EditRecordCommand}"
-                                                          CommandParameter="{Binding SelectedItem, ElementName=ResponsesDataGrid}"
+                                                          CommandParameter="{Binding SelectedItem, ElementName=RecordsDataGrid}"
                                                           MouseAction="LeftDoubleClick" />
                                         </DataGrid.InputBindings>
                                         <DataGrid.Columns>
@@ -518,7 +518,7 @@
                                                                 Width="*" />
                                         </DataGrid.Columns>
                                     </DataGrid>
-                                    <TextBlock Visibility="{Binding HasItems, ElementName=ResponsesDataGrid, Converter={StaticResource BooleanToVisibilityInverter}}">No forms found.</TextBlock>
+                                    <TextBlock Visibility="{Binding HasItems, ElementName=RecordsDataGrid, Converter={StaticResource BooleanToVisibilityInverter}}">No forms found.</TextBlock>
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>

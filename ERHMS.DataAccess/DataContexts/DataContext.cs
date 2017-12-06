@@ -86,7 +86,7 @@ namespace ERHMS.DataAccess
         public PgmRepository Pgms { get; private set; }
         public PgmLinkRepository PgmLinks { get; private set; }
         public ResponderRepository Responders { get; private set; }
-        public RecordRepository Responses { get; private set; }
+        public RecordRepository Records { get; private set; }
         public RoleRepository Roles { get; private set; }
         public RosterRepository Rosters { get; private set; }
         public TeamRepository Teams { get; private set; }
@@ -136,7 +136,7 @@ namespace ERHMS.DataAccess
             Pgms = new PgmRepository(this);
             PgmLinks = new PgmLinkRepository(this);
             Responders = new ResponderRepository(this);
-            Responses = new RecordRepository(this);
+            Records = new RecordRepository(this);
             Roles = new RoleRepository(this);
             Rosters = new RosterRepository(this);
             Teams = new TeamRepository(this);
