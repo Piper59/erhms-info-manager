@@ -9,5 +9,10 @@ namespace ERHMS.Test.Infrastructure
         {
             CollectionAssert.AreEqual(expected, actual);
         }
+
+        public static void AreEquivalent<T>(IEnumerable<T> actual, params T[] expected)
+        {
+            CollectionAssert.AreEquivalent(expected, actual);
+        }
     }
 }

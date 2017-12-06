@@ -1,6 +1,7 @@
 ﻿using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ERHMS.DataAccess
 {
@@ -133,12 +134,34 @@ namespace ERHMS.DataAccess
 
         public override string ToString()
         {
-            return string.Format(
-                "SELECT {0} FROM {1}{2} {3}",
-                string.Join(", ", SelectClauses),
-                new string('(', FromClauses.Count - 1),
-                string.Join(") ", FromClauses),
-                OtherClauses);
+            return string.Format("SELECT {0} FROM {1} {2}", GetSelectSql(), GetFromSql(), OtherClauses).Trim();
+        }
+
+        private string GetSelectSql()
+        {
+            return string.Join(", ", SelectClauses);
+        }
+
+        private string GetFromSql()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (Iterator<string> fromClause in FromClauses.Iterate())
+            {
+                switch (fromClause.Index)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        builder.Append(" ");
+                        break;
+                    default:
+                        builder.Insert(0, "(");
+                        builder.Append(") ");
+                        break;
+                }
+                builder.Append(fromClause.Value);
+            }
+            return builder.ToString();
         }
     }
 }

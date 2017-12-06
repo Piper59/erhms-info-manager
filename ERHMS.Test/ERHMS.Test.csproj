@@ -153,7 +153,8 @@
     <Compile Include="Dapper\LoggingConnectionTest.cs" />
     <Compile Include="Dapper\RepositoryTest.cs" />
     <Compile Include="Dapper\TypeMapTest.cs" />
-    <None Include="DataAccess\DataContextTest.cs" />
+    <Compile Include="DataAccess\DataContextTest.cs" />
+    <None Include="DataAccess\SampleDataContextTest.cs" />
     <Compile Include="EpiInfo\ConfigurationExtensionsTest.cs" />
     <Compile Include="EpiInfo\DataAccess\EntityRepositoryTest.cs" />
     <Compile Include="EpiInfo\DataAccess\ViewEntityRepositoryTest.cs" />

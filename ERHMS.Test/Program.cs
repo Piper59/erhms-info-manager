@@ -1,3 +1,4 @@
+using ERHMS.DataAccess;
 using ERHMS.Utility;
 using NUnitLite;
 using System;
@@ -11,10 +12,11 @@ namespace ERHMS.Test
         internal static int Main(string[] args)
         {
             Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            TypeMaps.Configure();
             Settings.Default.Reset();
-            AutoRun application = new AutoRun();
-            return application.Execute(args);
+            TypeMaps.Configure();
+            DataContext.Configure();
+            AutoRun app = new AutoRun();
+            return app.Execute(args);
         }
     }
 }
