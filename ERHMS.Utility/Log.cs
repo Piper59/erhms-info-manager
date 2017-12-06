@@ -47,8 +47,12 @@ namespace ERHMS.Utility
 
         static Log()
         {
-            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
-            GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
+            try
+            {
+                GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
+                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
+            }
+            catch { }
             name = Assembly.GetEntryAssembly().GetName().Name;
             FilePath = Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Logs", name + FileExtension);
             hierarchy = (Hierarchy)LogManager.GetRepository();
