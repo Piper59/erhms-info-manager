@@ -8,6 +8,7 @@
              xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
     <UserControl.Resources>
         <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
+        <Converters:LocationsToNamesConverter x:Key="LocationsToNamesConverter" />
         <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <Converters:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
         <Converters:ResponderToFullNameConverter x:Key="ResponderToFullNameConverter" />
@@ -155,7 +156,7 @@
                                 <DataGridTextColumn Binding="{Binding IncidentRole.Name}"
                                                     Header="Role"
                                                     Width="*" />
-                                <DataGridTextColumn Binding="{Binding LocationNames}"
+                                <DataGridTextColumn Binding="{Binding Locations, Converter={StaticResource LocationsToNamesConverter}}"
                                                     Header="Locations"
                                                     Width="*" />
                             </DataGrid.Columns>

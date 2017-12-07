@@ -68,21 +68,14 @@ namespace ERHMS.DataAccess
             return sql;
         }
 
-        private JobTicket Map(
-            Incident incident,
-            Job job,
-            Team team,
-            Responder responder,
-            IncidentRole incidentRole,
-            ILookup<string, Location> locations)
+        private JobTicket Map(Incident incident, Job job, Team team, Responder responder, IncidentRole incidentRole)
         {
             JobTicket jobTicket = new JobTicket
             {
                 Incident = incident,
                 Job = job,
                 Team = team,
-                Responder = responder,
-                Locations = locations[job.JobId].ToList()
+                Responder = responder
             };
             if (incidentRole.IncidentRoleId != null)
             {
@@ -95,17 +88,13 @@ namespace ERHMS.DataAccess
         {
             return Database.Invoke((connection, transaction) =>
             {
-                ILookup<string, Location> locations = Context.JobLocations.Select().ToLookup(
-                    jobLocation => jobLocation.JobId,
-                    jobLocation => jobLocation.Location,
-                    StringComparer.OrdinalIgnoreCase);
                 IEnumerable<JobTicket> teamJobTickets;
                 {
                     SqlBuilder sql = GetTeamSqlBuilder();
                     sql.OtherClauses = clauses;
                     Func<Incident, Job, Team, Responder, IncidentRole, JobTicket> map = (incident, job, team, responder, incidentRole) =>
                     {
-                        return Map(incident, job, team, responder, incidentRole, locations);
+                        return Map(incident, job, team, responder, incidentRole);
                     };
                     teamJobTickets = connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
                 }
@@ -115,7 +104,7 @@ namespace ERHMS.DataAccess
                     sql.OtherClauses = clauses;
                     Func<Incident, Job, Responder, IncidentRole, JobTicket> map = (incident, job, responder, incidentRole) =>
                     {
-                        return Map(incident, job, null, responder, incidentRole, locations);
+                        return Map(incident, job, null, responder, incidentRole);
                     };
                     nonTeamJobTickets = connection.Query(sql.ToString(), map, parameters, transaction, splitOn: sql.SplitOn);
                 }
@@ -195,6 +184,22 @@ namespace ERHMS.DataAccess
         public override void Delete(JobTicket entity)
         {
             throw new NotSupportedException();
+        }
+    }
+
+    public static class JobTicketRepositoryExtensions
+    {
+        public static IEnumerable<JobTicket> WithLocations(this IEnumerable<JobTicket> @this, DataContext context)
+        {
+            ILookup<string, Location> jobLocations = context.JobLocations.Select().ToLookup(
+                jobLocation => jobLocation.JobId,
+                jobLocation => jobLocation.Location,
+                StringComparer.OrdinalIgnoreCase);
+            foreach (JobTicket jobTicket in @this)
+            {
+                jobTicket.Locations = jobLocations[jobTicket.Job.JobId].ToList();
+                yield return jobTicket;
+            }
         }
     }
 }

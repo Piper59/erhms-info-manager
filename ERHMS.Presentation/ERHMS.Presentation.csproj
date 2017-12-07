@@ -246,12 +246,14 @@
     <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
+    <Compile Include="Converters\LocationsToNamesConverter.cs" />
     <Compile Include="Converters\MemorySizeToHumanReadableSizeConverter.cs" />
     <Compile Include="Converters\NullToBooleanConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityInverter.cs" />
     <Compile Include="Converters\PathToFileNameConverter.cs" />
     <Compile Include="Converters\PhaseToDescriptionConverter.cs" />
+    <Compile Include="Converters\RespondersToFullNamesConverter.cs" />
     <Compile Include="Converters\ResponderToFullNameAndEmailAddressConverter.cs" />
     <Compile Include="Converters\ResponderToFullNameConverter.cs" />
     <Compile Include="Converters\ResponseTypeToDescriptionConverter.cs" />

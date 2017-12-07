@@ -53,11 +53,6 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Locations), ref locations, value); }
         }
 
-        public string LocationNames
-        {
-            get { return string.Join(", ", Locations.Select(location => location.Name)); }
-        }
-
         public JobTicket()
             : base(false) { }
     }

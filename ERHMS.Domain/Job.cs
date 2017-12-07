@@ -1,5 +1,6 @@
 ﻿using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ERHMS.Domain
 {
@@ -39,6 +40,13 @@ namespace ERHMS.Domain
         {
             get { return GetProperty<DateTime?>(nameof(EndDate)); }
             set { SetProperty(nameof(EndDate), value?.RemoveMilliseconds()); }
+        }
+
+        private ICollection<Responder> responders;
+        public ICollection<Responder> Responders
+        {
+            get { return responders; }
+            set { SetProperty(nameof(Responders), ref responders, value); }
         }
 
         public Job(bool @new)

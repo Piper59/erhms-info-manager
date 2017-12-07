@@ -1,4 +1,5 @@
-﻿using ERHMS.Domain;
+﻿using ERHMS.DataAccess;
+using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
@@ -32,13 +33,19 @@ namespace ERHMS.Presentation.ViewModels
 
         protected override IEnumerable<Team> GetItems()
         {
-            return Context.Teams.SelectByIncidentId(Incident.IncidentId).OrderBy(team => team.Name);
+            return Context.Teams.SelectByIncidentId(Incident.IncidentId)
+                .WithResponders(Context)
+                .OrderBy(team => team.Name);
         }
 
         protected override IEnumerable<string> GetFilteredValues(Team item)
         {
             yield return item.Name;
             yield return item.Description;
+            foreach (Responder responder in item.Responders)
+            {
+                yield return responder.FullName;
+            }
         }
 
         public void Create()

@@ -1,4 +1,5 @@
-﻿using ERHMS.Domain;
+﻿using ERHMS.DataAccess;
+using ERHMS.Domain;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -120,6 +121,7 @@ namespace ERHMS.Presentation.ViewModels
                 .ThenBy(jobTeam => jobTeam.Team.Name)
                 .ToList());
             JobTickets = await TaskEx.Run(() => Context.JobTickets.SelectUndeletedByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
+                .WithLocations(Context)
                 .OrderBy(jobTicket => jobTicket.Job.Name)
                 .ThenBy(jobTicket => jobTicket.Team?.Name)
                 .ThenBy(jobTicket => jobTicket.Responder.FullName)

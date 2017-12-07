@@ -15,6 +15,12 @@ namespace ERHMS.Utility
             return @this.Select((value, index) => new Iterator<T>(value, index));
         }
 
+        public static IEnumerable<T> ElementsAt<T>(this IEnumerable<T> @this, params int[] indices)
+        {
+            IList<T> list = @this.ToList();
+            return indices.Select(index => list[index]);
+        }
+
         public static IEnumerable<T> Append<T>(this IEnumerable<T> @this, T item)
         {
             return @this.Concat(Yield(item));

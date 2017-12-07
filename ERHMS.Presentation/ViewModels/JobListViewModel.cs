@@ -1,4 +1,5 @@
-﻿using ERHMS.Domain;
+﻿using ERHMS.DataAccess;
+using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace ERHMS.Presentation.ViewModels
         protected override IEnumerable<Job> GetItems()
         {
             return Context.Jobs.SelectByIncidentId(Incident.IncidentId)
+                .WithResponders(Context)
                 .OrderByDescending(job => job.StartDate)
                 .ThenBy(job => job.Name);
         }
@@ -44,6 +46,10 @@ namespace ERHMS.Presentation.ViewModels
             if (item.StartDate.HasValue)
             {
                 yield return item.StartDate.Value.ToShortDateString();
+            }
+            foreach (Responder responder in item.Responders)
+            {
+                yield return responder.FullName;
             }
         }
 

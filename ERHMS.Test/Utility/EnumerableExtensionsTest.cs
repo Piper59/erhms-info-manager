@@ -23,6 +23,15 @@ namespace ERHMS.Test.Utility
         }
 
         [Test]
+        public void ElementsAtTest()
+        {
+            ICollection<int> numbers = Enumerable.Range(1, 10).ToList();
+            AssertExtensions.AreEqual(numbers.ElementsAt(0, 1, 2), 1, 2, 3);
+            AssertExtensions.AreEqual(numbers.ElementsAt(9, 8, 7), 10, 9, 8);
+            CollectionAssert.IsEmpty(numbers.ElementsAt());
+        }
+
+        [Test]
         public void AppendTest()
         {
             CollectionAssert.AreEqual(Enumerable.Range(1, 11), Enumerable.Range(1, 10).Append(11));

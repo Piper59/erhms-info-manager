@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Epi;
-using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using System.Collections.Generic;
@@ -11,8 +10,7 @@ namespace ERHMS.DataAccess
     {
         public static void Configure()
         {
-            TypeMap typeMap = new TypeMap(typeof(Responder));
-            SqlMapper.SetTypeMap(typeof(Responder), typeMap);
+            SqlMapper.SetTypeMap(typeof(Responder), GetTypeMap());
         }
 
         public ResponderRepository(DataContext context)

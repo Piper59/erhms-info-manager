@@ -3,7 +3,11 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters">
+    <UserControl.Resources>
+        <Converters:RespondersToFullNamesConverter x:Key="RespondersToFullNamesConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -27,6 +31,9 @@
                 <DataGridTextColumn Binding="{Binding Description}"
                                     Header="Description"
                                     Width="2*" />
+                <DataGridTextColumn Binding="{Binding Responders, Converter={StaticResource RespondersToFullNamesConverter}}"
+                                    Header="Responders"
+                                    Width="4*" />
             </DataGrid.Columns>
         </DataGrid>
         <WrapPanel Grid.Row="2"

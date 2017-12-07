@@ -1,4 +1,6 @@
-﻿namespace ERHMS.Domain
+﻿using System.Collections.Generic;
+
+namespace ERHMS.Domain
 {
     public class Team : IncidentEntity
     {
@@ -24,6 +26,13 @@
         {
             get { return GetProperty<string>(nameof(Description)); }
             set { SetProperty(nameof(Description), value); }
+        }
+
+        private ICollection<Responder> responders;
+        public ICollection<Responder> Responders
+        {
+            get { return responders; }
+            set { SetProperty(nameof(Responders), ref responders, value); }
         }
 
         public Team(bool @new)

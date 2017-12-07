@@ -17,6 +17,21 @@ namespace ERHMS.EpiInfo.DataAccess
     public class ViewEntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : ViewEntity, new()
     {
+        protected static TypeMap GetTypeMap()
+        {
+            TypeMap typeMap = new TypeMap(typeof(TEntity));
+            typeMap.Set(nameof(ViewEntity.UniqueKey), ColumnNames.UNIQUE_KEY).SetId().SetComputed();
+            typeMap.Set(nameof(ViewEntity.GlobalRecordId), ColumnNames.GLOBAL_RECORD_ID);
+            typeMap.Set(nameof(ViewEntity.ForeignKey), ColumnNames.FOREIGN_KEY);
+            typeMap.Set(nameof(ViewEntity.RecordStatus), ColumnNames.REC_STATUS);
+            typeMap.Set(nameof(ViewEntity.CreatedBy), ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME);
+            typeMap.Set(nameof(ViewEntity.CreatedOn), ColumnNames.RECORD_FIRST_SAVE_TIME);
+            typeMap.Set(nameof(ViewEntity.ModifiedBy), ColumnNames.RECORD_LAST_SAVE_LOGON_NAME);
+            typeMap.Set(nameof(ViewEntity.ModifiedOn), ColumnNames.RECORD_LAST_SAVE_TIME);
+            typeMap.Get(nameof(ViewEntity.Deleted)).SetComputed();
+            return typeMap;
+        }
+
         private IDictionary<string, Type> types;
 
         public IDatabase Database { get; private set; }

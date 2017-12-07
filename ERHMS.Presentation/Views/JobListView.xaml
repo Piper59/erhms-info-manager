@@ -6,6 +6,7 @@
              xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters">
     <UserControl.Resources>
         <Converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" Format="d" />
+        <Converters:RespondersToFullNamesConverter x:Key="RespondersToFullNamesConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -33,6 +34,9 @@
                 <DataGridTextColumn Binding="{Binding StartDate, Converter={StaticResource DateTimeToStringConverter}}"
                                     Header="Start Date"
                                     Width="*" />
+                <DataGridTextColumn Binding="{Binding Responders, Converter={StaticResource RespondersToFullNamesConverter}}"
+                                    Header="Responders"
+                                    Width="4*" />
             </DataGrid.Columns>
         </DataGrid>
         <WrapPanel Grid.Row="2"

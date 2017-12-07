@@ -384,6 +384,8 @@ namespace ERHMS.Test.DataAccess
             incidentInfo.Team2 = TeamsTest(incidentInfo, 1);
             Assert.AreEqual(2, context.Teams.SelectByIncidentId(incidentInfo.IncidentId).Count());
             Assert.IsTrue(context.IncidentRoles.SelectById(incidentInfo.TeamRole.IncidentRoleId).IsInUse);
+            TeamsWithRespondersTest(incidentInfo.Responders.Take(4), incidentInfo, false);
+            TeamsWithRespondersTest(incidentInfo.Responders.ElementsAt(0, 2), incidentInfo, true);
         }
 
         private Team TeamsTest(IncidentInfo incidentInfo, int index)
@@ -431,6 +433,13 @@ namespace ERHMS.Test.DataAccess
             Assert.AreEqual(team.Incident.Deleted ? 0 : 1, context.TeamResponders.SelectUndeletedByResponderId(responder.ResponderId).Count());
         }
 
+        private void TeamsWithRespondersTest(IEnumerable<Responder> expected, IncidentInfo incidentInfo, bool undeleted)
+        {
+            CollectionAssert.AreEquivalent(expected, context.Teams.SelectByIncidentId(incidentInfo.IncidentId)
+                .WithResponders(context, undeleted)
+                .SelectMany(team => team.Responders));
+        }
+
         [Test]
         [Order(11)]
         public void LocationsTest()
@@ -466,7 +475,11 @@ namespace ERHMS.Test.DataAccess
         public void JobsTest()
         {
             JobsTest(incidentInfo1);
+            JobsWithRespondersTest(incidentInfo1.Responders.Take(6), incidentInfo1, false);
+            JobsWithRespondersTest(incidentInfo1.Responders.ElementsAt(0, 2, 4), incidentInfo1, true);
             JobsTest(incidentInfo2);
+            JobsWithRespondersTest(incidentInfo2.Responders.ElementsAt(0, 1, 4, 5), incidentInfo2, false);
+            JobsWithRespondersTest(incidentInfo2.Responders.ElementsAt(0, 4), incidentInfo2, true);
             JobTicketsTest();
             Assert.AreEqual(2, context.Jobs.Select().Count());
             Assert.AreEqual(6, context.JobNotes.Select().Count());
@@ -498,13 +511,14 @@ namespace ERHMS.Test.DataAccess
             Job retrieved = context.Jobs.SelectById(original.JobId);
             Assert.AreEqual(original.Name, retrieved.Name);
             Assert.AreEqual(incidentInfo.Incident.Name, retrieved.Incident.Name);
-            Assert.AreEqual(1, context.Jobs.SelectByIncidentId(incidentInfo.IncidentId).Count());
             incidentInfo.Job = retrieved;
             JobDateRangeTest(retrieved);
             JobNotesTest(retrieved);
             JobTeamsTest(incidentInfo);
             JobRespondersTest(incidentInfo);
             JobLocationsTest(incidentInfo);
+            Assert.AreEqual(1, context.Jobs.SelectByIncidentId(incidentInfo.IncidentId).Count());
+            Assert.IsTrue(context.IncidentRoles.SelectById(incidentInfo.JobRole.IncidentRoleId).IsInUse);
             return retrieved;
         }
 
@@ -602,7 +616,6 @@ namespace ERHMS.Test.DataAccess
             }
             Assert.AreEqual(responders.Count / 4 - 1, context.Responders.SelectJobbable(job.IncidentId, job.JobId).Count());
             Assert.AreEqual(1, context.JobResponders.SelectUndeletedByJobId(job.JobId).Count());
-            Assert.IsTrue(context.IncidentRoles.SelectById(incidentInfo.JobRole.IncidentRoleId).IsInUse);
         }
 
         private void JobRespondersTest(Job job, Responder responder, IncidentRole incidentRole)
@@ -648,6 +661,13 @@ namespace ERHMS.Test.DataAccess
             Assert.AreEqual(location.Incident.Name, retrieved.Location.Incident.Name);
         }
 
+        private void JobsWithRespondersTest(IEnumerable<Responder> expected, IncidentInfo incidentInfo, bool undeleted)
+        {
+            CollectionAssert.AreEquivalent(expected, context.Jobs.SelectByIncidentId(incidentInfo.IncidentId)
+                .WithResponders(context, undeleted)
+                .SelectMany(job => job.Responders));
+        }
+
         private void JobTicketsTest()
         {
             Assert.AreEqual(10, context.JobTickets.Select().Count());
@@ -655,7 +675,9 @@ namespace ERHMS.Test.DataAccess
             JobTicketsDateRangeTest(2, incidentInfo2);
             foreach (Iterator<Responder> responder in incidentInfo1.Responders.Iterate())
             {
-                ICollection<JobTicket> jobTickets = context.JobTickets.SelectUndeletedByResponderId(responder.Value.ResponderId).ToList();
+                ICollection<JobTicket> jobTickets = context.JobTickets.SelectUndeletedByResponderId(responder.Value.ResponderId)
+                    .WithLocations(context)
+                    .ToList();
                 if (responder.Index < 6)
                 {
                     Assert.AreEqual(1, jobTickets.Count);
