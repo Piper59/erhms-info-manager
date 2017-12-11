@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://erhmsdev.cdc.gov/</InstallUrl>
+    <InstallUrl>https://www.cdc.gov/niosh-rtecs/test-erhms/</InstallUrl>
     <ProductName>ERHMS Info Manager Beta</ProductName>
     <PublisherName>NIOSH</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
