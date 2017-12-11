@@ -2,7 +2,6 @@
 using Epi.Fields;
 using ERHMS.Dapper;
 using ERHMS.EpiInfo;
-using ERHMS.Test.Infrastructure;
 using ERHMS.Utility;
 using NUnit.Framework;
 using System;
@@ -13,7 +12,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
-using Configuration = Epi.Configuration;
 using Project = ERHMS.EpiInfo.Project;
 
 namespace ERHMS.Test.EpiInfo

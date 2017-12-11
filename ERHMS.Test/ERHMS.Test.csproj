@@ -178,7 +178,7 @@
     <Compile Include="Infrastructure\AssertExtensions.cs" />
     <Compile Include="Infrastructure\AutomationElementX.cs" />
     <Compile Include="Infrastructure\AutomationExtensions.cs" />
-    <Compile Include="Infrastructure\Configuration.cs" />
+    <Compile Include="Infrastructure\Config.cs" />
     <Compile Include="Infrastructure\Constant.cs" />
     <Compile Include="Infrastructure\ConstantRepository.cs" />
     <Compile Include="Infrastructure\DatabaseCreator.cs" />

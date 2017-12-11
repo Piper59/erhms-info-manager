@@ -50,7 +50,7 @@ namespace ERHMS.Test.EpiInfo.Web
             Settings.Default.Reset();
             if (View.IsWebSurvey())
             {
-                using (IDbConnection connection = Infrastructure.Configuration.GetWebConnection())
+                using (IDbConnection connection = Config.GetWebConnection())
                 {
                     DynamicParameters parameters = new DynamicParameters();
                     parameters.Add("@SurveyId", View.WebSurveyId);
@@ -74,12 +74,12 @@ namespace ERHMS.Test.EpiInfo.Web
             IsConfiguredTest(ConfigurationError.OrganizationKey, "SurveyManagerServiceV2.svc");
             IsConfiguredTest(ConfigurationError.OrganizationKey, null);
             IsConfiguredTest(ConfigurationError.OrganizationKey, Guid.Empty);
-            IsConfiguredTest(ConfigurationError.None, Infrastructure.Configuration.OrganizationKey);
+            IsConfiguredTest(ConfigurationError.None, Config.OrganizationKey);
         }
 
         private void IsConfiguredTest(ConfigurationError expected, string relativeUrl)
         {
-            Uri endpoint = Infrastructure.Configuration.Endpoint;
+            Uri endpoint = Config.Endpoint;
             if (relativeUrl != null)
             {
                 endpoint = new Uri(endpoint, relativeUrl);

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace ERHMS.Test.Infrastructure
+namespace ERHMS.Test
 {
     public static class AssertExtensions
     {

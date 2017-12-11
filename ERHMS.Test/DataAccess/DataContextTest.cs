@@ -6,7 +6,6 @@ using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
-using ERHMS.Test.Infrastructure;
 using ERHMS.Utility;
 using NUnit.Framework;
 using System;
@@ -14,7 +13,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Configuration = Epi.Configuration;
 
 namespace ERHMS.Test.DataAccess
 {

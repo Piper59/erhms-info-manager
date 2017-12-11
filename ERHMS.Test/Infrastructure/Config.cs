@@ -2,9 +2,9 @@
 using System.Configuration;
 using System.Data.SqlClient;
 
-namespace ERHMS.Test.Infrastructure
+namespace ERHMS.Test
 {
-    public static class Configuration
+    public static class Config
     {
         public static Uri Endpoint
         {

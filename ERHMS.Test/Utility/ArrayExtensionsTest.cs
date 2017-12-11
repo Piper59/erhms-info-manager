@@ -1,5 +1,4 @@
-﻿using ERHMS.Test.Infrastructure;
-using ERHMS.Utility;
+﻿using ERHMS.Utility;
 using NUnit.Framework;
 using System.Linq;
 
