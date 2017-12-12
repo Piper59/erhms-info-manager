@@ -80,8 +80,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Reports";
             Incident = incident;
-            EndDate = DateTime.Now;
-            StartDate = EndDate - TimeSpan.FromHours(12.0);
+            StartDate = DateTime.Now - TimeSpan.FromHours(12.0);
             EditJobCommand = new RelayCommand<Job>(EditJob);
             EditTeamCommand = new RelayCommand<JobTeam>(EditTeam);
             EditResponderCommand = new RelayCommand<JobTicket>(EditResponder);
