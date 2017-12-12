@@ -1,12 +1,8 @@
 ﻿<UserControl x:Class="ERHMS.Presentation.Views.EmailView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
              xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
-    <UserControl.Resources>
-        <Converters:PathToFileNameConverter x:Key="PathToFileNameConverter" />
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

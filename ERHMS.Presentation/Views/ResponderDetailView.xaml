@@ -5,13 +5,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
-             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls">
-    <UserControl.Resources>
-        <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
-        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-        <Converters:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
-    </UserControl.Resources>
     <i:Interaction.Behaviors>
         <Behaviors:ControlPageNavigationBehavior Selector="{Binding ElementName=TabControl}" />
     </i:Interaction.Behaviors>

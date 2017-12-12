@@ -3,16 +3,11 @@
                                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                        xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
-                                       xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
                                        xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
                                        xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
                                        IsOpen="{Binding Active}"
                                        Style="{StaticResource ChildWindow}"
                                        Title="{Binding Title}">
-    <MahApps.SimpleChildWindow:ChildWindow.Resources>
-        <Converters:ResponseTypeToDescriptionConverter x:Key="ResponseTypeToDescriptionConverter" />
-        <Converters:ViewToWebSurveyUrlConverter x:Key="ViewToWebSurveyUrlConverter" />
-    </MahApps.SimpleChildWindow:ChildWindow.Resources>
     <Border Style="{StaticResource ChildWindowRoot}">
         <Grid>
             <Grid.RowDefinitions>

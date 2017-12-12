@@ -4,7 +4,6 @@
                                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                        xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
                                        xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
-                                       xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
                                        xmlns:EpiInfo="clr-namespace:ERHMS.EpiInfo;assembly=ERHMS.EpiInfo"
                                        xmlns:EpiInfo.DataAccess="clr-namespace:ERHMS.EpiInfo.DataAccess;assembly=ERHMS.EpiInfo.DataAccess"
                                        xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
@@ -12,11 +11,6 @@
                                        IsOpen="{Binding Active}"
                                        Style="{StaticResource ChildWindow}"
                                        Title="{Binding Title}">
-    <MahApps.SimpleChildWindow:ChildWindow.Resources>
-        <Converters:BooleanInverter x:Key="BooleanInverter" />
-        <Converters:DbProviderToDescriptionConverter x:Key="DbProviderToDescriptionConverter" />
-        <Converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
-    </MahApps.SimpleChildWindow:ChildWindow.Resources>
     <Border Style="{StaticResource ChildWindowRoot}">
         <Grid>
             <Grid.RowDefinitions>

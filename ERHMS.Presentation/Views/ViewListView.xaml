@@ -3,12 +3,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
-             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters">
-    <UserControl.Resources>
-        <Converters:NullToBooleanConverter x:Key="NullToBooleanConverter" />
-        <Converters:NullToVisibilityInverter x:Key="NullToVisibilityInverter" />
-    </UserControl.Resources>
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

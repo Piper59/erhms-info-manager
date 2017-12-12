@@ -3,11 +3,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
-             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
-    <UserControl.Resources>
-        <Converters:MemorySizeToHumanReadableSizeConverter x:Key="MemorySizeToHumanReadableSizeConverter" />
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

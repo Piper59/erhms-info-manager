@@ -3,14 +3,10 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
-             xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters"
              xmlns:Views="clr-namespace:ERHMS.Presentation.Views">
     <i:Interaction.Behaviors>
         <Behaviors:ControlPageNavigationBehavior Selector="{Binding ElementName=TabControl}" />
     </i:Interaction.Behaviors>
-    <UserControl.Resources>
-        <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
-    </UserControl.Resources>
     <TabControl x:Name="TabControl">
         <TabItem Header="_Details">
             <Views:JobDetailView DataContext="{Binding Detail}" />
