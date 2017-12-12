@@ -5,7 +5,7 @@ using System.Windows.Interactivity;
 
 namespace ERHMS.Presentation.Behaviors
 {
-    public class ControlPageNavigationBehavior : Behavior<UIElement>
+    public class ControlPageNavigationBehavior : Behavior<FrameworkElement>
     {
         public static readonly DependencyProperty SelectorProperty = DependencyProperty.Register(
             "Selector",
@@ -31,6 +31,8 @@ namespace ERHMS.Presentation.Behaviors
             }
         }
 
+        private Window window;
+
         public Selector Selector
         {
             get { return (Selector)GetValue(SelectorProperty); }
@@ -39,23 +41,43 @@ namespace ERHMS.Presentation.Behaviors
 
         protected override void OnAttached()
         {
-            base.OnAttached();
-            AssociatedObject.PreviewKeyDown += AssociatedObject_PreviewKeyDown;
+            if (AssociatedObject.IsLoaded)
+            {
+                Attach();
+            }
+            else
+            {
+                AssociatedObject.Loaded += (sender, e) =>
+                {
+                    Attach();
+                };
+            }
         }
 
         protected override void OnDetaching()
         {
-            base.OnDetaching();
-            AssociatedObject.PreviewKeyDown -= AssociatedObject_PreviewKeyDown;
+            if (window != null)
+            {
+                Detach();
+            }
         }
 
-        private void AssociatedObject_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void Attach()
         {
-            if (e.KeyboardDevice.Modifiers != ModifierKeys.Control)
-            {
-                return;
-            }
-            if (e.Key != Key.PageUp && e.Key != Key.PageDown)
+            window = Window.GetWindow(AssociatedObject);
+            window.PreviewKeyDown += Window_PreviewKeyDown;
+        }
+
+        private new void Detach()
+        {
+            window.PreviewKeyDown -= Window_PreviewKeyDown;
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyboardDevice.Modifiers != ModifierKeys.Control
+                || (e.Key != Key.PageUp && e.Key != Key.PageDown)
+                || !Selector.IsVisible)
             {
                 return;
             }

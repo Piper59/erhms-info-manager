@@ -8,14 +8,12 @@ namespace ERHMS.Presentation.Behaviors
     {
         protected override void OnAttached()
         {
-            base.OnAttached();
             AssociatedObject.PreviewMouseDown += AssociatedObject_MouseEvent;
             AssociatedObject.Click += AssociatedObject_MouseEvent;
         }
 
         protected override void OnDetaching()
         {
-            base.OnDetaching();
             AssociatedObject.PreviewMouseDown -= AssociatedObject_MouseEvent;
             AssociatedObject.Click -= AssociatedObject_MouseEvent;
         }

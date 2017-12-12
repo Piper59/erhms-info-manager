@@ -4,14 +4,12 @@ using System.Windows.Interactivity;
 
 namespace ERHMS.Presentation.Behaviors
 {
-    public class BridgeBehavior<T> : Behavior<T>
+    public abstract class BridgeBehavior<T> : Behavior<T>
         where T : DependencyObject
     {
         private bool updating;
 
-        protected BridgeBehavior() { }
-
-        protected void Update(Action action)
+        private void Update(Action action)
         {
             if (updating)
             {
@@ -20,6 +18,19 @@ namespace ERHMS.Presentation.Behaviors
             updating = true;
             action();
             updating = false;
+        }
+
+        protected abstract void PushCore();
+        protected abstract void PullCore();
+
+        protected void Push()
+        {
+            Update(PushCore);
+        }
+
+        protected void Pull()
+        {
+            Update(PullCore);
         }
     }
 }

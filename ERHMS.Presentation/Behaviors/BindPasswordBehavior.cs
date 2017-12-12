@@ -9,9 +9,9 @@ namespace ERHMS.Presentation.Behaviors
             "Password",
             typeof(string),
             typeof(BindPasswordBehavior),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PasswordProperty_PropertyChanged));
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, Password_PropertyChanged));
 
-        private static void PasswordProperty_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void Password_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             ((BindPasswordBehavior)sender).Push();
         }
@@ -24,13 +24,11 @@ namespace ERHMS.Presentation.Behaviors
 
         protected override void OnAttached()
         {
-            base.OnAttached();
             AssociatedObject.PasswordChanged += AssociatedObject_PasswordChanged;
         }
 
         protected override void OnDetaching()
         {
-            base.OnDetaching();
             AssociatedObject.PasswordChanged -= AssociatedObject_PasswordChanged;
         }
 
@@ -39,20 +37,14 @@ namespace ERHMS.Presentation.Behaviors
             Pull();
         }
 
-        private void Push()
+        protected override void PushCore()
         {
-            Update(() =>
-            {
-                AssociatedObject.Password = Password;
-            });
+            AssociatedObject.Password = Password;
         }
 
-        private void Pull()
+        protected override void PullCore()
         {
-            Update(() =>
-            {
-                Password = AssociatedObject.Password;
-            });
+            Password = AssociatedObject.Password;
         }
     }
 }

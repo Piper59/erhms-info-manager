@@ -103,7 +103,6 @@ namespace ERHMS.Presentation.ViewModels
                 Items.Refresh();
             };
             Items = CollectionViewSource.GetDefaultView(Enumerable.Empty<T>());
-            SelectedItems = new List<T>();
             RefreshCommand = new RelayCommand(Refresh, CanRefresh);
             MessengerInstance.Register<RefreshMessage>(this, msg =>
             {
@@ -136,7 +135,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public bool HasSingleSelectedItem()
         {
-            return (SelectedItem != null && SelectedItems == null) || SelectedItems.Count == 1;
+            return SelectedItems == null ? SelectedItem != null : SelectedItems.Count == 1;
         }
 
         protected abstract IEnumerable<T> GetItems();

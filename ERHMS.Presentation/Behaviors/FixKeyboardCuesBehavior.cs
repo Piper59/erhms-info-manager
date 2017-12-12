@@ -19,7 +19,6 @@ namespace ERHMS.Presentation.Behaviors
 
         protected override void OnAttached()
         {
-            base.OnAttached();
             Binding binding = new Binding("(KeyboardNavigation.ShowKeyboardCues)")
             {
                 Source = Window.GetWindow(AssociatedObject)
@@ -29,7 +28,6 @@ namespace ERHMS.Presentation.Behaviors
 
         protected override void OnDetaching()
         {
-            base.OnDetaching();
             BindingOperations.ClearBinding(AssociatedObject, ShowKeyboardCuesProperty);
         }
     }
