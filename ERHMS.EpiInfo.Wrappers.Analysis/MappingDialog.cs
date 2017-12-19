@@ -1,8 +1,10 @@
 ﻿using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
 using ERHMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ERHMS.EpiInfo.Wrappers
@@ -23,6 +25,14 @@ namespace ERHMS.EpiInfo.Wrappers
             BindMappings();
         }
 
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            if (Validate())
+            {
+                DialogResult = DialogResult.OK;
+            }
+        }
+
         private void BindMappings()
         {
             colTarget.Items.Clear();
@@ -38,19 +48,50 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        public MappingCollection GetMappings()
+        private IEnumerable<Mapping> GetMappingsInternal()
         {
-            MappingCollection mappings = new MappingCollection();
             foreach (DataGridViewRow row in dgvMappings.Rows)
             {
                 string source = (string)row.Cells[nameof(colSource)].Value;
                 string target = (string)row.Cells[nameof(colTarget)].Value;
-                if (target == null || target.EqualsIgnoreCase(EmptyTarget))
+                if (target != null && !target.EqualsIgnoreCase(EmptyTarget))
                 {
-                    continue;
+                    yield return new Mapping(source, target);
                 }
-                mappings.Add(source, target);
             }
+        }
+
+        private new bool Validate()
+        {
+            IDictionary<string, int> counts = new Dictionary<string, int>();
+            foreach (Mapping mapping in GetMappingsInternal())
+            {
+                int count;
+                counts.TryGetValue(mapping.Target, out count);
+                counts[mapping.Target] = ++count;
+            }
+            ICollection<string> duplicates = counts.Where(count => count.Value > 1)
+                .Select(count => count.Key)
+                .ToList();
+            if (duplicates.Count > 0)
+            {
+                StringBuilder message = new StringBuilder();
+                message.AppendLine("The following destination fields have more than one source:");
+                message.AppendLine();
+                foreach (string duplicate in duplicates.OrderBy(duplicate => duplicate))
+                {
+                    message.AppendLine(duplicate);
+                }
+                MessageBox.Show(message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
+
+        public MappingCollection GetMappings()
+        {
+            MappingCollection mappings = new MappingCollection();
+            mappings.AddRange(GetMappingsInternal());
             return mappings;
         }
     }
