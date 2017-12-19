@@ -17,7 +17,7 @@ namespace ERHMS.Utility
             byte[] data;
             if (value == null)
             {
-                data = new byte[0];
+                data = new byte[] { };
             }
             else
             {
