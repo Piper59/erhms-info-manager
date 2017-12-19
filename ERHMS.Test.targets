@@ -7,4 +7,7 @@
     </ItemGroup>
     <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(OutDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
+  <Target Name="CleanTargetDir" AfterTargets="Clean">
+    <RemoveDir Directories="$(TargetDir)" ContinueOnError="true" />
+  </Target>
 </Project>
