@@ -117,6 +117,7 @@ namespace ERHMS.EpiInfo.Wrappers
                     .Select(column => column.ColumnName)
                     .ToList();
                 ICollection<string> targets = View.Fields.DataFields.Cast<INamedObject>()
+                    .Where(field => !(field is Epi.Fields.UniqueKeyField))
                     .Select(field => field.Name)
                     .ToList();
                 MappingCollection mappings = null;
