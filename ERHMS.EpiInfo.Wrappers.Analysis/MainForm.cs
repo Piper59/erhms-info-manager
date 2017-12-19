@@ -70,19 +70,19 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        public void ExecuteCommand(string command, bool showDialog, Action<Exception> callback)
+        private void ExecuteCommandInternal(string command, bool showDialog, Action<Exception> callback)
         {
             Log.Logger.DebugFormat("Executing command: {0}", command);
             BackgroundWorker worker = GetBackgroundWorker("Running...", showDialog);
             worker.DoWork += (sender, e) =>
             {
-                EpiInterpreter.Context.ClearState();
                 EpiInterpreter.Execute(command);
             };
             worker.RunWorkerCompleted += (sender, e) =>
             {
                 if (e.Error != null)
                 {
+                    Log.Logger.Warn("Failed to execute command", e.Error);
                     ProgramEditor.ShowErrorMessage(e.Error.ToString());
                 }
                 callback?.Invoke(e.Error);
@@ -91,9 +91,17 @@ namespace ERHMS.EpiInfo.Wrappers
             worker.RunWorkerAsync();
         }
 
+        public void ExecuteCommand(string command, bool showDialog, Action<Exception> callback)
+        {
+            EpiInterpreter.Context.ResetWhileSelected();
+            EpiInterpreter.Context.SetOneCommandMode();
+            ExecuteCommandInternal(command, showDialog, callback);
+        }
+
         public void ExecuteCommands(bool showDialog, Action<Exception> callback = null)
         {
-            ExecuteCommand(Commands, showDialog, callback);
+            EpiInterpreter.Context.ClearState();
+            ExecuteCommandInternal(Commands, showDialog, callback);
         }
 
         public DataTable GetOutput()

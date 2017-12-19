@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using View = Epi.View;
 
@@ -145,12 +146,15 @@ namespace ERHMS.EpiInfo.Wrappers
                         break;
                     }
                 }
-                Form.AddCommand(mappings.GetCommands());
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine(mappings.GetCommands());
                 string path = IOExtensions.GetTempFileName("ERHMS_{0:N}.csv");
-                Form.AddCommand(Commands.Write(path, mappings.GetTargets()));
-                Form.AddCommand(Commands.Read(ProjectPath, ViewName));
-                Form.AddCommand(Commands.Merge(path, mappings.GetIdTarget()));
-                Form.ExecuteCommands(true, Step4);
+                builder.AppendLine(Commands.Write(path, mappings.GetTargets()));
+                builder.AppendLine(Commands.Read(ProjectPath, ViewName));
+                builder.AppendLine(Commands.Merge(path, mappings.GetIdTarget()));
+                string command = builder.ToString().Trim();
+                Form.AddCommand(command);
+                Form.ExecuteCommand(command, true, Step4);
             }
 
             private static void Step4(Exception ex)
