@@ -75,7 +75,11 @@ namespace ERHMS.EpiInfo.Wrappers
         }
         private void OnEvent(string data)
         {
-            OnEvent(WrapperEventArgs.Deserialize(data));
+            WrapperEventArgs e = WrapperEventArgs.Deserialize(data);
+            if (e != null)
+            {
+                OnEvent(WrapperEventArgs.Deserialize(data));
+            }
         }
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
