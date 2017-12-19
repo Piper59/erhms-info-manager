@@ -45,7 +45,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 string source = (string)row.Cells[nameof(colSource)].Value;
                 string target = (string)row.Cells[nameof(colTarget)].Value;
-                if (target.EqualsIgnoreCase(EmptyTarget))
+                if (target == null || target.EqualsIgnoreCase(EmptyTarget))
                 {
                     continue;
                 }
