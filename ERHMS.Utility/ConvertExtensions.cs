@@ -7,6 +7,16 @@ namespace ERHMS.Utility
 {
     public static class ConvertExtensions
     {
+        public static double ToDegrees(double radians)
+        {
+            return radians * 180.0 / Math.PI;
+        }
+
+        public static double ToRadians(double degrees)
+        {
+            return degrees * Math.PI / 180.0;
+        }
+
         private static IFormatter GetFormatter()
         {
             return new BinaryFormatter();

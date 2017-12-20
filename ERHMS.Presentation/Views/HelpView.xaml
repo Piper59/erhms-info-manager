@@ -108,17 +108,17 @@
                         </Grid>
                         <Controls:CappedPath>
                             <Controls:CappedPath.Data>
-                                <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 165, 140, Clockwise}" />
+                                <PathGeometry Figures="{Markup:Arc 300, 323.205, 250, 165, 140, Clockwise}" />
                             </Controls:CappedPath.Data>
                         </Controls:CappedPath>
                         <Controls:CappedPath>
                             <Controls:CappedPath.Data>
-                                <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 45, 20, Clockwise}" />
+                                <PathGeometry Figures="{Markup:Arc 300, 323.205, 250, 45, 20, Clockwise}" />
                             </Controls:CappedPath.Data>
                         </Controls:CappedPath>
                         <Controls:CappedPath>
                             <Controls:CappedPath.Data>
-                                <PathGeometry Figures="{Markup:Arc 300 323.205, 250, 285, 260, Clockwise}" />
+                                <PathGeometry Figures="{Markup:Arc 300, 323.205, 250, 285, 260, Clockwise}" />
                             </Controls:CappedPath.Data>
                         </Controls:CappedPath>
                     </Canvas>

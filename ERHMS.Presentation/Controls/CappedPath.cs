@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -27,21 +28,6 @@ namespace ERHMS.Presentation.Controls
             typeof(PathGeometry),
             typeof(CappedPath),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
-
-        private static double ToDegrees(double radians)
-        {
-            return radians * 180.0 / Math.PI;
-        }
-
-        private static double GetRotation(Point tangent, bool start)
-        {
-            double radians = Math.Atan2(tangent.Y, tangent.X);
-            if (start)
-            {
-                radians += Math.PI;
-            }
-            return ToDegrees(radians);
-        }
 
         public Brush Stroke
         {
@@ -91,8 +77,13 @@ namespace ERHMS.Presentation.Controls
             Point point;
             Point tangent;
             Data.GetPointAtFractionLength(start ? 0.0 : 1.0, out point, out tangent);
+            double rotation = Math.Atan2(tangent.Y, tangent.X);
+            if (start)
+            {
+                rotation += Math.PI;
+            }
             TransformGroup transforms = new TransformGroup();
-            transforms.Children.Add(new RotateTransform(GetRotation(tangent, start)));
+            transforms.Children.Add(new RotateTransform(ConvertExtensions.ToDegrees(rotation)));
             transforms.Children.Add(new TranslateTransform(point.X, point.Y));
             drawingContext.PushTransform(transforms);
             drawingContext.DrawGeometry(Stroke, pen, geometry);

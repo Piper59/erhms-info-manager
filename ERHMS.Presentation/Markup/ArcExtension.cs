@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -8,39 +9,43 @@ namespace ERHMS.Presentation.Markup
     [MarkupExtensionReturnType(typeof(PathFigureCollection))]
     public class ArcExtension : MarkupExtension
     {
-        [ConstructorArgument("center")]
-        public Point Center { get; set; }
+        [ConstructorArgument("centerX")]
+        public double CenterX { get; set; }
+
+        [ConstructorArgument("centerY")]
+        public double CenterY { get; set; }
 
         [ConstructorArgument("radius")]
         public double Radius { get; set; }
 
-        [ConstructorArgument("start")]
-        public double Start { get; set; }
+        [ConstructorArgument("startAngle")]
+        public double StartAngle { get; set; }
 
-        [ConstructorArgument("end")]
-        public double End { get; set; }
+        [ConstructorArgument("endAngle")]
+        public double EndAngle { get; set; }
 
         [ConstructorArgument("direction")]
         public SweepDirection Direction { get; set; }
 
         public ArcExtension() { }
 
-        public ArcExtension(Point center, double radius, double start, double end, SweepDirection direction)
+        public ArcExtension(double centerX, double centerY, double radius, double startAngle, double endAngle, SweepDirection direction)
         {
-            Center = center;
+            CenterX = centerX;
+            CenterY = centerY;
             Radius = radius;
-            Start = start;
-            End = end;
+            StartAngle = startAngle;
+            EndAngle = endAngle;
             Direction = direction;
         }
 
         private Point GetPoint(double degrees)
         {
-            double radians = degrees * Math.PI / 180.0;
+            double radians = ConvertExtensions.ToRadians(degrees);
             return new Point
             {
-                X = Center.X + Radius * Math.Cos(radians),
-                Y = Center.Y - Radius * Math.Sin(radians)
+                X = CenterX + Radius * Math.Cos(radians),
+                Y = CenterY - Radius * Math.Sin(radians)
             };
         }
 
@@ -50,13 +55,13 @@ namespace ERHMS.Presentation.Markup
             {
                 new PathFigure
                 {
-                    StartPoint = GetPoint(Start),
+                    StartPoint = GetPoint(StartAngle),
                     Segments = new PathSegmentCollection
                     {
                         new ArcSegment
                         {
                             Size = new Size(Radius, Radius),
-                            Point = GetPoint(End),
+                            Point = GetPoint(EndAngle),
                             SweepDirection = Direction
                         }
                     }
