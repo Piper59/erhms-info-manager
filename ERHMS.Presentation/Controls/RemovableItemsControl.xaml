@@ -13,8 +13,7 @@
             <Border Background="Transparent"
                     BorderThickness="1"
                     Margin="0,0,5,5"
-                    MinHeight="26"
-                    SnapsToDevicePixels="True">
+                    MinHeight="26">
                 <Border.InputBindings>
                     <MouseBinding Command="{Binding RemoveCommand, ElementName=Root}"
                                   CommandParameter="{Binding}"
@@ -33,8 +32,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <DockPanel Margin="5,3,3,3"
-                           SnapsToDevicePixels="False">
+                <DockPanel Margin="5,3,3,3">
                     <Button DockPanel.Dock="Right"
                             Command="{Binding RemoveCommand, ElementName=Root}"
                             CommandParameter="{Binding}"
@@ -42,7 +40,8 @@
                             Margin="3,0,0,0"
                             Style="{StaticResource ChromelessButtonStyle}"
                             Width="15">
-                        <Viewbox Margin="-4">
+                        <Viewbox Margin="-4"
+                                 SnapsToDevicePixels="False">
                             <ContentPresenter Content="{StaticResource appbar_close}" />
                         </Viewbox>
                     </Button>

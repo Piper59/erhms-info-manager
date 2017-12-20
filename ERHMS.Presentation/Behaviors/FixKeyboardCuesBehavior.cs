@@ -6,7 +6,7 @@ using System.Windows.Interactivity;
 
 namespace ERHMS.Presentation.Behaviors
 {
-    // https://stackoverflow.com/questions/20036898/avalondock-now-loses-alt-key-adornments
+    // https://stackoverflow.com/a/23049302
     public class FixKeyboardCuesBehavior : Behavior<UIElement>
     {
         private static readonly DependencyProperty ShowKeyboardCuesProperty;

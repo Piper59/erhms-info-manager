@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ERHMS.Presentation.Controls
 {
@@ -7,16 +8,17 @@ namespace ERHMS.Presentation.Controls
     {
         public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
             "Icon",
-            typeof(UIElement),
+            typeof(Visual),
             typeof(IconButton));
+
         public static readonly DependencyProperty AccessTextProperty = DependencyProperty.Register(
             "AccessText",
             typeof(string),
             typeof(IconButton));
 
-        public UIElement Icon
+        public Visual Icon
         {
-            get { return (UIElement)GetValue(IconProperty); }
+            get { return (Visual)GetValue(IconProperty); }
             set { SetValue(IconProperty, value); }
         }
 

@@ -49,12 +49,13 @@ namespace ERHMS.Presentation
         public new MainViewModel DataContext
         {
             get { return (MainViewModel)base.DataContext; }
+            private set { base.DataContext = value; }
         }
 
         public MainWindow(MainViewModel dataContext)
         {
+            DataContext = dataContext;
             InitializeComponent();
-            base.DataContext = dataContext;
             Closing += MainWindow_Closing;
             Messenger.Default.Register<AlertMessage>(this, msg => AlertAsync(msg));
             Messenger.Default.Register<BlockMessage>(this, msg => BlockAsync(msg));

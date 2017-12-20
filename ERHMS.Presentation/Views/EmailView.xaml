@@ -46,13 +46,13 @@
                          MahApps:TextBoxHelper.Watermark="Required"
                          Text="{Binding Subject}" />
                 <Label Grid.Row="2" Grid.Column="0">Body</Label>
-                <Controls:NonGreedyMultiLineTextBox Grid.Row="2" Grid.Column="1"
-                                                    AutomationProperties.Name="Body"
-                                                    MahApps:TextBoxHelper.Watermark="Required"
-                                                    Height="NaN"
-                                                    MinHeight="100"
-                                                    Style="{StaticResource MultiLineTextBox}"
-                                                    Text="{Binding Body}" />
+                <Controls:NonGreedyTextBox Grid.Row="2" Grid.Column="1"
+                                           AutomationProperties.Name="Body"
+                                           MahApps:TextBoxHelper.Watermark="Required"
+                                           Height="NaN"
+                                           MinHeight="100"
+                                           Style="{StaticResource MultiLineTextBox}"
+                                           Text="{Binding Body}" />
                 <Label Grid.Row="3" Grid.Column="0">Attachments</Label>
                 <Grid Grid.Row="3" Grid.Column="1">
                     <Grid.ColumnDefinitions>

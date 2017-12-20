@@ -228,7 +228,7 @@
     <Compile Include="Controls\IconButton.xaml.cs">
       <DependentUpon>IconButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NonGreedyMultiLineTextBox.cs" />
+    <Compile Include="Controls\NonGreedyTextBox.cs" />
     <Compile Include="Controls\RemovableItemsControl.xaml.cs">
       <DependentUpon>RemovableItemsControl.xaml</DependentUpon>
     </Compile>

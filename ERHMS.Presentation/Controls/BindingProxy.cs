@@ -2,6 +2,7 @@
 
 namespace ERHMS.Presentation.Controls
 {
+    // https://stackoverflow.com/a/22074985
     public class BindingProxy : Freezable
     {
         public static readonly DependencyProperty DataContextProperty = DependencyProperty.Register(

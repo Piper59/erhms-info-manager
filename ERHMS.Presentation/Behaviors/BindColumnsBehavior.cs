@@ -12,7 +12,7 @@ namespace ERHMS.Presentation.Behaviors
             "Columns",
             typeof(ICollection<DataGridColumn>),
             typeof(BindColumnsBehavior),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, Columns_PropertyChanged));
+            new FrameworkPropertyMetadata(Columns_PropertyChanged));
 
         private static void Columns_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {

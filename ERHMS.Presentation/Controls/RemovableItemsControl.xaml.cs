@@ -10,6 +10,7 @@ namespace ERHMS.Presentation.Controls
             "ItemContentTemplate",
             typeof(DataTemplate),
             typeof(RemovableItemsControl));
+
         public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register(
             "RemoveCommand",
             typeof(ICommand),

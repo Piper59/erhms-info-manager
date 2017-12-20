@@ -9,20 +9,39 @@ namespace ERHMS.Presentation.Controls
     {
         public static readonly DependencyProperty StrokeProperty = Shape.StrokeProperty.AddOwner(typeof(CappedPath));
         public static readonly DependencyProperty StrokeThicknessProperty = Shape.StrokeThicknessProperty.AddOwner(typeof(CappedPath));
+
         public static readonly DependencyProperty StrokeStartLineCapProperty = DependencyProperty.Register(
             "StrokeStartLineCap",
             typeof(Geometry),
             typeof(CappedPath),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
         public static readonly DependencyProperty StrokeEndLineCapProperty = DependencyProperty.Register(
             "StrokeEndLineCap",
-            typeof(Geometry), typeof(CappedPath),
+            typeof(Geometry),
+            typeof(CappedPath),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register(
             "Data",
             typeof(PathGeometry),
             typeof(CappedPath),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        private static double ToDegrees(double radians)
+        {
+            return radians * 180.0 / Math.PI;
+        }
+
+        private static double GetRotation(Point tangent, bool start)
+        {
+            double radians = Math.Atan2(tangent.Y, tangent.X);
+            if (start)
+            {
+                radians += Math.PI;
+            }
+            return ToDegrees(radians);
+        }
 
         public Brush Stroke
         {
@@ -54,20 +73,18 @@ namespace ERHMS.Presentation.Controls
             set { SetValue(DataProperty, value); }
         }
 
-        private double GetRotation(Point tangent, bool start)
+        protected override void OnRender(DrawingContext drawingContext)
         {
-            double angle = Math.Atan2(tangent.Y, tangent.X);
-            if (start)
-            {
-                angle += Math.PI;
-            }
-            return angle * 180.0 / Math.PI;
+            Pen pen = new Pen(Stroke, StrokeThickness);
+            drawingContext.DrawGeometry(null, pen, Data);
+            RenderLineCap(drawingContext, pen, true);
+            RenderLineCap(drawingContext, pen, false);
         }
 
         private void RenderLineCap(DrawingContext drawingContext, Pen pen, bool start)
         {
-            Geometry cap = start ? StrokeStartLineCap : StrokeEndLineCap;
-            if (cap == null)
+            Geometry geometry = start ? StrokeStartLineCap : StrokeEndLineCap;
+            if (geometry == null)
             {
                 return;
             }
@@ -78,16 +95,8 @@ namespace ERHMS.Presentation.Controls
             transforms.Children.Add(new RotateTransform(GetRotation(tangent, start)));
             transforms.Children.Add(new TranslateTransform(point.X, point.Y));
             drawingContext.PushTransform(transforms);
-            drawingContext.DrawGeometry(Stroke, pen, cap);
+            drawingContext.DrawGeometry(Stroke, pen, geometry);
             drawingContext.Pop();
-        }
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            Pen pen = new Pen(Stroke, StrokeThickness);
-            drawingContext.DrawGeometry(null, pen, Data);
-            RenderLineCap(drawingContext, pen, true);
-            RenderLineCap(drawingContext, pen, false);
         }
     }
 }

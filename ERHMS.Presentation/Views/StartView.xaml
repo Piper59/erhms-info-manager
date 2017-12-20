@@ -5,7 +5,6 @@
     <UserControl.Resources>
         <Style x:Key="Background" TargetType="Button">
             <Setter Property="Margin" Value="5" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -75,7 +74,8 @@
                     For further assistance, refer the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf">User Guide</Controls:WebHyperlink>.
                 </TextBlock>
             </StackPanel>
-            <Grid HorizontalAlignment="Center">
+            <Grid HorizontalAlignment="Center"
+                  SnapsToDevicePixels="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
