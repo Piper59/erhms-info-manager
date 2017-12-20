@@ -36,7 +36,7 @@ namespace ERHMS.Presentation.ViewModels
                 ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            if (!ValidateDateRange(Incident.StartDate, Incident.EndDateEstimate))
+            if (!DateTimeExtensions.AreInOrder(Incident.StartDate, Incident.EndDateEstimate))
             {
                 MessengerInstance.Send(new AlertMessage
                 {
@@ -44,7 +44,7 @@ namespace ERHMS.Presentation.ViewModels
                 });
                 return false;
             }
-            if (!ValidateDateRange(Incident.StartDate, Incident.EndDateActual))
+            if (!DateTimeExtensions.AreInOrder(Incident.StartDate, Incident.EndDateActual))
             {
                 MessengerInstance.Send(new AlertMessage
                 {

@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Messages;
+using ERHMS.Utility;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 
@@ -32,7 +33,7 @@ namespace ERHMS.Presentation.ViewModels
                 ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            if (!ValidateDateRange(Job.StartDate, Job.EndDate))
+            if (!DateTimeExtensions.AreInOrder(Job.StartDate, Job.EndDate))
             {
                 MessengerInstance.Send(new AlertMessage
                 {

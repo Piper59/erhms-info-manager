@@ -15,10 +15,10 @@ namespace ERHMS.Presentation.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            DateTime? dateTime = (DateTime?)value;
-            if (dateTime.HasValue)
+            DateTime? date = (DateTime?)value;
+            if (date.HasValue)
             {
-                return dateTime.Value.ToString(Format);
+                return date.Value.ToString(Format);
             }
             else
             {
@@ -28,10 +28,10 @@ namespace ERHMS.Presentation.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            DateTime dateTime;
-            if (DateTime.TryParse((string)value, out dateTime))
+            DateTime date;
+            if (DateTime.TryParse((string)value, out date))
             {
-                return dateTime;
+                return date;
             }
             else
             {

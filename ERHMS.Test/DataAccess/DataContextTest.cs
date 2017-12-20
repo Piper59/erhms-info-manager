@@ -75,54 +75,54 @@ namespace ERHMS.Test.DataAccess
             directory.Dispose();
         }
 
-        private void DateRangeTest(int expected, DateTime dateMin, DateTime dateMax, Func<DateTime?, DateTime?, int> select)
+        private void DateRangeTest(int expected, DateTime start, DateTime end, Func<DateTime?, DateTime?, int> select)
         {
-            DateTime preDateMin = dateMin.AddSeconds(-1.0);
-            DateTime postDateMin = dateMin.AddSeconds(1.0);
-            DateTime preDateMax = dateMax.AddSeconds(-1.0);
-            DateTime postDateMax = dateMax.AddSeconds(1.0);
+            DateTime preStart = start.AddSeconds(-1.0);
+            DateTime postStart = start.AddSeconds(1.0);
+            DateTime preEnd = end.AddSeconds(-1.0);
+            DateTime postEnd = end.AddSeconds(1.0);
             Assert.AreEqual(expected, select(null, null));
-            Assert.AreEqual(0, select(null, preDateMin));
-            Assert.AreEqual(1, select(null, postDateMin));
-            Assert.AreEqual(expected - 1, select(null, preDateMax));
-            Assert.AreEqual(expected, select(null, postDateMax));
-            Assert.AreEqual(expected, select(preDateMin, null));
-            Assert.AreEqual(expected - 1, select(postDateMin, null));
-            Assert.AreEqual(1, select(preDateMax, null));
-            Assert.AreEqual(0, select(postDateMax, null));
-            Assert.AreEqual(0, select(preDateMin.AddSeconds(-1.0), preDateMin));
-            Assert.AreEqual(1, select(preDateMin, postDateMin));
-            Assert.AreEqual(expected - 1, select(preDateMin, preDateMax));
-            Assert.AreEqual(expected, select(preDateMin, postDateMax));
-            Assert.AreEqual(expected - 2, select(postDateMin, preDateMax));
-            Assert.AreEqual(expected - 1, select(postDateMin, postDateMax));
-            Assert.AreEqual(1, select(preDateMax, postDateMax));
-            Assert.AreEqual(0, select(postDateMax, postDateMax.AddSeconds(1.0)));
+            Assert.AreEqual(0, select(null, preStart));
+            Assert.AreEqual(1, select(null, postStart));
+            Assert.AreEqual(expected - 1, select(null, preEnd));
+            Assert.AreEqual(expected, select(null, postEnd));
+            Assert.AreEqual(expected, select(preStart, null));
+            Assert.AreEqual(expected - 1, select(postStart, null));
+            Assert.AreEqual(1, select(preEnd, null));
+            Assert.AreEqual(0, select(postEnd, null));
+            Assert.AreEqual(0, select(preStart.AddSeconds(-1.0), preStart));
+            Assert.AreEqual(1, select(preStart, postStart));
+            Assert.AreEqual(expected - 1, select(preStart, preEnd));
+            Assert.AreEqual(expected, select(preStart, postEnd));
+            Assert.AreEqual(expected - 2, select(postStart, preEnd));
+            Assert.AreEqual(expected - 1, select(postStart, postEnd));
+            Assert.AreEqual(1, select(preEnd, postEnd));
+            Assert.AreEqual(0, select(postEnd, postEnd.AddSeconds(1.0)));
         }
 
-        private void DateRangeTest(int expected, bool starts, bool ends, DateTime dateMin, DateTime dateMax, Func<DateTime?, DateTime?, int> select)
+        private void DateRangeTest(int expected, bool starts, bool ends, DateTime start, DateTime end, Func<DateTime?, DateTime?, int> select)
         {
-            DateTime preDateMin = dateMin.AddSeconds(-1.0);
-            DateTime postDateMin = dateMin.AddSeconds(1.0);
-            DateTime preDateMax = dateMax.AddSeconds(-1.0);
-            DateTime postDateMax = dateMax.AddSeconds(1.0);
+            DateTime preStart = start.AddSeconds(-1.0);
+            DateTime postStart = start.AddSeconds(1.0);
+            DateTime preEnd = end.AddSeconds(-1.0);
+            DateTime postEnd = end.AddSeconds(1.0);
             Assert.AreEqual(expected, select(null, null));
-            Assert.AreEqual(starts ? 0 : expected, select(null, preDateMin));
-            Assert.AreEqual(expected, select(null, postDateMin));
-            Assert.AreEqual(expected, select(null, preDateMax));
-            Assert.AreEqual(expected, select(null, postDateMax));
-            Assert.AreEqual(expected, select(preDateMin, null));
-            Assert.AreEqual(expected, select(postDateMin, null));
-            Assert.AreEqual(expected, select(preDateMax, null));
-            Assert.AreEqual(ends ? 0 : expected, select(postDateMax, null));
-            Assert.AreEqual(starts ? 0 : expected, select(preDateMin.AddSeconds(-1.0), preDateMin));
-            Assert.AreEqual(expected, select(preDateMin, postDateMin));
-            Assert.AreEqual(expected, select(preDateMin, preDateMax));
-            Assert.AreEqual(expected, select(preDateMin, postDateMax));
-            Assert.AreEqual(expected, select(postDateMin, preDateMax));
-            Assert.AreEqual(expected, select(postDateMin, postDateMax));
-            Assert.AreEqual(expected, select(preDateMax, postDateMax));
-            Assert.AreEqual(ends ? 0 : expected, select(postDateMax, postDateMax.AddSeconds(1.0)));
+            Assert.AreEqual(starts ? 0 : expected, select(null, preStart));
+            Assert.AreEqual(expected, select(null, postStart));
+            Assert.AreEqual(expected, select(null, preEnd));
+            Assert.AreEqual(expected, select(null, postEnd));
+            Assert.AreEqual(expected, select(preStart, null));
+            Assert.AreEqual(expected, select(postStart, null));
+            Assert.AreEqual(expected, select(preEnd, null));
+            Assert.AreEqual(ends ? 0 : expected, select(postEnd, null));
+            Assert.AreEqual(starts ? 0 : expected, select(preStart.AddSeconds(-1.0), preStart));
+            Assert.AreEqual(expected, select(preStart, postStart));
+            Assert.AreEqual(expected, select(preStart, preEnd));
+            Assert.AreEqual(expected, select(preStart, postEnd));
+            Assert.AreEqual(expected, select(postStart, preEnd));
+            Assert.AreEqual(expected, select(postStart, postEnd));
+            Assert.AreEqual(expected, select(preEnd, postEnd));
+            Assert.AreEqual(ends ? 0 : expected, select(postEnd, postEnd.AddSeconds(1.0)));
         }
 
         [Test]

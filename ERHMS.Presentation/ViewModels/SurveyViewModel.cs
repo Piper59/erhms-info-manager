@@ -91,12 +91,12 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
-                DateTime now = DateTime.Now;
+                DateTime today = DateTime.Today;
                 Survey = new Survey
                 {
                     Title = View.Name,
-                    StartDate = now,
-                    EndDate = now.AddDays(10.0),
+                    StartDate = today,
+                    EndDate = today.AddDays(10.0),
                     ResponseType = ResponseType.Single,
                     PublishKey = Guid.NewGuid()
                 };
@@ -116,7 +116,7 @@ namespace ERHMS.Presentation.ViewModels
                 ShowValidationMessage(ValidationError.Required, fields);
                 return false;
             }
-            if (!ValidateDateRange(Survey.StartDate, Survey.EndDate))
+            if (!DateTimeExtensions.AreInOrder(Survey.StartDate, Survey.EndDate))
             {
                 MessengerInstance.Send(new AlertMessage
                 {
