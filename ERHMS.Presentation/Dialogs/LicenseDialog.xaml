@@ -25,18 +25,16 @@
                         Margin="-100,0"
                         Orientation="Horizontal">
                 <Button Click="Accept_Click"
+                        Content="Accept"
                         Height="35"
                         Margin="0,0,5,0"
-                        MinWidth="80">
-                    Accept
-                </Button>
+                        MinWidth="80" />
                 <Button Click="Cancel_Click"
+                        Content="Cancel"
                         Height="35"
                         Margin="5,0,5,0"
                         MinWidth="80"
-                        Style="{StaticResource AccentedDialogSquareButton}">
-                    Cancel
-                </Button>
+                        Style="{StaticResource AccentedDialogSquareButton}" />
             </StackPanel>
         </Grid>
     </MahApps.Dialogs:CustomDialog.Content>

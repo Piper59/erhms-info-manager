@@ -31,10 +31,7 @@ namespace ERHMS.Presentation.Dialogs
 
         public async Task ShowAsync()
         {
-            await OwningWindow.ShowMetroDialogAsync(this, new MetroDialogSettings
-            {
-                AnimateHide = false
-            });
+            await OwningWindow.ShowMetroDialogAsync(this);
             await WaitUntilUnloadedAsync();
         }
     }
