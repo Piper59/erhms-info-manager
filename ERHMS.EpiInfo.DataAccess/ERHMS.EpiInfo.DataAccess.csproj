@@ -80,6 +80,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="EntityRepository.cs" />
+    <Compile Include="IRepositoryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewEntityRepository.cs" />
   </ItemGroup>

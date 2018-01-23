@@ -15,8 +15,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_Teams"
             };
-            typeMap.Get(nameof(Team.TeamId)).SetId();
             typeMap.Get(nameof(Team.New)).SetComputed();
+            typeMap.Get(nameof(Team.Id)).SetComputed();
+            typeMap.Get(nameof(Team.Guid)).SetComputed();
+            typeMap.Get(nameof(Team.TeamId)).SetId();
             typeMap.Get(nameof(Team.Incident)).SetComputed();
             typeMap.Get(nameof(Team.Responders)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Team), typeMap);

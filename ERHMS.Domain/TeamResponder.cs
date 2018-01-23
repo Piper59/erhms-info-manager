@@ -4,7 +4,7 @@ namespace ERHMS.Domain
 {
     public class TeamResponder : GuidEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return TeamResponderId; }
             set { TeamResponderId = value; }

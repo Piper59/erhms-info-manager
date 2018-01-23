@@ -17,8 +17,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_Assignments"
             };
-            typeMap.Get(nameof(Assignment.AssignmentId)).SetId();
             typeMap.Get(nameof(Assignment.New)).SetComputed();
+            typeMap.Get(nameof(Assignment.Id)).SetComputed();
+            typeMap.Get(nameof(Assignment.Guid)).SetComputed();
+            typeMap.Get(nameof(Assignment.AssignmentId)).SetId();
             typeMap.Get(nameof(Assignment.View)).SetComputed();
             typeMap.Get(nameof(Assignment.Responder)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Assignment), typeMap);

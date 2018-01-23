@@ -13,8 +13,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_Roles"
             };
-            typeMap.Get(nameof(Role.RoleId)).SetId();
             typeMap.Get(nameof(Role.New)).SetComputed();
+            typeMap.Get(nameof(Role.Id)).SetComputed();
+            typeMap.Get(nameof(Role.Guid)).SetComputed();
+            typeMap.Get(nameof(Role.RoleId)).SetId();
             SqlMapper.SetTypeMap(typeof(Role), typeMap);
         }
 

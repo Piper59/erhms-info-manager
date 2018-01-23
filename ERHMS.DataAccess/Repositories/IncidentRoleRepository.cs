@@ -12,9 +12,11 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_IncidentRoles"
             };
-            typeMap.Get(nameof(IncidentRole.IncidentRoleId)).SetId();
             typeMap.Get(nameof(IncidentRole.New)).SetComputed();
-            typeMap.Get(nameof(IncidentRole.IsInUse)).SetComputed();
+            typeMap.Get(nameof(IncidentRole.Id)).SetComputed();
+            typeMap.Get(nameof(IncidentRole.Guid)).SetComputed();
+            typeMap.Get(nameof(IncidentRole.IncidentRoleId)).SetId();
+            typeMap.Get(nameof(IncidentRole.InUse)).SetComputed();
             typeMap.Get(nameof(IncidentRole.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(IncidentRole), typeMap);
         }
@@ -40,7 +42,7 @@ namespace ERHMS.DataAccess
                     SELECT COUNT(*)
                     FROM [ERHMS_JobResponders]
                     WHERE [ERHMS_JobResponders].[IncidentRoleId] = [ERHMS_IncidentRoles].[IncidentRoleId]
-                ) AS [IsInUse]");
+                ) AS [InUse]");
             sql.AddSeparator();
             sql.AddTable(JoinType.Inner, "ERHMS_Incidents.IncidentId", "ERHMS_IncidentRoles.IncidentId");
             return sql;

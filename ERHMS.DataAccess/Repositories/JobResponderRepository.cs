@@ -16,8 +16,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_JobResponders"
             };
-            typeMap.Get(nameof(JobResponder.JobResponderId)).SetId();
             typeMap.Get(nameof(JobResponder.New)).SetComputed();
+            typeMap.Get(nameof(JobResponder.Id)).SetComputed();
+            typeMap.Get(nameof(JobResponder.Guid)).SetComputed();
+            typeMap.Get(nameof(JobResponder.JobResponderId)).SetId();
             typeMap.Get(nameof(JobResponder.Job)).SetComputed();
             typeMap.Get(nameof(JobResponder.Responder)).SetComputed();
             typeMap.Get(nameof(JobResponder.IncidentRole)).SetComputed();

@@ -85,7 +85,7 @@ namespace ERHMS.Dapper
 
         private bool TryGetMember(string columnName, out SqlMapper.IMemberMap member)
         {
-            member = this.SingleOrDefault(propertyMap => propertyMap.ColumnName.EqualsIgnoreCase(columnName));
+            member = this.SingleOrDefault(propertyMap => propertyMap.ColumnName.Equals(columnName, StringComparison.OrdinalIgnoreCase));
             return member != null;
         }
 

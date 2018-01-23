@@ -60,6 +60,7 @@
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="InterlockedBoolean.cs" />
     <Compile Include="InvalidEnumValueException.cs" />
     <Compile Include="Invoker.cs" />
     <Compile Include="IOExtensions.cs" />

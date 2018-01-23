@@ -17,8 +17,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_JobNotes"
             };
-            typeMap.Get(nameof(JobNote.JobNoteId)).SetId();
             typeMap.Get(nameof(JobNote.New)).SetComputed();
+            typeMap.Get(nameof(JobNote.Id)).SetComputed();
+            typeMap.Get(nameof(JobNote.Guid)).SetComputed();
+            typeMap.Get(nameof(JobNote.JobNoteId)).SetId();
             typeMap.Get(nameof(JobNote.Job)).SetComputed();
             SqlMapper.SetTypeMap(typeof(JobNote), typeMap);
         }

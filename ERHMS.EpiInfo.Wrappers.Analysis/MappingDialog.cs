@@ -1,6 +1,5 @@
 ﻿using Epi.Windows.Analysis.Dialogs;
 using Epi.Windows.Analysis.Forms;
-using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +42,7 @@ namespace ERHMS.EpiInfo.Wrappers
             }
             foreach (string source in sources)
             {
-                string suggestedTarget = targets.FirstOrDefault(target => target.EqualsIgnoreCase(source));
+                string suggestedTarget = targets.FirstOrDefault(target => target.Equals(source, StringComparison.OrdinalIgnoreCase));
                 dgvMappings.Rows.Add(source, suggestedTarget ?? EmptyTarget);
             }
         }
@@ -54,7 +53,7 @@ namespace ERHMS.EpiInfo.Wrappers
             {
                 string source = (string)row.Cells[nameof(colSource)].Value;
                 string target = (string)row.Cells[nameof(colTarget)].Value;
-                if (target != null && !target.EqualsIgnoreCase(EmptyTarget))
+                if (target != null && !target.Equals(EmptyTarget, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return new Mapping(source, target);
                 }

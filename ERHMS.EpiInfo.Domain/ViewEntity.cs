@@ -7,7 +7,7 @@ namespace ERHMS.EpiInfo.Domain
 {
     public class ViewEntity : GuidEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return GlobalRecordId; }
             set { GlobalRecordId = value; }

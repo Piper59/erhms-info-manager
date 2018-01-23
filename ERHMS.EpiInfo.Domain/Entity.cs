@@ -30,7 +30,7 @@ namespace ERHMS.EpiInfo.Domain
             }
         }
 
-        protected abstract object Id { get; }
+        public abstract object Id { get; }
 
         protected Entity(bool @new)
         {

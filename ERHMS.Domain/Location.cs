@@ -2,7 +2,7 @@
 {
     public class Location : IncidentEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return LocationId; }
             set { LocationId = value; }

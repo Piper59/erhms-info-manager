@@ -12,8 +12,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_ViewLinks"
             };
-            typeMap.Get(nameof(ViewLink.ViewLinkId)).SetId();
             typeMap.Get(nameof(ViewLink.New)).SetComputed();
+            typeMap.Get(nameof(ViewLink.Id)).SetComputed();
+            typeMap.Get(nameof(ViewLink.Guid)).SetComputed();
+            typeMap.Get(nameof(ViewLink.ViewLinkId)).SetId();
             typeMap.Get(nameof(ViewLink.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(ViewLink), typeMap);
         }

@@ -13,8 +13,9 @@ namespace ERHMS.DataAccess
             {
                 TableName = "metaPrograms"
             };
-            typeMap.Set(nameof(Pgm.PgmId), ColumnNames.PROGRAM_ID).SetId();
             typeMap.Get(nameof(Pgm.New)).SetComputed();
+            typeMap.Get(nameof(Pgm.Id)).SetComputed();
+            typeMap.Set(nameof(Pgm.PgmId), ColumnNames.PROGRAM_ID).SetId();
             typeMap.Get(nameof(Pgm.Link)).SetComputed();
             typeMap.Get(nameof(Pgm.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Pgm), typeMap);

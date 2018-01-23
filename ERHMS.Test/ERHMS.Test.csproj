@@ -204,6 +204,7 @@
     <Compile Include="Utility\DynamicExtensionsTest.cs" />
     <Compile Include="Utility\EnumerableExtensionsTest.cs" />
     <Compile Include="Utility\EnumExtensionsTest.cs" />
+    <Compile Include="Utility\InterlockedBooleanTest.cs" />
     <Compile Include="Utility\IOExtensionsTest.cs" />
     <Compile Include="Utility\InvokerTest.cs" />
     <Compile Include="Utility\LogTest.cs" />

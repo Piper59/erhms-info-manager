@@ -2,7 +2,7 @@
 {
     public class Canvas : EpiInfoEntity<CanvasLink>
     {
-        protected override object Id
+        public override object Id
         {
             get { return CanvasId; }
         }

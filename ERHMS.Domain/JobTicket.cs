@@ -1,12 +1,11 @@
 ﻿using ERHMS.EpiInfo.Domain;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ERHMS.Domain
 {
     public class JobTicket : Entity
     {
-        protected override object Id
+        public override object Id
         {
             get { return null; }
         }

@@ -22,8 +22,9 @@ namespace ERHMS.DataAccess
             {
                 TableName = "metaViews"
             };
-            typeMap.Get(nameof(View.ViewId)).SetId();
             typeMap.Get(nameof(View.New)).SetComputed();
+            typeMap.Get(nameof(View.Id)).SetComputed();
+            typeMap.Get(nameof(View.ViewId)).SetId();
             typeMap.Set(nameof(View.WebSurveyId), ColumnNames.CHECK_CODE_AFTER);
             typeMap.Get(nameof(View.HasResponderIdField)).SetComputed();
             typeMap.Get(nameof(View.Link)).SetComputed();

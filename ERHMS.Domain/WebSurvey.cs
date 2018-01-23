@@ -4,7 +4,7 @@ namespace ERHMS.Domain
 {
     public class WebSurvey : GuidEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return WebSurveyId; }
             set { WebSurveyId = value; }

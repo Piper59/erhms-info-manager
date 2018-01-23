@@ -1,15 +1,15 @@
-﻿using ERHMS.Utility;
+﻿using System;
 
 namespace ERHMS.EpiInfo.Domain
 {
     public abstract class GuidEntity : Entity
     {
-        protected override object Id
+        public override object Id
         {
             get { return Guid; }
         }
 
-        protected abstract string Guid { get; set; }
+        public abstract string Guid { get; set; }
 
         protected GuidEntity(bool @new)
             : base(@new)
@@ -28,7 +28,7 @@ namespace ERHMS.EpiInfo.Domain
         public override bool Equals(object obj)
         {
             GuidEntity entity = obj as GuidEntity;
-            return entity != null && entity.Guid != null && entity.Guid.EqualsIgnoreCase(Guid);
+            return entity != null && entity.Guid != null && entity.Guid.Equals(Guid, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

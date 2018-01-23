@@ -2,7 +2,7 @@
 {
     public class IncidentRole : IncidentEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return IncidentRoleId; }
             set { IncidentRoleId = value; }
@@ -20,10 +20,10 @@
             set { SetProperty(nameof(Name), value); }
         }
 
-        public bool IsInUse
+        public bool InUse
         {
-            get { return GetProperty<bool>(nameof(IsInUse)); }
-            set { SetProperty(nameof(IsInUse), value); }
+            get { return GetProperty<bool>(nameof(InUse)); }
+            set { SetProperty(nameof(InUse), value); }
         }
 
         public IncidentRole(bool @new)

@@ -25,10 +25,9 @@ namespace ERHMS.EpiInfo
                 WHERE F.[ViewId] = @ViewId";
             Query query = Driver.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
-            short prepend = -1;
             return Driver.Select(query).AsEnumerable()
-                .OrderBy(row => row.IsNull("Position") ? prepend : row["Position"])
-                .ThenBy(row => row.IsNull("TabIndex") ? prepend : row["TabIndex"])
+                .OrderBy(row => row.IsNull("Position") ? (short)-1 : row["Position"])
+                .ThenBy(row => row.IsNull("TabIndex") ? (short)-1 : row["TabIndex"])
                 .ThenBy(row => row["FieldId"])
                 .Select(row => row.Field<int>("FieldId"));
         }

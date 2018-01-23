@@ -3,6 +3,7 @@ using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -43,11 +44,11 @@ namespace ERHMS.EpiInfo.Web
             }
             else if (type == typeof(bool))
             {
-                if (TrueValues.ContainsIgnoreCase(value))
+                if (TrueValues.Contains(value, StringComparer.OrdinalIgnoreCase))
                 {
                     return true;
                 }
-                else if (FalseValues.ContainsIgnoreCase(value))
+                else if (FalseValues.Contains(value, StringComparer.OrdinalIgnoreCase))
                 {
                     return false;
                 }

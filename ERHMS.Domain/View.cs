@@ -2,7 +2,7 @@
 {
     public class View : EpiInfoEntity<ViewLink>
     {
-        protected override object Id
+        public override object Id
         {
             get { return ViewId; }
         }

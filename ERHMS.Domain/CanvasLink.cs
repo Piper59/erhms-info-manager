@@ -2,7 +2,7 @@
 {
     public class CanvasLink : IncidentEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return CanvasLinkId; }
             set { CanvasLinkId = value; }

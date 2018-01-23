@@ -15,8 +15,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_UniquePairs"
             };
-            typeMap.Get(nameof(UniquePair.UniquePairId)).SetId();
             typeMap.Get(nameof(UniquePair.New)).SetComputed();
+            typeMap.Get(nameof(UniquePair.Id)).SetComputed();
+            typeMap.Get(nameof(UniquePair.Guid)).SetComputed();
+            typeMap.Get(nameof(UniquePair.UniquePairId)).SetId();
             SqlMapper.SetTypeMap(typeof(UniquePair), typeMap);
         }
 

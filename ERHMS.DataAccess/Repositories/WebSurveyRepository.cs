@@ -15,8 +15,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_WebSurveys"
             };
-            typeMap.Get(nameof(WebSurvey.WebSurveyId)).SetId();
             typeMap.Get(nameof(WebSurvey.New)).SetComputed();
+            typeMap.Get(nameof(WebSurvey.Id)).SetComputed();
+            typeMap.Get(nameof(WebSurvey.Guid)).SetComputed();
+            typeMap.Get(nameof(WebSurvey.WebSurveyId)).SetId();
             typeMap.Get(nameof(WebSurvey.View)).SetComputed();
             SqlMapper.SetTypeMap(typeof(WebSurvey), typeMap);
         }

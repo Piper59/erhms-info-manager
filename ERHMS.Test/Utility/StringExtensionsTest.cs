@@ -1,6 +1,8 @@
 ﻿using ERHMS.Utility;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ERHMS.Test.Utility
 {
@@ -14,17 +16,11 @@ namespace ERHMS.Test.Utility
         }
 
         [Test]
-        public void EqualsIgnoreCaseTest()
+        public void ContainsTest()
         {
-            Assert.IsTrue("test".EqualsIgnoreCase("TEST"));
-            Assert.IsTrue(StringExtensions.EqualsIgnoreCase(null, null));
-        }
-
-        [Test]
-        public void ContainsIgnoreCaseTest()
-        {
-            Assert.IsTrue("Hello, world!".ContainsIgnoreCase("WORLD"));
-            Assert.IsTrue("one two three".Split().ContainsIgnoreCase("TWO"));
+            Assert.IsTrue("Hello, world!".Contains("world", StringComparison.Ordinal));
+            Assert.IsFalse("Hello, world!".Contains("WORLD", StringComparison.Ordinal));
+            Assert.IsTrue("Hello, world!".Contains("WORLD", StringComparison.OrdinalIgnoreCase));
         }
 
         private string GetLines(string newLine1, string newLine2, string newLine3)
@@ -59,7 +55,7 @@ namespace ERHMS.Test.Utility
             string format = "{0} ({1})";
             Assert.AreEqual("test", "test".MakeUnique(format, value => false));
             Assert.AreEqual("test (3)", "test".MakeUnique(format, value => values.Contains(value)));
-            Assert.AreEqual("test (4)", "test".MakeUnique(format, value => values.ContainsIgnoreCase(value)));
+            Assert.AreEqual("test (4)", "test".MakeUnique(format, value => values.Contains(value, StringComparer.OrdinalIgnoreCase)));
         }
     }
 }

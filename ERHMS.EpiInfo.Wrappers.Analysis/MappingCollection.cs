@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         private bool ContainsTarget(string target)
         {
-            return this.Any(mapping => mapping.Target.EqualsIgnoreCase(target));
+            return this.Any(mapping => mapping.Target.Equals(target, StringComparison.OrdinalIgnoreCase));
         }
 
         private bool ContainsIdTarget()

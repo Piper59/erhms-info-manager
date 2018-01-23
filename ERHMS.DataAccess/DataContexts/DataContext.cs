@@ -27,6 +27,7 @@ namespace ERHMS.DataAccess
                 MethodInfo method = type.GetMethod("Configure", BindingFlags.Public | BindingFlags.Static, null, Type.EmptyTypes, null);
                 if (method != null)
                 {
+                    Log.Logger.DebugFormat("Configuring: {0}", type);
                     method.Invoke(null, null);
                 }
             }

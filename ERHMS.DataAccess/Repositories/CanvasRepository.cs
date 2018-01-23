@@ -12,8 +12,9 @@ namespace ERHMS.DataAccess
             {
                 TableName = "metaCanvases"
             };
-            typeMap.Get(nameof(Canvas.CanvasId)).SetId();
             typeMap.Get(nameof(Canvas.New)).SetComputed();
+            typeMap.Get(nameof(Canvas.Id)).SetComputed();
+            typeMap.Get(nameof(Canvas.CanvasId)).SetId();
             typeMap.Get(nameof(Canvas.Link)).SetComputed();
             typeMap.Get(nameof(Canvas.Incident)).SetComputed();
             SqlMapper.SetTypeMap(typeof(Canvas), typeMap);

@@ -234,6 +234,28 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             }
             catch (OperationCanceledException) { }
         }
+
+        [Test]
+        public void RefreshTest()
+        {
+            Surveillance surveillance1 = new Surveillance
+            {
+                GlobalRecordId = "993974ab-a5c8-4177-b81d-a060b2e5b9e1"
+            };
+            Assert.AreEqual("100", surveillances.Refresh(surveillance1).CaseId);
+            Surveillance surveillance2 = new Surveillance
+            {
+                GlobalRecordId = "f3c31be1-e9e6-471a-a269-2358dc013ac9"
+            };
+            IEnumerable<Surveillance> refreshed = surveillances.Refresh(new Surveillance[]
+            {
+                surveillance1,
+                surveillance1,
+                surveillance1,
+                surveillance2
+            });
+            Assert.AreEqual(2, refreshed.Count());
+        }
     }
 
     public class AccessViewEntityRepositoryTest : ViewEntityRepositoryTest

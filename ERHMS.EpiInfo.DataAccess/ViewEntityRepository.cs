@@ -20,6 +20,9 @@ namespace ERHMS.EpiInfo.DataAccess
         protected static TypeMap GetTypeMap()
         {
             TypeMap typeMap = new TypeMap(typeof(TEntity));
+            typeMap.Get(nameof(ViewEntity.New)).SetComputed();
+            typeMap.Get(nameof(ViewEntity.Id)).SetComputed();
+            typeMap.Get(nameof(ViewEntity.Guid)).SetComputed();
             typeMap.Set(nameof(ViewEntity.UniqueKey), ColumnNames.UNIQUE_KEY).SetId().SetComputed();
             typeMap.Set(nameof(ViewEntity.GlobalRecordId), ColumnNames.GLOBAL_RECORD_ID);
             typeMap.Set(nameof(ViewEntity.ForeignKey), ColumnNames.FOREIGN_KEY);

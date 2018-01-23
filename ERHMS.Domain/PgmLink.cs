@@ -2,7 +2,7 @@
 {
     public class PgmLink : IncidentEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return PgmLinkId; }
             set { PgmLinkId = value; }

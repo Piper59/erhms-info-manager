@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace ERHMS.Utility
     {
         private static bool IsCensorable(KeyValuePair<string, object> property)
         {
-            return property.Key.ContainsIgnoreCase("Password") || property.Key.EqualsIgnoreCase("Pwd");
+            return property.Key.Contains("Password", StringComparison.OrdinalIgnoreCase)
+                || property.Key.Equals("Pwd", StringComparison.OrdinalIgnoreCase);
         }
 
         private static string ToCensoredString(KeyValuePair<string, object> property)

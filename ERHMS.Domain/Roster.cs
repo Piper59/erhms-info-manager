@@ -2,7 +2,7 @@
 {
     public class Roster : IncidentEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return RosterId; }
             set { RosterId = value; }

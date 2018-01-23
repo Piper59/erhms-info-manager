@@ -4,7 +4,7 @@ namespace ERHMS.Domain
 {
     public class Team : IncidentEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return TeamId; }
             set { TeamId = value; }

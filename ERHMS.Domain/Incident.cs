@@ -6,7 +6,7 @@ namespace ERHMS.Domain
 {
     public class Incident : GuidEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return IncidentId; }
             set { IncidentId = value; }

@@ -1,4 +1,4 @@
-﻿using ERHMS.Utility;
+﻿using System;
 
 namespace ERHMS.EpiInfo.Wrappers
 {
@@ -15,7 +15,7 @@ namespace ERHMS.EpiInfo.Wrappers
 
         public bool IsIdentity()
         {
-            return StringExtensions.EqualsIgnoreCase(Source, Target);
+            return string.Equals(Source, Target, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

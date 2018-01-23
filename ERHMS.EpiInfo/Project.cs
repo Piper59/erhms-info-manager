@@ -6,6 +6,7 @@ using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Xml;
 
@@ -134,7 +135,7 @@ namespace ERHMS.EpiInfo
             ICollection<string> tableNames = Driver.GetTableNames();
             return ViewExtensions.SanitizeName(viewName).MakeUnique("{0}_{1}", value =>
             {
-                return Views.Contains(value) || tableNames.ContainsIgnoreCase(value);
+                return Views.Contains(value) || tableNames.Contains(value, StringComparer.OrdinalIgnoreCase);
             });
         }
 

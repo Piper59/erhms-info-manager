@@ -17,8 +17,10 @@ namespace ERHMS.DataAccess
             {
                 TableName = "ERHMS_JobTeams"
             };
-            typeMap.Get(nameof(JobTeam.JobTeamId)).SetId();
             typeMap.Get(nameof(JobTeam.New)).SetComputed();
+            typeMap.Get(nameof(JobTeam.Id)).SetComputed();
+            typeMap.Get(nameof(JobTeam.Guid)).SetComputed();
+            typeMap.Get(nameof(JobTeam.JobTeamId)).SetId();
             typeMap.Get(nameof(JobTeam.Job)).SetComputed();
             typeMap.Get(nameof(JobTeam.Team)).SetComputed();
             SqlMapper.SetTypeMap(typeof(JobTeam), typeMap);

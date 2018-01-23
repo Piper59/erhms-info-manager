@@ -2,7 +2,7 @@
 {
     public class Pgm : EpiInfoEntity<PgmLink>
     {
-        protected override object Id
+        public override object Id
         {
             get { return PgmId; }
         }

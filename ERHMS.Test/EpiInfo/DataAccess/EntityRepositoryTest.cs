@@ -4,7 +4,9 @@ using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.Utility;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 
 namespace ERHMS.Test.EpiInfo.DataAccess
@@ -13,7 +15,7 @@ namespace ERHMS.Test.EpiInfo.DataAccess
     {
         private class Gender : GuidEntity
         {
-            protected override string Guid
+            public override string Guid
             {
                 get { return GenderId; }
                 set { GenderId = value; }
@@ -52,8 +54,10 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             public static void Configure()
             {
                 TypeMap typeMap = new TypeMap(typeof(Gender));
-                typeMap.Get(nameof(Gender.GenderId)).SetId();
                 typeMap.Get(nameof(Gender.New)).SetComputed();
+                typeMap.Get(nameof(Gender.Id)).SetComputed();
+                typeMap.Get(nameof(Gender.Guid)).SetComputed();
+                typeMap.Get(nameof(Gender.GenderId)).SetId();
                 SqlMapper.SetTypeMap(typeof(Gender), typeMap);
             }
 
@@ -102,6 +106,28 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             genders.Save(gender);
             Assert.AreEqual(count, genders.Count());
             Assert.IsFalse(gender.New);
+        }
+
+        [Test]
+        public void RefreshTest()
+        {
+            Gender male = new Gender
+            {
+                GenderId = "273c6d62-be89-48df-9e04-775125bc4f6a"
+            };
+            Assert.AreEqual("Male", genders.Refresh(male).Name);
+            Gender female = new Gender
+            {
+                GenderId = "a7d96f3a-a990-4619-82d0-fcd9a9629f31"
+            };
+            IEnumerable<Gender> refreshed = genders.Refresh(new Gender[]
+            {
+                male,
+                male,
+                male,
+                female
+            });
+            Assert.AreEqual(2, refreshed.Count());
         }
     }
 

@@ -6,7 +6,7 @@ namespace ERHMS.Domain
 {
     public class UniquePair : GuidEntity
     {
-        protected override string Guid
+        public override string Guid
         {
             get { return UniquePairId; }
             set { UniquePairId = value; }

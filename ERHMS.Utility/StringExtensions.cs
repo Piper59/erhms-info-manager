@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ERHMS.Utility
@@ -9,19 +7,9 @@ namespace ERHMS.Utility
     {
         private static readonly Regex NewLinePattern = new Regex(@"\r\n|\r(?!\n)|(?<!\r)\n");
 
-        public static bool EqualsIgnoreCase(this string @this, string value)
+        public static bool Contains(this string @this, string value, StringComparison comparisonType)
         {
-            return string.Equals(@this, value, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public static bool ContainsIgnoreCase(this string @this, string value)
-        {
-            return @this.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
-        public static bool ContainsIgnoreCase(this IEnumerable<string> @this, string value)
-        {
-            return @this.Contains(value, StringComparer.OrdinalIgnoreCase);
+            return @this.IndexOf(value, comparisonType) >= 0;
         }
 
         public static string[] SplitLines(this string @this)

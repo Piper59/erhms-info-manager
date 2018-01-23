@@ -352,7 +352,7 @@ namespace ERHMS.Test.DataAccess
             IncidentRolesTest(incidentInfo2);
             ICollection<IncidentRole> incidentRoles = context.IncidentRoles.Select().ToList();
             Assert.AreEqual(4, incidentRoles.Count);
-            Assert.IsTrue(incidentRoles.All(incidentRole => !incidentRole.IsInUse));
+            Assert.IsTrue(incidentRoles.All(incidentRole => !incidentRole.InUse));
         }
 
         private void IncidentRolesTest(IncidentInfo incidentInfo)
@@ -381,7 +381,7 @@ namespace ERHMS.Test.DataAccess
             incidentInfo.Team1 = TeamsTest(incidentInfo, 0);
             incidentInfo.Team2 = TeamsTest(incidentInfo, 1);
             Assert.AreEqual(2, context.Teams.SelectByIncidentId(incidentInfo.IncidentId).Count());
-            Assert.IsTrue(context.IncidentRoles.SelectById(incidentInfo.TeamRole.IncidentRoleId).IsInUse);
+            Assert.IsTrue(context.IncidentRoles.SelectById(incidentInfo.TeamRole.IncidentRoleId).InUse);
             TeamsWithRespondersTest(incidentInfo.Responders.Take(4), incidentInfo, false);
             TeamsWithRespondersTest(incidentInfo.Responders.ElementsAt(0, 2), incidentInfo, true);
         }
@@ -516,7 +516,7 @@ namespace ERHMS.Test.DataAccess
             JobRespondersTest(incidentInfo);
             JobLocationsTest(incidentInfo);
             Assert.AreEqual(1, context.Jobs.SelectByIncidentId(incidentInfo.IncidentId).Count());
-            Assert.IsTrue(context.IncidentRoles.SelectById(incidentInfo.JobRole.IncidentRoleId).IsInUse);
+            Assert.IsTrue(context.IncidentRoles.SelectById(incidentInfo.JobRole.IncidentRoleId).InUse);
             return retrieved;
         }
 
