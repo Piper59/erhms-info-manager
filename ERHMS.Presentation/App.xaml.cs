@@ -128,10 +128,6 @@ namespace ERHMS.Presentation
                 typeof(TextBox),
                 UIElement.LostKeyboardFocusEvent,
                 new KeyboardFocusChangedEventHandler(TextBox_LostKeyboardFocus));
-            EventManager.RegisterClassHandler(
-                typeof(TabItem),
-                UIElement.GotKeyboardFocusEvent,
-                new KeyboardFocusChangedEventHandler(TabItem_GotKeyboardFocus));
             MainViewModel model = new MainViewModel(services);
             services.Document = model;
             MainView view = new MainView(model);
@@ -155,15 +151,6 @@ namespace ERHMS.Presentation
             if (e.KeyboardDevice.IsKeyDown(Key.Tab))
             {
                 ((TextBox)sender).Select(0, 0);
-            }
-        }
-
-        private void TabItem_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            TabItem tabItem = e.OriginalSource as TabItem;
-            if (tabItem != null && VisualTreeHelper.GetParent(tabItem).GetType() == typeof(DocumentPaneTabPanel))
-            {
-                Keyboard.ClearFocus();
             }
         }
 

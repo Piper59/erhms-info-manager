@@ -41,25 +41,29 @@ namespace ERHMS.Presentation.Behaviors
 
         protected override void OnAttached()
         {
+            AssociatedObject.Loaded += AssociatedObject_Loaded;
+            AssociatedObject.Unloaded += AssociatedObject_Unloaded;
             if (AssociatedObject.IsLoaded)
             {
                 Attach();
-            }
-            else
-            {
-                AssociatedObject.Loaded += (sender, e) =>
-                {
-                    Attach();
-                };
             }
         }
 
         protected override void OnDetaching()
         {
-            if (window != null)
-            {
-                Detach();
-            }
+            AssociatedObject.Loaded -= AssociatedObject_Loaded;
+            AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
+            Detach();
+        }
+
+        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e)
+        {
+            Attach();
+        }
+
+        private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Detach();
         }
 
         private void Attach()
