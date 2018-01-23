@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System;
 
 namespace ERHMS.Presentation.ViewModels
@@ -9,21 +10,16 @@ namespace ERHMS.Presentation.ViewModels
         public string Name
         {
             get { return name; }
-            set { Set(nameof(Name), ref name, value); }
+            set { SetProperty(nameof(Name), ref name, value); }
         }
 
-        public RelayCommand SaveCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
         public RoleViewModel(IServiceManager services, string verb)
             : base(services)
         {
             Title = string.Format("{0} a Role", verb);
-            SaveCommand = new RelayCommand(Save, HasName);
-        }
-
-        public bool HasName()
-        {
-            return !string.IsNullOrWhiteSpace(Name);
+            SaveCommand = new Command(Save, CanSave);
         }
 
         public event EventHandler Saved;
@@ -34,6 +30,11 @@ namespace ERHMS.Presentation.ViewModels
         private void OnSaved()
         {
             OnSaved(EventArgs.Empty);
+        }
+
+        public bool CanSave()
+        {
+            return !string.IsNullOrWhiteSpace(Name);
         }
 
         public void Save()

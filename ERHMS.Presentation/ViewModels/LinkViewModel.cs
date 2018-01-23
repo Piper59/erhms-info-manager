@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,20 +21,15 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<Incident> GetItems()
             {
-                return Context.Incidents.SelectUndeleted().OrderBy(incident => incident.Name);
-            }
-
-            public void Select(string incidentId)
-            {
-                SelectedItem = TypedItems.SingleOrDefault(incident => incident.IncidentId.EqualsIgnoreCase(incidentId));
+                return Context.Incidents.SelectUndeleted().OrderBy(incident => incident.Name, StringComparer.OrdinalIgnoreCase);
             }
         }
 
         public TEntity Entity { get; private set; }
         public IncidentListChildViewModel Incidents { get; private set; }
 
-        public RelayCommand LinkCommand { get; private set; }
-        public RelayCommand UnlinkCommand { get; private set; }
+        public ICommand LinkCommand { get; private set; }
+        public ICommand UnlinkCommand { get; private set; }
 
         protected LinkViewModel(IServiceManager services, TEntity entity)
             : base(services)
@@ -43,17 +39,19 @@ namespace ERHMS.Presentation.ViewModels
             Incidents = new IncidentListChildViewModel(services);
             if (entity.Incident != null)
             {
-                Incidents.Select(entity.Incident.IncidentId);
+                Incidents.Select(entity.Incident);
             }
-            LinkCommand = new RelayCommand(Link, Incidents.HasSelectedItem);
-            UnlinkCommand = new RelayCommand(Unlink);
-            Incidents.SelectionChanged += (sender, e) =>
-            {
-                LinkCommand.RaiseCanExecuteChanged();
-            };
+            LinkCommand = new Command(Link, Incidents.HasSelectedItem);
+            UnlinkCommand = new Command(Unlink);
         }
 
         public abstract void Link();
         public abstract void Unlink();
+
+        public override void Dispose()
+        {
+            Incidents.Dispose();
+            base.Dispose();
+        }
     }
 }

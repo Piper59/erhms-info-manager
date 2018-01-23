@@ -1,15 +1,30 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class RecipientViewModel : DialogViewModel
     {
+        public class ResponderListChildViewModel : ListViewModel<Responder>
+        {
+            public ResponderListChildViewModel(IServiceManager services)
+                : base(services)
+            {
+                Refresh();
+            }
+
+            protected override IEnumerable<Responder> GetItems()
+            {
+                return Context.Responders.SelectUndeleted().OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase);
+            }
+        }
+
         private bool isResponder;
         public bool IsResponder
         {
@@ -19,50 +34,36 @@ namespace ERHMS.Presentation.ViewModels
             }
             set
             {
-                if (Set(nameof(IsResponder), ref isResponder, value))
+                SetProperty(nameof(IsResponder), ref isResponder, value);
+                if (value)
                 {
-                    if (value)
-                    {
-                        EmailAddress = null;
-                    }
-                    else
-                    {
-                        Responder = null;
-                    }
+                    EmailAddress = null;
+                }
+                else
+                {
+                    Responders.Unselect();
                 }
             }
         }
 
-        public ICollection<Responder> Responders { get; private set; }
-
-        private Responder responder;
-        public Responder Responder
-        {
-            get { return responder; }
-            set { Set(nameof(Responder), ref responder, value); }
-        }
+        public ResponderListChildViewModel Responders { get; private set; }
 
         private string emailAddress;
         public string EmailAddress
         {
             get { return emailAddress; }
-            set { Set(nameof(EmailAddress), ref emailAddress, value); }
+            set { SetProperty(nameof(EmailAddress), ref emailAddress, value); }
         }
 
-        public RelayCommand AddCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
 
-        public RecipientViewModel(IServiceManager services, bool editable)
+        public RecipientViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Add a Recipient";
             IsResponder = true;
-            if (editable)
-            {
-                Responders = Context.Responders.SelectUndeleted()
-                    .OrderBy(responder => responder.FullName)
-                    .ToList();
-            }
-            AddCommand = new RelayCommand(Add);
+            Responders = new ResponderListChildViewModel(services);
+            AddCommand = new AsyncCommand(AddAsync);
         }
 
         public event EventHandler Added;
@@ -75,35 +76,24 @@ namespace ERHMS.Presentation.ViewModels
             OnAdded(EventArgs.Empty);
         }
 
-        public string GetEmailAddress()
+        private async Task<bool> ValidateAsync()
         {
-            return IsResponder ? Responder?.EmailAddress : EmailAddress;
-        }
-
-        private bool Validate()
-        {
-            if (Responder == null && string.IsNullOrWhiteSpace(EmailAddress))
+            if (!Responders.HasSelectedItem() && string.IsNullOrWhiteSpace(EmailAddress))
             {
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = "Please select a responder or enter an email address."
-                });
+                await Services.Dialog.AlertAsync("Please select a responder or enter an email address.");
                 return false;
             }
             if (!IsResponder && !MailExtensions.IsValidAddress(EmailAddress))
             {
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = "Please enter a valid email address."
-                });
+                await Services.Dialog.AlertAsync("Please enter a valid email address.");
                 return false;
             }
             return true;
         }
 
-        public void Add()
+        public async Task AddAsync()
         {
-            if (!Validate())
+            if (!await ValidateAsync())
             {
                 return;
             }
@@ -111,9 +101,10 @@ namespace ERHMS.Presentation.ViewModels
             Close();
         }
 
-        public override string ToString()
+        public override void Dispose()
         {
-            return IsResponder ? Responder?.FullName : EmailAddress;
+            Responders.Dispose();
+            base.Dispose();
         }
     }
 }

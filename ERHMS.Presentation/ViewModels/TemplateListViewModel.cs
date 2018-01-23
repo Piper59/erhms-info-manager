@@ -1,91 +1,70 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TemplateListViewModel : ListViewModel<TemplateInfo>
+    public class TemplateListViewModel : DocumentViewModel
     {
-        public static void Create(IServiceManager services, TemplateInfo template, Incident incident)
+        public class TemplateListChildViewModel : ListViewModel<TemplateInfo>
         {
-            string prefix = incident == null ? "" : incident.Name + "_";
-            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(services.Context.Project.FilePath, template.FilePath, prefix);
-            wrapper.Event += (sender, e) =>
+            public Incident Incident { get; private set; }
+
+            public TemplateListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
             {
-                if (e.Type == "ViewCreated")
-                {
-                    if (incident != null)
-                    {
-                        services.Context.ViewLinks.Save(new ViewLink(true)
-                        {
-                            ViewId = e.Properties.ViewId,
-                            IncidentId = incident.IncidentId
-                        });
-                    }
-                    services.Dispatcher.Invoke(() =>
-                    {
-                        Messenger.Default.Send(new RefreshMessage(typeof(View)));
-                        services.Documents.ShowViews();
-                    });
-                }
-            };
-            services.Dialogs.InvokeAsync(wrapper);
+                Incident = incident;
+                Refresh();
+            }
+
+            protected override IEnumerable<TemplateInfo> GetItems()
+            {
+                return TemplateInfo.GetByLevel(TemplateLevel.View).OrderBy(templateInfo => templateInfo.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(TemplateInfo item)
+            {
+                yield return item.Name;
+                yield return item.Description;
+            }
         }
 
         public Incident Incident { get; private set; }
+        public TemplateListChildViewModel Templates { get; private set; }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
+        public ICommand CreateCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
 
         public TemplateListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Templates";
             Incident = incident;
-            Refresh();
-            CreateCommand = new RelayCommand(Create, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            SelectionChanged += (sender, e) =>
+            CreateCommand = new AsyncCommand(CreateAsync, Templates.HasSelectedItem);
+            DeleteCommand = new AsyncCommand(DeleteAsync, Templates.HasSelectedItem);
+        }
+
+        public async Task CreateAsync()
+        {
+            string prefix = Incident == null ? "" : Incident.Name + "_";
+            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(Context.Project.FilePath, Templates.SelectedItem.FilePath, prefix);
+            wrapper.AddViewCreatedHandler(Services, Incident);
+            await Services.Wrapper.InvokeAsync(wrapper);
+        }
+
+        public async Task DeleteAsync()
+        {
+            if (await Services.Dialog.ConfirmAsync("Delete the selected template?", "Delete"))
             {
-                CreateCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        protected override IEnumerable<TemplateInfo> GetItems()
-        {
-            return TemplateInfo.GetByLevel(TemplateLevel.View).OrderBy(item => item.Name);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(TemplateInfo item)
-        {
-            yield return item.Name;
-            yield return item.Description;
-        }
-
-        public void Create()
-        {
-            Create(Services, SelectedItem, Incident);
-        }
-
-        public void Delete()
-        {
-            ConfirmMessage msg = new ConfirmMessage
-            {
-                Verb = "Delete",
-                Message = "Delete the selected template?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                SelectedItem.Delete();
-                MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
-            };
-            MessengerInstance.Send(msg);
+                Templates.SelectedItem.Delete();
+                Services.Data.Refresh(typeof(TemplateInfo));
+            }
         }
     }
 }

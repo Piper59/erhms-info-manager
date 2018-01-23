@@ -1,101 +1,133 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
+using ERHMS.Presentation.Commands;
 using ERHMS.Presentation.Dialogs;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class DataSourceListViewModel : ListViewModel<ProjectInfo>
+    [ContextSafe]
+    public class DataSourceListViewModel : DocumentViewModel
     {
-        public RelayCommand OpenCommand { get; private set; }
-        public RelayCommand AddNewCommand { get; private set; }
-        public RelayCommand AddExistingCommand { get; private set; }
-        public RelayCommand RemoveCommand { get; private set; }
+        public class DataSourceListChildViewModel : ListViewModel<ProjectInfo>
+        {
+            public DataSourceListChildViewModel(IServiceManager services)
+                : base(services)
+            {
+                Refresh();
+            }
+
+            protected override IEnumerable<ProjectInfo> GetItems()
+            {
+                ICollection<ProjectInfo> projectInfos = new List<ProjectInfo>();
+                foreach (string path in Settings.Default.DataSourcePaths)
+                {
+                    ProjectInfo projectInfo;
+                    if (ProjectInfo.TryRead(path, out projectInfo))
+                    {
+                        projectInfos.Add(projectInfo);
+                    }
+                }
+                return projectInfos.OrderBy(projectInfo => projectInfo.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(ProjectInfo item)
+            {
+                yield return item.Name;
+                yield return item.Description;
+            }
+        }
+
+        public DataSourceListChildViewModel DataSources { get; private set; }
+
+        public ICommand OpenCommand { get; private set; }
+        public ICommand AddNewCommand { get; private set; }
+        public ICommand AddExistingCommand { get; private set; }
+        public ICommand RemoveCommand { get; private set; }
 
         public DataSourceListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Data Sources";
-            Refresh();
-            OpenCommand = new RelayCommand(Open, HasSelectedItem);
-            AddNewCommand = new RelayCommand(AddNew);
-            AddExistingCommand = new RelayCommand(AddExisting);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            SelectionChanged += (sender, e) =>
-            {
-                OpenCommand.RaiseCanExecuteChanged();
-                RemoveCommand.RaiseCanExecuteChanged();
-            };
+            DataSources = new DataSourceListChildViewModel(services);
+            OpenCommand = new AsyncCommand(OpenAsync, DataSources.HasSelectedItem);
+            AddNewCommand = new AsyncCommand(AddNewAsync);
+            AddExistingCommand = new Command(AddExisting);
+            RemoveCommand = new AsyncCommand(RemoveAsync, DataSources.HasSelectedItem);
         }
 
-        protected override IEnumerable<ProjectInfo> GetItems()
+        private void Add(string path)
         {
-            ICollection<ProjectInfo> dataSources = new List<ProjectInfo>();
-            foreach (string path in Settings.Default.DataSourcePaths.ToList())
+            Settings.Default.DataSourcePaths.Add(path);
+            Settings.Default.Save();
+            Services.Data.Refresh(typeof(ProjectInfo));
+        }
+
+        private void Remove(string path)
+        {
+            Settings.Default.DataSourcePaths.Remove(path);
+            Settings.Default.Save();
+            Services.Data.Refresh(typeof(ProjectInfo));
+        }
+
+        public async Task OpenAsync()
+        {
+            ProjectInfo projectInfo;
+            if (ProjectInfo.TryRead(DataSources.SelectedItem.FilePath, out projectInfo))
             {
-                ProjectInfo dataSource;
-                if (ProjectInfo.TryRead(path, out dataSource))
+                await Services.Document.SetContextAsync(projectInfo);
+            }
+            else
+            {
+                if (await Services.Dialog.ConfirmAsync("Data source could not be opened. Remove it from the list of data sources?", "Remove"))
                 {
-                    dataSources.Add(dataSource);
-                }
-                else
-                {
-                    DataSourceViewModel.Remove(path);
+                    Remove(DataSources.SelectedItem.FilePath);
                 }
             }
-            return dataSources.OrderBy(dataSource => dataSource.Name);
         }
 
-        protected override IEnumerable<string> GetFilteredValues(ProjectInfo item)
+        public async Task AddNewAsync()
         {
-            yield return item.Name;
-            yield return item.Description;
-        }
-
-        public void Open()
-        {
-            Documents.OpenDataSource(ProjectInfo.Get(SelectedItem.FilePath));
-        }
-
-        public void AddNew()
-        {
-            Dialogs.ShowAsync(new DataSourceViewModel(Services));
+            using (DataSourceViewModel model = new DataSourceViewModel(Services))
+            {
+                model.Added += (sender, e) =>
+                {
+                    Add(model.FilePath);
+                };
+                await Services.Dialog.ShowAsync(model);
+            }
         }
 
         public void AddExisting()
         {
-            using (OpenFileDialog dialog = new OpenFileDialog())
+            string path = Services.Dialog.OpenFile(
+                "Add Existing Data Source",
+                Configuration.GetNewInstance().Directories.Project,
+                FileDialogExtensions.GetFilter("Data Sources", Project.FileExtension));
+            if (path != null)
             {
-                dialog.Title = "Add Existing Data Source";
-                dialog.InitialDirectory = Configuration.GetNewInstance().Directories.Project;
-                dialog.Filter = FileDialogExtensions.GetFilter("Data Sources", Project.FileExtension);
-                if (dialog.ShowDialog(Dialogs.Win32Window) == DialogResult.OK)
-                {
-                    DataSourceViewModel.Add(dialog.FileName);
-                    MessengerInstance.Send(new RefreshMessage(typeof(ProjectInfo)));
-                }
+                Add(path);
             }
         }
 
-        public void Remove()
+        public async Task RemoveAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Remove the selected data source?", "Remove"))
             {
-                Verb = "Remove",
-                Message = "Remove the selected data source?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                DataSourceViewModel.Remove(SelectedItem.FilePath);
-                MessengerInstance.Send(new RefreshMessage(typeof(ProjectInfo)));
-            };
-            MessengerInstance.Send(msg);
+                Remove(DataSources.SelectedItem.FilePath);
+            }
+        }
+
+        public override void Dispose()
+        {
+            DataSources.Dispose();
+            base.Dispose();
         }
     }
 }

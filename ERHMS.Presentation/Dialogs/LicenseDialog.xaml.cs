@@ -7,7 +7,15 @@ namespace ERHMS.Presentation.Dialogs
 {
     public partial class LicenseDialog : CustomDialog
     {
-        public static async Task<MessageDialogResult> ShowAsync(MetroWindow window)
+        private static MetroDialogSettings GetSettings()
+        {
+            return new MetroDialogSettings
+            {
+                CustomResourceDictionary = (ResourceDictionary)Application.Current.Resources["Accent"]
+            };
+        }
+
+        public static async Task<bool> ShowAsync(MetroWindow window)
         {
             LicenseDialog dialog = new LicenseDialog(window);
             return await dialog.ShowAsync();
@@ -16,11 +24,10 @@ namespace ERHMS.Presentation.Dialogs
         public MessageDialogResult Result { get; private set; }
 
         public LicenseDialog(MetroWindow window)
-            : base(window)
+            : base(window, GetSettings())
         {
             InitializeComponent();
-            Resources.MergedDictionaries.Add(App.Current.Accent);
-            Title = string.Format("{0} License", App.Title);
+            Title = string.Format("{0} License", Application.Current.Resources["AppTitle"]);
         }
 
         private async void Accept_Click(object sender, RoutedEventArgs e)
@@ -35,11 +42,11 @@ namespace ERHMS.Presentation.Dialogs
             await OwningWindow.HideMetroDialogAsync(this);
         }
 
-        public async Task<MessageDialogResult> ShowAsync()
+        public async Task<bool> ShowAsync()
         {
             await OwningWindow.ShowMetroDialogAsync(this);
             await WaitUntilUnloadedAsync();
-            return Result;
+            return Result == MessageDialogResult.Affirmative;
         }
     }
 }

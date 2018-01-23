@@ -1,50 +1,56 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentNoteListViewModel : ListViewModel<IncidentNote>
+    public class IncidentNoteListViewModel : DocumentViewModel
     {
+        public class IncidentNoteListChildViewModel : ListViewModel<IncidentNote>
+        {
+            public Incident Incident { get; private set; }
+
+            public IncidentNoteListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
+            {
+                Incident = incident;
+                Refresh();
+            }
+
+            protected override IEnumerable<IncidentNote> GetItems()
+            {
+                return Context.IncidentNotes.SelectByIncidentId(Incident.IncidentId).OrderByDescending(incidentNote => incidentNote.Date);
+            }
+        }
+
         public Incident Incident { get; private set; }
+        public IncidentNoteListChildViewModel IncidentNotes { get; private set; }
 
         private string content;
         [DirtyCheck]
         public string Content
         {
             get { return content; }
-            set { Set(nameof(Content), ref content, value); }
+            set { SetProperty(nameof(Content), ref content, value); }
         }
 
-        public RelayCommand SaveCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
         public IncidentNoteListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Notes";
             Incident = incident;
-            Refresh();
-            SaveCommand = new RelayCommand(Save, HasContent);
-            PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(Content))
-                {
-                    SaveCommand.RaiseCanExecuteChanged();
-                }
-            };
+            IncidentNotes = new IncidentNoteListChildViewModel(services, incident);
+            SaveCommand = new Command(Save, CanSave);
         }
 
-        public bool HasContent()
+        public bool CanSave()
         {
             return !string.IsNullOrWhiteSpace(Content);
-        }
-
-        protected override IEnumerable<IncidentNote> GetItems()
-        {
-            return Context.IncidentNotes.SelectByIncidentId(Incident.IncidentId).OrderByDescending(note => note.Date);
         }
 
         public void Save()
@@ -55,9 +61,15 @@ namespace ERHMS.Presentation.ViewModels
                 Content = Content,
                 Date = DateTime.Now
             });
-            MessengerInstance.Send(new RefreshMessage(typeof(IncidentNote)));
+            Services.Data.Refresh(typeof(IncidentNote));
             Content = "";
             Dirty = false;
+        }
+
+        public override void Dispose()
+        {
+            IncidentNotes.Dispose();
+            base.Dispose();
         }
     }
 }

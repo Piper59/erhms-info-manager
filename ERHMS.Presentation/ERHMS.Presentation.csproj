@@ -51,14 +51,6 @@
     <Reference Include="EpiInfo.Plugin">
       <HintPath>..\Epi Info 7\EpiInfo.Plugin.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19038, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=f46ff315b1088208, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -220,6 +212,10 @@
     <Compile Include="Behaviors\ControlPageNavigationBehavior.cs" />
     <Compile Include="Behaviors\FixKeyboardCuesBehavior.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClickBehavior.cs" />
+    <Compile Include="Commands\AsyncCommand.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Controls\BindingProxy.cs" />
     <Compile Include="Controls\CappedPath.cs" />
     <Compile Include="Controls\Filter.xaml.cs">
@@ -264,42 +260,48 @@
     <Compile Include="Dialogs\LicenseDialog.xaml.cs">
       <DependentUpon>LicenseDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\RootPathDialog.cs" />
+    <Compile Include="Infrastructure\BusyService.cs" />
+    <Compile Include="Infrastructure\ContextSafeAttribute.cs" />
+    <Compile Include="Infrastructure\DataService.cs" />
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
-    <Compile Include="Infrastructure\IDialogManager.cs" />
-    <Compile Include="Infrastructure\IDispatcher.cs" />
-    <Compile Include="Infrastructure\IDocumentManager.cs" />
-    <Compile Include="Infrastructure\IServiceManager.cs" />
-    <Compile Include="Infrastructure\PrintExtensions.cs" />
+    <Compile Include="Infrastructure\DispatchService.cs" />
+    <Compile Include="Infrastructure\ObservableObject.cs" />
+    <Compile Include="Infrastructure\PrintService.cs" />
+    <Compile Include="Infrastructure\ProcessService.cs" />
+    <Compile Include="Infrastructure\RefreshingEventArgs.cs" />
+    <Compile Include="Infrastructure\ServiceManager.cs" />
+    <Compile Include="Infrastructure\StringService.cs" />
     <Compile Include="Infrastructure\ValidationError.cs" />
     <Compile Include="Infrastructure\WaitCursor.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Infrastructure\WrapperExtensions.cs" />
     <Compile Include="Markup\ArcExtension.cs" />
-    <Compile Include="Messages\AlertMessage.cs" />
-    <Compile Include="Messages\BlockMessage.cs" />
-    <Compile Include="Messages\ConfirmMessage.cs" />
-    <Compile Include="Messages\ExitMessage.cs" />
-    <Compile Include="Messages\RefreshMessage.cs" />
-    <Compile Include="Messages\ShutdownMessage.cs" />
-    <Compile Include="Messages\ToastMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\IAppService.cs" />
+    <Compile Include="Services\IBusyService.cs" />
+    <Compile Include="Services\IDataService.cs" />
+    <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\IDispatchService.cs" />
+    <Compile Include="Services\IDocumentService.cs" />
+    <Compile Include="Services\IPrintService.cs" />
+    <Compile Include="Services\IProcessService.cs" />
+    <Compile Include="Services\IServiceManager.cs" />
+    <Compile Include="Services\IStringService.cs" />
+    <Compile Include="Services\IWrapperService.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AnalysisViewModel.cs" />
     <Compile Include="ViewModels\AssignmentListViewModel.cs" />
-    <Compile Include="ViewModels\AssignViewModel.cs" />
     <Compile Include="ViewModels\CanvasLinkViewModel.cs" />
     <Compile Include="ViewModels\CanvasListViewModel.cs" />
     <Compile Include="ViewModels\CanvasViewModel.cs" />
     <Compile Include="ViewModels\DataSourceListViewModel.cs" />
     <Compile Include="ViewModels\DataSourceViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
+    <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\EmailViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
+    <Compile Include="ViewModels\ImportExportViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
     <Compile Include="ViewModels\IncidentNoteListViewModel.cs" />
@@ -315,8 +317,8 @@
     <Compile Include="ViewModels\JobViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\ListViewModel.cs" />
-    <Compile Include="ViewModels\LocationDetailViewModel.cs" />
     <Compile Include="ViewModels\LocationListViewModel.cs" />
+    <Compile Include="ViewModels\LocationViewModel.cs" />
     <Compile Include="ViewModels\LogListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MergeAutomatedViewModel.cs" />
@@ -324,13 +326,13 @@
     <Compile Include="ViewModels\PgmLinkViewModel.cs" />
     <Compile Include="ViewModels\PgmListViewModel.cs" />
     <Compile Include="ViewModels\PgmViewModel.cs" />
+    <Compile Include="ViewModels\PostpopulateViewModel.cs" />
     <Compile Include="ViewModels\PrepopulateViewModel.cs" />
     <Compile Include="ViewModels\RecipientViewModel.cs" />
     <Compile Include="ViewModels\RecordListViewModel.cs" />
-    <Compile Include="ViewModels\ResponderDetailViewModel.cs" />
-    <Compile Include="ViewModels\ResponderLinkViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
     <Compile Include="ViewModels\ResponderReportViewModel.cs" />
+    <Compile Include="ViewModels\ResponderViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\RosterListViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
@@ -352,9 +354,6 @@
     </Compile>
     <Compile Include="Views\AssignmentListView.xaml.cs">
       <DependentUpon>AssignmentListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AssignView.xaml.cs">
-      <DependentUpon>AssignView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CanvasListView.xaml.cs">
       <DependentUpon>CanvasListView.xaml</DependentUpon>
@@ -413,14 +412,17 @@
     <Compile Include="Views\LinkView.xaml.cs">
       <DependentUpon>LinkView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LocationDetailView.xaml.cs">
-      <DependentUpon>LocationDetailView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\LocationListView.xaml.cs">
       <DependentUpon>LocationListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LocationView.xaml.cs">
+      <DependentUpon>LocationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogListView.xaml.cs">
       <DependentUpon>LogListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MergeAutomatedView.xaml.cs">
       <DependentUpon>MergeAutomatedView.xaml</DependentUpon>
@@ -431,6 +433,9 @@
     <Compile Include="Views\PgmListView.xaml.cs">
       <DependentUpon>PgmListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PostpopulateView.xaml.cs">
+      <DependentUpon>PostpopulateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PrepopulateView.xaml.cs">
       <DependentUpon>PrepopulateView.xaml</DependentUpon>
     </Compile>
@@ -440,14 +445,11 @@
     <Compile Include="Views\RecordListView.xaml.cs">
       <DependentUpon>RecordListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ResponderDetailView.xaml.cs">
-      <DependentUpon>ResponderDetailView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ResponderLinkView.xaml.cs">
-      <DependentUpon>ResponderLinkView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ResponderListView.xaml.cs">
       <DependentUpon>ResponderListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ResponderView.xaml.cs">
+      <DependentUpon>ResponderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RoleView.xaml.cs">
       <DependentUpon>RoleView.xaml</DependentUpon>
@@ -530,10 +532,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Resources\App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -571,10 +569,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AssignmentListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AssignView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -654,15 +648,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LocationDetailView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\LocationListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\LocationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LogListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -678,6 +676,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PostpopulateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PrepopulateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -690,15 +692,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ResponderDetailView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ResponderLinkView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ResponderListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResponderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

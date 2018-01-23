@@ -1,33 +1,34 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class JobLocationListViewModel : ListViewModel<JobLocation>
+    public class JobLocationListViewModel : DocumentViewModel
     {
         public class LocationListChildViewModel : ListViewModel<Location>
         {
             public Job Job { get; private set; }
 
-            public RelayCommand EditCommand { get; private set; }
+            public ICommand EditCommand { get; private set; }
 
             public LocationListChildViewModel(IServiceManager services, Job job)
                 : base(services)
             {
                 Job = job;
-                EditCommand = new RelayCommand(Edit, HasSelectedItem);
-                SelectionChanged += (sender, e) =>
-                {
-                    EditCommand.RaiseCanExecuteChanged();
-                };
+                Refresh();
+                EditCommand = new Command(Edit, HasSelectedItem);
             }
 
             protected override IEnumerable<Location> GetItems()
             {
-                return Context.Locations.SelectJobbable(Job.IncidentId, Job.JobId).OrderBy(location => location.Name);
+                return Context.Locations.SelectJobbable(Job.IncidentId, Job.JobId)
+                    .OrderBy(location => location.Name, StringComparer.OrdinalIgnoreCase);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Location item)
@@ -37,16 +38,52 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Documents.ShowLocation((Location)SelectedItem.Clone());
+                Services.Document.Show(
+                    model => model.Location.Equals(SelectedItem),
+                    () => new LocationViewModel(Services, Context.Locations.Refresh(SelectedItem)));
+            }
+        }
+
+        public class JobLocationListChildViewModel : ListViewModel<JobLocation>
+        {
+            public Job Job { get; private set; }
+
+            public ICommand EditCommand { get; private set; }
+
+            public JobLocationListChildViewModel(IServiceManager services, Job job)
+                : base(services)
+            {
+                Job = job;
+                Refresh();
+                EditCommand = new Command(Edit, HasSelectedItem);
+            }
+
+            protected override IEnumerable<JobLocation> GetItems()
+            {
+                return Context.JobLocations.SelectByJobId(Job.JobId)
+                    .OrderBy(jobLocation => jobLocation.Location.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(JobLocation item)
+            {
+                yield return item.Location.Name;
+            }
+
+            public void Edit()
+            {
+                Services.Document.Show(
+                    model => model.Location.Equals(SelectedItem.Location),
+                    () => new LocationViewModel(Services, Context.Locations.Refresh(SelectedItem.Location)));
             }
         }
 
         public Job Job { get; private set; }
         public LocationListChildViewModel Locations { get; private set; }
+        public JobLocationListChildViewModel JobLocations { get; private set; }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand RemoveCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
+        public ICommand RemoveCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public JobLocationListViewModel(IServiceManager services, Job job)
             : base(services)
@@ -54,29 +91,10 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Locations";
             Job = job;
             Locations = new LocationListChildViewModel(services, job);
-            Refresh();
-            AddCommand = new RelayCommand(Add, Locations.HasSelectedItem);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            Locations.SelectionChanged += (sender, e) =>
-            {
-                AddCommand.RaiseCanExecuteChanged();
-            };
-            SelectionChanged += (sender, e) =>
-            {
-                RemoveCommand.RaiseCanExecuteChanged();
-                EditCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        protected override IEnumerable<JobLocation> GetItems()
-        {
-            return Context.JobLocations.SelectByJobId(Job.JobId).OrderBy(jobLocation => jobLocation.Location.Name);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(JobLocation item)
-        {
-            yield return item.Location.Name;
+            JobLocations = new JobLocationListChildViewModel(services, job);
+            AddCommand = new Command(Add, Locations.HasAnySelectedItems);
+            RemoveCommand = new AsyncCommand(RemoveAsync, JobLocations.HasAnySelectedItems);
+            RefreshCommand = new Command(Refresh);
         }
 
         public void Add()
@@ -89,36 +107,34 @@ namespace ERHMS.Presentation.ViewModels
                     LocationId = location.LocationId
                 });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(JobLocation)));
+            Locations.Refresh();
+            Services.Data.Refresh(typeof(JobLocation));
         }
 
-        public void Remove()
+        public async Task RemoveAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Remove the selected locations?", "Remove"))
             {
-                Verb = "Remove",
-                Message = "Remove the selected locations?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                foreach (JobLocation jobLocation in SelectedItems)
+                foreach (JobLocation jobLocation in JobLocations.SelectedItems)
                 {
                     Context.JobLocations.Delete(jobLocation);
                 }
-                MessengerInstance.Send(new RefreshMessage(typeof(JobLocation)));
-            };
-            MessengerInstance.Send(msg);
+                Locations.Refresh();
+                Services.Data.Refresh(typeof(JobLocation));
+            }
         }
 
-        public void Edit()
-        {
-            Documents.ShowLocation((Location)SelectedItem.Location.Clone());
-        }
-
-        public override void Refresh()
+        public void Refresh()
         {
             Locations.Refresh();
-            base.Refresh();
+            JobLocations.Refresh();
+        }
+
+        public override void Dispose()
+        {
+            Locations.Dispose();
+            JobLocations.Dispose();
+            base.Dispose();
         }
     }
 }

@@ -8,6 +8,14 @@ namespace ERHMS.Presentation.Dialogs
 {
     public partial class ErrorDialog : CustomDialog
     {
+        private static MetroDialogSettings GetSettings()
+        {
+            return new MetroDialogSettings
+            {
+                CustomResourceDictionary = (ResourceDictionary)Application.Current.Resources["Accent"]
+            };
+        }
+
         public static async Task ShowAsync(MetroWindow window, string message, Exception exception)
         {
             ErrorDialog dialog = new ErrorDialog(window, message, exception);
@@ -15,10 +23,9 @@ namespace ERHMS.Presentation.Dialogs
         }
 
         public ErrorDialog(MetroWindow window, string message, Exception exception)
-            : base(window)
+            : base(window, GetSettings())
         {
             InitializeComponent();
-            Resources.MergedDictionaries.Add(App.Current.Accent);
             Title = "Error";
             Message.Text = message;
             Exception.Text = string.Format("{0}: {1}", exception.GetType().FullName, exception.Message);

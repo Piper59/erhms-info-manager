@@ -1,13 +1,16 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class AssignmentListViewModel : ListViewModel<Assignment>
+    public class AssignmentListViewModel : DocumentViewModel
     {
         public class ViewListChildViewModel : ListViewModel<View>
         {
@@ -17,6 +20,7 @@ namespace ERHMS.Presentation.ViewModels
                 : base(services)
             {
                 Incident = incident;
+                Refresh();
             }
 
             protected override IEnumerable<View> GetItems()
@@ -30,7 +34,7 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     views = Context.Views.SelectByIncidentId(Incident.IncidentId);
                 }
-                return views.OrderBy(view => view.Name);
+                return views.OrderBy(view => view.Name, StringComparer.OrdinalIgnoreCase);
             }
         }
 
@@ -38,17 +42,14 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public RelayCommand EditCommand { get; private set; }
+            public ICommand EditCommand { get; private set; }
 
             public ResponderListChildViewModel(IServiceManager services, Incident incident)
                 : base(services)
             {
                 Incident = incident;
-                EditCommand = new RelayCommand(Edit, HasSelectedItem);
-                SelectionChanged += (sender, e) =>
-                {
-                    EditCommand.RaiseCanExecuteChanged();
-                };
+                Refresh();
+                EditCommand = new Command(Edit, HasSelectedItem);
             }
 
             protected override IEnumerable<Responder> GetItems()
@@ -62,7 +63,7 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     responders = Context.Rosters.SelectUndeletedByIncidentId(Incident.IncidentId).Select(roster => roster.Responder);
                 }
-                return responders.OrderBy(responder => responder.FullName);
+                return responders.OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
@@ -78,81 +79,71 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Documents.ShowResponder(SelectedItem);
+                Services.Document.Show(
+                    model => model.Responder.Equals(SelectedItem),
+                    () => new ResponderViewModel(Services, Context.Responders.Refresh(SelectedItem)));
             }
         }
 
-        public Incident Incident { get; private set; }
+        public class AssignmentListChildViewModel : ListViewModel<Assignment>
+        {
+            public Incident Incident { get; private set; }
+
+            public AssignmentListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
+            {
+                Incident = incident;
+                Refresh();
+            }
+
+            protected override IEnumerable<Assignment> GetItems()
+            {
+                IEnumerable<Assignment> assignments;
+                if (Incident == null)
+                {
+                    assignments = Context.Assignments.SelectUndeleted();
+                }
+                else
+                {
+                    assignments = Context.Assignments.SelectUndeletedByIncidentId(Incident.IncidentId);
+                }
+                return assignments.OrderBy(assignment => assignment.View.Name, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(assignment => assignment.Responder.FullName, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(Assignment item)
+            {
+                yield return item.View.Name;
+                yield return item.Responder.FullName;
+                yield return item.View.Incident?.Name;
+            }
+        }
+
         public ViewListChildViewModel Views { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
+        public AssignmentListChildViewModel Assignments { get; private set; }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand RemoveCommand { get; private set; }
-        public RelayCommand EmailCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
+        public ICommand RemoveCommand { get; private set; }
+        public ICommand EmailCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public AssignmentListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Assignments";
-            Incident = incident;
             Views = new ViewListChildViewModel(services, incident);
             Responders = new ResponderListChildViewModel(services, incident);
-            Refresh();
-            AddCommand = new RelayCommand(Add, CanAdd);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            EmailCommand = new RelayCommand(Email, CanEmail);
-            Views.SelectionChanged += (sender, e) =>
-            {
-                AddCommand.RaiseCanExecuteChanged();
-            };
-            Responders.SelectionChanged += (sender, e) =>
-            {
-                AddCommand.RaiseCanExecuteChanged();
-            };
-            SelectionChanged += (sender, e) =>
-            {
-                RemoveCommand.RaiseCanExecuteChanged();
-                EmailCommand.RaiseCanExecuteChanged();
-            };
+            Assignments = new AssignmentListChildViewModel(services, incident);
+            AddCommand = new Command(Add, CanAdd);
+            RemoveCommand = new AsyncCommand(RemoveAsync, Assignments.HasAnySelectedItems);
+            EmailCommand = new Command(Email, CanEmail);
+            RefreshCommand = new Command(Refresh);
         }
 
         public bool CanAdd()
         {
-            return Views.HasSelectedItem() && Responders.HasSelectedItem();
-        }
-
-        public bool CanEmail()
-        {
-            if (!HasSelectedItem())
-            {
-                return false;
-            }
-            else
-            {
-                int viewId = SelectedItem.ViewId;
-                return TypedSelectedItems.All(assignment => assignment.ViewId == viewId);
-            }
-        }
-
-        protected override IEnumerable<Assignment> GetItems()
-        {
-            IEnumerable<Assignment> assignments;
-            if (Incident == null)
-            {
-                assignments = Context.Assignments.SelectUndeleted();
-            }
-            else
-            {
-                assignments = Context.Assignments.SelectUndeletedByIncidentId(Incident.IncidentId);
-            }
-            return assignments.OrderBy(assignment => assignment.View.Name).ThenBy(assignment => assignment.Responder.FullName);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(Assignment item)
-        {
-            yield return item.View.Name;
-            yield return item.Responder.FullName;
-            yield return item.View.Incident?.Name;
+            return Views.HasSelectedItem() && Responders.HasAnySelectedItems();
         }
 
         public void Add()
@@ -165,48 +156,63 @@ namespace ERHMS.Presentation.ViewModels
                     ResponderId = responder.ResponderId
                 });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(Assignment)));
+            Services.Data.Refresh(typeof(Assignment));
         }
 
-        public void Remove()
+        public async Task RemoveAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Remove the selected assignments?", "Remove"))
             {
-                Verb = "Remove",
-                Message = "Remove the selected assignments?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                foreach (Assignment assignment in SelectedItems)
+                foreach (Assignment assignment in Assignments.SelectedItems)
                 {
                     Context.Assignments.Delete(assignment);
                 }
-                MessengerInstance.Send(new RefreshMessage(typeof(Assignment)));
-            };
-            MessengerInstance.Send(msg);
+                Services.Data.Refresh(typeof(Assignment));
+            }
+        }
+
+        public bool CanEmail()
+        {
+            if (!Assignments.HasAnySelectedItems())
+            {
+                return false;
+            }
+            else
+            {
+                View view = Assignments.SelectedItems.First().View;
+                return Assignments.SelectedItems.All(assignment => assignment.View.Equals(view));
+            }
         }
 
         public void Email()
         {
-            Documents.Show(
-                () =>
+            Services.Document.Show(() =>
+            {
+                IEnumerable<Responder> responders = Assignments.SelectedItems.Select(assignment => assignment.Responder);
+                EmailViewModel model = new EmailViewModel(Services, Context.Responders.Refresh(responders));
+                View view = Context.Views.Refresh(Assignments.SelectedItems.First().View);
+                if (ViewExtensions.IsWebSurvey(view?.WebSurveyId))
                 {
-                    EmailViewModel document = new EmailViewModel(Services, TypedSelectedItems.Select(assignment => assignment.Responder));
-                    if (ViewExtensions.IsWebSurvey(SelectedItem.View.WebSurveyId))
-                    {
-                        document.AppendUrl = true;
-                        document.Views.Select(SelectedItem.ViewId);
-                    }
-                    return document;
-                },
-                document => false);
+                    model.AppendUrl = true;
+                    model.Views.Select(view);
+                }
+                return model;
+            });
         }
 
-        public override void Refresh()
+        public void Refresh()
         {
             Views.Refresh();
             Responders.Refresh();
-            base.Refresh();
+            Assignments.Refresh();
+        }
+
+        public override void Dispose()
+        {
+            Views.Dispose();
+            Responders.Dispose();
+            Assignments.Dispose();
+            base.Dispose();
         }
     }
 }

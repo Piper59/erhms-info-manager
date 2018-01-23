@@ -1,131 +1,127 @@
 ﻿using Epi;
+using ERHMS.Presentation.Commands;
 using ERHMS.Presentation.Dialogs;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
 using Ionic.Zip;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class LogListViewModel : ListViewModel<FileInfo>
+    [ContextSafe]
+    public class LogListViewModel : DocumentViewModel
     {
-        public RelayCommand OpenCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand PackageCommand { get; private set; }
+        public class LogListChildViewModel : ListViewModel<FileInfo>
+        {
+            public LogListChildViewModel(IServiceManager services)
+                : base(services)
+            {
+                Refresh();
+            }
+
+            protected override IEnumerable<FileInfo> GetItems()
+            {
+                DirectoryInfo directory = new DirectoryInfo(Configuration.GetNewInstance().Directories.LogDir);
+                return directory.SearchByExtension(Log.FileExtension).OrderBy(log => log.FullName, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(FileInfo item)
+            {
+                yield return item.FullName;
+            }
+        }
+
+        public LogListChildViewModel Logs { get; private set; }
+
+        public ICommand OpenCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand PackageCommand { get; private set; }
 
         public LogListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Logs";
-            Refresh();
-            OpenCommand = new RelayCommand(Open, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            PackageCommand = new RelayCommand(Package, HasSelectedItem);
-            SelectionChanged += (sender, e) =>
-            {
-                OpenCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                PackageCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        protected override IEnumerable<FileInfo> GetItems()
-        {
-            DirectoryInfo directory = new DirectoryInfo(Configuration.GetNewInstance().Directories.LogDir);
-            return directory.SearchByExtension(Log.FileExtension).OrderBy(log => log.FullName);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(FileInfo item)
-        {
-            yield return item.FullName;
+            Logs = new LogListChildViewModel(services);
+            OpenCommand = new Command(Open, Logs.HasAnySelectedItems);
+            DeleteCommand = new AsyncCommand(DeleteAsync, Logs.HasAnySelectedItems);
+            PackageCommand = new AsyncCommand(PackageAsync, Logs.HasAnySelectedItems);
         }
 
         public void Open()
         {
-            foreach (FileInfo log in SelectedItems)
+            foreach (FileInfo file in Logs.SelectedItems)
             {
-                log.Refresh();
-                if (log.Exists)
+                file.Refresh();
+                if (file.Exists)
                 {
-                    Process.Start(log.FullName);
+                    Services.Process.Start(new ProcessStartInfo
+                    {
+                        FileName = file.FullName
+                    });
                 }
             }
         }
 
-        public void Delete()
+        public async Task DeleteAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Delete the selected logs?", "Delete"))
             {
-                Verb = "Delete",
-                Message = "Delete the selected logs?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                foreach (FileInfo log in SelectedItems)
+                foreach (FileInfo file in Logs.SelectedItems)
                 {
-                    log.Refresh();
-                    if (log.Exists)
+                    file.Refresh();
+                    if (file.Exists)
                     {
                         try
                         {
-                            IOExtensions.RecycleFile(log.FullName);
+                            IOExtensions.RecycleFile(file.FullName);
                         }
                         catch (OperationCanceledException) { }
                     }
                 }
-                MessengerInstance.Send(new RefreshMessage(typeof(FileInfo)));
-            };
-            MessengerInstance.Send(msg);
+                Services.Data.Refresh(typeof(FileInfo));
+            }
         }
 
-        public void Package()
+        public async Task PackageAsync()
         {
-            using (SaveFileDialog dialog = new SaveFileDialog())
+            string path = Services.Dialog.SaveFile(
+                "Package Logs",
+                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                FileDialogExtensions.GetFilter("ZIP Files", ".zip"),
+                string.Format("Logs-{0:yyyyMMdd}-{0:HHmmss}.zip", DateTime.Now));
+            if (path != null)
             {
-                dialog.Title = "Package Logs";
-                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                dialog.Filter = FileDialogExtensions.GetFilter("ZIP Files", ".zip");
-                dialog.FileName = string.Format("Logs-{0:yyyyMMdd}-{0:HHmmss}.zip", DateTime.Now);
-                if (dialog.ShowDialog(Dialogs.Win32Window) == DialogResult.OK)
+                await Services.Dialog.BlockAsync("Packaging logs \u2026", () =>
                 {
-                    BlockMessage msg = new BlockMessage
+                    using (ZipFile package = new ZipFile())
                     {
-                        Message = "Packaging logs \u2026"
-                    };
-                    msg.Executing += (sender, e) =>
-                    {
-                        using (ZipFile package = new ZipFile())
+                        foreach (FileInfo file in Logs.SelectedItems)
                         {
-                            foreach (FileInfo log in SelectedItems)
+                            file.Refresh();
+                            if (file.Exists)
                             {
-                                log.Refresh();
-                                if (log.Exists)
-                                {
-                                    package.AddFile(log.FullName);
-                                }
-                            }
-                            using (Stream stream = dialog.OpenFile())
-                            {
-                                package.Save(stream);
+                                package.AddFile(file.FullName);
                             }
                         }
-                    };
-                    msg.Executed += (sender, e) =>
-                    {
-                        MessengerInstance.Send(new ToastMessage
+                        using (Stream stream = File.OpenWrite(path))
                         {
-                            Message = "Logs have been packaged."
-                        });
-                    };
-                    MessengerInstance.Send(msg);
-                }
+                            package.Save(stream);
+                        }
+                    }
+                });
+                Services.Dialog.Notify("Logs have been packaged.");
             }
+        }
+
+        public override void Dispose()
+        {
+            Logs.Dispose();
+            base.Dispose();
         }
     }
 }

@@ -1,24 +1,22 @@
 ﻿using Epi;
-using ERHMS.Dapper;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
-using ERHMS.Presentation.Dialogs;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : DocumentViewModel
     {
         private Configuration configuration;
 
@@ -29,7 +27,7 @@ namespace ERHMS.Presentation.ViewModels
         public string LogLevelName
         {
             get { return logLevelName; }
-            set { Set(nameof(LogLevelName), ref logLevelName, value); }
+            set { SetProperty(nameof(LogLevelName), ref logLevelName, value); }
         }
 
         private string rootPath;
@@ -37,7 +35,7 @@ namespace ERHMS.Presentation.ViewModels
         public string RootPath
         {
             get { return rootPath; }
-            set { Set(nameof(RootPath), ref rootPath, value); }
+            set { SetProperty(nameof(RootPath), ref rootPath, value); }
         }
 
         public ObservableCollection<Role> Roles { get; private set; }
@@ -47,7 +45,7 @@ namespace ERHMS.Presentation.ViewModels
         public string EmailHost
         {
             get { return emailHost; }
-            set { Set(nameof(EmailHost), ref emailHost, value); }
+            set { SetProperty(nameof(EmailHost), ref emailHost, value); }
         }
 
         private int? emailPort;
@@ -55,7 +53,7 @@ namespace ERHMS.Presentation.ViewModels
         public int? EmailPort
         {
             get { return emailPort; }
-            set { Set(nameof(EmailPort), ref emailPort, value); }
+            set { SetProperty(nameof(EmailPort), ref emailPort, value); }
         }
 
         private bool emailUseSsl;
@@ -63,7 +61,7 @@ namespace ERHMS.Presentation.ViewModels
         public bool EmailUseSsl
         {
             get { return emailUseSsl; }
-            set { Set(nameof(EmailUseSsl), ref emailUseSsl, value); }
+            set { SetProperty(nameof(EmailUseSsl), ref emailUseSsl, value); }
         }
 
         private string emailSender;
@@ -71,7 +69,7 @@ namespace ERHMS.Presentation.ViewModels
         public string EmailSender
         {
             get { return emailSender; }
-            set { Set(nameof(EmailSender), ref emailSender, value); }
+            set { SetProperty(nameof(EmailSender), ref emailSender, value); }
         }
 
         private string emailPassword;
@@ -79,7 +77,7 @@ namespace ERHMS.Presentation.ViewModels
         public string EmailPassword
         {
             get { return emailPassword; }
-            set { Set(nameof(EmailPassword), ref emailPassword, value); }
+            set { SetProperty(nameof(EmailPassword), ref emailPassword, value); }
         }
 
         private string mapApplicationId;
@@ -87,7 +85,7 @@ namespace ERHMS.Presentation.ViewModels
         public string MapApplicationId
         {
             get { return mapApplicationId; }
-            set { Set(nameof(MapApplicationId), ref mapApplicationId, value); }
+            set { SetProperty(nameof(MapApplicationId), ref mapApplicationId, value); }
         }
 
         private string endpointAddress;
@@ -95,7 +93,7 @@ namespace ERHMS.Presentation.ViewModels
         public string EndpointAddress
         {
             get { return endpointAddress; }
-            set { Set(nameof(EndpointAddress), ref endpointAddress, value); }
+            set { SetProperty(nameof(EndpointAddress), ref endpointAddress, value); }
         }
 
         private bool windowsAuthentication;
@@ -108,12 +106,10 @@ namespace ERHMS.Presentation.ViewModels
             }
             set
             {
-                if (Set(nameof(WindowsAuthentication), ref windowsAuthentication, value))
+                SetProperty(nameof(WindowsAuthentication), ref windowsAuthentication, value);
+                if (value)
                 {
-                    if (value)
-                    {
-                        BindingType = BindingType.BasicHttp;
-                    }
+                    BindingType = BindingType.BasicHttp;
                 }
             }
         }
@@ -125,7 +121,7 @@ namespace ERHMS.Presentation.ViewModels
         public BindingType BindingType
         {
             get { return bindingType; }
-            set { Set(nameof(BindingType), ref bindingType, value); }
+            set { SetProperty(nameof(BindingType), ref bindingType, value); }
         }
 
         private string organizationName;
@@ -133,7 +129,7 @@ namespace ERHMS.Presentation.ViewModels
         public string OrganizationName
         {
             get { return organizationName; }
-            set { Set(nameof(OrganizationName), ref organizationName, value); }
+            set { SetProperty(nameof(OrganizationName), ref organizationName, value); }
         }
 
         private Guid? organizationKey;
@@ -141,14 +137,14 @@ namespace ERHMS.Presentation.ViewModels
         public Guid? OrganizationKey
         {
             get { return organizationKey; }
-            set { Set(nameof(OrganizationKey), ref organizationKey, value); }
+            set { SetProperty(nameof(OrganizationKey), ref organizationKey, value); }
         }
 
-        public RelayCommand BrowseCommand { get; private set; }
-        public RelayCommand ShowDataSourcesCommand { get; private set; }
-        public RelayCommand AddRoleCommand { get; private set; }
-        public RelayCommand<Role> RemoveRoleCommand { get; private set; }
-        public RelayCommand SaveCommand { get; private set; }
+        public ICommand BrowseCommand { get; private set; }
+        public ICommand ShowDataSourcesCommand { get; private set; }
+        public ICommand AddRoleCommand { get; private set; }
+        public ICommand RemoveRoleCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
         public SettingsViewModel(IServiceManager services)
             : base(services)
@@ -161,8 +157,12 @@ namespace ERHMS.Presentation.ViewModels
             Roles = new ObservableCollection<Role>();
             if (Context != null)
             {
-                Roles.AddRange(Context.Roles.Select().OrderBy(role => role.Name));
+                Roles.AddRange(Context.Roles.Select().OrderBy(role => role.Name, StringComparer.OrdinalIgnoreCase));
             }
+            Roles.CollectionChanged += (sender, e) =>
+            {
+                Dirty = true;
+            };
             EmailHost = Settings.Default.EmailHost;
             EmailPort = Settings.Default.EmailPort;
             EmailUseSsl = Settings.Default.EmailUseSsl;
@@ -176,62 +176,50 @@ namespace ERHMS.Presentation.ViewModels
             OrganizationName = Settings.Default.OrganizationName;
             OrganizationKey = ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey);
             Dirty = false;
-            BrowseCommand = new RelayCommand(Browse);
-            ShowDataSourcesCommand = new RelayCommand(ShowDataSources);
-            AddRoleCommand = new RelayCommand(AddRole);
-            RemoveRoleCommand = new RelayCommand<Role>(RemoveRole);
-            SaveCommand = new RelayCommand(Save);
-            Roles.CollectionChanged += (sender, e) =>
-            {
-                Dirty = true;
-            };
+            BrowseCommand = new AsyncCommand(BrowseAsync);
+            ShowDataSourcesCommand = new Command(ShowDataSources);
+            AddRoleCommand = new AsyncCommand(AddRoleAsync);
+            RemoveRoleCommand = new Command<Role>(RemoveRole);
+            SaveCommand = new AsyncCommand(SaveAsync);
         }
 
-        public void Browse()
+        public async Task BrowseAsync()
         {
-            using (FolderBrowserDialog dialog = RootPathDialog.GetDialog())
+            string path = Services.Dialog.GetRootPath();
+            if (path != null && !path.Equals(configuration.GetRootPath(), StringComparison.OrdinalIgnoreCase))
             {
-                if (dialog.ShowDialog(Dialogs.Win32Window) == DialogResult.OK)
+                string message = string.Join(" ", new string[]
                 {
-                    string path = dialog.GetRootPath();
-                    if (!path.EqualsIgnoreCase(configuration.GetRootPath()))
-                    {
-                        ICollection<string> message = new List<string>();
-                        message.Add("Change the root directory?");
-                        message.Add("This may cause existing data sources to stop working properly.");
-                        message.Add(string.Format("{0} will attempt to copy your documents and restart when settings are saved.", App.Title));
-                        ConfirmMessage msg = new ConfirmMessage
-                        {
-                            Verb = "Change",
-                            Message = string.Join(" ", message)
-                        };
-                        msg.Confirmed += (sender, e) =>
-                        {
-                            Log.Logger.DebugFormat("Root path chosen: {0}", path);
-                            RootPath = path;
-                        };
-                        MessengerInstance.Send(msg);
-                    }
+                    "Change the root directory?",
+                    "This may cause existing data sources to stop working properly.",
+                    string.Format("{0} will attempt to copy your application files and restart when settings are saved.", Services.String.AppTitle)
+                });
+                if (await Services.Dialog.ConfirmAsync(message, "Change"))
+                {
+                    Log.Logger.DebugFormat("Root path chosen: {0}", path);
+                    RootPath = path;
                 }
             }
         }
 
         public void ShowDataSources()
         {
-            Services.Documents.ShowDataSources();
+            Services.Document.ShowByType(() => new DataSourceListViewModel(Services));
         }
 
-        public void AddRole()
+        public async Task AddRoleAsync()
         {
-            RoleViewModel role = new RoleViewModel(Services, "Add");
-            role.Saved += (sender, e) =>
+            using (RoleViewModel model = new RoleViewModel(Services, "Add"))
             {
-                Roles.Add(new Role(true)
+                model.Saved += (sender, e) =>
                 {
-                    Name = role.Name
-                });
-            };
-            Dialogs.ShowAsync(role);
+                    Roles.Add(new Role(true)
+                    {
+                        Name = model.Name
+                    });
+                };
+                await Services.Dialog.ShowAsync(model);
+            }
         }
 
         public void RemoveRole(Role role)
@@ -239,7 +227,7 @@ namespace ERHMS.Presentation.ViewModels
             Roles.Remove(role);
         }
 
-        private bool Validate()
+        private async Task<bool> ValidateAsync()
         {
             ICollection<string> fields = new List<string>();
             if (!string.IsNullOrWhiteSpace(EmailSender) && !MailExtensions.IsValidAddress(EmailSender))
@@ -253,15 +241,15 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowValidationMessage(ValidationError.Invalid, fields);
+                await Services.Dialog.AlertAsync(ValidationError.Invalid, fields);
                 return false;
             }
             return true;
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            if (!Validate())
+            if (!await ValidateAsync())
             {
                 return;
             }
@@ -288,55 +276,55 @@ namespace ERHMS.Presentation.ViewModels
             configuration.Settings.WebServiceBindingMode = BindingTypeExtensions.EpiInfoValues.Forward(BindingType);
             Settings.Default.OrganizationName = OrganizationName;
             Settings.Default.OrganizationKey = OrganizationKey?.ToString();
-            string rootPathInit = configuration.GetRootPath();
-            if (!RootPath.EqualsIgnoreCase(rootPathInit))
+            try
             {
-                try
+                bool restart = SetRootPath(configuration.GetRootPath(), RootPath);
+                Settings.Default.Save();
+                configuration.Save();
+                Dirty = false;
+                if (restart)
                 {
-                    using (new WaitCursor())
-                    {
-                        IOExtensions.CopyDirectory(rootPathInit, RootPath);
-                        configuration.SetUserDirectories(RootPath);
-                        ICollection<string> paths = Settings.Default.DataSourcePaths.ToList();
-                        Settings.Default.DataSourcePaths.Clear();
-                        Regex rootPathInitPattern = new Regex(@"^" + Regex.Escape(rootPathInit), RegexOptions.IgnoreCase);
-                        foreach (string path in paths)
-                        {
-                            Settings.Default.DataSourcePaths.Add(rootPathInitPattern.Replace(path, RootPath));
-                        }
-                    }
+                    Services.App.Restart();
                 }
-                catch (Exception ex)
+                else
                 {
-                    Log.Logger.Warn("Failed to initialize root path", ex);
-                    StringBuilder message = new StringBuilder();
-                    message.AppendFormat("{0} failed to initialize the following directory. Settings have not been saved.", App.Title);
-                    message.AppendLine();
-                    message.AppendLine();
-                    message.Append(RootPath);
-                    Dialogs.ShowErrorAsync(message.ToString(), ex);
-                    return;
+                    Log.LevelName = Settings.Default.LogLevelName;
+                    ConfigurationExtensions.Load();
+                    Services.Dialog.Notify("Settings have been saved.");
                 }
             }
-            Settings.Default.Save();
-            configuration.Save();
-            Dirty = false;
-            if (RootPath.EqualsIgnoreCase(rootPathInit))
+            catch (Exception ex)
             {
-                Log.LevelName = Settings.Default.LogLevelName;
-                ConfigurationExtensions.Load();
-                MessengerInstance.Send(new ToastMessage
-                {
-                    Message = "Settings have been saved."
-                });
+                Log.Logger.Warn("Failed to initialize root path", ex);
+                StringBuilder message = new StringBuilder();
+                message.AppendFormat("{0} failed to initialize the following directory. Settings have not been saved.", Services.String.AppTitle);
+                message.AppendLine();
+                message.AppendLine();
+                message.Append(RootPath);
+                await Services.Dialog.AlertAsync(message.ToString(), ex);
             }
-            else
+        }
+
+        private bool SetRootPath(string original, string modified)
+        {
+            if (original.Equals(modified, StringComparison.OrdinalIgnoreCase))
             {
-                MessengerInstance.Send(new ShutdownMessage
-                {
-                    Restart = true
-                });
+                return false;
             }
+            using (Services.Busy.BeginTask())
+            {
+                IOExtensions.CopyDirectory(original, modified);
+                configuration.SetUserDirectories(modified);
+                ICollection<string> paths = Settings.Default.DataSourcePaths.ToList();
+                Settings.Default.DataSourcePaths.Clear();
+                Regex originalPattern = new Regex(@"^" + Regex.Escape(original), RegexOptions.IgnoreCase);
+                foreach (string path in paths)
+                {
+                    Settings.Default.DataSourcePaths.Add(originalPattern.Replace(path, modified));
+                }
+                Settings.Default.LastDataSourcePath = null;
+            }
+            return true;
         }
     }
 }

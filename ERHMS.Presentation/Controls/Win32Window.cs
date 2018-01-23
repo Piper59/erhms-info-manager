@@ -7,12 +7,16 @@ namespace ERHMS.Presentation.Controls
 {
     public class Win32Window : IWin32Window
     {
-        public IntPtr Handle { get; private set; }
+        private WindowInteropHelper helper;
+
+        public IntPtr Handle
+        {
+            get { return helper.Handle; }
+        }
 
         public Win32Window(Window window)
         {
-            WindowInteropHelper helper = new WindowInteropHelper(window);
-            Handle = helper.Handle;
+            helper = new WindowInteropHelper(window);
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Services;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -13,7 +14,10 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Create a Dashboard";
         }
 
-        public override void Create()
+        public CanvasViewModel(IServiceManager services, int viewId)
+            : this(services, services.Data.Context.Views.SelectById(viewId)) { }
+
+        public override async Task CreateAsync()
         {
             EpiInfo.Canvas canvas = new EpiInfo.Canvas
             {
@@ -23,17 +27,16 @@ namespace ERHMS.Presentation.ViewModels
             Context.Project.InsertCanvas(canvas);
             if (View.Incident != null)
             {
-                CanvasLink canvasLink = new CanvasLink(true)
+                Context.CanvasLinks.Save(new CanvasLink(true)
                 {
                     CanvasId = canvas.CanvasId,
                     IncidentId = View.Incident.IncidentId
-                };
-                Context.CanvasLinks.Save(canvasLink);
+                });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(Domain.Canvas)));
-            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            Dialogs.InvokeAsync(AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content));
+            Services.Data.Refresh(typeof(Domain.Canvas));
             Close();
+            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
+            await Services.Wrapper.InvokeAsync(AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content));
         }
     }
 }

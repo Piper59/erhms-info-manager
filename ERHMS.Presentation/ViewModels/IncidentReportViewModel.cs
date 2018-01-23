@@ -1,79 +1,79 @@
 ﻿using ERHMS.DataAccess;
 using ERHMS.Domain;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentReportViewModel : ViewModelBase
+    public class IncidentReportViewModel : DocumentViewModel
     {
         public Incident Incident { get; private set; }
 
-        private bool isSelected;
-        public bool IsSelected
+        private bool active;
+        public bool Active
         {
-            get { return isSelected; }
-            set { Set(nameof(IsSelected), ref isSelected, value); }
+            get { return active; }
+            set { SetProperty(nameof(Active), ref active, value); }
         }
 
         private DateTime? startDate;
         public DateTime? StartDate
         {
             get { return startDate; }
-            set { Set(nameof(StartDate), ref startDate, value); }
+            set { SetProperty(nameof(StartDate), ref startDate, value); }
         }
 
         private DateTime? endDate;
         public DateTime? EndDate
         {
             get { return endDate; }
-            set { Set(nameof(EndDate), ref endDate, value); }
+            set { SetProperty(nameof(EndDate), ref endDate, value); }
         }
 
         private ICollection<IncidentNote> incidentNotes;
         public ICollection<IncidentNote> IncidentNotes
         {
             get { return incidentNotes; }
-            set { Set(nameof(IncidentNotes), ref incidentNotes, value); }
+            set { SetProperty(nameof(IncidentNotes), ref incidentNotes, value); }
         }
 
         private ICollection<Job> jobs;
         public ICollection<Job> Jobs
         {
             get { return jobs; }
-            set { Set(nameof(Jobs), ref jobs, value); }
+            set { SetProperty(nameof(Jobs), ref jobs, value); }
         }
 
         private ICollection<JobNote> jobNotes;
         public ICollection<JobNote> JobNotes
         {
             get { return jobNotes; }
-            set { Set(nameof(JobNotes), ref jobNotes, value); }
+            set { SetProperty(nameof(JobNotes), ref jobNotes, value); }
         }
 
         private ICollection<JobTeam> jobTeams;
         public ICollection<JobTeam> JobTeams
         {
             get { return jobTeams; }
-            set { Set(nameof(JobTeams), ref jobTeams, value); }
+            set { SetProperty(nameof(JobTeams), ref jobTeams, value); }
         }
 
         private ICollection<JobTicket> jobTickets;
         public ICollection<JobTicket> JobTickets
         {
             get { return jobTickets; }
-            set { Set(nameof(JobTickets), ref jobTickets, value); }
+            set { SetProperty(nameof(JobTickets), ref jobTickets, value); }
         }
 
-        public RelayCommand<Job> EditJobCommand { get; private set; }
-        public RelayCommand<JobTeam> EditTeamCommand { get; private set; }
-        public RelayCommand<JobTicket> EditResponderCommand { get; private set; }
-        public RelayCommand RefreshCommand { get; private set; }
+        public ICommand EditJobCommand { get; private set; }
+        public ICommand EditTeamCommand { get; private set; }
+        public ICommand EditResponderCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public IncidentReportViewModel(IServiceManager services, Incident incident)
             : base(services)
@@ -81,17 +81,17 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Reports";
             Incident = incident;
             StartDate = DateTime.Now - TimeSpan.FromHours(12.0);
-            EditJobCommand = new RelayCommand<Job>(EditJob);
-            EditTeamCommand = new RelayCommand<JobTeam>(EditTeam);
-            EditResponderCommand = new RelayCommand<JobTicket>(EditResponder);
-            RefreshCommand = new RelayCommand(Refresh);
-            PropertyChanged += (sender, e) =>
+            EditJobCommand = new Command<Job>(EditJob);
+            EditTeamCommand = new Command<JobTeam>(EditTeam);
+            EditResponderCommand = new Command<JobTicket>(EditResponder);
+            RefreshCommand = new AsyncCommand(RefreshAsync);
+            PropertyChanged += async (sender, e) =>
             {
-                if (e.PropertyName == nameof(IsSelected))
+                if (e.PropertyName == nameof(Active))
                 {
-                    if (IsSelected)
+                    if (Active)
                     {
-                        GenerateAsync();
+                        await GenerateAsync();
                     }
                     else
                     {
@@ -99,32 +99,6 @@ namespace ERHMS.Presentation.ViewModels
                     }
                 }
             };
-        }
-
-        public async void GenerateAsync()
-        {
-            IncidentNotes = await TaskEx.Run(() => Context.IncidentNotes.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
-                .OrderBy(incidentNote => incidentNote.Date)
-                .ToList());
-            Jobs = await TaskEx.Run(() => Context.Jobs.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
-                .OrderBy(job => job.Name)
-                .ToList());
-            JobNotes = await TaskEx.Run(() => Context.JobNotes.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
-                .OrderBy(jobNote => jobNote.Job.Name)
-                .ThenBy(jobNote => jobNote.Date)
-                .ToList());
-            ICollectionView jobNotesView = CollectionViewSource.GetDefaultView(JobNotes);
-            jobNotesView.GroupDescriptions.Add(new PropertyGroupDescription("Job"));
-            JobTeams = await TaskEx.Run(() => Context.JobTeams.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
-                .OrderBy(jobTeam => jobTeam.Job.Name)
-                .ThenBy(jobTeam => jobTeam.Team.Name)
-                .ToList());
-            JobTickets = await TaskEx.Run(() => Context.JobTickets.SelectUndeletedByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
-                .WithLocations(Context)
-                .OrderBy(jobTicket => jobTicket.Job.Name)
-                .ThenBy(jobTicket => jobTicket.Team?.Name)
-                .ThenBy(jobTicket => jobTicket.Responder.FullName)
-                .ToList());
         }
 
         public void Clear()
@@ -136,25 +110,80 @@ namespace ERHMS.Presentation.ViewModels
             JobTickets = null;
         }
 
+        public async Task GenerateAsync()
+        {
+            IncidentNotes = await TaskEx.Run(() => GetIncidentNotes());
+            Jobs = await TaskEx.Run(() => GetJobs());
+            JobNotes = await TaskEx.Run(() => GetJobNotes());
+            JobTeams = await TaskEx.Run(() => GetJobTeams());
+            JobTickets = await TaskEx.Run(() => GetJobTickets());
+        }
+
+        private ICollection<IncidentNote> GetIncidentNotes()
+        {
+            return Context.IncidentNotes.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
+                .OrderBy(incidentNote => incidentNote.Date)
+                .ToList();
+        }
+
+        private ICollection<Job> GetJobs()
+        {
+            return Context.Jobs.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
+                .OrderBy(job => job.Name, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        private ICollection<JobNote> GetJobNotes()
+        {
+            return Context.JobNotes.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
+                .OrderBy(jobNote => jobNote.Job.Name, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(jobNote => jobNote.Date)
+                .ToList();
+        }
+
+        private ICollection<JobTeam> GetJobTeams()
+        {
+            return Context.JobTeams.SelectByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
+                .OrderBy(jobTeam => jobTeam.Job.Name, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(jobTeam => jobTeam.Team.Name, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        private ICollection<JobTicket> GetJobTickets()
+        {
+            return Context.JobTickets.SelectUndeletedByIncidentIdAndDateRange(Incident.IncidentId, StartDate, EndDate)
+                .WithLocations(Context)
+                .OrderBy(jobTicket => jobTicket.Job.Name, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(jobTicket => jobTicket.Team?.Name, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(jobTicket => jobTicket.Responder.FullName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
         public void EditJob(Job job)
         {
-            Documents.ShowJob(job);
+            Services.Document.Show(
+                model => model.Job.Equals(job),
+                () => new JobViewModel(Services, Context.Jobs.Refresh(job)));
         }
 
         public void EditTeam(JobTeam jobTeam)
         {
-            Documents.ShowTeam(jobTeam.Team);
+            Services.Document.Show(
+                model => model.Team.Equals(jobTeam.Team),
+                () => new TeamViewModel(Services, Context.Teams.Refresh(jobTeam.Team)));
         }
 
         public void EditResponder(JobTicket jobTicket)
         {
-            Documents.ShowResponder(jobTicket.Responder);
+            Services.Document.Show(
+                model => model.Responder.Equals(jobTicket.Responder),
+                () => new ResponderViewModel(Services, Context.Responders.Refresh(jobTicket.Responder)));
         }
 
-        public void Refresh()
+        public async Task RefreshAsync()
         {
             Clear();
-            GenerateAsync();
+            await GenerateAsync();
         }
     }
 }

@@ -1,69 +1,75 @@
-﻿using ERHMS.Presentation.Messages;
+﻿using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows.Data;
-using System.Windows.Threading;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public abstract class ListViewModel<T> : ViewModelBase
     {
-        private static readonly TimeSpan TimerInterval = TimeSpan.FromSeconds(0.5);
+        private static readonly TimeSpan Delay = TimeSpan.FromSeconds(0.5);
+        private static readonly TimeSpan Infinity = new TimeSpan(0, 0, 0, 0, -1);
 
-        private DispatcherTimer timer;
+        private Timer timer;
 
-        private ICollectionView items;
-        public ICollectionView Items
+        private ICollectionView objects;
+        public ICollectionView Objects
         {
-            get { return items; }
-            private set { Set(nameof(Items), ref items, value); }
+            get { return objects; }
+            private set { SetProperty(nameof(Objects), ref objects, value); }
         }
 
-        public IEnumerable<T> TypedItems
+        public IEnumerable<T> Items
         {
-            get { return Items?.Cast<T>(); }
+            get { return Objects?.Cast<T>(); }
         }
 
-        private T selectedItem;
+        private object selectedObject;
+        public object SelectedObject
+        {
+            get
+            {
+                return selectedObject;
+            }
+            set
+            {
+                if (SetProperty(nameof(SelectedObject), ref selectedObject, value))
+                {
+                    OnSelectionChanged();
+                }
+            }
+        }
+
         public T SelectedItem
         {
+            get { return (T)SelectedObject; }
+        }
+
+        private IList selectedObjects;
+        public IList SelectedObjects
+        {
             get
             {
-                return selectedItem;
+                return selectedObjects;
             }
             set
             {
-                if (Set(nameof(SelectedItem), ref selectedItem, value))
+                if (SetProperty(nameof(SelectedObjects), ref selectedObjects, value))
                 {
                     OnSelectionChanged();
                 }
             }
         }
 
-        private IList selectedItems;
-        public IList SelectedItems
+        public IEnumerable<T> SelectedItems
         {
-            get
-            {
-                return selectedItems;
-            }
-            set
-            {
-                if (Set(nameof(SelectedItems), ref selectedItems, value))
-                {
-                    OnSelectionChanged();
-                }
-            }
-        }
-
-        public IEnumerable<T> TypedSelectedItems
-        {
-            get { return SelectedItems.Cast<T>(); }
+            get { return SelectedObjects.Cast<T>(); }
         }
 
         private string filter;
@@ -75,42 +81,24 @@ namespace ERHMS.Presentation.ViewModels
             }
             set
             {
-                if (Set(nameof(Filter), ref filter, value))
+                if (SetProperty(nameof(Filter), ref filter, value))
                 {
-                    timer.Stop();
-                    timer.Start();
+                    timer.Change(Delay, Infinity);
                 }
             }
         }
 
-        protected virtual IEnumerable<Type> RefreshTypes
-        {
-            get { yield return typeof(T); }
-        }
-
-        public RelayCommand RefreshCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         protected ListViewModel(IServiceManager services)
             : base(services)
         {
-            timer = new DispatcherTimer
+            timer = new Timer(state =>
             {
-                Interval = TimerInterval
-            };
-            timer.Tick += (sender, e) =>
-            {
-                timer.Stop();
-                Items.Refresh();
-            };
-            Items = CollectionViewSource.GetDefaultView(Enumerable.Empty<T>());
-            RefreshCommand = new RelayCommand(Refresh, CanRefresh);
-            MessengerInstance.Register<RefreshMessage>(this, msg =>
-            {
-                if (RefreshTypes.Contains(msg.Type))
-                {
-                    Refresh();
-                }
+                services.Dispatch.Post(Objects.Refresh);
             });
+            RefreshCommand = new Command(Refresh);
+            services.Data.Refreshing += Data_Refreshing;
         }
 
         public event EventHandler SelectionChanged;
@@ -123,19 +111,12 @@ namespace ERHMS.Presentation.ViewModels
             OnSelectionChanged(EventArgs.Empty);
         }
 
-        public virtual bool CanRefresh()
+        private void Data_Refreshing(object sender, RefreshingEventArgs e)
         {
-            return true;
-        }
-
-        public bool HasSelectedItem()
-        {
-            return SelectedItem != null || (SelectedItems != null && SelectedItems.Count > 0);
-        }
-
-        public bool HasSingleSelectedItem()
-        {
-            return SelectedItems == null ? SelectedItem != null : SelectedItems.Count == 1;
+            if (e.Type == typeof(T))
+            {
+                Refresh();
+            }
         }
 
         protected abstract IEnumerable<T> GetItems();
@@ -145,15 +126,15 @@ namespace ERHMS.Presentation.ViewModels
             yield break;
         }
 
-        protected virtual bool IsMatch(object item)
+        protected bool IsFilterMatch(object obj)
         {
             if (string.IsNullOrWhiteSpace(Filter))
             {
                 return true;
             }
-            foreach (string value in GetFilteredValues((T)item))
+            foreach (string value in GetFilteredValues((T)obj))
             {
-                if (value != null && value.ContainsIgnoreCase(Filter))
+                if (value != null && value.Contains(Filter, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -161,10 +142,48 @@ namespace ERHMS.Presentation.ViewModels
             return false;
         }
 
-        public virtual void Refresh()
+        public void Refresh()
         {
-            Items = CollectionViewSource.GetDefaultView(GetItems());
-            Items.Filter = IsMatch;
+            Objects = CollectionViewSource.GetDefaultView(GetItems());
+            Objects.Filter = IsFilterMatch;
+        }
+
+        public bool HasSelectedItem()
+        {
+            return SelectedObject != null;
+        }
+
+        public bool HasOneSelectedItem()
+        {
+            return SelectedObjects?.Count == 1;
+        }
+
+        public bool HasAnySelectedItems()
+        {
+            return SelectedObjects?.Count > 0;
+        }
+
+        public void Select(T item)
+        {
+            foreach (object obj in Objects)
+            {
+                if (Equals(obj, item))
+                {
+                    SelectedObject = obj;
+                    break;
+                }
+            }
+        }
+
+        public void Unselect()
+        {
+            SelectedObject = null;
+        }
+
+        public override void Dispose()
+        {
+            Services.Data.Refreshing -= Data_Refreshing;
+            base.Dispose();
         }
     }
 }

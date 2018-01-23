@@ -1,60 +1,87 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Wrappers;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class PrepopulateViewModel : DialogViewModel
     {
-        public View View { get; private set; }
-        public ICollection<Responder> Responders { get; private set; }
-
-        private Responder responder;
-        public Responder Responder
+        public class ResponderListChildViewModel : ListViewModel<Responder>
         {
-            get { return responder; }
-            set { Set(nameof(Responder), ref responder, value); }
+            public Incident Incident { get; private set; }
+
+            public ResponderListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
+            {
+                Refresh();
+            }
+
+            protected override IEnumerable<Responder> GetItems()
+            {
+                IEnumerable<Responder> responders;
+                if (Incident == null)
+                {
+                    responders = Context.Responders.SelectUndeleted();
+                }
+                else
+                {
+                    responders = Context.Rosters.SelectUndeletedByIncidentId(Incident.IncidentId).Select(roster => roster.Responder);
+                }
+                return responders.OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase);
+            }
         }
 
-        public RelayCommand ContinueCommand { get; private set; }
+        public View View { get; private set; }
+        public ResponderListChildViewModel Responders { get; private set; }
+
+        public ICommand ContinueCommand { get; private set; }
 
         public PrepopulateViewModel(IServiceManager services, View view)
             : base(services)
         {
             Title = "Prepopulate Responder Data Fields";
             View = view;
-            IEnumerable<Responder> responders;
-            if (view.Incident == null)
+            Responders = new ResponderListChildViewModel(services, view.Incident);
+            ContinueCommand = new AsyncCommand(ContinueAsync);
+        }
+
+        private object GetRecord()
+        {
+            if (Responders.SelectedItem == null)
             {
-                responders = Context.Responders.SelectUndeleted();
+                return null;
             }
             else
             {
-                responders = Context.Rosters.SelectUndeletedByIncidentId(view.Incident.IncidentId).Select(roster => roster.Responder);
-            }
-            Responders = responders.OrderBy(responder => responder.FullName).ToList();
-            ContinueCommand = new RelayCommand(Continue);
-        }
-
-        public void Continue()
-        {
-            object record = null;
-            if (Responder != null)
-            {
-                record = new
+                Responder responder = Context.Responders.Refresh(Responders.SelectedItem);
+                return new
                 {
-                    ResponderID = Responder.ResponderId,
-                    ResponderEmailAddress = Responder.EmailAddress,
-                    ResponderFirstName = Responder.FirstName,
-                    ResponderLastName = Responder.LastName
+                    ResponderID = responder.ResponderId,
+                    ResponderEmailAddress = responder.EmailAddress,
+                    ResponderLastName = responder.LastName,
+                    ResponderFirstName = responder.FirstName
                 };
             }
-            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            Dialogs.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, record));
+        }
+
+        public async Task ContinueAsync()
+        {
             Close();
+            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
+            await Services.Wrapper.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, GetRecord()));
+        }
+
+        public override void Dispose()
+        {
+            Responders.Dispose();
+            base.Dispose();
         }
     }
 }

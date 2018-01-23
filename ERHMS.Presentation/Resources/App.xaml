@@ -3,7 +3,8 @@
                     xmlns:AvalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
                     xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
                     xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow">
+                    xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
+                    xmlns:System="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml" />
         <ResourceDictionary Source="/MahApps.Metro;component/Styles/Controls.xaml" />
@@ -15,6 +16,8 @@
         <ResourceDictionary Source="IconsNonShared.xaml" />
         <ResourceDictionary Source="TabControl.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <ResourceDictionary x:Key="Accent" Source="Blue508.xaml" />
 
     <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource AccentedSquareButtonStyle}">
         <Setter Property="MahApps:ButtonHelper.PreserveTextCase" Value="True" />
@@ -174,9 +177,9 @@
         <Setter Property="TabStripPlacement" Value="Left" />
     </Style>
 
-    <Style TargetType="TabItem" BasedOn="{StaticResource MetroTabItem}">
-        <Setter Property="MahApps:ControlsHelper.HeaderFontSize" Value="15" />
-    </Style>
+    <Style TargetType="TabItem" BasedOn="{StaticResource MetroTabItem}" />
+
+    <System:Double x:Key="TabItemFontSize">15</System:Double>
 
     <Style TargetType="TextBox" BasedOn="{StaticResource MetroTextBox}">
         <Style.Triggers>
@@ -199,4 +202,6 @@
         </Style.Resources>
         <Setter Property="MaxWidth" Value="200" />
     </Style>
+
+    <Style TargetType="Controls:UserGuideTabItem" BasedOn="{StaticResource MetroTabItem}" />
 </ResourceDictionary>

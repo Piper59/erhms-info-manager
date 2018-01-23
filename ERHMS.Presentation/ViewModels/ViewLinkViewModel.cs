@@ -1,5 +1,5 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -16,14 +16,14 @@ namespace ERHMS.Presentation.ViewModels
                 ViewId = Entity.ViewId,
                 IncidentId = Incidents.SelectedItem.IncidentId
             });
-            MessengerInstance.Send(new RefreshMessage(typeof(View)));
+            Services.Data.Refresh(typeof(View));
             Close();
         }
 
         public override void Unlink()
         {
             Context.ViewLinks.DeleteByViewId(Entity.ViewId);
-            MessengerInstance.Send(new RefreshMessage(typeof(View)));
+            Services.Data.Refresh(typeof(View));
             Close();
         }
     }

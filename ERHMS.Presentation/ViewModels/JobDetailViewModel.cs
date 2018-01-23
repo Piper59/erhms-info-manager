@@ -1,27 +1,28 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class JobDetailViewModel : ViewModelBase
+    public class JobDetailViewModel : DocumentViewModel
     {
         public Job Job { get; private set; }
 
-        public RelayCommand SaveCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
         public JobDetailViewModel(IServiceManager services, Job job)
             : base(services)
         {
             Title = job.New ? "New Job" : job.Name;
             Job = job;
-            SaveCommand = new RelayCommand(Save);
             AddDirtyCheck(job);
+            SaveCommand = new AsyncCommand(SaveAsync);
         }
 
-        private bool Validate()
+        private async Task<bool> ValidateAsync()
         {
             ICollection<string> fields = new List<string>();
             if (string.IsNullOrWhiteSpace(Job.Name))
@@ -30,32 +31,26 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowValidationMessage(ValidationError.Required, fields);
+                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (!DateTimeExtensions.AreInOrder(Job.StartDate, Job.EndDate))
             {
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = "End date must be later than start date."
-                });
+                await Services.Dialog.AlertAsync("End date must be later than start date.");
                 return false;
             }
             return true;
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            if (!Validate())
+            if (!await ValidateAsync())
             {
                 return;
             }
             Context.Jobs.Save(Job);
-            MessengerInstance.Send(new ToastMessage
-            {
-                Message = "Job has been saved."
-            });
-            MessengerInstance.Send(new RefreshMessage(typeof(Job)));
+            Services.Dialog.Notify("Job has been saved.");
+            Services.Data.Refresh(typeof(Job));
             Title = Job.Name;
             Dirty = false;
         }

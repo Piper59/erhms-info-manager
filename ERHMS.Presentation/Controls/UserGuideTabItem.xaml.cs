@@ -21,7 +21,6 @@ namespace ERHMS.Presentation.Controls
         public UserGuideTabItem()
         {
             InitializeComponent();
-            SetResourceReference(StyleProperty, typeof(TabItem));
         }
 
         protected override void OnSelected(RoutedEventArgs e)

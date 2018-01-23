@@ -1,4 +1,8 @@
-﻿<UserControl x:Class="ERHMS.Presentation.Views.IncidentReportView"
+﻿<!--
+    ICollectionView jobNotesView = CollectionViewSource.GetDefaultView(JobNotes);
+    jobNotesView.GroupDescriptions.Add(new PropertyGroupDescription("Job"));
+-->
+<UserControl x:Class="ERHMS.Presentation.Views.IncidentReportView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

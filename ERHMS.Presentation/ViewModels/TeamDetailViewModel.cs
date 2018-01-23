@@ -1,26 +1,27 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TeamDetailViewModel : ViewModelBase
+    public class TeamDetailViewModel : DocumentViewModel
     {
         public Team Team { get; private set; }
 
-        public RelayCommand SaveCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
         public TeamDetailViewModel(IServiceManager services, Team team)
             : base(services)
         {
             Title = team.New ? "New Team" : team.Name;
             Team = team;
-            SaveCommand = new RelayCommand(Save);
             AddDirtyCheck(team);
+            SaveCommand = new AsyncCommand(SaveAsync);
         }
 
-        private bool Validate()
+        private async Task<bool> ValidateAsync()
         {
             ICollection<string> fields = new List<string>();
             if (string.IsNullOrWhiteSpace(Team.Name))
@@ -29,24 +30,21 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowValidationMessage(ValidationError.Required, fields);
+                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             return true;
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            if (!Validate())
+            if (!await ValidateAsync())
             {
                 return;
             }
             Context.Teams.Save(Team);
-            MessengerInstance.Send(new ToastMessage
-            {
-                Message = "Team has been saved."
-            });
-            MessengerInstance.Send(new RefreshMessage(typeof(Team)));
+            Services.Dialog.Notify("Team has been saved.");
+            Services.Data.Refresh(typeof(Team));
             Title = Team.Name;
             Dirty = false;
         }

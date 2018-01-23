@@ -39,9 +39,9 @@
             <Controls:IconButton AccessText="_Create"
                                  Command="{Binding CreateCommand}"
                                  Icon="{StaticResource appbar_add}" />
-            <Controls:IconButton AccessText="_Open"
-                                 Command="{Binding OpenCommand}"
-                                 Icon="{StaticResource appbar_folder_open}" />
+            <Controls:IconButton AccessText="_Edit"
+                                 Command="{Binding EditCommand}"
+                                 Icon="{StaticResource appbar_edit}" />
             <Controls:IconButton AccessText="_Delete"
                                  Command="{Binding DeleteCommand}"
                                  Icon="{StaticResource appbar_delete}" />

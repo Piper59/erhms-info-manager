@@ -1,34 +1,34 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class JobTeamListViewModel : ListViewModel<JobTeam>
+    public class JobTeamListViewModel : DocumentViewModel
     {
         public class TeamListChildViewModel : ListViewModel<Team>
         {
             public Job Job { get; private set; }
 
-            public RelayCommand EditCommand { get; private set; }
+            public ICommand EditCommand { get; private set; }
 
             public TeamListChildViewModel(IServiceManager services, Job job)
                 : base(services)
             {
                 Job = job;
-                EditCommand = new RelayCommand(Edit, HasSelectedItem);
-                SelectionChanged += (sender, e) =>
-                {
-                    EditCommand.RaiseCanExecuteChanged();
-                };
+                Refresh();
+                EditCommand = new Command(Edit, HasSelectedItem);
             }
 
             protected override IEnumerable<Team> GetItems()
             {
-                return Context.Teams.SelectJobbable(Job.IncidentId, Job.JobId).OrderBy(team => team.Name);
+                return Context.Teams.SelectJobbable(Job.IncidentId, Job.JobId).OrderBy(team => team.Name, StringComparer.OrdinalIgnoreCase);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Team item)
@@ -39,17 +39,53 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Documents.ShowTeam((Team)SelectedItem.Clone());
+                Services.Document.Show(
+                    model => model.Team.Equals(SelectedItem),
+                    () => new TeamViewModel(Services, Context.Teams.Refresh(SelectedItem)));
+            }
+        }
+
+        public class JobTeamListChildViewModel : ListViewModel<JobTeam>
+        {
+            public Job Job { get; private set; }
+
+            public ICommand EditCommand { get; private set; }
+
+            public JobTeamListChildViewModel(IServiceManager services, Job job)
+                : base(services)
+            {
+                Job = job;
+                Refresh();
+                EditCommand = new Command(Edit, HasSelectedItem);
+            }
+
+            protected override IEnumerable<JobTeam> GetItems()
+            {
+                return Context.JobTeams.SelectByJobId(Job.JobId).OrderBy(jobTeam => jobTeam.Team.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(JobTeam item)
+            {
+                yield return item.Team.Name;
+                yield return item.Team.Description;
+            }
+
+            public void Edit()
+            {
+                Services.Document.Show(
+                    model => model.Team.Equals(SelectedItem.Team),
+                    () => new TeamViewModel(Services, Context.Teams.Refresh(SelectedItem.Team)));
             }
         }
 
         public Job Job { get; private set; }
         public TeamListChildViewModel Teams { get; private set; }
+        public JobTeamListChildViewModel JobTeams { get; private set; }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand RemoveCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand EmailCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
+        public ICommand RemoveCommand { get; private set; }
+        public ICommand EmailCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public JobTeamListViewModel(IServiceManager services, Job job)
             : base(services)
@@ -57,32 +93,11 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Teams";
             Job = job;
             Teams = new TeamListChildViewModel(services, job);
-            Refresh();
-            AddCommand = new RelayCommand(Add, Teams.HasSelectedItem);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            EmailCommand = new RelayCommand(Email, HasSelectedItem);
-            Teams.SelectionChanged += (sender, e) =>
-            {
-                AddCommand.RaiseCanExecuteChanged();
-            };
-            SelectionChanged += (sender, e) =>
-            {
-                RemoveCommand.RaiseCanExecuteChanged();
-                EditCommand.RaiseCanExecuteChanged();
-                EmailCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        protected override IEnumerable<JobTeam> GetItems()
-        {
-            return Context.JobTeams.SelectByJobId(Job.JobId).OrderBy(jobTeam => jobTeam.Team.Name);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(JobTeam item)
-        {
-            yield return item.Team.Name;
-            yield return item.Team.Description;
+            JobTeams = new JobTeamListChildViewModel(services, job);
+            AddCommand = new Command(Add, Teams.HasAnySelectedItems);
+            RemoveCommand = new AsyncCommand(RemoveAsync, JobTeams.HasAnySelectedItems);
+            EmailCommand = new Command(Email, JobTeams.HasAnySelectedItems);
+            RefreshCommand = new Command(Refresh);
         }
 
         public void Add()
@@ -95,48 +110,48 @@ namespace ERHMS.Presentation.ViewModels
                     TeamId = team.TeamId
                 });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(JobTeam)));
+            Teams.Refresh();
+            Services.Data.Refresh(typeof(JobTeam));
         }
 
-        public void Remove()
+        public async Task RemoveAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Remove the selected teams?", "Remove"))
             {
-                Verb = "Remove",
-                Message = "Remove the selected teams?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                foreach (JobTeam jobTeam in SelectedItems)
+                foreach (JobTeam jobTeam in JobTeams.SelectedItems)
                 {
                     Context.JobTeams.Delete(jobTeam);
                 }
-                MessengerInstance.Send(new RefreshMessage(typeof(JobTeam)));
-            };
-            MessengerInstance.Send(msg);
-        }
-
-        public void Edit()
-        {
-            Documents.ShowTeam((Team)SelectedItem.Team.Clone());
+                Teams.Refresh();
+                Services.Data.Refresh(typeof(JobTeam));
+            }
         }
 
         public void Email()
         {
-            ISet<Responder> responders = new HashSet<Responder>();
-            foreach (JobTeam jobTeam in SelectedItems)
+            Services.Document.Show(() =>
             {
-                responders.AddRange(Context.TeamResponders.SelectUndeletedByTeamId(jobTeam.TeamId).Select(teamResponder => teamResponder.Responder));
-            }
-            Documents.Show(
-                () => new EmailViewModel(Services, responders.OrderBy(responder => responder.FullName)),
-                document => false);
+                ISet<Responder> responders = new HashSet<Responder>();
+                foreach (JobTeam jobTeam in JobTeams.SelectedItems)
+                {
+                    responders.AddRange(Context.TeamResponders.SelectUndeletedByTeamId(jobTeam.TeamId)
+                        .Select(teamResponder => teamResponder.Responder));
+                }
+                return new EmailViewModel(Services, Context.Responders.Refresh(responders));
+            });
         }
 
-        public override void Refresh()
+        public void Refresh()
         {
             Teams.Refresh();
-            base.Refresh();
+            JobTeams.Refresh();
+        }
+
+        public override void Dispose()
+        {
+            Teams.Dispose();
+            JobTeams.Dispose();
+            base.Dispose();
         }
     }
 }

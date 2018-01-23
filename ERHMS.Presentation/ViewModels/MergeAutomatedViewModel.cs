@@ -1,80 +1,99 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class MergeAutomatedViewModel : ListViewModel<Tuple<Responder, Responder>>
+    public class MergeAutomatedViewModel : DocumentViewModel
     {
-        private ICollection<Tuple<Responder, Responder>> duplicates;
+        public class PairListChildViewModel : ListViewModel<Tuple<Responder, Responder>>
+        {
+            private ICollection<Tuple<Responder, Responder>> items;
 
-        public RelayCommand MergeCommand { get; private set; }
-        public RelayCommand IgnoreCommand { get; private set; }
+            public PairListChildViewModel(IServiceManager services, IEnumerable<Tuple<Responder, Responder>> pairs)
+                : base(services)
+            {
+                items = pairs.ToList();
+                Refresh();
+            }
 
-        public MergeAutomatedViewModel(IServiceManager services, IEnumerable<Tuple<Responder, Responder>> duplicates)
+            protected override IEnumerable<Tuple<Responder, Responder>> GetItems()
+            {
+                return items;
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(Tuple<Responder, Responder> item)
+            {
+                yield return item.Item1.FullName;
+                yield return item.Item1.EmailAddress;
+                yield return item.Item2.FullName;
+                yield return item.Item2.EmailAddress;
+            }
+
+            public void Remove(Tuple<Responder, Responder> item)
+            {
+                items.Remove(item);
+            }
+        }
+
+        public PairListChildViewModel Pairs { get; private set; }
+
+        public ICommand MergeCommand { get; private set; }
+        public ICommand IgnoreCommand { get; private set; }
+
+        public MergeAutomatedViewModel(IServiceManager services, IEnumerable<Tuple<Responder, Responder>> pairs)
             : base(services)
         {
             Title = "Duplicates";
-            this.duplicates = duplicates.ToList();
-            Refresh();
-            MergeCommand = new RelayCommand(Merge, HasSingleSelectedItem);
-            IgnoreCommand = new RelayCommand(Ignore, HasSelectedItem);
-            SelectionChanged += (sender, e) =>
-            {
-                MergeCommand.RaiseCanExecuteChanged();
-                IgnoreCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        protected override IEnumerable<Tuple<Responder, Responder>> GetItems()
-        {
-            return duplicates;
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(Tuple<Responder, Responder> item)
-        {
-            yield return item.Item1.FullName;
-            yield return item.Item1.EmailAddress;
-            yield return item.Item2.FullName;
-            yield return item.Item2.EmailAddress;
+            Pairs = new PairListChildViewModel(services, pairs);
+            MergeCommand = new Command(Merge, Pairs.HasOneSelectedItem);
+            IgnoreCommand = new AsyncCommand(IgnoreAsync, Pairs.HasAnySelectedItems);
         }
 
         public void Merge()
         {
-            MergeSelectedViewModel duplicate = Documents.Show(
-                () => new MergeSelectedViewModel(Services, SelectedItem.Item1, SelectedItem.Item2),
-                document => false);
-            duplicate.Saved += (sender, e) =>
+            Services.Document.Show(() =>
             {
-                duplicates.Remove(SelectedItem);
-                Refresh();
-            };
+                Tuple<Responder, Responder> pair = Pairs.SelectedItems.First();
+                MergeSelectedViewModel model = new MergeSelectedViewModel(
+                    Services,
+                    Context.Responders.Refresh(pair.Item1),
+                    Context.Responders.Refresh(pair.Item2));
+                model.Saved += (sender, e) =>
+                {
+                    Pairs.Remove(pair);
+                    Pairs.Refresh();
+                };
+                return model;
+            });
         }
 
-        public void Ignore()
+        public async Task IgnoreAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Ignore the selected potentially duplicate responders?", "Ignore"))
             {
-                Verb = "Ignore",
-                Message = "Ignore the selected potentially duplicate responders?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                foreach (Tuple<Responder, Responder> duplicate in SelectedItems)
+                foreach (Tuple<Responder, Responder> pair in Pairs.SelectedItems)
                 {
                     Context.UniquePairs.Save(new UniquePair(true)
                     {
-                        Responder1Id = duplicate.Item1.ResponderId,
-                        Responder2Id = duplicate.Item2.ResponderId
+                        Responder1Id = pair.Item1.ResponderId,
+                        Responder2Id = pair.Item2.ResponderId
                     });
-                    duplicates.Remove(duplicate);
+                    Pairs.Remove(pair);
                 }
-                Refresh();
-            };
-            MessengerInstance.Send(msg);
+                Pairs.Refresh();
+            }
+        }
+
+        public override void Dispose()
+        {
+            Pairs.Dispose();
+            base.Dispose();
         }
     }
 }

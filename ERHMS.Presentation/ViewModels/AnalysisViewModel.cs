@@ -1,5 +1,7 @@
 ﻿using ERHMS.Domain;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -11,30 +13,23 @@ namespace ERHMS.Presentation.ViewModels
         public string Name
         {
             get { return name; }
-            set { Set(nameof(Name), ref name, value); }
+            set { SetProperty(nameof(Name), ref name, value); }
         }
 
-        public RelayCommand CreateCommand { get; private set; }
+        public ICommand CreateCommand { get; private set; }
 
         protected AnalysisViewModel(IServiceManager services, View view)
             : base(services)
         {
             View = view;
-            CreateCommand = new RelayCommand(Create, HasName);
-            PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(Name))
-                {
-                    CreateCommand.RaiseCanExecuteChanged();
-                }
-            };
+            CreateCommand = new AsyncCommand(CreateAsync, CanCreate);
         }
 
-        public bool HasName()
+        public bool CanCreate()
         {
             return !string.IsNullOrWhiteSpace(Name);
         }
 
-        public abstract void Create();
+        public abstract Task CreateAsync();
     }
 }

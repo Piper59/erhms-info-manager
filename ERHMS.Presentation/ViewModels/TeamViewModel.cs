@@ -1,8 +1,9 @@
 ﻿using ERHMS.Domain;
+using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TeamViewModel : ViewModelBase
+    public class TeamViewModel : DocumentViewModel
     {
         public Team Team { get; private set; }
         public TeamDetailViewModel Detail { get; private set; }
@@ -28,6 +29,13 @@ namespace ERHMS.Presentation.ViewModels
                     Title = Detail.Title;
                 }
             };
+        }
+
+        public override void Dispose()
+        {
+            Detail.Dispose();
+            Responders.Dispose();
+            base.Dispose();
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Services;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -13,7 +14,10 @@ namespace ERHMS.Presentation.ViewModels
             Title = "Create an Analysis";
         }
 
-        public override void Create()
+        public PgmViewModel(IServiceManager services, int viewId)
+            : this(services, services.Data.Context.Views.SelectById(viewId)) { }
+
+        public override async Task CreateAsync()
         {
             EpiInfo.Pgm pgm = new EpiInfo.Pgm
             {
@@ -23,17 +27,16 @@ namespace ERHMS.Presentation.ViewModels
             Context.Project.InsertPgm(pgm);
             if (View.Incident != null)
             {
-                PgmLink pgmLink = new PgmLink(true)
+                Context.PgmLinks.Save(new PgmLink(true)
                 {
                     PgmId = pgm.PgmId,
                     IncidentId = View.Incident.IncidentId
-                };
-                Context.PgmLinks.Save(pgmLink);
+                });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(Domain.Pgm)));
-            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            Dialogs.InvokeAsync(Analysis.OpenPgm.Create(pgm.Content, true));
+            Services.Data.Refresh(typeof(Domain.Pgm));
             Close();
+            Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
+            await Services.Wrapper.InvokeAsync(Analysis.OpenPgm.Create(pgm.Content, true));
         }
     }
 }

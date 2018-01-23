@@ -1,12 +1,15 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class TeamResponderListViewModel : ListViewModel<TeamResponder>
+    public class TeamResponderListViewModel : DocumentViewModel
     {
         public class IncidentRoleListChildViewModel : ListViewModel<IncidentRole>
         {
@@ -16,12 +19,13 @@ namespace ERHMS.Presentation.ViewModels
                 : base(services)
             {
                 Team = team;
+                Refresh();
             }
 
             protected override IEnumerable<IncidentRole> GetItems()
             {
                 return Context.IncidentRoles.SelectByIncidentId(Team.IncidentId)
-                    .OrderBy(incidentRole => incidentRole.Name);
+                    .OrderBy(incidentRole => incidentRole.Name, StringComparer.OrdinalIgnoreCase);
             }
         }
 
@@ -29,22 +33,20 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Team Team { get; private set; }
 
-            public RelayCommand EditCommand { get; private set; }
+            public ICommand EditCommand { get; private set; }
 
             public ResponderListChildViewModel(IServiceManager services, Team team)
                 : base(services)
             {
                 Team = team;
-                EditCommand = new RelayCommand(Edit, HasSelectedItem);
-                SelectionChanged += (sender, e) =>
-                {
-                    EditCommand.RaiseCanExecuteChanged();
-                };
+                Refresh();
+                EditCommand = new Command(Edit, HasSelectedItem);
             }
 
             protected override IEnumerable<Responder> GetItems()
             {
-                return Context.Responders.SelectTeamable(Team.IncidentId, Team.TeamId).OrderBy(responder => responder.FullName);
+                return Context.Responders.SelectTeamable(Team.IncidentId, Team.TeamId)
+                    .OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase);
             }
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
@@ -60,17 +62,55 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Documents.ShowResponder((Responder)SelectedItem.Clone());
+                Services.Document.Show(
+                    model => model.Responder.Equals(SelectedItem),
+                    () => new ResponderViewModel(Services, Context.Responders.Refresh(SelectedItem)));
+            }
+        }
+
+        public class TeamResponderListChildViewModel : ListViewModel<TeamResponder>
+        {
+            public Team Team { get; private set; }
+
+            public ICommand EditCommand { get; private set; }
+
+            public TeamResponderListChildViewModel(IServiceManager services, Team team)
+                : base(services)
+            {
+                Team = team;
+                Refresh();
+                EditCommand = new Command(Edit, HasSelectedItem);
+            }
+
+            protected override IEnumerable<TeamResponder> GetItems()
+            {
+                return Context.TeamResponders.SelectUndeletedByTeamId(Team.TeamId)
+                    .OrderBy(teamResponder => teamResponder.Responder.FullName, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(TeamResponder item)
+            {
+                yield return item.Responder.FullName;
+                yield return item.IncidentRole?.Name;
+            }
+
+            public void Edit()
+            {
+                Services.Document.Show(
+                    model => model.Responder.Equals(SelectedItem.Responder),
+                    () => new ResponderViewModel(Services, Context.Responders.Refresh(SelectedItem.Responder)));
             }
         }
 
         public Team Team { get; private set; }
         public IncidentRoleListChildViewModel IncidentRoles { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
+        public TeamResponderListChildViewModel TeamResponders { get; private set; }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand RemoveCommand { get; private set; }
-        public RelayCommand EmailCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
+        public ICommand RemoveCommand { get; private set; }
+        public ICommand EmailCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public TeamResponderListViewModel(IServiceManager services, Team team)
             : base(services)
@@ -79,30 +119,11 @@ namespace ERHMS.Presentation.ViewModels
             Team = team;
             IncidentRoles = new IncidentRoleListChildViewModel(services, team);
             Responders = new ResponderListChildViewModel(services, team);
-            Refresh();
-            AddCommand = new RelayCommand(Add, Responders.HasSelectedItem);
-            RemoveCommand = new RelayCommand(Remove, HasSelectedItem);
-            EmailCommand = new RelayCommand(Email, HasSelectedItem);
-            Responders.SelectionChanged += (sender, e) =>
-            {
-                AddCommand.RaiseCanExecuteChanged();
-            };
-            SelectionChanged += (sender, e) =>
-            {
-                RemoveCommand.RaiseCanExecuteChanged();
-                EmailCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        protected override IEnumerable<TeamResponder> GetItems()
-        {
-            return Context.TeamResponders.SelectUndeletedByTeamId(Team.TeamId).OrderBy(teamResponder => teamResponder.Responder.FullName);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(TeamResponder item)
-        {
-            yield return item.Responder.FullName;
-            yield return item.IncidentRole?.Name;
+            TeamResponders = new TeamResponderListChildViewModel(services, team);
+            AddCommand = new Command(Add, Responders.HasAnySelectedItems);
+            RemoveCommand = new AsyncCommand(RemoveAsync, TeamResponders.HasAnySelectedItems);
+            EmailCommand = new Command(Email, TeamResponders.HasAnySelectedItems);
+            RefreshCommand = new Command(Refresh);
         }
 
         public void Add()
@@ -116,39 +137,45 @@ namespace ERHMS.Presentation.ViewModels
                     IncidentRoleId = IncidentRoles.SelectedItem?.IncidentRoleId
                 });
             }
-            MessengerInstance.Send(new RefreshMessage(typeof(TeamResponder)));
+            Responders.Refresh();
+            Services.Data.Refresh(typeof(TeamResponder));
         }
 
-        public void Remove()
+        public async Task RemoveAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Remove the selected responders?", "Remove"))
             {
-                Verb = "Remove",
-                Message = "Remove the selected responders?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                foreach (TeamResponder teamResponder in SelectedItems)
+                foreach (TeamResponder teamResponder in TeamResponders.SelectedItems)
                 {
                     Context.TeamResponders.Delete(teamResponder);
                 }
-                MessengerInstance.Send(new RefreshMessage(typeof(TeamResponder)));
-            };
-            MessengerInstance.Send(msg);
+            }
+            Responders.Refresh();
+            Services.Data.Refresh(typeof(TeamResponder));
         }
 
         public void Email()
         {
-            Documents.Show(
-                () => new EmailViewModel(Services, TypedSelectedItems.Select(teamResponder => teamResponder.Responder)),
-                document => false);
+            Services.Document.Show(() =>
+            {
+                IEnumerable<Responder> responders = TeamResponders.SelectedItems.Select(teamResponder => teamResponder.Responder);
+                return new EmailViewModel(Services, Context.Responders.Refresh(responders));
+            });
         }
 
-        public override void Refresh()
+        public void Refresh()
         {
             IncidentRoles.Refresh();
             Responders.Refresh();
-            base.Refresh();
+            TeamResponders.Refresh();
+        }
+
+        public override void Dispose()
+        {
+            IncidentRoles.Dispose();
+            Responders.Dispose();
+            TeamResponders.Dispose();
+            base.Dispose();
         }
     }
 }

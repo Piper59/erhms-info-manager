@@ -21,7 +21,7 @@
                         <Image Margin="0,0,0,5"
                                Source="/Images/ERHMS.png"
                                Stretch="None" />
-                        <TextBlock Text="{Binding AppTitle, Mode=OneTime}" />
+                        <TextBlock Text="{StaticResource AppTitle}" />
                         <TextBlock>Version <Run Text="{Binding Version, Mode=OneTime}" /></TextBlock>
                         <TextBlock Text="{Binding BuildDate, Mode=OneTime}" />
                     </StackPanel>

@@ -1,109 +1,104 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class ResponderListViewModel : ListViewModel<Responder>
+    public class ResponderListViewModel : DocumentViewModel
     {
-        private ViewListViewModel views;
-        private ViewListViewModel Views
+        public class ResponderListChildViewModel : ListViewModel<Responder>
         {
-            get
+            public ResponderListChildViewModel(IServiceManager services)
+                : base(services)
             {
-                views.SelectedItem = views.TypedItems.SingleOrDefault(view => view.Name == Context.Responders.View.Name);
-                return views;
+                Refresh();
+            }
+
+            protected override IEnumerable<Responder> GetItems()
+            {
+                return Context.Responders.SelectUndeleted()
+                    .OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(Responder item)
+            {
+                yield return item.LastName;
+                yield return item.FirstName;
+                yield return item.EmailAddress;
+                yield return item.City;
+                yield return item.State;
+                yield return item.OrganizationName;
+                yield return item.Occupation;
             }
         }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand MergeAutomatedCommand { get; private set; }
-        public RelayCommand MergeSelectedCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand EmailCommand { get; private set; }
-        public RelayCommand ImportFromProjectCommand { get; private set; }
-        public RelayCommand ImportFromPackageCommand { get; private set; }
-        public RelayCommand ImportFromFileCommand { get; private set; }
-        public RelayCommand ImportFromWebCommand { get; private set; }
-        public RelayCommand ImportFromMobileCommand { get; private set; }
-        public RelayCommand ExportToPackageCommand { get; private set; }
-        public RelayCommand ExportToFileCommand { get; private set; }
-        public RelayCommand AnalyzeClassicCommand { get; private set; }
-        public RelayCommand AnalyzeVisualCommand { get; private set; }
+        public ResponderListChildViewModel Responders { get; private set; }
+        public ImportExportViewModel ImportExport { get; private set; }
+
+        public ICommand CreateCommand { get; private set; }
+        public ICommand EditCommand { get; private set; }
+        public ICommand MergeAutomatedCommand { get; private set; }
+        public ICommand MergeSelectedCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand EmailCommand { get; private set; }
+        public ICommand ImportFromProjectCommand { get; private set; }
+        public ICommand ImportFromPackageCommand { get; private set; }
+        public ICommand ImportFromFileCommand { get; private set; }
+        public ICommand ImportFromWebCommand { get; private set; }
+        public ICommand ImportFromMobileCommand { get; private set; }
+        public ICommand ExportToPackageCommand { get; private set; }
+        public ICommand ExportToFileCommand { get; private set; }
+        public ICommand AnalyzeClassicCommand { get; private set; }
+        public ICommand AnalyzeVisualCommand { get; private set; }
 
         public ResponderListViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Responders";
-            views = new ViewListViewModel(services, null);
-            Refresh();
-            CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasSingleSelectedItem);
-            MergeAutomatedCommand = new RelayCommand(MergeAutomated);
-            MergeSelectedCommand = new RelayCommand(MergeSelected);
-            DeleteCommand = new RelayCommand(Delete, HasSingleSelectedItem);
-            EmailCommand = new RelayCommand(Email, HasSelectedItem);
-            ImportFromProjectCommand = new RelayCommand(ImportFromProject);
-            ImportFromPackageCommand = new RelayCommand(ImportFromPackage);
-            ImportFromFileCommand = new RelayCommand(ImportFromFile);
-            ImportFromWebCommand = new RelayCommand(ImportFromWeb);
-            ImportFromMobileCommand = new RelayCommand(ImportFromMobile);
-            ExportToPackageCommand = new RelayCommand(ExportToPackage);
-            ExportToFileCommand = new RelayCommand(ExportToFile);
-            AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic);
-            AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual);
-            SelectionChanged += (sender, e) =>
-            {
-                EditCommand.RaiseCanExecuteChanged();
-                MergeSelectedCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                EmailCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        protected override IEnumerable<Responder> GetItems()
-        {
-            return Context.Responders.SelectUndeleted()
-                .OrderBy(responder => responder.FullName)
-                .ThenBy(responder => responder.EmailAddress);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(Responder item)
-        {
-            yield return item.LastName;
-            yield return item.FirstName;
-            yield return item.EmailAddress;
-            yield return item.City;
-            yield return item.State;
-            yield return item.OrganizationName;
-            yield return item.Occupation;
+            Responders = new ResponderListChildViewModel(services);
+            ImportExport = new ImportExportViewModel(services);
+            CreateCommand = new Command(Create);
+            EditCommand = new Command(Edit, Responders.HasOneSelectedItem);
+            MergeAutomatedCommand = new AsyncCommand(MergeAutomatedAsync);
+            MergeSelectedCommand = new AsyncCommand(MergeSelectedAsync);
+            DeleteCommand = new AsyncCommand(DeleteAsync, Responders.HasOneSelectedItem);
+            EmailCommand = new Command(Email, Responders.HasAnySelectedItems);
+            ImportFromProjectCommand = new Command(ImportFromProject);
+            ImportFromPackageCommand = new Command(ImportFromPackage);
+            ImportFromFileCommand = new AsyncCommand(ImportFromFileAsync);
+            ImportFromWebCommand = new AsyncCommand(ImportFromWebAsync);
+            ImportFromMobileCommand = new Command(ImportFromMobile);
+            ExportToPackageCommand = new Command(ExportToPackage);
+            ExportToFileCommand = new AsyncCommand(ExportToFileAsync);
+            AnalyzeClassicCommand = new AsyncCommand(AnalyzeClassicAsync);
+            AnalyzeVisualCommand = new AsyncCommand(AnalyzeVisualAsync);
         }
 
         public void Create()
         {
-            Documents.ShowNewResponder();
+            Services.Document.Show(() => new ResponderViewModel(Services, new Responder(true)));
         }
 
         public void Edit()
         {
-            Documents.ShowResponder((Responder)SelectedItem.Clone());
+            Services.Document.Show(
+                model => model.Responder.Equals(Responders.SelectedItems.First()),
+                () => new ResponderViewModel(Services, Context.Responders.Refresh(Responders.SelectedItems.First())));
         }
 
-        public void MergeAutomated()
+        public async Task MergeAutomatedAsync()
         {
-            ICollection<Tuple<Responder, Responder>> duplicates = new List<Tuple<Responder, Responder>>();
-            BlockMessage msg = new BlockMessage
-            {
-                Message = "Searching for potentially duplicate responders \u2026"
-            };
-            msg.Executing += (sender, e) =>
+            ICollection<Tuple<Responder, Responder>> pairs = new List<Tuple<Responder, Responder>>();
+            await Services.Dialog.BlockAsync("Searching for potentially duplicate responders \u2026", () =>
             {
                 IList<Responder> responders = Context.Responders.SelectUndeleted()
-                    .OrderBy(responder => responder.FullName)
+                    .OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase)
                     .ToList();
                 ILookup<string, string> uniquePairs = Context.UniquePairs.SelectLookup();
                 for (int index1 = 0; index1 < responders.Count; index1++)
@@ -112,122 +107,115 @@ namespace ERHMS.Presentation.ViewModels
                     for (int index2 = index1 + 1; index2 < responders.Count; index2++)
                     {
                         Responder responder2 = responders[index2];
-                        if (uniquePairs[responder1.ResponderId].Contains(responder2.ResponderId, StringComparer.OrdinalIgnoreCase))
+                        if (!uniquePairs[responder1.ResponderId].Contains(responder2.ResponderId, StringComparer.OrdinalIgnoreCase)
+                            && responder1.IsSimilar(responder2))
                         {
-                            continue;
-                        }
-                        if (responder1.IsSimilar(responder2))
-                        {
-                            duplicates.Add(Tuple.Create(responder1, responder2));
+                            pairs.Add(Tuple.Create(responder1, responder2));
                         }
                     }
                 }
-            };
-            msg.Executed += (sender, e) =>
+            });
+            if (pairs.Count == 0)
             {
-                if (duplicates.Count == 0)
+                string message = string.Join(" ", new string[]
                 {
-                    ICollection<string> message = new List<string>();
-                    message.Add("No potentially duplicate responders found.");
-                    message.Add("You may still perform a merge by selecting two responders from the list and clicking Merge > Selected.");
-                    MessengerInstance.Send(new AlertMessage
-                    {
-                        Title = "Help",
-                        Message = string.Join(" ", message)
-                    });
-                }
-                else
-                {
-                    Documents.Show(
-                        () => new MergeAutomatedViewModel(Services, duplicates),
-                        document => false);
-                }
-            };
-            MessengerInstance.Send(msg);
+                    "No potentially duplicate responders found.",
+                    "You may still perform a merge by selecting two responders from the list and clicking Merge > Selected."
+                });
+                await Services.Dialog.AlertAsync(message, "Help");
+            }
+            else
+            {
+                Services.Document.Show(() => new MergeAutomatedViewModel(Services, pairs));
+            }
         }
 
-        public void MergeSelected()
+        public async Task MergeSelectedAsync()
         {
-            if (SelectedItems.Count != 2)
+            IList<Responder> responders = Responders.SelectedItems.ToList();
+            if (responders.Count != 2)
             {
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = "Please select two responders to merge."
-                });
+                await Services.Dialog.AlertAsync("Please select two responders to merge.");
                 return;
             }
-            Documents.Show(
-                () => new MergeSelectedViewModel(Services, (Responder)SelectedItems[0], (Responder)SelectedItems[1]),
-                document => false);
+            Services.Document.Show(() => new MergeSelectedViewModel(
+                Services,
+                Context.Responders.Refresh(responders[0]),
+                Context.Responders.Refresh(responders[1])));
         }
 
-        public void Delete()
+        public async Task DeleteAsync()
         {
-            ConfirmMessage msg = new ConfirmMessage
+            if (await Services.Dialog.ConfirmAsync("Delete the selected responder?", "Delete"))
             {
-                Verb = "Delete",
-                Message = "Delete the selected responder?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                SelectedItem.Deleted = true;
-                Context.Responders.Save(SelectedItem);
-                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-            };
-            MessengerInstance.Send(msg);
+                Responder responder = Responders.SelectedItems.First();
+                responder.Deleted = true;
+                Context.Responders.Save(responder);
+                Services.Data.Refresh(typeof(Responder));
+            }
         }
 
         public void Email()
         {
-            Documents.Show(
-                () => new EmailViewModel(Services, TypedSelectedItems),
-                document => false);
+            Services.Document.Show(() => new EmailViewModel(Services, Context.Responders.Refresh(Responders.SelectedItems)));
         }
 
         public void ImportFromProject()
         {
-            Views.ImportFromProject();
+            ImportExport.ImportFromProject(Context.Responders.View.Id);
         }
 
         public void ImportFromPackage()
         {
-            Views.ImportFromPackage();
+            ImportExport.ImportFromPackage(Context.Responders.View.Id);
         }
 
-        public void ImportFromFile()
+        public async Task ImportFromFileAsync()
         {
-            Views.ImportFromFile();
+            await ImportExport.ImportFromFileAsync(Context.Responders.View.Id);
         }
 
-        public void ImportFromWeb()
+        public async Task ImportFromWebAsync()
         {
-            Views.ImportFromWeb();
+            await ImportExport.ImportFromWebAsync(Context.Responders.View.Id);
         }
 
         public void ImportFromMobile()
         {
-            Views.ImportFromMobile();
+            ImportExport.ImportFromMobile(Context.Responders.View.Id);
         }
 
         public void ExportToPackage()
         {
-            Views.ExportToPackage();
+            ImportExport.ExportToPackage(Context.Responders.View.Id);
         }
 
-        public void ExportToFile()
+        public async Task ExportToFileAsync()
         {
-            Views.ExportToFile();
+            await ImportExport.ExportToFileAsync(Context.Responders.View.Id);
         }
 
-        public void AnalyzeClassic()
+        public async Task AnalyzeClassicAsync()
         {
-            Views.AnalyzeClassic();
+            using (PgmViewModel model = new PgmViewModel(Services, Context.Responders.View.Id))
+            {
+                await Services.Dialog.ShowAsync(model);
+            }
         }
 
-        public void AnalyzeVisual()
+        public async Task AnalyzeVisualAsync()
         {
-            Views.AnalyzeVisual();
+            using (CanvasViewModel model = new CanvasViewModel(Services, Context.Responders.View.Id))
+            {
+                await Services.Dialog.ShowAsync(model);
+            }
         }
 
+        public override void Dispose()
+        {
+            Responders.Dispose();
+            ImportExport.Dispose();
+            base.Dispose();
+        }
     }
 }

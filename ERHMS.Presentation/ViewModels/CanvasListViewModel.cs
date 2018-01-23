@@ -1,82 +1,94 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Wrappers;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class CanvasListViewModel : ListViewModel<Canvas>
+    public class CanvasListViewModel : DocumentViewModel
     {
-        public Incident Incident { get; private set; }
+        public class CanvasListChildViewModel : ListViewModel<Canvas>
+        {
+            public Incident Incident { get; private set; }
 
-        public RelayCommand OpenCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand LinkCommand { get; private set; }
+            public CanvasListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
+            {
+                Incident = incident;
+                Refresh();
+            }
+
+            protected override IEnumerable<Canvas> GetItems()
+            {
+                IEnumerable<Canvas> canvases;
+                if (Incident == null)
+                {
+                    canvases = Context.Canvases.SelectUndeleted();
+                }
+                else
+                {
+                    canvases = Context.Canvases.SelectByIncidentId(Incident.IncidentId);
+                }
+                return canvases.OrderBy(canvas => canvas.Name, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(canvas => canvas.Incident?.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(Canvas item)
+            {
+                yield return item.Name;
+                yield return item.Incident?.Name;
+            }
+        }
+
+        public CanvasListChildViewModel Canvases { get; private set; }
+
+        public ICommand OpenCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand LinkCommand { get; private set; }
 
         public CanvasListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Dashboards";
-            Incident = incident;
-            Refresh();
-            OpenCommand = new RelayCommand(Open, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            LinkCommand = new RelayCommand(Link, HasSelectedItem);
-            SelectionChanged += (sender, e) =>
-            {
-                OpenCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                LinkCommand.RaiseCanExecuteChanged();
-            };
+            Canvases = new CanvasListChildViewModel(services, incident);
+            OpenCommand = new AsyncCommand(OpenAsync, Canvases.HasSelectedItem);
+            DeleteCommand = new AsyncCommand(DeleteAsync, Canvases.HasSelectedItem);
+            LinkCommand = new AsyncCommand(LinkAsync, Canvases.HasSelectedItem);
         }
 
-        protected override IEnumerable<Canvas> GetItems()
+        public async Task OpenAsync()
         {
-            IEnumerable<Canvas> canvases;
-            if (Incident == null)
+            Canvas canvas = Context.Canvases.Refresh(Canvases.SelectedItem);
+            await Services.Wrapper.InvokeAsync(AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content));
+        }
+
+        public async Task DeleteAsync()
+        {
+            if (await Services.Dialog.ConfirmAsync("Delete the selected dashboard?", "Delete"))
             {
-                canvases = Context.Canvases.SelectUndeleted();
+                Context.CanvasLinks.DeleteByCanvasId(Canvases.SelectedItem.CanvasId);
+                Context.Project.DeleteCanvas(Canvases.SelectedItem.CanvasId);
+                Services.Data.Refresh(typeof(Canvas));
             }
-            else
+        }
+
+        public async Task LinkAsync()
+        {
+            using (CanvasLinkViewModel model = new CanvasLinkViewModel(Services, Context.Canvases.Refresh(Canvases.SelectedItem)))
             {
-                canvases = Context.Canvases.SelectByIncidentId(Incident.IncidentId);
+                await Services.Dialog.ShowAsync(model);
             }
-            return canvases.OrderBy(canvas => canvas.Name).ThenBy(canvas => canvas.Incident?.Name);
         }
 
-        protected override IEnumerable<string> GetFilteredValues(Canvas item)
+        public override void Dispose()
         {
-            yield return item.Name;
-            yield return item.Incident?.Name;
-        }
-
-        public void Open()
-        {
-            Canvas canvas = Context.Canvases.SelectById(SelectedItem.CanvasId);
-            Dialogs.InvokeAsync(AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content));
-        }
-
-        public void Delete()
-        {
-            ConfirmMessage msg = new ConfirmMessage
-            {
-                Verb = "Delete",
-                Message = "Delete the selected dashboard?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                Context.CanvasLinks.DeleteByCanvasId(SelectedItem.CanvasId);
-                Context.Project.DeleteCanvas(SelectedItem.CanvasId);
-                MessengerInstance.Send(new RefreshMessage(typeof(Canvas)));
-            };
-            MessengerInstance.Send(msg);
-        }
-
-        public void Link()
-        {
-            Dialogs.ShowAsync(new CanvasLinkViewModel(Services, Context.Canvases.SelectById(SelectedItem.CanvasId)));
+            Canvases.Dispose();
+            base.Dispose();
         }
     }
 }

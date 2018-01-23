@@ -1,114 +1,97 @@
-﻿using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+﻿using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class StartViewModel : ViewModelBase
+    [ContextSafe]
+    public class StartViewModel : DocumentViewModel
     {
-        public RelayCommand ShowDataSourcesCommand { get; private set; }
-        public RelayCommand ShowHelpCommand { get; private set; }
-        public RelayCommand ShowRespondersCommand { get; private set; }
-        public RelayCommand ShowIncidentsCommand { get; private set; }
-        public RelayCommand ShowViewsCommand { get; private set; }
-        public RelayCommand ShowTemplatesCommand { get; private set; }
-        public RelayCommand ShowPgmsCommand { get; private set; }
-        public RelayCommand ShowCanvasesCommand { get; private set; }
+        public ICommand ShowDataSourcesCommand { get; private set; }
+        public ICommand ShowHelpCommand { get; private set; }
+        public ICommand ShowRespondersCommand { get; private set; }
+        public ICommand ShowIncidentsCommand { get; private set; }
+        public ICommand ShowViewsCommand { get; private set; }
+        public ICommand ShowTemplatesCommand { get; private set; }
+        public ICommand ShowPgmsCommand { get; private set; }
+        public ICommand ShowCanvasesCommand { get; private set; }
 
         public StartViewModel(IServiceManager services)
             : base(services)
         {
             Title = "Start";
-            ShowDataSourcesCommand = new RelayCommand(ShowDataSources);
-            ShowHelpCommand = new RelayCommand(ShowHelp);
-            ShowRespondersCommand = new RelayCommand(ShowResponders);
-            ShowIncidentsCommand = new RelayCommand(ShowIncidents);
-            ShowViewsCommand = new RelayCommand(ShowViews);
-            ShowTemplatesCommand = new RelayCommand(ShowTemplates);
-            ShowPgmsCommand = new RelayCommand(ShowPgms);
-            ShowCanvasesCommand = new RelayCommand(ShowCanvases);
+            ShowDataSourcesCommand = new Command(ShowDataSources);
+            ShowHelpCommand = new Command(ShowHelp);
+            ShowRespondersCommand = new AsyncCommand(ShowRespondersAsync);
+            ShowIncidentsCommand = new AsyncCommand(ShowIncidentsAsync);
+            ShowViewsCommand = new AsyncCommand(ShowViewsAsync);
+            ShowTemplatesCommand = new AsyncCommand(ShowTemplatesAsync);
+            ShowPgmsCommand = new AsyncCommand(ShowPgmsAsync);
+            ShowCanvasesCommand = new AsyncCommand(ShowCanvasesAsync);
         }
 
-        private bool Validate()
+        private async Task<bool> ValidateAsync()
         {
             if (Context == null)
             {
-                ConfirmMessage msg = new ConfirmMessage
+                if (await Services.Dialog.ConfirmAsync(Services.String.GetStarted, title: "Help"))
                 {
-                    Title = "Help",
-                    Message = "To get started, please create or open a data source."
-                };
-                msg.Confirmed += (sender, e) =>
-                {
-                    Documents.ShowDataSources();
-                };
-                MessengerInstance.Send(msg);
+                    Services.Document.ShowByType(() => new DataSourceListViewModel(Services));
+                }
                 return false;
             }
             return true;
         }
 
+        private async Task ShowAsync<TDocument>(Func<TDocument> constructor)
+            where TDocument : DocumentViewModel
+        {
+            if (!await ValidateAsync())
+            {
+                return;
+            }
+            Services.Document.ShowByType(constructor);
+        }
+
         public void ShowDataSources()
         {
-            Documents.ShowDataSources();
+            Services.Document.ShowByType(() => new DataSourceListViewModel(Services));
         }
 
         public void ShowHelp()
         {
-            Documents.ShowHelp();
+            Services.Document.ShowByType(() => new HelpViewModel(Services));
         }
 
-        public void ShowResponders()
+        public async Task ShowRespondersAsync()
         {
-            if (!Validate())
-            {
-                return;
-            }
-            Documents.ShowResponders();
+            await ShowAsync(() => new ResponderListViewModel(Services));
         }
 
-        public void ShowIncidents()
+        public async Task ShowIncidentsAsync()
         {
-            if (!Validate())
-            {
-                return;
-            }
-            Documents.ShowIncidents();
+            await ShowAsync(() => new IncidentListViewModel(Services));
         }
 
-        public void ShowViews()
+        public async Task ShowViewsAsync()
         {
-            if (!Validate())
-            {
-                return;
-            }
-            Documents.ShowViews();
+            await ShowAsync(() => new ViewListViewModel(Services, null));
         }
 
-        public void ShowTemplates()
+        public async Task ShowTemplatesAsync()
         {
-            if (!Validate())
-            {
-                return;
-            }
-            Documents.ShowTemplates();
+            await ShowAsync(() => new TemplateListViewModel(Services, null));
         }
 
-        public void ShowPgms()
+        public async Task ShowPgmsAsync()
         {
-            if (!Validate())
-            {
-                return;
-            }
-            Documents.ShowPgms();
+            await ShowAsync(() => new PgmListViewModel(Services, null));
         }
 
-        public void ShowCanvases()
+        public async Task ShowCanvasesAsync()
         {
-            if (!Validate())
-            {
-                return;
-            }
-            Documents.ShowCanvases();
+            await ShowAsync(() => new CanvasListViewModel(Services, null));
         }
     }
 }

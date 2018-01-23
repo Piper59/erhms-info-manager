@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
+using System.Windows;
 
 namespace ERHMS
 {
@@ -24,7 +24,7 @@ namespace ERHMS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "ERHMS Info Manager\u2122", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.ToString(), "ERHMS Info Manager\u2122", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

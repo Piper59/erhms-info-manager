@@ -1,8 +1,9 @@
 ﻿using ERHMS.Domain;
+using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class JobViewModel : ViewModelBase
+    public class JobViewModel : DocumentViewModel
     {
         public Job Job { get; private set; }
         public JobDetailViewModel Detail { get; private set; }
@@ -34,6 +35,16 @@ namespace ERHMS.Presentation.ViewModels
                     Title = Detail.Title;
                 }
             };
+        }
+
+        public override void Dispose()
+        {
+            Detail.Dispose();
+            Notes.Dispose();
+            Teams.Dispose();
+            Responders.Dispose();
+            Locations.Dispose();
+            base.Dispose();
         }
     }
 }

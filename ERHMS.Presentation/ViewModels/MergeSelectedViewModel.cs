@@ -1,80 +1,76 @@
 ﻿using Epi;
 using Epi.Fields;
 using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class MergeSelectedViewModel : ViewModelBase
+    public class MergeSelectedViewModel : DocumentViewModel
     {
-        public class PropertyChildViewModel : ViewModelBase
+        public class PropertyChildViewModel : ObservableObject
         {
             private string name;
             public string Name
             {
                 get { return name; }
-                set { Set(nameof(Name), ref name, value); }
+                set { SetProperty(nameof(Name), ref name, value); }
             }
 
             private string value1;
             public string Value1
             {
                 get { return value1; }
-                set { Set(nameof(Value1), ref value1, value); }
+                set { SetProperty(nameof(Value1), ref value1, value); }
             }
 
             private string value2;
             public string Value2
             {
                 get { return value2; }
-                set { Set(nameof(Value2), ref value2, value); }
+                set { SetProperty(nameof(Value2), ref value2, value); }
             }
 
-            private bool isSelected1;
-            public bool IsSelected1
+            private bool selected1;
+            public bool Selected1
             {
                 get
                 {
-                    return isSelected1;
+                    return selected1;
                 }
                 set
                 {
-                    if (Set(nameof(IsSelected1), ref isSelected1, value))
+                    SetProperty(nameof(Selected1), ref selected1, value);
+                    if (value)
                     {
-                        if (value)
-                        {
-                            IsSelected2 = false;
-                        }
+                        Selected2 = false;
                     }
                 }
             }
 
-            private bool isSelected2;
-            public bool IsSelected2
+            private bool selected2;
+            public bool Selected2
             {
                 get
                 {
-                    return isSelected2;
+                    return selected2;
                 }
                 set
                 {
-                    if (Set(nameof(IsSelected2), ref isSelected2, value))
+                    SetProperty(nameof(Selected2), ref selected2, value);
+                    if (value)
                     {
-                        if (value)
-                        {
-                            IsSelected1 = false;
-                        }
+                        Selected1 = false;
                     }
                 }
             }
 
-            public PropertyChildViewModel(IServiceManager services, string name, Responder responder1, Responder responder2)
-                : base(services)
+            public PropertyChildViewModel(string name, Responder responder1, Responder responder2)
             {
                 Name = name;
                 Value1 = Convert.ToString(responder1.GetProperty(name));
@@ -84,11 +80,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public Responder Responder1 { get; private set; }
         public Responder Responder2 { get; private set; }
-        public IList<PropertyChildViewModel> Properties { get; private set; }
+        public ICollection<PropertyChildViewModel> Properties { get; private set; }
 
-        public RelayCommand SelectAll1Command { get; private set; }
-        public RelayCommand SelectAll2Command { get; private set; }
-        public RelayCommand SaveCommand { get; private set; }
+        public ICommand SelectAll1Command { get; private set; }
+        public ICommand SelectAll2Command { get; private set; }
+        public ICommand SaveCommand { get; private set; }
 
         public MergeSelectedViewModel(IServiceManager services, Responder responder1, Responder responder2)
             : base(services)
@@ -105,11 +101,11 @@ namespace ERHMS.Presentation.ViewModels
                 .Prepend(ColumnNames.GLOBAL_RECORD_ID);
             foreach (string propertyName in propertyNames)
             {
-                Properties.Add(new PropertyChildViewModel(services, propertyName, responder1, responder2));
+                Properties.Add(new PropertyChildViewModel(propertyName, responder1, responder2));
             }
-            SelectAll1Command = new RelayCommand(SelectAll1);
-            SelectAll2Command = new RelayCommand(SelectAll2);
-            SaveCommand = new RelayCommand(Save);
+            SelectAll1Command = new Command(SelectAll1);
+            SelectAll2Command = new Command(SelectAll2);
+            SaveCommand = new AsyncCommand(SaveAsync);
         }
 
         public event EventHandler Saved;
@@ -126,7 +122,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (PropertyChildViewModel property in Properties)
             {
-                property.IsSelected1 = true;
+                property.Selected1 = true;
             }
         }
 
@@ -134,52 +130,50 @@ namespace ERHMS.Presentation.ViewModels
         {
             foreach (PropertyChildViewModel property in Properties)
             {
-                property.IsSelected2 = true;
+                property.Selected2 = true;
             }
         }
 
-        public bool Validate()
+        public async Task<bool> ValidateAsync()
         {
             ICollection<string> fields = new List<string>();
             foreach (PropertyChildViewModel property in Properties)
             {
-                if (!property.IsSelected1 && !property.IsSelected2)
+                if (!property.Selected1 && !property.Selected2)
                 {
                     fields.Add(property.Name);
                 }
             }
             if (fields.Count > 0)
             {
-                ShowValidationMessage(ValidationError.Required, fields);
+                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             return true;
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            if (!Validate())
+            if (!await ValidateAsync())
             {
                 return;
             }
-            Responder responder;
-            responder = Properties[0].IsSelected1 ? Responder1 : Responder2;
-            foreach (PropertyChildViewModel property in Properties)
             {
-                Responder selectedResponder = property.IsSelected1 ? Responder1 : Responder2;
-                responder.SetProperty(property.Name, selectedResponder.GetProperty(property.Name));
+                Responder responder = Properties.First().Selected1 ? Responder1 : Responder2;
+                foreach (PropertyChildViewModel property in Properties)
+                {
+                    responder.SetProperty(property.Name, (property.Selected1 ? Responder1 : Responder2).GetProperty(property.Name));
+                }
+                Context.Responders.Save(responder);
             }
-            Context.Responders.Save(responder);
-            responder = Properties[0].IsSelected1 ? Responder2 : Responder1;
-            responder.Deleted = true;
-            Context.Responders.Save(responder);
-            OnSaved();
-            MessengerInstance.Send(new ToastMessage
             {
-                Message = "Responders have been merged."
-            });
-            MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-            Close();
+                Responder responder = Properties.First().Selected1 ? Responder2 : Responder1;
+                responder.Deleted = true;
+                Context.Responders.Save(responder);
+            }
+            Services.Dialog.Notify("Responders have been merged.");
+            OnSaved();
+            await CloseAsync();
         }
     }
 }

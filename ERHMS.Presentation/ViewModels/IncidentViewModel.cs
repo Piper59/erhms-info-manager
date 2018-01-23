@@ -1,8 +1,9 @@
 ﻿using ERHMS.Domain;
+using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentViewModel : ViewModelBase
+    public class IncidentViewModel : DocumentViewModel
     {
         public Incident Incident { get; private set; }
         public IncidentDetailViewModel Detail { get; private set; }
@@ -50,6 +51,24 @@ namespace ERHMS.Presentation.ViewModels
                     Title = Detail.Title;
                 }
             };
+        }
+
+        public override void Dispose()
+        {
+            Detail.Dispose();
+            Notes.Dispose();
+            Rosters.Dispose();
+            Roles.Dispose();
+            Teams.Dispose();
+            Locations.Dispose();
+            Jobs.Dispose();
+            Views.Dispose();
+            Templates.Dispose();
+            Assignments.Dispose();
+            Pgms.Dispose();
+            Canvases.Dispose();
+            Report.Dispose();
+            base.Dispose();
         }
     }
 }

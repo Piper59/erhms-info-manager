@@ -1,129 +1,108 @@
 ﻿using Epi;
 using Epi.Fields;
-using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Wrappers;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
-using System;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class RecordListViewModel : ListViewModel<ViewEntity>
+    public class RecordListViewModel : DocumentViewModel
     {
-        public ViewEntityRepository<ViewEntity> Entities { get; private set; }
-
-        private ICollection<DataGridColumn> columns;
-        public ICollection<DataGridColumn> Columns
+        public class RecordListChildViewModel : ListViewModel<ViewEntity>
         {
-            get { return columns; }
-            private set { Set(nameof(Columns), ref columns, value); }
+            public ViewEntityRepository<ViewEntity> Entities { get; private set; }
+
+            public RecordListChildViewModel(IServiceManager services, View view)
+                : base(services)
+            {
+                Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
+                Refresh();
+            }
+
+            protected override IEnumerable<ViewEntity> GetItems()
+            {
+                return Entities.SelectOrdered();
+            }
         }
 
-        protected override IEnumerable<Type> RefreshTypes
-        {
-            get { yield break; }
-        }
+        public View View { get; private set; }
+        public ICollection<DataGridColumn> Columns { get; private set; }
+        public RecordListChildViewModel Records { get; private set; }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand LinkCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand UndeleteCommand { get; private set; }
+        public ICommand CreateCommand { get; private set; }
+        public ICommand EditCommand { get; private set; }
+        public ICommand PostpopulateCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand UndeleteCommand { get; private set; }
 
         public RecordListViewModel(IServiceManager services, View view)
             : base(services)
         {
             Title = view.Name;
-            Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
             List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id).ToList();
-            int append = int.MaxValue;
             Columns = view.Fields.DataFields
                 .Cast<Field>()
-                .OrderBy(field => field.Name == ColumnNames.REC_STATUS ? append : fieldIds.IndexOf(field.Id))
+                .OrderBy(field => field.Name == ColumnNames.REC_STATUS ? int.MaxValue : fieldIds.IndexOf(field.Id))
                 .Select(field => (DataGridColumn)new DataGridTextColumn
                 {
                     Header = field.Name,
                     Binding = new Binding(field.Name)
                 })
                 .ToList();
-            Refresh();
-            CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasSingleSelectedItem);
-            LinkCommand = new RelayCommand(Link, CanLink);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            UndeleteCommand = new RelayCommand(Undelete, HasSelectedItem);
-            SelectionChanged += (sender, e) =>
+            Records = new RecordListChildViewModel(services, view);
+            CreateCommand = new AsyncCommand(CreateAsync);
+            EditCommand = new AsyncCommand(EditAsync, Records.HasOneSelectedItem);
+            PostpopulateCommand = new AsyncCommand(PostpopulateAsync, CanPostpopulate);
+            DeleteCommand = new Command(Delete, Records.HasAnySelectedItems);
+            UndeleteCommand = new Command(Undelete, Records.HasAnySelectedItems);
+        }
+
+        public async Task CreateAsync()
+        {
+            Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name);
+            wrapper.AddRecordSavedHandler(Services);
+            await Services.Wrapper.InvokeAsync(wrapper);
+        }
+
+        public async Task EditAsync()
+        {
+            Wrapper wrapper = Enter.OpenRecord.Create(Context.Project.FilePath, View.Name, Records.SelectedItems.First().UniqueKey.Value);
+            wrapper.AddRecordSavedHandler(Services);
+            await Services.Wrapper.InvokeAsync(wrapper);
+        }
+
+        public bool CanPostpopulate()
+        {
+            return View.Fields.Contains("ResponderID") && Records.HasOneSelectedItem();
+        }
+
+        public async Task PostpopulateAsync()
+        {
+            using (PostpopulateViewModel model = new PostpopulateViewModel(Services, View, Records.SelectedItems.First()))
             {
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                UndeleteCommand.RaiseCanExecuteChanged();
-            };
-        }
-
-        public bool CanLink()
-        {
-            return Entities.View.Fields.Contains("ResponderID") && HasSingleSelectedItem();
-        }
-
-        protected override IEnumerable<ViewEntity> GetItems()
-        {
-            return Entities.SelectOrdered();
-        }
-
-        public void Create()
-        {
-            Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, Entities.View.Name);
-            // TODO: Combine
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == "RecordSaved" && e.Properties.ViewId == Context.Responders.View.Id)
-                {
-                    Services.Dispatcher.Invoke(() =>
-                    {
-                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-                    });
-                }
-            };
-            Dialogs.InvokeAsync(wrapper);
-        }
-
-        public void Edit()
-        {
-            Wrapper wrapper = Enter.OpenRecord.Create(Context.Project.FilePath, Entities.View.Name, SelectedItem.UniqueKey.Value);
-            // TODO: Combine
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == "RecordSaved" && e.Properties.ViewId == Context.Responders.View.Id)
-                {
-                    Services.Dispatcher.Invoke(() =>
-                    {
-                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-                    });
-                }
-            };
-            Dialogs.InvokeAsync(wrapper);
-        }
-
-        public void Link()
-        {
-            Dialogs.ShowAsync(new ResponderLinkViewModel(Services, Entities, SelectedItem));
+                await Services.Dialog.ShowAsync(model);
+            }
         }
 
         private void SetDeleted(bool deleted)
         {
-            foreach (ViewEntity entity in SelectedItems)
+            using (Services.Busy.BeginTask())
             {
-                if (entity.Deleted != deleted)
+                foreach (ViewEntity entity in Records.SelectedItems)
                 {
-                    entity.Deleted = deleted;
-                    Entities.Save(entity);
+                    if (entity.Deleted != deleted)
+                    {
+                        entity.Deleted = deleted;
+                        Records.Entities.Save(entity);
+                    }
                 }
             }
         }
@@ -136,6 +115,12 @@ namespace ERHMS.Presentation.ViewModels
         public void Undelete()
         {
             SetDeleted(false);
+        }
+
+        public override void Dispose()
+        {
+            Records.Dispose();
+            base.Dispose();
         }
     }
 }

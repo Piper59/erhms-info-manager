@@ -1,37 +1,24 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
 {
     public class SurveyViewModel : DialogViewModel
     {
-        private static string GetErrorMessageInternal(string reason)
-        {
-            return string.Format("{0} Please verify web survey settings.", reason);
-        }
-
-        public static string GetErrorMessage(string reason)
-        {
-            return GetErrorMessageInternal(reason);
-        }
-
-        public static string GetErrorMessage(ConfigurationError error)
-        {
-            return GetErrorMessageInternal(error.GetErrorMessage());
-        }
-
-        private Epi.View view;
-        public Epi.View View
+        private View view;
+        public View View
         {
             get { return view; }
-            private set { Set(nameof(View), ref view, value); }
+            private set { SetProperty(nameof(View), ref view, value); }
         }
 
         public ICollection<ResponseType> ResponseTypes { get; private set; }
@@ -40,12 +27,12 @@ namespace ERHMS.Presentation.ViewModels
         public Survey Survey
         {
             get { return survey; }
-            set { Set(nameof(Survey), ref survey, value); }
+            set { SetProperty(nameof(Survey), ref survey, value); }
         }
 
-        public RelayCommand PublishCommand { get; private set; }
+        public ICommand PublishCommand { get; private set; }
 
-        public SurveyViewModel(IServiceManager services, Epi.View view)
+        public SurveyViewModel(IServiceManager services, View view)
             : base(services)
         {
             Title = "Publish to Web";
@@ -53,41 +40,44 @@ namespace ERHMS.Presentation.ViewModels
             ResponseTypes = EnumExtensions.GetValues<ResponseType>()
                 .Where(responseType => responseType != ResponseType.Unspecified)
                 .ToList();
-            PublishCommand = new RelayCommand(Publish);
+            PublishCommand = new AsyncCommand(PublishAsync);
         }
 
-        public void Open()
+        public async Task<bool> InitializeAsync()
         {
             if (View.IsWebSurvey())
             {
                 ConfigurationError error = ConfigurationError.None;
-                BlockMessage msg = new BlockMessage
+                try
                 {
-                    Message = "Retrieving web survey details \u2026"
-                };
-                msg.Executing += (sender, e) =>
+                    await Services.Dialog.BlockAsync("Retrieving web survey details \u2026", () =>
+                    {
+                        if (Service.IsConfigured(out error))
+                        {
+                            Survey = Service.GetSurvey(View.WebSurveyId);
+                        }
+                    });
+                }
+                catch (Exception ex)
                 {
-                    if (Service.IsConfigured(out error))
-                    {
-                        Survey = Service.GetSurvey(View.WebSurveyId);
-                    }
-                };
-                msg.Executed += (sender, e) =>
+                    Log.Logger.Warn("Failed to retrieve web survey details", ex);
+                }
+                if (error != ConfigurationError.None)
                 {
-                    if (error != ConfigurationError.None)
-                    {
-                        Documents.ShowSettings(GetErrorMessage(error));
-                    }
-                    else if (Survey == null)
-                    {
-                        Documents.ShowSettings(GetErrorMessage("Failed to retrieve web survey details."));
-                    }
-                    else
-                    {
-                        Dialogs.ShowAsync(this);
-                    }
-                };
-                MessengerInstance.Send(msg);
+                    await Services.Dialog.AlertAsync(string.Format("{0} Please verify web survey settings.", error.GetErrorMessage()));
+                    Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                    return false;
+                }
+                else if (Survey == null)
+                {
+                    await Services.Dialog.AlertAsync("Failed to retrieve web survey details. Please verify web survey settings.");
+                    Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
             else
             {
@@ -100,11 +90,11 @@ namespace ERHMS.Presentation.ViewModels
                     ResponseType = ResponseType.Single,
                     PublishKey = Guid.NewGuid()
                 };
-                Dialogs.ShowAsync(this);
+                return true;
             }
         }
 
-        private bool Validate()
+        private async Task<bool> ValidateAsync()
         {
             ICollection<string> fields = new List<string>();
             if (string.IsNullOrWhiteSpace(Survey.Title))
@@ -113,76 +103,71 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                ShowValidationMessage(ValidationError.Required, fields);
+                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (!DateTimeExtensions.AreInOrder(Survey.StartDate, Survey.EndDate))
             {
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = "End date must be later than start date."
-                });
+                await Services.Dialog.AlertAsync("End date must be later than start date.");
                 return false;
             }
             return true;
         }
 
-        public void Publish()
+        public async Task PublishAsync()
         {
-            if (!Validate())
+            if (!await ValidateAsync())
             {
                 return;
             }
             ConfigurationError error = ConfigurationError.None;
             bool success = false;
-            BlockMessage msg = new BlockMessage
+            try
             {
-                Message = "Publishing form to web \u2026"
-            };
-            msg.Executing += (sender, e) =>
-            {
-                if (!Service.IsConfigured(out error))
+                await Services.Dialog.BlockAsync("Publishing form to web \u2026", () =>
                 {
-                    return;
-                }
-                if (View.IsWebSurvey())
-                {
-                    success = Service.Republish(View, Survey);
-                }
-                else
-                {
-                    success = Service.Publish(View, Survey);
-                    if (success)
+                    if (!Service.IsConfigured(out error))
                     {
-                        Context.WebSurveys.Save(new WebSurvey(true)
-                        {
-                            WebSurveyId = Survey.SurveyId,
-                            ViewId = View.Id,
-                            PublishKey = Survey.PublishKey.ToString()
-                        });
+                        return;
                     }
-                }
-            };
-            msg.Executed += (sender, e) =>
-            {
-                if (error != ConfigurationError.None)
-                {
-                    Documents.ShowSettings(GetErrorMessage(error));
-                }
-                else if (!success)
-                {
-                    Documents.ShowSettings(GetErrorMessage("Failed to publish form to web."));
-                }
-                else
-                {
-                    MessengerInstance.Send(new ToastMessage
+                    if (View.IsWebSurvey())
                     {
-                        Message = "Form has been published to web."
-                    });
-                }
-                Close();
-            };
-            MessengerInstance.Send(msg);
+                        success = Service.Republish(View, Survey);
+                    }
+                    else
+                    {
+                        success = Service.Publish(View, Survey);
+                        if (success)
+                        {
+                            Context.WebSurveys.Save(new WebSurvey(true)
+                            {
+                                WebSurveyId = Survey.SurveyId,
+                                ViewId = View.Id,
+                                PublishKey = Survey.PublishKey.ToString()
+                            });
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Warn("Failed to publish form to web", ex);
+            }
+            if (error != ConfigurationError.None)
+            {
+                await Services.Dialog.AlertAsync(string.Format("{0} Please verify web survey settings.", error.GetErrorMessage()));
+                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+            }
+            else if (!success)
+            {
+                await Services.Dialog.AlertAsync("Failed to publish form to web. Please verify web survey settings.");
+                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+            }
+            else
+            {
+                Services.Dialog.Notify("Form has been published to web.");
+            }
+            Close();
         }
     }
 }

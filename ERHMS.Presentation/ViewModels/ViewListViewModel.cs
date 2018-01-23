@@ -3,199 +3,187 @@ using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.DataAccess;
-using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Web;
 using ERHMS.EpiInfo.Wrappers;
-using ERHMS.Presentation.Messages;
-using ERHMS.Utility;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Record = ERHMS.EpiInfo.Web.Record;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class ViewListViewModel : ListViewModel<View>
+    public class ViewListViewModel : DocumentViewModel
     {
-        public Incident Incident { get; private set; }
+        public class ViewListChildViewModel : ListViewModel<View>
+        {
+            public Incident Incident { get; private set; }
 
-        public RelayCommand CreateCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand LinkCommand { get; private set; }
-        public RelayCommand EnterDataCommand { get; private set; }
-        public RelayCommand ViewDataCommand { get; private set; }
-        public RelayCommand PublishToTemplateCommand { get; private set; }
-        public RelayCommand PublishToWebCommand { get; private set; }
-        public RelayCommand PublishToMobileCommand { get; private set; }
-        public RelayCommand ImportFromProjectCommand { get; private set; }
-        public RelayCommand ImportFromPackageCommand { get; private set; }
-        public RelayCommand ImportFromFileCommand { get; private set; }
-        public RelayCommand ImportFromWebCommand { get; private set; }
-        public RelayCommand ImportFromMobileCommand { get; private set; }
-        public RelayCommand ExportToPackageCommand { get; private set; }
-        public RelayCommand ExportToFileCommand { get; private set; }
-        public RelayCommand AnalyzeClassicCommand { get; private set; }
-        public RelayCommand AnalyzeVisualCommand { get; private set; }
+            public ViewListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
+            {
+                Incident = incident;
+                Refresh();
+            }
+
+            protected override IEnumerable<View> GetItems()
+            {
+                IEnumerable<View> views;
+                if (Incident == null)
+                {
+                    views = Context.Views.SelectUndeleted();
+                }
+                else
+                {
+                    views = Context.Views.SelectByIncidentId(Incident.IncidentId);
+                }
+                return views.OrderBy(view => view.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(View item)
+            {
+                yield return item.Name;
+                yield return item.Incident?.Name;
+            }
+
+            public bool HasNonSystemSelectedItem()
+            {
+                return HasSelectedItem() && SelectedItem.ViewId != Context.Responders.View.Id;
+            }
+        }
+
+        public Incident Incident { get; private set; }
+        public ViewListChildViewModel Views { get; private set; }
+        public ImportExportViewModel ImportExport { get; private set; }
+
+        public ICommand CreateCommand { get; private set; }
+        public ICommand EditCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand LinkCommand { get; private set; }
+        public ICommand EnterDataCommand { get; private set; }
+        public ICommand ViewDataCommand { get; private set; }
+        public ICommand PublishToTemplateCommand { get; private set; }
+        public ICommand PublishToWebCommand { get; private set; }
+        public ICommand PublishToMobileCommand { get; private set; }
+        public ICommand ImportFromProjectCommand { get; private set; }
+        public ICommand ImportFromPackageCommand { get; private set; }
+        public ICommand ImportFromFileCommand { get; private set; }
+        public ICommand ImportFromWebCommand { get; private set; }
+        public ICommand ImportFromMobileCommand { get; private set; }
+        public ICommand ExportToPackageCommand { get; private set; }
+        public ICommand ExportToFileCommand { get; private set; }
+        public ICommand AnalyzeClassicCommand { get; private set; }
+        public ICommand AnalyzeVisualCommand { get; private set; }
 
         public ViewListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Forms";
             Incident = incident;
-            CreateCommand = new RelayCommand(Create);
-            EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasNonSystemSelectedItem);
-            LinkCommand = new RelayCommand(Link, HasNonSystemSelectedItem);
-            EnterDataCommand = new RelayCommand(EnterData, HasSelectedItem);
-            ViewDataCommand = new RelayCommand(ViewData, HasSelectedItem);
-            PublishToTemplateCommand = new RelayCommand(PublishToTemplate, HasSelectedItem);
-            PublishToWebCommand = new RelayCommand(PublishToWeb, HasSelectedItem);
-            PublishToMobileCommand = new RelayCommand(PublishToMobile, HasSelectedItem);
-            ImportFromProjectCommand = new RelayCommand(ImportFromProject, HasSelectedItem);
-            ImportFromPackageCommand = new RelayCommand(ImportFromPackage, HasSelectedItem);
-            ImportFromFileCommand = new RelayCommand(ImportFromFile, HasSelectedItem);
-            ImportFromWebCommand = new RelayCommand(ImportFromWeb, HasSelectedItem);
-            ImportFromMobileCommand = new RelayCommand(ImportFromMobile, HasSelectedItem);
-            ExportToPackageCommand = new RelayCommand(ExportToPackage, HasSelectedItem);
-            ExportToFileCommand = new RelayCommand(ExportToFile, HasSelectedItem);
-            AnalyzeClassicCommand = new RelayCommand(AnalyzeClassic, HasSelectedItem);
-            AnalyzeVisualCommand = new RelayCommand(AnalyzeVisual, HasSelectedItem);
-            Refresh();
-            SelectionChanged += (sender, e) =>
+            Views = new ViewListChildViewModel(services, incident);
+            ImportExport = new ImportExportViewModel(services);
+            CreateCommand = new AsyncCommand(CreateAsync);
+            EditCommand = new AsyncCommand(EditAsync, Views.HasSelectedItem);
+            DeleteCommand = new AsyncCommand(DeleteAsync, Views.HasNonSystemSelectedItem);
+            LinkCommand = new AsyncCommand(LinkAsync, Views.HasNonSystemSelectedItem);
+            EnterDataCommand = new AsyncCommand(EnterDataAsync, Views.HasSelectedItem);
+            ViewDataCommand = new Command(ViewData, Views.HasSelectedItem);
+            PublishToTemplateCommand = new AsyncCommand(PublishToTemplateAsync, Views.HasSelectedItem);
+            PublishToWebCommand = new AsyncCommand(PublishToWebAsync, Views.HasSelectedItem);
+            PublishToMobileCommand = new AsyncCommand(PublishToMobileAsync, Views.HasSelectedItem);
+            ImportFromProjectCommand = new Command(ImportFromProject, Views.HasSelectedItem);
+            ImportFromPackageCommand = new Command(ImportFromPackage, Views.HasSelectedItem);
+            ImportFromFileCommand = new AsyncCommand(ImportFromFileAsync, Views.HasSelectedItem);
+            ImportFromWebCommand = new AsyncCommand(ImportFromWebAsync, Views.HasSelectedItem);
+            ImportFromMobileCommand = new Command(ImportFromMobile, Views.HasSelectedItem);
+            ExportToPackageCommand = new Command(ExportToPackage, Views.HasSelectedItem);
+            ExportToFileCommand = new AsyncCommand(ExportToFileAsync, Views.HasSelectedItem);
+            AnalyzeClassicCommand = new AsyncCommand(AnalyzeClassicAsync, Views.HasSelectedItem);
+            AnalyzeVisualCommand = new AsyncCommand(AnalyzeVisualAsync, Views.HasSelectedItem);
+        }
+
+        public async Task CreateAsync()
+        {
+            string prefix = Incident == null ? "" : Incident.Name + "_";
+            Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(Context.Project.FilePath, DataContext.GetViewTemplate().FilePath, prefix);
+            wrapper.AddViewCreatedHandler(Services, Incident);
+            await Services.Wrapper.InvokeAsync(wrapper);
+        }
+
+        public async Task EditAsync()
+        {
+            await Services.Wrapper.InvokeAsync(MakeView.OpenView.Create(Context.Project.FilePath, Views.SelectedItem.Name));
+        }
+
+        public async Task DeleteAsync()
+        {
+            if (await Services.Dialog.ConfirmAsync("Delete the selected form?", "Delete"))
             {
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-                LinkCommand.RaiseCanExecuteChanged();
-                EnterDataCommand.RaiseCanExecuteChanged();
-                ViewDataCommand.RaiseCanExecuteChanged();
-                PublishToTemplateCommand.RaiseCanExecuteChanged();
-                PublishToWebCommand.RaiseCanExecuteChanged();
-                PublishToMobileCommand.RaiseCanExecuteChanged();
-                ImportFromProjectCommand.RaiseCanExecuteChanged();
-                ImportFromPackageCommand.RaiseCanExecuteChanged();
-                ImportFromFileCommand.RaiseCanExecuteChanged();
-                ImportFromWebCommand.RaiseCanExecuteChanged();
-                ImportFromMobileCommand.RaiseCanExecuteChanged();
-                ExportToPackageCommand.RaiseCanExecuteChanged();
-                ExportToFileCommand.RaiseCanExecuteChanged();
-                AnalyzeClassicCommand.RaiseCanExecuteChanged();
-                AnalyzeVisualCommand.RaiseCanExecuteChanged();
+                Context.Assignments.DeleteByViewId(Views.SelectedItem.ViewId);
+                Context.ViewLinks.DeleteByViewId(Views.SelectedItem.ViewId);
+                Context.WebSurveys.DeleteByViewId(Views.SelectedItem.ViewId);
+                Context.Project.DeleteView(Views.SelectedItem.ViewId);
+                Services.Data.Refresh(typeof(View));
             };
         }
 
-        public bool HasNonSystemSelectedItem()
+        public async Task LinkAsync()
         {
-            return HasSelectedItem() && SelectedItem.Name != Context.Responders.View.Name;
-        }
-
-        protected override IEnumerable<View> GetItems()
-        {
-            IEnumerable<View> views;
-            if (Incident == null)
+            using (ViewLinkViewModel model = new ViewLinkViewModel(Services, Context.Views.Refresh(Views.SelectedItem)))
             {
-                views = Context.Views.SelectUndeleted();
+                await Services.Dialog.ShowAsync(model);
             }
-            else
-            {
-                views = Context.Views.SelectByIncidentId(Incident.IncidentId);
-            }
-            return views.OrderBy(view => view.Name);
         }
 
-        protected override IEnumerable<string> GetFilteredValues(View item)
+        public async Task EnterDataAsync()
         {
-            yield return item.Name;
-            yield return item.Incident?.Name;
-        }
-
-        public void Create()
-        {
-            TemplateListViewModel.Create(Services, DataContext.GetViewTemplate(), Incident);
-        }
-
-        public void Edit()
-        {
-            Dialogs.InvokeAsync(MakeView.OpenView.Create(Context.Project.FilePath, SelectedItem.Name));
-        }
-
-        public void Delete()
-        {
-            ConfirmMessage msg = new ConfirmMessage
-            {
-                Verb = "Delete",
-                Message = "Delete the selected form?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                Context.Assignments.DeleteByViewId(SelectedItem.ViewId);
-                Context.ViewLinks.DeleteByViewId(SelectedItem.ViewId);
-                Context.WebSurveys.DeleteByViewId(SelectedItem.ViewId);
-                Context.Project.DeleteView(SelectedItem.ViewId);
-                MessengerInstance.Send(new RefreshMessage(typeof(View)));
-            };
-            MessengerInstance.Send(msg);
-        }
-
-        public void Link()
-        {
-            Dialogs.ShowAsync(new ViewLinkViewModel(Services, Context.Views.SelectById(SelectedItem.ViewId)));
-        }
-
-        public void EnterData()
-        {
-            View view = Context.Views.SelectById(SelectedItem.ViewId);
+            View view = Context.Views.Refresh(Views.SelectedItem);
             if (view.HasResponderIdField)
             {
-                Dialogs.ShowAsync(new PrepopulateViewModel(Services, view));
+                using (PrepopulateViewModel model = new PrepopulateViewModel(Services, view))
+                {
+                    await Services.Dialog.ShowAsync(model);
+                }
             }
             else
             {
                 Context.Project.CollectedData.EnsureDataTablesExist(view.ViewId);
                 Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, view.Name);
-                // TODO: Combine
-                wrapper.Event += (sender, e) =>
-                {
-                    if (e.Type == "RecordSaved" && e.Properties.ViewId == Context.Responders.View.Id)
-                    {
-                        Services.Dispatcher.Invoke(() =>
-                        {
-                            MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-                        });
-                    }
-                };
-                Dialogs.InvokeAsync(wrapper);
+                wrapper.AddRecordSavedHandler(Services);
+                await Services.Wrapper.InvokeAsync(wrapper);
             }
         }
 
         public void ViewData()
         {
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            Documents.ShowRecords(Context.Project.GetViewById(SelectedItem.ViewId));
+            Context.Project.CollectedData.EnsureDataTablesExist(Views.SelectedItem.ViewId);
+            Services.Document.Show(
+                model => model.View.Id == Views.SelectedItem.ViewId,
+                () => new RecordListViewModel(Services, Context.Project.GetViewById(Views.SelectedItem.ViewId)));
         }
 
-        public void PublishToTemplate()
+        public async Task PublishToTemplateAsync()
         {
-            Wrapper wrapper = MakeView.CreateTemplate.Create(Context.Project.FilePath, SelectedItem.Name);
+            Wrapper wrapper = MakeView.CreateTemplate.Create(Context.Project.FilePath, Views.SelectedItem.Name);
             wrapper.Event += (sender, e) =>
             {
                 if (e.Type == "TemplateCreated")
                 {
-                    Services.Dispatcher.Invoke(() =>
+                    Services.Dispatch.Post(() =>
                     {
-                        MessengerInstance.Send(new RefreshMessage(typeof(TemplateInfo)));
+                        Services.Data.Refresh(typeof(TemplateInfo));
                     });
                 }
             };
-            Dialogs.InvokeAsync(wrapper);
+            await Services.Wrapper.InvokeAsync(wrapper);
         }
 
-        private bool Validate(string target, Epi.View view, Func<Field, bool> unsupported)
+        private async Task<bool> ValidateAsync(string target, Epi.View view, Func<Field, bool> supported)
         {
             ICollection<Field> fields = view.Fields.Cast<Field>()
-                .Where(unsupported)
+                .Where(field => !supported(field))
                 .ToList();
             if (fields.Count > 0)
             {
@@ -208,226 +196,103 @@ namespace ERHMS.Presentation.ViewModels
                     message.AppendFormat("{0} ({1})", field.Name, field.FieldType);
                     message.AppendLine();
                 }
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = message.ToString().Trim()
-                });
+                await Services.Dialog.AlertAsync(message.ToString().Trim());
                 return false;
             }
             return true;
         }
 
-        public void PublishToWeb()
+        public async Task PublishToWebAsync()
         {
-            Epi.View view = Context.Project.GetViewById(SelectedItem.ViewId);
-            if (!Validate("web", view, field => !field.FieldType.IsWebSupported()))
+            Epi.View view = Context.Project.GetViewById(Views.SelectedItem.ViewId);
+            if (!await ValidateAsync("web", view, field => field.FieldType.IsWebSupported()))
             {
                 return;
             }
             ConfigurationError error;
             if (Service.IsConfigured(out error, true))
             {
-                SurveyViewModel survey = new SurveyViewModel(Services, view);
-                survey.Open();
+                using (SurveyViewModel model = new SurveyViewModel(Services, view))
+                {
+                    if (await model.InitializeAsync())
+                    {
+                        await Services.Dialog.ShowAsync(model);
+                    }
+                }
             }
             else
             {
-                Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
+                await Services.Dialog.AlertAsync(string.Format("{0} Please verify web survey settings.", error.GetErrorMessage()));
+                Services.Document.ShowByType(() => new SettingsViewModel(Services));
             }
         }
 
-        public void PublishToMobile()
+        public async Task PublishToMobileAsync()
         {
-            Epi.View view = Context.Project.GetViewById(SelectedItem.ViewId);
-            if (!Validate("mobile", view, field => !field.FieldType.IsMobileSupported()))
+            Epi.View view = Context.Project.GetViewById(Views.SelectedItem.ViewId);
+            if (!await ValidateAsync("mobile", view, field => field.FieldType.IsMobileSupported()))
             {
                 return;
             }
-            MakeView.PublishToMobile.Create(Context.Project.FilePath, SelectedItem.Name).Invoke();
+            MakeView.PublishToMobile.Create(Context.Project.FilePath, Views.SelectedItem.Name).Invoke();
         }
 
         public void ImportFromProject()
         {
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            bool imported = ImportExport.ImportFromView(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
-            if (imported && SelectedItem.ViewId == Context.Responders.View.Id)
-            {
-                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-            }
+            ImportExport.ImportFromProject(Views.SelectedItem.ViewId);
         }
 
         public void ImportFromPackage()
         {
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            bool imported = ImportExport.ImportFromPackage(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
-            if (imported && SelectedItem.ViewId == Context.Responders.View.Id)
-            {
-                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-            }
+            ImportExport.ImportFromPackage(Views.SelectedItem.ViewId);
         }
 
-        public void ImportFromFile()
+        public async Task ImportFromFileAsync()
         {
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            Wrapper wrapper = Analysis.Import.Create(Context.Project.FilePath, SelectedItem.Name);
-            // TODO: Combine
-            wrapper.Event += (sender, e) =>
-            {
-                if (e.Type == "DataImported" && e.Properties.ViewId == Context.Responders.View.Id)
-                {
-                    Services.Dispatcher.Invoke(() =>
-                    {
-                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-                    });
-                }
-            };
-            Dialogs.InvokeAsync(wrapper);
+            await ImportExport.ImportFromFileAsync(Views.SelectedItem.ViewId);
         }
 
-        public void ImportFromWeb()
+        public async Task ImportFromWebAsync()
         {
-            Epi.View view = Context.Project.GetViewById(SelectedItem.ViewId);
-            if (!view.IsWebSurvey())
-            {
-                MessengerInstance.Send(new AlertMessage
-                {
-                    Message = "Form has not been published to web."
-                });
-                return;
-            }
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            ConfigurationError error = ConfigurationError.None;
-            if (!Service.IsConfigured(out error, true))
-            {
-                Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
-                return;
-            }
-            Survey survey = null;
-            Exception exception = null;
-            bool unlinked = false;
-            bool success = false;
-            BlockMessage msg = new BlockMessage
-            {
-                Message = "Importing data from web \u2026"
-            };
-            msg.Executing += (sender, e) =>
-            {
-                if (!Service.IsConfigured(out error))
-                {
-                    return;
-                }
-                survey = Service.GetSurvey(view.WebSurveyId);
-                if (survey == null)
-                {
-                    return;
-                }
-                ILookup<string, Responder> responders = Context.Responders.Select()
-                    .ToLookup(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
-                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
-                try
-                {
-                    foreach (Record record in Service.GetRecords(survey))
-                    {
-                        if (record.ContainsKey("ResponderID") && record.ContainsKey("ResponderEmailAddress"))
-                        {
-                            Responder responder = responders[record["ResponderEmailAddress"]].FirstOrDefault();
-                            if (responder == null)
-                            {
-                                unlinked = true;
-                            }
-                            else
-                            {
-                                record["ResponderID"] = responder.ResponderId;
-                            }
-                        }
-                        entities.Save(record);
-                    }
-                    success = true;
-                }
-                catch (Exception ex)
-                {
-                    Log.Logger.Warn("Failed to import data from web", ex);
-                    exception = ex;
-                }
-            };
-            msg.Executed += (sender, e) =>
-            {
-                if (error != ConfigurationError.None)
-                {
-                    Documents.ShowSettings(SurveyViewModel.GetErrorMessage(error));
-                }
-                else if (survey == null)
-                {
-                    Documents.ShowSettings(SurveyViewModel.GetErrorMessage("Failed to retrieve web survey details."));
-                }
-                else if (!success)
-                {
-                    Log.Logger.Warn("Failed to import data from web", exception);
-                    Documents.ShowSettings("Failed to import data from web.", exception);
-                }
-                else
-                {
-                    if (SelectedItem.ViewId == Context.Responders.View.Id)
-                    {
-                        MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-                    }
-                    MessengerInstance.Send(new ToastMessage
-                    {
-                        Message = "Data has been imported from web."
-                    });
-                    if (unlinked)
-                    {
-                        ShowUnlinkedMessage(view);
-                    }
-                }
-            };
-            MessengerInstance.Send(msg);
-        }
-
-        private void ShowUnlinkedMessage(Epi.View view)
-        {
-            ConfirmMessage msg = new ConfirmMessage
-            {
-                Verb = "Review",
-                Message = "One or more records could not be linked to a responder. Review these records?"
-            };
-            msg.Confirmed += (sender, e) =>
-            {
-                Documents.ShowRecords(view);
-            };
-            MessengerInstance.Send(msg);
+            await ImportExport.ImportFromWebAsync(Views.SelectedItem.ViewId);
         }
 
         public void ImportFromMobile()
         {
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            bool imported = ImportExport.ImportFromMobile(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
-            if (imported && SelectedItem.ViewId == Context.Responders.View.Id)
-            {
-                MessengerInstance.Send(new RefreshMessage(typeof(Responder)));
-            }
+            ImportExport.ImportFromMobile(Views.SelectedItem.ViewId);
         }
 
         public void ExportToPackage()
         {
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            ImportExport.ExportToPackage(Dialogs.Win32Window, Context.Project.GetViewById(SelectedItem.ViewId));
+            ImportExport.ExportToPackage(Views.SelectedItem.ViewId);
         }
 
-        public void ExportToFile()
+        public async Task ExportToFileAsync()
         {
-            Context.Project.CollectedData.EnsureDataTablesExist(SelectedItem.ViewId);
-            Dialogs.InvokeAsync(Analysis.Export.Create(Context.Project.FilePath, SelectedItem.Name));
+            await ImportExport.ExportToFileAsync(Views.SelectedItem.ViewId);
         }
 
-        public void AnalyzeClassic()
+        public async Task AnalyzeClassicAsync()
         {
-            Dialogs.ShowAsync(new PgmViewModel(Services, SelectedItem));
+            using (PgmViewModel model = new PgmViewModel(Services, Views.SelectedItem.ViewId))
+            {
+                await Services.Dialog.ShowAsync(model);
+            }
         }
 
-        public void AnalyzeVisual()
+        public async Task AnalyzeVisualAsync()
         {
-            Dialogs.ShowAsync(new CanvasViewModel(Services, SelectedItem));
+            using (CanvasViewModel model = new CanvasViewModel(Services, Views.SelectedItem.ViewId))
+            {
+                await Services.Dialog.ShowAsync(model);
+            }
+        }
+
+        public override void Dispose()
+        {
+            Views.Dispose();
+            ImportExport.Dispose();
+            base.Dispose();
         }
     }
 }

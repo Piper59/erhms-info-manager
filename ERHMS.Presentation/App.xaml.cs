@@ -1,46 +1,51 @@
 ﻿using Epi;
 using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
-using ERHMS.Presentation.Dialogs;
-using ERHMS.Presentation.Messages;
+using ERHMS.Presentation.Services;
 using ERHMS.Presentation.ViewModels;
+using ERHMS.Presentation.Views;
 using ERHMS.Utility;
-using GalaSoft.MvvmLight.Messaging;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Xceed.Wpf.AvalonDock.Controls;
-using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation
 {
-    public partial class App : Application, IServiceManager, IDispatcher
+    public partial class App : Application, IAppService
     {
-        public const string BareTitle = "ERHMS Info Manager";
-        public static readonly string Title = BareTitle + "\u2122";
-
-        private static bool errored;
-        private static object erroredLock = new object();
-
-        public new static App Current
-        {
-            get { return (App)Application.Current; }
-        }
+        private static InterlockedBoolean errored;
+        private static ServiceManager services;
 
         [STAThread]
         internal static void Main(string[] args)
         {
+            errored = new InterlockedBoolean(false);
+            services = new ServiceManager
+            {
+                Busy = new BusyService(),
+                Data = new DataService(),
+                Print = new PrintService(),
+                Process = new ProcessService()
+            };
             try
             {
-                LoadSettings();
+                if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+                {
+                    string message = string.Format("Reset settings for {0}?", services.String.AppTitle);
+                    if (MessageBox.Show(message, services.String.AppTitle, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        ResetSettings();
+                    }
+                }
                 Log.LevelName = Settings.Default.LogLevelName;
                 Log.Logger.Debug("Starting up");
                 DataContext.Configure();
@@ -60,106 +65,40 @@ namespace ERHMS.Presentation
             }
         }
 
-        private static void LoadSettings()
+        private static void HandleError(Exception ex)
         {
-            bool reset;
-            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            Log.Logger.Fatal("Fatal error", ex);
+            if (errored.Exchange(true) == false)
             {
-                string message = string.Format("Reset settings for {0}?", Title);
-                reset = MessageBox.Show(message, Title, MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+                string message = string.Format("{0} encountered an error and must shut down.", services.String.AppTitle);
+                MessageBox.Show(message, services.String.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            else
-            {
-                Version version;
-                reset = Version.TryParse(Settings.Default.Version, out version)
-                    && version < Assembly.GetExecutingAssembly().GetName().Version
-                    && version.Major == 0;
-            }
-            if (reset)
+        }
+
+        private static void ResetSettings()
+        {
+            try
             {
                 Settings.Default.Reset();
                 Settings.Default.Save();
-                try
+                if (File.Exists(ConfigurationExtensions.FilePath))
                 {
                     File.Copy(ConfigurationExtensions.FilePath, ConfigurationExtensions.FilePath + ".bak", true);
                     File.Delete(ConfigurationExtensions.FilePath);
                 }
-                catch { }
             }
-        }
-
-        private static void HandleError(Exception ex)
-        {
-            Log.Logger.Fatal("Fatal error", ex);
-            lock (erroredLock)
+            catch (Exception ex)
             {
-                if (errored)
-                {
-                    return;
-                }
-                errored = true;
-                string message = string.Format("{0} encountered an error and must shut down.", Title);
-                MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+                Log.Logger.Warn("Failed to reset settings", ex);
             }
         }
-
-        public ResourceDictionary Accent { get; private set; }
-        public MainViewModel MainViewModel { get; private set; }
-        public new MainWindow MainWindow { get; private set; }
-
-        public new IDispatcher Dispatcher
-        {
-            get { return this; }
-        }
-
-        public IDocumentManager Documents
-        {
-            get { return MainViewModel; }
-        }
-
-        public IDialogManager Dialogs
-        {
-            get { return MainWindow; }
-        }
-
-        private DataContext context;
-        public DataContext Context
-        {
-            get
-            {
-                return context;
-            }
-            set
-            {
-                context = value;
-                OnContextChanged();
-            }
-        }
-
-        public bool ShuttingDown { get; private set; }
 
         public App()
         {
             InitializeComponent();
-            Resources.Add("AppTitle", Title);
             AddTextFileResource("COPYRIGHT");
             AddTextFileResource("LICENSE");
             AddTextFileResource("NOTICE");
-        }
-
-        public event EventHandler ContextChanged;
-        private void OnContextChanged(EventArgs e)
-        {
-            ContextChanged?.Invoke(this, e);
-        }
-        private void OnContextChanged()
-        {
-            OnContextChanged(EventArgs.Empty);
-        }
-
-        public void Invoke(System.Action action)
-        {
-            base.Dispatcher.Invoke(action);
         }
 
         private void AddTextFileResource(string key)
@@ -178,10 +117,9 @@ namespace ERHMS.Presentation
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Accent = new ResourceDictionary
-            {
-                Source = new Uri("pack://application:,,,/ERHMS.Presentation;component/Resources/Blue508.xaml")
-            };
+            services.App = this;
+            services.Dispatch = new DispatchService(SynchronizationContext.Current);
+            services.String = new StringService(Resources);
             EventManager.RegisterClassHandler(
                 typeof(TextBox),
                 UIElement.GotKeyboardFocusEvent,
@@ -194,16 +132,12 @@ namespace ERHMS.Presentation
                 typeof(TabItem),
                 UIElement.GotKeyboardFocusEvent,
                 new KeyboardFocusChangedEventHandler(TabItem_GotKeyboardFocus));
-            Messenger.Default.Register<ShutdownMessage>(this, msg =>
-            {
-                Shutdown();
-                if (msg.Restart)
-                {
-                    System.Windows.Forms.Application.Restart();
-                }
-            });
-            MainViewModel = new MainViewModel(this);
-            MainWindow = new MainWindow(MainViewModel);
+            MainViewModel model = new MainViewModel(services);
+            services.Document = model;
+            MainView view = new MainView(model);
+            services.Dialog = view;
+            services.Wrapper = view;
+            MainWindow = view;
             MainWindow.ContentRendered += MainWindow_ContentRendered;
             MainWindow.Show();
         }
@@ -235,62 +169,51 @@ namespace ERHMS.Presentation
 
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
         {
-            await ShowLicense();
-        }
-
-        private async Task ShowLicense()
-        {
             if (Settings.Default.LicenseAccepted)
             {
-                if (LoadConfiguration())
+                await StartupAsync();
+            }
+            else
+            {
+                if (await services.Dialog.ShowLicenseAsync())
                 {
-                    Documents.ShowStart();
-                    ProjectInfo projectInfo;
-                    if (ProjectInfo.TryRead(Settings.Default.LastDataSourcePath, out projectInfo))
-                    {
-                        ConfirmMessage msg = new ConfirmMessage
-                        {
-                            Verb = "Reopen",
-                            Message = string.Format("Reopen the previously used data source {0}?", projectInfo.Name)
-                        };
-                        msg.Confirmed += (sender, e) =>
-                        {
-                            Documents.OpenDataSource(projectInfo);
-                        };
-                        Messenger.Default.Send(msg);
-                    }
+                    Settings.Default.LicenseAccepted = true;
+                    Settings.Default.Save();
+                    await StartupAsync();
                 }
                 else
                 {
                     Shutdown();
+                }
+            }
+        }
+
+        private async Task StartupAsync()
+        {
+            if (await LoadConfigurationAsync())
+            {
+                services.Document.Show(() => new StartViewModel(services));
+                ProjectInfo projectInfo;
+                if (ProjectInfo.TryRead(Settings.Default.LastDataSourcePath, out projectInfo))
+                {
+                    if (await services.Dialog.ConfirmAsync(string.Format("Reopen the previously used data source {0}?", projectInfo.Name), "Reopen"))
+                    {
+                        await services.Document.SetContextAsync(projectInfo);
+                    }
+                    else
+                    {
+                        Settings.Default.LastDataSourcePath = null;
+                        Settings.Default.Save();
+                    }
                 }
             }
             else
             {
-                Log.Logger.Debug("Showing license");
-                if (await LicenseDialog.ShowAsync(MainWindow) == MessageDialogResult.Affirmative)
-                {
-                    Log.Logger.Debug("License accepted");
-                    Settings.Default.LicenseAccepted = true;
-                    Settings.Default.Save();
-                    if (LoadConfiguration())
-                    {
-                        Documents.ShowStart();
-                    }
-                    else
-                    {
-                        Shutdown();
-                    }
-                }
-                else
-                {
-                    Log.Logger.Debug("License not accepted");
-                    Shutdown();
-                }
+                Shutdown();
             }
         }
 
-        private bool LoadConfiguration()
+        private async Task<bool> LoadConfigurationAsync()
         {
             if (!File.Exists(ConfigurationExtensions.FilePath) && File.Exists(Settings.Default.ConfigurationFilePath))
             {
@@ -302,77 +225,81 @@ namespace ERHMS.Presentation
             {
                 while (true)
                 {
-                    Log.Logger.Debug("Prompting for root path");
-                    using (FolderBrowserDialog dialog = RootPathDialog.GetDialog())
+                    string path = services.Dialog.GetRootPath();
+                    if (path == null)
                     {
-                        if (dialog.Show(MainWindow.Win32Window))
+                        return false;
+                    }
+                    else
+                    {
+                        try
                         {
-                            string path = dialog.GetRootPath();
-                            Log.Logger.DebugFormat("Root path chosen: {0}", path);
-                            try
-                            {
-                                using (new WaitCursor())
-                                {
-                                    configuration = CreateConfiguration(path);
-                                }
-                                break;
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Logger.Warn("Failed to initialize root path", ex);
-                                StringBuilder message = new StringBuilder();
-                                message.AppendFormat("{0} failed to initialize the following directory. Please choose another location.", Title);
-                                message.AppendLine();
-                                message.AppendLine();
-                                message.Append(path);
-                                MessageBox.Show(message.ToString(), Title, MessageBoxButton.OK, MessageBoxImage.Error);
-                            }
+                            configuration = CreateConfiguration(path);
+                            break;
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Log.Logger.Debug("Root path not chosen");
-                            return false;
+                            Log.Logger.Warn("Failed to initialize root path", ex);
+                            StringBuilder message = new StringBuilder();
+                            message.AppendFormat(
+                                "{0} failed to initialize the following directory. Please choose another location.",
+                                services.String.AppTitle);
+                            message.AppendLine();
+                            message.AppendLine();
+                            message.Append(path);
+                            await services.Dialog.AlertAsync(message.ToString(), ex);
                         }
                     }
                 }
             }
-            using (TextWriter writer = new StreamWriter(Path.Combine(configuration.GetRootPath(), "INSTALL.txt")))
-            {
-                writer.WriteLine("{0} is installed in the following directory:", Title);
-                writer.WriteLine();
-                writer.WriteLine(AssemblyExtensions.GetEntryDirectoryPath());
-            }
             Settings.Default.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
+            configuration.Directories.LogDir = Path.GetDirectoryName(Log.FilePath);
+            configuration.Save();
+            configuration = ConfigurationExtensions.Load();
+            using (TextWriter writer = new StreamWriter(Path.Combine(configuration.GetRootPath(), "INSTALL.txt")))
+            {
+                writer.WriteLine("{0} is installed in the following directory:", services.String.AppTitle);
+                writer.WriteLine();
+                writer.WriteLine(AssemblyExtensions.GetEntryDirectoryPath());
+            }
             return true;
         }
 
         private Configuration CreateConfiguration(string path)
         {
-            Configuration configuration = ConfigurationExtensions.Create(path);
-            configuration.CreateUserDirectories();
-            IOExtensions.CopyDirectory(
-                Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
-                configuration.Directories.Templates);
-            CopyTextFileResource("COPYRIGHT", path);
-            CopyTextFileResource("LICENSE", path);
-            CopyTextFileResource("NOTICE", path);
-            configuration.Save();
-            ConfigurationExtensions.Load();
-            if (!SampleDataContext.Exists())
+            using (services.Busy.BeginTask())
             {
-                SampleDataContext.Create();
+                Configuration configuration = ConfigurationExtensions.Create(path);
+                configuration.CreateUserDirectories();
+                IOExtensions.CopyDirectory(
+                    Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
+                    configuration.Directories.Templates);
+                CopyTextFileResource("COPYRIGHT", path);
+                CopyTextFileResource("LICENSE", path);
+                CopyTextFileResource("NOTICE", path);
+                configuration.Save();
+                configuration = ConfigurationExtensions.Load();
+                if (!SampleDataContext.Exists())
+                {
+                    SampleDataContext.Create();
+                }
+                Settings.Default.DataSourcePaths.Add(SampleDataContext.GetFilePath());
+                Settings.Default.Save();
+                return configuration;
             }
-            Settings.Default.DataSourcePaths.Add(SampleDataContext.GetFilePath());
-            Settings.Default.Save();
-            return configuration;
         }
 
-        public new void Shutdown()
+        void IAppService.Exit()
         {
-            ShuttingDown = true;
-            base.Shutdown();
+            MainWindow.Close();
+        }
+
+        public void Restart()
+        {
+            Shutdown();
+            System.Windows.Forms.Application.Restart();
         }
     }
 }

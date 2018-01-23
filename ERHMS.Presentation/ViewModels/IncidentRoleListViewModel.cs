@@ -1,101 +1,118 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Messages;
-using GalaSoft.MvvmLight.Command;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public class IncidentRoleListViewModel : ListViewModel<IncidentRole>
+    public class IncidentRoleListViewModel : DocumentViewModel
     {
-        public Incident Incident { get; private set; }
+        public class IncidentRoleListChildViewModel : ListViewModel<IncidentRole>
+        {
+            public Incident Incident { get; private set; }
 
-        public RelayCommand AddCommand { get; private set; }
-        public RelayCommand EditCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand ShowSettingsCommand { get; private set; }
+            public IncidentRoleListChildViewModel(IServiceManager services, Incident incident)
+                : base(services)
+            {
+                Incident = incident;
+                Refresh();
+            }
+
+            protected override IEnumerable<IncidentRole> GetItems()
+            {
+                return Context.IncidentRoles.SelectByIncidentId(Incident.IncidentId)
+                    .OrderBy(incidentRole => incidentRole.Name, StringComparer.OrdinalIgnoreCase);
+            }
+
+            protected override IEnumerable<string> GetFilteredValues(IncidentRole item)
+            {
+                yield return item.Name;
+            }
+        }
+
+        public Incident Incident { get; private set; }
+        public IncidentRoleListChildViewModel IncidentRoles { get; private set; }
+
+        public ICommand AddCommand { get; private set; }
+        public ICommand EditCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand ShowSettingsCommand { get; private set; }
 
         public IncidentRoleListViewModel(IServiceManager services, Incident incident)
             : base(services)
         {
             Title = "Roles";
             Incident = incident;
-            Refresh();
-            AddCommand = new RelayCommand(Add);
-            EditCommand = new RelayCommand(Edit, HasSelectedItem);
-            DeleteCommand = new RelayCommand(Delete, HasSelectedItem);
-            ShowSettingsCommand = new RelayCommand(ShowSettings);
+            IncidentRoles = new IncidentRoleListChildViewModel(services, incident);
+            AddCommand = new AsyncCommand(AddAsync);
+            EditCommand = new AsyncCommand(EditAsync, IncidentRoles.HasSelectedItem);
+            DeleteCommand = new AsyncCommand(DeleteAsync, IncidentRoles.HasSelectedItem);
+            ShowSettingsCommand = new Command(ShowSettings);
         }
 
-        protected override IEnumerable<IncidentRole> GetItems()
+        public async Task AddAsync()
         {
-            return Context.IncidentRoles.SelectByIncidentId(Incident.IncidentId).OrderBy(role => role.Name);
-        }
-
-        protected override IEnumerable<string> GetFilteredValues(IncidentRole item)
-        {
-            yield return item.Name;
-        }
-
-        public void Add()
-        {
-            RoleViewModel role = new RoleViewModel(Services, "Add");
-            role.Saved += (sender, e) =>
+            using (RoleViewModel model = new RoleViewModel(Services, "Add"))
             {
-                Context.IncidentRoles.Save(new IncidentRole(true)
+                model.Saved += (sender, e) =>
                 {
-                    IncidentId = Incident.IncidentId,
-                    Name = role.Name
-                });
-                MessengerInstance.Send(new RefreshMessage(typeof(IncidentRole)));
-            };
-            Dialogs.ShowAsync(role);
+                    Context.IncidentRoles.Save(new IncidentRole(true)
+                    {
+                        IncidentId = Incident.IncidentId,
+                        Name = model.Name
+                    });
+                    Services.Data.Refresh(typeof(IncidentRole));
+                };
+                await Services.Dialog.ShowAsync(model);
+            }
         }
 
-        public void Edit()
+        public async Task EditAsync()
         {
-            RoleViewModel role = new RoleViewModel(Services, "Edit")
+            IncidentRole incidentRole = Context.IncidentRoles.Refresh(IncidentRoles.SelectedItem);
+            using (RoleViewModel model = new RoleViewModel(Services, "Edit"))
             {
-                Name = SelectedItem.Name
-            };
-            role.Saved += (sender, e) =>
-            {
-                SelectedItem.Name = role.Name;
-                Context.IncidentRoles.Save(SelectedItem);
-                MessengerInstance.Send(new RefreshMessage(typeof(IncidentRole)));
-            };
-            Dialogs.ShowAsync(role);
-        }
-
-        public void Delete()
-        {
-            IncidentRole role = Context.IncidentRoles.SelectById(SelectedItem.IncidentRoleId);
-            if (role.IsInUse)
-            {
-                MessengerInstance.Send(new AlertMessage
+                model.Name = incidentRole.Name;
+                model.Saved += (sender, e) =>
                 {
-                    Message = "The selected role is in use and may not be deleted."
-                });
+                    incidentRole.Name = model.Name;
+                    Context.IncidentRoles.Save(incidentRole);
+                    Services.Data.Refresh(typeof(IncidentRole));
+                };
+                await Services.Dialog.ShowAsync(model);
+            }
+        }
+
+        public async Task DeleteAsync()
+        {
+            IncidentRole incidentRole = Context.IncidentRoles.Refresh(IncidentRoles.SelectedItem);
+            if (incidentRole.InUse)
+            {
+                await Services.Dialog.AlertAsync("The selected role is in use and may not be deleted.");
             }
             else
             {
-                ConfirmMessage msg = new ConfirmMessage
+                if (await Services.Dialog.ConfirmAsync("Delete the selected role?", "Delete"))
                 {
-                    Verb = "Delete",
-                    Message = "Delete the selected role?"
-                };
-                msg.Confirmed += (sender, e) =>
-                {
-                    Context.IncidentRoles.Delete(role);
-                    MessengerInstance.Send(new RefreshMessage(typeof(IncidentRole)));
-                };
-                MessengerInstance.Send(msg);
+                    Context.IncidentRoles.Delete(incidentRole);
+                    Services.Data.Refresh(typeof(IncidentRole));
+                }
             }
         }
 
         public void ShowSettings()
         {
-            Documents.ShowSettings();
+            Services.Document.ShowByType(() => new SettingsViewModel(Services));
+        }
+
+        public override void Dispose()
+        {
+            IncidentRoles.Dispose();
+            base.Dispose();
         }
     }
 }
