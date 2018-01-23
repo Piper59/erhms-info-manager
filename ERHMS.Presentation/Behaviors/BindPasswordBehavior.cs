@@ -29,7 +29,10 @@ namespace ERHMS.Presentation.Behaviors
 
         protected override void OnDetaching()
         {
-            AssociatedObject.PasswordChanged -= AssociatedObject_PasswordChanged;
+            if (AssociatedObject != null)
+            {
+                AssociatedObject.PasswordChanged -= AssociatedObject_PasswordChanged;
+            }
         }
 
         private void AssociatedObject_PasswordChanged(object sender, RoutedEventArgs e)
