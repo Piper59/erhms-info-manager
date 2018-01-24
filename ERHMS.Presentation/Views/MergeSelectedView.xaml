@@ -4,11 +4,21 @@
              xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
     <Grid Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0">
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,5"
+                   TextWrapping="Wrap">
+            Each row below represents a responder data property.
+            The corresponding values for the responders to be merged are shown in two columns.
+            For each property, select the value that should be retained when the responders are merged.
+            You may also use the Select All button at the bottom of a column to quickly select one responder's values for all properties.
+            When you are finished, click Save.
+        </TextBlock>
+        <ScrollViewer Grid.Row="1">
             <ItemsControl ItemsSource="{Binding Properties}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -46,7 +56,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource AccentButton}">
                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -72,7 +82,7 @@
                 Select All
             </Button>
         </Grid>
-        <WrapPanel Grid.Row="2"
+        <WrapPanel Grid.Row="3"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Save"
                                  Command="{Binding SaveCommand}"
