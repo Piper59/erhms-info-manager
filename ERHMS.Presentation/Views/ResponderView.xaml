@@ -404,7 +404,8 @@
             </TabItem>
         </TabControl>
         <WrapPanel Grid.Row="1"
-                   Style="{StaticResource IconButtonBar}">
+                   Style="{StaticResource IconButtonBar}"
+                   Visibility="{Binding Report.Active, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Controls:IconButton AccessText="_Save"
                                  Command="{Binding SaveCommand}"
                                  Icon="{StaticResource appbar_disk}" />
