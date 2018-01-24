@@ -126,26 +126,26 @@
             </ScrollViewer>
         </TabItem>
         <Controls:UserGuideTabItem Header="_Data Sources"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=12" />
-        <Controls:UserGuideTabItem Header="_Responders"
                                    NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=14" />
-        <Controls:UserGuideTabItem Header="_Incidents"
+        <Controls:UserGuideTabItem Header="_Responders"
                                    NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=16" />
+        <Controls:UserGuideTabItem Header="_Incidents"
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=18" />
         <Controls:UserGuideTabItem Header="_Notes"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=19" />
-        <Controls:UserGuideTabItem Header="_Roster"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=20" />
-        <Controls:UserGuideTabItem Header="_Locations"
                                    NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=21" />
+        <Controls:UserGuideTabItem Header="_Roster"
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=21" />
+        <Controls:UserGuideTabItem Header="_Locations"
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=25" />
         <Controls:UserGuideTabItem Header="_Forms"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=23" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=28" />
         <Controls:UserGuideTabItem Header="_Templates"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=27" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=32" />
         <Controls:UserGuideTabItem Header="_Assignments"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=35" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=39" />
         <Controls:UserGuideTabItem Header="_Analyses"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=37" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=42" />
         <Controls:UserGuideTabItem Header="_Dashboards"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=37" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=42" />
     </TabControl>
 </UserControl>
