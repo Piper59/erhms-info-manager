@@ -11,12 +11,12 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Controls:Filter Grid.Row="0"
-                         Value="{Binding Filter}" />
+                         Value="{Binding Pairs.Filter}" />
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Pairs.Objects}"
+                  SelectedItem="{Binding Pairs.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Pairs.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
                 <MouseBinding Command="{Binding MergeCommand}"

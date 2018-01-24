@@ -11,12 +11,12 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Controls:Filter Grid.Row="0"
-                         Value="{Binding Filter}" />
+                         Value="{Binding Logs.Filter}" />
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Logs.Objects}"
+                  SelectedItem="{Binding Logs.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Logs.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
                 <MouseBinding Command="{Binding OpenCommand}"
@@ -47,7 +47,7 @@
                                  Icon="{StaticResource appbar_cabinet_files}"
                                  ToolTip="Package logs into a ZIP file" />
             <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
+                                 Command="{Binding Logs.RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
         </WrapPanel>
     </Grid>

@@ -9,10 +9,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Controls:Filter Grid.Row="0"
-                         Value="{Binding Filter}" />
+                         Value="{Binding Canvases.Filter}" />
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}"
+                  ItemsSource="{Binding Canvases.Objects}"
+                  SelectedItem="{Binding Canvases.SelectedObject}"
                   SelectionMode="Single">
             <DataGrid.Resources>
                 <Controls:BindingProxy x:Key="Proxy"
@@ -45,7 +45,7 @@
                                  Icon="{StaticResource appbar_globe}"
                                  ToolTip="Change the incident this dashboard is linked to" />
             <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
+                                 Command="{Binding Canvases.RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
         </WrapPanel>
     </Grid>

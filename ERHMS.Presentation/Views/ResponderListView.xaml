@@ -11,12 +11,12 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Controls:Filter Grid.Row="0"
-                         Value="{Binding Filter}" />
+                         Value="{Binding Responders.Filter}" />
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Responders.Objects}"
+                  SelectedItem="{Binding Responders.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Responders.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
                 <MouseBinding Command="{Binding EditCommand}"
@@ -124,7 +124,7 @@
                 </Button.ContextMenu>
             </Controls:IconButton>
             <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
+                                 Command="{Binding Responders.RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
         </WrapPanel>
     </Grid>

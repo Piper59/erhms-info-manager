@@ -22,13 +22,13 @@
                                  Icon="{StaticResource appbar_disk}" />
         </WrapPanel>
         <ScrollViewer Grid.Row="2">
-            <ItemsControl ItemsSource="{Binding Items}"
+            <ItemsControl ItemsSource="{Binding IncidentNotes.Objects}"
                           ItemTemplate="{StaticResource NoteTemplate}" />
         </ScrollViewer>
         <WrapPanel Grid.Row="3"
                    Style="{StaticResource IconButtonBar}">
             <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
+                                 Command="{Binding IncidentNotes.RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
         </WrapPanel>
     </Grid>

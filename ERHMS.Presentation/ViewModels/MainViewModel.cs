@@ -115,7 +115,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Context.Project.FilePath.Equals(projectInfo.FilePath, StringComparison.OrdinalIgnoreCase))
                 {
-                    await FindByType<DataSourceListViewModel>()?.CloseAsync();
+                    await CloseDataSourcesAsync();
                     ShowStart();
                 }
                 else
@@ -164,7 +164,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 if (Context != null)
                 {
-                    await FindByType<DataSourceListViewModel>()?.CloseAsync();
+                    await CloseDataSourcesAsync();
                     Settings.Default.LastDataSourcePath = projectInfo.FilePath;
                     Settings.Default.Save();
                     Title = string.Format("{0} - {1}", Services.String.AppTitle, Context.Project.Name);
@@ -245,6 +245,15 @@ namespace ERHMS.Presentation.ViewModels
         public void ShowDataSources()
         {
             ShowByType(() => new DataSourceListViewModel(Services));
+        }
+
+        public async Task CloseDataSourcesAsync()
+        {
+            DataSourceListViewModel model = FindByType<DataSourceListViewModel>();
+            if (model != null)
+            {
+                await model.CloseAsync();
+            }
         }
 
         public void ShowResponders()

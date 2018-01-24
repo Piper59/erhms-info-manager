@@ -47,6 +47,7 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = view.Name;
+            View = view;
             List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id).ToList();
             Columns = view.Fields.DataFields
                 .Cast<Field>()

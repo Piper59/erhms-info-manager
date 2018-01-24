@@ -29,20 +29,19 @@
             <ComboBox Grid.Column="1"
                       AutomationProperties.Name="Form"
                       DisplayMemberPath="Name"
-                      ItemsSource="{Binding Views.Items}"
-                      SelectedItem="{Binding Views.SelectedItem}" />
+                      ItemsSource="{Binding Views.Objects}"
+                      SelectedItem="{Binding Views.SelectedObject}" />
         </Grid>
         <Controls:Filter Grid.Row="2"
                          Value="{Binding Responders.Filter}" />
         <DataGrid Grid.Row="3"
-                  DataContext="{Binding Responders}"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Responders.Objects}"
+                  SelectedItem="{Binding Responders.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Responders.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding EditCommand}"
+                <MouseBinding Command="{Binding Responders.EditCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
@@ -84,12 +83,12 @@
             Existing Assignments
         </TextBlock>
         <Controls:Filter Grid.Row="6"
-                         Value="{Binding Filter}" />
+                         Value="{Binding Assignments.Filter}" />
         <DataGrid Grid.Row="7"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Assignments.Objects}"
+                  SelectedItem="{Binding Assignments.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Assignments.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.Resources>
                 <Controls:BindingProxy x:Key="Proxy"

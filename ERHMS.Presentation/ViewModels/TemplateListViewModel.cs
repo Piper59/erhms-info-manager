@@ -46,6 +46,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Templates";
             Incident = incident;
+            Templates = new TemplateListChildViewModel(services, incident);
             CreateCommand = new AsyncCommand(CreateAsync, Templates.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Templates.HasSelectedItem);
         }

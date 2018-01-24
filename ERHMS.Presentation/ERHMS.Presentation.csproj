@@ -448,6 +448,9 @@
     <Compile Include="Views\ResponderListView.xaml.cs">
       <DependentUpon>ResponderListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ResponderReportView.xaml.cs">
+      <DependentUpon>ResponderReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ResponderView.xaml.cs">
       <DependentUpon>ResponderView.xaml</DependentUpon>
     </Compile>
@@ -693,6 +696,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ResponderListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResponderReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

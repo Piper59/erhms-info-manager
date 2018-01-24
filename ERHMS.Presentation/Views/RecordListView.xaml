@@ -10,11 +10,11 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Records.Objects}"
+                  SelectedItem="{Binding Records.SelectedObject}">
             <i:Interaction.Behaviors>
                 <Behaviors:BindColumnsBehavior Columns="{Binding Columns}" />
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Records.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell" BasedOn="{StaticResource MetroDataGridCell}">
@@ -35,7 +35,7 @@
                                  Command="{Binding EditCommand}"
                                  Icon="{StaticResource appbar_edit}" />
             <Controls:IconButton AccessText="Re_sponder"
-                                 Command="{Binding LinkCommand}"
+                                 Command="{Binding PostpopulateCommand}"
                                  Icon="{StaticResource appbar_user}"
                                  ToolTip="Change the responder this record is linked to" />
             <Controls:IconButton AccessText="_Delete"
@@ -45,7 +45,7 @@
                                  Command="{Binding UndeleteCommand}"
                                  Icon="{StaticResource appbar_check}" />
             <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
+                                 Command="{Binding Records.RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
         </WrapPanel>
     </Grid>

@@ -111,7 +111,7 @@
                             <TextBox Grid.Row="4" Grid.Column="1"
                                      AutomationProperties.Name="User Name"
                                      IsEnabled="{Binding IntegratedSecurity, Converter={StaticResource BooleanInverter}}"
-                                     Text="{Binding UserId,TargetNullValue=''}" />
+                                     Text="{Binding UserId, TargetNullValue=''}" />
                             <Label Grid.Row="5" Grid.Column="0"
                                    Margin="0">
                                 Password

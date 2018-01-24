@@ -24,9 +24,9 @@
                 <ComboBox Grid.Column="1"
                           AutomationProperties.Name="Incident"
                           DisplayMemberPath="Name"
-                          ItemsSource="{Binding Incidents.Items}"
+                          ItemsSource="{Binding Incidents.Objects}"
                           Margin="0"
-                          SelectedItem="{Binding Incidents.SelectedItem}" />
+                          SelectedItem="{Binding Incidents.SelectedObject}" />
             </Grid>
             <WrapPanel Grid.Row="1"
                        Style="{StaticResource IconButtonBar}">

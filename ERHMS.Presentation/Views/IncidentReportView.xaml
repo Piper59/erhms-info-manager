@@ -1,8 +1,4 @@
-﻿<!--
-    ICollectionView jobNotesView = CollectionViewSource.GetDefaultView(JobNotes);
-    jobNotesView.GroupDescriptions.Add(new PropertyGroupDescription("Job"));
--->
-<UserControl x:Class="ERHMS.Presentation.Views.IncidentReportView"
+﻿<UserControl x:Class="ERHMS.Presentation.Views.IncidentReportView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -70,10 +66,18 @@
             </GroupBox>
             <GroupBox Header="Job Notes">
                 <StackPanel>
+                    <StackPanel.Resources>
+                        <CollectionViewSource x:Key="GroupedJobNotes"
+                                              Source="{Binding JobNotes}">
+                            <CollectionViewSource.GroupDescriptions>
+                                <PropertyGroupDescription PropertyName="Job" />
+                            </CollectionViewSource.GroupDescriptions>
+                        </CollectionViewSource>
+                    </StackPanel.Resources>
                     <MahApps:ProgressRing Visibility="{Binding JobNotes, Converter={StaticResource NullToVisibilityInverter}}" />
                     <StackPanel Visibility="{Binding JobNotes, Converter={StaticResource NullToVisibilityConverter}}">
                         <ItemsControl x:Name="JobNotesItemsControl"
-                                      ItemsSource="{Binding JobNotes}"
+                                      ItemsSource="{Binding Source={StaticResource GroupedJobNotes}}"
                                       Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <ItemsControl.GroupStyle>
                                 <GroupStyle>

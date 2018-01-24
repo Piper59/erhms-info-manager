@@ -14,8 +14,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using Xceed.Wpf.AvalonDock.Controls;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation

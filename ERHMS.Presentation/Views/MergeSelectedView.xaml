@@ -34,11 +34,11 @@
                             <Label Grid.Column="0"
                                    Content="{Binding Name}" />
                             <RadioButton Grid.Column="1"
-                                         IsChecked="{Binding IsSelected1}" />
+                                         IsChecked="{Binding Selected1}" />
                             <TextBlock Grid.Column="2"
                                        Text="{Binding Value1}" />
                             <RadioButton Grid.Column="3"
-                                         IsChecked="{Binding IsSelected2}" />
+                                         IsChecked="{Binding Selected2}" />
                             <TextBlock Grid.Column="4"
                                        Text="{Binding Value2}" />
                         </Grid>

@@ -22,14 +22,13 @@
         <Controls:Filter Grid.Row="1"
                          Value="{Binding Locations.Filter}" />
         <DataGrid Grid.Row="2"
-                  DataContext="{Binding Locations}"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Locations.Objects}"
+                  SelectedItem="{Binding Locations.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Locations.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding EditCommand}"
+                <MouseBinding Command="{Binding Locations.EditCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
@@ -67,15 +66,15 @@
             Existing Locations for This Job
         </TextBlock>
         <Controls:Filter Grid.Row="5"
-                         Value="{Binding Filter}" />
+                         Value="{Binding JobLocations.Filter}" />
         <DataGrid Grid.Row="6"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding JobLocations.Objects}"
+                  SelectedItem="{Binding JobLocations.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding JobLocations.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding EditCommand}"
+                <MouseBinding Command="{Binding JobLocations.EditCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>

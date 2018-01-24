@@ -22,8 +22,8 @@ namespace ERHMS.Presentation
             {
                 return string.Join(" ", new string[]
                 {
-                    "To get started, please create or open a data source.",
-                    "Click Create or Add > New on the Data Sources screen."
+                    "To get started, you must open or create a data source.",
+                    "Click Open or Add > New on the Data Sources screen."
                 });
             }
         }

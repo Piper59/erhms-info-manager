@@ -70,7 +70,7 @@
                     Welcome to <Run Text="{StaticResource AppTitle}" />!
                 </TextBlock>
                 <TextBlock>
-                    To get started, you must create or open a <Hyperlink Command="{Binding ShowDataSourcesCommand}">data source</Hyperlink>.<LineBreak />
+                    To get started, you must open or create a <Hyperlink Command="{Binding ShowDataSourcesCommand}">data source</Hyperlink>.<LineBreak />
                     For further assistance, refer the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf">User Guide</Controls:WebHyperlink>.
                 </TextBlock>
             </StackPanel>

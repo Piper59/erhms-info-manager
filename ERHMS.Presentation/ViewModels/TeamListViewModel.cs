@@ -53,6 +53,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Teams";
             Incident = incident;
+            Teams = new TeamListChildViewModel(services, incident);
             CreateCommand = new Command(Create);
             EditCommand = new Command(Edit, Teams.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Teams.HasSelectedItem);

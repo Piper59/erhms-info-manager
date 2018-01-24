@@ -22,14 +22,13 @@
         <Controls:Filter Grid.Row="1"
                          Value="{Binding Teams.Filter}" />
         <DataGrid Grid.Row="2"
-                  DataContext="{Binding Teams}"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Teams.Objects}"
+                  SelectedItem="{Binding Teams.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Teams.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding EditCommand}"
+                <MouseBinding Command="{Binding Teams.EditCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
@@ -56,15 +55,15 @@
             Existing Teams for This Job
         </TextBlock>
         <Controls:Filter Grid.Row="5"
-                         Value="{Binding Filter}" />
+                         Value="{Binding JobTeams.Filter}" />
         <DataGrid Grid.Row="6"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding JobTeams.Objects}"
+                  SelectedItem="{Binding JobTeams.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding JobTeams.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding EditCommand}"
+                <MouseBinding Command="{Binding JobTeams.EditCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>

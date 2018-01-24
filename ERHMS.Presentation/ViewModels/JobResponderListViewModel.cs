@@ -119,6 +119,7 @@ namespace ERHMS.Presentation.ViewModels
             Job = job;
             IncidentRoles = new IncidentRoleListChildViewModel(services, job);
             Responders = new ResponderListChildViewModel(services, job);
+            JobResponders = new JobResponderListChildViewModel(services, job);
             AddCommand = new Command(Add, Responders.HasAnySelectedItems);
             RemoveCommand = new AsyncCommand(RemoveAsync, JobResponders.HasAnySelectedItems);
             EmailCommand = new Command(Email, JobResponders.HasAnySelectedItems);

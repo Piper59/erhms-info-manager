@@ -86,7 +86,6 @@
                     </Grid.ColumnDefinitions>
                     <CheckBox Grid.Column="0"
                               IsChecked="{Binding AppendUrl}"
-                              IsEnabled="{Binding CanAppendUrl}"
                               Margin="0">
                         Append web survey URL
                     </CheckBox>
@@ -94,9 +93,9 @@
                               AutomationProperties.Name="Append web survey URL"
                               DisplayMemberPath="Name"
                               IsEnabled="{Binding AppendUrl}"
-                              ItemsSource="{Binding Views.Items}"
+                              ItemsSource="{Binding Views.Objects}"
                               Margin="5,0,0,0"
-                              SelectedItem="{Binding Views.SelectedItem}" />
+                              SelectedItem="{Binding Views.SelectedObject}" />
                 </Grid>
             </Grid>
         </ScrollViewer>

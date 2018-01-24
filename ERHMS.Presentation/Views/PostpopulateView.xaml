@@ -24,8 +24,8 @@
                 <ComboBox Grid.Column="1"
                           AutomationProperties.Name="Responder"
                           Margin="0"
-                          ItemsSource="{Binding Responders.Items}"
-                          SelectedItem="{Binding Responders.SelectedItem}">
+                          ItemsSource="{Binding Responders.Objects}"
+                          SelectedItem="{Binding Responders.SelectedObject}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameConverter}}" />

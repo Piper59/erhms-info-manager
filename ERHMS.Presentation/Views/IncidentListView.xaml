@@ -10,10 +10,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Controls:Filter Grid.Row="0"
-                         Value="{Binding Filter}" />
+                         Value="{Binding Incidents.Filter}" />
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}"
+                  ItemsSource="{Binding Incidents.Objects}"
+                  SelectedItem="{Binding Incidents.SelectedObject}"
                   SelectionMode="Single">
             <DataGrid.InputBindings>
                 <MouseBinding Command="{Binding OpenCommand}"
@@ -46,7 +46,7 @@
                                  Command="{Binding DeleteCommand}"
                                  Icon="{StaticResource appbar_delete}" />
             <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
+                                 Command="{Binding Incidents.RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
         </WrapPanel>
     </Grid>

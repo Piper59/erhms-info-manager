@@ -31,8 +31,8 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public ViewEntityRepository<ViewEntity> Entities { get; private set; }
         public ViewEntity Entity { get; private set; }
+        public ViewEntityRepository<ViewEntity> Entities { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
 
         public ICommand LinkCommand { get; private set; }
@@ -42,8 +42,8 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = "Link to Responder";
-            Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
             Entity = entity;
+            Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
             Responders = new ResponderListChildViewModel(services);
             Responders.SelectById(entity.GetProperty("ResponderID") as string);
             LinkCommand = new Command(Link, Responders.HasSelectedItem);

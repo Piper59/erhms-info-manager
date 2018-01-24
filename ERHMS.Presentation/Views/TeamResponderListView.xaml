@@ -31,20 +31,19 @@
                       AutomationProperties.Name="Role"
                       MahApps:TextBoxHelper.ClearTextButton="True"
                       DisplayMemberPath="Name"
-                      ItemsSource="{Binding IncidentRoles.Items}"
-                      SelectedItem="{Binding IncidentRoles.SelectedItem}" />
+                      ItemsSource="{Binding IncidentRoles.Objects}"
+                      SelectedItem="{Binding IncidentRoles.SelectedObject}" />
         </Grid>
         <Controls:Filter Grid.Row="2"
                          Value="{Binding Responders.Filter}" />
         <DataGrid Grid.Row="3"
-                  DataContext="{Binding Responders}"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding Responders.Objects}"
+                  SelectedItem="{Binding Responders.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Responders.SelectedObjects}" />
             </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding EditCommand}"
+                <MouseBinding Command="{Binding Responders.EditCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
@@ -86,13 +85,17 @@
             Existing Responders for This Team
         </TextBlock>
         <Controls:Filter Grid.Row="6"
-                         Value="{Binding Filter}" />
+                         Value="{Binding TeamResponders.Filter}" />
         <DataGrid Grid.Row="7"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}">
+                  ItemsSource="{Binding TeamResponders.Objects}"
+                  SelectedItem="{Binding TeamResponders.SelectedObject}">
             <i:Interaction.Behaviors>
-                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding SelectedItems}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding TeamResponders.SelectedObjects}" />
             </i:Interaction.Behaviors>
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding TeamResponders.EditCommand}"
+                              MouseAction="LeftDoubleClick" />
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Responder, Converter={StaticResource ResponderToFullNameConverter}}"
                                     Header="Responder"

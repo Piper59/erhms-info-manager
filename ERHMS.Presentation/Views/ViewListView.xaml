@@ -11,10 +11,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Controls:Filter Grid.Row="0"
-                         Value="{Binding Filter}" />
+                         Value="{Binding Views.Filter}" />
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem}"
+                  ItemsSource="{Binding Views.Objects}"
+                  SelectedItem="{Binding Views.SelectedObject}"
                   SelectionMode="Single">
             <DataGrid.Resources>
                 <Controls:BindingProxy x:Key="Proxy"
@@ -47,7 +47,7 @@
                                  ToolTip="Change the incident this form is linked to" />
             <Controls:IconButton AccessText="Da_ta"
                                  Icon="{StaticResource appbar_database}"
-                                 IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBooleanConverter}}">
+                                 IsEnabled="{Binding Views.SelectedObject, Converter={StaticResource NullToBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>
@@ -62,7 +62,7 @@
             </Controls:IconButton>
             <Controls:IconButton AccessText="_Publish"
                                  Icon="{StaticResource appbar_page_upload}"
-                                 IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBooleanConverter}}">
+                                 IsEnabled="{Binding Views.SelectedObject, Converter={StaticResource NullToBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>
@@ -79,7 +79,7 @@
             </Controls:IconButton>
             <Controls:IconButton AccessText="I_mport"
                                  Icon="{StaticResource appbar_inbox_in}"
-                                 IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBooleanConverter}}">
+                                 IsEnabled="{Binding Views.SelectedObject, Converter={StaticResource NullToBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>
@@ -100,7 +100,7 @@
             </Controls:IconButton>
             <Controls:IconButton AccessText="E_xport"
                                  Icon="{StaticResource appbar_inbox_out}"
-                                 IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBooleanConverter}}">
+                                 IsEnabled="{Binding Views.SelectedObject, Converter={StaticResource NullToBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>
@@ -115,7 +115,7 @@
             </Controls:IconButton>
             <Controls:IconButton AccessText="_Analyze"
                                  Icon="{StaticResource appbar_graph_bar}"
-                                 IsEnabled="{Binding SelectedItem, Converter={StaticResource NullToBooleanConverter}}">
+                                 IsEnabled="{Binding Views.SelectedObject, Converter={StaticResource NullToBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClickBehavior />
                 </i:Interaction.Behaviors>
@@ -129,7 +129,7 @@
                 </Button.ContextMenu>
             </Controls:IconButton>
             <Controls:IconButton AccessText="_Refresh"
-                                 Command="{Binding RefreshCommand}"
+                                 Command="{Binding Views.RefreshCommand}"
                                  Icon="{StaticResource appbar_refresh_clockwise_down}" />
         </WrapPanel>
     </Grid>

@@ -56,7 +56,7 @@
             <Views:CanvasListView DataContext="{Binding Canvases}" />
         </TabItem>
         <TabItem Header="_Reports"
-                 IsSelected="{Binding Report.IsSelected}"
+                 IsSelected="{Binding Report.Active}"
                  Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:IncidentReportView DataContext="{Binding Report}" />
         </TabItem>
