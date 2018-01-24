@@ -22,12 +22,12 @@ namespace ERHMS.DataAccess
 
         public static void Configure()
         {
+            Log.Logger.Debug("Configuring data context");
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(type => IsRepositoryType(type)))
             {
                 MethodInfo method = type.GetMethod("Configure", BindingFlags.Public | BindingFlags.Static, null, Type.EmptyTypes, null);
                 if (method != null)
                 {
-                    Log.Logger.DebugFormat("Configuring: {0}", type);
                     method.Invoke(null, null);
                 }
             }
