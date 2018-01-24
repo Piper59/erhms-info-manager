@@ -172,6 +172,7 @@ namespace ERHMS.Presentation.ViewModels
                 Context.Responders.Save(responder);
             }
             Services.Dialog.Notify("Responders have been merged.");
+            Services.Data.Refresh(typeof(Responder));
             OnSaved();
             await CloseAsync();
         }
