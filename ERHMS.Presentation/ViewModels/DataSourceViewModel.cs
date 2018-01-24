@@ -206,18 +206,12 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         if (await Services.Dialog.ConfirmAsync("Database already exists. Add a data source using this database?", "Add"))
                         {
-                            Create(database, false);
-                            Close();
+                            await CreateAsync(database, false, !Project.IsInitialized(database));
                         }
                     }
                     else
                     {
-                        await Services.Dialog.BlockAsync("Creating data source \u2026", () =>
-                        {
-                            Create(database, true);
-                        });
-                        Services.Dialog.Notify("Data source has been created.");
-                        Close();
+                        await CreateAsync(database, true, true);
                     }
                 }
             }
@@ -228,27 +222,32 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        private void Create(IDatabase database, bool initialize)
+        private async Task CreateAsync(IDatabase database, bool create, bool initialize)
         {
-            if (initialize)
+            await Services.Dialog.BlockAsync("Creating data source \u2026", () =>
             {
-                database.Create();
-            }
-            Project project = Project.Create(new ProjectCreationInfo
-            {
-                Name = Name,
-                Description = Description,
-                Location = Path.Combine(Location, Name),
-                Driver = DbProviderExtensions.EpiInfoValues.Forward(Provider),
-                Builder = database.Builder,
-                DatabaseName = database.Name,
-                Initialize = initialize
+                if (create)
+                {
+                    database.Create();
+                }
+                Project project = Project.Create(new ProjectCreationInfo
+                {
+                    Name = Name,
+                    Description = Description,
+                    Location = Path.Combine(Location, Name),
+                    Driver = DbProviderExtensions.EpiInfoValues.Forward(Provider),
+                    Builder = database.Builder,
+                    DatabaseName = database.Name,
+                    Initialize = initialize
+                });
+                if (initialize)
+                {
+                    DataContext.Create(project);
+                }
             });
-            if (initialize)
-            {
-                DataContext.Create(project);
-            }
+            Services.Dialog.Notify("Data source has been created.");
             OnAdded();
+            Close();
         }
     }
 }

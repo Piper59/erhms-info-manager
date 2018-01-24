@@ -16,6 +16,11 @@ namespace ERHMS.EpiInfo
     {
         public new const string FileExtension = ".prj";
 
+        public static bool IsInitialized(IDatabase database)
+        {
+            return database.TableExists("metaDbInfo");
+        }
+
         public static Project Create(ProjectCreationInfo info)
         {
             Log.Logger.DebugFormat("Creating project: {0}", info);
