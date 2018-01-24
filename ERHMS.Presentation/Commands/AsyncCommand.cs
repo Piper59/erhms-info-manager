@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.Commands
@@ -21,7 +22,15 @@ namespace ERHMS.Presentation.Commands
 
         public async override void Execute(object parameter)
         {
-            await executeAsync();
+            try
+            {
+                await executeAsync();
+            }
+            catch
+            {
+                Log.Logger.WarnFormat(GetErrorMessage(executeAsync));
+                throw;
+            }
         }
     }
 
@@ -43,7 +52,15 @@ namespace ERHMS.Presentation.Commands
 
         public async override void Execute(object parameter)
         {
-            await executeAsync((T)parameter);
+            try
+            {
+                await executeAsync((T)parameter);
+            }
+            catch
+            {
+                Log.Logger.WarnFormat(GetErrorMessage(executeAsync));
+                throw;
+            }
         }
     }
 }
