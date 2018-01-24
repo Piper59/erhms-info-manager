@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Converters="clr-namespace:ERHMS.Presentation.Converters">
-    <Converters:AccessTextToPlainTextConverter x:Key="AccessTextToPlainTextConverter" />
     <Converters:BindingTypeToDescriptionConverter x:Key="BindingTypeToDescriptionConverter" />
     <Converters:BooleanInverter x:Key="BooleanInverter" />
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

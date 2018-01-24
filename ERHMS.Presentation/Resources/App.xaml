@@ -12,9 +12,9 @@
         <ResourceDictionary Source="/MahApps.Metro;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="Blue508.xaml" />
         <ResourceDictionary Source="BaseLight508.xaml" />
-        <ResourceDictionary Source="Converters.xaml" />
         <ResourceDictionary Source="IconsNonShared.xaml" />
         <ResourceDictionary Source="TabControl.xaml" />
+        <ResourceDictionary Source="Converters.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ResourceDictionary x:Key="Accent" Source="Blue508.xaml" />
