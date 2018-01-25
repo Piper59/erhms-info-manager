@@ -87,6 +87,11 @@ namespace ERHMS.Presentation.ViewModels
                     {
                         if (record.ContainsKey("ResponderID") && record.ContainsKey("ResponderEmailAddress"))
                         {
+                            ViewEntity entity = entities.SelectById(record.GlobalRecordId);
+                            if (entity != null && !string.IsNullOrEmpty(entity.GetProperty("ResponderID") as string))
+                            {
+                                continue;
+                            }
                             Responder responder = responders[record["ResponderEmailAddress"]].FirstOrDefault();
                             if (responder == null)
                             {
