@@ -39,14 +39,14 @@
                       Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
                 <MenuItem Command="{Binding ShowRespondersCommand}"
                           Header="Show _All" />
-                <MenuItem Command="{Binding ShowNewResponderCommand}"
+                <MenuItem Command="{Binding CreateResponderCommand}"
                           Header="Create _New" />
             </MenuItem>
             <MenuItem Header="_Incidents"
                       Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
                 <MenuItem Command="{Binding ShowIncidentsCommand}"
                           Header="Show _All" />
-                <MenuItem Command="{Binding ShowNewIncidentCommand}"
+                <MenuItem Command="{Binding CreateIncidentCommand}"
                           Header="Create _New" />
             </MenuItem>
             <MenuItem Header="_Data"
