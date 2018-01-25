@@ -22,8 +22,8 @@ namespace ERHMS.Presentation.ViewModels
         public void ImportFromProject(int viewId)
         {
             Context.Project.CollectedData.EnsureDataTablesExist(viewId);
-            bool imported = ImportExport.ImportFromView(Services.Dialog.GetOwner(), Context.Project.GetViewById(viewId));
-            if (imported && viewId == Context.Responders.View.Id)
+            ImportExport.ImportFromView(Services.Dialog.GetOwner(), Context.Project.GetViewById(viewId));
+            if (viewId == Context.Responders.View.Id)
             {
                 Services.Data.Refresh(typeof(Responder));
             }
@@ -32,8 +32,8 @@ namespace ERHMS.Presentation.ViewModels
         public void ImportFromPackage(int viewId)
         {
             Context.Project.CollectedData.EnsureDataTablesExist(viewId);
-            bool imported = ImportExport.ImportFromPackage(Services.Dialog.GetOwner(), Context.Project.GetViewById(viewId));
-            if (imported && viewId == Context.Responders.View.Id)
+            ImportExport.ImportFromPackage(Services.Dialog.GetOwner(), Context.Project.GetViewById(viewId));
+            if (viewId == Context.Responders.View.Id)
             {
                 Services.Data.Refresh(typeof(Responder));
             }
@@ -143,8 +143,8 @@ namespace ERHMS.Presentation.ViewModels
         public void ImportFromMobile(int viewId)
         {
             Context.Project.CollectedData.EnsureDataTablesExist(viewId);
-            bool imported = ImportExport.ImportFromMobile(Services.Dialog.GetOwner(), Context.Project.GetViewById(viewId));
-            if (imported && viewId == Context.Responders.View.Id)
+            ImportExport.ImportFromMobile(Services.Dialog.GetOwner(), Context.Project.GetViewById(viewId));
+            if (viewId == Context.Responders.View.Id)
             {
                 Services.Data.Refresh(typeof(Responder));
             }
