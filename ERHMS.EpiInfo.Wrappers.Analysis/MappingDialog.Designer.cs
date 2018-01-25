@@ -194,7 +194,7 @@
             this.lblInstructions.Size = new System.Drawing.Size(360, 44);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Map the source fields you are importing to their corresponding destination fields" +
-    " in the target form. If a source field should not be imported, leave its corresp" +
+    " in the target form. If a source field should not be imported, leave the corresp" +
     "onding destination field blank.";
             // 
             // MappingDialog

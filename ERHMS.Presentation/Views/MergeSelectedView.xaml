@@ -15,7 +15,7 @@
             Each row below represents a responder data property.
             The corresponding values for the responders to be merged are shown in two columns.
             For each property, select the value that should be retained when the responders are merged.
-            You may also use the Select All button at the bottom of a column to quickly select one responder's values for all properties.
+            You may also use the Select All button at the bottom of a column to quickly select the corresponding responder's values for all properties.
             When you are finished, click Save.
         </TextBlock>
         <ScrollViewer Grid.Row="1">
