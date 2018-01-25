@@ -115,8 +115,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (Context.Project.FilePath.Equals(projectInfo.FilePath, StringComparison.OrdinalIgnoreCase))
                 {
-                    await CloseDataSourcesAsync();
-                    ShowStart();
+                    await OnContextSetAsync();
                 }
                 else
                 {
@@ -164,11 +163,10 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 if (Context != null)
                 {
-                    await CloseDataSourcesAsync();
                     Settings.Default.LastDataSourcePath = projectInfo.FilePath;
                     Settings.Default.Save();
                     Title = string.Format("{0} - {1}", Services.String.AppTitle, Context.Project.Name);
-                    ShowStart();
+                    await OnContextSetAsync();
                 }
             }
             catch (Exception ex)
@@ -177,6 +175,17 @@ namespace ERHMS.Presentation.ViewModels
                 await Services.Dialog.AlertAsync("Failed to open data source.", ex);
                 ShowDataSources();
             }
+        }
+
+        private async Task OnContextSetAsync()
+        {
+            Services.Dialog.Notify("Data source has been opened.");
+            DataSourceListViewModel model = FindByType<DataSourceListViewModel>();
+            if (model != null)
+            {
+                await model.CloseAsync();
+            }
+            ShowStart();
         }
 
         private TModel Find<TModel>(Func<TModel, bool> predicate)
@@ -245,15 +254,6 @@ namespace ERHMS.Presentation.ViewModels
         public void ShowDataSources()
         {
             ShowByType(() => new DataSourceListViewModel(Services));
-        }
-
-        public async Task CloseDataSourcesAsync()
-        {
-            DataSourceListViewModel model = FindByType<DataSourceListViewModel>();
-            if (model != null)
-            {
-                await model.CloseAsync();
-            }
         }
 
         public void ShowResponders()
