@@ -4,6 +4,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ERHMS.Beta")]
 [assembly: AssemblyProduct("ERHMS Info Manager Beta")]
 [assembly: AssemblyCompany("NIOSH")]
-[assembly: AssemblyVersion("2.6.1.0")]
-[assembly: AssemblyInformationalVersion("December 12, 2017")]
+[assembly: AssemblyVersion("2.7.0.0")]
+[assembly: AssemblyInformationalVersion("January 25, 2018")]
 [assembly: ComVisible(false)]
