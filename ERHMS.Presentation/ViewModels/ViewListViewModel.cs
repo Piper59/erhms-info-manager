@@ -174,6 +174,7 @@ namespace ERHMS.Presentation.ViewModels
                     Services.Dispatch.Post(() =>
                     {
                         Services.Data.Refresh(typeof(TemplateInfo));
+                        Services.Document.ShowByType(() => new TemplateListViewModel(Services, null));
                     });
                 }
             };
