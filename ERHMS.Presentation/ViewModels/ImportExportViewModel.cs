@@ -42,9 +42,11 @@ namespace ERHMS.Presentation.ViewModels
         public async Task ImportFromFileAsync(int viewId)
         {
             Context.Project.CollectedData.EnsureDataTablesExist(viewId);
-            Wrapper wrapper = Analysis.Import.Create(Context.Project.FilePath, Context.Project.GetViewById(viewId).Name);
-            wrapper.AddRecordSavedHandler(Services);
-            await Services.Wrapper.InvokeAsync(wrapper);
+            await Services.Wrapper.InvokeAsync(Analysis.Import.Create(Context.Project.FilePath, Context.Project.GetViewById(viewId).Name));
+            if (viewId == Context.Responders.View.Id)
+            {
+                Services.Data.Refresh(typeof(Responder));
+            }
         }
 
         public async Task ImportFromWebAsync(int viewId)
@@ -118,11 +120,11 @@ namespace ERHMS.Presentation.ViewModels
             }
             else
             {
+                Services.Dialog.Notify("Data has been imported from web.");
                 if (view.Id == Context.Responders.View.Id)
                 {
                     Services.Data.Refresh(typeof(Responder));
                 }
-                Services.Dialog.Notify("Data has been imported from web.");
                 if (unlinked)
                 {
                     string message = string.Join(" ", new string[]
