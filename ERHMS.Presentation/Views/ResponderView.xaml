@@ -399,7 +399,8 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="_Reports"
-                     IsSelected="{Binding Report.Active}">
+                     IsSelected="{Binding Report.Active}"
+                     Visibility="{Binding Responder.New, Converter={StaticResource BooleanToVisibilityInverter}}">
                 <Views:ResponderReportView DataContext="{Binding Report}" />
             </TabItem>
         </TabControl>
