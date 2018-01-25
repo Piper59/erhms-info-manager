@@ -87,25 +87,28 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task PostpopulateAsync()
         {
-            using (PostpopulateViewModel model = new PostpopulateViewModel(Services, View, Records.SelectedItems.First()))
+            ViewEntity entity = Records.Entities.Refresh(Records.SelectedItems.First());
+            using (PostpopulateViewModel model = new PostpopulateViewModel(Services, View, entity))
             {
+                model.Saved += (sender, e) =>
+                {
+                    Records.Refresh();
+                };
                 await Services.Dialog.ShowAsync(model);
             }
         }
 
         private void SetDeleted(bool deleted)
         {
-            using (Services.Busy.BeginTask())
+            foreach (ViewEntity entity in Records.Entities.Refresh(Records.SelectedItems))
             {
-                foreach (ViewEntity entity in Records.SelectedItems)
+                if (entity.Deleted != deleted)
                 {
-                    if (entity.Deleted != deleted)
-                    {
-                        entity.Deleted = deleted;
-                        Records.Entities.Save(entity);
-                    }
+                    entity.Deleted = deleted;
+                    Records.Entities.Save(entity);
                 }
             }
+            Records.Refresh();
         }
 
         public void Delete()

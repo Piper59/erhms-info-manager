@@ -50,11 +50,22 @@ namespace ERHMS.Presentation.ViewModels
             UnlinkCommand = new Command(Unlink);
         }
 
+        public event EventHandler Saved;
+        private void OnSaved(EventArgs e)
+        {
+            Saved?.Invoke(this, e);
+        }
+        private void OnSaved()
+        {
+            OnSaved(EventArgs.Empty);
+        }
+
         private void SetResponderId(string responderId)
         {
             ViewEntity entity = Entities.Refresh(Entity);
             entity.SetProperty("ResponderID", responderId);
             Entities.Save(entity);
+            OnSaved();
             Close();
         }
 
