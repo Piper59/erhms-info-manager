@@ -13,9 +13,9 @@
                 To prepopulate these fields, select a responder from the list below.
             </TextBlock>
             <ComboBox AutomationProperties.Name="Responder"
-                      ItemsSource="{Binding Responders}"
+                      ItemsSource="{Binding Responders.Objects}"
                       Margin="0,5,0,0"
-                      SelectedItem="{Binding Responder}">
+                      SelectedItem="{Binding Responders.SelectedObject}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource ResponderToFullNameConverter}}" />

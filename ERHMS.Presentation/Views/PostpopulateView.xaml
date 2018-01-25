@@ -23,8 +23,8 @@
                 </Label>
                 <ComboBox Grid.Column="1"
                           AutomationProperties.Name="Responder"
-                          Margin="0"
                           ItemsSource="{Binding Responders.Objects}"
+                          Margin="0"
                           SelectedItem="{Binding Responders.SelectedObject}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>

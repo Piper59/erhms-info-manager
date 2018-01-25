@@ -20,6 +20,7 @@ namespace ERHMS.Presentation.ViewModels
             public ResponderListChildViewModel(IServiceManager services, Incident incident)
                 : base(services)
             {
+                Incident = incident;
                 Refresh();
             }
 
