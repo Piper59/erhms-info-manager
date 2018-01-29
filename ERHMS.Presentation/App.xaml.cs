@@ -145,7 +145,7 @@ namespace ERHMS.Presentation
         private void DebugDataBinding()
         {
             PresentationTraceSources.Refresh();
-            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
             TraceDialog dialog = new TraceDialog(PresentationTraceSources.DataBindingSource)
             {
                 Title = "Data Binding"
