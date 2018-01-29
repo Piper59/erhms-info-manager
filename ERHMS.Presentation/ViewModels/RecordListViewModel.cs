@@ -10,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
-using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -20,7 +19,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public ViewEntityRepository<ViewEntity> Entities { get; private set; }
 
-            public RecordListChildViewModel(IServiceManager services, View view)
+            public RecordListChildViewModel(IServiceManager services, Epi.View view)
                 : base(services)
             {
                 Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
@@ -33,7 +32,7 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public View View { get; private set; }
+        public Epi.View View { get; private set; }
         public ICollection<DataGridColumn> Columns { get; private set; }
         public RecordListChildViewModel Records { get; private set; }
 
@@ -43,7 +42,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand DeleteCommand { get; private set; }
         public ICommand UndeleteCommand { get; private set; }
 
-        public RecordListViewModel(IServiceManager services, View view)
+        public RecordListViewModel(IServiceManager services, Epi.View view)
             : base(services)
         {
             Title = view.Name;
@@ -68,9 +67,20 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task CreateAsync()
         {
-            Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name);
-            wrapper.AddRecordSavedHandler(Services);
-            await Services.Wrapper.InvokeAsync(wrapper);
+            Domain.View view = Context.Views.SelectById(View.Id);
+            if (view.HasResponderIdField)
+            {
+                using (PrepopulateViewModel model = new PrepopulateViewModel(Services, view))
+                {
+                    await Services.Dialog.ShowAsync(model);
+                }
+            }
+            else
+            {
+                Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name);
+                wrapper.AddRecordSavedHandler(Services);
+                await Services.Wrapper.InvokeAsync(wrapper);
+            }
         }
 
         public async Task EditAsync()
