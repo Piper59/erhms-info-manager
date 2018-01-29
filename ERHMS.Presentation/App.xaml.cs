@@ -1,11 +1,13 @@
 ﻿using Epi;
 using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
+using ERHMS.Presentation.Dialogs;
 using ERHMS.Presentation.Services;
 using ERHMS.Presentation.ViewModels;
 using ERHMS.Presentation.Views;
 using ERHMS.Utility;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -94,6 +96,7 @@ namespace ERHMS.Presentation
         public App()
         {
             InitializeComponent();
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
             AddTextFileResource("COPYRIGHT");
             AddTextFileResource("LICENSE");
             AddTextFileResource("NOTICE");
@@ -134,6 +137,18 @@ namespace ERHMS.Presentation
             MainWindow = view;
             MainWindow.ContentRendered += MainWindow_ContentRendered;
             MainWindow.Show();
+            DebugDataBinding();
+        }
+
+        private void DebugDataBinding()
+        {
+            PresentationTraceSources.Refresh();
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
+            TraceDialog dialog = new TraceDialog(PresentationTraceSources.DataBindingSource)
+            {
+                Title = "Data Binding"
+            };
+            dialog.Show();
         }
 
         private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

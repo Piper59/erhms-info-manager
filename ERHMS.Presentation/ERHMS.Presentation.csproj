@@ -260,6 +260,9 @@
     <Compile Include="Dialogs\LicenseDialog.xaml.cs">
       <DependentUpon>LicenseDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\TraceDialog.xaml.cs">
+      <DependentUpon>TraceDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\BusyService.cs" />
     <Compile Include="Infrastructure\ContextSafeAttribute.cs" />
     <Compile Include="Infrastructure\DataService.cs" />
@@ -271,6 +274,7 @@
     <Compile Include="Infrastructure\RefreshingEventArgs.cs" />
     <Compile Include="Infrastructure\ServiceManager.cs" />
     <Compile Include="Infrastructure\StringService.cs" />
+    <Compile Include="Infrastructure\User32.cs" />
     <Compile Include="Infrastructure\ValidationError.cs" />
     <Compile Include="Infrastructure\WaitCursor.cs" />
     <Compile Include="Infrastructure\WrapperExtensions.cs" />
@@ -532,6 +536,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\LicenseDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\TraceDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
