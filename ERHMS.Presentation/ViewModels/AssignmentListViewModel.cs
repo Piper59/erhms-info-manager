@@ -119,6 +119,7 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public Incident Incident { get; private set; }
         public ViewListChildViewModel Views { get; private set; }
         public ResponderListChildViewModel Responders { get; private set; }
         public AssignmentListChildViewModel Assignments { get; private set; }
@@ -132,6 +133,7 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = "Assignments";
+            Incident = incident;
             Views = new ViewListChildViewModel(services, incident);
             Responders = new ResponderListChildViewModel(services, incident);
             Assignments = new AssignmentListChildViewModel(services, incident);

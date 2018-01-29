@@ -45,6 +45,7 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public Incident Incident { get; private set; }
         public CanvasListChildViewModel Canvases { get; private set; }
 
         public ICommand OpenCommand { get; private set; }
@@ -55,6 +56,7 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = "Dashboards";
+            Incident = incident;
             Canvases = new CanvasListChildViewModel(services, incident);
             OpenCommand = new AsyncCommand(OpenAsync, Canvases.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Canvases.HasSelectedItem);

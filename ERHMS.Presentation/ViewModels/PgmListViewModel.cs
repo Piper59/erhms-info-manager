@@ -45,6 +45,7 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
+        public Incident Incident { get; private set; }
         public PgmListChildViewModel Pgms { get; private set; }
 
         public ICommand OpenCommand { get; private set; }
@@ -55,6 +56,7 @@ namespace ERHMS.Presentation.ViewModels
             : base(services)
         {
             Title = "Analyses";
+            Incident = incident;
             Pgms = new PgmListChildViewModel(services, incident);
             OpenCommand = new AsyncCommand(OpenAsync, Pgms.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Pgms.HasSelectedItem);
