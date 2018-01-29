@@ -148,13 +148,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            foreach (Responder responder in Responders.SelectedItems)
+            using (Services.Busy.BeginTask())
             {
-                Context.Assignments.Save(new Assignment(true)
+                foreach (Responder responder in Responders.SelectedItems)
                 {
-                    ViewId = Views.SelectedItem.ViewId,
-                    ResponderId = responder.ResponderId
-                });
+                    Context.Assignments.Save(new Assignment(true)
+                    {
+                        ViewId = Views.SelectedItem.ViewId,
+                        ResponderId = responder.ResponderId
+                    });
+                }
             }
             Services.Data.Refresh(typeof(Assignment));
         }
@@ -163,9 +166,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (await Services.Dialog.ConfirmAsync("Remove the selected assignments?", "Remove"))
             {
-                foreach (Assignment assignment in Assignments.SelectedItems)
+                using (Services.Busy.BeginTask())
                 {
-                    Context.Assignments.Delete(assignment);
+                    foreach (Assignment assignment in Assignments.SelectedItems)
+                    {
+                        Context.Assignments.Delete(assignment);
+                    }
                 }
                 Services.Data.Refresh(typeof(Assignment));
             }

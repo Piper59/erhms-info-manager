@@ -77,14 +77,17 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (await Services.Dialog.ConfirmAsync("Ignore the selected potentially duplicate responders?", "Ignore"))
             {
-                foreach (Tuple<Responder, Responder> pair in Pairs.SelectedItems)
+                using (Services.Busy.BeginTask())
                 {
-                    Context.UniquePairs.Save(new UniquePair(true)
+                    foreach (Tuple<Responder, Responder> pair in Pairs.SelectedItems)
                     {
-                        Responder1Id = pair.Item1.ResponderId,
-                        Responder2Id = pair.Item2.ResponderId
-                    });
-                    Pairs.Remove(pair);
+                        Context.UniquePairs.Save(new UniquePair(true)
+                        {
+                            Responder1Id = pair.Item1.ResponderId,
+                            Responder2Id = pair.Item2.ResponderId
+                        });
+                        Pairs.Remove(pair);
+                    }
                 }
                 Pairs.Refresh();
             }

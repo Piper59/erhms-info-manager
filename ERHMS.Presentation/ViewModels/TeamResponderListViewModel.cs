@@ -128,14 +128,17 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            foreach (Responder responder in Responders.SelectedItems)
+            using (Services.Busy.BeginTask())
             {
-                Context.TeamResponders.Save(new TeamResponder(true)
+                foreach (Responder responder in Responders.SelectedItems)
                 {
-                    TeamId = Team.TeamId,
-                    ResponderId = responder.ResponderId,
-                    IncidentRoleId = IncidentRoles.SelectedItem?.IncidentRoleId
-                });
+                    Context.TeamResponders.Save(new TeamResponder(true)
+                    {
+                        TeamId = Team.TeamId,
+                        ResponderId = responder.ResponderId,
+                        IncidentRoleId = IncidentRoles.SelectedItem?.IncidentRoleId
+                    });
+                }
             }
             Responders.Refresh();
             Services.Data.Refresh(typeof(TeamResponder));
@@ -145,9 +148,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (await Services.Dialog.ConfirmAsync("Remove the selected responders?", "Remove"))
             {
-                foreach (TeamResponder teamResponder in TeamResponders.SelectedItems)
+                using (Services.Busy.BeginTask())
                 {
-                    Context.TeamResponders.Delete(teamResponder);
+                    foreach (TeamResponder teamResponder in TeamResponders.SelectedItems)
+                    {
+                        Context.TeamResponders.Delete(teamResponder);
+                    }
                 }
             }
             Responders.Refresh();

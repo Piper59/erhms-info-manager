@@ -99,13 +99,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            foreach (Location location in Locations.SelectedItems)
+            using (Services.Busy.BeginTask())
             {
-                Context.JobLocations.Save(new JobLocation(true)
+                foreach (Location location in Locations.SelectedItems)
                 {
-                    JobId = Job.JobId,
-                    LocationId = location.LocationId
-                });
+                    Context.JobLocations.Save(new JobLocation(true)
+                    {
+                        JobId = Job.JobId,
+                        LocationId = location.LocationId
+                    });
+                }
             }
             Locations.Refresh();
             Services.Data.Refresh(typeof(JobLocation));
@@ -115,9 +118,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (await Services.Dialog.ConfirmAsync("Remove the selected locations?", "Remove"))
             {
-                foreach (JobLocation jobLocation in JobLocations.SelectedItems)
+                using (Services.Busy.BeginTask())
                 {
-                    Context.JobLocations.Delete(jobLocation);
+                    foreach (JobLocation jobLocation in JobLocations.SelectedItems)
+                    {
+                        Context.JobLocations.Delete(jobLocation);
+                    }
                 }
                 Locations.Refresh();
                 Services.Data.Refresh(typeof(JobLocation));

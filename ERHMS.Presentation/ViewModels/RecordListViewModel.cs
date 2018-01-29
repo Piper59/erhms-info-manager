@@ -100,12 +100,15 @@ namespace ERHMS.Presentation.ViewModels
 
         private void SetDeleted(bool deleted)
         {
-            foreach (ViewEntity entity in Records.Entities.Refresh(Records.SelectedItems))
+            using (Services.Busy.BeginTask())
             {
-                if (entity.Deleted != deleted)
+                foreach (ViewEntity entity in Records.Entities.Refresh(Records.SelectedItems))
                 {
-                    entity.Deleted = deleted;
-                    Records.Entities.Save(entity);
+                    if (entity.Deleted != deleted)
+                    {
+                        entity.Deleted = deleted;
+                        Records.Entities.Save(entity);
+                    }
                 }
             }
             Records.Refresh();

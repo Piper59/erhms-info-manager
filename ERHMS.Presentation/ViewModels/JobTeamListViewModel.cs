@@ -102,13 +102,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            foreach (Team team in Teams.SelectedItems)
+            using (Services.Busy.BeginTask())
             {
-                Context.JobTeams.Save(new JobTeam(true)
+                foreach (Team team in Teams.SelectedItems)
                 {
-                    JobId = Job.JobId,
-                    TeamId = team.TeamId
-                });
+                    Context.JobTeams.Save(new JobTeam(true)
+                    {
+                        JobId = Job.JobId,
+                        TeamId = team.TeamId
+                    });
+                }
             }
             Teams.Refresh();
             Services.Data.Refresh(typeof(JobTeam));
@@ -118,9 +121,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (await Services.Dialog.ConfirmAsync("Remove the selected teams?", "Remove"))
             {
-                foreach (JobTeam jobTeam in JobTeams.SelectedItems)
+                using (Services.Busy.BeginTask())
                 {
-                    Context.JobTeams.Delete(jobTeam);
+                    foreach (JobTeam jobTeam in JobTeams.SelectedItems)
+                    {
+                        Context.JobTeams.Delete(jobTeam);
+                    }
                 }
                 Teams.Refresh();
                 Services.Data.Refresh(typeof(JobTeam));

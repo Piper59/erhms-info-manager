@@ -113,13 +113,16 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            foreach (Responder responder in Responders.SelectedItems)
+            using (Services.Busy.BeginTask())
             {
-                Context.Rosters.Save(new Roster(true)
+                foreach (Responder responder in Responders.SelectedItems)
                 {
-                    ResponderId = responder.ResponderId,
-                    IncidentId = Incident.IncidentId
-                });
+                    Context.Rosters.Save(new Roster(true)
+                    {
+                        ResponderId = responder.ResponderId,
+                        IncidentId = Incident.IncidentId
+                    });
+                }
             }
             Responders.Refresh();
             Services.Data.Refresh(typeof(Roster));
@@ -129,9 +132,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (await Services.Dialog.ConfirmAsync("Remove the selected responders?", "Remove"))
             {
-                foreach (Roster roster in Rosters.SelectedItems)
+                using (Services.Busy.BeginTask())
                 {
-                    Context.Rosters.Delete(roster);
+                    foreach (Roster roster in Rosters.SelectedItems)
+                    {
+                        Context.Rosters.Delete(roster);
+                    }
                 }
                 Responders.Refresh();
                 Services.Data.Refresh(typeof(Roster));
