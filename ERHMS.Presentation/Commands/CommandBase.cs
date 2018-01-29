@@ -1,13 +1,19 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ERHMS.Presentation.Commands
 {
     public abstract class CommandBase : ICommand
     {
-        protected static string GetErrorMessage(Delegate execute)
+        protected static readonly Task CompletedTask = TaskEx.WhenAll();
+
+        private Delegate execute;
+
+        protected CommandBase(Delegate execute)
         {
-            return string.Format("Error in {0}: {1}", execute.Method.Name, execute.Target);
+            this.execute = execute;
         }
 
         public event EventHandler CanExecuteChanged
@@ -21,6 +27,19 @@ namespace ERHMS.Presentation.Commands
         }
 
         public abstract bool CanExecute(object parameter);
-        public abstract void Execute(object parameter);
+        public abstract Task ExecuteCore(object parameter);
+
+        public async void Execute(object parameter)
+        {
+            try
+            {
+                await ExecuteCore(parameter);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.WarnFormat("{0} in {1} {2}: {3}", ex.GetType(), execute.Target, execute.Method.Name, ex.Message);
+                throw;
+            }
+        }
     }
 }

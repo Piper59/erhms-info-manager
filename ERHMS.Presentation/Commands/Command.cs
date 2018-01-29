@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.Commands
 {
@@ -8,6 +9,7 @@ namespace ERHMS.Presentation.Commands
         private Func<bool> canExecute;
 
         public Command(Action execute, Func<bool> canExecute = null)
+            : base(execute)
         {
             this.execute = execute;
             this.canExecute = canExecute ?? (() => true);
@@ -18,9 +20,10 @@ namespace ERHMS.Presentation.Commands
             return canExecute();
         }
 
-        public override void Execute(object parameter)
+        public override Task ExecuteCore(object parameter)
         {
             execute();
+            return CompletedTask;
         }
     }
 
@@ -30,6 +33,7 @@ namespace ERHMS.Presentation.Commands
         private Func<T, bool> canExecute;
 
         public Command(Action<T> execute, Func<T, bool> canExecute = null)
+            : base(execute)
         {
             this.execute = execute;
             this.canExecute = canExecute ?? (parameter => true);
@@ -40,9 +44,10 @@ namespace ERHMS.Presentation.Commands
             return canExecute((T)parameter);
         }
 
-        public override void Execute(object parameter)
+        public override Task ExecuteCore(object parameter)
         {
             execute((T)parameter);
+            return CompletedTask;
         }
     }
 }

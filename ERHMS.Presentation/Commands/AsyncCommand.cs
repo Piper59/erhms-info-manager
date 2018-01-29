@@ -1,5 +1,4 @@
-﻿using ERHMS.Utility;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.Commands
@@ -10,6 +9,7 @@ namespace ERHMS.Presentation.Commands
         private Func<bool> canExecute;
 
         public AsyncCommand(Func<Task> executeAsync, Func<bool> canExecute = null)
+            : base(executeAsync)
         {
             this.executeAsync = executeAsync;
             this.canExecute = canExecute ?? (() => true);
@@ -20,17 +20,9 @@ namespace ERHMS.Presentation.Commands
             return canExecute();
         }
 
-        public async override void Execute(object parameter)
+        public override async Task ExecuteCore(object parameter)
         {
-            try
-            {
-                await executeAsync();
-            }
-            catch
-            {
-                Log.Logger.WarnFormat(GetErrorMessage(executeAsync));
-                throw;
-            }
+            await executeAsync();
         }
     }
 
@@ -40,6 +32,7 @@ namespace ERHMS.Presentation.Commands
         private Func<T, bool> canExecute;
 
         public AsyncCommand(Func<T, Task> executeAsync, Func<T, bool> canExecute = null)
+            : base(executeAsync)
         {
             this.executeAsync = executeAsync;
             this.canExecute = canExecute ?? (parameter => true);
@@ -50,17 +43,9 @@ namespace ERHMS.Presentation.Commands
             return canExecute((T)parameter);
         }
 
-        public async override void Execute(object parameter)
+        public override async Task ExecuteCore(object parameter)
         {
-            try
-            {
-                await executeAsync((T)parameter);
-            }
-            catch
-            {
-                Log.Logger.WarnFormat(GetErrorMessage(executeAsync));
-                throw;
-            }
+            await executeAsync((T)parameter);
         }
     }
 }
