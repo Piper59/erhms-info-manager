@@ -14,13 +14,6 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Incident Incident { get; private set; }
 
-        private bool active;
-        public bool Active
-        {
-            get { return active; }
-            set { SetProperty(nameof(Active), ref active, value); }
-        }
-
         private DateTime? startDate;
         public DateTime? StartDate
         {

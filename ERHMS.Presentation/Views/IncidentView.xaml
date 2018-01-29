@@ -36,10 +36,12 @@
             <Views:JobListView DataContext="{Binding Jobs}" />
         </TabItem>
         <TabItem Header="_Forms"
+                 IsSelected="{Binding Views.Active}"
                  Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:ViewListView DataContext="{Binding Views}" />
         </TabItem>
         <TabItem Header="_Templates"
+                 IsSelected="{Binding Templates.Active}"
                  Visibility="{Binding Incident.New, Converter={StaticResource BooleanToVisibilityInverter}}">
             <Views:TemplateListView DataContext="{Binding Templates}" />
         </TabItem>

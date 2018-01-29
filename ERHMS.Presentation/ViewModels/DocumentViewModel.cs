@@ -9,6 +9,13 @@ namespace ERHMS.Presentation.ViewModels
 {
     public abstract class DocumentViewModel : ViewModelBase
     {
+        private bool active;
+        public bool Active
+        {
+            get { return active; }
+            set { SetProperty(nameof(Active), ref active, value); }
+        }
+
         private bool dirty;
         public virtual bool Dirty
         {

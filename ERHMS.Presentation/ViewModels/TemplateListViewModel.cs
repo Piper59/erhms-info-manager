@@ -33,6 +33,11 @@ namespace ERHMS.Presentation.ViewModels
                 yield return item.Name;
                 yield return item.Description;
             }
+
+            public void SelectByPath(string path)
+            {
+                SelectedObject = Items.SingleOrDefault(templateInfo => templateInfo.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase));
+            }
         }
 
         public Incident Incident { get; private set; }

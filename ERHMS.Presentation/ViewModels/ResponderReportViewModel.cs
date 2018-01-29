@@ -14,13 +14,6 @@ namespace ERHMS.Presentation.ViewModels
     {
         public Responder Responder { get; private set; }
 
-        private bool active;
-        public bool Active
-        {
-            get { return active; }
-            set { SetProperty(nameof(Active), ref active, value); }
-        }
-
         private ICollection<Incident> incidents;
         public ICollection<Incident> Incidents
         {

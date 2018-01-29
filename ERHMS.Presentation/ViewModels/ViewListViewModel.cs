@@ -52,6 +52,11 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return HasSelectedItem() && SelectedItem.ViewId != Context.Responders.View.Id;
             }
+
+            public void SelectById(int viewId)
+            {
+                SelectedObject = Items.FirstOrDefault(view => view.ViewId == viewId);
+            }
         }
 
         public Incident Incident { get; private set; }
@@ -174,7 +179,19 @@ namespace ERHMS.Presentation.ViewModels
                     Services.Dispatch.Post(() =>
                     {
                         Services.Data.Refresh(typeof(TemplateInfo));
-                        Services.Document.ShowByType(() => new TemplateListViewModel(Services, null));
+                        if (Incident == null)
+                        {
+                            TemplateListViewModel model = Services.Document.ShowByType(() => new TemplateListViewModel(Services, null));
+                            model.Templates.SelectByPath(e.Properties.Path);
+                        }
+                        else
+                        {
+                            IncidentViewModel parent = Services.Document.Show(
+                                model => model.Incident.Equals(Incident),
+                                () => new IncidentViewModel(Services, Incident));
+                            parent.Templates.Active = true;
+                            parent.Templates.Templates.SelectByPath(e.Properties.Path);
+                        }
                     });
                 }
             };

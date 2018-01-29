@@ -38,7 +38,19 @@ namespace ERHMS.Presentation
                     services.Dispatch.Post(() =>
                     {
                         services.Data.Refresh(typeof(View));
-                        services.Document.ShowByType(() => new ViewListViewModel(services, null));
+                        if (incident == null)
+                        {
+                            ViewListViewModel model = services.Document.ShowByType(() => new ViewListViewModel(services, null));
+                            model.Views.SelectById(e.Properties.ViewId);
+                        }
+                        else
+                        {
+                            IncidentViewModel parent = services.Document.Show(
+                                model => model.Incident.Equals(incident),
+                                () => new IncidentViewModel(services, incident));
+                            parent.Views.Active = true;
+                            parent.Views.Views.SelectById(e.Properties.ViewId);
+                        }
                     });
                 }
             };
