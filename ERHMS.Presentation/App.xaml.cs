@@ -137,7 +137,9 @@ namespace ERHMS.Presentation
             MainWindow = view;
             MainWindow.ContentRendered += MainWindow_ContentRendered;
             MainWindow.Show();
+#if DEBUG_FULL
             DebugDataBinding();
+#endif
         }
 
         private void DebugDataBinding()
