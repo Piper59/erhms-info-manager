@@ -9,7 +9,8 @@
     <AutomationProperties.Name>
         <Binding Converter="{StaticResource AccessTextToPlainTextConverter}"
                  ElementName="Root"
-                 Path="AccessText" />
+                 Path="AccessText"
+                 TargetNullValue="" />
     </AutomationProperties.Name>
     <Grid>
         <Grid.RowDefinitions>
