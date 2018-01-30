@@ -142,17 +142,6 @@ namespace ERHMS.Presentation
 #endif
         }
 
-        private void DebugDataBinding()
-        {
-            PresentationTraceSources.Refresh();
-            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
-            TraceDialog dialog = new TraceDialog(PresentationTraceSources.DataBindingSource)
-            {
-                Title = "Data Binding"
-            };
-            dialog.Show();
-        }
-
         private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (e.KeyboardDevice.IsKeyDown(Key.Tab))
@@ -291,6 +280,17 @@ namespace ERHMS.Presentation
                 Settings.Default.Save();
                 return configuration;
             }
+        }
+
+        private void DebugDataBinding()
+        {
+            PresentationTraceSources.Refresh();
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
+            TraceDialog dialog = new TraceDialog(PresentationTraceSources.DataBindingSource)
+            {
+                Title = "Data Binding"
+            };
+            dialog.Show();
         }
 
         void IAppService.Exit()
