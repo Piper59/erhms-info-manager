@@ -15,7 +15,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <ManifestCertificateThumbprint>BDFE829F4DBCA70ED3784FABF331C8F92348180D</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>757A4A11A9912C980D460163A4D52E7DC94CBEE0</ManifestCertificateThumbprint>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <ZipFile>publish\ERHMSInfoManager.zip</ZipFile>
     <PublishUrl>publish\</PublishUrl>
