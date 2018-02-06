@@ -127,8 +127,8 @@ namespace ERHMS.Presentation
                 new KeyboardFocusChangedEventHandler(TextBox_GotKeyboardFocus));
             EventManager.RegisterClassHandler(
                 typeof(TextBox),
-                UIElement.LostKeyboardFocusEvent,
-                new KeyboardFocusChangedEventHandler(TextBox_LostKeyboardFocus));
+                UIElement.LostFocusEvent,
+                new RoutedEventHandler(TextBox_LostFocus));
             MainViewModel model = new MainViewModel(services);
             services.Document = model;
             MainView view = new MainView(model);
@@ -150,12 +150,9 @@ namespace ERHMS.Presentation
             }
         }
 
-        private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (e.KeyboardDevice.IsKeyDown(Key.Tab))
-            {
-                ((TextBox)sender).Select(0, 0);
-            }
+            ((TextBox)sender).Select(0, 0);
         }
 
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
