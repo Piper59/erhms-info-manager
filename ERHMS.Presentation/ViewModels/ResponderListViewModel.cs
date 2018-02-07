@@ -66,7 +66,7 @@ namespace ERHMS.Presentation.ViewModels
             CreateCommand = new Command(Create);
             EditCommand = new Command(Edit, Responders.HasOneSelectedItem);
             MergeAutomatedCommand = new AsyncCommand(MergeAutomatedAsync);
-            MergeSelectedCommand = new AsyncCommand(MergeSelectedAsync);
+            MergeSelectedCommand = new AsyncCommand(MergeSelectedAsync, Responders.HasAnySelectedItems);
             DeleteCommand = new AsyncCommand(DeleteAsync, Responders.HasOneSelectedItem);
             EmailCommand = new Command(Email, Responders.HasAnySelectedItems);
             ImportFromProjectCommand = new Command(ImportFromProject);
