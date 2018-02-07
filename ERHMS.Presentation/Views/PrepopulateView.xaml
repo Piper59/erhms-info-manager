@@ -10,7 +10,8 @@
         <StackPanel>
             <TextBlock TextWrapping="Wrap">
                 The selected form appears to contain responder data fields.
-                To prepopulate these fields, select a responder from the list below.
+                If you want to prepopulate these fields, select a responder from the list below and click Continue.
+                Otherwise, you may continue to the form without first selecting a responder.
             </TextBlock>
             <ComboBox AutomationProperties.Name="Responder"
                       ItemsSource="{Binding Responders.Objects}"
