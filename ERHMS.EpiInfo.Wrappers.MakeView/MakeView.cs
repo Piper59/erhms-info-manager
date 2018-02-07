@@ -43,7 +43,7 @@ namespace ERHMS.EpiInfo.Wrappers
             }
         }
 
-        public class InstantiateProjectTemplate : Wrapper
+        public class InstantiateTemplate : Wrapper
         {
             private static string ProjectPath { get; set; }
             private static string TemplatePath { get; set; }
@@ -69,6 +69,14 @@ namespace ERHMS.EpiInfo.Wrappers
                 Template template = new Template(Form.Mediator);
                 template.InstantiateTemplate(TemplatePath);
                 Form.Close();
+            }
+        }
+
+        public class InstantiateProjectTemplate
+        {
+            public static Wrapper Create(string projectPath, string templatePath)
+            {
+                return InstantiateTemplate.Create(projectPath, templatePath);
             }
         }
 

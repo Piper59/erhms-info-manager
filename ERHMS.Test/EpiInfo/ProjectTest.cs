@@ -2,11 +2,13 @@
 using Epi.Fields;
 using ERHMS.Dapper;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Utility;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,10 +20,10 @@ namespace ERHMS.Test.EpiInfo
 {
     public abstract class ProjectTest
     {
-        private TempDirectory directory;
-        private Configuration configuration;
-        private IProjectCreator creator;
-        private Project project;
+        protected TempDirectory directory;
+        protected Configuration configuration;
+        protected IProjectCreator creator;
+        protected Project project;
 
         protected abstract IProjectCreator GetCreator();
 
@@ -334,6 +336,25 @@ namespace ERHMS.Test.EpiInfo
         protected override IProjectCreator GetCreator()
         {
             return new AccessProjectCreator(nameof(AccessProjectTest));
+        }
+
+        [Test]
+        [Explicit]
+        public void InstantiateViewTemplatesTest()
+        {
+            IOExtensions.CopyDirectory(
+                Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
+                configuration.Directories.Templates);
+            foreach (TemplateInfo templateInfo in TemplateInfo.GetByLevel(TemplateLevel.View))
+            {
+                TestContext.Error.WriteLine(templateInfo.Name);
+                Wrapper wrapper = MakeView.InstantiateTemplate.Create(project.FilePath, templateInfo.FilePath);
+                wrapper.Invoke();
+                wrapper.Exited.WaitOne();
+            }
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), project.Name);
+            IOExtensions.CopyDirectory(project.Location, path);
+            Process.Start(path);
         }
     }
 
