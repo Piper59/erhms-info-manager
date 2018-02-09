@@ -41,6 +41,7 @@ namespace ERHMS.Presentation.Views
 
         private IWin32Window owner;
         private ResourceDictionary accent;
+        private bool closeRequested;
         private bool closing;
 
         public new MainViewModel DataContext
@@ -55,19 +56,26 @@ namespace ERHMS.Presentation.Views
             accent = (ResourceDictionary)Application.Current.Resources["Accent"];
             DataContext = model;
             InitializeComponent();
-            Closing += async (sender, e) =>
+            Closing += MainView_Closing;
+        }
+
+        private async void MainView_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = !closing;
+            if (closeRequested || closing)
             {
-                if (closing)
-                {
-                    return;
-                }
-                e.Cancel = true;
-                if (await ConfirmAsync(string.Format("Are you sure you want to exit {0}?", Application.Current.Resources["AppTitle"]), "Exit"))
-                {
-                    closing = true;
-                    Close();
-                }
-            };
+                return;
+            }
+            closeRequested = true;
+            if (await ConfirmAsync(string.Format("Are you sure you want to exit {0}?", Application.Current.Resources["AppTitle"]), "Exit"))
+            {
+                closing = true;
+                Close();
+            }
+            else
+            {
+                closeRequested = false;
+            }
         }
 
         public IWin32Window GetOwner()
