@@ -68,6 +68,7 @@ namespace ERHMS.Presentation.ViewModels
                     ResponderEmailAddress = responder.EmailAddress,
                     ResponderLastName = responder.LastName,
                     ResponderFirstName = responder.FirstName,
+                    ResponderMiddleInitial = responder.MiddleInitial,
                     ResponderFullName = responder.FullName,
                     ResponderName = responder.FullName
                 };
