@@ -349,8 +349,15 @@ namespace ERHMS.Test.EpiInfo
             {
                 TestContext.Error.WriteLine(templateInfo.Name);
                 Wrapper wrapper = MakeView.InstantiateTemplate.Create(project.FilePath, templateInfo.FilePath);
+                int? viewId = null;
+                wrapper.Event += (sender, e) =>
+                {
+                    viewId = e.Properties.ViewId;
+                };
                 wrapper.Invoke();
                 wrapper.Exited.WaitOne();
+                Assert.IsTrue(viewId.HasValue);
+                project.CollectedData.EnsureDataTablesExist(viewId.Value);
             }
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), project.Name);
             IOExtensions.CopyDirectory(project.Location, path);

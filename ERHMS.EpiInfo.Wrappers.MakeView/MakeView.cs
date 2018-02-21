@@ -68,6 +68,13 @@ namespace ERHMS.EpiInfo.Wrappers
                 Form.OpenProject(ProjectPath);
                 Template template = new Template(Form.Mediator);
                 template.InstantiateTemplate(TemplatePath);
+                if (TemplateInfo.Get(TemplatePath).Level == TemplateLevel.View)
+                {
+                    RaiseEvent("ViewCreated", new
+                    {
+                        ViewId = Form.Mediator.ProjectExplorer.CurrentView.Id
+                    });
+                }
                 Form.Close();
             }
         }
@@ -121,10 +128,9 @@ namespace ERHMS.EpiInfo.Wrappers
                         document.Save(templatePath);
                         Template template = new Template(Form.Mediator);
                         template.InstantiateTemplate(templatePath);
-                        int viewId = Form.Mediator.ProjectExplorer.CurrentView.Id;
                         RaiseEvent("ViewCreated", new
                         {
-                            ViewId = viewId
+                            ViewId = Form.Mediator.ProjectExplorer.CurrentView.Id
                         });
                         Form.TryClose("Form has been created.");
                     }
