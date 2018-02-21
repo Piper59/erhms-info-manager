@@ -50,6 +50,15 @@ namespace ERHMS.Presentation.ViewModels
                 Incident = incident;
                 Refresh();
                 EditCommand = new Command(Edit, HasSelectedItem);
+                services.Data.Refreshing += Data_Refreshing;
+            }
+
+            private void Data_Refreshing(object sender, RefreshingEventArgs e)
+            {
+                if (e.Type == typeof(Roster))
+                {
+                    Refresh();
+                }
             }
 
             protected override IEnumerable<Responder> GetItems()
@@ -82,6 +91,12 @@ namespace ERHMS.Presentation.ViewModels
                 Services.Document.Show(
                     model => model.Responder.Equals(SelectedItem),
                     () => new ResponderViewModel(Services, Context.Responders.Refresh(SelectedItem)));
+            }
+
+            public override void Dispose()
+            {
+                Services.Data.Refreshing -= Data_Refreshing;
+                base.Dispose();
             }
         }
 
