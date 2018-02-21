@@ -23,7 +23,7 @@
                 <StackPanel>
                     <TextBlock FontSize="15"
                                Margin="0,0,0,10">
-                        Click the headings on the left to open the corresponding sections of the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf">User Guide</Controls:WebHyperlink>.<LineBreak />
+                        Click the headings on the left to open the corresponding sections of the <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf">User Guide</Controls:WebHyperlink>.<LineBreak />
                         Click the links in the diagram below to open the corresponding modules of the software.
                     </TextBlock>
                     <Canvas Height="600"
@@ -126,26 +126,26 @@
             </ScrollViewer>
         </TabItem>
         <Controls:UserGuideTabItem Header="_Data Sources"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=14" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=15" />
         <Controls:UserGuideTabItem Header="_Responders"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=16" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=17" />
         <Controls:UserGuideTabItem Header="_Incidents"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=18" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=19" />
         <Controls:UserGuideTabItem Header="_Notes"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=21" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=22" />
         <Controls:UserGuideTabItem Header="_Roster"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=21" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=22" />
         <Controls:UserGuideTabItem Header="_Locations"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=25" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=26" />
         <Controls:UserGuideTabItem Header="_Forms"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=28" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=29" />
         <Controls:UserGuideTabItem Header="_Templates"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=32" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=33" />
         <Controls:UserGuideTabItem Header="_Assignments"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=39" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=40" />
         <Controls:UserGuideTabItem Header="_Analyses"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=42" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=43" />
         <Controls:UserGuideTabItem Header="_Dashboards"
-                                   NavigateUri="https://www.cdc.gov/niosh/docs/2017-169/pdf/2017-169.pdf#page=42" />
+                                   NavigateUri="https://www.cdc.gov/niosh/docs/2018-115/pdf/2018-115.pdf#page=43" />
     </TabControl>
 </UserControl>
