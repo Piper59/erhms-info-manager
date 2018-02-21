@@ -340,7 +340,7 @@ namespace ERHMS.Test.EpiInfo
 
         [Test]
         [Explicit]
-        public void InstantiateViewTemplatesTest()
+        public void ReviewTemplatesTest()
         {
             IOExtensions.CopyDirectory(
                 Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
