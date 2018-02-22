@@ -8,16 +8,20 @@ namespace ERHMS.Launcher
 {
     public static class Launcher
     {
-        public static void Execute(string[] args)
+        internal static string GetEntryDirectoryPath()
+        {
+            return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        }
+
+        public static void Execute(string path, string[] args)
         {
             try
             {
-                DirectoryInfo directory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-                string executable = Path.Combine(directory.FullName, "ERHMS.Presentation.exe");
+                string executable = Path.Combine(path, "ERHMS.Presentation.exe");
                 Process.Start(new ProcessStartInfo
                 {
                     UseShellExecute = false,
-                    WorkingDirectory = directory.FullName,
+                    WorkingDirectory = path,
                     FileName = executable
                 });
             }
@@ -25,6 +29,11 @@ namespace ERHMS.Launcher
             {
                 MessageBox.Show(ex.ToString(), "ERHMS Info Manager\u2122", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public static void Execute(string[] args)
+        {
+            Execute(GetEntryDirectoryPath(), args);
         }
     }
 }

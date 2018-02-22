@@ -26,9 +26,6 @@
     </ItemGroup>
     <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
-  <Target Name="CreateLauncher" AfterTargets="Build" Condition="'$(MainProject)' == 'true'">
-    <Exec WorkingDirectory="$(BuildContainerDir)" Command="cscript //Nologo &quot;$(SolutionDir)shortcut.vbs&quot; &quot;Launch ERHMS Info Manager.lnk&quot; &quot;$(BuildDir)$(TargetFileName)&quot;" />
-  </Target>
   <Target Name="CleanBuildContainerDir" AfterTargets="Clean" Condition="'$(Rebuilding)' == 'false'">
     <RemoveDir Directories="$(BuildContainerDir)" />
   </Target>

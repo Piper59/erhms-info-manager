@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		COPYRIGHT.txt = COPYRIGHT.txt
 		Deployment.txt = Deployment.txt
+		ERHMS.Build.Launcher.targets = ERHMS.Build.Launcher.targets
 		ERHMS.Build.targets = ERHMS.Build.targets
 		ERHMS.Build.Wrappers.targets = ERHMS.Build.Wrappers.targets
 		ERHMS.Common.targets = ERHMS.Common.targets
@@ -14,7 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ERHMS.Test.targets = ERHMS.Test.targets
 		LICENSE.txt = LICENSE.txt
 		NOTICE.txt = NOTICE.txt
-		shortcut.vbs = shortcut.vbs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Utility", "ERHMS.Utility\ERHMS.Utility.csproj", "{F8E50F50-057D-4666-9555-16A773B925E9}"
