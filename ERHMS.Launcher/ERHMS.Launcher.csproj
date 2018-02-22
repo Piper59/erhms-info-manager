@@ -11,6 +11,9 @@
     <AssemblyName>ERHMS.Launcher</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetName>Launch ERHMS Info Manager</TargetName>
+    <ApplicationIcon>..\ERHMS\ERHMS.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
