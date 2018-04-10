@@ -48,16 +48,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Test", "ERHMS.Test\ERHMS.Test.csproj", "{EBE64B8B-0CD8-4245-B27D-7534B6472741}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Launcher", "ERHMS.Launcher\ERHMS.Launcher.csproj", "{A25BA0EF-FC69-44BF-8F73-32EB8B3843F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7D000598-61C2-42F5-9C9E-25DA05B2C90D} = {7D000598-61C2-42F5-9C9E-25DA05B2C90D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS", "ERHMS\ERHMS.csproj", "{5AB92A6D-4845-4AC0-A8AC-2C79EEF212DF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7D000598-61C2-42F5-9C9E-25DA05B2C90D} = {7D000598-61C2-42F5-9C9E-25DA05B2C90D}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Beta", "ERHMS.Beta\ERHMS.Beta.csproj", "{4E10E881-7D3B-4A2D-AEC7-9A657C0B3450}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7D000598-61C2-42F5-9C9E-25DA05B2C90D} = {7D000598-61C2-42F5-9C9E-25DA05B2C90D}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
