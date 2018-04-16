@@ -94,7 +94,7 @@
                               DisplayMemberPath="Name"
                               IsEnabled="{Binding AppendUrl}"
                               ItemsSource="{Binding Views.Objects}"
-                              Margin="5,0,0,0"
+                              Margin="5,2.5,0,2.5"
                               SelectedItem="{Binding Views.SelectedObject}" />
                 </Grid>
             </Grid>
