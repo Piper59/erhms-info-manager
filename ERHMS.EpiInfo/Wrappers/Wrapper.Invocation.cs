@@ -116,7 +116,7 @@ namespace ERHMS.EpiInfo.Wrappers
             WriteLine(args.Count);
             foreach (object arg in args)
             {
-                WriteLine(ConvertExtensions.ToBase64String(arg));
+                WriteLine(Base64Extensions.ToBase64String(arg));
             }
         }
 

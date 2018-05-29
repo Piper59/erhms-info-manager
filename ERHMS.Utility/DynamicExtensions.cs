@@ -33,12 +33,12 @@ namespace ERHMS.Utility
                     properties = new Dictionary<string, object>(properties);
                 }
             }
-            return ConvertExtensions.ToBase64String(properties);
+            return Base64Extensions.ToBase64String(properties);
         }
 
         public static ExpandoObject Deserialize(string value)
         {
-            IDictionary<string, object> properties = (IDictionary<string, object>)ConvertExtensions.FromBase64String(value);
+            IDictionary<string, object> properties = (IDictionary<string, object>)Base64Extensions.FromBase64String(value);
             if (properties == null)
             {
                 return null;

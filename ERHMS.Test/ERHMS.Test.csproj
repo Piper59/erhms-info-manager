@@ -196,6 +196,7 @@
     <Compile Include="Utility\ArrayExtensionsTest.cs" />
     <Compile Include="Utility\AssemblyExtensionsTest.cs" />
     <Compile Include="Utility\AttributeExtensionsTest.cs" />
+    <Compile Include="Utility\Base64ExtensionsTest.cs" />
     <Compile Include="Utility\ConvertExtensionsTest.cs" />
     <Compile Include="Utility\DamerauLevenshteinTest.cs" />
     <Compile Include="Utility\DateTimeExtensionsTest.cs" />

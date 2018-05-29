@@ -60,7 +60,7 @@ namespace ERHMS.EpiInfo.Wrappers
             object[] args = new object[count];
             for (int index = 0; index < count; index++)
             {
-                args[index] = ConvertExtensions.FromBase64String(In.ReadLine());
+                args[index] = Base64Extensions.FromBase64String(In.ReadLine());
             }
             return args;
         }

@@ -51,6 +51,7 @@
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="AttributeExtensions.cs" />
+    <Compile Include="Base64Extensions.cs" />
     <Compile Include="ConvertExtensions.cs" />
     <Compile Include="CryptographyExtensions.cs" />
     <Compile Include="DamerauLevenshtein.cs" />
