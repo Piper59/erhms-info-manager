@@ -8,14 +8,14 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class CanvasViewModel : AnalysisViewModel
     {
-        public CanvasViewModel(IServiceManager services, View view)
-            : base(services, view)
+        public CanvasViewModel(View view)
+            : base(view)
         {
             Title = "Create a Dashboard";
         }
 
-        public CanvasViewModel(IServiceManager services, int viewId)
-            : this(services, services.Data.Context.Views.SelectById(viewId)) { }
+        public CanvasViewModel(int viewId)
+            : this(Context.Views.SelectById(viewId)) { }
 
         public override async Task CreateAsync()
         {
@@ -33,10 +33,11 @@ namespace ERHMS.Presentation.ViewModels
                     IncidentId = View.Incident.IncidentId
                 });
             }
-            Services.Data.Refresh(typeof(Domain.Canvas));
+            ServiceLocator.Data.Refresh(typeof(Domain.Canvas));
             Close();
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            await Services.Wrapper.InvokeAsync(AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content));
+            Wrapper wrapper = AnalysisDashboard.OpenCanvas.Create(Context.Project.FilePath, canvas.CanvasId, canvas.Content);
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
     }
 }

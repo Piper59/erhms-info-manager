@@ -46,11 +46,11 @@
                             <RadioButton Grid.Column="1"
                                          IsChecked="{Binding Selected1}" />
                             <TextBlock Grid.Column="2"
-                                       Text="{Binding Value1}" />
+                                       Text="{Binding Text1}" />
                             <RadioButton Grid.Column="3"
                                          IsChecked="{Binding Selected2}" />
                             <TextBlock Grid.Column="4"
-                                       Text="{Binding Value2}" />
+                                       Text="{Binding Text2}" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

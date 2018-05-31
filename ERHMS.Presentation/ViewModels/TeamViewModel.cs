@@ -1,5 +1,4 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -15,12 +14,11 @@ namespace ERHMS.Presentation.ViewModels
             protected set { base.Dirty = value; }
         }
 
-        public TeamViewModel(IServiceManager services, Team team)
-            : base(services)
+        public TeamViewModel(Team team)
         {
             Team = team;
-            Detail = new TeamDetailViewModel(services, team);
-            Responders = new TeamResponderListViewModel(services, team);
+            Detail = new TeamDetailViewModel(team);
+            Responders = new TeamResponderListViewModel(team);
             Title = Detail.Title;
             Detail.PropertyChanged += (sender, e) =>
             {
@@ -29,13 +27,6 @@ namespace ERHMS.Presentation.ViewModels
                     Title = Detail.Title;
                 }
             };
-        }
-
-        public override void Dispose()
-        {
-            Detail.Dispose();
-            Responders.Dispose();
-            base.Dispose();
         }
     }
 }

@@ -2,6 +2,7 @@
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public TeamListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public TeamListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -48,12 +48,11 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand EditCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
 
-        public TeamListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public TeamListViewModel(Incident incident)
         {
             Title = "Teams";
             Incident = incident;
-            Teams = new TeamListChildViewModel(services, incident);
+            Teams = new TeamListChildViewModel(incident);
             CreateCommand = new Command(Create);
             EditCommand = new Command(Edit, Teams.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Teams.HasSelectedItem);
@@ -61,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Services.Document.Show(() => new TeamViewModel(Services, new Team(true)
+            ServiceLocator.Document.Show(() => new TeamViewModel(new Team(true)
             {
                 IncidentId = Incident.IncidentId
             }));
@@ -69,26 +68,20 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Edit()
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Team.Equals(Teams.SelectedItem),
-                () => new TeamViewModel(Services, Context.Teams.Refresh(Teams.SelectedItem)));
+                () => new TeamViewModel(Context.Teams.Refresh(Teams.SelectedItem)));
         }
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected team?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.TeamConfirmDelete, "Delete"))
             {
                 Context.JobTeams.DeleteByTeamId(Teams.SelectedItem.TeamId);
                 Context.TeamResponders.DeleteByTeamId(Teams.SelectedItem.TeamId);
                 Context.Teams.Delete(Teams.SelectedItem);
-                Services.Data.Refresh(typeof(Team));
+                ServiceLocator.Data.Refresh(typeof(Team));
             }
-        }
-
-        public override void Dispose()
-        {
-            Teams.Dispose();
-            base.Dispose();
         }
     }
 }

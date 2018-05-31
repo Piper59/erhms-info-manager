@@ -6,17 +6,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public abstract class ListViewModel<T> : ViewModelBase
+    public abstract class ListViewModel<T> : ViewModelBase, IWeakEventListener
     {
-        private static readonly TimeSpan Delay = TimeSpan.FromSeconds(0.5);
-        private static readonly TimeSpan Infinity = new TimeSpan(0, 0, 0, 0, -1);
-
-        private Timer timer;
+        private DispatcherTimer timer;
 
         private ICollectionView objects;
         public ICollectionView Objects
@@ -83,22 +81,31 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (SetProperty(nameof(Filter), ref filter, value))
                 {
-                    timer.Change(Delay, Infinity);
+                    timer.Stop();
+                    timer.Start();
                 }
             }
         }
 
+        protected virtual IEnumerable<Type> RefreshTypes
+        {
+            get { yield return typeof(T); }
+        }
+
         public ICommand RefreshCommand { get; private set; }
 
-        protected ListViewModel(IServiceManager services)
-            : base(services)
+        protected ListViewModel()
         {
-            timer = new Timer(state =>
+            timer = new DispatcherTimer
             {
-                services.Dispatch.Post(Objects.Refresh);
-            });
+                Interval = TimeSpan.FromSeconds(0.5)
+            };
+            timer.Tick += (sender, e) =>
+            {
+                Objects.Refresh();
+            };
             RefreshCommand = new Command(Refresh);
-            services.Data.Refreshing += Data_Refreshing;
+            RefreshingWeakEventManager.AddListener(ServiceLocator.Data, this);
         }
 
         public event EventHandler SelectionChanged;
@@ -109,14 +116,6 @@ namespace ERHMS.Presentation.ViewModels
         private void OnSelectionChanged()
         {
             OnSelectionChanged(EventArgs.Empty);
-        }
-
-        private void Data_Refreshing(object sender, RefreshingEventArgs e)
-        {
-            if (e.Type == typeof(T))
-            {
-                Refresh();
-            }
         }
 
         protected abstract IEnumerable<T> GetItems();
@@ -146,6 +145,22 @@ namespace ERHMS.Presentation.ViewModels
         {
             Objects = CollectionViewSource.GetDefaultView(GetItems());
             Objects.Filter = IsFilterMatch;
+        }
+
+        public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+        {
+            if (managerType == typeof(RefreshingWeakEventManager))
+            {
+                if (RefreshTypes.Contains(((RefreshingEventArgs)e).Type))
+                {
+                    Refresh();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool HasSelectedItem()
@@ -178,12 +193,6 @@ namespace ERHMS.Presentation.ViewModels
         public void Unselect()
         {
             SelectedObject = null;
-        }
-
-        public override void Dispose()
-        {
-            Services.Data.Refreshing -= Data_Refreshing;
-            base.Dispose();
         }
     }
 }

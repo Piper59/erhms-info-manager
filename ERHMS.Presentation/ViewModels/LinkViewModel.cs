@@ -1,6 +1,5 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Commands;
-using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +12,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class IncidentListChildViewModel : ListViewModel<Incident>
         {
-            public IncidentListChildViewModel(IServiceManager services)
-                : base(services)
+            public IncidentListChildViewModel()
             {
                 Refresh();
             }
@@ -31,12 +29,11 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand LinkCommand { get; private set; }
         public ICommand UnlinkCommand { get; private set; }
 
-        protected LinkViewModel(IServiceManager services, TEntity entity)
-            : base(services)
+        protected LinkViewModel(TEntity entity)
         {
             Title = "Link to Incident";
             Entity = entity;
-            Incidents = new IncidentListChildViewModel(services);
+            Incidents = new IncidentListChildViewModel();
             if (entity.Incident != null)
             {
                 Incidents.Select(entity.Incident);
@@ -47,11 +44,5 @@ namespace ERHMS.Presentation.ViewModels
 
         public abstract void Link();
         public abstract void Unlink();
-
-        public override void Dispose()
-        {
-            Incidents.Dispose();
-            base.Dispose();
-        }
     }
 }

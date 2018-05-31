@@ -1,4 +1,5 @@
 ﻿using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Threading.Tasks;
@@ -15,8 +16,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand ShowPgmsCommand { get; private set; }
         public ICommand ShowCanvasesCommand { get; private set; }
 
-        public HelpViewModel(IServiceManager services)
-            : base(services)
+        public HelpViewModel()
         {
             Title = "Help";
             ShowRespondersCommand = new AsyncCommand(ShowRespondersAsync);
@@ -31,9 +31,9 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (Context == null)
             {
-                if (await Services.Dialog.ConfirmAsync(Services.String.GetStarted, title: "Help"))
+                if (await ServiceLocator.Dialog.ConfirmAsync(Resources.GetStarted, title: "Help"))
                 {
-                    Services.Document.ShowByType(() => new DataSourceListViewModel(Services));
+                    ServiceLocator.Document.ShowByType(() => new DataSourceListViewModel());
                 }
                 return false;
             }
@@ -47,37 +47,37 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            Services.Document.ShowByType(constructor);
+            ServiceLocator.Document.ShowByType(constructor);
         }
 
         public async Task ShowRespondersAsync()
         {
-            await ShowAsync(() => new ResponderListViewModel(Services));
+            await ShowAsync(() => new ResponderListViewModel());
         }
 
         public async Task ShowIncidentsAsync()
         {
-            await ShowAsync(() => new IncidentListViewModel(Services));
+            await ShowAsync(() => new IncidentListViewModel());
         }
 
         public async Task ShowViewsAsync()
         {
-            await ShowAsync(() => new ViewListViewModel(Services, null));
+            await ShowAsync(() => new ViewListViewModel(null));
         }
 
         public async Task ShowTemplatesAsync()
         {
-            await ShowAsync(() => new TemplateListViewModel(Services, null));
+            await ShowAsync(() => new TemplateListViewModel(null));
         }
 
         public async Task ShowPgmsAsync()
         {
-            await ShowAsync(() => new PgmListViewModel(Services, null));
+            await ShowAsync(() => new PgmListViewModel(null));
         }
 
         public async Task ShowCanvasesAsync()
         {
-            await ShowAsync(() => new CanvasListViewModel(Services, null));
+            await ShowAsync(() => new CanvasListViewModel(null));
         }
     }
 }

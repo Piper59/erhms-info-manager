@@ -5,8 +5,8 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class CanvasLinkViewModel : LinkViewModel<Canvas, CanvasLink>
     {
-        public CanvasLinkViewModel(IServiceManager services, Canvas canvas)
-            : base(services, canvas) { }
+        public CanvasLinkViewModel(Canvas canvas)
+            : base(canvas) { }
 
         public override void Link()
         {
@@ -16,14 +16,14 @@ namespace ERHMS.Presentation.ViewModels
                 CanvasId = Entity.CanvasId,
                 IncidentId = Incidents.SelectedItem.IncidentId
             });
-            Services.Data.Refresh(typeof(Canvas));
+            ServiceLocator.Data.Refresh(typeof(Canvas));
             Close();
         }
 
         public override void Unlink()
         {
             Context.CanvasLinks.DeleteByCanvasId(Entity.CanvasId);
-            Services.Data.Refresh(typeof(Canvas));
+            ServiceLocator.Data.Refresh(typeof(Canvas));
             Close();
         }
     }

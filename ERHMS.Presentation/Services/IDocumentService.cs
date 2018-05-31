@@ -15,4 +15,12 @@ namespace ERHMS.Presentation.Services
         TModel ShowByType<TModel>(Func<TModel> constructor)
             where TModel : DocumentViewModel;
     }
+
+    public static class IDocumentServiceExtensions
+    {
+        public static SettingsViewModel ShowSettings(this IDocumentService @this)
+        {
+            return @this.ShowByType(() => new SettingsViewModel());
+        }
+    }
 }

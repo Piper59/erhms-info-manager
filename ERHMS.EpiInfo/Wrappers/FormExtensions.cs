@@ -16,8 +16,7 @@ namespace ERHMS.EpiInfo.Wrappers
         public static bool TryClose(this Form @this, string reason, MessageBoxIcon icon = MessageBoxIcon.None)
         {
             string message = string.Format("{0} Close Epi Info\u2122?", reason);
-            DialogResult result = MessageBox.Show(@this, message, "Close?", MessageBoxButtons.YesNo, icon);
-            if (result == DialogResult.Yes)
+            if (MessageBox.Show(@this, message, "Close?", MessageBoxButtons.YesNo, icon) == DialogResult.Yes)
             {
                 @this.Close();
                 return true;

@@ -269,14 +269,15 @@
     <Compile Include="Infrastructure\BusyService.cs" />
     <Compile Include="Infrastructure\ContextSafeAttribute.cs" />
     <Compile Include="Infrastructure\DataService.cs" />
+    <Compile Include="Infrastructure\DialogTypeMap.cs" />
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
-    <Compile Include="Infrastructure\DispatchService.cs" />
-    <Compile Include="Infrastructure\ObservableObject.cs" />
-    <Compile Include="Infrastructure\PrintService.cs" />
+    <Compile Include="Infrastructure\DispatcherService.cs" />
+    <Compile Include="Infrastructure\ImportExport.cs" />
+    <Compile Include="Infrastructure\ListViewModelExtensions.cs" />
+    <Compile Include="Infrastructure\PrinterService.cs" />
     <Compile Include="Infrastructure\ProcessService.cs" />
     <Compile Include="Infrastructure\RefreshingEventArgs.cs" />
-    <Compile Include="Infrastructure\ServiceManager.cs" />
-    <Compile Include="Infrastructure\StringService.cs" />
+    <Compile Include="Infrastructure\RefreshingWeakEventManager.cs" />
     <Compile Include="Infrastructure\User32.cs" />
     <Compile Include="Infrastructure\ValidationError.cs" />
     <Compile Include="Infrastructure\WaitCursor.cs" />
@@ -285,17 +286,21 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IAppService.cs" />
     <Compile Include="Services\IBusyService.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\IDispatchService.cs" />
+    <Compile Include="Services\IDispatcherService.cs" />
     <Compile Include="Services\IDocumentService.cs" />
-    <Compile Include="Services\IPrintService.cs" />
+    <Compile Include="Services\IPrinterService.cs" />
     <Compile Include="Services\IProcessService.cs" />
-    <Compile Include="Services\IServiceManager.cs" />
-    <Compile Include="Services\IStringService.cs" />
     <Compile Include="Services\IWrapperService.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AnalysisViewModel.cs" />
     <Compile Include="ViewModels\AssignmentListViewModel.cs" />
@@ -308,7 +313,6 @@
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\EmailViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
-    <Compile Include="ViewModels\ImportExportViewModel.cs" />
     <Compile Include="ViewModels\IncidentDetailViewModel.cs" />
     <Compile Include="ViewModels\IncidentListViewModel.cs" />
     <Compile Include="ViewModels\IncidentNoteListViewModel.cs" />
@@ -496,17 +500,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\COPYRIGHT.txt">
-      <Link>COPYRIGHT.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\LICENSE.txt">
-      <Link>LICENSE.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\NOTICE.txt">
-      <Link>NOTICE.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

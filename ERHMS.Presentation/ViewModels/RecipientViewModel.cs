@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -13,8 +14,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class ResponderListChildViewModel : ListViewModel<Responder>
         {
-            public ResponderListChildViewModel(IServiceManager services)
-                : base(services)
+            public ResponderListChildViewModel()
             {
                 Refresh();
             }
@@ -57,12 +57,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand AddCommand { get; private set; }
 
-        public RecipientViewModel(IServiceManager services)
-            : base(services)
+        public RecipientViewModel()
         {
             Title = "Add a Recipient";
             IsResponder = true;
-            Responders = new ResponderListChildViewModel(services);
+            Responders = new ResponderListChildViewModel();
             AddCommand = new AsyncCommand(AddAsync);
         }
 
@@ -80,12 +79,12 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (!Responders.HasSelectedItem() && string.IsNullOrWhiteSpace(EmailAddress))
             {
-                await Services.Dialog.AlertAsync("Please select a responder or enter an email address.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.EmailRecipientNotSpecified);
                 return false;
             }
             if (!IsResponder && !MailExtensions.IsValidAddress(EmailAddress))
             {
-                await Services.Dialog.AlertAsync("Please enter a valid email address.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.EmailRecipientAddressInvalid);
                 return false;
             }
             return true;
@@ -99,12 +98,6 @@ namespace ERHMS.Presentation.ViewModels
             }
             OnAdded();
             Close();
-        }
-
-        public override void Dispose()
-        {
-            Responders.Dispose();
-            base.Dispose();
         }
     }
 }

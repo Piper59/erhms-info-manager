@@ -3,6 +3,7 @@ using ERHMS.Dapper;
 using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -107,8 +108,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand BrowseCommand { get; private set; }
         public ICommand CreateCommand { get; private set; }
 
-        public DataSourceViewModel(IServiceManager services)
-            : base(services)
+        public DataSourceViewModel()
         {
             Title = "Create a Data Source";
             Location = Configuration.GetNewInstance().Directories.Project;
@@ -130,7 +130,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Browse()
         {
-            string path = Services.Dialog.OpenFolder();
+            string path = ServiceLocator.Dialog.OpenFolder();
             if (path != null)
             {
                 Location = path;
@@ -157,7 +157,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (Name.IndexOfAny(Path.GetInvalidPathChars()) != -1 || Name.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
@@ -166,7 +166,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Invalid, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Invalid, fields);
                 return false;
             }
             return true;
@@ -182,7 +182,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (File.Exists(FilePath))
                 {
-                    if (await Services.Dialog.ConfirmAsync("Data source already exists. Add it to the list of data sources?", "Add"))
+                    if (await ServiceLocator.Dialog.ConfirmAsync(Resources.DataSourceConfirmAddExisting, "Add"))
                     {
                         OnAdded();
                         Close();
@@ -204,7 +204,7 @@ namespace ERHMS.Presentation.ViewModels
                     }
                     if (database.Exists())
                     {
-                        if (await Services.Dialog.ConfirmAsync("Database already exists. Add a data source using this database?", "Add"))
+                        if (await ServiceLocator.Dialog.ConfirmAsync(Resources.DataSourceConfirmAddForDatabase, "Add"))
                         {
                             await CreateAsync(database, false, !Project.IsInitialized(database));
                         }
@@ -218,13 +218,13 @@ namespace ERHMS.Presentation.ViewModels
             catch (Exception ex)
             {
                 Log.Logger.Warn("Failed to create data source", ex);
-                await Services.Dialog.AlertAsync("Failed to create data source.", ex);
+                await ServiceLocator.Dialog.ShowErrorAsync(Resources.DataSourceCreateFailed, ex);
             }
         }
 
         private async Task CreateAsync(IDatabase database, bool create, bool initialize)
         {
-            await Services.Dialog.BlockAsync("Creating data source \u2026", () =>
+            await ServiceLocator.Dialog.BlockAsync(Resources.DataSourceCreating, () =>
             {
                 if (create)
                 {
@@ -245,7 +245,7 @@ namespace ERHMS.Presentation.ViewModels
                     DataContext.Create(project);
                 }
             });
-            Services.Dialog.Notify("Data source has been created.");
+            ServiceLocator.Dialog.Notify(Resources.DataSourceCreated);
             OnAdded();
             Close();
         }

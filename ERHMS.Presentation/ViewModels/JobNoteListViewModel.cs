@@ -13,8 +13,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Job Job { get; private set; }
 
-            public JobNoteListChildViewModel(IServiceManager services, Job job)
-                : base(services)
+            public JobNoteListChildViewModel(Job job)
             {
                 Job = job;
                 Refresh();
@@ -39,12 +38,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand SaveCommand { get; private set; }
 
-        public JobNoteListViewModel(IServiceManager services, Job job)
-            : base(services)
+        public JobNoteListViewModel(Job job)
         {
             Title = "Notes";
             Job = job;
-            JobNotes = new JobNoteListChildViewModel(services, job);
+            JobNotes = new JobNoteListChildViewModel(job);
             SaveCommand = new Command(Save, CanSave);
         }
 
@@ -61,15 +59,9 @@ namespace ERHMS.Presentation.ViewModels
                 Content = Content,
                 Date = DateTime.Now
             });
-            Services.Data.Refresh(typeof(JobNote));
+            ServiceLocator.Data.Refresh(typeof(JobNote));
             Content = "";
             Dirty = false;
-        }
-
-        public override void Dispose()
-        {
-            JobNotes.Dispose();
-            base.Dispose();
         }
     }
 }

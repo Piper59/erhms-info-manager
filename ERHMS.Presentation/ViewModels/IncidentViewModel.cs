@@ -1,5 +1,4 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -26,23 +25,22 @@ namespace ERHMS.Presentation.ViewModels
             protected set { base.Dirty = value; }
         }
 
-        public IncidentViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public IncidentViewModel(Incident incident)
         {
             Incident = incident;
-            Detail = new IncidentDetailViewModel(services, incident);
-            Notes = new IncidentNoteListViewModel(services, incident);
-            Rosters = new RosterListViewModel(services, incident);
-            Roles = new IncidentRoleListViewModel(services, incident);
-            Teams = new TeamListViewModel(services, incident);
-            Locations = new LocationListViewModel(services, incident);
-            Jobs = new JobListViewModel(services, incident);
-            Views = new ViewListViewModel(services, incident);
-            Templates = new TemplateListViewModel(services, incident);
-            Assignments = new AssignmentListViewModel(services, incident);
-            Pgms = new PgmListViewModel(services, incident);
-            Canvases = new CanvasListViewModel(services, incident);
-            Report = new IncidentReportViewModel(services, incident);
+            Detail = new IncidentDetailViewModel(incident);
+            Notes = new IncidentNoteListViewModel(incident);
+            Rosters = new RosterListViewModel(incident);
+            Roles = new IncidentRoleListViewModel(incident);
+            Teams = new TeamListViewModel(incident);
+            Locations = new LocationListViewModel(incident);
+            Jobs = new JobListViewModel(incident);
+            Views = new ViewListViewModel(incident);
+            Templates = new TemplateListViewModel(incident);
+            Assignments = new AssignmentListViewModel(incident);
+            Pgms = new PgmListViewModel(incident);
+            Canvases = new CanvasListViewModel(incident);
+            Report = new IncidentReportViewModel(incident);
             Title = Detail.Title;
             Detail.PropertyChanged += (sender, e) =>
             {
@@ -51,24 +49,6 @@ namespace ERHMS.Presentation.ViewModels
                     Title = Detail.Title;
                 }
             };
-        }
-
-        public override void Dispose()
-        {
-            Detail.Dispose();
-            Notes.Dispose();
-            Rosters.Dispose();
-            Roles.Dispose();
-            Teams.Dispose();
-            Locations.Dispose();
-            Jobs.Dispose();
-            Views.Dispose();
-            Templates.Dispose();
-            Assignments.Dispose();
-            Pgms.Dispose();
-            Canvases.Dispose();
-            Report.Dispose();
-            base.Dispose();
         }
     }
 }

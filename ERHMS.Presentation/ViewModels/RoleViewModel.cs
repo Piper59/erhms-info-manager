@@ -1,5 +1,4 @@
 ﻿using ERHMS.Presentation.Commands;
-using ERHMS.Presentation.Services;
 using System;
 
 namespace ERHMS.Presentation.ViewModels
@@ -15,8 +14,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand SaveCommand { get; private set; }
 
-        public RoleViewModel(IServiceManager services, string verb)
-            : base(services)
+        public RoleViewModel(string verb)
         {
             Title = string.Format("{0} a Role", verb);
             SaveCommand = new Command(Save, CanSave);

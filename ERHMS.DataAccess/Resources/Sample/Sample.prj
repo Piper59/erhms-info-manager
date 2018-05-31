@@ -1,6 +1,6 @@
-<Project id="95827db7-2c44-42a3-902a-1ec932529e28" name="Sample" location="C:\ERHMS Info Manager\Projects\Sample" description="Sample data source for evaluation and training purposes" schemaVersion="102" epiVersion="" createDate="04/27/2018 12:39:36" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False" erhmsVersion="2.0.0.0">
+<Project id="2f0fd5f2-f6bc-41dd-ba41-08be02e5fd61" name="Sample" location="" description="Sample data source for evaluation and training purposes" schemaVersion="102" epiVersion="" createDate="" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False" erhmsVersion="2.0.0.0">
   <CollectedData>
-    <Database connectionString="zHDkaR2yI5Pbh2/LYHfZ7ljYKFwMFLb6TrxCvYEORi7csqJucXA0eUm4ILZ7oROEr1/Sb9DZbLxOcMezPiJdUzw7GNCF2+D26MBuECdWC7VrqORNCMXY6upbC7hRbiqu" dataDriver="Epi.Data.Office.AccessDBFactory, Epi.Data.Office" />
+    <Database connectionString="" dataDriver="" />
   </CollectedData>
   <Metadata source="2" />
   <EnterMakeviewInterpreter source="Epi.Core.EnterInterpreter" />

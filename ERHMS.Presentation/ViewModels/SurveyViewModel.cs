@@ -2,6 +2,7 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -32,8 +33,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand PublishCommand { get; private set; }
 
-        public SurveyViewModel(IServiceManager services, View view)
-            : base(services)
+        public SurveyViewModel(View view)
         {
             Title = "Publish to Web";
             View = view;
@@ -50,7 +50,7 @@ namespace ERHMS.Presentation.ViewModels
                 ConfigurationError error = ConfigurationError.None;
                 try
                 {
-                    await Services.Dialog.BlockAsync("Retrieving web survey details \u2026", () =>
+                    await ServiceLocator.Dialog.BlockAsync(Resources.WebGettingSurvey, () =>
                     {
                         if (Service.IsConfigured(out error))
                         {
@@ -64,14 +64,14 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 if (error != ConfigurationError.None)
                 {
-                    await Services.Dialog.AlertAsync(string.Format("{0} Please verify web survey settings.", error.GetErrorMessage()));
-                    Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                    await ServiceLocator.Dialog.AlertAsync(string.Format(Resources.WebConfigure, error.GetErrorMessage()));
+                    ServiceLocator.Document.ShowSettings();
                     return false;
                 }
                 else if (Survey == null)
                 {
-                    await Services.Dialog.AlertAsync("Failed to retrieve web survey details. Please verify web survey settings.");
-                    Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                    await ServiceLocator.Dialog.AlertAsync(Resources.WebGetSurveyFailed);
+                    ServiceLocator.Document.ShowSettings();
                     return false;
                 }
                 else
@@ -103,12 +103,12 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (!DateTimeExtensions.AreInOrder(Survey.StartDate, Survey.EndDate))
             {
-                await Services.Dialog.AlertAsync("End date must be later than start date.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.WebSurveyEndDateInvalid);
                 return false;
             }
             return true;
@@ -124,7 +124,7 @@ namespace ERHMS.Presentation.ViewModels
             bool success = false;
             try
             {
-                await Services.Dialog.BlockAsync("Publishing form to web \u2026", () =>
+                await ServiceLocator.Dialog.BlockAsync(Resources.WebPublishing, () =>
                 {
                     if (!Service.IsConfigured(out error))
                     {
@@ -155,17 +155,17 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (error != ConfigurationError.None)
             {
-                await Services.Dialog.AlertAsync(string.Format("{0} Please verify web survey settings.", error.GetErrorMessage()));
-                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                await ServiceLocator.Dialog.AlertAsync(Resources.WebConfigure, error.GetErrorMessage());
+                ServiceLocator.Document.ShowSettings();
             }
             else if (!success)
             {
-                await Services.Dialog.AlertAsync("Failed to publish form to web. Please verify web survey settings.");
-                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                await ServiceLocator.Dialog.AlertAsync(Resources.WebPublishFailed);
+                ServiceLocator.Document.ShowSettings();
             }
             else
             {
-                Services.Dialog.Notify("Form has been published to web.");
+                ServiceLocator.Dialog.Notify(Resources.WebPublished);
             }
             Close();
         }

@@ -7,52 +7,57 @@ namespace ERHMS.Presentation
 {
     public static class WrapperExtensions
     {
-        public static void AddRecordSavedHandler(this Wrapper @this, IServiceManager services)
+        public static void AddRecordSavedHandler(this Wrapper @this)
         {
             @this.Event += (sender, e) =>
             {
-                if (e.Type == "RecordSaved" && e.Properties.ViewId == services.Data.Context.Responders.View.Id)
+                if (e.Type != "RecordSaved")
                 {
-                    services.Dispatch.Post(() =>
+                    return;
+                }
+                if (e.Properties.ViewId == ServiceLocator.Data.Context.Responders.View.Id)
+                {
+                    ServiceLocator.Dispatcher.Post(() =>
                     {
-                        services.Data.Refresh(typeof(Responder));
+                        ServiceLocator.Data.Refresh(typeof(Responder));
                     });
                 }
             };
         }
 
-        public static void AddViewCreatedHandler(this Wrapper @this, IServiceManager services, Incident incident)
+        public static void AddViewCreatedHandler(this Wrapper @this, Incident incident)
         {
             @this.Event += (sender, e) =>
             {
-                if (e.Type == "ViewCreated")
+                if (e.Type != "ViewCreated")
                 {
-                    if (incident != null)
+                    return;
+                }
+                if (incident != null)
+                {
+                    ServiceLocator.Data.Context.ViewLinks.Save(new ViewLink(true)
                     {
-                        services.Data.Context.ViewLinks.Save(new ViewLink(true)
-                        {
-                            ViewId = e.Properties.ViewId,
-                            IncidentId = incident.IncidentId
-                        });
-                    }
-                    services.Dispatch.Post(() =>
-                    {
-                        services.Data.Refresh(typeof(View));
-                        if (incident == null)
-                        {
-                            ViewListViewModel model = services.Document.ShowByType(() => new ViewListViewModel(services, null));
-                            model.Views.SelectById(e.Properties.ViewId);
-                        }
-                        else
-                        {
-                            IncidentViewModel parent = services.Document.Show(
-                                model => model.Incident.Equals(incident),
-                                () => new IncidentViewModel(services, incident));
-                            parent.Views.Active = true;
-                            parent.Views.Views.SelectById(e.Properties.ViewId);
-                        }
+                        ViewId = e.Properties.ViewId,
+                        IncidentId = incident.IncidentId
                     });
                 }
+                ServiceLocator.Dispatcher.Post(() =>
+                {
+                    ServiceLocator.Data.Refresh(typeof(View));
+                    if (incident == null)
+                    {
+                        ViewListViewModel model = ServiceLocator.Document.ShowByType(() => new ViewListViewModel(null));
+                        model.Views.SelectById(e.Properties.ViewId);
+                    }
+                    else
+                    {
+                        IncidentViewModel model = ServiceLocator.Document.Show(
+                            _model => _model.Incident.Equals(incident),
+                            () => new IncidentViewModel(incident));
+                        model.Views.Active = true;
+                        model.Views.Views.SelectById(e.Properties.ViewId);
+                    }
+                });
             };
         }
     }

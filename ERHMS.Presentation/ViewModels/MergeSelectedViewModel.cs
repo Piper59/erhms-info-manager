@@ -2,6 +2,7 @@
 using Epi.Fields;
 using ERHMS.Domain;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -13,7 +14,7 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class MergeSelectedViewModel : DocumentViewModel
     {
-        public class PropertyChildViewModel : ObservableObject
+        public class PropertyChildViewModel : ViewModelBase
         {
             private string name;
             public string Name
@@ -22,18 +23,32 @@ namespace ERHMS.Presentation.ViewModels
                 set { SetProperty(nameof(Name), ref name, value); }
             }
 
-            private string value1;
-            public string Value1
+            private object value1;
+            public object Value1
             {
                 get { return value1; }
                 set { SetProperty(nameof(Value1), ref value1, value); }
             }
 
-            private string value2;
-            public string Value2
+            private object value2;
+            public object Value2
             {
                 get { return value2; }
                 set { SetProperty(nameof(Value2), ref value2, value); }
+            }
+
+            private string text1;
+            public string Text1
+            {
+                get { return text1; }
+                set { SetProperty(nameof(Text1), ref text1, value); }
+            }
+
+            private string text2;
+            public string Text2
+            {
+                get { return text2; }
+                set { SetProperty(nameof(Text2), ref text2, value); }
             }
 
             private bool selected1;
@@ -73,8 +88,26 @@ namespace ERHMS.Presentation.ViewModels
             public PropertyChildViewModel(string name, Responder responder1, Responder responder2)
             {
                 Name = name;
-                Value1 = Convert.ToString(responder1.GetProperty(name));
-                Value2 = Convert.ToString(responder2.GetProperty(name));
+                Value1 = responder1.GetProperty(name);
+                Value2 = responder2.GetProperty(name);
+                Text1 = Convert.ToString(Value1);
+                Text2 = Convert.ToString(Value2);
+            }
+
+            public object GetSelectedValue()
+            {
+                if (Selected1)
+                {
+                    return Value1;
+                }
+                else if (Selected2)
+                {
+                    return Value2;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Neither value is selected.");
+                }
             }
         }
 
@@ -86,8 +119,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand SelectAll2Command { get; private set; }
         public ICommand SaveCommand { get; private set; }
 
-        public MergeSelectedViewModel(IServiceManager services, Responder responder1, Responder responder2)
-            : base(services)
+        public MergeSelectedViewModel(Responder responder1, Responder responder2)
         {
             Title = "Merge";
             Responder1 = responder1;
@@ -146,7 +178,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             return true;
@@ -162,7 +194,7 @@ namespace ERHMS.Presentation.ViewModels
                 Responder responder = Properties.First().Selected1 ? Responder1 : Responder2;
                 foreach (PropertyChildViewModel property in Properties)
                 {
-                    responder.SetProperty(property.Name, (property.Selected1 ? Responder1 : Responder2).GetProperty(property.Name));
+                    responder.SetProperty(property.Name, property.GetSelectedValue());
                 }
                 Context.Responders.Save(responder);
             }
@@ -171,8 +203,8 @@ namespace ERHMS.Presentation.ViewModels
                 responder.Deleted = true;
                 Context.Responders.Save(responder);
             }
-            Services.Dialog.Notify("Responders have been merged.");
-            Services.Data.Refresh(typeof(Responder));
+            ServiceLocator.Dialog.Notify(Resources.ResponderPairMerged);
+            ServiceLocator.Data.Refresh(typeof(Responder));
             OnSaved();
             await CloseAsync();
         }

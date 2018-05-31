@@ -1,5 +1,4 @@
 ﻿using ERHMS.Domain;
-using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -18,15 +17,14 @@ namespace ERHMS.Presentation.ViewModels
             protected set { base.Dirty = value; }
         }
 
-        public JobViewModel(IServiceManager services, Job job)
-            : base(services)
+        public JobViewModel(Job job)
         {
             Job = job;
-            Detail = new JobDetailViewModel(services, job);
-            Notes = new JobNoteListViewModel(services, job);
-            Teams = new JobTeamListViewModel(services, job);
-            Responders = new JobResponderListViewModel(services, job);
-            Locations = new JobLocationListViewModel(services, job);
+            Detail = new JobDetailViewModel(job);
+            Notes = new JobNoteListViewModel(job);
+            Teams = new JobTeamListViewModel(job);
+            Responders = new JobResponderListViewModel(job);
+            Locations = new JobLocationListViewModel(job);
             Title = Detail.Title;
             Detail.PropertyChanged += (sender, e) =>
             {
@@ -35,16 +33,6 @@ namespace ERHMS.Presentation.ViewModels
                     Title = Detail.Title;
                 }
             };
-        }
-
-        public override void Dispose()
-        {
-            Detail.Dispose();
-            Notes.Dispose();
-            Teams.Dispose();
-            Responders.Dispose();
-            Locations.Dispose();
-            base.Dispose();
         }
     }
 }

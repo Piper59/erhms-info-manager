@@ -10,9 +10,6 @@ namespace ERHMS.Test
 {
     public static class AutomationExtensions
     {
-        private static readonly TimeSpan WaitMax = TimeSpan.FromSeconds(60.0);
-        private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(0.1);
-
         public static bool Wait(Func<bool> done)
         {
             DateTime start = DateTime.Now;
@@ -22,11 +19,11 @@ namespace ERHMS.Test
                 {
                     return true;
                 }
-                else if ((DateTime.Now - start) > WaitMax)
+                else if ((DateTime.Now - start) > TimeSpan.FromMinutes(1.0))
                 {
                     return false;
                 }
-                Thread.Sleep(Timeout);
+                Thread.Sleep(TimeSpan.FromSeconds(0.1));
             }
         }
 

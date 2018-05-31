@@ -5,8 +5,8 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class PgmLinkViewModel : LinkViewModel<Pgm, PgmLink>
     {
-        public PgmLinkViewModel(IServiceManager services, Pgm pgm)
-            : base(services, pgm) { }
+        public PgmLinkViewModel(Pgm pgm)
+            : base(pgm) { }
 
         public override void Link()
         {
@@ -16,14 +16,14 @@ namespace ERHMS.Presentation.ViewModels
                 PgmId = Entity.PgmId,
                 IncidentId = Incidents.SelectedItem.IncidentId
             });
-            Services.Data.Refresh(typeof(Pgm));
+            ServiceLocator.Data.Refresh(typeof(Pgm));
             Close();
         }
 
         public override void Unlink()
         {
             Context.PgmLinks.DeleteByPgmId(Entity.PgmId);
-            Services.Data.Refresh(typeof(Pgm));
+            ServiceLocator.Data.Refresh(typeof(Pgm));
             Close();
         }
     }

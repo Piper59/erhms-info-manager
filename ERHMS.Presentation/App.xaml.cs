@@ -10,12 +10,11 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Resx = ERHMS.Presentation.Properties.Resources;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation
@@ -23,25 +22,16 @@ namespace ERHMS.Presentation
     public partial class App : Application, IAppService
     {
         private static InterlockedBoolean errored;
-        private static ServiceManager services;
 
         [STAThread]
         internal static void Main(string[] args)
         {
             errored = new InterlockedBoolean(false);
-            services = new ServiceManager
-            {
-                Busy = new BusyService(),
-                Data = new DataService(),
-                Print = new PrintService(),
-                Process = new ProcessService()
-            };
             try
             {
                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
                 {
-                    string message = string.Format("Reset settings for {0}?", services.String.AppTitle);
-                    if (MessageBox.Show(message, services.String.AppTitle, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show(Resx.AppConfirmReset, Resx.AppTitle, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         ResetSettings();
                     }
@@ -70,8 +60,7 @@ namespace ERHMS.Presentation
             Log.Logger.Fatal("Fatal error", ex);
             if (errored.Exchange(true) == false)
             {
-                string message = string.Format("{0} encountered an error and must shut down.", services.String.AppTitle);
-                MessageBox.Show(message, services.String.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Resx.AppError, Resx.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -97,30 +86,15 @@ namespace ERHMS.Presentation
         {
             InitializeComponent();
             ShutdownMode = ShutdownMode.OnMainWindowClose;
-            AddTextFileResource("COPYRIGHT");
-            AddTextFileResource("LICENSE");
-            AddTextFileResource("NOTICE");
-        }
-
-        private void AddTextFileResource(string key)
-        {
-            string resourceName = string.Format("ERHMS.Presentation.{0}.txt", key);
-            Resources.Add(key, Assembly.GetExecutingAssembly().GetManifestResourceText(resourceName));
-        }
-
-        private void CopyTextFileResource(string key, string directoryPath)
-        {
-            string fileName = key + ".txt";
-            string resourceName = string.Format("ERHMS.Presentation.{0}.txt", key);
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo(resourceName, Path.Combine(directoryPath, fileName));
+            Resources.Add("AppTitle", Resx.AppTitle);
+            Resources.Add("COPYRIGHT", Resx.COPYRIGHT);
+            Resources.Add("LICENSE", Resx.LICENSE);
+            Resources.Add("NOTICE", Resx.NOTICE);
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            services.App = this;
-            services.Dispatch = new DispatchService(SynchronizationContext.Current);
-            services.String = new StringService(Resources);
             EventManager.RegisterClassHandler(
                 typeof(TextBox),
                 UIElement.GotKeyboardFocusEvent,
@@ -129,11 +103,9 @@ namespace ERHMS.Presentation
                 typeof(TextBox),
                 UIElement.LostFocusEvent,
                 new RoutedEventHandler(TextBox_LostFocus));
-            MainViewModel model = new MainViewModel(services);
-            services.Document = model;
+            MainViewModel model = new MainViewModel();
             MainView view = new MainView(model);
-            services.Dialog = view;
-            services.Wrapper = view;
+            InitializeServices(view);
             MainWindow = view;
             MainWindow.ContentRendered += MainWindow_ContentRendered;
             MainWindow.Show();
@@ -155,6 +127,11 @@ namespace ERHMS.Presentation
             ((TextBox)sender).Select(0, 0);
         }
 
+        private void InitializeServices(MainView view)
+        {
+            // TODO
+        }
+
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
         {
             if (Settings.Default.LicenseAccepted)
@@ -163,7 +140,7 @@ namespace ERHMS.Presentation
             }
             else
             {
-                if (await services.Dialog.ShowLicenseAsync())
+                if (await ServiceLocator.Dialog.ShowLicenseAsync())
                 {
                     Settings.Default.LicenseAccepted = true;
                     Settings.Default.Save();
@@ -180,13 +157,14 @@ namespace ERHMS.Presentation
         {
             if (await LoadConfigurationAsync())
             {
-                services.Document.Show(() => new StartViewModel(services));
+                ServiceLocator.Document.Show(() => new StartViewModel());
                 ProjectInfo projectInfo;
                 if (ProjectInfo.TryRead(Settings.Default.LastDataSourcePath, out projectInfo))
                 {
-                    if (await services.Dialog.ConfirmAsync(string.Format("Reopen the previously used data source {0}?", projectInfo.Name), "Reopen"))
+                    string message = string.Format(Resx.DataSourceConfirmReopen, projectInfo.Name);
+                    if (await ServiceLocator.Dialog.ConfirmAsync(message, "Reopen"))
                     {
-                        await services.Document.SetContextAsync(projectInfo);
+                        await ServiceLocator.Document.SetContextAsync(projectInfo);
                     }
                     else
                     {
@@ -213,7 +191,7 @@ namespace ERHMS.Presentation
             {
                 while (true)
                 {
-                    string path = services.Dialog.GetRootPath();
+                    string path = ServiceLocator.Dialog.GetRootPath();
                     if (path == null)
                     {
                         return false;
@@ -228,14 +206,8 @@ namespace ERHMS.Presentation
                         catch (Exception ex)
                         {
                             Log.Logger.Warn("Failed to initialize root path", ex);
-                            StringBuilder message = new StringBuilder();
-                            message.AppendFormat(
-                                "{0} failed to initialize the following directory. Please choose another location.",
-                                services.String.AppTitle);
-                            message.AppendLine();
-                            message.AppendLine();
-                            message.Append(path);
-                            await services.Dialog.AlertAsync(message.ToString(), ex);
+                            string message = string.Format(Resx.RootPathInitializeFailed, path);
+                            await ServiceLocator.Dialog.ShowErrorAsync(message, ex);
                         }
                     }
                 }
@@ -246,27 +218,23 @@ namespace ERHMS.Presentation
             configuration.Directories.LogDir = Path.GetDirectoryName(Log.FilePath);
             configuration.Save();
             configuration = ConfigurationExtensions.Load();
-            using (TextWriter writer = new StreamWriter(Path.Combine(configuration.GetRootPath(), "INSTALL.txt")))
-            {
-                writer.WriteLine("{0} is installed in the following directory:", services.String.AppTitle);
-                writer.WriteLine();
-                writer.WriteLine(AssemblyExtensions.GetEntryDirectoryPath());
-            }
+            string text = string.Format(Resx.AppInstallDirectory, AssemblyExtensions.GetEntryDirectoryPath());
+            File.WriteAllText(Path.Combine(configuration.GetRootPath(), "INSTALL.txt"), text);
             return true;
         }
 
         private Configuration CreateConfiguration(string path)
         {
-            using (services.Busy.BeginTask())
+            using (ServiceLocator.Busy.Begin())
             {
                 Configuration configuration = ConfigurationExtensions.Create(path);
                 configuration.CreateUserDirectories();
                 IOExtensions.CopyDirectory(
                     Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
                     configuration.Directories.Templates);
-                CopyTextFileResource("COPYRIGHT", path);
-                CopyTextFileResource("LICENSE", path);
-                CopyTextFileResource("NOTICE", path);
+                File.WriteAllText(Path.Combine(path, "COPYRIGHT.txt"), Resx.COPYRIGHT);
+                File.WriteAllText(Path.Combine(path, "LICENSE.txt"), Resx.LICENSE);
+                File.WriteAllText(Path.Combine(path, "NOTICE.txt"), Resx.NOTICE);
                 configuration.Save();
                 configuration = ConfigurationExtensions.Load();
                 if (!SampleDataContext.Exists())

@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -20,8 +21,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand SaveCommand { get; private set; }
 
-        public ResponderViewModel(IServiceManager services, Responder responder)
-            : base(services)
+        public ResponderViewModel(Responder responder)
         {
             Title = responder.New ? "New Responder" : responder.FullName;
             Responder = responder;
@@ -30,7 +30,7 @@ namespace ERHMS.Presentation.ViewModels
             Suffixes = Context.Suffixes.ToList();
             Genders = Context.Genders.ToList();
             States = Context.States.ToList();
-            Report = new ResponderReportViewModel(services, responder);
+            Report = new ResponderReportViewModel(responder);
             SaveCommand = new AsyncCommand(SaveAsync);
         }
 
@@ -51,7 +51,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (Responder.BirthDate.HasValue && Responder.BirthDate.Value.Date > DateTime.Today)
@@ -72,7 +72,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Invalid, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Invalid, fields);
                 return false;
             }
             return true;
@@ -85,16 +85,10 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             Context.Responders.Save(Responder);
-            Services.Dialog.Notify("Responder has been saved.");
-            Services.Data.Refresh(typeof(Responder));
+            ServiceLocator.Dialog.Notify(Resources.ResponderSaved);
+            ServiceLocator.Data.Refresh(typeof(Responder));
             Title = Responder.FullName;
             Dirty = false;
-        }
-
-        public override void Dispose()
-        {
-            Report.Dispose();
-            base.Dispose();
         }
     }
 }

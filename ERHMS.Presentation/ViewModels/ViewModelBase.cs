@@ -1,18 +1,16 @@
 ﻿using ERHMS.DataAccess;
 using ERHMS.Presentation.Services;
-using System;
+using System.ComponentModel;
 using System.Text;
 
 namespace ERHMS.Presentation.ViewModels
 {
-    public abstract class ViewModelBase : ObservableObject, IDisposable
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
-        protected IServiceManager Services { get; private set; }
-
-        public DataContext Context
+        protected static DataContext Context
         {
-            get { return Services.Data.Context; }
-            set { Services.Data.Context = value; }
+            get { return ServiceLocator.Data.Context; }
+            set { ServiceLocator.Data.Context = value; }
         }
 
         private string title;
@@ -22,20 +20,28 @@ namespace ERHMS.Presentation.ViewModels
             protected set { SetProperty(nameof(Title), ref title, value); }
         }
 
-        protected ViewModelBase(IServiceManager services)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            Services = services;
-            services.Data.ContextChanged += Data_ContextChanged;
+            PropertyChanged?.Invoke(this, e);
+        }
+        protected void OnPropertyChanged(string name)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(name));
         }
 
-        private void Data_ContextChanged(object sender, EventArgs e)
+        protected bool SetProperty<T>(string name, ref T field, T value)
         {
-            OnPropertyChanged(nameof(Context));
-        }
-
-        public virtual void Dispose()
-        {
-            Services.Data.ContextChanged -= Data_ContextChanged;
+            if (Equals(value, field))
+            {
+                return false;
+            }
+            else
+            {
+                field = value;
+                OnPropertyChanged(name);
+                return true;
+            }
         }
 
         public override string ToString()

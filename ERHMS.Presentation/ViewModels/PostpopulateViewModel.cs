@@ -2,7 +2,6 @@
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.Presentation.Commands;
-using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +13,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class ResponderListChildViewModel : ListViewModel<Responder>
         {
-            public ResponderListChildViewModel(IServiceManager services)
-                : base(services)
+            public ResponderListChildViewModel()
             {
                 Refresh();
             }
@@ -38,13 +36,12 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand LinkCommand { get; private set; }
         public ICommand UnlinkCommand { get; private set; }
 
-        public PostpopulateViewModel(IServiceManager services, View view, ViewEntity entity)
-            : base(services)
+        public PostpopulateViewModel(View view, ViewEntity entity)
         {
             Title = "Link to Responder";
             Entity = entity;
             Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
-            Responders = new ResponderListChildViewModel(services);
+            Responders = new ResponderListChildViewModel();
             Responders.SelectById(entity.GetProperty("ResponderID") as string);
             LinkCommand = new Command(Link, Responders.HasSelectedItem);
             UnlinkCommand = new Command(Unlink);
@@ -77,12 +74,6 @@ namespace ERHMS.Presentation.ViewModels
         public void Unlink()
         {
             SetResponderId(null);
-        }
-
-        public override void Dispose()
-        {
-            Responders.Dispose();
-            base.Dispose();
         }
     }
 }

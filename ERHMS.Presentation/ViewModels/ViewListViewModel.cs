@@ -6,11 +6,11 @@ using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Web;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
@@ -21,8 +21,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public ViewListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public ViewListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -30,15 +29,9 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<View> GetItems()
             {
-                IEnumerable<View> views;
-                if (Incident == null)
-                {
-                    views = Context.Views.SelectUndeleted();
-                }
-                else
-                {
-                    views = Context.Views.SelectByIncidentId(Incident.IncidentId);
-                }
+                IEnumerable<View> views = Incident == null
+                    ? Context.Views.SelectUndeleted()
+                    : Context.Views.SelectByIncidentId(Incident.IncidentId);
                 return views.OrderBy(view => view.Name, StringComparer.OrdinalIgnoreCase);
             }
 
@@ -61,7 +54,6 @@ namespace ERHMS.Presentation.ViewModels
 
         public Incident Incident { get; private set; }
         public ViewListChildViewModel Views { get; private set; }
-        public ImportExportViewModel ImportExport { get; private set; }
 
         public ICommand CreateCommand { get; private set; }
         public ICommand EditCommand { get; private set; }
@@ -82,13 +74,11 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand AnalyzeClassicCommand { get; private set; }
         public ICommand AnalyzeVisualCommand { get; private set; }
 
-        public ViewListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public ViewListViewModel(Incident incident)
         {
             Title = "Forms";
             Incident = incident;
-            Views = new ViewListChildViewModel(services, incident);
-            ImportExport = new ImportExportViewModel(services);
+            Views = new ViewListChildViewModel(incident);
             CreateCommand = new AsyncCommand(CreateAsync);
             EditCommand = new AsyncCommand(EditAsync, Views.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Views.HasNonSystemSelectedItem);
@@ -113,33 +103,32 @@ namespace ERHMS.Presentation.ViewModels
         {
             string prefix = Incident == null ? "" : Incident.Name + "_";
             Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(Context.Project.FilePath, DataContext.GetViewTemplate().FilePath, prefix);
-            wrapper.AddViewCreatedHandler(Services, Incident);
-            await Services.Wrapper.InvokeAsync(wrapper);
+            wrapper.AddViewCreatedHandler(Incident);
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
 
         public async Task EditAsync()
         {
-            await Services.Wrapper.InvokeAsync(MakeView.OpenView.Create(Context.Project.FilePath, Views.SelectedItem.Name));
+            Wrapper wrapper = MakeView.OpenView.Create(Context.Project.FilePath, Views.SelectedItem.Name);
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected form?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.ViewConfirmDelete, "Delete"))
             {
                 Context.Assignments.DeleteByViewId(Views.SelectedItem.ViewId);
                 Context.ViewLinks.DeleteByViewId(Views.SelectedItem.ViewId);
                 Context.WebSurveys.DeleteByViewId(Views.SelectedItem.ViewId);
                 Context.Project.DeleteView(Views.SelectedItem.ViewId);
-                Services.Data.Refresh(typeof(View));
+                ServiceLocator.Data.Refresh(typeof(View));
             };
         }
 
         public async Task LinkAsync()
         {
-            using (ViewLinkViewModel model = new ViewLinkViewModel(Services, Context.Views.Refresh(Views.SelectedItem)))
-            {
-                await Services.Dialog.ShowAsync(model);
-            }
+            ViewLinkViewModel model = new ViewLinkViewModel(Context.Views.Refresh(Views.SelectedItem));
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public async Task EnterDataAsync()
@@ -147,26 +136,24 @@ namespace ERHMS.Presentation.ViewModels
             View view = Context.Views.Refresh(Views.SelectedItem);
             if (view.HasResponderIdField)
             {
-                using (PrepopulateViewModel model = new PrepopulateViewModel(Services, view))
-                {
-                    await Services.Dialog.ShowAsync(model);
-                }
+                PrepopulateViewModel model = new PrepopulateViewModel(view);
+                await ServiceLocator.Dialog.ShowAsync(model);
             }
             else
             {
                 Context.Project.CollectedData.EnsureDataTablesExist(view.ViewId);
                 Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, view.Name);
-                wrapper.AddRecordSavedHandler(Services);
-                await Services.Wrapper.InvokeAsync(wrapper);
+                wrapper.AddRecordSavedHandler();
+                await ServiceLocator.Wrapper.InvokeAsync(wrapper);
             }
         }
 
         public void ViewData()
         {
             Context.Project.CollectedData.EnsureDataTablesExist(Views.SelectedItem.ViewId);
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.View.Id == Views.SelectedItem.ViewId,
-                () => new RecordListViewModel(Services, Context.Project.GetViewById(Views.SelectedItem.ViewId)));
+                () => new RecordListViewModel(Context.Project.GetViewById(Views.SelectedItem.ViewId)));
         }
 
         public async Task PublishToTemplateAsync()
@@ -174,28 +161,29 @@ namespace ERHMS.Presentation.ViewModels
             Wrapper wrapper = MakeView.CreateTemplate.Create(Context.Project.FilePath, Views.SelectedItem.Name);
             wrapper.Event += (sender, e) =>
             {
-                if (e.Type == "TemplateCreated")
+                if (e.Type != "TemplateCreated")
                 {
-                    Services.Dispatch.Post(() =>
-                    {
-                        Services.Data.Refresh(typeof(TemplateInfo));
-                        if (Incident == null)
-                        {
-                            TemplateListViewModel model = Services.Document.ShowByType(() => new TemplateListViewModel(Services, null));
-                            model.Templates.SelectByPath(e.Properties.Path);
-                        }
-                        else
-                        {
-                            IncidentViewModel parent = Services.Document.Show(
-                                model => model.Incident.Equals(Incident),
-                                () => new IncidentViewModel(Services, Incident));
-                            parent.Templates.Active = true;
-                            parent.Templates.Templates.SelectByPath(e.Properties.Path);
-                        }
-                    });
+                    return;
                 }
+                ServiceLocator.Dispatcher.Post(() =>
+                {
+                    ServiceLocator.Data.Refresh(typeof(TemplateInfo));
+                    if (Incident == null)
+                    {
+                        TemplateListViewModel model = ServiceLocator.Document.ShowByType(() => new TemplateListViewModel(null));
+                        model.Templates.SelectByPath(e.Properties.Path);
+                    }
+                    else
+                    {
+                        IncidentViewModel model = ServiceLocator.Document.Show(
+                            _model => _model.Incident.Equals(Incident),
+                            () => new IncidentViewModel(Incident));
+                        model.Templates.Active = true;
+                        model.Templates.Templates.SelectByPath(e.Properties.Path);
+                    }
+                });
             };
-            await Services.Wrapper.InvokeAsync(wrapper);
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
 
         private async Task<bool> ValidateAsync(string target, Epi.View view, Func<Field, bool> supported)
@@ -205,16 +193,9 @@ namespace ERHMS.Presentation.ViewModels
                 .ToList();
             if (fields.Count > 0)
             {
-                StringBuilder message = new StringBuilder();
-                message.AppendFormat("The following fields are unsupported for publication to {0}:", target);
-                message.AppendLine();
-                message.AppendLine();
-                foreach (Field field in fields)
-                {
-                    message.AppendFormat("{0} ({1})", field.Name, field.FieldType);
-                    message.AppendLine();
-                }
-                await Services.Dialog.AlertAsync(message.ToString().Trim());
+                IEnumerable<string> fieldNames = fields.Select(field => string.Format("{0} ({1})", field.Name, field.FieldType));
+                string message = string.Format(Resources.ViewFieldUnsupported, target, string.Join(Environment.NewLine, fieldNames));
+                await ServiceLocator.Dialog.AlertAsync(message);
                 return false;
             }
             return true;
@@ -230,18 +211,16 @@ namespace ERHMS.Presentation.ViewModels
             ConfigurationError error;
             if (Service.IsConfigured(out error, true))
             {
-                using (SurveyViewModel model = new SurveyViewModel(Services, view))
+                SurveyViewModel model = new SurveyViewModel(view);
+                if (await model.InitializeAsync())
                 {
-                    if (await model.InitializeAsync())
-                    {
-                        await Services.Dialog.ShowAsync(model);
-                    }
+                    await ServiceLocator.Dialog.ShowAsync(model);
                 }
             }
             else
             {
-                await Services.Dialog.AlertAsync(string.Format("{0} Please verify web survey settings.", error.GetErrorMessage()));
-                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                await ServiceLocator.Dialog.AlertAsync(string.Format(Resources.WebConfigure, error.GetErrorMessage()));
+                ServiceLocator.Document.ShowSettings();
             }
         }
 
@@ -252,7 +231,8 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return;
             }
-            MakeView.PublishToMobile.Create(Context.Project.FilePath, Views.SelectedItem.Name).Invoke();
+            Wrapper wrapper = MakeView.PublishToMobile.Create(Context.Project.FilePath, Views.SelectedItem.Name);
+            wrapper.Invoke();
         }
 
         public void ImportFromProject()
@@ -292,25 +272,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task AnalyzeClassicAsync()
         {
-            using (PgmViewModel model = new PgmViewModel(Services, Views.SelectedItem.ViewId))
-            {
-                await Services.Dialog.ShowAsync(model);
-            }
+            PgmViewModel model = new PgmViewModel(Views.SelectedItem.ViewId);
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public async Task AnalyzeVisualAsync()
         {
-            using (CanvasViewModel model = new CanvasViewModel(Services, Views.SelectedItem.ViewId))
-            {
-                await Services.Dialog.ShowAsync(model);
-            }
-        }
-
-        public override void Dispose()
-        {
-            Views.Dispose();
-            ImportExport.Dispose();
-            base.Dispose();
+            CanvasViewModel model = new CanvasViewModel(Views.SelectedItem.ViewId);
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
     }
 }

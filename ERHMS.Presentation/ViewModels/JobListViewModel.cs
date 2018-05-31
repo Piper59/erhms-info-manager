@@ -2,6 +2,7 @@
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public JobListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public JobListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -53,12 +53,11 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand EditCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
 
-        public JobListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public JobListViewModel(Incident incident)
         {
             Title = "Jobs";
             Incident = incident;
-            Jobs = new JobListChildViewModel(services, incident);
+            Jobs = new JobListChildViewModel(incident);
             CreateCommand = new Command(Create);
             EditCommand = new Command(Edit, Jobs.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Jobs.HasSelectedItem);
@@ -66,7 +65,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Services.Document.Show(() => new JobViewModel(Services, new Job(true)
+            ServiceLocator.Document.Show(() => new JobViewModel(new Job(true)
             {
                 IncidentId = Incident.IncidentId
             }));
@@ -74,28 +73,22 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Edit()
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Job.Equals(Jobs.SelectedItem),
-                () => new JobViewModel(Services, Context.Jobs.Refresh(Jobs.SelectedItem)));
+                () => new JobViewModel(Context.Jobs.Refresh(Jobs.SelectedItem)));
         }
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected job?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.JobConfirmDelete, "Delete"))
             {
                 Context.JobNotes.DeleteByJobId(Jobs.SelectedItem.JobId);
                 Context.JobTeams.DeleteByJobId(Jobs.SelectedItem.JobId);
                 Context.JobResponders.DeleteByJobId(Jobs.SelectedItem.JobId);
                 Context.JobLocations.DeleteByJobId(Jobs.SelectedItem.JobId);
                 Context.Jobs.Delete(Jobs.SelectedItem);
-                Services.Data.Refresh(typeof(Job));
+                ServiceLocator.Data.Refresh(typeof(Job));
             }
-        }
-
-        public override void Dispose()
-        {
-            Jobs.Dispose();
-            base.Dispose();
         }
     }
 }

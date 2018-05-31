@@ -2,6 +2,7 @@
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.Windows;
+using Resx = ERHMS.Presentation.Properties.Resources;
 
 namespace ERHMS.Presentation.Dialogs
 {
@@ -27,7 +28,7 @@ namespace ERHMS.Presentation.Dialogs
             : base(window, GetSettings())
         {
             InitializeComponent();
-            Title = string.Format("{0} License", Application.Current.Resources["AppTitle"]);
+            Title = Resx.LicenseTitle;
         }
 
         private async void Accept_Click(object sender, RoutedEventArgs e)

@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public LocationListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public LocationListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -45,12 +45,11 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand EditCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
 
-        public LocationListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public LocationListViewModel(Incident incident)
         {
             Title = "Locations";
             Incident = incident;
-            Locations = new LocationListChildViewModel(services, incident);
+            Locations = new LocationListChildViewModel(incident);
             CreateCommand = new Command(Create);
             EditCommand = new Command(Edit, Locations.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Locations.HasSelectedItem);
@@ -58,7 +57,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Services.Document.Show(() => new LocationViewModel(Services, new Location(true)
+            ServiceLocator.Document.Show(() => new LocationViewModel(new Location(true)
             {
                 IncidentId = Incident.IncidentId
             }));
@@ -66,25 +65,19 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Edit()
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Location.Equals(Locations.SelectedItem),
-                () => new LocationViewModel(Services, Context.Locations.Refresh(Locations.SelectedItem)));
+                () => new LocationViewModel(Context.Locations.Refresh(Locations.SelectedItem)));
         }
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected location?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.LocationConfirmDelete, "Delete"))
             {
                 Context.JobLocations.DeleteByLocationId(Locations.SelectedItem.LocationId);
                 Context.Locations.Delete(Locations.SelectedItem);
-                Services.Data.Refresh(typeof(Location));
+                ServiceLocator.Data.Refresh(typeof(Location));
             }
-        }
-
-        public override void Dispose()
-        {
-            Locations.Dispose();
-            base.Dispose();
         }
     }
 }

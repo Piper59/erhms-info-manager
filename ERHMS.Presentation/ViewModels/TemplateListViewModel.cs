@@ -2,6 +2,7 @@
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public TemplateListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public TemplateListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -46,12 +46,11 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand CreateCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
 
-        public TemplateListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public TemplateListViewModel(Incident incident)
         {
             Title = "Templates";
             Incident = incident;
-            Templates = new TemplateListChildViewModel(services, incident);
+            Templates = new TemplateListChildViewModel(incident);
             CreateCommand = new AsyncCommand(CreateAsync, Templates.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Templates.HasSelectedItem);
         }
@@ -60,16 +59,16 @@ namespace ERHMS.Presentation.ViewModels
         {
             string prefix = Incident == null ? "" : Incident.Name + "_";
             Wrapper wrapper = MakeView.InstantiateViewTemplate.Create(Context.Project.FilePath, Templates.SelectedItem.FilePath, prefix);
-            wrapper.AddViewCreatedHandler(Services, Incident);
-            await Services.Wrapper.InvokeAsync(wrapper);
+            wrapper.AddViewCreatedHandler(Incident);
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected template?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.TemplateConfirmDelete, "Delete"))
             {
                 Templates.SelectedItem.Delete();
-                Services.Data.Refresh(typeof(TemplateInfo));
+                ServiceLocator.Data.Refresh(typeof(TemplateInfo));
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,20 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class LocationListChildViewModel : ListViewModel<Location>
         {
+            protected override IEnumerable<Type> RefreshTypes
+            {
+                get
+                {
+                    yield return typeof(Location);
+                    yield return typeof(JobLocation);
+                }
+            }
+
             public Job Job { get; private set; }
 
             public ICommand EditCommand { get; private set; }
 
-            public LocationListChildViewModel(IServiceManager services, Job job)
-                : base(services)
+            public LocationListChildViewModel(Job job)
             {
                 Job = job;
                 Refresh();
@@ -38,20 +47,28 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Services.Document.Show(
+                ServiceLocator.Document.Show(
                     model => model.Location.Equals(SelectedItem),
-                    () => new LocationViewModel(Services, Context.Locations.Refresh(SelectedItem)));
+                    () => new LocationViewModel(Context.Locations.Refresh(SelectedItem)));
             }
         }
 
         public class JobLocationListChildViewModel : ListViewModel<JobLocation>
         {
+            protected override IEnumerable<Type> RefreshTypes
+            {
+                get
+                {
+                    yield return typeof(Location);
+                    yield return typeof(JobLocation);
+                }
+            }
+
             public Job Job { get; private set; }
 
             public ICommand EditCommand { get; private set; }
 
-            public JobLocationListChildViewModel(IServiceManager services, Job job)
-                : base(services)
+            public JobLocationListChildViewModel(Job job)
             {
                 Job = job;
                 Refresh();
@@ -71,9 +88,9 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Services.Document.Show(
+                ServiceLocator.Document.Show(
                     model => model.Location.Equals(SelectedItem.Location),
-                    () => new LocationViewModel(Services, Context.Locations.Refresh(SelectedItem.Location)));
+                    () => new LocationViewModel(Context.Locations.Refresh(SelectedItem.Location)));
             }
         }
 
@@ -85,13 +102,12 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand RemoveCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
 
-        public JobLocationListViewModel(IServiceManager services, Job job)
-            : base(services)
+        public JobLocationListViewModel(Job job)
         {
             Title = "Locations";
             Job = job;
-            Locations = new LocationListChildViewModel(services, job);
-            JobLocations = new JobLocationListChildViewModel(services, job);
+            Locations = new LocationListChildViewModel(job);
+            JobLocations = new JobLocationListChildViewModel(job);
             AddCommand = new Command(Add, Locations.HasAnySelectedItems);
             RemoveCommand = new AsyncCommand(RemoveAsync, JobLocations.HasAnySelectedItems);
             RefreshCommand = new Command(Refresh);
@@ -99,7 +115,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            using (Services.Busy.BeginTask())
+            using (ServiceLocator.Busy.Begin())
             {
                 foreach (Location location in Locations.SelectedItems)
                 {
@@ -110,23 +126,21 @@ namespace ERHMS.Presentation.ViewModels
                     });
                 }
             }
-            Locations.Refresh();
-            Services.Data.Refresh(typeof(JobLocation));
+            ServiceLocator.Data.Refresh(typeof(JobLocation));
         }
 
         public async Task RemoveAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Remove the selected locations?", "Remove"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.JobLocationConfirmRemove, "Remove"))
             {
-                using (Services.Busy.BeginTask())
+                using (ServiceLocator.Busy.Begin())
                 {
                     foreach (JobLocation jobLocation in JobLocations.SelectedItems)
                     {
                         Context.JobLocations.Delete(jobLocation);
                     }
                 }
-                Locations.Refresh();
-                Services.Data.Refresh(typeof(JobLocation));
+                ServiceLocator.Data.Refresh(typeof(JobLocation));
             }
         }
 
@@ -134,13 +148,6 @@ namespace ERHMS.Presentation.ViewModels
         {
             Locations.Refresh();
             JobLocations.Refresh();
-        }
-
-        public override void Dispose()
-        {
-            Locations.Dispose();
-            JobLocations.Dispose();
-            base.Dispose();
         }
     }
 }

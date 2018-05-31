@@ -2,12 +2,12 @@
 using ERHMS.EpiInfo;
 using ERHMS.Presentation.Commands;
 using ERHMS.Presentation.Dialogs;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation.ViewModels
@@ -17,8 +17,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class DataSourceListChildViewModel : ListViewModel<ProjectInfo>
         {
-            public DataSourceListChildViewModel(IServiceManager services)
-                : base(services)
+            public DataSourceListChildViewModel()
             {
                 Refresh();
             }
@@ -51,11 +50,10 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand AddExistingCommand { get; private set; }
         public ICommand RemoveCommand { get; private set; }
 
-        public DataSourceListViewModel(IServiceManager services)
-            : base(services)
+        public DataSourceListViewModel()
         {
             Title = "Data Sources";
-            DataSources = new DataSourceListChildViewModel(services);
+            DataSources = new DataSourceListChildViewModel();
             OpenCommand = new AsyncCommand(OpenAsync, DataSources.HasSelectedItem);
             AddNewCommand = new AsyncCommand(AddNewAsync);
             AddExistingCommand = new Command(AddExisting);
@@ -66,14 +64,14 @@ namespace ERHMS.Presentation.ViewModels
         {
             Settings.Default.DataSourcePaths.Add(path);
             Settings.Default.Save();
-            Services.Data.Refresh(typeof(ProjectInfo));
+            ServiceLocator.Data.Refresh(typeof(ProjectInfo));
         }
 
         private void Remove(string path)
         {
             Settings.Default.DataSourcePaths.Remove(path);
             Settings.Default.Save();
-            Services.Data.Refresh(typeof(ProjectInfo));
+            ServiceLocator.Data.Refresh(typeof(ProjectInfo));
         }
 
         public async Task OpenAsync()
@@ -81,11 +79,11 @@ namespace ERHMS.Presentation.ViewModels
             ProjectInfo projectInfo;
             if (ProjectInfo.TryRead(DataSources.SelectedItem.FilePath, out projectInfo))
             {
-                await Services.Document.SetContextAsync(projectInfo);
+                await ServiceLocator.Document.SetContextAsync(projectInfo);
             }
             else
             {
-                if (await Services.Dialog.ConfirmAsync("Data source could not be opened. Remove it from the list of data sources?", "Remove"))
+                if (await ServiceLocator.Dialog.ConfirmAsync(Resources.DataSourceConfirmRemoveUnopenable, "Remove"))
                 {
                     Remove(DataSources.SelectedItem.FilePath);
                 }
@@ -94,22 +92,20 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task AddNewAsync()
         {
-            using (DataSourceViewModel model = new DataSourceViewModel(Services))
+            DataSourceViewModel model = new DataSourceViewModel();
+            model.Added += (sender, e) =>
             {
-                model.Added += (sender, e) =>
-                {
-                    Add(model.FilePath);
-                };
-                await Services.Dialog.ShowAsync(model);
-            }
+                Add(model.FilePath);
+            };
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public void AddExisting()
         {
-            string path = Services.Dialog.OpenFile(
+            string path = ServiceLocator.Dialog.OpenFile(
                 "Add Existing Data Source",
                 Configuration.GetNewInstance().Directories.Project,
-                FileDialogExtensions.GetFilter("Data Sources", Project.FileExtension));
+                FileDialogExtensions.Filters.DataSources);
             if (path != null)
             {
                 Add(path);
@@ -118,16 +114,10 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task RemoveAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Remove the selected data source?", "Remove"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.DataSourceConfirmRemove, "Remove"))
             {
                 Remove(DataSources.SelectedItem.FilePath);
             }
-        }
-
-        public override void Dispose()
-        {
-            DataSources.Dispose();
-            base.Dispose();
         }
     }
 }

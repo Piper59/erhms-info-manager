@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -14,12 +15,20 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class TeamListChildViewModel : ListViewModel<Team>
         {
+            protected override IEnumerable<Type> RefreshTypes
+            {
+                get
+                {
+                    yield return typeof(Team);
+                    yield return typeof(JobTeam);
+                }
+            }
+
             public Job Job { get; private set; }
 
             public ICommand EditCommand { get; private set; }
 
-            public TeamListChildViewModel(IServiceManager services, Job job)
-                : base(services)
+            public TeamListChildViewModel(Job job)
             {
                 Job = job;
                 Refresh();
@@ -39,20 +48,28 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Services.Document.Show(
+                ServiceLocator.Document.Show(
                     model => model.Team.Equals(SelectedItem),
-                    () => new TeamViewModel(Services, Context.Teams.Refresh(SelectedItem)));
+                    () => new TeamViewModel(Context.Teams.Refresh(SelectedItem)));
             }
         }
 
         public class JobTeamListChildViewModel : ListViewModel<JobTeam>
         {
+            protected override IEnumerable<Type> RefreshTypes
+            {
+                get
+                {
+                    yield return typeof(Team);
+                    yield return typeof(JobTeam);
+                }
+            }
+
             public Job Job { get; private set; }
 
             public ICommand EditCommand { get; private set; }
 
-            public JobTeamListChildViewModel(IServiceManager services, Job job)
-                : base(services)
+            public JobTeamListChildViewModel(Job job)
             {
                 Job = job;
                 Refresh();
@@ -72,9 +89,9 @@ namespace ERHMS.Presentation.ViewModels
 
             public void Edit()
             {
-                Services.Document.Show(
+                ServiceLocator.Document.Show(
                     model => model.Team.Equals(SelectedItem.Team),
-                    () => new TeamViewModel(Services, Context.Teams.Refresh(SelectedItem.Team)));
+                    () => new TeamViewModel(Context.Teams.Refresh(SelectedItem.Team)));
             }
         }
 
@@ -87,13 +104,12 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand EmailCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
 
-        public JobTeamListViewModel(IServiceManager services, Job job)
-            : base(services)
+        public JobTeamListViewModel(Job job)
         {
             Title = "Teams";
             Job = job;
-            Teams = new TeamListChildViewModel(services, job);
-            JobTeams = new JobTeamListChildViewModel(services, job);
+            Teams = new TeamListChildViewModel(job);
+            JobTeams = new JobTeamListChildViewModel(job);
             AddCommand = new Command(Add, Teams.HasAnySelectedItems);
             RemoveCommand = new AsyncCommand(RemoveAsync, JobTeams.HasAnySelectedItems);
             EmailCommand = new Command(Email, JobTeams.HasAnySelectedItems);
@@ -102,7 +118,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            using (Services.Busy.BeginTask())
+            using (ServiceLocator.Busy.Begin())
             {
                 foreach (Team team in Teams.SelectedItems)
                 {
@@ -113,29 +129,27 @@ namespace ERHMS.Presentation.ViewModels
                     });
                 }
             }
-            Teams.Refresh();
-            Services.Data.Refresh(typeof(JobTeam));
+            ServiceLocator.Data.Refresh(typeof(JobTeam));
         }
 
         public async Task RemoveAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Remove the selected teams?", "Remove"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.JobTeamConfirmRemove, "Remove"))
             {
-                using (Services.Busy.BeginTask())
+                using (ServiceLocator.Busy.Begin())
                 {
                     foreach (JobTeam jobTeam in JobTeams.SelectedItems)
                     {
                         Context.JobTeams.Delete(jobTeam);
                     }
                 }
-                Teams.Refresh();
-                Services.Data.Refresh(typeof(JobTeam));
+                ServiceLocator.Data.Refresh(typeof(JobTeam));
             }
         }
 
         public void Email()
         {
-            Services.Document.Show(() =>
+            ServiceLocator.Document.Show(() =>
             {
                 ISet<Responder> responders = new HashSet<Responder>();
                 foreach (JobTeam jobTeam in JobTeams.SelectedItems)
@@ -143,7 +157,7 @@ namespace ERHMS.Presentation.ViewModels
                     responders.AddRange(Context.TeamResponders.SelectUndeletedByTeamId(jobTeam.TeamId)
                         .Select(teamResponder => teamResponder.Responder));
                 }
-                return new EmailViewModel(Services, Context.Responders.Refresh(responders));
+                return new EmailViewModel(Context.Responders.Refresh(responders));
             });
         }
 
@@ -151,13 +165,6 @@ namespace ERHMS.Presentation.ViewModels
         {
             Teams.Refresh();
             JobTeams.Refresh();
-        }
-
-        public override void Dispose()
-        {
-            Teams.Dispose();
-            JobTeams.Dispose();
-            base.Dispose();
         }
     }
 }

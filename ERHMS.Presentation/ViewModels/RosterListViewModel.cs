@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,20 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class ResponderListChildViewModel : ListViewModel<Responder>
         {
+            protected override IEnumerable<Type> RefreshTypes
+            {
+                get
+                {
+                    yield return typeof(Responder);
+                    yield return typeof(Roster);
+                }
+            }
+
             public Incident Incident { get; private set; }
 
             public ICommand EditCommand { get; private set; }
 
-            public ResponderListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public ResponderListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -33,31 +42,33 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
             {
-                yield return item.LastName;
-                yield return item.FirstName;
-                yield return item.EmailAddress;
-                yield return item.City;
-                yield return item.State;
-                yield return item.OrganizationName;
-                yield return item.Occupation;
+                return ListViewModelExtensions.GetFilteredValues(item);
             }
 
             public void Edit()
             {
-                Services.Document.Show(
+                ServiceLocator.Document.Show(
                     model => model.Responder.Equals(SelectedItem),
-                    () => new ResponderViewModel(Services, Context.Responders.Refresh(SelectedItem)));
+                    () => new ResponderViewModel(Context.Responders.Refresh(SelectedItem)));
             }
         }
 
         public class RosterListChildViewModel : ListViewModel<Roster>
         {
+            protected override IEnumerable<Type> RefreshTypes
+            {
+                get
+                {
+                    yield return typeof(Responder);
+                    yield return typeof(Roster);
+                }
+            }
+
             public Incident Incident { get; private set; }
 
             public ICommand EditCommand { get; private set; }
 
-            public RosterListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public RosterListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -72,20 +83,14 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<string> GetFilteredValues(Roster item)
             {
-                yield return item.Responder.LastName;
-                yield return item.Responder.FirstName;
-                yield return item.Responder.EmailAddress;
-                yield return item.Responder.City;
-                yield return item.Responder.State;
-                yield return item.Responder.OrganizationName;
-                yield return item.Responder.Occupation;
+                return ListViewModelExtensions.GetFilteredValues(item.Responder);
             }
 
             public void Edit()
             {
-                Services.Document.Show(
+                ServiceLocator.Document.Show(
                     model => model.Responder.Equals(SelectedItem.Responder),
-                    () => new ResponderViewModel(Services, Context.Responders.Refresh(SelectedItem.Responder)));
+                    () => new ResponderViewModel(Context.Responders.Refresh(SelectedItem.Responder)));
             }
         }
 
@@ -98,13 +103,12 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand EmailCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
 
-        public RosterListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public RosterListViewModel(Incident incident)
         {
             Title = "Roster";
             Incident = incident;
-            Responders = new ResponderListChildViewModel(services, incident);
-            Rosters = new RosterListChildViewModel(services, incident);
+            Responders = new ResponderListChildViewModel(incident);
+            Rosters = new RosterListChildViewModel(incident);
             AddCommand = new Command(Add, Responders.HasAnySelectedItems);
             RemoveCommand = new AsyncCommand(RemoveAsync, Rosters.HasAnySelectedItems);
             EmailCommand = new Command(Email, Rosters.HasAnySelectedItems);
@@ -113,7 +117,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Add()
         {
-            using (Services.Busy.BeginTask())
+            using (ServiceLocator.Busy.Begin())
             {
                 foreach (Responder responder in Responders.SelectedItems)
                 {
@@ -124,32 +128,30 @@ namespace ERHMS.Presentation.ViewModels
                     });
                 }
             }
-            Responders.Refresh();
-            Services.Data.Refresh(typeof(Roster));
+            ServiceLocator.Data.Refresh(typeof(Roster));
         }
 
         public async Task RemoveAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Remove the selected responders?", "Remove"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.RosterConfirmRemove, "Remove"))
             {
-                using (Services.Busy.BeginTask())
+                using (ServiceLocator.Busy.Begin())
                 {
                     foreach (Roster roster in Rosters.SelectedItems)
                     {
                         Context.Rosters.Delete(roster);
                     }
                 }
-                Responders.Refresh();
-                Services.Data.Refresh(typeof(Roster));
+                ServiceLocator.Data.Refresh(typeof(Roster));
             }
         }
 
         public void Email()
         {
-            Services.Document.Show(() =>
+            ServiceLocator.Document.Show(() =>
             {
                 IEnumerable<Responder> responders = Rosters.SelectedItems.Select(roster => roster.Responder);
-                return new EmailViewModel(Services, Context.Responders.Refresh(responders));
+                return new EmailViewModel(Context.Responders.Refresh(responders));
             });
         }
 
@@ -157,13 +159,6 @@ namespace ERHMS.Presentation.ViewModels
         {
             Responders.Refresh();
             Rosters.Refresh();
-        }
-
-        public override void Dispose()
-        {
-            Responders.Dispose();
-            Rosters.Dispose();
-            base.Dispose();
         }
     }
 }

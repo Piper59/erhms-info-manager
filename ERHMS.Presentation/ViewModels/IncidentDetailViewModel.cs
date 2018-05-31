@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand SaveCommand { get; private set; }
 
-        public IncidentDetailViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public IncidentDetailViewModel(Incident incident)
         {
             Title = incident.New ? "New Incident" : incident.Name;
             Incident = incident;
@@ -34,17 +34,17 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (!DateTimeExtensions.AreInOrder(Incident.StartDate, Incident.EndDateEstimate))
             {
-                await Services.Dialog.AlertAsync("Estimated end date must be later than start date.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.IncidentEndDateEstimateInvalid);
                 return false;
             }
             if (!DateTimeExtensions.AreInOrder(Incident.StartDate, Incident.EndDateActual))
             {
-                await Services.Dialog.AlertAsync("Actual end date must be later than start date.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.IncidentEndDateActualInvalid);
                 return false;
             }
             return true;
@@ -58,11 +58,11 @@ namespace ERHMS.Presentation.ViewModels
             }
             bool @new = Incident.New;
             Context.Incidents.Save(Incident);
-            Services.Dialog.Notify("Incident has been saved.");
-            Services.Data.Refresh(typeof(Incident));
+            ServiceLocator.Dialog.Notify(Resources.IncidentSaved);
+            ServiceLocator.Data.Refresh(typeof(Incident));
             if (@new)
             {
-                Services.Data.Refresh(typeof(IncidentRole));
+                ServiceLocator.Data.Refresh(typeof(IncidentRole));
             }
             Title = Incident.Name;
             Dirty = false;

@@ -8,14 +8,14 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class PgmViewModel : AnalysisViewModel
     {
-        public PgmViewModel(IServiceManager services, View view)
-            : base(services, view)
+        public PgmViewModel(View view)
+            : base(view)
         {
             Title = "Create an Analysis";
         }
 
-        public PgmViewModel(IServiceManager services, int viewId)
-            : this(services, services.Data.Context.Views.SelectById(viewId)) { }
+        public PgmViewModel(int viewId)
+            : this(Context.Views.SelectById(viewId)) { }
 
         public override async Task CreateAsync()
         {
@@ -33,10 +33,11 @@ namespace ERHMS.Presentation.ViewModels
                     IncidentId = View.Incident.IncidentId
                 });
             }
-            Services.Data.Refresh(typeof(Domain.Pgm));
+            ServiceLocator.Data.Refresh(typeof(Domain.Pgm));
             Close();
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            await Services.Wrapper.InvokeAsync(Analysis.OpenPgm.Create(pgm.Content, true));
+            Wrapper wrapper = Analysis.OpenPgm.Create(pgm.Content, true);
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
     }
 }

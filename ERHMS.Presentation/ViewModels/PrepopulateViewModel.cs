@@ -17,8 +17,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public ResponderListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public ResponderListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -26,15 +25,9 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<Responder> GetItems()
             {
-                IEnumerable<Responder> responders;
-                if (Incident == null)
-                {
-                    responders = Context.Responders.SelectUndeleted();
-                }
-                else
-                {
-                    responders = Context.Rosters.SelectUndeletedByIncidentId(Incident.IncidentId).Select(roster => roster.Responder);
-                }
+                IEnumerable<Responder> responders = Incident == null
+                    ? Context.Responders.SelectUndeleted()
+                    : Context.Rosters.SelectUndeletedByIncidentId(Incident.IncidentId).Select(roster => roster.Responder);
                 return responders.OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase);
             }
         }
@@ -44,12 +37,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand ContinueCommand { get; private set; }
 
-        public PrepopulateViewModel(IServiceManager services, View view)
-            : base(services)
+        public PrepopulateViewModel(View view)
         {
             Title = "Prepopulate Responder Data Fields";
             View = view;
-            Responders = new ResponderListChildViewModel(services, view.Incident);
+            Responders = new ResponderListChildViewModel(view.Incident);
             ContinueCommand = new AsyncCommand(ContinueAsync);
         }
 
@@ -79,13 +71,8 @@ namespace ERHMS.Presentation.ViewModels
         {
             Close();
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            await Services.Wrapper.InvokeAsync(Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, GetRecord()));
-        }
-
-        public override void Dispose()
-        {
-            Responders.Dispose();
-            base.Dispose();
+            Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, GetRecord());
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
     }
 }

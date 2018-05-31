@@ -7,7 +7,6 @@ namespace ERHMS.Presentation.Services
     {
         DataContext Context { get; set; }
 
-        event EventHandler ContextChanged;
         event EventHandler<RefreshingEventArgs> Refreshing;
 
         void Refresh(Type type);

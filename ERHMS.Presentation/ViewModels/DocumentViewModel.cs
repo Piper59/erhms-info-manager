@@ -1,4 +1,5 @@
 ﻿using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -25,8 +26,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand CloseCommand { get; private set; }
 
-        protected DocumentViewModel(IServiceManager services)
-            : base(services)
+        protected DocumentViewModel()
         {
             CloseCommand = new AsyncCommand(CloseAsync);
             PropertyChanged += (sender, e) =>
@@ -60,8 +60,8 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (Dirty && confirm)
             {
-                string message = string.Format("There may be unsaved changes. Are you sure you want to close {0}?", Title);
-                if (await Services.Dialog.ConfirmAsync(message, "Close"))
+                string message = string.Format(Resources.DocumentConfirmCloseDirty, Title);
+                if (await ServiceLocator.Dialog.ConfirmAsync(message, "Close"))
                 {
                     OnClosed();
                 }

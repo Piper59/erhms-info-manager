@@ -10,35 +10,21 @@ using MahApps.Metro.SimpleChildWindow;
 using Mantin.Controls.Wpf.Notification;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
+using Resx = ERHMS.Presentation.Properties.Resources;
 
 namespace ERHMS.Presentation.Views
 {
     public partial class MainView : MetroWindow, IDialogService, IWrapperService
     {
-        private static readonly IDictionary<Type, Type> DialogViews = new Dictionary<Type, Type>
-        {
-            { typeof(CanvasLinkViewModel), typeof(LinkView) },
-            { typeof(CanvasViewModel), typeof(AnalysisView) },
-            { typeof(DataSourceViewModel), typeof(DataSourceView) },
-            { typeof(PgmLinkViewModel), typeof(LinkView) },
-            { typeof(PgmViewModel), typeof(AnalysisView) },
-            { typeof(PostpopulateViewModel), typeof(PostpopulateView) },
-            { typeof(PrepopulateViewModel), typeof(PrepopulateView) },
-            { typeof(RecipientViewModel), typeof(RecipientView) },
-            { typeof(RoleViewModel), typeof(RoleView) },
-            { typeof(SurveyViewModel), typeof(SurveyView) },
-            { typeof(ViewLinkViewModel), typeof(LinkView) }
-        };
-
         private IWin32Window owner;
         private ResourceDictionary accent;
         private bool closeRequested;
@@ -59,7 +45,7 @@ namespace ERHMS.Presentation.Views
             Closing += MainView_Closing;
         }
 
-        private async void MainView_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void MainView_Closing(object sender, CancelEventArgs e)
         {
             e.Cancel = !closing;
             if (closeRequested || closing)
@@ -67,7 +53,7 @@ namespace ERHMS.Presentation.Views
                 return;
             }
             closeRequested = true;
-            if (await ConfirmAsync(string.Format("Are you sure you want to exit {0}?", Application.Current.Resources["AppTitle"]), "Exit"))
+            if (await ConfirmAsync(Resx.AppConfirmExit, "Exit"))
             {
                 closing = true;
                 Close();
@@ -96,23 +82,10 @@ namespace ERHMS.Presentation.Views
                 });
         }
 
-        public async Task AlertAsync(string message, Exception exception)
-        {
-            Log.Logger.DebugFormat("Alerting: {0}", message);
-            await ErrorDialog.ShowAsync(this, message, exception);
-        }
-
         public async Task AlertAsync(ValidationError error, IEnumerable<string> fields)
         {
-            StringBuilder message = new StringBuilder();
-            message.AppendFormat("The following fields are {0}:", error.ToString().ToLower());
-            message.AppendLine();
-            message.AppendLine();
-            foreach (string field in fields)
-            {
-                message.AppendLine(field);
-            }
-            await AlertAsync(message.ToString().Trim());
+            string message = string.Format(Resx.ValidationError, error.ToString().ToLower(), string.Join(Environment.NewLine, fields));
+            await AlertAsync(message);
         }
 
         public async Task BlockAsync(string message, Action action)
@@ -157,7 +130,7 @@ namespace ERHMS.Presentation.Views
         public void Notify(string message)
         {
             Log.Logger.DebugFormat("Notifying: {0}", message);
-            ToastPopUp popup = new ToastPopUp((string)Application.Current.Resources["AppTitle"], message, NotificationType.Information)
+            ToastPopUp popup = new ToastPopUp(Resx.AppTitle, message, NotificationType.Information)
             {
                 Background = Brushes.White,
                 BorderBrush = Brushes.Black
@@ -169,9 +142,15 @@ namespace ERHMS.Presentation.Views
         {
             Log.Logger.DebugFormat("Showing: {0}", model);
             model.Active = true;
-            ChildWindow dialog = (ChildWindow)Activator.CreateInstance(DialogViews[model.GetType()]);
+            ChildWindow dialog = (ChildWindow)Activator.CreateInstance(DialogTypeMap.Instance.GetDialogType(model));
             dialog.DataContext = model;
             await this.ShowChildWindowAsync(dialog, ChildWindowManager.OverlayFillBehavior.FullWindow);
+        }
+
+        public async Task ShowErrorAsync(string message, Exception exception)
+        {
+            Log.Logger.DebugFormat("Alerting: {0}", message);
+            await ErrorDialog.ShowAsync(this, message, exception);
         }
 
         public async Task<bool> ShowLicenseAsync()
@@ -227,14 +206,10 @@ namespace ERHMS.Presentation.Views
 
         public string GetRootPath()
         {
-            string directoryName = (string)Application.Current.Resources["AppBareTitle"];
+            string directoryName = Resx.AppBareTitle;
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                dialog.Description = string.Join(" ", new string[]
-                {
-                    "Choose a location for your application files.",
-                    string.Format("We'll create a directory named {0} in that location.", directoryName)
-                });
+                dialog.Description = Resx.RootPathInstructions;
                 string path;
                 while (true)
                 {
@@ -251,16 +226,8 @@ namespace ERHMS.Presentation.Views
                     {
                         break;
                     }
-                    StringBuilder message = new StringBuilder();
-                    message.AppendLine("The following directory already exists. Are you sure you want to use this location?");
-                    message.AppendLine();
-                    message.Append(path);
-                    MessageBoxResult result = MessageBox.Show(
-                        message.ToString(),
-                        (string)Application.Current.Resources["AppTitle"],
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.OK)
+                    string message = string.Format(Resx.RootPathDirectoryExists, path);
+                    if (MessageBox.Show(message, Resx.AppTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.OK)
                     {
                         break;
                     }

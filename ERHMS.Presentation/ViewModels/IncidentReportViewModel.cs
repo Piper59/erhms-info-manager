@@ -68,8 +68,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand EditResponderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
 
-        public IncidentReportViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public IncidentReportViewModel(Incident incident)
         {
             Title = "Reports";
             Incident = incident;
@@ -154,23 +153,23 @@ namespace ERHMS.Presentation.ViewModels
 
         public void EditJob(Job job)
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Job.Equals(job),
-                () => new JobViewModel(Services, Context.Jobs.Refresh(job)));
+                () => new JobViewModel(Context.Jobs.Refresh(job)));
         }
 
         public void EditTeam(JobTeam jobTeam)
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Team.Equals(jobTeam.Team),
-                () => new TeamViewModel(Services, Context.Teams.Refresh(jobTeam.Team)));
+                () => new TeamViewModel(Context.Teams.Refresh(jobTeam.Team)));
         }
 
         public void EditResponder(JobTicket jobTicket)
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Responder.Equals(jobTicket.Responder),
-                () => new ResponderViewModel(Services, Context.Responders.Refresh(jobTicket.Responder)));
+                () => new ResponderViewModel(Context.Responders.Refresh(jobTicket.Responder)));
         }
 
         public async Task RefreshAsync()

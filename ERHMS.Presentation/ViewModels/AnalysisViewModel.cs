@@ -1,6 +1,5 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Commands;
-using ERHMS.Presentation.Services;
 using System.Threading.Tasks;
 
 namespace ERHMS.Presentation.ViewModels
@@ -18,8 +17,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand CreateCommand { get; private set; }
 
-        protected AnalysisViewModel(IServiceManager services, View view)
-            : base(services)
+        protected AnalysisViewModel(View view)
         {
             View = view;
             CreateCommand = new AsyncCommand(CreateAsync, CanCreate);

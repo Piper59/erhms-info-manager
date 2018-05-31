@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public IncidentRoleListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public IncidentRoleListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -42,12 +42,11 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand DeleteCommand { get; private set; }
         public ICommand ShowSettingsCommand { get; private set; }
 
-        public IncidentRoleListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public IncidentRoleListViewModel(Incident incident)
         {
             Title = "Roles";
             Incident = incident;
-            IncidentRoles = new IncidentRoleListChildViewModel(services, incident);
+            IncidentRoles = new IncidentRoleListChildViewModel(incident);
             AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, IncidentRoles.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, IncidentRoles.HasSelectedItem);
@@ -56,35 +55,31 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task AddAsync()
         {
-            using (RoleViewModel model = new RoleViewModel(Services, "Add"))
+            RoleViewModel model = new RoleViewModel("Add");
+            model.Saved += (sender, e) =>
             {
-                model.Saved += (sender, e) =>
+                Context.IncidentRoles.Save(new IncidentRole(true)
                 {
-                    Context.IncidentRoles.Save(new IncidentRole(true)
-                    {
-                        IncidentId = Incident.IncidentId,
-                        Name = model.Name
-                    });
-                    Services.Data.Refresh(typeof(IncidentRole));
-                };
-                await Services.Dialog.ShowAsync(model);
-            }
+                    IncidentId = Incident.IncidentId,
+                    Name = model.Name
+                });
+                ServiceLocator.Data.Refresh(typeof(IncidentRole));
+            };
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public async Task EditAsync()
         {
             IncidentRole incidentRole = Context.IncidentRoles.Refresh(IncidentRoles.SelectedItem);
-            using (RoleViewModel model = new RoleViewModel(Services, "Edit"))
+            RoleViewModel model = new RoleViewModel("Edit");
+            model.Name = incidentRole.Name;
+            model.Saved += (sender, e) =>
             {
-                model.Name = incidentRole.Name;
-                model.Saved += (sender, e) =>
-                {
-                    incidentRole.Name = model.Name;
-                    Context.IncidentRoles.Save(incidentRole);
-                    Services.Data.Refresh(typeof(IncidentRole));
-                };
-                await Services.Dialog.ShowAsync(model);
-            }
+                incidentRole.Name = model.Name;
+                Context.IncidentRoles.Save(incidentRole);
+                ServiceLocator.Data.Refresh(typeof(IncidentRole));
+            };
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public async Task DeleteAsync()
@@ -92,27 +87,21 @@ namespace ERHMS.Presentation.ViewModels
             IncidentRole incidentRole = Context.IncidentRoles.Refresh(IncidentRoles.SelectedItem);
             if (incidentRole.InUse)
             {
-                await Services.Dialog.AlertAsync("The selected role is in use and may not be deleted.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.IncidentRoleDeleteProhibited);
             }
             else
             {
-                if (await Services.Dialog.ConfirmAsync("Delete the selected role?", "Delete"))
+                if (await ServiceLocator.Dialog.ConfirmAsync(Resources.IncidentRoleConfirmDelete, "Delete"))
                 {
                     Context.IncidentRoles.Delete(incidentRole);
-                    Services.Data.Refresh(typeof(IncidentRole));
+                    ServiceLocator.Data.Refresh(typeof(IncidentRole));
                 }
             }
         }
 
         public void ShowSettings()
         {
-            Services.Document.ShowByType(() => new SettingsViewModel(Services));
-        }
-
-        public override void Dispose()
-        {
-            IncidentRoles.Dispose();
-            base.Dispose();
+            ServiceLocator.Document.ShowSettings();
         }
     }
 }

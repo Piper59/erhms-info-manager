@@ -1,5 +1,6 @@
 ﻿using ERHMS.Domain;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System.Collections.Generic;
@@ -13,8 +14,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand SaveCommand { get; private set; }
 
-        public JobDetailViewModel(IServiceManager services, Job job)
-            : base(services)
+        public JobDetailViewModel(Job job)
         {
             Title = job.New ? "New Job" : job.Name;
             Job = job;
@@ -31,12 +31,12 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (!DateTimeExtensions.AreInOrder(Job.StartDate, Job.EndDate))
             {
-                await Services.Dialog.AlertAsync("End date must be later than start date.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.JobEndDateInvalid);
                 return false;
             }
             return true;
@@ -49,8 +49,8 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             Context.Jobs.Save(Job);
-            Services.Dialog.Notify("Job has been saved.");
-            Services.Data.Refresh(typeof(Job));
+            ServiceLocator.Dialog.Notify(Resources.JobSaved);
+            ServiceLocator.Data.Refresh(typeof(Job));
             Title = Job.Name;
             Dirty = false;
         }

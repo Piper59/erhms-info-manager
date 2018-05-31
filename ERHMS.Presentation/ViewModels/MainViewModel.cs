@@ -2,6 +2,7 @@
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -52,10 +53,9 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand CloseCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
 
-        public MainViewModel(IServiceManager services)
-            : base(services)
+        public MainViewModel()
         {
-            Title = services.String.AppTitle;
+            Title = Resources.AppTitle;
             Documents = new ObservableCollection<DocumentViewModel>();
             ShowDataSourcesCommand = new Command(ShowDataSources);
             ShowRespondersCommand = new Command(ShowResponders, HasContext);
@@ -99,12 +99,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             if (projectInfo.Version > Assembly.GetExecutingAssembly().GetName().Version)
             {
-                string message = string.Join(" ", new string[]
-                {
-                    string.Format("The selected data source was created in a newer version of {0}.", Services.String.AppTitle),
-                    string.Format("Please upgrade to the latest version of {0} to open this data source.", Services.String.AppTitle)
-                });
-                await Services.Dialog.AlertAsync(message, "Help");
+                await ServiceLocator.Dialog.AlertAsync(Resources.DataSourceNewerVersion, "Help");
                 return;
             }
             if (Context == null)
@@ -119,7 +114,7 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 else
                 {
-                    if (await Services.Dialog.ConfirmAsync("Open data source? This will close the current data source.", "Open"))
+                    if (await ServiceLocator.Dialog.ConfirmAsync(Resources.DataSourceConfirmCloseAndOpen, "Open"))
                     {
                         await SetContextInternalAsync(projectInfo);
                     }
@@ -141,19 +136,13 @@ namespace ERHMS.Presentation.ViewModels
                 Context = new DataContext(new Project(projectInfo.FilePath));
                 if (Context.NeedsUpgrade())
                 {
-                    string message = string.Join(" ", new string[]
+                    if (await ServiceLocator.Dialog.ConfirmAsync(Resources.DataSourceConfirmUpgrade, "Upgrade"))
                     {
-                        string.Format("The selected data source was created in an older version of {0}.", Services.String.AppTitle),
-                        "Upgrade this data source?",
-                        string.Format("This may make the data source inaccessible to other users with older versions of {0}.", Services.String.AppTitle)
-                    });
-                    if (await Services.Dialog.ConfirmAsync(message, "Upgrade"))
-                    {
-                        await Services.Dialog.BlockAsync("Upgrading data source \u2026", () =>
+                        await ServiceLocator.Dialog.BlockAsync(Resources.DataSourceUpgrading, () =>
                         {
                             Context.Upgrade();
                         });
-                        Services.Dialog.Notify("Data source has been upgraded.");
+                        ServiceLocator.Dialog.Notify(Resources.DataSourceUpgraded);
                     }
                     else
                     {
@@ -165,21 +154,21 @@ namespace ERHMS.Presentation.ViewModels
                 {
                     Settings.Default.LastDataSourcePath = projectInfo.FilePath;
                     Settings.Default.Save();
-                    Title = string.Format("{0} - {1}", Services.String.AppTitle, Context.Project.Name);
+                    Title = string.Format("{0} - {1}", Resources.AppTitle, Context.Project.Name);
                     await OnContextSetAsync();
                 }
             }
             catch (Exception ex)
             {
                 Log.Logger.Warn("Failed to open data source", ex);
-                await Services.Dialog.AlertAsync("Failed to open data source.", ex);
+                await ServiceLocator.Dialog.ShowErrorAsync(Resources.DataSourceOpenFailed, ex);
                 ShowDataSources();
             }
         }
 
         private async Task OnContextSetAsync()
         {
-            Services.Dialog.Notify("Data source has been opened.");
+            ServiceLocator.Dialog.Notify(Resources.DataSourceOpened);
             DataSourceListViewModel model = FindByType<DataSourceListViewModel>();
             if (model != null)
             {
@@ -219,7 +208,7 @@ namespace ERHMS.Presentation.ViewModels
             TModel model = Find(predicate);
             if (model == null)
             {
-                using (Services.Busy.BeginTask())
+                using (ServiceLocator.Busy.Begin())
                 {
                     model = constructor();
                     Log.Logger.DebugFormat("Opening document: {0}", model);
@@ -231,7 +220,6 @@ namespace ERHMS.Presentation.ViewModels
                         {
                             ActiveDocument = null;
                         }
-                        model.Dispose();
                     };
                     Documents.Add(model);
                 }
@@ -253,77 +241,77 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ShowDataSources()
         {
-            ShowByType(() => new DataSourceListViewModel(Services));
+            ShowByType(() => new DataSourceListViewModel());
         }
 
         public void ShowResponders()
         {
-            ShowByType(() => new ResponderListViewModel(Services));
+            ShowByType(() => new ResponderListViewModel());
         }
 
         public void CreateResponder()
         {
-            Show(() => new ResponderViewModel(Services, new Responder(true)));
+            Show(() => new ResponderViewModel(new Responder(true)));
         }
 
         public void ShowIncidents()
         {
-            ShowByType(() => new IncidentListViewModel(Services));
+            ShowByType(() => new IncidentListViewModel());
         }
 
         public void CreateIncident()
         {
-            Show(() => new IncidentViewModel(Services, new Incident(true)));
+            Show(() => new IncidentViewModel(new Incident(true)));
         }
 
         public void ShowViews()
         {
-            ShowByType(() => new ViewListViewModel(Services, null));
+            ShowByType(() => new ViewListViewModel(null));
         }
 
         public void ShowTemplates()
         {
-            ShowByType(() => new TemplateListViewModel(Services, null));
+            ShowByType(() => new TemplateListViewModel(null));
         }
 
         public void ShowAssignments()
         {
-            ShowByType(() => new AssignmentListViewModel(Services, null));
+            ShowByType(() => new AssignmentListViewModel(null));
         }
 
         public void ShowPgms()
         {
-            ShowByType(() => new PgmListViewModel(Services, null));
+            ShowByType(() => new PgmListViewModel(null));
         }
 
         public void ShowCanvases()
         {
-            ShowByType(() => new CanvasListViewModel(Services, null));
+            ShowByType(() => new CanvasListViewModel(null));
         }
 
         public void ShowStart()
         {
-            ShowByType(() => new StartViewModel(Services));
+            ShowByType(() => new StartViewModel());
         }
 
         public void ShowSettings()
         {
-            ShowByType(() => new SettingsViewModel(Services));
+            ShowByType(() => new SettingsViewModel());
         }
 
         public void ShowLogs()
         {
-            ShowByType(() => new LogListViewModel(Services));
+            ShowByType(() => new LogListViewModel());
         }
 
         public void ShowHelp()
         {
-            ShowByType(() => new HelpViewModel(Services));
+            ShowByType(() => new HelpViewModel());
         }
 
         public void ShowAbout()
         {
-            ShowByType(() => new AboutViewModel(Services));
+            ShowByType(() => new AboutViewModel());
         }
 
         public bool CanClose()
@@ -338,7 +326,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Exit()
         {
-            Services.App.Exit();
+            ServiceLocator.App.Exit();
         }
     }
 }

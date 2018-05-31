@@ -5,7 +5,7 @@ namespace ERHMS.Presentation
 {
     public class BusyService : IBusyService
     {
-        public IDisposable BeginTask()
+        public IDisposable Begin()
         {
             return new WaitCursor();
         }

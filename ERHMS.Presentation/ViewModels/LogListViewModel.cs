@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.Presentation.Commands;
 using ERHMS.Presentation.Dialogs;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using Ionic.Zip;
@@ -18,8 +19,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class LogListChildViewModel : ListViewModel<FileInfo>
         {
-            public LogListChildViewModel(IServiceManager services)
-                : base(services)
+            public LogListChildViewModel()
             {
                 Refresh();
             }
@@ -42,11 +42,10 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand DeleteCommand { get; private set; }
         public ICommand PackageCommand { get; private set; }
 
-        public LogListViewModel(IServiceManager services)
-            : base(services)
+        public LogListViewModel()
         {
             Title = "Logs";
-            Logs = new LogListChildViewModel(services);
+            Logs = new LogListChildViewModel();
             OpenCommand = new Command(Open, Logs.HasAnySelectedItems);
             DeleteCommand = new AsyncCommand(DeleteAsync, Logs.HasAnySelectedItems);
             PackageCommand = new AsyncCommand(PackageAsync, Logs.HasAnySelectedItems);
@@ -59,7 +58,7 @@ namespace ERHMS.Presentation.ViewModels
                 file.Refresh();
                 if (file.Exists)
                 {
-                    Services.Process.Start(new ProcessStartInfo
+                    ServiceLocator.Process.Start(new ProcessStartInfo
                     {
                         FileName = file.FullName
                     });
@@ -69,7 +68,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected logs?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.LogConfirmDelete, "Delete"))
             {
                 foreach (FileInfo file in Logs.SelectedItems)
                 {
@@ -83,20 +82,20 @@ namespace ERHMS.Presentation.ViewModels
                         catch (OperationCanceledException) { }
                     }
                 }
-                Services.Data.Refresh(typeof(FileInfo));
+                ServiceLocator.Data.Refresh(typeof(FileInfo));
             }
         }
 
         public async Task PackageAsync()
         {
-            string path = Services.Dialog.SaveFile(
+            string path = ServiceLocator.Dialog.SaveFile(
                 "Package Logs",
                 Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                FileDialogExtensions.GetFilter("ZIP Files", ".zip"),
+                FileDialogExtensions.Filters.ZipFiles,
                 string.Format("Logs-{0:yyyyMMdd}-{0:HHmmss}.zip", DateTime.Now));
             if (path != null)
             {
-                await Services.Dialog.BlockAsync("Packaging logs \u2026", () =>
+                await ServiceLocator.Dialog.BlockAsync(Resources.LogPackaging, () =>
                 {
                     using (ZipFile package = new ZipFile())
                     {
@@ -114,14 +113,8 @@ namespace ERHMS.Presentation.ViewModels
                         }
                     }
                 });
-                Services.Dialog.Notify("Logs have been packaged.");
+                ServiceLocator.Dialog.Notify(Resources.LogPackaged);
             }
-        }
-
-        public override void Dispose()
-        {
-            Logs.Dispose();
-            base.Dispose();
         }
     }
 }

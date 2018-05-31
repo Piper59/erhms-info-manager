@@ -3,13 +3,13 @@ using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Settings = ERHMS.Utility.Settings;
@@ -146,8 +146,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand RemoveRoleCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
 
-        public SettingsViewModel(IServiceManager services)
-            : base(services)
+        public SettingsViewModel()
         {
             Title = "Settings";
             configuration = Configuration.GetNewInstance();
@@ -185,16 +184,10 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task BrowseAsync()
         {
-            string path = Services.Dialog.GetRootPath();
+            string path = ServiceLocator.Dialog.GetRootPath();
             if (path != null && !path.Equals(configuration.GetRootPath(), StringComparison.OrdinalIgnoreCase))
             {
-                string message = string.Join(" ", new string[]
-                {
-                    "Change the root directory?",
-                    "This may cause existing data sources to stop working properly.",
-                    string.Format("{0} will attempt to copy your application files and restart when settings are saved.", Services.String.AppTitle)
-                });
-                if (await Services.Dialog.ConfirmAsync(message, "Change"))
+                if (await ServiceLocator.Dialog.ConfirmAsync(Resources.SettingsConfirmChangeRootDirectory, "Change"))
                 {
                     Log.Logger.DebugFormat("Root path chosen: {0}", path);
                     RootPath = path;
@@ -204,22 +197,20 @@ namespace ERHMS.Presentation.ViewModels
 
         public void ShowDataSources()
         {
-            Services.Document.ShowByType(() => new DataSourceListViewModel(Services));
+            ServiceLocator.Document.ShowByType(() => new DataSourceListViewModel());
         }
 
         public async Task AddRoleAsync()
         {
-            using (RoleViewModel model = new RoleViewModel(Services, "Add"))
+            RoleViewModel model = new RoleViewModel("Add");
+            model.Saved += (sender, e) =>
             {
-                model.Saved += (sender, e) =>
+                Roles.Add(new Role(true)
                 {
-                    Roles.Add(new Role(true)
-                    {
-                        Name = model.Name
-                    });
-                };
-                await Services.Dialog.ShowAsync(model);
-            }
+                    Name = model.Name
+                });
+            };
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public void RemoveRole(Role role)
@@ -241,7 +232,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Invalid, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Invalid, fields);
                 return false;
             }
             return true;
@@ -256,7 +247,7 @@ namespace ERHMS.Presentation.ViewModels
             Settings.Default.LogLevelName = LogLevelName;
             if (Context != null)
             {
-                using (Services.Busy.BeginTask())
+                using (ServiceLocator.Busy.Begin())
                 {
                     Context.Database.Transact((connection, transaction) =>
                     {
@@ -287,24 +278,20 @@ namespace ERHMS.Presentation.ViewModels
                 Dirty = false;
                 if (restart)
                 {
-                    Services.App.Restart();
+                    ServiceLocator.App.Restart();
                 }
                 else
                 {
                     Log.LevelName = Settings.Default.LogLevelName;
                     ConfigurationExtensions.Load();
-                    Services.Dialog.Notify("Settings have been saved.");
+                    ServiceLocator.Dialog.Notify(Resources.SettingsSaved);
                 }
             }
             catch (Exception ex)
             {
                 Log.Logger.Warn("Failed to initialize root path", ex);
-                StringBuilder message = new StringBuilder();
-                message.AppendFormat("{0} failed to initialize the following directory. Settings have not been saved.", Services.String.AppTitle);
-                message.AppendLine();
-                message.AppendLine();
-                message.Append(RootPath);
-                await Services.Dialog.AlertAsync(message.ToString(), ex);
+                string message = string.Format(Resources.SettingsInitializeFailed, RootPath);
+                await ServiceLocator.Dialog.ShowErrorAsync(message, ex);
             }
         }
 
@@ -314,7 +301,7 @@ namespace ERHMS.Presentation.ViewModels
             {
                 return false;
             }
-            using (Services.Busy.BeginTask())
+            using (ServiceLocator.Busy.Begin())
             {
                 IOExtensions.CopyDirectory(original, modified);
                 configuration.SetUserDirectories(modified);

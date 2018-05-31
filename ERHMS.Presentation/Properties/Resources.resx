@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppBareTitle" xml:space="preserve">
+    <value>ERHMS Info Manager</value>
+  </data>
+  <data name="AppTitle" xml:space="preserve">
+    <value>ERHMS Info Manager™</value>
+  </data>
+  <data name="AssignmentConfirmRemove" xml:space="preserve">
+    <value>Remove the selected assignments?</value>
+  </data>
+  <data name="CanvasConfirmDelete" xml:space="preserve">
+    <value>Delete the selected dashboard?</value>
+  </data>
+  <data name="DataSourceConfirmAddExisting" xml:space="preserve">
+    <value>Data source already exists. Add it to the list of data sources?</value>
+  </data>
+  <data name="DataSourceConfirmAddForDatabase" xml:space="preserve">
+    <value>Database already exists. Add a data source using this database?</value>
+  </data>
+  <data name="DataSourceConfirmRemove" xml:space="preserve">
+    <value>Remove the selected data source?</value>
+  </data>
+  <data name="DataSourceConfirmRemoveUnopenable" xml:space="preserve">
+    <value>Data source could not be opened. Remove it from the list of data sources?</value>
+  </data>
+  <data name="DataSourceConfirmUpgrade" xml:space="preserve">
+    <value>The selected data source was created in an older version of ERHMS Info Manager™. Upgrade this data source? This may make the data source inaccessible to other users with older versions of ERHMS Info Manager™.</value>
+  </data>
+  <data name="DataSourceCreated" xml:space="preserve">
+    <value>Data source has been created.</value>
+  </data>
+  <data name="DataSourceCreateFailed" xml:space="preserve">
+    <value>Failed to create data source.</value>
+  </data>
+  <data name="DataSourceCreating" xml:space="preserve">
+    <value>Creating data source …</value>
+  </data>
+  <data name="DataSourceNewerVersion" xml:space="preserve">
+    <value>The selected data source was created in a newer version of ERHMS Info Manager™. Please upgrade to the latest version of ERHMS Info Manager™ to open this data source.</value>
+  </data>
+  <data name="DocumentConfirmCloseDirty" xml:space="preserve">
+    <value>There may be unsaved changes. Are you sure you want to close {0}?</value>
+  </data>
+  <data name="GetStarted" xml:space="preserve">
+    <value>To get started, you must open or create a data source. Click Open or Add &gt;New on the Data Sources screen.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="LICENSE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\LICENSE.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="LicenseTitle" xml:space="preserve">
+    <value>ERHMS Info Manager™ License</value>
+  </data>
+  <data name="WebConfirmReviewUnlinkable" xml:space="preserve">
+    <value>One or more records could not be linked to a responder. Review these records?</value>
+  </data>
+  <data name="WebConfigure" xml:space="preserve">
+    <value>{0} Please verify web survey settings.</value>
+  </data>
+  <data name="WebGetSurveyFailed" xml:space="preserve">
+    <value>Failed to retrieve web survey details. Please verify web survey settings.</value>
+  </data>
+  <data name="WebImported" xml:space="preserve">
+    <value>Data has been imported from web.</value>
+  </data>
+  <data name="WebImportFailed" xml:space="preserve">
+    <value>Failed to import data from web. Please verify web survey settings.</value>
+  </data>
+  <data name="WebImporting" xml:space="preserve">
+    <value>Importing data from web …</value>
+  </data>
+  <data name="WebViewNotPublished" xml:space="preserve">
+    <value>The selected form has not yet been published to web.</value>
+  </data>
+  <data name="EmailConfigure" xml:space="preserve">
+    <value>Please configure email settings.</value>
+  </data>
+  <data name="EmailSendFailed" xml:space="preserve">
+    <value>Failed to send email. Please verify email settings.</value>
+  </data>
+  <data name="EmailSendFailedForRecipients" xml:space="preserve">
+    <value>Delivery to the following recipients failed:
+
+{0}</value>
+  </data>
+  <data name="EmailSending" xml:space="preserve">
+    <value>Sending email …</value>
+  </data>
+  <data name="EmailSent" xml:space="preserve">
+    <value>Email has been sent.</value>
+  </data>
+  <data name="EmailViewNotSelected" xml:space="preserve">
+    <value>Please select a form to append a web survey URL.</value>
+  </data>
+  <data name="IncidentEndDateActualInvalid" xml:space="preserve">
+    <value>Actual end date must be later than start date.</value>
+  </data>
+  <data name="IncidentEndDateEstimateInvalid" xml:space="preserve">
+    <value>Estimated end date must be later than start date.</value>
+  </data>
+  <data name="IncidentConfirmDelete" xml:space="preserve">
+    <value>Delete the selected incident?</value>
+  </data>
+  <data name="IncidentSaved" xml:space="preserve">
+    <value>Incident has been saved.</value>
+  </data>
+  <data name="IncidentRoleConfirmDelete" xml:space="preserve">
+    <value>Delete the selected role?</value>
+  </data>
+  <data name="IncidentRoleDeleteProhibited" xml:space="preserve">
+    <value>The selected role is in use and may not be deleted.</value>
+  </data>
+  <data name="DataSourceConfirmCloseAndOpen" xml:space="preserve">
+    <value>Open data source? This will close the current data source.</value>
+  </data>
+  <data name="DataSourceOpened" xml:space="preserve">
+    <value>Data source has been opened.</value>
+  </data>
+  <data name="DataSourceOpenFailed" xml:space="preserve">
+    <value>Failed to open data source.</value>
+  </data>
+  <data name="DataSourceUpgraded" xml:space="preserve">
+    <value>Data source has been upgraded.</value>
+  </data>
+  <data name="DataSourceUpgrading" xml:space="preserve">
+    <value>Upgrading data source …</value>
+  </data>
+  <data name="EmailRecipientAddressInvalid" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
+  </data>
+  <data name="EmailRecipientNotSpecified" xml:space="preserve">
+    <value>Please select a responder or enter an email address.</value>
+  </data>
+  <data name="JobConfirmDelete" xml:space="preserve">
+    <value>Delete the selected job?</value>
+  </data>
+  <data name="JobEndDateInvalid" xml:space="preserve">
+    <value>End date must be later than start date.</value>
+  </data>
+  <data name="JobLocationConfirmRemove" xml:space="preserve">
+    <value>Remove the selected locations?</value>
+  </data>
+  <data name="JobResponderConfirmRemove" xml:space="preserve">
+    <value>Remove the selected responders?</value>
+  </data>
+  <data name="JobSaved" xml:space="preserve">
+    <value>Job has been saved.</value>
+  </data>
+  <data name="JobTeamConfirmRemove" xml:space="preserve">
+    <value>Remove the selected teams?</value>
+  </data>
+  <data name="LocationConfirmDelete" xml:space="preserve">
+    <value>Delete the selected location?</value>
+  </data>
+  <data name="LocationGeolocateEmpty" xml:space="preserve">
+    <value>Address could not be located.</value>
+  </data>
+  <data name="LocationGeolocateFailed" xml:space="preserve">
+    <value>Failed to locate address. Please verify mapping settings.</value>
+  </data>
+  <data name="LocationSaved" xml:space="preserve">
+    <value>Location has been saved.</value>
+  </data>
+  <data name="LogConfirmDelete" xml:space="preserve">
+    <value>Delete the selected logs?</value>
+  </data>
+  <data name="LogPackaged" xml:space="preserve">
+    <value>Logs have been packaged.</value>
+  </data>
+  <data name="LogPackaging" xml:space="preserve">
+    <value>Packaging logs …</value>
+  </data>
+  <data name="PgmConfirmDelete" xml:space="preserve">
+    <value>Delete the selected analysis?</value>
+  </data>
+  <data name="ResponderConfirmDelete" xml:space="preserve">
+    <value>Delete the selected responder?</value>
+  </data>
+  <data name="ResponderPairConfirmIgnore" xml:space="preserve">
+    <value>Ignore the selected potentially duplicate responders?</value>
+  </data>
+  <data name="ResponderPairMerged" xml:space="preserve">
+    <value>Responders have been merged.</value>
+  </data>
+  <data name="ResponderPairNotSelected" xml:space="preserve">
+    <value>Please select two responders to merge.</value>
+  </data>
+  <data name="ResponderPairSearchEmpty" xml:space="preserve">
+    <value>No potentially duplicate responders found. You may still perform a merge by selecting two responders from the list and clicking Merge &gt;Selected.</value>
+  </data>
+  <data name="ResponderPairSearching" xml:space="preserve">
+    <value>Searching for potentially duplicate responders …</value>
+  </data>
+  <data name="ResponderSaved" xml:space="preserve">
+    <value>Responder has been saved.</value>
+  </data>
+  <data name="RosterConfirmRemove" xml:space="preserve">
+    <value>Remove the selected responders?</value>
+  </data>
+  <data name="SettingsConfirmChangeRootDirectory" xml:space="preserve">
+    <value>Change the root directory? This may cause existing data sources to stop working properly. ERHMS Info Manager™ will attempt to copy your application files and restart when settings are saved.</value>
+  </data>
+  <data name="SettingsInitializeFailed" xml:space="preserve">
+    <value>ERHMS Info Manager™ failed to initialize the following directory:
+
+{0}
+
+Settings have not been saved.</value>
+  </data>
+  <data name="SettingsSaved" xml:space="preserve">
+    <value>Settings have been saved.</value>
+  </data>
+  <data name="TeamConfirmDelete" xml:space="preserve">
+    <value>Delete the selected team?</value>
+  </data>
+  <data name="TeamResponderConfirmRemove" xml:space="preserve">
+    <value>Remove the selected responders?</value>
+  </data>
+  <data name="TeamSaved" xml:space="preserve">
+    <value>Team has been saved.</value>
+  </data>
+  <data name="TemplateConfirmDelete" xml:space="preserve">
+    <value>Delete the selected template?</value>
+  </data>
+  <data name="ViewConfirmDelete" xml:space="preserve">
+    <value>Delete the selected form?</value>
+  </data>
+  <data name="ViewFieldUnsupported" xml:space="preserve">
+    <value>The following fields are unsupported for publication to {0}:
+
+{1}</value>
+  </data>
+  <data name="WebSurveyEndDateInvalid" xml:space="preserve">
+    <value>End date must be later than start date.</value>
+  </data>
+  <data name="WebGettingSurvey" xml:space="preserve">
+    <value>Retrieving web survey details …</value>
+  </data>
+  <data name="WebPublished" xml:space="preserve">
+    <value>Form has been published to web.</value>
+  </data>
+  <data name="WebPublishFailed" xml:space="preserve">
+    <value>Failed to publish form to web. Please verify web survey settings.</value>
+  </data>
+  <data name="WebPublishing" xml:space="preserve">
+    <value>Publishing form to web …</value>
+  </data>
+  <data name="COPYRIGHT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\COPYRIGHT.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="NOTICE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\NOTICE.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="AppConfirmExit" xml:space="preserve">
+    <value>Are you sure you want to exit ERHMS Info Manager™?</value>
+  </data>
+  <data name="RootPathDirectoryExists" xml:space="preserve">
+    <value>The following directory already exists:
+
+{0}
+
+Are you sure you want to use this location?</value>
+  </data>
+  <data name="RootPathInstructions" xml:space="preserve">
+    <value>Choose a location for your application files. We'll create a directory named ERHMS Info Manager in that location.</value>
+  </data>
+  <data name="ValidationError" xml:space="preserve">
+    <value>The following fields are {0}:
+
+{1}</value>
+  </data>
+  <data name="AppError" xml:space="preserve">
+    <value>ERHMS Info Manager™ encountered an error and must shut down.</value>
+  </data>
+  <data name="DataSourceConfirmReopen" xml:space="preserve">
+    <value>Reopen the previously used data source {0}?</value>
+  </data>
+  <data name="RootPathInitializeFailed" xml:space="preserve">
+    <value>ERHMS Info Manager™ failed to initialize the following directory:
+
+{0}
+
+Please choose another location.</value>
+  </data>
+  <data name="AppConfirmReset" xml:space="preserve">
+    <value>Reset settings for ERHMS Info Manager™?</value>
+  </data>
+  <data name="AppInstallDirectory" xml:space="preserve">
+    <value>ERHMS Info Manager™ is installed in the following directory:
+
+{0}
+</value>
+  </data>
+</root>

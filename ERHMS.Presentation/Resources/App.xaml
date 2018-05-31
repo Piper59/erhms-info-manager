@@ -2,9 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:AvalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
                     xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls"
+                    xmlns:Infrastructure="clr-namespace:ERHMS.Presentation"
                     xmlns:MahApps="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:MahApps.SimpleChildWindow="clr-namespace:MahApps.Metro.SimpleChildWindow;assembly=MahApps.Metro.SimpleChildWindow"
-                    xmlns:System="clr-namespace:System;assembly=mscorlib">
+                    xmlns:System="clr-namespace:System;assembly=mscorlib"
+                    xmlns:ViewModels="clr-namespace:ERHMS.Presentation.ViewModels"
+                    xmlns:Views="clr-namespace:ERHMS.Presentation.Views">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml" />
         <ResourceDictionary Source="/MahApps.Metro;component/Styles/Controls.xaml" />
@@ -80,6 +83,20 @@
         </Style.Resources>
         <Setter Property="Margin" Value="0,0,0,5" />
     </Style>
+
+    <Infrastructure:DialogTypeMap x:Key="{x:Type Infrastructure:DialogTypeMap}">
+        <x:Type x:Key="{x:Type ViewModels:CanvasLinkViewModel}" TypeName="Views:LinkView" />
+        <x:Type x:Key="{x:Type ViewModels:CanvasViewModel}" TypeName="Views:AnalysisView" />
+        <x:Type x:Key="{x:Type ViewModels:DataSourceViewModel}" TypeName="Views:DataSourceView" />
+        <x:Type x:Key="{x:Type ViewModels:PgmLinkViewModel}" TypeName="Views:LinkView" />
+        <x:Type x:Key="{x:Type ViewModels:PgmViewModel}" TypeName="Views:AnalysisView" />
+        <x:Type x:Key="{x:Type ViewModels:PostpopulateViewModel}" TypeName="Views:PostpopulateView" />
+        <x:Type x:Key="{x:Type ViewModels:PrepopulateViewModel}" TypeName="Views:PrepopulateView" />
+        <x:Type x:Key="{x:Type ViewModels:RecipientViewModel}" TypeName="Views:RecipientView" />
+        <x:Type x:Key="{x:Type ViewModels:RoleViewModel}" TypeName="Views:RoleView" />
+        <x:Type x:Key="{x:Type ViewModels:SurveyViewModel}" TypeName="Views:SurveyView" />
+        <x:Type x:Key="{x:Type ViewModels:ViewLinkViewModel}" TypeName="Views:LinkView" />
+    </Infrastructure:DialogTypeMap>
 
     <Style TargetType="GroupBox" BasedOn="{StaticResource MetroGroupBox}">
         <Setter Property="Margin" Value="0,0,0,10" />

@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -14,8 +15,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class IncidentListChildViewModel : ListViewModel<Incident>
         {
-            public IncidentListChildViewModel(IServiceManager services)
-                : base(services)
+            public IncidentListChildViewModel()
             {
                 Refresh();
             }
@@ -45,11 +45,10 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand OpenCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
 
-        public IncidentListViewModel(IServiceManager services)
-            : base(services)
+        public IncidentListViewModel()
         {
             Title = "Incidents";
-            Incidents = new IncidentListChildViewModel(Services);
+            Incidents = new IncidentListChildViewModel();
             CreateCommand = new Command(Create);
             OpenCommand = new Command(Open, Incidents.HasSelectedItem);
             DeleteCommand = new AsyncCommand(DeleteAsync, Incidents.HasSelectedItem);
@@ -57,30 +56,24 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Services.Document.Show(() => new IncidentViewModel(Services, new Incident(true)));
+            ServiceLocator.Document.Show(() => new IncidentViewModel(new Incident(true)));
         }
 
         public void Open()
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Incident.Equals(Incidents.SelectedItem),
-                () => new IncidentViewModel(Services, Context.Incidents.Refresh(Incidents.SelectedItem)));
+                () => new IncidentViewModel(Context.Incidents.Refresh(Incidents.SelectedItem)));
         }
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected incident?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.IncidentConfirmDelete, "Delete"))
             {
                 Incidents.SelectedItem.Deleted = true;
                 Context.Incidents.Save(Incidents.SelectedItem);
-                Services.Data.Refresh(typeof(Incident));
+                ServiceLocator.Data.Refresh(typeof(Incident));
             }
-        }
-
-        public override void Dispose()
-        {
-            Incidents.Dispose();
-            base.Dispose();
         }
     }
 }

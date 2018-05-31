@@ -5,8 +5,8 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ViewLinkViewModel : LinkViewModel<View, ViewLink>
     {
-        public ViewLinkViewModel(IServiceManager services, View view)
-            : base(services, view) { }
+        public ViewLinkViewModel(View view)
+            : base(view) { }
 
         public override void Link()
         {
@@ -16,14 +16,14 @@ namespace ERHMS.Presentation.ViewModels
                 ViewId = Entity.ViewId,
                 IncidentId = Incidents.SelectedItem.IncidentId
             });
-            Services.Data.Refresh(typeof(View));
+            ServiceLocator.Data.Refresh(typeof(View));
             Close();
         }
 
         public override void Unlink()
         {
             Context.ViewLinks.DeleteByViewId(Entity.ViewId);
-            Services.Data.Refresh(typeof(View));
+            ServiceLocator.Data.Refresh(typeof(View));
             Close();
         }
     }

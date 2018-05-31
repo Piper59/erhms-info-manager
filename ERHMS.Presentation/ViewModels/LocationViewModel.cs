@@ -1,4 +1,5 @@
 ﻿using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using Microsoft.Maps.MapControl.WPF;
@@ -62,8 +63,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand CenterAndZoomOutCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
 
-        public LocationViewModel(IServiceManager services, Location location)
-            : base(services)
+        public LocationViewModel(Location location)
         {
             Title = location.New ? "New Location" : location.Name;
             Location = location;
@@ -162,7 +162,7 @@ namespace ERHMS.Presentation.ViewModels
             WebRequest request = WebRequest.Create("http://dev.virtualearth.net/REST/v1/Locations?" + query.ToString());
             try
             {
-                using (Services.Busy.BeginTask())
+                using (ServiceLocator.Busy.Begin())
                 using (WebResponse response = request.GetResponse())
                 {
                     XmlDocument document = new XmlDocument();
@@ -172,7 +172,7 @@ namespace ERHMS.Presentation.ViewModels
                     XmlElement point = document.SelectSingleElement("/v1:Response/v1:ResourceSets/v1:ResourceSet/v1:Resources/v1:Location/v1:Point", manager);
                     if (point == null)
                     {
-                        await Services.Dialog.AlertAsync("Address could not be found.");
+                        await ServiceLocator.Dialog.AlertAsync(Resources.LocationGeolocateEmpty);
                     }
                     else
                     {
@@ -188,8 +188,8 @@ namespace ERHMS.Presentation.ViewModels
             catch (Exception ex)
             {
                 Log.Logger.Warn("Failed to locate address", ex);
-                await Services.Dialog.AlertAsync("Failed to locate address. Please verify mapping settings.", ex);
-                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                await ServiceLocator.Dialog.ShowErrorAsync(Resources.LocationGeolocateFailed, ex);
+                ServiceLocator.Document.ShowSettings();
             }
         }
 
@@ -265,7 +265,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             return true;
@@ -278,8 +278,8 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             Context.Locations.Save(Location);
-            Services.Dialog.Notify("Location has been saved.");
-            Services.Data.Refresh(typeof(Location));
+            ServiceLocator.Dialog.Notify(Resources.LocationSaved);
+            ServiceLocator.Data.Refresh(typeof(Location));
             Title = Location.Name;
             Dirty = false;
             SaveState();

@@ -13,8 +13,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public Incident Incident { get; private set; }
 
-            public IncidentNoteListChildViewModel(IServiceManager services, Incident incident)
-                : base(services)
+            public IncidentNoteListChildViewModel(Incident incident)
             {
                 Incident = incident;
                 Refresh();
@@ -39,12 +38,11 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand SaveCommand { get; private set; }
 
-        public IncidentNoteListViewModel(IServiceManager services, Incident incident)
-            : base(services)
+        public IncidentNoteListViewModel(Incident incident)
         {
             Title = "Notes";
             Incident = incident;
-            IncidentNotes = new IncidentNoteListChildViewModel(services, incident);
+            IncidentNotes = new IncidentNoteListChildViewModel(incident);
             SaveCommand = new Command(Save, CanSave);
         }
 
@@ -61,15 +59,9 @@ namespace ERHMS.Presentation.ViewModels
                 Content = Content,
                 Date = DateTime.Now
             });
-            Services.Data.Refresh(typeof(IncidentNote));
+            ServiceLocator.Data.Refresh(typeof(IncidentNote));
             Content = "";
             Dirty = false;
-        }
-
-        public override void Dispose()
-        {
-            IncidentNotes.Dispose();
-            base.Dispose();
         }
     }
 }

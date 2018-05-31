@@ -1,4 +1,5 @@
 ﻿using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System.Reflection;
@@ -13,8 +14,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand PrintCommand { get; private set; }
 
-        public AboutViewModel(IServiceManager services)
-            : base(services)
+        public AboutViewModel()
         {
             Title = "About";
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -25,9 +25,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Print()
         {
-            Services.Print.Print(
-                string.Format("{0} License", Services.String.AppTitle),
-                Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Presentation.LICENSE.txt"));
+            ServiceLocator.Printer.Print(Resources.LicenseTitle, Resources.LICENSE);
         }
     }
 }

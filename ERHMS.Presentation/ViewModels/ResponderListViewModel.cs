@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class ResponderListChildViewModel : ListViewModel<Responder>
         {
-            public ResponderListChildViewModel(IServiceManager services)
-                : base(services)
+            public ResponderListChildViewModel()
             {
                 Refresh();
             }
@@ -28,18 +28,11 @@ namespace ERHMS.Presentation.ViewModels
 
             protected override IEnumerable<string> GetFilteredValues(Responder item)
             {
-                yield return item.LastName;
-                yield return item.FirstName;
-                yield return item.EmailAddress;
-                yield return item.City;
-                yield return item.State;
-                yield return item.OrganizationName;
-                yield return item.Occupation;
+                return ListViewModelExtensions.GetFilteredValues(item);
             }
         }
 
         public ResponderListChildViewModel Responders { get; private set; }
-        public ImportExportViewModel ImportExport { get; private set; }
 
         public ICommand CreateCommand { get; private set; }
         public ICommand EditCommand { get; private set; }
@@ -57,12 +50,10 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand AnalyzeClassicCommand { get; private set; }
         public ICommand AnalyzeVisualCommand { get; private set; }
 
-        public ResponderListViewModel(IServiceManager services)
-            : base(services)
+        public ResponderListViewModel()
         {
             Title = "Responders";
-            Responders = new ResponderListChildViewModel(services);
-            ImportExport = new ImportExportViewModel(services);
+            Responders = new ResponderListChildViewModel();
             CreateCommand = new Command(Create);
             EditCommand = new Command(Edit, Responders.HasOneSelectedItem);
             MergeAutomatedCommand = new AsyncCommand(MergeAutomatedAsync);
@@ -82,20 +73,20 @@ namespace ERHMS.Presentation.ViewModels
 
         public void Create()
         {
-            Services.Document.Show(() => new ResponderViewModel(Services, new Responder(true)));
+            ServiceLocator.Document.Show(() => new ResponderViewModel(new Responder(true)));
         }
 
         public void Edit()
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Responder.Equals(Responders.SelectedItems.First()),
-                () => new ResponderViewModel(Services, Context.Responders.Refresh(Responders.SelectedItems.First())));
+                () => new ResponderViewModel(Context.Responders.Refresh(Responders.SelectedItems.First())));
         }
 
         public async Task MergeAutomatedAsync()
         {
             ICollection<Tuple<Responder, Responder>> pairs = new List<Tuple<Responder, Responder>>();
-            await Services.Dialog.BlockAsync("Searching for potentially duplicate responders \u2026", () =>
+            await ServiceLocator.Dialog.BlockAsync(Resources.ResponderPairSearching, () =>
             {
                 IList<Responder> responders = Context.Responders.SelectUndeleted()
                     .OrderBy(responder => responder.FullName, StringComparer.OrdinalIgnoreCase)
@@ -107,8 +98,7 @@ namespace ERHMS.Presentation.ViewModels
                     for (int index2 = index1 + 1; index2 < responders.Count; index2++)
                     {
                         Responder responder2 = responders[index2];
-                        if (!uniquePairs[responder1.ResponderId].Contains(responder2.ResponderId, StringComparer.OrdinalIgnoreCase)
-                            && responder1.IsSimilar(responder2))
+                        if (responder1.IsSimilar(responder2) && !uniquePairs[responder1.ResponderId].Contains(responder2.ResponderId))
                         {
                             pairs.Add(Tuple.Create(responder1, responder2));
                         }
@@ -117,16 +107,11 @@ namespace ERHMS.Presentation.ViewModels
             });
             if (pairs.Count == 0)
             {
-                string message = string.Join(" ", new string[]
-                {
-                    "No potentially duplicate responders found.",
-                    "You may still perform a merge by selecting two responders from the list and clicking Merge > Selected."
-                });
-                await Services.Dialog.AlertAsync(message, "Help");
+                await ServiceLocator.Dialog.AlertAsync(Resources.ResponderPairSearchEmpty, "Help");
             }
             else
             {
-                Services.Document.Show(() => new MergeAutomatedViewModel(Services, pairs));
+                ServiceLocator.Document.Show(() => new MergeAutomatedViewModel(pairs));
             }
         }
 
@@ -135,29 +120,28 @@ namespace ERHMS.Presentation.ViewModels
             IList<Responder> responders = Responders.SelectedItems.ToList();
             if (responders.Count != 2)
             {
-                await Services.Dialog.AlertAsync("Please select two responders to merge.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.ResponderPairNotSelected);
                 return;
             }
-            Services.Document.Show(() => new MergeSelectedViewModel(
-                Services,
+            ServiceLocator.Document.Show(() => new MergeSelectedViewModel(
                 Context.Responders.Refresh(responders[0]),
                 Context.Responders.Refresh(responders[1])));
         }
 
         public async Task DeleteAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Delete the selected responder?", "Delete"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.ResponderConfirmDelete, "Delete"))
             {
                 Responder responder = Responders.SelectedItems.First();
                 responder.Deleted = true;
                 Context.Responders.Save(responder);
-                Services.Data.Refresh(typeof(Responder));
+                ServiceLocator.Data.Refresh(typeof(Responder));
             }
         }
 
         public void Email()
         {
-            Services.Document.Show(() => new EmailViewModel(Services, Context.Responders.Refresh(Responders.SelectedItems)));
+            ServiceLocator.Document.Show(() => new EmailViewModel(Context.Responders.Refresh(Responders.SelectedItems)));
         }
 
         public void ImportFromProject()
@@ -197,25 +181,14 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task AnalyzeClassicAsync()
         {
-            using (PgmViewModel model = new PgmViewModel(Services, Context.Responders.View.Id))
-            {
-                await Services.Dialog.ShowAsync(model);
-            }
+            PgmViewModel model = new PgmViewModel(Context.Responders.View.Id);
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public async Task AnalyzeVisualAsync()
         {
-            using (CanvasViewModel model = new CanvasViewModel(Services, Context.Responders.View.Id))
-            {
-                await Services.Dialog.ShowAsync(model);
-            }
-        }
-
-        public override void Dispose()
-        {
-            Responders.Dispose();
-            ImportExport.Dispose();
-            base.Dispose();
+            CanvasViewModel model = new CanvasViewModel(Context.Responders.View.Id);
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
     }
 }

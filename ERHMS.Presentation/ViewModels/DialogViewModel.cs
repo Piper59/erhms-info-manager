@@ -1,5 +1,4 @@
 ﻿using ERHMS.Presentation.Commands;
-using ERHMS.Presentation.Services;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -14,8 +13,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public ICommand CloseCommand { get; private set; }
 
-        protected DialogViewModel(IServiceManager services)
-            : base(services)
+        protected DialogViewModel()
         {
             CloseCommand = new Command(Close);
         }

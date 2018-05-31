@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using ERHMS.Utility;
 using System;
@@ -19,8 +20,7 @@ namespace ERHMS.Presentation.ViewModels
     {
         public class ViewListChildViewModel : ListViewModel<View>
         {
-            public ViewListChildViewModel(IServiceManager services)
-                : base(services)
+            public ViewListChildViewModel()
             {
                 Refresh();
             }
@@ -106,8 +106,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand RemoveAttachmentCommand { get; private set; }
         public ICommand SendCommand { get; private set; }
 
-        public EmailViewModel(IServiceManager services, IEnumerable<Responder> responders)
-            : base(services)
+        public EmailViewModel(IEnumerable<Responder> responders)
         {
             Title = "Email";
             Recipients = new ObservableCollection<RecipientChildViewModel>();
@@ -116,7 +115,7 @@ namespace ERHMS.Presentation.ViewModels
                 Recipients.Add(new RecipientChildViewModel(responder));
             }
             Attachments = new ObservableCollection<string>();
-            Views = new ViewListChildViewModel(services);
+            Views = new ViewListChildViewModel();
             AddRecipientCommand = new AsyncCommand(AddRecipientAsync);
             RemoveRecipientCommand = new Command<RecipientChildViewModel>(RemoveRecipient);
             AddAttachmentCommand = new Command(AddAttachment);
@@ -126,14 +125,12 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task AddRecipientAsync()
         {
-            using (RecipientViewModel model = new RecipientViewModel(Services))
+            RecipientViewModel model = new RecipientViewModel();
+            model.Added += (sender, e) =>
             {
-                model.Added += (sender, e) =>
-                {
-                    Recipients.Add(new RecipientChildViewModel(model));
-                };
-                await Services.Dialog.ShowAsync(model);
-            }
+                Recipients.Add(new RecipientChildViewModel(model));
+            };
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public void RemoveRecipient(RecipientChildViewModel recipient)
@@ -143,7 +140,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public void AddAttachment()
         {
-            foreach (string path in Services.Dialog.OpenFiles("Attach a File"))
+            foreach (string path in ServiceLocator.Dialog.OpenFiles("Attach a File"))
             {
                 Attachments.Add(path);
             }
@@ -171,12 +168,12 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (fields.Count > 0)
             {
-                await Services.Dialog.AlertAsync(ValidationError.Required, fields);
+                await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
             if (AppendUrl && !Views.HasSelectedItem())
             {
-                await Services.Dialog.AlertAsync("Please select a form to append a web survey URL.");
+                await ServiceLocator.Dialog.AlertAsync(Resources.EmailViewNotSelected);
                 return false;
             }
             return true;
@@ -190,14 +187,14 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (!Settings.Default.IsEmailConfigured())
             {
-                await Services.Dialog.AlertAsync("Please configure email settings.");
-                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                await ServiceLocator.Dialog.AlertAsync(Resources.EmailConfigure);
+                ServiceLocator.Document.ShowSettings();
                 return;
             }
             ICollection<RecipientChildViewModel> failures = new List<RecipientChildViewModel>();
             try
             {
-                await Services.Dialog.BlockAsync("Sending email \u2026", () =>
+                await ServiceLocator.Dialog.BlockAsync(Resources.EmailSending, () =>
                 {
                     MailMessage message = Settings.Default.GetMailMessage();
                     message.Subject = Subject;
@@ -234,18 +231,12 @@ namespace ERHMS.Presentation.ViewModels
                 });
                 if (failures.Count > 0)
                 {
-                    StringBuilder message = new StringBuilder();
-                    message.AppendLine("Delivery to the following recipients failed:");
-                    message.AppendLine();
-                    foreach (RecipientChildViewModel failure in failures)
-                    {
-                        message.AppendLine(failure.ToString());
-                    }
-                    await Services.Dialog.AlertAsync(message.ToString().Trim());
+                    string message = string.Format(Resources.EmailSendFailedForRecipients, string.Join(Environment.NewLine, failures));
+                    await ServiceLocator.Dialog.AlertAsync(message);
                 }
                 else
                 {
-                    Services.Dialog.Notify("Email has been sent.");
+                    ServiceLocator.Dialog.Notify(Resources.EmailSent);
                     Dirty = false;
                     await CloseAsync();
                 }
@@ -253,15 +244,9 @@ namespace ERHMS.Presentation.ViewModels
             catch (Exception ex)
             {
                 Log.Logger.Warn("Failed to send email", ex);
-                await Services.Dialog.AlertAsync("Failed to send email. Please verify email settings.", ex);
-                Services.Document.ShowByType(() => new SettingsViewModel(Services));
+                await ServiceLocator.Dialog.ShowErrorAsync(Resources.EmailSendFailed, ex);
+                ServiceLocator.Document.ShowSettings();
             }
-        }
-
-        public override void Dispose()
-        {
-            Views.Dispose();
-            base.Dispose();
         }
     }
 }

@@ -10,12 +10,12 @@ namespace ERHMS.Presentation.Services
     {
         IWin32Window GetOwner();
         Task AlertAsync(string message, string title = null);
-        Task AlertAsync(string message, Exception exception);
         Task AlertAsync(ValidationError error, IEnumerable<string> fields);
         Task BlockAsync(string message, Action action);
         Task<bool> ConfirmAsync(string message, string verb = null, string title = null);
         void Notify(string message);
         Task ShowAsync(DialogViewModel model);
+        Task ShowErrorAsync(string message, Exception exception);
         Task<bool> ShowLicenseAsync();
         string OpenFolder();
         string OpenFile(string title = null, string initialDirectory = null, string filter = null);

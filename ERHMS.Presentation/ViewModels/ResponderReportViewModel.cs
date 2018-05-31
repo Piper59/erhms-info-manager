@@ -47,8 +47,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand EditJobCommand { get; private set; }
         public ICommand EditRecordCommand { get; private set; }
 
-        public ResponderReportViewModel(IServiceManager services, Responder responder)
-            : base(services)
+        public ResponderReportViewModel(Responder responder)
         {
             Title = "Reports";
             Responder = responder;
@@ -122,28 +121,29 @@ namespace ERHMS.Presentation.ViewModels
 
         public void EditIncident(Incident incident)
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Incident.Equals(incident),
-                () => new IncidentDetailViewModel(Services, Context.Incidents.Refresh(incident)));
+                () => new IncidentDetailViewModel(Context.Incidents.Refresh(incident)));
         }
 
         public void EditTeam(TeamResponder teamResponder)
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Team.Equals(teamResponder.Team),
-                () => new TeamViewModel(Services, Context.Teams.Refresh(teamResponder.Team)));
+                () => new TeamViewModel(Context.Teams.Refresh(teamResponder.Team)));
         }
 
         public void EditJob(JobTicket jobTicket)
         {
-            Services.Document.Show(
+            ServiceLocator.Document.Show(
                 model => model.Job.Equals(jobTicket.Job),
-                () => new JobViewModel(Services, Context.Jobs.Refresh(jobTicket.Job)));
+                () => new JobViewModel(Context.Jobs.Refresh(jobTicket.Job)));
         }
 
         public async Task EditRecordAsync(Record record)
         {
-            await Services.Wrapper.InvokeAsync(Enter.OpenRecord.Create(Context.Project.FilePath, record.View.Name, record.UniqueKey.Value));
+            Wrapper wrapper = Enter.OpenRecord.Create(Context.Project.FilePath, record.View.Name, record.UniqueKey.Value);
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
     }
 }

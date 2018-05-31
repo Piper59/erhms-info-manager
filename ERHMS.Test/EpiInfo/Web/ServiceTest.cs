@@ -111,7 +111,7 @@ namespace ERHMS.Test.EpiInfo.Web
             {
                 Title = View.Name,
                 StartDate = now,
-                EndDate = now.Add(new TimeSpan(1, 0, 0, 0)),
+                EndDate = now.Add(TimeSpan.FromDays(1.0)),
                 ResponseType = ResponseType.Single,
                 Draft = true,
                 PublishKey = Guid.NewGuid()

@@ -19,8 +19,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             public ViewEntityRepository<ViewEntity> Entities { get; private set; }
 
-            public RecordListChildViewModel(IServiceManager services, Epi.View view)
-                : base(services)
+            public RecordListChildViewModel(View view)
             {
                 Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
                 Refresh();
@@ -32,7 +31,7 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        public Epi.View View { get; private set; }
+        public View View { get; private set; }
         public ICollection<DataGridColumn> Columns { get; private set; }
         public RecordListChildViewModel Records { get; private set; }
 
@@ -42,8 +41,7 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand DeleteCommand { get; private set; }
         public ICommand UndeleteCommand { get; private set; }
 
-        public RecordListViewModel(IServiceManager services, Epi.View view)
-            : base(services)
+        public RecordListViewModel(View view)
         {
             Title = view.Name;
             View = view;
@@ -57,7 +55,7 @@ namespace ERHMS.Presentation.ViewModels
                     Binding = new Binding(field.Name)
                 })
                 .ToList();
-            Records = new RecordListChildViewModel(services, view);
+            Records = new RecordListChildViewModel(view);
             CreateCommand = new AsyncCommand(CreateAsync);
             EditCommand = new AsyncCommand(EditAsync, Records.HasOneSelectedItem);
             PostpopulateCommand = new AsyncCommand(PostpopulateAsync, CanPostpopulate);
@@ -70,24 +68,22 @@ namespace ERHMS.Presentation.ViewModels
             Domain.View view = Context.Views.SelectById(View.Id);
             if (view.HasResponderIdField)
             {
-                using (PrepopulateViewModel model = new PrepopulateViewModel(Services, view))
-                {
-                    await Services.Dialog.ShowAsync(model);
-                }
+                PrepopulateViewModel model = new PrepopulateViewModel(view);
+                await ServiceLocator.Dialog.ShowAsync(model);
             }
             else
             {
                 Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name);
-                wrapper.AddRecordSavedHandler(Services);
-                await Services.Wrapper.InvokeAsync(wrapper);
+                wrapper.AddRecordSavedHandler();
+                await ServiceLocator.Wrapper.InvokeAsync(wrapper);
             }
         }
 
         public async Task EditAsync()
         {
             Wrapper wrapper = Enter.OpenRecord.Create(Context.Project.FilePath, View.Name, Records.SelectedItems.First().UniqueKey.Value);
-            wrapper.AddRecordSavedHandler(Services);
-            await Services.Wrapper.InvokeAsync(wrapper);
+            wrapper.AddRecordSavedHandler();
+            await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
 
         public bool CanPostpopulate()
@@ -98,19 +94,17 @@ namespace ERHMS.Presentation.ViewModels
         public async Task PostpopulateAsync()
         {
             ViewEntity entity = Records.Entities.Refresh(Records.SelectedItems.First());
-            using (PostpopulateViewModel model = new PostpopulateViewModel(Services, View, entity))
+            PostpopulateViewModel model = new PostpopulateViewModel(View, entity);
+            model.Saved += (sender, e) =>
             {
-                model.Saved += (sender, e) =>
-                {
-                    Records.Refresh();
-                };
-                await Services.Dialog.ShowAsync(model);
-            }
+                Records.Refresh();
+            };
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         private void SetDeleted(bool deleted)
         {
-            using (Services.Busy.BeginTask())
+            using (ServiceLocator.Busy.Begin())
             {
                 foreach (ViewEntity entity in Records.Entities.Refresh(Records.SelectedItems))
                 {
@@ -132,12 +126,6 @@ namespace ERHMS.Presentation.ViewModels
         public void Undelete()
         {
             SetDeleted(false);
-        }
-
-        public override void Dispose()
-        {
-            Records.Dispose();
-            base.Dispose();
         }
     }
 }

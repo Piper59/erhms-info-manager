@@ -1,6 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             private ICollection<Tuple<Responder, Responder>> items;
 
-            public PairListChildViewModel(IServiceManager services, IEnumerable<Tuple<Responder, Responder>> pairs)
-                : base(services)
+            public PairListChildViewModel(IEnumerable<Tuple<Responder, Responder>> pairs)
             {
                 items = pairs.ToList();
                 Refresh();
@@ -46,22 +46,20 @@ namespace ERHMS.Presentation.ViewModels
         public ICommand MergeCommand { get; private set; }
         public ICommand IgnoreCommand { get; private set; }
 
-        public MergeAutomatedViewModel(IServiceManager services, IEnumerable<Tuple<Responder, Responder>> pairs)
-            : base(services)
+        public MergeAutomatedViewModel(IEnumerable<Tuple<Responder, Responder>> pairs)
         {
             Title = "Duplicates";
-            Pairs = new PairListChildViewModel(services, pairs);
+            Pairs = new PairListChildViewModel(pairs);
             MergeCommand = new Command(Merge, Pairs.HasOneSelectedItem);
             IgnoreCommand = new AsyncCommand(IgnoreAsync, Pairs.HasAnySelectedItems);
         }
 
         public void Merge()
         {
-            Services.Document.Show(() =>
+            ServiceLocator.Document.Show(() =>
             {
                 Tuple<Responder, Responder> pair = Pairs.SelectedItems.First();
                 MergeSelectedViewModel model = new MergeSelectedViewModel(
-                    Services,
                     Context.Responders.Refresh(pair.Item1),
                     Context.Responders.Refresh(pair.Item2));
                 model.Saved += (sender, e) =>
@@ -75,9 +73,9 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task IgnoreAsync()
         {
-            if (await Services.Dialog.ConfirmAsync("Ignore the selected potentially duplicate responders?", "Ignore"))
+            if (await ServiceLocator.Dialog.ConfirmAsync(Resources.ResponderPairConfirmIgnore, "Ignore"))
             {
-                using (Services.Busy.BeginTask())
+                using (ServiceLocator.Busy.Begin())
                 {
                     foreach (Tuple<Responder, Responder> pair in Pairs.SelectedItems)
                     {
@@ -91,12 +89,6 @@ namespace ERHMS.Presentation.ViewModels
                 }
                 Pairs.Refresh();
             }
-        }
-
-        public override void Dispose()
-        {
-            Pairs.Dispose();
-            base.Dispose();
         }
     }
 }
