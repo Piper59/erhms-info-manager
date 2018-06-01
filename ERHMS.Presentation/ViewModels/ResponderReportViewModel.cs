@@ -18,28 +18,28 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<Incident> Incidents
         {
             get { return incidents; }
-            set { SetProperty(nameof(Incidents), ref incidents, value); }
+            private set { SetProperty(nameof(Incidents), ref incidents, value); }
         }
 
         private ICollection<TeamResponder> teamResponders;
         public ICollection<TeamResponder> TeamResponders
         {
             get { return teamResponders; }
-            set { SetProperty(nameof(TeamResponders), ref teamResponders, value); }
+            private set { SetProperty(nameof(TeamResponders), ref teamResponders, value); }
         }
 
         private ICollection<JobTicket> jobTickets;
         public ICollection<JobTicket> JobTickets
         {
             get { return jobTickets; }
-            set { SetProperty(nameof(JobTickets), ref jobTickets, value); }
+            private set { SetProperty(nameof(JobTickets), ref jobTickets, value); }
         }
 
         private ICollection<Record> records;
         public ICollection<Record> Records
         {
             get { return records; }
-            set { SetProperty(nameof(Records), ref records, value); }
+            private set { SetProperty(nameof(Records), ref records, value); }
         }
 
         public ICommand EditIncidentCommand { get; private set; }

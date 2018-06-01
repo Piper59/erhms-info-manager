@@ -28,7 +28,7 @@ namespace ERHMS.Presentation.ViewModels
         public Survey Survey
         {
             get { return survey; }
-            set { SetProperty(nameof(Survey), ref survey, value); }
+            private set { SetProperty(nameof(Survey), ref survey, value); }
         }
 
         public ICommand PublishCommand { get; private set; }

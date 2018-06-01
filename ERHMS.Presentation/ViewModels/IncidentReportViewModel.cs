@@ -32,35 +32,35 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<IncidentNote> IncidentNotes
         {
             get { return incidentNotes; }
-            set { SetProperty(nameof(IncidentNotes), ref incidentNotes, value); }
+            private set { SetProperty(nameof(IncidentNotes), ref incidentNotes, value); }
         }
 
         private ICollection<Job> jobs;
         public ICollection<Job> Jobs
         {
             get { return jobs; }
-            set { SetProperty(nameof(Jobs), ref jobs, value); }
+            private set { SetProperty(nameof(Jobs), ref jobs, value); }
         }
 
         private ICollection<JobNote> jobNotes;
         public ICollection<JobNote> JobNotes
         {
             get { return jobNotes; }
-            set { SetProperty(nameof(JobNotes), ref jobNotes, value); }
+            private set { SetProperty(nameof(JobNotes), ref jobNotes, value); }
         }
 
         private ICollection<JobTeam> jobTeams;
         public ICollection<JobTeam> JobTeams
         {
             get { return jobTeams; }
-            set { SetProperty(nameof(JobTeams), ref jobTeams, value); }
+            private set { SetProperty(nameof(JobTeams), ref jobTeams, value); }
         }
 
         private ICollection<JobTicket> jobTickets;
         public ICollection<JobTicket> JobTickets
         {
             get { return jobTickets; }
-            set { SetProperty(nameof(JobTickets), ref jobTickets, value); }
+            private set { SetProperty(nameof(JobTickets), ref jobTickets, value); }
         }
 
         public ICommand EditJobCommand { get; private set; }

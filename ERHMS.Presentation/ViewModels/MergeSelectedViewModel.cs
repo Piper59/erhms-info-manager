@@ -20,35 +20,35 @@ namespace ERHMS.Presentation.ViewModels
             public string Name
             {
                 get { return name; }
-                set { SetProperty(nameof(Name), ref name, value); }
+                private set { SetProperty(nameof(Name), ref name, value); }
             }
 
             private object value1;
             public object Value1
             {
                 get { return value1; }
-                set { SetProperty(nameof(Value1), ref value1, value); }
+                private set { SetProperty(nameof(Value1), ref value1, value); }
             }
 
             private object value2;
             public object Value2
             {
                 get { return value2; }
-                set { SetProperty(nameof(Value2), ref value2, value); }
+                private set { SetProperty(nameof(Value2), ref value2, value); }
             }
 
             private string text1;
             public string Text1
             {
                 get { return text1; }
-                set { SetProperty(nameof(Text1), ref text1, value); }
+                private set { SetProperty(nameof(Text1), ref text1, value); }
             }
 
             private string text2;
             public string Text2
             {
                 get { return text2; }
-                set { SetProperty(nameof(Text2), ref text2, value); }
+                private set { SetProperty(nameof(Text2), ref text2, value); }
             }
 
             private bool selected1;
