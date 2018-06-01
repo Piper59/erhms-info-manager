@@ -1,4 +1,5 @@
-﻿using Epi;
+﻿using CommonServiceLocator;
+using Epi;
 using ERHMS.DataAccess;
 using ERHMS.EpiInfo;
 using ERHMS.Presentation.Dialogs;
@@ -14,7 +15,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Unity;
+using Unity.ServiceLocation;
 using Resx = ERHMS.Presentation.Properties.Resources;
+using ServiceLocator = ERHMS.Presentation.Services.ServiceLocator;
 using Settings = ERHMS.Utility.Settings;
 
 namespace ERHMS.Presentation
@@ -129,7 +133,18 @@ namespace ERHMS.Presentation
 
         private void InitializeServices(MainView view)
         {
-            // TODO
+            IUnityContainer container = new UnityContainer();
+            container.RegisterInstance<IAppService>(this);
+            container.RegisterInstance<IBusyService>(new BusyService());
+            container.RegisterInstance<IDataService>(new DataService());
+            container.RegisterInstance<IDialogService>(view);
+            container.RegisterInstance<IDispatcherService>(new DispatcherService());
+            container.RegisterInstance<IDocumentService>(view.DataContext);
+            container.RegisterInstance<IPrinterService>(new PrinterService());
+            container.RegisterInstance<IProcessService>(new ProcessService());
+            container.RegisterInstance<IWrapperService>(view);
+            IServiceLocator serviceLocator = new UnityServiceLocator(container);
+            CommonServiceLocator.ServiceLocator.SetLocatorProvider(() => serviceLocator);
         }
 
         private async void MainWindow_ContentRendered(object sender, EventArgs e)
