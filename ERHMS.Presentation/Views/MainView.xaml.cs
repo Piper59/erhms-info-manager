@@ -19,7 +19,7 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
-using Resx = ERHMS.Presentation.Properties.Resources;
+using ResXResources = ERHMS.Presentation.Properties.Resources;
 
 namespace ERHMS.Presentation.Views
 {
@@ -53,7 +53,7 @@ namespace ERHMS.Presentation.Views
                 return;
             }
             closeRequested = true;
-            if (await ConfirmAsync(Resx.AppConfirmExit, "Exit"))
+            if (await ConfirmAsync(ResXResources.AppConfirmExit, "Exit"))
             {
                 closing = true;
                 Close();
@@ -84,7 +84,7 @@ namespace ERHMS.Presentation.Views
 
         public async Task AlertAsync(ValidationError error, IEnumerable<string> fields)
         {
-            string message = string.Format(Resx.ValidationError, error.ToString().ToLower(), string.Join(Environment.NewLine, fields));
+            string message = string.Format(ResXResources.ValidationError, error.ToString().ToLower(), string.Join(Environment.NewLine, fields));
             await AlertAsync(message);
         }
 
@@ -130,7 +130,7 @@ namespace ERHMS.Presentation.Views
         public void Notify(string message)
         {
             Log.Logger.DebugFormat("Notifying: {0}", message);
-            ToastPopUp popup = new ToastPopUp(Resx.AppTitle, message, NotificationType.Information)
+            ToastPopUp popup = new ToastPopUp(ResXResources.AppTitle, message, NotificationType.Information)
             {
                 Background = Brushes.White,
                 BorderBrush = Brushes.Black
@@ -206,10 +206,10 @@ namespace ERHMS.Presentation.Views
 
         public string GetRootPath()
         {
-            string directoryName = Resx.AppBareTitle;
+            string directoryName = ResXResources.AppBareTitle;
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                dialog.Description = Resx.RootPathInstructions;
+                dialog.Description = ResXResources.RootPathInstructions;
                 string path;
                 while (true)
                 {
@@ -226,8 +226,8 @@ namespace ERHMS.Presentation.Views
                     {
                         break;
                     }
-                    string message = string.Format(Resx.RootPathDirectoryExists, path);
-                    if (MessageBox.Show(message, Resx.AppTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                    string message = string.Format(ResXResources.RootPathDirectoryExists, path);
+                    if (MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.OK)
                     {
                         break;
                     }

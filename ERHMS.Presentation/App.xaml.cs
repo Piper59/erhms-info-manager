@@ -17,7 +17,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Unity;
 using Unity.ServiceLocation;
-using Resx = ERHMS.Presentation.Properties.Resources;
+using ResXResources = ERHMS.Presentation.Properties.Resources;
 using ServiceLocator = ERHMS.Presentation.Services.ServiceLocator;
 using Settings = ERHMS.Utility.Settings;
 
@@ -35,7 +35,7 @@ namespace ERHMS.Presentation
             {
                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
                 {
-                    if (MessageBox.Show(Resx.AppConfirmReset, Resx.AppTitle, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show(ResXResources.AppConfirmReset, ResXResources.AppTitle, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         ResetSettings();
                     }
@@ -64,7 +64,7 @@ namespace ERHMS.Presentation
             Log.Logger.Fatal("Fatal error", ex);
             if (errored.Exchange(true) == false)
             {
-                MessageBox.Show(Resx.AppError, Resx.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ResXResources.AppError, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -90,10 +90,10 @@ namespace ERHMS.Presentation
         {
             InitializeComponent();
             ShutdownMode = ShutdownMode.OnMainWindowClose;
-            Resources.Add("AppTitle", Resx.AppTitle);
-            Resources.Add("COPYRIGHT", Resx.COPYRIGHT.Trim());
-            Resources.Add("LICENSE", Resx.LICENSE.Trim());
-            Resources.Add("NOTICE", Resx.NOTICE.Trim());
+            Resources.Add("AppTitle", ResXResources.AppTitle);
+            Resources.Add("COPYRIGHT", ResXResources.COPYRIGHT.Trim());
+            Resources.Add("LICENSE", ResXResources.LICENSE.Trim());
+            Resources.Add("NOTICE", ResXResources.NOTICE.Trim());
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -176,7 +176,7 @@ namespace ERHMS.Presentation
                 ProjectInfo projectInfo;
                 if (ProjectInfo.TryRead(Settings.Default.LastDataSourcePath, out projectInfo))
                 {
-                    string message = string.Format(Resx.DataSourceConfirmReopen, projectInfo.Name);
+                    string message = string.Format(ResXResources.DataSourceConfirmReopen, projectInfo.Name);
                     if (await ServiceLocator.Dialog.ConfirmAsync(message, "Reopen"))
                     {
                         await ServiceLocator.Document.SetContextAsync(projectInfo);
@@ -221,7 +221,7 @@ namespace ERHMS.Presentation
                         catch (Exception ex)
                         {
                             Log.Logger.Warn("Failed to initialize root path", ex);
-                            string message = string.Format(Resx.RootPathInitializeFailed, path);
+                            string message = string.Format(ResXResources.RootPathInitializeFailed, path);
                             await ServiceLocator.Dialog.ShowErrorAsync(message, ex);
                         }
                     }
@@ -233,7 +233,7 @@ namespace ERHMS.Presentation
             configuration.Directories.LogDir = Path.GetDirectoryName(Log.FilePath);
             configuration.Save();
             configuration = ConfigurationExtensions.Load();
-            string text = string.Format(Resx.AppInstallDirectory, AssemblyExtensions.GetEntryDirectoryPath());
+            string text = string.Format(ResXResources.AppInstallDirectory, AssemblyExtensions.GetEntryDirectoryPath());
             File.WriteAllText(Path.Combine(configuration.GetRootPath(), "INSTALL.txt"), text);
             return true;
         }
@@ -247,9 +247,9 @@ namespace ERHMS.Presentation
                 IOExtensions.CopyDirectory(
                     Path.Combine(AssemblyExtensions.GetEntryDirectoryPath(), "Templates"),
                     configuration.Directories.Templates);
-                File.WriteAllText(Path.Combine(path, "COPYRIGHT.txt"), Resx.COPYRIGHT);
-                File.WriteAllText(Path.Combine(path, "LICENSE.txt"), Resx.LICENSE);
-                File.WriteAllText(Path.Combine(path, "NOTICE.txt"), Resx.NOTICE);
+                File.WriteAllText(Path.Combine(path, "COPYRIGHT.txt"), ResXResources.COPYRIGHT);
+                File.WriteAllText(Path.Combine(path, "LICENSE.txt"), ResXResources.LICENSE);
+                File.WriteAllText(Path.Combine(path, "NOTICE.txt"), ResXResources.NOTICE);
                 configuration.Save();
                 configuration = ConfigurationExtensions.Load();
                 if (!SampleDataContext.Exists())
