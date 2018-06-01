@@ -16,6 +16,13 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class MainViewModel : ViewModelBase, IDocumentService
     {
+        private bool hasContext;
+        public bool HasContext
+        {
+            get { return hasContext; }
+            private set { SetProperty(nameof(HasContext), ref hasContext, value); }
+        }
+
         public ObservableCollection<DocumentViewModel> Documents { get; private set; }
 
         private DocumentViewModel activeDocument;
@@ -58,15 +65,15 @@ namespace ERHMS.Presentation.ViewModels
             Title = Resources.AppTitle;
             Documents = new ObservableCollection<DocumentViewModel>();
             ShowDataSourcesCommand = new Command(ShowDataSources);
-            ShowRespondersCommand = new Command(ShowResponders, HasContext);
-            CreateResponderCommand = new Command(CreateResponder, HasContext);
-            ShowIncidentsCommand = new Command(ShowIncidents, HasContext);
-            CreateIncidentCommand = new Command(CreateIncident, HasContext);
-            ShowViewsCommand = new Command(ShowViews, HasContext);
-            ShowTemplatesCommand = new Command(ShowTemplates, HasContext);
-            ShowAssignmentsCommand = new Command(ShowAssignments, HasContext);
-            ShowPgmsCommand = new Command(ShowPgms, HasContext);
-            ShowCanvasesCommand = new Command(ShowCanvases, HasContext);
+            ShowRespondersCommand = new Command(ShowResponders, CanShowContextUnsafe);
+            CreateResponderCommand = new Command(CreateResponder, CanShowContextUnsafe);
+            ShowIncidentsCommand = new Command(ShowIncidents, CanShowContextUnsafe);
+            CreateIncidentCommand = new Command(CreateIncident, CanShowContextUnsafe);
+            ShowViewsCommand = new Command(ShowViews, CanShowContextUnsafe);
+            ShowTemplatesCommand = new Command(ShowTemplates, CanShowContextUnsafe);
+            ShowAssignmentsCommand = new Command(ShowAssignments, CanShowContextUnsafe);
+            ShowPgmsCommand = new Command(ShowPgms, CanShowContextUnsafe);
+            ShowCanvasesCommand = new Command(ShowCanvases, CanShowContextUnsafe);
             ShowStartCommand = new Command(ShowStart);
             ShowSettingsCommand = new Command(ShowSettings);
             ShowLogsCommand = new Command(ShowLogs);
@@ -164,6 +171,10 @@ namespace ERHMS.Presentation.ViewModels
                 await ServiceLocator.Dialog.ShowErrorAsync(Resources.DataSourceOpenFailed, ex);
                 ShowDataSources();
             }
+            finally
+            {
+                HasContext = Context != null;
+            }
         }
 
         private async Task OnContextSetAsync()
@@ -234,7 +245,7 @@ namespace ERHMS.Presentation.ViewModels
             return Show(model => true, constructor);
         }
 
-        public bool HasContext()
+        public bool CanShowContextUnsafe()
         {
             return Context != null;
         }

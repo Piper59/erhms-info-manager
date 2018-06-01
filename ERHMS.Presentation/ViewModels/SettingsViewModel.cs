@@ -20,6 +20,13 @@ namespace ERHMS.Presentation.ViewModels
     {
         private Configuration configuration;
 
+        private bool hasContext;
+        public bool HasContext
+        {
+            get { return hasContext; }
+            private set { SetProperty(nameof(HasContext), ref hasContext, value); }
+        }
+
         public ICollection<string> LogLevelNames { get; private set; }
 
         private string logLevelName;
@@ -150,6 +157,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = "Settings";
             configuration = Configuration.GetNewInstance();
+            HasContext = Context != null;
             LogLevelNames = Log.LevelNames;
             LogLevelName = Settings.Default.LogLevelName;
             RootPath = configuration.GetRootPath();

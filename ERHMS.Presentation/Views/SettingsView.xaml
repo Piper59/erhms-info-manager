@@ -52,13 +52,13 @@
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Roles"
-                          Visibility="{Binding Context, Converter={StaticResource NullToVisibilityInverter}}">
+                          Visibility="{Binding HasContext, Converter={StaticResource BooleanToVisibilityInverter}}">
                     <TextBlock TextWrapping="Wrap">
                         To customize roles, <Hyperlink Command="{Binding ShowDataSourcesCommand}">open a data source</Hyperlink>.
                     </TextBlock>
                 </GroupBox>
                 <GroupBox Header="Roles"
-                          Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                          Visibility="{Binding HasContext, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />

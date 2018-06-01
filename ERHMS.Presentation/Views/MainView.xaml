@@ -36,21 +36,21 @@
                           Header="E_xit" />
             </MenuItem>
             <MenuItem Header="_Responders"
-                      Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                      Visibility="{Binding HasContext, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <MenuItem Command="{Binding ShowRespondersCommand}"
                           Header="Show _All" />
                 <MenuItem Command="{Binding CreateResponderCommand}"
                           Header="Create _New" />
             </MenuItem>
             <MenuItem Header="_Incidents"
-                      Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                      Visibility="{Binding HasContext, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <MenuItem Command="{Binding ShowIncidentsCommand}"
                           Header="Show _All" />
                 <MenuItem Command="{Binding CreateIncidentCommand}"
                           Header="Create _New" />
             </MenuItem>
             <MenuItem Header="_Data"
-                      Visibility="{Binding Context, Converter={StaticResource NullToVisibilityConverter}}">
+                      Visibility="{Binding HasContext, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <MenuItem Command="{Binding ShowViewsCommand}"
                           Header="_Forms" />
                 <MenuItem Command="{Binding ShowTemplatesCommand}"
