@@ -91,9 +91,9 @@ namespace ERHMS.Presentation
             InitializeComponent();
             ShutdownMode = ShutdownMode.OnMainWindowClose;
             Resources.Add("AppTitle", Resx.AppTitle);
-            Resources.Add("COPYRIGHT", Resx.COPYRIGHT);
-            Resources.Add("LICENSE", Resx.LICENSE);
-            Resources.Add("NOTICE", Resx.NOTICE);
+            Resources.Add("COPYRIGHT", Resx.COPYRIGHT.Trim());
+            Resources.Add("LICENSE", Resx.LICENSE.Trim());
+            Resources.Add("NOTICE", Resx.NOTICE.Trim());
         }
 
         protected override void OnStartup(StartupEventArgs e)
