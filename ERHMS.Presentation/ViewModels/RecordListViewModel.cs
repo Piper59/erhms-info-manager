@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Wrappers;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
+using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
 {
@@ -88,7 +90,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public bool CanPostpopulate()
         {
-            return View.Fields.Contains("ResponderID") && Records.HasOneSelectedItem();
+            return View.Fields.Contains(FieldNames.ResponderId) && Records.HasOneSelectedItem();
         }
 
         public async Task PostpopulateAsync()

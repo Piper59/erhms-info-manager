@@ -8,13 +8,13 @@ namespace ERHMS.DataAccess
 {
     public class ViewRepository : EpiInfoEntityRepository<View, ViewLink>
     {
-        internal const string HasResponderIdFieldSql = @"
+        internal static readonly string HasResponderIdFieldSql = string.Format(@"
             (
                 SELECT COUNT(*)
                 FROM [metaFields]
                 WHERE [metaFields].[ViewId] = [metaViews].[ViewId]
-                AND [metaFields].[Name] = 'ResponderID'
-            ) AS [HasResponderIdField]";
+                AND [metaFields].[Name] = '{0}'
+            ) AS [HasResponderIdField]", FieldNames.ResponderId);
 
         public static void Configure()
         {

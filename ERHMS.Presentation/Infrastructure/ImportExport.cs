@@ -92,21 +92,21 @@ namespace ERHMS.Presentation
                     ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
                     foreach (Record record in Service.GetRecords(survey))
                     {
-                        if (record.ContainsKey("ResponderID") && record.ContainsKey("ResponderEmailAddress"))
+                        if (record.ContainsKey(FieldNames.ResponderId) && record.ContainsKey(FieldNames.ResponderEmailAddress))
                         {
                             ViewEntity entity = entities.SelectById(record.GlobalRecordId);
-                            if (entity != null && !string.IsNullOrEmpty(entity.GetProperty("ResponderID") as string))
+                            if (entity != null && !string.IsNullOrEmpty(entity.GetProperty(FieldNames.ResponderId) as string))
                             {
                                 continue;
                             }
-                            Responder responder = responders[record["ResponderEmailAddress"]].FirstOrDefault();
+                            Responder responder = responders[record[FieldNames.ResponderEmailAddress]].FirstOrDefault();
                             if (responder == null)
                             {
                                 unlinked = true;
                             }
                             else
                             {
-                                record["ResponderID"] = responder.ResponderId;
+                                record[FieldNames.ResponderId] = responder.ResponderId;
                             }
                         }
                         entities.Save(record);

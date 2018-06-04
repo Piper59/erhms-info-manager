@@ -736,7 +736,7 @@ namespace ERHMS.Test.DataAccess
             if (incident == null)
             {
                 Field field = page.CreateField(MetaFieldType.Text);
-                field.Name = "ResponderID";
+                field.Name = FieldNames.ResponderId;
                 field.SaveToDb();
             }
             else
@@ -812,7 +812,7 @@ namespace ERHMS.Test.DataAccess
             {
                 Assert.AreEqual(0, context.Records.SelectByResponderId(responder.ResponderId).Count());
                 ViewEntity entity = new ViewEntity(true);
-                entity.SetProperty("ResponderID", responder.ResponderId);
+                entity.SetProperty(FieldNames.ResponderId, responder.ResponderId);
                 entities.Save(entity);
                 Assert.AreEqual(1, context.Records.SelectByResponderId(responder.ResponderId).Count());
             }

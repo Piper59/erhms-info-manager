@@ -2,6 +2,7 @@
 using Epi;
 using ERHMS.Dapper;
 using ERHMS.Domain;
+using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,6 +17,11 @@ namespace ERHMS.DataAccess
         {
             TypeMap typeMap = new TypeMap(typeof(Record));
             SqlMapper.SetTypeMap(typeof(Record), typeMap);
+        }
+
+        private static string Escape(string identifier)
+        {
+            return DbExtensions.Escape(identifier);
         }
 
         public DataContext Context { get; private set; }
@@ -46,7 +52,7 @@ namespace ERHMS.DataAccess
                     string sql = "SELECT * FROM [metaFields]";
                     fields = connection.Select(sql, transaction: transaction);
                 }
-                foreach (DataRow field in fields.Select("Name = 'ResponderID'"))
+                foreach (DataRow field in fields.Select(string.Format("Name = '{0}'", FieldNames.ResponderId)))
                 {
                     View view = views[field.Field<int>("ViewId")];
                     string viewTableName = view.Name;
@@ -57,7 +63,7 @@ namespace ERHMS.DataAccess
                     }
                     SqlBuilder sql = new SqlBuilder();
                     sql.AddTable(viewTableName);
-                    sql.SelectClauses.Add("[ResponderID]");
+                    sql.SelectClauses.Add(Escape(FieldNames.ResponderId));
                     sql.AddTableFromClause(JoinType.Inner, pageTableName, ColumnNames.GLOBAL_RECORD_ID, viewTableName, ColumnNames.GLOBAL_RECORD_ID);
                     sql.OtherClauses = clauses;
                     using (IDataReader reader = connection.ExecuteReader(sql.ToString(), parameters, transaction))
@@ -84,7 +90,7 @@ namespace ERHMS.DataAccess
 
         public IEnumerable<Record> SelectByResponderId(string responderId)
         {
-            string clauses = "WHERE [ResponderID] = @ResponderId";
+            string clauses = string.Format("WHERE {0} = @ResponderId", Escape(FieldNames.ResponderId));
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@ResponderId", responderId);
             return Select(clauses, parameters);

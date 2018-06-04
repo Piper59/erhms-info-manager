@@ -42,7 +42,7 @@ namespace ERHMS.Presentation.ViewModels
             Entity = entity;
             Entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
             Responders = new ResponderListChildViewModel();
-            Responders.SelectById(entity.GetProperty("ResponderID") as string);
+            Responders.SelectById(entity.GetProperty(FieldNames.ResponderId) as string);
             LinkCommand = new Command(Link, Responders.HasSelectedItem);
             UnlinkCommand = new Command(Unlink);
         }
@@ -60,7 +60,7 @@ namespace ERHMS.Presentation.ViewModels
         private void SetResponderId(string responderId)
         {
             ViewEntity entity = Entities.Refresh(Entity);
-            entity.SetProperty("ResponderID", responderId);
+            entity.SetProperty(FieldNames.ResponderId, responderId);
             Entities.Save(entity);
             OnSaved();
             Close();

@@ -63,6 +63,7 @@
     <Compile Include="Canvas.cs" />
     <Compile Include="CanvasLink.cs" />
     <Compile Include="EpiInfoEntity.cs" />
+    <Compile Include="FieldNames.cs" />
     <Compile Include="Incident.cs" />
     <Compile Include="IncidentEntity.cs" />
     <Compile Include="IncidentNote.cs" />

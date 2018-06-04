@@ -13,8 +13,8 @@ namespace ERHMS.Domain
 
         public string ResponderId
         {
-            get { return GetProperty<string>("ResponderID"); }
-            set { SetProperty("ResponderID", value); }
+            get { return GetProperty<string>(FieldNames.ResponderId); }
+            set { SetProperty(FieldNames.ResponderId, value); }
         }
     }
 }
