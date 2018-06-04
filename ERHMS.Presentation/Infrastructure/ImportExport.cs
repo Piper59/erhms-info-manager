@@ -90,7 +90,7 @@ namespace ERHMS.Presentation
                     ILookup<string, Responder> responders = Context.Responders.Select()
                         .ToLookup(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
                     ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
-                    foreach (Record record in Service.GetRecords(survey))
+                    foreach (Record record in Service.GetRecords(survey).OrderBy(record => record.ModifiedOn))
                     {
                         if (record.ContainsKey(FieldNames.ResponderId) && record.ContainsKey(FieldNames.ResponderEmailAddress))
                         {

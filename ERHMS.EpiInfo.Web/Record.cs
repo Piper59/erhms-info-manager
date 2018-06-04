@@ -25,6 +25,8 @@ namespace ERHMS.EpiInfo.Web
         };
 
         public string GlobalRecordId { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
 
         public Record()
             : base(StringComparer.OrdinalIgnoreCase) { }
