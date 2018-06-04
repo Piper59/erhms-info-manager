@@ -32,7 +32,7 @@ namespace ERHMS.Test.EpiInfo.Web
         [Test]
         public void GetAndSetValueTest()
         {
-            Record record = new Record(Guid.Empty.ToString());
+            Record record = new Record();
             record.SetValues(Assembly.GetExecutingAssembly().GetManifestResourceText("ERHMS.Test.Resources.Record.xml"));
             for (int index = 1; index <= 2; index++)
             {

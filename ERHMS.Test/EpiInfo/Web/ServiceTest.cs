@@ -157,7 +157,7 @@ namespace ERHMS.Test.EpiInfo.Web
             {
                 for (int index = 0; index < 10; index++)
                 {
-                    Record record = new Record(Guid.NewGuid().ToString());
+                    Record record = new Record();
                     record["GENDER"] = random.NextDouble() < 0.5 ? "1" : "2";
                     PreFilledAnswerRequest request = new PreFilledAnswerRequest
                     {
