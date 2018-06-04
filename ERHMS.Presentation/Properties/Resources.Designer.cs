@@ -373,7 +373,7 @@ namespace ERHMS.Presentation.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To get started, you must open or create a data source. Click Open or Add &gt;New on the Data Sources screen..
+        ///   Looks up a localized string similar to To get started, you must open or create a data source. Click Open or Add &gt; New on the Data Sources screen..
         /// </summary>
         internal static string GetStarted {
             get {
@@ -638,7 +638,7 @@ namespace ERHMS.Presentation.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No potentially duplicate responders found. You may still perform a merge by selecting two responders from the list and clicking Merge &gt;Selected..
+        ///   Looks up a localized string similar to No potentially duplicate responders found. You may still perform a merge by selecting two responders from the list and clicking Merge &gt; Selected..
         /// </summary>
         internal static string ResponderPairSearchEmpty {
             get {

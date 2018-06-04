@@ -223,7 +223,7 @@
     <value>Please select a form to append a web survey URL.</value>
   </data>
   <data name="GetStarted" xml:space="preserve">
-    <value>To get started, you must open or create a data source. Click Open or Add &gt;New on the Data Sources screen.</value>
+    <value>To get started, you must open or create a data source. Click Open or Add &gt; New on the Data Sources screen.</value>
   </data>
   <data name="IncidentConfirmDelete" xml:space="preserve">
     <value>Delete the selected incident?</value>
@@ -307,7 +307,7 @@
     <value>Please select two responders to merge.</value>
   </data>
   <data name="ResponderPairSearchEmpty" xml:space="preserve">
-    <value>No potentially duplicate responders found. You may still perform a merge by selecting two responders from the list and clicking Merge &gt;Selected.</value>
+    <value>No potentially duplicate responders found. You may still perform a merge by selecting two responders from the list and clicking Merge &gt; Selected.</value>
   </data>
   <data name="ResponderPairSearching" xml:space="preserve">
     <value>Searching for potentially duplicate responders …</value>
