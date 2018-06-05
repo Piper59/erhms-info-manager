@@ -9,8 +9,8 @@
     <Border Style="{StaticResource ChildWindowRoot}">
         <StackPanel>
             <TextBlock TextWrapping="Wrap">
-                The selected form appears to contain responder data fields.
-                If you want to prepopulate these fields, select a responder from the list below and click Continue.
+                The selected form appears to contain responder data.
+                If you want to prepopulate this data, select a responder from the list below and click Continue.
                 Otherwise, you may continue to the form without first selecting a responder.
             </TextBlock>
             <ComboBox AutomationProperties.Name="Responder"

@@ -39,7 +39,7 @@ namespace ERHMS.Presentation.ViewModels
 
         public PrepopulateViewModel(View view)
         {
-            Title = "Prepopulate Responder Data Fields";
+            Title = "Prepopulate Responder Data";
             View = view;
             Responders = new ResponderListChildViewModel(view.Incident);
             ContinueCommand = new AsyncCommand(ContinueAsync);
