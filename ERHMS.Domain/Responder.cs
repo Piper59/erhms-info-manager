@@ -321,7 +321,7 @@ namespace ERHMS.Domain
             {
                 return true;
             }
-            if (BirthDate.HasValue && responder.BirthDate.HasValue && BirthDate.Value == responder.BirthDate.Value)
+            if (BirthDate.HasValue && responder.BirthDate.HasValue && BirthDate == responder.BirthDate)
             {
                 return true;
             }

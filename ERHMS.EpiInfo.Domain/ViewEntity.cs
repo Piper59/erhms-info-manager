@@ -63,7 +63,7 @@ namespace ERHMS.EpiInfo.Domain
 
         public bool Deleted
         {
-            get { return RecordStatus.HasValue && RecordStatus.Value == 0; }
+            get { return RecordStatus == 0; }
             set { RecordStatus = (short)(value ? 0 : 1); }
         }
 

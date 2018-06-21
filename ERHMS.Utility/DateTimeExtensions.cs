@@ -6,7 +6,7 @@ namespace ERHMS.Utility
     {
         public static bool AreInOrder(DateTime? start, DateTime? end)
         {
-            return !start.HasValue || !end.HasValue || start.Value < end.Value;
+            return !start.HasValue || !end.HasValue || start < end;
         }
 
         public static DateTime RemoveMilliseconds(this DateTime @this)
