@@ -1,7 +1,5 @@
 ﻿using Dapper;
 using Epi;
-using Epi.Core.ServiceClient;
-using Epi.SurveyManagerServiceV2;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Web;
 using NUnit.Framework;
@@ -9,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using Project = ERHMS.EpiInfo.Project;
 using Settings = ERHMS.Utility.Settings;
 
@@ -141,43 +138,22 @@ namespace ERHMS.Test.EpiInfo.Web
 
         [Test]
         [Order(4)]
-        public void GetRecordsTest()
+        public void TryAddAndGetRecordsTest()
         {
+            Random random = new Random();
             Survey survey = Service.GetSurvey(View.WebSurveyId);
-            IDictionary<string, Record> records = AddRecords(survey).ToDictionary(record => record.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
+            IDictionary<string, Record> records = new Dictionary<string, Record>(StringComparer.OrdinalIgnoreCase);
+            for (int index = 0; index < 10; index++)
+            {
+                Record record = new Record();
+                record["GENDER"] = random.NextDouble() < 0.5 ? "1" : "2";
+                Assert.IsTrue(Service.TryAddRecord(survey, record));
+                records.Add(record.GlobalRecordId, record);
+            }
             foreach (Record record in Service.GetRecords(survey))
             {
                 Assert.IsTrue(records.ContainsKey(record.GlobalRecordId));
                 Assert.AreEqual(records[record.GlobalRecordId]["GENDER"], record["GENDER"]);
-            }
-        }
-
-        private IEnumerable<Record> AddRecords(Survey survey)
-        {
-            Random random = new Random();
-            Guid organizationKey = new Guid(Settings.Default.OrganizationKey);
-            Guid surveyId = new Guid(survey.SurveyId);
-            using (ManagerServiceV2Client client = ServiceClient.GetClientV2())
-            {
-                for (int index = 0; index < 10; index++)
-                {
-                    Record record = new Record();
-                    record["GENDER"] = random.NextDouble() < 0.5 ? "1" : "2";
-                    PreFilledAnswerRequest request = new PreFilledAnswerRequest
-                    {
-                        AnswerInfo = new PreFilledAnswerDTO
-                        {
-                            OrganizationKey = organizationKey,
-                            SurveyId = surveyId,
-                            UserPublishKey = survey.PublishKey,
-                            SurveyQuestionAnswerList = record
-                        }
-                    };
-                    PreFilledAnswerResponse response = client.SetSurveyAnswer(request);
-                    Assert.AreEqual("Success", response.Status);
-                    record.GlobalRecordId = response.SurveyResponseID;
-                    yield return record;
-                }
             }
         }
     }

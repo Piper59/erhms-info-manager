@@ -70,6 +70,7 @@
     <Compile Include="Record.cs" />
     <Compile Include="ResponseType.cs" />
     <Compile Include="Service.V1.cs" />
+    <Compile Include="Service.V2.cs" />
     <Compile Include="Survey.cs" />
   </ItemGroup>
   <ItemGroup>
