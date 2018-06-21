@@ -209,7 +209,7 @@ namespace ERHMS.Presentation.ViewModels
                 return;
             }
             ConfigurationError error;
-            if (Service.IsConfigured(out error, true))
+            if (Service.IsConfigured(out error, local: true))
             {
                 SurveyViewModel model = new SurveyViewModel(view);
                 if (await model.InitializeAsync())

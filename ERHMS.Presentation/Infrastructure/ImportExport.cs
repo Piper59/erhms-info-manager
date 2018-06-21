@@ -65,7 +65,7 @@ namespace ERHMS.Presentation
                 return;
             }
             ConfigurationError error = ConfigurationError.None;
-            if (!Service.IsConfigured(out error, true))
+            if (!Service.IsConfigured(out error, local: true))
             {
                 await ServiceLocator.Dialog.AlertAsync(string.Format(Resources.WebConfigure, error.GetErrorMessage()));
                 ServiceLocator.Document.ShowSettings();

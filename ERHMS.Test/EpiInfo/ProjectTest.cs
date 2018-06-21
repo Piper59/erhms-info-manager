@@ -271,7 +271,7 @@ namespace ERHMS.Test.EpiInfo
             Assert.IsFalse(view.IsWebSurvey());
             view.WebSurveyId = Guid.Empty.ToString();
             Assert.IsTrue(view.IsWebSurvey());
-            configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerServiceV2.svc";
+            configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerService.svc";
             configuration.Save();
             Assert.AreEqual("http://example.com/EIWS/Home/00000000-0000-0000-0000-000000000000", view.GetWebSurveyUrl().ToString());
         }

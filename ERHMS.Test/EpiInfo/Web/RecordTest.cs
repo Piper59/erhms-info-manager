@@ -54,7 +54,7 @@ namespace ERHMS.Test.EpiInfo.Web
         public void GetUrlTest()
         {
             Record record = new Record(Guid.Empty.ToString());
-            configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerServiceV2.svc";
+            configuration.Settings.WebServiceEndpointAddress = "http://example.com/EIWS/SurveyManagerService.svc";
             configuration.Save();
             Assert.AreEqual("http://example.com/EIWS/Survey/00000000-0000-0000-0000-000000000000", record.GetUrl().ToString());
         }

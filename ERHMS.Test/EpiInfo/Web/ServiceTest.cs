@@ -71,13 +71,17 @@ namespace ERHMS.Test.EpiInfo.Web
             IsConfiguredTest(ConfigurationError.Address, "Default.html");
             IsConfiguredTest(ConfigurationError.Address, "SurveyManagerService.html");
             IsConfiguredTest(ConfigurationError.OrganizationKey, "SurveyManagerService.svc");
+            IsConfiguredTest(ConfigurationError.OrganizationKey, "SurveyManagerService.svc", 1);
+            IsConfiguredTest(ConfigurationError.Version, "SurveyManagerService.svc", 2);
             IsConfiguredTest(ConfigurationError.OrganizationKey, "SurveyManagerServiceV2.svc");
+            IsConfiguredTest(ConfigurationError.OrganizationKey, "SurveyManagerServiceV2.svc", 2);
+            IsConfiguredTest(ConfigurationError.Version, "SurveyManagerServiceV2.svc", 3);
             IsConfiguredTest(ConfigurationError.OrganizationKey, null);
             IsConfiguredTest(ConfigurationError.OrganizationKey, Guid.Empty);
             IsConfiguredTest(ConfigurationError.None, Config.OrganizationKey);
         }
 
-        private void IsConfiguredTest(ConfigurationError expected, string relativeUrl)
+        private void IsConfiguredTest(ConfigurationError expected, string relativeUrl, int? version = null)
         {
             Uri endpoint = Config.Endpoint;
             if (relativeUrl != null)
@@ -86,7 +90,7 @@ namespace ERHMS.Test.EpiInfo.Web
             }
             configuration.Settings.WebServiceEndpointAddress = endpoint.ToString();
             configuration.Save();
-            IsConfiguredTest(expected);
+            IsConfiguredTest(expected, version);
         }
 
         private void IsConfiguredTest(ConfigurationError expected, Guid organizationKey)
@@ -95,10 +99,10 @@ namespace ERHMS.Test.EpiInfo.Web
             IsConfiguredTest(expected);
         }
 
-        private void IsConfiguredTest(ConfigurationError expected)
+        private void IsConfiguredTest(ConfigurationError expected, int? version = null)
         {
             ConfigurationError actual;
-            Assert.AreEqual(expected == ConfigurationError.None, Service.IsConfigured(out actual));
+            Assert.AreEqual(expected == ConfigurationError.None, Service.IsConfigured(out actual, version));
             Assert.AreEqual(expected, actual);
         }
 

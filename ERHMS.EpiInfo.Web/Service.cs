@@ -13,14 +13,14 @@ namespace ERHMS.EpiInfo.Web
 {
     public static class Service
     {
-        private static readonly Regex NamePattern = new Regex(@"^SurveyManagerService(?:V\d+)?\.svc$", RegexOptions.IgnoreCase);
+        private static readonly Regex NamePattern = new Regex(@"^SurveyManagerService(?:V(?<version>\d+))?\.svc$", RegexOptions.IgnoreCase);
 
         private static Guid? OrganizationKey
         {
             get { return ConvertExtensions.ToNullableGuid(Settings.Default.OrganizationKey); }
         }
 
-        public static bool IsConfigured(out ConfigurationError error, bool local = false)
+        public static bool IsConfigured(out ConfigurationError error, int? version = null, bool local = false)
         {
             Log.Logger.Debug("Checking web configuration");
             Uri endpoint;
@@ -34,6 +34,15 @@ namespace ERHMS.EpiInfo.Web
             {
                 error = ConfigurationError.Address;
                 return false;
+            }
+            if (version.HasValue && version > 1)
+            {
+                Group versionGroup = nameMatch.Groups["version"];
+                if (!versionGroup.Success || int.Parse(versionGroup.Value) < version)
+                {
+                    error = ConfigurationError.Version;
+                    return false;
+                }
             }
             if (!OrganizationKey.HasValue)
             {
