@@ -7,24 +7,24 @@ namespace ERHMS.Utility
 {
     public class TwoWayDictionary<T1, T2> : ICollection<Tuple<T1, T2>>
     {
-        private static Tuple<T1, T2> ToItem(T1 item1, T2 item2)
+        private static Tuple<T1, T2> ToTuple(T1 item1, T2 item2)
         {
             return Tuple.Create(item1, item2);
         }
 
-        private static Tuple<T1, T2> ToItem(KeyValuePair<T1, T2> pair)
+        private static Tuple<T1, T2> ToTuple(KeyValuePair<T1, T2> pair)
         {
-            return ToItem(pair.Key, pair.Value);
+            return ToTuple(pair.Key, pair.Value);
         }
 
-        private static KeyValuePair<T1, T2> ToForwardPair(Tuple<T1, T2> item)
+        private static KeyValuePair<T1, T2> ToForwardPair(Tuple<T1, T2> tuple)
         {
-            return new KeyValuePair<T1, T2>(item.Item1, item.Item2);
+            return new KeyValuePair<T1, T2>(tuple.Item1, tuple.Item2);
         }
 
-        private static KeyValuePair<T2, T1> ToReversePair(Tuple<T1, T2> item)
+        private static KeyValuePair<T2, T1> ToReversePair(Tuple<T1, T2> tuple)
         {
-            return new KeyValuePair<T2, T1>(item.Item2, item.Item1);
+            return new KeyValuePair<T2, T1>(tuple.Item2, tuple.Item1);
         }
 
         private IDictionary<T1, T2> forward;
@@ -60,9 +60,9 @@ namespace ERHMS.Utility
             }
         }
 
-        public void Add(Tuple<T1, T2> item)
+        public void Add(Tuple<T1, T2> tuple)
         {
-            Add(item.Item1, item.Item2);
+            Add(tuple.Item1, tuple.Item2);
         }
 
         public void Clear()
@@ -71,24 +71,24 @@ namespace ERHMS.Utility
             reverse.Clear();
         }
 
-        public bool Contains(Tuple<T1, T2> item)
+        public bool Contains(Tuple<T1, T2> tuple)
         {
-            return forward.Contains(ToForwardPair(item));
+            return forward.Contains(ToForwardPair(tuple));
         }
 
         public void CopyTo(Tuple<T1, T2>[] array, int arrayIndex)
         {
             foreach (Iterator<KeyValuePair<T1, T2>> pair in forward.Iterate())
             {
-                array[arrayIndex + pair.Index] = ToItem(pair.Value);
+                array[arrayIndex + pair.Index] = ToTuple(pair.Value);
             }
         }
 
-        public bool Remove(Tuple<T1, T2> item)
+        public bool Remove(Tuple<T1, T2> tuple)
         {
-            if (forward.Remove(ToForwardPair(item)))
+            if (forward.Remove(ToForwardPair(tuple)))
             {
-                reverse.Remove(ToReversePair(item));
+                reverse.Remove(ToReversePair(tuple));
                 return true;
             }
             else
@@ -109,7 +109,7 @@ namespace ERHMS.Utility
 
         public IEnumerator<Tuple<T1, T2>> GetEnumerator()
         {
-            return forward.Select(ToItem).GetEnumerator();
+            return forward.Select(ToTuple).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
