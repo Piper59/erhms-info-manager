@@ -166,6 +166,7 @@ namespace ERHMS.Presentation.ViewModels
             else
             {
                 ServiceLocator.Dialog.Notify(Resources.WebPublished);
+                ServiceLocator.Data.Refresh(typeof(Domain.View));
             }
             Close();
         }
