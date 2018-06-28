@@ -12,6 +12,8 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ResponderReportViewModel : DocumentViewModel
     {
+        private bool generating;
+
         public Responder Responder { get; private set; }
 
         private ICollection<Incident> incidents;
@@ -59,6 +61,10 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (e.PropertyName == nameof(Active))
                 {
+                    if (generating)
+                    {
+                        return;
+                    }
                     if (Active)
                     {
                         await GenerateAsync();
@@ -81,10 +87,18 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task GenerateAsync()
         {
-            Incidents = await TaskEx.Run(() => GetIncidents());
-            TeamResponders = await TaskEx.Run(() => GetTeamResponders());
-            JobTickets = await TaskEx.Run(() => GetJobTickets());
-            Records = await TaskEx.Run(() => GetRecords());
+            try
+            {
+                generating = true;
+                Incidents = await TaskEx.Run(() => GetIncidents());
+                TeamResponders = await TaskEx.Run(() => GetTeamResponders());
+                JobTickets = await TaskEx.Run(() => GetJobTickets());
+                Records = await TaskEx.Run(() => GetRecords());
+            }
+            finally
+            {
+                generating = false;
+            }
         }
 
         private ICollection<Incident> GetIncidents()

@@ -12,6 +12,8 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class IncidentReportViewModel : DocumentViewModel
     {
+        private bool generating;
+
         public Incident Incident { get; private set; }
 
         private DateTime? startDate;
@@ -81,6 +83,10 @@ namespace ERHMS.Presentation.ViewModels
             {
                 if (e.PropertyName == nameof(Active))
                 {
+                    if (generating)
+                    {
+                        return;
+                    }
                     if (Active)
                     {
                         await GenerateAsync();
@@ -104,11 +110,19 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task GenerateAsync()
         {
-            IncidentNotes = await TaskEx.Run(() => GetIncidentNotes());
-            Jobs = await TaskEx.Run(() => GetJobs());
-            JobNotes = await TaskEx.Run(() => GetJobNotes());
-            JobTeams = await TaskEx.Run(() => GetJobTeams());
-            JobTickets = await TaskEx.Run(() => GetJobTickets());
+            try
+            {
+                generating = true;
+                IncidentNotes = await TaskEx.Run(() => GetIncidentNotes());
+                Jobs = await TaskEx.Run(() => GetJobs());
+                JobNotes = await TaskEx.Run(() => GetJobNotes());
+                JobTeams = await TaskEx.Run(() => GetJobTeams());
+                JobTickets = await TaskEx.Run(() => GetJobTickets());
+            }
+            finally
+            {
+                generating = false;
+            }
         }
 
         private ICollection<IncidentNote> GetIncidentNotes()
@@ -174,6 +188,10 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task RefreshAsync()
         {
+            if (generating)
+            {
+                return;
+            }
             Clear();
             await GenerateAsync();
         }
