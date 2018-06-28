@@ -214,7 +214,10 @@ namespace ERHMS.Test.EpiInfo.DataAccess
             {
                 database.Transact((connection, transaction) =>
                 {
-                    Record record = new Record(Guid.NewGuid().ToString());
+                    Record record = new Record
+                    {
+                        GlobalRecordId = Guid.NewGuid().ToString()
+                    };
                     record["CaseID"] = "2100";
                     record["LastName"] = "Doe";
                     record["FirstName"] = "John";

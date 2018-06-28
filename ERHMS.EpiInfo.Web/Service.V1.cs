@@ -223,8 +223,9 @@ namespace ERHMS.EpiInfo.Web
                         SurveyAnswerResponse response = client.GetSurveyAnswer(request);
                         foreach (SurveyAnswerDTO answer in response.SurveyResponseList)
                         {
-                            Record record = new Record(answer.ResponseId)
+                            Record record = new Record()
                             {
+                                GlobalRecordId = answer.ResponseId,
                                 CreatedOn = answer.DateCreated,
                                 ModifiedOn = answer.DateUpdated
                             };

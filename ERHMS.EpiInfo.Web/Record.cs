@@ -32,12 +32,6 @@ namespace ERHMS.EpiInfo.Web
         public Record()
             : base(StringComparer.OrdinalIgnoreCase) { }
 
-        public Record(string globalRecordId)
-            : this()
-        {
-            GlobalRecordId = globalRecordId;
-        }
-
         public object GetValue(string key, Type type)
         {
             string value = this[key];
