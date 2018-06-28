@@ -848,6 +848,32 @@ namespace ERHMS.Test.DataAccess
 
         [Test]
         [Order(17)]
+        public void WebLinksTest()
+        {
+            foreach (Responder responder in responders.Take(3))
+            {
+                WebLinksTest(responder);
+            }
+            Assert.AreEqual(3, context.WebLinks.Select().Count());
+        }
+
+        private void WebLinksTest(Responder responder)
+        {
+            WebLink original = new WebLink(true)
+            {
+                ResponderId = responder.ResponderId,
+                SurveyId = Guid.NewGuid().ToString(),
+                GlobalRecordId = Guid.NewGuid().ToString()
+            };
+            context.WebLinks.Save(original);
+            Assert.AreEqual(1, context.WebLinks.SelectBySurveyId(original.SurveyId).Count());
+            WebLink retrieved = context.WebLinks.SelectById(original.WebLinkId);
+            Assert.AreEqual(original.GlobalRecordId, retrieved.GlobalRecordId);
+            Assert.AreEqual(responder.EmailAddress, retrieved.Responder.EmailAddress);
+        }
+
+        [Test]
+        [Order(18)]
         public void PgmsTest()
         {
             PgmTest(null);
@@ -883,7 +909,7 @@ namespace ERHMS.Test.DataAccess
         }
 
         [Test]
-        [Order(18)]
+        [Order(19)]
         public void CanvasesTest()
         {
             CanvasTest(null);

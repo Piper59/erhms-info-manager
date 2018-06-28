@@ -95,6 +95,7 @@ namespace ERHMS.DataAccess
         public UniquePairRepository UniquePairs { get; private set; }
         public ViewRepository Views { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
+        public WebLinkRepository WebLinks { get; private set; }
         public WebSurveyRepository WebSurveys { get; private set; }
 
         public IEnumerable<string> Prefixes
@@ -145,6 +146,7 @@ namespace ERHMS.DataAccess
             UniquePairs = new UniquePairRepository(this);
             Views = new ViewRepository(this);
             ViewLinks = new ViewLinkRepository(this);
+            WebLinks = new WebLinkRepository(this);
             WebSurveys = new WebSurveyRepository(this);
         }
 
@@ -171,6 +173,10 @@ namespace ERHMS.DataAccess
             {
                 return true;
             }
+            if (!Database.TableExists("ERHMS_WebLinks"))
+            {
+                return true;
+            }
             return false;
         }
 
@@ -190,6 +196,10 @@ namespace ERHMS.DataAccess
                 if (!Database.TableExists("ERHMS_UniquePairs"))
                 {
                     connection.Execute(GetScript("Deduplication"), transaction);
+                }
+                if (!Database.TableExists("ERHMS_WebLinks"))
+                {
+                    connection.Execute(GetScript("WebLinking"), transaction);
                 }
             });
             Project.Version = Assembly.GetExecutingAssembly().GetName().Version;
