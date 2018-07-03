@@ -155,7 +155,7 @@ namespace ERHMS.Presentation.ViewModels
             }
             if (error != ConfigurationError.None)
             {
-                await ServiceLocator.Dialog.AlertAsync(Resources.WebConfigure, error.GetErrorMessage());
+                await ServiceLocator.Dialog.AlertAsync(string.Format(Resources.WebConfigure, error.GetErrorMessage()));
                 ServiceLocator.Document.ShowSettings();
             }
             else if (!success)

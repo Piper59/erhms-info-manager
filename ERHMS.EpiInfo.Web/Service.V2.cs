@@ -29,7 +29,7 @@ namespace ERHMS.EpiInfo.Web
                     {
                         case "Success":
                             record.GlobalRecordId = response.SurveyResponseID;
-                            record.Passcode = response.SurveyResponsePassCode;
+                            record.PassCode = response.SurveyResponsePassCode;
                             return true;
                         case "Failed":
                             return false;

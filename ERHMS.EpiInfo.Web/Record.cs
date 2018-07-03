@@ -25,7 +25,7 @@ namespace ERHMS.EpiInfo.Web
         };
 
         public string GlobalRecordId { get; set; }
-        public string Passcode { get; set; }
+        public string PassCode { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
 
@@ -64,6 +64,23 @@ namespace ERHMS.EpiInfo.Web
                 {
                     return null;
                 }
+            }
+        }
+
+        public void SetValue(string key, object value)
+        {
+            if (value?.GetType() == typeof(bool))
+            {
+                value = (bool)value ? "Yes" : "No";
+            }
+            this[key] = value?.ToString();
+        }
+
+        public void SetValues(IEnumerable<KeyValuePair<string, object>> properties)
+        {
+            foreach (KeyValuePair<string, object> property in properties)
+            {
+                SetValue(property.Key, property.Value);
             }
         }
 

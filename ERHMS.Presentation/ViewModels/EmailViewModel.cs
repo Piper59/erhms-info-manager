@@ -1,5 +1,7 @@
 ﻿using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.EpiInfo.Web;
 using ERHMS.Presentation.Commands;
 using ERHMS.Presentation.Properties;
 using ERHMS.Presentation.Services;
@@ -11,6 +13,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Record = ERHMS.EpiInfo.Web.Record;
 using Settings = ERHMS.Utility.Settings;
 using View = ERHMS.Domain.View;
 
@@ -94,8 +97,24 @@ namespace ERHMS.Presentation.ViewModels
                 if (!value)
                 {
                     Views.Unselect();
+                    SingleUseUrl = false;
+                    MultipleUseUrl = false;
                 }
             }
+        }
+
+        private bool singleUseUrl;
+        public bool SingleUseUrl
+        {
+            get { return singleUseUrl; }
+            set { SetProperty(nameof(SingleUseUrl), ref singleUseUrl, value); }
+        }
+
+        private bool multipleUseUrl;
+        public bool MultipleUseUrl
+        {
+            get { return multipleUseUrl; }
+            set { SetProperty(nameof(MultipleUseUrl), ref multipleUseUrl, value); }
         }
 
         public ViewListChildViewModel Views { get; private set; }
@@ -171,10 +190,18 @@ namespace ERHMS.Presentation.ViewModels
                 await ServiceLocator.Dialog.AlertAsync(ValidationError.Required, fields);
                 return false;
             }
-            if (AppendUrl && !Views.HasSelectedItem())
+            if (AppendUrl)
             {
-                await ServiceLocator.Dialog.AlertAsync(Resources.EmailViewNotSelected);
-                return false;
+                if (!Views.HasSelectedItem())
+                {
+                    await ServiceLocator.Dialog.AlertAsync(Resources.EmailViewNotSelected);
+                    return false;
+                }
+                if (!SingleUseUrl && !MultipleUseUrl)
+                {
+                    await ServiceLocator.Dialog.AlertAsync(Resources.EmailUrlTypeNotSelected);
+                    return false;
+                }
             }
             return true;
         }
@@ -191,34 +218,103 @@ namespace ERHMS.Presentation.ViewModels
                 ServiceLocator.Document.ShowSettings();
                 return;
             }
+            ConfigurationError error = ConfigurationError.None;
+            int version = 2;
+            if (AppendUrl && SingleUseUrl && !Service.IsConfigured(out error, version, true))
+            {
+                await ServiceLocator.Dialog.AlertAsync(string.Format(Resources.WebConfigure, error.GetErrorMessage(version)));
+                ServiceLocator.Document.ShowSettings();
+                return;
+            }
+            Survey survey = null;
+            Epi.View view = null;
             ICollection<RecipientChildViewModel> failures = new List<RecipientChildViewModel>();
             try
             {
                 await ServiceLocator.Dialog.BlockAsync(Resources.EmailSending, () =>
                 {
-                    MailMessage message = Settings.Default.GetMailMessage();
-                    message.Subject = Subject;
-                    foreach (string path in Attachments)
+                    if (AppendUrl && SingleUseUrl)
                     {
-                        message.Attachments.Add(new Attachment(path));
+                        if (!Service.IsConfigured(out error, version))
+                        {
+                            return;
+                        }
+                        survey = Service.GetSurvey(Views.SelectedItem.WebSurveyId);
+                        if (survey == null)
+                        {
+                            return;
+                        }
                     }
-                    StringBuilder body = new StringBuilder();
-                    body.Append(Body.Trim());
-                    if (AppendUrl)
-                    {
-                        body.AppendLine();
-                        body.AppendLine();
-                        body.AppendFormat(ViewExtensions.GetWebSurveyUrl(Views.SelectedItem.WebSurveyId).ToString());
-                    }
-                    message.Body = body.ToString();
                     using (SmtpClient client = Settings.Default.GetSmtpClient(ConfigurationExtensions.DecryptSafe))
                     {
                         foreach (RecipientChildViewModel recipient in Recipients)
                         {
                             try
                             {
-                                message.To.Clear();
+                                MailMessage message = Settings.Default.GetMailMessage();
                                 message.To.Add(new MailAddress(recipient.EmailAddress));
+                                message.Subject = Subject;
+                                foreach (string path in Attachments)
+                                {
+                                    message.Attachments.Add(new Attachment(path));
+                                }
+                                StringBuilder body = new StringBuilder();
+                                body.Append(Body.Trim());
+                                if (AppendUrl)
+                                {
+                                    body.AppendLine();
+                                    body.AppendLine();
+                                    if (SingleUseUrl)
+                                    {
+                                        Responder responder;
+                                        Record record;
+                                        if (recipient.Responder == null)
+                                        {
+                                            responder = null;
+                                            record = new Record();
+                                        }
+                                        else
+                                        {
+                                            if (view == null)
+                                            {
+                                                view = Context.Project.GetViewById(Views.SelectedItem.ViewId);
+                                            }
+                                            responder = Context.Responders.Refresh(recipient.Responder);
+                                            if (Views.SelectedItem.ViewId == Context.Responders.View.Id)
+                                            {
+                                                record = responder.ToRecord();
+                                            }
+                                            else
+                                            {
+                                                record = responder.ToRelatedRecord(view);
+                                            }
+                                        }
+                                        if (Service.TryAddRecord(survey, record))
+                                        {
+                                            body.AppendLine(record.GetUrl().AbsoluteUri);
+                                            body.AppendFormat("Pass code: {0}", record.PassCode);
+                                            if (responder != null)
+                                            {
+                                                Context.WebLinks.Save(new WebLink(true)
+                                                {
+                                                    ResponderId = responder.ResponderId,
+                                                    SurveyId = survey.SurveyId,
+                                                    GlobalRecordId = record.GlobalRecordId
+                                                });
+                                            }
+                                        }
+                                        else
+                                        {
+                                            failures.Add(recipient);
+                                            continue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        body.AppendFormat(ViewExtensions.GetWebSurveyUrl(Views.SelectedItem.WebSurveyId).ToString());
+                                    }
+                                }
+                                message.Body = body.ToString();
                                 client.Send(message);
                             }
                             catch (Exception ex)

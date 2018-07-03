@@ -1,6 +1,9 @@
-﻿using ERHMS.EpiInfo.Domain;
+﻿using Epi;
+using ERHMS.EpiInfo.Domain;
 using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ERHMS.Domain
 {
@@ -334,6 +337,47 @@ namespace ERHMS.Domain
                 return true;
             }
             return false;
+        }
+
+        public EpiInfo.Web.Record ToRecord()
+        {
+            EpiInfo.Web.Record record = new EpiInfo.Web.Record();
+            record.SetValues(GetProperties());
+            record.Remove(ColumnNames.UNIQUE_KEY);
+            record.Remove(ColumnNames.GLOBAL_RECORD_ID);
+            record.Remove(ColumnNames.FOREIGN_KEY);
+            record.Remove(ColumnNames.REC_STATUS);
+            record.Remove(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME);
+            record.Remove(ColumnNames.RECORD_FIRST_SAVE_TIME);
+            record.Remove(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME);
+            record.Remove(ColumnNames.RECORD_LAST_SAVE_TIME);
+            return record;
+        }
+
+        public EpiInfo.Web.Record ToRelatedRecord(Epi.View view = null)
+        {
+            EpiInfo.Web.Record record = new EpiInfo.Web.Record();
+            TrySetValue(FieldNames.ResponderId, ResponderId, record, view);
+            TrySetValue(FieldNames.ResponderEmailAddress, EmailAddress, record, view);
+            TrySetValue("ResponderFirstName", FirstName, record, view);
+            TrySetValue("ResponderMiddleInitial", MiddleInitial, record, view);
+            TrySetValue("ResponderLastName", LastName, record, view);
+            TrySetValue("ResponderFullName", FullName, record, view);
+            TrySetValue("ResponderName", FullName, record, view);
+            return record;
+        }
+
+        private bool TrySetValue(string key, object value, EpiInfo.Web.Record record, Epi.View view)
+        {
+            if (view == null || view.Fields.Contains(key))
+            {
+                record.SetValue(key, value);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

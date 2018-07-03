@@ -45,33 +45,16 @@ namespace ERHMS.Presentation.ViewModels
             ContinueCommand = new AsyncCommand(ContinueAsync);
         }
 
-        private object GetRecord()
-        {
-            if (Responders.SelectedItem == null)
-            {
-                return null;
-            }
-            else
-            {
-                Responder responder = Context.Responders.Refresh(Responders.SelectedItem);
-                return new
-                {
-                    ResponderID = responder.ResponderId,
-                    ResponderEmailAddress = responder.EmailAddress,
-                    ResponderLastName = responder.LastName,
-                    ResponderFirstName = responder.FirstName,
-                    ResponderMiddleInitial = responder.MiddleInitial,
-                    ResponderFullName = responder.FullName,
-                    ResponderName = responder.FullName
-                };
-            }
-        }
-
         public async Task ContinueAsync()
         {
             Close();
             Context.Project.CollectedData.EnsureDataTablesExist(View.ViewId);
-            Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, GetRecord());
+            IDictionary<string, string> record = null;
+            if (Responders.SelectedItem != null)
+            {
+                record = Context.Responders.Refresh(Responders.SelectedItem).ToRelatedRecord();
+            }
+            Wrapper wrapper = Enter.OpenNewRecord.Create(Context.Project.FilePath, View.Name, record);
             await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
     }

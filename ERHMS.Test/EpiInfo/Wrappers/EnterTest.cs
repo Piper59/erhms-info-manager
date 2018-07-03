@@ -1,6 +1,7 @@
 ﻿using ERHMS.EpiInfo.Wrappers;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using View = Epi.View;
 
@@ -37,7 +38,7 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             View view = Project.Views["Surveillance"];
             view.LoadRecord(1);
             FieldTest(view, "LastName", "Doe");
-            FieldTest(view, "BirthDate", new DateTime(1980, 1, 1));
+            FieldTest(view, "BirthDate", "1/1/1980");
             EventsTest(events, view);
         }
 
@@ -45,12 +46,12 @@ namespace ERHMS.Test.EpiInfo.Wrappers
         public void OpenNewRecordTest()
         {
             // Invoke wrapper
-            dynamic record = new
+            IDictionary<string, string> record = new Dictionary<string, string>
             {
-                CaseID = "2100",
-                FirstName = "John",
-                LastName = "Doe",
-                BirthDate = new DateTime(1980, 1, 1)
+                { "CaseID", "2100" },
+                { "FirstName", "John" },
+                { "LastName", "Doe" },
+                { "BirthDate", "1/1/1980" }
             };
             Wrapper = Enter.OpenNewRecord.Create(Project.FilePath, "Surveillance", record);
             WrapperEventCollection events = new WrapperEventCollection(Wrapper);
@@ -68,16 +69,16 @@ namespace ERHMS.Test.EpiInfo.Wrappers
             View view = Project.Views["Surveillance"];
             Assert.AreEqual(21, view.GetRecordCount());
             view.LoadRecord(21);
-            FieldTest(view, "CaseID", record.CaseID);
-            FieldTest(view, "FirstName", record.FirstName);
-            FieldTest(view, "LastName", record.LastName);
-            FieldTest(view, "BirthDate", record.BirthDate);
+            FieldTest(view, "CaseID", record["CaseID"]);
+            FieldTest(view, "FirstName", record["FirstName"]);
+            FieldTest(view, "LastName", record["LastName"]);
+            FieldTest(view, "BirthDate", record["BirthDate"]);
             EventsTest(events, view);
         }
 
-        private void FieldTest(View view, string name, object value)
+        private void FieldTest(View view, string name, string value)
         {
-            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueObject);
+            Assert.AreEqual(value, view.Fields.DataFields[name].CurrentRecordValueString);
         }
 
         private void EventsTest(WrapperEventCollection events, View view)

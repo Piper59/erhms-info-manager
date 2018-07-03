@@ -19,7 +19,7 @@ namespace ERHMS.Presentation.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -364,7 +364,16 @@ namespace ERHMS.Presentation.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select a form to append a web survey URL..
+        ///   Looks up a localized string similar to Please select the type of web survey link to append (multiple-use or single-use)..
+        /// </summary>
+        internal static string EmailUrlTypeNotSelected {
+            get {
+                return ResourceManager.GetString("EmailUrlTypeNotSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a form to append a web survey link..
         /// </summary>
         internal static string EmailViewNotSelected {
             get {

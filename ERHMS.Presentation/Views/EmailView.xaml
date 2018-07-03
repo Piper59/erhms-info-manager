@@ -80,22 +80,45 @@
                 </Grid>
                 <Label Grid.Row="4" Grid.Column="0">Options</Label>
                 <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <CheckBox Grid.Column="0"
-                              IsChecked="{Binding AppendUrl}"
-                              Margin="0">
-                        Append web survey URL
+                    <CheckBox Grid.Row="0" Grid.Column="0"
+                              IsChecked="{Binding AppendUrl}">
+                        Append a web survey link to the body of the email
                     </CheckBox>
-                    <ComboBox Grid.Column="1"
-                              AutomationProperties.Name="Append web survey URL"
+                    <ComboBox Grid.Row="0" Grid.Column="1"
+                              AutomationProperties.Name="Append a web survey link to the body of the email"
                               DisplayMemberPath="Name"
                               IsEnabled="{Binding AppendUrl}"
                               ItemsSource="{Binding Views.Objects}"
-                              Margin="5,2.5,0,2.5"
+                              Margin="5,0,0,5"
                               SelectedItem="{Binding Views.SelectedObject}" />
+                    <RadioButton Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                 IsChecked="{Binding MultipleUseUrl}"
+                                 IsEnabled="{Binding AppendUrl}">
+                        Link to a blank survey.
+                        This link may be used to submit multiple survey responses.
+                    </RadioButton>
+                    <RadioButton Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                 IsChecked="{Binding SingleUseUrl}"
+                                 IsEnabled="{Binding AppendUrl}">
+                        Link to a survey with responder data prepopulated.
+                        This link may be used to submit a single survey response only.
+                    </RadioButton>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                               Margin="0,2.5,0,0"
+                               TextWrapping="Wrap">
+                        <Run FontWeight="SemiBold">Note:</Run> Responder data includes fields named ResponderID, ResponderEmailAddress, etc., that are included by default on new forms.
+                        When importing from web, these fields are used to link the form's data to the responders who provided it.
+                    </TextBlock>
                 </Grid>
             </Grid>
         </ScrollViewer>

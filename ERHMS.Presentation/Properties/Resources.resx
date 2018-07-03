@@ -219,8 +219,11 @@
   <data name="EmailSent" xml:space="preserve">
     <value>Email has been sent.</value>
   </data>
+  <data name="EmailUrlTypeNotSelected" xml:space="preserve">
+    <value>Please select the type of web survey link to append (multiple-use or single-use).</value>
+  </data>
   <data name="EmailViewNotSelected" xml:space="preserve">
-    <value>Please select a form to append a web survey URL.</value>
+    <value>Please select a form to append a web survey link.</value>
   </data>
   <data name="GetStarted" xml:space="preserve">
     <value>To get started, you must open or create a data source. Click Open or Add &gt; New on the Data Sources screen.</value>

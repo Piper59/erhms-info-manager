@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Windows;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -65,17 +66,17 @@ namespace ERHMS.EpiInfo.Wrappers
             private static string ViewName { get; set; }
             private static MainForm Form { get; set; }
 
-            public static Wrapper Create(string projectPath, string viewName, object record = null)
+            public static Wrapper Create(string projectPath, string viewName, IEnumerable<KeyValuePair<string, string>> record = null)
             {
                 Wrapper wrapper = Create(() => MainInternal(projectPath, viewName));
                 wrapper.Invoked += (sender, e) =>
                 {
                     if (record != null)
                     {
-                        foreach (PropertyInfo property in record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                        foreach (KeyValuePair<string, string> property in record)
                         {
-                            wrapper.WriteLine(property.Name);
-                            wrapper.WriteLine(property.GetValue(record, null));
+                            wrapper.WriteLine(property.Key);
+                            wrapper.WriteLine(property.Value);
                         }
                     }
                     wrapper.Close();

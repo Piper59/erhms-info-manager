@@ -82,6 +82,11 @@ namespace ERHMS.EpiInfo.Domain
             return value;
         }
 
+        protected IEnumerable<KeyValuePair<string, object>> GetProperties()
+        {
+            return properties;
+        }
+
         public bool PropertyEquals(string name, object value)
         {
             object obj;
