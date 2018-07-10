@@ -21,5 +21,10 @@ namespace ERHMS.Utility
         {
             return Convert.ToBoolean(Interlocked.Exchange(ref this.value, Convert.ToInt32(value)));
         }
+
+        public bool CompareExchange(bool value, bool comparand)
+        {
+            return Convert.ToBoolean(Interlocked.CompareExchange(ref this.value, Convert.ToInt32(value), Convert.ToInt32(comparand)));
+        }
     }
 }

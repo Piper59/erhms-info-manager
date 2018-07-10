@@ -62,7 +62,7 @@ namespace ERHMS.Presentation
         private static void HandleError(Exception ex)
         {
             Log.Logger.Fatal("Fatal error", ex);
-            if (errored.Exchange(true) == false)
+            if (!errored.Exchange(true))
             {
                 MessageBox.Show(ResXResources.AppError, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
