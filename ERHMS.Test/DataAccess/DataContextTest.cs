@@ -805,18 +805,18 @@ namespace ERHMS.Test.DataAccess
 
         [Test]
         [Order(15)]
-        public void RecordsTest()
+        public void ResponderEntitiesTest()
         {
             ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(context.Database, context.Project.Views[view.Name]);
             foreach (Responder responder in responders)
             {
-                Assert.AreEqual(0, context.Records.SelectByResponderId(responder.ResponderId).Count());
+                Assert.AreEqual(0, context.ResponderEntities.SelectByResponderId(responder.ResponderId).Count());
                 ViewEntity entity = new ViewEntity(true);
                 entity.SetProperty(FieldNames.ResponderId, responder.ResponderId);
                 entities.Save(entity);
-                Assert.AreEqual(1, context.Records.SelectByResponderId(responder.ResponderId).Count());
+                Assert.AreEqual(1, context.ResponderEntities.SelectByResponderId(responder.ResponderId).Count());
             }
-            Assert.AreEqual(responders.Count, context.Records.Select().Count());
+            Assert.AreEqual(responders.Count, context.ResponderEntities.Select().Count());
         }
 
         [Test]

@@ -37,17 +37,17 @@ namespace ERHMS.Presentation.ViewModels
             private set { SetProperty(nameof(JobTickets), ref jobTickets, value); }
         }
 
-        private ICollection<Record> records;
-        public ICollection<Record> Records
+        private ICollection<ResponderEntity> entities;
+        public ICollection<ResponderEntity> Entities
         {
-            get { return records; }
-            private set { SetProperty(nameof(Records), ref records, value); }
+            get { return entities; }
+            private set { SetProperty(nameof(Entities), ref entities, value); }
         }
 
         public ICommand EditIncidentCommand { get; private set; }
         public ICommand EditTeamCommand { get; private set; }
         public ICommand EditJobCommand { get; private set; }
-        public ICommand EditRecordCommand { get; private set; }
+        public ICommand EditEntityCommand { get; private set; }
 
         public ResponderReportViewModel(Responder responder)
         {
@@ -56,7 +56,7 @@ namespace ERHMS.Presentation.ViewModels
             EditIncidentCommand = new Command<Incident>(EditIncident);
             EditTeamCommand = new Command<TeamResponder>(EditTeam);
             EditJobCommand = new Command<JobTicket>(EditJob);
-            EditRecordCommand = new AsyncCommand<Record>(EditRecordAsync);
+            EditEntityCommand = new AsyncCommand<ResponderEntity>(EditEntityAsync);
             PropertyChanged += async (sender, e) =>
             {
                 if (e.PropertyName == nameof(Active))
@@ -82,7 +82,7 @@ namespace ERHMS.Presentation.ViewModels
             Incidents = null;
             TeamResponders = null;
             JobTickets = null;
-            Records = null;
+            Entities = null;
         }
 
         public async Task GenerateAsync()
@@ -93,7 +93,7 @@ namespace ERHMS.Presentation.ViewModels
                 Incidents = await TaskEx.Run(() => GetIncidents());
                 TeamResponders = await TaskEx.Run(() => GetTeamResponders());
                 JobTickets = await TaskEx.Run(() => GetJobTickets());
-                Records = await TaskEx.Run(() => GetRecords());
+                Entities = await TaskEx.Run(() => GetEntities());
             }
             finally
             {
@@ -125,11 +125,11 @@ namespace ERHMS.Presentation.ViewModels
                 .ToList();
         }
 
-        private ICollection<Record> GetRecords()
+        private ICollection<ResponderEntity> GetEntities()
         {
-            return Context.Records.SelectByResponderId(Responder.ResponderId)
-                .OrderBy(record => record.View.Name, StringComparer.OrdinalIgnoreCase)
-                .ThenBy(record => record.CreatedOn)
+            return Context.ResponderEntities.SelectByResponderId(Responder.ResponderId)
+                .OrderBy(entity => entity.View.Name, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(entity => entity.CreatedOn)
                 .ToList();
         }
 
@@ -154,9 +154,9 @@ namespace ERHMS.Presentation.ViewModels
                 () => new JobViewModel(Context.Jobs.Refresh(jobTicket.Job)));
         }
 
-        public async Task EditRecordAsync(Record record)
+        public async Task EditEntityAsync(ResponderEntity entity)
         {
-            Wrapper wrapper = Enter.OpenRecord.Create(Context.Project.FilePath, record.View.Name, record.UniqueKey.Value);
+            Wrapper wrapper = Enter.OpenRecord.Create(Context.Project.FilePath, entity.View.Name, entity.UniqueKey.Value);
             await ServiceLocator.Wrapper.InvokeAsync(wrapper);
         }
     }

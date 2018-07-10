@@ -103,7 +103,7 @@
     <Compile Include="Repositories\PgmLinkRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\PgmRepository.cs" />
-    <Compile Include="Repositories\RecordRepository.cs" />
+    <Compile Include="Repositories\ResponderEntityRepository.cs" />
     <Compile Include="Repositories\ResponderRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\RosterRepository.cs" />

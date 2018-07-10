@@ -13,7 +13,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Base = ERHMS.EpiInfo.ImportExport;
-using Record = ERHMS.EpiInfo.Web.Record;
 using View = Epi.View;
 
 namespace ERHMS.Presentation
