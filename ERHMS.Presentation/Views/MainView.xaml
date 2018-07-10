@@ -179,13 +179,6 @@
                         </i:Interaction.Behaviors>
                     </Views:PgmListView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type ViewModels:RecordListViewModel}">
-                    <Views:RecordListView>
-                        <i:Interaction.Behaviors>
-                            <Behaviors:FixKeyboardCuesBehavior />
-                        </i:Interaction.Behaviors>
-                    </Views:RecordListView>
-                </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:ResponderViewModel}">
                     <Views:ResponderView>
                         <i:Interaction.Behaviors>
@@ -227,6 +220,13 @@
                             <Behaviors:FixKeyboardCuesBehavior />
                         </i:Interaction.Behaviors>
                     </Views:TemplateListView>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:ViewEntityListViewModel}">
+                    <Views:ViewEntityListView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:ViewEntityListView>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:ViewListViewModel}">
                     <Views:ViewListView>

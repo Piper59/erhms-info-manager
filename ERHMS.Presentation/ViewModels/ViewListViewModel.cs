@@ -153,7 +153,7 @@ namespace ERHMS.Presentation.ViewModels
             Context.Project.CollectedData.EnsureDataTablesExist(Views.SelectedItem.ViewId);
             ServiceLocator.Document.Show(
                 model => model.View.Id == Views.SelectedItem.ViewId,
-                () => new RecordListViewModel(Context.Project.GetViewById(Views.SelectedItem.ViewId)));
+                () => new ViewEntityListViewModel(Context.Project.GetViewById(Views.SelectedItem.ViewId)));
         }
 
         public async Task PublishToTemplateAsync()

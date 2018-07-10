@@ -142,7 +142,7 @@ namespace ERHMS.Presentation
                     {
                         ServiceLocator.Document.Show(
                             model => model.View.Id == view.Id,
-                            () => new RecordListViewModel(view));
+                            () => new ViewEntityListViewModel(view));
                     }
                 }
             }

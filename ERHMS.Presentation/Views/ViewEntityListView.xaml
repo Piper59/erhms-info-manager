@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="ERHMS.Presentation.Views.ViewEntityListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Behaviors="clr-namespace:ERHMS.Presentation.Behaviors"
+             xmlns:Controls="clr-namespace:ERHMS.Presentation.Controls">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="0"
+                  ItemsSource="{Binding Entities.Objects}"
+                  SelectedItem="{Binding Entities.SelectedObject}">
+            <i:Interaction.Behaviors>
+                <Behaviors:BindColumnsBehavior Columns="{Binding Columns}" />
+                <Behaviors:BindSelectedItemsBehavior SelectedItems="{Binding Entities.SelectedObjects}" />
+            </i:Interaction.Behaviors>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell" BasedOn="{StaticResource MetroDataGridCell}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Deleted}" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource GrayNormalBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
+        <WrapPanel Grid.Row="1"
+                   Style="{StaticResource IconButtonBar}">
+            <Controls:IconButton AccessText="_Create"
+                                 Command="{Binding CreateCommand}"
+                                 Icon="{StaticResource appbar_add}" />
+            <Controls:IconButton AccessText="_Edit"
+                                 Command="{Binding EditCommand}"
+                                 Icon="{StaticResource appbar_edit}" />
+            <Controls:IconButton AccessText="Re_sponder"
+                                 Command="{Binding PostpopulateCommand}"
+                                 Icon="{StaticResource appbar_user}"
+                                 ToolTip="Change the responder this record is linked to" />
+            <Controls:IconButton AccessText="_Delete"
+                                 Command="{Binding DeleteCommand}"
+                                 Icon="{StaticResource appbar_close}" />
+            <Controls:IconButton AccessText="_Undelete"
+                                 Command="{Binding UndeleteCommand}"
+                                 Icon="{StaticResource appbar_check}" />
+            <Controls:IconButton AccessText="_Refresh"
+                                 Command="{Binding Entities.RefreshCommand}"
+                                 Icon="{StaticResource appbar_refresh_clockwise_down}" />
+        </WrapPanel>
+    </Grid>
+</UserControl>
