@@ -862,11 +862,11 @@ namespace ERHMS.Test.DataAccess
             WebLink original = new WebLink(true)
             {
                 ResponderId = responder.ResponderId,
-                SurveyId = Guid.NewGuid().ToString(),
+                WebSurveyId = Guid.NewGuid().ToString(),
                 GlobalRecordId = Guid.NewGuid().ToString()
             };
             context.WebLinks.Save(original);
-            Assert.AreEqual(1, context.WebLinks.SelectBySurveyId(original.SurveyId).Count());
+            Assert.AreEqual(1, context.WebLinks.SelectByWebSurveyId(original.WebSurveyId).Count());
             WebLink retrieved = context.WebLinks.SelectById(original.WebLinkId);
             Assert.AreEqual(original.GlobalRecordId, retrieved.GlobalRecordId);
             Assert.AreEqual(responder.EmailAddress, retrieved.Responder.EmailAddress);

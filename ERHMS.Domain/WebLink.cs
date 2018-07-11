@@ -29,10 +29,10 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(Responder), ref responder, value); }
         }
 
-        public string SurveyId
+        public string WebSurveyId
         {
-            get { return GetProperty<string>(nameof(SurveyId)); }
-            set { SetProperty(nameof(SurveyId), value); }
+            get { return GetProperty<string>(nameof(WebSurveyId)); }
+            set { SetProperty(nameof(WebSurveyId), value); }
         }
 
         public string GlobalRecordId

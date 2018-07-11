@@ -297,7 +297,7 @@ namespace ERHMS.Presentation.ViewModels
                                                 Context.WebLinks.Save(new WebLink(true)
                                                 {
                                                     ResponderId = responder.ResponderId,
-                                                    SurveyId = survey.SurveyId,
+                                                    WebSurveyId = survey.SurveyId,
                                                     GlobalRecordId = record.GlobalRecordId
                                                 });
                                             }

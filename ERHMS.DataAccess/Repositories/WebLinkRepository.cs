@@ -68,11 +68,11 @@ namespace ERHMS.DataAccess
             return Select(clauses, parameters).SingleOrDefault();
         }
 
-        public IEnumerable<WebLink> SelectBySurveyId(string surveyId)
+        public IEnumerable<WebLink> SelectByWebSurveyId(string webSurveyId)
         {
-            string clauses = "WHERE [ERHMS_WebLinks].[SurveyId] = @SurveyId";
+            string clauses = "WHERE [ERHMS_WebLinks].[WebSurveyId] = @WebSurveyId";
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@SurveyId", surveyId);
+            parameters.Add("@WebSurveyId", webSurveyId);
             return Select(clauses, parameters);
         }
     }
