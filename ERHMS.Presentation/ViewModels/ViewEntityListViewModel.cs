@@ -1,11 +1,14 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Converters;
 using ERHMS.Presentation.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +20,7 @@ namespace ERHMS.Presentation.ViewModels
 {
     public class ViewEntityListViewModel : DocumentViewModel
     {
-        public class ViewEntityListChildViewModel : ListViewModel<ViewEntity>
+        public class ViewEntityListChildViewModel : ListViewModel<ResponderEntity>
         {
             public ViewEntityRepository<ViewEntity> Repository { get; private set; }
 
@@ -27,9 +30,37 @@ namespace ERHMS.Presentation.ViewModels
                 Refresh();
             }
 
-            protected override IEnumerable<ViewEntity> GetItems()
+            protected override IEnumerable<ResponderEntity> GetItems()
             {
-                return Repository.SelectOrdered();
+                return Repository.SelectOrdered().WithResponders(Context);
+            }
+        }
+
+        private static IEnumerable<DataGridColumn> GetColumns(View view)
+        {
+            IValueConverter converter = new NullSafeConverter(new ResponderToFullNameAndEmailAddressConverter());
+            int recStatusFieldId = view.Fields[ColumnNames.REC_STATUS].Id;
+            List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id)
+                .OrderBy(fieldId => fieldId == recStatusFieldId ? int.MaxValue : fieldId)
+                .ToList();
+            foreach (Field field in view.Fields.DataFields.Cast<Field>().OrderBy(field => fieldIds.IndexOf(field.Id)))
+            {
+                yield return new DataGridTextColumn
+                {
+                    Header = field.Name,
+                    Binding = new Binding(field.Name)
+                };
+                if (view.Id != Context.Responders.View.Id && field.Name.Equals(FieldNames.ResponderId, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return new DataGridTextColumn
+                    {
+                        Header = "Responder",
+                        Binding = new Binding(nameof(ResponderEntity.Responder))
+                        {
+                            Converter = converter
+                        }
+                    };
+                }
             }
         }
 
@@ -47,16 +78,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = view.Name;
             View = view;
-            List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id).ToList();
-            Columns = view.Fields.DataFields
-                .Cast<Field>()
-                .OrderBy(field => field.Name == ColumnNames.REC_STATUS ? int.MaxValue : fieldIds.IndexOf(field.Id))
-                .Select(field => (DataGridColumn)new DataGridTextColumn
-                {
-                    Header = field.Name,
-                    Binding = new Binding(field.Name)
-                })
-                .ToList();
+            Columns = GetColumns(view).ToList();
             Entities = new ViewEntityListChildViewModel(view);
             CreateCommand = new AsyncCommand(CreateAsync);
             EditCommand = new AsyncCommand(EditAsync, Entities.HasOneSelectedItem);

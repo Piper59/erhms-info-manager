@@ -82,7 +82,7 @@ namespace ERHMS.EpiInfo.Domain
             return value;
         }
 
-        protected IEnumerable<KeyValuePair<string, object>> GetProperties()
+        public IEnumerable<KeyValuePair<string, object>> GetProperties()
         {
             return properties;
         }

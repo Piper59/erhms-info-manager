@@ -259,6 +259,7 @@
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="Converters\LocationsToNamesConverter.cs" />
     <Compile Include="Converters\MemorySizeToHumanReadableSizeConverter.cs" />
+    <Compile Include="Converters\NullSafeConverter.cs" />
     <Compile Include="Converters\NullToBooleanConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityInverter.cs" />

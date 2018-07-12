@@ -111,6 +111,7 @@
     <Compile Include="Repositories\TeamRepository.cs" />
     <Compile Include="Repositories\TeamResponderRepository.cs" />
     <Compile Include="Repositories\UniquePairRepository.cs" />
+    <Compile Include="Repositories\ViewEntityRepositoryExtensions.cs" />
     <Compile Include="Repositories\ViewLinkRepository.cs" />
     <Compile Include="Repositories\ViewRepository.cs" />
     <Compile Include="Repositories\WebLinkRepository.cs" />
