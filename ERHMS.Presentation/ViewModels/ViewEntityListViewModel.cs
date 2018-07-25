@@ -1,19 +1,14 @@
-﻿using Epi;
-using Epi.Fields;
-using ERHMS.DataAccess;
+﻿using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Wrappers;
 using ERHMS.Presentation.Commands;
-using ERHMS.Presentation.Converters;
 using ERHMS.Presentation.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Data;
 using View = Epi.View;
 
 namespace ERHMS.Presentation.ViewModels
@@ -36,34 +31,6 @@ namespace ERHMS.Presentation.ViewModels
             }
         }
 
-        private static IEnumerable<DataGridColumn> GetColumns(View view)
-        {
-            IValueConverter converter = new NullSafeConverter(new ResponderToFullNameAndEmailAddressConverter());
-            int recStatusFieldId = view.Fields[ColumnNames.REC_STATUS].Id;
-            List<int> fieldIds = Context.Project.GetSortedFieldIds(view.Id)
-                .OrderBy(fieldId => fieldId == recStatusFieldId ? int.MaxValue : fieldId)
-                .ToList();
-            foreach (Field field in view.Fields.DataFields.Cast<Field>().OrderBy(field => fieldIds.IndexOf(field.Id)))
-            {
-                yield return new DataGridTextColumn
-                {
-                    Header = field.Name,
-                    Binding = new Binding(field.Name)
-                };
-                if (view.Id != Context.Responders.View.Id && field.Name.Equals(FieldNames.ResponderId, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return new DataGridTextColumn
-                    {
-                        Header = "Responder",
-                        Binding = new Binding(nameof(ResponderEntity.Responder))
-                        {
-                            Converter = converter
-                        }
-                    };
-                }
-            }
-        }
-
         public View View { get; private set; }
         public ICollection<DataGridColumn> Columns { get; private set; }
         public ViewEntityListChildViewModel Entities { get; private set; }
@@ -78,7 +45,7 @@ namespace ERHMS.Presentation.ViewModels
         {
             Title = view.Name;
             View = view;
-            Columns = GetColumns(view).ToList();
+            Columns = DataGridExtensions.GetDataColumns(Context.Project, view, view.Id != Context.Responders.View.Id).ToList();
             Entities = new ViewEntityListChildViewModel(view);
             CreateCommand = new AsyncCommand(CreateAsync);
             EditCommand = new AsyncCommand(EditAsync, Entities.HasOneSelectedItem);

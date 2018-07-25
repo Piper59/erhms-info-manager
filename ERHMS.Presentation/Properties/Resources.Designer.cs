@@ -825,15 +825,6 @@ namespace ERHMS.Presentation.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or more records could not be linked to a responder. Review these records?.
-        /// </summary>
-        internal static string WebConfirmReviewUnlinkable {
-            get {
-                return ResourceManager.GetString("WebConfirmReviewUnlinkable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Failed to retrieve web survey details. Please verify web survey settings..
         /// </summary>
         internal static string WebGetSurveyFailed {

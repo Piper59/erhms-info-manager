@@ -282,6 +282,8 @@
     </Compile>
     <Compile Include="Infrastructure\BusyService.cs" />
     <Compile Include="Infrastructure\ContextSafeAttribute.cs" />
+    <Compile Include="Infrastructure\CustomPropertyDescriptor.cs" />
+    <Compile Include="Infrastructure\DataGridExtensions.cs" />
     <Compile Include="Infrastructure\DataService.cs" />
     <Compile Include="Infrastructure\DialogTypeMap.cs" />
     <Compile Include="Infrastructure\DirtyCheckAttribute.cs" />
@@ -354,6 +356,8 @@
     <Compile Include="ViewModels\PostpopulateViewModel.cs" />
     <Compile Include="ViewModels\PrepopulateViewModel.cs" />
     <Compile Include="ViewModels\RecipientViewModel.cs" />
+    <Compile Include="ViewModels\RecordListViewModel.cs" />
+    <Compile Include="ViewModels\RecordViewModel.cs" />
     <Compile Include="ViewModels\ResponderListViewModel.cs" />
     <Compile Include="ViewModels\ResponderReportViewModel.cs" />
     <Compile Include="ViewModels\ResponderViewModel.cs" />
@@ -466,6 +470,9 @@
     </Compile>
     <Compile Include="Views\RecipientView.xaml.cs">
       <DependentUpon>RecipientView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecordListView.xaml.cs">
+      <DependentUpon>RecordListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ResponderListView.xaml.cs">
       <DependentUpon>ResponderListView.xaml</DependentUpon>
@@ -710,6 +717,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RecipientView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RecordListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

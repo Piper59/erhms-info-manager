@@ -10,6 +10,7 @@ using ERHMS.Presentation.Services;
 using ERHMS.Presentation.ViewModels;
 using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Base = ERHMS.EpiInfo.ImportExport;
@@ -71,7 +72,7 @@ namespace ERHMS.Presentation
                 return;
             }
             Survey survey = null;
-            bool unlinked = false;
+            ICollection<RecordViewModel> records = new List<RecordViewModel>();
             try
             {
                 await ServiceLocator.Dialog.BlockAsync(Resources.WebImporting, () =>
@@ -85,30 +86,81 @@ namespace ERHMS.Presentation
                     {
                         return;
                     }
-                    Context.Project.CollectedData.EnsureDataTablesExist(viewId);
-                    ILookup<string, Responder> responders = Context.Responders.Select()
-                        .ToLookup(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
                     ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
+                    IDictionary<string, ViewEntity> entitiesById = entities.Select()
+                        .ToDictionary(entity => entity.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
+                    IDictionary<string, WebLink> webLinksByRecordId = Context.WebLinks.SelectByWebSurveyId(view.WebSurveyId)
+                        .ToDictionary(webLink => webLink.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
+                    ICollection<Responder> responders = Context.Responders.Select().ToList();
+                    IDictionary<string, Responder> respondersById = responders
+                        .ToDictionary(responder => responder.ResponderId, StringComparer.OrdinalIgnoreCase);
+                    ILookup<string, Responder> respondersByEmailAddress = responders
+                        .ToLookup(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
                     foreach (Record record in Service.GetRecords(survey).OrderBy(record => record.ModifiedOn))
                     {
-                        if (record.ContainsKey(FieldNames.ResponderId) && record.ContainsKey(FieldNames.ResponderEmailAddress))
+                        ViewEntity entity = null;
+                        Responder responder = null;
+                        if (view.Id == Context.Responders.View.Id)
                         {
-                            ViewEntity entity = entities.SelectById(record.GlobalRecordId);
-                            if (entity != null && !string.IsNullOrEmpty(entity.GetProperty(FieldNames.ResponderId) as string))
-                            {
-                                continue;
-                            }
-                            Responder responder = responders[record[FieldNames.ResponderEmailAddress]].FirstOrDefault();
+                            respondersById.TryGetValue(record.GlobalRecordId, out responder);
                             if (responder == null)
                             {
-                                unlinked = true;
+                                WebLink webLink;
+                                if (webLinksByRecordId.TryGetValue(record.GlobalRecordId, out webLink))
+                                {
+                                    respondersById.TryGetValue(webLink.ResponderId, out responder);
+                                }
                             }
-                            else
+                            if (responder == null)
+                            {
+                                string emailAddress;
+                                if (record.TryGetValue(nameof(Responder.EmailAddress), out emailAddress))
+                                {
+                                    responder = respondersByEmailAddress[emailAddress].FirstOrDefault();
+                                }
+                            }
+                            if (responder != null)
+                            {
+                                entity = responder;
+                                record.EntityId = entity.GlobalRecordId;
+                            }
+                        }
+                        else
+                        {
+                            entitiesById.TryGetValue(record.GlobalRecordId, out entity);
+                            string responderId = entity?.GetProperty(FieldNames.ResponderId) as string;
+                            if (responderId != null)
+                            {
+                                respondersById.TryGetValue(responderId, out responder);
+                            }
+                            if (responder == null)
+                            {
+                                WebLink webLink;
+                                if (webLinksByRecordId.TryGetValue(record.GlobalRecordId, out webLink))
+                                {
+                                    respondersById.TryGetValue(webLink.ResponderId, out responder);
+                                }
+                            }
+                            if (responder == null)
+                            {
+                                string emailAddress;
+                                if (record.TryGetValue(FieldNames.ResponderEmailAddress, out emailAddress))
+                                {
+                                    responder = respondersByEmailAddress[emailAddress].FirstOrDefault();
+                                }
+                            }
+                            if (responder != null && record.ContainsKey(FieldNames.ResponderId))
                             {
                                 record[FieldNames.ResponderId] = responder.ResponderId;
                             }
                         }
-                        entities.Save(record);
+                        records.Add(new RecordViewModel
+                        {
+                            Import = entity == null || record.ModifiedOn > entity.ModifiedOn,
+                            Record = record,
+                            Entity = entity,
+                            Responder = responder
+                        });
                     }
                 });
             }
@@ -131,20 +183,7 @@ namespace ERHMS.Presentation
             }
             else
             {
-                ServiceLocator.Dialog.Notify(Resources.WebImported);
-                if (view.Id == Context.Responders.View.Id)
-                {
-                    ServiceLocator.Data.Refresh(typeof(Responder));
-                }
-                if (unlinked)
-                {
-                    if (await ServiceLocator.Dialog.ConfirmAsync(Resources.WebConfirmReviewUnlinkable, "Review"))
-                    {
-                        ServiceLocator.Document.Show(
-                            model => model.View.Id == view.Id,
-                            () => new ViewEntityListViewModel(view));
-                    }
-                }
+                ServiceLocator.Document.Show(() => new RecordListViewModel(view, records));
             }
         }
 

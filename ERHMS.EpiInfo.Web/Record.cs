@@ -25,6 +25,7 @@ namespace ERHMS.EpiInfo.Web
         };
 
         public string GlobalRecordId { get; set; }
+        public string EntityId { get; set; }
         public string PassCode { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }

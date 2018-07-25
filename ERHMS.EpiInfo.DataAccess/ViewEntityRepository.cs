@@ -268,13 +268,14 @@ namespace ERHMS.EpiInfo.DataAccess
                         throw;
                     }
                 }
-                TEntity entity = SelectById(record.GlobalRecordId);
+                string globalRecordId = record.EntityId ?? record.GlobalRecordId;
+                TEntity entity = SelectById(globalRecordId);
                 if (entity == null)
                 {
                     entity = new TEntity
                     {
                         New = true,
-                        GlobalRecordId = record.GlobalRecordId
+                        GlobalRecordId = globalRecordId
                     };
                 }
                 foreach (string key in record.Keys)

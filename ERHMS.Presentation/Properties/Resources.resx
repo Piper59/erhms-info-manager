@@ -379,9 +379,6 @@ Settings have not been saved.</value>
   <data name="WebConfigure" xml:space="preserve">
     <value>{0} Please verify web survey settings.</value>
   </data>
-  <data name="WebConfirmReviewUnlinkable" xml:space="preserve">
-    <value>One or more records could not be linked to a responder. Review these records?</value>
-  </data>
   <data name="WebGetSurveyFailed" xml:space="preserve">
     <value>Failed to retrieve web survey details. Please verify web survey settings.</value>
   </data>

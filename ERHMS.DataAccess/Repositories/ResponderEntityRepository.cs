@@ -72,6 +72,7 @@ namespace ERHMS.DataAccess
                         {
                             ResponderEntity entity = new ResponderEntity
                             {
+                                ViewId = view.ViewId,
                                 View = view
                             };
                             entity.SetProperties(reader);

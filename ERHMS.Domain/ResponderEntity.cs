@@ -5,6 +5,12 @@ namespace ERHMS.Domain
 {
     public class ResponderEntity : ViewEntity
     {
+        public int ViewId
+        {
+            get { return GetProperty<int>(nameof(ViewId)); }
+            set { SetProperty(nameof(ViewId), value); }
+        }
+
         private View view;
         public View View
         {

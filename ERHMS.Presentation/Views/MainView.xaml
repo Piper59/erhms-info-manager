@@ -123,6 +123,13 @@
                         </i:Interaction.Behaviors>
                     </Views:HelpView>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:RecordListViewModel}">
+                    <Views:RecordListView>
+                        <i:Interaction.Behaviors>
+                            <Behaviors:FixKeyboardCuesBehavior />
+                        </i:Interaction.Behaviors>
+                    </Views:RecordListView>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:IncidentListViewModel}">
                     <Views:IncidentListView>
                         <i:Interaction.Behaviors>
