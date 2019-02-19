@@ -125,7 +125,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Unity.Abstractions, Version=4.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.9.5\lib\net40\Unity.Abstractions.dll</HintPath>
+      <HintPath>..\packages\Unity.Abstractions.4.0.3\lib\net40\Unity.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Container, Version=5.9.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.9.5\lib\net40\Unity.Container.dll</HintPath>
@@ -135,7 +135,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Unity.ServiceLocation, Version=2.1.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.8.6\lib\net40\Unity.ServiceLocation.dll</HintPath>
+      <HintPath>..\packages\Unity.ServiceLocation.5.9.1\lib\net40\Unity.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
