@@ -58,6 +58,7 @@ namespace ERHMS.Presentation
 
         public static async Task ImportFromWebAsync(int viewId)
         {
+            Context.Project.CollectedData.EnsureDataTablesExist(viewId);
             View view = Context.Project.GetViewById(viewId);
             if (!view.IsWebSurvey())
             {
@@ -75,6 +76,7 @@ namespace ERHMS.Presentation
             ICollection<RecordViewModel> records = new List<RecordViewModel>();
             try
             {
+                // TODO: Refactor
                 await ServiceLocator.Dialog.BlockAsync(Resources.WebImporting, () =>
                 {
                     if (!Service.IsConfigured(out error))

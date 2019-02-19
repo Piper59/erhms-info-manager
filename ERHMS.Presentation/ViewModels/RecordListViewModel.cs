@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ERHMS.Domain;
+using ERHMS.Presentation.Commands;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -36,9 +38,13 @@ namespace ERHMS.Presentation.ViewModels
             yield return new DataGridTextColumn
             {
                 Header = "Local",
-                Binding = new Binding("Entity.ModifiedOn"),
+                Binding = new Binding("Entity.ModifiedOn")
+                {
+                    FallbackValue = "Not found"
+                },
                 IsReadOnly = true
             };
+            // TODO: Allow single-click to change state
             yield return new DataGridCheckBoxColumn
             {
                 Header = "Import",
@@ -55,6 +61,9 @@ namespace ERHMS.Presentation.ViewModels
         public ICollection<DataGridColumn> Columns { get; private set; }
         public RecordListChildViewModel Records { get; private set; }
 
+        public ICommand PostpopulateCommand { get; private set; }
+        public ICommand ImportCommand { get; private set; }
+
         public RecordListViewModel(View view, IEnumerable<RecordViewModel> records)
         {
             Title = "Import";
@@ -63,16 +72,23 @@ namespace ERHMS.Presentation.ViewModels
             Records = new RecordListChildViewModel(records);
         }
 
+        public bool CanPostpopulate()
+        {
+            return View.Fields.Contains(FieldNames.ResponderId) && Records.HasOneSelectedItem();
+        }
+
         public async Task PostpopulateAsync()
         {
+            // TODO?
+            // Or disallow postpopulation until the record is imported?
+            // I.e., postpopulation would have to be done in ViewEntityListViewModel
             await TaskEx.WhenAll();
-            // TODO
         }
 
         public async Task ImportAsync()
         {
-            await TaskEx.WhenAll();
             // TODO
+            await TaskEx.WhenAll();
             //Context.Project.CollectedData.EnsureDataTablesExist(viewId);
             //foreach (...)
             //{
