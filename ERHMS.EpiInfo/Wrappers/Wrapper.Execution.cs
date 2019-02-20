@@ -16,25 +16,35 @@ namespace ERHMS.EpiInfo.Wrappers
         {
             try
             {
-                SetStreams();
-                Log.LevelName = Settings.Default.LogLevelName;
-                Log.Logger.Debug("Starting up");
-                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
-                {
-                    HandleError(e.ExceptionObject as Exception);
-                };
-                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
-                Application.EnableVisualStyles();
-                ConfigurationExtensions.Load();
+                SetUp();
                 BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
                 MethodInfo method = Assembly.GetCallingAssembly().GetType(args[0]).GetMethod(args[1], flags);
                 method.Invoke(null, ReceiveArgs());
-                Log.Logger.Debug("Exiting");
+                TearDown();
             }
             catch (Exception ex)
             {
                 HandleError(ex);
             }
+        }
+
+        public static void SetUp()
+        {
+            SetStreams();
+            Log.LevelName = Settings.Default.LogLevelName;
+            Log.Logger.Debug("Starting up");
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                HandleError(e.ExceptionObject as Exception);
+            };
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
+            Application.EnableVisualStyles();
+            ConfigurationExtensions.Load();
+        }
+
+        public static void TearDown()
+        {
+            Log.Logger.Debug("Exiting");
         }
 
         private static void SetStreams()
