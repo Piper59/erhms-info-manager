@@ -46,7 +46,11 @@ namespace ERHMS.Presentation.Dialogs
         private void Log_TextChanged(object sender, TextChangedEventArgs e)
         {
             Log.ScrollToEnd();
-            User32.FlashWindowEx(win32Window.Handle, 5);
+            try
+            {
+                User32.FlashWindowEx(win32Window.Handle, 5);
+            }
+            catch { }
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)

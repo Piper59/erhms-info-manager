@@ -22,7 +22,7 @@ namespace ERHMS.Presentation
             public uint dwTimeout;
         }
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int FlashWindowEx(ref FLASHWINFO pwfi);
 
         public static void FlashWindowEx(IntPtr hwnd, uint uCount)
