@@ -8,6 +8,19 @@ namespace ERHMS.Utility
 {
     public static class IOExtensions
     {
+        public static string AddDirectorySeparator(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return path;
+            }
+            string result = path;
+            result = result.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            result = result.TrimEnd(Path.DirectorySeparatorChar);
+            result += Path.DirectorySeparatorChar;
+            return result;
+        }
+
         public static string GetTempFileName(string format, params object[] args)
         {
             ArrayExtensions.Resize(ref args, args.Length + 1, 1);

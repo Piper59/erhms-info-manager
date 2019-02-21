@@ -18,6 +18,26 @@ namespace ERHMS.Test.Utility
         };
 
         [Test]
+        public void AddDirectorySeparatorTest()
+        {
+            AddDirectorySeparatorTest(null, null);
+            AddDirectorySeparatorTest(@"", @"");
+            AddDirectorySeparatorTest(@"C:\", @"C:");
+            AddDirectorySeparatorTest(@"C:\", @"C:\");
+            AddDirectorySeparatorTest(@"C:\1\2\3\", @"C:\1\2\3");
+            AddDirectorySeparatorTest(@"C:\1\2\3\", @"C:\1\2\3\");
+            AddDirectorySeparatorTest(@"C:\1\2\3\", @"C:\1\2\3\\\");
+            AddDirectorySeparatorTest(@"C:\1\2\3\", @"C:/1/2/3");
+            AddDirectorySeparatorTest(@"C:\1\2\3\", @"C:/1/2/3/");
+            AddDirectorySeparatorTest(@"C:\1\2\3\", @"C:/1/2/3///");
+        }
+
+        private void AddDirectorySeparatorTest(string expected, string path)
+        {
+            Assert.AreEqual(expected, IOExtensions.AddDirectorySeparator(path));
+        }
+
+        [Test]
         public void GetTempFileNameTest()
         {
             GetTempFileNameTest("temp_{0:N}.txt");

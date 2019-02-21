@@ -82,15 +82,15 @@ namespace ERHMS.EpiInfo
 
         private static void SetSystemDirectories(Config.DirectoriesRow directories)
         {
-            directories.Configuration = Path.GetDirectoryName(FilePath);
-            directories.LogDir = Path.GetDirectoryName(Log.FilePath);
-            directories.Working = Path.GetTempPath();
+            directories.Configuration = IOExtensions.AddDirectorySeparator(Path.GetDirectoryName(FilePath));
+            directories.LogDir = IOExtensions.AddDirectorySeparator(Path.GetDirectoryName(Log.FilePath));
+            directories.Working = IOExtensions.AddDirectorySeparator(Path.GetTempPath());
         }
 
         private static void SetUserDirectories(Config.DirectoriesRow directories, string userDirectoryPath)
         {
-            directories.Project = Path.Combine(userDirectoryPath, "Projects");
-            directories.Templates = Path.Combine(userDirectoryPath, "Templates");
+            directories.Project = IOExtensions.AddDirectorySeparator(Path.Combine(userDirectoryPath, "Projects"));
+            directories.Templates = IOExtensions.AddDirectorySeparator(Path.Combine(userDirectoryPath, "Templates"));
         }
 
         private static void SetCrypto(Config config, bool isFipsCryptoRequired)

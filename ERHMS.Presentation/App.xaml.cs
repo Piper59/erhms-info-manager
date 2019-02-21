@@ -230,7 +230,7 @@ namespace ERHMS.Presentation
             Settings.Default.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
-            configuration.Directories.LogDir = Path.GetDirectoryName(Log.FilePath);
+            configuration.Directories.LogDir = IOExtensions.AddDirectorySeparator(Path.GetDirectoryName(Log.FilePath));
             configuration.Save();
             configuration = ConfigurationExtensions.Load();
             string text = string.Format(ResXResources.AppInstallDirectory, AssemblyExtensions.GetEntryDirectoryPath());
