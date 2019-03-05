@@ -1,5 +1,9 @@
 ﻿using ERHMS.Domain;
+using ERHMS.EpiInfo.DataAccess;
+using ERHMS.EpiInfo.Domain;
 using ERHMS.Presentation.Commands;
+using ERHMS.Presentation.Properties;
+using ERHMS.Presentation.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -79,26 +83,30 @@ namespace ERHMS.Presentation.ViewModels
 
         public async Task PostpopulateAsync()
         {
-            // TODO?
-            // Or disallow postpopulation until the record is imported?
-            // I.e., postpopulation would have to be done in ViewEntityListViewModel
-            await TaskEx.WhenAll();
+            PostpopulateViewModel model = new PostpopulateViewModel(Records.SelectedItem.Responder?.ResponderId);
+            model.Saved += (sender, e) =>
+            {
+                Records.SelectedItem.Responder = e.ResponderId == null ? null : Context.Responders.SelectById(e.ResponderId);
+                Records.SelectedItem.Record[FieldNames.ResponderId] = e.ResponderId;
+            };
+            await ServiceLocator.Dialog.ShowAsync(model);
         }
 
         public async Task ImportAsync()
         {
-            // TODO
-            await TaskEx.WhenAll();
-            //Context.Project.CollectedData.EnsureDataTablesExist(viewId);
-            //foreach (...)
-            //{
-            //    entities.Save(record);
-            //}
-            //ServiceLocator.Dialog.Notify(Resources.WebImported);
-            //if (view.Id == Context.Responders.View.Id)
-            //{
-            //    ServiceLocator.Data.Refresh(typeof(Responder));
-            //}
+            await ServiceLocator.Dialog.BlockAsync(Resources.WebImporting, () =>
+            {
+                ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, View);
+                foreach (RecordViewModel record in Records.Items.Where(record => record.Import))
+                {
+                    entities.Save(record.Record);
+                }
+            });
+            ServiceLocator.Dialog.Notify(Resources.WebImported);
+            if (View.Id == Context.Responders.View.Id)
+            {
+                ServiceLocator.Data.Refresh(typeof(Responder));
+            }
         }
     }
 }

@@ -85,9 +85,12 @@ namespace ERHMS.Presentation.ViewModels
         public async Task PostpopulateAsync()
         {
             ViewEntity entity = Entities.Repository.Refresh(Entities.SelectedItems.First());
-            PostpopulateViewModel model = new PostpopulateViewModel(View, entity);
+            PostpopulateViewModel model = new PostpopulateViewModel(entity.GetProperty(FieldNames.ResponderId) as string);
             model.Saved += (sender, e) =>
             {
+                entity = Entities.Repository.Refresh(entity);
+                entity.SetProperty(FieldNames.ResponderId, e.ResponderId);
+                Entities.Repository.Save(entity);
                 Entities.Refresh();
             };
             await ServiceLocator.Dialog.ShowAsync(model);
