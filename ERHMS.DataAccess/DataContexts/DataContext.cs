@@ -95,7 +95,7 @@ namespace ERHMS.DataAccess
         public UniquePairRepository UniquePairs { get; private set; }
         public ViewRepository Views { get; private set; }
         public ViewLinkRepository ViewLinks { get; private set; }
-        public WebLinkRepository WebLinks { get; private set; }
+        public WebRecordRepository WebRecords { get; private set; }
         public WebSurveyRepository WebSurveys { get; private set; }
 
         public IEnumerable<string> Prefixes
@@ -146,7 +146,7 @@ namespace ERHMS.DataAccess
             UniquePairs = new UniquePairRepository(this);
             Views = new ViewRepository(this);
             ViewLinks = new ViewLinkRepository(this);
-            WebLinks = new WebLinkRepository(this);
+            WebRecords = new WebRecordRepository(this);
             WebSurveys = new WebSurveyRepository(this);
         }
 
@@ -173,7 +173,7 @@ namespace ERHMS.DataAccess
             {
                 return true;
             }
-            if (!Database.TableExists("ERHMS_WebLinks"))
+            if (!Database.TableExists("ERHMS_WebRecords"))
             {
                 return true;
             }
@@ -187,7 +187,7 @@ namespace ERHMS.DataAccess
             {
                 if (!Database.TableExists("ERHMS_Jobs"))
                 {
-                    connection.Execute(GetScript("JobTicketing"), transaction);
+                    connection.Execute(GetScript("Jobs"), transaction);
                     foreach (Incident incident in Incidents.Select())
                     {
                         IncidentRoles.InsertAll(incident.IncidentId);
@@ -195,11 +195,11 @@ namespace ERHMS.DataAccess
                 }
                 if (!Database.TableExists("ERHMS_UniquePairs"))
                 {
-                    connection.Execute(GetScript("Deduplication"), transaction);
+                    connection.Execute(GetScript("UniquePairs"), transaction);
                 }
-                if (!Database.TableExists("ERHMS_WebLinks"))
+                if (!Database.TableExists("ERHMS_WebRecords"))
                 {
-                    connection.Execute(GetScript("WebLinking"), transaction);
+                    connection.Execute(GetScript("WebRecords"), transaction);
                 }
             });
             Project.Version = Assembly.GetExecutingAssembly().GetName().Version;

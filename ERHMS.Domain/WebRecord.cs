@@ -2,18 +2,18 @@
 
 namespace ERHMS.Domain
 {
-    public class WebLink : GuidEntity
+    public class WebRecord : GuidEntity
     {
         public override string Guid
         {
-            get { return WebLinkId; }
-            set { WebLinkId = value; }
+            get { return WebRecordId; }
+            set { WebRecordId = value; }
         }
 
-        public string WebLinkId
+        public string WebRecordId
         {
-            get { return GetProperty<string>(nameof(WebLinkId)); }
-            set { SetProperty(nameof(WebLinkId), value); }
+            get { return GetProperty<string>(nameof(WebRecordId)); }
+            set { SetProperty(nameof(WebRecordId), value); }
         }
 
         public string ResponderId
@@ -41,15 +41,15 @@ namespace ERHMS.Domain
             set { SetProperty(nameof(GlobalRecordId), value); }
         }
 
-        public WebLink(bool @new)
+        public WebRecord(bool @new)
             : base(@new) { }
 
-        public WebLink()
+        public WebRecord()
             : this(false) { }
 
         public override object Clone()
         {
-            WebLink clone = (WebLink)base.Clone();
+            WebRecord clone = (WebRecord)base.Clone();
             clone.Responder = (Responder)Responder.Clone();
             return clone;
         }

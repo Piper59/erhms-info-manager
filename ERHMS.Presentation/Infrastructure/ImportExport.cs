@@ -91,8 +91,8 @@ namespace ERHMS.Presentation
                     ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
                     IDictionary<string, ViewEntity> entitiesById = entities.Select()
                         .ToDictionary(entity => entity.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
-                    IDictionary<string, WebLink> webLinksByRecordId = Context.WebLinks.SelectByWebSurveyId(view.WebSurveyId)
-                        .ToDictionary(webLink => webLink.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
+                    IDictionary<string, WebRecord> webRecordsByRecordId = Context.WebRecords.SelectByWebSurveyId(view.WebSurveyId)
+                        .ToDictionary(webRecord => webRecord.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
                     ICollection<Responder> responders = Context.Responders.Select().ToList();
                     IDictionary<string, Responder> respondersById = responders
                         .ToDictionary(responder => responder.ResponderId, StringComparer.OrdinalIgnoreCase);
@@ -107,10 +107,10 @@ namespace ERHMS.Presentation
                             respondersById.TryGetValue(record.GlobalRecordId, out responder);
                             if (responder == null)
                             {
-                                WebLink webLink;
-                                if (webLinksByRecordId.TryGetValue(record.GlobalRecordId, out webLink))
+                                WebRecord webRecord;
+                                if (webRecordsByRecordId.TryGetValue(record.GlobalRecordId, out webRecord))
                                 {
-                                    respondersById.TryGetValue(webLink.ResponderId, out responder);
+                                    respondersById.TryGetValue(webRecord.ResponderId, out responder);
                                 }
                             }
                             if (responder == null)
@@ -137,10 +137,10 @@ namespace ERHMS.Presentation
                             }
                             if (responder == null)
                             {
-                                WebLink webLink;
-                                if (webLinksByRecordId.TryGetValue(record.GlobalRecordId, out webLink))
+                                WebRecord webRecord;
+                                if (webRecordsByRecordId.TryGetValue(record.GlobalRecordId, out webRecord))
                                 {
-                                    respondersById.TryGetValue(webLink.ResponderId, out responder);
+                                    respondersById.TryGetValue(webRecord.ResponderId, out responder);
                                 }
                             }
                             if (responder == null)

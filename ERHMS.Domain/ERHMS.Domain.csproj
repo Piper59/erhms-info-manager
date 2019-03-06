@@ -92,7 +92,7 @@
     <Compile Include="UniquePair.cs" />
     <Compile Include="View.cs" />
     <Compile Include="ViewLink.cs" />
-    <Compile Include="WebLink.cs" />
+    <Compile Include="WebRecord.cs" />
     <Compile Include="WebSurvey.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

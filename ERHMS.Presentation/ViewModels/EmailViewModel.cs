@@ -294,7 +294,7 @@ namespace ERHMS.Presentation.ViewModels
                                             body.AppendFormat("Pass code: {0}", record.PassCode);
                                             if (responder != null)
                                             {
-                                                Context.WebLinks.Save(new WebLink(true)
+                                                Context.WebRecords.Save(new WebRecord(true)
                                                 {
                                                     ResponderId = responder.ResponderId,
                                                     WebSurveyId = survey.SurveyId,

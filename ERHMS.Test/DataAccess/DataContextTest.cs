@@ -848,26 +848,26 @@ namespace ERHMS.Test.DataAccess
 
         [Test]
         [Order(17)]
-        public void WebLinksTest()
+        public void WebRecordsTest()
         {
             foreach (Responder responder in responders.Take(3))
             {
-                WebLinksTest(responder);
+                WebRecordsTest(responder);
             }
-            Assert.AreEqual(3, context.WebLinks.Select().Count());
+            Assert.AreEqual(3, context.WebRecords.Select().Count());
         }
 
-        private void WebLinksTest(Responder responder)
+        private void WebRecordsTest(Responder responder)
         {
-            WebLink original = new WebLink(true)
+            WebRecord original = new WebRecord(true)
             {
                 ResponderId = responder.ResponderId,
                 WebSurveyId = Guid.NewGuid().ToString(),
                 GlobalRecordId = Guid.NewGuid().ToString()
             };
-            context.WebLinks.Save(original);
-            Assert.AreEqual(1, context.WebLinks.SelectByWebSurveyId(original.WebSurveyId).Count());
-            WebLink retrieved = context.WebLinks.SelectById(original.WebLinkId);
+            context.WebRecords.Save(original);
+            Assert.AreEqual(1, context.WebRecords.SelectByWebSurveyId(original.WebSurveyId).Count());
+            WebRecord retrieved = context.WebRecords.SelectById(original.WebRecordId);
             Assert.AreEqual(original.GlobalRecordId, retrieved.GlobalRecordId);
             Assert.AreEqual(responder.EmailAddress, retrieved.Responder.EmailAddress);
         }
