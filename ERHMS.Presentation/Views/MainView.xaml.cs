@@ -227,7 +227,7 @@ namespace ERHMS.Presentation.Views
                         break;
                     }
                     string message = string.Format(ResXResources.RootPathDirectoryExists, path);
-                    if (MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                    if (MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
                         break;
                     }
