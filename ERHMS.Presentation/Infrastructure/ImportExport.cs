@@ -1,7 +1,6 @@
 ﻿using ERHMS.DataAccess;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.DataAccess;
 using ERHMS.EpiInfo.Domain;
 using ERHMS.EpiInfo.Web;
 using ERHMS.EpiInfo.Wrappers;
@@ -76,7 +75,6 @@ namespace ERHMS.Presentation
             ICollection<RecordViewModel> records = new List<RecordViewModel>();
             try
             {
-                // TODO: Refactor
                 await ServiceLocator.Dialog.BlockAsync(Resources.WebImporting, () =>
                 {
                     if (!Service.IsConfigured(out error))
@@ -88,73 +86,19 @@ namespace ERHMS.Presentation
                     {
                         return;
                     }
-                    ViewEntityRepository<ViewEntity> entities = new ViewEntityRepository<ViewEntity>(Context.Database, view);
-                    IDictionary<string, ViewEntity> entitiesById = entities.Select()
-                        .ToDictionary(entity => entity.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
-                    IDictionary<string, WebRecord> webRecordsByRecordId = Context.WebRecords.SelectByWebSurveyId(view.WebSurveyId)
-                        .ToDictionary(webRecord => webRecord.GlobalRecordId, StringComparer.OrdinalIgnoreCase);
-                    ICollection<Responder> responders = Context.Responders.Select().ToList();
-                    IDictionary<string, Responder> respondersById = responders
-                        .ToDictionary(responder => responder.ResponderId, StringComparer.OrdinalIgnoreCase);
-                    ILookup<string, Responder> respondersByEmailAddress = responders
-                        .ToLookup(responder => responder.EmailAddress, StringComparer.OrdinalIgnoreCase);
+                    WebMapper mapper = new WebMapper(Context, view);
                     foreach (Record record in Service.GetRecords(survey).OrderBy(record => record.ModifiedOn))
                     {
-                        ViewEntity entity = null;
-                        Responder responder = null;
-                        if (view.Id == Context.Responders.View.Id)
+                        Tuple<ViewEntity, Responder> tuple = mapper.Map(record);
+                        ViewEntity entity = tuple.Item1;
+                        Responder responder = tuple.Item2;
+                        if (entity != null)
                         {
-                            respondersById.TryGetValue(record.GlobalRecordId, out responder);
-                            if (responder == null)
-                            {
-                                WebRecord webRecord;
-                                if (webRecordsByRecordId.TryGetValue(record.GlobalRecordId, out webRecord))
-                                {
-                                    respondersById.TryGetValue(webRecord.ResponderId, out responder);
-                                }
-                            }
-                            if (responder == null)
-                            {
-                                string emailAddress;
-                                if (record.TryGetValue(nameof(Responder.EmailAddress), out emailAddress))
-                                {
-                                    responder = respondersByEmailAddress[emailAddress].FirstOrDefault();
-                                }
-                            }
-                            if (responder != null)
-                            {
-                                entity = responder;
-                                record.EntityId = entity.GlobalRecordId;
-                            }
+                            record.EntityId = entity.GlobalRecordId;
                         }
-                        else
+                        if (responder != null && record.ContainsKey(FieldNames.ResponderId))
                         {
-                            entitiesById.TryGetValue(record.GlobalRecordId, out entity);
-                            string responderId = entity?.GetProperty(FieldNames.ResponderId) as string;
-                            if (responderId != null)
-                            {
-                                respondersById.TryGetValue(responderId, out responder);
-                            }
-                            if (responder == null)
-                            {
-                                WebRecord webRecord;
-                                if (webRecordsByRecordId.TryGetValue(record.GlobalRecordId, out webRecord))
-                                {
-                                    respondersById.TryGetValue(webRecord.ResponderId, out responder);
-                                }
-                            }
-                            if (responder == null)
-                            {
-                                string emailAddress;
-                                if (record.TryGetValue(FieldNames.ResponderEmailAddress, out emailAddress))
-                                {
-                                    responder = respondersByEmailAddress[emailAddress].FirstOrDefault();
-                                }
-                            }
-                            if (responder != null && record.ContainsKey(FieldNames.ResponderId))
-                            {
-                                record[FieldNames.ResponderId] = responder.ResponderId;
-                            }
+                            record[FieldNames.ResponderId] = responder.ResponderId;
                         }
                         records.Add(new RecordViewModel
                         {

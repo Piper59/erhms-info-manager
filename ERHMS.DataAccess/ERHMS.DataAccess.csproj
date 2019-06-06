@@ -66,6 +66,10 @@
       <Project>{0d41b95e-cf48-40a9-b7c5-71a6e5bb9924}</Project>
       <Name>ERHMS.EpiInfo.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo.Web\ERHMS.EpiInfo.Web.csproj">
+      <Project>{05366C9D-7568-4C45-9C80-C77B18EB69E8}</Project>
+      <Name>ERHMS.EpiInfo.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo.Wrappers.MakeView\ERHMS.EpiInfo.Wrappers.MakeView.csproj">
       <Project>{b9bd5854-5610-41bb-89f1-8bfa0a1ddd4f}</Project>
       <Name>ERHMS.EpiInfo.MakeView</Name>
@@ -117,6 +121,7 @@
     <Compile Include="Repositories\WebRecordRepository.cs" />
     <Compile Include="Repositories\WebSurveyRepository.cs" />
     <Compile Include="SqlBuilder.cs" />
+    <Compile Include="WebMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\Forms\ARC_HSR.xml">
