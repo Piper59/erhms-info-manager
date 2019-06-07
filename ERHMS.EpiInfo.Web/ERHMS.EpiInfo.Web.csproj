@@ -73,9 +73,6 @@
     <Compile Include="Service.V2.cs" />
     <Compile Include="Survey.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\ERHMS.Build.targets" />
 </Project>
