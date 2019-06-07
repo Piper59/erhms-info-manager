@@ -98,7 +98,7 @@ namespace ERHMS.Presentation.Views
                 {
                     CustomResourceDictionary = accent
                 });
-            await TaskEx.Run(action);
+            await Task.Run(action);
             await controller.CloseAsync();
         }
 
@@ -241,7 +241,7 @@ namespace ERHMS.Presentation.Views
             WindowState state = WindowState;
             WindowState = WindowState.Minimized;
             wrapper.Invoke();
-            await TaskEx.Run(() =>
+            await Task.Run(() =>
             {
                 wrapper.Exited.WaitOne();
             });

@@ -41,8 +41,7 @@
     <Reference Include="Epi.Core">
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Epi.Windows, Version=7.2.6222.21578, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Epi.Windows">
       <HintPath>..\Epi Info 7\Epi.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />

@@ -7,7 +7,7 @@ namespace ERHMS.Presentation.Commands
 {
     public abstract class CommandBase : ICommand
     {
-        protected static readonly Task CompletedTask = TaskEx.WhenAll();
+        protected static readonly Task CompletedTask = Task.WhenAll();
 
         private Delegate execute;
 

@@ -90,10 +90,10 @@ namespace ERHMS.Presentation.ViewModels
             try
             {
                 generating = true;
-                Incidents = await TaskEx.Run(() => GetIncidents());
-                TeamResponders = await TaskEx.Run(() => GetTeamResponders());
-                JobTickets = await TaskEx.Run(() => GetJobTickets());
-                Entities = await TaskEx.Run(() => GetEntities());
+                Incidents = await Task.Run(() => GetIncidents());
+                TeamResponders = await Task.Run(() => GetTeamResponders());
+                JobTickets = await Task.Run(() => GetJobTickets());
+                Entities = await Task.Run(() => GetEntities());
             }
             finally
             {

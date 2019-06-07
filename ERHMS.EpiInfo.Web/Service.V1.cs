@@ -205,9 +205,9 @@ namespace ERHMS.EpiInfo.Web
                             UserPublishKey = survey.PublishKey,
                             StatusId = -1,
                             ReturnSizeInfoOnly = true,
-                            SurveyAnswerIdList = new List<string>()
+                            SurveyAnswerIdList = new string[] { }
                         },
-                        SurveyAnswerList = new List<SurveyAnswerDTO>()
+                        SurveyAnswerList = new SurveyAnswerDTO[] { }
                     };
                     int pageCount;
                     {

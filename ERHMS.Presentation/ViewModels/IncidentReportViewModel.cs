@@ -113,11 +113,11 @@ namespace ERHMS.Presentation.ViewModels
             try
             {
                 generating = true;
-                IncidentNotes = await TaskEx.Run(() => GetIncidentNotes());
-                Jobs = await TaskEx.Run(() => GetJobs());
-                JobNotes = await TaskEx.Run(() => GetJobNotes());
-                JobTeams = await TaskEx.Run(() => GetJobTeams());
-                JobTickets = await TaskEx.Run(() => GetJobTickets());
+                IncidentNotes = await Task.Run(() => GetIncidentNotes());
+                Jobs = await Task.Run(() => GetJobs());
+                JobNotes = await Task.Run(() => GetJobNotes());
+                JobTeams = await Task.Run(() => GetJobTeams());
+                JobTickets = await Task.Run(() => GetJobTickets());
             }
             finally
             {
