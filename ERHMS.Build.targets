@@ -14,17 +14,17 @@
       <Rebuilding>true</Rebuilding>
     </PropertyGroup>
   </Target>
+  <Target Name="CopyEpiInfoFiles" BeforeTargets="Build" Condition="'$(MainProject)' == 'true'">
+    <ItemGroup>
+      <EpiInfoFile Include="$(EpiInfoDir)**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
   <Target Name="CopyBuildFiles" AfterTargets="Build">
     <ItemGroup>
       <BuildFile Include="$(TargetDir)**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(BuildFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
-  </Target>
-  <Target Name="CopyEpiInfoFiles" AfterTargets="Build" Condition="'$(MainProject)' == 'true'">
-    <ItemGroup>
-      <EpiInfoFile Include="$(EpiInfoDir)**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
   <Target Name="CleanBuildContainerDir" AfterTargets="Clean" Condition="'$(Rebuilding)' == 'false'">
     <RemoveDir Directories="$(BuildContainerDir)" />
