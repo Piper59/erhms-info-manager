@@ -39,9 +39,9 @@ namespace ERHMS.DataAccess
             assembly.CopyManifestResourceTo("ERHMS.DataAccess.Resources.Sample.Sample.mdb", databasePath);
             Project project = new Project(projectPath);
             SampleDataContext context = new SampleDataContext(project);
-            context.InsertPgm("Safety Messages", "ERHMS.DataAccess.Resources.Sample.SafetyMessages.pgm7");
+            context.InsertPgm("Air Quality", "ERHMS.DataAccess.Resources.Sample.AirQuality.pgm7");
             context.InsertCanvas("Air Quality", "ERHMS.DataAccess.Resources.Sample.AirQuality.cvs7");
-            context.InsertCanvas("Symptoms", "ERHMS.DataAccess.Resources.Sample.Symptoms.cvs7");
+            context.InsertCanvas("Heat Exposure", "ERHMS.DataAccess.Resources.Sample.HeatExposure.cvs7");
             context.Upgrade();
             return context;
         }

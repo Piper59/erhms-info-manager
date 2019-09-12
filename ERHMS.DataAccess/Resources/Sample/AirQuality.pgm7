@@ -1,0 +1,2 @@
+READ {Projects\Sample\Sample.prj}:[GreensburgTornado_AirQuality]
+MEANS AirQualityIndex SurveyDate
