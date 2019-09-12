@@ -260,7 +260,7 @@ namespace ERHMS.Presentation.Views
                         (string)Application.Current.Resources["AppTitle"],
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.OK)
+                    if (result == MessageBoxResult.Yes)
                     {
                         break;
                     }

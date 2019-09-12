@@ -34,7 +34,8 @@ namespace ERHMS.Presentation
                 Busy = new BusyService(),
                 Data = new DataService(),
                 Print = new PrintService(),
-                Process = new ProcessService()
+                Process = new ProcessService(),
+                String = new StringService()
             };
             try
             {
@@ -243,7 +244,7 @@ namespace ERHMS.Presentation
             Settings.Default.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Settings.Default.ConfigurationFilePath = ConfigurationExtensions.FilePath;
             Settings.Default.Save();
-            configuration.Directories.LogDir = Path.GetDirectoryName(Log.FilePath);
+            configuration.Directories.LogDir = IOExtensions.AddDirectorySeparator(Path.GetDirectoryName(Log.FilePath));
             configuration.Save();
             configuration = ConfigurationExtensions.Load();
             using (TextWriter writer = new StreamWriter(Path.Combine(configuration.GetRootPath(), "INSTALL.txt")))
