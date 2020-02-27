@@ -1,6 +1,0 @@
-﻿CREATE TABLE ERHMS_WebRecords (
-	WebRecordId NVARCHAR(255) NOT NULL PRIMARY KEY,
-	ResponderId NVARCHAR(255) NOT NULL REFERENCES Responders (GlobalRecordId),
-	WebSurveyId NVARCHAR(255) NOT NULL,
-	GlobalRecordId NVARCHAR(255) NOT NULL
-);

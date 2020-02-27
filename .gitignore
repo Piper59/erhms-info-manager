@@ -1,9 +1,0 @@
-bin/
-Build/
-obj/
-packages/
-publish/
-.vs/
-TestResult.xml
-*.suo
-*.user

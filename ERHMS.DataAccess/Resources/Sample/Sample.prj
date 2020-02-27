@@ -1,7 +1,0 @@
-<Project id="2f0fd5f2-f6bc-41dd-ba41-08be02e5fd61" name="Sample" location="" description="Sample data source for evaluation and training purposes" schemaVersion="102" epiVersion="" createDate="" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False" erhmsVersion="2.0.0.0">
-  <CollectedData>
-    <Database connectionString="" dataDriver="" />
-  </CollectedData>
-  <Metadata source="2" />
-  <EnterMakeviewInterpreter source="Epi.Core.EnterInterpreter" />
-</Project>
