@@ -27,6 +27,7 @@ namespace ERHMS.Desktop
 
         private static void HandleError(Exception ex)
         {
+            // TODO: Add logging
             if (Interlocked.Increment(ref errorCount) > 1)
             {
                 return;

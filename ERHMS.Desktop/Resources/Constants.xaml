@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=mscorlib">
+    <!-- Fonts -->
+    <System:Double x:Key="DefaultFontSize">18.667</System:Double>
+    <System:Double x:Key="LargeFontSize">26.667</System:Double>
+    <FontWeight x:Key="BoldFontWeight">SemiBold</FontWeight>
+
+    <!-- Layout -->
+    <System:Double x:Key="SmallSpace">5</System:Double>
+    <System:Double x:Key="LargeSpace">10</System:Double>
+    <Thickness x:Key="DefaultMargin"
+               Bottom="{StaticResource SmallSpace}"
+               Left="{StaticResource SmallSpace}"
+               Right="{StaticResource SmallSpace}"
+               Top="{StaticResource SmallSpace}" />
+    <Thickness x:Key="DefaultPadding"
+               Bottom="{StaticResource LargeSpace}"
+               Left="{StaticResource LargeSpace}"
+               Right="{StaticResource LargeSpace}"
+               Top="{StaticResource LargeSpace}" />
+</ResourceDictionary>

@@ -3,5 +3,63 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         Height="600"
+        MinHeight="240"
+        MinWidth="320"
         Title="{x:Static Properties:Resources.AppTitle}"
-        Width="800" />
+        Width="800"
+        WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
+                BorderThickness="0,1"
+                SnapsToDevicePixels="True">
+            <Grid Margin="{StaticResource DefaultMargin}"
+                  MaxWidth="640">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">Current incident:</Label>
+                <ComboBox Grid.Column="1" />
+            </Grid>
+        </Border>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel MaxWidth="720" Style="{StaticResource Container}">
+                <StackPanel Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource Heading}">Pre-deployment</TextBlock>
+                    <Button>Customize pre-deployment forms</Button>
+                    <Button>Collect responder information</Button>
+                    <Button>Verify responder information periodically</Button>
+                    <Button>View pre-deployment data</Button>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource Heading}">Deployment</TextBlock>
+                    <Button>Customize deployment forms</Button>
+                    <Button>In-process responders</Button>
+                    <Button>Collect responder status reports</Button>
+                    <Button>Collect incident status reports</Button>
+                    <Button>Out-process responders</Button>
+                    <Button>View deployment data</Button>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource Heading}">Post-deployment</TextBlock>
+                    <Button>Customize post-deployment forms</Button>
+                    <Button>Follow up with responders as necessary</Button>
+                    <Button>Perform after-action assessments</Button>
+                    <Button>View post-deployment data</Button>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource Heading}">Advanced</TextBlock>
+                    <Button>Open Epi Info</Button>
+                    <Button>Open File Explorer</Button>
+                    <Button>Import/export data</Button>
+                    <Button>Check data consistency</Button>
+                    <Button>Back up data</Button>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
