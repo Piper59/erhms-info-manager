@@ -1,0 +1,7 @@
+<Project id="a565062a-bb7f-56b8-a9ff-5eaad90c002a" name="Salmonellosis" location="C:\TFSCode\Epi Info 7\build\Epi Info 7\Projects\Salmonellosis" description="" schemaVersion="102" epiVersion="" createDate="11/23/2016 14:44:16" useMetadataDbForCollectedData="" useBackgroundOnAllPages="False">
+  <CollectedData>
+    <Database connectionString="zHDkaR2yI5Pbh2/LYHfZ7ljYKFwMFLb6TrxCvYEORi7csqJucXA0eUm4ILZ7oROEjrnivQAfaAQZGiX42PBxqOc/ISdltMDIF78MlJbPV6OLIWdoDgguljbFynF5S0Yloqg2nM7DRxB0MCRxDlHRsJEdT/8msbyW76uHLOrLqG7KCSUWfXjQnCYq35DMCO3l" dataDriver="Epi.Data.Office.AccessDBFactory, Epi.Data.Office" />
+  </CollectedData>
+  <Metadata source="2" />
+  <EnterMakeviewInterpreter source="Epi.Core.EnterInterpreter" />
+</Project>
