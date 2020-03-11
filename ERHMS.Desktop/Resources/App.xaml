@@ -1,27 +1,26 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="Container" TargetType="Panel">
-        <Setter Property="Margin">
-            <Setter.Value>
-                <Thickness Bottom="{StaticResource LargeSpace}"
-                           Left="{StaticResource SmallSpace}"
-                           Right="{StaticResource SmallSpace}"
-                           Top="{StaticResource LargeSpace}" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
 
     <Style x:Key="Heading" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
-        <Setter Property="FontWeight" Value="{StaticResource BoldFontWeight}" />
+        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
 
     <Style x:Key="Section" TargetType="Panel">
         <Setter Property="Margin">
             <Setter.Value>
-                <Thickness Bottom="{StaticResource LargeSpace}" />
+                <Thickness Bottom="{StaticResource HugeSpace}" />
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="Title" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource HugeFontSize}" />
+        <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
 </ResourceDictionary>
