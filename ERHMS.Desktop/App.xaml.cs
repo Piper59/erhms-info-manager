@@ -51,7 +51,8 @@ namespace ERHMS.Desktop
 
         private static string RELEASE_GetErrorMessage(Exception ex)
         {
-            return string.Format(ResXResources.AppError, ex.Message);
+            // TODO: Add reference to log file
+            return ResXResources.AppError;
         }
 
         public App()
