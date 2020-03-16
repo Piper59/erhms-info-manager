@@ -14,18 +14,24 @@
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
 
     <!-- Layout -->
-    <System:Double x:Key="LayoutWidth">720</System:Double>
+    <System:Double x:Key="SmallLayoutWidth">720</System:Double>
+    <System:Double x:Key="LargeLayoutWidth">1200</System:Double>
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
     <System:Double x:Key="HugeSpace">20</System:Double>
-    <Thickness x:Key="DefaultMargin"
+    <Thickness x:Key="SmallThickness"
                Bottom="{StaticResource SmallSpace}"
                Left="{StaticResource SmallSpace}"
                Right="{StaticResource SmallSpace}"
                Top="{StaticResource SmallSpace}" />
-    <Thickness x:Key="DefaultPadding"
+    <Thickness x:Key="LargeThickness"
                Bottom="{StaticResource LargeSpace}"
                Left="{StaticResource LargeSpace}"
                Right="{StaticResource LargeSpace}"
                Top="{StaticResource LargeSpace}" />
+    <Thickness x:Key="HugeThickness"
+               Bottom="{StaticResource HugeSpace}"
+               Left="{StaticResource HugeSpace}"
+               Right="{StaticResource HugeSpace}"
+               Top="{StaticResource HugeSpace}" />
 </ResourceDictionary>
