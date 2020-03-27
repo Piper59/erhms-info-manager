@@ -110,4 +110,5 @@
     </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\MSBuild\ERHMS.Desktop.targets" />
 </Project>

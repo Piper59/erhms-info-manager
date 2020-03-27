@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Desktop", "ERHMS.Desktop\ERHMS.Desktop.csproj", "{F0080890-84E8-48F2-8B0E-2CECE4706CB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{D8EB9884-A5F0-48C3-9D11-C12DDD61B0E6}"
+	ProjectSection(SolutionItems) = preProject
+		MSBuild\ERHMS.Common.targets = MSBuild\ERHMS.Common.targets
+		MSBuild\ERHMS.Desktop.targets = MSBuild\ERHMS.Desktop.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
