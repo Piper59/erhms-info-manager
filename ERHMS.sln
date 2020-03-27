@@ -3,13 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Desktop", "ERHMS.Desktop\ERHMS.Desktop.csproj", "{F0080890-84E8-48F2-8B0E-2CECE4706CB2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{D8EB9884-A5F0-48C3-9D11-C12DDD61B0E6}"
 	ProjectSection(SolutionItems) = preProject
 		MSBuild\ERHMS.Common.targets = MSBuild\ERHMS.Common.targets
 		MSBuild\ERHMS.Desktop.targets = MSBuild\ERHMS.Desktop.targets
+		MSBuild\ERHMS.Launcher.targets = MSBuild\ERHMS.Launcher.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Desktop", "ERHMS.Desktop\ERHMS.Desktop.csproj", "{F0080890-84E8-48F2-8B0E-2CECE4706CB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Launcher", "ERHMS.Launcher\ERHMS.Launcher.csproj", "{F58642EF-AE0A-4AB4-BA0F-FC586D352920}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +24,10 @@ Global
 		{F0080890-84E8-48F2-8B0E-2CECE4706CB2}.Debug|x86.Build.0 = Debug|x86
 		{F0080890-84E8-48F2-8B0E-2CECE4706CB2}.Release|x86.ActiveCfg = Release|x86
 		{F0080890-84E8-48F2-8B0E-2CECE4706CB2}.Release|x86.Build.0 = Release|x86
+		{F58642EF-AE0A-4AB4-BA0F-FC586D352920}.Debug|x86.ActiveCfg = Debug|x86
+		{F58642EF-AE0A-4AB4-BA0F-FC586D352920}.Debug|x86.Build.0 = Debug|x86
+		{F58642EF-AE0A-4AB4-BA0F-FC586D352920}.Release|x86.ActiveCfg = Release|x86
+		{F58642EF-AE0A-4AB4-BA0F-FC586D352920}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,7 +12,7 @@ namespace ERHMS.Desktop
         private static int errorCount;
 
         [STAThread]
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
