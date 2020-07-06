@@ -51,6 +51,7 @@
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
                     <TextBlock Style="{StaticResource Heading}">Pre-deployment</TextBlock>
+                    <Button>Plan for pre-deployment</Button>
                     <Button>Manage worker forms</Button>
                     <Button>Collect worker information</Button>
                 </StackPanel>
@@ -76,6 +77,7 @@
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
                     <TextBlock Style="{StaticResource Heading}">Deployment</TextBlock>
+                    <Button>Plan for deployment</Button>
                     <Button>In-process workers</Button>
                     <Button>Collect worker status reports</Button>
                     <Button>Collect incident status reports</Button>
@@ -83,6 +85,7 @@
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
                     <TextBlock Style="{StaticResource Heading}">Post-deployment</TextBlock>
+                    <Button>Plan for post-deployment</Button>
                     <Button>Follow up with workers</Button>
                     <Button>Collect after-action reports</Button>
                 </StackPanel>
