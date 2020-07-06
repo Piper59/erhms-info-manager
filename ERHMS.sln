@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{D8EB
 		MSBuild\ERHMS.Launcher.targets = MSBuild\ERHMS.Launcher.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Utility", "ERHMS.Utility\ERHMS.Utility.csproj", "{9A749A26-71AC-45EE-BF7B-12F696FD8527}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Desktop", "ERHMS.Desktop\ERHMS.Desktop.csproj", "{F0080890-84E8-48F2-8B0E-2CECE4706CB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Launcher", "ERHMS.Launcher\ERHMS.Launcher.csproj", "{F58642EF-AE0A-4AB4-BA0F-FC586D352920}"
@@ -20,6 +22,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A749A26-71AC-45EE-BF7B-12F696FD8527}.Debug|x86.ActiveCfg = Debug|x86
+		{9A749A26-71AC-45EE-BF7B-12F696FD8527}.Debug|x86.Build.0 = Debug|x86
+		{9A749A26-71AC-45EE-BF7B-12F696FD8527}.Release|x86.ActiveCfg = Release|x86
+		{9A749A26-71AC-45EE-BF7B-12F696FD8527}.Release|x86.Build.0 = Release|x86
 		{F0080890-84E8-48F2-8B0E-2CECE4706CB2}.Debug|x86.ActiveCfg = Debug|x86
 		{F0080890-84E8-48F2-8B0E-2CECE4706CB2}.Debug|x86.Build.0 = Debug|x86
 		{F0080890-84E8-48F2-8B0E-2CECE4706CB2}.Release|x86.ActiveCfg = Release|x86
