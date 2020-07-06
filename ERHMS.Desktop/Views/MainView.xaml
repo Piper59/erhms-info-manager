@@ -32,9 +32,13 @@
                       Header="_Tools">
                 <MenuItem Header="Open _Epi Info" />
                 <MenuItem Header="Open _File Explorer" />
-                <MenuItem Header="_Import/export data" />
-                <MenuItem Header="_Check data consistency" />
+                <Separator />
+                <MenuItem Header="_Check data quality" />
+                <MenuItem Header="E_xport data" />
+                <MenuItem Header="_Import data" />
                 <MenuItem Header="_Back up data" />
+                <Separator />
+                <MenuItem Header="Export _logs" />
             </MenuItem>
             <MenuItem Grid.Column="3"
                       Header="_Help" />
