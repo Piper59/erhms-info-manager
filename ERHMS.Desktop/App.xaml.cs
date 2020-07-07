@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.Views;
+﻿using ERHMS.Desktop.ViewModels;
+using ERHMS.Desktop.Views;
 using ERHMS.Utility;
 using log4net;
 using System;
@@ -58,7 +59,7 @@ namespace ERHMS.Desktop
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainView mainView = new MainView();
+            MainView mainView = new MainView(new MainViewModel());
             mainView.Show();
         }
     }

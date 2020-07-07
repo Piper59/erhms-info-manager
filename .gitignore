@@ -3,3 +3,5 @@ Build/
 obj/
 packages/
 .vs/
+*.suo
+*.user
