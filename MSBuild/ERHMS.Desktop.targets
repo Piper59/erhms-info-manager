@@ -10,7 +10,7 @@
 
   <Target Name="CopyEpiInfoFiles" AfterTargets="Build">
     <ItemGroup>
-      <EpiInfoFile Include="$(EpiInfoDir)**\*" />
+      <EpiInfoFile Include="$(EpiInfoDir)**\*" Exclude="$(EpiInfoDir)Projects\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
