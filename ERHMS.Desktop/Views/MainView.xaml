@@ -27,6 +27,7 @@
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
             <MenuItem Grid.Column="0"
+                      Command="{Binding HomeCommand}"
                       Header="H_ome" />
             <MenuItem Grid.Column="1"
                       Header="_Tools">
@@ -43,53 +44,8 @@
             <MenuItem Grid.Column="3"
                       Header="_Help" />
         </Menu>
-        <ScrollViewer Grid.Row="1">
-            <StackPanel MaxWidth="{StaticResource SmallLayoutWidth}"
-                        Style="{StaticResource Container}">
-                <StackPanel Style="{StaticResource Section}">
-                    <TextBlock Style="{StaticResource Title}">ERHMS Info Manager</TextBlock>
-                </StackPanel>
-                <StackPanel Style="{StaticResource Section}">
-                    <TextBlock Style="{StaticResource Heading}">Pre-deployment</TextBlock>
-                    <Button>Plan for pre-deployment</Button>
-                    <Button>Manage worker forms</Button>
-                    <Button>Collect worker information</Button>
-                </StackPanel>
-                <StackPanel Style="{StaticResource Section}">
-                    <TextBlock Style="{StaticResource Heading}">Incident</TextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <ComboBox />
-                            <Label Style="{StaticResource Watermark}">
-                                <TextBlock>
-                                    <Run>Select an incident or click</Run>
-                                    <Run Style="{StaticResource Emphasis}">Manage</Run>
-                                </TextBlock>
-                            </Label>
-                        </Grid>
-                        <Button Grid.Column="1">Manage</Button>
-                    </Grid>
-                    <Button>Manage incident forms</Button>
-                </StackPanel>
-                <StackPanel Style="{StaticResource Section}">
-                    <TextBlock Style="{StaticResource Heading}">Deployment</TextBlock>
-                    <Button>Plan for deployment</Button>
-                    <Button>In-process workers</Button>
-                    <Button>Collect worker status reports</Button>
-                    <Button>Collect incident status reports</Button>
-                    <Button>Out-process workers</Button>
-                </StackPanel>
-                <StackPanel Style="{StaticResource Section}">
-                    <TextBlock Style="{StaticResource Heading}">Post-deployment</TextBlock>
-                    <Button>Plan for post-deployment</Button>
-                    <Button>Follow up with workers</Button>
-                    <Button>Collect after-action reports</Button>
-                </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
+        <ScrollViewer x:Name="ContentViewer"
+                      Grid.Row="1"
+                      Content="{Binding Content}" />
     </Grid>
 </Window>

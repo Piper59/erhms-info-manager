@@ -7,6 +7,7 @@
                 <ResourceDictionary Source="Resources/Constants.xaml" />
                 <ResourceDictionary Source="Resources/Base.xaml" />
                 <ResourceDictionary Source="Resources/App.xaml" />
+                <ResourceDictionary Source="Resources/Templates.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
    </Application.Resources>

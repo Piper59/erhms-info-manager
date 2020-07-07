@@ -59,8 +59,8 @@ namespace ERHMS.Desktop
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainView mainView = new MainView(new MainViewModel());
-            mainView.Show();
+            Window window = new MainView(new MainViewModel());
+            window.Show();
         }
     }
 }

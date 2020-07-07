@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel MaxWidth="{StaticResource SmallLayoutWidth}"
+                Style="{StaticResource Container}">
+        <StackPanel Style="{StaticResource Section}">
+            <TextBlock Style="{StaticResource Title}">ERHMS Info Manager</TextBlock>
+        </StackPanel>
+        <StackPanel Style="{StaticResource Section}">
+            <TextBlock Style="{StaticResource Heading}">Pre-deployment</TextBlock>
+            <Button>Plan for pre-deployment</Button>
+            <Button>Manage worker forms</Button>
+            <Button>Collect worker information</Button>
+        </StackPanel>
+        <StackPanel Style="{StaticResource Section}">
+            <TextBlock Style="{StaticResource Heading}">Incident</TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <ComboBox />
+                    <Label Style="{StaticResource Watermark}">
+                        <TextBlock>
+                            <Run>Select an incident or click</Run>
+                            <Run Style="{StaticResource Emphasis}">Manage</Run>
+                        </TextBlock>
+                    </Label>
+                </Grid>
+                <Button Grid.Column="1">Manage</Button>
+            </Grid>
+            <Button>Manage incident forms</Button>
+        </StackPanel>
+        <StackPanel Style="{StaticResource Section}">
+            <TextBlock Style="{StaticResource Heading}">Deployment</TextBlock>
+            <Button>Plan for deployment</Button>
+            <Button>In-process workers</Button>
+            <Button>Collect worker status reports</Button>
+            <Button>Collect incident status reports</Button>
+            <Button>Out-process workers</Button>
+        </StackPanel>
+        <StackPanel Style="{StaticResource Section}">
+            <TextBlock Style="{StaticResource Heading}">Post-deployment</TextBlock>
+            <Button>Plan for post-deployment</Button>
+            <Button>Follow up with workers</Button>
+            <Button>Collect after-action reports</Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>
