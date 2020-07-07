@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ERHMS.Desktop.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ControlFontSize" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="DefaultPageHeight" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1056</Value>
+    </Setting>
+    <Setting Name="DefaultPageWidth" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">816</Value>
+    </Setting>
+    <Setting Name="EditorFontSize" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="GridSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="IsFipsCryptoRequired" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

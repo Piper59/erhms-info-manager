@@ -1,5 +1,8 @@
-﻿using ERHMS.Desktop.ViewModels;
+﻿using Epi;
+using Epi.DataSets;
+using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
+using ERHMS.EpiInfo;
 using ERHMS.Utility;
 using System;
 using System.IO;
@@ -8,6 +11,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using ResXResources = ERHMS.Desktop.Properties.Resources;
+using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop
 {
@@ -47,6 +51,7 @@ namespace ERHMS.Desktop
         public App()
         {
             DispatcherUnhandledException += App_DispatcherUnhandledException;
+            Configure();
             InitializeComponent();
         }
 
@@ -55,6 +60,24 @@ namespace ERHMS.Desktop
             HandleError(e.Exception);
             e.Handled = true;
             Shutdown(1);
+        }
+
+        private void Configure()
+        {
+            Log.Default.Debug("Configuring");
+            if (!ConfigurationExtensions.Exists())
+            {
+                Configuration configuration = ConfigurationExtensions.Create(Settings.Default.IsFipsCryptoRequired);
+                Config.SettingsRow settings = configuration.Settings;
+                settings.ControlFontSize = Settings.Default.ControlFontSize;
+                settings.DefaultPageHeight = Settings.Default.DefaultPageHeight;
+                settings.DefaultPageWidth = Settings.Default.DefaultPageWidth;
+                settings.EditorFontSize = Settings.Default.EditorFontSize;
+                settings.GridSize = Settings.Default.GridSize;
+                configuration.Save();
+            }
+            ConfigurationExtensions.Load();
+            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }
 
         protected override void OnStartup(StartupEventArgs e)
