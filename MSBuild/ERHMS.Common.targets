@@ -7,6 +7,13 @@
     <BuildDir>$(BuildContainerDir)$(BuildDirName)\</BuildDir>
   </PropertyGroup>
 
+  <Target Name="Require32Bit" BeforeTargets="Build">
+    <Error Condition="'$(Platform)' != 'x86'" Text="Target platform must be x86." />
+    <PropertyGroup>
+      <PlatformTarget>x86</PlatformTarget>
+    </PropertyGroup>
+  </Target>
+
   <Target Name="CopyBuildFiles" AfterTargets="Build">
     <ItemGroup>
       <BuildFile Include="$(TargetDir)**\*" />
