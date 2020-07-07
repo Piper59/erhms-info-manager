@@ -6,12 +6,14 @@
     <BuildDirName>ERHMS Info Manager</BuildDirName>
     <BuildDir>$(BuildContainerDir)$(BuildDirName)\</BuildDir>
   </PropertyGroup>
+
   <Target Name="CopyBuildFiles" AfterTargets="Build">
     <ItemGroup>
       <BuildFile Include="$(TargetDir)**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(BuildFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
+
   <Target Name="ProhibitRebuild" BeforeTargets="BeforeRebuild">
     <Error Text="Rebuilding prohibited; clean and build instead." />
   </Target>

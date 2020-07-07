@@ -1,4 +1,6 @@
 ﻿using ERHMS.Desktop.Views;
+using ERHMS.Utility;
+using log4net;
 using System;
 using System.Threading;
 using System.Windows;
@@ -9,15 +11,19 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
-        private static int errorCount;
+        private static int errorCount = 0;
+
+        public static ILog Log { get; } = LoggingExtensions.GetLog();
 
         [STAThread]
         public static void Main(string[] args)
         {
             try
             {
+                Log.Debug("Starting up");
                 App app = new App();
                 app.Run();
+                Log.Debug("Shutting down");
             }
             catch (Exception ex)
             {
@@ -27,32 +33,13 @@ namespace ERHMS.Desktop
 
         private static void HandleError(Exception ex)
         {
-            // TODO: Add logging
+            Log.Error(ex.Message, ex);
             if (Interlocked.Increment(ref errorCount) > 1)
             {
                 return;
             }
-            MessageBox.Show(GetErrorMessage(ex), $"{ResXResources.AppTitle} - Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private static string GetErrorMessage(Exception ex)
-        {
-#if DEBUG
-            return DEBUG_GetErrorMessage(ex);
-#else
-            return RELEASE_GetErrorMessage(ex);
-#endif
-        }
-
-        private static string DEBUG_GetErrorMessage(Exception ex)
-        {
-            return ex.ToString();
-        }
-
-        private static string RELEASE_GetErrorMessage(Exception ex)
-        {
-            // TODO: Add reference to log file
-            return ResXResources.AppError;
+            string message = string.Format(ResXResources.AppError, Log.Logger.Repository.GetFile());
+            MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public App()

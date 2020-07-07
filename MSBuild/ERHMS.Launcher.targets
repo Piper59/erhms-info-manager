@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="ERHMS.Common.targets" />
-  <Target Name="CopyBuildFiles" />
-  <Target Name="CopyLauncher" AfterTargets="Build">
+
+  <Target Name="CopyBuildFiles" AfterTargets="Build">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(BuildContainerDir)" SkipUnchangedFiles="true" />
   </Target>
 </Project>
