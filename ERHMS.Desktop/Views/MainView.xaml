@@ -31,8 +31,10 @@
                       Header="H_ome" />
             <MenuItem Grid.Column="1"
                       Header="_Tools">
-                <MenuItem Header="Open _Epi Info" />
-                <MenuItem Header="Open _File Explorer" />
+                <MenuItem Command="{Binding OpenEpiInfoCommand}"
+                          Header="Open _Epi Info" />
+                <MenuItem Command="{Binding OpenFileExplorerCommand}"
+                          Header="Open _File Explorer" />
                 <Separator />
                 <MenuItem Header="_Check data quality" />
                 <MenuItem Header="E_xport data" />

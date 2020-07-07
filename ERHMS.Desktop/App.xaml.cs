@@ -3,6 +3,8 @@ using ERHMS.Desktop.Views;
 using ERHMS.Utility;
 using log4net;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -15,6 +17,7 @@ namespace ERHMS.Desktop
         private static int errorCount = 0;
 
         public static ILog Log { get; } = LoggingExtensions.GetLog();
+        public static string BuildDir { get; } = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         [STAThread]
         public static void Main(string[] args)
