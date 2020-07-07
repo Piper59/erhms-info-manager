@@ -1,7 +1,6 @@
 ﻿using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.Utility;
-using log4net;
 using System;
 using System.IO;
 using System.Reflection;
@@ -16,7 +15,6 @@ namespace ERHMS.Desktop
     {
         private static int errorCount = 0;
 
-        public static ILog Log { get; } = LoggingExtensions.GetLog();
         public static string BuildDir { get; } = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         [STAThread]
@@ -24,10 +22,10 @@ namespace ERHMS.Desktop
         {
             try
             {
-                Log.Debug("Starting up");
+                Log.Default.Debug("Starting up");
                 App app = new App();
                 app.Run();
-                Log.Debug("Shutting down");
+                Log.Default.Debug("Shutting down");
             }
             catch (Exception ex)
             {
@@ -37,12 +35,12 @@ namespace ERHMS.Desktop
 
         private static void HandleError(Exception ex)
         {
-            Log.Error(ex.Message, ex);
+            Log.Default.Error(ex.Message, ex);
             if (Interlocked.Increment(ref errorCount) > 1)
             {
                 return;
             }
-            string message = string.Format(ResXResources.AppError, Log.Logger.Repository.GetFile());
+            string message = string.Format(ResXResources.AppError, Log.Default.Logger.Repository.GetFile());
             MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 

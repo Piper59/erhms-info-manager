@@ -6,9 +6,9 @@ using System.Security.Principal;
 
 namespace ERHMS.Utility
 {
-    public static class LoggingExtensions
+    public static class Log
     {
-        static LoggingExtensions()
+        static Log()
         {
             try
             {
@@ -17,10 +17,7 @@ namespace ERHMS.Utility
             catch { }
         }
 
-        public static ILog GetLog()
-        {
-            return LogManager.GetLogger(nameof(ERHMS));
-        }
+        public static ILog Default { get; } = LogManager.GetLogger(nameof(ERHMS));
 
         public static string GetFile(this ILoggerRepository @this)
         {

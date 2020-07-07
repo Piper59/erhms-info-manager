@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Utility;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -30,7 +31,7 @@ namespace ERHMS.Desktop.Commands
             }
             catch (Exception ex)
             {
-                App.Log.WarnFormat(
+                Log.Default.WarnFormat(
                     "{0} in {1}.{2}: {3}",
                     ex.GetType(),
                     execute.Target.GetType(),

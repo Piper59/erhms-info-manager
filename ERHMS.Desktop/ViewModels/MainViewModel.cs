@@ -1,4 +1,5 @@
 ﻿using ERHMS.Desktop.Commands;
+using ERHMS.Utility;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
@@ -16,7 +17,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                App.Log.Debug($"Displaying {value}");
+                Log.Default.Debug($"Displaying {value}");
                 Set(ref content, value);
             }
         }
