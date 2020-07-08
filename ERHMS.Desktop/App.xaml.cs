@@ -1,12 +1,9 @@
 ﻿using Epi;
-using Epi.DataSets;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
 using ERHMS.Utility;
 using System;
-using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -19,14 +16,13 @@ namespace ERHMS.Desktop
     {
         private static int errorCount = 0;
 
-        public static string BuildDir { get; } = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
         [STAThread]
         public static void Main(string[] args)
         {
             try
             {
                 Log.Default.Debug("Starting up");
+                Configure();
                 App app = new App();
                 app.Run();
                 Log.Default.Debug("Shutting down");
@@ -48,10 +44,22 @@ namespace ERHMS.Desktop
             MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+        private static void Configure()
+        {
+            Log.Default.Debug("Configuring");
+            if (!ConfigurationExtensions.Exists())
+            {
+                Configuration configuration = ConfigurationExtensions.Create();
+                Settings.Default.Apply(configuration);
+                configuration.Save();
+            }
+            ConfigurationExtensions.Load();
+            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
+        }
+
         public App()
         {
             DispatcherUnhandledException += App_DispatcherUnhandledException;
-            Configure();
             InitializeComponent();
         }
 
@@ -60,24 +68,6 @@ namespace ERHMS.Desktop
             HandleError(e.Exception);
             e.Handled = true;
             Shutdown(1);
-        }
-
-        private void Configure()
-        {
-            Log.Default.Debug("Configuring");
-            if (!ConfigurationExtensions.Exists())
-            {
-                Configuration configuration = ConfigurationExtensions.Create(Settings.Default.IsFipsCryptoRequired);
-                Config.SettingsRow settings = configuration.Settings;
-                settings.ControlFontSize = Settings.Default.ControlFontSize;
-                settings.DefaultPageHeight = Settings.Default.DefaultPageHeight;
-                settings.DefaultPageWidth = Settings.Default.DefaultPageWidth;
-                settings.EditorFontSize = Settings.Default.EditorFontSize;
-                settings.GridSize = Settings.Default.GridSize;
-                configuration.Save();
-            }
-            ConfigurationExtensions.Load();
-            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }
 
         protected override void OnStartup(StartupEventArgs e)

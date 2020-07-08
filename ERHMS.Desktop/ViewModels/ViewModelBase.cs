@@ -16,7 +16,7 @@ namespace ERHMS.Desktop.ViewModels
             OnPropertyChanged(new PropertyChangedEventArgs(name));
         }
 
-        protected bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string name = null)
         {
             if (EqualityComparer<T>.Default.Equals(value, field))
             {
@@ -25,7 +25,7 @@ namespace ERHMS.Desktop.ViewModels
             else
             {
                 field = value;
-                OnPropertyChanged(propertyName);
+                OnPropertyChanged(name);
                 return true;
             }
         }

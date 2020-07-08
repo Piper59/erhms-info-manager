@@ -11,19 +11,21 @@ namespace ERHMS.EpiInfo
             return File.Exists(Configuration.DefaultConfigurationPath);
         }
 
-        public static Configuration Create(bool isFipsCryptoRequired)
+        public static Configuration Create()
         {
             Configuration configuration = Configuration.CreateDefaultConfiguration();
             configuration.RecentViews.Clear();
             configuration.RecentProjects.Clear();
-            if (isFipsCryptoRequired)
-            {
-                Config.TextEncryptionModuleDataTable table = configuration.ConfigDataSet.TextEncryptionModule;
-                Config.TextEncryptionModuleRow row = table.NewTextEncryptionModuleRow();
-                row.FileName = "FipsCrypto.dll";
-                table.Rows.Add(row);
-            }
             return configuration;
+        }
+
+        public static void SetFipsCrypto(this Configuration @this)
+        {
+            Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
+            table.Clear();
+            Config.TextEncryptionModuleRow row = table.NewTextEncryptionModuleRow();
+            row.FileName = "FipsCrypto.dll";
+            table.Rows.Add(row);
         }
 
         public static void Save(this Configuration @this)

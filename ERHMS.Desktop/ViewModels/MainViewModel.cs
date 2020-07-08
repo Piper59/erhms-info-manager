@@ -18,7 +18,7 @@ namespace ERHMS.Desktop.ViewModels
             set
             {
                 Log.Default.Debug($"Displaying {value}");
-                Set(ref content, value);
+                SetProperty(ref content, value);
             }
         }
 
@@ -40,17 +40,18 @@ namespace ERHMS.Desktop.ViewModels
 
         private void OpenEpiInfo()
         {
+            string entryDir = ReflectionExtensions.GetEntryDir();
             Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,
-                WorkingDirectory = App.BuildDir,
-                FileName = Path.Combine(App.BuildDir, "EpiInfo.exe")
+                WorkingDirectory = entryDir,
+                FileName = Path.Combine(entryDir, "EpiInfo.exe")
             });
         }
 
         private void OpenFileExplorer()
         {
-            Process.Start(App.BuildDir);
+            Process.Start(ReflectionExtensions.GetEntryDir());
         }
     }
 }
