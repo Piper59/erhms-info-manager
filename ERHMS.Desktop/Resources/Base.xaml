@@ -65,4 +65,23 @@
         <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
     </Style>
     <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}" />
+
+    <Style x:Key="TextBoxBase" TargetType="TextBox">
+        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Padding">
+            <Setter.Value>
+                <Thickness Bottom="{StaticResource LargeSpace}"
+                           Left="{StaticResource SmallSpace}"
+                           Right="{StaticResource SmallSpace}"
+                           Top="{StaticResource LargeSpace}" />
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsReadOnly" Value="True">
+                <Setter Property="Background" Value="{x:Static SystemColors.MenuBarBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}" />
 </ResourceDictionary>

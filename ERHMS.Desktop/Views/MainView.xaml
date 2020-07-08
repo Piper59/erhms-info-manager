@@ -47,6 +47,7 @@
                       Header="_Help" />
         </Menu>
         <ScrollViewer Grid.Row="1"
+                      AutomationProperties.Name="Main content"
                       Content="{Binding Content}" />
     </Grid>
 </Window>
