@@ -22,18 +22,18 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public ICommand HomeCommand { get; }
+        public ICommand GoHomeCommand { get; }
         public ICommand OpenEpiInfoCommand { get; }
         public ICommand OpenFileExplorerCommand { get; }
 
         public MainViewModel()
         {
-            HomeCommand = new Command(Home);
+            GoHomeCommand = new Command(GoHome);
             OpenEpiInfoCommand = new Command(OpenEpiInfo);
             OpenFileExplorerCommand = new Command(OpenFileExplorer);
         }
 
-        private void Home()
+        private void GoHome()
         {
             Content = new HomeViewModel();
         }
