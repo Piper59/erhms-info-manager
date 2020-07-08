@@ -40,18 +40,18 @@ namespace ERHMS.Desktop.ViewModels
 
         private void OpenEpiInfo()
         {
-            string entryDir = ReflectionExtensions.GetEntryDir();
+            string entryDirectory = ReflectionExtensions.GetEntryDirectory();
             Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,
-                WorkingDirectory = entryDir,
-                FileName = Path.Combine(entryDir, "EpiInfo.exe")
+                WorkingDirectory = entryDirectory,
+                FileName = Path.Combine(entryDirectory, "EpiInfo.exe")
             });
         }
 
         private void OpenFileExplorer()
         {
-            Process.Start(ReflectionExtensions.GetEntryDir());
+            Process.Start(ReflectionExtensions.GetEntryDirectory());
         }
     }
 }
