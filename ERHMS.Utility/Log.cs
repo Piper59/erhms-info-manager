@@ -1,7 +1,4 @@
 ﻿using log4net;
-using log4net.Appender;
-using log4net.Repository;
-using System.Linq;
 using System.Security.Principal;
 
 namespace ERHMS.Utility
@@ -17,14 +14,9 @@ namespace ERHMS.Utility
             catch { }
         }
 
-        public static ILog Default { get; } = LogManager.GetLogger(nameof(ERHMS));
+        public const string LoggerName = nameof(ERHMS);
+        public const string MainAppenderName = "Main";
 
-        public static string GetFile(this ILoggerRepository @this)
-        {
-            return @this.GetAppenders()
-                .OfType<FileAppender>()
-                .FirstOrDefault()
-                ?.File;
-        }
+        public static ILog Default { get; } = LogManager.GetLogger(LoggerName);
     }
 }

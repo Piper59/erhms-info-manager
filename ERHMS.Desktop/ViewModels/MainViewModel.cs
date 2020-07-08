@@ -1,15 +1,28 @@
 ﻿using ERHMS.Desktop.Commands;
+using ERHMS.EpiInfo;
 using ERHMS.Utility;
 using System.Diagnostics;
-using System.IO;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private object content = new HomeViewModel();
-        public object Content
+        private static MainViewModel current;
+        public static MainViewModel Current
+        {
+            get
+            {
+                if (current == null)
+                {
+                    current = new MainViewModel();
+                }
+                return current;
+            }
+        }
+
+        private ViewModelBase content;
+        public ViewModelBase Content
         {
             get
             {
@@ -17,7 +30,16 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                Log.Default.Debug($"Displaying {value}");
+                string type = value == null ? "NULL" : value.GetType().Name;
+                string message = $"Displaying: {type}";
+                if (value == null)
+                {
+                    Log.Default.Warn(message);
+                }
+                else
+                {
+                    Log.Default.Debug(message);
+                }
                 SetProperty(ref content, value);
             }
         }
@@ -26,7 +48,7 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand OpenEpiInfoCommand { get; }
         public ICommand OpenFileExplorerCommand { get; }
 
-        public MainViewModel()
+        private MainViewModel()
         {
             GoHomeCommand = new Command(GoHome);
             OpenEpiInfoCommand = new Command(OpenEpiInfo);
@@ -40,13 +62,7 @@ namespace ERHMS.Desktop.ViewModels
 
         private void OpenEpiInfo()
         {
-            string entryDirectory = ReflectionExtensions.GetEntryDirectory();
-            Process.Start(new ProcessStartInfo
-            {
-                UseShellExecute = false,
-                WorkingDirectory = entryDirectory,
-                FileName = Path.Combine(entryDirectory, "EpiInfo.exe")
-            });
+            Module.Menu.Start();
         }
 
         private void OpenFileExplorer()

@@ -40,7 +40,11 @@ namespace ERHMS.Desktop
             {
                 return;
             }
-            string message = string.Format(ResXResources.AppError, Log.Default.Logger.Repository.GetFile());
+            string file = Log.Default.Logger.Repository.GetFile(Log.MainAppenderName);
+            string message =
+                file == null
+                ? ResXResources.AppErrorWithoutLog
+                : string.Format(ResXResources.AppErrorWithLog, file);
             MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
@@ -73,7 +77,11 @@ namespace ERHMS.Desktop
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Window window = new MainView(new MainViewModel());
+            MainViewModel.Current.Content = new HomeViewModel();
+            Window window = new MainView
+            {
+                DataContext = MainViewModel.Current
+            };
             window.Show();
         }
     }

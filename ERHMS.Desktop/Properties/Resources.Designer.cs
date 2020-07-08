@@ -65,9 +65,18 @@ namespace ERHMS.Desktop.Properties {
         ///
         ///{0}.
         /// </summary>
-        public static string AppError {
+        public static string AppErrorWithLog {
             get {
-                return ResourceManager.GetString("AppError", resourceCulture);
+                return ResourceManager.GetString("AppErrorWithLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
+        /// </summary>
+        public static string AppErrorWithoutLog {
+            get {
+                return ResourceManager.GetString("AppErrorWithoutLog", resourceCulture);
             }
         }
         
