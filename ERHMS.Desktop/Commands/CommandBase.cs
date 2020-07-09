@@ -25,20 +25,22 @@ namespace ERHMS.Desktop.Commands
 
         public async void Execute(object parameter)
         {
+            Log.Default.Debug($"Executing: {this}");
             try
             {
                 await ExecuteCore(parameter);
             }
             catch (Exception ex)
             {
-                Log.Default.WarnFormat(
-                    "{0} in {1}.{2}: {3}",
-                    ex.GetType(),
-                    execute.Target.GetType(),
-                    execute.Method.Name,
-                    ex.Message);
+                Log.Default.WarnFormat("{0} in {1}: {2}", ex.GetType(), this, ex.Message);
                 throw;
             }
+            Log.Default.Debug($"Executed: {this}");
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}.{1}", execute.Method.DeclaringType, execute.Method.Name);
         }
     }
 }

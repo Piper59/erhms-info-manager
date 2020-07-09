@@ -35,7 +35,7 @@ namespace ERHMS.Desktop
 
         private static void HandleError(Exception ex)
         {
-            Log.Default.Error(ex.Message, ex);
+            Log.Default.Error(ex);
             if (Interlocked.Increment(ref errorCount) > 1)
             {
                 return;
