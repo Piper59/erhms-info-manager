@@ -30,16 +30,8 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                string type = value == null ? "NULL" : value.GetType().Name;
-                string message = $"Displaying: {type}";
-                if (value == null)
-                {
-                    Log.Default.Warn(message);
-                }
-                else
-                {
-                    Log.Default.Debug(message);
-                }
+                string type = value?.GetType()?.Name ?? "NULL";
+                Log.Default.Debug($"Displaying: {type}");
                 SetProperty(ref content, value);
             }
         }
