@@ -47,6 +47,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="DataExtensions.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LoggingExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
