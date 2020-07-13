@@ -74,8 +74,8 @@ namespace ERHMS.EpiInfo
             {
                 CreateCodeTable(xCodeTable);
             }
-            XElement xProject = xTemplate.Element(ProjectMapper.ElementName);
-            ICollection<XElement> xViews = xProject.Elements(ViewMapper.ElementName).ToList();
+            XElement xProject = xTemplate.Element(ElementNames.Project);
+            ICollection<XElement> xViews = xProject.Elements(ElementNames.View).ToList();
             switch (level)
             {
                 case TemplateLevel.Project:
@@ -90,15 +90,15 @@ namespace ERHMS.EpiInfo
                     break;
                 case TemplateLevel.View:
                     {
-                        XElement xView = xProject.Elements(ViewMapper.ElementName).Single();
+                        XElement xView = xProject.Elements(ElementNames.View).Single();
                         CreateViewAndPages(xView);
                         CreateFields(xView);
                     }
                     break;
                 case TemplateLevel.Page:
                     {
-                        XElement xView = xProject.Elements(ViewMapper.ElementName).Single();
-                        XElement xPage = xView.Elements(PageMapper.ElementName).Single();
+                        XElement xView = xProject.Elements(ElementNames.View).Single();
+                        XElement xPage = xView.Elements(ElementNames.Page).Single();
                         Page page = CreatePage(xPage, View);
                         CreateFields(xPage, page);
                         AddCheckCode(xView, View);
@@ -156,7 +156,7 @@ namespace ERHMS.EpiInfo
             Project.Metadata.InsertView(view);
             Project.Views.Add(view);
             viewIdMap[(int)xView.Attribute(ColumnNames.VIEW_ID)] = view.Id;
-            foreach (XElement xPage in xView.Elements(PageMapper.ElementName))
+            foreach (XElement xPage in xView.Elements(ElementNames.Page))
             {
                 CreatePage(xPage, view);
             }
@@ -186,7 +186,7 @@ namespace ERHMS.EpiInfo
         {
             int viewId = (int)xView.Attribute(ColumnNames.VIEW_ID);
             View view = Project.GetViewById(viewIdMap[viewId]);
-            foreach (XElement xPage in xView.Elements(PageMapper.ElementName))
+            foreach (XElement xPage in xView.Elements(ElementNames.Page))
             {
                 int pageId = (int)xPage.Attribute(ColumnNames.PAGE_ID);
                 Page page = view.GetPageById(pageIdMap[pageId]);
@@ -196,7 +196,7 @@ namespace ERHMS.EpiInfo
 
         private void CreateFields(XElement xPage, Page page)
         {
-            foreach (XElement xField in xPage.Elements(FieldMapper.ElementName))
+            foreach (XElement xField in xPage.Elements(ElementNames.Field))
             {
                 CreateField(xField, page);
             }
@@ -251,7 +251,7 @@ namespace ERHMS.EpiInfo
             progress.Report("Postprocessing fields");
             int viewId = viewIdMap[(int)xView.Attribute(ColumnNames.VIEW_ID)];
             View view = Project.GetViewById(viewId);
-            foreach (XElement xField in xView.Descendants(FieldMapper.ElementName))
+            foreach (XElement xField in xView.Descendants(ElementNames.Field))
             {
                 int fieldId = fieldIdMap[(int)xField.Attribute(ColumnNames.FIELD_ID)];
                 Field field = view.GetFieldById(fieldId);

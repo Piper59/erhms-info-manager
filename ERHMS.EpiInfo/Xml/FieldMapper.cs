@@ -15,10 +15,7 @@ namespace ERHMS.EpiInfo.Xml
     public class TypedFieldMapper<TModel> : Mapper<TModel>, ITypedFieldMapper
         where TModel : Field
     {
-        static TypedFieldMapper()
-        {
-            ElementName = "Field";
-        }
+        protected override string ElementName => ElementNames.Field;
 
         public override XElement GetElement(TModel model)
         {
@@ -243,11 +240,6 @@ namespace ERHMS.EpiInfo.Xml
 
     public class FieldMapper : Mapper<Field>
     {
-        static FieldMapper()
-        {
-            ElementName = "Field";
-        }
-
         private readonly ICollection<ITypedFieldMapper> TypedMappers = new List<ITypedFieldMapper>
         {
             new RenderableFieldMapper(),
@@ -266,6 +258,8 @@ namespace ERHMS.EpiInfo.Xml
             new RelatedViewFieldMapper(),
             new GroupFieldMapper()
         };
+
+        protected override string ElementName => ElementNames.Field;
 
         public FieldMapper()
         {

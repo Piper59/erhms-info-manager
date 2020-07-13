@@ -18,10 +18,7 @@ namespace ERHMS.EpiInfo.Xml
             "Expr1017"
         };
 
-        static PageMapper()
-        {
-            ElementName = "Page";
-        }
+        protected override string ElementName => ElementNames.Page;
 
         public PageMapper()
         {
@@ -57,7 +54,7 @@ namespace ERHMS.EpiInfo.Xml
             ICollection<DataRow> rows = GetFieldsAsDataRows(model).ToList();
             foreach (DataRow row in rows)
             {
-                XElement element = new XElement(FieldMapper.ElementName);
+                XElement element = new XElement(ElementNames.Field);
                 MetaFieldType fieldType = (MetaFieldType)row.Field<int>(ColumnNames.FIELD_TYPE_ID);
                 foreach (DataColumn column in row.Table.Columns)
                 {

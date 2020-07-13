@@ -5,10 +5,7 @@ namespace ERHMS.EpiInfo.Xml
 {
     public class ViewMapper : Mapper<View>
     {
-        static ViewMapper()
-        {
-            ElementName = "View";
-        }
+        protected override string ElementName => ElementNames.View;
 
         public ViewMapper()
         {

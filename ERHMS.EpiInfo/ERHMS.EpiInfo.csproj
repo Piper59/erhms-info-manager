@@ -71,6 +71,7 @@
     <Compile Include="TemplateLevel.cs" />
     <Compile Include="TemplateReader.cs" />
     <Compile Include="TemplateWriter.cs" />
+    <Compile Include="Xml\ElementNames.cs" />
     <Compile Include="Xml\FieldMapper.cs" />
     <Compile Include="Xml\Mapper.cs" />
     <Compile Include="Xml\PageMapper.cs" />

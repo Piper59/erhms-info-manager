@@ -103,8 +103,7 @@ namespace ERHMS.EpiInfo.Xml
             }
         }
 
-        public static string ElementName { get; protected set; }
-
+        protected abstract string ElementName { get; }
         protected ICollection<Mapping> Mappings { get; set; }
 
         public virtual XElement GetElement(TModel model)

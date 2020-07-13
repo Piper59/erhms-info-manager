@@ -21,10 +21,7 @@ namespace ERHMS.EpiInfo.Xml
             "EditorFontSize"
         };
 
-        static ProjectMapper()
-        {
-            ElementName = "Project";
-        }
+        protected override string ElementName => ElementNames.Project;
 
         public ProjectMapper()
         {
