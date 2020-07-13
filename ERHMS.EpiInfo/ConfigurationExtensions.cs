@@ -1,12 +1,26 @@
-﻿using Epi;
-using Epi.DataSets;
+﻿using Epi.DataSets;
+using System.Configuration;
 using System.IO;
+using Configuration = Epi.Configuration;
 
 namespace ERHMS.EpiInfo
 {
     public static class ConfigurationExtensions
     {
         private const string FipsCryptoFileName = "FipsCrypto.dll";
+
+        public static bool CompatibilityMode
+        {
+            get
+            {
+                string value = ConfigurationManager.AppSettings[nameof(CompatibilityMode)];
+                if (bool.TryParse(value, out bool result))
+                {
+                    return result;
+                }
+                return false;
+            }
+        }
 
         public static bool Exists()
         {

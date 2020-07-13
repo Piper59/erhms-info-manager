@@ -52,6 +52,7 @@
     <Compile Include="LoggingExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="InvalidEnumValueException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

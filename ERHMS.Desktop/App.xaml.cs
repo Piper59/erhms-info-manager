@@ -14,7 +14,7 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
-        private static int errorCount = 0;
+        private static int errorCount;
 
         [STAThread]
         public static void Main(string[] args)

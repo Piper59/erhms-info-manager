@@ -33,6 +33,7 @@ namespace ERHMS.Desktop.Commands
             catch (Exception ex)
             {
                 Log.Default.WarnFormat("{0} in {1}: {2}", ex.GetType(), this, ex.Message);
+                // TODO: Recover by default?
                 throw;
             }
             Log.Default.Debug($"Executed: {this}");

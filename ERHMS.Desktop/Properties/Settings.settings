@@ -2,6 +2,9 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ERHMS.Desktop.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
+    <Setting Name="CompatibilityMode" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="ControlFontSize" Type="System.Decimal" Scope="Application">
       <Value Profile="(Default)">12</Value>
     </Setting>

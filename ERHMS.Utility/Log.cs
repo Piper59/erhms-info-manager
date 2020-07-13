@@ -1,4 +1,5 @@
 ﻿using log4net;
+using System.Diagnostics;
 using System.Security.Principal;
 
 namespace ERHMS.Utility
@@ -9,6 +10,7 @@ namespace ERHMS.Utility
         {
             try
             {
+                GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
                 GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
             }
             catch { }
