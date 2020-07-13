@@ -51,7 +51,7 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public TemplateReader(Stream stream, IProgress<string> progress)
+        public TemplateReader(Stream stream, IProgress<string> progress = null)
         {
             this.stream = stream;
             this.progress = progress;
@@ -120,7 +120,7 @@ namespace ERHMS.EpiInfo
         private DataTable CreateCodeTable(XElement xCodeTable)
         {
             string tableName = (string)xCodeTable.Attribute("TableName");
-            progress.Report($"Creating code table: {tableName}");
+            progress?.Report($"Creating code table: {tableName}");
             DataTable table = xCodeTable.ToTable();
             TableNameGenerator generator = new TableNameGenerator(Project);
             if (generator.Exists(tableName))
@@ -144,7 +144,7 @@ namespace ERHMS.EpiInfo
         private View CreateViewAndPages(XElement xView)
         {
             string viewName = (string)xView.Attribute(ColumnNames.NAME);
-            progress.Report($"Creating view: {viewName}");
+            progress?.Report($"Creating view: {viewName}");
             View view = new View(Project);
             ViewMapper mapper = new ViewMapper();
             mapper.SetProperties(xView, view);
@@ -166,7 +166,7 @@ namespace ERHMS.EpiInfo
         private Page CreatePage(XElement xPage, View view)
         {
             string pageName = (string)xPage.Attribute(ColumnNames.NAME);
-            progress.Report($"Creating page: {view.Name}/{pageName}");
+            progress?.Report($"Creating page: {view.Name}/{pageName}");
             Page page = new Page(view);
             PageMapper mapper = new PageMapper();
             mapper.SetProperties(xPage, page);
@@ -206,7 +206,7 @@ namespace ERHMS.EpiInfo
         {
             View view = page.GetView();
             string fieldName = (string)xField.Attribute(ColumnNames.NAME);
-            progress.Report($"Creating field: {view.Name}/{page.Name}/{fieldName}");
+            progress?.Report($"Creating field: {view.Name}/{page.Name}/{fieldName}");
             int fieldTypeId = (int)xField.Attribute(ColumnNames.FIELD_TYPE_ID);
             Field field = page.CreateField((MetaFieldType)fieldTypeId);
             FieldMapper mapper = new FieldMapper();
@@ -236,7 +236,7 @@ namespace ERHMS.EpiInfo
 
         private void AddCheckCode(XElement xView, View view)
         {
-            progress.Report("Adding check code");
+            progress?.Report("Adding check code");
             string checkCode = ((string)xView.Attribute(ColumnNames.CHECK_CODE)).Trim();
             if (view.CheckCode.Contains(checkCode))
             {
@@ -248,7 +248,7 @@ namespace ERHMS.EpiInfo
 
         private void PostprocessFields(XElement xView)
         {
-            progress.Report("Postprocessing fields");
+            progress?.Report("Postprocessing fields");
             int viewId = viewIdMap[(int)xView.Attribute(ColumnNames.VIEW_ID)];
             View view = Project.GetViewById(viewId);
             foreach (XElement xField in xView.Descendants(ElementNames.Field))
@@ -301,7 +301,7 @@ namespace ERHMS.EpiInfo
         private DataTable CreateGridTable(XElement xGridTable)
         {
             string tableName = (string)xGridTable.Attribute("TableName");
-            progress.Report($"Creating grid table: {tableName}");
+            progress?.Report($"Creating grid table: {tableName}");
             DataTable table = xGridTable.ToTable();
             foreach (DataRow row in table.Rows)
             {

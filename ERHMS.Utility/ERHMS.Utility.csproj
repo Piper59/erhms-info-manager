@@ -50,6 +50,7 @@
     <Compile Include="DataExtensions.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LoggingExtensions.cs" />
+    <Compile Include="ProgressLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="InvalidEnumValueException.cs" />
