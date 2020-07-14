@@ -75,6 +75,7 @@
     <Compile Include="Xml\XPage.cs" />
     <Compile Include="Xml\XProject.cs" />
     <Compile Include="Xml\XTable.cs" />
+    <Compile Include="Xml\XTemplate.Construct.cs" />
     <Compile Include="Xml\XTemplate.cs" />
     <Compile Include="Xml\XView.cs" />
   </ItemGroup>
