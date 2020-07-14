@@ -132,5 +132,15 @@ namespace ERHMS.EpiInfo.Xml
         {
             Add(new XView(page));
         }
+
+        public XProject(XElement element)
+            : base(ElementNames.Project)
+        {
+            Add(element.Attributes());
+            foreach (XElement xView in element.Elements(ElementNames.View))
+            {
+                Add(new XView(xView));
+            }
+        }
     }
 }

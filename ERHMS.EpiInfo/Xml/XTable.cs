@@ -28,5 +28,8 @@ namespace ERHMS.EpiInfo.Xml
                 Add(xRow);
             }
         }
+
+        public XTable(XElement element)
+            : base(element) { }
     }
 }

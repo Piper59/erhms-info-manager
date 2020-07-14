@@ -1,4 +1,6 @@
-﻿namespace ERHMS.EpiInfo.Xml
+﻿using System.Collections.Generic;
+
+namespace ERHMS.EpiInfo.Xml
 {
     public static class ElementNames
     {
@@ -11,5 +13,12 @@
         public const string Row = "Item";
         public const string Template = "Template";
         public const string View = "View";
+
+        public static readonly ICollection<string> Tables = new string[]
+        {
+            CodeTable,
+            GridTable,
+            BackgroundsTable
+        };
     }
 }

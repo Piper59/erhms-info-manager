@@ -83,5 +83,15 @@ namespace ERHMS.EpiInfo.Xml
                 Add(new XField(field));
             }
         }
+
+        public XPage(XElement element)
+            : base(ElementNames.Page)
+        {
+            Add(element.Attributes());
+            foreach (XElement xField in element.Elements(ElementNames.Field))
+            {
+                Add(new XField(xField));
+            }
+        }
     }
 }

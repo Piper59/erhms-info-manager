@@ -88,5 +88,15 @@ namespace ERHMS.EpiInfo.Xml
             CheckCode = page.GetView().CheckCode;
             Add(new XPage(page));
         }
+
+        public XView(XElement element)
+            : base(ElementNames.View)
+        {
+            Add(element.Attributes());
+            foreach (XElement xPage in element.Elements(ElementNames.Page))
+            {
+                Add(new XPage(xPage));
+            }
+        }
     }
 }

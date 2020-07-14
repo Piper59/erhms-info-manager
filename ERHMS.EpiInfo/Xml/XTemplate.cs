@@ -13,6 +13,19 @@ namespace ERHMS.EpiInfo.Xml
 {
     public class XTemplate : XElement
     {
+        public static bool IsLevelSupported(TemplateLevel level)
+        {
+            switch (level)
+            {
+                case TemplateLevel.Project:
+                case TemplateLevel.View:
+                case TemplateLevel.Page:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
@@ -91,6 +104,25 @@ namespace ERHMS.EpiInfo.Xml
             RemoveRelateFields();
             AddCodeTables();
             AddGridTables();
+        }
+
+        public XTemplate(XElement element)
+            : base(ElementNames.Template)
+        {
+            Add(element.Attributes());
+            if (!IsLevelSupported(Level))
+            {
+                throw new NotSupportedException();
+            }
+            XElement xProject = element.Elements(ElementNames.Project).Single();
+            Add(new XProject(xProject));
+            foreach (string elementName in ElementNames.Tables)
+            {
+                foreach (XElement xTable in element.Elements(elementName))
+                {
+                    Add(new XTable(xTable));
+                }
+            }
         }
 
         private void RemoveRelateFields()

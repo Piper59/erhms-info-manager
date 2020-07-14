@@ -45,5 +45,8 @@ namespace ERHMS.EpiInfo.Xml
                 this.SetAttributeValue(field[column], column.ColumnName);
             }
         }
+
+        public XField(XElement element)
+            : base(element) { }
     }
 }
