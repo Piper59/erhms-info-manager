@@ -57,6 +57,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.Data\ERHMS.Data.csproj">
+      <Project>{ccebb7b1-4468-4b27-958e-79e86373a398}</Project>
+      <Name>ERHMS.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
       <Name>ERHMS.EpiInfo</Name>

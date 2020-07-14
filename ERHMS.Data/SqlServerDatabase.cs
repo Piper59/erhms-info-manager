@@ -24,12 +24,12 @@ namespace ERHMS.Data
         public SqlServerDatabase(string connectionString)
             : this(new SqlConnectionStringBuilder(connectionString)) { }
 
-        protected override DbConnection GetConnection()
+        protected override IDbConnection GetConnection()
         {
             return new SqlConnection(ConnectionString);
         }
 
-        private DbConnection GetDefaultConnection()
+        private IDbConnection GetDefaultConnection()
         {
             DbConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString)
             {
@@ -53,7 +53,7 @@ namespace ERHMS.Data
         {
             using (IDbConnection connection = Connect(GetDefaultConnection()))
             {
-                string sql = string.Format("CREATE DATABASE {0};", Quote(Name));
+                string sql = $"CREATE DATABASE {Quote(Name)};";
                 connection.Execute(sql);
             }
         }

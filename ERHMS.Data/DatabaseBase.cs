@@ -19,14 +19,9 @@ namespace ERHMS.Data
         protected abstract DbCommandBuilder CommandBuilder { get; }
         public abstract string Name { get; }
 
-        protected abstract DbConnection GetConnection();
+        protected abstract IDbConnection GetConnection();
 
         public abstract bool Exists();
-
-        public bool TableExists(string name)
-        {
-            return GetConnection().TableExists(name);
-        }
 
         public abstract void CreateCore();
 

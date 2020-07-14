@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.Common;
 
 namespace ERHMS.Utility
 {
@@ -48,12 +47,6 @@ namespace ERHMS.Utility
                 }
             }
             return true;
-        }
-
-        public static bool TableExists(this DbConnection @this, string name)
-        {
-            DataTable schema = @this.GetSchema("Tables", new string[] { null, null, name });
-            return schema.Rows.Count > 0;
         }
     }
 }

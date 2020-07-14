@@ -2,9 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=mscorlib">
     <!-- Colors -->
-    <Color x:Key="PreDeploymentColor">#ff0079c1</Color>
-    <Color x:Key="DeploymentColor">#ffef3e42</Color>
-    <Color x:Key="PostDeploymentColor">#ff6cb33f</Color>
+    <Color x:Key="ThemeBlue">#ff0079c1</Color>
+    <Color x:Key="ThemeRed">#ffef3e42</Color>
+    <Color x:Key="ThemeGreen">#ff6cb33f</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="PreDeploymentBrush" Color="{StaticResource ThemeBlue}" />
+    <SolidColorBrush x:Key="DeploymentBrush" Color="{StaticResource ThemeRed}" />
+    <SolidColorBrush x:Key="PostDeploymentBrush" Color="{StaticResource ThemeGreen}" />
 
     <!-- Fonts -->
     <System:Double x:Key="DefaultFontSize">16</System:Double>

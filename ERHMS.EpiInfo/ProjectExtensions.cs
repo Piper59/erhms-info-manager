@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo
     {
         public static Project Create(ProjectCreationInfo info)
         {
-            Log.Default.DebugFormat("Creating project: {0}", info.FilePath);
+            Log.Default.Debug($"Creating project: {info.Path}");
             Directory.CreateDirectory(info.Location);
             Project project = new Project
             {

@@ -11,12 +11,12 @@ namespace ERHMS.Desktop.ViewModels
         {
             PropertyChanged?.Invoke(this, e);
         }
-        protected void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string propertyName)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(name));
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string name = null)
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(value, field))
             {
@@ -25,7 +25,7 @@ namespace ERHMS.Desktop.ViewModels
             else
             {
                 field = value;
-                OnPropertyChanged(name);
+                OnPropertyChanged(propertyName);
                 return true;
             }
         }

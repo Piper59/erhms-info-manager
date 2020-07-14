@@ -10,12 +10,19 @@ namespace ERHMS.Utility
             return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         }
 
-        public static void CopyManifestResourceTo(this Assembly @this, string resourceName, string path)
+        public static void CopyManifestResourceTo(this Assembly @this, string resourceName, Stream stream)
         {
             using (Stream source = @this.GetManifestResourceStream(resourceName))
-            using (Stream target = File.Create(path))
             {
-                source.CopyTo(target);
+                source.CopyTo(stream);
+            }
+        }
+
+        public static void CopyManifestResourceTo(this Assembly @this, string resourceName, string path)
+        {
+            using (Stream stream = File.Create(path))
+            {
+                @this.CopyManifestResourceTo(resourceName, stream);
             }
         }
     }

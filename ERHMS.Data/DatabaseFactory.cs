@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.Utility;
 using System;
 using System.Data.Common;
 using System.Data.OleDb;
@@ -32,7 +31,7 @@ namespace ERHMS.Data
                 case DatabaseType.SqlServer:
                     return new SqlServerDatabase(connectionString);
                 default:
-                    throw new InvalidEnumValueException(type);
+                    throw new NotSupportedException();
             }
         }
 

@@ -32,7 +32,7 @@ namespace ERHMS.Desktop.Commands
             }
             catch (Exception ex)
             {
-                Log.Default.WarnFormat("{0} in {1}: {2}", ex.GetType(), this, ex.Message);
+                Log.Default.Warn($"{ex.GetType()} in {this}: {ex.Message}");
                 // TODO: Recover by default?
                 throw;
             }
@@ -41,7 +41,7 @@ namespace ERHMS.Desktop.Commands
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}", execute.Method.DeclaringType, execute.Method.Name);
+            return $"{execute.Method.DeclaringType}.{execute.Method.Name}";
         }
     }
 }

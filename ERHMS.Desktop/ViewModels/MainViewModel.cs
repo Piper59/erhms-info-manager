@@ -30,7 +30,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                Log.Default.DebugFormat($"Displaying: {value}");
+                Log.Default.Debug($"Displaying: {value}");
                 SetProperty(ref content, value);
             }
         }

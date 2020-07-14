@@ -11,7 +11,6 @@ namespace ERHMS.Data
         string Name { get; }
 
         bool Exists();
-        bool TableExists(string name);
         void Create();
         IDbConnection Connect();
         string Quote(string identifier);

@@ -7,7 +7,7 @@ using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using ResXResources = ERHMS.Desktop.Properties.Resources;
+using ResX = ERHMS.Desktop.Properties.Resources;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop
@@ -43,9 +43,9 @@ namespace ERHMS.Desktop
             string file = Log.Default.Logger.Repository.GetFile(Log.MainAppenderName);
             string message =
                 file == null
-                ? ResXResources.AppErrorWithoutLog
-                : string.Format(ResXResources.AppErrorWithLog, file);
-            MessageBox.Show(message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                ? ResX.AppErrorWithoutLog
+                : string.Format(ResX.AppErrorWithLog, file);
+            MessageBox.Show(message, ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private static void Configure()

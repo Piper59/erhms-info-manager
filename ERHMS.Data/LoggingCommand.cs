@@ -70,7 +70,7 @@ namespace ERHMS.Data
 
         private void OnExecuting()
         {
-            Log.Default.DebugFormat("Executing SQL: {0}", CommandText.Trim());
+            Log.Default.Debug($"Executing SQL: {CommandText.Trim()}");
         }
 
         public int ExecuteNonQuery()
