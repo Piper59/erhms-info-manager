@@ -16,10 +16,13 @@ namespace ERHMS.Data
         public string Instance => connectionStringBuilder.DataSource;
         public override string Name => connectionStringBuilder.InitialCatalog;
 
-        public SqlServerDatabase(string connectionString)
+        public SqlServerDatabase(SqlConnectionStringBuilder connectionStringBuilder)
         {
-            connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            this.connectionStringBuilder = connectionStringBuilder;
         }
+
+        public SqlServerDatabase(string connectionString)
+            : this(new SqlConnectionStringBuilder(connectionString)) { }
 
         protected override DbConnection GetConnection()
         {

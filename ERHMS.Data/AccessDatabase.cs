@@ -17,10 +17,13 @@ namespace ERHMS.Data
         public string FilePath => connectionStringBuilder.DataSource;
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 
-        public AccessDatabase(string connectionString)
+        public AccessDatabase(OleDbConnectionStringBuilder connectionStringBuilder)
         {
-            connectionStringBuilder = new OleDbConnectionStringBuilder(connectionString);
+            this.connectionStringBuilder = connectionStringBuilder;
         }
+
+        public AccessDatabase(string connectionString)
+            : this(new OleDbConnectionStringBuilder(connectionString)) { }
 
         protected override DbConnection GetConnection()
         {
