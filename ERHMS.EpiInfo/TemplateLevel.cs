@@ -19,8 +19,11 @@ namespace ERHMS.EpiInfo
             {
                 return TemplateLevel.View;
             }
-            Enum.TryParse(value, true, out TemplateLevel result);
-            return result;
+            if (Enum.TryParse(value, true, out TemplateLevel result))
+            {
+                return result;
+            }
+            return TemplateLevel.Unknown;
         }
     }
 }
