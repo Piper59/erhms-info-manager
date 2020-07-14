@@ -1,4 +1,5 @@
 ﻿using Epi;
+using Epi.Fields;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +115,7 @@ namespace ERHMS.EpiInfo
         public ViewNameGenerator(Project project)
         {
             tableNames = GetSet(project.CollectedData.GetDbDriver().GetTableNames());
-            viewNames = GetSet(project.Views.Names);
+            viewNames = GetSet(project.Views.Cast<View>().Select(view => view.Name));
         }
 
         public override bool Exists(string name)
@@ -160,7 +161,7 @@ namespace ERHMS.EpiInfo
 
         public FieldNameGenerator(View view)
         {
-            fieldNames = GetSet(view.Fields.Names);
+            fieldNames = GetSet(view.Fields.Cast<Field>().Select(field => field.Name));
         }
 
         public override bool Exists(string name)

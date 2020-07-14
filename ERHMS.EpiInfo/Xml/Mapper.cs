@@ -41,8 +41,8 @@ namespace ERHMS.EpiInfo.Xml
                 };
             }
 
-            public static Mapping FromExpr(
-                Expression<Func<TModel, object>> expression,
+            public static Mapping FromExpr<TProperty>(
+                Expression<Func<TModel, TProperty>> expression,
                 Action<XElement, TModel> setProperty = null,
                 string attributeName = null)
             {
@@ -96,7 +96,7 @@ namespace ERHMS.EpiInfo.Xml
                     {
                         return;
                     }
-                    object value = Convert.ChangeType(attribute, property.PropertyType);
+                    object value = Convert.ChangeType(attribute.Value, property.PropertyType);
                     property.SetValue(model, value);
                 }
                 catch { }

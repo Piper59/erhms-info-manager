@@ -192,6 +192,7 @@ namespace ERHMS.EpiInfo
                 Page page = view.GetPageById(pageIdMap[pageId]);
                 CreateFields(xPage, page);
             }
+            view.MustRefreshFieldCollection = true;
         }
 
         private void CreateFields(XElement xPage, Page page)
@@ -228,7 +229,6 @@ namespace ERHMS.EpiInfo
                 relate.RelatedViewID = viewIdMap[relate.RelatedViewID];
             }
             field.SaveToDb();
-            view.Fields.Add(field);
             view.MustRefreshFieldCollection = false;
             fieldIdMap[(int)xField.Attribute(ColumnNames.FIELD_ID)] = field.Id;
             return field;
