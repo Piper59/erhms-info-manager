@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Xml
@@ -7,16 +8,12 @@ namespace ERHMS.EpiInfo.Xml
     {
         private const string Space = "__space__";
 
-        public string TableName
+        public static XTable Construct(string elementName, DataTable table)
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
-        }
-
-        public XTable(string elementName, DataTable table)
-            : base(elementName)
-        {
-            TableName = table.TableName;
+            XTable xTable = new XTable(elementName)
+            {
+                TableName = table.TableName
+            };
             foreach (DataRow row in table.Rows)
             {
                 XElement xRow = new XElement(ElementNames.Row);
@@ -25,11 +22,26 @@ namespace ERHMS.EpiInfo.Xml
                     string attributeName = column.ColumnName.Replace(" ", Space);
                     xRow.SetAttributeValue(row[column], attributeName);
                 }
-                Add(xRow);
+                xTable.Add(xRow);
             }
+            return xTable;
         }
 
-        public XTable(XElement element)
+        public static XTable Wrap(XElement element)
+        {
+            return new XTable(element);
+        }
+
+        public string TableName
+        {
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        private XTable(string elementName)
+            : base(elementName) { }
+
+        private XTable(XElement element)
             : base(element) { }
     }
 }

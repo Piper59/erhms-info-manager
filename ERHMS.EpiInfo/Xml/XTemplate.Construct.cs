@@ -9,12 +9,52 @@ namespace ERHMS.EpiInfo.Xml
 {
     public partial class XTemplate
     {
+        public static XTemplate Construct(Project project)
+        {
+            Log.Default.Debug("Constructing project template");
+            XTemplate xTemplate = new XTemplate(TemplateLevel.Project, project.Metadata)
+            {
+                Name = project.Name,
+                Description = project.Description
+            };
+            xTemplate.Add(XProject.Construct(project));
+            xTemplate.AddCodeTables();
+            xTemplate.AddGridTables();
+            xTemplate.AddBackgroundsTable();
+            return xTemplate;
+        }
+
+        public static XTemplate Construct(View view)
+        {
+            Log.Default.Debug("Constructing view template");
+            XTemplate xTemplate = new XTemplate(TemplateLevel.Project, view.GetMetadata())
+            {
+                Name = view.Name
+            };
+            xTemplate.Add(XProject.Construct(view));
+            xTemplate.RemoveRelateFields();
+            xTemplate.AddCodeTables();
+            xTemplate.AddGridTables();
+            return xTemplate;
+        }
+
+        public static XTemplate Construct(Page page)
+        {
+            Log.Default.Debug("Constructing page template");
+            XTemplate xTemplate = new XTemplate(TemplateLevel.Project, page.GetMetadata())
+            {
+                Name = page.Name
+            };
+            xTemplate.Add(XProject.Construct(page));
+            xTemplate.RemoveRelateFields();
+            xTemplate.AddCodeTables();
+            xTemplate.AddGridTables();
+            return xTemplate;
+        }
+
         private void RemoveRelateFields()
         {
-            Log.Default.Debug("Removing relate fields");
-            IEnumerable<XField> xFields = Descendants().OfType<XField>()
-                .Where(xField => xField.FieldType == MetaFieldType.Relate)
-                .ToList();
+            ICollection<XField> xFields = XFields.Where(xField => xField.FieldType == MetaFieldType.Relate).ToList();
             foreach (XField xField in xFields)
             {
                 xField.Remove();
@@ -23,9 +63,8 @@ namespace ERHMS.EpiInfo.Xml
 
         private void AddCodeTables()
         {
-            Log.Default.Debug("Adding code tables");
             ISet<string> tableNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (XField xField in Descendants().OfType<XField>())
+            foreach (XField xField in XFields)
             {
                 if (xField.FieldType.HasCodeTable())
                 {
@@ -55,14 +94,13 @@ namespace ERHMS.EpiInfo.Xml
             }
             DataTable table = Metadata.GetCodeTableData(tableName);
             table.TableName = tableName;
-            Add(new XTable(ElementNames.CodeTable, table));
+            Add(XTable.Construct(ElementNames.CodeTable, table));
             tableNames.Add(tableName);
         }
 
         private void AddGridTables()
         {
-            Log.Default.Debug("Adding grid tables");
-            foreach (XField xField in Descendants().OfType<XField>())
+            foreach (XField xField in XFields)
             {
                 if (xField.FieldType != MetaFieldType.Grid)
                 {
@@ -70,15 +108,14 @@ namespace ERHMS.EpiInfo.Xml
                 }
                 DataTable table = Metadata.GetGridColumns(xField.FieldId);
                 table.TableName = xField.Name;
-                Add(new XTable(ElementNames.GridTable, table));
+                Add(XTable.Construct(ElementNames.GridTable, table));
             }
         }
 
         private void AddBackgroundsTable()
         {
-            Log.Default.Debug("Adding backgrounds table");
             DataTable table = new DataTable(ElementNames.BackgroundsTable);
-            Add(new XTable(ElementNames.BackgroundsTable, table));
+            Add(XTable.Construct(ElementNames.BackgroundsTable, table));
         }
     }
 }

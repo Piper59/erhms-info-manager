@@ -1,11 +1,52 @@
 ﻿using Epi;
-using ERHMS.Utility;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Xml
 {
     public class XView : XElement
     {
+        public static XView Construct(View view)
+        {
+            XView xView = new XView
+            {
+                ViewId = view.Id,
+                Name = view.Name,
+                IsRelatedView = view.IsRelatedView,
+                CheckCode = view.CheckCode,
+                Width = view.PageWidth,
+                Height = view.PageHeight,
+                Orientation = view.PageOrientation,
+                LabelAlign = view.PageLabelAlign,
+                SurveyId = ConfigurationExtensions.CompatibilityMode ? view.WebSurveyId : null
+            };
+            foreach (Page page in view.Pages)
+            {
+                xView.Add(XPage.Construct(page));
+            }
+            return xView;
+        }
+
+        public static XView Construct(Page page)
+        {
+            XView xView = new XView
+            {
+                CheckCode = page.GetView().CheckCode
+            };
+            xView.Add(XPage.Construct(page));
+            return xView;
+        }
+
+        public static XView Wrap(XElement element)
+        {
+            XView xView = new XView();
+            xView.Add(element.Attributes());
+            foreach (XElement xPage in element.Elements(ElementNames.Page))
+            {
+                xView.Add(XPage.Wrap(xPage));
+            }
+            return xView;
+        }
+
         public int ViewId
         {
             get { return (int)this.GetAttribute(); }
@@ -62,41 +103,5 @@ namespace ERHMS.EpiInfo.Xml
 
         private XView()
             : base(ElementNames.View) { }
-
-        public XView(View view)
-            : this()
-        {
-            Log.Default.Debug($"Adding view: {view.Name}");
-            ViewId = view.Id;
-            Name = view.Name;
-            IsRelatedView = view.IsRelatedView;
-            CheckCode = view.CheckCode;
-            Width = view.PageWidth;
-            Height = view.PageHeight;
-            Orientation = view.PageOrientation;
-            LabelAlign = view.PageLabelAlign;
-            SurveyId = ConfigurationExtensions.CompatibilityMode ? view.WebSurveyId : null;
-            foreach (Page page in view.Pages)
-            {
-                Add(new XPage(page));
-            }
-        }
-
-        public XView(Page page)
-            : this()
-        {
-            CheckCode = page.GetView().CheckCode;
-            Add(new XPage(page));
-        }
-
-        public XView(XElement element)
-            : base(ElementNames.View)
-        {
-            Add(element.Attributes());
-            foreach (XElement xPage in element.Elements(ElementNames.Page))
-            {
-                Add(new XPage(xPage));
-            }
-        }
     }
 }

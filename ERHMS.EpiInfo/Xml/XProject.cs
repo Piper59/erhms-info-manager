@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -23,6 +22,71 @@ namespace ERHMS.EpiInfo.Xml
             "EditorFontName",
             "EditorFontSize"
         };
+
+        public static XProject Construct(Project project)
+        {
+            XProject xProject = new XProject
+            {
+                Id = null,
+                Name = project.Name,
+                Location = "",
+                Description = project.Description,
+                EpiVersion = project.EpiVersion,
+                CreateDate = null
+            };
+            if (ConfigurationExtensions.CompatibilityMode)
+            {
+                Configuration configuration = Configuration.GetNewInstance();
+                foreach (string attributeName in ConfigurationAttributeNames)
+                {
+                    xProject.SetAttributeValue(configuration.Settings[attributeName], attributeName);
+                }
+            }
+            xProject.Add(
+                new XElement("CollectedData",
+                    new XElement("Database",
+                        new XAttribute("Source", ""),
+                        new XAttribute("DataDriver", "")
+                    )
+                ),
+                new XElement("Metadata",
+                    new XAttribute("Source", "")
+                ),
+                new XElement("EnterMakeviewInterpreter",
+                    new XAttribute("Source", project.EnterMakeviewIntepreter)
+                )
+            );
+            foreach (View view in project.Views)
+            {
+                xProject.Add(XView.Construct(view));
+            }
+            return xProject;
+        }
+
+        public static XProject Construct(View view)
+        {
+            XProject xProject = new XProject();
+            xProject.Add(XView.Construct(view));
+            return xProject;
+        }
+
+        public static XProject Construct(Page page)
+        {
+            XProject xProject = new XProject();
+            xProject.Add(XView.Construct(page));
+            return xProject;
+        }
+
+        public static XProject Wrap(XElement element)
+        {
+            XProject xProject = new XProject();
+            xProject.Add(element.Attributes());
+            foreach (XElement xView in element.Elements(ElementNames.View))
+            {
+                xProject.Add(XView.Wrap(xView));
+            }
+            return xProject;
+        }
 
         public Guid? Id
         {
@@ -82,65 +146,5 @@ namespace ERHMS.EpiInfo.Xml
 
         private XProject()
             : base(ElementNames.Project) { }
-
-        public XProject(Project project)
-            : this()
-        {
-            Log.Default.Debug($"Adding project: {project.Name}");
-            Id = null;
-            Name = project.Name;
-            Location = "";
-            Description = project.Description;
-            EpiVersion = project.EpiVersion;
-            CreateDate = null;
-            if (ConfigurationExtensions.CompatibilityMode)
-            {
-                Configuration configuration = Configuration.GetNewInstance();
-                foreach (string attributeName in ConfigurationAttributeNames)
-                {
-                    this.SetAttributeValue(configuration.Settings[attributeName], attributeName);
-                }
-            }
-            Add(
-                new XElement("CollectedData",
-                    new XElement("Database",
-                        new XAttribute("Source", ""),
-                        new XAttribute("DataDriver", "")
-                    )
-                ),
-                new XElement("Metadata",
-                    new XAttribute("Source", "")
-                ),
-                new XElement("EnterMakeviewInterpreter",
-                    new XAttribute("Source", project.EnterMakeviewIntepreter)
-                )
-            );
-            foreach (View view in project.Views)
-            {
-                Add(new XView(view));
-            }
-        }
-
-        public XProject(View view)
-            : this()
-        {
-            Add(new XView(view));
-        }
-
-        public XProject(Page page)
-            : this()
-        {
-            Add(new XView(page));
-        }
-
-        public XProject(XElement element)
-            : base(ElementNames.Project)
-        {
-            Add(element.Attributes());
-            foreach (XElement xView in element.Elements(ElementNames.View))
-            {
-                Add(new XView(xView));
-            }
-        }
     }
 }

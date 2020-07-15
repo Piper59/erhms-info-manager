@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,20 +16,9 @@ namespace ERHMS.EpiInfo.Xml
             "Expr1017"
         };
 
-        public new string Name => (string)this.GetAttribute();
-        public int FieldId => (int)this.GetAttribute();
-        public int FieldTypeId => (int)this.GetAttribute();
-        public MetaFieldType FieldType => (MetaFieldType)FieldTypeId;
-        public string SourceTableName => (string)this.GetAttribute();
-
-        private XField()
-            : base(ElementNames.Field) { }
-
-        public XField(DataRow field)
-            : this()
+        public static XField Construct(DataRow field)
         {
-            string name = field.Field<string>(ColumnNames.NAME);
-            Log.Default.Debug($"Adding field: {name}");
+            XField xField = new XField();
             MetaFieldType fieldType = (MetaFieldType)field.Field<int>(ColumnNames.FIELD_TYPE_ID);
             foreach (DataColumn column in field.Table.Columns)
             {
@@ -42,11 +30,26 @@ namespace ERHMS.EpiInfo.Xml
                 {
                     continue;
                 }
-                this.SetAttributeValue(field[column], column.ColumnName);
+                xField.SetAttributeValue(field[column], column.ColumnName);
             }
+            return xField;
         }
 
-        public XField(XElement element)
+        public static XField Wrap(XElement element)
+        {
+            return new XField(element);
+        }
+
+        public new string Name => (string)this.GetAttribute();
+        public int FieldId => (int)this.GetAttribute();
+        public int FieldTypeId => (int)this.GetAttribute();
+        public MetaFieldType FieldType => (MetaFieldType)FieldTypeId;
+        public string SourceTableName => (string)this.GetAttribute();
+
+        private XField()
+            : base(ElementNames.Field) { }
+
+        private XField(XElement element)
             : base(element) { }
     }
 }

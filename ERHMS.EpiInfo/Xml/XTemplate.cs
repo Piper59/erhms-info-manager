@@ -1,7 +1,7 @@
-﻿using Epi;
-using Epi.Data.Services;
+﻿using Epi.Data.Services;
 using ERHMS.Utility;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -22,6 +22,27 @@ namespace ERHMS.EpiInfo.Xml
                 default:
                     return false;
             }
+        }
+
+        public static XTemplate Wrap(XElement element)
+        {
+            Log.Default.Debug("Wrapping template");
+            XTemplate xTemplate = new XTemplate();
+            xTemplate.Add(element.Attributes());
+            if (!IsLevelSupported(xTemplate.Level))
+            {
+                throw new NotSupportedException();
+            }
+            XElement xProject = element.Element(ElementNames.Project);
+            xTemplate.Add(XProject.Wrap(xProject));
+            foreach (string elementName in ElementNames.Tables)
+            {
+                foreach (XElement xTable in element.Elements(elementName))
+                {
+                    xTemplate.Add(XTable.Wrap(xTable));
+                }
+            }
+            return xTemplate;
         }
 
         public new string Name
@@ -58,10 +79,15 @@ namespace ERHMS.EpiInfo.Xml
             private set { this.SetAttributeValue(value); }
         }
 
-        private IMetadataProvider Metadata { get; }
+        public XProject XProject => Elements().OfType<XProject>().Single();
+        public IEnumerable<XField> XFields => Descendants().OfType<XField>();
+        private IMetadataProvider Metadata { get; set; }
+
+        private XTemplate()
+            : base(ElementNames.Template) { }
 
         private XTemplate(TemplateLevel level, IMetadataProvider metadata)
-            : base(ElementNames.Template)
+            : this()
         {
             Name = "";
             Description = "";
@@ -70,61 +96,9 @@ namespace ERHMS.EpiInfo.Xml
             Metadata = metadata;
         }
 
-        public XTemplate(Project project)
-            : this(TemplateLevel.Project, project.Metadata)
-        {
-            Log.Default.Debug("Creating project template");
-            Name = project.Name;
-            Description = project.Description;
-            Add(new XProject(project));
-            AddCodeTables();
-            AddGridTables();
-            AddBackgroundsTable();
-        }
-
-        public XTemplate(View view)
-            : this(TemplateLevel.View, view.GetMetadata())
-        {
-            Log.Default.Debug("Creating view template");
-            Name = view.Name;
-            Add(new XProject(view));
-            RemoveRelateFields();
-            AddCodeTables();
-            AddGridTables();
-        }
-
-        public XTemplate(Page page)
-            : this(TemplateLevel.Page, page.GetMetadata())
-        {
-            Log.Default.Debug("Creating page template");
-            Name = page.Name;
-            Add(new XProject(page));
-            RemoveRelateFields();
-            AddCodeTables();
-            AddGridTables();
-        }
-
-        public XTemplate(XElement element)
-            : base(ElementNames.Template)
-        {
-            Add(element.Attributes());
-            if (!IsLevelSupported(Level))
-            {
-                throw new NotSupportedException();
-            }
-            XElement xProject = element.Elements(ElementNames.Project).Single();
-            Add(new XProject(xProject));
-            foreach (string elementName in ElementNames.Tables)
-            {
-                foreach (XElement xTable in element.Elements(elementName))
-                {
-                    Add(new XTable(xTable));
-                }
-            }
-        }
-
         public new void Save(Stream stream)
         {
+            Log.Default.Debug("Saving template");
             XmlWriterSettings settings = new XmlWriterSettings
             {
                 Indent = true,

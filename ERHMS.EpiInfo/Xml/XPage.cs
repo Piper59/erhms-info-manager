@@ -36,6 +36,34 @@ namespace ERHMS.EpiInfo.Xml
             return fields.Values.OrderBy(field => field.Field<double?>(ColumnNames.TAB_INDEX));
         }
 
+        public static XPage Construct(Page page)
+        {
+            XPage xPage = new XPage
+            {
+                PageId = page.Id,
+                Name = page.Name,
+                Position = page.Position,
+                BackgroundId = page.BackgroundId,
+                ViewId = page.GetView().Id
+            };
+            foreach (DataRow field in GetFields(page))
+            {
+                xPage.Add(XField.Construct(field));
+            }
+            return xPage;
+        }
+
+        public static XPage Wrap(XElement element)
+        {
+            XPage xPage = new XPage();
+            xPage.Add(element.Attributes());
+            foreach (XElement xField in element.Elements(ElementNames.Field))
+            {
+                xPage.Add(XField.Wrap(xField));
+            }
+            return xPage;
+        }
+
         public int PageId
         {
             get { return (int)this.GetAttribute(); }
@@ -68,30 +96,5 @@ namespace ERHMS.EpiInfo.Xml
 
         private XPage()
             : base(ElementNames.Page) { }
-
-        public XPage(Page page)
-            : this()
-        {
-            Log.Default.Debug($"Adding page: {page.Name}");
-            PageId = page.Id;
-            Name = page.Name;
-            Position = page.Position;
-            BackgroundId = page.BackgroundId;
-            ViewId = page.GetView().Id;
-            foreach (DataRow field in GetFields(page))
-            {
-                Add(new XField(field));
-            }
-        }
-
-        public XPage(XElement element)
-            : base(ElementNames.Page)
-        {
-            Add(element.Attributes());
-            foreach (XElement xField in element.Elements(ElementNames.Field))
-            {
-                Add(new XField(xField));
-            }
-        }
     }
 }
