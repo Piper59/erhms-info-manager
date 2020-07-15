@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +10,7 @@ namespace ERHMS.EpiInfo.Xml
     {
         public static XTemplate Construct(Project project)
         {
-            Log.Default.Debug("Constructing project template");
+            Log.Debug("Constructing project template");
             XTemplate xTemplate = new XTemplate(TemplateLevel.Project, project.Metadata)
             {
                 Name = project.Name,
@@ -26,7 +25,7 @@ namespace ERHMS.EpiInfo.Xml
 
         public static XTemplate Construct(View view)
         {
-            Log.Default.Debug("Constructing view template");
+            Log.Debug("Constructing view template");
             XTemplate xTemplate = new XTemplate(TemplateLevel.Project, view.GetMetadata())
             {
                 Name = view.Name
@@ -40,7 +39,7 @@ namespace ERHMS.EpiInfo.Xml
 
         public static XTemplate Construct(Page page)
         {
-            Log.Default.Debug("Constructing page template");
+            Log.Debug("Constructing page template");
             XTemplate xTemplate = new XTemplate(TemplateLevel.Project, page.GetMetadata())
             {
                 Name = page.Name

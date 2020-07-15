@@ -1,4 +1,4 @@
-﻿using ERHMS.Utility;
+﻿using log4net;
 using System.Data;
 
 namespace ERHMS.Data
@@ -6,6 +6,7 @@ namespace ERHMS.Data
     public class LoggingCommand : IDbCommand
     {
         private IDbCommand @base;
+        private ILog log;
 
         public string CommandText
         {
@@ -48,9 +49,10 @@ namespace ERHMS.Data
             set { @base.UpdatedRowSource = value; }
         }
 
-        public LoggingCommand(IDbCommand @base)
+        public LoggingCommand(IDbCommand @base, ILog log)
         {
             this.@base = @base;
+            this.log = log;
         }
 
         public void Cancel()
@@ -70,7 +72,7 @@ namespace ERHMS.Data
 
         private void OnExecuting()
         {
-            Log.Default.Debug($"Executing SQL: {CommandText.Trim()}");
+            log.Debug($"Executing SQL: {CommandText.Trim()}");
         }
 
         public int ExecuteNonQuery()

@@ -1,5 +1,5 @@
 ﻿using Epi.Data.Services;
-using ERHMS.Utility;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +11,8 @@ namespace ERHMS.EpiInfo.Xml
 {
     public partial class XTemplate : XElement
     {
+        private static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
+
         public static bool IsLevelSupported(TemplateLevel level)
         {
             switch (level)
@@ -26,7 +28,7 @@ namespace ERHMS.EpiInfo.Xml
 
         public static XTemplate Wrap(XElement element)
         {
-            Log.Default.Debug("Wrapping template");
+            Log.Debug("Wrapping template");
             XTemplate xTemplate = new XTemplate();
             xTemplate.Add(element.Attributes());
             if (!IsLevelSupported(xTemplate.Level))
@@ -98,7 +100,7 @@ namespace ERHMS.EpiInfo.Xml
 
         public new void Save(Stream stream)
         {
-            Log.Default.Debug("Saving template");
+            Log.Debug("Saving template");
             XmlWriterSettings settings = new XmlWriterSettings
             {
                 Indent = true,

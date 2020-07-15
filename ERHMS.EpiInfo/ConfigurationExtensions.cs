@@ -9,6 +9,8 @@ namespace ERHMS.EpiInfo
     {
         private const string FipsCryptoFileName = "FipsCrypto.dll";
 
+        public static string FilePath => Configuration.DefaultConfigurationPath;
+
         public static bool CompatibilityMode
         {
             get
@@ -24,7 +26,7 @@ namespace ERHMS.EpiInfo
 
         public static bool Exists()
         {
-            return File.Exists(Configuration.DefaultConfigurationPath);
+            return File.Exists(FilePath);
         }
 
         public static Configuration Create()
@@ -51,7 +53,7 @@ namespace ERHMS.EpiInfo
 
         public static Configuration Load()
         {
-            Configuration.Load(Configuration.DefaultConfigurationPath);
+            Configuration.Load(FilePath);
             return Configuration.GetNewInstance();
         }
     }

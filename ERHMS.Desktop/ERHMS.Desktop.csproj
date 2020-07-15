@@ -65,10 +65,6 @@
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
       <Name>ERHMS.EpiInfo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.Utility\ERHMS.Utility.csproj">
-      <Project>{9a749a26-71ac-45ee-bf7b-12f696fd8527}</Project>
-      <Name>ERHMS.Utility</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">

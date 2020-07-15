@@ -5,19 +5,6 @@ namespace ERHMS.Utility
 {
     public static class DataExtensions
     {
-        public static class OleDb
-        {
-            public static class FileExtensions
-            {
-                public const string Access2003 = ".mdb";
-            }
-
-            public static class Providers
-            {
-                public const string Jet4 = "Microsoft.Jet.OLEDB.4.0";
-            }
-        }
-
         public static void SetColumnDataType(this DataTable @this, string columnName, Type dataType)
         {
             DataColumn source = @this.Columns[columnName];

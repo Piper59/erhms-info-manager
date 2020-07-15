@@ -1,5 +1,4 @@
-﻿using ERHMS.Utility;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.IO;
@@ -15,8 +14,8 @@ namespace ERHMS.Data
         public override DatabaseType Type => DatabaseType.Access;
         public override DbConnectionStringBuilder ConnectionStringBuilder => connectionStringBuilder;
         protected override DbCommandBuilder CommandBuilder => commandBuilder;
-        public string Path => connectionStringBuilder.DataSource;
-        public override string Name => System.IO.Path.GetFileNameWithoutExtension(Path);
+        public string FilePath => connectionStringBuilder.DataSource;
+        public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 
         public AccessDatabase(OleDbConnectionStringBuilder connectionStringBuilder)
         {
@@ -33,18 +32,23 @@ namespace ERHMS.Data
 
         public override bool Exists()
         {
-            return File.Exists(Path);
+            return File.Exists(FilePath);
         }
 
         public override void CreateCore()
         {
-            Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path));
-            Assembly.GetExecutingAssembly().CopyManifestResourceTo("ERHMS.Data.Resources.Empty.mdb", Path);
+            string resourceName = "ERHMS.Data.Resources.Empty.mdb";
+            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+            using (Stream source = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            using (Stream target = File.Create(FilePath))
+            {
+                source.CopyTo(target);
+            }
         }
 
         public override string ToString()
         {
-            return Path;
+            return FilePath;
         }
     }
 }

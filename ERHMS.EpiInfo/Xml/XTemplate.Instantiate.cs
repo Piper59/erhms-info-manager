@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.Utility;
 
 namespace ERHMS.EpiInfo.Xml
 {
@@ -7,7 +6,7 @@ namespace ERHMS.EpiInfo.Xml
     {
         public void Instantiate(Project project)
         {
-            Log.Default.Debug("Instantiating template");
+            Log.Debug("Instantiating template");
             Metadata = project.Metadata;
             // TODO
         }

@@ -1,13 +1,17 @@
 ﻿using ERHMS.Desktop.Commands;
 using ERHMS.EpiInfo;
-using ERHMS.Utility;
+using log4net;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        protected static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
+
         private static MainViewModel current;
         public static MainViewModel Current
         {
@@ -30,7 +34,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                Log.Default.Debug($"Displaying: {value}");
+                Log.Debug($"Displaying: {value}");
                 SetProperty(ref content, value);
             }
         }
@@ -53,12 +57,13 @@ namespace ERHMS.Desktop.ViewModels
 
         private void OpenEpiInfo()
         {
-            Module.Menu.Start();
+            EpiInfo.Module.Menu.Start();
         }
 
         private void OpenFileExplorer()
         {
-            Process.Start(ReflectionExtensions.GetEntryDirectory());
+            string entryDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            Process.Start(entryDirectory);
         }
     }
 }

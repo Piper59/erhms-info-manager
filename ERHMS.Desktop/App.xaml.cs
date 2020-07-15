@@ -2,8 +2,14 @@
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
-using ERHMS.Utility;
+using log4net;
+using log4net.Appender;
+using log4net.Config;
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Security;
+using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -14,6 +20,8 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
+        private static ILog Log { get; set; }
+
         private static int errorCount;
 
         [STAThread]
@@ -21,11 +29,12 @@ namespace ERHMS.Desktop
         {
             try
             {
-                Log.Default.Debug("Starting up");
-                Configure();
+                ConfigureLog();
+                Log.Debug("Starting up");
+                ConfigureEpiInfo();
                 App app = new App();
                 app.Run();
-                Log.Default.Debug("Shutting down");
+                Log.Debug("Shutting down");
             }
             catch (Exception ex)
             {
@@ -33,14 +42,29 @@ namespace ERHMS.Desktop
             }
         }
 
+        private static void ConfigureLog()
+        {
+            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
+            try
+            {
+                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
+            }
+            catch (SecurityException) { }
+            XmlConfigurator.Configure();
+            Log = LogManager.GetLogger(nameof(ERHMS));
+        }
+
         private static void HandleError(Exception ex)
         {
-            Log.Default.Fatal(ex);
+            Log.Fatal(ex);
             if (Interlocked.Increment(ref errorCount) > 1)
             {
                 return;
             }
-            string file = Log.Default.Logger.Repository.GetFile(Log.MainAppenderName);
+            string file = Log.Logger.Repository.GetAppenders()
+                .OfType<FileAppender>()
+                .FirstOrDefault()
+                ?.File;
             string message =
                 file == null
                 ? ResX.AppErrorWithoutLog
@@ -48,15 +72,17 @@ namespace ERHMS.Desktop
             MessageBox.Show(message, ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private static void Configure()
+        private static void ConfigureEpiInfo()
         {
-            Log.Default.Debug("Configuring");
+            Log.Debug("Configuring Epi Info");
             if (!ConfigurationExtensions.Exists())
             {
+                Log.Debug($"Creating configuration file: {ConfigurationExtensions.FilePath}");
                 Configuration configuration = ConfigurationExtensions.Create();
                 Settings.Default.Apply(configuration);
                 configuration.Save();
             }
+            Log.Debug($"Loading configuration file: {ConfigurationExtensions.FilePath}");
             ConfigurationExtensions.Load();
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }

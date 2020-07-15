@@ -50,12 +50,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ERHMS.Utility\ERHMS.Utility.csproj">
-      <Project>{9a749a26-71ac-45ee-bf7b-12f696fd8527}</Project>
-      <Name>ERHMS.Utility</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -71,9 +65,7 @@
     <Compile Include="SqlServerDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Empty.mdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Empty.mdb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

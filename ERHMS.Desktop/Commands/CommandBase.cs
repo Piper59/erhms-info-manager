@@ -1,4 +1,4 @@
-﻿using ERHMS.Utility;
+﻿using log4net;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -7,6 +7,8 @@ namespace ERHMS.Desktop.Commands
 {
     public abstract class CommandBase : ICommand
     {
+        protected static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
+
         private Delegate execute;
 
         protected CommandBase(Delegate execute)
@@ -25,18 +27,18 @@ namespace ERHMS.Desktop.Commands
 
         public async void Execute(object parameter)
         {
-            Log.Default.Debug($"Executing: {this}");
+            Log.Debug($"Executing: {this}");
             try
             {
                 await ExecuteCore(parameter);
             }
             catch (Exception ex)
             {
-                Log.Default.Warn($"{ex.GetType()} in {this}: {ex.Message}");
+                Log.Warn($"{ex.GetType()} in {this}: {ex.Message}");
                 // TODO: Recover by default?
                 throw;
             }
-            Log.Default.Debug($"Executed: {this}");
+            Log.Debug($"Executed: {this}");
         }
 
         public override string ToString()

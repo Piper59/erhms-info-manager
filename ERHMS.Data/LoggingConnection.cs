@@ -1,10 +1,12 @@
-﻿using System.Data;
+﻿using log4net;
+using System.Data;
 
 namespace ERHMS.Data
 {
     public class LoggingConnection : IDbConnection
     {
         private IDbConnection @base;
+        private ILog log;
 
         public string ConnectionString
         {
@@ -27,9 +29,10 @@ namespace ERHMS.Data
             get { return @base.State; }
         }
 
-        public LoggingConnection(IDbConnection @base)
+        public LoggingConnection(IDbConnection @base, ILog log)
         {
             this.@base = @base;
+            this.log = log;
         }
 
         public IDbTransaction BeginTransaction()
@@ -54,7 +57,7 @@ namespace ERHMS.Data
 
         public IDbCommand CreateCommand()
         {
-            return new LoggingCommand(@base.CreateCommand());
+            return new LoggingCommand(@base.CreateCommand(), log);
         }
 
         public void Dispose()

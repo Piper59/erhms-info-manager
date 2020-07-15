@@ -1,6 +1,6 @@
-﻿using ERHMS.Utility;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace ERHMS.EpiInfo
 {
@@ -28,7 +28,7 @@ namespace ERHMS.EpiInfo
 
         public static Process Start(this Module @this, string arguments = "")
         {
-            string entryDirectory = ReflectionExtensions.GetEntryDirectory();
+            string entryDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             return Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,
