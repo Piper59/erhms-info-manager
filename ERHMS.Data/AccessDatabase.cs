@@ -8,18 +8,18 @@ namespace ERHMS.Data
 {
     public class AccessDatabase : DatabaseBase
     {
-        private OleDbConnectionStringBuilder connectionStringBuilder;
+        private OleDbConnectionStringBuilder builder;
         private OleDbCommandBuilder commandBuilder = new OleDbCommandBuilder();
 
         public override DatabaseType Type => DatabaseType.Access;
-        public override DbConnectionStringBuilder ConnectionStringBuilder => connectionStringBuilder;
+        public override DbConnectionStringBuilder Builder => builder;
         protected override DbCommandBuilder CommandBuilder => commandBuilder;
-        public string FilePath => connectionStringBuilder.DataSource;
+        public string FilePath => builder.DataSource;
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 
-        public AccessDatabase(OleDbConnectionStringBuilder connectionStringBuilder)
+        public AccessDatabase(OleDbConnectionStringBuilder builder)
         {
-            this.connectionStringBuilder = connectionStringBuilder;
+            this.builder = builder;
         }
 
         public AccessDatabase(string connectionString)
@@ -38,11 +38,13 @@ namespace ERHMS.Data
         public override void CreateCore()
         {
             string resourceName = "ERHMS.Data.Resources.Empty.mdb";
-            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
             using (Stream source = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (Stream target = File.Create(FilePath))
             {
-                source.CopyTo(target);
+                Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+                using (Stream target = File.Create(FilePath))
+                {
+                    source.CopyTo(target);
+                }
             }
         }
 

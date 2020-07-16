@@ -1,5 +1,5 @@
-﻿using Epi.Data.Services;
-using log4net;
+﻿using Epi;
+using Epi.Data.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,8 +11,6 @@ namespace ERHMS.EpiInfo.Xml
 {
     public partial class XTemplate : XElement
     {
-        private static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
-
         public static bool IsLevelSupported(TemplateLevel level)
         {
             switch (level)
@@ -28,7 +26,6 @@ namespace ERHMS.EpiInfo.Xml
 
         public static XTemplate Wrap(XElement element)
         {
-            Log.Debug("Wrapping template");
             XTemplate xTemplate = new XTemplate();
             xTemplate.Add(element.Attributes());
             if (!IsLevelSupported(xTemplate.Level))
@@ -37,6 +34,10 @@ namespace ERHMS.EpiInfo.Xml
             }
             XElement xProject = element.Element(ElementNames.Project);
             xTemplate.Add(XProject.Wrap(xProject));
+            if (xTemplate.Level != TemplateLevel.Project)
+            {
+                xTemplate.RemoveRelateFields();
+            }
             foreach (string elementName in ElementNames.Tables)
             {
                 foreach (XElement xTable in element.Elements(elementName))
@@ -46,6 +47,8 @@ namespace ERHMS.EpiInfo.Xml
             }
             return xTemplate;
         }
+
+        private IMetadataProvider Metadata { get; set; }
 
         public new string Name
         {
@@ -78,12 +81,12 @@ namespace ERHMS.EpiInfo.Xml
         public TemplateLevel Level
         {
             get { return TemplateLevelExtensions.Parse((string)this.GetAttribute()); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XProject XProject => Elements().OfType<XProject>().Single();
-        public IEnumerable<XField> XFields => Descendants().OfType<XField>();
-        private IMetadataProvider Metadata { get; set; }
+        public IEnumerable<XTable> XSourceTables => Elements(ElementNames.SourceTable).OfType<XTable>();
+        public IEnumerable<XTable> XGridTables => Elements(ElementNames.GridTable).OfType<XTable>();
 
         private XTemplate()
             : base(ElementNames.Template) { }
@@ -91,16 +94,34 @@ namespace ERHMS.EpiInfo.Xml
         private XTemplate(TemplateLevel level, IMetadataProvider metadata)
             : this()
         {
+            if (!IsLevelSupported(level))
+            {
+                throw new NotSupportedException();
+            }
+            Metadata = metadata;
             Name = "";
             Description = "";
             CreateDate = ConfigurationExtensions.CompatibilityMode ? DateTime.Now : (DateTime?)null;
             Level = level;
-            Metadata = metadata;
+        }
+
+        private void RemoveRelateFields()
+        {
+            ICollection<XField> xFields = XProject.XFields
+                .Where(xField => xField.FieldType == MetaFieldType.Relate)
+                .ToList();
+            foreach (XField xField in xFields)
+            {
+                xField.Remove();
+            }
+            foreach (XView xView in XProject.XViews)
+            {
+                xView.IsRelatedView = false;
+            }
         }
 
         public new void Save(Stream stream)
         {
-            Log.Debug("Saving template");
             XmlWriterSettings settings = new XmlWriterSettings
             {
                 Indent = true,

@@ -61,6 +61,7 @@
     <Compile Include="IDatabase.cs" />
     <Compile Include="LoggingCommand.cs" />
     <Compile Include="LoggingConnection.cs" />
+    <Compile Include="ParameterCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerDatabase.cs" />
   </ItemGroup>

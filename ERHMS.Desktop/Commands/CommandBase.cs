@@ -35,7 +35,6 @@ namespace ERHMS.Desktop.Commands
             catch (Exception ex)
             {
                 Log.Warn($"{ex.GetType()} in {this}: {ex.Message}");
-                // TODO: Recover by default?
                 throw;
             }
             Log.Debug($"Executed: {this}");

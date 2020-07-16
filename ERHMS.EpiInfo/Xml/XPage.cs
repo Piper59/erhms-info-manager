@@ -1,5 +1,5 @@
 ﻿using Epi;
-using ERHMS.Utility;
+using ERHMS.EpiInfo.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,10 +23,9 @@ namespace ERHMS.EpiInfo.Xml
             foreach (DataRow group in groups)
             {
                 IEnumerable<DataRow> members = group.Field<string>(ColumnNames.LIST)
-                    .Split(Constants.LIST_SEPARATOR)
-                    .Select(fieldName => fields.TryGetValue(fieldName, out DataRow field) ? field : null)
-                    .Where(field => field != null);
-                double? tabIndexMin = members.Min(member => member.Field<double?>(ColumnNames.TAB_INDEX));
+                    ?.Split(Constants.LIST_SEPARATOR)
+                    ?.Select(fieldName => fields.TryGetValue(fieldName, out DataRow field) ? field : null);
+                double? tabIndexMin = members?.Min(member => member?.Field<double?>(ColumnNames.TAB_INDEX));
                 if (tabIndexMin == null)
                 {
                     continue;
@@ -43,7 +42,7 @@ namespace ERHMS.EpiInfo.Xml
                 PageId = page.Id,
                 Name = page.Name,
                 Position = page.Position,
-                BackgroundId = page.BackgroundId,
+                BackgroundId = 0,
                 ViewId = page.GetView().Id
             };
             foreach (DataRow field in GetFields(page))
@@ -67,34 +66,47 @@ namespace ERHMS.EpiInfo.Xml
         public int PageId
         {
             get { return (int)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Position
         {
             get { return (int)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int BackgroundId
         {
             get { return (int)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int ViewId
         {
             get { return (int)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
+
+        public XView XView => (XView)Parent;
+        public IEnumerable<XField> XFields => Elements().OfType<XField>();
 
         private XPage()
             : base(ElementNames.Page) { }
+
+        public Page Instantiate(View view)
+        {
+            return new Page(view)
+            {
+                Id = PageId,
+                Name = Name,
+                Position = Position
+            };
+        }
     }
 }

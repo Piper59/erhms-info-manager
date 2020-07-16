@@ -1,4 +1,6 @@
 ﻿using Epi;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Xml
@@ -50,58 +52,77 @@ namespace ERHMS.EpiInfo.Xml
         public int ViewId
         {
             get { return (int)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public bool IsRelatedView
         {
             get { return (bool)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string CheckCode
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Width
         {
             get { return (int)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Height
         {
             get { return (int)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Orientation
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string LabelAlign
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string SurveyId
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
+
+        public XProject XProject => (XProject)Parent;
+        public IEnumerable<XPage> XPages => Elements().OfType<XPage>();
+        public IEnumerable<XField> XFields => Descendants().OfType<XField>();
 
         private XView()
             : base(ElementNames.View) { }
+
+        public View Instantiate(Project project)
+        {
+            return new View(project)
+            {
+                Id = ViewId,
+                Name = Name,
+                IsRelatedView = IsRelatedView,
+                CheckCode = CheckCode,
+                PageWidth = Width,
+                PageHeight = Height,
+                PageOrientation = Orientation,
+                PageLabelAlign = LabelAlign
+            };
+        }
     }
 }

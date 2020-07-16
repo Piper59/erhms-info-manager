@@ -1,7 +1,7 @@
-﻿using Epi.DataSets;
-using System.Configuration;
+﻿using Epi;
+using Epi.DataSets;
 using System.IO;
-using Configuration = Epi.Configuration;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace ERHMS.EpiInfo
 {

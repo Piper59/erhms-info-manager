@@ -10,14 +10,13 @@ namespace ERHMS.EpiInfo.Xml
     {
         public static XTemplate Construct(Project project)
         {
-            Log.Debug("Constructing project template");
             XTemplate xTemplate = new XTemplate(TemplateLevel.Project, project.Metadata)
             {
                 Name = project.Name,
                 Description = project.Description
             };
             xTemplate.Add(XProject.Construct(project));
-            xTemplate.AddCodeTables();
+            xTemplate.AddSourceTables();
             xTemplate.AddGridTables();
             xTemplate.AddBackgroundsTable();
             return xTemplate;
@@ -25,81 +24,66 @@ namespace ERHMS.EpiInfo.Xml
 
         public static XTemplate Construct(View view)
         {
-            Log.Debug("Constructing view template");
-            XTemplate xTemplate = new XTemplate(TemplateLevel.Project, view.GetMetadata())
+            XTemplate xTemplate = new XTemplate(TemplateLevel.View, view.GetMetadata())
             {
                 Name = view.Name
             };
             xTemplate.Add(XProject.Construct(view));
             xTemplate.RemoveRelateFields();
-            xTemplate.AddCodeTables();
+            xTemplate.AddSourceTables();
             xTemplate.AddGridTables();
             return xTemplate;
         }
 
         public static XTemplate Construct(Page page)
         {
-            Log.Debug("Constructing page template");
-            XTemplate xTemplate = new XTemplate(TemplateLevel.Project, page.GetMetadata())
+            XTemplate xTemplate = new XTemplate(TemplateLevel.Page, page.GetMetadata())
             {
                 Name = page.Name
             };
             xTemplate.Add(XProject.Construct(page));
             xTemplate.RemoveRelateFields();
-            xTemplate.AddCodeTables();
+            xTemplate.AddSourceTables();
             xTemplate.AddGridTables();
             return xTemplate;
         }
 
-        private void RemoveRelateFields()
-        {
-            ICollection<XField> xFields = XFields.Where(xField => xField.FieldType == MetaFieldType.Relate).ToList();
-            foreach (XField xField in xFields)
-            {
-                xField.Remove();
-            }
-        }
-
-        private void AddCodeTables()
+        private void AddSourceTables()
         {
             ISet<string> tableNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (XField xField in XFields)
+            foreach (XField xField in XProject.XFields)
             {
-                if (xField.FieldType.HasCodeTable())
+                if (xField.FieldType.IsTableBased())
                 {
-                    AddCodeTable(xField.SourceTableName, tableNames);
+                    tableNames.Add(xField.SourceTableName);
                 }
                 else if (xField.FieldType == MetaFieldType.Grid)
                 {
                     DataTable gridColumns = Metadata.GetGridColumns(xField.FieldId);
                     foreach (DataRow gridColumn in gridColumns.Rows)
                     {
-                        if (!gridColumn.Field<MetaFieldType>(ColumnNames.FIELD_TYPE_ID).HasCodeTable())
+                        if (gridColumn.Field<MetaFieldType>(ColumnNames.FIELD_TYPE_ID).IsTableBased())
                         {
-                            continue;
+                            tableNames.Add(gridColumn.Field<string>(ColumnNames.SOURCE_TABLE_NAME));
                         }
-                        string tableName = gridColumn.Field<string>(ColumnNames.SOURCE_TABLE_NAME);
-                        AddCodeTable(tableName, tableNames);
                     }
                 }
             }
-        }
-
-        private void AddCodeTable(string tableName, ISet<string> tableNames)
-        {
-            if (string.IsNullOrEmpty(tableName) || tableNames.Contains(tableName))
+            foreach (string tableName in tableNames.OrderBy(tableName => tableName, StringComparer.OrdinalIgnoreCase))
             {
-                return;
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    continue;
+                }
+                DataTable table = Metadata.GetCodeTableData(tableName);
+                table.TableName = tableName;
+                Add(XTable.Construct(ElementNames.SourceTable, table));
             }
-            DataTable table = Metadata.GetCodeTableData(tableName);
-            table.TableName = tableName;
-            Add(XTable.Construct(ElementNames.CodeTable, table));
-            tableNames.Add(tableName);
         }
 
         private void AddGridTables()
         {
-            foreach (XField xField in XFields)
+            foreach (XField xField in XProject.XFields)
             {
                 if (xField.FieldType != MetaFieldType.Grid)
                 {

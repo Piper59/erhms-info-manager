@@ -8,15 +8,15 @@ namespace ERHMS.Data
 {
     public static class DatabaseFactory
     {
-        public static IDatabase GetDatabase(DbConnectionStringBuilder connectionStringBuilder)
+        public static IDatabase GetDatabase(DbConnectionStringBuilder builder)
         {
-            if (connectionStringBuilder is OleDbConnectionStringBuilder oleDbConnectionStringBuilder)
+            if (builder is OleDbConnectionStringBuilder oleDbBuilder)
             {
-                return new AccessDatabase(oleDbConnectionStringBuilder);
+                return new AccessDatabase(oleDbBuilder);
             }
-            if (connectionStringBuilder is SqlConnectionStringBuilder sqlConnectionStringBuilder)
+            if (builder is SqlConnectionStringBuilder sqlBuilder)
             {
-                return new SqlServerDatabase(sqlConnectionStringBuilder);
+                return new SqlServerDatabase(sqlBuilder);
             }
             throw new NotSupportedException();
         }

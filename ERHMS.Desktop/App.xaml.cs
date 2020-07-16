@@ -3,17 +3,15 @@ using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
 using log4net;
-using log4net.Appender;
 using log4net.Config;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Security;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using ResX = ERHMS.Desktop.Properties.Resources;
+using ResXResources = ERHMS.Desktop.Properties.Resources;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop
@@ -54,24 +52,6 @@ namespace ERHMS.Desktop
             Log = LogManager.GetLogger(nameof(ERHMS));
         }
 
-        private static void HandleError(Exception ex)
-        {
-            Log.Fatal(ex);
-            if (Interlocked.Increment(ref errorCount) > 1)
-            {
-                return;
-            }
-            string file = Log.Logger.Repository.GetAppenders()
-                .OfType<FileAppender>()
-                .FirstOrDefault()
-                ?.File;
-            string message =
-                file == null
-                ? ResX.AppErrorWithoutLog
-                : string.Format(ResX.AppErrorWithLog, file);
-            MessageBox.Show(message, ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
         private static void ConfigureEpiInfo()
         {
             Log.Debug("Configuring Epi Info");
@@ -85,6 +65,16 @@ namespace ERHMS.Desktop
             Log.Debug($"Loading configuration file: {ConfigurationExtensions.FilePath}");
             ConfigurationExtensions.Load();
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
+        }
+
+        private static void HandleError(Exception ex)
+        {
+            Log.Fatal(ex);
+            if (Interlocked.Increment(ref errorCount) > 1)
+            {
+                return;
+            }
+            MessageBox.Show(ex.Message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public App()

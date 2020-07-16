@@ -61,26 +61,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down. For details, refer to the log file at the following location:
-        ///
-        ///{0}.
-        /// </summary>
-        public static string AppErrorWithLog {
-            get {
-                return ResourceManager.GetString("AppErrorWithLog", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
-        /// </summary>
-        public static string AppErrorWithoutLog {
-            get {
-                return ResourceManager.GetString("AppErrorWithoutLog", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager.
         /// </summary>
         public static string AppTitle {

@@ -6,7 +6,8 @@ namespace ERHMS.Data
     public class LoggingCommand : IDbCommand
     {
         private IDbCommand @base;
-        private ILog log;
+
+        private ILog Log { get; set; }
 
         public string CommandText
         {
@@ -52,7 +53,7 @@ namespace ERHMS.Data
         public LoggingCommand(IDbCommand @base, ILog log)
         {
             this.@base = @base;
-            this.log = log;
+            Log = log;
         }
 
         public void Cancel()
@@ -72,7 +73,7 @@ namespace ERHMS.Data
 
         private void OnExecuting()
         {
-            log.Debug($"Executing SQL: {CommandText.Trim()}");
+            Log.Debug($"Executing SQL: {CommandText.Trim()}");
         }
 
         public int ExecuteNonQuery()

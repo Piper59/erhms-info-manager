@@ -53,23 +53,22 @@
       <Project>{ccebb7b1-4468-4b27-958e-79e86373a398}</Project>
       <Name>ERHMS.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.Utility\ERHMS.Utility.csproj">
-      <Project>{9a749a26-71ac-45ee-bf7b-12f696fd8527}</Project>
-      <Name>ERHMS.Utility</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="ConfigurationExtensions.cs" />
+    <Compile Include="Infrastructure\DataExtensions.cs" />
     <Compile Include="MetaFieldTypeExtensions.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="NameGenerator.cs" />
     <Compile Include="ProjectCreationInfo.cs" />
     <Compile Include="ProjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateLevel.cs" />
     <Compile Include="Xml\ElementNames.cs" />
+    <Compile Include="Xml\FieldMapper.cs" />
     <Compile Include="Xml\XField.cs" />
     <Compile Include="Xml\XmlExtensions.cs" />
     <Compile Include="Xml\XPage.cs" />

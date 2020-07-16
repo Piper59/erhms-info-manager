@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 
-namespace ERHMS.Utility
+namespace ERHMS.EpiInfo.Infrastructure
 {
-    public static class DataExtensions
+    internal static class DataExtensions
     {
         public static void SetColumnDataType(this DataTable @this, string columnName, Type dataType)
         {
@@ -50,7 +50,7 @@ namespace ERHMS.Utility
                 DataRow row2 = table2.Rows[index];
                 foreach (DataColumn column in table1.Columns)
                 {
-                    if (row1[column.ColumnName] != row2[column.ColumnName])
+                    if (!Equals(row1[column.ColumnName], row2[column.ColumnName]))
                     {
                         return false;
                     }

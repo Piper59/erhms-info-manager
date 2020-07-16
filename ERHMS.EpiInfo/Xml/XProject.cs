@@ -1,6 +1,7 @@
 ﻿using Epi;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Xml
@@ -98,7 +99,7 @@ namespace ERHMS.EpiInfo.Xml
                 }
                 return null;
             }
-            private set
+            set
             {
                 this.SetAttributeValue(value);
             }
@@ -107,25 +108,25 @@ namespace ERHMS.EpiInfo.Xml
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Location
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Description
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string EpiVersion
         {
             get { return (string)this.GetAttribute(); }
-            private set { this.SetAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public DateTime? CreateDate
@@ -138,11 +139,14 @@ namespace ERHMS.EpiInfo.Xml
                 }
                 return null;
             }
-            private set
+            set
             {
                 this.SetAttributeValue(value?.ToString(XmlExtensions.DateFormat));
             }
         }
+
+        public IEnumerable<XView> XViews => Elements().OfType<XView>();
+        public IEnumerable<XField> XFields => Descendants().OfType<XField>();
 
         private XProject()
             : base(ElementNames.Project) { }

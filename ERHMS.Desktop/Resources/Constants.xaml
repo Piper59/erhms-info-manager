@@ -7,9 +7,10 @@
     <Color x:Key="ThemeGreen">#ff6cb33f</Color>
 
     <!-- Brushes -->
-    <SolidColorBrush x:Key="PreDeploymentBrush" Color="{StaticResource ThemeBlue}" />
-    <SolidColorBrush x:Key="DeploymentBrush" Color="{StaticResource ThemeRed}" />
-    <SolidColorBrush x:Key="PostDeploymentBrush" Color="{StaticResource ThemeGreen}" />
+    <SolidColorBrush x:Key="Accent" Color="{StaticResource ThemeBlue}" />
+    <SolidColorBrush x:Key="PreDeployment" Color="{StaticResource ThemeBlue}" />
+    <SolidColorBrush x:Key="Deployment" Color="{StaticResource ThemeRed}" />
+    <SolidColorBrush x:Key="PostDeployment" Color="{StaticResource ThemeGreen}" />
 
     <!-- Fonts -->
     <System:Double x:Key="DefaultFontSize">16</System:Double>

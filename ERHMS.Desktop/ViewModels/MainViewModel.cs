@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Input;
+using Module = ERHMS.EpiInfo.Module;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -57,7 +58,7 @@ namespace ERHMS.Desktop.ViewModels
 
         private void OpenEpiInfo()
         {
-            EpiInfo.Module.Menu.Start();
+            Module.Menu.Start();
         }
 
         private void OpenFileExplorer()

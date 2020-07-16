@@ -7,18 +7,18 @@ namespace ERHMS.Data
 {
     public class SqlServerDatabase : DatabaseBase
     {
-        private SqlConnectionStringBuilder connectionStringBuilder;
+        private SqlConnectionStringBuilder builder;
         private SqlCommandBuilder commandBuilder = new SqlCommandBuilder();
 
         public override DatabaseType Type => DatabaseType.SqlServer;
-        public override DbConnectionStringBuilder ConnectionStringBuilder => connectionStringBuilder;
+        public override DbConnectionStringBuilder Builder => builder;
         protected override DbCommandBuilder CommandBuilder => commandBuilder;
-        public string Instance => connectionStringBuilder.DataSource;
-        public override string Name => connectionStringBuilder.InitialCatalog;
+        public string Instance => builder.DataSource;
+        public override string Name => builder.InitialCatalog;
 
-        public SqlServerDatabase(SqlConnectionStringBuilder connectionStringBuilder)
+        public SqlServerDatabase(SqlConnectionStringBuilder builder)
         {
-            this.connectionStringBuilder = connectionStringBuilder;
+            this.builder = builder;
         }
 
         public SqlServerDatabase(string connectionString)
@@ -29,29 +29,31 @@ namespace ERHMS.Data
             return new SqlConnection(ConnectionString);
         }
 
-        private IDbConnection GetDefaultConnection()
+        private IDbConnection GetMasterConnection()
         {
-            DbConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString)
+            DbConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString)
             {
-                InitialCatalog = null
+                InitialCatalog = "master"
             };
-            return new SqlConnection(connectionStringBuilder.ConnectionString);
+            return new SqlConnection(builder.ConnectionString);
         }
 
         public override bool Exists()
         {
-            using (IDbConnection connection = Connect(GetDefaultConnection()))
+            using (IDbConnection connection = Connect(GetMasterConnection()))
             {
                 string sql = "SELECT COUNT(*) FROM sys.databases WHERE name = @name;";
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@name", Name);
+                ParameterCollection parameters = new ParameterCollection
+                {
+                    { "@name", Name }
+                };
                 return connection.ExecuteScalar<int>(sql, parameters) > 0;
             }
         }
 
         public override void CreateCore()
         {
-            using (IDbConnection connection = Connect(GetDefaultConnection()))
+            using (IDbConnection connection = Connect(GetMasterConnection()))
             {
                 string sql = $"CREATE DATABASE {Quote(Name)};";
                 connection.Execute(sql);

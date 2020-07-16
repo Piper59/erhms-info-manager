@@ -6,7 +6,8 @@ namespace ERHMS.Data
     public class LoggingConnection : IDbConnection
     {
         private IDbConnection @base;
-        private ILog log;
+
+        private ILog Log { get; set; }
 
         public string ConnectionString
         {
@@ -32,7 +33,7 @@ namespace ERHMS.Data
         public LoggingConnection(IDbConnection @base, ILog log)
         {
             this.@base = @base;
-            this.log = log;
+            Log = log;
         }
 
         public IDbTransaction BeginTransaction()
@@ -57,7 +58,7 @@ namespace ERHMS.Data
 
         public IDbCommand CreateCommand()
         {
-            return new LoggingCommand(@base.CreateCommand(), log);
+            return new LoggingCommand(@base.CreateCommand(), Log);
         }
 
         public void Dispose()

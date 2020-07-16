@@ -1,4 +1,5 @@
 ﻿using Epi;
+using Epi.Fields;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,11 +16,28 @@ namespace ERHMS.EpiInfo.Xml
             "Expr1016",
             "Expr1017"
         };
+        private static readonly ICollection<IFieldMapper> Mappers = new IFieldMapper[]
+        {
+            new RenderableFieldMapper(),
+            new FieldWithSeparatePromptMapper(),
+            new InputFieldWithoutSeparatePromptMapper(),
+            new InputFieldWithSeparatePromptMapper(),
+            new TextFieldMapper(),
+            new NumberFieldMapper(),
+            new PhoneNumberFieldMapper(),
+            new DateFieldMapper(),
+            new OptionFieldMapper(),
+            new ImageFieldMapper(),
+            new MirrorFieldMapper(),
+            new TableBasedDropDownFieldMapper(),
+            new DDLFieldOfCodesMapper(),
+            new RelatedViewFieldMapper(),
+            new GroupFieldMapper()
+        };
 
         public static XField Construct(DataRow field)
         {
             XField xField = new XField();
-            MetaFieldType fieldType = (MetaFieldType)field.Field<int>(ColumnNames.FIELD_TYPE_ID);
             foreach (DataColumn column in field.Table.Columns)
             {
                 if (!ConfigurationExtensions.CompatibilityMode && IgnoredColumnNames.Contains(column.ColumnName))
@@ -40,16 +58,53 @@ namespace ERHMS.EpiInfo.Xml
             return new XField(element);
         }
 
-        public new string Name => (string)this.GetAttribute();
-        public int FieldId => (int)this.GetAttribute();
-        public int FieldTypeId => (int)this.GetAttribute();
-        public MetaFieldType FieldType => (MetaFieldType)FieldTypeId;
-        public string SourceTableName => (string)this.GetAttribute();
+        public new string Name
+        {
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public int FieldId
+        {
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public int FieldTypeId
+        {
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public MetaFieldType FieldType
+        {
+            get { return (MetaFieldType)FieldTypeId; }
+            set { FieldTypeId = (int)value; }
+        }
+
+        public string SourceTableName
+        {
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public XPage XPage => (XPage)Parent;
 
         private XField()
             : base(ElementNames.Field) { }
 
         private XField(XElement element)
             : base(element) { }
+
+        public Field Instantiate(Page page)
+        {
+            Field field = page.CreateField(FieldType);
+            field.Name = Name;
+            foreach (IFieldMapper mapper in Mappers)
+            {
+                mapper.Map(this, field);
+            }
+            return field;
+        }
     }
 }
