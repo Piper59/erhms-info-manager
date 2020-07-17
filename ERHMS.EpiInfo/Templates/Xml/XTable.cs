@@ -46,7 +46,7 @@ namespace ERHMS.EpiInfo.Templates.Xml
             foreach (XElement xRow in Elements(ElementNames.Row))
             {
                 ICollection<(string, string)> fields = new List<(string, string)>();
-                foreach (XAttribute attribute in Attributes())
+                foreach (XAttribute attribute in xRow.Attributes())
                 {
                     string columnName = attribute.Name.ToString().Replace(Space, " ");
                     string value = attribute.Value;
