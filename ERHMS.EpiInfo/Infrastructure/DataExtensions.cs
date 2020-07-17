@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 
 namespace ERHMS.EpiInfo.Infrastructure
@@ -47,13 +48,14 @@ namespace ERHMS.EpiInfo.Infrastructure
             int ordinal = source.Ordinal;
             DataColumn target = @this.Columns.Add(null, dataType);
             target.SetOrdinal(ordinal);
+            TypeConverter converter = TypeDescriptor.GetConverter(dataType);
             foreach (DataRow row in @this.Rows)
             {
                 if (row.IsNull(source))
                 {
                     continue;
                 }
-                row[target] = Convert.ChangeType(row[source], dataType);
+                row[target] = converter.ConvertFrom(row[source]);
             }
             source.Table.Columns.Remove(source);
             target.ColumnName = columnName;

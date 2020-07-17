@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templates.Xml.Mapping
 {
-    public class FieldMapper<TField> : IFieldMapper
+    public class FieldMapper<TField> : IFieldMapper<TField>
         where TField : Field
     {
         protected FieldMappingCollection<TField> Mappings { get; set; }
@@ -19,7 +20,7 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
 
         public void SetProperties(XField xField, TField field)
         {
-            foreach (FieldMapping<TField> mapping in Mappings)
+            foreach (IFieldMapping<TField> mapping in Mappings)
             {
                 try
                 {
@@ -42,24 +43,36 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
     }
     public class RenderableFieldMapper : FieldMapper<RenderableField>
     {
-        private static Font GetFont(XField xField, string propertyName)
+        private static bool TryGetFont(XField xField, string propertyName, out Font value)
         {
             ICollection<string> keys = new string[] {
                 "Family",
                 "Size",
                 "Style"
             };
-            IDictionary<string, string> attributes = keys.ToDictionary(
+            IDictionary<string, XAttribute> attributes = keys.ToDictionary(
                 key => key,
-                key => xField.Attribute($"{propertyName}{key}").Value);
-            if (attributes.Values.Any(value => value == ""))
+                key => xField.Attribute($"{propertyName}{key}"));
+            if (attributes.Values.Any(attribute => attribute == null || attribute.Value == ""))
             {
-                return null;
+                value = null;
+                return false;
             }
-            FontFamily family = new FontFamily(attributes["Family"]);
-            float size = float.Parse(attributes["Size"]);
-            FontStyle style = (FontStyle)Enum.Parse(typeof(FontStyle), attributes["Style"]);
-            return new Font(family, size, style);
+            FontFamily family = new FontFamily((string)attributes["Family"]);
+            float size = (float)attributes["Size"];
+            FontStyle style = (FontStyle)Enum.Parse(typeof(FontStyle), (string)attributes["Style"]);
+            value = new Font(family, size, style);
+            return true;
+        }
+
+        private static bool TryGetControlFont(XField xField, out Font value)
+        {
+            return TryGetFont(xField, nameof(RenderableField.ControlFont), out value);
+        }
+
+        private static bool TryGetPromptFont(XField xField, out Font value)
+        {
+            return TryGetFont(xField, nameof(RenderableField.PromptFont), out value);
         }
 
         public RenderableFieldMapper()
@@ -73,8 +86,8 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
                 { f => f.ControlTopPositionPercentage },
                 { f => f.TabIndex },
                 { f => f.HasTabStop },
-                { f => f.ControlFont, xf => GetFont(xf, nameof(RenderableField.ControlFont)) },
-                { f => f.PromptFont, xf => GetFont(xf, nameof(RenderableField.PromptFont)) }
+                { f => f.ControlFont, TryGetControlFont },
+                { f => f.PromptFont, TryGetPromptFont }
             };
         }
     }
@@ -170,7 +183,7 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
     {
         private const string OptionsSeparator = "||";
 
-        private static List<string> GetOptions(XField xField)
+        private static bool TryGetOptions(XField xField, out List<string> value)
         {
             string options = (string)xField.Attribute(ColumnNames.LIST);
             int index = options.IndexOf(OptionsSeparator);
@@ -178,7 +191,8 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
             {
                 options = options.Substring(0, index);
             }
-            return options.Split(Constants.LIST_SEPARATOR).ToList();
+            value = options.Split(Constants.LIST_SEPARATOR).ToList();
+            return true;
         }
 
         public OptionFieldMapper()
@@ -187,7 +201,7 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
             {
                 { f => f.Pattern },
                 { f => f.ShowTextOnRight },
-                { f => f.Options, xf => GetOptions(xf) }
+                { f => f.Options, TryGetOptions }
             };
         }
     }
@@ -255,9 +269,16 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
 
     public class GroupFieldMapper : FieldMapper<GroupField>
     {
-        private static Color GetBackgroundColor(XField xField)
+        private static bool GetBackgroundColor(XField xField, out Color value)
         {
-            return Color.FromArgb((int)xField.Attribute(ColumnNames.BACKGROUND_COLOR));
+            XAttribute attribute = xField.Attribute(ColumnNames.BACKGROUND_COLOR);
+            if (attribute == null || attribute.Value == "")
+            {
+                value = Color.Empty;
+                return false;
+            }
+            value = Color.FromArgb((int)attribute);
+            return true;
         }
 
         public GroupFieldMapper()
@@ -265,7 +286,7 @@ namespace ERHMS.EpiInfo.Templates.Xml.Mapping
             Mappings = new FieldMappingCollection<GroupField>
             {
                 { f => f.ChildFieldNames, ColumnNames.LIST },
-                { f => f.BackgroundColor, xf => GetBackgroundColor(xf) }
+                { f => f.BackgroundColor, GetBackgroundColor }
             };
         }
     }

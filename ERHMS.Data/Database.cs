@@ -3,7 +3,7 @@ using System.Data.Common;
 
 namespace ERHMS.Data
 {
-    public abstract class DatabaseBase : IDatabase
+    public abstract class Database : IDatabase
     {
         protected static IDbConnection Connect(IDbConnection connection)
         {
@@ -20,7 +20,13 @@ namespace ERHMS.Data
 
         protected abstract IDbConnection GetConnection();
         public abstract bool Exists();
-        public abstract void Create();
+        protected abstract void CreateCore();
+
+        public void Create()
+        {
+            Log.Default.Debug($"Creating database: {this}");
+            CreateCore();
+        }
 
         public IDbConnection Connect()
         {

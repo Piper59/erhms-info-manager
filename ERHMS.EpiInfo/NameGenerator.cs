@@ -40,6 +40,8 @@ namespace ERHMS.EpiInfo
             return $"{baseName}{Separator}{suffix}";
         }
 
+        protected abstract TSuffix ParseSuffix(string value);
+
         public virtual bool Exists(string name)
         {
             return Names.Contains(name);
@@ -88,6 +90,11 @@ namespace ERHMS.EpiInfo
             StartSuffix = 1;
         }
 
+        protected override int ParseSuffix(string value)
+        {
+            return int.Parse(value);
+        }
+
         protected override int GetNextSuffix(int suffix)
         {
             return suffix + 1;
@@ -103,6 +110,11 @@ namespace ERHMS.EpiInfo
             Regex = new Regex(@"^(?<baseName>.+?)(?:_(?<suffix>[A-Z]))?$", RegexOptions.IgnoreCase);
             Separator = "_";
             StartSuffix = 'A';
+        }
+
+        protected override char ParseSuffix(string value)
+        {
+            return value.Single();
         }
 
         protected override char GetNextSuffix(char suffix)
@@ -161,19 +173,15 @@ namespace ERHMS.EpiInfo
         }
     }
 
-    public class PageNameGenerator : NameGenerator<int>
+    public class PageNameGenerator : IntSuffixNameGenerator
     {
         public PageNameGenerator(View view)
         {
+            Regex = null;
             BaseName = "Page";
             Separator = " ";
             StartSuffix = view.Pages.Count + 1;
             Names = ToSet(view.Pages.Select(page => page.Name));
-        }
-
-        protected override int GetNextSuffix(int suffix)
-        {
-            return suffix + 1;
         }
     }
 

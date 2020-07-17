@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessDatabase.cs" />
-    <Compile Include="DatabaseBase.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="DatabaseFactory.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="DriverAttribute.cs" />

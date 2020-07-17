@@ -11,6 +11,7 @@ namespace ERHMS.EpiInfo
     {
         public static Project Create(ProjectCreationInfo info)
         {
+            Log.Default.Debug($"Creating project: {info.FilePath}");
             Directory.CreateDirectory(info.Location);
             Project project = new Project
             {

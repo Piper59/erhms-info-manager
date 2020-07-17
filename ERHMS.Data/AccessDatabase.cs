@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace ERHMS.Data
 {
-    public class AccessDatabase : DatabaseBase
+    public class AccessDatabase : Database
     {
         private OleDbConnectionStringBuilder builder;
         private OleDbCommandBuilder commandBuilder = new OleDbCommandBuilder();
@@ -35,7 +35,7 @@ namespace ERHMS.Data
             return File.Exists(FilePath);
         }
 
-        public override void Create()
+        protected override void CreateCore()
         {
             string resourceName = "ERHMS.Data.Resources.Empty.mdb";
             using (Stream source = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))

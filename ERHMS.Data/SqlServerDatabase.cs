@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace ERHMS.Data
 {
-    public class SqlServerDatabase : DatabaseBase
+    public class SqlServerDatabase : Database
     {
         private const string MasterDatabaseName = "master";
 
@@ -53,7 +53,7 @@ namespace ERHMS.Data
             }
         }
 
-        public override void Create()
+        protected override void CreateCore()
         {
             using (IDbConnection connection = Connect(GetMasterConnection()))
             {

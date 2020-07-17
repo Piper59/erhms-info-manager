@@ -1,30 +1,82 @@
 ﻿using Epi.Fields;
 using System;
+using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templates.Xml.Mapping
 {
-    public class FieldMapping<TAttribute> : IFieldMapping
+    public abstract class FieldMapping<TField, TProperty> : IFieldMapping<TField>
+        where TField : Field
     {
-        public Func<XField, TAttribute> Accessor { get; }
+        public delegate bool TryGetValueDelegate(XField xField, out TProperty value);
+
         public PropertyInfo Property { get; }
 
-        public FieldMapping(Func<XField, TAttribute> accessor, PropertyInfo property)
+        protected FieldMapping(Expression<Func<TField, TProperty>> expression)
         {
-            Accessor = accessor;
-            Property = property;
+            Property = (PropertyInfo)((MemberExpression)expression.Body).Member;
         }
 
-        public void SetProperty(XField xField, Field field)
+        protected abstract bool TryGetValue(XField xField, out TProperty value);
+
+        public void SetProperty(XField xField, TField field)
         {
             try
             {
-                Property.SetValue(field, Accessor(xField));
+                if (TryGetValue(xField, out TProperty value))
+                {
+                    Property.SetValue(field, value);
+                }
             }
             catch (Exception ex)
             {
                 throw new FieldMappingException(xField, Property.Name, ex);
             }
+        }
+    }
+
+    public class AttributeFieldMapping<TField, TProperty> : FieldMapping<TField, TProperty>
+        where TField : Field
+    {
+        public TypeConverter Converter { get; }
+        public string AttributeName { get; }
+
+        public AttributeFieldMapping(Expression<Func<TField, TProperty>> expression, string attributeName = null)
+            : base(expression)
+        {
+            Converter = TypeDescriptor.GetConverter(typeof(TProperty));
+            AttributeName = attributeName ?? Property.Name;
+        }
+
+        protected override bool TryGetValue(XField xField, out TProperty value)
+        {
+            XAttribute attribute = xField.Attribute(AttributeName);
+            if (attribute == null || attribute.Value == "")
+            {
+                value = default(TProperty);
+                return false;
+            }
+            value = (TProperty)Converter.ConvertFromString(attribute.Value);
+            return true;
+        }
+    }
+
+    public class DelegateFieldMapping<TField, TProperty> : FieldMapping<TField, TProperty>
+        where TField : Field
+    {
+        public TryGetValueDelegate Delegate { get; }
+
+        public DelegateFieldMapping(Expression<Func<TField, TProperty>> expression, TryGetValueDelegate @delegate)
+            : base(expression)
+        {
+            Delegate = @delegate;
+        }
+
+        protected override bool TryGetValue(XField xField, out TProperty value)
+        {
+            return Delegate(xField, out value);
         }
     }
 }

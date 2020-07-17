@@ -8,7 +8,7 @@ using Module = ERHMS.EpiInfo.Module;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModel
     {
         private static MainViewModel current;
         public static MainViewModel Current
@@ -23,8 +23,8 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        private ViewModelBase content;
-        public ViewModelBase Content
+        private ViewModel content;
+        public ViewModel Content
         {
             get
             {

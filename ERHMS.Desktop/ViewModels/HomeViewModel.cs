@@ -1,4 +1,4 @@
 ﻿namespace ERHMS.Desktop.ViewModels
 {
-    public class HomeViewModel : ViewModelBase { }
+    public class HomeViewModel : ViewModel { }
 }
