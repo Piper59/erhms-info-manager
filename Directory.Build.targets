@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="Require32Bit" BeforeTargets="Build">
+    <Error Condition="'$(Platform)' != 'x86'" Text="Target platform must be x86." />
+    <PropertyGroup>
+      <PlatformTarget>x86</PlatformTarget>
+    </PropertyGroup>
+  </Target>
+
+  <Target Condition="'$(AssemblyName)' == '$(MainAssemblyName)'" Name="CopyEpiInfoFiles" AfterTargets="Build">
+    <ItemGroup>
+      <EpiInfoFile Include="$(EpiInfoDir)**\*" Exclude="$(EpiInfoDir)Projects\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(OutputPath)%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Condition="'$(AssemblyName)' == '$(MainAssemblyName)'" Name="CleanOutputPath" AfterTargets="Clean">
+    <RemoveDir Directories="$(OutputPath)" />
+  </Target>
+</Project>

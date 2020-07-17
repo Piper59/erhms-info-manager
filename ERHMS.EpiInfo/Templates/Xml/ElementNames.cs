@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ERHMS.EpiInfo.Xml
+namespace ERHMS.EpiInfo.Templates.Xml
 {
     public static class ElementNames
     {
@@ -11,12 +11,10 @@ namespace ERHMS.EpiInfo.Xml
         public const string Field = "Field";
         public const string SourceTable = "SourceTable";
         public const string GridTable = "GridTable";
-        public const string BackgroundsTable = "Backgrounds";
         public static readonly ICollection<string> Tables = new string[]
         {
             SourceTable,
-            GridTable,
-            BackgroundsTable
+            GridTable
         };
         public const string Row = "Item";
     }

@@ -5,28 +5,6 @@ namespace ERHMS.EpiInfo.Infrastructure
 {
     internal static class DataExtensions
     {
-        public static void SetColumnDataType(this DataTable @this, string columnName, Type dataType)
-        {
-            DataColumn source = @this.Columns[columnName];
-            if (source.DataType == dataType)
-            {
-                return;
-            }
-            int ordinal = source.Ordinal;
-            DataColumn target = @this.Columns.Add(null, dataType);
-            target.SetOrdinal(ordinal);
-            foreach (DataRow row in @this.Rows)
-            {
-                if (row.IsNull(source))
-                {
-                    continue;
-                }
-                row[target] = Convert.ChangeType(row[source], dataType);
-            }
-            source.Table.Columns.Remove(source);
-            target.ColumnName = columnName;
-        }
-
         public static bool DataEquals(this DataTable table1, DataTable table2)
         {
             if (table1.Columns.Count != table2.Columns.Count)
@@ -57,6 +35,28 @@ namespace ERHMS.EpiInfo.Infrastructure
                 }
             }
             return true;
+        }
+
+        public static void SetColumnDataType(this DataTable @this, string columnName, Type dataType)
+        {
+            DataColumn source = @this.Columns[columnName];
+            if (source.DataType == dataType)
+            {
+                return;
+            }
+            int ordinal = source.Ordinal;
+            DataColumn target = @this.Columns.Add(null, dataType);
+            target.SetOrdinal(ordinal);
+            foreach (DataRow row in @this.Rows)
+            {
+                if (row.IsNull(source))
+                {
+                    continue;
+                }
+                row[target] = Convert.ChangeType(row[source], dataType);
+            }
+            source.Table.Columns.Remove(source);
+            target.ColumnName = columnName;
         }
     }
 }

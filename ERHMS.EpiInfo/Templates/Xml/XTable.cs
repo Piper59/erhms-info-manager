@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using ERHMS.EpiInfo.Infrastructure;
+using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Xml
+namespace ERHMS.EpiInfo.Templates.Xml
 {
     public class XTable : XElement
     {
         private const string Space = "__space__";
 
-        public static XTable Construct(string elementName, DataTable table)
+        public static XTable Create(string elementName, DataTable table)
         {
             XTable xTable = new XTable(elementName)
             {
@@ -20,28 +21,23 @@ namespace ERHMS.EpiInfo.Xml
                 foreach (DataColumn column in table.Columns)
                 {
                     string attributeName = column.ColumnName.Replace(" ", Space);
-                    xRow.SetAttributeValue(row[column], attributeName);
+                    xRow.SetAttributeValueEx(row[column], attributeName);
                 }
                 xTable.Add(xRow);
             }
             return xTable;
         }
 
-        public static XTable Wrap(XElement element)
-        {
-            return new XTable(element);
-        }
-
         public string TableName
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
-        private XTable(string elementName)
+        public XTable(string elementName)
             : base(elementName) { }
 
-        private XTable(XElement element)
+        public XTable(XElement element)
             : base(element) { }
 
         public DataTable Instantiate()
@@ -49,24 +45,21 @@ namespace ERHMS.EpiInfo.Xml
             DataTable table = new DataTable(TableName);
             foreach (XElement xRow in Elements(ElementNames.Row))
             {
-                ICollection<KeyValuePair<string, string>> fields = new List<KeyValuePair<string, string>>();
+                ICollection<(string, string)> fields = new List<(string, string)>();
                 foreach (XAttribute attribute in Attributes())
                 {
-                    fields.Add(new KeyValuePair<string, string>(
-                        attribute.Name.ToString().Replace(Space, " "),
-                        attribute.Value));
-                }
-                foreach (KeyValuePair<string, string> field in fields)
-                {
-                    if (!table.Columns.Contains(field.Key))
+                    string columnName = attribute.Name.ToString().Replace(Space, " ");
+                    string value = attribute.Value;
+                    if (!table.Columns.Contains(columnName))
                     {
-                        table.Columns.Add(field.Key);
+                        table.Columns.Add(columnName);
                     }
+                    fields.Add((columnName, value));
                 }
                 DataRow row = table.NewRow();
-                foreach (KeyValuePair<string, string> field in fields)
+                foreach ((string columnName, string value) in fields)
                 {
-                    row.SetField(field.Key, field.Value);
+                    row.SetField(columnName, value);
                 }
                 table.Rows.Add(row);
             }

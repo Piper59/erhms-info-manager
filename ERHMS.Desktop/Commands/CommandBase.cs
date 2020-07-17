@@ -1,5 +1,6 @@
-﻿using log4net;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -7,13 +8,18 @@ namespace ERHMS.Desktop.Commands
 {
     public abstract class CommandBase : ICommand
     {
-        protected static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
+        public static event EventHandler<ErrorEventArgs> GlobalError;
 
-        private Delegate execute;
+        public static bool Always() => true;
+        public static bool Always<T>(T parameter) => true;
 
-        protected CommandBase(Delegate execute)
+        public Delegate Delegate { get; }
+        public ErrorBehavior ErrorBehavior { get; }
+
+        protected CommandBase(Delegate @delegate, ErrorBehavior errorBehavior)
         {
-            this.execute = execute;
+            Delegate = @delegate;
+            ErrorBehavior = errorBehavior;
         }
 
         public event EventHandler CanExecuteChanged
@@ -22,27 +28,64 @@ namespace ERHMS.Desktop.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
+        protected virtual void OnCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        public event EventHandler<ErrorEventArgs> Error;
+
+        protected virtual void OnError(ErrorEventArgs e)
+        {
+            IEnumerable<Delegate> delegates = Enumerable.Concat(
+                Error?.GetInvocationList() ?? Enumerable.Empty<Delegate>(),
+                GlobalError?.GetInvocationList() ?? Enumerable.Empty<Delegate>());
+            foreach (EventHandler<ErrorEventArgs> handler in delegates)
+            {
+                if (e.Handled)
+                {
+                    break;
+                }
+                handler(this, e);
+            }
+        }
+
+        protected void OnError(Exception ex)
+        {
+            OnError(new ErrorEventArgs(ex));
+        }
+
         public abstract bool CanExecute(object parameter);
         public abstract Task ExecuteCore(object parameter);
 
         public async void Execute(object parameter)
         {
-            Log.Debug($"Executing: {this}");
+            Log.Default.Debug($"Executing: {this}");
             try
             {
                 await ExecuteCore(parameter);
             }
             catch (Exception ex)
             {
-                Log.Warn($"{ex.GetType()} in {this}: {ex.Message}");
-                throw;
+                Log.Default.Warn(ex);
+                switch (ErrorBehavior)
+                {
+                    case ErrorBehavior.Catch:
+                        break;
+                    case ErrorBehavior.Raise:
+                        OnError(ex);
+                        break;
+                    case ErrorBehavior.Throw:
+                    default:
+                        throw;
+                }
             }
-            Log.Debug($"Executed: {this}");
+            Log.Default.Debug($"Executed: {this}");
         }
 
         public override string ToString()
         {
-            return $"{execute.Method.DeclaringType}.{execute.Method.Name}";
+            return $"{Delegate.Method.DeclaringType}.{Delegate.Method.Name}";
         }
     }
 }

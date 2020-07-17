@@ -50,15 +50,13 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
     <Compile Include="AccessDatabase.cs" />
     <Compile Include="DatabaseBase.cs" />
     <Compile Include="DatabaseFactory.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="DriverAttribute.cs" />
     <Compile Include="IDatabase.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="LoggingCommand.cs" />
     <Compile Include="LoggingConnection.cs" />
     <Compile Include="ParameterCollection.cs" />
@@ -72,5 +70,4 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\MSBuild\ERHMS.Common.targets" />
 </Project>

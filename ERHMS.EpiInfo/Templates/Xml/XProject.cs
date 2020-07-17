@@ -1,14 +1,15 @@
 ﻿using Epi;
+using ERHMS.EpiInfo.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Xml
+namespace ERHMS.EpiInfo.Templates.Xml
 {
     public class XProject : XElement
     {
-        private static readonly ICollection<string> ConfigurationAttributeNames = new string[]
+        private static readonly ICollection<string> ConfigurationSettingNames = new string[]
         {
             "ControlFontBold",
             "ControlFontItalics",
@@ -24,24 +25,21 @@ namespace ERHMS.EpiInfo.Xml
             "EditorFontSize"
         };
 
-        public static XProject Construct(Project project)
+        public static XProject Create(Project project)
         {
             XProject xProject = new XProject
             {
-                Id = null,
+                Id = project.Id,
                 Name = project.Name,
-                Location = "",
+                Location = project.Location,
                 Description = project.Description,
                 EpiVersion = project.EpiVersion,
-                CreateDate = null
+                CreateDate = project.CreateDate
             };
-            if (ConfigurationExtensions.CompatibilityMode)
+            Configuration configuration = Configuration.GetNewInstance();
+            foreach (string settingName in ConfigurationSettingNames)
             {
-                Configuration configuration = Configuration.GetNewInstance();
-                foreach (string attributeName in ConfigurationAttributeNames)
-                {
-                    xProject.SetAttributeValue(configuration.Settings[attributeName], attributeName);
-                }
+                xProject.SetAttributeValueEx(configuration.Settings[settingName], settingName);
             }
             xProject.Add(
                 new XElement("CollectedData",
@@ -57,35 +55,7 @@ namespace ERHMS.EpiInfo.Xml
                     new XAttribute("Source", project.EnterMakeviewIntepreter)
                 )
             );
-            foreach (View view in project.Views)
-            {
-                xProject.Add(XView.Construct(view));
-            }
-            return xProject;
-        }
-
-        public static XProject Construct(View view)
-        {
-            XProject xProject = new XProject();
-            xProject.Add(XView.Construct(view));
-            return xProject;
-        }
-
-        public static XProject Construct(Page page)
-        {
-            XProject xProject = new XProject();
-            xProject.Add(XView.Construct(page));
-            return xProject;
-        }
-
-        public static XProject Wrap(XElement element)
-        {
-            XProject xProject = new XProject();
-            xProject.Add(element.Attributes());
-            foreach (XElement xView in element.Elements(ElementNames.View))
-            {
-                xProject.Add(XView.Wrap(xView));
-            }
+            xProject.OnCreated();
             return xProject;
         }
 
@@ -93,7 +63,7 @@ namespace ERHMS.EpiInfo.Xml
         {
             get
             {
-                if (Guid.TryParse((string)this.GetAttribute(), out Guid result))
+                if (Guid.TryParse((string)this.GetAttributeEx(), out Guid result))
                 {
                     return result;
                 }
@@ -101,39 +71,39 @@ namespace ERHMS.EpiInfo.Xml
             }
             set
             {
-                this.SetAttributeValue(value);
+                this.SetAttributeValueEx(value);
             }
         }
 
         public new string Name
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public string Location
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public string Description
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public string EpiVersion
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public DateTime? CreateDate
         {
             get
             {
-                if (DateTime.TryParse((string)this.GetAttribute(), out DateTime result))
+                if (DateTime.TryParse((string)this.GetAttributeEx(), out DateTime result))
                 {
                     return result;
                 }
@@ -141,14 +111,39 @@ namespace ERHMS.EpiInfo.Xml
             }
             set
             {
-                this.SetAttributeValue(value?.ToString(XmlExtensions.DateFormat));
+                this.SetAttributeValueEx(value?.ToString(XTemplate.DateFormat));
             }
         }
 
         public IEnumerable<XView> XViews => Elements().OfType<XView>();
         public IEnumerable<XField> XFields => Descendants().OfType<XField>();
 
-        private XProject()
+        public XProject()
             : base(ElementNames.Project) { }
+
+        public XProject(XElement element)
+            : this()
+        {
+            Add(element.Attributes());
+            foreach (XElement xView in element.Elements(ElementNames.View))
+            {
+                Add(new XView(xView));
+            }
+            OnCreated();
+        }
+
+        private void OnCreated()
+        {
+            Id = null;
+            Location = null;
+            CreateDate = null;
+            if (!ConfigurationExtensions.CompatibilityMode)
+            {
+                foreach (string settingName in ConfigurationSettingNames)
+                {
+                    Attribute(settingName)?.Remove();
+                }
+            }
+        }
     }
 }

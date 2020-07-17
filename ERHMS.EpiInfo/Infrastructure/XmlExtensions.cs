@@ -2,18 +2,16 @@
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Xml
+namespace ERHMS.EpiInfo.Infrastructure
 {
     internal static class XmlExtensions
     {
-        public const string DateFormat = "F";
-
-        public static XAttribute GetAttribute(this XElement @this, [CallerMemberName] string attributeName = null)
+        public static XAttribute GetAttributeEx(this XElement @this, [CallerMemberName] string attributeName = null)
         {
             return @this.Attribute(attributeName);
         }
 
-        public static void SetAttributeValue(this XElement @this, object value, [CallerMemberName] string attributeName = null)
+        public static void SetAttributeValueEx(this XElement @this, object value, [CallerMemberName] string attributeName = null)
         {
             if (value == null || value is DBNull)
             {

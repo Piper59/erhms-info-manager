@@ -5,9 +5,9 @@ namespace ERHMS.Data
 {
     public class LoggingConnection : IDbConnection
     {
-        private IDbConnection @base;
+        public ILog Log { get; }
 
-        private ILog Log { get; set; }
+        private IDbConnection @base;
 
         public string ConnectionString
         {

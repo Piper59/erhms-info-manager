@@ -7,6 +7,8 @@ namespace ERHMS.Data
 {
     public class SqlServerDatabase : DatabaseBase
     {
+        private const string MasterDatabaseName = "master";
+
         private SqlConnectionStringBuilder builder;
         private SqlCommandBuilder commandBuilder = new SqlCommandBuilder();
 
@@ -33,7 +35,7 @@ namespace ERHMS.Data
         {
             DbConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString)
             {
-                InitialCatalog = "master"
+                InitialCatalog = MasterDatabaseName
             };
             return new SqlConnection(builder.ConnectionString);
         }
@@ -51,7 +53,7 @@ namespace ERHMS.Data
             }
         }
 
-        public override void CreateCore()
+        public override void Create()
         {
             using (IDbConnection connection = Connect(GetMasterConnection()))
             {

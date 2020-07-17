@@ -35,7 +35,7 @@ namespace ERHMS.Data
             return File.Exists(FilePath);
         }
 
-        public override void CreateCore()
+        public override void Create()
         {
             string resourceName = "ERHMS.Data.Resources.Empty.mdb";
             using (Stream source = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))

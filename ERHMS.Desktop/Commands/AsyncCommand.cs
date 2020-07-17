@@ -8,11 +8,11 @@ namespace ERHMS.Desktop.Commands
         private Func<Task> executeAsync;
         private Func<bool> canExecute;
 
-        public AsyncCommand(Func<Task> executeAsync, Func<bool> canExecute = null)
-            : base(executeAsync)
+        public AsyncCommand(Func<Task> executeAsync, Func<bool> canExecute, ErrorBehavior errorBehavior)
+            : base(executeAsync, errorBehavior)
         {
             this.executeAsync = executeAsync;
-            this.canExecute = canExecute ?? (() => true);
+            this.canExecute = canExecute;
         }
 
         public override bool CanExecute(object parameter)
@@ -31,11 +31,11 @@ namespace ERHMS.Desktop.Commands
         private Func<T, Task> executeAsync;
         private Func<T, bool> canExecute;
 
-        public AsyncCommand(Func<T, Task> executeAsync, Func<T, bool> canExecute = null)
-            : base(executeAsync)
+        public AsyncCommand(Func<T, Task> executeAsync, Func<T, bool> canExecute, ErrorBehavior errorBehavior)
+            : base(executeAsync, errorBehavior)
         {
             this.executeAsync = executeAsync;
-            this.canExecute = canExecute ?? (parameter => true);
+            this.canExecute = canExecute;
         }
 
         public override bool CanExecute(object parameter)

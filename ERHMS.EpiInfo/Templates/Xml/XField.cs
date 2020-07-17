@@ -1,11 +1,13 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.EpiInfo.Infrastructure;
+using ERHMS.EpiInfo.Templates.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Xml
+namespace ERHMS.EpiInfo.Templates.Xml
 {
     public class XField : XElement
     {
@@ -35,45 +37,33 @@ namespace ERHMS.EpiInfo.Xml
             new GroupFieldMapper()
         };
 
-        public static XField Construct(DataRow field)
+        public static XField Create(DataRow field)
         {
             XField xField = new XField();
             foreach (DataColumn column in field.Table.Columns)
             {
-                if (!ConfigurationExtensions.CompatibilityMode && IgnoredColumnNames.Contains(column.ColumnName))
-                {
-                    continue;
-                }
-                if (column.ColumnName == ColumnNames.BACKGROUND_COLOR && field.IsNull(column))
-                {
-                    continue;
-                }
-                xField.SetAttributeValue(field[column], column.ColumnName);
+                xField.SetAttributeValueEx(field[column], column.ColumnName);
             }
+            xField.OnCreated();
             return xField;
-        }
-
-        public static XField Wrap(XElement element)
-        {
-            return new XField(element);
         }
 
         public new string Name
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public int FieldId
         {
-            get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (int)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public int FieldTypeId
         {
-            get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (int)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public MetaFieldType FieldType
@@ -84,17 +74,36 @@ namespace ERHMS.EpiInfo.Xml
 
         public string SourceTableName
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
         }
 
         public XPage XPage => (XPage)Parent;
 
-        private XField()
+        public XField()
             : base(ElementNames.Field) { }
 
-        private XField(XElement element)
-            : base(element) { }
+        public XField(XElement element)
+            : base(element)
+        {
+            OnCreated();
+        }
+
+        private void OnCreated()
+        {
+            XAttribute backgroundColor = Attribute(ColumnNames.BACKGROUND_COLOR);
+            if (backgroundColor != null && backgroundColor.Value == "")
+            {
+                backgroundColor.Remove();
+            }
+            if (!ConfigurationExtensions.CompatibilityMode)
+            {
+                foreach (string columnName in IgnoredColumnNames)
+                {
+                    Attribute(columnName)?.Remove();
+                }
+            }
+        }
 
         public Field Instantiate(Page page)
         {
@@ -102,7 +111,7 @@ namespace ERHMS.EpiInfo.Xml
             field.Name = Name;
             foreach (IFieldMapper mapper in Mappers)
             {
-                mapper.Map(this, field);
+                mapper.SetProperties(this, field);
             }
             return field;
         }

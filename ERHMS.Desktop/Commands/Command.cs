@@ -8,11 +8,11 @@ namespace ERHMS.Desktop.Commands
         private Action execute;
         private Func<bool> canExecute;
 
-        public Command(Action execute, Func<bool> canExecute = null)
-            : base(execute)
+        public Command(Action execute, Func<bool> canExecute, ErrorBehavior errorBehavior)
+            : base(execute, errorBehavior)
         {
             this.execute = execute;
-            this.canExecute = canExecute ?? (() => true);
+            this.canExecute = canExecute;
         }
 
         public override bool CanExecute(object parameter)
@@ -32,11 +32,11 @@ namespace ERHMS.Desktop.Commands
         private Action<T> execute;
         private Func<T, bool> canExecute;
 
-        public Command(Action<T> execute, Func<T, bool> canExecute = null)
-            : base(execute)
+        public Command(Action<T> execute, Func<T, bool> canExecute, ErrorBehavior errorBehavior)
+            : base(execute, errorBehavior)
         {
             this.execute = execute;
-            this.canExecute = canExecute ?? (parameter => true);
+            this.canExecute = canExecute;
         }
 
         public override bool CanExecute(object parameter)

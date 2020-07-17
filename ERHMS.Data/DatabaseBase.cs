@@ -1,16 +1,13 @@
-﻿using log4net;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
 
 namespace ERHMS.Data
 {
     public abstract class DatabaseBase : IDatabase
     {
-        protected static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
-
         protected static IDbConnection Connect(IDbConnection connection)
         {
-            connection = new LoggingConnection(connection, Log);
+            connection = new LoggingConnection(connection, Log.Default);
             connection.Open();
             return connection;
         }
@@ -23,13 +20,7 @@ namespace ERHMS.Data
 
         protected abstract IDbConnection GetConnection();
         public abstract bool Exists();
-        public abstract void CreateCore();
-
-        public void Create()
-        {
-            Log.Debug($"Creating database: {this}");
-            CreateCore();
-        }
+        public abstract void Create();
 
         public IDbConnection Connect()
         {

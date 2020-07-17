@@ -15,11 +15,11 @@ namespace ERHMS.EpiInfo
     {
         public static TemplateLevel Parse(string value)
         {
-            if (value.Equals("Form", StringComparison.OrdinalIgnoreCase))
+            if (value == "Form")
             {
                 return TemplateLevel.View;
             }
-            if (Enum.TryParse(value, true, out TemplateLevel result))
+            if (Enum.TryParse(value, out TemplateLevel result))
             {
                 return result;
             }

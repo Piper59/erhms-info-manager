@@ -31,7 +31,7 @@ namespace ERHMS.EpiInfo
 
         protected Regex Regex { get; set; }
         protected string BaseName { get; set; }
-        protected string Separator { get; set; } = "";
+        protected string Separator { get; set; }
         protected TSuffix StartSuffix { get; set; }
         protected ISet<string> Names { get; set; }
 
@@ -81,9 +81,10 @@ namespace ERHMS.EpiInfo
 
     public abstract class IntSuffixNameGenerator : NameGenerator<int>
     {
-        public IntSuffixNameGenerator()
+        protected IntSuffixNameGenerator()
         {
             Regex = new Regex(@"^(?<baseName>.+?)(?<suffix>[0-9]+)?$");
+            Separator = "";
             StartSuffix = 1;
         }
 
@@ -97,7 +98,7 @@ namespace ERHMS.EpiInfo
     {
         private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        public CharSuffixNameGenerator()
+        protected CharSuffixNameGenerator()
         {
             Regex = new Regex(@"^(?<baseName>.+?)(?:_(?<suffix>[A-Z]))?$", RegexOptions.IgnoreCase);
             Separator = "_";

@@ -1,6 +1,5 @@
-﻿using ERHMS.Desktop.Commands;
+﻿using ERHMS.Desktop.Infrastructure;
 using ERHMS.EpiInfo;
-using log4net;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -11,8 +10,6 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        protected static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
-
         private static MainViewModel current;
         public static MainViewModel Current
         {
@@ -35,7 +32,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                Log.Debug($"Displaying: {value}");
+                Log.Default.Debug($"Displaying: {value}");
                 SetProperty(ref content, value);
             }
         }
@@ -46,9 +43,9 @@ namespace ERHMS.Desktop.ViewModels
 
         private MainViewModel()
         {
-            GoHomeCommand = new Command(GoHome);
-            OpenEpiInfoCommand = new Command(OpenEpiInfo);
-            OpenFileExplorerCommand = new Command(OpenFileExplorer);
+            GoHomeCommand = new SimpleCommand(GoHome);
+            OpenEpiInfoCommand = new SimpleCommand(OpenEpiInfo);
+            OpenFileExplorerCommand = new SimpleCommand(OpenFileExplorer);
         }
 
         private void GoHome()

@@ -2,7 +2,6 @@
 using Epi.Data;
 using Epi.Data.Services;
 using ERHMS.Data;
-using log4net;
 using System;
 using System.IO;
 
@@ -10,11 +9,8 @@ namespace ERHMS.EpiInfo
 {
     public static class ProjectExtensions
     {
-        private static ILog Log { get; } = LogManager.GetLogger(nameof(ERHMS));
-
         public static Project Create(ProjectCreationInfo info)
         {
-            Log.Debug($"Creating project: {info.FilePath}");
             Directory.CreateDirectory(info.Location);
             Project project = new Project
             {

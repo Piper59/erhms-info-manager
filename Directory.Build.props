@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MainAssemblyName>ERHMS Info Manager</MainAssemblyName>
+    <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(SolutionDir)\SolutionInfo.cs" />
+  </ItemGroup>
+</Project>
