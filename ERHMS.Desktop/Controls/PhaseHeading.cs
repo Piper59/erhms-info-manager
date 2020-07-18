@@ -8,6 +8,11 @@ namespace ERHMS.Desktop.Controls
 {
     public class PhaseHeading : Border
     {
+        private const byte StartAlpha = 0x40;
+        private const byte EndAlpha = 0x00;
+        private static readonly Point StartPoint = new Point(0.5, 0.0);
+        private static readonly Point EndPoint = new Point(1.0, 0.0);
+
         public new TextBlock Child
         {
             get { return (TextBlock)base.Child; }
@@ -47,7 +52,7 @@ namespace ERHMS.Desktop.Controls
 
         private void Update()
         {
-            Background = new LinearGradientBrush(GetColor(0x40), GetColor(0x00), 0.0);
+            Background = new LinearGradientBrush(GetColor(StartAlpha), GetColor(EndAlpha), StartPoint, EndPoint);
             Child.Text = Phase.ToDisplayName();
         }
     }
