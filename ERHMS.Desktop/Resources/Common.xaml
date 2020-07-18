@@ -20,8 +20,6 @@
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
 
     <!-- Layout -->
-    <System:Double x:Key="SmallLayoutWidth">720</System:Double>
-    <System:Double x:Key="LargeLayoutWidth">1200</System:Double>
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
     <System:Double x:Key="HugeSpace">20</System:Double>

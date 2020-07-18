@@ -14,6 +14,18 @@
         <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
     </Style>
 
+    <Style x:Key="Layout" TargetType="Control">
+        <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
+    </Style>
+
+    <Style x:Key="LayoutNarrow" TargetType="Control" BasedOn="{StaticResource Layout}">
+        <Setter Property="MaxWidth" Value="720" />
+    </Style>
+
+    <Style x:Key="LayoutWide" TargetType="Control" BasedOn="{StaticResource Layout}">
+        <Setter Property="MaxWidth" Value="1200" />
+    </Style>
+
     <Style x:Key="Section" TargetType="Panel">
         <Setter Property="Margin">
             <Setter.Value>
