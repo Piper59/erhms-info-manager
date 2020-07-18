@@ -7,8 +7,10 @@ using log4net;
 using log4net.Config;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -19,13 +21,17 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
+        private static readonly Regex CleanArgRegex = new Regex(@"(?:/|--)clean", RegexOptions.IgnoreCase);
+
         private static int unhandledErrorCount;
 
         [STAThread]
         public static void Main(string[] args)
         {
+
             try
             {
+                ParseArgs(args);
                 ConfigureLog();
                 Log.Default.Debug("Starting up");
                 ConfigureEpiInfo();
@@ -36,6 +42,14 @@ namespace ERHMS.Desktop
             catch (Exception ex)
             {
                 OnUnhandledError(ex);
+            }
+        }
+
+        private static void ParseArgs(string[] args)
+        {
+            if (args.Any(arg => CleanArgRegex.IsMatch(arg)))
+            {
+                Settings.Default.Reset();
             }
         }
 
