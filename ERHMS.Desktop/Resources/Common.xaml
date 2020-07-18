@@ -1,17 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=mscorlib">
-    <!-- Colors -->
-    <Color x:Key="ThemeBlue">#ff0079c1</Color>
-    <Color x:Key="ThemeRed">#ffef3e42</Color>
-    <Color x:Key="ThemeGreen">#ff6cb33f</Color>
-
-    <!-- Brushes -->
-    <SolidColorBrush x:Key="Accent" Color="{StaticResource ThemeBlue}" />
-    <SolidColorBrush x:Key="PreDeployment" Color="{StaticResource ThemeBlue}" />
-    <SolidColorBrush x:Key="Deployment" Color="{StaticResource ThemeRed}" />
-    <SolidColorBrush x:Key="PostDeployment" Color="{StaticResource ThemeGreen}" />
-
     <!-- Fonts -->
     <System:Double x:Key="DefaultFontSize">16</System:Double>
     <System:Double x:Key="LargeFontSize">24</System:Double>
@@ -20,6 +9,8 @@
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
 
     <!-- Layout -->
+    <System:Double x:Key="SmallWidth">720</System:Double>
+    <System:Double x:Key="LargeWidth">1200</System:Double>
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
     <System:Double x:Key="HugeSpace">20</System:Double>

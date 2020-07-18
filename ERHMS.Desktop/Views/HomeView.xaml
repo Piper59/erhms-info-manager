@@ -1,9 +1,10 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Views.HomeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
              AutomationProperties.Name="{x:Static Properties:Resources.AppTitle}"
-             Style="{StaticResource LayoutNarrow}">
+             Style="{StaticResource LayoutSmall}">
     <StackPanel Style="{StaticResource Container}">
         <StackPanel Style="{StaticResource Section}">
             <TextBlock Style="{StaticResource Title}">
@@ -11,13 +12,13 @@
             </TextBlock>
         </StackPanel>
         <StackPanel Style="{StaticResource Section}">
-            <TextBlock Style="{StaticResource Heading}">Pre-deployment</TextBlock>
+            <Controls:PhaseHeading Phase="PreDeployment" />
             <Button>Plan for pre-deployment</Button>
             <Button>Manage worker forms</Button>
             <Button>Collect worker information</Button>
         </StackPanel>
         <StackPanel Style="{StaticResource Section}">
-            <TextBlock Style="{StaticResource Heading}">Deployment</TextBlock>
+            <Controls:PhaseHeading Phase="Deployment" />
             <Button>Plan for deployment</Button>
             <Button>Manage incident forms</Button>
             <Button>In-process workers</Button>
@@ -26,7 +27,7 @@
             <Button>Out-process workers</Button>
         </StackPanel>
         <StackPanel Style="{StaticResource Section}">
-            <TextBlock Style="{StaticResource Heading}">Post-deployment</TextBlock>
+            <Controls:PhaseHeading Phase="PostDeployment" />
             <Button>Plan for post-deployment</Button>
             <Button>Manage incident forms</Button>
             <Button>Follow up with workers</Button>
