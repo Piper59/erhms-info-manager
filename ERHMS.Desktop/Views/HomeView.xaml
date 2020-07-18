@@ -7,9 +7,17 @@
              Style="{StaticResource LayoutSmall}">
     <StackPanel Style="{StaticResource Container}">
         <StackPanel Style="{StaticResource Section}">
-            <TextBlock Style="{StaticResource Title}">
-                <Run Text="{x:Static Properties:Resources.AppTitle}" />
-            </TextBlock>
+            <StackPanel Margin="{StaticResource SmallThickness}"
+                        Orientation="Horizontal">
+                <Image Height="64" Source="../Resources/ERHMS.ico">
+                    <Image.Margin>
+                        <Thickness Right="{StaticResource LargeSpace}" />
+                    </Image.Margin>
+                </Image>
+                <TextBlock VerticalAlignment="Center">
+                    <Run Style="{StaticResource TitleText}" Text="{x:Static Properties:Resources.AppTitle}" />
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
         <StackPanel Style="{StaticResource Section}">
             <Controls:PhaseHeading Phase="PreDeployment" />
