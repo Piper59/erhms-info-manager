@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using ERHMS.Desktop.Properties;
+using System;
+using System.Windows;
 
 namespace ERHMS.Desktop.Views
 {
@@ -6,7 +8,23 @@ namespace ERHMS.Desktop.Views
     {
         public MainView()
         {
+            try
+            {
+                Settings.Default.WriteTo(this);
+            }
+            catch { }
             InitializeComponent();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            try
+            {
+                Settings.Default.ReadFrom(this);
+                Settings.Default.Save();
+            }
+            catch { }
+            base.OnClosed(e);
         }
     }
 }

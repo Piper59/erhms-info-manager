@@ -57,7 +57,7 @@ namespace ERHMS.Desktop
             {
                 Log.Default.Debug($"Creating configuration file: {ConfigurationExtensions.FilePath}");
                 Configuration configuration = ConfigurationExtensions.Create();
-                Settings.Default.Apply(configuration);
+                Settings.Default.WriteTo(configuration);
                 configuration.Save();
             }
             Log.Default.Debug($"Loading configuration file: {ConfigurationExtensions.FilePath}");
