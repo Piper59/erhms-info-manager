@@ -29,16 +29,16 @@ namespace ERHMS.Desktop
             try
             {
                 ConfigureEpiInfo();
-                if (args.Length > 0)
-                {
-                    Log.Default.Debug("Running in utility mode");
-                    Utilities.Main(args);
-                }
-                else
+                if (args.Length == 0)
                 {
                     Log.Default.Debug("Running in standard mode");
                     App app = new App();
                     app.Run();
+                }
+                else
+                {
+                    Log.Default.Debug("Running in utility mode");
+                    Utilities.Main(args);
                 }
             }
             catch (Exception ex)
@@ -52,15 +52,11 @@ namespace ERHMS.Desktop
         {
             try
             {
-                try
-                {
-                    GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
-                }
-                catch (SecurityException) { }
-                GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
-                XmlConfigurator.Configure();
+                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
             }
-            catch { }
+            catch (SecurityException) { }
+            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
+            XmlConfigurator.Configure();
         }
 
         private static void ConfigureEpiInfo()

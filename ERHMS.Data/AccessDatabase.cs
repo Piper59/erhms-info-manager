@@ -8,6 +8,8 @@ namespace ERHMS.Data
 {
     public class AccessDatabase : Database
     {
+        public const string FileExtension = ".mdb";
+
         private OleDbConnectionStringBuilder builder;
         private OleDbCommandBuilder commandBuilder = new OleDbCommandBuilder();
 

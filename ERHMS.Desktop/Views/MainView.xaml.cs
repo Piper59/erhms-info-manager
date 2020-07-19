@@ -8,22 +8,14 @@ namespace ERHMS.Desktop.Views
     {
         public MainView()
         {
-            try
-            {
-                Settings.Default.WriteTo(this);
-            }
-            catch { }
+            Settings.Default.WriteTo(this);
             InitializeComponent();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            try
-            {
-                Settings.Default.ReadFrom(this);
-                Settings.Default.Save();
-            }
-            catch { }
+            Settings.Default.ReadFrom(this);
+            Settings.Default.Save();
             base.OnClosed(e);
         }
     }
