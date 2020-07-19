@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templates.Xml
 {
-    public partial class XTemplate : XElement
+    public class XTemplate : XElement
     {
         public const string DateFormat = "F";
 

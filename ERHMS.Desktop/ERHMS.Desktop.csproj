@@ -16,6 +16,7 @@
     <Deterministic>true</Deterministic>
     <ApplicationIcon>..\ERHMS.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <StartupObject>ERHMS.Desktop.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +102,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utilities.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />

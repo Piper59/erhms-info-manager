@@ -7,10 +7,8 @@ using log4net;
 using log4net.Config;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Security;
 using System.Security.Principal;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -21,47 +19,48 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
-        private static readonly Regex CleanArgRegex = new Regex(@"(?:/|--)clean", RegexOptions.IgnoreCase);
-
         private static int unhandledErrorCount;
 
         [STAThread]
         public static void Main(string[] args)
         {
-
+            ConfigureLog();
+            Log.Default.Debug("Starting up");
             try
             {
-                ParseArgs(args);
-                ConfigureLog();
-                Log.Default.Debug("Starting up");
                 ConfigureEpiInfo();
-                App app = new App();
-                app.Run();
-                Log.Default.Debug("Shutting down");
+                if (args.Length > 0)
+                {
+                    Log.Default.Debug("Running in utility mode");
+                    Utilities.Main(args);
+                }
+                else
+                {
+                    Log.Default.Debug("Running in standard mode");
+                    App app = new App();
+                    app.Run();
+                }
             }
             catch (Exception ex)
             {
                 OnUnhandledError(ex);
             }
-        }
-
-        private static void ParseArgs(string[] args)
-        {
-            if (args.Any(arg => CleanArgRegex.IsMatch(arg)))
-            {
-                Settings.Default.Reset();
-            }
+            Log.Default.Debug("Shutting down");
         }
 
         private static void ConfigureLog()
         {
             try
             {
-                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
+                try
+                {
+                    GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
+                }
+                catch (SecurityException) { }
+                GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
+                XmlConfigurator.Configure();
             }
-            catch (SecurityException) { }
-            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
-            XmlConfigurator.Configure();
+            catch { }
         }
 
         private static void ConfigureEpiInfo()

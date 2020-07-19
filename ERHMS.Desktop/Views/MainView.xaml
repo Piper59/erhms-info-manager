@@ -38,8 +38,7 @@
                 <MenuItem Header="Import data" />
                 <MenuItem Header="Back up data" />
                 <Separator />
-                <MenuItem Header="View current log" />
-                <MenuItem Header="Export all logs" />
+                <MenuItem Header="Export logs" />
             </MenuItem>
             <MenuItem Grid.Column="3"
                       Header="Help" />
