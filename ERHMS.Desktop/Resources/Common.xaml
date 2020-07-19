@@ -8,9 +8,7 @@
     <FontWeight x:Key="ThinFontWeight">Light</FontWeight>
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
 
-    <!-- Layout -->
-    <System:Double x:Key="SmallWidth">720</System:Double>
-    <System:Double x:Key="LargeWidth">1200</System:Double>
+    <!-- Spacing -->
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
     <System:Double x:Key="HugeSpace">20</System:Double>
@@ -29,4 +27,8 @@
                Left="{StaticResource HugeSpace}"
                Right="{StaticResource HugeSpace}"
                Top="{StaticResource HugeSpace}" />
+
+    <!-- Layout -->
+    <System:Double x:Key="SmallWidth">720</System:Double>
+    <System:Double x:Key="LargeWidth">1200</System:Double>
 </ResourceDictionary>
