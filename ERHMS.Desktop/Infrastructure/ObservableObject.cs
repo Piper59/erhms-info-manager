@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ERHMS.Desktop.ViewModels
+namespace ERHMS.Desktop.Infrastructure
 {
-    public abstract class ViewModel : INotifyPropertyChanged
+    public abstract class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -112,7 +112,20 @@ namespace ERHMS.Desktop
             else
             {
                 Log.Default.Debug($"Running in utility mode: {string.Join(", ", e.Args)}");
-                await Utility.RunAsync(e.Args[0], e.Args.Skip(1).ToList());
+                IUtility utility = Utility.Create(e.Args[0], e.Args.Skip(1).ToList());
+                if (utility.LongRunning)
+                {
+                    Window window = new UtilityView
+                    {
+                        DataContext = new UtilityViewModel(utility)
+                    };
+                    window.Show();
+                }
+                else
+                {
+                    await utility.RunAsync();
+                    Shutdown();
+                }
             }
         }
     }

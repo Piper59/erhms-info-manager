@@ -1,4 +1,6 @@
-﻿namespace ERHMS.Desktop.ViewModels
+﻿using ERHMS.Desktop.Infrastructure;
+
+namespace ERHMS.Desktop.ViewModels
 {
-    public class HomeViewModel : ViewModel { }
+    public class HomeViewModel : ObservableObject { }
 }

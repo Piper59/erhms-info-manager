@@ -6,7 +6,7 @@ namespace ERHMS.Desktop.Utilities
 {
     public class Help : Utility
     {
-        protected override bool LongRunning => false;
+        public override bool LongRunning => false;
 
         protected override Task<string> RunCoreAsync()
         {

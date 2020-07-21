@@ -1,4 +1,4 @@
-﻿using ERHMS.Desktop.Utilities;
+﻿using ERHMS.Desktop.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Text;
@@ -35,9 +35,9 @@ namespace ERHMS.Desktop.Views
 
         private IProgress<string> progress;
 
-        public new Utility DataContext
+        public new UtilityViewModel DataContext
         {
-            get { return (Utility)base.DataContext; }
+            get { return (UtilityViewModel)base.DataContext; }
             set { base.DataContext = value; }
         }
 
@@ -50,26 +50,32 @@ namespace ERHMS.Desktop.Views
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            UnregisterDataContext(e.OldValue as Utility);
-            RegisterDataContext(e.NewValue as Utility);
+            UnregisterDataContext(e.OldValue as UtilityViewModel);
+            RegisterDataContext(e.NewValue as UtilityViewModel);
         }
 
-        private void RegisterDataContext(Utility dataContext)
+        private void RegisterDataContext(UtilityViewModel dataContext)
         {
             if (dataContext != null)
             {
-                dataContext.Progress = progress;
+                dataContext.Utility.Progress = progress;
                 dataContext.CloseRequested += DataContext_CloseRequested;
             }
         }
 
-        private void UnregisterDataContext(Utility dataContext)
+        private void UnregisterDataContext(UtilityViewModel dataContext)
         {
             if (dataContext != null)
             {
-                dataContext.Progress = null;
+                dataContext.Utility.Progress = null;
                 dataContext.CloseRequested -= DataContext_CloseRequested;
             }
+        }
+
+        protected override async void OnContentRendered(EventArgs e)
+        {
+            base.OnContentRendered(e);
+            await DataContext.Run();
         }
 
         private void AppendToLog(string message)

@@ -84,6 +84,7 @@
     <Compile Include="Controls\PhaseHeading.cs" />
     <Compile Include="Infrastructure\Brushes.cs" />
     <Compile Include="Infrastructure\Colors.cs" />
+    <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\SimpleAsyncCommand.cs" />
     <Compile Include="Infrastructure\SimpleSyncCommand.cs" />
@@ -105,11 +106,12 @@
     <Compile Include="Utilities\CreateTemplate.cs" />
     <Compile Include="Utilities\Help.cs" />
     <Compile Include="Utilities\InstantiateTemplate.cs" />
+    <Compile Include="Utilities\IUtility.cs" />
     <Compile Include="Utilities\ResetSettings.cs" />
     <Compile Include="Utilities\Utility.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="ViewModels\UtilityViewModel.cs" />
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>

@@ -13,7 +13,7 @@ namespace ERHMS.Desktop.Utilities
 {
     public class InstantiateTemplate : Utility
     {
-        protected override bool LongRunning => true;
+        public override bool LongRunning => true;
         public string TemplatePath { get; }
         public string ProjectPath { get; }
 

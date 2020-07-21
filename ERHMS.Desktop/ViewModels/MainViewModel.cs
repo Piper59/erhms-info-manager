@@ -8,12 +8,12 @@ using Module = ERHMS.EpiInfo.Module;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class MainViewModel : ViewModel
+    public class MainViewModel : ObservableObject
     {
         public static MainViewModel Current { get; } = new MainViewModel();
 
-        private ViewModel content;
-        public ViewModel Content
+        private object content;
+        public object Content
         {
             get
             {

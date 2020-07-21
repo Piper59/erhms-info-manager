@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.Utilities
 {
     public class CreateTemplate : Utility
     {
-        protected override bool LongRunning => true;
+        public override bool LongRunning => true;
         public string ProjectPath { get; }
         public string TemplatePath { get; }
 
