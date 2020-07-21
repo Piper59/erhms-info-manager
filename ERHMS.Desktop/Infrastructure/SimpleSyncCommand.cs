@@ -3,15 +3,15 @@ using System;
 
 namespace ERHMS.Desktop.Infrastructure
 {
-    internal class SimpleCommand : Command
+    public class SimpleSyncCommand : SyncCommand
     {
-        public SimpleCommand(Action execute)
+        public SimpleSyncCommand(Action execute)
             : base(execute, Always, ErrorBehavior.Raise) { }
     }
 
-    internal class SimpleCommand<T> : Command<T>
+    public class SimpleSyncCommand<T> : SyncCommand<T>
     {
-        public SimpleCommand(Action<T> execute)
+        public SimpleSyncCommand(Action<T> execute)
             : base(execute, Always, ErrorBehavior.Raise) { }
     }
 }

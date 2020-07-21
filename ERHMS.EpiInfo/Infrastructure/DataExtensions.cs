@@ -1,10 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Data;
 
 namespace ERHMS.EpiInfo.Infrastructure
 {
-    internal static class DataExtensions
+    public static class DataExtensions
     {
         public static bool DataEquals(this DataTable table1, DataTable table2)
         {
@@ -48,14 +47,13 @@ namespace ERHMS.EpiInfo.Infrastructure
             int ordinal = source.Ordinal;
             DataColumn target = @this.Columns.Add(null, dataType);
             target.SetOrdinal(ordinal);
-            TypeConverter converter = TypeDescriptor.GetConverter(dataType);
             foreach (DataRow row in @this.Rows)
             {
                 if (row.IsNull(source))
                 {
                     continue;
                 }
-                row[target] = converter.ConvertFrom(row[source]);
+                row[target] = Convert.ChangeType(row[source], dataType);
             }
             source.Table.Columns.Remove(source);
             target.ColumnName = columnName;

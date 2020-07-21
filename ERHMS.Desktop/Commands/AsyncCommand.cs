@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.Commands
 {
-    public class AsyncCommand : CommandBase
+    public class AsyncCommand : Command
     {
         private Func<Task> executeAsync;
         private Func<bool> canExecute;
@@ -26,7 +26,7 @@ namespace ERHMS.Desktop.Commands
         }
     }
 
-    public class AsyncCommand<T> : CommandBase
+    public class AsyncCommand<T> : Command
     {
         private Func<T, Task> executeAsync;
         private Func<T, bool> canExecute;

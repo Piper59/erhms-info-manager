@@ -2,11 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=mscorlib">
     <!-- Fonts -->
+    <System:Double x:Key="SmallFontSize">12</System:Double>
     <System:Double x:Key="DefaultFontSize">16</System:Double>
     <System:Double x:Key="LargeFontSize">24</System:Double>
     <System:Double x:Key="HugeFontSize">32</System:Double>
     <FontWeight x:Key="ThinFontWeight">Light</FontWeight>
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
+    <FontFamily x:Key="MonospacedFontFamily">Consolas</FontFamily>
 
     <!-- Spacing -->
     <System:Double x:Key="SmallSpace">5</System:Double>

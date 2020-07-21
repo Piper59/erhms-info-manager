@@ -42,8 +42,7 @@ namespace ERHMS.Launcher
                     message.AppendLine(executable);
                 }
                 message.AppendLine();
-                message.Append(ex.Message.TrimEnd('.'));
-                message.Append(".");
+                message.Append(ex.Message);
                 MessageBox.Show(message.ToString(), AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

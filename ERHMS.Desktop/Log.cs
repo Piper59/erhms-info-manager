@@ -4,6 +4,6 @@ namespace ERHMS.Desktop
 {
     internal static class Log
     {
-        public static ILog Default { get; } = LogManager.GetLogger(nameof(ERHMS));
+        public static ILog Default => LogManager.GetLogger(nameof(ERHMS));
     }
 }

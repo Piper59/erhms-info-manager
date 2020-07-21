@@ -30,9 +30,16 @@ namespace ERHMS.Desktop.Properties
 
         public void ReadFrom(Window window)
         {
-            WindowWidth = window.Width;
-            WindowHeight = window.Height;
-            WindowMaximized = window.WindowState == WindowState.Maximized;
+            if (window.WindowState == WindowState.Maximized)
+            {
+                WindowMaximized = true;
+            }
+            else
+            {
+                WindowWidth = window.Width;
+                WindowHeight = window.Height;
+                WindowMaximized = false;
+            }
         }
     }
 }

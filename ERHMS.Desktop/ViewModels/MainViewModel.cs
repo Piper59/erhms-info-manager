@@ -1,27 +1,16 @@
-﻿using ERHMS.Desktop.Infrastructure;
+﻿using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Infrastructure;
 using ERHMS.EpiInfo;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class MainViewModel : ViewModel
     {
-        private static MainViewModel current;
-        public static MainViewModel Current
-        {
-            get
-            {
-                if (current == null)
-                {
-                    current = new MainViewModel();
-                }
-                return current;
-            }
-        }
+        public static MainViewModel Current { get; } = new MainViewModel();
 
         private ViewModel content;
         public ViewModel Content
@@ -37,15 +26,15 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public ICommand GoHomeCommand { get; }
-        public ICommand OpenEpiInfoCommand { get; }
-        public ICommand OpenFileExplorerCommand { get; }
+        public Command GoHomeCommand { get; }
+        public Command OpenEpiInfoCommand { get; }
+        public Command OpenFileExplorerCommand { get; }
 
         private MainViewModel()
         {
-            GoHomeCommand = new SimpleCommand(GoHome);
-            OpenEpiInfoCommand = new SimpleCommand(OpenEpiInfo);
-            OpenFileExplorerCommand = new SimpleCommand(OpenFileExplorer);
+            GoHomeCommand = new SimpleSyncCommand(GoHome);
+            OpenEpiInfoCommand = new SimpleSyncCommand(OpenEpiInfo);
+            OpenFileExplorerCommand = new SimpleSyncCommand(OpenFileExplorer);
         }
 
         private void GoHome()

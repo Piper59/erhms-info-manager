@@ -13,6 +13,18 @@ namespace ERHMS.Desktop.Controls
         private static readonly Point StartPoint = new Point(0.5, 0.0);
         private static readonly Point EndPoint = new Point(1.0, 0.0);
 
+        private static Color GetColor(Color color, byte alpha)
+        {
+            return Color.FromArgb(alpha, color.R, color.G, color.B);
+        }
+
+        private static Brush GetBackground(Color color)
+        {
+            Color startColor = GetColor(color, StartAlpha);
+            Color endColor = GetColor(color, EndAlpha);
+            return new LinearGradientBrush(startColor, endColor, StartPoint, EndPoint);
+        }
+
         public new TextBlock Child
         {
             get { return (TextBlock)base.Child; }
@@ -29,7 +41,8 @@ namespace ERHMS.Desktop.Controls
             set
             {
                 phase = value;
-                Update();
+                Background = GetBackground(value.ToColor());
+                Child.Text = value.ToDisplayName();
             }
         }
 
@@ -42,18 +55,6 @@ namespace ERHMS.Desktop.Controls
             {
                 Style = (Style)Application.Current.FindResource("Heading")
             };
-        }
-
-        private Color GetColor(byte alpha)
-        {
-            Color color = Phase.ToColor();
-            return Color.FromArgb(alpha, color.R, color.G, color.B);
-        }
-
-        private void Update()
-        {
-            Background = new LinearGradientBrush(GetColor(StartAlpha), GetColor(EndAlpha), StartPoint, EndPoint);
-            Child.Text = Phase.ToDisplayName();
         }
     }
 }

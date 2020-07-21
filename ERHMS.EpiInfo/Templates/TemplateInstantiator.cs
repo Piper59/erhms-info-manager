@@ -49,12 +49,17 @@ namespace ERHMS.EpiInfo.Templates
 
         private Context context;
 
+        public abstract TemplateLevel Level { get; }
         public XTemplate XTemplate { get; }
         protected IMetadataProvider Metadata { get; }
         public IProgress<string> Progress { get; set; }
 
         protected TemplateInstantiator(XTemplate xTemplate, IMetadataProvider metadata)
         {
+            if (xTemplate.Level != Level)
+            {
+                throw new ArgumentException($"Template level must be '{Level}'.");
+            }
             XTemplate = xTemplate;
             Metadata = metadata;
         }
@@ -243,7 +248,7 @@ namespace ERHMS.EpiInfo.Templates
             {
                 return condition;
             }
-            return string.Concat(columnName, RelateConditionSeparator, fieldId);
+            return columnName + RelateConditionSeparator + fieldId;
         }
 
         private void InstantiateGridTable(XTable xTable)
@@ -265,6 +270,7 @@ namespace ERHMS.EpiInfo.Templates
 
     public class ProjectTemplateInstantiator : TemplateInstantiator
     {
+        public override TemplateLevel Level => TemplateLevel.Project;
         public Project Project { get; }
 
         public ProjectTemplateInstantiator(XTemplate xTemplate, Project project)
@@ -292,6 +298,7 @@ namespace ERHMS.EpiInfo.Templates
 
     public class ViewTemplateInstantiator : TemplateInstantiator
     {
+        public override TemplateLevel Level => TemplateLevel.View;
         public Project Project { get; }
 
         public ViewTemplateInstantiator(XTemplate xTemplate, Project project)
@@ -310,6 +317,7 @@ namespace ERHMS.EpiInfo.Templates
 
     public class PageTemplateInstantiator : TemplateInstantiator
     {
+        public override TemplateLevel Level => TemplateLevel.Page;
         public View View { get; }
 
         public PageTemplateInstantiator(XTemplate xTemplate, View view)
@@ -332,7 +340,7 @@ namespace ERHMS.EpiInfo.Templates
             string checkCode = xView.CheckCode.Trim();
             if (!View.CheckCode.Contains(checkCode))
             {
-                View.CheckCode = string.Concat(View.CheckCode, "\n", checkCode).Trim();
+                View.CheckCode = (View.CheckCode + "\n" + checkCode).Trim();
                 Metadata.UpdateView(View);
             }
         }

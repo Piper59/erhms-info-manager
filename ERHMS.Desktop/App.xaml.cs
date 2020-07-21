@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Utilities;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
@@ -7,6 +8,7 @@ using log4net;
 using log4net.Config;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security;
 using System.Security.Principal;
 using System.Threading;
@@ -29,17 +31,8 @@ namespace ERHMS.Desktop
             try
             {
                 ConfigureEpiInfo();
-                if (args.Length == 0)
-                {
-                    Log.Default.Debug("Running in standard mode");
-                    App app = new App();
-                    app.Run();
-                }
-                else
-                {
-                    Log.Default.Debug("Running in utility mode");
-                    Utilities.Main(args);
-                }
+                App app = new App();
+                app.Run();
             }
             catch (Exception ex)
             {
@@ -85,9 +78,9 @@ namespace ERHMS.Desktop
 
         public App()
         {
-            DispatcherUnhandledException += App_DispatcherUnhandledException;
-            CommandBase.GlobalError += CommandBase_GlobalError;
             InitializeComponent();
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+            Command.GlobalError += Command_GlobalError;
         }
 
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -97,21 +90,30 @@ namespace ERHMS.Desktop
             Shutdown(1);
         }
 
-        private void CommandBase_GlobalError(object sender, ErrorEventArgs e)
+        private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
             Log.Default.Error(e.Exception);
             MessageBox.Show(e.Exception.Message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainViewModel.Current.Content = new HomeViewModel();
-            Window window = new MainView
+            if (e.Args.Length == 0)
             {
-                DataContext = MainViewModel.Current
-            };
-            window.Show();
+                Log.Default.Debug("Running in standard mode");
+                MainViewModel.Current.Content = new HomeViewModel();
+                Window window = new MainView
+                {
+                    DataContext = MainViewModel.Current
+                };
+                window.Show();
+            }
+            else
+            {
+                Log.Default.Debug($"Running in utility mode: {string.Join(", ", e.Args)}");
+                await Utility.RunAsync(e.Args[0], e.Args.Skip(1).ToList());
+            }
         }
     }
 }

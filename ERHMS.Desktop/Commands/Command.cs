@@ -1,53 +1,91 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.Commands
 {
-    public class Command : CommandBase
+    public abstract class Command : ICommand
     {
-        private Action execute;
-        private Func<bool> canExecute;
+        public static event EventHandler<ErrorEventArgs> GlobalError;
 
-        public Command(Action execute, Func<bool> canExecute, ErrorBehavior errorBehavior)
-            : base(execute, errorBehavior)
+        public static bool Always() => true;
+        public static bool Always<T>(T parameter) => true;
+
+        public static void OnCanExecuteChanged()
         {
-            this.execute = execute;
-            this.canExecute = canExecute;
+            CommandManager.InvalidateRequerySuggested();
         }
 
-        public override bool CanExecute(object parameter)
+        public Delegate Delegate { get; }
+        public ErrorBehavior ErrorBehavior { get; }
+
+        protected Command(Delegate @delegate, ErrorBehavior errorBehavior)
         {
-            return canExecute();
+            Delegate = @delegate;
+            ErrorBehavior = errorBehavior;
         }
 
-        public override Task ExecuteCore(object parameter)
+        public event EventHandler CanExecuteChanged
         {
-            execute();
-            return Task.CompletedTask;
-        }
-    }
-
-    public class Command<T> : CommandBase
-    {
-        private Action<T> execute;
-        private Func<T, bool> canExecute;
-
-        public Command(Action<T> execute, Func<T, bool> canExecute, ErrorBehavior errorBehavior)
-            : base(execute, errorBehavior)
-        {
-            this.execute = execute;
-            this.canExecute = canExecute;
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public override bool CanExecute(object parameter)
+        public event EventHandler<ErrorEventArgs> Error;
+
+        protected virtual void OnError(ErrorEventArgs e)
         {
-            return canExecute((T)parameter);
+            IEnumerable<Delegate> delegates = Enumerable.Concat(
+                Error?.GetInvocationList() ?? Enumerable.Empty<Delegate>(),
+                GlobalError?.GetInvocationList() ?? Enumerable.Empty<Delegate>());
+            foreach (EventHandler<ErrorEventArgs> handler in delegates)
+            {
+                if (e.Handled)
+                {
+                    break;
+                }
+                handler(this, e);
+            }
         }
 
-        public override Task ExecuteCore(object parameter)
+        protected void OnError(Exception ex)
         {
-            execute((T)parameter);
-            return Task.CompletedTask;
+            OnError(new ErrorEventArgs(ex));
+        }
+
+        public abstract bool CanExecute(object parameter);
+        public abstract Task ExecuteCore(object parameter);
+
+        public async void Execute(object parameter)
+        {
+            Log.Default.Debug($"Executing: {this}");
+            try
+            {
+                await ExecuteCore(parameter);
+            }
+            catch (Exception ex)
+            {
+                Log.Default.Warn(ex);
+                switch (ErrorBehavior)
+                {
+                    case ErrorBehavior.Catch:
+                        break;
+                    case ErrorBehavior.Raise:
+                        OnError(ex);
+                        break;
+                    case ErrorBehavior.Throw:
+                    default:
+                        throw;
+                }
+            }
+            Log.Default.Debug($"Executed: {this}");
+        }
+
+        public override string ToString()
+        {
+            return $"{Delegate.Method.DeclaringType}.{Delegate.Method.Name}";
         }
     }
 }

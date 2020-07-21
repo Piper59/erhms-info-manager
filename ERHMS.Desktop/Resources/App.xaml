@@ -40,6 +40,12 @@
         <Setter Property="MaxWidth" Value="{StaticResource LargeWidth}" />
     </Style>
 
+    <Style x:Key="Preformatted"  TargetType="TextBox">
+        <Setter Property="FontFamily" Value="{StaticResource MonospacedFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+    </Style>
+
     <Style x:Key="Section" TargetType="Panel">
         <Setter Property="Margin">
             <Setter.Value>
