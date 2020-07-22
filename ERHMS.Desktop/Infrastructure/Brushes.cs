@@ -4,7 +4,9 @@ namespace ERHMS.Desktop.Infrastructure
 {
     public static class Brushes
     {
-        public static readonly SolidColorBrush ControlLighter = new SolidColorBrush(Colors.ControlLighter);
+        public static readonly SolidColorBrush Border = new SolidColorBrush(Colors.Border);
+        public static readonly SolidColorBrush ControlLight = new SolidColorBrush(Colors.ControlLight);
+        public static readonly SolidColorBrush ControlDisabled = new SolidColorBrush(Colors.ControlDisabled);
         public static readonly SolidColorBrush ThemeBlue = new SolidColorBrush(Colors.ThemeBlue);
         public static readonly SolidColorBrush ThemeRed = new SolidColorBrush(Colors.ThemeRed);
         public static readonly SolidColorBrush ThemeGreen = new SolidColorBrush(Colors.ThemeGreen);

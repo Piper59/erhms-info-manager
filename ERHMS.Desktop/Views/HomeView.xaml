@@ -4,48 +4,50 @@
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Infrastructure="clr-namespace:ERHMS.Desktop.Infrastructure"
              xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
-             AutomationProperties.Name="{x:Static Properties:Resources.AppTitle}"
-             Style="{StaticResource LayoutSmall}">
+             AutomationProperties.Name="{x:Static Properties:Resources.AppTitle}">
     <UserControl.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-            <Setter Property="Background" Value="{x:Static Infrastructure:Brushes.ControlLighter}" />
+            <Setter Property="Background" Value="{x:Static Infrastructure:Brushes.ControlLight}" />
         </Style>
     </UserControl.Resources>
-    <StackPanel Style="{StaticResource Container}">
-        <StackPanel Style="{StaticResource Section}">
-            <StackPanel Margin="{StaticResource SmallThickness}"
-                        Orientation="Horizontal">
-                <Image Height="64" Source="../Resources/ERHMS.ico">
-                    <Image.Margin>
-                        <Thickness Right="{StaticResource LargeSpace}" />
-                    </Image.Margin>
-                </Image>
-                <TextBlock VerticalAlignment="Center">
-                    <Run Style="{StaticResource TitleText}" Text="{x:Static Properties:Resources.AppTitle}" />
-                </TextBlock>
+    <Border Style="{StaticResource LayoutSmall}">
+        <StackPanel Style="{StaticResource Container}">
+            <StackPanel Style="{StaticResource Section}">
+                <StackPanel Margin="{StaticResource SmallThickness}"
+                            Orientation="Horizontal">
+                    <Image Source="../Resources/ERHMS.ico"
+                           Width="64">
+                        <Image.Margin>
+                            <Thickness Right="{StaticResource LargeSpace}" />
+                        </Image.Margin>
+                    </Image>
+                    <TextBlock VerticalAlignment="Center">
+                        <Run Style="{StaticResource TitleText}" Text="{x:Static Properties:Resources.AppTitle}" />
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Style="{StaticResource Section}">
+                <Controls:PhaseHeading Phase="PreDeployment" />
+                <Button>Plan for pre-deployment</Button>
+                <Button>Manage worker forms</Button>
+                <Button>Collect worker information</Button>
+            </StackPanel>
+            <StackPanel Style="{StaticResource Section}">
+                <Controls:PhaseHeading Phase="Deployment" />
+                <Button>Plan for deployment</Button>
+                <Button>Manage incident forms</Button>
+                <Button>In-process workers</Button>
+                <Button>Collect worker status reports</Button>
+                <Button>Collect incident status reports</Button>
+                <Button>Out-process workers</Button>
+            </StackPanel>
+            <StackPanel Style="{StaticResource Section}">
+                <Controls:PhaseHeading Phase="PostDeployment" />
+                <Button>Plan for post-deployment</Button>
+                <Button>Manage incident forms</Button>
+                <Button>Follow up with workers</Button>
+                <Button>Collect after-action reports</Button>
             </StackPanel>
         </StackPanel>
-        <StackPanel Style="{StaticResource Section}">
-            <Controls:PhaseHeading Phase="PreDeployment" />
-            <Button>Plan for pre-deployment</Button>
-            <Button>Manage worker forms</Button>
-            <Button>Collect worker information</Button>
-        </StackPanel>
-        <StackPanel Style="{StaticResource Section}">
-            <Controls:PhaseHeading Phase="Deployment" />
-            <Button>Plan for deployment</Button>
-            <Button>Manage incident forms</Button>
-            <Button>In-process workers</Button>
-            <Button>Collect worker status reports</Button>
-            <Button>Collect incident status reports</Button>
-            <Button>Out-process workers</Button>
-        </StackPanel>
-        <StackPanel Style="{StaticResource Section}">
-            <Controls:PhaseHeading Phase="PostDeployment" />
-            <Button>Plan for post-deployment</Button>
-            <Button>Manage incident forms</Button>
-            <Button>Follow up with workers</Button>
-            <Button>Collect after-action reports</Button>
-        </StackPanel>
-    </StackPanel>
+    </Border>
 </UserControl>

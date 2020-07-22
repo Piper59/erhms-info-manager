@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -82,8 +83,16 @@
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\PhaseHeading.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\IconToImageSourceConverter.cs" />
+    <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="Dialogs\DialogButton.cs" />
+    <Compile Include="Dialogs\DialogButtonCollection.cs" />
+    <Compile Include="Dialogs\DialogInfo.cs" />
+    <Compile Include="Dialogs\DialogInfoPreset.cs" />
     <Compile Include="Infrastructure\Brushes.cs" />
     <Compile Include="Infrastructure\Colors.cs" />
+    <Compile Include="Infrastructure\DialogService.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\SimpleAsyncCommand.cs" />
@@ -103,15 +112,21 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Utilities\CreateTemplate.cs" />
     <Compile Include="Utilities\Help.cs" />
     <Compile Include="Utilities\InstantiateTemplate.cs" />
     <Compile Include="Utilities\IUtility.cs" />
     <Compile Include="Utilities\ResetSettings.cs" />
     <Compile Include="Utilities\Utility.cs" />
+    <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\UtilityViewModel.cs" />
+    <Compile Include="Views\DialogView.xaml.cs">
+      <DependentUpon>DialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -155,7 +170,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Templates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

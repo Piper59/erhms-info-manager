@@ -18,19 +18,19 @@ namespace ERHMS.Desktop.ViewModels
             private set { SetProperty(ref done, value); }
         }
 
-        public Command CloseCommand { get; }
+        public Command ExitCommand { get; }
 
         public UtilityViewModel(IUtility utility)
         {
             Utility = utility;
-            CloseCommand = new SyncCommand(Close, CanClose, ErrorBehavior.Throw);
+            ExitCommand = new SyncCommand(Exit, CanExit, ErrorBehavior.Throw);
         }
 
-        public event EventHandler CloseRequested;
+        public event EventHandler ExitRequested;
 
-        protected virtual void OnCloseRequested()
+        protected virtual void OnExitRequested()
         {
-            CloseRequested?.Invoke(this, EventArgs.Empty);
+            ExitRequested?.Invoke(this, EventArgs.Empty);
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -50,14 +50,14 @@ namespace ERHMS.Desktop.ViewModels
             Done = true;
         }
 
-        private bool CanClose()
+        private bool CanExit()
         {
             return Done;
         }
 
-        private void Close()
+        private void Exit()
         {
-            OnCloseRequested();
+            OnExitRequested();
         }
     }
 }

@@ -15,25 +15,33 @@ namespace ERHMS.Desktop.Utilities
     {
         public override bool LongRunning => true;
         public string TemplatePath { get; }
-        public string ProjectPath { get; }
+        public string ProjectLocation { get; }
+        public string ProjectName { get; }
 
-        public InstantiateTemplate(string templatePath, string projectPath)
+        public InstantiateTemplate(string templatePath, string projectLocation, string projectName)
         {
             TemplatePath = templatePath;
-            ProjectPath = projectPath;
+            ProjectLocation = projectLocation;
+            ProjectName = projectName;
         }
 
         protected override async Task<string> RunCoreAsync()
         {
             await Task.Run(() =>
             {
-                if (File.Exists(ProjectPath))
+                ProjectCreationInfo info = new ProjectCreationInfo
+                {
+                    Location = ProjectLocation,
+                    Name = ProjectName
+                };
+                if (File.Exists(info.FilePath))
                 {
                     throw new ArgumentException("Project already exists.");
                 }
+                string databasePath = Path.ChangeExtension(info.FilePath, AccessDatabase.FileExtension);
                 IDatabase database = new AccessDatabase(new OleDbConnectionStringBuilder
                 {
-                    DataSource = Path.ChangeExtension(ProjectPath, AccessDatabase.FileExtension)
+                    DataSource = databasePath
                 });
                 if (database.Exists())
                 {
@@ -44,13 +52,11 @@ namespace ERHMS.Desktop.Utilities
                 {
                     throw new ArgumentException("Template is not project-level.");
                 }
+                Progress?.Report($"Creating database: {databasePath}");
                 database.Create();
-                Project project = ProjectExtensions.Create(new ProjectCreationInfo
-                {
-                    Name = Path.GetFileNameWithoutExtension(ProjectPath),
-                    Location = Path.GetDirectoryName(ProjectPath),
-                    Database = database
-                });
+                info.Database = database;
+                Progress?.Report($"Creating project: {info.FilePath}");
+                Project project = ProjectExtensions.Create(info);
                 project.Initialize();
                 ProjectTemplateInstantiator instantiator = new ProjectTemplateInstantiator(xTemplate, project)
                 {

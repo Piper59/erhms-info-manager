@@ -1,5 +1,8 @@
 ﻿using Epi;
 using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Utilities;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
@@ -11,6 +14,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Security.Principal;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -30,6 +34,7 @@ namespace ERHMS.Desktop
             Log.Default.Debug("Starting up");
             try
             {
+                ConfigureServices();
                 ConfigureEpiInfo();
                 App app = new App();
                 app.Run();
@@ -52,6 +57,11 @@ namespace ERHMS.Desktop
             XmlConfigurator.Configure();
         }
 
+        private static void ConfigureServices()
+        {
+            ServiceLocator.Dialog = new DialogService();
+        }
+
         private static void ConfigureEpiInfo()
         {
             Log.Default.Debug("Configuring Epi Info");
@@ -72,7 +82,11 @@ namespace ERHMS.Desktop
             Log.Default.Fatal(ex);
             if (Interlocked.Increment(ref unhandledErrorCount) == 1)
             {
-                MessageBox.Show(ex.Message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                StringBuilder message = new StringBuilder();
+                message.AppendLine($"{ResXResources.AppTitle} has encountered an error and must shut down.");
+                message.AppendLine();
+                message.Append(ex.Message);
+                MessageBox.Show(message.ToString(), ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -92,8 +106,19 @@ namespace ERHMS.Desktop
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
-            Log.Default.Error(e.Exception);
-            MessageBox.Show(e.Exception.Message, ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+            OnHandledError(e.Exception);
+        }
+
+        private void OnHandledError(Exception ex)
+        {
+            Log.Default.Error(ex);
+            ServiceLocator.Dialog.Show(new DialogInfo(DialogInfoPreset.Error)
+            {
+                Lead = $"{ResXResources.AppTitle} has encountered an error",
+                Body = ex.Message,
+                Details = ex.ToString(),
+                Buttons = DialogButtonCollection.Close
+            });
         }
 
         protected override async void OnStartup(StartupEventArgs e)
@@ -112,19 +137,26 @@ namespace ERHMS.Desktop
             else
             {
                 Log.Default.Debug($"Running in utility mode: {string.Join(", ", e.Args)}");
-                IUtility utility = Utility.Create(e.Args[0], e.Args.Skip(1).ToList());
-                if (utility.LongRunning)
+                try
                 {
-                    Window window = new UtilityView
+                    IUtility utility = Utility.Create(e.Args[0], e.Args.Skip(1).ToList());
+                    if (utility.LongRunning)
                     {
-                        DataContext = new UtilityViewModel(utility)
-                    };
-                    window.Show();
+                        Window window = new UtilityView
+                        {
+                            DataContext = new UtilityViewModel(utility)
+                        };
+                        window.Show();
+                    }
+                    else
+                    {
+                        await utility.RunAsync();
+                        Shutdown();
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    await utility.RunAsync();
-                    Shutdown();
+                    OnHandledError(ex);
                 }
             }
         }

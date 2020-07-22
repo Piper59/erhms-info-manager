@@ -28,12 +28,14 @@ namespace ERHMS.Desktop.Utilities
                 {
                     throw new ArgumentException("Template already exists.");
                 }
+                Progress?.Report($"Opening project: {ProjectPath}");
                 Project project = new Project(ProjectPath);
                 ProjectTemplateCreator creator = new ProjectTemplateCreator(project)
                 {
                     Progress = Progress
                 };
                 XTemplate xTemplate = creator.Create();
+                Progress?.Report($"Saving template: {TemplatePath}");
                 using (Stream stream = File.Create(TemplatePath))
                 using (XmlWriter writer = XmlWriter.Create(stream, XTemplate.XmlWriterSettings))
                 {

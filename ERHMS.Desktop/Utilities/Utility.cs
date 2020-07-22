@@ -1,11 +1,11 @@
-﻿using ERHMS.Desktop.Properties;
+﻿using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ERHMS.Desktop.Utilities
 {
@@ -60,21 +60,32 @@ namespace ERHMS.Desktop.Utilities
         {
             Log.Default.Debug($"Running: {this}");
             Progress?.Report("Running");
-            string result;
+            DialogInfo info;
             try
             {
-                result = await RunCoreAsync();
+                string result = await RunCoreAsync();
                 Progress?.Report("Completed");
+                info = new DialogInfo(DialogInfoPreset.Normal)
+                {
+                    Body = result,
+                    Buttons = DialogButtonCollection.OK
+                };
             }
             catch (Exception ex)
             {
                 Log.Default.Error(ex);
-                result = $"An error occurred while running the '{this}' utility.";
                 Progress?.Report(ex.ToString());
                 Progress?.Report("Completed with errors");
+                info = new DialogInfo(DialogInfoPreset.Error)
+                {
+                    Lead = $"An error occurred while running the '{this}' utility",
+                    Body = ex.Message,
+                    Details = ex.ToString(),
+                    Buttons = DialogButtonCollection.Close
+                };
             }
             Log.Default.Debug($"Completed: {this}");
-            MessageBox.Show(result, Resources.AppTitle);
+            ServiceLocator.Dialog.Show(info);
         }
 
         public override string ToString()

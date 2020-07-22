@@ -13,6 +13,12 @@
         <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
     </Style>
 
+    <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="MinWidth" Value="75" />
+        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
+    </Style>
+
     <Style x:Key="Emphasis" TargetType="Run">
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
     </Style>
@@ -28,22 +34,36 @@
         <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
     </Style>
 
-    <Style x:Key="Layout" TargetType="Control">
+    <Style x:Key="Layout" TargetType="Border">
         <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
     </Style>
 
-    <Style x:Key="LayoutSmall" TargetType="Control" BasedOn="{StaticResource Layout}">
+    <Style x:Key="LayoutSmall" TargetType="Border" BasedOn="{StaticResource Layout}">
         <Setter Property="MaxWidth" Value="{StaticResource SmallWidth}" />
     </Style>
 
-    <Style x:Key="LayoutLarge" TargetType="Control" BasedOn="{StaticResource Layout}">
+    <Style x:Key="LayoutLarge" TargetType="Border" BasedOn="{StaticResource Layout}">
         <Setter Property="MaxWidth" Value="{StaticResource LargeWidth}" />
     </Style>
 
-    <Style x:Key="Preformatted"  TargetType="TextBox">
+    <Style x:Key="Lead" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
+        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+    </Style>
+
+    <Style x:Key="LeadText" TargetType="TextElement">
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
+    </Style>
+
+    <Style x:Key="Preformatted" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
         <Setter Property="FontFamily" Value="{StaticResource MonospacedFontFamily}" />
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Visible" />
         <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Visible" />
     </Style>
 
     <Style x:Key="Section" TargetType="Panel">

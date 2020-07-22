@@ -15,7 +15,7 @@ namespace ERHMS.EpiInfo
 
     public static class ModuleExtensions
     {
-        public static string GetFileName(this Module @this)
+        public static string ToFileName(this Module @this)
         {
             switch (@this)
             {
@@ -33,7 +33,7 @@ namespace ERHMS.EpiInfo
             {
                 UseShellExecute = false,
                 WorkingDirectory = entryDirectory,
-                FileName = Path.Combine(entryDirectory, @this.GetFileName()),
+                FileName = Path.Combine(entryDirectory, @this.ToFileName()),
                 Arguments = arguments
             });
         }

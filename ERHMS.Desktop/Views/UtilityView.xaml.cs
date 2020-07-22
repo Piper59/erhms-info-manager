@@ -1,10 +1,10 @@
-﻿using ERHMS.Desktop.ViewModels;
+﻿using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels;
 using System;
 using System.ComponentModel;
-using System.Text;
 using System.Windows;
 using System.Windows.Threading;
-using ResXResources = ERHMS.Desktop.Properties.Resources;
 
 namespace ERHMS.Desktop.Views
 {
@@ -19,17 +19,9 @@ namespace ERHMS.Desktop.Views
                 Parent = parent;
             }
 
-            public void Report(string value)
+            public async void Report(string value)
             {
-                Action action = () => Parent.AppendToLog(value);
-                if (Parent.CheckAccess())
-                {
-                    action();
-                }
-                else
-                {
-                    Parent.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
-                }
+                await Parent.Dispatcher.InvokeAsync(() => Parent.AppendToLog(value), DispatcherPriority.Background);
             }
         }
 
@@ -59,7 +51,7 @@ namespace ERHMS.Desktop.Views
             if (dataContext != null)
             {
                 dataContext.Utility.Progress = progress;
-                dataContext.CloseRequested += DataContext_CloseRequested;
+                dataContext.ExitRequested += DataContext_ExitRequested;
             }
         }
 
@@ -68,7 +60,7 @@ namespace ERHMS.Desktop.Views
             if (dataContext != null)
             {
                 dataContext.Utility.Progress = null;
-                dataContext.CloseRequested -= DataContext_CloseRequested;
+                dataContext.ExitRequested -= DataContext_ExitRequested;
             }
         }
 
@@ -84,7 +76,7 @@ namespace ERHMS.Desktop.Views
             Log.ScrollToEnd();
         }
 
-        private void DataContext_CloseRequested(object sender, EventArgs e)
+        private void DataContext_ExitRequested(object sender, EventArgs e)
         {
             Close();
         }
@@ -93,16 +85,17 @@ namespace ERHMS.Desktop.Views
         {
             if (!DataContext.Done)
             {
-                StringBuilder message = new StringBuilder();
-                message.AppendLine("This utility is still running.");
-                message.AppendLine();
-                message.Append("Close anyway?");
-                MessageBoxResult result = MessageBox.Show(
-                    message.ToString(),
-                    ResXResources.AppTitle,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-                if (result == MessageBoxResult.No)
+                DialogInfo info = new DialogInfo(DialogInfoPreset.Warning)
+                {
+                    Lead = "This utility is still running",
+                    Body = "Exit anyway?",
+                    Buttons = new DialogButtonCollection
+                    {
+                        new DialogButton(true, "Exit", false, false),
+                        new DialogButton(false, "Don't exit", false, true),
+                    }
+                };
+                if (!ServiceLocator.Dialog.Show(info).GetValueOrDefault())
                 {
                     e.Cancel = true;
                 }

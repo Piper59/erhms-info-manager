@@ -10,14 +10,14 @@ namespace ERHMS.Desktop.Utilities
 
         protected override Task<string> RunCoreAsync()
         {
-            StringBuilder message = new StringBuilder();
-            message.AppendLine("The following utilities are available:");
+            StringBuilder result = new StringBuilder();
+            result.AppendLine("The following utilities are available:");
             foreach (string typeName in Types.Keys.OrderBy(typeName => typeName))
             {
-                message.AppendLine();
-                message.Append(typeName);
+                result.AppendLine();
+                result.Append($"    \u2022 {typeName}");
             }
-            return Task.FromResult(message.ToString());
+            return Task.FromResult(result.ToString());
         }
     }
 }

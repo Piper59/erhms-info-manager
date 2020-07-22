@@ -51,6 +51,7 @@ namespace ERHMS.Desktop.Controls
             Margin = (Thickness)Application.Current.FindResource("SmallThickness");
             double padding = (double)Application.Current.FindResource("SmallSpace");
             Padding = new Thickness(padding, 0.0, padding, 0.0);
+            SnapsToDevicePixels = true;
             Child = new TextBlock
             {
                 Style = (Style)Application.Current.FindResource("Heading")
