@@ -48,15 +48,21 @@ namespace ERHMS.EpiInfo.Templating.Xml
             return xField;
         }
 
-        public new string Name
-        {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
-        }
-
         public int FieldId
         {
             get { return (int)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
+        public int PageId
+        {
+            get { return (int)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
+        public new string Name
+        {
+            get { return (string)this.GetAttributeEx(); }
             set { this.SetAttributeValueEx(value); }
         }
 
@@ -72,9 +78,39 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { FieldTypeId = (int)value; }
         }
 
+        public string List
+        {
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
+        public string RelateCondition
+        {
+            get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
+        public int? RelatedViewId
+        {
+            get { return (int?)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
+        public int? SourceFieldId
+        {
+            get { return (int?)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
         public string SourceTableName
         {
             get { return (string)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
+        public double? TabIndex
+        {
+            get { return (double?)this.GetAttributeEx(); }
             set { this.SetAttributeValueEx(value); }
         }
 

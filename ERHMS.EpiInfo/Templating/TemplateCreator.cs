@@ -23,10 +23,10 @@ namespace ERHMS.EpiInfo.Templating
                 .Where(field => (MetaFieldType)field.Field<int>(ColumnNames.FIELD_TYPE_ID) == MetaFieldType.Group);
             foreach (DataRow group in groups)
             {
-                IEnumerable<DataRow> members = group.Field<string>(ColumnNames.LIST)
+                IEnumerable<DataRow> children = group.Field<string>(ColumnNames.LIST)
                     ?.Split(Constants.LIST_SEPARATOR)
                     ?.Select(fieldName => fields.TryGetValue(fieldName, out DataRow field) ? field : null);
-                double? tabIndexMin = members?.Min(member => member?.Field<double?>(ColumnNames.TAB_INDEX));
+                double? tabIndexMin = children?.Min(child => child?.Field<double?>(ColumnNames.TAB_INDEX));
                 if (tabIndexMin == null)
                 {
                     continue;

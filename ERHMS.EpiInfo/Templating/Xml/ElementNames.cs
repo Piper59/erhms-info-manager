@@ -16,6 +16,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
             SourceTable,
             GridTable
         };
-        public const string Row = "Item";
+        public const string Item = "Item";
     }
 }

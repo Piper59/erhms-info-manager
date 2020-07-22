@@ -41,20 +41,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 xProject.SetAttributeValueEx(configuration.Settings[settingName], settingName);
             }
-            xProject.Add(
-                new XElement("CollectedData",
-                    new XElement("Database",
-                        new XAttribute("Source", ""),
-                        new XAttribute("DataDriver", "")
-                    )
-                ),
-                new XElement("Metadata",
-                    new XAttribute("Source", "")
-                ),
-                new XElement("EnterMakeviewInterpreter",
-                    new XAttribute("Source", project.EnterMakeviewIntepreter)
-                )
-            );
             xProject.OnCreated();
             return xProject;
         }

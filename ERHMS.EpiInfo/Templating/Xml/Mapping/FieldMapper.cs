@@ -185,7 +185,7 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 
         private static bool TryGetOptions(XField xField, out List<string> value)
         {
-            string options = (string)xField.Attribute(ColumnNames.LIST);
+            string options = xField.List;
             int index = options.IndexOf(OptionsSeparator);
             if (index != -1)
             {

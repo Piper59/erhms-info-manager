@@ -28,6 +28,12 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { this.SetAttributeValueEx(value); }
         }
 
+        public int ViewId
+        {
+            get { return (int)this.GetAttributeEx(); }
+            set { this.SetAttributeValueEx(value); }
+        }
+
         public new string Name
         {
             get { return (string)this.GetAttributeEx(); }
@@ -41,12 +47,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
         }
 
         public int BackgroundId
-        {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
-        }
-
-        public int ViewId
         {
             get { return (int)this.GetAttributeEx(); }
             set { this.SetAttributeValueEx(value); }

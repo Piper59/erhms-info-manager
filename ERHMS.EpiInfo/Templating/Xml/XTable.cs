@@ -15,15 +15,15 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 TableName = table.TableName
             };
-            foreach (DataRow row in table.Rows)
+            foreach (DataRow item in table.Rows)
             {
-                XElement xRow = new XElement(ElementNames.Row);
+                XElement xItem = new XElement(ElementNames.Item);
                 foreach (DataColumn column in table.Columns)
                 {
                     string attributeName = column.ColumnName.Replace(" ", Space);
-                    xRow.SetAttributeValueEx(row[column], attributeName);
+                    xItem.SetAttributeValueEx(item[column], attributeName);
                 }
-                xTable.Add(xRow);
+                xTable.Add(xItem);
             }
             return xTable;
         }
@@ -34,6 +34,8 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { this.SetAttributeValueEx(value); }
         }
 
+        public IEnumerable<XElement> XItems => Elements(ElementNames.Item);
+
         public XTable(string elementName)
             : base(elementName) { }
 
@@ -43,25 +45,24 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public DataTable Instantiate()
         {
             DataTable table = new DataTable(TableName);
-            foreach (XElement xRow in Elements(ElementNames.Row))
+            foreach (XElement xItem in XItems)
             {
                 ICollection<(string, string)> fields = new List<(string, string)>();
-                foreach (XAttribute attribute in xRow.Attributes())
+                foreach (XAttribute attribute in xItem.Attributes())
                 {
                     string columnName = attribute.Name.ToString().Replace(Space, " ");
-                    string value = attribute.Value;
                     if (!table.Columns.Contains(columnName))
                     {
                         table.Columns.Add(columnName);
                     }
-                    fields.Add((columnName, value));
+                    fields.Add((columnName, attribute.Value));
                 }
-                DataRow row = table.NewRow();
+                DataRow item = table.NewRow();
                 foreach ((string columnName, string value) in fields)
                 {
-                    row.SetField(columnName, value);
+                    item.SetField(columnName, value);
                 }
-                table.Rows.Add(row);
+                table.Rows.Add(item);
             }
             return table;
         }
