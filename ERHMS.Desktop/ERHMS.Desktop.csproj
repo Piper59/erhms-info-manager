@@ -116,16 +116,9 @@
     </Compile>
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
-    <Compile Include="Utilities\CreateTemplate.cs" />
-    <Compile Include="Utilities\Help.cs" />
-    <Compile Include="Utilities\InstantiateTemplate.cs" />
-    <Compile Include="Utilities\IUtility.cs" />
-    <Compile Include="Utilities\ResetSettings.cs" />
-    <Compile Include="Utilities\Utility.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\UtilityViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
@@ -134,9 +127,6 @@
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UtilityView.xaml.cs">
-      <DependentUpon>UtilityView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -189,10 +179,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UtilityView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

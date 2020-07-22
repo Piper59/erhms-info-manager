@@ -29,11 +29,15 @@ namespace ERHMS.EpiInfo
             return File.Exists(FilePath);
         }
 
-        public static Configuration Create()
+        public static Configuration Create(string filePath = null)
         {
             Configuration configuration = Configuration.CreateDefaultConfiguration();
             configuration.RecentViews.Clear();
             configuration.RecentProjects.Clear();
+            if (filePath != null)
+            {
+                configuration = new Configuration(filePath, configuration.ConfigDataSet);
+            }
             return configuration;
         }
 
@@ -51,9 +55,9 @@ namespace ERHMS.EpiInfo
             Configuration.Save(@this);
         }
 
-        public static Configuration Load()
+        public static Configuration Load(string filePath = null)
         {
-            Configuration.Load(FilePath);
+            Configuration.Load(filePath ?? FilePath);
             return Configuration.GetNewInstance();
         }
     }

@@ -1,13 +1,11 @@
-﻿using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace ERHMS.Desktop.Utilities
+namespace ERHMS.Console.Utilities
 {
     public abstract class Utility : IUtility
     {
@@ -51,46 +49,26 @@ namespace ERHMS.Desktop.Utilities
             }
         }
 
-        public abstract bool LongRunning { get; }
-        public IProgress<string> Progress { get; set; }
+        protected static TextReader In => System.Console.In;
+        protected static TextWriter Out => System.Console.Out;
+        protected static TextWriter Error => System.Console.Error;
 
-        protected abstract Task<string> RunCoreAsync();
+        protected abstract void RunCore();
 
-        public async Task RunAsync()
+        public void Run()
         {
-            Log.Default.Debug($"Running: {this}");
-            Progress?.Report("Running");
-            DialogInfo info;
+            Log.Default.Info("Running");
             try
             {
-                string result = await RunCoreAsync();
-                Progress?.Report("Completed");
-                info = new DialogInfo(DialogInfoPreset.Normal)
-                {
-                    Body = result,
-                    Buttons = DialogButtonCollection.OK
-                };
+                RunCore();
+                Log.Default.Info("Completed");
             }
             catch (Exception ex)
             {
-                Log.Default.Error(ex);
-                Progress?.Report(ex.ToString());
-                Progress?.Report("Completed with errors");
-                info = new DialogInfo(DialogInfoPreset.Error)
-                {
-                    Lead = $"An error occurred while running the '{this}' utility",
-                    Body = ex.Message,
-                    Details = ex.ToString(),
-                    Buttons = DialogButtonCollection.Close
-                };
+                Log.Default.Error(ex.Message);
+                Log.Default.Debug(ex.StackTrace);
+                Log.Default.Warn("Completed with errors");
             }
-            Log.Default.Debug($"Completed: {this}");
-            ServiceLocator.Dialog.Show(info);
-        }
-
-        public override string ToString()
-        {
-            return GetType().Name;
         }
     }
 }

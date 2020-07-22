@@ -3,7 +3,6 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Services;
-using ERHMS.Desktop.Utilities;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
@@ -11,7 +10,6 @@ using log4net;
 using log4net.Config;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Security;
 using System.Security.Principal;
 using System.Text;
@@ -121,44 +119,15 @@ namespace ERHMS.Desktop
             });
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            if (e.Args.Length == 0)
+            MainViewModel.Current.Content = new HomeViewModel();
+            Window window = new MainView
             {
-                Log.Default.Debug("Running in standard mode");
-                MainViewModel.Current.Content = new HomeViewModel();
-                Window window = new MainView
-                {
-                    DataContext = MainViewModel.Current
-                };
-                window.Show();
-            }
-            else
-            {
-                Log.Default.Debug($"Running in utility mode: {string.Join(", ", e.Args)}");
-                try
-                {
-                    IUtility utility = Utility.Create(e.Args[0], e.Args.Skip(1).ToList());
-                    if (utility.LongRunning)
-                    {
-                        Window window = new UtilityView
-                        {
-                            DataContext = new UtilityViewModel(utility)
-                        };
-                        window.Show();
-                    }
-                    else
-                    {
-                        await utility.RunAsync();
-                        Shutdown();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnHandledError(ex);
-                }
-            }
+                DataContext = MainViewModel.Current
+            };
+            window.Show();
         }
     }
 }
