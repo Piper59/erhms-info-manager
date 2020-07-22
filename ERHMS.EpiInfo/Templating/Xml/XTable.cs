@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Templates.Xml
+namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XTable : XElement
     {

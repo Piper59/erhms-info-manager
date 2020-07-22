@@ -1,6 +1,6 @@
 ﻿using Epi;
-using ERHMS.EpiInfo.Templates;
-using ERHMS.EpiInfo.Templates.Xml;
+using ERHMS.EpiInfo.Templating;
+using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.IO;
 using System.Xml;

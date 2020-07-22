@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Templates.Xml.Mapping
+namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
     public class FieldMapper<TField> : IFieldMapper<TField>
         where TField : Field

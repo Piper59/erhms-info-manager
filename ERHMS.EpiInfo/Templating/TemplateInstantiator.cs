@@ -2,13 +2,13 @@
 using Epi.Data.Services;
 using Epi.Fields;
 using ERHMS.EpiInfo.Infrastructure;
-using ERHMS.EpiInfo.Templates.Xml;
+using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace ERHMS.EpiInfo.Templates
+namespace ERHMS.EpiInfo.Templating
 {
     public abstract class TemplateInstantiator
     {

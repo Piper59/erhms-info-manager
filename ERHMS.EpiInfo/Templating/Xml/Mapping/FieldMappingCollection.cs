@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace ERHMS.EpiInfo.Templates.Xml.Mapping
+namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
     public class FieldMappingCollection<TField> : List<IFieldMapping<TField>>
         where TField : Field

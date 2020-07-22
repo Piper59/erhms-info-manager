@@ -1,6 +1,6 @@
 ﻿using Epi.Fields;
 
-namespace ERHMS.EpiInfo.Templates.Xml.Mapping
+namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
     public interface IFieldMapping<TField>
         where TField : Field

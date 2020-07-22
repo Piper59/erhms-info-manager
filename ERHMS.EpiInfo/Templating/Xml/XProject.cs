@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Templates.Xml
+namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XProject : XElement
     {

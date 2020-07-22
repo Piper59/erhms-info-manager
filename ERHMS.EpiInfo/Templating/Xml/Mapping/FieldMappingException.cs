@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace ERHMS.EpiInfo.Templates.Xml.Mapping
+namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
     public class FieldMappingException : Exception
     {

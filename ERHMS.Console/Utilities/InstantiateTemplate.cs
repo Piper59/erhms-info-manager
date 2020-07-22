@@ -1,8 +1,8 @@
 ﻿using Epi;
 using ERHMS.Data;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Templates;
-using ERHMS.EpiInfo.Templates.Xml;
+using ERHMS.EpiInfo.Templating;
+using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Data.OleDb;
 using System.IO;

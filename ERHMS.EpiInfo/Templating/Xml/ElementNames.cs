@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ERHMS.EpiInfo.Templates.Xml
+namespace ERHMS.EpiInfo.Templating.Xml
 {
     public static class ElementNames
     {

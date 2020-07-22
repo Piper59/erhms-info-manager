@@ -1,13 +1,13 @@
 ﻿using Epi;
 using Epi.Fields;
 using ERHMS.EpiInfo.Infrastructure;
-using ERHMS.EpiInfo.Templates.Xml.Mapping;
+using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Templates.Xml
+namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XField : XElement
     {

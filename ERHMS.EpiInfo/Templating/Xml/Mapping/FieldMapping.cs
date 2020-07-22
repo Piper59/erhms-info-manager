@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Templates.Xml.Mapping
+namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
     public abstract class FieldMapping<TField, TProperty> : IFieldMapping<TField>
         where TField : Field
