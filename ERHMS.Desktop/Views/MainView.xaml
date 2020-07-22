@@ -34,8 +34,6 @@
                           Header="Open File Explorer" />
                 <Separator />
                 <MenuItem Header="Check data quality" />
-                <MenuItem Header="Export data" />
-                <MenuItem Header="Import data" />
                 <MenuItem Header="Back up data" />
                 <Separator />
                 <MenuItem Header="Export logs" />

@@ -1,7 +1,7 @@
+.vs/
 bin/
 Build/
 obj/
 packages/
-.vs/
 *.suo
 *.user
