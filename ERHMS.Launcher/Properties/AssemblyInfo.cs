@@ -1,3 +1,3 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("ERHMS.Launcher")]
+[assembly: AssemblyTitle("Launch ERHMS Info Manager")]
