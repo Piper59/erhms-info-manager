@@ -58,10 +58,10 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
                 value = null;
                 return false;
             }
-            FontFamily family = new FontFamily((string)attributes["Family"]);
-            float size = (float)attributes["Size"];
-            FontStyle style = (FontStyle)Enum.Parse(typeof(FontStyle), (string)attributes["Style"]);
-            value = new Font(family, size, style);
+            value = new Font(
+                new FontFamily((string)attributes["Family"]),
+                (float)attributes["Size"],
+                (FontStyle)Enum.Parse(typeof(FontStyle), (string)attributes["Style"]));
             return true;
         }
 
@@ -245,6 +245,33 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 
     public class DDLFieldOfCodesMapper : FieldMapper<DDLFieldOfCodes>
     {
+        private const char RelateConditionSeparator = ':';
+
+        public static string MapRelateConditions(string conditions, IDictionary<int, int> fieldIdMap)
+        {
+            IList<string> conditionList = conditions.Split(Constants.LIST_SEPARATOR);
+            for (int index = 0; index < conditionList.Count; index++)
+            {
+                string condition = conditionList[index];
+                IList<string> chunks = condition.Split(RelateConditionSeparator);
+                if (chunks.Count != 2)
+                {
+                    continue;
+                }
+                string columnName = chunks[0];
+                if (!int.TryParse(chunks[1], out int fieldId))
+                {
+                    continue;
+                }
+                if (!fieldIdMap.TryGetValue(fieldId, out fieldId))
+                {
+                    continue;
+                }
+                conditionList[index] = string.Concat(columnName, RelateConditionSeparator, fieldId);
+            }
+            return string.Join(Constants.LIST_SEPARATOR.ToString(), conditionList);
+        }
+
         public DDLFieldOfCodesMapper()
         {
             Mappings = new FieldMappingCollection<DDLFieldOfCodes>
@@ -269,7 +296,7 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 
     public class GroupFieldMapper : FieldMapper<GroupField>
     {
-        private static bool GetBackgroundColor(XField xField, out Color value)
+        private static bool TryGetBackgroundColor(XField xField, out Color value)
         {
             XAttribute attribute = xField.Attribute(ColumnNames.BACKGROUND_COLOR);
             if (attribute == null || attribute.Value == "")
@@ -281,12 +308,26 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             return true;
         }
 
+        public static string MapChildFieldNames(string fieldNames, IDictionary<string, string> fieldNameMap)
+        {
+            IList<string> fieldNameList = fieldNames.Split(Constants.LIST_SEPARATOR);
+            for (int index = 0; index < fieldNameList.Count; index++)
+            {
+                string original = fieldNameList[index];
+                if (fieldNameMap.TryGetValue(original, out string modified))
+                {
+                    fieldNameList[index] = modified;
+                }
+            }
+            return string.Join(Constants.LIST_SEPARATOR.ToString(), fieldNameList);
+        }
+
         public GroupFieldMapper()
         {
             Mappings = new FieldMappingCollection<GroupField>
             {
                 { f => f.ChildFieldNames, ColumnNames.LIST },
-                { f => f.BackgroundColor, GetBackgroundColor }
+                { f => f.BackgroundColor, TryGetBackgroundColor }
             };
         }
     }

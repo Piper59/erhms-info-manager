@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationExtensions.cs" />
-    <Compile Include="Infrastructure\FieldExtensions.cs" />
     <Compile Include="Infrastructure\XmlExtensions.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MetaFieldTypeExtensions.cs" />

@@ -1,6 +1,6 @@
 ﻿using Epi;
-using ERHMS.EpiInfo.Infrastructure;
 using ERHMS.EpiInfo.Templating.Xml;
+using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,19 +98,30 @@ namespace ERHMS.EpiInfo.Templating
 
         private void OnFieldCanonizing(XField xField)
         {
-            if (xField.FieldType == MetaFieldType.Mirror && xField.SourceFieldId != null)
+            if (xField.FieldType == MetaFieldType.Mirror)
             {
-                xField.SourceFieldId = context.FieldIdMap[xField.SourceFieldId.Value];
+                int? sourceFieldId = xField.SourceFieldId;
+                if (sourceFieldId != null)
+                {
+                    xField.SourceFieldId = context.FieldIdMap[sourceFieldId.Value];
+                }
             }
-            if (xField.FieldType == MetaFieldType.Codes && xField.RelateCondition != null)
+            if (xField.FieldType == MetaFieldType.Codes)
             {
-                xField.RelateCondition = FieldExtensions.MapRelateConditions(
-                    xField.RelateCondition,
-                    context.FieldIdMap);
+                string conditions = xField.RelateCondition;
+                if (conditions != null)
+                {
+                    conditions = DDLFieldOfCodesMapper.MapRelateConditions(conditions, context.FieldIdMap);
+                    xField.RelateCondition = conditions;
+                }
             }
-            if (xField.FieldType == MetaFieldType.Relate && xField.RelatedViewId != null)
+            if (xField.FieldType == MetaFieldType.Relate)
             {
-                xField.RelatedViewId = context.ViewIdMap[xField.RelatedViewId.Value];
+                int? relatedViewId = xField.RelatedViewId;
+                if (relatedViewId != null)
+                {
+                    xField.RelatedViewId = context.ViewIdMap[relatedViewId.Value];
+                }
             }
         }
 
@@ -128,11 +139,15 @@ namespace ERHMS.EpiInfo.Templating
 
             foreach (XField xField in xView.XFields)
             {
-                if (xField.FieldType == MetaFieldType.Group && xField.List != null)
+                if (xField.FieldType == MetaFieldType.Group)
                 {
-                    IEnumerable<string> fieldNames = xField.List.Split(Constants.LIST_SEPARATOR)
-                        .OrderBy(fieldName => GetTabIndex(fieldName));
-                    xField.List = string.Join(Constants.LIST_SEPARATOR.ToString(), fieldNames);
+                    string fieldNames = xField.List;
+                    if (fieldNames != null)
+                    {
+                        xField.List = string.Join(
+                            Constants.LIST_SEPARATOR.ToString(),
+                            fieldNames.Split(Constants.LIST_SEPARATOR).OrderBy(GetTabIndex));
+                    }
                 }
             }
         }

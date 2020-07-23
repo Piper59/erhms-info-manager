@@ -1,9 +1,9 @@
 ﻿using Epi;
 using Epi.Data.Services;
 using Epi.Fields;
-using ERHMS.EpiInfo.Infrastructure;
 using ERHMS.Common;
 using ERHMS.EpiInfo.Templating.Xml;
+using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -185,82 +185,52 @@ namespace ERHMS.EpiInfo.Templating
 
         private void OnFieldInstantiating(Field field)
         {
-            void MapSourceTableName(TableBasedDropDownField f)
+            if (field is TableBasedDropDownField tbddf)
             {
-                if (f == null)
-                {
-                    return;
-                }
-                f.SourceTableName = context.TableNameMap[f.SourceTableName];
+                tbddf.SourceTableName = context.TableNameMap[tbddf.SourceTableName];
             }
-
-            void MapRelatedViewId(RelatedViewField f)
+            if (field is RelatedViewField rvf)
             {
-                if (f == null)
-                {
-                    return;
-                }
-                f.RelatedViewID = context.ViewIdMap[f.RelatedViewID];
+                rvf.RelatedViewID = context.ViewIdMap[rvf.RelatedViewID];
             }
-
-            MapSourceTableName(field as TableBasedDropDownField);
-            MapRelatedViewId(field as RelatedViewField);
         }
 
         private void OnViewInstantiated(IEnumerable<Field> fields)
         {
-            void MapChildFieldNames(GroupField f)
-            {
-                if (f == null)
-                {
-                    return;
-                }
-                string fieldNames = f.ChildFieldNames;
-                if (string.IsNullOrEmpty(fieldNames))
-                {
-                    return;
-                }
-                f.ChildFieldNames = FieldExtensions.MapChildFieldNames(fieldNames, context.FieldNameMap);
-                f.SaveToDb();
-            }
-
             foreach (Field field in fields)
             {
-                MapChildFieldNames(field as GroupField);
+                if (field is GroupField gf)
+                {
+                    string fieldNames = gf.ChildFieldNames;
+                    if (!string.IsNullOrEmpty(fieldNames))
+                    {
+                        fieldNames = GroupFieldMapper.MapChildFieldNames(fieldNames, context.FieldNameMap);
+                        gf.ChildFieldNames = fieldNames;
+                        gf.SaveToDb();
+                    }
+                }
             }
         }
 
         private void OnProjectInstantiated(IEnumerable<Field> fields)
         {
-            void MapSourceFieldId(MirrorField f)
-            {
-                if (f == null)
-                {
-                    return;
-                }
-                f.SourceFieldId = context.FieldIdMap[f.SourceFieldId];
-                f.SaveToDb();
-            }
-
-            void MapRelateConditions(DDLFieldOfCodes f)
-            {
-                if (f == null)
-                {
-                    return;
-                }
-                string conditions = f.AssociatedFieldInformation;
-                if (string.IsNullOrEmpty(conditions))
-                {
-                    return;
-                }
-                f.AssociatedFieldInformation = FieldExtensions.MapRelateConditions(conditions, context.FieldIdMap);
-                f.SaveToDb();
-            }
-
             foreach (Field field in fields)
             {
-                MapSourceFieldId(field as MirrorField);
-                MapRelateConditions(field as DDLFieldOfCodes);
+                if (field is MirrorField mf)
+                {
+                    mf.SourceFieldId = context.FieldIdMap[mf.SourceFieldId];
+                    mf.SaveToDb();
+                }
+                if (field is DDLFieldOfCodes ddlfoc)
+                {
+                    string conditions = ddlfoc.AssociatedFieldInformation;
+                    if (!string.IsNullOrEmpty(conditions))
+                    {
+                        conditions = DDLFieldOfCodesMapper.MapRelateConditions(conditions, context.FieldIdMap);
+                        ddlfoc.AssociatedFieldInformation = conditions;
+                        ddlfoc.SaveToDb();
+                    }
+                }
             }
         }
 
