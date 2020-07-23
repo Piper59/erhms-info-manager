@@ -36,11 +36,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 EpiVersion = project.EpiVersion,
                 CreateDate = project.CreateDate
             };
-            Configuration configuration = Configuration.GetNewInstance();
-            foreach (string settingName in ConfigurationSettingNames)
-            {
-                xProject.SetAttributeValueEx(configuration.Settings[settingName], settingName);
-            }
             xProject.OnCreated();
             return xProject;
         }
@@ -123,12 +118,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
             Id = null;
             Location = null;
             CreateDate = null;
-            if (!ConfigurationExtensions.CompatibilityMode)
+            foreach (string settingName in ConfigurationSettingNames)
             {
-                foreach (string settingName in ConfigurationSettingNames)
-                {
-                    Attribute(settingName)?.Remove();
-                }
+                Attribute(settingName)?.Remove();
             }
         }
     }

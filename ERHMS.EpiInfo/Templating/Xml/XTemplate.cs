@@ -107,13 +107,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         internal void OnCreated()
         {
+            CreateDate = null;
             if (Level != TemplateLevel.Project)
             {
                 RemoveRelateFields();
-            }
-            if (!ConfigurationExtensions.CompatibilityMode)
-            {
-                CreateDate = null;
             }
         }
 

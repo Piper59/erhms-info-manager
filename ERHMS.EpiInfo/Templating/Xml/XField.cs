@@ -132,12 +132,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 backgroundColor.Remove();
             }
-            if (!ConfigurationExtensions.CompatibilityMode)
+            foreach (string columnName in IgnoredColumnNames)
             {
-                foreach (string columnName in IgnoredColumnNames)
-                {
-                    Attribute(columnName)?.Remove();
-                }
+                Attribute(columnName)?.Remove();
             }
         }
 

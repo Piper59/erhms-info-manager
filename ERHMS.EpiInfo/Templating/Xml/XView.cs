@@ -100,10 +100,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         private void OnCreated()
         {
-            if (!ConfigurationExtensions.CompatibilityMode)
-            {
-                SurveyId = null;
-            }
+            SurveyId = null;
         }
 
         public View Instantiate(Project project)
