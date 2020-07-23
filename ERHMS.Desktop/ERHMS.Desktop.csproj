@@ -92,7 +92,6 @@
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogInfo.cs" />
     <Compile Include="Dialogs\DialogInfoPreset.cs" />
-    <Compile Include="Infrastructure\Brushes.cs" />
     <Compile Include="Infrastructure\Colors.cs" />
     <Compile Include="Infrastructure\DialogService.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
@@ -167,6 +166,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Templates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Default.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\HighContrast.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

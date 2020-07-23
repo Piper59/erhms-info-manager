@@ -2,14 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
-             xmlns:Infrastructure="clr-namespace:ERHMS.Desktop.Infrastructure"
              xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
              AutomationProperties.Name="{x:Static Properties:Resources.AppTitle}">
-    <UserControl.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-            <Setter Property="Background" Value="{x:Static Infrastructure:Brushes.ControlLight}" />
-        </Style>
-    </UserControl.Resources>
     <Border Style="{StaticResource LayoutSmall}">
         <StackPanel Style="{StaticResource Container}">
             <StackPanel Style="{StaticResource Section}">

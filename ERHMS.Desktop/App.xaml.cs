@@ -9,6 +9,7 @@ using ERHMS.EpiInfo;
 using log4net;
 using log4net.Config;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Security;
 using System.Security.Principal;
@@ -88,11 +89,33 @@ namespace ERHMS.Desktop
             }
         }
 
+        private ResourceDictionary ThemeDictionary => Resources.MergedDictionaries[0];
+
         public App()
         {
             InitializeComponent();
+            SetTheme();
+            SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
             DispatcherUnhandledException += App_DispatcherUnhandledException;
             Command.GlobalError += Command_GlobalError;
+        }
+
+        private void SetTheme()
+        {
+            string themeName = SystemParameters.HighContrast ? "HighContrast" : "Default";
+            Uri source = new Uri($"/Themes/{themeName}.xaml", UriKind.Relative);
+            if (ThemeDictionary.Source != source)
+            {
+                ThemeDictionary.Source = source;
+            }
+        }
+
+        private void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SystemParameters.HighContrast))
+            {
+                SetTheme();
+            }
         }
 
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

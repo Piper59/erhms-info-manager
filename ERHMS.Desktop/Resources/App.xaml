@@ -60,10 +60,10 @@
     <Style x:Key="Preformatted" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
         <Setter Property="FontFamily" Value="{StaticResource MonospacedFontFamily}" />
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Visible" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="VerticalScrollBarVisibility" Value="Visible" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
 
     <Style x:Key="Section" TargetType="Panel">

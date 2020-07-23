@@ -10,7 +10,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0"
+              BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+              BorderThickness="0,1">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
