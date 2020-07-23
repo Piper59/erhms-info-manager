@@ -11,13 +11,14 @@ namespace ERHMS.Desktop.Dialogs
         public string Lead { get; set; }
         public string Body { get; set; }
         public string Details { get; set; }
-        public DialogButtonCollection Buttons { get; set; } = DialogButtonCollection.OK;
+        public DialogButtonCollection Buttons { get; set; }
 
         public DialogInfo(DialogInfoPreset preset)
         {
             switch (preset)
             {
                 case DialogInfoPreset.Normal:
+                    Buttons = DialogButtonCollection.OK;
                     break;
                 case DialogInfoPreset.Warning:
                     Sound = SystemSounds.Asterisk;
@@ -26,6 +27,7 @@ namespace ERHMS.Desktop.Dialogs
                 case DialogInfoPreset.Error:
                     Sound = SystemSounds.Asterisk;
                     Icon = SystemIcons.Error;
+                    Buttons = DialogButtonCollection.Close;
                     break;
                 default:
                     throw new NotSupportedException();

@@ -10,5 +10,6 @@ namespace ERHMS.Desktop.Infrastructure
         public static readonly Color PreDeployment = ThemeBlue;
         public static readonly Color Deployment = ThemeRed;
         public static readonly Color PostDeployment = ThemeGreen;
+        public static readonly Color Accent = ThemeBlue;
     }
 }

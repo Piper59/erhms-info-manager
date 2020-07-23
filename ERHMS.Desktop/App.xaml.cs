@@ -9,8 +9,10 @@ using ERHMS.EpiInfo;
 using log4net;
 using log4net.Config;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Security;
 using System.Security.Principal;
 using System.Text;
@@ -25,6 +27,7 @@ namespace ERHMS.Desktop
     public partial class App : Application
     {
         private static int unhandledErrorCount;
+        private static bool reset;
 
         [STAThread]
         public static void Main(string[] args)
@@ -33,6 +36,7 @@ namespace ERHMS.Desktop
             Log.Default.Debug("Starting up");
             try
             {
+                ParseArgs(args);
                 ConfigureServices();
                 ConfigureEpiInfo();
                 App app = new App();
@@ -54,6 +58,16 @@ namespace ERHMS.Desktop
             catch (SecurityException) { }
             GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
             XmlConfigurator.Configure();
+        }
+
+        private static void ParseArgs(IList<string> args)
+        {
+            if (args.Contains("/reset", StringComparer.OrdinalIgnoreCase))
+            {
+                Log.Default.Debug("Resetting settings");
+                Settings.Default.Reset();
+                reset = true;
+            }
         }
 
         private static void ConfigureServices()
@@ -137,8 +151,7 @@ namespace ERHMS.Desktop
             {
                 Lead = $"{ResXResources.AppTitle} has encountered an error",
                 Body = ex.Message,
-                Details = ex.ToString(),
-                Buttons = DialogButtonCollection.Close
+                Details = ex.ToString()
             });
         }
 
@@ -151,6 +164,13 @@ namespace ERHMS.Desktop
                 DataContext = MainViewModel.Current
             };
             window.Show();
+            if (reset)
+            {
+                ServiceLocator.Dialog.Show(new DialogInfo(DialogInfoPreset.Normal)
+                {
+                    Lead = "Settings have been reset"
+                });
+            }
         }
     }
 }

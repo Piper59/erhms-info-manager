@@ -48,13 +48,11 @@
 
     <Style x:Key="Lead" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
-        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
         <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
     </Style>
 
     <Style x:Key="LeadText" TargetType="TextElement">
         <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
-        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
     </Style>
 
     <Style x:Key="Preformatted" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
