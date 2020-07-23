@@ -78,6 +78,22 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { FieldTypeId = (int)value; }
         }
 
+        public int? BackgroundColor
+        {
+            get
+            {
+                if (int.TryParse((string)this.GetAttributeEx(), out int value))
+                {
+                    return value;
+                }
+                return null;
+            }
+            set
+            {
+                this.SetAttributeValueEx(value);
+            }
+        }
+
         public string List
         {
             get { return (string)this.GetAttributeEx(); }
@@ -92,14 +108,34 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public int? RelatedViewId
         {
-            get { return (int?)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get
+            {
+                if (int.TryParse((string)this.GetAttributeEx(), out int value))
+                {
+                    return value;
+                }
+                return null;
+            }
+            set
+            {
+                this.SetAttributeValueEx(value);
+            }
         }
 
         public int? SourceFieldId
         {
-            get { return (int?)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get
+            {
+                if (int.TryParse((string)this.GetAttributeEx(), out int value))
+                {
+                    return value;
+                }
+                return null;
+            }
+            set
+            {
+                this.SetAttributeValueEx(value);
+            }
         }
 
         public string SourceTableName
@@ -110,8 +146,18 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public double? TabIndex
         {
-            get { return (double?)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get
+            {
+                if (double.TryParse((string)this.GetAttributeEx(), out double value))
+                {
+                    return value;
+                }
+                return null;
+            }
+            set
+            {
+                this.SetAttributeValueEx(value);
+            }
         }
 
         public XPage XPage => (XPage)Parent;
@@ -127,10 +173,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         private void OnCreated()
         {
-            XAttribute backgroundColor = Attribute(ColumnNames.BACKGROUND_COLOR);
-            if (backgroundColor != null && backgroundColor.Value == "")
+            if (BackgroundColor == null)
             {
-                backgroundColor.Remove();
+                Attribute(nameof(BackgroundColor))?.Remove();
             }
             foreach (string columnName in IgnoredColumnNames)
             {

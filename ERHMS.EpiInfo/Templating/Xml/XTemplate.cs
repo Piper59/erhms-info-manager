@@ -62,9 +62,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
         {
             get
             {
-                if (DateTime.TryParse((string)this.GetAttributeEx(), out DateTime result))
+                if (DateTime.TryParse((string)this.GetAttributeEx(), out DateTime value))
                 {
-                    return result;
+                    return value;
                 }
                 return null;
             }

@@ -123,6 +123,14 @@ namespace ERHMS.EpiInfo.Templating
                     xField.RelatedViewId = context.ViewIdMap[relatedViewId.Value];
                 }
             }
+            if (xField.FieldType == MetaFieldType.Group)
+            {
+                int? backgroundColor = xField.BackgroundColor;
+                if (backgroundColor != null)
+                {
+                    xField.BackgroundColor = -1;
+                }
+            }
         }
 
         private void OnViewCanonized(XView xView)

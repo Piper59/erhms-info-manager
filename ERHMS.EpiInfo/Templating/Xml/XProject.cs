@@ -44,9 +44,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
         {
             get
             {
-                if (Guid.TryParse((string)this.GetAttributeEx(), out Guid result))
+                if (Guid.TryParse((string)this.GetAttributeEx(), out Guid value))
                 {
-                    return result;
+                    return value;
                 }
                 return null;
             }
@@ -84,9 +84,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
         {
             get
             {
-                if (DateTime.TryParse((string)this.GetAttributeEx(), out DateTime result))
+                if (DateTime.TryParse((string)this.GetAttributeEx(), out DateTime value))
                 {
-                    return result;
+                    return value;
                 }
                 return null;
             }

@@ -298,13 +298,12 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
     {
         private static bool TryGetBackgroundColor(XField xField, out Color value)
         {
-            XAttribute attribute = xField.Attribute(ColumnNames.BACKGROUND_COLOR);
-            if (attribute == null || attribute.Value == "")
+            if (xField.BackgroundColor == null)
             {
                 value = Color.Empty;
                 return false;
             }
-            value = Color.FromArgb((int)attribute);
+            value = Color.FromArgb(xField.BackgroundColor.Value);
             return true;
         }
 
