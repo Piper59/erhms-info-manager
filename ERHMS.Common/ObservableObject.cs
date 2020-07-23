@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Common
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {

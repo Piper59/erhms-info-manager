@@ -54,6 +54,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.Common\ERHMS.Common.csproj">
+      <Project>{16c636f8-a356-4e9e-9d60-4f825ed830a0}</Project>
+      <Name>ERHMS.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.Data\ERHMS.Data.csproj">
       <Project>{ccebb7b1-4468-4b27-958e-79e86373a398}</Project>
       <Name>ERHMS.Data</Name>
@@ -61,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationExtensions.cs" />
-    <Compile Include="Infrastructure\DataExtensions.cs" />
     <Compile Include="Infrastructure\FieldExtensions.cs" />
     <Compile Include="Infrastructure\XmlExtensions.cs" />
     <Compile Include="Log.cs" />

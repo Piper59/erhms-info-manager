@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common;
 using ERHMS.Data;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;

@@ -2,7 +2,7 @@
 
 namespace ERHMS.Desktop.Infrastructure
 {
-    public static class Colors
+    internal static class Colors
     {
         public static readonly Color ThemeBlue = Color.FromRgb(0x00, 0x79, 0xc1);
         public static readonly Color ThemeRed = Color.FromRgb(0xef, 0x3e, 0x42);

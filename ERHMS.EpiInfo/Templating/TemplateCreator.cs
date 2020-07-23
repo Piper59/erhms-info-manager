@@ -1,6 +1,6 @@
 ﻿using Epi;
 using Epi.Data.Services;
-using ERHMS.EpiInfo.Infrastructure;
+using ERHMS.Common;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Collections.Generic;

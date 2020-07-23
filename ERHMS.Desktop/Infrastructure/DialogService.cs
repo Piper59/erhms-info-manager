@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace ERHMS.Desktop.Infrastructure
 {
-    public class DialogService : IDialogService
+    internal class DialogService : IDialogService
     {
         public bool? Show(DialogInfo info)
         {

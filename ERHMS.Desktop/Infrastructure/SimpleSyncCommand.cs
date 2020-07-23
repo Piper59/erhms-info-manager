@@ -3,13 +3,13 @@ using System;
 
 namespace ERHMS.Desktop.Infrastructure
 {
-    public class SimpleSyncCommand : SyncCommand
+    internal class SimpleSyncCommand : SyncCommand
     {
         public SimpleSyncCommand(Action execute)
             : base(execute, Always, ErrorBehavior.Raise) { }
     }
 
-    public class SimpleSyncCommand<T> : SyncCommand<T>
+    internal class SimpleSyncCommand<T> : SyncCommand<T>
     {
         public SimpleSyncCommand(Action<T> execute)
             : base(execute, Always, ErrorBehavior.Raise) { }

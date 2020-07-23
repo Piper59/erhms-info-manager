@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ERHMS.Console
+namespace ERHMS.Common
 {
     public class ProgressLogger : IProgress<string>
     {

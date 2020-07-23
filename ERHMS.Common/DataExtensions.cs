@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace ERHMS.EpiInfo.Infrastructure
+namespace ERHMS.Common
 {
     public static class DataExtensions
     {
