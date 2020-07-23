@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Common", "ERHMS.Common\ERHMS.Common.csproj", "{16C636F8-A356-4E9E-9D60-4F825ED830A0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Domain", "ERHMS.Domain\ERHMS.Domain.csproj", "{181048FB-DAE4-4875-9A58-461F81C4131A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Data", "ERHMS.Data\ERHMS.Data.csproj", "{CCEBB7B1-4468-4B27-958E-79E86373A398}"
@@ -33,6 +35,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16C636F8-A356-4E9E-9D60-4F825ED830A0}.Debug|x86.ActiveCfg = Debug|x86
+		{16C636F8-A356-4E9E-9D60-4F825ED830A0}.Debug|x86.Build.0 = Debug|x86
+		{16C636F8-A356-4E9E-9D60-4F825ED830A0}.Release|x86.ActiveCfg = Release|x86
+		{16C636F8-A356-4E9E-9D60-4F825ED830A0}.Release|x86.Build.0 = Release|x86
 		{181048FB-DAE4-4875-9A58-461F81C4131A}.Debug|x86.ActiveCfg = Debug|x86
 		{181048FB-DAE4-4875-9A58-461F81C4131A}.Debug|x86.Build.0 = Debug|x86
 		{181048FB-DAE4-4875-9A58-461F81C4131A}.Release|x86.ActiveCfg = Release|x86
