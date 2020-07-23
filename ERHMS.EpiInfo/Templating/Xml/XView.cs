@@ -101,6 +101,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         private void OnCreated()
         {
             SurveyId = null;
+            CheckCode = CheckCode.Trim();
         }
 
         public View Instantiate(Project project)
