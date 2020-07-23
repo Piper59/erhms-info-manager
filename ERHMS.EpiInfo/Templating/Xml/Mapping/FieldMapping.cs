@@ -1,5 +1,6 @@
 ﻿using Epi.Fields;
 using System;
+using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Linq;
@@ -39,11 +40,14 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
     public class AttributeFieldMapping<TField, TProperty> : FieldMapping<TField, TProperty>
         where TField : Field
     {
+        private TypeConverter converter;
+
         public string AttributeName { get; }
 
         public AttributeFieldMapping(Expression<Func<TField, TProperty>> expression, string attributeName = null)
             : base(expression)
         {
+            converter = TypeDescriptor.GetConverter(typeof(TProperty));
             AttributeName = attributeName ?? Property.Name;
         }
 
@@ -55,7 +59,7 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
                 value = default(TProperty);
                 return false;
             }
-            value = (TProperty)Convert.ChangeType(attribute.Value, typeof(TProperty));
+            value = (TProperty)converter.ConvertFromString(attribute.Value);
             return true;
         }
     }

@@ -2,6 +2,7 @@
 using Epi.Fields;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -33,6 +34,7 @@ namespace ERHMS.EpiInfo
         protected string BaseName { get; set; }
         protected string Separator { get; set; }
         protected TSuffix StartSuffix { get; set; }
+        protected TypeConverter SuffixConverter { get; } = TypeDescriptor.GetConverter(typeof(TSuffix));
         protected ISet<string> Names { get; set; }
 
         protected virtual string Format(string baseName, TSuffix suffix)
@@ -65,7 +67,7 @@ namespace ERHMS.EpiInfo
                 Group suffixGroup = match.Groups["suffix"];
                 if (suffixGroup.Success)
                 {
-                    suffix = (TSuffix)Convert.ChangeType(suffixGroup.Value, typeof(TSuffix));
+                    suffix = (TSuffix)SuffixConverter.ConvertFromString(suffixGroup.Value);
                 }
             }
             while (true)

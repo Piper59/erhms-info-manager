@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -45,7 +46,8 @@ namespace ERHMS.Console.Utilities
             }
             for (int index = 0; index < parameters.Count; index++)
             {
-                yield return Convert.ChangeType(args[index], parameters[index].ParameterType);
+                TypeConverter converter = TypeDescriptor.GetConverter(parameters[index].ParameterType);
+                yield return converter.ConvertFromString(args[index]);
             }
         }
 
