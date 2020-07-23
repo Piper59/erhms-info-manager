@@ -9,13 +9,13 @@ namespace ERHMS.Desktop.Views
         public MainView()
         {
             InitializeComponent();
-            Settings.Default.WriteTo(this);
+            Settings.Default.Apply(this);
             SizeChanged += OnSizeChanged;
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Settings.Default.ReadFrom(this);
+            Settings.Default.Update(this);
         }
 
         protected override void OnClosed(EventArgs e)
