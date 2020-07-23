@@ -8,6 +8,7 @@ namespace ERHMS.Data
 {
     public class AccessDatabase : Database
     {
+        public const string Provider = "Microsoft.Jet.OLEDB.4.0";
         public const string FileExtension = ".mdb";
 
         private OleDbConnectionStringBuilder builder;
@@ -16,16 +17,16 @@ namespace ERHMS.Data
         public override DatabaseType Type => DatabaseType.Access;
         public override DbConnectionStringBuilder Builder => builder;
         protected override DbCommandBuilder CommandBuilder => commandBuilder;
-        public string FilePath => builder.DataSource;
+        public string FilePath => Path.GetFullPath(builder.DataSource);
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 
-        public AccessDatabase(OleDbConnectionStringBuilder builder)
-        {
-            this.builder = builder;
-        }
-
         public AccessDatabase(string connectionString)
-            : this(new OleDbConnectionStringBuilder(connectionString)) { }
+        {
+            builder = new OleDbConnectionStringBuilder(connectionString)
+            {
+                Provider = Provider
+            };
+        }
 
         protected override IDbConnection GetConnection()
         {

@@ -36,7 +36,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 EpiVersion = project.EpiVersion,
                 CreateDate = project.CreateDate
             };
-            xProject.OnCreated();
+            xProject.OnCreated(TemplateLevel.Project);
             return xProject;
         }
 
@@ -102,7 +102,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XProject()
             : base(ElementNames.Project) { }
 
-        public XProject(XElement element)
+        public XProject(XElement element, TemplateLevel level)
             : this()
         {
             Add(element.Attributes());
@@ -110,14 +110,17 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 Add(new XView(xView));
             }
-            OnCreated();
+            OnCreated(level);
         }
 
-        private void OnCreated()
+        private void OnCreated(TemplateLevel level)
         {
-            Id = null;
-            Location = null;
-            CreateDate = null;
+            if (level == TemplateLevel.Project)
+            {
+                Id = null;
+                Location = null;
+                CreateDate = null;
+            }
             foreach (string settingName in ConfigurationSettingNames)
             {
                 Attribute(settingName)?.Remove();

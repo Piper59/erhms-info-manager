@@ -31,6 +31,21 @@ namespace ERHMS.EpiInfo.Templating.Xml
             }
         }
 
+        public static XTemplate Create(TemplateLevel level)
+        {
+            if (!IsLevelSupported(level))
+            {
+                throw new NotSupportedException();
+            }
+            return new XTemplate
+            {
+                Name = null,
+                Description = null,
+                CreateDate = DateTime.Now,
+                Level = level
+            };
+        }
+
         public new string Name
         {
             get { return (string)this.GetAttributeEx(); }
@@ -72,19 +87,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XTemplate()
             : base(ElementNames.Template) { }
 
-        public XTemplate(TemplateLevel level)
-            : this()
-        {
-            if (!IsLevelSupported(level))
-            {
-                throw new NotSupportedException();
-            }
-            Name = "";
-            Description = "";
-            CreateDate = DateTime.Now;
-            Level = level;
-        }
-
         public XTemplate(XElement element)
             : this()
         {
@@ -94,7 +96,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 throw new NotSupportedException();
             }
             XElement xProject = element.Element(ElementNames.Project);
-            Add(new XProject(xProject));
+            Add(new XProject(xProject, Level));
             foreach (string elementName in ElementNames.Tables)
             {
                 foreach (XElement xTable in element.Elements(elementName))

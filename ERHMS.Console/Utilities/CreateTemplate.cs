@@ -2,7 +2,6 @@
 using ERHMS.Common;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
-using System;
 using System.IO;
 using System.Xml;
 
@@ -11,28 +10,30 @@ namespace ERHMS.Console.Utilities
     public class CreateTemplate : Utility
     {
         public string ProjectPath { get; }
+        public string ViewName { get; }
         public string TemplatePath { get; }
 
-        public CreateTemplate(string projectPath, string templatePath)
+        public CreateTemplate(string projectPath, string viewName, string templatePath)
         {
             ProjectPath = projectPath;
+            ViewName = viewName;
             TemplatePath = templatePath;
         }
 
         protected override void RunCore()
         {
-            if (File.Exists(TemplatePath))
-            {
-                throw new ArgumentException("Template already exists.");
-            }
-            Log.Default.Debug($"Opening project: {ProjectPath}");
             Project project = new Project(ProjectPath);
-            ProjectTemplateCreator creator = new ProjectTemplateCreator(project)
+            TemplateCreator creator;
+            if (ViewName == "")
             {
-                Progress = new ProgressLogger()
-            };
+                creator = new ProjectTemplateCreator(project);
+            }
+            else
+            {
+                creator = new ViewTemplateCreator(project.Views[ViewName]);
+            }
+            creator.Progress = new ProgressLogger();
             XTemplate xTemplate = creator.Create();
-            Log.Default.Debug($"Saving template: {TemplatePath}");
             using (Stream stream = File.Create(TemplatePath))
             using (XmlWriter writer = XmlWriter.Create(stream, XTemplate.XmlWriterSettings))
             {

@@ -1,12 +1,9 @@
 ﻿using Epi;
 using ERHMS.Common;
-using ERHMS.Data;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
-using System.Data.OleDb;
-using System.IO;
 using System.Xml.Linq;
 
 namespace ERHMS.Console.Utilities
@@ -14,49 +11,31 @@ namespace ERHMS.Console.Utilities
     public class InstantiateTemplate : Utility
     {
         public string TemplatePath { get; }
-        public string ProjectLocation { get; }
-        public string ProjectName { get; }
+        public string ProjectPath { get; }
 
-        public InstantiateTemplate(string templatePath, string projectLocation, string projectName)
+        public InstantiateTemplate(string templatePath, string projectPath)
         {
             TemplatePath = templatePath;
-            ProjectLocation = projectLocation;
-            ProjectName = projectName;
+            ProjectPath = projectPath;
         }
 
         protected override void RunCore()
         {
-            ProjectCreationInfo info = new ProjectCreationInfo
-            {
-                Location = ProjectLocation,
-                Name = ProjectName
-            };
-            if (File.Exists(info.FilePath))
-            {
-                throw new ArgumentException("Project already exists.");
-            }
-            string databasePath = Path.ChangeExtension(info.FilePath, AccessDatabase.FileExtension);
-            IDatabase database = new AccessDatabase(new OleDbConnectionStringBuilder
-            {
-                DataSource = databasePath
-            });
-            if (database.Exists())
-            {
-                throw new ArgumentException("Database already exists.");
-            }
             XTemplate xTemplate = new XTemplate(XDocument.Load(TemplatePath).Root);
-            if (xTemplate.Level != TemplateLevel.Project)
+            Project project = new Project(ProjectPath);
+            TemplateInstantiator instantiator;
+            switch (xTemplate.Level)
             {
-                throw new ArgumentException("Template is not project-level.");
+                case TemplateLevel.Project:
+                    instantiator = new ProjectTemplateInstantiator(xTemplate, project);
+                    break;
+                case TemplateLevel.View:
+                    instantiator = new ViewTemplateInstantiator(xTemplate, project);
+                    break;
+                default:
+                    throw new ArgumentException("Template level is not project or view.");
             }
-            database.Create();
-            info.Database = database;
-            Project project = ProjectExtensions.Create(info);
-            project.Initialize();
-            ProjectTemplateInstantiator instantiator = new ProjectTemplateInstantiator(xTemplate, project)
-            {
-                Progress = new ProgressLogger()
-            };
+            instantiator.Progress = new ProgressLogger();
             instantiator.Instantiate();
             Log.Default.Debug("Template has been instantiated");
         }

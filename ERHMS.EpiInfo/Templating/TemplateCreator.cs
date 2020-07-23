@@ -147,11 +147,9 @@ namespace ERHMS.EpiInfo.Templating
 
         protected override XTemplate CreateCore()
         {
-            XTemplate xTemplate = new XTemplate(TemplateLevel.Project)
-            {
-                Name = Project.Name,
-                Description = Project.Description
-            };
+            XTemplate xTemplate = XTemplate.Create(TemplateLevel.Project);
+            xTemplate.Name = Project.Name;
+            xTemplate.Description = Project.Description;
             XProject xProject = XProject.Create(Project);
             xTemplate.Add(xProject);
             foreach (View view in Project.Views)
@@ -175,10 +173,8 @@ namespace ERHMS.EpiInfo.Templating
 
         protected override XTemplate CreateCore()
         {
-            XTemplate xTemplate = new XTemplate(TemplateLevel.View)
-            {
-                Name = View.Name
-            };
+            XTemplate xTemplate = XTemplate.Create(TemplateLevel.View);
+            xTemplate.Name = View.Name;
             XProject xProject = new XProject();
             xTemplate.Add(xProject);
             AddView(View, xProject);
@@ -199,10 +195,8 @@ namespace ERHMS.EpiInfo.Templating
 
         protected override XTemplate CreateCore()
         {
-            XTemplate xTemplate = new XTemplate(TemplateLevel.Page)
-            {
-                Name = Page.Name
-            };
+            XTemplate xTemplate = XTemplate.Create(TemplateLevel.Page);
+            xTemplate.Name = Page.Name;
             XProject xProject = new XProject();
             xTemplate.Add(xProject);
             XView xView = new XView

@@ -1,29 +1,12 @@
 ﻿using Epi;
 using System;
-using System.Data.Common;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 
 namespace ERHMS.Data
 {
     public static class DatabaseFactory
     {
-        public static IDatabase GetDatabase(DbConnectionStringBuilder builder)
+        public static IDatabase GetDatabase(DatabaseType type, string connectionString)
         {
-            if (builder is OleDbConnectionStringBuilder oleDbBuilder)
-            {
-                return new AccessDatabase(oleDbBuilder);
-            }
-            if (builder is SqlConnectionStringBuilder sqlBuilder)
-            {
-                return new SqlServerDatabase(sqlBuilder);
-            }
-            throw new NotSupportedException();
-        }
-
-        public static IDatabase GetDatabase(string driver, string connectionString)
-        {
-            DatabaseType type = DatabaseTypeExtensions.FromDriver(driver);
             switch (type)
             {
                 case DatabaseType.Access:
@@ -33,6 +16,11 @@ namespace ERHMS.Data
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        public static IDatabase GetDatabase(string driver, string connectionString)
+        {
+            return GetDatabase(DatabaseTypeExtensions.FromDriver(driver), connectionString);
         }
 
         public static IDatabase GetDatabase(Project project)

@@ -1,6 +1,5 @@
 ﻿using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
-using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
@@ -9,25 +8,19 @@ namespace ERHMS.Console.Utilities
 {
     public class CanonizeTemplate : Utility
     {
-        public string InputPath { get; }
-        public string OutputPath { get; }
+        public string TemplatePath { get; }
 
-        public CanonizeTemplate(string inputPath, string outputPath)
+        public CanonizeTemplate(string templatePath)
         {
-            InputPath = inputPath;
-            OutputPath = outputPath;
+            TemplatePath = templatePath;
         }
 
         protected override void RunCore()
         {
-            if (File.Exists(OutputPath))
-            {
-                throw new ArgumentException("Template already exists.");
-            }
-            XTemplate xTemplate = new XTemplate(XDocument.Load(InputPath).Root);
+            XTemplate xTemplate = new XTemplate(XDocument.Load(TemplatePath).Root);
             TemplateCanonizer canonizer = new TemplateCanonizer(xTemplate);
             canonizer.Canonize();
-            using (Stream stream = File.Create(OutputPath))
+            using (Stream stream = File.Create(TemplatePath))
             using (XmlWriter writer = XmlWriter.Create(stream, XTemplate.XmlWriterSettings))
             {
                 xTemplate.Save(writer);
