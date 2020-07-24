@@ -30,7 +30,7 @@ namespace ERHMS.Desktop
         private static bool reset;
 
         [STAThread]
-        public static void Main(string[] args)
+        private static void Main(string[] args)
         {
             ConfigureLog();
             Log.Default.Debug("Starting up");
