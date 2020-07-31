@@ -9,7 +9,8 @@
             <StackPanel Style="{StaticResource Section}">
                 <StackPanel Margin="{StaticResource SmallThickness}"
                             Orientation="Horizontal">
-                    <Image Source="../Resources/ERHMS.ico"
+                    <Image AutomationProperties.Name="{Binding Source={x:Static Properties:Resources.AppTitle}, StringFormat='{}{0} Logo'}"
+                           Source="../Resources/ERHMS.ico"
                            Width="64">
                         <Image.Margin>
                             <Thickness Right="{StaticResource LargeSpace}" />

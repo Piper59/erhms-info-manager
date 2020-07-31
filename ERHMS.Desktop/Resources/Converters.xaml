@@ -3,5 +3,6 @@
                     xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
+    <Converters:IconToNameConverter x:Key="IconToNameConverter" />
     <Converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
 </ResourceDictionary>
