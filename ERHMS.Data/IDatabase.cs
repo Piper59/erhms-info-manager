@@ -6,7 +6,7 @@ namespace ERHMS.Data
     public interface IDatabase
     {
         DatabaseType Type { get; }
-        DbConnectionStringBuilder Builder { get; }
+        DbConnectionStringBuilder ConnectionStringBuilder { get; }
         string ConnectionString { get; }
         string Name { get; }
 

@@ -154,7 +154,7 @@ namespace ERHMS.EpiInfo
     {
         private static readonly Regex TrailingDigitsRegex = new Regex(@"[0-9]+$");
 
-        private ISet<string> viewNames;
+        private readonly ISet<string> viewNames;
 
         public ViewNameGenerator(Project project)
         {
@@ -162,10 +162,9 @@ namespace ERHMS.EpiInfo
             viewNames = ToSet(GetViewNames(project));
         }
 
-        public bool Conflicts(string name)
+        public bool IsConflict(string name)
         {
-            string baseName = TrailingDigitsRegex.Replace(name, "");
-            return viewNames.Contains(baseName);
+            return viewNames.Contains(TrailingDigitsRegex.Replace(name, ""));
         }
 
         protected override void Add(string name)

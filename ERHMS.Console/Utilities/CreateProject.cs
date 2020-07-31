@@ -13,11 +13,7 @@ namespace ERHMS.Console.Utilities
         public string ProjectLocation { get; }
         public string ProjectName { get; }
 
-        public CreateProject(
-            DatabaseType databaseType,
-            string connectionString,
-            string projectLocation,
-            string projectName)
+        public CreateProject(DatabaseType databaseType, string connectionString, string projectLocation, string projectName)
         {
             DatabaseType = databaseType;
             ConnectionString = connectionString;

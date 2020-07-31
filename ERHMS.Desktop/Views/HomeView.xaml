@@ -16,7 +16,8 @@
                         </Image.Margin>
                     </Image>
                     <TextBlock VerticalAlignment="Center">
-                        <Run Style="{StaticResource TitleText}" Text="{x:Static Properties:Resources.AppTitle}" />
+                        <Run Style="{StaticResource TitleText}"
+                             Text="{x:Static Properties:Resources.AppTitle}" />
                     </TextBlock>
                 </StackPanel>
             </StackPanel>

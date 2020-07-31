@@ -3,7 +3,6 @@ using ERHMS.Console.Utilities;
 using ERHMS.EpiInfo;
 using log4net.Config;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -13,11 +12,17 @@ namespace ERHMS.Console
     {
         private static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                System.Console.Error.WriteLine(Help.GetUsage());
+                return;
+            }
             ConfigureLog();
             try
             {
                 ConfigureEpiInfo();
-                GetUtility(args).Run();
+                IUtility utility = Utility.Create(args[0], args.Skip(1).ToList());
+                utility.Run();
             }
             catch (Exception ex)
             {
@@ -45,18 +50,6 @@ namespace ERHMS.Console
                 ConfigurationExtensions.Load(path);
             }
             Configuration.Environment = ExecutionEnvironment.Console;
-        }
-
-        private static IUtility GetUtility(IList<string> args)
-        {
-            if (args.Count == 0)
-            {
-                return new Help
-                {
-                    Writer = System.Console.Error
-                };
-            }
-            return Utility.Create(args[0], args.Skip(1).ToList());
         }
     }
 }

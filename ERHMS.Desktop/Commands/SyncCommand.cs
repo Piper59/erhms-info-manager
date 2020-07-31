@@ -5,8 +5,8 @@ namespace ERHMS.Desktop.Commands
 {
     public class SyncCommand : Command
     {
-        private Action execute;
-        private Func<bool> canExecute;
+        private readonly Action execute;
+        private readonly Func<bool> canExecute;
 
         public SyncCommand(Action execute, Func<bool> canExecute, ErrorBehavior errorBehavior)
             : base(execute, errorBehavior)
@@ -29,8 +29,8 @@ namespace ERHMS.Desktop.Commands
 
     public class SyncCommand<T> : Command
     {
-        private Action<T> execute;
-        private Func<T, bool> canExecute;
+        private readonly Action<T> execute;
+        private readonly Func<T, bool> canExecute;
 
         public SyncCommand(Action<T> execute, Func<T, bool> canExecute, ErrorBehavior errorBehavior)
             : base(execute, errorBehavior)

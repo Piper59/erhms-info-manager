@@ -9,7 +9,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XProject : XElement
     {
-        private static readonly ICollection<string> ConfigurationSettingNames = new string[]
+        internal static readonly IReadOnlyCollection<string> ConfigurationSettingNames = new string[]
         {
             "ControlFontBold",
             "ControlFontItalics",
@@ -36,64 +36,48 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 EpiVersion = project.EpiVersion,
                 CreateDate = project.CreateDate
             };
-            xProject.OnCreated(TemplateLevel.Project);
+            Configuration configuration = Configuration.GetNewInstance();
+            foreach (string settingName in ConfigurationSettingNames)
+            {
+                xProject.SetAttributeValue(configuration.Settings[settingName], settingName);
+            }
             return xProject;
         }
 
         public Guid? Id
         {
-            get
-            {
-                if (Guid.TryParse((string)this.GetAttributeEx(), out Guid value))
-                {
-                    return value;
-                }
-                return null;
-            }
-            set
-            {
-                this.SetAttributeValueEx(value);
-            }
+            get { return this.GetAttributeValueOrNull<Guid>(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public new string Name
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Location
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Description
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string EpiVersion
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public DateTime? CreateDate
         {
-            get
-            {
-                if (DateTime.TryParse((string)this.GetAttributeEx(), out DateTime value))
-                {
-                    return value;
-                }
-                return null;
-            }
-            set
-            {
-                this.SetAttributeValueEx(value?.ToString(XTemplate.DateFormat));
-            }
+            get { return this.GetAttributeValueOrNull<DateTime>(); }
+            set { this.SetAttributeValue(value?.ToString(XTemplate.DateFormat)); }
         }
 
         public IEnumerable<XView> XViews => Elements().OfType<XView>();
@@ -110,20 +94,20 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 Add(new XView(xView));
             }
-            OnCreated(level);
         }
 
-        private void OnCreated(TemplateLevel level)
+        public void RemoveRelateFields()
         {
-            if (level == TemplateLevel.Project)
+            foreach (XField xField in XFields.ToList())
             {
-                Id = null;
-                Location = null;
-                CreateDate = null;
+                if (xField.FieldType == MetaFieldType.Relate)
+                {
+                    xField.Remove();
+                }
             }
-            foreach (string settingName in ConfigurationSettingNames)
+            foreach (XView xView in XViews)
             {
-                Attribute(settingName)?.Remove();
+                xView.IsRelatedView = false;
             }
         }
     }

@@ -5,16 +5,16 @@ namespace ERHMS.Data
 {
     public static class DatabaseFactory
     {
-        public static IDatabase GetDatabase(DatabaseType type, string connectionString)
+        public static IDatabase GetDatabase(DatabaseType databaseType, string connectionString)
         {
-            switch (type)
+            switch (databaseType)
             {
                 case DatabaseType.Access:
                     return new AccessDatabase(connectionString);
                 case DatabaseType.SqlServer:
                     return new SqlServerDatabase(connectionString);
                 default:
-                    throw new NotSupportedException();
+                    throw new ArgumentOutOfRangeException(nameof(databaseType));
             }
         }
 

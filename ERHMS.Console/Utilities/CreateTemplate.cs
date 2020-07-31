@@ -9,6 +9,8 @@ namespace ERHMS.Console.Utilities
 {
     public class CreateTemplate : Utility
     {
+        private const string ViewNameWildcard = "*";
+
         public string ProjectPath { get; }
         public string ViewName { get; }
         public string TemplatePath { get; }
@@ -24,7 +26,7 @@ namespace ERHMS.Console.Utilities
         {
             Project project = new Project(ProjectPath);
             TemplateCreator creator;
-            if (ViewName == "")
+            if (ViewName == ViewNameWildcard)
             {
                 creator = new ProjectTemplateCreator(project);
             }

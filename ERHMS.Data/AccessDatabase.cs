@@ -10,27 +10,22 @@ namespace ERHMS.Data
     {
         public const string Provider = "Microsoft.Jet.OLEDB.4.0";
         public const string FileExtension = ".mdb";
+        private const string ResourceName = "ERHMS.Data.Resources.AccessDatabase.mdb";
 
-        private OleDbConnectionStringBuilder builder;
-        private OleDbCommandBuilder commandBuilder = new OleDbCommandBuilder();
+        private readonly OleDbConnectionStringBuilder connectionStringBuilder;
 
         public override DatabaseType Type => DatabaseType.Access;
-        public override DbConnectionStringBuilder Builder => builder;
-        protected override DbCommandBuilder CommandBuilder => commandBuilder;
-        public string FilePath => Path.GetFullPath(builder.DataSource);
+        public override DbConnectionStringBuilder ConnectionStringBuilder => new OleDbConnectionStringBuilder(ConnectionString);
+        public string FilePath => connectionStringBuilder.DataSource;
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 
         public AccessDatabase(string connectionString)
         {
-            builder = new OleDbConnectionStringBuilder(connectionString)
+            connectionStringBuilder = new OleDbConnectionStringBuilder(connectionString)
             {
+                DataSource = Path.GetFullPath(connectionStringBuilder.DataSource),
                 Provider = Provider
             };
-        }
-
-        protected override IDbConnection GetConnection()
-        {
-            return new OleDbConnection(ConnectionString);
         }
 
         public override bool Exists()
@@ -40,8 +35,7 @@ namespace ERHMS.Data
 
         protected override void CreateCore()
         {
-            string resourceName = "ERHMS.Data.Resources.Empty.mdb";
-            using (Stream source = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            using (Stream source = Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceName))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
                 using (Stream target = File.Create(FilePath))
@@ -49,6 +43,11 @@ namespace ERHMS.Data
                     source.CopyTo(target);
                 }
             }
+        }
+
+        protected override IDbConnection GetConnection()
+        {
+            return new OleDbConnection(ConnectionString);
         }
 
         public override string ToString()

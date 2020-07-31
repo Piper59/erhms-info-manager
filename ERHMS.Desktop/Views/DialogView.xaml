@@ -54,6 +54,7 @@
                     Details
                 </Button>
                 <ItemsControl Grid.Column="1"
+                              IsTabStop="False"
                               ItemsSource="{Binding Buttons}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

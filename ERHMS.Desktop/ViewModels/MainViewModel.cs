@@ -2,6 +2,7 @@
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.EpiInfo;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -27,28 +28,42 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public Command GoHomeCommand { get; }
-        public Command OpenEpiInfoCommand { get; }
-        public Command OpenFileExplorerCommand { get; }
+        public Command ExitCommand { get; }
+        public Command ViewHomeCommand { get; }
+        public Command ViewEpiInfoCommand { get; }
+        public Command ViewFileExplorerCommand { get; }
 
         private MainViewModel()
         {
-            GoHomeCommand = new SimpleSyncCommand(GoHome);
-            OpenEpiInfoCommand = new SimpleSyncCommand(OpenEpiInfo);
-            OpenFileExplorerCommand = new SimpleSyncCommand(OpenFileExplorer);
+            ExitCommand = new SimpleSyncCommand(Exit);
+            ViewHomeCommand = new SimpleSyncCommand(ViewHome);
+            ViewEpiInfoCommand = new SimpleSyncCommand(ViewEpiInfo);
+            ViewFileExplorerCommand = new SimpleSyncCommand(ViewFileExplorer);
         }
 
-        private void GoHome()
+        public event EventHandler ExitRequested;
+
+        private void OnExitRequested()
+        {
+            ExitRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void Exit()
+        {
+            OnExitRequested();
+        }
+
+        private void ViewHome()
         {
             Content = new HomeViewModel();
         }
 
-        private void OpenEpiInfo()
+        private void ViewEpiInfo()
         {
             Module.Menu.Start();
         }
 
-        private void OpenFileExplorer()
+        private void ViewFileExplorer()
         {
             string entryDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             Process.Start(entryDirectory);

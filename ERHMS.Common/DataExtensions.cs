@@ -15,9 +15,10 @@ namespace ERHMS.Common
             {
                 return false;
             }
-            foreach (DataColumn column in table1.Columns)
+            foreach (DataColumn column1 in table1.Columns)
             {
-                if (!table2.Columns.Contains(column.ColumnName))
+                DataColumn column2 = table2.Columns[column1.ColumnName];
+                if (column2 == null || column2.DataType != column1.DataType)
                 {
                     return false;
                 }
@@ -26,9 +27,10 @@ namespace ERHMS.Common
             {
                 DataRow row1 = table1.Rows[index];
                 DataRow row2 = table2.Rows[index];
-                foreach (DataColumn column in table1.Columns)
+                foreach (DataColumn column1 in table1.Columns)
                 {
-                    if (!Equals(row1[column.ColumnName], row2[column.ColumnName]))
+                    DataColumn column2 = table2.Columns[column1.ColumnName];
+                    if (!Equals(row1[column1], row2[column2]))
                     {
                         return false;
                     }
@@ -46,17 +48,16 @@ namespace ERHMS.Common
             }
             int ordinal = source.Ordinal;
             DataColumn target = @this.Columns.Add(null, dataType);
-            target.SetOrdinal(ordinal);
             foreach (DataRow row in @this.Rows)
             {
-                if (row.IsNull(source))
+                if (!row.IsNull(source))
                 {
-                    continue;
+                    row[target] = Convert.ChangeType(row[source], dataType);
                 }
-                row[target] = Convert.ChangeType(row[source], dataType);
             }
             source.Table.Columns.Remove(source);
             target.ColumnName = columnName;
+            target.SetOrdinal(ordinal);
         }
     }
 }

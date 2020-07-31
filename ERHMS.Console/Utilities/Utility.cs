@@ -10,7 +10,7 @@ namespace ERHMS.Console.Utilities
 {
     public abstract class Utility : IUtility
     {
-        public static readonly IDictionary<string, Type> Types = typeof(IUtility).Assembly.GetTypes()
+        public static readonly IReadOnlyDictionary<string, Type> Types = typeof(IUtility).Assembly.GetTypes()
             .Where(type => typeof(IUtility).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
             .ToDictionary(type => type.Name, type => type, StringComparer.OrdinalIgnoreCase);
 
@@ -18,7 +18,7 @@ namespace ERHMS.Console.Utilities
         {
             if (!Types.TryGetValue(typeName, out Type type))
             {
-                throw new ArgumentException($"The utility '{typeName}' could not be found.");
+                throw new ArgumentException($"Utility '{typeName}' could not be found.");
             }
             ConstructorInfo constructor = type.GetConstructors().Single();
             object[] parameters = GetParameters(constructor, args).ToArray();
@@ -31,7 +31,7 @@ namespace ERHMS.Console.Utilities
             if (args.Count != parameters.Count)
             {
                 StringBuilder message = new StringBuilder();
-                message.Append($"The '{constructor.DeclaringType.Name}' utility must be invoked with ");
+                message.Append($"Utility '{constructor.DeclaringType.Name}' must be invoked with ");
                 if (parameters.Count == 0)
                 {
                     message.Append("no arguments");

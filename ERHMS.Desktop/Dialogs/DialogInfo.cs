@@ -17,20 +17,27 @@ namespace ERHMS.Desktop.Dialogs
         {
             switch (preset)
             {
-                case DialogInfoPreset.Normal:
-                    Buttons = DialogButtonCollection.OK;
+                case DialogInfoPreset.Default:
+                    Buttons = new DialogButtonCollection
+                    {
+                        new DialogButton(null, "OK", true, true)
+                    };
                     break;
                 case DialogInfoPreset.Warning:
                     Sound = SystemSounds.Asterisk;
                     Icon = SystemIcons.Warning;
+                    Buttons = new DialogButtonCollection();
                     break;
                 case DialogInfoPreset.Error:
                     Sound = SystemSounds.Asterisk;
                     Icon = SystemIcons.Error;
-                    Buttons = DialogButtonCollection.Close;
+                    Buttons = new DialogButtonCollection
+                    {
+                        new DialogButton(null, "Close", true, true)
+                    };
                     break;
                 default:
-                    throw new NotSupportedException();
+                    throw new ArgumentOutOfRangeException(nameof(preset));
             }
         }
     }

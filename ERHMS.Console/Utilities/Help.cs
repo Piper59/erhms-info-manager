@@ -1,24 +1,25 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
+using System.Text;
 
 namespace ERHMS.Console.Utilities
 {
     public class Help : Utility
     {
-        private TextWriter writer;
-        public TextWriter Writer
+        public static string GetUsage()
         {
-            get { return writer ?? Out; }
-            set { writer = value; }
+            StringBuilder usage = new StringBuilder();
+            usage.Append("The following utilities are available:");
+            foreach (string typeName in Types.Keys.OrderBy(typeName => typeName))
+            {
+                usage.AppendLine();
+                usage.Append($"  {typeName}");
+            }
+            return usage.ToString();
         }
 
         protected override void RunCore()
         {
-            Writer.WriteLine("The following utilities are available:");
-            foreach (string typeName in Types.Keys.OrderBy(typeName => typeName))
-            {
-                Writer.WriteLine($"  {typeName}");
-            }
+            Out.WriteLine(GetUsage());
         }
     }
 }

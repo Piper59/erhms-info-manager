@@ -18,38 +18,37 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 BackgroundId = page.BackgroundId,
                 ViewId = page.GetView().Id
             };
-            xPage.OnCreated();
             return xPage;
         }
 
         public int PageId
         {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
-        }
-
-        public int ViewId
-        {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public new string Name
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Position
         {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int BackgroundId
         {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public int ViewId
+        {
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XView XView => (XView)Parent;
@@ -66,12 +65,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 Add(new XField(xField));
             }
-            OnCreated();
-        }
-
-        private void OnCreated()
-        {
-            BackgroundId = 0;
         }
 
         public Page Instantiate(View view)

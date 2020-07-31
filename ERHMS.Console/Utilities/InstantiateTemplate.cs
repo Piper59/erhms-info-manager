@@ -33,7 +33,7 @@ namespace ERHMS.Console.Utilities
                     instantiator = new ViewTemplateInstantiator(xTemplate, project);
                     break;
                 default:
-                    throw new ArgumentException("Template level is not project or view.");
+                    throw new ArgumentException($"Template level '{xTemplate.Level}' is not supported.");
             }
             instantiator.Progress = new ProgressLogger();
             instantiator.Instantiate();

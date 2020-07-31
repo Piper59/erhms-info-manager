@@ -17,7 +17,7 @@ namespace ERHMS.Desktop.Infrastructure
                 case Phase.PostDeployment:
                     return Colors.PostDeployment;
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentOutOfRangeException(nameof(@this));
             }
         }
 
@@ -32,7 +32,7 @@ namespace ERHMS.Desktop.Infrastructure
                 case Phase.PostDeployment:
                     return "Post-deployment";
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentOutOfRangeException(nameof(@this));
             }
         }
     }

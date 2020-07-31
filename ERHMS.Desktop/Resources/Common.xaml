@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=mscorlib">
     <!-- Fonts -->
-    <System:Double x:Key="SmallFontSize">12</System:Double>
+    <System:Double x:Key="SmallFontSize">13.333</System:Double>
     <System:Double x:Key="DefaultFontSize">16</System:Double>
     <System:Double x:Key="MediumFontSize">20</System:Double>
     <System:Double x:Key="LargeFontSize">24</System:Double>

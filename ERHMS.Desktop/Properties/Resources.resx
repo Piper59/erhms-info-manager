@@ -120,4 +120,13 @@
   <data name="AppTitle" xml:space="preserve">
     <value>ERHMS Info Manager</value>
   </data>
+  <data name="HandledErrorLead" xml:space="preserve">
+    <value>ERHMS Info Manager has encountered an error</value>
+  </data>
+  <data name="SettingsResetLead" xml:space="preserve">
+    <value>Settings have been reset</value>
+  </data>
+  <data name="UnhandledErrorMessage" xml:space="preserve">
+    <value>ERHMS Info Manager has encountered an error and must shut down.</value>
+  </data>
 </root>

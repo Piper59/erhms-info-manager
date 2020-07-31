@@ -22,62 +22,61 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 LabelAlign = view.PageLabelAlign,
                 SurveyId = view.WebSurveyId
             };
-            xView.OnCreated();
             return xView;
         }
 
         public int ViewId
         {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public new string Name
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public bool IsRelatedView
         {
-            get { return (bool)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (bool)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string CheckCode
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Width
         {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Height
         {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Orientation
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string LabelAlign
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string SurveyId
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XProject XProject => (XProject)Parent;
@@ -95,13 +94,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 Add(new XPage(xPage));
             }
-            OnCreated();
-        }
-
-        private void OnCreated()
-        {
-            SurveyId = null;
-            CheckCode = CheckCode.Trim();
         }
 
         public View Instantiate(Project project)

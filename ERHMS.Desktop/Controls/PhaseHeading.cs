@@ -13,15 +13,10 @@ namespace ERHMS.Desktop.Controls
         private static readonly Point StartPoint = new Point(0.5, 0.0);
         private static readonly Point EndPoint = new Point(1.0, 0.0);
 
-        private static Color GetColor(Color color, byte alpha)
-        {
-            return Color.FromArgb(alpha, color.R, color.G, color.B);
-        }
-
         private static Brush GetBackground(Color color)
         {
-            Color startColor = GetColor(color, StartAlpha);
-            Color endColor = GetColor(color, EndAlpha);
+            Color startColor = color.CopyWithAlpha(StartAlpha);
+            Color endColor = color.CopyWithAlpha(EndAlpha);
             return new LinearGradientBrush(startColor, endColor, StartPoint, EndPoint);
         }
 
@@ -48,9 +43,9 @@ namespace ERHMS.Desktop.Controls
 
         public PhaseHeading()
         {
-            Margin = (Thickness)Application.Current.FindResource("SmallThickness");
-            double padding = (double)Application.Current.FindResource("SmallSpace");
-            Padding = new Thickness(padding, 0.0, padding, 0.0);
+            double space = (double)Application.Current.FindResource("SmallSpace");
+            Margin = new Thickness(space);
+            Padding = new Thickness(space, 0.0, space, 0.0);
             SnapsToDevicePixels = true;
             Child = new TextBlock
             {

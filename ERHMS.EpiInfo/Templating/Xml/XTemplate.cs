@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.EpiInfo.Infrastructure;
+﻿using ERHMS.EpiInfo.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +34,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         {
             if (!IsLevelSupported(level))
             {
-                throw new NotSupportedException();
+                throw new ArgumentOutOfRangeException(nameof(level));
             }
             return new XTemplate
             {
@@ -48,36 +47,26 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public new string Name
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Description
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public DateTime? CreateDate
         {
-            get
-            {
-                if (DateTime.TryParse((string)this.GetAttributeEx(), out DateTime value))
-                {
-                    return value;
-                }
-                return null;
-            }
-            set
-            {
-                this.SetAttributeValueEx(value?.ToString(DateFormat));
-            }
+            get { return this.GetAttributeValueOrNull<DateTime>(); }
+            set { this.SetAttributeValue(value?.ToString(DateFormat)); }
         }
 
         public TemplateLevel Level
         {
-            get { return TemplateLevelExtensions.Parse((string)this.GetAttributeEx()); }
-            set { this.SetAttributeValueEx(value); }
+            get { return TemplateLevelExtensions.Parse((string)this.GetAttribute()); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XProject XProject => Elements().OfType<XProject>().Single();
@@ -93,7 +82,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             Add(element.Attributes());
             if (!IsLevelSupported(Level))
             {
-                throw new NotSupportedException();
+                throw new ArgumentException($"Template level '{Level}' is not supported.", nameof(element));
             }
             XElement xProject = element.Element(ElementNames.Project);
             Add(new XProject(xProject, Level));
@@ -103,31 +92,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 {
                     Add(new XTable(xTable));
                 }
-            }
-            OnCreated();
-        }
-
-        internal void OnCreated()
-        {
-            CreateDate = null;
-            if (Level != TemplateLevel.Project)
-            {
-                RemoveRelateFields();
-            }
-        }
-
-        private void RemoveRelateFields()
-        {
-            ICollection<XField> xFields = XProject.XFields
-                .Where(xField => xField.FieldType == MetaFieldType.Relate)
-                .ToList();
-            foreach (XField xField in xFields)
-            {
-                xField.Remove();
-            }
-            foreach (XView xView in XProject.XViews)
-            {
-                xView.IsRelatedView = false;
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,12 +17,12 @@ namespace ERHMS.Desktop.Commands
             CommandManager.InvalidateRequerySuggested();
         }
 
-        public Delegate Delegate { get; }
+        public string Name { get; }
         public ErrorBehavior ErrorBehavior { get; }
 
-        protected Command(Delegate @delegate, ErrorBehavior errorBehavior)
+        protected Command(Delegate execute, ErrorBehavior errorBehavior)
         {
-            Delegate = @delegate;
+            Name = $"{execute.Method.DeclaringType}.{execute.Method.Name}";
             ErrorBehavior = errorBehavior;
         }
 
@@ -37,16 +36,28 @@ namespace ERHMS.Desktop.Commands
 
         protected virtual void OnError(ErrorEventArgs e)
         {
-            IEnumerable<Delegate> delegates = Enumerable.Concat(
-                Error?.GetInvocationList() ?? Enumerable.Empty<Delegate>(),
-                GlobalError?.GetInvocationList() ?? Enumerable.Empty<Delegate>());
-            foreach (EventHandler<ErrorEventArgs> handler in delegates)
+            if (!e.Handled)
             {
-                if (e.Handled)
+                OnErrorInternal(e, Error?.GetInvocationList());
+                if (!e.Handled)
                 {
-                    break;
+                    OnErrorInternal(e, GlobalError?.GetInvocationList());
                 }
-                handler(this, e);
+            }
+        }
+
+        private void OnErrorInternal(ErrorEventArgs e, IEnumerable<Delegate> handlers)
+        {
+            if (handlers != null)
+            {
+                foreach (EventHandler<ErrorEventArgs> handler in handlers)
+                {
+                    handler(this, e);
+                    if (e.Handled)
+                    {
+                        break;
+                    }
+                }
             }
         }
 
@@ -85,7 +96,7 @@ namespace ERHMS.Desktop.Commands
 
         public override string ToString()
         {
-            return $"{Delegate.Method.DeclaringType}.{Delegate.Method.Name}";
+            return Name;
         }
     }
 }

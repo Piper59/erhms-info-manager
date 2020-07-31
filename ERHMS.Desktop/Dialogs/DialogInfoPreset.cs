@@ -2,7 +2,7 @@
 {
     public enum DialogInfoPreset
     {
-        Normal,
+        Default,
         Warning,
         Error
     }

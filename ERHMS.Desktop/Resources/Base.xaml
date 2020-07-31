@@ -47,20 +47,20 @@
     <Style TargetType="Label" BasedOn="{StaticResource LabelBase}" />
 
     <Style x:Key="MenuBase" TargetType="Menu">
-        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
     </Style>
     <Style TargetType="Menu" BasedOn="{StaticResource MenuBase}" />
 
     <Style x:Key="MenuItemBase" TargetType="MenuItem">
-        <Style.Triggers>
-            <Trigger Property="Role" Value="TopLevelHeader">
-                <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
-            </Trigger>
-            <Trigger Property="Role" Value="TopLevelItem">
-                <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
-            </Trigger>
-        </Style.Triggers>
-        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Padding">
+            <Setter.Value>
+                <Thickness Bottom="{StaticResource SmallSpace}"
+                           Left="{StaticResource LargeSpace}"
+                           Right="{StaticResource LargeSpace}"
+                           Top="{StaticResource SmallSpace}" />
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}" />
 

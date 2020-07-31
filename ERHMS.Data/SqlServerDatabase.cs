@@ -9,32 +9,25 @@ namespace ERHMS.Data
     {
         private const string MasterDatabaseName = "master";
 
-        private SqlConnectionStringBuilder builder;
-        private SqlCommandBuilder commandBuilder = new SqlCommandBuilder();
+        private readonly SqlConnectionStringBuilder connectionStringBuilder;
 
         public override DatabaseType Type => DatabaseType.SqlServer;
-        public override DbConnectionStringBuilder Builder => builder;
-        protected override DbCommandBuilder CommandBuilder => commandBuilder;
-        public string Instance => builder.DataSource;
-        public override string Name => builder.InitialCatalog;
+        public override DbConnectionStringBuilder ConnectionStringBuilder => new SqlConnectionStringBuilder(ConnectionString);
+        public string Instance => connectionStringBuilder.DataSource;
+        public override string Name => connectionStringBuilder.InitialCatalog;
 
         public SqlServerDatabase(string connectionString)
         {
-            builder = new SqlConnectionStringBuilder(connectionString);
-        }
-
-        protected override IDbConnection GetConnection()
-        {
-            return new SqlConnection(ConnectionString);
+            connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
         }
 
         private IDbConnection GetMasterConnection()
         {
-            DbConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString)
+            DbConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString)
             {
                 InitialCatalog = MasterDatabaseName
             };
-            return new SqlConnection(builder.ConnectionString);
+            return new SqlConnection(connectionStringBuilder.ConnectionString);
         }
 
         public override bool Exists()
@@ -59,17 +52,21 @@ namespace ERHMS.Data
             }
         }
 
+        protected override IDbConnection GetConnection()
+        {
+            return new SqlConnection(ConnectionString);
+        }
+
         public override string ToString()
         {
-            if (Name == null)
+            if (Name == "")
             {
-                return null;
+                return Instance;
             }
-            if (Instance == null)
+            else
             {
-                return Name;
+                return $"{Instance}.{Name}";
             }
-            return $"{Instance}.{Name}";
         }
     }
 }

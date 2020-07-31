@@ -9,19 +9,24 @@ namespace ERHMS.Desktop.Views
         public MainView()
         {
             InitializeComponent();
-            Settings.Default.Apply(this);
-            SizeChanged += OnSizeChanged;
+            Settings.Default.ApplyTo(this);
         }
 
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
-            Settings.Default.Update(this);
+            base.OnRenderSizeChanged(sizeInfo);
+            Settings.Default.UpdateFrom(this);
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            Settings.Default.Save();
             base.OnClosed(e);
+            Settings.Default.Save();
+        }
+
+        private void DataContext_ExitRequested(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

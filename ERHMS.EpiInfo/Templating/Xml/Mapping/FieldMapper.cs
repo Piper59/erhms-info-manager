@@ -1,10 +1,8 @@
 ﻿using Epi;
 using Epi.Fields;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
@@ -13,7 +11,7 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
     {
         protected FieldMappingCollection<TField> Mappings { get; set; }
 
-        protected virtual void OnError(FieldMappingException ex)
+        protected void OnError(FieldMappingException ex)
         {
             Log.Default.Warn(ex);
         }
@@ -41,53 +39,58 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             }
         }
     }
-    public class RenderableFieldMapper : FieldMapper<RenderableField>
+
+    public class DateFieldMapper : FieldMapper<DateField>
     {
-        private static bool TryGetFont(XField xField, string propertyName, out Font value)
+        public DateFieldMapper()
         {
-            ICollection<string> keys = new string[] {
-                "Family",
-                "Size",
-                "Style"
+            Mappings = new FieldMappingCollection<DateField>
+            {
+                { f => f.Lower },
+                { f => f.Upper }
             };
-            IDictionary<string, XAttribute> attributes = keys.ToDictionary(
-                key => key,
-                key => xField.Attribute($"{propertyName}{key}"));
-            if (attributes.Values.Any(attribute => attribute == null || attribute.Value == ""))
+        }
+    }
+
+    public class DDLFieldOfCodesMapper : FieldMapper<DDLFieldOfCodes>
+    {
+        private const char FieldInfoSeparator = ':';
+
+        public static string MapAssociatedFieldInformation(string value, IDictionary<int, int> fieldIdMap)
+        {
+            IList<string> fieldInfos = value.Split(Constants.LIST_SEPARATOR);
+            for (int index = 0; index < fieldInfos.Count; index++)
             {
-                value = null;
-                return false;
+                string fieldInfo = fieldInfos[index];
+                IList<string> chunks = fieldInfo.Split(FieldInfoSeparator);
+                if (chunks.Count != 2)
+                {
+                    continue;
+                }
+                string columnName = chunks[0];
+                if (!int.TryParse(chunks[1], out int fieldId))
+                {
+                    continue;
+                }
+                if (!fieldIdMap.TryGetValue(fieldId, out fieldId))
+                {
+                    continue;
+                }
+                fieldInfos[index] = $"{columnName}{FieldInfoSeparator}{fieldId}";
             }
-            value = new Font(
-                new FontFamily((string)attributes["Family"]),
-                (float)attributes["Size"],
-                (FontStyle)Enum.Parse(typeof(FontStyle), (string)attributes["Style"]));
-            return true;
+            return string.Join(Constants.LIST_SEPARATOR.ToString(), fieldInfos);
         }
 
-        private static bool TryGetControlFont(XField xField, out Font value)
+        public static void MapAssociatedFieldInformation(DDLFieldOfCodes field, IDictionary<int, int> fieldIdMap)
         {
-            return TryGetFont(xField, nameof(RenderableField.ControlFont), out value);
+            field.AssociatedFieldInformation = MapAssociatedFieldInformation(field.AssociatedFieldInformation, fieldIdMap);
         }
 
-        private static bool TryGetPromptFont(XField xField, out Font value)
+        public DDLFieldOfCodesMapper()
         {
-            return TryGetFont(xField, nameof(RenderableField.PromptFont), out value);
-        }
-
-        public RenderableFieldMapper()
-        {
-            Mappings = new FieldMappingCollection<RenderableField>
+            Mappings = new FieldMappingCollection<DDLFieldOfCodes>
             {
-                { f => f.PromptText },
-                { f => f.ControlWidthPercentage },
-                { f => f.ControlHeightPercentage },
-                { f => f.ControlLeftPositionPercentage },
-                { f => f.ControlTopPositionPercentage },
-                { f => f.TabIndex },
-                { f => f.HasTabStop },
-                { f => f.ControlFont, TryGetControlFont },
-                { f => f.PromptFont, TryGetPromptFont }
+                { f => f.AssociatedFieldInformation, ColumnNames.RELATE_CONDITION }
             };
         }
     }
@@ -100,6 +103,62 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             {
                 { f => f.PromptLeftPositionPercentage },
                 { f => f.PromptTopPositionPercentage }
+            };
+        }
+    }
+
+    public class GroupFieldMapper : FieldMapper<GroupField>
+    {
+        private static bool TryGetBackgroundColor(XField xField, out Color value)
+        {
+            if (xField.BackgroundColor == null)
+            {
+                value = Color.Empty;
+                return false;
+            }
+            else
+            {
+                value = Color.FromArgb(xField.BackgroundColor.Value);
+                return true;
+            }
+        }
+
+        public static string MapChildFieldNames(string value, IDictionary<string, string> fieldNameMap)
+        {
+            IList<string> fieldNames = value.Split(Constants.LIST_SEPARATOR);
+            for (int index = 0; index < fieldNames.Count; index++)
+            {
+                string original = fieldNames[index];
+                if (fieldNameMap.TryGetValue(original, out string modified))
+                {
+                    fieldNames[index] = modified;
+                }
+            }
+            return string.Join(Constants.LIST_SEPARATOR.ToString(), fieldNames);
+        }
+
+        public static void MapChildFieldNames(GroupField field, IDictionary<string, string> fieldNameMap)
+        {
+            field.ChildFieldNames = MapChildFieldNames(field.ChildFieldNames, fieldNameMap);
+        }
+
+        public GroupFieldMapper()
+        {
+            Mappings = new FieldMappingCollection<GroupField>
+            {
+                { f => f.ChildFieldNames, ColumnNames.LIST },
+                { f => f.BackgroundColor, TryGetBackgroundColor }
+            };
+        }
+    }
+
+    public class ImageFieldMapper : FieldMapper<ImageField>
+    {
+        public ImageFieldMapper()
+        {
+            Mappings = new FieldMappingCollection<ImageField>
+            {
+                { f => f.ShouldRetainImageSize }
             };
         }
     }
@@ -130,15 +189,13 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
         }
     }
 
-    public class TextFieldMapper : FieldMapper<TextField>
+    public class MirrorFieldMapper : FieldMapper<MirrorField>
     {
-        public TextFieldMapper()
+        public MirrorFieldMapper()
         {
-            Mappings = new FieldMappingCollection<TextField>
+            Mappings = new FieldMappingCollection<MirrorField>
             {
-                { f => f.MaxLength },
-                { f => f.SourceFieldId },
-                { f => f.IsEncrypted }
+                { f => f.SourceFieldId }
             };
         }
     }
@@ -150,29 +207,6 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             Mappings = new FieldMappingCollection<NumberField>
             {
                 { f => f.Pattern },
-                { f => f.Lower },
-                { f => f.Upper }
-            };
-        }
-    }
-
-    public class PhoneNumberFieldMapper : FieldMapper<PhoneNumberField>
-    {
-        public PhoneNumberFieldMapper()
-        {
-            Mappings = new FieldMappingCollection<PhoneNumberField>
-            {
-                { f => f.Pattern }
-            };
-        }
-    }
-
-    public class DateFieldMapper : FieldMapper<DateField>
-    {
-        public DateFieldMapper()
-        {
-            Mappings = new FieldMappingCollection<DateField>
-            {
                 { f => f.Lower },
                 { f => f.Upper }
             };
@@ -206,24 +240,55 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
         }
     }
 
-    public class ImageFieldMapper : FieldMapper<ImageField>
+    public class PhoneNumberFieldMapper : FieldMapper<PhoneNumberField>
     {
-        public ImageFieldMapper()
+        public PhoneNumberFieldMapper()
         {
-            Mappings = new FieldMappingCollection<ImageField>
+            Mappings = new FieldMappingCollection<PhoneNumberField>
             {
-                { f => f.ShouldRetainImageSize }
+                { f => f.Pattern }
             };
         }
     }
 
-    public class MirrorFieldMapper : FieldMapper<MirrorField>
+    public class RelatedViewFieldMapper : FieldMapper<RelatedViewField>
     {
-        public MirrorFieldMapper()
+        public RelatedViewFieldMapper()
         {
-            Mappings = new FieldMappingCollection<MirrorField>
+            Mappings = new FieldMappingCollection<RelatedViewField>
             {
-                { f => f.SourceFieldId }
+                { f => f.RelatedViewID, "RelatedViewId" },
+                { f => f.ShouldReturnToParent },
+                { f => f.Condition, ColumnNames.RELATE_CONDITION }
+            };
+        }
+    }
+
+    public class RenderableFieldMapper : FieldMapper<RenderableField>
+    {
+        private static bool TryGetControlFont(XField xField, out Font value)
+        {
+            return xField.TryGetFont(nameof(RenderableField.ControlFont), out value);
+        }
+
+        private static bool TryGetPromptFont(XField xField, out Font value)
+        {
+            return xField.TryGetFont(nameof(RenderableField.PromptFont), out value);
+        }
+
+        public RenderableFieldMapper()
+        {
+            Mappings = new FieldMappingCollection<RenderableField>
+            {
+                { f => f.PromptText },
+                { f => f.ControlWidthPercentage },
+                { f => f.ControlHeightPercentage },
+                { f => f.ControlLeftPositionPercentage },
+                { f => f.ControlTopPositionPercentage },
+                { f => f.TabIndex },
+                { f => f.HasTabStop },
+                { f => f.ControlFont, TryGetControlFont },
+                { f => f.PromptFont, TryGetPromptFont }
             };
         }
     }
@@ -243,90 +308,15 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
         }
     }
 
-    public class DDLFieldOfCodesMapper : FieldMapper<DDLFieldOfCodes>
+    public class TextFieldMapper : FieldMapper<TextField>
     {
-        private const char RelateConditionSeparator = ':';
-
-        public static string MapRelateConditions(string conditions, IDictionary<int, int> fieldIdMap)
+        public TextFieldMapper()
         {
-            IList<string> conditionList = conditions.Split(Constants.LIST_SEPARATOR);
-            for (int index = 0; index < conditionList.Count; index++)
+            Mappings = new FieldMappingCollection<TextField>
             {
-                string condition = conditionList[index];
-                IList<string> chunks = condition.Split(RelateConditionSeparator);
-                if (chunks.Count != 2)
-                {
-                    continue;
-                }
-                string columnName = chunks[0];
-                if (!int.TryParse(chunks[1], out int fieldId))
-                {
-                    continue;
-                }
-                if (!fieldIdMap.TryGetValue(fieldId, out fieldId))
-                {
-                    continue;
-                }
-                conditionList[index] = string.Concat(columnName, RelateConditionSeparator, fieldId);
-            }
-            return string.Join(Constants.LIST_SEPARATOR.ToString(), conditionList);
-        }
-
-        public DDLFieldOfCodesMapper()
-        {
-            Mappings = new FieldMappingCollection<DDLFieldOfCodes>
-            {
-                { f => f.AssociatedFieldInformation, ColumnNames.RELATE_CONDITION }
-            };
-        }
-    }
-
-    public class RelatedViewFieldMapper : FieldMapper<RelatedViewField>
-    {
-        public RelatedViewFieldMapper()
-        {
-            Mappings = new FieldMappingCollection<RelatedViewField>
-            {
-                { f => f.RelatedViewID, "RelatedViewId" },
-                { f => f.ShouldReturnToParent },
-                { f => f.Condition, ColumnNames.RELATE_CONDITION }
-            };
-        }
-    }
-
-    public class GroupFieldMapper : FieldMapper<GroupField>
-    {
-        private static bool TryGetBackgroundColor(XField xField, out Color value)
-        {
-            if (xField.BackgroundColor == null)
-            {
-                value = Color.Empty;
-                return false;
-            }
-            value = Color.FromArgb(xField.BackgroundColor.Value);
-            return true;
-        }
-
-        public static string MapChildFieldNames(string fieldNames, IDictionary<string, string> fieldNameMap)
-        {
-            IList<string> fieldNameList = fieldNames.Split(Constants.LIST_SEPARATOR);
-            for (int index = 0; index < fieldNameList.Count; index++)
-            {
-                string original = fieldNameList[index];
-                if (fieldNameMap.TryGetValue(original, out string modified))
-                {
-                    fieldNameList[index] = modified;
-                }
-            }
-            return string.Join(Constants.LIST_SEPARATOR.ToString(), fieldNameList);
-        }
-
-        public GroupFieldMapper()
-        {
-            Mappings = new FieldMappingCollection<GroupField>
-            {
-                { f => f.ChildFieldNames, ColumnNames.LIST },
-                { f => f.BackgroundColor, TryGetBackgroundColor }
+                { f => f.MaxLength },
+                { f => f.SourceFieldId },
+                { f => f.IsEncrypted }
             };
         }
     }

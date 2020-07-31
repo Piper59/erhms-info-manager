@@ -7,9 +7,9 @@ namespace ERHMS.Desktop.Properties
 {
     internal partial class Settings
     {
-        public void Apply(Configuration configuration)
+        public void ApplyTo(Configuration configuration)
         {
-            if (FipsCrypto)
+            if (UseFipsCrypto)
             {
                 configuration.SetFipsCrypto();
             }
@@ -21,14 +21,14 @@ namespace ERHMS.Desktop.Properties
             row.GridSize = GridSize;
         }
 
-        public void Apply(Window window)
+        public void ApplyTo(Window window)
         {
             window.Width = WindowWidth;
             window.Height = WindowHeight;
             window.WindowState = WindowMaximized ? WindowState.Maximized : WindowState.Normal;
         }
 
-        public void Update(Window window)
+        public void UpdateFrom(Window window)
         {
             if (window.WindowState == WindowState.Maximized)
             {

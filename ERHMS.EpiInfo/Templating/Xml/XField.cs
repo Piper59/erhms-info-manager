@@ -5,36 +5,30 @@ using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XField : XElement
     {
-        private static readonly ISet<string> IgnoredColumnNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly IReadOnlyCollection<IFieldMapper> Mappers = new IFieldMapper[]
         {
-            "UniqueId",
-            "Expr1015",
-            "Expr1016",
-            "Expr1017"
-        };
-        private static readonly ICollection<IFieldMapper> Mappers = new IFieldMapper[]
-        {
-            new RenderableFieldMapper(),
+            new DateFieldMapper(),
+            new DDLFieldOfCodesMapper(),
             new FieldWithSeparatePromptMapper(),
+            new GroupFieldMapper(),
+            new ImageFieldMapper(),
             new InputFieldWithoutSeparatePromptMapper(),
             new InputFieldWithSeparatePromptMapper(),
-            new TextFieldMapper(),
-            new NumberFieldMapper(),
-            new PhoneNumberFieldMapper(),
-            new DateFieldMapper(),
-            new OptionFieldMapper(),
-            new ImageFieldMapper(),
             new MirrorFieldMapper(),
-            new TableBasedDropDownFieldMapper(),
-            new DDLFieldOfCodesMapper(),
+            new NumberFieldMapper(),
+            new OptionFieldMapper(),
+            new PhoneNumberFieldMapper(),
             new RelatedViewFieldMapper(),
-            new GroupFieldMapper()
+            new RenderableFieldMapper(),
+            new TableBasedDropDownFieldMapper(),
+            new TextFieldMapper()
         };
 
         public static XField Create(DataRow field)
@@ -42,34 +36,39 @@ namespace ERHMS.EpiInfo.Templating.Xml
             XField xField = new XField();
             foreach (DataColumn column in field.Table.Columns)
             {
-                xField.SetAttributeValueEx(field[column], column.ColumnName);
+                xField.SetAttributeValue(field[column], column.ColumnName);
             }
-            xField.OnCreated();
             return xField;
-        }
-
-        public int FieldId
-        {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
-        }
-
-        public int PageId
-        {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
         }
 
         public new string Name
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public int PageId
+        {
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public int FieldId
+        {
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public Guid? UniqueId
+        {
+            get { return this.GetAttributeValueOrNull<Guid>(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int FieldTypeId
         {
-            get { return (int)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (int)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public MetaFieldType FieldType
@@ -78,86 +77,46 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { FieldTypeId = (int)value; }
         }
 
-        public int? BackgroundColor
-        {
-            get
-            {
-                if (int.TryParse((string)this.GetAttributeEx(), out int value))
-                {
-                    return value;
-                }
-                return null;
-            }
-            set
-            {
-                this.SetAttributeValueEx(value);
-            }
-        }
-
-        public string List
-        {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
-        }
-
         public string RelateCondition
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int? RelatedViewId
         {
-            get
-            {
-                if (int.TryParse((string)this.GetAttributeEx(), out int value))
-                {
-                    return value;
-                }
-                return null;
-            }
-            set
-            {
-                this.SetAttributeValueEx(value);
-            }
+            get { return this.GetAttributeValueOrNull<int>(); }
+            set { this.SetAttributeValue(value); }
         }
 
-        public int? SourceFieldId
+        public string List
         {
-            get
-            {
-                if (int.TryParse((string)this.GetAttributeEx(), out int value))
-                {
-                    return value;
-                }
-                return null;
-            }
-            set
-            {
-                this.SetAttributeValueEx(value);
-            }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string SourceTableName
         {
-            get { return (string)this.GetAttributeEx(); }
-            set { this.SetAttributeValueEx(value); }
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public int? BackgroundColor
+        {
+            get { return this.GetAttributeValueOrNull<int>(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public double? TabIndex
         {
-            get
-            {
-                if (double.TryParse((string)this.GetAttributeEx(), out double value))
-                {
-                    return value;
-                }
-                return null;
-            }
-            set
-            {
-                this.SetAttributeValueEx(value);
-            }
+            get { return this.GetAttributeValueOrNull<double>(); }
+            set { this.SetAttributeValue(value); }
+        }
+
+        public int? SourceFieldId
+        {
+            get { return this.GetAttributeValueOrNull<int>(); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XPage XPage => (XPage)Parent;
@@ -166,20 +125,24 @@ namespace ERHMS.EpiInfo.Templating.Xml
             : base(ElementNames.Field) { }
 
         public XField(XElement element)
-            : base(element)
-        {
-            OnCreated();
-        }
+            : base(element) { }
 
-        private void OnCreated()
+        public bool TryGetFont(string propertyName, out Font font)
         {
-            if (BackgroundColor == null)
+            if (this.TryGetAttribute($"{propertyName}Family", out XAttribute xFamily)
+                && this.TryGetAttribute($"{propertyName}Size", out XAttribute xSize)
+                && this.TryGetAttribute($"{propertyName}Style", out XAttribute xStyle))
             {
-                Attribute(nameof(BackgroundColor))?.Remove();
+                FontFamily family = new FontFamily((string)xFamily);
+                float size = (float)xSize;
+                FontStyle style = (FontStyle)Enum.Parse(typeof(FontStyle), (string)xStyle);
+                font = new Font(family, size, style);
+                return true;
             }
-            foreach (string columnName in IgnoredColumnNames)
+            else
             {
-                Attribute(columnName)?.Remove();
+                font = null;
+                return false;
             }
         }
 

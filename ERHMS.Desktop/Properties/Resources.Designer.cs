@@ -68,5 +68,32 @@ namespace ERHMS.Desktop.Properties {
                 return ResourceManager.GetString("AppTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
+        /// </summary>
+        public static string HandledErrorLead {
+            get {
+                return ResourceManager.GetString("HandledErrorLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings have been reset.
+        /// </summary>
+        public static string SettingsResetLead {
+            get {
+                return ResourceManager.GetString("SettingsResetLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
+        /// </summary>
+        public static string UnhandledErrorMessage {
+            get {
+                return ResourceManager.GetString("UnhandledErrorMessage", resourceCulture);
+            }
+        }
     }
 }

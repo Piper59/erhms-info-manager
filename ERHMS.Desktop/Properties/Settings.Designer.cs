@@ -61,19 +61,19 @@ namespace ERHMS.Desktop.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool FipsCrypto {
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int GridSize {
             get {
-                return ((bool)(this["FipsCrypto"]));
+                return ((int)(this["GridSize"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public int GridSize {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseFipsCrypto {
             get {
-                return ((int)(this["GridSize"]));
+                return ((bool)(this["UseFipsCrypto"]));
             }
         }
         

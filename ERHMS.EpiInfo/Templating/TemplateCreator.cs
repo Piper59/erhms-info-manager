@@ -1,6 +1,5 @@
 ﻿using Epi;
 using Epi.Data.Services;
-using ERHMS.Common;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Collections.Generic;
@@ -11,31 +10,6 @@ namespace ERHMS.EpiInfo.Templating
 {
     public abstract class TemplateCreator
     {
-        private const double GroupTabIndexDifference = 0.1;
-
-        private static IEnumerable<DataRow> GetFields(Page page)
-        {
-            DataTable table = page.GetMetadata().GetFieldsOnPageAsDataTable(page.Id);
-            table.SetColumnDataType(ColumnNames.TAB_INDEX, typeof(double));
-            IDictionary<string, DataRow> fields = table.Rows.Cast<DataRow>()
-                .ToDictionary(field => field.Field<string>(ColumnNames.NAME), StringComparer.OrdinalIgnoreCase);
-            IEnumerable<DataRow> groups = fields.Values
-                .Where(field => (MetaFieldType)field.Field<int>(ColumnNames.FIELD_TYPE_ID) == MetaFieldType.Group);
-            foreach (DataRow group in groups)
-            {
-                IEnumerable<DataRow> children = group.Field<string>(ColumnNames.LIST)
-                    ?.Split(Constants.LIST_SEPARATOR)
-                    ?.Select(fieldName => fields.TryGetValue(fieldName, out DataRow field) ? field : null);
-                double? tabIndexMin = children?.Min(child => child?.Field<double?>(ColumnNames.TAB_INDEX));
-                if (tabIndexMin == null)
-                {
-                    continue;
-                }
-                group.SetField(ColumnNames.TAB_INDEX, tabIndexMin.Value - GroupTabIndexDifference);
-            }
-            return fields.Values.OrderBy(field => field.Field<double?>(ColumnNames.TAB_INDEX));
-        }
-
         protected IMetadataProvider Metadata { get; }
         protected abstract string DisplayName { get; }
         public IProgress<string> Progress { get; set; }
@@ -53,7 +27,6 @@ namespace ERHMS.EpiInfo.Templating
             XTemplate xTemplate = CreateCore();
             AddSourceTables(xTemplate);
             AddGridTables(xTemplate);
-            xTemplate.OnCreated();
             return xTemplate;
         }
 
@@ -74,7 +47,7 @@ namespace ERHMS.EpiInfo.Templating
             Progress?.Report($"Adding page: {view.Name}/{page.Name}");
             XPage xPage = XPage.Create(page);
             xView.Add(xPage);
-            foreach (DataRow field in GetFields(page))
+            foreach (DataRow field in Metadata.GetSortedFields(page.Id))
             {
                 string fieldName = field.Field<string>(ColumnNames.NAME);
                 Progress?.Report($"Adding field: {view.Name}/{page.Name}/{fieldName}");
@@ -94,8 +67,7 @@ namespace ERHMS.EpiInfo.Templating
                 }
                 else if (xField.FieldType == MetaFieldType.Grid)
                 {
-                    DataTable gridColumns = Metadata.GetGridColumns(xField.FieldId);
-                    foreach (DataRow gridColumn in gridColumns.Rows)
+                    foreach (DataRow gridColumn in Metadata.GetGridColumns(xField.FieldId).Rows)
                     {
                         if (gridColumn.Field<MetaFieldType>(ColumnNames.FIELD_TYPE_ID).IsTableBased())
                         {
@@ -106,14 +78,13 @@ namespace ERHMS.EpiInfo.Templating
             }
             foreach (string tableName in tableNames.OrderBy(tableName => tableName, StringComparer.OrdinalIgnoreCase))
             {
-                if (string.IsNullOrEmpty(tableName))
+                if (!string.IsNullOrEmpty(tableName))
                 {
-                    continue;
+                    Progress?.Report($"Adding source table: {tableName}");
+                    DataTable table = Metadata.GetCodeTableData(tableName);
+                    table.TableName = tableName;
+                    xTemplate.Add(XTable.Create(ElementNames.SourceTable, table));
                 }
-                Progress?.Report($"Adding source table: {tableName}");
-                DataTable table = Metadata.GetCodeTableData(tableName);
-                table.TableName = tableName;
-                xTemplate.Add(XTable.Create(ElementNames.SourceTable, table));
             }
         }
 
@@ -122,14 +93,13 @@ namespace ERHMS.EpiInfo.Templating
             Progress?.Report("Adding grid tables");
             foreach (XField xField in xTemplate.XProject.XFields)
             {
-                if (xField.FieldType != MetaFieldType.Grid)
+                if (xField.FieldType == MetaFieldType.Grid)
                 {
-                    continue;
+                    Progress?.Report($"Adding grid table: {xField.Name}");
+                    DataTable table = Metadata.GetGridColumns(xField.FieldId);
+                    table.TableName = xField.Name;
+                    xTemplate.Add(XTable.Create(ElementNames.GridTable, table));
                 }
-                Progress?.Report($"Adding grid table: {xField.Name}");
-                DataTable table = Metadata.GetGridColumns(xField.FieldId);
-                table.TableName = xField.Name;
-                xTemplate.Add(XTable.Create(ElementNames.GridTable, table));
             }
         }
     }
@@ -178,6 +148,7 @@ namespace ERHMS.EpiInfo.Templating
             XProject xProject = new XProject();
             xTemplate.Add(xProject);
             AddView(View, xProject);
+            xProject.RemoveRelateFields();
             return xTemplate;
         }
     }
@@ -205,6 +176,7 @@ namespace ERHMS.EpiInfo.Templating
             };
             xProject.Add(xView);
             AddPage(Page, xView);
+            xProject.RemoveRelateFields();
             return xTemplate;
         }
     }

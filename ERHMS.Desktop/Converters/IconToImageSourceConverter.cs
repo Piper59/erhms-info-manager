@@ -18,11 +18,13 @@ namespace ERHMS.Desktop.Converters
             {
                 return null;
             }
-            int size = parameter == null ? DefaultSize : (int)parameter;
-            return Imaging.CreateBitmapSourceFromHIcon(
-                ((Icon)value).Handle,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromWidthAndHeight(size, size));
+            else
+            {
+                IntPtr icon = ((Icon)value).Handle;
+                int size = parameter == null ? DefaultSize : (int)parameter;
+                BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromWidthAndHeight(size, size);
+                return Imaging.CreateBitmapSourceFromHIcon(icon, Int32Rect.Empty, sizeOptions);
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

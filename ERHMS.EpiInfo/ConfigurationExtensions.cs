@@ -6,7 +6,7 @@ namespace ERHMS.EpiInfo
 {
     public static class ConfigurationExtensions
     {
-        private const string FipsCryptoFileName = "FipsCrypto.dll";
+        private const string FipsCryptoAssembly = "FipsCrypto.dll";
 
         public static string FilePath => Configuration.DefaultConfigurationPath;
 
@@ -32,7 +32,7 @@ namespace ERHMS.EpiInfo
             Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
             table.Clear();
             Config.TextEncryptionModuleRow row = table.NewTextEncryptionModuleRow();
-            row.FileName = FipsCryptoFileName;
+            row.FileName = FipsCryptoAssembly;
             table.Rows.Add(row);
         }
 

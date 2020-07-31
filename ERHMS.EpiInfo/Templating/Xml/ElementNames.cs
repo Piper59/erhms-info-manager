@@ -11,7 +11,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public const string Field = "Field";
         public const string SourceTable = "SourceTable";
         public const string GridTable = "GridTable";
-        public static readonly ICollection<string> Tables = new string[]
+        public static readonly IReadOnlyCollection<string> Tables = new string[]
         {
             SourceTable,
             GridTable

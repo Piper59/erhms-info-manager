@@ -1,4 +1,5 @@
 ﻿using Epi.Fields;
+using ERHMS.EpiInfo.Infrastructure;
 using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
@@ -7,11 +8,11 @@ using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
+    public delegate bool TryGetValueFunc<TProperty>(XField xField, out TProperty value);
+
     public abstract class FieldMapping<TField, TProperty> : IFieldMapping<TField>
         where TField : Field
     {
-        public delegate bool TryGetValueDelegate(XField xField, out TProperty value);
-
         public PropertyInfo Property { get; }
 
         protected FieldMapping(Expression<Func<TField, TProperty>> expression)
@@ -40,7 +41,7 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
     public class AttributeFieldMapping<TField, TProperty> : FieldMapping<TField, TProperty>
         where TField : Field
     {
-        private TypeConverter converter;
+        private readonly TypeConverter converter;
 
         public string AttributeName { get; }
 
@@ -53,31 +54,33 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 
         protected override bool TryGetValue(XField xField, out TProperty value)
         {
-            XAttribute attribute = xField.Attribute(AttributeName);
-            if (attribute == null || attribute.Value == "")
+            if (xField.TryGetAttribute(AttributeName, out XAttribute attribute))
+            {
+                value = (TProperty)converter.ConvertFromString(attribute.Value);
+                return true;
+            }
+            else
             {
                 value = default(TProperty);
                 return false;
             }
-            value = (TProperty)converter.ConvertFromString(attribute.Value);
-            return true;
         }
     }
 
     public class DelegateFieldMapping<TField, TProperty> : FieldMapping<TField, TProperty>
         where TField : Field
     {
-        public TryGetValueDelegate Delegate { get; }
+        private readonly TryGetValueFunc<TProperty> tryGetValueFunc;
 
-        public DelegateFieldMapping(Expression<Func<TField, TProperty>> expression, TryGetValueDelegate @delegate)
+        public DelegateFieldMapping(Expression<Func<TField, TProperty>> expression, TryGetValueFunc<TProperty> tryGetValueFunc)
             : base(expression)
         {
-            Delegate = @delegate;
+            this.tryGetValueFunc = tryGetValueFunc;
         }
 
         protected override bool TryGetValue(XField xField, out TProperty value)
         {
-            return Delegate(xField, out value);
+            return tryGetValueFunc(xField, out value);
         }
     }
 }

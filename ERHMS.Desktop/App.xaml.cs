@@ -9,7 +9,6 @@ using ERHMS.EpiInfo;
 using log4net;
 using log4net.Config;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -27,7 +26,6 @@ namespace ERHMS.Desktop
     public partial class App : Application
     {
         private static int unhandledErrorCount;
-        private static bool reset;
 
         [STAThread]
         private static void Main(string[] args)
@@ -36,9 +34,6 @@ namespace ERHMS.Desktop
             Log.Default.Debug("Starting up");
             try
             {
-                ParseArgs(args);
-                ConfigureServices();
-                ConfigureEpiInfo();
                 App app = new App();
                 app.Run();
             }
@@ -60,45 +55,22 @@ namespace ERHMS.Desktop
             XmlConfigurator.Configure();
         }
 
-        private static void ParseArgs(IList<string> args)
-        {
-            if (args.Contains("/reset", StringComparer.OrdinalIgnoreCase))
-            {
-                Log.Default.Debug("Resetting settings");
-                Settings.Default.Reset();
-                reset = true;
-            }
-        }
-
-        private static void ConfigureServices()
-        {
-            ServiceLocator.Dialog = new DialogService();
-        }
-
-        private static void ConfigureEpiInfo()
-        {
-            Log.Default.Debug("Configuring Epi Info");
-            if (!ConfigurationExtensions.Exists())
-            {
-                Log.Default.Debug($"Creating configuration file: {ConfigurationExtensions.FilePath}");
-                Configuration configuration = ConfigurationExtensions.Create();
-                Settings.Default.Apply(configuration);
-                configuration.Save();
-            }
-            Log.Default.Debug($"Loading configuration file: {ConfigurationExtensions.FilePath}");
-            ConfigurationExtensions.Load();
-            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
-        }
-
         private static void OnUnhandledError(Exception ex)
         {
-            Log.Default.Fatal(ex);
+            if (ex != null)
+            {
+                Log.Default.Fatal(ex);
+            }
             if (Interlocked.Increment(ref unhandledErrorCount) == 1)
             {
                 StringBuilder message = new StringBuilder();
-                message.AppendLine($"{ResXResources.AppTitle} has encountered an error and must shut down.");
-                message.AppendLine();
-                message.Append(ex.Message);
+                message.Append(ResXResources.UnhandledErrorMessage);
+                if (ex != null)
+                {
+                    message.AppendLine();
+                    message.AppendLine();
+                    message.Append(ex.Message);
+                }
                 MessageBox.Show(message.ToString(), ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -107,11 +79,47 @@ namespace ERHMS.Desktop
 
         public App()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
+            ConfigureServices();
+            ConfigureEpiInfo();
             InitializeComponent();
             SetTheme();
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
-            DispatcherUnhandledException += App_DispatcherUnhandledException;
             Command.GlobalError += Command_GlobalError;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            OnUnhandledError(e.ExceptionObject as Exception);
+        }
+
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            OnUnhandledError(e.Exception);
+            e.Handled = true;
+            Shutdown(1);
+        }
+
+        private void ConfigureServices()
+        {
+            Log.Default.Debug("Configuring services");
+            ServiceLocator.Dialog = new DialogService(this);
+        }
+
+        private void ConfigureEpiInfo()
+        {
+            Log.Default.Debug("Configuring Epi Info");
+            if (!ConfigurationExtensions.Exists())
+            {
+                Log.Default.Debug($"Creating configuration file: {ConfigurationExtensions.FilePath}");
+                Configuration configuration = ConfigurationExtensions.Create();
+                Settings.Default.ApplyTo(configuration);
+                configuration.Save();
+            }
+            Log.Default.Debug($"Loading configuration file: {ConfigurationExtensions.FilePath}");
+            ConfigurationExtensions.Load();
+            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }
 
         private void SetTheme()
@@ -132,13 +140,6 @@ namespace ERHMS.Desktop
             }
         }
 
-        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            OnUnhandledError(e.Exception);
-            e.Handled = true;
-            Shutdown(1);
-        }
-
         private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
             OnHandledError(e.Exception);
@@ -149,7 +150,7 @@ namespace ERHMS.Desktop
             Log.Default.Error(ex);
             ServiceLocator.Dialog.Show(new DialogInfo(DialogInfoPreset.Error)
             {
-                Lead = $"{ResXResources.AppTitle} has encountered an error",
+                Lead = ResXResources.HandledErrorLead,
                 Body = ex.Message,
                 Details = ex.ToString()
             });
@@ -158,17 +159,24 @@ namespace ERHMS.Desktop
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            bool resetting = false;
+            if (e.Args.Contains("/reset", StringComparer.OrdinalIgnoreCase))
+            {
+                resetting = true;
+                Log.Default.Debug("Resetting settings");
+                Settings.Default.Reset();
+            }
             MainViewModel.Current.Content = new HomeViewModel();
             Window window = new MainView
             {
                 DataContext = MainViewModel.Current
             };
             window.Show();
-            if (reset)
+            if (resetting)
             {
-                ServiceLocator.Dialog.Show(new DialogInfo(DialogInfoPreset.Normal)
+                ServiceLocator.Dialog.Show(new DialogInfo(DialogInfoPreset.Default)
                 {
-                    Lead = "Settings have been reset"
+                    Lead = ResXResources.SettingsResetLead
                 });
             }
         }

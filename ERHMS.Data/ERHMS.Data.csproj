@@ -66,7 +66,7 @@
     <Compile Include="SqlServerDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Empty.mdb" />
+    <EmbeddedResource Include="Resources\AccessDatabase.mdb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
