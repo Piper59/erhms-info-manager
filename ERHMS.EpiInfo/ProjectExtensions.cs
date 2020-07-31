@@ -23,7 +23,7 @@ namespace ERHMS.EpiInfo
                 CollectedDataConnectionString = info.Database.ConnectionString,
                 CollectedDataDbInfo = new DbDriverInfo
                 {
-                    DBCnnStringBuilder = info.Database.ConnectionStringBuilder,
+                    DBCnnStringBuilder = info.Database.GetConnectionStringBuilder(),
                     DBName = info.Database.Name
                 }
             };

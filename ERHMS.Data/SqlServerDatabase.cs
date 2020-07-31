@@ -12,7 +12,7 @@ namespace ERHMS.Data
         private readonly SqlConnectionStringBuilder connectionStringBuilder;
 
         public override DatabaseType Type => DatabaseType.SqlServer;
-        public override DbConnectionStringBuilder ConnectionStringBuilder => new SqlConnectionStringBuilder(ConnectionString);
+        protected override DbConnectionStringBuilder ConnectionStringBuilder => connectionStringBuilder;
         public string Instance => connectionStringBuilder.DataSource;
         public override string Name => connectionStringBuilder.InitialCatalog;
 

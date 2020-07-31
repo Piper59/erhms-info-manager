@@ -6,10 +6,10 @@ namespace ERHMS.Data
     public interface IDatabase
     {
         DatabaseType Type { get; }
-        DbConnectionStringBuilder ConnectionStringBuilder { get; }
         string ConnectionString { get; }
         string Name { get; }
 
+        DbConnectionStringBuilder GetConnectionStringBuilder();
         bool Exists();
         void Create();
         IDbConnection Connect();

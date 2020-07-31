@@ -13,9 +13,17 @@ namespace ERHMS.Data
         }
 
         public abstract DatabaseType Type { get; }
-        public abstract DbConnectionStringBuilder ConnectionStringBuilder { get; }
+        protected abstract DbConnectionStringBuilder ConnectionStringBuilder { get; }
         public string ConnectionString => ConnectionStringBuilder.ConnectionString;
         public abstract string Name { get; }
+
+        public DbConnectionStringBuilder GetConnectionStringBuilder()
+        {
+            return new DbConnectionStringBuilder
+            {
+                ConnectionString = ConnectionString
+            };
+        }
 
         public abstract bool Exists();
         protected abstract void CreateCore();

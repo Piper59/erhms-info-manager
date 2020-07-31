@@ -15,7 +15,7 @@ namespace ERHMS.Data
         private readonly OleDbConnectionStringBuilder connectionStringBuilder;
 
         public override DatabaseType Type => DatabaseType.Access;
-        public override DbConnectionStringBuilder ConnectionStringBuilder => new OleDbConnectionStringBuilder(ConnectionString);
+        protected override DbConnectionStringBuilder ConnectionStringBuilder => connectionStringBuilder;
         public string FilePath => connectionStringBuilder.DataSource;
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 
@@ -23,9 +23,9 @@ namespace ERHMS.Data
         {
             connectionStringBuilder = new OleDbConnectionStringBuilder(connectionString)
             {
-                DataSource = Path.GetFullPath(connectionStringBuilder.DataSource),
                 Provider = Provider
             };
+            connectionStringBuilder.DataSource = Path.GetFullPath(connectionStringBuilder.DataSource);
         }
 
         public override bool Exists()
