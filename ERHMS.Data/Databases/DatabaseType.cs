@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace ERHMS.Data
+namespace ERHMS.Data.Databases
 {
     public enum DatabaseType
     {

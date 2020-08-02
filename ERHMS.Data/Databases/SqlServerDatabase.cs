@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
-namespace ERHMS.Data
+namespace ERHMS.Data.Databases
 {
     public class SqlServerDatabase : Database
     {

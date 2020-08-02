@@ -1,7 +1,7 @@
 ﻿using Epi;
 using System;
 
-namespace ERHMS.Data
+namespace ERHMS.Data.Databases
 {
     public static class DatabaseFactory
     {

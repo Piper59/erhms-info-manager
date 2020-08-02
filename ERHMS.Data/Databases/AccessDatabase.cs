@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Reflection;
 
-namespace ERHMS.Data
+namespace ERHMS.Data.Databases
 {
     public class AccessDatabase : Database
     {
