@@ -12,6 +12,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Security;
 using System.Security.Principal;
 using System.Text;
@@ -25,7 +26,14 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
+        private static readonly FieldInfo MenuDropAlignmentField;
+
         private static int unhandledErrorCount;
+
+        static App()
+        {
+            MenuDropAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
+        }
 
         [STAThread]
         private static void Main(string[] args)
@@ -85,6 +93,7 @@ namespace ERHMS.Desktop
             ConfigureEpiInfo();
             InitializeComponent();
             SetTheme();
+            SetMenuDropAlignment();
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
             Command.GlobalError += Command_GlobalError;
         }
@@ -132,11 +141,24 @@ namespace ERHMS.Desktop
             }
         }
 
+        private void SetMenuDropAlignment()
+        {
+            if (SystemParameters.MenuDropAlignment && MenuDropAlignmentField != null)
+            {
+                MenuDropAlignmentField.SetValue(null, false);
+            }
+        }
+
         private void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(SystemParameters.HighContrast))
+            switch (e.PropertyName)
             {
-                SetTheme();
+                case nameof(SystemParameters.HighContrast):
+                    SetTheme();
+                    break;
+                case nameof(SystemParameters.MenuDropAlignment):
+                    SetMenuDropAlignment();
+                    break;
             }
         }
 

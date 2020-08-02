@@ -36,6 +36,9 @@
             <MenuItem Header="_View">
                 <MenuItem Command="{Binding ViewHomeCommand}"
                           Header="_Home" />
+                <MenuItem Header="_Worker database" />
+                <MenuItem Header="_Incident database" />
+                <Separator />
                 <MenuItem Command="{Binding ViewEpiInfoCommand}"
                           Header="_Epi Info" />
                 <MenuItem Command="{Binding ViewFileExplorerCommand}"
