@@ -36,8 +36,10 @@
             <MenuItem Header="_View">
                 <MenuItem Command="{Binding GoToHomeCommand}"
                           Header="_Home" />
-                <MenuItem Header="_Worker database" />
-                <MenuItem Header="_Incident database" />
+                <MenuItem Command="{Binding OpenWorkerProjectCommand}"
+                          Header="_Worker database" />
+                <MenuItem Command="{Binding OpenIncidentProjectCommand}"
+                          Header="_Incident database" />
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Data">

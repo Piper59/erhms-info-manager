@@ -30,6 +30,8 @@ namespace ERHMS.Desktop.ViewModels
 
         public Command ExitCommand { get; }
         public Command GoToHomeCommand { get; }
+        public Command OpenWorkerProjectCommand { get; }
+        public Command OpenIncidentProjectCommand { get; }
         public Command StartEpiInfoCommand { get; }
         public Command StartFileExplorerCommand { get; }
 
@@ -37,6 +39,8 @@ namespace ERHMS.Desktop.ViewModels
         {
             ExitCommand = new SimpleSyncCommand(Exit);
             GoToHomeCommand = new SimpleSyncCommand(GoToHome);
+            OpenWorkerProjectCommand = new SimpleSyncCommand(OpenWorkerProject);
+            OpenIncidentProjectCommand = new SimpleSyncCommand(OpenIncidentProject);
             StartEpiInfoCommand = new SimpleSyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
         }
@@ -56,6 +60,16 @@ namespace ERHMS.Desktop.ViewModels
         private void GoToHome()
         {
             Content = new HomeViewModel();
+        }
+
+        private void OpenWorkerProject()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OpenIncidentProject()
+        {
+            throw new NotImplementedException();
         }
 
         private void StartEpiInfo()

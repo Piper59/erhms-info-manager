@@ -25,13 +25,13 @@
             <StackPanel Style="{StaticResource Section}">
                 <Controls:PhaseHeading Phase="PreDeployment" />
                 <Button>Plan for pre-deployment</Button>
-                <Button>Manage worker forms</Button>
+                <Button>Customize worker forms</Button>
                 <Button>Collect worker information</Button>
             </StackPanel>
             <StackPanel Style="{StaticResource Section}">
                 <Controls:PhaseHeading Phase="Deployment" />
                 <Button>Plan for deployment</Button>
-                <Button>Manage incident forms</Button>
+                <Button>Customize incident forms</Button>
                 <Button>In-process workers</Button>
                 <Button>Collect worker status reports</Button>
                 <Button>Collect incident status reports</Button>
@@ -40,7 +40,7 @@
             <StackPanel Style="{StaticResource Section}">
                 <Controls:PhaseHeading Phase="PostDeployment" />
                 <Button>Plan for post-deployment</Button>
-                <Button>Manage incident forms</Button>
+                <Button>Customize incident forms</Button>
                 <Button>Follow up with workers</Button>
                 <Button>Collect after-action reports</Button>
             </StackPanel>
