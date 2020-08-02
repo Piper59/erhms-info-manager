@@ -34,15 +34,10 @@
                           InputGestureText="Alt+F4" />
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Command="{Binding ViewHomeCommand}"
+                <MenuItem Command="{Binding GoToHomeCommand}"
                           Header="_Home" />
                 <MenuItem Header="_Worker database" />
                 <MenuItem Header="_Incident database" />
-                <Separator />
-                <MenuItem Command="{Binding ViewEpiInfoCommand}"
-                          Header="_Epi Info" />
-                <MenuItem Command="{Binding ViewFileExplorerCommand}"
-                          Header="_File Explorer" />
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Data">
@@ -54,6 +49,11 @@
                     <MenuItem Header="_View current" />
                     <MenuItem Header="_Export all" />
                 </MenuItem>
+                <Separator />
+                <MenuItem Command="{Binding StartEpiInfoCommand}"
+                          Header="_Epi Info" />
+                <MenuItem Command="{Binding StartFileExplorerCommand}"
+                          Header="_File Explorer" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_View help" />
