@@ -68,6 +68,32 @@ namespace ERHMS.Desktop.Properties {
             }
         }
         
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Projects\\Incidents\\Incident\\Incident.prj")]
+        public string IncidentProjectPath {
+            get {
+                return ((string)(this["IncidentProjectPath"]));
+            }
+            set {
+                this["IncidentProjectPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Projects\\Incidents\\Incident\\Incident.prj</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection IncidentProjectPaths {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["IncidentProjectPaths"]));
+            }
+            set {
+                this["IncidentProjectPaths"] = value;
+            }
+        }
+        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -110,6 +136,18 @@ namespace ERHMS.Desktop.Properties {
             }
             set {
                 this["WindowWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Projects\\Worker\\Worker.prj")]
+        public string WorkerProjectPath {
+            get {
+                return ((string)(this["WorkerProjectPath"]));
+            }
+            set {
+                this["WorkerProjectPath"] = value;
             }
         }
     }
