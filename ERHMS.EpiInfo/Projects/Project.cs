@@ -5,10 +5,12 @@ using ERHMS.Data.Databases;
 using System;
 using System.IO;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Projects
 {
-    public static class ProjectExtensions
+    public class Project : Epi.Project
     {
+        public new MetadataDbProvider Metadata => (MetadataDbProvider)base.Metadata;
+
         public static Project Create(ProjectCreationInfo info)
         {
             Log.Default.Debug($"Creating project: {info.FilePath}");
@@ -34,14 +36,19 @@ namespace ERHMS.EpiInfo
             return project;
         }
 
-        public static bool IsInitialized(this Project @this)
+        private Project() { }
+
+        public Project(string path)
+            : base(path) { }
+
+        public bool IsInitialized()
         {
-            return @this.Metadata.TableExists("metaDbInfo");
+            return Metadata.TableExists("metaDbInfo");
         }
 
-        public static void Initialize(this Project @this)
+        public void Initialize()
         {
-            ((MetadataDbProvider)@this.Metadata).CreateMetadataTables();
+            Metadata.CreateMetadataTables();
         }
     }
 }

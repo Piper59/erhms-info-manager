@@ -2,7 +2,7 @@
 using ERHMS.Data.Databases;
 using System.IO;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Projects
 {
     public class ProjectCreationInfo
     {
