@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.EpiInfo.Templating.Xml;
 using ERHMS.EpiInfo.Templating.Xml.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -9,6 +10,29 @@ namespace ERHMS.EpiInfo.Templating
 {
     public class TemplateCanonizer
     {
+        private class TabIndexComparer : IComparer<string>
+        {
+            private IDictionary<string, double> tabIndices;
+
+            public TabIndexComparer(IEnumerable<XField> fields)
+            {
+                tabIndices = fields.ToDictionary(
+                    field => field.Name,
+                    field => field.TabIndex.Value,
+                    StringComparer.OrdinalIgnoreCase);
+            }
+
+            private double GetTabIndex(string fieldName)
+            {
+                return tabIndices.TryGetValue(fieldName, out double tabIndex) ? tabIndex : double.MaxValue;
+            }
+
+            public int Compare(string x, string y)
+            {
+                return GetTabIndex(x).CompareTo(GetTabIndex(y));
+            }
+        }
+
         private class Context
         {
             private static void Add(int id, IDictionary<int, int> idMap)
@@ -68,6 +92,7 @@ namespace ERHMS.EpiInfo.Templating
                     {
                         CanonizeField(xField, nextTabIndex++);
                     }
+                    ProcessPageFields(xPage);
                 }
             }
             int nextGridColumnId = 1;
@@ -152,6 +177,23 @@ namespace ERHMS.EpiInfo.Templating
                         xField.BackgroundColor = xField.BackgroundColor.Value | Opaque;
                     }
                     break;
+            }
+        }
+
+        private void ProcessPageFields(XPage xPage)
+        {
+            TabIndexComparer tabIndexComparer = new TabIndexComparer(xPage.XFields);
+            foreach (XField xField in xPage.XFields)
+            {
+                if (xField.FieldType == MetaFieldType.Group)
+                {
+                    if (xField.List != null)
+                    {
+                        string[] childFieldNames = xField.List.Split(Constants.LIST_SEPARATOR);
+                        Array.Sort(childFieldNames, tabIndexComparer);
+                        xField.List = string.Join(Constants.LIST_SEPARATOR.ToString(), childFieldNames);
+                    }
+                }
             }
         }
 

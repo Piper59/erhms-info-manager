@@ -79,7 +79,7 @@ namespace ERHMS.EpiInfo.Templating
                 InstantiateSourceTable(xTable);
             }
             ICollection<Field> fields = InstantiateCore();
-            MapProjectFields(fields);
+            ProcessProjectFields(fields);
             Progress?.Report("Adding grid tables");
             foreach (XTable xTable in XTemplate.XGridTables)
             {
@@ -157,7 +157,7 @@ namespace ERHMS.EpiInfo.Templating
                     fields.Add(InstantiateField(xField, page));
                 }
             }
-            MapViewFields(fields);
+            ProcessViewFields(fields);
             return fields;
         }
 
@@ -169,7 +169,7 @@ namespace ERHMS.EpiInfo.Templating
             {
                 fields.Add(InstantiateField(xField, page));
             }
-            MapViewFields(fields);
+            ProcessViewFields(fields);
             return fields;
         }
 
@@ -197,7 +197,7 @@ namespace ERHMS.EpiInfo.Templating
             return field;
         }
 
-        private void MapViewFields(IEnumerable<Field> fields)
+        private void ProcessViewFields(IEnumerable<Field> fields)
         {
             foreach (Field field in fields)
             {
@@ -209,7 +209,7 @@ namespace ERHMS.EpiInfo.Templating
             }
         }
 
-        private void MapProjectFields(IEnumerable<Field> fields)
+        private void ProcessProjectFields(IEnumerable<Field> fields)
         {
             foreach (Field field in fields)
             {
