@@ -9,15 +9,15 @@
         Title="{x:Static Properties:Resources.AppTitle}"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
+        <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
     </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
                 BorderThickness="0,1"
                 SnapsToDevicePixels="True"
                 Style="{StaticResource LayoutFull}">
-            <DockPanel MinHeight="100"
-                       Style="{StaticResource Container}">
+            <Grid MinHeight="100"
+                  Style="{StaticResource Container}">
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -39,7 +39,7 @@
                                    Visibility="{Binding Body, Converter={StaticResource ObjectToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
-            </DockPanel>
+            </Grid>
         </Border>
         <Border Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}">
             <Grid Style="{StaticResource Container}">
