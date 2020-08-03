@@ -13,12 +13,14 @@
                     <TextBlock Grid.Column="0"
                                Style="{StaticResource Title}"
                                Text="{Binding Project.Type,StringFormat='{}{0} Database'}" />
-                    <Button Grid.Column="1"
-                            Command="local:AppCommands.GoToHomeCommand"
-                            Style="{StaticResource ActionButton}"
-                            VerticalAlignment="Top">
-                        Home
-                    </Button>
+                    <WrapPanel Grid.Column="1"
+                               VerticalAlignment="Top">
+                        <WrapPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+                        </WrapPanel.Resources>
+                        <Button Command="{Binding RefreshCommand}">Refresh</Button>
+                        <Button Command="local:AppCommands.GoToHomeCommand">Home</Button>
+                    </WrapPanel>
                 </Grid>
                 <TextBlock Style="{StaticResource Small}"
                            Text="{Binding Project.FilePath}" />

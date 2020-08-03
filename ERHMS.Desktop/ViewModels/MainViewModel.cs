@@ -43,8 +43,8 @@ namespace ERHMS.Desktop.ViewModels
         {
             ExitCommand = new SimpleSyncCommand(Exit);
             GoToHomeCommand = new SimpleSyncCommand(GoToHome);
-            OpenWorkerProjectCommand = new SimpleAsyncCommand(OpenWorkerProject);
-            OpenIncidentProjectCommand = new SimpleAsyncCommand(OpenIncidentProject);
+            OpenWorkerProjectCommand = new SimpleAsyncCommand(OpenWorkerProjectAsync);
+            OpenIncidentProjectCommand = new SimpleAsyncCommand(OpenIncidentProjectAsync);
             StartEpiInfoCommand = new SimpleSyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
         }
@@ -66,7 +66,7 @@ namespace ERHMS.Desktop.ViewModels
             Content = new HomeViewModel();
         }
 
-        private async Task OpenProject(ProjectType projectType, string path)
+        private async Task OpenProjectAsync(ProjectType projectType, string path)
         {
             // TODO: Error handling
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName);
@@ -76,14 +76,14 @@ namespace ERHMS.Desktop.ViewModels
             });
         }
 
-        private async Task OpenWorkerProject()
+        private async Task OpenWorkerProjectAsync()
         {
-            await OpenProject(ProjectType.Worker, Settings.Default.WorkerProjectPath);
+            await OpenProjectAsync(ProjectType.Worker, Settings.Default.WorkerProjectPath);
         }
 
-        private async Task OpenIncidentProject()
+        private async Task OpenIncidentProjectAsync()
         {
-            await OpenProject(ProjectType.Incident, Settings.Default.IncidentProjectPath);
+            await OpenProjectAsync(ProjectType.Incident, Settings.Default.IncidentProjectPath);
         }
 
         private void StartEpiInfo()

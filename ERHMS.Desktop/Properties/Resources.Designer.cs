@@ -88,6 +88,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshing database.
+        /// </summary>
+        public static string RefreshingProjectTaskName {
+            get {
+                return ResourceManager.GetString("RefreshingProjectTaskName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings have been reset.
         /// </summary>
         public static string SettingsResetLead {
