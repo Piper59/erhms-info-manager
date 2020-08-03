@@ -69,7 +69,7 @@ namespace ERHMS.Desktop.ViewModels
         private async Task OpenProject(ProjectType projectType, string path)
         {
             // TODO: Error handling
-            IProgressService progress = ServiceProvider.GetProgressService("Opening database");
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName);
             await progress.RunAsync(() =>
             {
                 Content = new ProjectViewModel(ProjectFactory.GetProject(projectType, path));

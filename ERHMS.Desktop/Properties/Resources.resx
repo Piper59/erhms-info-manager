@@ -123,6 +123,9 @@
   <data name="HandledErrorLead" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
+  <data name="OpeningProjectTaskName" xml:space="preserve">
+    <value>Opening database</value>
+  </data>
   <data name="SettingsResetLead" xml:space="preserve">
     <value>Settings have been reset</value>
   </data>
