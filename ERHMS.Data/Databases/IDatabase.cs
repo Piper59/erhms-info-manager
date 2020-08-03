@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 
 namespace ERHMS.Data.Databases
@@ -14,5 +15,7 @@ namespace ERHMS.Data.Databases
         void Create();
         IDbConnection Connect();
         string Quote(string identifier);
+        IEnumerable<string> GetTableNames();
+        bool TableExists(string tableName);
     }
 }

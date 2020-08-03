@@ -1,11 +1,15 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Projects;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using Module = ERHMS.EpiInfo.Module;
 
 namespace ERHMS.Desktop.ViewModels
@@ -39,8 +43,8 @@ namespace ERHMS.Desktop.ViewModels
         {
             ExitCommand = new SimpleSyncCommand(Exit);
             GoToHomeCommand = new SimpleSyncCommand(GoToHome);
-            OpenWorkerProjectCommand = new SimpleSyncCommand(OpenWorkerProject);
-            OpenIncidentProjectCommand = new SimpleSyncCommand(OpenIncidentProject);
+            OpenWorkerProjectCommand = new SimpleAsyncCommand(OpenWorkerProject);
+            OpenIncidentProjectCommand = new SimpleAsyncCommand(OpenIncidentProject);
             StartEpiInfoCommand = new SimpleSyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
         }
@@ -62,14 +66,24 @@ namespace ERHMS.Desktop.ViewModels
             Content = new HomeViewModel();
         }
 
-        private void OpenWorkerProject()
+        private async Task OpenProject(ProjectType projectType, string path)
         {
-            throw new NotImplementedException();
+            // TODO: Error handling
+            IProgressService progress = ServiceProvider.GetProgressService("Opening database");
+            await progress.RunAsync(() =>
+            {
+                Content = new ProjectViewModel(ProjectFactory.GetProject(projectType, path));
+            });
         }
 
-        private void OpenIncidentProject()
+        private async Task OpenWorkerProject()
         {
-            throw new NotImplementedException();
+            await OpenProject(ProjectType.Worker, Settings.Default.WorkerProjectPath);
+        }
+
+        private async Task OpenIncidentProject()
+        {
+            await OpenProject(ProjectType.Incident, Settings.Default.IncidentProjectPath);
         }
 
         private void StartEpiInfo()

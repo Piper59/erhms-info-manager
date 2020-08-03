@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.Infrastructure
     internal class DialogService : IDialogService
     {
         public Application Application { get; }
-        public Dispatcher Dispatcher => Application.Dispatcher;
+        private Dispatcher Dispatcher => Application.Dispatcher;
 
         public DialogService(Application application)
         {

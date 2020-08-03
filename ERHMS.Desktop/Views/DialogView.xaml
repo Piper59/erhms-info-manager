@@ -33,11 +33,9 @@
                         <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                                    Style="{StaticResource Lead}"
                                    Text="{Binding Lead}"
-                                   TextWrapping="Wrap"
                                    Visibility="{Binding Lead, Converter={StaticResource ObjectToVisibilityConverter}}" />
                         <TextBlock Style="{StaticResource Body}"
                                    Text="{Binding Body}"
-                                   TextWrapping="Wrap"
                                    Visibility="{Binding Body, Converter={StaticResource ObjectToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>

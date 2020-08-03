@@ -24,7 +24,7 @@ namespace ERHMS.Data.Databases
 
         public static DatabaseType FromDriver(string driver)
         {
-            object value = typeof(DatabaseType).GetFields()
+            object value = typeof(DatabaseType).GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Single(field => field.GetCustomAttribute<DriverAttribute>().Driver == driver)
                 .GetValue(null);
             return (DatabaseType)value;

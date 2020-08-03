@@ -39,7 +39,7 @@ namespace ERHMS.Console.Utilities
             database.Create();
             info.Database = database;
             Project project = Project.Create(info);
-            project.Initialize();
+            project.InitializeMetadata();
             Log.Default.Debug("Project has been created");
         }
     }

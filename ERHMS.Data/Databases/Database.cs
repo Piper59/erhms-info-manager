@@ -1,5 +1,8 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
+using System.Linq;
 
 namespace ERHMS.Data.Databases
 {
@@ -34,7 +37,7 @@ namespace ERHMS.Data.Databases
             CreateCore();
         }
 
-        protected abstract IDbConnection GetConnection();
+        protected abstract DbConnection GetConnection();
 
         public IDbConnection Connect()
         {
@@ -44,6 +47,24 @@ namespace ERHMS.Data.Databases
         public virtual string Quote(string identifier)
         {
             return string.Format("[{0}]", identifier.Replace("]", "]]"));
+        }
+
+        public IEnumerable<string> GetTableNames()
+        {
+            using (DbConnection connection = GetConnection())
+            {
+                connection.Open();
+                DataTable table = connection.GetSchema("Tables");
+                foreach (DataRow row in table.Rows)
+                {
+                    yield return row.Field<string>("TABLE_NAME");
+                }
+            }
+        }
+
+        public bool TableExists(string tableName)
+        {
+            return GetTableNames().Contains(tableName, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

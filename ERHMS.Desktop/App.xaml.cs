@@ -113,7 +113,8 @@ namespace ERHMS.Desktop
         private void ConfigureServices()
         {
             Log.Default.Debug("Configuring services");
-            ServiceLocator.Dialog = new DialogService(this);
+            ServiceProvider.GetDialogService = () => new DialogService(this);
+            ServiceProvider.GetProgressService = taskName => new ProgressService(this, taskName);
         }
 
         private void ConfigureEpiInfo()
@@ -170,7 +171,8 @@ namespace ERHMS.Desktop
         private void OnHandledError(Exception ex)
         {
             Log.Default.Error(ex);
-            ServiceLocator.Dialog.Show(new DialogInfo(DialogInfoPreset.Error)
+            IDialogService dialog = ServiceProvider.GetDialogService();
+            dialog.Show(new DialogInfo(DialogInfoPreset.Error)
             {
                 Lead = ResXResources.HandledErrorLead,
                 Body = ex.Message,
@@ -196,7 +198,8 @@ namespace ERHMS.Desktop
             window.Show();
             if (resetting)
             {
-                ServiceLocator.Dialog.Show(new DialogInfo(DialogInfoPreset.Default)
+                IDialogService dialog = ServiceProvider.GetDialogService();
+                dialog.Show(new DialogInfo(DialogInfoPreset.Default)
                 {
                     Lead = ResXResources.SettingsResetLead
                 });

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS.EpiInfo.Templating
 {
     public enum TemplateLevel
     {

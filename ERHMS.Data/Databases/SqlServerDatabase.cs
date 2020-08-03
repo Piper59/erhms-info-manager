@@ -52,7 +52,7 @@ namespace ERHMS.Data.Databases
             }
         }
 
-        protected override IDbConnection GetConnection()
+        protected override DbConnection GetConnection()
         {
             return new SqlConnection(ConnectionString);
         }

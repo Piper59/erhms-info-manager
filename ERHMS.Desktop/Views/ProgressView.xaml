@@ -1,0 +1,31 @@
+﻿<Window x:Class="ERHMS.Desktop.Views.ProgressView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
+        xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        Title="{x:Static Properties:Resources.AppTitle}"
+        Width="480"
+        WindowStartupLocation="CenterOwner">
+    <b:Interaction.Behaviors>
+        <Behaviors:RelayEventBehavior EventName="Completed"
+                                      HandlerName="DataContext_Completed" />
+    </b:Interaction.Behaviors>
+    <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+            BorderThickness="0,1,0,0"
+            SnapsToDevicePixels="True"
+            Style="{StaticResource LayoutFull}">
+        <StackPanel Style="{StaticResource Container}">
+            <TextBlock Foreground="{DynamicResource AccentTextBrush}"
+                       Style="{StaticResource Lead}"
+                       Text="{Binding TaskName}" />
+            <ProgressBar IsIndeterminate="True" />
+            <TextBlock Style="{StaticResource Small}"
+                       Text="{Binding Progress}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap" />
+        </StackPanel>
+    </Border>
+</Window>

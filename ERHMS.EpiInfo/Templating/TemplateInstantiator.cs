@@ -274,6 +274,7 @@ namespace ERHMS.EpiInfo.Templating
     {
         public override TemplateLevel Level => TemplateLevel.View;
         public Project Project { get; }
+        public View View { get; private set; }
 
         public ViewTemplateInstantiator(XTemplate xTemplate, Project project)
             : base(xTemplate, project.Metadata)
@@ -284,8 +285,8 @@ namespace ERHMS.EpiInfo.Templating
         protected override ICollection<Field> InstantiateCore()
         {
             XView xView = XTemplate.XProject.XViews.Single();
-            View view = InstantiateView(xView, Project);
-            return InstantiateFields(xView, view);
+            View = InstantiateView(xView, Project);
+            return InstantiateFields(xView, View);
         }
     }
 
@@ -293,6 +294,7 @@ namespace ERHMS.EpiInfo.Templating
     {
         public override TemplateLevel Level => TemplateLevel.Page;
         public View View { get; }
+        public Page Page { get; private set; }
 
         public PageTemplateInstantiator(XTemplate xTemplate, View view)
             : base(xTemplate, view.GetMetadata())
@@ -310,8 +312,8 @@ namespace ERHMS.EpiInfo.Templating
                 Metadata.UpdateView(View);
             }
             XPage xPage = xView.XPages.Single();
-            Page page = InstantiatePage(xPage, View);
-            return InstantiateFields(xPage, page);
+            Page = InstantiatePage(xPage, View);
+            return InstantiateFields(xPage, Page);
         }
     }
 }
