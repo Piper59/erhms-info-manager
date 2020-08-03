@@ -50,6 +50,7 @@ namespace ERHMS.Desktop.Infrastructure
             }
             finally
             {
+                DataContext.Complete = true;
                 Mouse.OverrideCursor = null;
             }
         }
