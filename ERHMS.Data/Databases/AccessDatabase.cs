@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Data.OleDb;
 using System.IO;
 using System.Reflection;
@@ -8,8 +7,8 @@ namespace ERHMS.Data.Databases
 {
     public class AccessDatabase : Database
     {
-        public const string Provider = "Microsoft.Jet.OLEDB.4.0";
         public const string FileExtension = ".mdb";
+        public const string Provider = "Microsoft.Jet.OLEDB.4.0";
         private const string ResourceName = "ERHMS.Data.Resources.AccessDatabase.mdb";
 
         private readonly OleDbConnectionStringBuilder connectionStringBuilder;

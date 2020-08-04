@@ -1,4 +1,5 @@
 ﻿using Epi;
+using Epi.Data;
 using Epi.Data.Services;
 using ERHMS.Common;
 using System;
@@ -16,7 +17,7 @@ namespace ERHMS.EpiInfo
         {
             DataTable fields = @this.GetFieldsOnPageAsDataTable(pageId);
             fields.SetColumnDataType(ColumnNames.TAB_INDEX, typeof(double));
-            IDictionary<string, DataRow> fieldsByName = fields.Rows.Cast<DataRow>().ToDictionary(
+            IDictionary<string, DataRow> fieldsByName = fields.AsEnumerable().ToDictionary(
                 field => field.Field<string>(ColumnNames.NAME),
                 field => field,
                 StringComparer.OrdinalIgnoreCase);
@@ -44,6 +45,37 @@ namespace ERHMS.EpiInfo
                 }
             }
             return fields.Select(null, ColumnNames.TAB_INDEX);
+        }
+
+        public static IEnumerable<string> GetSortedFieldNames(this IMetadataProvider @this, int viewId, Predicate<MetaFieldType> predicate = null)
+        {
+            ICollection<string> columnNames = new string[]
+            {
+                $"F.[{ColumnNames.NAME}]",
+                $"F.[{ColumnNames.FIELD_ID}]",
+                $"F.[{ColumnNames.FIELD_TYPE_ID}]",
+                $"F.[{ColumnNames.TAB_INDEX}]",
+                $"P.[{ColumnNames.POSITION}]"
+            };
+            string sql = $@"
+                SELECT {string.Join(", ", columnNames)}
+                FROM [metaFields] AS F
+                LEFT OUTER JOIN [metaPages] AS P ON F.[{ColumnNames.PAGE_ID}] = P.[{ColumnNames.PAGE_ID}]
+                WHERE F.[{ColumnNames.VIEW_ID}] = @ViewId";
+            Query query = @this.Project.CollectedData.CreateQuery(sql);
+            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
+            DataTable table = @this.Project.CollectedData.Select(query);
+            table.SetColumnDataType(ColumnNames.TAB_INDEX, typeof(double));
+            table.SetColumnDataType(ColumnNames.POSITION, typeof(int));
+            IEnumerable<DataRow> fields = table.AsEnumerable();
+            if (predicate != null)
+            {
+                fields = fields.Where(field => predicate(field.Field<MetaFieldType>(ColumnNames.FIELD_TYPE_ID)));
+            }
+            return fields.OrderBy(field => field.IsNull(ColumnNames.POSITION) ? -1 : field.Field<int>(ColumnNames.POSITION))
+                .ThenBy(field => field.IsNull(ColumnNames.TAB_INDEX) ? -1.0 : field.Field<double>(ColumnNames.TAB_INDEX))
+                .ThenBy(field => field.Field<int>(ColumnNames.FIELD_ID))
+                .Select(field => field.Field<string>(ColumnNames.NAME));
         }
     }
 }

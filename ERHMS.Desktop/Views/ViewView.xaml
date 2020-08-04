@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Views.ViewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:ERHMS.Desktop"
+             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors">
+    <b:Interaction.Behaviors>
+        <Behaviors:RelayEventBehavior EventName="PropertyChanged"
+                                      HandlerName="DataContext_PropertyChanged" />
+    </b:Interaction.Behaviors>
+    <Border Style="{StaticResource LayoutLarge}">
+        <StackPanel Style="{StaticResource Container}">
+            <Grid Style="{StaticResource Section}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Style="{StaticResource Title}"
+                           Text="{Binding View.Name, StringFormat='{}{0} Form'}" />
+                <WrapPanel Grid.Column="1"
+                           VerticalAlignment="Top">
+                    <WrapPanel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+                    </WrapPanel.Resources>
+                    <Button Command="{Binding RefreshCommand}">Refresh</Button>
+                    <!-- TODO: Add button to return to project -->
+                    <Button Command="local:AppCommands.GoToHomeCommand">Home</Button>
+                </WrapPanel>
+            </Grid>
+            <StackPanel Style="{StaticResource Section}">
+                <TextBlock Style="{StaticResource Heading}">Records</TextBlock>
+                <!-- TODO: Handle empty DataGrid -->
+                <!-- TODO: Expand narrow rows without compressing wide ones -->
+                <!-- TODO: Add paging -->
+                <DataGrid x:Name="Records"
+                          ItemsSource="{Binding Records}"
+                          MaxColumnWidth="200" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

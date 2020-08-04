@@ -12,7 +12,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
                                Style="{StaticResource Title}"
-                               Text="{Binding Project.Type,StringFormat='{}{0} Database'}" />
+                               Text="{Binding Project.Type, StringFormat='{}{0} Database'}" />
                     <WrapPanel Grid.Column="1"
                                VerticalAlignment="Top">
                         <WrapPanel.Resources>
@@ -27,7 +27,9 @@
             </StackPanel>
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Heading}">Forms</TextBlock>
-                <DataGrid ItemsSource="{Binding Views}">
+                <!-- TODO: Handle empty DataGrid -->
+                <DataGrid ItemsSource="{Binding Views}"
+                          SelectedItem="{Binding SelectedView}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Name}"
                                             Header="Name"
@@ -40,8 +42,9 @@
             </StackPanel>
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Heading}">Dashboards</TextBlock>
+                <!-- TODO: Add dashboards -->
+                <!-- TODO: Handle empty DataGrid -->
             </StackPanel>
-            <!-- TODO -->
         </StackPanel>
     </Border>
 </UserControl>

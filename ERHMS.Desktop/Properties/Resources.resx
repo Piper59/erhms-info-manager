@@ -126,8 +126,14 @@
   <data name="OpeningProjectTaskName" xml:space="preserve">
     <value>Opening database</value>
   </data>
+  <data name="OpeningViewTaskName" xml:space="preserve">
+    <value>Opening form</value>
+  </data>
   <data name="RefreshingProjectTaskName" xml:space="preserve">
     <value>Refreshing database</value>
+  </data>
+  <data name="RefreshingViewTaskName" xml:space="preserve">
+    <value>Refreshing form</value>
   </data>
   <data name="SettingsResetLead" xml:space="preserve">
     <value>Settings have been reset</value>

@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.35\lib\net461\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Epi.Core">
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
     </Reference>
@@ -69,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationExtensions.cs" />
+    <Compile Include="Data\Record.cs" />
+    <Compile Include="Data\RecordRepository.cs" />
     <Compile Include="Infrastructure\XmlExtensions.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MetadataExtensions.cs" />

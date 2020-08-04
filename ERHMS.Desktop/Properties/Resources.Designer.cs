@@ -88,11 +88,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opening form.
+        /// </summary>
+        public static string OpeningViewTaskName {
+            get {
+                return ResourceManager.GetString("OpeningViewTaskName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refreshing database.
         /// </summary>
         public static string RefreshingProjectTaskName {
             get {
                 return ResourceManager.GetString("RefreshingProjectTaskName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshing form.
+        /// </summary>
+        public static string RefreshingViewTaskName {
+            get {
+                return ResourceManager.GetString("RefreshingViewTaskName", resourceCulture);
             }
         }
         

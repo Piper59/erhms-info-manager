@@ -62,16 +62,6 @@ namespace ERHMS.EpiInfo.Projects
             Database = DatabaseFactory.GetDatabase(this);
         }
 
-        public ISet<string> GetTableNameSet()
-        {
-            return new HashSet<string>(Database.GetTableNames(), StringComparer.OrdinalIgnoreCase);
-        }
-
-        public ISet<string> GetViewNameSet()
-        {
-            return new HashSet<string>(Views.Cast<View>().Select(view => view.Name), StringComparer.OrdinalIgnoreCase);
-        }
-
         public bool IsInitialized()
         {
             return Database.TableExists("metaDbInfo");
@@ -99,6 +89,16 @@ namespace ERHMS.EpiInfo.Projects
             };
             instantiator.Instantiate();
             return instantiator.View;
+        }
+
+        public ISet<string> GetTableNameSet()
+        {
+            return new HashSet<string>(Database.GetTableNames(), StringComparer.OrdinalIgnoreCase);
+        }
+
+        public ISet<string> GetViewNameSet()
+        {
+            return new HashSet<string>(Views.Cast<View>().Select(view => view.Name), StringComparer.OrdinalIgnoreCase);
         }
     }
 }

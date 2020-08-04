@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Module = ERHMS.EpiInfo.Module;
+using View = Epi.View;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -36,6 +37,7 @@ namespace ERHMS.Desktop.ViewModels
         public Command GoToHomeCommand { get; }
         public Command OpenWorkerProjectCommand { get; }
         public Command OpenIncidentProjectCommand { get; }
+        public Command OpenViewCommand { get; }
         public Command StartEpiInfoCommand { get; }
         public Command StartFileExplorerCommand { get; }
 
@@ -45,6 +47,7 @@ namespace ERHMS.Desktop.ViewModels
             GoToHomeCommand = new SimpleSyncCommand(GoToHome);
             OpenWorkerProjectCommand = new SimpleAsyncCommand(OpenWorkerProjectAsync);
             OpenIncidentProjectCommand = new SimpleAsyncCommand(OpenIncidentProjectAsync);
+            OpenViewCommand = new SimpleAsyncCommand<View>(OpenViewAsync);
             StartEpiInfoCommand = new SimpleSyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
         }
@@ -68,12 +71,13 @@ namespace ERHMS.Desktop.ViewModels
 
         private async Task OpenProjectAsync(ProjectType projectType, string path)
         {
-            // TODO: Error handling
+            // TODO: Handle errors
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName);
             await progress.RunAsync(() =>
             {
-                Content = new ProjectViewModel(ProjectFactory.GetProject(projectType, path));
+                content = new ProjectViewModel(ProjectFactory.GetProject(projectType, path));
             });
+            OnPropertyChanged(nameof(Content));
         }
 
         private async Task OpenWorkerProjectAsync()
@@ -84,6 +88,16 @@ namespace ERHMS.Desktop.ViewModels
         private async Task OpenIncidentProjectAsync()
         {
             await OpenProjectAsync(ProjectType.Incident, Settings.Default.IncidentProjectPath);
+        }
+
+        private async Task OpenViewAsync(View view)
+        {
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
+            await progress.RunAsync(() =>
+            {
+                content = new ViewViewModel(view);
+            });
+            OnPropertyChanged(nameof(Content));
         }
 
         private void StartEpiInfo()
