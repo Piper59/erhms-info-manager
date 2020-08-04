@@ -45,8 +45,8 @@ namespace ERHMS.Desktop.ViewModels
         {
             ExitCommand = new SimpleSyncCommand(Exit);
             GoToHomeCommand = new SimpleSyncCommand(GoToHome);
-            OpenWorkerProjectCommand = new SimpleAsyncCommand(OpenWorkerProjectAsync);
-            OpenIncidentProjectCommand = new SimpleAsyncCommand(OpenIncidentProjectAsync);
+            OpenWorkerProjectCommand = new SimpleAsyncCommand<string>(OpenWorkerProjectAsync);
+            OpenIncidentProjectCommand = new SimpleAsyncCommand<string>(OpenIncidentProjectAsync);
             OpenViewCommand = new SimpleAsyncCommand<View>(OpenViewAsync);
             StartEpiInfoCommand = new SimpleSyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
@@ -80,14 +80,14 @@ namespace ERHMS.Desktop.ViewModels
             OnPropertyChanged(nameof(Content));
         }
 
-        private async Task OpenWorkerProjectAsync()
+        private async Task OpenWorkerProjectAsync(string path)
         {
-            await OpenProjectAsync(ProjectType.Worker, Settings.Default.WorkerProjectPath);
+            await OpenProjectAsync(ProjectType.Worker, path ?? Settings.Default.WorkerProjectPath);
         }
 
-        private async Task OpenIncidentProjectAsync()
+        private async Task OpenIncidentProjectAsync(string path)
         {
-            await OpenProjectAsync(ProjectType.Incident, Settings.Default.IncidentProjectPath);
+            await OpenProjectAsync(ProjectType.Incident, path ?? Settings.Default.IncidentProjectPath);
         }
 
         private async Task OpenViewAsync(View view)
