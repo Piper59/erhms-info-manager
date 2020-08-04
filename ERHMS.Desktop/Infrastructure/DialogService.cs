@@ -7,7 +7,7 @@ using System.Windows.Threading;
 
 namespace ERHMS.Desktop.Infrastructure
 {
-    internal class DialogService : IDialogService
+    public class DialogService : IDialogService
     {
         public Application Application { get; }
         private Dispatcher Dispatcher => Application.Dispatcher;

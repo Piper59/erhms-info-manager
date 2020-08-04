@@ -9,7 +9,7 @@ using System.Windows.Threading;
 
 namespace ERHMS.Desktop.Infrastructure
 {
-    internal class ProgressService : IProgressService
+    public class ProgressService : IProgressService
     {
         private static readonly TimeSpan ShowDialogDelay = TimeSpan.FromSeconds(1.0);
 

@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace ERHMS.Desktop.Infrastructure
 {
-    internal static class PhaseExtensions
+    public static class PhaseExtensions
     {
         public static Color ToColor(this Phase @this)
         {

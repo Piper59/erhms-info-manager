@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Infrastructure
 {
-    internal static class XmlExtensions
+    public static class XmlExtensions
     {
         public static XAttribute GetAttribute(this XElement @this, [CallerMemberName] string attributeName = null)
         {
