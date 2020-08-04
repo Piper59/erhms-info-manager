@@ -51,7 +51,7 @@ namespace ERHMS.EpiInfo.Projects
         public new MetadataDbProvider Metadata => (MetadataDbProvider)base.Metadata;
         public IDatabase Database { get; private set; }
         public virtual ProjectType Type => ProjectType.Unknown;
-        protected virtual ICollection<string> BuiltInViewNames { get; } = new string[] { };
+        public IEnumerable<CoreView> CoreViews => CoreView.All.Where(coreView => coreView.ProjectType == Type);
 
         public Project() { }
 
@@ -67,22 +67,15 @@ namespace ERHMS.EpiInfo.Projects
             return Database.TableExists("metaDbInfo");
         }
 
-        public void InitializeMetadata()
+        public void Initialize()
         {
-            Log.Default.Debug("Initializing metadata");
+            Log.Default.Debug("Initializing");
             Metadata.CreateMetadataTables();
         }
 
-        public View InitializeBuiltInView(string viewName)
+        public View InstantiateView(XTemplate xTemplate)
         {
-            Log.Default.Debug($"Initializing built-in view: {viewName}");
-            XTemplate xTemplate;
-            string resourceName = $"ERHMS.Resources.Templates.Forms.{Type}.{viewName}.xml";
-            using (Stream stream = ResourceProvider.GetResource(resourceName))
-            {
-                XDocument document = XDocument.Load(stream);
-                xTemplate = new XTemplate(document.Root);
-            }
+            Log.Default.Debug($"Instantiating view: {xTemplate.Name}");
             ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, this)
             {
                 Progress = new ProgressLogger()
@@ -91,14 +84,17 @@ namespace ERHMS.EpiInfo.Projects
             return instantiator.View;
         }
 
-        public ISet<string> GetTableNameSet()
+        public View InstantiateView(CoreView coreView)
         {
-            return new HashSet<string>(Database.GetTableNames(), StringComparer.OrdinalIgnoreCase);
-        }
-
-        public ISet<string> GetViewNameSet()
-        {
-            return new HashSet<string>(Views.Cast<View>().Select(view => view.Name), StringComparer.OrdinalIgnoreCase);
+            Log.Default.Debug($"Instantiating core view: {coreView.Name}");
+            XTemplate xTemplate;
+            string resourceName = $"ERHMS.Resources.Templates.Forms.{coreView.ProjectType}.{coreView.Name}.xml";
+            using (Stream stream = ResourceProvider.GetResource(resourceName))
+            {
+                XDocument document = XDocument.Load(stream);
+                xTemplate = new XTemplate(document.Root);
+            }
+            return InstantiateView(xTemplate);
         }
     }
 }

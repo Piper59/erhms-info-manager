@@ -92,6 +92,7 @@ namespace ERHMS.Desktop.ViewModels
 
         private async Task OpenViewAsync(View view)
         {
+            // TODO: Handle errors
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
             await progress.RunAsync(() =>
             {

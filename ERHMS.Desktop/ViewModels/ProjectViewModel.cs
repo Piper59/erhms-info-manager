@@ -6,7 +6,6 @@ using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo.Projects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using View = Epi.View;
 
@@ -17,46 +16,43 @@ namespace ERHMS.Desktop.ViewModels
         public class ViewChildViewModel : ObservableObject
         {
             public View View { get; }
-            public int ViewId => View.Id;
-            public string Name => View.Name;
-            public int RecordCount { get; }
+            public int RecordCount { get; set; }
 
-            public ViewChildViewModel(View view, ISet<string> tableNames)
+            public ViewChildViewModel(View view)
             {
                 View = view;
-                RecordCount = tableNames.Contains(view.TableName) ? view.GetRecordCount() : 0;
             }
 
             public override int GetHashCode()
             {
-                return ViewId;
+                return View.Id;
             }
 
             public override bool Equals(object obj)
             {
-                return obj is ViewChildViewModel view && view.ViewId == ViewId;
+                return obj is ViewChildViewModel viewChild && viewChild.View.Id == View.Id;
             }
         }
 
         public Project Project { get; }
 
-        private ICollection<ViewChildViewModel> views;
-        public ICollection<ViewChildViewModel> Views
+        private ICollection<ViewChildViewModel> viewChildren;
+        public ICollection<ViewChildViewModel> ViewChildren
         {
-            get { return views; }
-            set { SetProperty(ref views, value); }
+            get { return viewChildren; }
+            set { SetProperty(ref viewChildren, value); }
         }
 
-        private ViewChildViewModel selectedView;
-        public ViewChildViewModel SelectedView
+        private ViewChildViewModel selectedViewChild;
+        public ViewChildViewModel SelectedViewChild
         {
             get
             {
-                return selectedView;
+                return selectedViewChild;
             }
             set
             {
-                SetProperty(ref selectedView, value);
+                SetProperty(ref selectedViewChild, value);
                 if (value != null)
                 {
                     AppCommands.OpenViewCommand.Execute(value.View);
@@ -75,11 +71,15 @@ namespace ERHMS.Desktop.ViewModels
 
         private void RefreshInternal()
         {
-            ISet<string> tableNames = Project.GetTableNameSet();
-            views = Project.Views.Cast<View>()
-                .OrderBy(view => view.Name, StringComparer.OrdinalIgnoreCase)
-                .Select(view => new ViewChildViewModel(view, tableNames))
-                .ToList();
+            ISet<string> tableNames = new HashSet<string>(Project.Database.GetTableNames(), StringComparer.OrdinalIgnoreCase);
+            viewChildren = new List<ViewChildViewModel>();
+            foreach (View view in Project.Views)
+            {
+                viewChildren.Add(new ViewChildViewModel(view)
+                {
+                    RecordCount = tableNames.Contains(view.TableName) ? view.GetRecordCount() : 0
+                });
+            }
         }
 
         private async Task RefreshAsync()
@@ -90,7 +90,7 @@ namespace ERHMS.Desktop.ViewModels
                 Project.LoadViews();
                 RefreshInternal();
             });
-            OnPropertyChanged(nameof(Views));
+            OnPropertyChanged(nameof(ViewChildren));
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ERHMS.EpiInfo.Projects
+﻿namespace ERHMS.EpiInfo.Projects
 {
     public class WorkerProject : Project
     {
@@ -10,10 +8,6 @@ namespace ERHMS.EpiInfo.Projects
         }
 
         public override ProjectType Type => ProjectType.Worker;
-        protected override ICollection<string> BuiltInViewNames { get; } = new string[]
-        {
-            "WorkerInfo"
-        };
 
         public WorkerProject() { }
 

@@ -80,6 +80,7 @@
     <Compile Include="MetaFieldTypeExtensions.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="NameGenerator.cs" />
+    <Compile Include="Projects\CoreView.cs" />
     <Compile Include="Projects\IncidentProject.cs" />
     <Compile Include="Projects\Project.cs" />
     <Compile Include="Projects\ProjectCreationInfo.cs" />

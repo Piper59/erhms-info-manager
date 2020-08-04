@@ -28,10 +28,10 @@
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Heading}">Forms</TextBlock>
                 <!-- TODO: Handle empty DataGrid -->
-                <DataGrid ItemsSource="{Binding Views}"
-                          SelectedItem="{Binding SelectedView}">
+                <DataGrid ItemsSource="{Binding ViewChildren}"
+                          SelectedItem="{Binding SelectedViewChild}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Name}"
+                        <DataGridTextColumn Binding="{Binding View.Name}"
                                             Header="Name"
                                             Width="2*" />
                         <DataGridTextColumn Binding="{Binding RecordCount}"
