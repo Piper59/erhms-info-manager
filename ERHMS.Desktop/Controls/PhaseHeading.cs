@@ -43,13 +43,13 @@ namespace ERHMS.Desktop.Controls
 
         public PhaseHeading()
         {
-            double space = (double)Application.Current.FindResource("SmallSpace");
+            double space = (double)FindResource("SmallSpace");
             Margin = new Thickness(space);
             Padding = new Thickness(space, 0.0, space, 0.0);
             SnapsToDevicePixels = true;
             Child = new TextBlock
             {
-                Style = (Style)Application.Current.FindResource("Heading")
+                Style = (Style)FindResource("Heading")
             };
         }
     }

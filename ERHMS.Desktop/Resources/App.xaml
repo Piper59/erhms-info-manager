@@ -28,10 +28,6 @@
     <!-- Text elements -->
     <Style x:Key="BodyText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}" />
 
-    <Style x:Key="Emphasis" TargetType="TextElement">
-        <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
-    </Style>
-
     <Style x:Key="HeadingText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
         <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />

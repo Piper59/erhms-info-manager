@@ -4,6 +4,16 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors">
+    <UserControl.Resources>
+        <Style x:Key="Field" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Item.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                    <Setter Property="TextDecorations" Value="Strikethrough" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <b:Interaction.Behaviors>
         <Behaviors:RelayEventBehavior EventName="PropertyChanged"
                                       HandlerName="DataContext_PropertyChanged" />
@@ -32,7 +42,7 @@
                 <TextBlock Style="{StaticResource Heading}">Records</TextBlock>
                 <!-- TODO: Handle empty DataGrid -->
                 <!-- TODO: Expand narrow rows without compressing wide ones -->
-                <!-- TODO: Add paging -->
+                <!-- TODO: Add filtering and paging -->
                 <DataGrid x:Name="Records"
                           ItemsSource="{Binding Records}"
                           MaxColumnWidth="200" />

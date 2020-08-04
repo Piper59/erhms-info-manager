@@ -41,6 +41,7 @@ namespace ERHMS.Desktop.Views
                 Records.Columns.Add(new DataGridTextColumn
                 {
                     Binding = new Binding(propertyName),
+                    ElementStyle = (Style)FindResource("Field"),
                     Header = propertyName
                 });
             }

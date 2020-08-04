@@ -47,7 +47,6 @@ namespace ERHMS.Desktop.ViewModels
         private void RefreshInternal()
         {
             propertyNames = View.GetMetadata().GetSortedFieldNames(View.Id, MetaFieldTypeExtensions.IsTextualData).ToList();
-            // TODO: Filter out deleted records
             records = repository.Select().ToList();
         }
 

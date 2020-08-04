@@ -13,6 +13,7 @@ namespace ERHMS.EpiInfo.Data
 
         public IDictionary<string, object> Properties { get; } = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
+        public bool Deleted => GetProperty<short?>(ColumnNames.REC_STATUS) == 0;
 
         public bool TryGetProperty(string propertyName, out object value)
         {
