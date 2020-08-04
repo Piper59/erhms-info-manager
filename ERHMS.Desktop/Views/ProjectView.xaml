@@ -2,49 +2,51 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ERHMS.Desktop">
-    <Border Style="{StaticResource LayoutLarge}">
-        <StackPanel Style="{StaticResource Container}">
-            <StackPanel Style="{StaticResource Section}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               Style="{StaticResource Title}"
-                               Text="{Binding Project.Type, StringFormat='{}{0} Database'}" />
-                    <WrapPanel Grid.Column="1"
-                               VerticalAlignment="Top">
-                        <WrapPanel.Resources>
-                            <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
-                        </WrapPanel.Resources>
-                        <Button Command="{Binding RefreshCommand}">Refresh</Button>
-                        <Button Command="local:AppCommands.GoToHomeCommand">Home</Button>
-                    </WrapPanel>
-                </Grid>
-                <TextBlock Style="{StaticResource Small}"
-                           Text="{Binding Project.FilePath}" />
+    <ScrollViewer>
+        <Border Style="{StaticResource LayoutLarge}">
+            <StackPanel Style="{StaticResource Container}">
+                <StackPanel Style="{StaticResource Section}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{StaticResource Title}"
+                                   Text="{Binding Project.Type, StringFormat='{}{0} Database'}" />
+                        <WrapPanel Grid.Column="1"
+                                   VerticalAlignment="Top">
+                            <WrapPanel.Resources>
+                                <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+                            </WrapPanel.Resources>
+                            <Button Command="{Binding RefreshCommand}">Refresh</Button>
+                            <Button Command="local:AppCommands.GoToHomeCommand">Home</Button>
+                        </WrapPanel>
+                    </Grid>
+                    <TextBlock Style="{StaticResource Small}"
+                               Text="{Binding Project.FilePath}" />
+                </StackPanel>
+                <StackPanel Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource Heading}">Forms</TextBlock>
+                    <!-- TODO: Handle empty DataGrid -->
+                    <DataGrid ItemsSource="{Binding ViewChildren}"
+                              SelectedItem="{Binding SelectedViewChild}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding View.Name}"
+                                                Header="Name"
+                                                Width="2*" />
+                            <DataGridTextColumn Binding="{Binding RecordCount}"
+                                                Header="Records"
+                                                Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource Heading}">Dashboards</TextBlock>
+                    <!-- TODO: Add dashboards -->
+                    <!-- TODO: Handle empty DataGrid -->
+                </StackPanel>
             </StackPanel>
-            <StackPanel Style="{StaticResource Section}">
-                <TextBlock Style="{StaticResource Heading}">Forms</TextBlock>
-                <!-- TODO: Handle empty DataGrid -->
-                <DataGrid ItemsSource="{Binding ViewChildren}"
-                          SelectedItem="{Binding SelectedViewChild}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding View.Name}"
-                                            Header="Name"
-                                            Width="2*" />
-                        <DataGridTextColumn Binding="{Binding RecordCount}"
-                                            Header="Records"
-                                            Width="*" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </StackPanel>
-            <StackPanel Style="{StaticResource Section}">
-                <TextBlock Style="{StaticResource Heading}">Dashboards</TextBlock>
-                <!-- TODO: Add dashboards -->
-                <!-- TODO: Handle empty DataGrid -->
-            </StackPanel>
-        </StackPanel>
-    </Border>
+        </Border>
+    </ScrollViewer>
 </UserControl>

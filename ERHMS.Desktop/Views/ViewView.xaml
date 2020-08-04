@@ -18,35 +18,37 @@
         <Behaviors:RelayEventBehavior EventName="PropertyChanged"
                                       HandlerName="DataContext_PropertyChanged" />
     </b:Interaction.Behaviors>
-    <Border Style="{StaticResource LayoutLarge}">
-        <StackPanel Style="{StaticResource Container}">
-            <Grid Style="{StaticResource Section}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           Style="{StaticResource Title}"
-                           Text="{Binding View.Name, StringFormat='{}{0} Form'}" />
-                <WrapPanel Grid.Column="1"
-                           VerticalAlignment="Top">
-                    <WrapPanel.Resources>
-                        <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
-                    </WrapPanel.Resources>
-                    <Button Command="{Binding RefreshCommand}">Refresh</Button>
-                    <!-- TODO: Add button to return to project -->
-                    <Button Command="local:AppCommands.GoToHomeCommand">Home</Button>
-                </WrapPanel>
-            </Grid>
-            <StackPanel Style="{StaticResource Section}">
-                <TextBlock Style="{StaticResource Heading}">Records</TextBlock>
-                <!-- TODO: Handle empty DataGrid -->
-                <!-- TODO: Expand narrow rows without compressing wide ones -->
-                <!-- TODO: Add filtering and paging -->
-                <DataGrid x:Name="Records"
-                          ItemsSource="{Binding Records}"
-                          MaxColumnWidth="200" />
+    <ScrollViewer>
+        <Border Style="{StaticResource LayoutLarge}">
+            <StackPanel Style="{StaticResource Container}">
+                <Grid Style="{StaticResource Section}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Style="{StaticResource Title}"
+                               Text="{Binding View.Name, StringFormat='{}{0} Form'}" />
+                    <WrapPanel Grid.Column="1"
+                               VerticalAlignment="Top">
+                        <WrapPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+                        </WrapPanel.Resources>
+                        <Button Command="{Binding RefreshCommand}">Refresh</Button>
+                        <!-- TODO: Add button to return to project -->
+                        <Button Command="local:AppCommands.GoToHomeCommand">Home</Button>
+                    </WrapPanel>
+                </Grid>
+                <StackPanel Style="{StaticResource Section}">
+                    <TextBlock Style="{StaticResource Heading}">Records</TextBlock>
+                    <!-- TODO: Handle empty DataGrid -->
+                    <!-- TODO: Expand narrow rows without compressing wide ones -->
+                    <!-- TODO: Add filtering and paging -->
+                    <DataGrid x:Name="Records"
+                              ItemsSource="{Binding Records}"
+                              MaxColumnWidth="200" />
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </Border>
+        </Border>
+    </ScrollViewer>
 </UserControl>
