@@ -34,7 +34,7 @@ namespace ERHMS.Desktop.Infrastructure
         public async Task RunAsync(Action action)
         {
             Window owner = Application.MainWindow;
-            Window window = new ProgressView
+            ProgressView window = new ProgressView
             {
                 DataContext = DataContext,
                 Owner = owner
@@ -43,28 +43,13 @@ namespace ERHMS.Desktop.Infrastructure
             try
             {
                 Task task = Task.Run(action);
-                DispatcherOperation operation = null;
-                try
-                {
-                    await Task.Delay(ShowDialogDelay);
-                    operation = Dispatcher.InvokeAsync(() =>
-                    {
-                        if (!DataContext.Complete)
-                        {
-                            window.ShowDialog();
-                        }
-                    });
-                    await task;
-                }
-                finally
-                {
-                    DataContext.Complete = true;
-                    await operation;
-                }
+                window.ShowDialog(ShowDialogDelay);
+                await task;
             }
             finally
             {
                 Mouse.OverrideCursor = null;
+                window.Showing.Cancel();
             }
         }
     }

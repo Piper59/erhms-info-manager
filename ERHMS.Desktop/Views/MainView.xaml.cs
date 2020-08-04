@@ -7,22 +7,22 @@ namespace ERHMS.Desktop.Views
 {
     public partial class MainView : Window
     {
-        private static readonly TimeSpan ResizeTimerInterval = TimeSpan.FromSeconds(1.0);
+        private static readonly TimeSpan SaveSizeDelay = TimeSpan.FromSeconds(1.0);
 
-        private Timer resizeTimer;
+        private Timer saveSizeTimer;
 
         public MainView()
         {
             InitializeComponent();
             Settings.Default.ApplyTo(this);
-            resizeTimer = new Timer(state => Settings.Default.Save());
+            saveSizeTimer = new Timer(state => Settings.Default.Save());
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
             Settings.Default.UpdateFrom(this);
-            resizeTimer.Change(ResizeTimerInterval, Timeout.InfiniteTimeSpan);
+            saveSizeTimer.Change(SaveSizeDelay, Timeout.InfiniteTimeSpan);
         }
 
         private void DataContext_ExitRequested(object sender, EventArgs e)

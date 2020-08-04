@@ -19,8 +19,7 @@
                         </Image>
                         <TextBlock Style="{StaticResource Title}"
                                    Text="{x:Static Properties:Resources.AppTitle}"
-                                   VerticalAlignment="Center">
-                        </TextBlock>
+                                   VerticalAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
