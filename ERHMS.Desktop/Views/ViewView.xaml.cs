@@ -17,12 +17,7 @@ namespace ERHMS.Desktop.Views
         public ViewView()
         {
             InitializeComponent();
-            Loaded += OnLoaded;
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            SetRecordColumns();
+            Loaded += (sender, e) => SetRecordColumns();
         }
 
         private void DataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)

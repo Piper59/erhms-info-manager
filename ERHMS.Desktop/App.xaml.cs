@@ -87,7 +87,7 @@ namespace ERHMS.Desktop
 
         public App()
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => OnUnhandledError(e.ExceptionObject as Exception);
             DispatcherUnhandledException += OnDispatcherUnhandledException;
             ConfigureServices();
             ConfigureEpiInfo();
@@ -95,12 +95,7 @@ namespace ERHMS.Desktop
             SetTheme();
             SetMenuDropAlignment();
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
-            Command.GlobalError += Command_GlobalError;
-        }
-
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            OnUnhandledError(e.ExceptionObject as Exception);
+            Command.GlobalError += (sender, e) => OnHandledError(e.Exception);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -161,11 +156,6 @@ namespace ERHMS.Desktop
                     SetMenuDropAlignment();
                     break;
             }
-        }
-
-        private void Command_GlobalError(object sender, ErrorEventArgs e)
-        {
-            OnHandledError(e.Exception);
         }
 
         private void OnHandledError(Exception ex)
