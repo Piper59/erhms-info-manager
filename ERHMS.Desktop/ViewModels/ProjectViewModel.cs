@@ -8,7 +8,6 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -71,31 +70,26 @@ namespace ERHMS.Desktop.ViewModels
         private ViewItemViewModel selectedViewItem;
         public ViewItemViewModel SelectedViewItem
         {
-            get { return selectedViewItem; }
-            set { SetProperty(ref selectedViewItem, value); }
+            get
+            {
+                return selectedViewItem;
+            }
+            set
+            {
+                SetProperty(ref selectedViewItem, value);
+                Command.OnCanExecuteChanged();
+            }
         }
 
         public Command RefreshCommand { get; }
-        public Command OpenViewCommand { get; }
+        public Command ViewDataCommand { get; }
 
         public ProjectViewModel(Project project)
         {
             Project = project;
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
-            OpenViewCommand = new SimpleAsyncCommand<Epi.View>(OpenViewAsync);
-        }
-
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
-            if (e.PropertyName == nameof(SelectedViewItem))
-            {
-                if (SelectedViewItem != null)
-                {
-                    OpenViewCommand.Execute(SelectedViewItem.View);
-                }
-            }
+            ViewDataCommand = new AsyncCommand(ViewDataAsync, HasSelectedViewItem, ErrorBehavior.Raise);
         }
 
         private void RefreshInternal()
@@ -114,13 +108,18 @@ namespace ERHMS.Desktop.ViewModels
             OnPropertyChanged(nameof(ViewItems));
         }
 
-        public async Task OpenViewAsync(Epi.View view)
+        public bool HasSelectedViewItem()
+        {
+            return SelectedViewItem != null;
+        }
+
+        public async Task ViewDataAsync()
         {
             ViewViewModel content = null;
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
             await progress.RunAsync(() =>
             {
-                content = new ViewViewModel(this, view);
+                content = new ViewViewModel(this, SelectedViewItem.View);
             });
             MainViewModel.Current.Content = content;
         }

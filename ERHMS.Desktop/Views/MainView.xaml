@@ -35,7 +35,7 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Command="{Binding GoHomeCommand}"
-                          Header="_Home" />
+                          Header="H_ome" />
                 <MenuItem Command="{Binding ViewWorkerProjectCommand}"
                           Header="_Worker database" />
                 <MenuItem Command="{Binding ViewIncidentProjectCommand}"
@@ -59,6 +59,7 @@
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_View help" />
+                <MenuItem Header="_Take the tour" />
                 <Separator />
                 <MenuItem Header="_About ERHMS Info Manager" />
             </MenuItem>

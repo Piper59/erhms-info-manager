@@ -24,8 +24,8 @@
                     <WrapPanel.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
                     </WrapPanel.Resources>
-                    <Button Command="{Binding RefreshCommand}">Refresh</Button>
-                    <Button Command="local:AppCommands.GoHomeCommand">Home</Button>
+                    <Button Command="{Binding RefreshCommand}">_Refresh</Button>
+                    <Button Command="local:AppCommands.GoHomeCommand">H_ome</Button>
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">
@@ -35,6 +35,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
                                        Style="{StaticResource Body}">
@@ -43,7 +44,8 @@
                             <!-- TODO: Handle empty DataGrid? -->
                             <DataGrid Grid.Row="1"
                                       ItemsSource="{Binding ViewItems}"
-                                      SelectedItem="{Binding SelectedViewItem}">
+                                      SelectedItem="{Binding SelectedViewItem}"
+                                      SelectionMode="Single">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding View.Name}"
                                                         Header="Name"
@@ -65,6 +67,27 @@
                                     <Behaviors:TabOnceBehavior />
                                 </b:Interaction.Behaviors>
                             </DataGrid>
+                            <WrapPanel Grid.Row="2"
+                                       HorizontalAlignment="Center">
+                                <WrapPanel.Resources>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+                                </WrapPanel.Resources>
+                                <Button>_Customize</Button>
+                                <Button Command="{Binding ViewDataCommand}">V_iew data</Button>
+                                <Button>_Enter data</Button>
+                                <Button>
+                                    <Button.ContextMenu>
+                                        <!-- TODO: Open on any click -->
+                                        <ContextMenu>
+                                            <MenuItem Header="_Export" />
+                                            <MenuItem Header="_Import" />
+                                            <MenuItem Header="_Analyze" />
+                                            <MenuItem Header="_Delete" />
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
+                                    _Advanced
+                                </Button>
+                            </WrapPanel>
                         </Grid>
                     </Border>
                 </TabItem>

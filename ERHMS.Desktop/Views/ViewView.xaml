@@ -38,12 +38,12 @@
                     <WrapPanel.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
                     </WrapPanel.Resources>
-                    <Button Command="{Binding RefreshCommand}">Refresh</Button>
+                    <Button Command="{Binding RefreshCommand}">_Refresh</Button>
                     <Button Command="{Binding GoBackCommand}"
                             Visibility="{Binding Parent, Converter={StaticResource ObjectToVisibilityConverter}}">
-                        Back
+                        _Back
                     </Button>
-                    <Button Command="local:AppCommands.GoHomeCommand">Home</Button>
+                    <Button Command="local:AppCommands.GoHomeCommand">H_ome</Button>
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">
@@ -53,6 +53,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
                                        Style="{StaticResource Body}">
@@ -74,6 +75,15 @@
                                     </b:Interaction.Behaviors>
                                 </DataGrid>
                             </Border>
+                            <WrapPanel Grid.Row="2"
+                                       HorizontalAlignment="Center">
+                                <WrapPanel.Resources>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+                                </WrapPanel.Resources>
+                                <Button>_Edit</Button>
+                                <Button>_Delete</Button>
+                                <Button>_Undelete</Button>
+                            </WrapPanel>
                         </Grid>
                     </Border>
                 </TabItem>

@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.Behaviors
 {
+    // TODO: Select on GotKeyboardFocus?
     public class TabOnceBehavior : Behavior<DataGrid>
     {
         protected override void OnAttached()
