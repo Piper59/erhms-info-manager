@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="AppCommands.cs" />
     <Compile Include="Behaviors\RelayEventBehavior.cs" />
+    <Compile Include="Behaviors\TabOnceBehavior.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\ErrorBehavior.cs" />

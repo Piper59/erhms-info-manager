@@ -8,7 +8,7 @@
         <Style x:Key="Field" TargetType="TextBlock">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Item.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                    <Setter Property="Opacity" Value="0.5" />
                     <Setter Property="TextDecorations" Value="Strikethrough" />
                 </DataTrigger>
             </Style.Triggers>
@@ -68,7 +68,11 @@
                                           HorizontalAlignment="Left"
                                           ItemsSource="{Binding Records}"
                                           Margin="0"
-                                          MaxColumnWidth="400" />
+                                          MaxColumnWidth="400">
+                                    <b:Interaction.Behaviors>
+                                        <Behaviors:TabOnceBehavior />
+                                    </b:Interaction.Behaviors>
+                                </DataGrid>
                             </Border>
                         </Grid>
                     </Border>
