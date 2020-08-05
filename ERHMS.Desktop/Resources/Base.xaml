@@ -38,11 +38,11 @@
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
     </Style>
     <Style TargetType="DataGrid" BasedOn="{StaticResource DataGridBase}" />
 
     <Style x:Key="DataGridCellBase" TargetType="DataGridCell">
-        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Padding">
             <Setter.Value>
                 <Thickness Bottom="{StaticResource SmallSpace}"
@@ -81,15 +81,6 @@
     </Style>
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBase}" />
 
-    <Style x:Key="DataGridRowBase" TargetType="DataGridRow">
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-    <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowBase}" />
-
     <Style x:Key="LabelBase" TargetType="Label">
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
@@ -127,6 +118,26 @@
         <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
     </Style>
     <Style TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarBase}" />
+
+    <Style x:Key="TabControlBase" TargetType="TabControl">
+        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style TargetType="TabControl" BasedOn="{StaticResource TabControlBase}" />
+
+    <Style x:Key="TabItemBase" TargetType="TabItem">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock FontSize="{StaticResource LargeFontSize}"
+                               FontWeight="{StaticResource ThinFontWeight}"
+                               Padding="{StaticResource SmallThickness}"
+                               Text="{Binding}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="TabItem" BasedOn="{StaticResource TabItemBase}" />
 
     <Style x:Key="TextBlockBase" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />

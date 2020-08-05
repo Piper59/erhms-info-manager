@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -8,49 +7,46 @@ namespace ERHMS.Desktop.Views
 {
     public partial class ProgressView : Window
     {
-        private DispatcherTimer showTimer;
+        private static readonly TimeSpan ShowDelay = TimeSpan.FromSeconds(1.0);
 
-        public CancellationTokenSource Showing { get; }
+        private DispatcherTimer showTimer;
+        private bool completed;
 
         public ProgressView()
         {
-            InitializeComponent();
-            showTimer = new DispatcherTimer();
+            showTimer = new DispatcherTimer(DispatcherPriority.Input)
+            {
+                Interval = ShowDelay
+            };
             showTimer.Tick += ShowTimer_Tick;
-            Showing = new CancellationTokenSource();
-            Showing.Token.Register(OnShowingCanceled);
+            InitializeComponent();
         }
 
-        public void ShowDialog(TimeSpan delay)
+        public void BeginShowDialog()
         {
-            if (!Showing.IsCancellationRequested)
-            {
-                showTimer.Interval = delay;
-                showTimer.Start();
-            }
+            completed = false;
+            showTimer.Start();
         }
 
         private void ShowTimer_Tick(object sender, EventArgs e)
         {
             showTimer.Stop();
-            if (!Showing.IsCancellationRequested)
+            if (!completed)
             {
                 ShowDialog();
             }
         }
 
-        private void OnShowingCanceled()
+        public void EndShowDialog()
         {
             showTimer.Stop();
+            completed = true;
             Close();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (!Showing.IsCancellationRequested)
-            {
-                e.Cancel = true;
-            }
+            e.Cancel &= !completed;
             base.OnClosing(e);
         }
     }

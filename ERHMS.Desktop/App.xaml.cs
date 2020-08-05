@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.Desktop.Commands;
+﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Services;
@@ -108,7 +107,7 @@ namespace ERHMS.Desktop
         private void ConfigureServices()
         {
             Log.Default.Debug("Configuring services");
-            ServiceProvider.GetDialogService = () => new DialogService(this);
+            ServiceProvider.GetDialogService = info => new DialogService(this, info);
             ServiceProvider.GetProgressService = taskName => new ProgressService(this, taskName);
         }
 
@@ -118,13 +117,13 @@ namespace ERHMS.Desktop
             if (!ConfigurationExtensions.Exists())
             {
                 Log.Default.Debug($"Creating configuration file: {ConfigurationExtensions.FilePath}");
-                Configuration configuration = ConfigurationExtensions.Create();
+                Epi.Configuration configuration = ConfigurationExtensions.Create();
                 Settings.Default.ApplyTo(configuration);
                 configuration.Save();
             }
             Log.Default.Debug($"Loading configuration file: {ConfigurationExtensions.FilePath}");
             ConfigurationExtensions.Load();
-            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
+            Epi.Configuration.Environment = Epi.ExecutionEnvironment.WindowsApplication;
         }
 
         private void SetTheme()
@@ -161,13 +160,13 @@ namespace ERHMS.Desktop
         private void OnHandledError(Exception ex)
         {
             Log.Default.Error(ex);
-            IDialogService dialog = ServiceProvider.GetDialogService();
-            dialog.Show(new DialogInfo(DialogInfoPreset.Error)
+            IDialogService dialog = ServiceProvider.GetDialogService(new DialogInfo(DialogInfoPreset.Error)
             {
                 Lead = ResXResources.HandledErrorLead,
                 Body = ex.Message,
                 Details = ex.ToString()
             });
+            dialog.Show();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -188,11 +187,11 @@ namespace ERHMS.Desktop
             window.Show();
             if (resetting)
             {
-                IDialogService dialog = ServiceProvider.GetDialogService();
-                dialog.Show(new DialogInfo(DialogInfoPreset.Default)
+                IDialogService dialog = ServiceProvider.GetDialogService(new DialogInfo(DialogInfoPreset.Default)
                 {
                     Lead = ResXResources.SettingsResetLead
                 });
+                dialog.Show();
             }
         }
     }

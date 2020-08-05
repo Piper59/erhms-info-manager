@@ -11,11 +11,11 @@ namespace ERHMS.Desktop.ViewModels
             set { SetProperty(ref taskName, value); }
         }
 
-        private string progress;
-        public string Progress
+        private string status;
+        public string Status
         {
-            get { return progress; }
-            set { SetProperty(ref progress, value); }
+            get { return status; }
+            set { SetProperty(ref status, value); }
         }
     }
 }

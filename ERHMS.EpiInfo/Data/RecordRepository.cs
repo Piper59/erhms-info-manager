@@ -23,12 +23,12 @@ namespace ERHMS.EpiInfo.Data
             View = view;
         }
 
-        private string Quote(string identifier)
+        public string Quote(string identifier)
         {
             return Database.Quote(identifier);
         }
 
-        private string GetFromClause()
+        public string GetFromClause()
         {
             StringBuilder fromClause = new StringBuilder();
             fromClause.Append(Quote(View.TableName));
@@ -41,17 +41,30 @@ namespace ERHMS.EpiInfo.Data
                     Quote(View.TableName),
                     Quote(ColumnNames.GLOBAL_RECORD_ID));
             }
+            fromClause.Insert(0, "FROM ");
             return fromClause.ToString();
         }
 
-        private string GetSelectSql(string selectClause, string otherClauses)
+        public string GetWhereDeletedClause(bool? deleted)
+        {
+            if (deleted == null)
+            {
+                return null;
+            }
+            else
+            {
+                return $"WHERE {Quote(ColumnNames.REC_STATUS)} = {(deleted.Value ? 0 : 1)}";
+            }
+        }
+
+        public string GetSelectSql(string selectList, string clauses)
         {
             StringBuilder sql = new StringBuilder();
             string fromClause = GetFromClause();
-            sql.Append($"SELECT {selectClause} FROM {fromClause}");
-            if (!string.IsNullOrEmpty(otherClauses))
+            sql.Append($"SELECT {selectList} {fromClause}");
+            if (!string.IsNullOrEmpty(clauses))
             {
-                sql.Append($" {otherClauses}");
+                sql.Append($" {clauses}");
             }
             sql.Append(";");
             return sql.ToString();

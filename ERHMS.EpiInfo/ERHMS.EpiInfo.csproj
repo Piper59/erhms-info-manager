@@ -84,7 +84,6 @@
     <Compile Include="Projects\IncidentProject.cs" />
     <Compile Include="Projects\Project.cs" />
     <Compile Include="Projects\ProjectCreationInfo.cs" />
-    <Compile Include="Projects\ProjectFactory.cs" />
     <Compile Include="Projects\ProjectType.cs" />
     <Compile Include="Projects\WorkerProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,6 +104,7 @@
     <Compile Include="Templating\Xml\XTable.cs" />
     <Compile Include="Templating\Xml\XTemplate.cs" />
     <Compile Include="Templating\Xml\XView.cs" />
+    <Compile Include="ViewExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,24 +1,49 @@
-﻿using ERHMS.Common;
+﻿using Epi.Fields;
+using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
-using View = Epi.View;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class ProjectViewModel : ObservableObject
     {
-        public class ViewChildViewModel : ObservableObject
+        public class ViewItemViewModel : ObservableObject
         {
-            public View View { get; }
-            public int RecordCount { get; set; }
+            public static IEnumerable<ViewItemViewModel> GetAll(Project project)
+            {
+                ISet<string> tableNames = new HashSet<string>(project.Database.GetTableNames(), StringComparer.OrdinalIgnoreCase);
+                foreach (Epi.View view in project.Views)
+                {
+                    ViewItemViewModel viewItem = new ViewItemViewModel(view)
+                    {
+                        Title = view.Pages[0].Fields.OfType<LabelField>()
+                            .OrderBy(field => field.TabIndex)
+                            .FirstOrDefault(field => field.Name.StartsWith("Title", StringComparison.OrdinalIgnoreCase))
+                            ?.PromptText
+                    };
+                    if (tableNames.Contains(view.TableName))
+                    {
+                        RecordRepository repository = new RecordRepository(project.Database, view);
+                        viewItem.RecordCount = repository.Count(repository.GetWhereDeletedClause(false));
+                    }
+                    yield return viewItem;
+                }
+            }
 
-            public ViewChildViewModel(View view)
+            public Epi.View View { get; }
+            public string Title { get; private set; }
+            public int RecordCount { get; private set; }
+
+            private ViewItemViewModel(Epi.View view)
             {
                 View = view;
             }
@@ -30,59 +55,55 @@ namespace ERHMS.Desktop.ViewModels
 
             public override bool Equals(object obj)
             {
-                return obj is ViewChildViewModel viewChild && viewChild.View.Id == View.Id;
+                return obj is ViewItemViewModel viewItem && viewItem.View.Id == View.Id;
             }
         }
 
         public Project Project { get; }
 
-        private ICollection<ViewChildViewModel> viewChildren;
-        public ICollection<ViewChildViewModel> ViewChildren
+        private ICollection<ViewItemViewModel> viewItems;
+        public ICollection<ViewItemViewModel> ViewItems
         {
-            get { return viewChildren; }
-            set { SetProperty(ref viewChildren, value); }
+            get { return viewItems; }
+            set { SetProperty(ref viewItems, value); }
         }
 
-        private ViewChildViewModel selectedViewChild;
-        public ViewChildViewModel SelectedViewChild
+        private ViewItemViewModel selectedViewItem;
+        public ViewItemViewModel SelectedViewItem
         {
-            get
-            {
-                return selectedViewChild;
-            }
-            set
-            {
-                SetProperty(ref selectedViewChild, value);
-                if (value != null)
-                {
-                    AppCommands.OpenViewCommand.Execute(value.View);
-                }
-            }
+            get { return selectedViewItem; }
+            set { SetProperty(ref selectedViewItem, value); }
         }
 
         public Command RefreshCommand { get; }
+        public Command OpenViewCommand { get; }
 
         public ProjectViewModel(Project project)
         {
             Project = project;
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
+            OpenViewCommand = new SimpleAsyncCommand<Epi.View>(OpenViewAsync);
+        }
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            if (e.PropertyName == nameof(SelectedViewItem))
+            {
+                if (SelectedViewItem != null)
+                {
+                    OpenViewCommand.Execute(SelectedViewItem.View);
+                }
+            }
         }
 
         private void RefreshInternal()
         {
-            ISet<string> tableNames = new HashSet<string>(Project.Database.GetTableNames(), StringComparer.OrdinalIgnoreCase);
-            viewChildren = new List<ViewChildViewModel>();
-            foreach (View view in Project.Views)
-            {
-                viewChildren.Add(new ViewChildViewModel(view)
-                {
-                    RecordCount = tableNames.Contains(view.TableName) ? view.GetRecordCount() : 0
-                });
-            }
+            viewItems = ViewItemViewModel.GetAll(Project).ToList();
         }
 
-        private async Task RefreshAsync()
+        public async Task RefreshAsync()
         {
             IProgressService progress = ServiceProvider.GetProgressService(Resources.RefreshingProjectTaskName);
             await progress.RunAsync(() =>
@@ -90,7 +111,18 @@ namespace ERHMS.Desktop.ViewModels
                 Project.LoadViews();
                 RefreshInternal();
             });
-            OnPropertyChanged(nameof(ViewChildren));
+            OnPropertyChanged(nameof(ViewItems));
+        }
+
+        public async Task OpenViewAsync(Epi.View view)
+        {
+            ViewViewModel content = null;
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
+            await progress.RunAsync(() =>
+            {
+                content = new ViewViewModel(this, view);
+            });
+            MainViewModel.Current.Content = content;
         }
     }
 }

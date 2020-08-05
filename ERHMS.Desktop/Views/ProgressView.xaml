@@ -17,7 +17,7 @@
                        Text="{Binding TaskName}" />
             <ProgressBar IsIndeterminate="True" />
             <TextBlock Style="{StaticResource Small}"
-                       Text="{Binding Progress}"
+                       Text="{Binding Status}"
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="NoWrap" />
         </StackPanel>

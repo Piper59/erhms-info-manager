@@ -34,11 +34,11 @@
                           InputGestureText="Alt+F4" />
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Command="{Binding GoToHomeCommand}"
+                <MenuItem Command="{Binding GoHomeCommand}"
                           Header="_Home" />
-                <MenuItem Command="{Binding OpenWorkerProjectCommand}"
+                <MenuItem Command="{Binding ViewWorkerProjectCommand}"
                           Header="_Worker database" />
-                <MenuItem Command="{Binding OpenIncidentProjectCommand}"
+                <MenuItem Command="{Binding ViewIncidentProjectCommand}"
                           Header="_Incident database" />
             </MenuItem>
             <MenuItem Header="_Tools">

@@ -1,5 +1,4 @@
-﻿using Epi;
-using Epi.DataSets;
+﻿using Epi.DataSets;
 using ERHMS.EpiInfo;
 using System.Windows;
 
@@ -7,7 +6,7 @@ namespace ERHMS.Desktop.Properties
 {
     internal partial class Settings
     {
-        public void ApplyTo(Configuration configuration)
+        public void ApplyTo(Epi.Configuration configuration)
         {
             if (UseFipsCrypto)
             {

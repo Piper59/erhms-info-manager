@@ -10,34 +10,38 @@ namespace ERHMS.Desktop.Infrastructure
     public class DialogService : IDialogService
     {
         public Application Application { get; }
-        private Dispatcher Dispatcher => Application.Dispatcher;
+        public Dispatcher Dispatcher => Application.Dispatcher;
+        public DialogInfo Info { get; }
+        public DialogViewModel DataContext { get; }
 
-        public DialogService(Application application)
+        public DialogService(Application application, DialogInfo info)
         {
             Application = application;
+            Info = info;
+            DataContext = new DialogViewModel(info);
         }
 
-        public bool? Show(DialogInfo info)
+        public bool? Show()
         {
             if (Dispatcher.CheckAccess())
             {
-                return ShowInternal(info);
+                return ShowInternal();
             }
             else
             {
-                return Dispatcher.Invoke(() => ShowInternal(info));
+                return Dispatcher.Invoke(ShowInternal);
             }
         }
 
-        private bool? ShowInternal(DialogInfo info)
+        private bool? ShowInternal()
         {
             Window owner = Application.MainWindow;
             Window window = new DialogView
             {
-                DataContext = new DialogViewModel(info),
+                DataContext = DataContext,
                 Owner = owner
             };
-            info.Sound?.Play();
+            Info.Sound?.Play();
             return window.ShowDialog();
         }
     }

@@ -11,10 +11,8 @@ namespace ERHMS.Desktop.Infrastructure
 {
     public class ProgressService : IProgressService
     {
-        private static readonly TimeSpan ShowDialogDelay = TimeSpan.FromSeconds(1.0);
-
         public Application Application { get; }
-        private Dispatcher Dispatcher => Application.Dispatcher;
+        public Dispatcher Dispatcher => Application.Dispatcher;
         public ProgressViewModel DataContext { get; }
 
         public ProgressService(Application application, string taskName)
@@ -28,7 +26,7 @@ namespace ERHMS.Desktop.Infrastructure
 
         public async void Report(string value)
         {
-            await Dispatcher.InvokeAsync(() => DataContext.Progress = value);
+            await Dispatcher.InvokeAsync(() => DataContext.Status = value);
         }
 
         public async Task RunAsync(Action action)
@@ -43,13 +41,13 @@ namespace ERHMS.Desktop.Infrastructure
             try
             {
                 Task task = Task.Run(action);
-                window.ShowDialog(ShowDialogDelay);
+                window.BeginShowDialog();
                 await task;
             }
             finally
             {
                 Mouse.OverrideCursor = null;
-                window.Showing.Cancel();
+                window.EndShowDialog();
             }
         }
     }

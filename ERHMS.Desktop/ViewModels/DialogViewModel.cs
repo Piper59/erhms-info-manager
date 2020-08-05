@@ -62,7 +62,7 @@ namespace ERHMS.Desktop.ViewModels
             ToggleShowingDetailsCommand = new SimpleSyncCommand(ToggleShowingDetails);
         }
 
-        private void ToggleShowingDetails()
+        public void ToggleShowingDetails()
         {
             ShowingDetails = !ShowingDetails;
         }

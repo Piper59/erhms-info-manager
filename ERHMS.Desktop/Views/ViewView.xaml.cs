@@ -22,7 +22,7 @@ namespace ERHMS.Desktop.Views
 
         private void DataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ViewViewModel.PropertyNames))
+            if (e.PropertyName == nameof(ViewViewModel.FieldNames))
             {
                 SetRecordColumns();
             }
@@ -31,13 +31,13 @@ namespace ERHMS.Desktop.Views
         private void SetRecordColumns()
         {
             Records.Columns.Clear();
-            foreach (string propertyName in DataContext.PropertyNames)
+            foreach (string fieldName in DataContext.FieldNames)
             {
                 Records.Columns.Add(new DataGridTextColumn
                 {
-                    Binding = new Binding(propertyName),
+                    Binding = new Binding(fieldName),
                     ElementStyle = (Style)FindResource("Field"),
-                    Header = propertyName
+                    Header = fieldName
                 });
             }
         }

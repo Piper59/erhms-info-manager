@@ -11,7 +11,6 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Module = ERHMS.EpiInfo.Module;
-using View = Epi.View;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -34,20 +33,18 @@ namespace ERHMS.Desktop.ViewModels
         }
 
         public Command ExitCommand { get; }
-        public Command GoToHomeCommand { get; }
-        public Command OpenWorkerProjectCommand { get; }
-        public Command OpenIncidentProjectCommand { get; }
-        public Command OpenViewCommand { get; }
+        public Command GoHomeCommand { get; }
+        public Command ViewWorkerProjectCommand { get; }
+        public Command ViewIncidentProjectCommand { get; }
         public Command StartEpiInfoCommand { get; }
         public Command StartFileExplorerCommand { get; }
 
         private MainViewModel()
         {
             ExitCommand = new SimpleSyncCommand(Exit);
-            GoToHomeCommand = new SimpleSyncCommand(GoToHome);
-            OpenWorkerProjectCommand = new SimpleAsyncCommand<string>(OpenWorkerProjectAsync);
-            OpenIncidentProjectCommand = new SimpleAsyncCommand<string>(OpenIncidentProjectAsync);
-            OpenViewCommand = new SimpleAsyncCommand<View>(OpenViewAsync);
+            GoHomeCommand = new SimpleSyncCommand(GoHome);
+            ViewWorkerProjectCommand = new SimpleAsyncCommand<string>(ViewWorkerProjectAsync);
+            ViewIncidentProjectCommand = new SimpleAsyncCommand<string>(ViewIncidentProjectAsync);
             StartEpiInfoCommand = new SimpleSyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
         }
@@ -59,54 +56,60 @@ namespace ERHMS.Desktop.ViewModels
             ExitRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private void Exit()
+        public void Exit()
         {
             OnExitRequested();
         }
 
-        private void GoToHome()
+        public void GoHome()
         {
             Content = new HomeViewModel();
         }
 
-        private async Task OpenProjectAsync(ProjectType projectType, string path)
+        // TODO: Handle errors
+        // Path and setting are null: offer to create/open
+        // Project does not exist: remove from settings, offer to create/open
+
+        public async Task ViewWorkerProjectAsync(string path = null)
         {
-            // TODO: Handle errors
+            path = path ?? Settings.Default.WorkerProjectPath;
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName);
             await progress.RunAsync(() =>
             {
-                content = new ProjectViewModel(ProjectFactory.GetProject(projectType, path));
+                content = new ProjectViewModel(new WorkerProject(path));
+                if (Settings.Default.WorkerProjectPath != path)
+                {
+                    Settings.Default.WorkerProjectPath = path;
+                    Settings.Default.Save();
+                }
             });
             OnPropertyChanged(nameof(Content));
         }
 
-        private async Task OpenWorkerProjectAsync(string path)
+        public async Task ViewIncidentProjectAsync(string path = null)
         {
-            await OpenProjectAsync(ProjectType.Worker, path ?? Settings.Default.WorkerProjectPath);
-        }
-
-        private async Task OpenIncidentProjectAsync(string path)
-        {
-            await OpenProjectAsync(ProjectType.Incident, path ?? Settings.Default.IncidentProjectPath);
-        }
-
-        private async Task OpenViewAsync(View view)
-        {
-            // TODO: Handle errors
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
+            path = path ?? Settings.Default.IncidentProjectPath;
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName);
             await progress.RunAsync(() =>
             {
-                content = new ViewViewModel(view);
+                content = new ProjectViewModel(new IncidentProject(path));
+                if (Settings.Default.IncidentProjectPath != path)
+                {
+                    Settings.Default.IncidentProjectPath = path;
+                    Settings.Default.IncidentProjectPaths.Remove(path);
+                    Settings.Default.IncidentProjectPaths.Insert(0, path);
+                    Settings.Default.Save();
+                }
             });
             OnPropertyChanged(nameof(Content));
         }
 
-        private void StartEpiInfo()
+        public void StartEpiInfo()
         {
             Module.Menu.Start();
         }
 
-        private void StartFileExplorer()
+        public void StartFileExplorer()
         {
             string entryDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             Process.Start(entryDirectory);

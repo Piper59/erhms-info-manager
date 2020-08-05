@@ -9,7 +9,6 @@ using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using View = Epi.View;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -17,13 +16,14 @@ namespace ERHMS.Desktop.ViewModels
     {
         private readonly RecordRepository repository;
 
-        public View View { get; }
+        public ProjectViewModel Parent { get; }
+        public Epi.View View { get; }
 
-        private ICollection<string> propertyNames;
-        public ICollection<string> PropertyNames
+        private ICollection<string> fieldNames;
+        public ICollection<string> FieldNames
         {
-            get { return propertyNames; }
-            set { SetProperty(ref propertyNames, value); }
+            get { return fieldNames; }
+            set { SetProperty(ref fieldNames, value); }
         }
 
         private ICollection<Record> records;
@@ -34,28 +34,50 @@ namespace ERHMS.Desktop.ViewModels
         }
 
         public Command RefreshCommand { get; }
+        public Command GoBackCommand { get; }
 
-        public ViewViewModel(View view)
+        public ViewViewModel(ProjectViewModel parent, Epi.View view)
         {
+            repository = new RecordRepository(DatabaseFactory.GetDatabase(view.Project), view);
+            Parent = parent;
             View = view;
-            IDatabase database = DatabaseFactory.GetDatabase(view.Project);
-            repository = new RecordRepository(database, view);
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
+            GoBackCommand = new AsyncCommand(GoBackAsync, CanGoBack, ErrorBehavior.Raise);
         }
+
+        public ViewViewModel(Epi.View view)
+            : this(null, view) { }
 
         private void RefreshInternal()
         {
-            propertyNames = View.GetMetadata().GetSortedFieldNames(View.Id, MetaFieldTypeExtensions.IsTextualData).ToList();
+            // TODO: Handle errors
+            fieldNames = View.GetMetadata().GetSortedFieldNames(View.Id, MetaFieldTypeExtensions.IsTextualData).ToList();
             records = repository.Select().ToList();
         }
 
-        private async Task RefreshAsync()
+        public async Task RefreshAsync()
         {
             IProgressService progress = ServiceProvider.GetProgressService(Resources.RefreshingViewTaskName);
-            await progress.RunAsync(RefreshInternal);
-            OnPropertyChanged(nameof(PropertyNames));
+            await progress.RunAsync(() =>
+            {
+                View.LoadFields();
+                RefreshInternal();
+            });
+            OnPropertyChanged(nameof(FieldNames));
             OnPropertyChanged(nameof(Records));
+        }
+
+        public bool CanGoBack()
+        {
+            return Parent != null;
+        }
+
+        public async Task GoBackAsync()
+        {
+            await Parent.RefreshAsync();
+            Parent.SelectedViewItem = null;
+            MainViewModel.Current.Content = Parent;
         }
     }
 }
