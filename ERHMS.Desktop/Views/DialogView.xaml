@@ -16,8 +16,8 @@
                 BorderThickness="0,1"
                 SnapsToDevicePixels="True"
                 Style="{StaticResource LayoutFull}">
-            <Grid MinHeight="100"
-                  Style="{StaticResource Container}">
+            <DockPanel MinHeight="100"
+                       Style="{StaticResource Container}">
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -39,7 +39,7 @@
                                    Visibility="{Binding Body, Converter={StaticResource ObjectToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
-            </Grid>
+            </DockPanel>
         </Border>
         <Border Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}">
             <Grid Style="{StaticResource Container}">
@@ -76,12 +76,12 @@
                 BorderThickness="0,1,0,0"
                 SnapsToDevicePixels="True"
                 Visibility="{Binding ShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel Style="{StaticResource Container}">
+            <DockPanel Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="200"
                          Style="{StaticResource Preformatted}"
                          Text="{Binding Details}" />
-            </StackPanel>
+            </DockPanel>
         </Border>
     </StackPanel>
 </Window>

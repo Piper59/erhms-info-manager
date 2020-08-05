@@ -131,7 +131,7 @@
                 <DataTemplate>
                     <TextBlock FontSize="{StaticResource LargeFontSize}"
                                FontWeight="{StaticResource ThinFontWeight}"
-                               Padding="{StaticResource SmallThickness}"
+                               Margin="4,3"
                                Text="{Binding}" />
                 </DataTemplate>
             </Setter.Value>

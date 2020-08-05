@@ -7,20 +7,16 @@
     <ScrollViewer>
         <Border Style="{StaticResource LayoutSmall}">
             <StackPanel Style="{StaticResource Container}">
-                <StackPanel Style="{StaticResource Section}">
-                    <StackPanel Margin="{StaticResource SmallThickness}"
-                                Orientation="Horizontal">
-                        <Image AutomationProperties.Name="{Binding Source={x:Static Properties:Resources.AppTitle}, StringFormat='{}{0} Logo'}"
-                               Source="../Resources/ERHMS.ico"
-                               Width="64">
-                            <Image.Margin>
-                                <Thickness Right="{StaticResource SmallSpace}" />
-                            </Image.Margin>
-                        </Image>
-                        <TextBlock Style="{StaticResource Title}"
-                                   Text="{x:Static Properties:Resources.AppTitle}"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Style="{StaticResource Section}">
+                    <Image AutomationProperties.Name="{Binding Source={x:Static Properties:Resources.AppTitle}, StringFormat='{}{0} Logo'}"
+                           Margin="{StaticResource SmallThickness}"
+                           Source="../Resources/ERHMS.ico"
+                           Width="64">
+                    </Image>
+                    <TextBlock Style="{StaticResource Title}"
+                               Text="{x:Static Properties:Resources.AppTitle}"
+                               VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
                     <Controls:PhaseHeading Phase="PreDeployment" />

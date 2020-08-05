@@ -46,13 +46,34 @@
                     <Button Command="local:AppCommands.GoHomeCommand">Home</Button>
                 </WrapPanel>
             </Grid>
-            <!-- TODO: Handle empty DataGrid -->
-            <!-- TODO: Stretch columns if less than full width -->
-            <!-- TODO: Add filtering and paging -->
-            <DataGrid x:Name="Records"
-                      Grid.Row="1"
-                      ItemsSource="{Binding Records}"
-                      MaxColumnWidth="200" />
+            <TabControl Grid.Row="1">
+                <TabItem Header="Records">
+                    <Border Style="{StaticResource LayoutFull}">
+                        <Grid Style="{StaticResource Container}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0"
+                                       Style="{StaticResource Body}">
+                                Select an existing record or <Hyperlink>create a new record</Hyperlink>
+                            </TextBlock>
+                            <Border Grid.Row="1"
+                                    Background="{Binding Background, ElementName=Records}"
+                                    Margin="{StaticResource SmallThickness}"
+                                    SnapsToDevicePixels="True">
+                                <!-- TODO: Handle empty DataGrid -->
+                                <!-- TODO: Add filtering and paging -->
+                                <DataGrid x:Name="Records"
+                                          HorizontalAlignment="Left"
+                                          ItemsSource="{Binding Records}"
+                                          Margin="0"
+                                          MaxColumnWidth="400" />
+                            </Border>
+                        </Grid>
+                    </Border>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Border>
 </UserControl>
