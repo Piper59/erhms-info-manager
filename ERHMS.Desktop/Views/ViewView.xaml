@@ -8,7 +8,6 @@
         <Style x:Key="Field" TargetType="TextBlock">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Item.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
-                    <Setter Property="Opacity" Value="0.5" />
                     <Setter Property="TextDecorations" Value="Strikethrough" />
                 </DataTrigger>
             </Style.Triggers>
