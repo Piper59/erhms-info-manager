@@ -20,7 +20,7 @@ namespace ERHMS.Desktop.Dialogs
                 case DialogInfoPreset.Default:
                     Buttons = new DialogButtonCollection
                     {
-                        new DialogButton(null, "OK", true, true)
+                        new DialogButton(null, "_OK", true, true)
                     };
                     break;
                 case DialogInfoPreset.Warning:
@@ -33,7 +33,7 @@ namespace ERHMS.Desktop.Dialogs
                     Icon = SystemIcons.Error;
                     Buttons = new DialogButtonCollection
                     {
-                        new DialogButton(null, "Close", true, true)
+                        new DialogButton(null, "_Close", true, true)
                     };
                     break;
                 default:

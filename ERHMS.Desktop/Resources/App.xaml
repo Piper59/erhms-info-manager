@@ -69,8 +69,7 @@
 
     <!-- Other -->
     <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="MinWidth" Value="75" />
+        <Setter Property="MinWidth" Value="100" />
         <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
     </Style>
 

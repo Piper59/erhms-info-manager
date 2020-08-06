@@ -16,7 +16,7 @@
                        Style="{StaticResource Lead}"
                        Text="{Binding TaskName}" />
             <ProgressBar IsIndeterminate="True" />
-            <TextBlock Style="{StaticResource Small}"
+            <TextBlock Style="{StaticResource Body}"
                        Text="{Binding Status}"
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="NoWrap" />
