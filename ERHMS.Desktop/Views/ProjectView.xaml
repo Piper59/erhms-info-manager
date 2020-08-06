@@ -77,14 +77,16 @@
                                 <Button>_Enter data</Button>
                                 <Button>
                                     <Button.ContextMenu>
-                                        <!-- TODO: Open on any click -->
                                         <ContextMenu>
-                                            <MenuItem Header="_Export" />
-                                            <MenuItem Header="_Import" />
+                                            <MenuItem Header="_Export data" />
+                                            <MenuItem Header="_Import data" />
                                             <MenuItem Header="_Analyze" />
                                             <MenuItem Header="_Delete" />
                                         </ContextMenu>
                                     </Button.ContextMenu>
+                                    <b:Interaction.Behaviors>
+                                        <Behaviors:OpenContextMenuBehavior />
+                                    </b:Interaction.Behaviors>
                                     _Advanced
                                 </Button>
                             </WrapPanel>

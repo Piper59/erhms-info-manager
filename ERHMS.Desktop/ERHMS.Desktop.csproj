@@ -87,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCommands.cs" />
+    <Compile Include="Behaviors\OpenContextMenuBehavior.cs" />
     <Compile Include="Behaviors\RelayEventBehavior.cs" />
     <Compile Include="Behaviors\TabOnceBehavior.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
