@@ -3,45 +3,43 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace ERHMS.Desktop.Infrastructure
 {
     public class DialogService : IDialogService
     {
-        public Application Application { get; }
-        public Dispatcher Dispatcher => Application.Dispatcher;
-        public DialogInfo Info { get; }
-        public DialogViewModel DataContext { get; }
+        private readonly Application application;
+        private readonly DialogInfo info;
+        private readonly DialogViewModel dataContext;
 
         public DialogService(Application application, DialogInfo info)
         {
-            Application = application;
-            Info = info;
-            DataContext = new DialogViewModel(info);
+            this.application = application;
+            this.info = info;
+            dataContext = new DialogViewModel(info);
         }
 
         public bool? Show()
         {
-            if (Dispatcher.CheckAccess())
+            if (application.Dispatcher.CheckAccess())
             {
                 return ShowInternal();
             }
             else
             {
-                return Dispatcher.Invoke(ShowInternal);
+                return application.Dispatcher.Invoke(ShowInternal);
             }
         }
 
         private bool? ShowInternal()
         {
-            Window owner = Application.MainWindow;
+            Window owner = application.MainWindow;
             Window window = new DialogView
             {
-                DataContext = DataContext,
+                DataContext = dataContext,
                 Owner = owner
             };
-            Info.Sound?.Play();
+            info.Sound?.Play();
             return window.ShowDialog();
         }
     }

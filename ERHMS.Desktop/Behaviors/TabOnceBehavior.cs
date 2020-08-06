@@ -8,7 +8,7 @@ namespace ERHMS.Desktop.Behaviors
 {
     public class TabOnceBehavior : Behavior<DataGrid>
     {
-        private bool isInternalFocusChange;
+        private bool settingFocus;
         private DataGridCellInfo focusedCell;
 
         protected override void OnAttached()
@@ -25,7 +25,7 @@ namespace ERHMS.Desktop.Behaviors
 
         private void AssociatedObject_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            if (!isInternalFocusChange && IsDescendantCell(e.NewFocus, out DataGridCell newCell))
+            if (!settingFocus && IsDescendantCell(e.NewFocus, out DataGridCell newCell))
             {
                 if (!e.KeyboardDevice.IsKeyDown(Key.Tab) || IsDescendantCell(e.OldFocus, out DataGridCell oldCell))
                 {
@@ -44,7 +44,7 @@ namespace ERHMS.Desktop.Behaviors
                             column = focusedCell.Column;
                         }
                     }
-                    FocusAndSelect(item, column);
+                    SetFocus(item, column);
                 }
             }
         }
@@ -55,9 +55,9 @@ namespace ERHMS.Desktop.Behaviors
             return cell != null && AssociatedObject.IsAncestorOf(cell);
         }
 
-        private void FocusAndSelect(object item, DataGridColumn column)
+        private void SetFocus(object item, DataGridColumn column)
         {
-            isInternalFocusChange = true;
+            settingFocus = true;
             try
             {
                 DataGridCellInfo cell = new DataGridCellInfo(item, column);
@@ -79,7 +79,7 @@ namespace ERHMS.Desktop.Behaviors
             catch { }
             finally
             {
-                isInternalFocusChange = false;
+                settingFocus = false;
             }
         }
 
@@ -90,30 +90,54 @@ namespace ERHMS.Desktop.Behaviors
                 switch (e.KeyboardDevice.Modifiers)
                 {
                     case ModifierKeys.None:
-                        MoveFocus(FocusNavigationDirection.Last, FocusNavigationDirection.Next);
+                        MoveFocus(true);
                         e.Handled = true;
                         break;
                     case ModifierKeys.Shift:
-                        MoveFocus(FocusNavigationDirection.First, FocusNavigationDirection.Previous);
+                        MoveFocus(false);
                         e.Handled = true;
                         break;
                 }
             }
         }
 
-        private void MoveFocus(FocusNavigationDirection inner, FocusNavigationDirection outer)
+        private void MoveFocus(bool forward)
         {
-            isInternalFocusChange = true;
+            bool intercepted = false;
+
+            void handler(object sender, KeyboardFocusChangedEventArgs e)
+            {
+                intercepted = true;
+                MoveFocusOuter(e.NewFocus, forward);
+                e.Handled = true;
+            }
+
+            AssociatedObject.PreviewGotKeyboardFocus += handler;
             try
             {
-                AssociatedObject.MoveFocus(new TraversalRequest(inner));
-                ((FrameworkElement)Keyboard.FocusedElement).MoveFocus(new TraversalRequest(outer));
+                MoveFocusInner(forward);
+                if (!intercepted)
+                {
+                    MoveFocusOuter(Keyboard.FocusedElement, forward);
+                }
             }
             catch { }
             finally
             {
-                isInternalFocusChange = false;
+                AssociatedObject.PreviewGotKeyboardFocus -= handler;
             }
+        }
+
+        private void MoveFocusInner(bool forward)
+        {
+            FocusNavigationDirection direction = forward ? FocusNavigationDirection.Last : FocusNavigationDirection.First;
+            AssociatedObject.MoveFocus(new TraversalRequest(direction));
+        }
+
+        private void MoveFocusOuter(IInputElement element, bool forward)
+        {
+            FocusNavigationDirection direction = forward ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous;
+            ((FrameworkElement)element).MoveFocus(new TraversalRequest(direction));
         }
     }
 }

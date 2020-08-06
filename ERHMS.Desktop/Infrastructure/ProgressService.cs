@@ -5,20 +5,18 @@ using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace ERHMS.Desktop.Infrastructure
 {
     public class ProgressService : IProgressService
     {
-        public Application Application { get; }
-        public Dispatcher Dispatcher => Application.Dispatcher;
-        public ProgressViewModel DataContext { get; }
+        private readonly Application application;
+        private readonly ProgressViewModel dataContext;
 
         public ProgressService(Application application, string taskName)
         {
-            Application = application;
-            DataContext = new ProgressViewModel
+            this.application = application;
+            dataContext = new ProgressViewModel
             {
                 TaskName = taskName
             };
@@ -26,15 +24,15 @@ namespace ERHMS.Desktop.Infrastructure
 
         public async void Report(string value)
         {
-            await Dispatcher.InvokeAsync(() => DataContext.Status = value);
+            await application.Dispatcher.InvokeAsync(() => dataContext.Status = value);
         }
 
         public async Task RunAsync(Action action)
         {
-            Window owner = Application.MainWindow;
+            Window owner = application.MainWindow;
             ProgressView window = new ProgressView
             {
-                DataContext = DataContext,
+                DataContext = dataContext,
                 Owner = owner
             };
             Mouse.OverrideCursor = Cursors.Wait;
