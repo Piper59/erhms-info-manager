@@ -51,9 +51,8 @@ namespace ERHMS.Desktop.ViewModels
 
         private void RefreshInternal()
         {
-            // TODO: Handle errors
             fieldNames = View.GetMetadata().GetSortedFieldNames(View.Id, MetaFieldTypeExtensions.IsTextualData).ToList();
-            records = repository.Select().ToList();
+            records = repository.TableExists() ? repository.Select().ToList() : null;
         }
 
         public async Task RefreshAsync()

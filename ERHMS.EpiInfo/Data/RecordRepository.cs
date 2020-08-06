@@ -28,6 +28,11 @@ namespace ERHMS.EpiInfo.Data
             return Database.Quote(identifier);
         }
 
+        public bool TableExists()
+        {
+            return Database.TableExists(View.TableName);
+        }
+
         public string GetFromClause()
         {
             StringBuilder fromClause = new StringBuilder();

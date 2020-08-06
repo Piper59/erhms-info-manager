@@ -37,7 +37,7 @@ namespace ERHMS.Desktop.Views
                 {
                     Binding = new Binding(fieldName),
                     ElementStyle = (Style)FindResource("Field"),
-                    Header = fieldName
+                    Header = fieldName.Replace("_", "__")
                 });
             }
         }
