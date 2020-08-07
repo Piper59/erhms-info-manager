@@ -35,8 +35,10 @@ namespace ERHMS.Desktop.Infrastructure
                 Owner = owner,
                 DataContext = dataContext
             };
-            // TODO: Disable owner?
-            // Do something less heavy-handed?
+            if (owner != null)
+            {
+                owner.IsEnabled = false;
+            }
             Mouse.OverrideCursor = Cursors.AppStarting;
             try
             {
@@ -47,6 +49,10 @@ namespace ERHMS.Desktop.Infrastructure
             finally
             {
                 Mouse.OverrideCursor = null;
+                if (owner != null)
+                {
+                    owner.IsEnabled = true;
+                }
                 window.EndShowDialog();
             }
         }
