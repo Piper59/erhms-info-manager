@@ -2,6 +2,7 @@
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -24,7 +25,7 @@ namespace ERHMS.Desktop.Infrastructure
             await application.Dispatcher.InvokeAsync(() => dataContext.Status = value);
         }
 
-        public async Task RunAsync(Action action)
+        public async Task RunAsync(Action action, CancellationToken token)
         {
             Window owner = application.MainWindow;
             ProgressView window = new ProgressView
@@ -35,7 +36,7 @@ namespace ERHMS.Desktop.Infrastructure
             Mouse.OverrideCursor = Cursors.Wait;
             try
             {
-                Task task = Task.Run(action);
+                Task task = Task.Run(action, token);
                 window.BeginShowDialog();
                 await task;
             }
@@ -45,5 +46,7 @@ namespace ERHMS.Desktop.Infrastructure
                 window.EndShowDialog();
             }
         }
+
+        public Task RunAsync(Action action) => RunAsync(action, CancellationToken.None);
     }
 }

@@ -11,11 +11,7 @@ namespace ERHMS.Desktop.Commands
 
         public static bool Always() => true;
         public static bool Always<T>(T parameter) => true;
-
-        public static void OnCanExecuteChanged()
-        {
-            CommandManager.InvalidateRequerySuggested();
-        }
+        public static void OnCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
 
         public string Name { get; }
         public ErrorBehavior ErrorBehavior { get; }
@@ -61,10 +57,7 @@ namespace ERHMS.Desktop.Commands
             }
         }
 
-        protected void OnError(Exception ex)
-        {
-            OnError(new ErrorEventArgs(ex));
-        }
+        protected void OnError(Exception ex) => OnError(new ErrorEventArgs(ex));
 
         public abstract bool CanExecute(object parameter);
         public abstract Task ExecuteCore(object parameter);

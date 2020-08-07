@@ -109,6 +109,7 @@
     <Compile Include="Infrastructure\DialogService.cs" />
     <Compile Include="Infrastructure\ISelectable.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
+    <Compile Include="Infrastructure\ProcessStartedEventArgs.cs" />
     <Compile Include="Infrastructure\ProgressService.cs" />
     <Compile Include="Infrastructure\SelectableListCollectionView.cs" />
     <Compile Include="Infrastructure\SimpleAsyncCommand.cs" />

@@ -120,6 +120,12 @@
   <data name="AppTitle" xml:space="preserve">
     <value>ERHMS Info Manager</value>
   </data>
+  <data name="EpiInfoNotRespondingBody" xml:space="preserve">
+    <value>Epi Info took longer than expected to start. Please continue to wait or try again.</value>
+  </data>
+  <data name="EpiInfoNotRespondingLead" xml:space="preserve">
+    <value>Epi Info is not responding</value>
+  </data>
   <data name="HandledErrorLead" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
@@ -137,6 +143,12 @@
   </data>
   <data name="SettingsResetLead" xml:space="preserve">
     <value>Settings have been reset</value>
+  </data>
+  <data name="StartingEpiInfoErrorLead" xml:space="preserve">
+    <value>An error occurred while starting Epi Info</value>
+  </data>
+  <data name="StartingEpiInfoTaskName" xml:space="preserve">
+    <value>Starting Epi Info</value>
   </data>
   <data name="UnhandledErrorMessage" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.</value>

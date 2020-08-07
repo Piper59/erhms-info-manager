@@ -29,16 +29,9 @@ namespace ERHMS.Desktop.Properties
 
         public void UpdateFrom(Window window)
         {
-            if (window.WindowState == WindowState.Maximized)
-            {
-                WindowMaximized = true;
-            }
-            else
-            {
-                WindowWidth = window.Width;
-                WindowHeight = window.Height;
-                WindowMaximized = false;
-            }
+            WindowWidth = window.RestoreBounds.Width;
+            WindowHeight = window.RestoreBounds.Height;
+            WindowMaximized = window.WindowState == WindowState.Maximized;
         }
     }
 }

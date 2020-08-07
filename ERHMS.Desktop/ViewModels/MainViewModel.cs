@@ -1,5 +1,6 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -9,6 +10,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Module = ERHMS.EpiInfo.Module;
 
@@ -16,6 +18,9 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
+        private static readonly TimeSpan StartEpiInfoWait = TimeSpan.FromSeconds(10.0);
+        private static readonly TimeSpan StartEpiInfoPollInterval = TimeSpan.FromSeconds(0.1);
+
         public static MainViewModel Current { get; } = new MainViewModel();
 
         private object content;
@@ -45,21 +50,16 @@ namespace ERHMS.Desktop.ViewModels
             GoHomeCommand = new SimpleSyncCommand(GoHome);
             ViewWorkerProjectCommand = new SimpleAsyncCommand<string>(ViewWorkerProjectAsync);
             ViewIncidentProjectCommand = new SimpleAsyncCommand<string>(ViewIncidentProjectAsync);
-            StartEpiInfoCommand = new SimpleSyncCommand(StartEpiInfo);
+            StartEpiInfoCommand = new SimpleAsyncCommand(StartEpiInfoAsync);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
         }
 
+        public event EventHandler<ProcessStartedEventArgs> ProcessStarted;
+        private void OnProcessStarted(ProcessStartedEventArgs e) => ProcessStarted?.Invoke(this, e);
+        private void OnProcessStarted(Process process) => OnProcessStarted(new ProcessStartedEventArgs(process));
+
         public event EventHandler ExitRequested;
-
-        private void OnExitRequested()
-        {
-            ExitRequested?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void Exit()
-        {
-            OnExitRequested();
-        }
+        private void OnExitRequested() => ExitRequested?.Invoke(this, EventArgs.Empty);
 
         public void GoHome()
         {
@@ -104,15 +104,58 @@ namespace ERHMS.Desktop.ViewModels
             OnPropertyChanged(nameof(Content));
         }
 
-        public void StartEpiInfo()
+        public async Task StartEpiInfoAsync(Module module, params string[] arguments)
         {
-            Module.Menu.Start();
+            using (CancellationTokenSource starting = new CancellationTokenSource())
+            {
+                IProgressService progress = ServiceProvider.GetProgressService(Resources.StartingEpiInfoTaskName);
+                try
+                {
+                    await progress.RunAsync(() =>
+                    {
+                        starting.CancelAfter(StartEpiInfoWait);
+                        Process process = module.Start(arguments);
+                        while (!process.WaitForInputIdle((int)StartEpiInfoPollInterval.TotalMilliseconds))
+                        {
+                            starting.Token.ThrowIfCancellationRequested();
+                        }
+                        OnProcessStarted(process);
+                    }, starting.Token);
+                }
+                catch (Exception ex)
+                {
+                    DialogInfo info = new DialogInfo(DialogInfoPreset.Error);
+                    if (ex is OperationCanceledException)
+                    {
+                        info.Lead = Resources.EpiInfoNotRespondingLead;
+                        info.Body = Resources.EpiInfoNotRespondingBody;
+                    }
+                    else
+                    {
+                        info.Lead = Resources.StartingEpiInfoErrorLead;
+                        info.Body = ex.Message;
+                        info.Details = ex.ToString();
+                    }
+                    IDialogService dialog = ServiceProvider.GetDialogService(info);
+                    dialog.Show();
+                }
+            }
+        }
+
+        public async Task StartEpiInfoAsync()
+        {
+            await StartEpiInfoAsync(Module.Menu);
         }
 
         public void StartFileExplorer()
         {
             string entryDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             Process.Start(entryDirectory);
+        }
+
+        public void Exit()
+        {
+            OnExitRequested();
         }
     }
 }

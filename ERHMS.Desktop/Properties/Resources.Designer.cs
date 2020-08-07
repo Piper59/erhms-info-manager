@@ -70,6 +70,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Epi Info took longer than expected to start. Please continue to wait or try again..
+        /// </summary>
+        public static string EpiInfoNotRespondingBody {
+            get {
+                return ResourceManager.GetString("EpiInfoNotRespondingBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epi Info is not responding.
+        /// </summary>
+        public static string EpiInfoNotRespondingLead {
+            get {
+                return ResourceManager.GetString("EpiInfoNotRespondingLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
         /// </summary>
         public static string HandledErrorLead {
@@ -120,6 +138,24 @@ namespace ERHMS.Desktop.Properties {
         public static string SettingsResetLead {
             get {
                 return ResourceManager.GetString("SettingsResetLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while starting Epi Info.
+        /// </summary>
+        public static string StartingEpiInfoErrorLead {
+            get {
+                return ResourceManager.GetString("StartingEpiInfoErrorLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting Epi Info.
+        /// </summary>
+        public static string StartingEpiInfoTaskName {
+            get {
+                return ResourceManager.GetString("StartingEpiInfoTaskName", resourceCulture);
             }
         }
         

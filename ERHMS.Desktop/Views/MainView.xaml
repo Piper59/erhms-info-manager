@@ -8,6 +8,8 @@
         MinWidth="640"
         Title="{x:Static Properties:Resources.AppTitle}">
     <b:Interaction.Behaviors>
+        <Behaviors:RelayEventBehavior EventName="ProcessStarted"
+                                      HandlerName="DataContext_ProcessStarted" />
         <Behaviors:RelayEventBehavior EventName="ExitRequested"
                                       HandlerName="DataContext_ExitRequested" />
     </b:Interaction.Behaviors>
