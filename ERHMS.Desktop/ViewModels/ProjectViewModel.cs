@@ -4,6 +4,7 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
 using System;
@@ -67,9 +68,9 @@ namespace ERHMS.Desktop.ViewModels
             viewItems = new SelectableListCollectionView<ViewItem>(new List<ViewItem>());
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
-            CustomizeCommand = new SyncCommand(Customize, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            CustomizeCommand = new AsyncCommand(CustomizeAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
             ViewDataCommand = new AsyncCommand(ViewDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
-            EnterDataCommand = new SyncCommand(EnterData, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            EnterDataCommand = new AsyncCommand(EnterDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
         }
 
         private void RefreshInternal()
@@ -92,9 +93,13 @@ namespace ERHMS.Desktop.ViewModels
             ViewItems.Refresh();
         }
 
-        public void Customize()
+        public async Task CustomizeAsync()
         {
-            // TODO
+            Epi.View view = viewItems.SelectedItem.View;
+            await MainViewModel.Current.StartEpiInfoAsync(
+                Module.MakeView,
+                $"/project:{view.Project.FilePath}",
+                $"/view:{view.Name}");
         }
 
         public async Task ViewDataAsync()
@@ -108,9 +113,14 @@ namespace ERHMS.Desktop.ViewModels
             MainViewModel.Current.Content = content;
         }
 
-        public void EnterData()
+        public async Task EnterDataAsync()
         {
-            // TODO
+            Epi.View view = viewItems.SelectedItem.View;
+            await MainViewModel.Current.StartEpiInfoAsync(
+                Module.Enter,
+                $"/project:{view.Project.FilePath}",
+                $"/view:{view.Name}",
+                "/record:*");
         }
     }
 }

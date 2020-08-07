@@ -14,6 +14,7 @@ namespace ERHMS.EpiInfo.Data
 
         public IDictionary<string, object> Properties { get; } = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
+        public int? UniqueKey => GetProperty<int?>(ColumnNames.UNIQUE_KEY);
 
         public bool Deleted
         {

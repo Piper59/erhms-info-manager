@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace ERHMS.EpiInfo
@@ -26,7 +27,7 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static Process Start(this Module @this, string arguments = "")
+        public static Process Start(this Module @this, params string[] arguments)
         {
             string entryDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             return Process.Start(new ProcessStartInfo
@@ -34,7 +35,7 @@ namespace ERHMS.EpiInfo
                 UseShellExecute = false,
                 WorkingDirectory = entryDirectory,
                 FileName = Path.Combine(entryDirectory, @this.ToFileName()),
-                Arguments = arguments
+                Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument.Replace("\"", "\"\"")}\""))
             });
         }
     }
