@@ -84,7 +84,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task RefreshAsync()
         {
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.RefreshingProjectTaskName);
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.RefreshingProjectTaskName, false);
             await progress.RunAsync(() =>
             {
                 Project.LoadViews();
@@ -105,7 +105,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task ViewDataAsync()
         {
             ViewViewModel content = null;
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName, false);
             await progress.RunAsync(() =>
             {
                 content = new ViewViewModel(this, viewItems.SelectedItem.View);

@@ -73,7 +73,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task ViewWorkerProjectAsync(string path = null)
         {
             path = path ?? Settings.Default.WorkerProjectPath;
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName);
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
             await progress.RunAsync(() =>
             {
                 content = new ProjectViewModel(new WorkerProject(path));
@@ -89,7 +89,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task ViewIncidentProjectAsync(string path = null)
         {
             path = path ?? Settings.Default.IncidentProjectPath;
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName);
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
             await progress.RunAsync(() =>
             {
                 content = new ProjectViewModel(new IncidentProject(path));
@@ -108,7 +108,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             using (CancellationTokenSource starting = new CancellationTokenSource())
             {
-                IProgressService progress = ServiceProvider.GetProgressService(Resources.StartingEpiInfoTaskName);
+                IProgressService progress = ServiceProvider.GetProgressService(Resources.StartingEpiInfoTaskName, true);
                 try
                 {
                     await progress.RunAsync(() =>
@@ -117,6 +117,12 @@ namespace ERHMS.Desktop.ViewModels
                         Process process = module.Start(arguments);
                         while (!process.WaitForInputIdle((int)StartEpiInfoPollInterval.TotalMilliseconds))
                         {
+                            if (progress.IsUserCancellationRequested)
+                            {
+                                process.CloseMainWindow();
+                                process.Close();
+                                return;
+                            }
                             starting.Token.ThrowIfCancellationRequested();
                         }
                         OnProcessStarted(process);

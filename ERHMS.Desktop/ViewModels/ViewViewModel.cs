@@ -85,7 +85,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task RefreshAsync()
         {
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.RefreshingViewTaskName);
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.RefreshingViewTaskName, false);
             await progress.RunAsync(() =>
             {
                 View.LoadFields();

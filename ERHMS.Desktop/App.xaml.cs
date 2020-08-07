@@ -108,7 +108,7 @@ namespace ERHMS.Desktop
         {
             Log.Default.Debug("Configuring services");
             ServiceProvider.GetDialogService = info => new DialogService(this, info);
-            ServiceProvider.GetProgressService = taskName => new ProgressService(this, taskName);
+            ServiceProvider.GetProgressService = (taskName, canUserCancel) => new ProgressService(this, taskName, canUserCancel);
         }
 
         private void ConfigureEpiInfo()

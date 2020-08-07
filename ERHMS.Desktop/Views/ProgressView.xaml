@@ -7,19 +7,45 @@
         Title="{x:Static Properties:Resources.AppTitle}"
         Width="480"
         WindowStartupLocation="CenterOwner">
-    <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
-            BorderThickness="0,1,0,0"
-            SnapsToDevicePixels="True"
-            Style="{StaticResource LayoutFull}">
-        <StackPanel Style="{StaticResource Container}">
-            <TextBlock Foreground="{DynamicResource AccentTextBrush}"
-                       Style="{StaticResource Lead}"
-                       Text="{Binding TaskName}" />
-            <ProgressBar IsIndeterminate="True" />
-            <TextBlock Style="{StaticResource Body}"
-                       Text="{Binding Status}"
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="NoWrap" />
-        </StackPanel>
-    </Border>
+    <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+    </Window.Resources>
+    <StackPanel>
+        <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+                BorderThickness="0,1,0,0"
+                SnapsToDevicePixels="True"
+                Style="{StaticResource LayoutFull}">
+            <StackPanel Style="{StaticResource Container}">
+                <TextBlock Foreground="{DynamicResource AccentTextBrush}"
+                           Style="{StaticResource Lead}"
+                           Text="{Binding TaskName}" />
+                <ProgressBar IsIndeterminate="True" />
+                <TextBlock Style="{StaticResource Body}"
+                           Text="{Binding Status}"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap" />
+            </StackPanel>
+        </Border>
+        <Border Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}"
+                BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+                BorderThickness="0,1,0,0"
+                SnapsToDevicePixels="True"
+                Visibility="{Binding CanUserCancel, Converter={StaticResource BoolToVisibilityConverter}}">
+            <WrapPanel HorizontalAlignment="Right"
+                       Style="{StaticResource Container}">
+                <Button Command="{Binding CancelCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ActionButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsUserCancellationRequested}" Value="True">
+                                    <Setter Property="Content" Value="Cancelling..." />
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Content" Value="Cancel" />
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </WrapPanel>
+        </Border>
+    </StackPanel>
 </Window>

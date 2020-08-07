@@ -14,10 +14,12 @@ namespace ERHMS.Desktop.Infrastructure
         private readonly Application application;
         private readonly ProgressViewModel dataContext;
 
-        public ProgressService(Application application, string taskName)
+        public bool IsUserCancellationRequested => dataContext.IsUserCancellationRequested;
+
+        public ProgressService(Application application, string taskName, bool canUserCancel)
         {
             this.application = application;
-            dataContext = new ProgressViewModel(taskName);
+            dataContext = new ProgressViewModel(taskName, canUserCancel);
         }
 
         public async void Report(string value)
@@ -30,10 +32,12 @@ namespace ERHMS.Desktop.Infrastructure
             Window owner = application.MainWindow;
             ProgressView window = new ProgressView
             {
-                DataContext = dataContext,
-                Owner = owner
+                Owner = owner,
+                DataContext = dataContext
             };
-            Mouse.OverrideCursor = Cursors.Wait;
+            // TODO: Disable owner?
+            // Do something less heavy-handed?
+            Mouse.OverrideCursor = Cursors.AppStarting;
             try
             {
                 Task task = Task.Run(action, token);

@@ -36,8 +36,8 @@ namespace ERHMS.Desktop.Infrastructure
             Window owner = application.MainWindow;
             Window window = new DialogView
             {
-                DataContext = dataContext,
-                Owner = owner
+                Owner = owner,
+                DataContext = dataContext
             };
             info.Sound?.Play();
             return window.ShowDialog();
