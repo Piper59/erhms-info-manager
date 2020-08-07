@@ -56,7 +56,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
                                        Style="{StaticResource Body}">
-                                Select an existing record or <Hyperlink>create a new record</Hyperlink>
+                                Select an existing record or <Hyperlink Command="{Binding CreateCommand}">create a new record</Hyperlink>
                             </TextBlock>
                             <Border Grid.Row="1"
                                     Background="{Binding Background, ElementName=RecordItems}"

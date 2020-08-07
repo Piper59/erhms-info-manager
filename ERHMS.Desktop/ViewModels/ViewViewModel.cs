@@ -50,6 +50,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public Command RefreshCommand { get; }
         public Command GoBackCommand { get; }
+        public Command CreateCommand { get; }
         public Command EditCommand { get; }
         public Command DeleteCommand { get; }
         public Command UndeleteCommand { get; }
@@ -63,6 +64,7 @@ namespace ERHMS.Desktop.ViewModels
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
             GoBackCommand = new AsyncCommand(GoBackAsync, CanGoBack, ErrorBehavior.Raise);
+            CreateCommand = new SimpleAsyncCommand(CreateAsync);
             EditCommand = new AsyncCommand(EditAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
             DeleteCommand = new AsyncCommand(DeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
@@ -105,6 +107,15 @@ namespace ERHMS.Desktop.ViewModels
         {
             await Parent.RefreshAsync();
             MainViewModel.Current.Content = Parent;
+        }
+
+        public async Task CreateAsync()
+        {
+            await MainViewModel.Current.StartEpiInfoAsync(
+                Module.Enter,
+                $"/project:{View.Project.FilePath}",
+                $"/view:{View.Name}",
+                "/record:*");
         }
 
         public async Task EditAsync()
