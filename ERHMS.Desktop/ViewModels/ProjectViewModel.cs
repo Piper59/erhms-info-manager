@@ -8,93 +8,80 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class ProjectViewModel : ObservableObject
     {
-        public class ViewItemViewModel : ObservableObject
+        public class ViewItem : ObservableObject
         {
-            public static IEnumerable<ViewItemViewModel> GetAll(Project project)
+            public Epi.View View { get; }
+            public string Title { get; }
+            public int RecordCount { get; }
+
+            private bool selected;
+            public bool Selected
             {
-                ISet<string> tableNames = new HashSet<string>(project.Database.GetTableNames(), StringComparer.OrdinalIgnoreCase);
-                foreach (Epi.View view in project.Views)
+                get { return selected; }
+                set { SetProperty(ref selected, value); }
+            }
+
+            public ViewItem(Epi.View view)
+            {
+                View = view;
+                Title = view.Pages[0].Fields.OfType<LabelField>()
+                    .OrderBy(field => field.TabIndex)
+                    .FirstOrDefault(field => field.Name.StartsWith("Title", StringComparison.OrdinalIgnoreCase))
+                    ?.PromptText;
+                RecordRepository repository = new RecordRepository(view);
+                if (repository.TableExists())
                 {
-                    ViewItemViewModel viewItem = new ViewItemViewModel(view)
-                    {
-                        Title = view.Pages[0].Fields.OfType<LabelField>()
-                            .OrderBy(field => field.TabIndex)
-                            .FirstOrDefault(field => field.Name.StartsWith("Title", StringComparison.OrdinalIgnoreCase))
-                            ?.PromptText
-                    };
-                    if (tableNames.Contains(view.TableName))
-                    {
-                        RecordRepository repository = new RecordRepository(project.Database, view);
-                        viewItem.RecordCount = repository.Count(repository.GetWhereDeletedClause(false));
-                    }
-                    yield return viewItem;
+                    RecordCount = repository.Count(repository.GetWhereDeletedClause(false));
                 }
             }
 
-            public Epi.View View { get; }
-            public string Title { get; private set; }
-            public int RecordCount { get; private set; }
-
-            private ViewItemViewModel(Epi.View view)
-            {
-                View = view;
-            }
-
-            public override int GetHashCode()
-            {
-                return View.Id;
-            }
+            public override int GetHashCode() => View.Id;
 
             public override bool Equals(object obj)
             {
-                return obj is ViewItemViewModel viewItem && viewItem.View.Id == View.Id;
+                return obj is ViewItem viewItem && viewItem.View.Id == View.Id;
             }
         }
 
         public Project Project { get; }
 
-        private ICollection<ViewItemViewModel> viewItems;
-        public ICollection<ViewItemViewModel> ViewItems
-        {
-            get { return viewItems; }
-            set { SetProperty(ref viewItems, value); }
-        }
-
-        private ViewItemViewModel selectedViewItem;
-        public ViewItemViewModel SelectedViewItem
-        {
-            get
-            {
-                return selectedViewItem;
-            }
-            set
-            {
-                SetProperty(ref selectedViewItem, value);
-                Command.OnCanExecuteChanged();
-            }
-        }
+        // TODO: Encapsulate as SelectableCollectionView<T> where T : ISelectable?
+        private ICollection<ViewItem> viewItems;
+        public ICollectionView ViewItems { get; }
 
         public Command RefreshCommand { get; }
+        public Command CustomizeCommand { get; }
         public Command ViewDataCommand { get; }
+        public Command EnterDataCommand { get; }
 
         public ProjectViewModel(Project project)
         {
             Project = project;
+            viewItems = new List<ViewItem>();
+            ViewItems = CollectionViewSource.GetDefaultView(viewItems);
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
+            CustomizeCommand = new SyncCommand(Customize, HasSelectedViewItem, ErrorBehavior.Raise);
             ViewDataCommand = new AsyncCommand(ViewDataAsync, HasSelectedViewItem, ErrorBehavior.Raise);
+            EnterDataCommand = new SyncCommand(EnterData, HasSelectedViewItem, ErrorBehavior.Raise);
         }
 
         private void RefreshInternal()
         {
-            viewItems = ViewItemViewModel.GetAll(Project).ToList();
+            viewItems.Clear();
+            foreach (Epi.View view in Project.Views)
+            {
+                viewItems.Add(new ViewItem(view));
+            }
         }
 
         public async Task RefreshAsync()
@@ -105,12 +92,17 @@ namespace ERHMS.Desktop.ViewModels
                 Project.LoadViews();
                 RefreshInternal();
             });
-            OnPropertyChanged(nameof(ViewItems));
+            ViewItems.Refresh();
         }
 
         public bool HasSelectedViewItem()
         {
-            return SelectedViewItem != null;
+            return ViewItems.CurrentItem != null;
+        }
+
+        public void Customize()
+        {
+            // TODO
         }
 
         public async Task ViewDataAsync()
@@ -119,9 +111,14 @@ namespace ERHMS.Desktop.ViewModels
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
             await progress.RunAsync(() =>
             {
-                content = new ViewViewModel(this, SelectedViewItem.View);
+                content = new ViewViewModel(this, ((ViewItem)ViewItems.CurrentItem).View);
             });
             MainViewModel.Current.Content = content;
+        }
+
+        public void EnterData()
+        {
+            // TODO
         }
     }
 }

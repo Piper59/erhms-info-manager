@@ -105,14 +105,14 @@ namespace ERHMS.Desktop.Behaviors
         {
             bool intercepted = false;
 
-            void handler(object sender, KeyboardFocusChangedEventArgs e)
+            void AssociatedObject_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
             {
                 intercepted = true;
                 MoveFocusOuter(e.NewFocus, forward);
                 e.Handled = true;
             }
 
-            AssociatedObject.PreviewGotKeyboardFocus += handler;
+            AssociatedObject.PreviewGotKeyboardFocus += AssociatedObject_PreviewGotKeyboardFocus;
             try
             {
                 MoveFocusInner(forward);
@@ -124,7 +124,7 @@ namespace ERHMS.Desktop.Behaviors
             catch { }
             finally
             {
-                AssociatedObject.PreviewGotKeyboardFocus -= handler;
+                AssociatedObject.PreviewGotKeyboardFocus -= AssociatedObject_PreviewGotKeyboardFocus;
             }
         }
 

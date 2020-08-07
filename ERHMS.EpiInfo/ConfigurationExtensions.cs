@@ -15,14 +15,14 @@ namespace ERHMS.EpiInfo
             return File.Exists(FilePath);
         }
 
-        public static Configuration Create(string filePath = null)
+        public static Configuration Create(string path = null)
         {
             Configuration configuration = Configuration.CreateDefaultConfiguration();
             configuration.RecentViews.Clear();
             configuration.RecentProjects.Clear();
-            if (filePath != null)
+            if (path != null)
             {
-                configuration = new Configuration(filePath, configuration.ConfigDataSet);
+                configuration = new Configuration(path, configuration.ConfigDataSet);
             }
             return configuration;
         }
@@ -36,14 +36,11 @@ namespace ERHMS.EpiInfo
             table.Rows.Add(row);
         }
 
-        public static void Save(this Configuration @this)
-        {
-            Configuration.Save(@this);
-        }
+        public static void Save(this Configuration @this) => Configuration.Save(@this);
 
-        public static Configuration Load(string filePath = null)
+        public static Configuration Load(string path = null)
         {
-            Configuration.Load(filePath ?? FilePath);
+            Configuration.Load(path ?? FilePath);
             return Configuration.GetNewInstance();
         }
     }

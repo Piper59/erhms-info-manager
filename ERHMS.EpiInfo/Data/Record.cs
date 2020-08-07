@@ -1,19 +1,44 @@
 ﻿using Epi;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Dynamic;
 using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo.Data
 {
-    public class Record : DynamicObject
+    public class Record : DynamicObject, INotifyPropertyChanged
     {
         private static readonly Regex TableNamePrefixRegex = new Regex(@"^.+\.");
 
         public IDictionary<string, object> Properties { get; } = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
-        public bool Deleted => GetProperty<short?>(ColumnNames.REC_STATUS) == 0;
+
+        public bool Deleted
+        {
+            get
+            {
+                return GetProperty<short?>(ColumnNames.REC_STATUS) == 0;
+            }
+            set
+            {
+                SetProperty(ColumnNames.REC_STATUS, (short)(value ? 0 : 1));
+                OnPropertyChanged(nameof(Deleted));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, e);
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
 
         public bool TryGetProperty(string propertyName, out object value)
         {
@@ -49,6 +74,7 @@ namespace ERHMS.EpiInfo.Data
         public void SetProperty(string propertyName, object value)
         {
             Properties[propertyName] = value;
+            OnPropertyChanged(propertyName);
         }
 
         public void SetProperties(IDataRecord record)

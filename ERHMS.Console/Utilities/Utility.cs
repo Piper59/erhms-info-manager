@@ -14,6 +14,10 @@ namespace ERHMS.Console.Utilities
             .Where(type => typeof(IUtility).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
             .ToDictionary(type => type.Name, type => type, StringComparer.OrdinalIgnoreCase);
 
+        protected static TextReader In => System.Console.In;
+        protected static TextWriter Out => System.Console.Out;
+        protected static TextWriter Error => System.Console.Error;
+
         public static IUtility Create(string typeName, IList<string> args)
         {
             if (!Types.TryGetValue(typeName, out Type type))
@@ -50,10 +54,6 @@ namespace ERHMS.Console.Utilities
                 yield return converter.ConvertFromString(args[index]);
             }
         }
-
-        protected static TextReader In => System.Console.In;
-        protected static TextWriter Out => System.Console.Out;
-        protected static TextWriter Error => System.Console.Error;
 
         protected abstract void RunCore();
 

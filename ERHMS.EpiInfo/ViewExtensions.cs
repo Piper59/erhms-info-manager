@@ -9,7 +9,6 @@ namespace ERHMS.EpiInfo
         {
             @this.MustRefreshFieldCollection = true;
             FieldCollectionMaster fields = @this.Fields;
-            return;
         }
     }
 }

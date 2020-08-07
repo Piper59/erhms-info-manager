@@ -14,24 +14,18 @@ namespace ERHMS.EpiInfo.Data
     {
         private const string TooManyFieldsDefinedError = "3190";
 
-        public IDatabase Database { get; }
+        private IDatabase database;
+
         public View View { get; }
 
-        public RecordRepository(IDatabase database, View view)
+        public RecordRepository(View view)
         {
-            Database = database;
             View = view;
+            database = DatabaseFactory.GetDatabase(view.Project);
         }
 
-        public string Quote(string identifier)
-        {
-            return Database.Quote(identifier);
-        }
-
-        public bool TableExists()
-        {
-            return Database.TableExists(View.TableName);
-        }
+        private string Quote(string identifier) => database.Quote(identifier);
+        public bool TableExists() => database.TableExists(View.TableName);
 
         public string GetFromClause()
         {
@@ -77,7 +71,7 @@ namespace ERHMS.EpiInfo.Data
 
         public int Count(string clauses = null, object parameters = null)
         {
-            using (IDbConnection connection = Database.Connect())
+            using (IDbConnection connection = database.Connect())
             {
                 string sql = GetSelectSql("COUNT(*)", clauses);
                 return connection.ExecuteScalar<int>(sql, parameters);
@@ -131,7 +125,7 @@ namespace ERHMS.EpiInfo.Data
 
         public ICollection<Record> Select(string clauses = null, object parameters = null)
         {
-            using (IDbConnection connection = Database.Connect())
+            using (IDbConnection connection = database.Connect())
             {
                 try
                 {

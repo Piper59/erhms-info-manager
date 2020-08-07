@@ -16,10 +16,7 @@ namespace ERHMS.Desktop.Infrastructure
         public ProgressService(Application application, string taskName)
         {
             this.application = application;
-            dataContext = new ProgressViewModel
-            {
-                TaskName = taskName
-            };
+            dataContext = new ProgressViewModel(taskName);
         }
 
         public async void Report(string value)

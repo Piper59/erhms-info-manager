@@ -46,7 +46,7 @@ namespace ERHMS.Desktop.Views
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel &= !completed;
+            e.Cancel = !completed;
             base.OnClosing(e);
         }
     }

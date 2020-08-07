@@ -44,7 +44,6 @@
                             <!-- TODO: Handle empty DataGrid? -->
                             <DataGrid Grid.Row="1"
                                       ItemsSource="{Binding ViewItems}"
-                                      SelectedItem="{Binding SelectedViewItem}"
                                       SelectionMode="Single">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding View.Name}"
@@ -63,6 +62,11 @@
                                                         Header="Records"
                                                         Width="*" />
                                 </DataGrid.Columns>
+                                <DataGrid.ItemContainerStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="IsSelected" Value="{Binding Selected}" />
+                                    </Style>
+                                </DataGrid.ItemContainerStyle>
                                 <b:Interaction.Behaviors>
                                     <Behaviors:TabOnceBehavior />
                                 </b:Interaction.Behaviors>
@@ -72,9 +76,9 @@
                                 <WrapPanel.Resources>
                                     <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
                                 </WrapPanel.Resources>
-                                <Button>_Customize</Button>
+                                <Button Command="{Binding CustomizeCommand}">_Customize</Button>
                                 <Button Command="{Binding ViewDataCommand}">V_iew data</Button>
-                                <Button>_Enter data</Button>
+                                <Button Command="{Binding EnterDataCommand}">_Enter data</Button>
                                 <Button>
                                     <Button.ContextMenu>
                                         <ContextMenu>

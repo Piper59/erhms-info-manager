@@ -78,9 +78,6 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             this.tryGetValueFunc = tryGetValueFunc;
         }
 
-        protected override bool TryGetValue(XField xField, out TProperty value)
-        {
-            return tryGetValueFunc(xField, out value);
-        }
+        protected override bool TryGetValue(XField xField, out TProperty value) => tryGetValueFunc(xField, out value);
     }
 }

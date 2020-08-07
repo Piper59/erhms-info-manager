@@ -15,15 +15,8 @@ namespace ERHMS.Desktop.Commands
             this.canExecute = canExecute;
         }
 
-        public override bool CanExecute(object parameter)
-        {
-            return canExecute();
-        }
-
-        public override async Task ExecuteCore(object parameter)
-        {
-            await executeAsync();
-        }
+        public override bool CanExecute(object parameter) => canExecute();
+        public override async Task ExecuteCore(object parameter) => await executeAsync();
     }
 
     public class AsyncCommand<T> : Command
@@ -38,14 +31,7 @@ namespace ERHMS.Desktop.Commands
             this.canExecute = canExecute;
         }
 
-        public override bool CanExecute(object parameter)
-        {
-            return canExecute((T)parameter);
-        }
-
-        public override async Task ExecuteCore(object parameter)
-        {
-            await executeAsync((T)parameter);
-        }
+        public override bool CanExecute(object parameter) => canExecute((T)parameter);
+        public override async Task ExecuteCore(object parameter) => await executeAsync((T)parameter);
     }
 }

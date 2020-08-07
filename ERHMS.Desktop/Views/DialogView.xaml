@@ -80,7 +80,7 @@
                 <TextBox IsReadOnly="True"
                          MaxHeight="200"
                          Style="{StaticResource Preformatted}"
-                         Text="{Binding Details}" />
+                         Text="{Binding Details, Mode=OneWay}" />
             </DockPanel>
         </Border>
     </StackPanel>

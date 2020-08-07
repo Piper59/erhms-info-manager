@@ -33,8 +33,7 @@ namespace ERHMS.EpiInfo.Projects
                 {
                     DBCnnStringBuilder = info.Database.GetConnectionStringBuilder(),
                     DBName = info.Database.Name
-                },
-                Database = info.Database
+                }
             };
             project.CollectedData.Initialize(project.CollectedDataDbInfo, project.CollectedDataDriver, false);
             project.MetadataSource = MetadataSource.SameDb;
@@ -49,7 +48,6 @@ namespace ERHMS.EpiInfo.Projects
         }
 
         public new MetadataDbProvider Metadata => (MetadataDbProvider)base.Metadata;
-        public IDatabase Database { get; private set; }
         public virtual ProjectType Type => ProjectType.Unknown;
         public IEnumerable<CoreView> CoreViews => CoreView.All.Where(coreView => coreView.ProjectType == Type);
 
@@ -59,12 +57,11 @@ namespace ERHMS.EpiInfo.Projects
             : base(path)
         {
             Log.Default.Debug($"Opening project: {path}");
-            Database = DatabaseFactory.GetDatabase(this);
         }
 
         public bool IsInitialized()
         {
-            return Database.TableExists("metaDbInfo");
+            return Metadata.TableExists("metaDbInfo");
         }
 
         public void Initialize()

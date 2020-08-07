@@ -92,15 +92,8 @@ namespace ERHMS.EpiInfo
             StartSuffix = 1;
         }
 
-        protected override int ParseSuffix(string value)
-        {
-            return int.Parse(value);
-        }
-
-        protected override int GetNextSuffix(int suffix)
-        {
-            return suffix + 1;
-        }
+        protected override int ParseSuffix(string value) => int.Parse(value);
+        protected override int GetNextSuffix(int suffix) => suffix + 1;
     }
 
     public abstract class CharSuffixNameGenerator : NameGenerator<char>
@@ -114,10 +107,7 @@ namespace ERHMS.EpiInfo
             StartSuffix = 'A';
         }
 
-        protected override char ParseSuffix(string value)
-        {
-            return value.Single();
-        }
+        protected override char ParseSuffix(string value) => value.Single();
 
         protected override char GetNextSuffix(char suffix)
         {

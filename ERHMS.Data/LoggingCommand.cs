@@ -56,20 +56,10 @@ namespace ERHMS.Data
             Log = log;
         }
 
-        public void Cancel()
-        {
-            @base.Cancel();
-        }
-
-        public IDbDataParameter CreateParameter()
-        {
-            return @base.CreateParameter();
-        }
-
-        public void Dispose()
-        {
-            @base.Dispose();
-        }
+        public void Cancel() => @base.Cancel();
+        public IDbDataParameter CreateParameter() => @base.CreateParameter();
+        public void Dispose() => @base.Dispose();
+        public void Prepare() => @base.Prepare();
 
         private void OnExecuting()
         {
@@ -98,11 +88,6 @@ namespace ERHMS.Data
         {
             OnExecuting();
             return @base.ExecuteScalar();
-        }
-
-        public void Prepare()
-        {
-            @base.Prepare();
         }
     }
 }

@@ -7,7 +7,7 @@
     <UserControl.Resources>
         <Style x:Key="Field" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Item.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
+                <DataTrigger Binding="{Binding Item.Record.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
                     <Setter Property="TextDecorations" Value="Strikethrough" />
                 </DataTrigger>
             </Style.Triggers>
@@ -59,16 +59,21 @@
                                 Select an existing record or <Hyperlink>create a new record</Hyperlink>
                             </TextBlock>
                             <Border Grid.Row="1"
-                                    Background="{Binding Background, ElementName=Records}"
+                                    Background="{Binding Background, ElementName=RecordItems}"
                                     Margin="{StaticResource SmallThickness}"
                                     SnapsToDevicePixels="True">
                                 <!-- TODO: Handle empty DataGrid -->
                                 <!-- TODO: Add filtering and paging -->
-                                <DataGrid x:Name="Records"
+                                <DataGrid x:Name="RecordItems"
                                           HorizontalAlignment="Left"
-                                          ItemsSource="{Binding Records}"
+                                          ItemsSource="{Binding RecordItems}"
                                           Margin="0"
                                           MaxColumnWidth="400">
+                                    <DataGrid.ItemContainerStyle>
+                                        <Style TargetType="DataGridRow">
+                                            <Setter Property="IsSelected" Value="{Binding Selected}" />
+                                        </Style>
+                                    </DataGrid.ItemContainerStyle>
                                     <b:Interaction.Behaviors>
                                         <Behaviors:TabOnceBehavior />
                                     </b:Interaction.Behaviors>
@@ -79,9 +84,9 @@
                                 <WrapPanel.Resources>
                                     <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
                                 </WrapPanel.Resources>
-                                <Button>_Edit</Button>
-                                <Button>_Delete</Button>
-                                <Button>_Undelete</Button>
+                                <Button Command="{Binding EditCommand}">_Edit</Button>
+                                <Button Command="{Binding DeleteCommand}">_Delete</Button>
+                                <Button Command="{Binding UndeleteCommand}">_Undelete</Button>
                             </WrapPanel>
                         </Grid>
                     </Border>

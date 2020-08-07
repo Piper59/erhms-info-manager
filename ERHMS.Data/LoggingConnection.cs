@@ -15,20 +15,9 @@ namespace ERHMS.Data
             set { @base.ConnectionString = value; }
         }
 
-        public int ConnectionTimeout
-        {
-            get { return @base.ConnectionTimeout; }
-        }
-
-        public string Database
-        {
-            get { return @base.Database; }
-        }
-
-        public ConnectionState State
-        {
-            get { return @base.State; }
-        }
+        public int ConnectionTimeout => @base.ConnectionTimeout;
+        public string Database => @base.Database;
+        public ConnectionState State => @base.State;
 
         public LoggingConnection(IDbConnection @base, ILog log)
         {
@@ -36,39 +25,16 @@ namespace ERHMS.Data
             Log = log;
         }
 
-        public IDbTransaction BeginTransaction()
-        {
-            return @base.BeginTransaction();
-        }
-
-        public IDbTransaction BeginTransaction(IsolationLevel il)
-        {
-            return @base.BeginTransaction(il);
-        }
-
-        public void ChangeDatabase(string databaseName)
-        {
-            @base.ChangeDatabase(databaseName);
-        }
-
-        public void Close()
-        {
-            @base.Close();
-        }
+        public IDbTransaction BeginTransaction() => @base.BeginTransaction();
+        public IDbTransaction BeginTransaction(IsolationLevel il) => @base.BeginTransaction(il);
+        public void ChangeDatabase(string databaseName) => @base.ChangeDatabase(databaseName);
+        public void Close() => @base.Close();
+        public void Dispose() => @base.Dispose();
+        public void Open() => @base.Open();
 
         public IDbCommand CreateCommand()
         {
             return new LoggingCommand(@base.CreateCommand(), Log);
-        }
-
-        public void Dispose()
-        {
-            @base.Dispose();
-        }
-
-        public void Open()
-        {
-            @base.Open();
         }
     }
 }
