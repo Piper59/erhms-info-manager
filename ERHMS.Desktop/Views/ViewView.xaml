@@ -38,10 +38,7 @@
                         <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
                     </WrapPanel.Resources>
                     <Button Command="{Binding RefreshCommand}">_Refresh</Button>
-                    <Button Command="{Binding GoBackCommand}"
-                            Visibility="{Binding Parent, Converter={StaticResource ObjectToVisibilityConverter}}">
-                        _Back
-                    </Button>
+                    <Button Command="{Binding GoUpCommand}">_Up</Button>
                     <Button Command="local:AppCommands.GoHomeCommand">H_ome</Button>
                 </WrapPanel>
             </Grid>
@@ -86,7 +83,7 @@
                                 </WrapPanel.Resources>
                                 <Button Command="{Binding EditCommand}">_Edit</Button>
                                 <Button Command="{Binding DeleteCommand}">_Delete</Button>
-                                <Button Command="{Binding UndeleteCommand}">_Undelete</Button>
+                                <Button Command="{Binding UndeleteCommand}">U_ndelete</Button>
                             </WrapPanel>
                         </Grid>
                     </Border>

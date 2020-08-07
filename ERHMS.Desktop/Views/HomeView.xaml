@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
-             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties">
+             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+             xmlns:Projects="clr-namespace:ERHMS.EpiInfo.Projects;assembly=ERHMS.EpiInfo">
     <ScrollViewer>
         <Border Style="{StaticResource LayoutSmall}">
             <StackPanel Style="{StaticResource Container}">
@@ -22,14 +23,20 @@
                     <Controls:PhaseHeading Phase="PreDeployment" />
                     <Button>Plan for pre-deployment</Button>
                     <Button Command="local:AppCommands.ViewWorkerProjectCommand">Customize worker forms</Button>
-                    <Button>Collect worker information</Button>
+                    <Button Command="local:AppCommands.ViewCoreViewCommand"
+                            CommandParameter="{x:Static Projects:CoreView.WorkerInfo}">
+                        Collect worker information
+                    </Button>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
                     <Controls:PhaseHeading Phase="Deployment" />
                     <Button>Plan for deployment</Button>
                     <Button Command="local:AppCommands.ViewIncidentProjectCommand">Customize incident forms</Button>
                     <Button>In-process workers</Button>
-                    <Button>Collect worker status reports</Button>
+                    <Button Command="local:AppCommands.ViewCoreViewCommand"
+                            CommandParameter="{x:Static Projects:CoreView.WorkerStatus}">
+                        Collect worker status reports
+                    </Button>
                     <Button>Collect incident status reports</Button>
                     <Button>Out-process workers</Button>
                 </StackPanel>

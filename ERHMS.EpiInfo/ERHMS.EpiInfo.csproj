@@ -85,6 +85,7 @@
     <Compile Include="Projects\IncidentProject.cs" />
     <Compile Include="Projects\Project.cs" />
     <Compile Include="Projects\ProjectCreationInfo.cs" />
+    <Compile Include="Projects\ProjectFactory.cs" />
     <Compile Include="Projects\ProjectType.cs" />
     <Compile Include="Projects\WorkerProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,6 +5,7 @@ using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
+using ERHMS.EpiInfo.Projects;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace ERHMS.Desktop.ViewModels
 
         private readonly RecordRepository repository;
 
-        public ProjectViewModel Parent { get; }
+        public Project Project { get; }
         public Epi.View View { get; }
         public IReadOnlyList<string> FieldNames { get; private set; }
 
@@ -49,29 +50,26 @@ namespace ERHMS.Desktop.ViewModels
         public ICollectionView RecordItems => recordItems;
 
         public Command RefreshCommand { get; }
-        public Command GoBackCommand { get; }
+        public Command GoUpCommand { get; }
         public Command CreateCommand { get; }
         public Command EditCommand { get; }
         public Command DeleteCommand { get; }
         public Command UndeleteCommand { get; }
 
-        public ViewViewModel(ProjectViewModel parent, Epi.View view)
+        public ViewViewModel(Project project, Epi.View view)
         {
-            Parent = parent;
+            Project = project;
             View = view;
             repository = new RecordRepository(view);
             recordItems = new SelectableListCollectionView<RecordItem>(new List<RecordItem>());
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
-            GoBackCommand = new AsyncCommand(GoBackAsync, CanGoBack, ErrorBehavior.Raise);
+            GoUpCommand = new SimpleAsyncCommand(GoUpAsync);
             CreateCommand = new SimpleAsyncCommand(CreateAsync);
             EditCommand = new AsyncCommand(EditAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
             DeleteCommand = new AsyncCommand(DeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
         }
-
-        public ViewViewModel(Epi.View view)
-            : this(null, view) { }
 
         private void RefreshInternal()
         {
@@ -98,15 +96,16 @@ namespace ERHMS.Desktop.ViewModels
             RecordItems.Refresh();
         }
 
-        public bool CanGoBack()
+        public async Task GoUpAsync()
         {
-            return Parent != null;
-        }
-
-        public async Task GoBackAsync()
-        {
-            await Parent.RefreshAsync();
-            MainViewModel.Current.Content = Parent;
+            ProjectViewModel content = null;
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
+            await progress.RunAsync(() =>
+            {
+                Project.LoadViews();
+                content = new ProjectViewModel(Project);
+            });
+            MainViewModel.Current.Content = content;
         }
 
         public async Task CreateAsync()

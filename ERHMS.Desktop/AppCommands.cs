@@ -8,5 +8,6 @@ namespace ERHMS.Desktop
         public static Command GoHomeCommand => MainViewModel.Current.GoHomeCommand;
         public static Command ViewWorkerProjectCommand => MainViewModel.Current.ViewWorkerProjectCommand;
         public static Command ViewIncidentProjectCommand => MainViewModel.Current.ViewIncidentProjectCommand;
+        public static Command ViewCoreViewCommand => MainViewModel.Current.ViewCoreViewCommand;
     }
 }

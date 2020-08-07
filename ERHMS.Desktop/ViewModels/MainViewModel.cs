@@ -43,6 +43,7 @@ namespace ERHMS.Desktop.ViewModels
         public Command ViewIncidentProjectCommand { get; }
         public Command StartEpiInfoCommand { get; }
         public Command StartFileExplorerCommand { get; }
+        public Command ViewCoreViewCommand { get; }
 
         private MainViewModel()
         {
@@ -52,6 +53,7 @@ namespace ERHMS.Desktop.ViewModels
             ViewIncidentProjectCommand = new SimpleAsyncCommand<string>(ViewIncidentProjectAsync);
             StartEpiInfoCommand = new SimpleAsyncCommand(StartEpiInfoAsync);
             StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
+            ViewCoreViewCommand = new SimpleAsyncCommand<CoreView>(ViewCoreViewAsync);
         }
 
         public event EventHandler<ProcessStartedEventArgs> ProcessStarted;
@@ -61,6 +63,11 @@ namespace ERHMS.Desktop.ViewModels
         public event EventHandler ExitRequested;
         private void OnExitRequested() => ExitRequested?.Invoke(this, EventArgs.Empty);
 
+        public void Exit()
+        {
+            OnExitRequested();
+        }
+
         public void GoHome()
         {
             Content = new HomeViewModel();
@@ -69,7 +76,6 @@ namespace ERHMS.Desktop.ViewModels
         // TODO: Handle errors
         // Path and setting are null: offer to create/open
         // Project does not exist: remove from settings, offer to create/open
-
         public async Task ViewWorkerProjectAsync(string path = null)
         {
             path = path ?? Settings.Default.WorkerProjectPath;
@@ -86,6 +92,7 @@ namespace ERHMS.Desktop.ViewModels
             OnPropertyChanged(nameof(Content));
         }
 
+        // TODO: Handle errors
         public async Task ViewIncidentProjectAsync(string path = null)
         {
             path = path ?? Settings.Default.IncidentProjectPath;
@@ -159,9 +166,17 @@ namespace ERHMS.Desktop.ViewModels
             Process.Start(entryDirectory);
         }
 
-        public void Exit()
+        // TODO: Handle errors
+        public async Task ViewCoreViewAsync(CoreView coreView)
         {
-            OnExitRequested();
+            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
+            await progress.RunAsync(() =>
+            {
+                Project project = ProjectFactory.GetProject(coreView.ProjectType, Settings.Default.GetProjectPath(coreView.ProjectType));
+                Epi.View view = project.Views[coreView.Name];
+                content = new ViewViewModel(project, view);
+            });
+            OnPropertyChanged(nameof(Content));
         }
     }
 }

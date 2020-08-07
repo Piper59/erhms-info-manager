@@ -108,7 +108,7 @@ namespace ERHMS.Desktop.ViewModels
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName, false);
             await progress.RunAsync(() =>
             {
-                content = new ViewViewModel(this, viewItems.SelectedItem.View);
+                content = new ViewViewModel(Project, viewItems.SelectedItem.View);
             });
             MainViewModel.Current.Content = content;
         }

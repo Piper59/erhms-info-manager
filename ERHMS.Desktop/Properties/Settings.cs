@@ -1,11 +1,26 @@
 ﻿using Epi.DataSets;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Projects;
+using System;
 using System.Windows;
 
 namespace ERHMS.Desktop.Properties
 {
     internal partial class Settings
     {
+        public string GetProjectPath(ProjectType projectType)
+        {
+            switch (projectType)
+            {
+                case ProjectType.Worker:
+                    return WorkerProjectPath;
+                case ProjectType.Incident:
+                    return IncidentProjectPath;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(projectType));
+            }
+        }
+
         public void ApplyTo(Epi.Configuration configuration)
         {
             if (UseFipsCrypto)
