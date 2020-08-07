@@ -8,6 +8,7 @@ using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.ViewModels
@@ -63,8 +64,8 @@ namespace ERHMS.Desktop.ViewModels
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
             GoBackCommand = new AsyncCommand(GoBackAsync, CanGoBack, ErrorBehavior.Raise);
             EditCommand = new AsyncCommand(EditAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
-            DeleteCommand = new SyncCommand(Delete, recordItems.HasSelectedItem, ErrorBehavior.Raise);
-            UndeleteCommand = new SyncCommand(Undelete, recordItems.HasSelectedItem, ErrorBehavior.Raise);
+            DeleteCommand = new AsyncCommand(DeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
+            UndeleteCommand = new AsyncCommand(UndeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
         }
 
         public ViewViewModel(Epi.View view)
@@ -116,14 +117,31 @@ namespace ERHMS.Desktop.ViewModels
                 $"/record:{record.UniqueKey}");
         }
 
-        public void Delete()
+        private async Task SetDeletedAsync(bool deleted)
         {
-            // TODO
+            string taskName = deleted ? Resources.DeletingRecordsTaskName : Resources.UndeletingRecordsTaskName;
+            IProgressService progress = ServiceProvider.GetProgressService(taskName, true);
+            await progress.RunAsync(() =>
+            {
+                foreach (RecordItem recordItem in recordItems.SelectedItems)
+                {
+                    if (progress.IsUserCancellationRequested)
+                    {
+                        break;
+                    }
+                    repository.SetDeleted(recordItem.Record, deleted);
+                }
+            });
         }
 
-        public void Undelete()
+        public async Task DeleteAsync()
         {
-            // TODO
+            await SetDeletedAsync(true);
+        }
+
+        public async Task UndeleteAsync()
+        {
+            await SetDeletedAsync(false);
         }
     }
 }

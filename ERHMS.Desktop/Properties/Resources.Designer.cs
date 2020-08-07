@@ -70,7 +70,16 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Epi Info took longer than expected to start. Please continue to wait or try again..
+        ///   Looks up a localized string similar to Deleting records.
+        /// </summary>
+        public static string DeletingRecordsTaskName {
+            get {
+                return ResourceManager.GetString("DeletingRecordsTaskName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epi Info is taking longer than expected to start. Please continue to wait or try again..
         /// </summary>
         public static string EpiInfoNotRespondingBody {
             get {
@@ -156,6 +165,15 @@ namespace ERHMS.Desktop.Properties {
         public static string StartingEpiInfoTaskName {
             get {
                 return ResourceManager.GetString("StartingEpiInfoTaskName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undeleting records.
+        /// </summary>
+        public static string UndeletingRecordsTaskName {
+            get {
+                return ResourceManager.GetString("UndeletingRecordsTaskName", resourceCulture);
             }
         }
         

@@ -13,21 +13,23 @@ namespace ERHMS.EpiInfo.Data
         private static readonly Regex TableNamePrefixRegex = new Regex(@"^.+\.");
 
         public IDictionary<string, object> Properties { get; } = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
+
         public int? UniqueKey => GetProperty<int?>(ColumnNames.UNIQUE_KEY);
 
         public bool Deleted
         {
             get
             {
-                return GetProperty<short?>(ColumnNames.REC_STATUS) == 0;
+                return RecordStatus.ToDeleted(GetProperty<short?>(ColumnNames.REC_STATUS));
             }
             set
             {
-                SetProperty(ColumnNames.REC_STATUS, (short)(value ? 0 : 1));
+                SetProperty(ColumnNames.REC_STATUS, RecordStatus.FromDeleted(value));
                 OnPropertyChanged(nameof(Deleted));
             }
         }
+
+        public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

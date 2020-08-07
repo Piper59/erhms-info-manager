@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Epi;
+using ERHMS.Data;
 using ERHMS.Data.Databases;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace ERHMS.EpiInfo.Data
             }
             else
             {
-                return $"WHERE {Quote(ColumnNames.REC_STATUS)} = {(deleted.Value ? 0 : 1)}";
+                return $"WHERE {Quote(ColumnNames.REC_STATUS)} = {RecordStatus.FromDeleted(deleted.Value)}";
             }
         }
 
@@ -142,6 +143,23 @@ namespace ERHMS.EpiInfo.Data
                         throw;
                     }
                 }
+            }
+        }
+
+        public void SetDeleted(Record record, bool deleted)
+        {
+            using (IDbConnection connection = database.Connect())
+            {
+                string sql = $@"
+                    UPDATE {Quote(View.TableName)}
+                    SET {Quote(ColumnNames.REC_STATUS)} = {RecordStatus.FromDeleted(deleted)}
+                    WHERE {Quote(ColumnNames.UNIQUE_KEY)} = @UniqueKey";
+                ParameterCollection parameters = new ParameterCollection
+                {
+                    { "@UniqueKey", record.UniqueKey.Value }
+                };
+                connection.Execute(sql, parameters);
+                record.Deleted = deleted;
             }
         }
     }
