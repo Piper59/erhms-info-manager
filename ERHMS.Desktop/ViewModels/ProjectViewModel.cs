@@ -11,13 +11,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class ProjectViewModel : ObservableObject
     {
-        public class ViewItem : ObservableObject
+        public class ViewItem : ObservableObject, ISelectable
         {
             public Epi.View View { get; }
             public string Title { get; }
@@ -54,9 +53,8 @@ namespace ERHMS.Desktop.ViewModels
 
         public Project Project { get; }
 
-        // TODO: Encapsulate as SelectableCollectionView<T> where T : ISelectable?
-        private ICollection<ViewItem> viewItems;
-        public ICollectionView ViewItems { get; }
+        private readonly SelectableListCollectionView<ViewItem> viewItems;
+        public ICollectionView ViewItems => viewItems;
 
         public Command RefreshCommand { get; }
         public Command CustomizeCommand { get; }
@@ -66,21 +64,20 @@ namespace ERHMS.Desktop.ViewModels
         public ProjectViewModel(Project project)
         {
             Project = project;
-            viewItems = new List<ViewItem>();
-            ViewItems = CollectionViewSource.GetDefaultView(viewItems);
+            viewItems = new SelectableListCollectionView<ViewItem>(new List<ViewItem>());
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
-            CustomizeCommand = new SyncCommand(Customize, HasSelectedViewItem, ErrorBehavior.Raise);
-            ViewDataCommand = new AsyncCommand(ViewDataAsync, HasSelectedViewItem, ErrorBehavior.Raise);
-            EnterDataCommand = new SyncCommand(EnterData, HasSelectedViewItem, ErrorBehavior.Raise);
+            CustomizeCommand = new SyncCommand(Customize, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            ViewDataCommand = new AsyncCommand(ViewDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            EnterDataCommand = new SyncCommand(EnterData, viewItems.HasSelectedItem, ErrorBehavior.Raise);
         }
 
         private void RefreshInternal()
         {
-            viewItems.Clear();
+            viewItems.Source.Clear();
             foreach (Epi.View view in Project.Views)
             {
-                viewItems.Add(new ViewItem(view));
+                viewItems.Source.Add(new ViewItem(view));
             }
         }
 
@@ -95,11 +92,6 @@ namespace ERHMS.Desktop.ViewModels
             ViewItems.Refresh();
         }
 
-        public bool HasSelectedViewItem()
-        {
-            return ViewItems.CurrentItem != null;
-        }
-
         public void Customize()
         {
             // TODO
@@ -111,7 +103,7 @@ namespace ERHMS.Desktop.ViewModels
             IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName);
             await progress.RunAsync(() =>
             {
-                content = new ViewViewModel(this, ((ViewItem)ViewItems.CurrentItem).View);
+                content = new ViewViewModel(this, viewItems.SelectedItem.View);
             });
             MainViewModel.Current.Content = content;
         }

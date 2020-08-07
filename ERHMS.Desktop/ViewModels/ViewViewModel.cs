@@ -9,13 +9,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class ViewViewModel : ObservableObject
     {
-        public class RecordItem : ObservableObject
+        public class RecordItem : ObservableObject, ISelectable
         {
             public Record Record { get; }
 
@@ -45,9 +44,8 @@ namespace ERHMS.Desktop.ViewModels
         public Epi.View View { get; }
         public IReadOnlyList<string> FieldNames { get; private set; }
 
-        // TODO: Encapsulate as SelectableCollectionView<T> where T : ISelectable?
-        private ICollection<RecordItem> recordItems;
-        public ICollectionView RecordItems { get; }
+        private readonly SelectableListCollectionView<RecordItem> recordItems;
+        public ICollectionView RecordItems => recordItems;
 
         public Command RefreshCommand { get; }
         public Command GoBackCommand { get; }
@@ -60,14 +58,13 @@ namespace ERHMS.Desktop.ViewModels
             Parent = parent;
             View = view;
             repository = new RecordRepository(view);
-            recordItems = new List<RecordItem>();
-            RecordItems = CollectionViewSource.GetDefaultView(recordItems);
+            recordItems = new SelectableListCollectionView<RecordItem>(new List<RecordItem>());
             RefreshInternal();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
             GoBackCommand = new AsyncCommand(GoBackAsync, CanGoBack, ErrorBehavior.Raise);
-            EditCommand = new SyncCommand(Edit, HasSelectedRecordItem, ErrorBehavior.Raise);
-            DeleteCommand = new SyncCommand(Delete, HasSelectedRecordItem, ErrorBehavior.Raise);
-            UndeleteCommand = new SyncCommand(Undelete, HasSelectedRecordItem, ErrorBehavior.Raise);
+            EditCommand = new SyncCommand(Edit, recordItems.HasSelectedItem, ErrorBehavior.Raise);
+            DeleteCommand = new SyncCommand(Delete, recordItems.HasSelectedItem, ErrorBehavior.Raise);
+            UndeleteCommand = new SyncCommand(Undelete, recordItems.HasSelectedItem, ErrorBehavior.Raise);
         }
 
         public ViewViewModel(Epi.View view)
@@ -76,12 +73,12 @@ namespace ERHMS.Desktop.ViewModels
         private void RefreshInternal()
         {
             FieldNames = View.GetMetadata().GetSortedFieldNames(View.Id, MetaFieldTypeExtensions.IsTextualData).ToList();
-            recordItems.Clear();
+            recordItems.Source.Clear();
             if (repository.TableExists())
             {
                 foreach (Record record in repository.Select())
                 {
-                    recordItems.Add(new RecordItem(record));
+                    recordItems.Source.Add(new RecordItem(record));
                 }
             }
         }
@@ -107,11 +104,6 @@ namespace ERHMS.Desktop.ViewModels
         {
             await Parent.RefreshAsync();
             MainViewModel.Current.Content = Parent;
-        }
-
-        public bool HasSelectedRecordItem()
-        {
-            return RecordItems.CurrentItem != null;
         }
 
         public void Edit()
