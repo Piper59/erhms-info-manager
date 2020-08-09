@@ -9,46 +9,13 @@ namespace ERHMS.Data
 
         private IDbCommand @base;
 
-        public string CommandText
-        {
-            get { return @base.CommandText; }
-            set { @base.CommandText = value; }
-        }
-
-        public int CommandTimeout
-        {
-            get { return @base.CommandTimeout; }
-            set { @base.CommandTimeout = value; }
-        }
-
-        public CommandType CommandType
-        {
-            get { return @base.CommandType; }
-            set { @base.CommandType = value; }
-        }
-
-        public IDbConnection Connection
-        {
-            get { return @base.Connection; }
-            set { @base.Connection = value; }
-        }
-
-        public IDataParameterCollection Parameters
-        {
-            get { return @base.Parameters; }
-        }
-
-        public IDbTransaction Transaction
-        {
-            get { return @base.Transaction; }
-            set { @base.Transaction = value; }
-        }
-
-        public UpdateRowSource UpdatedRowSource
-        {
-            get { return @base.UpdatedRowSource; }
-            set { @base.UpdatedRowSource = value; }
-        }
+        public string CommandText { get => @base.CommandText; set => @base.CommandText = value; }
+        public int CommandTimeout { get => @base.CommandTimeout; set => @base.CommandTimeout = value; }
+        public CommandType CommandType { get => @base.CommandType; set => @base.CommandType = value; }
+        public IDbConnection Connection { get => @base.Connection; set => @base.Connection = value; }
+        public IDataParameterCollection Parameters => @base.Parameters;
+        public IDbTransaction Transaction { get => @base.Transaction; set => @base.Transaction = value; }
+        public UpdateRowSource UpdatedRowSource { get => @base.UpdatedRowSource; set => @base.UpdatedRowSource = value; }
 
         public LoggingCommand(IDbCommand @base, ILog log)
         {

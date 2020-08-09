@@ -9,12 +9,7 @@ namespace ERHMS.Data
 
         private IDbConnection @base;
 
-        public string ConnectionString
-        {
-            get { return @base.ConnectionString; }
-            set { @base.ConnectionString = value; }
-        }
-
+        public string ConnectionString { get => @base.ConnectionString; set => @base.ConnectionString = value; }
         public int ConnectionTimeout => @base.ConnectionTimeout;
         public string Database => @base.Database;
         public ConnectionState State => @base.State;

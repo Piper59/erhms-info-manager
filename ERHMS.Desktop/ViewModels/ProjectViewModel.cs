@@ -9,7 +9,6 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,8 +53,8 @@ namespace ERHMS.Desktop.ViewModels
 
         public Project Project { get; }
 
-        private readonly SelectableListCollectionView<ViewItem> viewItems;
-        public ICollectionView ViewItems => viewItems;
+        private readonly CustomCollectionView<ViewItem> viewItems;
+        public IPagingCollectionView ViewItems => viewItems;
 
         public Command RefreshCommand { get; }
         public Command CustomizeCommand { get; }
@@ -65,8 +64,9 @@ namespace ERHMS.Desktop.ViewModels
         public ProjectViewModel(Project project)
         {
             Project = project;
-            viewItems = new SelectableListCollectionView<ViewItem>(new List<ViewItem>());
+            viewItems = new CustomCollectionView<ViewItem>(new List<ViewItem>());
             RefreshInternal();
+            ViewItems.Refresh();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
             CustomizeCommand = new AsyncCommand(CustomizeAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
             ViewDataCommand = new AsyncCommand(ViewDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);

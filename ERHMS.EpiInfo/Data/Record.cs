@@ -13,35 +13,31 @@ namespace ERHMS.EpiInfo.Data
         private static readonly Regex TableNamePrefixRegex = new Regex(@"^.+\.");
 
         public IDictionary<string, object> Properties { get; } = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-
+        public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
         public int? UniqueKey => GetProperty<int?>(ColumnNames.UNIQUE_KEY);
+
+        public short? RecordStatus
+        {
+            get { return GetProperty<short?>(ColumnNames.REC_STATUS); }
+            private set { SetProperty(ColumnNames.REC_STATUS, value); }
+        }
 
         public bool Deleted
         {
             get
             {
-                return RecordStatus.ToDeleted(GetProperty<short?>(ColumnNames.REC_STATUS));
+                return Data.RecordStatus.ToDeleted(RecordStatus);
             }
             set
             {
-                SetProperty(ColumnNames.REC_STATUS, RecordStatus.FromDeleted(value));
+                RecordStatus = Data.RecordStatus.FromDeleted(value);
                 OnPropertyChanged(nameof(Deleted));
             }
         }
 
-        public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
-
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(this, e);
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
+        private void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
+        private void OnPropertyChanged(string propertyName) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
         public bool TryGetProperty(string propertyName, out object value)
         {

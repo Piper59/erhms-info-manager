@@ -10,25 +10,10 @@ namespace ERHMS.EpiInfo
 {
     public abstract class NameGenerator<TSuffix>
     {
-        protected static ISet<string> ToSet(IEnumerable<string> names)
-        {
-            return new HashSet<string>(names, StringComparer.OrdinalIgnoreCase);
-        }
-
-        protected static IEnumerable<string> GetTableNames(Project project)
-        {
-            return project.CollectedData.GetDbDriver().GetTableNames();
-        }
-
-        protected static IEnumerable<string> GetViewNames(Project project)
-        {
-            return project.Views.Cast<View>().Select(view => view.Name);
-        }
-
-        protected static IEnumerable<string> GetTableAndViewNames(Project project)
-        {
-            return Enumerable.Concat(GetTableNames(project), GetViewNames(project));
-        }
+        protected static ISet<string> ToSet(IEnumerable<string> names) => new HashSet<string>(names, StringComparer.OrdinalIgnoreCase);
+        protected static IEnumerable<string> GetTableNames(Project project) => project.CollectedData.GetDbDriver().GetTableNames();
+        protected static IEnumerable<string> GetViewNames(Project project) => project.Views.Cast<View>().Select(view => view.Name);
+        protected static IEnumerable<string> GetTableAndViewNames(Project project) => Enumerable.Concat(GetTableNames(project), GetViewNames(project));
 
         protected Regex Regex { get; set; }
         protected string BaseName { get; set; }

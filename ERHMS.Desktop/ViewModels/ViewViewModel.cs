@@ -7,9 +7,7 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.ViewModels
@@ -46,8 +44,8 @@ namespace ERHMS.Desktop.ViewModels
         public Epi.View View { get; }
         public IReadOnlyList<string> FieldNames { get; private set; }
 
-        private readonly SelectableListCollectionView<RecordItem> recordItems;
-        public ICollectionView RecordItems => recordItems;
+        private readonly CustomCollectionView<RecordItem> recordItems;
+        public IPagingCollectionView RecordItems => recordItems;
 
         public Command RefreshCommand { get; }
         public Command GoUpCommand { get; }
@@ -61,8 +59,9 @@ namespace ERHMS.Desktop.ViewModels
             Project = project;
             View = view;
             repository = new RecordRepository(view);
-            recordItems = new SelectableListCollectionView<RecordItem>(new List<RecordItem>());
+            recordItems = new CustomCollectionView<RecordItem>(new List<RecordItem>());
             RefreshInternal();
+            RecordItems.Refresh();
             RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
             GoUpCommand = new SimpleAsyncCommand(GoUpAsync);
             CreateCommand = new SimpleAsyncCommand(CreateAsync);
