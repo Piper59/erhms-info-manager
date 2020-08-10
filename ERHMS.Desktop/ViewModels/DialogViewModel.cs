@@ -1,9 +1,9 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Infrastructure;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -22,7 +22,7 @@ namespace ERHMS.Desktop.ViewModels
             set { SetProperty(ref showingDetails, value); }
         }
 
-        public Command ToggleShowingDetailsCommand { get; }
+        public ICommand ToggleShowingDetailsCommand { get; }
 
         public DialogViewModel(DialogInfo info)
         {
@@ -31,7 +31,7 @@ namespace ERHMS.Desktop.ViewModels
             Body = info.Body;
             Details = info.Details;
             Buttons = info.Buttons;
-            ToggleShowingDetailsCommand = new SimpleSyncCommand(ToggleShowingDetails);
+            ToggleShowingDetailsCommand = new SyncCommand(ToggleShowingDetails, Command.Always, ErrorBehavior.Raise);
         }
 
         public void ToggleShowingDetails()

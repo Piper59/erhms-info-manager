@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ERHMS.Desktop.Commands
+namespace ERHMS.Desktop.Events
 {
     public class ErrorEventArgs : EventArgs
     {

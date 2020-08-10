@@ -1,12 +1,11 @@
 ﻿using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System.Windows;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop.Services
 {
-    public class DialogService : IDialogService
+    internal class DialogService : IDialogService
     {
         private readonly Application application;
         private readonly DialogInfo info;

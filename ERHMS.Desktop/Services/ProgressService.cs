@@ -1,5 +1,4 @@
-﻿using ERHMS.Desktop.Services;
-using ERHMS.Desktop.ViewModels;
+﻿using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System;
 using System.Threading;
@@ -7,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop.Services
 {
-    public class ProgressService : IProgressService
+    internal class ProgressService : IProgressService
     {
         private readonly Application application;
         private readonly ProgressViewModel dataContext;
@@ -39,7 +38,7 @@ namespace ERHMS.Desktop.Infrastructure
             {
                 owner.IsEnabled = false;
             }
-            Mouse.OverrideCursor = Cursors.AppStarting;
+            Mouse.OverrideCursor = Cursors.Wait;
             try
             {
                 Task task = Task.Run(action, token);

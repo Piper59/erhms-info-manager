@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop.Data
 {
     public interface IPagingCollectionView : ICollectionView
     {

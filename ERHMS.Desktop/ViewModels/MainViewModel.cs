@@ -1,7 +1,7 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Events;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
@@ -12,6 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
 
 namespace ERHMS.Desktop.ViewModels
@@ -37,23 +38,23 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public Command ExitCommand { get; }
-        public Command GoHomeCommand { get; }
-        public Command ViewWorkerProjectCommand { get; }
-        public Command ViewIncidentProjectCommand { get; }
-        public Command StartEpiInfoCommand { get; }
-        public Command StartFileExplorerCommand { get; }
-        public Command ViewCoreViewCommand { get; }
+        public ICommand ExitCommand { get; }
+        public ICommand GoHomeCommand { get; }
+        public ICommand ViewWorkerProjectCommand { get; }
+        public ICommand ViewIncidentProjectCommand { get; }
+        public ICommand StartEpiInfoCommand { get; }
+        public ICommand StartFileExplorerCommand { get; }
+        public ICommand ViewCoreViewCommand { get; }
 
         private MainViewModel()
         {
-            ExitCommand = new SimpleSyncCommand(Exit);
-            GoHomeCommand = new SimpleSyncCommand(GoHome);
-            ViewWorkerProjectCommand = new SimpleAsyncCommand<string>(ViewWorkerProjectAsync);
-            ViewIncidentProjectCommand = new SimpleAsyncCommand<string>(ViewIncidentProjectAsync);
-            StartEpiInfoCommand = new SimpleAsyncCommand(StartEpiInfoAsync);
-            StartFileExplorerCommand = new SimpleSyncCommand(StartFileExplorer);
-            ViewCoreViewCommand = new SimpleAsyncCommand<CoreView>(ViewCoreViewAsync);
+            ExitCommand = new SyncCommand(Exit, Command.Always, ErrorBehavior.Raise);
+            GoHomeCommand = new SyncCommand(GoHome, Command.Always, ErrorBehavior.Raise);
+            ViewWorkerProjectCommand = new AsyncCommand<string>(ViewWorkerProjectAsync, Command.Always, ErrorBehavior.Raise);
+            ViewIncidentProjectCommand = new AsyncCommand<string>(ViewIncidentProjectAsync, Command.Always, ErrorBehavior.Raise);
+            StartEpiInfoCommand = new AsyncCommand(StartEpiInfoAsync, Command.Always, ErrorBehavior.Raise);
+            StartFileExplorerCommand = new SyncCommand(StartFileExplorer, Command.Always, ErrorBehavior.Raise);
+            ViewCoreViewCommand = new AsyncCommand<CoreView>(ViewCoreViewAsync, Command.Always, ErrorBehavior.Raise);
         }
 
         public event EventHandler<ProcessStartedEventArgs> ProcessStarted;

@@ -1,6 +1,6 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
@@ -9,6 +9,7 @@ using ERHMS.EpiInfo.Projects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -45,14 +46,14 @@ namespace ERHMS.Desktop.ViewModels
         public IReadOnlyList<string> FieldNames { get; private set; }
 
         private readonly CustomCollectionView<RecordItem> recordItems;
-        public IPagingCollectionView RecordItems => recordItems;
+        public ICustomCollectionView<RecordItem> RecordItems => recordItems;
 
-        public Command RefreshCommand { get; }
-        public Command GoUpCommand { get; }
-        public Command CreateCommand { get; }
-        public Command EditCommand { get; }
-        public Command DeleteCommand { get; }
-        public Command UndeleteCommand { get; }
+        public ICommand RefreshCommand { get; }
+        public ICommand GoUpCommand { get; }
+        public ICommand CreateCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand UndeleteCommand { get; }
 
         public ViewViewModel(Project project, Epi.View view)
         {
@@ -60,11 +61,12 @@ namespace ERHMS.Desktop.ViewModels
             View = view;
             repository = new RecordRepository(view);
             recordItems = new CustomCollectionView<RecordItem>(new List<RecordItem>());
+            // TODO: Remove
             RefreshInternal();
             RecordItems.Refresh();
-            RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
-            GoUpCommand = new SimpleAsyncCommand(GoUpAsync);
-            CreateCommand = new SimpleAsyncCommand(CreateAsync);
+            RefreshCommand = new AsyncCommand(RefreshAsync, Command.Always, ErrorBehavior.Raise);
+            GoUpCommand = new AsyncCommand(GoUpAsync, Command.Always, ErrorBehavior.Raise);
+            CreateCommand = new AsyncCommand(CreateAsync, Command.Always, ErrorBehavior.Raise);
             EditCommand = new AsyncCommand(EditAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
             DeleteCommand = new AsyncCommand(DeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, recordItems.HasSelectedItem, ErrorBehavior.Raise);
@@ -76,10 +78,7 @@ namespace ERHMS.Desktop.ViewModels
             recordItems.Source.Clear();
             if (repository.TableExists())
             {
-                foreach (Record record in repository.Select())
-                {
-                    recordItems.Source.Add(new RecordItem(record));
-                }
+                recordItems.Source.AddRange(repository.Select().Select(record => new RecordItem(record)));
             }
         }
 

@@ -8,26 +8,62 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop.Data
 {
-    public class CustomCollectionView<TSelectable> : List<TSelectable>, IPagingCollectionView, INotifyPropertyChanged
+    public class CustomCollectionView<TSelectable> : List<TSelectable>, ICustomCollectionView<TSelectable>
         where TSelectable : ISelectable
     {
         private class InternalCollectionView : ListCollectionView
         {
             public CustomCollectionView<TSelectable> Parent { get; }
 
+            public override Predicate<object> Filter
+            {
+                get
+                {
+                    return base.Filter;
+                }
+                set
+                {
+                    Parent.NeedsPageReset = true;
+                    base.Filter = value;
+                }
+            }
+
             public InternalCollectionView(CustomCollectionView<TSelectable> parent, IList source)
                 : base(source)
             {
                 Parent = parent;
+                GroupDescriptions.CollectionChanged += (sender, e) => ResetPageOrDefer();
+                ((INotifyCollectionChanged)SortDescriptions).CollectionChanged += (sender, e) => ResetPageOrDefer();
+            }
+
+            private void ResetPageOrDefer()
+            {
+                if (IsRefreshDeferred)
+                {
+                    Parent.NeedsPageReset = true;
+                }
+                else
+                {
+                    Parent.GoToPage(1);
+                }
             }
 
             protected override void RefreshOverride()
             {
+                object currentItem = Parent.CurrentItem;
                 Parent.OnCurrentChanging();
                 Parent.CurrentPosition = -1;
                 base.RefreshOverride();
+                if (currentItem != null)
+                {
+                    int index = Parent.IndexOf(currentItem);
+                    if (index != -1)
+                    {
+                        Parent.CurrentPosition = index;
+                    }
+                }
                 Parent.OnCurrentChanged();
             }
 
@@ -44,6 +80,7 @@ namespace ERHMS.Desktop.Infrastructure
 
         private readonly InternalCollectionView @base;
 
+        private bool NeedsPageReset { get; set; }
         public CultureInfo Culture { get => @base.Culture; set => @base.Culture = value; }
         public List<TSelectable> Source { get; }
         public IEnumerable SourceCollection => Source;
@@ -53,7 +90,7 @@ namespace ERHMS.Desktop.Infrastructure
         public IEnumerable<TSelectable> SelectedItems => this.Where(item => item.Selected);
         public object CurrentItem => SelectedItem;
         public bool IsCurrentBeforeFirst => CurrentPosition == -1;
-        public bool IsCurrentAfterLast => CurrentPosition == -1;
+        public bool IsCurrentAfterLast => IsEmpty;
         public bool CanFilter => @base.CanFilter;
         public Predicate<object> Filter { get => @base.Filter; set => @base.Filter = value; }
         public Predicate<TSelectable> TypedFilter { set => @base.Filter = item => value((TSelectable)item); }
@@ -138,7 +175,12 @@ namespace ERHMS.Desktop.Infrastructure
                         PageCount++;
                     }
                 }
-                if (CurrentPage < 1)
+                if (NeedsPageReset)
+                {
+                    CurrentPage = 1;
+                    NeedsPageReset = false;
+                }
+                else if (CurrentPage < 1)
                 {
                     CurrentPage = 1;
                 }
@@ -159,26 +201,13 @@ namespace ERHMS.Desktop.Infrastructure
             OnPropertyChanged(nameof(CurrentPage));
         }
 
-        public bool Contains(object item)
-        {
-            if (item is TSelectable selectable)
-            {
-                return base.Contains(selectable);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool HasSelectedItem()
-        {
-            return CurrentPosition != -1;
-        }
+        public bool Contains(object item) => base.Contains((TSelectable)item);
+        private int IndexOf(object item) => base.IndexOf((TSelectable)item);
+        public bool HasSelectedItem() => CurrentPosition != -1;
 
         public bool MoveCurrentToPosition(int position)
         {
-            if (position >= 0 && position < Count)
+            if (position == -1 || (position >= 0 && position < Count))
             {
                 OnCurrentChanging();
                 CurrentPosition = position;
@@ -198,9 +227,14 @@ namespace ERHMS.Desktop.Infrastructure
 
         public bool MoveCurrentTo(object item)
         {
-            if (item is TSelectable selectable)
+            if (item == null)
             {
-                int position = IndexOf(selectable);
+                MoveCurrentToPosition(-1);
+                return true;
+            }
+            else
+            {
+                int position = IndexOf((TSelectable)item);
                 if (position == -1)
                 {
                     return false;
@@ -210,10 +244,6 @@ namespace ERHMS.Desktop.Infrastructure
                     MoveCurrentToPosition(position);
                     return true;
                 }
-            }
-            else
-            {
-                return false;
             }
         }
 
@@ -237,7 +267,12 @@ namespace ERHMS.Desktop.Infrastructure
         public bool GoToNextPage() => GoToPage(CurrentPage + 1);
         public bool GoToPreviousPage() => GoToPage(CurrentPage - 1);
 
-        public void Refresh() => @base.Refresh();
+        public void Refresh()
+        {
+            NeedsPageReset = true;
+            @base.Refresh();
+        }
+
         public IDisposable DeferRefresh() => @base.DeferRefresh();
     }
 }

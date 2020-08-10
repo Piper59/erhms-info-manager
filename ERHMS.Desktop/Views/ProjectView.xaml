@@ -68,7 +68,7 @@
                                     </Style>
                                 </DataGrid.ItemContainerStyle>
                                 <b:Interaction.Behaviors>
-                                    <Behaviors:TabOnceBehavior />
+                                    <Behaviors:AccessibleDataGridBehavior />
                                 </b:Interaction.Behaviors>
                             </DataGrid>
                             <WrapPanel Grid.Row="2"
@@ -89,7 +89,7 @@
                                         </ContextMenu>
                                     </Button.ContextMenu>
                                     <b:Interaction.Behaviors>
-                                        <Behaviors:OpenContextMenuBehavior />
+                                        <Behaviors:OpenContextMenuOnClickBehavior />
                                     </b:Interaction.Behaviors>
                                     _Advanced
                                 </Button>

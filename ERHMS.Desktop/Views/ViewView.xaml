@@ -72,7 +72,7 @@
                                         </Style>
                                     </DataGrid.ItemContainerStyle>
                                     <b:Interaction.Behaviors>
-                                        <Behaviors:TabOnceBehavior />
+                                        <Behaviors:AccessibleDataGridBehavior />
                                     </b:Interaction.Behaviors>
                                 </DataGrid>
                             </Border>

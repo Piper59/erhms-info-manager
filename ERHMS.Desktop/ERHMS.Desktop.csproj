@@ -87,34 +87,32 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCommands.cs" />
-    <Compile Include="Behaviors\OpenContextMenuBehavior.cs" />
+    <Compile Include="Behaviors\AccessibleDataGridBehavior.cs" />
+    <Compile Include="Behaviors\OpenContextMenuOnClickBehavior.cs" />
     <Compile Include="Behaviors\RelayEventBehavior.cs" />
-    <Compile Include="Behaviors\TabOnceBehavior.cs" />
+    <Compile Include="Colors.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\ErrorBehavior.cs" />
-    <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\PhaseHeading.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
     <Compile Include="Converters\IconToNameConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="Data\CustomCollectionView.cs" />
+    <Compile Include="Data\ICustomCollectionView.cs" />
+    <Compile Include="Data\IPagingCollectionView.cs" />
+    <Compile Include="Data\ISelectable.cs" />
+    <Compile Include="Data\ISelectableCollectionView.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogInfo.cs" />
     <Compile Include="Dialogs\DialogInfoPreset.cs" />
+    <Compile Include="Events\ErrorEventArgs.cs" />
+    <Compile Include="Events\ProcessStartedEventArgs.cs" />
     <Compile Include="Infrastructure\ColorExtensions.cs" />
-    <Compile Include="Infrastructure\Colors.cs" />
-    <Compile Include="Infrastructure\CustomCollectionView.cs" />
-    <Compile Include="Infrastructure\DialogService.cs" />
-    <Compile Include="Infrastructure\IPagingCollectionView.cs" />
-    <Compile Include="Infrastructure\ISelectable.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
-    <Compile Include="Infrastructure\ProcessStartedEventArgs.cs" />
-    <Compile Include="Infrastructure\ProgressService.cs" />
-    <Compile Include="Infrastructure\SimpleAsyncCommand.cs" />
-    <Compile Include="Infrastructure\SimpleSyncCommand.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -130,8 +128,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IProgressService.cs" />
+    <Compile Include="Services\ProgressService.cs" />
     <Compile Include="Services\ServiceProvider.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />

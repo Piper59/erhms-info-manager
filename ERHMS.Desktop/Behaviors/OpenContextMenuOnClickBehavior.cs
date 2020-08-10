@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 
 namespace ERHMS.Desktop.Behaviors
 {
-    public class OpenContextMenuBehavior : Behavior<ButtonBase>
+    public class OpenContextMenuOnClickBehavior : Behavior<ButtonBase>
     {
         private ContextMenu ContextMenu => AssociatedObject.ContextMenu;
 

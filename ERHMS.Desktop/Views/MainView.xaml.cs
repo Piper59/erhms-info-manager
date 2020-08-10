@@ -1,4 +1,4 @@
-﻿using ERHMS.Desktop.Infrastructure;
+﻿using ERHMS.Desktop.Events;
 using ERHMS.Desktop.Properties;
 using System;
 using System.Threading;

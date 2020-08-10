@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop
 {
     public static class Colors
     {

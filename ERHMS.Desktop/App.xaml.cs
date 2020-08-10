@@ -1,6 +1,5 @@
 ﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;

@@ -1,7 +1,7 @@
 ﻿using Epi.Fields;
 using ERHMS.Common;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -43,7 +44,7 @@ namespace ERHMS.Desktop.ViewModels
                 }
             }
 
-            public override int GetHashCode() => View.Id;
+            public override int GetHashCode() => View.Id.GetHashCode();
 
             public override bool Equals(object obj)
             {
@@ -54,12 +55,12 @@ namespace ERHMS.Desktop.ViewModels
         public Project Project { get; }
 
         private readonly CustomCollectionView<ViewItem> viewItems;
-        public IPagingCollectionView ViewItems => viewItems;
+        public ICustomCollectionView<ViewItem> ViewItems => viewItems;
 
-        public Command RefreshCommand { get; }
-        public Command CustomizeCommand { get; }
-        public Command ViewDataCommand { get; }
-        public Command EnterDataCommand { get; }
+        public ICommand RefreshCommand { get; }
+        public ICommand CustomizeCommand { get; }
+        public ICommand ViewDataCommand { get; }
+        public ICommand EnterDataCommand { get; }
 
         public ProjectViewModel(Project project)
         {
@@ -67,7 +68,7 @@ namespace ERHMS.Desktop.ViewModels
             viewItems = new CustomCollectionView<ViewItem>(new List<ViewItem>());
             RefreshInternal();
             ViewItems.Refresh();
-            RefreshCommand = new SimpleAsyncCommand(RefreshAsync);
+            RefreshCommand = new AsyncCommand(RefreshAsync, Command.Always, ErrorBehavior.Raise);
             CustomizeCommand = new AsyncCommand(CustomizeAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
             ViewDataCommand = new AsyncCommand(ViewDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
             EnterDataCommand = new AsyncCommand(EnterDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
@@ -76,10 +77,7 @@ namespace ERHMS.Desktop.ViewModels
         private void RefreshInternal()
         {
             viewItems.Source.Clear();
-            foreach (Epi.View view in Project.Views)
-            {
-                viewItems.Source.Add(new ViewItem(view));
-            }
+            viewItems.Source.AddRange(Project.Views.Cast<Epi.View>().Select(view => new ViewItem(view)));
         }
 
         public async Task RefreshAsync()

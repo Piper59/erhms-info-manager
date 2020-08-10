@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop.Events
 {
     public class ProcessStartedEventArgs : EventArgs
     {

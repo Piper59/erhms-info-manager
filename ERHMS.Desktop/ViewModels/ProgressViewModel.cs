@@ -1,5 +1,6 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -23,7 +24,7 @@ namespace ERHMS.Desktop.ViewModels
             private set { SetProperty(ref isUserCancellationRequested, value); }
         }
 
-        public Command CancelCommand { get; }
+        public ICommand CancelCommand { get; }
 
         public ProgressViewModel(string taskName, bool canUserCancel)
         {

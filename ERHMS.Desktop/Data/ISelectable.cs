@@ -1,4 +1,4 @@
-﻿namespace ERHMS.Desktop.Infrastructure
+﻿namespace ERHMS.Desktop.Data
 {
     public interface ISelectable
     {
