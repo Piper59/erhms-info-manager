@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System;
-using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -60,10 +59,9 @@ namespace ERHMS.Desktop.Behaviors
                 }
                 else if (AssociatedObject.Columns.Count > 0 && AssociatedObject.Items.Count > 0)
                 {
-                    IList items = AssociatedObject.SelectedItems.Count > 0 ? AssociatedObject.SelectedItems : AssociatedObject.Items;
-                    object item = items[0];
+                    object item = AssociatedObject.Items[0];
                     DataGridColumn column = AssociatedObject.ColumnFromDisplayIndex(0);
-                    if (focusedCell != null && items.Contains(focusedCell.Item))
+                    if (focusedCell != null && AssociatedObject.Items.Contains(focusedCell.Item))
                     {
                         item = focusedCell.Item;
                         if (focusedCell.Column.DisplayIndex != -1)
