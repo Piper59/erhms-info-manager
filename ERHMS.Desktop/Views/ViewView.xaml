@@ -38,7 +38,7 @@
                         <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
                     </WrapPanel.Resources>
                     <Button Command="{Binding RefreshCommand}">_Refresh</Button>
-                    <Button Command="{Binding GoUpCommand}">_Up</Button>
+                    <Button Command="{Binding GoUpCommand}">U_p</Button>
                     <Button Command="local:AppCommands.GoHomeCommand">H_ome</Button>
                 </WrapPanel>
             </Grid>
@@ -57,7 +57,7 @@
                             </TextBlock>
                             <Border Grid.Row="1"
                                     Background="{Binding Background, ElementName=RecordItems}"
-                                    Margin="{StaticResource SmallThickness}"
+                                    Margin="{StaticResource DefaultMargin}"
                                     SnapsToDevicePixels="True">
                                 <!-- TODO: Handle empty DataGrid -->
                                 <!-- TODO: Add filtering and paging -->
@@ -83,7 +83,7 @@
                                 </WrapPanel.Resources>
                                 <Button Command="{Binding EditCommand}">_Edit</Button>
                                 <Button Command="{Binding DeleteCommand}">_Delete</Button>
-                                <Button Command="{Binding UndeleteCommand}">U_ndelete</Button>
+                                <Button Command="{Binding UndeleteCommand}">_Undelete</Button>
                             </WrapPanel>
                         </Grid>
                     </Border>

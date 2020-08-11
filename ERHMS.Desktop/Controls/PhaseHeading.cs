@@ -43,9 +43,8 @@ namespace ERHMS.Desktop.Controls
 
         public PhaseHeading()
         {
-            double space = (double)FindResource("SmallSpace");
-            Margin = new Thickness(space);
-            Padding = new Thickness(space, 0.0, space, 0.0);
+            Margin = (Thickness)FindResource("DefaultMargin");
+            Padding = (Thickness)FindResource("SmallHorizontalPadding");
             SnapsToDevicePixels = true;
             Child = new TextBlock
             {

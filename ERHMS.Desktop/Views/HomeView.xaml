@@ -5,20 +5,30 @@
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
              xmlns:Projects="clr-namespace:ERHMS.EpiInfo.Projects;assembly=ERHMS.EpiInfo">
+    <UserControl.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+            <Setter Property="Padding" Value="{StaticResource LargePadding}" />
+        </Style>
+    </UserControl.Resources>
     <ScrollViewer>
         <Border Style="{StaticResource LayoutSmall}">
             <StackPanel Style="{StaticResource Container}">
-                <StackPanel Orientation="Horizontal"
-                            Style="{StaticResource Section}">
-                    <Image AutomationProperties.Name="{Binding Source={x:Static Properties:Resources.AppTitle}, StringFormat='{}{0} Logo'}"
-                           Margin="{StaticResource SmallThickness}"
+                <Grid Style="{StaticResource Section}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0"
+                           AutomationProperties.Name="{Binding Source={x:Static Properties:Resources.AppTitle}, StringFormat='{}{0} Logo'}"
+                           Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
                            Width="64">
                     </Image>
-                    <TextBlock Style="{StaticResource Title}"
+                    <TextBlock Grid.Column="1"
+                               Style="{StaticResource Title}"
                                Text="{x:Static Properties:Resources.AppTitle}"
                                VerticalAlignment="Center" />
-                </StackPanel>
+                </Grid>
                 <StackPanel Style="{StaticResource Section}">
                     <Controls:PhaseHeading Phase="PreDeployment" />
                     <Button>Plan for pre-deployment</Button>
