@@ -5,4 +5,5 @@
     <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
     <Converters:IconToNameConverter x:Key="IconToNameConverter" />
     <Converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+    <Converters:PageCountToVisibilityConverter x:Key="PageCountToVisibilityConverter" />
 </ResourceDictionary>

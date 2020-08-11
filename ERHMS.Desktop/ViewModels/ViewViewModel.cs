@@ -61,9 +61,8 @@ namespace ERHMS.Desktop.ViewModels
             View = view;
             repository = new RecordRepository(view);
             recordItems = new CustomCollectionView<RecordItem>(new List<RecordItem>());
-            // TODO: Remove
             RefreshInternal();
-            RecordItems.Refresh();
+            recordItems.Refresh();
             RefreshCommand = new AsyncCommand(RefreshAsync, Command.Always, ErrorBehavior.Raise);
             GoUpCommand = new AsyncCommand(GoUpAsync, Command.Always, ErrorBehavior.Raise);
             CreateCommand = new AsyncCommand(CreateAsync, Command.Always, ErrorBehavior.Raise);

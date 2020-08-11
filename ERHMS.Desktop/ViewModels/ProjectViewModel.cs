@@ -67,7 +67,7 @@ namespace ERHMS.Desktop.ViewModels
             Project = project;
             viewItems = new CustomCollectionView<ViewItem>(new List<ViewItem>());
             RefreshInternal();
-            ViewItems.Refresh();
+            viewItems.Refresh();
             RefreshCommand = new AsyncCommand(RefreshAsync, Command.Always, ErrorBehavior.Raise);
             CustomizeCommand = new AsyncCommand(CustomizeAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
             ViewDataCommand = new AsyncCommand(ViewDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);

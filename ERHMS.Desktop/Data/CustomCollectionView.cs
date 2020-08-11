@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Desktop.Commands;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.Data
 {
@@ -93,7 +95,22 @@ namespace ERHMS.Desktop.Data
         public bool IsCurrentAfterLast => IsEmpty;
         public bool CanFilter => @base.CanFilter;
         public Predicate<object> Filter { get => @base.Filter; set => @base.Filter = value; }
-        public Predicate<TSelectable> TypedFilter { set => @base.Filter = item => value((TSelectable)item); }
+
+        public Predicate<TSelectable> TypedFilter
+        {
+            set
+            {
+                if (value == null)
+                {
+                    @base.Filter = null;
+                }
+                else
+                {
+                    @base.Filter = item => value((TSelectable)item);
+                }
+            }
+        }
+
         public bool CanGroup => @base.CanGroup;
         public ObservableCollection<GroupDescription> GroupDescriptions => @base.GroupDescriptions;
         public ReadOnlyObservableCollection<object> Groups => @base.Groups;
@@ -124,12 +141,19 @@ namespace ERHMS.Desktop.Data
         public int PageCount { get; private set; }
         public int CurrentPage { get; private set; }
 
+        public ICommand GoToPageCommand { get; }
+        public ICommand GoToNextPageCommand { get; }
+        public ICommand GoToPreviousPageCommand { get; }
+
         public CustomCollectionView(List<TSelectable> source)
             : base(source)
         {
             Source = source;
             @base = new InternalCollectionView(this, source);
             ((INotifyCollectionChanged)@base).CollectionChanged += Base_CollectionChanged;
+            GoToPageCommand = new SyncCommand<int>(page => GoToPage(page), CanGoToPage, ErrorBehavior.Raise);
+            GoToNextPageCommand = new SyncCommand(() => GoToNextPage(), CanGoToNextPage, ErrorBehavior.Raise);
+            GoToPreviousPageCommand = new SyncCommand(() => GoToPreviousPage(), CanGoToPreviousPage, ErrorBehavior.Raise);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -247,6 +271,11 @@ namespace ERHMS.Desktop.Data
             }
         }
 
+        private bool CanGoToPage(int page)
+        {
+            return page >= 1 && page <= PageCount;
+        }
+
         public bool GoToPage(int page)
         {
             if (page < 1 || page > PageCount)
@@ -264,7 +293,9 @@ namespace ERHMS.Desktop.Data
             }
         }
 
+        private bool CanGoToNextPage() => CanGoToPage(CurrentPage + 1);
         public bool GoToNextPage() => GoToPage(CurrentPage + 1);
+        private bool CanGoToPreviousPage() => CanGoToPage(CurrentPage - 1);
         public bool GoToPreviousPage() => GoToPage(CurrentPage - 1);
 
         public void Refresh()

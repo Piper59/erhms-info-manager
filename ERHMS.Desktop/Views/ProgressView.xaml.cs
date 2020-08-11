@@ -14,12 +14,12 @@ namespace ERHMS.Desktop.Views
 
         public ProgressView()
         {
-            showTimer = new DispatcherTimer(DispatcherPriority.Input)
+            InitializeComponent();
+            showTimer = new DispatcherTimer
             {
                 Interval = ShowDelay
             };
             showTimer.Tick += ShowTimer_Tick;
-            InitializeComponent();
         }
 
         public void BeginShowDialog()
