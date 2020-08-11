@@ -88,7 +88,7 @@ namespace ERHMS.Desktop.ViewModels
                 Project.LoadViews();
                 RefreshInternal();
             });
-            ViewItems.Refresh();
+            viewItems.Refresh();
         }
 
         public async Task CustomizeAsync()

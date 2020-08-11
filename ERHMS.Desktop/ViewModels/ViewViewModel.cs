@@ -90,7 +90,7 @@ namespace ERHMS.Desktop.ViewModels
                 RefreshInternal();
             });
             OnPropertyChanged(nameof(FieldNames));
-            RecordItems.Refresh();
+            recordItems.Refresh();
         }
 
         public async Task GoUpAsync()
@@ -139,6 +139,7 @@ namespace ERHMS.Desktop.ViewModels
                     repository.SetDeleted(recordItem.Record, deleted);
                 }
             });
+            recordItems.Refresh();
         }
 
         public async Task DeleteAsync()

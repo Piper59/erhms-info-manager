@@ -58,6 +58,7 @@ namespace ERHMS.Desktop.Data
                 Parent.OnCurrentChanging();
                 Parent.CurrentPosition = -1;
                 base.RefreshOverride();
+                Parent.RefreshInternal();
                 if (currentItem != null)
                 {
                     int index = Parent.IndexOf(currentItem);
@@ -150,7 +151,6 @@ namespace ERHMS.Desktop.Data
         {
             Source = source;
             @base = new InternalCollectionView(this, source);
-            ((INotifyCollectionChanged)@base).CollectionChanged += Base_CollectionChanged;
             GoToPageCommand = new SyncCommand<int>(page => GoToPage(page), CanGoToPage, ErrorBehavior.Raise);
             GoToNextPageCommand = new SyncCommand(() => GoToNextPage(), CanGoToNextPage, ErrorBehavior.Raise);
             GoToPreviousPageCommand = new SyncCommand(() => GoToPreviousPage(), CanGoToPreviousPage, ErrorBehavior.Raise);
@@ -178,53 +178,6 @@ namespace ERHMS.Desktop.Data
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         private void OnCollectionChanged() => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
-        private void Base_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (@base.IsEmpty)
-            {
-                PageCount = 0;
-                CurrentPage = 0;
-            }
-            else
-            {
-                if (PageSize == null)
-                {
-                    PageCount = 1;
-                }
-                else
-                {
-                    PageCount = Math.DivRem(@base.Count, PageSize.Value, out int remainder);
-                    if (remainder > 0)
-                    {
-                        PageCount++;
-                    }
-                }
-                if (NeedsPageReset)
-                {
-                    CurrentPage = 1;
-                    NeedsPageReset = false;
-                }
-                else if (CurrentPage < 1)
-                {
-                    CurrentPage = 1;
-                }
-                else if (CurrentPage > PageCount)
-                {
-                    CurrentPage = PageCount;
-                }
-            }
-            Clear();
-            IEnumerable<TSelectable> items = @base.Cast<TSelectable>();
-            if (PageSize != null)
-            {
-                items = items.Skip((CurrentPage - 1) * PageSize.Value).Take(PageSize.Value);
-            }
-            AddRange(items);
-            OnCollectionChanged();
-            OnPropertyChanged(nameof(PageCount));
-            OnPropertyChanged(nameof(CurrentPage));
-        }
-
         public bool Contains(object item) => base.Contains((TSelectable)item);
         private int IndexOf(object item) => base.IndexOf((TSelectable)item);
         public bool HasSelectedItem() => CurrentPosition != -1;
@@ -235,6 +188,10 @@ namespace ERHMS.Desktop.Data
             {
                 OnCurrentChanging();
                 CurrentPosition = position;
+                if (SelectedItem != null)
+                {
+                    SelectedItem.Selected = true;
+                }
                 OnCurrentChanged();
                 return true;
             }
@@ -305,5 +262,52 @@ namespace ERHMS.Desktop.Data
         }
 
         public IDisposable DeferRefresh() => @base.DeferRefresh();
+
+        private void RefreshInternal()
+        {
+            if (@base.IsEmpty)
+            {
+                PageCount = 0;
+                CurrentPage = 0;
+            }
+            else
+            {
+                if (PageSize == null)
+                {
+                    PageCount = 1;
+                }
+                else
+                {
+                    PageCount = Math.DivRem(@base.Count, PageSize.Value, out int remainder);
+                    if (remainder > 0)
+                    {
+                        PageCount++;
+                    }
+                }
+                if (NeedsPageReset)
+                {
+                    CurrentPage = 1;
+                    NeedsPageReset = false;
+                }
+                else if (CurrentPage < 1)
+                {
+                    CurrentPage = 1;
+                }
+                else if (CurrentPage > PageCount)
+                {
+                    CurrentPage = PageCount;
+                }
+            }
+            Clear();
+            IEnumerable<TSelectable> items = @base.Cast<TSelectable>();
+            if (PageSize != null)
+            {
+                items = items.Skip((CurrentPage - 1) * PageSize.Value).Take(PageSize.Value);
+            }
+            AddRange(items);
+            OnCollectionChanged();
+            OnPropertyChanged(nameof(PageCount));
+            OnPropertyChanged(nameof(CurrentPage));
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace ERHMS.Desktop.ViewModels
             CancelCommand = new SyncCommand(Cancel, CanCancel, ErrorBehavior.Raise);
         }
 
-        public bool CanCancel() => CanUserCancel && !IsUserCancellationRequested;
+        public bool CanCancel() => CanUserCancel && !isUserCancellationRequested;
 
         public void Cancel()
         {

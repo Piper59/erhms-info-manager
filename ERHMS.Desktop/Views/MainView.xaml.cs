@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.Views
     {
         private static readonly TimeSpan SaveSizeDelay = TimeSpan.FromSeconds(1.0);
 
-        private Timer saveSizeTimer = new Timer(state => Settings.Default.Save());
+        private readonly Timer saveSizeTimer = new Timer(state => Settings.Default.Save());
 
         public MainView()
         {
