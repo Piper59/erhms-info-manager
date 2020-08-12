@@ -1,4 +1,6 @@
-﻿namespace ERHMS.EpiInfo.Projects
+﻿using Epi;
+
+namespace ERHMS.EpiInfo.Projects
 {
     public class WorkerProject : Project
     {
@@ -8,6 +10,7 @@
         }
 
         public override ProjectType Type => ProjectType.Worker;
+        public View WorkerInfoView => Views[CoreView.WorkerInfo.Name];
 
         public WorkerProject() { }
 

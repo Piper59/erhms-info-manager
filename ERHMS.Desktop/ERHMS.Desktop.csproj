@@ -38,6 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.35\lib\net461\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Epi.Core">
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
     </Reference>
@@ -117,6 +120,7 @@
     <Compile Include="Events\ProcessStartedEventArgs.cs" />
     <Compile Include="Infrastructure\ColorExtensions.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
+    <Compile Include="Integration.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
