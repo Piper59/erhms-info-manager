@@ -44,7 +44,8 @@
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">
-                <TabItem Header="Records">
+                <TabItem DataContext="{Binding Records}"
+                         Header="Records">
                     <Border Style="{StaticResource LayoutFull}">
                         <Grid Style="{StaticResource Container}">
                             <Grid.RowDefinitions>
@@ -68,14 +69,14 @@
                                                            Grid.Column="1"
                                                            Text="{Binding SearchText, Delay=500}" />
                                 <ComboBox x:Name="RecordStatus"
-                                          AutomationProperties.Name="Record status"
+                                          AutomationProperties.Name="Status"
                                           Grid.Column="2"
-                                          DisplayMemberPath="DisplayText"
-                                          ItemsSource="{Binding RecordStatusItems}"
+                                          DisplayMemberPath="Text"
+                                          ItemsSource="{Binding Statuses}"
                                           MinWidth="125">
                                     <ComboBox.ItemContainerStyle>
                                         <Style TargetType="ComboBoxItem">
-                                            <Setter Property="AutomationProperties.Name" Value="{Binding DisplayText}" />
+                                            <Setter Property="AutomationProperties.Name" Value="{Binding Text}" />
                                         </Style>
                                     </ComboBox.ItemContainerStyle>
                                 </ComboBox>
@@ -90,25 +91,25 @@
                                     Select an existing record or <Hyperlink Command="{Binding CreateCommand}">create a new record</Hyperlink>
                                 </TextBlock>
                                 <WrapPanel Grid.Column="1"
-                                           Visibility="{Binding RecordItems.PageCount, Converter={StaticResource PageCountToVisibilityConverter}}">
+                                           Visibility="{Binding Items.PageCount, Converter={StaticResource PageCountToVisibilityConverter}}">
                                     <WrapPanel.Resources>
                                         <Style TargetType="TextBlock" BasedOn="{StaticResource Body}" />
                                     </WrapPanel.Resources>
                                     <TextBlock>
                                         <Run>Page</Run>
-                                        <Run Text="{Binding RecordItems.CurrentPage, Mode=OneWay}" />
+                                        <Run Text="{Binding Items.CurrentPage, Mode=OneWay}" />
                                         <Run>of</Run>
-                                        <Run Text="{Binding RecordItems.PageCount, Mode=OneWay}" />
+                                        <Run Text="{Binding Items.PageCount, Mode=OneWay}" />
                                     </TextBlock>
                                     <TextBlock>
                                         <Hyperlink AutomationProperties.Name="Previous page"
-                                                   Command="{Binding RecordItems.GoToPreviousPageCommand}">
+                                                   Command="{Binding Items.GoToPreviousPageCommand}">
                                             Prev
                                         </Hyperlink>
                                     </TextBlock>
                                     <TextBlock>
                                         <Hyperlink AutomationProperties.Name="Next page"
-                                                   Command="{Binding RecordItems.GoToNextPageCommand}">
+                                                   Command="{Binding Items.GoToNextPageCommand}">
                                             Next
                                         </Hyperlink>
                                     </TextBlock>
@@ -121,7 +122,7 @@
                                 <!-- TODO: Handle empty DataGrid -->
                                 <DataGrid x:Name="RecordItems"
                                           HorizontalAlignment="Left"
-                                          ItemsSource="{Binding RecordItems}"
+                                          ItemsSource="{Binding Items}"
                                           Margin="0"
                                           MaxColumnWidth="400">
                                     <DataGrid.ItemContainerStyle>

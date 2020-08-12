@@ -16,7 +16,7 @@ namespace ERHMS.EpiInfo.Data
         public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
         public int? UniqueKey => GetProperty<int?>(ColumnNames.UNIQUE_KEY);
 
-        public short? RecordStatus
+        public short? Status
         {
             get { return GetProperty<short?>(ColumnNames.REC_STATUS); }
             private set { SetProperty(ColumnNames.REC_STATUS, value); }
@@ -26,11 +26,11 @@ namespace ERHMS.EpiInfo.Data
         {
             get
             {
-                return Data.RecordStatus.ToDeleted(RecordStatus);
+                return RecordStatus.ToDeleted(Status);
             }
             set
             {
-                RecordStatus = Data.RecordStatus.FromDeleted(value);
+                Status = RecordStatus.FromDeleted(value);
                 OnPropertyChanged(nameof(Deleted));
             }
         }

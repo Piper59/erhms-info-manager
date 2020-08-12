@@ -29,7 +29,7 @@ namespace ERHMS.Desktop.Views
 
         private void DataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ViewViewModel.FieldNames))
+            if (e.PropertyName == nameof(ViewViewModel.RecordsChildViewModel.FieldNames))
             {
                 SetRecordItemColumns();
             }
@@ -38,9 +38,9 @@ namespace ERHMS.Desktop.Views
         private void SetRecordItemColumns()
         {
             IDictionary<string, DataGridColumn> columns = RecordItems.Columns.ToDictionary(column => (string)column.Header);
-            for (int fieldNameIndex = 0; fieldNameIndex < DataContext.FieldNames.Count; fieldNameIndex++)
+            for (int fieldNameIndex = 0; fieldNameIndex < DataContext.Records.FieldNames.Count; fieldNameIndex++)
             {
-                string fieldName = DataContext.FieldNames[fieldNameIndex];
+                string fieldName = DataContext.Records.FieldNames[fieldNameIndex];
                 if (columns.TryGetValue(GetRecordItemColumnHeader(fieldName), out DataGridColumn column))
                 {
                     int columnIndex = RecordItems.Columns.IndexOf(column);
@@ -54,7 +54,7 @@ namespace ERHMS.Desktop.Views
                     RecordItems.Columns.Insert(fieldNameIndex, GetRecordItemColumn(fieldName));
                 }
             }
-            while (RecordItems.Columns.Count > DataContext.FieldNames.Count)
+            while (RecordItems.Columns.Count > DataContext.Records.FieldNames.Count)
             {
                 RecordItems.Columns.RemoveAt(RecordItems.Columns.Count - 1);
             }

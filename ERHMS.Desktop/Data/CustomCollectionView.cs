@@ -79,16 +79,19 @@ namespace ERHMS.Desktop.Data
         public ICommand GoToNextPageCommand { get; }
         public ICommand GoToPreviousPageCommand { get; }
 
-        public CustomCollectionView()
-            : base(new TSelectable[] { })
+        public CustomCollectionView(List<TSelectable> source)
+            : base(new ArrayList(source))
         {
-            Source = new List<TSelectable>();
+            Source = source;
             GroupDescriptions.CollectionChanged += (sender, e) => ResetPageOrDefer();
             ((INotifyCollectionChanged)SortDescriptions).CollectionChanged += (sender, e) => ResetPageOrDefer();
             GoToPageCommand = new SyncCommand<int>(page => GoToPage(page), CanGoToPage, ErrorBehavior.Raise);
             GoToNextPageCommand = new SyncCommand(() => GoToNextPage(), CanGoToNextPage, ErrorBehavior.Raise);
             GoToPreviousPageCommand = new SyncCommand(() => GoToPreviousPage(), CanGoToPreviousPage, ErrorBehavior.Raise);
         }
+
+        public CustomCollectionView()
+            : this(new List<TSelectable>()) { }
 
         public bool HasSelectedItem() => CurrentPosition != -1;
 

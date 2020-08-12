@@ -29,7 +29,8 @@
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">
-                <TabItem Header="Forms">
+                <TabItem DataContext="{Binding Views}"
+                         Header="Forms">
                     <Border Style="{StaticResource LayoutFull}">
                         <Grid Style="{StaticResource Container}">
                             <Grid.RowDefinitions>
@@ -43,7 +44,7 @@
                             </TextBlock>
                             <!-- TODO: Handle empty DataGrid? -->
                             <DataGrid Grid.Row="1"
-                                      ItemsSource="{Binding ViewItems}"
+                                      ItemsSource="{Binding Items}"
                                       SelectionMode="Single">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding View.Name}"

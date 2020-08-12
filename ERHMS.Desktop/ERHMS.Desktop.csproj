@@ -146,7 +146,9 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
+    <Compile Include="ViewModels\ProjectViewModel.Views.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
+    <Compile Include="ViewModels\ViewViewModel.Records.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
