@@ -4,12 +4,12 @@ using System.ComponentModel;
 
 namespace ERHMS.Desktop.Data
 {
-    public interface ISelectableCollectionView<TSelectable> : ICollectionView, IEnumerable<TSelectable>
+    public interface ISelectableCollectionView<TSelectable> : ICollectionView
         where TSelectable : ISelectable
     {
+        Predicate<TSelectable> TypedFilter { set; }
         TSelectable SelectedItem { get; }
         IEnumerable<TSelectable> SelectedItems { get; }
-        Predicate<TSelectable> TypedFilter { set; }
 
         bool HasSelectedItem();
     }

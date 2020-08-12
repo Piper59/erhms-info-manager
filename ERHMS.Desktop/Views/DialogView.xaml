@@ -75,7 +75,7 @@
         <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
                 BorderThickness="0,1,0,0"
                 SnapsToDevicePixels="True"
-                Visibility="{Binding ShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding IsShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
             <DockPanel Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="200"

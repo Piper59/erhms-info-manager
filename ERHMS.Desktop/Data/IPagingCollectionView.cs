@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.Data
 {
-    public interface IPagingCollectionView : ICollectionView
+    public interface IPagingCollectionView : ICollectionView, INotifyPropertyChanged
     {
         int? PageSize { get; set; }
         int PageCount { get; }

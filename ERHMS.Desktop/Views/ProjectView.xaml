@@ -64,7 +64,7 @@
                                 </DataGrid.Columns>
                                 <DataGrid.ItemContainerStyle>
                                     <Style TargetType="DataGridRow">
-                                        <Setter Property="IsSelected" Value="{Binding Selected}" />
+                                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                                     </Style>
                                 </DataGrid.ItemContainerStyle>
                                 <b:Interaction.Behaviors>

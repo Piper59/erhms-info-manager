@@ -64,10 +64,13 @@
                                 </Label>
                                 <TextBox x:Name="Search"
                                          AutomationProperties.Name="Search"
-                                         Grid.Column="1" />
+                                         Grid.Column="1"
+                                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
                                 <ComboBox x:Name="RecordStatus"
                                           AutomationProperties.Name="Record status"
                                           Grid.Column="2"
+                                          DisplayMemberPath="DisplayText"
+                                          ItemsSource="{Binding RecordStatusItems}"
                                           MinWidth="125" />
                             </Grid>
                             <Grid Grid.Row="1">
@@ -105,7 +108,7 @@
                                           MaxColumnWidth="400">
                                     <DataGrid.ItemContainerStyle>
                                         <Style TargetType="DataGridRow">
-                                            <Setter Property="IsSelected" Value="{Binding Selected}" />
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                                         </Style>
                                     </DataGrid.ItemContainerStyle>
                                     <b:Interaction.Behaviors>

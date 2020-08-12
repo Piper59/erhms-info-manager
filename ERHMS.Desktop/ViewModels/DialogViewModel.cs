@@ -15,11 +15,11 @@ namespace ERHMS.Desktop.ViewModels
         public string Details { get; }
         public IReadOnlyCollection<DialogButton> Buttons { get; }
 
-        private bool showingDetails;
-        public bool ShowingDetails
+        private bool isShowingDetails;
+        public bool IsShowingDetails
         {
-            get { return showingDetails; }
-            set { SetProperty(ref showingDetails, value); }
+            get { return isShowingDetails; }
+            set { SetProperty(ref isShowingDetails, value); }
         }
 
         public ICommand ToggleShowingDetailsCommand { get; }
@@ -36,7 +36,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void ToggleShowingDetails()
         {
-            ShowingDetails = !ShowingDetails;
+            IsShowingDetails = !IsShowingDetails;
         }
     }
 }

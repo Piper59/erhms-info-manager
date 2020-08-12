@@ -2,6 +2,6 @@
 {
     public interface ISelectable
     {
-        bool Selected { get; set; }
+        bool IsSelected { get; set; }
     }
 }

@@ -94,6 +94,18 @@ namespace ERHMS.Desktop.Properties {
             }
         }
         
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsWindowMaximized {
+            get {
+                return ((bool)(this["IsWindowMaximized"]));
+            }
+            set {
+                this["IsWindowMaximized"] = value;
+            }
+        }
+        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -112,18 +124,6 @@ namespace ERHMS.Desktop.Properties {
             }
             set {
                 this["WindowHeight"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool WindowMaximized {
-            get {
-                return ((bool)(this["WindowMaximized"]));
-            }
-            set {
-                this["WindowMaximized"] = value;
             }
         }
         

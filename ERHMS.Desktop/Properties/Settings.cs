@@ -39,14 +39,14 @@ namespace ERHMS.Desktop.Properties
         {
             window.Width = WindowWidth;
             window.Height = WindowHeight;
-            window.WindowState = WindowMaximized ? WindowState.Maximized : WindowState.Normal;
+            window.WindowState = IsWindowMaximized ? WindowState.Maximized : WindowState.Normal;
         }
 
         public void UpdateFrom(Window window)
         {
             WindowWidth = window.RestoreBounds.Width;
             WindowHeight = window.RestoreBounds.Height;
-            WindowMaximized = window.WindowState == WindowState.Maximized;
+            IsWindowMaximized = window.WindowState == WindowState.Maximized;
         }
     }
 }

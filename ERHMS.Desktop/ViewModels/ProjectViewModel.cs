@@ -8,7 +8,6 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -23,11 +22,11 @@ namespace ERHMS.Desktop.ViewModels
             public string Title { get; }
             public int RecordCount { get; }
 
-            private bool selected;
-            public bool Selected
+            private bool isSelected;
+            public bool IsSelected
             {
-                get { return selected; }
-                set { SetProperty(ref selected, value); }
+                get { return isSelected; }
+                set { SetProperty(ref isSelected, value); }
             }
 
             public ViewItem(Epi.View view)
@@ -65,7 +64,7 @@ namespace ERHMS.Desktop.ViewModels
         public ProjectViewModel(Project project)
         {
             Project = project;
-            viewItems = new CustomCollectionView<ViewItem>(new List<ViewItem>());
+            viewItems = new CustomCollectionView<ViewItem>();
             RefreshInternal();
             viewItems.Refresh();
             RefreshCommand = new AsyncCommand(RefreshAsync, Command.Always, ErrorBehavior.Raise);

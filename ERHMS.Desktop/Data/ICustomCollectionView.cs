@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-
-namespace ERHMS.Desktop.Data
+﻿namespace ERHMS.Desktop.Data
 {
-    public interface ICustomCollectionView<TSelectable> : ISelectableCollectionView<TSelectable>, IPagingCollectionView, INotifyPropertyChanged
+    public interface ICustomCollectionView<TSelectable> : ISelectableCollectionView<TSelectable>, IPagingCollectionView
         where TSelectable : ISelectable
     { }
 }
