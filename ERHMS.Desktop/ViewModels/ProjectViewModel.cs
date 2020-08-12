@@ -60,6 +60,10 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand CustomizeCommand { get; }
         public ICommand ViewDataCommand { get; }
         public ICommand EnterDataCommand { get; }
+        public ICommand ExportDataCommand { get; }
+        public ICommand ImportDataCommand { get; }
+        public ICommand AnalyzeCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         public ProjectViewModel(Project project)
         {
@@ -71,6 +75,10 @@ namespace ERHMS.Desktop.ViewModels
             CustomizeCommand = new AsyncCommand(CustomizeAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
             ViewDataCommand = new AsyncCommand(ViewDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
             EnterDataCommand = new AsyncCommand(EnterDataAsync, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            ExportDataCommand = new SyncCommand(ExportData, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            ImportDataCommand = new SyncCommand(ImportData, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            AnalyzeCommand = new SyncCommand(Analyze, viewItems.HasSelectedItem, ErrorBehavior.Raise);
+            DeleteCommand = new SyncCommand(Delete, viewItems.HasSelectedItem, ErrorBehavior.Raise);
         }
 
         private void RefreshInternal()
@@ -118,6 +126,26 @@ namespace ERHMS.Desktop.ViewModels
                 $"/project:{view.Project.FilePath}",
                 $"/view:{view.Name}",
                 "/record:*");
+        }
+
+        public void ExportData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ImportData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Analyze()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Delete()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -82,10 +82,10 @@
                                 <Button>
                                     <Button.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="_Export data" />
-                                            <MenuItem Header="_Import data" />
-                                            <MenuItem Header="_Analyze" />
-                                            <MenuItem Header="_Delete" />
+                                            <MenuItem Command="{Binding ExportDataCommand}" Header="_Export data" />
+                                            <MenuItem Command="{Binding ImportDataCommand}" Header="_Import data" />
+                                            <MenuItem Command="{Binding AnalyzeCommand}" Header="_Analyze" />
+                                            <MenuItem Command="{Binding DeleteCommand}" Header="_Delete" />
                                         </ContextMenu>
                                     </Button.ContextMenu>
                                     <b:Interaction.Behaviors>
