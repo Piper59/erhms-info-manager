@@ -8,7 +8,7 @@
         Width="480"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+        <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
     </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
@@ -35,7 +35,7 @@
                        Style="{StaticResource Container}">
                 <Button Command="{Binding CancelCommand}">
                     <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource ActionButton}">
+                        <Style TargetType="Button" BasedOn="{StaticResource DialogButton}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsUserCancellationRequested}" Value="True">
                                     <Setter Property="Content" Value="Cancelling..." />
