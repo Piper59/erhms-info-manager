@@ -10,10 +10,25 @@ namespace ERHMS.EpiInfo
 {
     public abstract class NameGenerator<TSuffix>
     {
-        protected static ISet<string> ToSet(IEnumerable<string> names) => new HashSet<string>(names, StringComparer.OrdinalIgnoreCase);
-        protected static IEnumerable<string> GetTableNames(Project project) => project.CollectedData.GetDbDriver().GetTableNames();
-        protected static IEnumerable<string> GetViewNames(Project project) => project.Views.Cast<View>().Select(view => view.Name);
-        protected static IEnumerable<string> GetTableAndViewNames(Project project) => Enumerable.Concat(GetTableNames(project), GetViewNames(project));
+        protected static ISet<string> ToSet(IEnumerable<string> names)
+        {
+            return new HashSet<string>(names, StringComparer.OrdinalIgnoreCase);
+        }
+
+        protected static IEnumerable<string> GetTableNames(Project project)
+        {
+            return project.CollectedData.GetDbDriver().GetTableNames();
+        }
+
+        protected static IEnumerable<string> GetViewNames(Project project)
+        {
+            return project.Views.Cast<View>().Select(view => view.Name);
+        }
+
+        protected static IEnumerable<string> GetTableAndViewNames(Project project)
+        {
+            return Enumerable.Concat(GetTableNames(project), GetViewNames(project));
+        }
 
         protected Regex Regex { get; set; }
         protected string BaseName { get; set; }
@@ -77,8 +92,15 @@ namespace ERHMS.EpiInfo
             StartSuffix = 1;
         }
 
-        protected override int ParseSuffix(string value) => int.Parse(value);
-        protected override int GetNextSuffix(int suffix) => suffix + 1;
+        protected override int ParseSuffix(string value)
+        {
+            return int.Parse(value);
+        }
+
+        protected override int GetNextSuffix(int suffix)
+        {
+            return suffix + 1;
+        }
     }
 
     public abstract class CharSuffixNameGenerator : NameGenerator<char>
@@ -92,7 +114,10 @@ namespace ERHMS.EpiInfo
             StartSuffix = 'A';
         }
 
-        protected override char ParseSuffix(string value) => value.Single();
+        protected override char ParseSuffix(string value)
+        {
+            return value.Single();
+        }
 
         protected override char GetNextSuffix(char suffix)
         {

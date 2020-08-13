@@ -25,8 +25,15 @@ namespace ERHMS.EpiInfo.Data
             database = DatabaseFactory.GetDatabase(view.Project);
         }
 
-        public string Quote(string identifier) => database.Quote(identifier);
-        public bool TableExists() => database.TableExists(View.TableName);
+        public string Quote(string identifier)
+        {
+            return database.Quote(identifier);
+        }
+
+        public bool TableExists()
+        {
+            return database.TableExists(View.TableName);
+        }
 
         public string GetFromClause()
         {

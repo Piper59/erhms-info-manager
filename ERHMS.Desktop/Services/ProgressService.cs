@@ -56,6 +56,9 @@ namespace ERHMS.Desktop.Services
             }
         }
 
-        public Task RunAsync(Action action) => RunAsync(action, CancellationToken.None);
+        public Task RunAsync(Action action)
+        {
+            return RunAsync(action, CancellationToken.None);
+        }
     }
 }

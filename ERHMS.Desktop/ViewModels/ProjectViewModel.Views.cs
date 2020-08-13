@@ -45,7 +45,10 @@ namespace ERHMS.Desktop.ViewModels
                     }
                 }
 
-                public override int GetHashCode() => View.Id.GetHashCode();
+                public override int GetHashCode()
+                {
+                    return View.Id.GetHashCode();
+                }
 
                 public override bool Equals(object obj)
                 {

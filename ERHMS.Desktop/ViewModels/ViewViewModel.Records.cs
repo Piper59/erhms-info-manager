@@ -59,7 +59,10 @@ namespace ERHMS.Desktop.ViewModels
                     Record = record;
                 }
 
-                public override int GetHashCode() => Record.GetHashCode();
+                public override int GetHashCode()
+                {
+                    return Record.GetHashCode();
+                }
 
                 public override bool Equals(object obj)
                 {

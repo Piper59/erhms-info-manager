@@ -36,7 +36,10 @@ namespace ERHMS.EpiInfo
             table.Rows.Add(row);
         }
 
-        public static void Save(this Configuration @this) => Configuration.Save(@this);
+        public static void Save(this Configuration @this)
+        {
+            Configuration.Save(@this);
+        }
 
         public static Configuration Load(string path = null)
         {

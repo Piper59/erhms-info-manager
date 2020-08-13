@@ -93,7 +93,10 @@ namespace ERHMS.Desktop.Data
         public CustomCollectionView()
             : this(new List<TSelectable>()) { }
 
-        public bool HasSelectedItem() => CurrentPosition != -1;
+        public bool HasSelectedItem()
+        {
+            return CurrentPosition != -1;
+        }
 
         private void ResetPageOrDefer()
         {
@@ -129,10 +132,25 @@ namespace ERHMS.Desktop.Data
             }
         }
 
-        private bool CanGoToNextPage() => CanGoToPage(CurrentPage + 1);
-        public bool GoToNextPage() => GoToPage(CurrentPage + 1);
-        private bool CanGoToPreviousPage() => CanGoToPage(CurrentPage - 1);
-        public bool GoToPreviousPage() => GoToPage(CurrentPage - 1);
+        private bool CanGoToNextPage()
+        {
+            return CanGoToPage(CurrentPage + 1);
+        }
+
+        public bool GoToNextPage()
+        {
+            return GoToPage(CurrentPage + 1);
+        }
+
+        private bool CanGoToPreviousPage()
+        {
+            return CanGoToPage(CurrentPage - 1);
+        }
+
+        public bool GoToPreviousPage()
+        {
+            return GoToPage(CurrentPage - 1);
+        }
 
         public override void Refresh()
         {

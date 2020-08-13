@@ -10,10 +10,20 @@ namespace ERHMS.Desktop.Commands
     {
         public static event EventHandler<ErrorEventArgs> GlobalError;
 
-        public static void OnCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+        public static void OnCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
 
-        public static bool Always() => true;
-        public static bool Always<T>(T parameter) => true;
+        public static bool Always()
+        {
+            return true;
+        }
+
+        public static bool Always<T>(T parameter)
+        {
+            return true;
+        }
 
         public string Name { get; }
         public ErrorBehavior ErrorBehavior { get; }

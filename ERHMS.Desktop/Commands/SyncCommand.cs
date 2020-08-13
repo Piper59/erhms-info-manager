@@ -15,7 +15,10 @@ namespace ERHMS.Desktop.Commands
             this.canExecute = canExecute;
         }
 
-        public override bool CanExecute(object parameter) => canExecute();
+        public override bool CanExecute(object parameter)
+        {
+            return canExecute();
+        }
 
         public override Task ExecuteCore(object parameter)
         {
@@ -36,7 +39,10 @@ namespace ERHMS.Desktop.Commands
             this.canExecute = canExecute;
         }
 
-        public override bool CanExecute(object parameter) => canExecute((T)parameter);
+        public override bool CanExecute(object parameter)
+        {
+            return canExecute((T)parameter);
+        }
 
         public override Task ExecuteCore(object parameter)
         {
