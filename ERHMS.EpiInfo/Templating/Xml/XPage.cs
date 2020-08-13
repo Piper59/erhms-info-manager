@@ -67,6 +67,15 @@ namespace ERHMS.EpiInfo.Templating.Xml
             }
         }
 
+        public void SetName(string name)
+        {
+            Name = name;
+            foreach (XField xField in XFields)
+            {
+                xField.PageName = name;
+            }
+        }
+
         public Page Instantiate(View view)
         {
             return new Page(view)

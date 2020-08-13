@@ -11,11 +11,13 @@ namespace ERHMS.Console.Utilities
     {
         public string TemplatePath { get; }
         public string ProjectPath { get; }
+        public string FormName { get; }
 
-        public InstantiateTemplate(string templatePath, string projectPath)
+        public InstantiateTemplate(string templatePath, string projectPath, string formName)
         {
             TemplatePath = templatePath;
             ProjectPath = projectPath;
+            FormName = formName;
         }
 
         protected override void RunCore()
@@ -26,10 +28,15 @@ namespace ERHMS.Console.Utilities
             switch (xTemplate.Level)
             {
                 case TemplateLevel.Project:
+                    if (FormName != "")
+                    {
+                        throw new ArgumentException("Form name must be empty (\"\") for a project-level template.");
+                    }
                     instantiator = new ProjectTemplateInstantiator(xTemplate, project);
                     break;
                 case TemplateLevel.View:
                     instantiator = new ViewTemplateInstantiator(xTemplate, project);
+                    xTemplate.XProject.XView.SetName(FormName);
                     break;
                 default:
                     throw new ArgumentException($"Template level '{xTemplate.Level}' is not supported.");

@@ -96,6 +96,11 @@ namespace ERHMS.EpiInfo.Templating.Xml
             }
         }
 
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+
         public View Instantiate(Project project)
         {
             return new View(project)

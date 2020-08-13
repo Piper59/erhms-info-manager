@@ -284,7 +284,7 @@ namespace ERHMS.EpiInfo.Templating
 
         protected override ICollection<Field> InstantiateCore()
         {
-            XView xView = XTemplate.XProject.XViews.Single();
+            XView xView = XTemplate.XProject.XView;
             View = InstantiateView(xView, Project);
             return InstantiateFields(xView, View);
         }
@@ -304,7 +304,7 @@ namespace ERHMS.EpiInfo.Templating
 
         protected override ICollection<Field> InstantiateCore()
         {
-            XView xView = XTemplate.XProject.XViews.Single();
+            XView xView = XTemplate.XProject.XView;
             string checkCode = xView.CheckCode.Trim();
             if (!View.CheckCode.Contains(checkCode))
             {

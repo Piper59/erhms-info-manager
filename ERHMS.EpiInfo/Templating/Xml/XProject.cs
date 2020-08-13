@@ -81,6 +81,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         }
 
         public IEnumerable<XView> XViews => Elements().OfType<XView>();
+        public XView XView => XViews.Single();
         public IEnumerable<XField> XFields => Descendants().OfType<XField>();
 
         public XProject()

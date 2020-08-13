@@ -1,4 +1,4 @@
-﻿<Template Name="WorkerStatus" Description="" CreateDate="" Level="View">
+﻿<Template Name="WorkerStatus" Description="Worker Status Report" CreateDate="" Level="View">
   <Project>
     <View ViewId="1" Name="WorkerStatus" IsRelatedView="false" CheckCode="DefineVariables&#xA;&#x9;DEFINE ERHMS NETOBJECT &quot;ERHMS Info Manager.Integration&quot;&#xA;End-DefineVariables&#xA;&#xA;Field WorkerInfo_LookUpId&#xA;&#x9;Click&#xA;&#x9;&#x9;ASSIGN WorkerInfo_GlobalRecordId = ERHMS.LookUpWorkerId(WorkerInfo_FirstName, WorkerInfo_LastName)&#xA;&#x9;End-Click&#xA;End-Field" Width="816" Height="1056" Orientation="Portrait" LabelAlign="Vertical" SurveyId="">
       <Page PageId="1" Name="Page 1" Position="0" BackgroundId="0" ViewId="1">

@@ -53,6 +53,12 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { this.SetAttributeValue(value); }
         }
 
+        public string PageName
+        {
+            get { return (string)this.GetAttribute(); }
+            set { this.SetAttributeValue(value); }
+        }
+
         public int FieldId
         {
             get { return (int)this.GetAttribute(); }

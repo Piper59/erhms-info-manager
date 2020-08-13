@@ -9,16 +9,16 @@ namespace ERHMS.Console.Utilities
 {
     public class CreateTemplate : Utility
     {
-        private const string ViewNameWildcard = "*";
+        private const string FormNameWildcard = "*";
 
         public string ProjectPath { get; }
-        public string ViewName { get; }
+        public string FormName { get; }
         public string TemplatePath { get; }
 
-        public CreateTemplate(string projectPath, string viewName, string templatePath)
+        public CreateTemplate(string projectPath, string formName, string templatePath)
         {
             ProjectPath = projectPath;
-            ViewName = viewName;
+            FormName = formName;
             TemplatePath = templatePath;
         }
 
@@ -26,13 +26,13 @@ namespace ERHMS.Console.Utilities
         {
             Project project = new Project(ProjectPath);
             TemplateCreator creator;
-            if (ViewName == ViewNameWildcard)
+            if (FormName == FormNameWildcard)
             {
                 creator = new ProjectTemplateCreator(project);
             }
             else
             {
-                creator = new ViewTemplateCreator(project.Views[ViewName]);
+                creator = new ViewTemplateCreator(project.Views[FormName]);
             }
             creator.Progress = new ProgressLogger();
             XTemplate xTemplate = creator.Create();

@@ -1,0 +1,9 @@
+﻿<Template Name="GenericNonWorker" Description="Generic Non-Worker-Specific Form" CreateDate="" Level="View">
+  <Project>
+    <View ViewId="1" Name="" IsRelatedView="false" CheckCode="" Width="816" Height="1056" Orientation="Portrait" LabelAlign="Vertical" SurveyId="">
+      <Page PageId="1" Name="Page 1" Position="0" BackgroundId="0" ViewId="1">
+        <Field Name="Title" PageId="1" FieldId="1" UniqueId="" FieldTypeId="2" ControlAfterCheckCode="" ControlBeforeCheckCode="" PageName="Page 1" PageBeforeCheckCode="" PageAfterCheckCode="" Position="0" ControlTopPositionPercentage="0.034090909090909088" ControlLeftPositionPercentage="0.044117647058823532" ControlHeightPercentage="0.044093269290346085" ControlWidthPercentage="0.090783923399682151" ControlScriptName="" PromptTopPositionPercentage="" PromptLeftPositionPercentage="" PromptText="Title" PromptFontFamily="" PromptFontSize="" PromptFontStyle="" ControlFontFamily="Segoe UI" ControlFontSize="24" ControlFontStyle="Regular" PromptScriptName="" ShouldRepeatLast="false" IsRequired="false" IsReadOnly="false" IsEncrypted="false" ShouldRetainImageSize="false" Pattern="" MaxLength="" ShowTextOnRight="false" Lower="" Upper="" RelateCondition="" ShouldReturnToParent="false" RelatedViewId="" List="" SourceTableName="" CodeColumnName="" TextColumnName="" BackgroundColor="" Sort="false" IsExclusiveTable="false" TabIndex="1" HasTabStop="false" SourceFieldId="" />
+      </Page>
+    </View>
+  </Project>
+</Template>
