@@ -61,13 +61,16 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Column="0"
-                                       Target="{Binding ElementName=Search}">
+                                       Target="{Binding ElementName=SearchText}">
                                     _Search:
                                 </Label>
-                                <Controls:ClearableTextBox x:Name="Search"
-                                                           AutomationProperties.Name="Search"
-                                                           Grid.Column="1"
-                                                           Text="{Binding SearchText, Delay=500}" />
+                                <Controls:ButtonTextBox x:Name="SearchText"
+                                                        AutomationProperties.Name="Search"
+                                                        ButtonContent="Clear"
+                                                        ButtonName="Clear search"
+                                                        Command="{Binding ClearSearchTextCommand}"
+                                                        Grid.Column="1"
+                                                        Text="{Binding SearchText, Delay=500}" />
                                 <ComboBox x:Name="RecordStatus"
                                           AutomationProperties.Name="Status"
                                           Grid.Column="2"
@@ -75,7 +78,7 @@
                                           ItemsSource="{Binding Statuses}"
                                           MinWidth="125">
                                     <ComboBox.ItemContainerStyle>
-                                        <Style TargetType="ComboBoxItem">
+                                        <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}">
                                             <Setter Property="AutomationProperties.Name" Value="{Binding Text}" />
                                         </Style>
                                     </ComboBox.ItemContainerStyle>

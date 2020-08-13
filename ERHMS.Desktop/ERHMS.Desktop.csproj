@@ -98,8 +98,8 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\ErrorBehavior.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
-    <Compile Include="Controls\ClearableTextBox.xaml.cs">
-      <DependentUpon>ClearableTextBox.xaml</DependentUpon>
+    <Compile Include="Controls\ButtonTextBox.xaml.cs">
+      <DependentUpon>ButtonTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PhaseHeading.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -189,7 +189,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ClearableTextBox.xaml">
+    <Page Include="Controls\ButtonTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

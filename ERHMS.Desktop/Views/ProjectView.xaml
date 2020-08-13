@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
-             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors">
+             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
     <Border Style="{StaticResource LayoutLarge}">
         <Grid Style="{StaticResource Container}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0"
-                  Style="{StaticResource Section}">
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -28,7 +29,25 @@
                     <Button Command="local:AppCommands.GoHomeCommand">H_ome</Button>
                 </WrapPanel>
             </Grid>
-            <TabControl Grid.Row="1">
+            <Grid Grid.Row="1"
+                  Style="{StaticResource Section}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0"
+                       Target="{Binding ElementName=ProjectPath}">
+                    Database:
+                </Label>
+                <Controls:ButtonTextBox x:Name="ProjectPath"
+                                        AutomationProperties.Name="Database"
+                                        Grid.Column="1"
+                                        ButtonContent="Change"
+                                        ButtonName="Change database"
+                                        IsReadOnly="True"
+                                        Text="{Binding Project.FilePath, Mode=OneWay}" />
+            </Grid>
+            <TabControl Grid.Row="2">
                 <TabItem DataContext="{Binding Views}"
                          Header="Forms">
                     <Border Style="{StaticResource LayoutFull}">

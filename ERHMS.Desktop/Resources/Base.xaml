@@ -23,6 +23,20 @@
     </Style>
     <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxBase}" />
 
+    <Style x:Key="ComboBoxItemBase" TargetType="ComboBoxItem">
+        <Style.Resources>
+            <Style TargetType="ContentPresenter">
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="-2,-1" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+        </Style.Resources>
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
+    </Style>
+    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}" />
+
     <Style x:Key="DataGridBase" TargetType="DataGrid">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
@@ -34,21 +48,14 @@
     <Style TargetType="DataGrid" BasedOn="{StaticResource DataGridBase}" />
 
     <Style x:Key="DataGridCellBase" TargetType="DataGridCell">
-        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="DataGridCell">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
-                            Padding="{TemplateBinding Padding}"
-                            SnapsToDevicePixels="True">
-                        <ContentPresenter Margin="-3,0"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
+            </Style>
+            <Style TargetType="ContentPresenter">
+                <Setter Property="Margin" Value="-1" />
+            </Style>
+        </Style.Resources>
     </Style>
     <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}" />
 
@@ -126,7 +133,6 @@
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="Padding" Value="{StaticResource SmallPadding}" />
-
         <Style.Triggers>
             <Trigger Property="IsReadOnly" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />

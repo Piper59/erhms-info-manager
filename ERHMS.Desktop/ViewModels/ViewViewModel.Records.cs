@@ -98,6 +98,7 @@ namespace ERHMS.Desktop.ViewModels
             private readonly CustomCollectionView<Item> items;
             public ICustomCollectionView<Item> Items => items;
 
+            public ICommand ClearSearchTextCommand { get; }
             public ICommand CreateCommand { get; }
             public ICommand EditCommand { get; }
             public ICommand DeleteCommand { get; }
@@ -116,6 +117,7 @@ namespace ERHMS.Desktop.ViewModels
                 };
                 RefreshData();
                 SetFilter();
+                ClearSearchTextCommand = new SyncCommand(ClearSearchText, Command.Always, ErrorBehavior.Raise);
                 CreateCommand = new AsyncCommand(CreateAsync, Command.Always, ErrorBehavior.Raise);
                 EditCommand = new AsyncCommand(EditAsync, items.HasSelectedItem, ErrorBehavior.Raise);
                 DeleteCommand = new AsyncCommand(DeleteAsync, items.HasSelectedItem, ErrorBehavior.Raise);
@@ -164,6 +166,11 @@ namespace ERHMS.Desktop.ViewModels
                     statusFilter = item => item.Record.Status == status;
                 }
                 items.TypedFilter = item => searchFilter(item) && statusFilter(item);
+            }
+
+            public void ClearSearchText()
+            {
+                SearchText = "";
             }
 
             public async Task CreateAsync()
