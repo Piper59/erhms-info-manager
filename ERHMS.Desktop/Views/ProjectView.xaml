@@ -75,7 +75,7 @@
                                     <DataGridTextColumn Binding="{Binding View.Pages.Count}"
                                                         Header="Pages"
                                                         Width="*" />
-                                    <DataGridTextColumn Binding="{Binding View.Fields.Count}"
+                                    <DataGridTextColumn Binding="{Binding FieldCount}"
                                                         Header="Fields"
                                                         Width="*" />
                                     <DataGridTextColumn Binding="{Binding RecordCount}"

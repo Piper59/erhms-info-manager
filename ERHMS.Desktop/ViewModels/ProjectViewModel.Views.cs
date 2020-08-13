@@ -22,6 +22,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 public Epi.View View { get; }
                 public string Title { get; }
+                public int FieldCount { get; }
                 public int RecordCount { get; }
 
                 private bool isSelected;
@@ -38,6 +39,7 @@ namespace ERHMS.Desktop.ViewModels
                         .OrderBy(field => field.TabIndex)
                         .FirstOrDefault(field => field.Name.StartsWith("Title", StringComparison.OrdinalIgnoreCase))
                         ?.PromptText;
+                    FieldCount = view.Fields.Cast<Field>().Count(field => field.FieldType.IsTextualData());
                     RecordRepository repository = new RecordRepository(view);
                     if (repository.TableExists())
                     {
