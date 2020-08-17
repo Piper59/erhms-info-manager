@@ -178,6 +178,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a template.
+        /// </summary>
+        public static string OpenTemplateDialogTitle {
+            get {
+                return ResourceManager.GetString("OpenTemplateDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings have been reset.
         /// </summary>
         public static string SettingsResetLead {
@@ -201,6 +210,51 @@ namespace ERHMS.Desktop.Properties {
         public static string StartingEpiInfoTitle {
             get {
                 return ResourceManager.GetString("StartingEpiInfoTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epi Info template (*.xml)|*.xml.
+        /// </summary>
+        public static string TemplateFilter {
+            get {
+                return ResourceManager.GetString("TemplateFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified template is not a {0}-level template..
+        /// </summary>
+        public static string TemplateLevelErrorMessage {
+            get {
+                return ResourceManager.GetString("TemplateLevelErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a template..
+        /// </summary>
+        public static string TemplatePathEmptyBody {
+            get {
+                return ResourceManager.GetString("TemplatePathEmptyBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A template is required.
+        /// </summary>
+        public static string TemplatePathEmptyLead {
+            get {
+                return ResourceManager.GetString("TemplatePathEmptyLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified file could not be read or is not an Epi Info template..
+        /// </summary>
+        public static string TemplateReadErrorMessage {
+            get {
+                return ResourceManager.GetString("TemplateReadErrorMessage", resourceCulture);
             }
         }
         

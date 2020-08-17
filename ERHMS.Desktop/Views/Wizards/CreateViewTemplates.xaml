@@ -1,7 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
                     xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
     <DataTemplate DataType="{x:Type Wizards:CreateViewWizard+ChooseTypeStep}">
@@ -33,9 +31,6 @@
 
     <DataTemplate DataType="{x:Type Wizards:CreateViewWizard+CreateBlankStep}">
         <StackPanel>
-            <b:Interaction.Behaviors>
-                <Behaviors:InitialFocusBehavior ElementName="ViewName" />
-            </b:Interaction.Behaviors>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -55,6 +50,45 @@
                 These fields will allow you to look up a worker's unique ID based on their first and last name.
             </TextBlock>
             <CheckBox IsChecked="{Binding IncludeWorkerInfo}">Include worker information fields</CheckBox>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type Wizards:CreateViewWizard+CreateTemplateBasedStep}">
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0"
+                       Grid.Row="0"
+                       Target="{Binding ElementName=TemplatePath}">
+                    Template:
+                </Label>
+                <Controls:ActionTextBox x:Name="TemplatePath"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        AutomationProperties.Name="Template"
+                                        ActionName="Browse for template"
+                                        ActionText="Browse"
+                                        Command="{Binding BrowseCommand}"
+                                        IsReadOnly="True"
+                                        Text="{Binding TemplatePath}" />
+                <Label Grid.Column="0"
+                       Grid.Row="1"
+                       Target="{Binding ElementName=ViewName}">
+                    Form name:
+                </Label>
+                <TextBox x:Name="ViewName"
+                         Grid.Column="1"
+                         Grid.Row="1"
+                         AutomationProperties.Name="Form name"
+                         Text="{Binding ViewName}" />
+            </Grid>
         </StackPanel>
     </DataTemplate>
 

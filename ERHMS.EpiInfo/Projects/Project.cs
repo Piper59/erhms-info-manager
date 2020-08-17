@@ -71,12 +71,12 @@ namespace ERHMS.EpiInfo.Projects
             Metadata.CreateMetadataTables();
         }
 
-        public View InstantiateView(XTemplate xTemplate)
+        public View InstantiateView(XTemplate xTemplate, IProgress<string> progress = null)
         {
             Log.Default.Debug($"Instantiating view: {xTemplate.Name}");
             ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, this)
             {
-                Progress = new ProgressLogger()
+                Progress = new ProgressLogger(progress)
             };
             instantiator.Instantiate();
             return instantiator.View;

@@ -149,7 +149,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\FileDialogService.cs" />
     <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IProgressService.cs" />
     <Compile Include="Services\IWizardService.cs" />
     <Compile Include="Services\ProgressService.cs" />

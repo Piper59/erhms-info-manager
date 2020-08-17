@@ -156,6 +156,9 @@
   <data name="LoadingViewTitle" xml:space="preserve">
     <value>Loading form</value>
   </data>
+  <data name="OpenTemplateDialogTitle" xml:space="preserve">
+    <value>Choose a template</value>
+  </data>
   <data name="SettingsResetLead" xml:space="preserve">
     <value>Settings have been reset</value>
   </data>
@@ -164,6 +167,21 @@
   </data>
   <data name="StartingEpiInfoTitle" xml:space="preserve">
     <value>Starting Epi Info</value>
+  </data>
+  <data name="TemplateFilter" xml:space="preserve">
+    <value>Epi Info template (*.xml)|*.xml</value>
+  </data>
+  <data name="TemplateLevelErrorMessage" xml:space="preserve">
+    <value>The specified template is not a {0}-level template.</value>
+  </data>
+  <data name="TemplatePathEmptyBody" xml:space="preserve">
+    <value>Please specify a template.</value>
+  </data>
+  <data name="TemplatePathEmptyLead" xml:space="preserve">
+    <value>A template is required</value>
+  </data>
+  <data name="TemplateReadErrorMessage" xml:space="preserve">
+    <value>The specified file could not be read or is not an Epi Info template.</value>
   </data>
   <data name="UndeletingRecordsTitle" xml:space="preserve">
     <value>Undeleting records</value>

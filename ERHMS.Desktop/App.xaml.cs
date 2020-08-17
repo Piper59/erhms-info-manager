@@ -112,6 +112,7 @@ namespace ERHMS.Desktop
         {
             Log.Default.Debug("Configuring services");
             ServiceProvider.Install<IDialogService>(() => new DialogService(this));
+            ServiceProvider.Install<IFileDialogService>(() => new FileDialogService(this));
             ServiceProvider.Install<IProgressService>(() => new ProgressService(this));
             ServiceProvider.Install<IWizardService>(() => new WizardService(this));
         }

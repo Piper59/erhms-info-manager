@@ -4,6 +4,7 @@ using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Projects;
+using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using ERHMS.Resources;
 using System;
@@ -51,7 +52,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string ContinueText => "Create";
 
-            private string viewName = "";
+            protected string viewName = "";
             public string ViewName
             {
                 get { return viewName; }
@@ -65,9 +66,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 ContinueCommand = new AsyncCommand(ContinueAsync);
             }
 
-            protected abstract Epi.View ContinueCore(string viewName);
-
-            public async Task ContinueAsync()
+            protected virtual bool Validate()
             {
                 if (!Wizard.ViewNameGenerator.IsValid(viewName, out InvalidViewNameReason reason))
                 {
@@ -76,8 +75,19 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         Lead = ResXExtensions.GetInvalidViewNameLead(reason),
                         Body = ResXExtensions.GetInvalidViewNameBody(reason)
                     });
+                    return false;
                 }
                 else
+                {
+                    return true;
+                }
+            }
+
+            protected abstract Epi.View ContinueCore(IProgressService progress);
+
+            public async Task ContinueAsync()
+            {
+                if (Validate())
                 {
                     try
                     {
@@ -85,7 +95,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         progress.Title = ResX.CreatingViewTitle;
                         await progress.RunAsync(() =>
                         {
-                            Wizard.View = ContinueCore(viewName);
+                            Wizard.View = ContinueCore(progress);
                         });
                         Wizard.ViewNameGenerator.Add(Wizard.View.Name);
                         Wizard.Result = true;
@@ -114,7 +124,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 set { SetProperty(ref includeWorkerInfo, value); }
             }
 
-            protected override Epi.View ContinueCore(string viewName)
+            protected override Epi.View ContinueCore(IProgressService progress)
             {
                 string templateName = includeWorkerInfo ? "BlankWorkerInfo" : "Blank";
                 string resourceName = $"ERHMS.Resources.Templates.Forms.{templateName}.xml";
@@ -125,13 +135,74 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
                 XTemplate xTemplate = new XTemplate(document.Root);
                 xTemplate.XProject.XView.SetName(viewName);
-                return Wizard.Project.InstantiateView(xTemplate);
+                return Wizard.Project.InstantiateView(xTemplate, progress);
             }
         }
 
-        public class CreateTemplateBasedStep : StepViewModel<CreateViewWizard>
+        public class CreateTemplateBasedStep : CreateStep
         {
-            public override ICommand ContinueCommand => Command.Null;
+            private string templatePath = "";
+            public string TemplatePath
+            {
+                get { return templatePath; }
+                set { SetProperty(ref templatePath, value); }
+            }
+
+            public ICommand BrowseCommand { get; }
+
+            public CreateTemplateBasedStep()
+            {
+                BrowseCommand = new SyncCommand(Browse);
+            }
+
+            public void Browse()
+            {
+                IFileDialogService dialog = ServiceProvider.Resolve<IFileDialogService>();
+                dialog.Title = ResX.OpenTemplateDialogTitle;
+                dialog.InitialDirectory = Wizard.Configuration.Directories.Templates;
+                dialog.Filter = ResX.TemplateFilter;
+                if (dialog.Open(out string path).GetValueOrDefault())
+                {
+                    TemplatePath = path;
+                }
+            }
+
+            protected override bool Validate()
+            {
+                if (templatePath == "")
+                {
+                    ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Error)
+                    {
+                        Lead = ResX.TemplatePathEmptyLead,
+                        Body = ResX.TemplatePathEmptyBody
+                    });
+                    return false;
+                }
+                else
+                {
+                    return base.Validate();
+                }
+            }
+
+            protected override Epi.View ContinueCore(IProgressService progress)
+            {
+                XTemplate xTemplate;
+                try
+                {
+                    XDocument document = XDocument.Load(templatePath);
+                    xTemplate = new XTemplate(document.Root);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(ResX.TemplateReadErrorMessage, ex);
+                }
+                if (xTemplate.Level != TemplateLevel.View)
+                {
+                    throw new InvalidOperationException(string.Format(ResX.TemplateLevelErrorMessage, "form"));
+                }
+                xTemplate.XProject.XView.SetName(viewName);
+                return Wizard.Project.InstantiateView(xTemplate, progress);
+            }
         }
 
         public class CopyExistingStep : StepViewModel<CreateViewWizard>
@@ -170,12 +241,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
+        private Epi.Configuration Configuration { get; }
         public Project Project { get; }
         private ViewNameGenerator ViewNameGenerator { get; }
         public Epi.View View { get; private set; }
 
         public CreateViewWizard(Project project)
         {
+            Configuration = ConfigurationExtensions.Load();
             Project = project;
             ViewNameGenerator = new ViewNameGenerator(project);
             currentStep = new ChooseTypeStep(this);

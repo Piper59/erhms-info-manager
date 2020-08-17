@@ -24,6 +24,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 case TemplateLevel.Project:
                 case TemplateLevel.View:
                 case TemplateLevel.Page:
+                case TemplateLevel.Field:
                     return true;
                 default:
                     return false;
