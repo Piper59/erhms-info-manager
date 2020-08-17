@@ -14,12 +14,14 @@ namespace ERHMS.Desktop.ViewModels
         public ViewsChildViewModel Views { get; }
 
         public ICommand RefreshCommand { get; }
+        public ICommand OpenProjectCommand { get; }
 
         public ProjectViewModel(Project project)
         {
             Project = project;
             Views = new ViewsChildViewModel(project);
             RefreshCommand = new AsyncCommand(RefreshAsync);
+            OpenProjectCommand = new AsyncCommand(OpenProjectAsync);
         }
 
         private void RefreshData()
@@ -38,6 +40,12 @@ namespace ERHMS.Desktop.ViewModels
             progress.Title = ResX.LoadingProjectTitle;
             await progress.RunAsync(RefreshData);
             RefreshView();
+        }
+
+        public async Task OpenProjectAsync()
+        {
+            await Task.CompletedTask;
+            throw new System.NotImplementedException();
         }
     }
 }
