@@ -81,7 +81,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             path = path ?? Settings.Default.WorkerProjectPath;
             IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-            progress.Title = ResX.OpeningProjectTitle;
+            progress.Title = ResX.LoadingProjectTitle;
             await progress.RunAsync(() =>
             {
                 content = new ProjectViewModel(new WorkerProject(path));
@@ -99,7 +99,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             path = path ?? Settings.Default.IncidentProjectPath;
             IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-            progress.Title = ResX.OpeningProjectTitle;
+            progress.Title = ResX.LoadingProjectTitle;
             await progress.RunAsync(() =>
             {
                 content = new ProjectViewModel(new IncidentProject(path));
@@ -174,7 +174,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task ViewCoreViewAsync(CoreView coreView)
         {
             IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-            progress.Title = ResX.OpeningProjectTitle;
+            progress.Title = ResX.LoadingViewTitle;
             await progress.RunAsync(() =>
             {
                 Project project = ProjectFactory.GetProject(coreView.ProjectType, Settings.Default.GetProjectPath(coreView.ProjectType));

@@ -115,7 +115,7 @@ namespace ERHMS.Desktop.ViewModels
                 {
                     PageSize = 100
                 };
-                RefreshData();
+                RefreshDataInternal();
                 SetFilter();
                 ClearSearchTextCommand = new SyncCommand(ClearSearchText);
                 CreateCommand = new AsyncCommand(CreateAsync);
@@ -124,15 +124,20 @@ namespace ERHMS.Desktop.ViewModels
                 UndeleteCommand = new AsyncCommand(UndeleteAsync, items.HasSelectedItem);
             }
 
-            public void RefreshData()
+            private void RefreshDataInternal()
             {
-                View.LoadFields();
                 FieldNames = View.GetMetadata().GetSortedFieldNames(View.Id, MetaFieldTypeExtensions.IsTextualData).ToList();
                 items.Source.Clear();
                 if (repository.TableExists())
                 {
                     items.Source.AddRange(repository.Select().Select(record => new Item(record)));
                 }
+            }
+
+            public void RefreshData()
+            {
+                View.LoadFields();
+                RefreshDataInternal();
             }
 
             public void RefreshView()

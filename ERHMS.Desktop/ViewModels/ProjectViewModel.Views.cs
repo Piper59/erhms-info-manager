@@ -25,7 +25,6 @@ namespace ERHMS.Desktop.ViewModels
                 public Epi.View View { get; }
                 public string Title { get; }
                 public int FieldCount { get; }
-                // TODO: Remove?
                 public int RecordCount { get; }
 
                 private bool isSelected;
@@ -78,7 +77,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 Project = project;
                 items = new CustomCollectionView<Item>();
-                RefreshData();
+                RefreshDataInternal();
                 CreateCommand = new AsyncCommand(CreateAsync);
                 CustomizeCommand = new AsyncCommand(CustomizeAsync, items.HasSelectedItem);
                 ViewDataCommand = new AsyncCommand(ViewDataAsync, items.HasSelectedItem);
@@ -88,11 +87,16 @@ namespace ERHMS.Desktop.ViewModels
                 DeleteCommand = new AsyncCommand(DeleteAsync, items.HasSelectedItem);
             }
 
+            private void RefreshDataInternal()
+            {
+                items.Source.Clear();
+                items.Source.AddRange(Project.Views.Cast<Epi.View>().Select(view => new Item(view)));
+            }
+
             public void RefreshData()
             {
                 Project.LoadViews();
-                items.Source.Clear();
-                items.Source.AddRange(Project.Views.Cast<Epi.View>().Select(view => new Item(view)));
+                RefreshDataInternal();
             }
 
             public void RefreshView()
@@ -105,7 +109,7 @@ namespace ERHMS.Desktop.ViewModels
                 CreateViewWizard wizard = null;
                 {
                     IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-                    progress.Title = ResX.RefreshingProjectTitle;
+                    progress.Title = ResX.LoadingProjectTitle;
                     await progress.RunAsync(() =>
                     {
                         Project.LoadViews();
@@ -116,7 +120,7 @@ namespace ERHMS.Desktop.ViewModels
                 if (result.GetValueOrDefault())
                 {
                     IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-                    progress.Title = ResX.RefreshingProjectTitle;
+                    progress.Title = ResX.LoadingProjectTitle;
                     await progress.RunAsync(() =>
                     {
                         items.Source.Add(new Item(wizard.View));
@@ -138,7 +142,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 ViewViewModel content = null;
                 IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-                progress.Title = ResX.OpeningViewTitle;
+                progress.Title = ResX.LoadingViewTitle;
                 await progress.RunAsync(() =>
                 {
                     content = new ViewViewModel(Project, items.SelectedItem.View);

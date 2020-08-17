@@ -39,7 +39,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-            progress.Title = ResX.RefreshingViewTitle;
+            progress.Title = ResX.LoadingViewTitle;
             await progress.RunAsync(RefreshData);
             RefreshView();
         }
@@ -48,7 +48,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             ProjectViewModel content = null;
             IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-            progress.Title = ResX.RefreshingProjectTitle;
+            progress.Title = ResX.LoadingProjectTitle;
             await progress.RunAsync(() =>
             {
                 Project.LoadViews();

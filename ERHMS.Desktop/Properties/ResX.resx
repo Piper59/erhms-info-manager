@@ -150,17 +150,11 @@
   <data name="HandledErrorLead" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
-  <data name="OpeningProjectTitle" xml:space="preserve">
-    <value>Opening database</value>
+  <data name="LoadingProjectTitle" xml:space="preserve">
+    <value>Loading database</value>
   </data>
-  <data name="OpeningViewTitle" xml:space="preserve">
-    <value>Opening form</value>
-  </data>
-  <data name="RefreshingProjectTitle" xml:space="preserve">
-    <value>Refreshing database</value>
-  </data>
-  <data name="RefreshingViewTitle" xml:space="preserve">
-    <value>Refreshing form</value>
+  <data name="LoadingViewTitle" xml:space="preserve">
+    <value>Loading form</value>
   </data>
   <data name="SettingsResetLead" xml:space="preserve">
     <value>Settings have been reset</value>

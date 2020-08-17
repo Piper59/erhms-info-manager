@@ -160,38 +160,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opening database.
+        ///   Looks up a localized string similar to Loading database.
         /// </summary>
-        public static string OpeningProjectTitle {
+        public static string LoadingProjectTitle {
             get {
-                return ResourceManager.GetString("OpeningProjectTitle", resourceCulture);
+                return ResourceManager.GetString("LoadingProjectTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opening form.
+        ///   Looks up a localized string similar to Loading form.
         /// </summary>
-        public static string OpeningViewTitle {
+        public static string LoadingViewTitle {
             get {
-                return ResourceManager.GetString("OpeningViewTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Refreshing database.
-        /// </summary>
-        public static string RefreshingProjectTitle {
-            get {
-                return ResourceManager.GetString("RefreshingProjectTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Refreshing form.
-        /// </summary>
-        public static string RefreshingViewTitle {
-            get {
-                return ResourceManager.GetString("RefreshingViewTitle", resourceCulture);
+                return ResourceManager.GetString("LoadingViewTitle", resourceCulture);
             }
         }
         
