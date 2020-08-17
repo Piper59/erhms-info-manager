@@ -17,18 +17,6 @@ namespace ERHMS.Desktop.Services
 
         public bool? Show(DialogInfo info)
         {
-            if (application.Dispatcher.CheckAccess())
-            {
-                return ShowInternal(info);
-            }
-            else
-            {
-                return application.Dispatcher.Invoke(() => ShowInternal(info));
-            }
-        }
-
-        private bool? ShowInternal(DialogInfo info)
-        {
             Window owner = application.GetActiveWindow();
             Window window = new DialogView
             {

@@ -16,18 +16,6 @@ namespace ERHMS.Desktop.Services
 
         public bool? Run(IWizard wizard)
         {
-            if (application.Dispatcher.CheckAccess())
-            {
-                return RunInternal(wizard);
-            }
-            else
-            {
-                return application.Dispatcher.Invoke(() => RunInternal(wizard));
-            }
-        }
-
-        private bool? RunInternal(IWizard wizard)
-        {
             Window owner = application.GetActiveWindow();
             Window window = new WizardView
             {
