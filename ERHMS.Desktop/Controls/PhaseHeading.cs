@@ -14,6 +14,7 @@ namespace ERHMS.Desktop.Controls
         static PhaseHeading()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PhaseHeading), new FrameworkPropertyMetadata(typeof(PhaseHeading)));
+            IsTabStopProperty.OverrideMetadata(typeof(PhaseHeading), new FrameworkPropertyMetadata(false));
         }
 
         public Phase Phase

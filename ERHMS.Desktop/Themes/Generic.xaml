@@ -61,7 +61,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Controls:WizardButton">
-                    <Button Background="Transparent"
+                    <Button AutomationProperties.HelpText="{TemplateBinding HelpText}"
+                            AutomationProperties.Name="{TemplateBinding Text}"
+                            Background="Transparent"
                             Command="{TemplateBinding Command}"
                             HorizontalContentAlignment="Left"
                             Padding="{StaticResource LargePadding}">
