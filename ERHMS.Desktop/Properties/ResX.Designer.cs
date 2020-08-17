@@ -88,6 +88,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This form, any related forms, and all associated data will be permanently deleted. This operation cannot be undone..
+        /// </summary>
+        public static string DeleteViewWarningBody {
+            get {
+                return ResourceManager.GetString("DeleteViewWarningBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the {0} form?.
+        /// </summary>
+        public static string DeleteViewWarningLead {
+            get {
+                return ResourceManager.GetString("DeleteViewWarningLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting records.
         /// </summary>
         public static string DeletingRecordsTitle {
@@ -111,24 +129,6 @@ namespace ERHMS.Desktop.Properties {
         public static string DeletingViewTitle {
             get {
                 return ResourceManager.GetString("DeletingViewTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This form, any related forms, and all associated data will be permanently deleted. This operation cannot be undone..
-        /// </summary>
-        public static string DeletingViewWarningBody {
-            get {
-                return ResourceManager.GetString("DeletingViewWarningBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete the {0} form?.
-        /// </summary>
-        public static string DeletingViewWarningLead {
-            get {
-                return ResourceManager.GetString("DeletingViewWarningLead", resourceCulture);
             }
         }
         
@@ -178,6 +178,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a database.
+        /// </summary>
+        public static string OpenProjectDialogTitle {
+            get {
+                return ResourceManager.GetString("OpenProjectDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose a template.
         /// </summary>
         public static string OpenTemplateDialogTitle {
@@ -187,11 +196,38 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Epi Info project (*.prj)|*.prj.
+        /// </summary>
+        public static string ProjectFilter {
+            get {
+                return ResourceManager.GetString("ProjectFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings have been reset.
         /// </summary>
         public static string SettingsResetLead {
             get {
                 return ResourceManager.GetString("SettingsResetLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify an existing form..
+        /// </summary>
+        public static string SourceViewEmptyBody {
+            get {
+                return ResourceManager.GetString("SourceViewEmptyBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No existing form was specified.
+        /// </summary>
+        public static string SourceViewEmptyLead {
+            get {
+                return ResourceManager.GetString("SourceViewEmptyLead", resourceCulture);
             }
         }
         
@@ -241,7 +277,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A template is required.
+        ///   Looks up a localized string similar to No template was specified.
         /// </summary>
         public static string TemplatePathEmptyLead {
             get {
@@ -286,7 +322,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A form name is required.
+        ///   Looks up a localized string similar to No form name was specified.
         /// </summary>
         public static string ViewNameEmptyLead {
             get {

@@ -6,6 +6,7 @@
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         MinHeight="480"
         MinWidth="640"
+        SnapsToDevicePixels="True"
         Title="{x:Static Properties:ResX.AppTitle}">
     <b:Interaction.Behaviors>
         <Behaviors:RelayEventBehavior EventName="ProcessStarted"

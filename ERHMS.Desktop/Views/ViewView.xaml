@@ -71,8 +71,7 @@
                                                         ActionText="Clear"
                                                         Command="{Binding ClearSearchTextCommand}"
                                                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
-                                <ComboBox x:Name="RecordStatus"
-                                          Grid.Column="2"
+                                <ComboBox Grid.Column="2"
                                           AutomationProperties.Name="Status"
                                           DisplayMemberPath="Text"
                                           ItemsSource="{Binding Statuses}"

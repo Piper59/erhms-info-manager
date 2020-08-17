@@ -14,7 +14,7 @@
             <Controls:WizardButton Command="{Binding CreateTemplateBasedCommand}">
                 Create a form based on a template
                 <Controls:WizardButton.HelpText>
-                    Use this option to create a new form based on an Epi Info form template.
+                    Use this option to create a new form based on an Epi Info template.
                     Once the form is created, you can add, edit, and remove fields.
                 </Controls:WizardButton.HelpText>
             </Controls:WizardButton>
@@ -75,9 +75,9 @@
                                         AutomationProperties.Name="Template"
                                         ActionName="Browse for template"
                                         ActionText="Browse"
-                                        Command="{Binding BrowseCommand}"
+                                        Command="{Binding OpenTemplateCommand}"
                                         IsReadOnly="True"
-                                        Text="{Binding TemplatePath}" />
+                                        Text="{Binding TemplatePath, Mode=OneWay}" />
                 <Label Grid.Column="0"
                        Grid.Row="1"
                        Target="{Binding ElementName=ViewName}">
@@ -88,6 +88,75 @@
                          Grid.Row="1"
                          AutomationProperties.Name="Form name"
                          Text="{Binding ViewName}" />
+            </Grid>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type Wizards:CreateViewWizard+CopyExistingStep}">
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0"
+                       Grid.Row="0"
+                       Target="{Binding ElementName=SourceProjectPath}">
+                    Source database:
+                </Label>
+                <Controls:ActionTextBox x:Name="SourceProjectPath"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        AutomationProperties.Name="Source database"
+                                        ActionName="Change source database"
+                                        ActionText="Change"
+                                        Command="{Binding OpenSourceProjectCommand}"
+                                        IsReadOnly="True"
+                                        Text="{Binding SourceProjectPath, Mode=OneWay}" />
+                <Label Grid.Column="0"
+                       Grid.Row="1"
+                       Target="{Binding ElementName=View}">
+                    Existing form:
+                </Label>
+                <ComboBox x:Name="View"
+                          Grid.Column="1"
+                          Grid.Row="1"
+                          AutomationProperties.Name="Existing form"
+                          DisplayMemberPath="Name"
+                          ItemsSource="{Binding SourceViews}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}">
+                            <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+                <Label Grid.Column="0"
+                       Grid.Row="2"
+                       Target="{Binding ElementName=TargetProjectPath}">
+                    Target database:
+                </Label>
+                <TextBox x:Name="TargetProjectPath"
+                         Grid.Column="1"
+                         Grid.Row="2"
+                         AutomationProperties.Name="Target database"
+                         IsReadOnly="True"
+                         Text="{Binding TargetProjectPath, Mode=OneWay}" />
+                <Label Grid.Column="0"
+                       Grid.Row="3"
+                       Target="{Binding ElementName=TargetViewName}">
+                    New form name:
+                </Label>
+                <TextBox x:Name="TargetViewName"
+                         Grid.Column="1"
+                         Grid.Row="3"
+                         AutomationProperties.Name="New form name"
+                         Text="{Binding TargetViewName}" />
             </Grid>
         </StackPanel>
     </DataTemplate>

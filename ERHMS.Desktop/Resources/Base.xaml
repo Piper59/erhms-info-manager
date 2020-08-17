@@ -19,7 +19,7 @@
             <Style TargetType="ContentPresenter">
                 <Style.Resources>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="0,1,0,-1" />
+                        <Setter Property="Margin" Value="-2,1,2,-1" />
                     </Style>
                 </Style.Resources>
             </Style>
@@ -35,7 +35,7 @@
             <Style TargetType="ContentPresenter">
                 <Style.Resources>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="-2,-1" />
+                        <Setter Property="Margin" Value="-4,-1,0,-1" />
                     </Style>
                 </Style.Resources>
             </Style>

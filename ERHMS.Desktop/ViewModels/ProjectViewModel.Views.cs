@@ -174,12 +174,12 @@ namespace ERHMS.Desktop.ViewModels
             {
                 bool? result = ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Warning)
                 {
-                    Lead = string.Format(ResX.DeletingViewWarningLead, items.SelectedItem.View.Name),
-                    Body = ResX.DeletingViewWarningBody,
+                    Lead = string.Format(ResX.DeleteViewWarningLead, items.SelectedItem.View.Name),
+                    Body = ResX.DeleteViewWarningBody,
                     Buttons = new DialogButtonCollection
                     {
-                        new DialogButton(true, "Delete", false, false),
-                        new DialogButton(false, "Cancel", false, true)
+                        new DialogButton(true, "_Delete", true, false),
+                        new DialogButton(false, "_Cancel", false, true)
                     }
                 });
                 if (result.GetValueOrDefault())

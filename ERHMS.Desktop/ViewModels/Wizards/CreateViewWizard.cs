@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.Commands;
+﻿using ERHMS.Common;
+using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -8,8 +9,12 @@ using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using ERHMS.Resources;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml.Linq;
 
@@ -34,23 +39,23 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void CreateBlank()
             {
-                GoToStep(new CreateBlankStep());
+                GoToStep(new CreateBlankStep(Wizard));
             }
 
             public void CreateTemplateBased()
             {
-                GoToStep(new CreateTemplateBasedStep());
+                GoToStep(new CreateTemplateBasedStep(Wizard));
             }
 
             public void CopyExisting()
             {
-                GoToStep(new CopyExistingStep());
+                GoToStep(new CopyExistingStep(Wizard));
             }
         }
 
         public abstract class CreateStep : StepViewModel<CreateViewWizard>
         {
-            public override string ContinueText => "Create";
+            public override string ContinueText => "_Create";
 
             protected string viewName = "";
             public string ViewName
@@ -61,7 +66,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override ICommand ContinueCommand { get; }
 
-            public CreateStep()
+            public CreateStep(CreateViewWizard wizard)
+                : base(wizard)
             {
                 ContinueCommand = new AsyncCommand(ContinueAsync);
             }
@@ -100,7 +106,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         Wizard.ViewNameGenerator.Add(Wizard.View.Name);
                         Wizard.Result = true;
                         Wizard.Completed = true;
-                        GoToStep(new OpenStep());
+                        GoToStep(new OpenStep(Wizard));
                     }
                     catch (Exception ex)
                     {
@@ -124,6 +130,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 set { SetProperty(ref includeWorkerInfo, value); }
             }
 
+            public CreateBlankStep(CreateViewWizard wizard)
+                : base(wizard) { }
+
             protected override Epi.View ContinueCore(IProgressService progress)
             {
                 string templateName = includeWorkerInfo ? "BlankWorkerInfo" : "Blank";
@@ -145,17 +154,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public string TemplatePath
             {
                 get { return templatePath; }
-                set { SetProperty(ref templatePath, value); }
+                private set { SetProperty(ref templatePath, value); }
             }
 
-            public ICommand BrowseCommand { get; }
+            public ICommand OpenTemplateCommand { get; }
 
-            public CreateTemplateBasedStep()
+            public CreateTemplateBasedStep(CreateViewWizard wizard)
+                : base(wizard)
             {
-                BrowseCommand = new SyncCommand(Browse);
+                OpenTemplateCommand = new SyncCommand(OpenTemplate);
             }
 
-            public void Browse()
+            public void OpenTemplate()
             {
                 IFileDialogService dialog = ServiceProvider.Resolve<IFileDialogService>();
                 dialog.Title = ResX.OpenTemplateDialogTitle;
@@ -205,14 +215,105 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
-        public class CopyExistingStep : StepViewModel<CreateViewWizard>
+        public class CopyExistingStep : CreateStep
         {
-            public override ICommand ContinueCommand => Command.Null;
+            private string sourceProjectPath;
+            public string SourceProjectPath
+            {
+                get { return sourceProjectPath; }
+                private set { SetProperty(ref sourceProjectPath, value); }
+            }
+
+            private List<Epi.View> sourceViews;
+            public ICollectionView SourceViews { get; }
+
+            public string TargetProjectPath { get; }
+
+            public string TargetViewName
+            {
+                get
+                {
+                    return viewName;
+                }
+                set
+                {
+                    SetProperty(ref viewName, value);
+                    OnPropertyChanged(nameof(TargetViewName));
+                }
+            }
+
+            public ICommand OpenSourceProjectCommand { get; }
+
+            public CopyExistingStep(CreateViewWizard wizard)
+                : base(wizard)
+            {
+                sourceProjectPath = wizard.Project.FilePath;
+                sourceViews = new List<Epi.View>();
+                SourceViews = new ListCollectionView(sourceViews);
+                SetSourceViews(wizard.Project);
+                TargetProjectPath = wizard.Project.FilePath;
+                OpenSourceProjectCommand = new AsyncCommand(OpenSourceProjectAsync);
+            }
+
+            private void SetSourceViews(Project project)
+            {
+                sourceViews.Clear();
+                sourceViews.AddRange(project.Views.Cast<Epi.View>());
+            }
+
+            public async Task OpenSourceProjectAsync()
+            {
+                IFileDialogService dialog = ServiceProvider.Resolve<IFileDialogService>();
+                dialog.Title = ResX.OpenProjectDialogTitle;
+                dialog.InitialDirectory = Wizard.Configuration.Directories.Project;
+                dialog.Filter = ResX.ProjectFilter;
+                if (dialog.Open(out string path).GetValueOrDefault())
+                {
+                    IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                    progress.Title = ResX.LoadingProjectTitle;
+                    await progress.RunAsync(() =>
+                    {
+                        SetSourceViews(new Project(path));
+                    });
+                    SourceProjectPath = path;
+                    SourceViews.Refresh();
+                    SourceViews.MoveCurrentToPosition(-1);
+                }
+            }
+
+            protected override bool Validate()
+            {
+                if (SourceViews.CurrentPosition == -1)
+                {
+                    ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Error)
+                    {
+                        Lead = ResX.SourceViewEmptyLead,
+                        Body = ResX.SourceViewEmptyBody
+                    });
+                    return false;
+                }
+                else
+                {
+                    return base.Validate();
+                }
+            }
+
+            protected override Epi.View ContinueCore(IProgressService progress)
+            {
+                Epi.View view = (Epi.View)SourceViews.CurrentItem;
+                ViewTemplateCreator creator = new ViewTemplateCreator(view)
+                {
+                    Progress = new ProgressLogger(progress)
+                };
+                XTemplate xTemplate = creator.Create();
+                xTemplate.XProject.XView.SetName(viewName);
+                return Wizard.Project.InstantiateView(xTemplate, progress);
+            }
         }
 
         public class OpenStep : StepViewModel<CreateViewWizard>
         {
-            public override string ContinueText => "Close";
+            public override string ContinueText => "_Close";
 
             private bool openView = true;
             public bool OpenView
@@ -223,7 +324,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override ICommand ContinueCommand { get; }
 
-            public OpenStep()
+            public OpenStep(CreateViewWizard wizard)
+                : base(wizard)
             {
                 ContinueCommand = new AsyncCommand(ContinueAsync);
             }

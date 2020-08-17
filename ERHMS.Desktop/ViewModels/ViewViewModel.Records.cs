@@ -7,8 +7,10 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
@@ -17,7 +19,7 @@ namespace ERHMS.Desktop.ViewModels
     {
         public class RecordsChildViewModel : ObservableObject
         {
-            public class Status : ObservableObject, ISelectable
+            public class Status : ObservableObject
             {
                 public static readonly IReadOnlyCollection<Status> All = new Status[]
                 {
@@ -28,13 +30,6 @@ namespace ERHMS.Desktop.ViewModels
 
                 public short? Value { get; }
                 public string Text { get; }
-
-                private bool isSelected;
-                public bool IsSelected
-                {
-                    get { return isSelected; }
-                    set { SetProperty(ref isSelected, value); }
-                }
 
                 private Status(short? value, string text)
                 {
@@ -90,10 +85,8 @@ namespace ERHMS.Desktop.ViewModels
                 }
             }
 
+            public ICollectionView Statuses { get; }
             public IReadOnlyList<string> FieldNames { get; private set; }
-
-            private readonly CustomCollectionView<Status> statuses;
-            public ICustomCollectionView<Status> Statuses => statuses;
 
             private readonly CustomCollectionView<Item> items;
             public ICustomCollectionView<Item> Items => items;
@@ -108,9 +101,8 @@ namespace ERHMS.Desktop.ViewModels
             {
                 View = view;
                 repository = new RecordRepository(view);
-                statuses = new CustomCollectionView<Status>(Status.All.ToList());
-                statuses.MoveCurrentToPosition(0);
-                statuses.CurrentChanged += (sender, e) => SetFilter();
+                Statuses = new ListCollectionView(Status.All.ToList());
+                Statuses.CurrentChanged += (sender, e) => SetFilter();
                 items = new CustomCollectionView<Item>()
                 {
                     PageSize = 100
@@ -165,7 +157,7 @@ namespace ERHMS.Desktop.ViewModels
                         return false;
                     };
                 }
-                short? status = statuses.SelectedItem?.Value;
+                short? status = ((Status)Statuses.CurrentItem)?.Value;
                 if (status != null)
                 {
                     statusFilter = item => item.Record.Status == status;

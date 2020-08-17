@@ -3,19 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-        xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+        AutomationProperties.HelpText="{Binding CurrentStep, Converter={StaticResource WizardStepToTitleConverter}}"
         Height="480"
+        MinHeight="480"
+        MinWidth="640"
         Width="640"
-        ResizeMode="NoResize"
+        SnapsToDevicePixels="True"
         Title="{x:Static Properties:ResX.AppTitle}"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary x:Key="StepTitles"
-                                Source="/Views/Wizards/StepTitles.xaml" />
-            <Converters:ObjectToResourceConverter x:Key="StepToTitleConverter"
-                                                  Resources="{StaticResource StepTitles}" />
         </ResourceDictionary>
     </Window.Resources>
     <b:Interaction.Behaviors>
@@ -42,7 +40,7 @@
                                    Style="{StaticResource Section}">
                             <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                                        Style="{StaticResource Lead}"
-                                       Text="{Binding CurrentStep, Converter={StaticResource StepToTitleConverter}}">
+                                       Text="{Binding CurrentStep, Converter={StaticResource WizardStepToTitleConverter}}">
                             </TextBlock>
                         </DockPanel>
                         <ContentPresenter Grid.Row="1"
@@ -60,14 +58,15 @@
                 </WrapPanel.Resources>
                 <Button Command="{Binding CurrentStep.ReturnCommand}"
                         Visibility="{Binding CurrentStep.CanReturn, Converter={StaticResource BoolToVisibilityConverter}}">
-                    Back
+                    _Back
                 </Button>
                 <Button Command="{Binding CurrentStep.ContinueCommand}"
-                        Content="{Binding CurrentStep.ContinueText}" />
+                        Content="{Binding CurrentStep.ContinueText}"
+                        IsDefault="True" />
                 <Button Command="{Binding ExitCommand}"
                         IsCancel="True"
                         Visibility="{Binding Completed, Converter={StaticResource BoolToVisibilityInverter}}">
-                    Cancel
+                    _Cancel
                 </Button>
             </WrapPanel>
         </Border>
