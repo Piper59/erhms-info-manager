@@ -48,13 +48,13 @@ namespace ERHMS.Desktop.ViewModels
 
         private MainViewModel()
         {
-            ExitCommand = new SyncCommand(Exit, Command.Always, ErrorBehavior.Raise);
-            GoHomeCommand = new SyncCommand(GoHome, Command.Always, ErrorBehavior.Raise);
-            ViewWorkerProjectCommand = new AsyncCommand<string>(ViewWorkerProjectAsync, Command.Always, ErrorBehavior.Raise);
-            ViewIncidentProjectCommand = new AsyncCommand<string>(ViewIncidentProjectAsync, Command.Always, ErrorBehavior.Raise);
-            StartEpiInfoCommand = new AsyncCommand(StartEpiInfoAsync, Command.Always, ErrorBehavior.Raise);
-            StartFileExplorerCommand = new SyncCommand(StartFileExplorer, Command.Always, ErrorBehavior.Raise);
-            ViewCoreViewCommand = new AsyncCommand<CoreView>(ViewCoreViewAsync, Command.Always, ErrorBehavior.Raise);
+            ExitCommand = new SyncCommand(Exit);
+            GoHomeCommand = new SyncCommand(GoHome);
+            ViewWorkerProjectCommand = new AsyncCommand<string>(ViewWorkerProjectAsync);
+            ViewIncidentProjectCommand = new AsyncCommand<string>(ViewIncidentProjectAsync);
+            StartEpiInfoCommand = new AsyncCommand(StartEpiInfoAsync);
+            StartFileExplorerCommand = new SyncCommand(StartFileExplorer);
+            ViewCoreViewCommand = new AsyncCommand<CoreView>(ViewCoreViewAsync);
         }
 
         public event EventHandler<ProcessStartedEventArgs> ProcessStarted;
@@ -80,7 +80,8 @@ namespace ERHMS.Desktop.ViewModels
         public async Task ViewWorkerProjectAsync(string path = null)
         {
             path = path ?? Settings.Default.WorkerProjectPath;
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
+            IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+            progress.Title = ResX.OpeningProjectTitle;
             await progress.RunAsync(() =>
             {
                 content = new ProjectViewModel(new WorkerProject(path));
@@ -97,7 +98,8 @@ namespace ERHMS.Desktop.ViewModels
         public async Task ViewIncidentProjectAsync(string path = null)
         {
             path = path ?? Settings.Default.IncidentProjectPath;
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
+            IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+            progress.Title = ResX.OpeningProjectTitle;
             await progress.RunAsync(() =>
             {
                 content = new ProjectViewModel(new IncidentProject(path));
@@ -116,7 +118,9 @@ namespace ERHMS.Desktop.ViewModels
         {
             using (CancellationTokenSource starting = new CancellationTokenSource())
             {
-                IProgressService progress = ServiceProvider.GetProgressService(Resources.StartingEpiInfoTaskName, true);
+                IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                progress.Title = ResX.StartingEpiInfoTitle;
+                progress.CanUserCancel = true;
                 try
                 {
                     await progress.RunAsync(() =>
@@ -141,17 +145,16 @@ namespace ERHMS.Desktop.ViewModels
                     DialogInfo info = new DialogInfo(DialogInfoPreset.Error);
                     if (ex is OperationCanceledException)
                     {
-                        info.Lead = Resources.EpiInfoNotRespondingLead;
-                        info.Body = Resources.EpiInfoNotRespondingBody;
+                        info.Lead = ResX.EpiInfoNotRespondingLead;
+                        info.Body = ResX.EpiInfoNotRespondingBody;
                     }
                     else
                     {
-                        info.Lead = Resources.StartingEpiInfoErrorLead;
+                        info.Lead = ResX.StartingEpiInfoErrorLead;
                         info.Body = ex.Message;
                         info.Details = ex.ToString();
                     }
-                    IDialogService dialog = ServiceProvider.GetDialogService(info);
-                    dialog.Show();
+                    ServiceProvider.Resolve<IDialogService>().Show(info);
                 }
             }
         }
@@ -170,7 +173,8 @@ namespace ERHMS.Desktop.ViewModels
         // TODO: Handle errors
         public async Task ViewCoreViewAsync(CoreView coreView)
         {
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
+            IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+            progress.Title = ResX.OpeningProjectTitle;
             await progress.RunAsync(() =>
             {
                 Project project = ProjectFactory.GetProject(coreView.ProjectType, Settings.Default.GetProjectPath(coreView.ProjectType));

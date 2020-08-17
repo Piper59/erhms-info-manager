@@ -6,7 +6,7 @@
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         MinHeight="480"
         MinWidth="640"
-        Title="{x:Static Properties:Resources.AppTitle}">
+        Title="{x:Static Properties:ResX.AppTitle}">
     <b:Interaction.Behaviors>
         <Behaviors:RelayEventBehavior EventName="ProcessStarted"
                                       HandlerName="DataContext_ProcessStarted" />

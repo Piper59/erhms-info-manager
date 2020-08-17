@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="/Resources/Templates.xaml" />
                 <ResourceDictionary Source="/Resources/Base.xaml" />
                 <ResourceDictionary Source="/Resources/App.xaml" />
+                <ResourceDictionary Source="/Views/Wizards/CreateViewTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

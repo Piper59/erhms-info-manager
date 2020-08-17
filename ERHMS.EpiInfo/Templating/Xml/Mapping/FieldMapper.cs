@@ -257,7 +257,7 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
         {
             Mappings = new FieldMappingCollection<RelatedViewField>
             {
-                { f => f.RelatedViewID, "RelatedViewId" },
+                { f => f.RelatedViewID, nameof(XField.RelatedViewId) },
                 { f => f.ShouldReturnToParent },
                 { f => f.Condition, ColumnNames.RELATE_CONDITION }
             };

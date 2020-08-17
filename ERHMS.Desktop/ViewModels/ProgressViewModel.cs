@@ -6,7 +6,12 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class ProgressViewModel : ObservableObject
     {
-        public string TaskName { get; }
+        private string title;
+        public string Title
+        {
+            get { return title; }
+            set { SetProperty(ref title, value); }
+        }
 
         private string status;
         public string Status
@@ -15,7 +20,12 @@ namespace ERHMS.Desktop.ViewModels
             set { SetProperty(ref status, value); }
         }
 
-        public bool CanUserCancel { get; }
+        private bool canUserCancel;
+        public bool CanUserCancel
+        {
+            get { return canUserCancel; }
+            set { SetProperty(ref canUserCancel, value); }
+        }
 
         private bool isUserCancellationRequested;
         public bool IsUserCancellationRequested
@@ -26,16 +36,14 @@ namespace ERHMS.Desktop.ViewModels
 
         public ICommand CancelCommand { get; }
 
-        public ProgressViewModel(string taskName, bool canUserCancel)
+        public ProgressViewModel()
         {
-            TaskName = taskName;
-            CanUserCancel = canUserCancel;
-            CancelCommand = new SyncCommand(Cancel, CanCancel, ErrorBehavior.Raise);
+            CancelCommand = new SyncCommand(Cancel, CanCancel);
         }
 
         public bool CanCancel()
         {
-            return CanUserCancel && !isUserCancellationRequested;
+            return canUserCancel && !isUserCancellationRequested;
         }
 
         public void Cancel()

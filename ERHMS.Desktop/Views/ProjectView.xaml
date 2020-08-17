@@ -39,11 +39,11 @@
                        Target="{Binding ElementName=ProjectPath}">
                     Database:
                 </Label>
-                <Controls:ButtonTextBox x:Name="ProjectPath"
-                                        AutomationProperties.Name="Database"
+                <Controls:ActionTextBox x:Name="ProjectPath"
                                         Grid.Column="1"
-                                        ButtonContent="Change"
-                                        ButtonName="Change database"
+                                        AutomationProperties.Name="Database"
+                                        ActionName="Change database"
+                                        ActionText="Change"
                                         IsReadOnly="True"
                                         Text="{Binding Project.FilePath, Mode=OneWay}" />
             </Grid>
@@ -59,7 +59,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
                                        Style="{StaticResource Body}">
-                                Select an existing form or <Hyperlink>create a new form</Hyperlink>
+                                Select an existing form or <Hyperlink Command="{Binding CreateCommand}">create a new form</Hyperlink>
                             </TextBlock>
                             <!-- TODO: Handle empty DataGrid? -->
                             <DataGrid Grid.Row="1"
@@ -104,12 +104,11 @@
                                         <ContextMenu>
                                             <MenuItem Command="{Binding ExportDataCommand}" Header="_Export data" />
                                             <MenuItem Command="{Binding ImportDataCommand}" Header="_Import data" />
-                                            <MenuItem Command="{Binding AnalyzeCommand}" Header="_Analyze" />
                                             <MenuItem Command="{Binding DeleteCommand}" Header="_Delete" />
                                         </ContextMenu>
                                     </Button.ContextMenu>
                                     <b:Interaction.Behaviors>
-                                        <Behaviors:OpenContextMenuOnClickBehavior />
+                                        <Behaviors:DropDownButtonBehavior />
                                     </b:Interaction.Behaviors>
                                     _Advanced
                                 </Button>

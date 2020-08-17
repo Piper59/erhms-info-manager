@@ -117,11 +117,11 @@ namespace ERHMS.Desktop.ViewModels
                 };
                 RefreshData();
                 SetFilter();
-                ClearSearchTextCommand = new SyncCommand(ClearSearchText, Command.Always, ErrorBehavior.Raise);
-                CreateCommand = new AsyncCommand(CreateAsync, Command.Always, ErrorBehavior.Raise);
-                EditCommand = new AsyncCommand(EditAsync, items.HasSelectedItem, ErrorBehavior.Raise);
-                DeleteCommand = new AsyncCommand(DeleteAsync, items.HasSelectedItem, ErrorBehavior.Raise);
-                UndeleteCommand = new AsyncCommand(UndeleteAsync, items.HasSelectedItem, ErrorBehavior.Raise);
+                ClearSearchTextCommand = new SyncCommand(ClearSearchText);
+                CreateCommand = new AsyncCommand(CreateAsync);
+                EditCommand = new AsyncCommand(EditAsync, items.HasSelectedItem);
+                DeleteCommand = new AsyncCommand(DeleteAsync, items.HasSelectedItem);
+                UndeleteCommand = new AsyncCommand(UndeleteAsync, items.HasSelectedItem);
             }
 
             public void RefreshData()
@@ -193,8 +193,10 @@ namespace ERHMS.Desktop.ViewModels
 
             private async Task SetDeletedAsync(bool deleted)
             {
-                string taskName = deleted ? Resources.DeletingRecordsTaskName : Resources.UndeletingRecordsTaskName;
-                IProgressService progress = ServiceProvider.GetProgressService(taskName, true);
+                string title = deleted ? ResX.DeletingRecordsTitle : ResX.UndeletingRecordsTitle;
+                IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                progress.Title = title;
+                progress.CanUserCancel = true;
                 await progress.RunAsync(() =>
                 {
                     foreach (Item item in items.SelectedItems)

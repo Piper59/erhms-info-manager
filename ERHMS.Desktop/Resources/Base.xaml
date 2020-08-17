@@ -7,6 +7,13 @@
     </Style>
     <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}" />
 
+    <Style x:Key="CheckBoxBase" TargetType="CheckBox">
+        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxBase}" />
+
     <Style x:Key="ComboBoxBase" TargetType="ComboBox">
         <Style.Resources>
             <Style TargetType="ContentPresenter">

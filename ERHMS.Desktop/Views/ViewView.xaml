@@ -64,16 +64,16 @@
                                        Target="{Binding ElementName=SearchText}">
                                     _Search:
                                 </Label>
-                                <Controls:ButtonTextBox x:Name="SearchText"
-                                                        AutomationProperties.Name="Search"
-                                                        ButtonContent="Clear"
-                                                        ButtonName="Clear search"
-                                                        Command="{Binding ClearSearchTextCommand}"
+                                <Controls:ActionTextBox x:Name="SearchText"
                                                         Grid.Column="1"
-                                                        Text="{Binding SearchText, Delay=500}" />
+                                                        AutomationProperties.Name="Search"
+                                                        ActionName="Clear search"
+                                                        ActionText="Clear"
+                                                        Command="{Binding ClearSearchTextCommand}"
+                                                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
                                 <ComboBox x:Name="RecordStatus"
-                                          AutomationProperties.Name="Status"
                                           Grid.Column="2"
+                                          AutomationProperties.Name="Status"
                                           DisplayMemberPath="Text"
                                           ItemsSource="{Binding Statuses}"
                                           MinWidth="125">

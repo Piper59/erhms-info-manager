@@ -8,11 +8,11 @@ namespace ERHMS.Desktop.Commands
         private readonly Action execute;
         private readonly Func<bool> canExecute;
 
-        public SyncCommand(Action execute, Func<bool> canExecute, ErrorBehavior errorBehavior)
+        public SyncCommand(Action execute, Func<bool> canExecute = null, ErrorBehavior errorBehavior = ErrorBehavior.Raise)
             : base(execute, errorBehavior)
         {
             this.execute = execute;
-            this.canExecute = canExecute;
+            this.canExecute = canExecute ?? Always;
         }
 
         public override bool CanExecute(object parameter)
@@ -32,11 +32,11 @@ namespace ERHMS.Desktop.Commands
         private readonly Action<T> execute;
         private readonly Func<T, bool> canExecute;
 
-        public SyncCommand(Action<T> execute, Func<T, bool> canExecute, ErrorBehavior errorBehavior)
+        public SyncCommand(Action<T> execute, Func<T, bool> canExecute = null, ErrorBehavior errorBehavior = ErrorBehavior.Raise)
             : base(execute, errorBehavior)
         {
             this.execute = execute;
-            this.canExecute = canExecute;
+            this.canExecute = canExecute ?? Always;
         }
 
         public override bool CanExecute(object parameter)

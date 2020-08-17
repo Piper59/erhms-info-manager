@@ -61,7 +61,7 @@ namespace ERHMS.EpiInfo
                 SELECT {string.Join(", ", columnNames)}
                 FROM [metaFields] AS F
                 LEFT OUTER JOIN [metaPages] AS P ON F.[{ColumnNames.PAGE_ID}] = P.[{ColumnNames.PAGE_ID}]
-                WHERE F.[{ColumnNames.VIEW_ID}] = @ViewId";
+                WHERE F.[{ColumnNames.VIEW_ID}] = @ViewId;";
             Query query = @this.Project.CollectedData.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, viewId));
             DataTable table = @this.Project.CollectedData.Select(query);

@@ -1,13 +1,21 @@
-﻿using ERHMS.Desktop.Dialogs;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ERHMS.Desktop.Services
 {
     public static class ServiceProvider
     {
-        public delegate IDialogService DialogServiceFactory(DialogInfo info);
-        public delegate IProgressService ProgressServiceFactory(string taskName, bool canUserCancel);
+        private static readonly IDictionary<Type, Delegate> factories = new Dictionary<Type, Delegate>();
 
-        public static DialogServiceFactory GetDialogService { get; set; }
-        public static ProgressServiceFactory GetProgressService { get; set; }
+        public static void Install<TService>(Func<TService> factory)
+        {
+            factories[typeof(TService)] = factory;
+        }
+
+        public static TService Resolve<TService>()
+        {
+            Func<TService> factory = (Func<TService>)factories[typeof(TService)];
+            return factory();
+        }
     }
 }

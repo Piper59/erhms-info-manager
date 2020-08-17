@@ -85,9 +85,9 @@ namespace ERHMS.Desktop.Data
             Source = source;
             GroupDescriptions.CollectionChanged += (sender, e) => ResetPageOrDefer();
             ((INotifyCollectionChanged)SortDescriptions).CollectionChanged += (sender, e) => ResetPageOrDefer();
-            GoToPageCommand = new SyncCommand<int>(page => GoToPage(page), CanGoToPage, ErrorBehavior.Raise);
-            GoToNextPageCommand = new SyncCommand(() => GoToNextPage(), CanGoToNextPage, ErrorBehavior.Raise);
-            GoToPreviousPageCommand = new SyncCommand(() => GoToPreviousPage(), CanGoToPreviousPage, ErrorBehavior.Raise);
+            GoToPageCommand = new SyncCommand<int>(page => GoToPage(page), CanGoToPage);
+            GoToNextPageCommand = new SyncCommand(() => GoToNextPage(), CanGoToNextPage);
+            GoToPreviousPageCommand = new SyncCommand(() => GoToPreviousPage(), CanGoToPreviousPage);
         }
 
         public CustomCollectionView()

@@ -83,6 +83,10 @@
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
       <Name>ERHMS.EpiInfo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Resources\ERHMS.Resources.csproj">
+      <Project>{a7f8931b-dbe9-41e8-8d9f-86e7635c83c3}</Project>
+      <Name>ERHMS.Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -91,22 +95,28 @@
     </Compile>
     <Compile Include="AppCommands.cs" />
     <Compile Include="Behaviors\AccessibleDataGridBehavior.cs" />
-    <Compile Include="Behaviors\OpenContextMenuOnClickBehavior.cs" />
+    <Compile Include="Behaviors\DropDownButtonBehavior.cs" />
+    <Compile Include="Behaviors\InitialFocusBehavior.cs" />
     <Compile Include="Behaviors\RelayEventBehavior.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\ErrorBehavior.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
-    <Compile Include="Controls\ButtonTextBox.xaml.cs">
-      <DependentUpon>ButtonTextBox.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Controls\ActionTextBox.cs" />
     <Compile Include="Controls\PhaseHeading.cs" />
+    <Compile Include="Controls\WizardButton.cs" />
+    <Compile Include="Converters\ActionTextBoxPaddingConverter.cs" />
+    <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityInverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
     <Compile Include="Converters\IconToNameConverter.cs" />
+    <Compile Include="Converters\ObjectToResourceConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\PageCountToVisibilityConverter.cs" />
+    <Compile Include="Converters\PhaseHeadingBackgroundConverter.cs" />
+    <Compile Include="Converters\PhaseToDisplayTextConverter.cs" />
     <Compile Include="Data\CustomCollectionView.cs" />
     <Compile Include="Data\ICustomCollectionView.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
@@ -118,6 +128,7 @@
     <Compile Include="Dialogs\DialogInfoPreset.cs" />
     <Compile Include="Events\ErrorEventArgs.cs" />
     <Compile Include="Events\ProcessStartedEventArgs.cs" />
+    <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\ColorExtensions.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Integration.cs" />
@@ -125,11 +136,12 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
+    <Compile Include="Properties\ResX.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>ResX.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\ResXExtensions.cs" />
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -139,14 +151,18 @@
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IProgressService.cs" />
+    <Compile Include="Services\IWizardService.cs" />
     <Compile Include="Services\ProgressService.cs" />
     <Compile Include="Services\ServiceProvider.cs" />
+    <Compile Include="Services\WizardService.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.Views.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewWizard.cs" />
+    <Compile Include="ViewModels\WizardViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.Records.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
@@ -164,14 +180,19 @@
     <Compile Include="Views\ProjectView.xaml.cs">
       <DependentUpon>ProjectView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WizardView.xaml.cs">
+      <DependentUpon>WizardView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ViewView.xaml.cs">
       <DependentUpon>ViewView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wizards\IStep.cs" />
+    <Compile Include="Wizards\IWizard.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Include="Properties\ResX.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>ResX.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -186,10 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ButtonTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -217,6 +234,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\HighContrast.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -238,6 +259,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\CreateViewTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\StepTitles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WizardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

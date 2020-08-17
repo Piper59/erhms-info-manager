@@ -160,7 +160,7 @@ namespace ERHMS.EpiInfo.Data
                 string sql = $@"
                     UPDATE {Quote(View.TableName)}
                     SET {Quote(ColumnNames.REC_STATUS)} = {RecordStatus.FromDeleted(deleted)}
-                    WHERE {Quote(ColumnNames.UNIQUE_KEY)} = @UniqueKey";
+                    WHERE {Quote(ColumnNames.UNIQUE_KEY)} = @UniqueKey;";
                 ParameterCollection parameters = new ParameterCollection
                 {
                     { "@UniqueKey", record.UniqueKey.Value }

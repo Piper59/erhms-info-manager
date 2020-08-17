@@ -49,7 +49,7 @@ namespace ERHMS.EpiInfo
             return Names.Contains(name);
         }
 
-        protected virtual void Add(string name)
+        public virtual void Add(string name)
         {
             Names.Add(name);
         }
@@ -152,6 +152,9 @@ namespace ERHMS.EpiInfo
 
     public class ViewNameGenerator : CharSuffixNameGenerator
     {
+        public const int MaxLength = 64;
+        private static readonly Regex InvalidViewNameCharPattern = new Regex(@"[^a-zA-Z0-9_]");
+        private static readonly Regex InvalidViewNameBeginningPattern = new Regex(@"^[^a-zA-Z]+");
         private static readonly Regex TrailingDigitsRegex = new Regex(@"[0-9]+$");
 
         private readonly ISet<string> viewNames;
@@ -167,7 +170,37 @@ namespace ERHMS.EpiInfo
             return viewNames.Contains(TrailingDigitsRegex.Replace(name, ""));
         }
 
-        protected override void Add(string name)
+        public bool IsValid(string name, out InvalidViewNameReason reason)
+        {
+            reason = InvalidViewNameReason.None;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                reason = InvalidViewNameReason.Empty;
+            }
+            else if (InvalidViewNameCharPattern.IsMatch(name))
+            {
+                reason = InvalidViewNameReason.InvalidChar;
+            }
+            else if (InvalidViewNameBeginningPattern.IsMatch(name))
+            {
+                reason = InvalidViewNameReason.InvalidBeginning;
+            }
+            else if (name.Length > MaxLength)
+            {
+                reason = InvalidViewNameReason.TooLong;
+            }
+            else if (Exists(name))
+            {
+                reason = InvalidViewNameReason.Exists;
+            }
+            else if (IsConflict(name))
+            {
+                reason = InvalidViewNameReason.IsConflict;
+            }
+            return reason == InvalidViewNameReason.None;
+        }
+
+        public override void Add(string name)
         {
             base.Add(name);
             viewNames.Add(name);

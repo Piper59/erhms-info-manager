@@ -1,4 +1,4 @@
-﻿<Template Name="GenericNonWorker" Description="Generic Non-Worker-Specific Form" CreateDate="" Level="View">
+﻿<Template Name="Blank" Description="Blank Form" CreateDate="" Level="View">
   <Project>
     <View ViewId="1" Name="" IsRelatedView="false" CheckCode="" Width="816" Height="1056" Orientation="Portrait" LabelAlign="Vertical" SurveyId="">
       <Page PageId="1" Name="Page 1" Position="0" BackgroundId="0" ViewId="1">

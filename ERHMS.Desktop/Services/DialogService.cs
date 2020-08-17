@@ -1,4 +1,5 @@
 ﻿using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System.Windows;
@@ -8,35 +9,31 @@ namespace ERHMS.Desktop.Services
     internal class DialogService : IDialogService
     {
         private readonly Application application;
-        private readonly DialogInfo info;
-        private readonly DialogViewModel dataContext;
 
-        public DialogService(Application application, DialogInfo info)
+        public DialogService(Application application)
         {
             this.application = application;
-            this.info = info;
-            dataContext = new DialogViewModel(info);
         }
 
-        public bool? Show()
+        public bool? Show(DialogInfo info)
         {
             if (application.Dispatcher.CheckAccess())
             {
-                return ShowInternal();
+                return ShowInternal(info);
             }
             else
             {
-                return application.Dispatcher.Invoke(ShowInternal);
+                return application.Dispatcher.Invoke(() => ShowInternal(info));
             }
         }
 
-        private bool? ShowInternal()
+        private bool? ShowInternal(DialogInfo info)
         {
-            Window owner = application.MainWindow;
+            Window owner = application.GetActiveWindow();
             Window window = new DialogView
             {
                 Owner = owner,
-                DataContext = dataContext
+                DataContext = new DialogViewModel(info)
             };
             info.Sound?.Play();
             return window.ShowDialog();

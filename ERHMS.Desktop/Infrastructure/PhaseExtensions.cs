@@ -21,7 +21,7 @@ namespace ERHMS.Desktop.Infrastructure
             }
         }
 
-        public static string ToDisplayName(this Phase @this)
+        public static string ToDisplayText(this Phase @this)
         {
             switch (@this)
             {

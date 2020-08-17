@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.ViewModels;
+﻿using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System;
 using System.Threading;
@@ -13,12 +14,24 @@ namespace ERHMS.Desktop.Services
         private readonly Application application;
         private readonly ProgressViewModel dataContext;
 
+        public string Title
+        {
+            get { return dataContext.Title; }
+            set { dataContext.Title = value; }
+        }
+
+        public bool CanUserCancel
+        {
+            get { return dataContext.CanUserCancel; }
+            set { dataContext.CanUserCancel = value; }
+        }
+
         public bool IsUserCancellationRequested => dataContext.IsUserCancellationRequested;
 
-        public ProgressService(Application application, string taskName, bool canUserCancel)
+        public ProgressService(Application application)
         {
             this.application = application;
-            dataContext = new ProgressViewModel(taskName, canUserCancel);
+            dataContext = new ProgressViewModel();
         }
 
         public async void Report(string value)
@@ -28,7 +41,7 @@ namespace ERHMS.Desktop.Services
 
         public async Task RunAsync(Action action, CancellationToken token)
         {
-            Window owner = application.MainWindow;
+            Window owner = application.GetActiveWindow();
             ProgressView window = new ProgressView
             {
                 Owner = owner,

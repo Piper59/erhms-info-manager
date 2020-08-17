@@ -8,6 +8,24 @@ namespace ERHMS.Desktop.Commands
 {
     public abstract class Command : ICommand
     {
+        private class NullCommand : Command
+        {
+            public NullCommand()
+                : base("Null", ErrorBehavior.Throw) { }
+
+            public override bool CanExecute(object parameter)
+            {
+                return false;
+            }
+
+            public override Task ExecuteCore(object parameter)
+            {
+                throw new InvalidOperationException("The null command cannot be executed.");
+            }
+        }
+
+        public static readonly ICommand Null = new NullCommand();
+
         public static event EventHandler<ErrorEventArgs> GlobalError;
 
         public static void OnCanExecuteChanged()
@@ -15,24 +33,20 @@ namespace ERHMS.Desktop.Commands
             CommandManager.InvalidateRequerySuggested();
         }
 
-        public static bool Always()
-        {
-            return true;
-        }
-
-        public static bool Always<T>(T parameter)
-        {
-            return true;
-        }
+        protected static bool Always() => true;
+        protected static bool Always<T>(T parameter) => true;
 
         public string Name { get; }
         public ErrorBehavior ErrorBehavior { get; }
 
-        protected Command(Delegate execute, ErrorBehavior errorBehavior)
+        protected Command(string name, ErrorBehavior errorBehavior)
         {
-            Name = $"{execute.Method.DeclaringType}.{execute.Method.Name}";
+            Name = name;
             ErrorBehavior = errorBehavior;
         }
+
+        protected Command(Delegate execute, ErrorBehavior errorBehavior)
+            : this($"{execute.Method.DeclaringType}.{execute.Method.Name}", errorBehavior) { }
 
         public event EventHandler CanExecuteChanged
         {

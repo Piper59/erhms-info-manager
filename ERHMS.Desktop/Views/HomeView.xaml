@@ -19,14 +19,14 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{Binding Source={x:Static Properties:Resources.AppTitle}, StringFormat='{}{0} Logo'}"
+                           AutomationProperties.Name="{Binding Source={x:Static Properties:ResX.AppTitle}, StringFormat='{}{0} Logo'}"
                            Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
                            Width="64">
                     </Image>
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
-                               Text="{x:Static Properties:Resources.AppTitle}"
+                               Text="{x:Static Properties:ResX.AppTitle}"
                                VerticalAlignment="Center" />
                 </Grid>
                 <StackPanel Style="{StaticResource Section}">

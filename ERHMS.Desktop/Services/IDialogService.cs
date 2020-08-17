@@ -1,7 +1,9 @@
-﻿namespace ERHMS.Desktop.Services
+﻿using ERHMS.Desktop.Dialogs;
+
+namespace ERHMS.Desktop.Services
 {
     public interface IDialogService
     {
-        bool? Show();
+        bool? Show(DialogInfo info);
     }
 }

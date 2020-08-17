@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 
 namespace ERHMS.Desktop.Behaviors
 {
-    public class OpenContextMenuOnClickBehavior : Behavior<ButtonBase>
+    public class DropDownButtonBehavior : Behavior<ButtonBase>
     {
         private ContextMenu ContextMenu => AssociatedObject.ContextMenu;
 
@@ -23,14 +23,10 @@ namespace ERHMS.Desktop.Behaviors
 
         private void AssociatedObject_MouseEvent(object sender, RoutedEventArgs e)
         {
-            if (ContextMenu != null)
-            {
-                ContextMenu.DataContext = AssociatedObject.DataContext;
-                ContextMenu.PlacementTarget = AssociatedObject;
-                ContextMenu.Placement = PlacementMode.Right;
-                ContextMenu.IsOpen = true;
-                e.Handled = true;
-            }
+            ContextMenu.PlacementTarget = AssociatedObject;
+            ContextMenu.Placement = PlacementMode.Right;
+            ContextMenu.IsOpen = true;
+            e.Handled = true;
         }
     }
 }

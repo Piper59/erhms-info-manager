@@ -76,6 +76,7 @@
     <Compile Include="Data\RecordRepository.cs" />
     <Compile Include="Data\RecordStatus.cs" />
     <Compile Include="Infrastructure\XmlExtensions.cs" />
+    <Compile Include="InvalidViewNameReason.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MetadataExtensions.cs" />
     <Compile Include="MetaFieldTypeExtensions.cs" />

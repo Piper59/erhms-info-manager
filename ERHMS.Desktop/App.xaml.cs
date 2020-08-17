@@ -1,5 +1,6 @@
 ﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
@@ -17,7 +18,6 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using ResXResources = ERHMS.Desktop.Properties.Resources;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop
@@ -26,6 +26,7 @@ namespace ERHMS.Desktop
     {
         private static readonly FieldInfo MenuDropAlignmentField;
 
+        private static App app;
         private static int unhandledErrorCount;
 
         static App()
@@ -40,7 +41,7 @@ namespace ERHMS.Desktop
             Log.Default.Debug("Starting up");
             try
             {
-                App app = new App();
+                app = new App();
                 app.Run();
             }
             catch (Exception ex)
@@ -70,14 +71,18 @@ namespace ERHMS.Desktop
             if (Interlocked.Increment(ref unhandledErrorCount) == 1)
             {
                 StringBuilder message = new StringBuilder();
-                message.Append(ResXResources.UnhandledErrorMessage);
+                message.Append(ResX.UnhandledErrorMessage);
                 if (ex != null)
                 {
                     message.AppendLine();
                     message.AppendLine();
                     message.Append(ex.Message);
                 }
-                MessageBox.Show(message.ToString(), ResXResources.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(message.ToString(), ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            if (app != null)
+            {
+                app.Shutdown(1);
             }
         }
 
@@ -85,6 +90,7 @@ namespace ERHMS.Desktop
 
         public App()
         {
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => OnUnhandledError(e.ExceptionObject as Exception);
             DispatcherUnhandledException += OnDispatcherUnhandledException;
             ConfigureServices();
@@ -100,14 +106,14 @@ namespace ERHMS.Desktop
         {
             OnUnhandledError(e.Exception);
             e.Handled = true;
-            Shutdown(1);
         }
 
         private void ConfigureServices()
         {
             Log.Default.Debug("Configuring services");
-            ServiceProvider.GetDialogService = info => new DialogService(this, info);
-            ServiceProvider.GetProgressService = (taskName, canUserCancel) => new ProgressService(this, taskName, canUserCancel);
+            ServiceProvider.Install<IDialogService>(() => new DialogService(this));
+            ServiceProvider.Install<IProgressService>(() => new ProgressService(this));
+            ServiceProvider.Install<IWizardService>(() => new WizardService(this));
         }
 
         private void ConfigureEpiInfo()
@@ -159,13 +165,12 @@ namespace ERHMS.Desktop
         private void OnHandledError(Exception ex)
         {
             Log.Default.Error(ex);
-            IDialogService dialog = ServiceProvider.GetDialogService(new DialogInfo(DialogInfoPreset.Error)
+            ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Error)
             {
-                Lead = ResXResources.HandledErrorLead,
+                Lead = ResX.HandledErrorLead,
                 Body = ex.Message,
                 Details = ex.ToString()
             });
-            dialog.Show();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -186,11 +191,10 @@ namespace ERHMS.Desktop
             window.Show();
             if (resetting)
             {
-                IDialogService dialog = ServiceProvider.GetDialogService(new DialogInfo(DialogInfoPreset.Default)
+                ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Default)
                 {
-                    Lead = ResXResources.SettingsResetLead
+                    Lead = ResX.SettingsResetLead
                 });
-                dialog.Show();
             }
         }
     }

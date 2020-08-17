@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Data;
 using Epi.Data.Services;
+using Epi.Fields;
 using ERHMS.Common;
 using ERHMS.Data.Databases;
 using ERHMS.EpiInfo.Templating;
@@ -84,14 +85,46 @@ namespace ERHMS.EpiInfo.Projects
         public View InstantiateView(CoreView coreView)
         {
             Log.Default.Debug($"Instantiating core view: {coreView.Name}");
-            XTemplate xTemplate;
             string resourceName = $"ERHMS.Resources.Templates.Forms.{coreView.ProjectType}.{coreView.Name}.xml";
+            XDocument document;
             using (Stream stream = ResourceProvider.GetResource(resourceName))
             {
-                XDocument document = XDocument.Load(stream);
-                xTemplate = new XTemplate(document.Root);
+                document = XDocument.Load(stream);
             }
+            XTemplate xTemplate = new XTemplate(document.Root);
             return InstantiateView(xTemplate);
+        }
+
+        private void DeleteViewInternal(View view)
+        {
+            foreach (Page page in view.Pages)
+            {
+                Metadata.DeleteFields(page);
+                Metadata.DeletePage(page);
+            }
+            Metadata.DeleteView(view.Name);
+            Views.Remove(view.Name);
+        }
+
+        public void DeleteView(View view)
+        {
+            view.DeleteAllDataTables();
+            if (view.IsRelatedView && view.ParentView != null)
+            {
+                foreach (RelatedViewField field in view.ParentView.Fields.RelatedFields)
+                {
+                    if (field.ChildView?.Id == view.Id)
+                    {
+                        metadata.DeleteField(field);
+                    }
+                }
+                view.ParentView.MustRefreshFieldCollection = true;
+            }
+            foreach (View descendantView in view.GetDescendantViews())
+            {
+                DeleteViewInternal(descendantView);
+            }
+            DeleteViewInternal(view);
         }
     }
 }

@@ -22,8 +22,8 @@ namespace ERHMS.Desktop.ViewModels
             Project = project;
             View = view;
             Records = new RecordsChildViewModel(view);
-            RefreshCommand = new AsyncCommand(RefreshAsync, Command.Always, ErrorBehavior.Raise);
-            GoUpCommand = new AsyncCommand(GoUpAsync, Command.Always, ErrorBehavior.Raise);
+            RefreshCommand = new AsyncCommand(RefreshAsync);
+            GoUpCommand = new AsyncCommand(GoUpAsync);
         }
 
         private void RefreshData()
@@ -38,7 +38,8 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task RefreshAsync()
         {
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.RefreshingViewTaskName, false);
+            IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+            progress.Title = ResX.RefreshingViewTitle;
             await progress.RunAsync(RefreshData);
             RefreshView();
         }
@@ -46,7 +47,8 @@ namespace ERHMS.Desktop.ViewModels
         public async Task GoUpAsync()
         {
             ProjectViewModel content = null;
-            IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningProjectTaskName, false);
+            IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+            progress.Title = ResX.RefreshingProjectTitle;
             await progress.RunAsync(() =>
             {
                 Project.LoadViews();

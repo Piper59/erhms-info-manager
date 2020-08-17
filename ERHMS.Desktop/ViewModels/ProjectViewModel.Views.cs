@@ -2,8 +2,10 @@
 using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
+using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Projects;
@@ -23,6 +25,7 @@ namespace ERHMS.Desktop.ViewModels
                 public Epi.View View { get; }
                 public string Title { get; }
                 public int FieldCount { get; }
+                // TODO: Remove?
                 public int RecordCount { get; }
 
                 private bool isSelected;
@@ -39,7 +42,7 @@ namespace ERHMS.Desktop.ViewModels
                         .OrderBy(field => field.TabIndex)
                         .FirstOrDefault(field => field.Name.StartsWith("Title", StringComparison.OrdinalIgnoreCase))
                         ?.PromptText;
-                    FieldCount = view.Fields.Cast<Field>().Count(field => field.FieldType.IsTextualData());
+                    FieldCount = view.Fields.OfType<IInputField>().Count();
                     RecordRepository repository = new RecordRepository(view);
                     if (repository.TableExists())
                     {
@@ -63,12 +66,12 @@ namespace ERHMS.Desktop.ViewModels
             private readonly CustomCollectionView<Item> items;
             public ICustomCollectionView<Item> Items => items;
 
+            public ICommand CreateCommand { get; }
             public ICommand CustomizeCommand { get; }
             public ICommand ViewDataCommand { get; }
             public ICommand EnterDataCommand { get; }
             public ICommand ExportDataCommand { get; }
             public ICommand ImportDataCommand { get; }
-            public ICommand AnalyzeCommand { get; }
             public ICommand DeleteCommand { get; }
 
             public ViewsChildViewModel(Project project)
@@ -76,13 +79,13 @@ namespace ERHMS.Desktop.ViewModels
                 Project = project;
                 items = new CustomCollectionView<Item>();
                 RefreshData();
-                CustomizeCommand = new AsyncCommand(CustomizeAsync, items.HasSelectedItem, ErrorBehavior.Raise);
-                ViewDataCommand = new AsyncCommand(ViewDataAsync, items.HasSelectedItem, ErrorBehavior.Raise);
-                EnterDataCommand = new AsyncCommand(EnterDataAsync, items.HasSelectedItem, ErrorBehavior.Raise);
-                ExportDataCommand = new SyncCommand(ExportData, items.HasSelectedItem, ErrorBehavior.Raise);
-                ImportDataCommand = new SyncCommand(ImportData, items.HasSelectedItem, ErrorBehavior.Raise);
-                AnalyzeCommand = new SyncCommand(Analyze, items.HasSelectedItem, ErrorBehavior.Raise);
-                DeleteCommand = new SyncCommand(Delete, items.HasSelectedItem, ErrorBehavior.Raise);
+                CreateCommand = new AsyncCommand(CreateAsync);
+                CustomizeCommand = new AsyncCommand(CustomizeAsync, items.HasSelectedItem);
+                ViewDataCommand = new AsyncCommand(ViewDataAsync, items.HasSelectedItem);
+                EnterDataCommand = new AsyncCommand(EnterDataAsync, items.HasSelectedItem);
+                ExportDataCommand = new SyncCommand(ExportData, items.HasSelectedItem);
+                ImportDataCommand = new SyncCommand(ImportData, items.HasSelectedItem);
+                DeleteCommand = new AsyncCommand(DeleteAsync, items.HasSelectedItem);
             }
 
             public void RefreshData()
@@ -97,6 +100,31 @@ namespace ERHMS.Desktop.ViewModels
                 items.Refresh();
             }
 
+            public async Task CreateAsync()
+            {
+                CreateViewWizard wizard = null;
+                {
+                    IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                    progress.Title = ResX.RefreshingProjectTitle;
+                    await progress.RunAsync(() =>
+                    {
+                        Project.LoadViews();
+                        wizard = new CreateViewWizard(Project);
+                    });
+                }
+                bool? result = ServiceProvider.Resolve<IWizardService>().Run(wizard);
+                if (result.GetValueOrDefault())
+                {
+                    IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                    progress.Title = ResX.RefreshingProjectTitle;
+                    await progress.RunAsync(() =>
+                    {
+                        items.Source.Add(new Item(wizard.View));
+                    });
+                    items.Refresh();
+                }
+            }
+
             public async Task CustomizeAsync()
             {
                 Epi.View view = items.SelectedItem.View;
@@ -109,7 +137,8 @@ namespace ERHMS.Desktop.ViewModels
             public async Task ViewDataAsync()
             {
                 ViewViewModel content = null;
-                IProgressService progress = ServiceProvider.GetProgressService(Resources.OpeningViewTaskName, false);
+                IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                progress.Title = ResX.OpeningViewTitle;
                 await progress.RunAsync(() =>
                 {
                     content = new ViewViewModel(Project, items.SelectedItem.View);
@@ -137,14 +166,41 @@ namespace ERHMS.Desktop.ViewModels
                 throw new System.NotImplementedException();
             }
 
-            public void Analyze()
+            public async Task DeleteAsync()
             {
-                throw new System.NotImplementedException();
-            }
-
-            public void Delete()
-            {
-                throw new System.NotImplementedException();
+                bool? result = ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Warning)
+                {
+                    Lead = string.Format(ResX.DeletingViewWarningLead, items.SelectedItem.View.Name),
+                    Body = ResX.DeletingViewWarningBody,
+                    Buttons = new DialogButtonCollection
+                    {
+                        new DialogButton(true, "Delete", false, false),
+                        new DialogButton(false, "Cancel", false, true)
+                    }
+                });
+                if (result.GetValueOrDefault())
+                {
+                    try
+                    {
+                        IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                        progress.Title = ResX.DeletingViewTitle;
+                        await progress.RunAsync(() =>
+                        {
+                            Project.DeleteView(items.SelectedItem.View);
+                        });
+                        items.Source.Remove(items.SelectedItem);
+                        items.Refresh();
+                    }
+                    catch (Exception ex)
+                    {
+                        ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Error)
+                        {
+                            Lead = ResX.DeletingViewErrorLead,
+                            Body = ex.Message,
+                            Details = ex.ToString()
+                        });
+                    }
+                }
             }
         }
     }

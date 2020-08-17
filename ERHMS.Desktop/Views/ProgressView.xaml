@@ -4,12 +4,9 @@
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         ResizeMode="NoResize"
         SizeToContent="Height"
-        Title="{x:Static Properties:Resources.AppTitle}"
+        Title="{x:Static Properties:ResX.AppTitle}"
         Width="480"
         WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
-    </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
                 BorderThickness="0,1,0,0"
@@ -18,7 +15,7 @@
             <StackPanel Style="{StaticResource Container}">
                 <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                            Style="{StaticResource Lead}"
-                           Text="{Binding TaskName}" />
+                           Text="{Binding Title}" />
                 <ProgressBar IsIndeterminate="True" />
                 <TextBlock Style="{StaticResource Body}"
                            Text="{Binding Status}"
@@ -33,6 +30,9 @@
                 Visibility="{Binding CanUserCancel, Converter={StaticResource BoolToVisibilityConverter}}">
             <WrapPanel HorizontalAlignment="Right"
                        Style="{StaticResource Container}">
+                <WrapPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
+                </WrapPanel.Resources>
                 <Button Command="{Binding CancelCommand}">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource DialogButton}">
