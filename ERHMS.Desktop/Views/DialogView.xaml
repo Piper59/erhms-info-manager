@@ -67,8 +67,7 @@
                             <Button Click="Button_Click"
                                     Content="{Binding Text}"
                                     IsCancel="{Binding IsCancel}"
-                                    IsDefault="{Binding IsDefault}"
-                                    Loaded="Button_Loaded" />
+                                    IsDefault="{Binding IsDefault}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

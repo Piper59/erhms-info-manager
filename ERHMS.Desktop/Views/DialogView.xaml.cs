@@ -16,15 +16,6 @@ namespace ERHMS.Desktop.Views
             InitializeComponent();
         }
 
-        private void Button_Loaded(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)e.Source;
-            if (GetDataContext(button).IsDefault)
-            {
-                button.Focus();
-            }
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             bool? result = GetDataContext((Button)e.Source).Result;
