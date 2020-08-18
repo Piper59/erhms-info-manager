@@ -24,7 +24,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
-        <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+        <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1"
                 SnapsToDevicePixels="True"
                 Style="{StaticResource LayoutFull}">
@@ -42,7 +42,7 @@
                            VerticalAlignment="Top"
                            Visibility="{Binding Info.Icon, Converter={StaticResource ObjectToVisibilityConverter}}" />
                     <StackPanel Grid.Column="1">
-                        <TextBlock Foreground="{DynamicResource AccentTextBrush}"
+                        <TextBlock Foreground="{StaticResource AccentTextBrush}"
                                    Style="{StaticResource Lead}"
                                    Text="{Binding Info.Lead}"
                                    Visibility="{Binding Info.Lead, Converter={StaticResource ObjectToVisibilityConverter}}" />
@@ -53,7 +53,7 @@
                 </Grid>
             </DockPanel>
         </Border>
-        <Border Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}">
+        <Border Background="{x:Static SystemColors.MenuBarBrush}">
             <Grid Style="{StaticResource Container}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -86,7 +86,7 @@
                 </ItemsControl>
             </Grid>
         </Border>
-        <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+        <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
                 SnapsToDevicePixels="True"
                 Visibility="{Binding IsShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">

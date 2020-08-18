@@ -26,18 +26,15 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
-        private static readonly FieldInfo MenuDropAlignmentField;
+        private static readonly FieldInfo MenuDropAlignmentField = typeof(SystemParameters).GetField(
+            "_menuDropAlignment",
+            BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly string ThemeName = SystemParameters.HighContrast ? "HighContrast" : "Default";
 
         private static App app;
         private static int unhandledErrorCount;
 
-        private static string ThemeName => SystemParameters.HighContrast ? "HighContrast" : "Default";
         public static Uri ThemeDictionarySource => new Uri($"pack://application:,,,/ERHMS Info Manager;component/Themes/{ThemeName}.xaml");
-
-        static App()
-        {
-            MenuDropAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
-        }
 
         [STAThread]
         private static void Main(string[] args)

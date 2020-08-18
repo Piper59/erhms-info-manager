@@ -20,12 +20,12 @@
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
-        <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+        <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
                 SnapsToDevicePixels="True"
                 Style="{StaticResource LayoutFull}">
             <StackPanel Style="{StaticResource Container}">
-                <TextBlock Foreground="{DynamicResource AccentTextBrush}"
+                <TextBlock Foreground="{StaticResource AccentTextBrush}"
                            Style="{StaticResource Lead}"
                            Text="{Binding Title}" />
                 <ProgressBar IsIndeterminate="True" />
@@ -35,8 +35,8 @@
                            TextWrapping="NoWrap" />
             </StackPanel>
         </Border>
-        <Border Background="{DynamicResource {x:Static SystemColors.MenuBarBrushKey}}"
-                BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+        <Border Background="{x:Static SystemColors.MenuBarBrush}"
+                BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
                 SnapsToDevicePixels="True"
                 Visibility="{Binding CanUserCancel, Converter={StaticResource BoolToVisibilityConverter}}">

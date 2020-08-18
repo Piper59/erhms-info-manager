@@ -53,7 +53,7 @@
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="HeadersVisibility" Value="Column" />
-        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{x:Static SystemColors.ControlLightBrush}" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
     <Style TargetType="DataGrid" BasedOn="{StaticResource DataGridBase}" />
@@ -146,7 +146,7 @@
         <Setter Property="Padding" Value="{StaticResource SmallPadding}" />
         <Style.Triggers>
             <Trigger Property="IsReadOnly" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
