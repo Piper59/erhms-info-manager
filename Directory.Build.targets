@@ -11,6 +11,13 @@
     <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(OutputPath)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
 
+  <Target Condition="'$(AssemblyName)' == '$(MainAssemblyName)'" Name="TouchTemplates" AfterTargets="CopyEpiInfoFiles">
+    <ItemGroup>
+      <Template Include="$(OutputPath)Templates\**\*" />
+    </ItemGroup>
+    <Touch Files="@(Template)" />
+  </Target>
+
   <Target Condition="'$(AssemblyName)' == '$(MainAssemblyName)'" Name="CleanOutputPath" AfterTargets="Clean">
     <RemoveDir Directories="$(OutputPath)" />
   </Target>
