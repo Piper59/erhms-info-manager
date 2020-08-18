@@ -6,9 +6,12 @@ using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
 using log4net;
-using log4net.Config;
+using log4net.Appender;
+using log4net.Layout;
+using log4net.Repository.Hierarchy;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
@@ -53,7 +56,7 @@ namespace ERHMS.Desktop
             Log.Default.Debug("Shutting down");
         }
 
-        private static void ConfigureLog()
+        internal static void ConfigureLog()
         {
             try
             {
@@ -61,7 +64,18 @@ namespace ERHMS.Desktop
             }
             catch (SecurityException) { }
             GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
-            XmlConfigurator.Configure();
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+            PatternLayout layout = new PatternLayout("%date | %property{user} | %property{process}(%thread) | %level | %message%newline");
+            layout.ActivateOptions();
+            FileAppender appender = new FileAppender
+            {
+                File = Path.Combine("Logs", $"ERHMS.{DateTime.Now:yyyy-MM-dd}.txt"),
+                LockingModel = new FileAppender.InterProcessLock(),
+                Layout = layout
+            };
+            appender.ActivateOptions();
+            hierarchy.Root.AddAppender(appender);
+            hierarchy.Configured = true;
         }
 
         private static void OnUnhandledError(Exception ex)
