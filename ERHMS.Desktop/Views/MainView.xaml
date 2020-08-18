@@ -4,10 +4,19 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+        Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
         SnapsToDevicePixels="True"
         Title="{x:Static Properties:ResX.AppTitle}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/Templates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <b:Interaction.Behaviors>
         <Behaviors:RelayEventBehavior EventName="ProcessStarted"
                                       HandlerName="DataContext_ProcessStarted" />

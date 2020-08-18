@@ -6,9 +6,14 @@
              xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
              xmlns:Projects="clr-namespace:ERHMS.EpiInfo.Projects;assembly=ERHMS.EpiInfo">
     <UserControl.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-            <Setter Property="Padding" Value="{StaticResource LargePadding}" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+                <Setter Property="Padding" Value="{StaticResource LargePadding}" />
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
         <Border Style="{StaticResource LayoutSmall}">

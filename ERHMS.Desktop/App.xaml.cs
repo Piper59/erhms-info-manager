@@ -8,7 +8,6 @@ using ERHMS.EpiInfo;
 using log4net;
 using log4net.Config;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +27,9 @@ namespace ERHMS.Desktop
 
         private static App app;
         private static int unhandledErrorCount;
+
+        private static string ThemeName => SystemParameters.HighContrast ? "HighContrast" : "Default";
+        public static Uri ThemeDictionarySource => new Uri($"pack://application:,,,/ERHMS Info Manager;component/Themes/{ThemeName}.xaml");
 
         static App()
         {
@@ -86,8 +88,6 @@ namespace ERHMS.Desktop
             }
         }
 
-        private ResourceDictionary ThemeDictionary => Resources.MergedDictionaries[0];
-
         public App()
         {
             ShutdownMode = ShutdownMode.OnMainWindowClose;
@@ -96,9 +96,7 @@ namespace ERHMS.Desktop
             ConfigureServices();
             ConfigureEpiInfo();
             InitializeComponent();
-            SetTheme();
             SetMenuDropAlignment();
-            SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
             Command.GlobalError += (sender, e) => OnHandledError(e.Exception);
         }
 
@@ -132,34 +130,11 @@ namespace ERHMS.Desktop
             Epi.Configuration.Environment = Epi.ExecutionEnvironment.WindowsApplication;
         }
 
-        private void SetTheme()
-        {
-            string themeName = SystemParameters.HighContrast ? "HighContrast" : "Default";
-            Uri source = new Uri($"/Themes/{themeName}.xaml", UriKind.Relative);
-            if (ThemeDictionary.Source != source)
-            {
-                ThemeDictionary.Source = source;
-            }
-        }
-
         private void SetMenuDropAlignment()
         {
             if (SystemParameters.MenuDropAlignment && MenuDropAlignmentField != null)
             {
                 MenuDropAlignmentField.SetValue(null, false);
-            }
-        }
-
-        private void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(SystemParameters.HighContrast):
-                    SetTheme();
-                    break;
-                case nameof(SystemParameters.MenuDropAlignment):
-                    SetMenuDropAlignment();
-                    break;
             }
         }
 

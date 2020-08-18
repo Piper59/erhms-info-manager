@@ -1,8 +1,10 @@
 ﻿<Window x:Class="ERHMS.Desktop.Views.DialogView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         AutomationProperties.HelpText="{Binding Info.Lead}"
+        Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         MaxWidth="560"
         MinWidth="320"
         ResizeMode="NoResize"
@@ -10,6 +12,17 @@
         SnapsToDevicePixels="True"
         Title="{x:Static Properties:ResX.AppTitle}"
         WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
+            <Converters:IconToNameConverter x:Key="IconToNameConverter" />
+            <Converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
                 BorderThickness="0,1"

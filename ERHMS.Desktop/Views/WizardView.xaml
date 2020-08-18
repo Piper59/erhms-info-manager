@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
+        xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
-        AutomationProperties.HelpText="{Binding CurrentStep, Converter={StaticResource WizardStepToTitleConverter}}"
+        Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         Height="480"
         MinHeight="480"
         MinWidth="640"
@@ -14,8 +15,22 @@
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Views/Wizards/CreateViewTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary x:Key="StepTitles"
+                                Source="/ERHMS Info Manager;component/Views/Wizards/StepTitles.xaml" />
+            <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <Converters:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
+            <Converters:ObjectToResourceConverter x:Key="StepToTitleConverter"
+                                                  Resources="{StaticResource StepTitles}" />
         </ResourceDictionary>
     </Window.Resources>
+    <AutomationProperties.HelpText>
+        <Binding Path="CurrentStep"
+                 Converter="{StaticResource StepToTitleConverter}" />
+    </AutomationProperties.HelpText>
     <b:Interaction.Behaviors>
         <Behaviors:RelayEventBehavior EventName="ExitRequested"
                                       HandlerName="DataContext_ExitRequested" />
@@ -40,7 +55,7 @@
                                    Style="{StaticResource Section}">
                             <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                                        Style="{StaticResource Lead}"
-                                       Text="{Binding CurrentStep, Converter={StaticResource WizardStepToTitleConverter}}">
+                                       Text="{Binding CurrentStep, Converter={StaticResource StepToTitleConverter}}">
                             </TextBlock>
                         </DockPanel>
                         <ContentPresenter Grid.Row="1"

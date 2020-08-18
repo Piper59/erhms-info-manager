@@ -5,6 +5,13 @@
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Border Style="{StaticResource LayoutLarge}">
         <Grid Style="{StaticResource Container}">
             <Grid.RowDefinitions>

@@ -4,15 +4,22 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <UserControl.Resources>
-        <Style x:Key="Field" TargetType="TextBlock">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Item.Record.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
-                    <Setter Property="TextDecorations" Value="Strikethrough" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Converters:PageCountToVisibilityConverter x:Key="PageCountToVisibilityConverter" />
+            <Style x:Key="Field" TargetType="TextBlock">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Item.Record.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
+                        <Setter Property="TextDecorations" Value="Strikethrough" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <b:Interaction.Behaviors>
         <Behaviors:RelayEventBehavior EventName="PropertyChanged"
