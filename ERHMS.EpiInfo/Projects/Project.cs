@@ -24,7 +24,7 @@ namespace ERHMS.EpiInfo.Projects
             Directory.CreateDirectory(info.Location);
             TProject project = new TProject
             {
-                Id = Guid.NewGuid(),
+                Id = Util.GetFileGuid(info.FilePath),
                 Name = info.Name,
                 Description = info.Description,
                 Location = info.Location,

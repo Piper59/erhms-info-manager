@@ -135,7 +135,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             protected override Epi.View ContinueCore(IProgressService progress)
             {
-                string templateName = includeWorkerInfo ? "BlankWorkerInfo" : "Blank";
+                string templateName = includeWorkerInfo ? "Blank_WorkerInfo" : "Blank_NoWorkerInfo";
                 string resourceName = $"ERHMS.Resources.Templates.Forms.{templateName}.xml";
                 XDocument document;
                 using (Stream stream = ResourceProvider.GetResource(resourceName))

@@ -47,17 +47,7 @@
     <Compile Include="ResourceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Templates\Forms\Blank.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\Forms\BlankWorkerInfo.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\Forms\Incident\WorkerStatus.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\Forms\Worker\WorkerInfo.xml">
+    <EmbeddedResource Include="Templates\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
