@@ -2,6 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <DataTemplate DataType="{x:Type Wizards:CreateViewWizard+ChooseTypeStep}">
         <StackPanel>
             <Controls:WizardButton Command="{Binding CreateBlankCommand}">
