@@ -53,7 +53,7 @@
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0"
                                    Style="{StaticResource Section}">
-                            <TextBlock Foreground="{StaticResource AccentTextBrush}"
+                            <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                                        Style="{StaticResource Lead}"
                                        Text="{Binding CurrentStep, Converter={StaticResource StepToTitleConverter}}">
                             </TextBlock>

@@ -25,7 +25,7 @@
                 SnapsToDevicePixels="True"
                 Style="{StaticResource LayoutFull}">
             <StackPanel Style="{StaticResource Container}">
-                <TextBlock Foreground="{StaticResource AccentTextBrush}"
+                <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                            Style="{StaticResource Lead}"
                            Text="{Binding Title}" />
                 <ProgressBar IsIndeterminate="True" />
