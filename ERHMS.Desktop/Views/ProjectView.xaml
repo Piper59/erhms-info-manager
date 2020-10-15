@@ -46,6 +46,7 @@
                        Target="{Binding ElementName=ProjectPath}">
                     Database:
                 </Label>
+                <!-- TODO: Display paths as file names throughout? -->
                 <Controls:ActionTextBox x:Name="ProjectPath"
                                         Grid.Column="1"
                                         AutomationProperties.Name="Database"
