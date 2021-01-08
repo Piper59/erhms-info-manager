@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Common.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -10,44 +11,76 @@ namespace ERHMS.Console.Utilities
 {
     public abstract class Utility : IUtility
     {
-        public static readonly IReadOnlyDictionary<string, Type> Types = typeof(IUtility).Assembly.GetTypes()
+        private static readonly IDictionary<string, Type> subclasses = typeof(IUtility).Assembly.GetTypes()
             .Where(type => typeof(IUtility).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
-            .ToDictionary(type => type.Name, type => type, StringComparer.OrdinalIgnoreCase);
+            .ToDictionary(subclass => subclass.Name, StringComparer.OrdinalIgnoreCase);
 
+        private static string ProgramName => Assembly.GetEntryAssembly().GetName().Name;
         protected static TextReader In => System.Console.In;
         protected static TextWriter Out => System.Console.Out;
         protected static TextWriter Error => System.Console.Error;
 
-        public static IUtility Create(string typeName, IList<string> args)
+        public static string GetUsage()
         {
-            if (!Types.TryGetValue(typeName, out Type type))
+            StringBuilder usage = new StringBuilder();
+            usage.AppendLine("usage:");
+            usage.AppendLine($"  {ProgramName} UTILITY [ARGUMENT ...]");
+            usage.AppendLine();
+            usage.Append("utilities:");
+            foreach (string subclassName in subclasses.Keys.OrderBy(subclassName => subclassName))
             {
-                throw new ArgumentException($"Utility '{typeName}' could not be found.");
+                usage.AppendLine();
+                usage.Append($"  {subclassName}");
             }
-            ConstructorInfo constructor = type.GetConstructors().Single();
+            return usage.ToString();
+        }
+
+        public static string GetUsage(Type subclass)
+        {
+            StringBuilder usage = new StringBuilder();
+            usage.Append("usage:");
+            foreach (ConstructorInfo constructor in subclass.GetConstructors())
+            {
+                usage.AppendLine();
+                usage.Append($"  {ProgramName} {subclass.Name}");
+                foreach (ParameterInfo parameter in constructor.GetParameters())
+                {
+                    usage.Append($" {parameter.Name}");
+                }
+            }
+            return usage.ToString();
+        }
+
+        public static IUtility Create(string utilityName, IList<string> args)
+        {
+            if (!subclasses.TryGetValue(utilityName, out Type subclass))
+            {
+                throw new ArgumentException($"Utility '{utilityName}' does not exist.");
+            }
+            ConstructorInfo constructor = GetConstructor(subclass, args.Count);
             object[] parameters = GetParameters(constructor, args).ToArray();
             return (IUtility)constructor.Invoke(parameters);
+        }
+
+        private static ConstructorInfo GetConstructor(Type subclass, int parameterCount)
+        {
+            try
+            {
+                return subclass.GetConstructors().Single(constructor => constructor.GetParameters().Length == parameterCount);
+            }
+            catch (InvalidOperationException)
+            {
+                using (new Highlighter())
+                {
+                    Error.WriteLine(GetUsage(subclass));
+                }
+                throw new ArgumentException($"Utility '{subclass.Name}' cannot be invoked with the specified arguments.");
+            }
         }
 
         private static IEnumerable<object> GetParameters(ConstructorInfo constructor, IList<string> args)
         {
             IList<ParameterInfo> parameters = constructor.GetParameters();
-            if (args.Count != parameters.Count)
-            {
-                StringBuilder message = new StringBuilder();
-                message.Append($"Utility '{constructor.DeclaringType.Name}' must be invoked with ");
-                if (parameters.Count == 0)
-                {
-                    message.Append("no arguments");
-                }
-                else
-                {
-                    message.Append("the following arguments: ");
-                    message.Append(string.Join(", ", parameters.Select(parameter => parameter.Name)));
-                }
-                message.Append(".");
-                throw new ArgumentException(message.ToString());
-            }
             for (int index = 0; index < parameters.Count; index++)
             {
                 TypeConverter converter = TypeDescriptor.GetConverter(parameters[index].ParameterType);
@@ -59,17 +92,17 @@ namespace ERHMS.Console.Utilities
 
         public void Run()
         {
-            Log.Default.Info("Running");
+            Log.Instance.Info("Running");
             try
             {
                 RunCore();
-                Log.Default.Info("Completed");
+                Log.Instance.Info("Completed");
             }
             catch (Exception ex)
             {
-                Log.Default.Error(ex.Message);
-                Log.Default.Debug(ex.StackTrace);
-                Log.Default.Warn("Completed with errors");
+                Log.Instance.Error(ex.Message);
+                Log.Instance.Debug(ex.StackTrace);
+                Log.Instance.Warn("Completed with errors");
             }
         }
     }

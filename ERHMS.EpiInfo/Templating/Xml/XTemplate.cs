@@ -10,13 +10,16 @@ namespace ERHMS.EpiInfo.Templating.Xml
     {
         public const string DateFormat = "F";
 
-        public static XmlWriterSettings GetXmlWriterSettings()
+        public static XmlWriterSettings XmlWriterSettings
         {
-            return new XmlWriterSettings
+            get
             {
-                Indent = true,
-                OmitXmlDeclaration = true
-            };
+                return new XmlWriterSettings
+                {
+                    Indent = true,
+                    OmitXmlDeclaration = true
+                };
+            }
         }
 
         public static XTemplate Create(TemplateLevel level)

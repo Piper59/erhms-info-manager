@@ -1,5 +1,6 @@
 ﻿using Epi;
-using ERHMS.Common;
+using ERHMS.Common.Logging;
+using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.IO;
@@ -9,39 +10,42 @@ namespace ERHMS.Console.Utilities
 {
     public class CreateTemplate : Utility
     {
-        private const string FormNameWildcard = "*";
-
         public string ProjectPath { get; }
-        public string FormName { get; }
+        public string ViewName { get; }
         public string TemplatePath { get; }
 
-        public CreateTemplate(string projectPath, string formName, string templatePath)
+        public CreateTemplate(string projectPath, string templatePath)
         {
             ProjectPath = projectPath;
-            FormName = formName;
             TemplatePath = templatePath;
+        }
+
+        public CreateTemplate(string projectPath, string viewName, string templatePath)
+            : this(projectPath, templatePath)
+        {
+            ViewName = viewName;
         }
 
         protected override void RunCore()
         {
-            Project project = new Project(ProjectPath);
+            Project project = ProjectExtensions.Open(ProjectPath);
             TemplateCreator creator;
-            if (FormName == FormNameWildcard)
+            if (ViewName == null)
             {
                 creator = new ProjectTemplateCreator(project);
             }
             else
             {
-                creator = new ViewTemplateCreator(project.Views[FormName]);
+                creator = new ViewTemplateCreator(project.Views[ViewName]);
             }
-            creator.Progress = new ProgressLogger();
+            creator.Progress = new LoggingProgress();
             XTemplate xTemplate = creator.Create();
             using (Stream stream = File.Create(TemplatePath))
             using (XmlWriter writer = XmlWriter.Create(stream, XTemplate.XmlWriterSettings))
             {
                 xTemplate.Save(writer);
             }
-            Log.Default.Debug("Template has been created");
+            Log.Instance.Debug("Template has been created");
         }
     }
 }

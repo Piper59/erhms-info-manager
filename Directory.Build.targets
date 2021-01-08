@@ -3,22 +3,4 @@
   <Target Name="Require32Bit" BeforeTargets="Build">
     <Error Condition="'$(PlatformTarget)' != 'x86'" Text="Target platform must be x86." />
   </Target>
-
-  <Target Condition="'$(AssemblyName)' == '$(MainAssemblyName)'" Name="CopyEpiInfoFiles" AfterTargets="Build">
-    <ItemGroup>
-      <EpiInfoFile Include="$(EpiInfoDir)**\*" Exclude="$(EpiInfoDir)Projects\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(OutputPath)%(RecursiveDir)" SkipUnchangedFiles="true" />
-  </Target>
-
-  <Target Condition="'$(AssemblyName)' == '$(MainAssemblyName)'" Name="TouchTemplates" AfterTargets="CopyEpiInfoFiles">
-    <ItemGroup>
-      <Template Include="$(OutputPath)Templates\**\*" />
-    </ItemGroup>
-    <Touch Files="@(Template)" />
-  </Target>
-
-  <Target Condition="'$(AssemblyName)' == '$(MainAssemblyName)'" Name="CleanOutputPath" AfterTargets="Clean">
-    <RemoveDir Directories="$(OutputPath)" />
-  </Target>
 </Project>

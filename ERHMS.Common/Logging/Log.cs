@@ -1,4 +1,5 @@
 ﻿using log4net;
+using log4net.Repository.Hierarchy;
 using System;
 
 namespace ERHMS.Common.Logging
@@ -8,8 +9,8 @@ namespace ERHMS.Common.Logging
         private static readonly Lazy<ILog> instance = new Lazy<ILog>(GetInstance);
         public static ILog Instance => instance.Value;
 
-        private static EventHandler initializing;
-        public static event EventHandler Initializing
+        private static EventHandler<InitializingEventArgs> initializing;
+        public static event EventHandler<InitializingEventArgs> Initializing
         {
             add
             {
@@ -25,12 +26,17 @@ namespace ERHMS.Common.Logging
             }
         }
 
-        private static void OnInitializing(EventArgs e) => initializing?.Invoke(null, e);
-        private static void OnInitializing() => OnInitializing(EventArgs.Empty);
+        private static void OnInitializing(InitializingEventArgs e)
+        {
+            initializing?.Invoke(null, e);
+            e.Hierarchy.Configured = true;
+        }
+
+        private static void OnInitializing(Hierarchy hierarchy) => OnInitializing(new InitializingEventArgs(hierarchy));
 
         private static ILog GetInstance()
         {
-            OnInitializing();
+            OnInitializing((Hierarchy)LogManager.GetRepository());
             return LogManager.GetLogger(nameof(ERHMS));
         }
     }

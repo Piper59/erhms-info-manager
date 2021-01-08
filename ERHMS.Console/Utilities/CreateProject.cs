@@ -1,5 +1,7 @@
-﻿using ERHMS.Data.Databases;
-using ERHMS.EpiInfo.Projects;
+﻿using Epi;
+using ERHMS.Common.Logging;
+using ERHMS.Data.Databases;
+using ERHMS.EpiInfo;
 using System;
 using System.IO;
 
@@ -38,9 +40,9 @@ namespace ERHMS.Console.Utilities
             }
             database.Create();
             info.Database = database;
-            Project project = Project.Create(info);
+            Project project = ProjectExtensions.Create(info);
             project.Initialize();
-            Log.Default.Debug("Project has been created");
+            Log.Instance.Debug("Project has been created");
         }
     }
 }

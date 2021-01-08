@@ -1,4 +1,5 @@
-﻿using ERHMS.EpiInfo.Templating;
+﻿using ERHMS.Common.Logging;
+using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.IO;
 using System.Xml;
@@ -18,14 +19,17 @@ namespace ERHMS.Console.Utilities
         protected override void RunCore()
         {
             XTemplate xTemplate = new XTemplate(XDocument.Load(TemplatePath).Root);
-            TemplateCanonizer canonizer = new TemplateCanonizer(xTemplate);
+            TemplateCanonizer canonizer = new TemplateCanonizer(xTemplate)
+            {
+                Progress = new LoggingProgress()
+            };
             canonizer.Canonize();
             using (Stream stream = File.Create(TemplatePath))
             using (XmlWriter writer = XmlWriter.Create(stream, XTemplate.XmlWriterSettings))
             {
                 xTemplate.Save(writer);
             }
-            Log.Default.Debug("Template has been canonized");
+            Log.Instance.Debug("Template has been canonized");
         }
     }
 }

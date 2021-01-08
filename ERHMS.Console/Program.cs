@@ -1,11 +1,10 @@
 ﻿using Epi;
+using ERHMS.Common.Logging;
 using ERHMS.Console.Utilities;
 using ERHMS.EpiInfo;
-using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
-using log4net.Repository.Hierarchy;
 using System;
 using System.IO;
 using System.Linq;
@@ -18,26 +17,28 @@ namespace ERHMS.Console
         {
             if (args.Length == 0)
             {
-                System.Console.Error.WriteLine(Help.GetUsage());
+                using (new Highlighter())
+                {
+                    System.Console.Error.WriteLine(Utility.GetUsage());
+                }
                 return;
             }
-            ConfigureLog();
+            Log.Initializing += Log_Initializing;
             try
             {
-                ConfigureEpiInfo();
+                Configure();
                 IUtility utility = Utility.Create(args[0], args.Skip(1).ToList());
                 utility.Run();
             }
             catch (Exception ex)
             {
-                Log.Default.Fatal(ex.Message);
-                Log.Default.Debug(ex.StackTrace);
+                Log.Instance.Fatal(ex.Message);
+                Log.Instance.Debug(ex.StackTrace);
             }
         }
 
-        private static void ConfigureLog()
+        private static void Log_Initializing(object sender, InitializingEventArgs e)
         {
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             PatternLayout layout = new PatternLayout("%message%newline");
             layout.ActivateOptions();
             ColoredConsoleAppender appender = new ColoredConsoleAppender
@@ -66,11 +67,10 @@ namespace ERHMS.Console
                 ForeColor = ColoredConsoleAppender.Colors.Red | ColoredConsoleAppender.Colors.HighIntensity
             });
             appender.ActivateOptions();
-            hierarchy.Root.AddAppender(appender);
-            hierarchy.Configured = true;
+            e.Hierarchy.Root.AddAppender(appender);
         }
 
-        private static void ConfigureEpiInfo()
+        private static void Configure()
         {
             if (ConfigurationExtensions.Exists())
             {
