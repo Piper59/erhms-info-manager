@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <OutputPath>$(BuildContainerDir)</OutputPath>
     <ApplicationIcon>..\ERHMS.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
@@ -22,7 +23,6 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,7 +31,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

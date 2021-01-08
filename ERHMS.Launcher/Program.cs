@@ -12,26 +12,26 @@ namespace ERHMS.Launcher
         private const string AppTitle = "ERHMS Info Manager";
 
         [STAThread]
-        public static void Main(string[] args)
+        private static void Main()
         {
-            string executable = null;
+            string programPath = null;
             try
             {
                 string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 string workingDirectory = Path.Combine(currentDirectory, AppTitle);
-                executable = Path.Combine(workingDirectory, $"{AppTitle}.exe");
+                programPath = Path.Combine(workingDirectory, $"{AppTitle}.exe");
                 Process.Start(new ProcessStartInfo
                 {
                     UseShellExecute = false,
                     WorkingDirectory = workingDirectory,
-                    FileName = executable
+                    FileName = programPath
                 });
             }
             catch (Exception ex)
             {
                 StringBuilder message = new StringBuilder();
                 message.Append($"{AppTitle} could not be launched");
-                if (executable == null)
+                if (programPath == null)
                 {
                     message.AppendLine(".");
                 }
@@ -39,7 +39,7 @@ namespace ERHMS.Launcher
                 {
                     message.AppendLine(" from the following location:");
                     message.AppendLine();
-                    message.AppendLine(executable);
+                    message.AppendLine(programPath);
                 }
                 message.AppendLine();
                 message.Append(ex.Message);
