@@ -1,5 +1,4 @@
 ﻿using Epi;
-using Epi.Collections;
 
 namespace ERHMS.EpiInfo
 {
@@ -8,7 +7,7 @@ namespace ERHMS.EpiInfo
         public static void LoadFields(this View @this)
         {
             @this.MustRefreshFieldCollection = true;
-            FieldCollectionMaster fields = @this.Fields;
+            _ = @this.Fields;
         }
 
         public static void CreateDataTables(this View @this)
@@ -19,16 +18,16 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static void CreateAllDataTables(this View @this)
+        public static void CreateDataTableTree(this View @this)
         {
             CreateDataTables(@this);
             foreach (View view in @this.GetDescendantViews())
             {
-                CreateDataTables(@this);
+                CreateDataTables(view);
             }
         }
 
-        public static void DeleteAllDataTables(this View @this)
+        public static void DeleteDataTableTree(this View @this)
         {
             @this.DeleteDataTables();
             foreach (View view in @this.GetDescendantViews())

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 
-namespace ERHMS.Common
+namespace ERHMS.Data
 {
-    public static class DataExtensions
+    public static class DataTableExtensions
     {
         public static bool DataEquals(this DataTable table1, DataTable table2)
         {

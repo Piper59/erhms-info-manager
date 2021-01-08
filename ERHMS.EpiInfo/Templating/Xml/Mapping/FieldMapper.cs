@@ -1,62 +1,63 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.Common.Logging;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
-    public class FieldMapper<TField> : IFieldMapper<TField>
+    public delegate bool FieldIdMapper(int fieldId, out int result);
+    public delegate bool FieldNameMapper(string fieldName, out string result);
+
+    public abstract class FieldMapper<TField> : IFieldMapper<TField>
         where TField : Field
     {
-        protected FieldMappingCollection<TField> Mappings { get; set; }
-
-        protected void OnError(FieldMappingException ex)
-        {
-            Log.Default.Warn(ex);
-        }
+        protected abstract FieldPropertyMapperCollection<TField> PropertyMappers { get; }
 
         public void SetProperties(XField xField, TField field)
         {
-            foreach (IFieldMapping<TField> mapping in Mappings)
+            foreach (IFieldPropertyMapper<TField> propertyMapper in PropertyMappers)
             {
                 try
                 {
-                    mapping.SetProperty(xField, field);
+                    propertyMapper.SetProperty(xField, field);
                 }
-                catch (FieldMappingException ex)
+                catch (FieldPropertyMapperException ex)
                 {
-                    OnError(ex);
+                    Log.Instance.Warn(ex);
                 }
             }
         }
 
-        public void SetProperties(XField xField, Field field)
+        public bool TrySetProperties(XField xField, Field field)
         {
             if (field is TField typedField)
             {
                 SetProperties(xField, typedField);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
 
     public class DateFieldMapper : FieldMapper<DateField>
     {
-        public DateFieldMapper()
+        protected override FieldPropertyMapperCollection<DateField> PropertyMappers { get; } = new FieldPropertyMapperCollection<DateField>
         {
-            Mappings = new FieldMappingCollection<DateField>
-            {
-                { f => f.Lower },
-                { f => f.Upper }
-            };
-        }
+            { f => f.Lower },
+            { f => f.Upper }
+        };
     }
 
     public class DDLFieldOfCodesMapper : FieldMapper<DDLFieldOfCodes>
     {
         private const char FieldInfoSeparator = ':';
 
-        public static string MapAssociatedFieldInformation(string value, IDictionary<int, int> fieldIdMap)
+        public static string MapAssociatedFieldInformation(string value, FieldIdMapper mapper)
         {
             IList<string> fieldInfos = value.Split(Constants.LIST_SEPARATOR);
             for (int index = 0; index < fieldInfos.Count; index++)
@@ -72,39 +73,29 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
                 {
                     continue;
                 }
-                if (!fieldIdMap.TryGetValue(fieldId, out fieldId))
+                if (!mapper(fieldId, out int mappedFieldId))
                 {
                     continue;
                 }
-                fieldInfos[index] = $"{columnName}{FieldInfoSeparator}{fieldId}";
+                string mappedFieldInfo = $"{columnName}{FieldInfoSeparator}{mappedFieldId}";
+                fieldInfos[index] = mappedFieldInfo;
             }
             return string.Join(Constants.LIST_SEPARATOR.ToString(), fieldInfos);
         }
 
-        public static void MapAssociatedFieldInformation(DDLFieldOfCodes field, IDictionary<int, int> fieldIdMap)
+        protected override FieldPropertyMapperCollection<DDLFieldOfCodes> PropertyMappers { get; } = new FieldPropertyMapperCollection<DDLFieldOfCodes>
         {
-            field.AssociatedFieldInformation = MapAssociatedFieldInformation(field.AssociatedFieldInformation, fieldIdMap);
-        }
-
-        public DDLFieldOfCodesMapper()
-        {
-            Mappings = new FieldMappingCollection<DDLFieldOfCodes>
-            {
-                { f => f.AssociatedFieldInformation, ColumnNames.RELATE_CONDITION }
-            };
-        }
+            { f => f.AssociatedFieldInformation, ColumnNames.RELATE_CONDITION }
+        };
     }
 
     public class FieldWithSeparatePromptMapper : FieldMapper<FieldWithSeparatePrompt>
     {
-        public FieldWithSeparatePromptMapper()
+        protected override FieldPropertyMapperCollection<FieldWithSeparatePrompt> PropertyMappers { get; } = new FieldPropertyMapperCollection<FieldWithSeparatePrompt>
         {
-            Mappings = new FieldMappingCollection<FieldWithSeparatePrompt>
-            {
-                { f => f.PromptLeftPositionPercentage },
-                { f => f.PromptTopPositionPercentage }
-            };
-        }
+            { f => f.PromptLeftPositionPercentage },
+            { f => f.PromptTopPositionPercentage }
+        };
     }
 
     public class GroupFieldMapper : FieldMapper<GroupField>
@@ -123,94 +114,71 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             }
         }
 
-        public static string MapChildFieldNames(string value, IDictionary<string, string> fieldNameMap)
+        public static string MapChildFieldNames(string value, FieldNameMapper mapper)
         {
             IList<string> fieldNames = value.Split(Constants.LIST_SEPARATOR);
             for (int index = 0; index < fieldNames.Count; index++)
             {
-                string original = fieldNames[index];
-                if (fieldNameMap.TryGetValue(original, out string modified))
+                string fieldName = fieldNames[index];
+                if (mapper(fieldName, out string mappedFieldName))
                 {
-                    fieldNames[index] = modified;
+                    fieldNames[index] = mappedFieldName;
                 }
             }
             return string.Join(Constants.LIST_SEPARATOR.ToString(), fieldNames);
         }
 
-        public static void MapChildFieldNames(GroupField field, IDictionary<string, string> fieldNameMap)
+        protected override FieldPropertyMapperCollection<GroupField> PropertyMappers { get; } = new FieldPropertyMapperCollection<GroupField>
         {
-            field.ChildFieldNames = MapChildFieldNames(field.ChildFieldNames, fieldNameMap);
-        }
-
-        public GroupFieldMapper()
-        {
-            Mappings = new FieldMappingCollection<GroupField>
-            {
-                { f => f.ChildFieldNames, ColumnNames.LIST },
-                { f => f.BackgroundColor, TryGetBackgroundColor }
-            };
-        }
+            { f => f.ChildFieldNames, ColumnNames.LIST },
+            { f => f.BackgroundColor, TryGetBackgroundColor }
+        };
     }
 
     public class ImageFieldMapper : FieldMapper<ImageField>
     {
-        public ImageFieldMapper()
+        protected override FieldPropertyMapperCollection<ImageField> PropertyMappers { get; } = new FieldPropertyMapperCollection<ImageField>
         {
-            Mappings = new FieldMappingCollection<ImageField>
-            {
-                { f => f.ShouldRetainImageSize }
-            };
-        }
+            { f => f.ShouldRetainImageSize }
+        };
     }
 
     public class InputFieldWithoutSeparatePromptMapper : FieldMapper<InputFieldWithoutSeparatePrompt>
     {
-        public InputFieldWithoutSeparatePromptMapper()
+        protected override FieldPropertyMapperCollection<InputFieldWithoutSeparatePrompt> PropertyMappers { get; } = new FieldPropertyMapperCollection<InputFieldWithoutSeparatePrompt>
         {
-            Mappings = new FieldMappingCollection<InputFieldWithoutSeparatePrompt>
-            {
-                { f => f.ShouldRepeatLast },
-                { f => f.IsRequired },
-                { f => f.IsReadOnly }
-            };
-        }
+            { f => f.ShouldRepeatLast },
+            { f => f.IsRequired },
+            { f => f.IsReadOnly }
+        };
     }
 
     public class InputFieldWithSeparatePromptMapper : FieldMapper<InputFieldWithSeparatePrompt>
     {
-        public InputFieldWithSeparatePromptMapper()
+        protected override FieldPropertyMapperCollection<InputFieldWithSeparatePrompt> PropertyMappers { get; } = new FieldPropertyMapperCollection<InputFieldWithSeparatePrompt>
         {
-            Mappings = new FieldMappingCollection<InputFieldWithSeparatePrompt>
-            {
-                { f => f.ShouldRepeatLast },
-                { f => f.IsRequired },
-                { f => f.IsReadOnly }
-            };
-        }
+            { f => f.ShouldRepeatLast },
+            { f => f.IsRequired },
+            { f => f.IsReadOnly }
+        };
     }
 
     public class MirrorFieldMapper : FieldMapper<MirrorField>
     {
-        public MirrorFieldMapper()
+        protected override FieldPropertyMapperCollection<MirrorField> PropertyMappers { get; } = new FieldPropertyMapperCollection<MirrorField>
         {
-            Mappings = new FieldMappingCollection<MirrorField>
-            {
-                { f => f.SourceFieldId }
-            };
-        }
+            { f => f.SourceFieldId }
+        };
     }
 
     public class NumberFieldMapper : FieldMapper<NumberField>
     {
-        public NumberFieldMapper()
+        protected override FieldPropertyMapperCollection<NumberField> PropertyMappers { get; } = new FieldPropertyMapperCollection<NumberField>
         {
-            Mappings = new FieldMappingCollection<NumberField>
-            {
-                { f => f.Pattern },
-                { f => f.Lower },
-                { f => f.Upper }
-            };
-        }
+            { f => f.Pattern },
+            { f => f.Lower },
+            { f => f.Upper }
+        };
     }
 
     public class OptionFieldMapper : FieldMapper<OptionField>
@@ -229,39 +197,30 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             return true;
         }
 
-        public OptionFieldMapper()
+        protected override FieldPropertyMapperCollection<OptionField> PropertyMappers { get; } = new FieldPropertyMapperCollection<OptionField>
         {
-            Mappings = new FieldMappingCollection<OptionField>
-            {
-                { f => f.Pattern },
-                { f => f.ShowTextOnRight },
-                { f => f.Options, TryGetOptions }
-            };
-        }
+            { f => f.Pattern },
+            { f => f.ShowTextOnRight },
+            { f => f.Options, TryGetOptions }
+        };
     }
 
     public class PhoneNumberFieldMapper : FieldMapper<PhoneNumberField>
     {
-        public PhoneNumberFieldMapper()
+        protected override FieldPropertyMapperCollection<PhoneNumberField> PropertyMappers { get; } = new FieldPropertyMapperCollection<PhoneNumberField>
         {
-            Mappings = new FieldMappingCollection<PhoneNumberField>
-            {
-                { f => f.Pattern }
-            };
-        }
+            { f => f.Pattern }
+        };
     }
 
     public class RelatedViewFieldMapper : FieldMapper<RelatedViewField>
     {
-        public RelatedViewFieldMapper()
+        protected override FieldPropertyMapperCollection<RelatedViewField> PropertyMappers { get; } = new FieldPropertyMapperCollection<RelatedViewField>
         {
-            Mappings = new FieldMappingCollection<RelatedViewField>
-            {
-                { f => f.RelatedViewID, nameof(XField.RelatedViewId) },
-                { f => f.ShouldReturnToParent },
-                { f => f.Condition, ColumnNames.RELATE_CONDITION }
-            };
-        }
+            { f => f.RelatedViewID, nameof(XField.RelatedViewId) },
+            { f => f.ShouldReturnToParent },
+            { f => f.Condition, ColumnNames.RELATE_CONDITION }
+        };
     }
 
     public class RenderableFieldMapper : FieldMapper<RenderableField>
@@ -276,48 +235,39 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             return xField.TryGetFont(nameof(RenderableField.PromptFont), out value);
         }
 
-        public RenderableFieldMapper()
+        protected override FieldPropertyMapperCollection<RenderableField> PropertyMappers { get; } = new FieldPropertyMapperCollection<RenderableField>
         {
-            Mappings = new FieldMappingCollection<RenderableField>
-            {
-                { f => f.PromptText },
-                { f => f.ControlWidthPercentage },
-                { f => f.ControlHeightPercentage },
-                { f => f.ControlLeftPositionPercentage },
-                { f => f.ControlTopPositionPercentage },
-                { f => f.TabIndex },
-                { f => f.HasTabStop },
-                { f => f.ControlFont, TryGetControlFont },
-                { f => f.PromptFont, TryGetPromptFont }
-            };
-        }
+            { f => f.PromptText },
+            { f => f.ControlWidthPercentage },
+            { f => f.ControlHeightPercentage },
+            { f => f.ControlLeftPositionPercentage },
+            { f => f.ControlTopPositionPercentage },
+            { f => f.TabIndex },
+            { f => f.HasTabStop },
+            { f => f.ControlFont, TryGetControlFont },
+            { f => f.PromptFont, TryGetPromptFont }
+        };
     }
 
     public class TableBasedDropDownFieldMapper : FieldMapper<TableBasedDropDownField>
     {
-        public TableBasedDropDownFieldMapper()
+        protected override FieldPropertyMapperCollection<TableBasedDropDownField> PropertyMappers { get; } = new FieldPropertyMapperCollection<TableBasedDropDownField>
         {
-            Mappings = new FieldMappingCollection<TableBasedDropDownField>
-            {
-                { f => f.ShouldSort, ColumnNames.SORT },
-                { f => f.TextColumnName },
-                { f => f.CodeColumnName },
-                { f => f.SourceTableName },
-                { f => f.IsExclusiveTable }
-            };
-        }
+            { f => f.ShouldSort, ColumnNames.SORT },
+            { f => f.TextColumnName },
+            { f => f.CodeColumnName },
+            { f => f.SourceTableName },
+            { f => f.IsExclusiveTable }
+        };
     }
 
     public class TextFieldMapper : FieldMapper<TextField>
     {
-        public TextFieldMapper()
+        protected override FieldPropertyMapperCollection<TextField> PropertyMappers { get; } = new FieldPropertyMapperCollection<TextField>
         {
-            Mappings = new FieldMappingCollection<TextField>
-            {
-                { f => f.MaxLength },
-                { f => f.SourceFieldId },
-                { f => f.IsEncrypted }
-            };
-        }
+            { f => f.MaxLength },
+            { f => f.SourceFieldId },
+            { f => f.IsEncrypted }
+        };
     }
 }

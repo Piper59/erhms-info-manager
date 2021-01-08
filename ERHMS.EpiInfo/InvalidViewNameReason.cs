@@ -4,10 +4,10 @@
     {
         None,
         Empty,
-        InvalidChar,
-        InvalidBeginning,
         TooLong,
-        Exists,
-        IsConflict
+        InvalidChar,
+        InvalidStartChar,
+        Identical,
+        Similar
     }
 }

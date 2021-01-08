@@ -2,93 +2,50 @@
 using Epi;
 using ERHMS.Data;
 using ERHMS.Data.Databases;
+using ERHMS.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Linq;
 using System.Text;
 
 namespace ERHMS.EpiInfo.Data
 {
-    public class RecordRepository
+    public class RecordRepository : Repository<Record>
     {
-        private const string TooManyFieldsDefinedError = "3190";
-
-        private IDatabase database;
+        private static bool IsTooManyFieldsDefinedError(OleDbException exception)
+        {
+            return exception.Errors.Count == 1 && exception.Errors[0].SQLState == "3190";
+        }
 
         public View View { get; }
 
         public RecordRepository(View view)
+            : base(DatabaseFactory.GetDatabase(view.Project))
         {
             View = view;
-            database = DatabaseFactory.GetDatabase(view.Project);
         }
 
-        public string Quote(string identifier)
+        protected override string GetFromClause()
         {
-            return database.Quote(identifier);
-        }
-
-        public bool TableExists()
-        {
-            return database.TableExists(View.TableName);
-        }
-
-        public string GetFromClause()
-        {
-            StringBuilder fromClause = new StringBuilder();
-            fromClause.Append(Quote(View.TableName));
+            StringBuilder clause = new StringBuilder();
+            clause.Append(Quote(View.TableName));
             foreach (Page page in View.Pages)
             {
-                fromClause.Insert(0, "(");
-                fromClause.AppendFormat(
+                clause.Insert(0, "(");
+                clause.AppendFormat(
                     " INNER JOIN {0} ON {0}.{2} = {1}.{2})",
                     Quote(page.TableName),
                     Quote(View.TableName),
                     Quote(ColumnNames.GLOBAL_RECORD_ID));
             }
-            fromClause.Insert(0, "FROM ");
-            return fromClause.ToString();
+            clause.Insert(0, "FROM ");
+            return clause.ToString();
         }
 
-        public string GetWhereDeletedClause(bool? deleted)
+        private IEnumerable<Record> SingleQuerySelect(IDbConnection connection, string clauses, object parameters)
         {
-            if (deleted == null)
-            {
-                return null;
-            }
-            else
-            {
-                return $"WHERE {Quote(ColumnNames.REC_STATUS)} = {RecordStatus.FromDeleted(deleted.Value)}";
-            }
-        }
-
-        public string GetSelectSql(string selectList, string clauses)
-        {
-            StringBuilder sql = new StringBuilder();
-            string fromClause = GetFromClause();
-            sql.Append($"SELECT {selectList} {fromClause}");
-            if (!string.IsNullOrEmpty(clauses))
-            {
-                sql.Append($" {clauses}");
-            }
-            sql.Append(";");
-            return sql.ToString();
-        }
-
-        public int Count(string clauses = null, object parameters = null)
-        {
-            using (IDbConnection connection = database.Connect())
-            {
-                string sql = GetSelectSql("COUNT(*)", clauses);
-                return connection.ExecuteScalar<int>(sql, parameters);
-            }
-        }
-
-        private IEnumerable<Record> SelectSingleQuery(IDbConnection connection, string clauses, object parameters)
-        {
-            string sql = GetSelectSql("*", clauses);
+            string sql = GetSelectQuery("*", clauses);
             using (IDataReader reader = connection.ExecuteReader(sql, parameters))
             {
                 while (reader.Read())
@@ -100,30 +57,34 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        private IEnumerable<Record> SelectMultiQuery(IDbConnection connection, string clauses, object parameters)
+        private IEnumerable<Record> MultipleQuerySelect(IDbConnection connection, string clauses, object parameters)
         {
+            string keyColumnName = ColumnNames.GLOBAL_RECORD_ID;
             IDictionary<string, Record> records = new Dictionary<string, Record>(StringComparer.OrdinalIgnoreCase);
             {
-                string sql = GetSelectSql($"{Quote(View.TableName)}.*", clauses);
+                string sql = GetSelectQuery($"{Quote(View.TableName)}.*", clauses);
                 using (IDataReader reader = connection.ExecuteReader(sql, parameters))
                 {
+                    int keyOrdinal = reader.GetOrdinal(keyColumnName);
                     while (reader.Read())
                     {
+                        string key = reader.GetString(keyOrdinal);
                         Record record = new Record();
                         record.SetProperties(reader);
-                        records[record.GlobalRecordId] = record;
+                        records[key] = record;
                     }
                 }
             }
             foreach (Page page in View.Pages)
             {
-                string sql = GetSelectSql($"{Quote(page.TableName)}.*", clauses);
+                string sql = GetSelectQuery($"{Quote(page.TableName)}.*", clauses);
                 using (IDataReader reader = connection.ExecuteReader(sql, parameters))
                 {
-                    int ordinal = reader.GetOrdinal(ColumnNames.GLOBAL_RECORD_ID);
+                    int keyOrdinal = reader.GetOrdinal(keyColumnName);
                     while (reader.Read())
                     {
-                        Record record = records[reader.GetString(ordinal)];
+                        string key = reader.GetString(keyOrdinal);
+                        Record record = records[key];
                         record.SetProperties(reader);
                     }
                 }
@@ -131,19 +92,19 @@ namespace ERHMS.EpiInfo.Data
             return records.Values;
         }
 
-        public ICollection<Record> Select(string clauses = null, object parameters = null)
+        public override IEnumerable<Record> Select(string clauses = null, object parameters = null)
         {
-            using (IDbConnection connection = database.Connect())
+            using (IDbConnection connection = Database.Connect())
             {
                 try
                 {
-                    return SelectSingleQuery(connection, clauses, parameters).ToList();
+                    return SingleQuerySelect(connection, clauses, parameters);
                 }
                 catch (OleDbException ex)
                 {
-                    if (ex.Errors.Count == 1 && ex.Errors[0].SQLState == TooManyFieldsDefinedError)
+                    if (IsTooManyFieldsDefinedError(ex))
                     {
-                        return SelectMultiQuery(connection, clauses, parameters).ToList();
+                        return MultipleQuerySelect(connection, clauses, parameters);
                     }
                     else
                     {
@@ -153,21 +114,43 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
+        public IEnumerable<Record> SelectByDeleted(bool deleted)
+        {
+            string @operator = deleted ? "=" : "<>";
+            string clauses = $"WHERE {Quote(ColumnNames.REC_STATUS)} {@operator} @RECSTATUS";
+            ParameterCollection parameters = new ParameterCollection
+            {
+                { "@RECSTATUS", RecordStatuses.Deleted }
+            };
+            return Select(clauses, parameters);
+        }
+
         public void SetDeleted(Record record, bool deleted)
         {
-            using (IDbConnection connection = database.Connect())
+            using (IDbConnection connection = Database.Connect())
             {
                 string sql = $@"
                     UPDATE {Quote(View.TableName)}
-                    SET {Quote(ColumnNames.REC_STATUS)} = {RecordStatus.FromDeleted(deleted)}
-                    WHERE {Quote(ColumnNames.UNIQUE_KEY)} = @UniqueKey;";
+                    SET {Quote(ColumnNames.REC_STATUS)} = @RECSTATUS
+                    WHERE {Quote(ColumnNames.GLOBAL_RECORD_ID)} = @GlobalRecordId;";
                 ParameterCollection parameters = new ParameterCollection
                 {
-                    { "@UniqueKey", record.UniqueKey.Value }
+                    { "@RECSTATUS", deleted ? RecordStatuses.Deleted : RecordStatuses.Undeleted },
+                    { "@GlobalRecordId", record.GlobalRecordId }
                 };
                 connection.Execute(sql, parameters);
-                record.Deleted = deleted;
             }
+            record.Deleted = deleted;
+        }
+
+        public void Delete(Record record)
+        {
+            SetDeleted(record, true);
+        }
+
+        public void Undelete(Record record)
+        {
+            SetDeleted(record, false);
         }
     }
 }

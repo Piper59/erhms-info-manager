@@ -1,30 +1,21 @@
-﻿using System.Data.Common;
+﻿using ERHMS.Data.Properties;
 using System.Data.OleDb;
 using System.IO;
-using System.Reflection;
 
 namespace ERHMS.Data.Databases
 {
-    public class AccessDatabase : Database
+    public class AccessDatabase : Database<OleDbConnectionStringBuilder, OleDbConnection>
     {
-        public const string FileExtension = ".mdb";
-        public const string Provider = "Microsoft.Jet.OLEDB.4.0";
-        private const string ResourceName = "ERHMS.Data.Resources.AccessDatabase.mdb";
-
-        private readonly OleDbConnectionStringBuilder connectionStringBuilder;
-
         public override DatabaseType Type => DatabaseType.Access;
-        protected override DbConnectionStringBuilder ConnectionStringBuilder => connectionStringBuilder;
-        public string FilePath => connectionStringBuilder.DataSource;
+        public string FilePath => ConnectionStringBuilder.DataSource;
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 
         public AccessDatabase(string connectionString)
+            : base(connectionString) { }
+
+        protected override string GetId(OleDbConnectionStringBuilder connectionStringBuilder)
         {
-            connectionStringBuilder = new OleDbConnectionStringBuilder(connectionString)
-            {
-                Provider = Provider
-            };
-            connectionStringBuilder.DataSource = Path.GetFullPath(connectionStringBuilder.DataSource);
+            return connectionStringBuilder.DataSource;
         }
 
         public override bool Exists()
@@ -34,24 +25,11 @@ namespace ERHMS.Data.Databases
 
         protected override void CreateCore()
         {
-            using (Stream source = Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceName))
+            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+            using (Stream stream = File.Open(FilePath, FileMode.CreateNew, FileAccess.Write))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
-                using (Stream target = File.Create(FilePath))
-                {
-                    source.CopyTo(target);
-                }
+                stream.Write(ResX.AccessDatabase, 0, ResX.AccessDatabase.Length);
             }
-        }
-
-        protected override DbConnection GetConnection()
-        {
-            return new OleDbConnection(ConnectionString);
-        }
-
-        public override string ToString()
-        {
-            return FilePath;
         }
     }
 }

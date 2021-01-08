@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.EpiInfo.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +8,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XProject : XElement
     {
-        internal static readonly IReadOnlyCollection<string> ConfigurationSettingNames = new string[]
-        {
-            "ControlFontBold",
-            "ControlFontItalics",
-            "ControlFontName",
-            "ControlFontSize",
-            "DefaultLabelAlign",
-            "DefaultPageHeight",
-            "DefaultPageOrientation",
-            "DefaultPageWidth",
-            "EditorFontBold",
-            "EditorFontItalics",
-            "EditorFontName",
-            "EditorFontSize"
-        };
-
         public static XProject Create(Project project)
         {
             XProject xProject = new XProject
@@ -36,11 +19,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 EpiVersion = project.EpiVersion,
                 CreateDate = project.CreateDate
             };
-            Configuration configuration = Configuration.GetNewInstance();
-            foreach (string settingName in ConfigurationSettingNames)
-            {
-                xProject.SetAttributeValue(configuration.Settings[settingName], settingName);
-            }
             return xProject;
         }
 
@@ -87,17 +65,17 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XProject()
             : base(ElementNames.Project) { }
 
-        public XProject(XElement element, TemplateLevel level)
+        public XProject(XElement element)
             : this()
         {
             Add(element.Attributes());
-            foreach (XElement xView in element.Elements(ElementNames.View))
+            foreach (XElement viewElement in element.Elements(ElementNames.View))
             {
-                Add(new XView(xView));
+                Add(new XView(viewElement));
             }
         }
 
-        public void RemoveRelateFields()
+        public void RemoveRelationships()
         {
             foreach (XField xField in XFields.ToList())
             {

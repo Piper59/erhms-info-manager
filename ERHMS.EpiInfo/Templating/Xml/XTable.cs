@@ -1,5 +1,4 @@
-﻿using ERHMS.EpiInfo.Infrastructure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 
@@ -9,6 +8,16 @@ namespace ERHMS.EpiInfo.Templating.Xml
     {
         private const string Space = " ";
         private const string EscapedSpace = "__space__";
+
+        private static string Escape(string columnName)
+        {
+            return columnName.Replace(Space, EscapedSpace);
+        }
+
+        private static string Unescape(string attributeName)
+        {
+            return attributeName.Replace(EscapedSpace, Space);
+        }
 
         public static XTable Create(string elementName, DataTable table)
         {
@@ -21,8 +30,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 XElement xItem = new XElement(ElementNames.Item);
                 foreach (DataColumn column in table.Columns)
                 {
-                    string attributeName = column.ColumnName.Replace(Space, EscapedSpace);
-                    xItem.SetAttributeValue(item[column], attributeName);
+                    string attributeName = Escape(column.ColumnName);
+                    object value = item[column];
+                    xItem.SetAttributeValue(value, attributeName);
                 }
                 xTable.Add(xItem);
             }
@@ -48,20 +58,19 @@ namespace ERHMS.EpiInfo.Templating.Xml
             DataTable table = new DataTable(TableName);
             foreach (XElement xItem in XItems)
             {
-                ICollection<(string, string)> fields = new List<(string, string)>();
                 foreach (XAttribute attribute in xItem.Attributes())
                 {
-                    string columnName = attribute.Name.ToString().Replace(EscapedSpace, Space);
+                    string columnName = Unescape(attribute.Name.LocalName);
                     if (!table.Columns.Contains(columnName))
                     {
                         table.Columns.Add(columnName);
                     }
-                    fields.Add((columnName, attribute.Value));
                 }
                 DataRow item = table.NewRow();
-                foreach ((string columnName, string value) in fields)
+                foreach (XAttribute attribute in xItem.Attributes())
                 {
-                    item.SetField(columnName, value);
+                    string columnName = Unescape(attribute.Name.LocalName);
+                    item.SetField(columnName, attribute.Value);
                 }
                 table.Rows.Add(item);
             }

@@ -3,10 +3,16 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Infrastructure
+namespace ERHMS.EpiInfo.Templating.Xml
 {
-    public static class XmlExtensions
+    internal static class XElementExtensions
     {
+        public static bool TryGetAttribute(this XElement @this, string attributeName, out XAttribute attribute)
+        {
+            attribute = @this.Attribute(attributeName);
+            return attribute != null && attribute.Value != "";
+        }
+
         public static XAttribute GetAttribute(this XElement @this, [CallerMemberName] string attributeName = null)
         {
             return @this.Attribute(attributeName);
@@ -33,12 +39,6 @@ namespace ERHMS.EpiInfo.Infrastructure
                 value = "";
             }
             @this.SetAttributeValue(attributeName, value);
-        }
-
-        public static bool TryGetAttribute(this XElement @this, string attributeName, out XAttribute attribute)
-        {
-            attribute = @this.Attribute(attributeName);
-            return attribute != null && attribute.Value != "";
         }
     }
 }

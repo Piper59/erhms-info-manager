@@ -10,54 +10,28 @@ namespace ERHMS.EpiInfo.Templating
 {
     public class TemplateCanonizer
     {
-        private class TabIndexComparer : IComparer<string>
-        {
-            private IDictionary<string, double> tabIndices;
-
-            public TabIndexComparer(IEnumerable<XField> fields)
-            {
-                tabIndices = fields.ToDictionary(
-                    field => field.Name,
-                    field => field.TabIndex.Value,
-                    StringComparer.OrdinalIgnoreCase);
-            }
-
-            private double GetTabIndex(string fieldName)
-            {
-                return tabIndices.TryGetValue(fieldName, out double tabIndex) ? tabIndex : double.MaxValue;
-            }
-
-            public int Compare(string x, string y)
-            {
-                return GetTabIndex(x).CompareTo(GetTabIndex(y));
-            }
-        }
-
         private class Context
         {
-            private static void Add(int id, IDictionary<int, int> idMap)
+            private static void AddToIdMap(int id, IDictionary<int, int> idMap)
             {
                 idMap.Add(id, idMap.Count + 1);
             }
 
-            public IDictionary<int, int> ViewIdMap { get; }
-            public IDictionary<int, int> PageIdMap { get; }
-            public IDictionary<int, int> FieldIdMap { get; }
+            public IDictionary<int, int> ViewIdMap { get; } = new Dictionary<int, int>();
+            public IDictionary<int, int> PageIdMap { get; } = new Dictionary<int, int>();
+            public IDictionary<int, int> FieldIdMap { get; } = new Dictionary<int, int>();
 
             public Context(XProject xProject)
             {
-                ViewIdMap = new Dictionary<int, int>();
-                PageIdMap = new Dictionary<int, int>();
-                FieldIdMap = new Dictionary<int, int>();
                 foreach (XView xView in xProject.XViews)
                 {
-                    Add(xView.ViewId, ViewIdMap);
+                    AddToIdMap(xView.ViewId, ViewIdMap);
                     foreach (XPage xPage in xView.XPages)
                     {
-                        Add(xPage.PageId, PageIdMap);
+                        AddToIdMap(xPage.PageId, PageIdMap);
                         foreach (XField xField in xPage.XFields)
                         {
-                            Add(xField.FieldId, FieldIdMap);
+                            AddToIdMap(xField.FieldId, FieldIdMap);
                         }
                     }
                 }
@@ -70,6 +44,7 @@ namespace ERHMS.EpiInfo.Templating
         private Context context;
 
         public XTemplate XTemplate { get; }
+        public IProgress<string> Progress { get; set; }
 
         public TemplateCanonizer(XTemplate xTemplate)
         {
@@ -78,9 +53,13 @@ namespace ERHMS.EpiInfo.Templating
 
         public void Canonize()
         {
+            Progress?.Report($"Canonizing Epi Info template: {XTemplate.Name}");
             context = new Context(XTemplate.XProject);
             CanonizeTemplate();
-            CanonizeProject(XTemplate.XProject);
+            if (XTemplate.Level == TemplateLevel.Project)
+            {
+                CanonizeProject(XTemplate.XProject);
+            }
             foreach (XView xView in XTemplate.XProject.XViews)
             {
                 CanonizeView(xView);
@@ -92,17 +71,9 @@ namespace ERHMS.EpiInfo.Templating
                     {
                         CanonizeField(xField, nextTabIndex++);
                     }
-                    ProcessPageFields(xPage);
                 }
             }
-            int nextGridColumnId = 1;
-            foreach (XTable xTable in XTemplate.XGridTables)
-            {
-                foreach (XElement xItem in xTable.XItems)
-                {
-                    CanonizeGridTableItem(xItem, nextGridColumnId++);
-                }
-            }
+            CanonizeGridTables();
         }
 
         private void CanonizeTemplate()
@@ -112,20 +83,15 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeProject(XProject xProject)
         {
-            if (XTemplate.Level == TemplateLevel.Project)
-            {
-                xProject.Id = null;
-                xProject.Location = null;
-                xProject.CreateDate = null;
-                foreach (string settingName in XProject.ConfigurationSettingNames)
-                {
-                    xProject.Attribute(settingName)?.Remove();
-                }
-            }
+            Progress?.Report($"Canonizing project: {xProject.Name}");
+            xProject.Id = null;
+            xProject.Location = null;
+            xProject.CreateDate = null;
         }
 
         private void CanonizeView(XView xView)
         {
+            Progress?.Report($"Canonizing view: {xView.Name}");
             xView.ViewId = context.ViewIdMap[xView.ViewId];
             xView.CheckCode = xView.CheckCode.Trim();
             xView.SurveyId = null;
@@ -133,6 +99,8 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizePage(XPage xPage)
         {
+            XView xView = xPage.XView;
+            Progress?.Report($"Canonizing page: {xView.Name}/{xPage.Name}");
             xPage.PageId = context.PageIdMap[xPage.PageId];
             xPage.BackgroundId = DefaultBackgroundId;
             xPage.ViewId = xPage.XView.ViewId;
@@ -140,6 +108,9 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeField(XField xField, int tabIndex)
         {
+            XPage xPage = xField.XPage;
+            XView xView = xPage.XView;
+            Progress?.Report($"Canonizing field: {xView.Name}/{xPage.Name}/{xField.Name}");
             xField.PageId = xField.XPage.PageId;
             xField.FieldId = context.FieldIdMap[xField.FieldId];
             xField.UniqueId = null;
@@ -162,7 +133,9 @@ namespace ERHMS.EpiInfo.Templating
                 case MetaFieldType.Codes:
                     if (xField.RelateCondition != null)
                     {
-                        xField.RelateCondition = DDLFieldOfCodesMapper.MapAssociatedFieldInformation(xField.RelateCondition, context.FieldIdMap);
+                        xField.RelateCondition = DDLFieldOfCodesMapper.MapAssociatedFieldInformation(
+                            xField.RelateCondition,
+                            context.FieldIdMap.TryGetValue);
                     }
                     break;
                 case MetaFieldType.Relate:
@@ -176,31 +149,37 @@ namespace ERHMS.EpiInfo.Templating
                     {
                         xField.BackgroundColor = xField.BackgroundColor.Value | Opaque;
                     }
+                    if (xField.List != null)
+                    {
+                        IDictionary<string, double> tabIndices = xField.XPage.XFields.ToDictionary(
+                            pageXField => pageXField.Name,
+                            pageXField => pageXField.TabIndex.Value,
+                            StringComparer.OrdinalIgnoreCase);
+                        xField.ListItems = xField.ListItems.OrderBy(fieldName => tabIndices[fieldName]);
+                    }
                     break;
             }
         }
 
-        private void ProcessPageFields(XPage xPage)
+        private void CanonizeGridTables()
         {
-            TabIndexComparer tabIndexComparer = new TabIndexComparer(xPage.XFields);
-            foreach (XField xField in xPage.XFields)
+            Progress?.Report("Canonizing grid tables");
+            int nextGridColumnId = 1;
+            foreach (XTable xTable in XTemplate.XGridTables)
             {
-                if (xField.FieldType == MetaFieldType.Group)
-                {
-                    if (xField.List != null)
-                    {
-                        string[] childFieldNames = xField.List.Split(Constants.LIST_SEPARATOR);
-                        Array.Sort(childFieldNames, tabIndexComparer);
-                        xField.List = string.Join(Constants.LIST_SEPARATOR.ToString(), childFieldNames);
-                    }
-                }
+                CanonizeGridTable(xTable, nextGridColumnId++);
             }
         }
 
-        private void CanonizeGridTableItem(XElement xItem, int gridColumnId)
+        private void CanonizeGridTable(XTable xTable, int gridColumnId)
         {
-            xItem.SetAttributeValue(ColumnNames.GRID_COLUMN_ID, gridColumnId);
-            xItem.SetAttributeValue(ColumnNames.FIELD_ID, context.FieldIdMap[(int)xItem.Attribute(ColumnNames.FIELD_ID)]);
+            Progress?.Report($"Canonizing grid table: {xTable.TableName}");
+            foreach (XElement xItem in xTable.XItems)
+            {
+                xItem.SetAttributeValue(ColumnNames.GRID_COLUMN_ID, gridColumnId);
+                int fieldId = (int)xItem.Attribute(ColumnNames.FIELD_ID);
+                xItem.SetAttributeValue(ColumnNames.FIELD_ID, context.FieldIdMap[fieldId]);
+            }
         }
     }
 }

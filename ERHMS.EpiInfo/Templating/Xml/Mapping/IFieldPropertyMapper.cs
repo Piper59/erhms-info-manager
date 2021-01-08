@@ -2,7 +2,7 @@
 
 namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
-    public interface IFieldMapping<TField>
+    public interface IFieldPropertyMapper<TField>
         where TField : Field
     {
         void SetProperty(XField xField, TField field);

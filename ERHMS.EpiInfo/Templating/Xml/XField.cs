@@ -1,6 +1,5 @@
 ﻿using Epi;
 using Epi.Fields;
-using ERHMS.EpiInfo.Infrastructure;
 using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XField : XElement
     {
-        private static readonly IReadOnlyCollection<IFieldMapper> Mappers = new IFieldMapper[]
+        private static readonly ICollection<IFieldMapper> mappers = new IFieldMapper[]
         {
             new DateFieldMapper(),
             new DDLFieldOfCodesMapper(),
@@ -101,6 +100,12 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { this.SetAttributeValue(value); }
         }
 
+        public IEnumerable<string> ListItems
+        {
+            get { return List.Split(Constants.LIST_SEPARATOR); }
+            set { List = string.Join(Constants.LIST_SEPARATOR.ToString(), value); }
+        }
+
         public string SourceTableName
         {
             get { return (string)this.GetAttribute(); }
@@ -140,9 +145,8 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 && this.TryGetAttribute($"{propertyName}Style", out XAttribute xStyle))
             {
                 FontFamily family = new FontFamily((string)xFamily);
-                float size = (float)xSize;
                 FontStyle style = (FontStyle)Enum.Parse(typeof(FontStyle), (string)xStyle);
-                font = new Font(family, size, style);
+                font = new Font(family, (float)xSize, style);
                 return true;
             }
             else
@@ -156,9 +160,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
         {
             Field field = page.CreateField(FieldType);
             field.Name = Name;
-            foreach (IFieldMapper mapper in Mappers)
+            foreach (IFieldMapper mapper in mappers)
             {
-                mapper.SetProperties(this, field);
+                mapper.TrySetProperties(this, field);
             }
             return field;
         }

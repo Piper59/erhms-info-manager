@@ -1,5 +1,4 @@
 ﻿using Epi.Fields;
-using ERHMS.EpiInfo.Infrastructure;
 using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
@@ -8,14 +7,12 @@ using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
-    public delegate bool TryGetValueFunc<TProperty>(XField xField, out TProperty value);
-
-    public abstract class FieldMapping<TField, TProperty> : IFieldMapping<TField>
+    public abstract class FieldPropertyMapper<TField, TProperty> : IFieldPropertyMapper<TField>
         where TField : Field
     {
         public PropertyInfo Property { get; }
 
-        protected FieldMapping(Expression<Func<TField, TProperty>> expression)
+        protected FieldPropertyMapper(Expression<Func<TField, TProperty>> expression)
         {
             Property = (PropertyInfo)((MemberExpression)expression.Body).Member;
         }
@@ -33,22 +30,21 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             }
             catch (Exception ex)
             {
-                throw new FieldMappingException(xField, Property.Name, ex);
+                throw new FieldPropertyMapperException(xField, Property.Name, ex);
             }
         }
     }
 
-    public class AttributeFieldMapping<TField, TProperty> : FieldMapping<TField, TProperty>
+    public class AttributeFieldPropertyMapper<TField, TProperty> : FieldPropertyMapper<TField, TProperty>
         where TField : Field
     {
-        private readonly TypeConverter converter;
+        private readonly TypeConverter converter = TypeDescriptor.GetConverter(typeof(TProperty));
 
         public string AttributeName { get; }
 
-        public AttributeFieldMapping(Expression<Func<TField, TProperty>> expression, string attributeName = null)
+        public AttributeFieldPropertyMapper(Expression<Func<TField, TProperty>> expression, string attributeName = null)
             : base(expression)
         {
-            converter = TypeDescriptor.GetConverter(typeof(TProperty));
             AttributeName = attributeName ?? Property.Name;
         }
 
@@ -61,26 +57,28 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
             }
             else
             {
-                value = default(TProperty);
+                value = default;
                 return false;
             }
         }
     }
 
-    public class DelegateFieldMapping<TField, TProperty> : FieldMapping<TField, TProperty>
+    public delegate bool FieldPropertyValueAccessor<TProperty>(XField xField, out TProperty value);
+
+    public class DelegateFieldPropertyMapper<TField, TProperty> : FieldPropertyMapper<TField, TProperty>
         where TField : Field
     {
-        private readonly TryGetValueFunc<TProperty> tryGetValueFunc;
+        private readonly FieldPropertyValueAccessor<TProperty> accessor;
 
-        public DelegateFieldMapping(Expression<Func<TField, TProperty>> expression, TryGetValueFunc<TProperty> tryGetValueFunc)
+        public DelegateFieldPropertyMapper(Expression<Func<TField, TProperty>> expression, FieldPropertyValueAccessor<TProperty> accessor)
             : base(expression)
         {
-            this.tryGetValueFunc = tryGetValueFunc;
+            this.accessor = accessor;
         }
 
         protected override bool TryGetValue(XField xField, out TProperty value)
         {
-            return tryGetValueFunc(xField, out value);
+            return accessor(xField, out value);
         }
     }
 }

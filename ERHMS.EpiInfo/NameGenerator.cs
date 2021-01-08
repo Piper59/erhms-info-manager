@@ -2,7 +2,6 @@
 using Epi.Fields;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -10,9 +9,9 @@ namespace ERHMS.EpiInfo
 {
     public abstract class NameGenerator<TSuffix>
     {
-        protected static ISet<string> ToSet(IEnumerable<string> names)
+        protected static ISet<string> ToNameSet(params IEnumerable<string>[] sources)
         {
-            return new HashSet<string>(names, StringComparer.OrdinalIgnoreCase);
+            return new HashSet<string>(sources.SelectMany(source => source), StringComparer.OrdinalIgnoreCase);
         }
 
         protected static IEnumerable<string> GetTableNames(Project project)
@@ -25,19 +24,13 @@ namespace ERHMS.EpiInfo
             return project.Views.Cast<View>().Select(view => view.Name);
         }
 
-        protected static IEnumerable<string> GetTableAndViewNames(Project project)
-        {
-            return Enumerable.Concat(GetTableNames(project), GetViewNames(project));
-        }
+        protected abstract Regex Regex { get; }
+        protected abstract string BaseName { get; }
+        protected abstract string Separator { get; }
+        protected abstract TSuffix StartSuffix { get; }
+        protected abstract ISet<string> Names { get; }
 
-        protected Regex Regex { get; set; }
-        protected string BaseName { get; set; }
-        protected string Separator { get; set; }
-        protected TSuffix StartSuffix { get; set; }
-        protected TypeConverter SuffixConverter { get; } = TypeDescriptor.GetConverter(typeof(TSuffix));
-        protected ISet<string> Names { get; set; }
-
-        protected virtual string Format(string baseName, TSuffix suffix)
+        protected string Format(string baseName, TSuffix suffix)
         {
             return $"{baseName}{Separator}{suffix}";
         }
@@ -56,7 +49,7 @@ namespace ERHMS.EpiInfo
 
         protected abstract TSuffix GetNextSuffix(TSuffix suffix);
 
-        public virtual string MakeUnique(string name)
+        public virtual string Generate(string name)
         {
             string baseName = BaseName;
             TSuffix suffix = StartSuffix;
@@ -67,7 +60,7 @@ namespace ERHMS.EpiInfo
                 Group suffixGroup = match.Groups["suffix"];
                 if (suffixGroup.Success)
                 {
-                    suffix = (TSuffix)SuffixConverter.ConvertFromString(suffixGroup.Value);
+                    suffix = ParseSuffix(suffixGroup.Value);
                 }
             }
             while (true)
@@ -75,7 +68,6 @@ namespace ERHMS.EpiInfo
                 name = Format(baseName, suffix);
                 if (!Exists(name))
                 {
-                    Add(name);
                     return name;
                 }
                 suffix = GetNextSuffix(suffix);
@@ -85,12 +77,9 @@ namespace ERHMS.EpiInfo
 
     public abstract class IntSuffixNameGenerator : NameGenerator<int>
     {
-        protected IntSuffixNameGenerator()
-        {
-            Regex = new Regex(@"^(?<baseName>.+?)(?<suffix>[0-9]+)?$");
-            Separator = "";
-            StartSuffix = 1;
-        }
+        protected override Regex Regex { get; } = new Regex(@"^(?<baseName>.+?)(?<suffix>[0-9]+)?$");
+        protected override string Separator => "";
+        protected override int StartSuffix => 1;
 
         protected override int ParseSuffix(string value)
         {
@@ -107,12 +96,9 @@ namespace ERHMS.EpiInfo
     {
         private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        protected CharSuffixNameGenerator()
-        {
-            Regex = new Regex(@"^(?<baseName>.+?)(?:_(?<suffix>[A-Z]))?$", RegexOptions.IgnoreCase);
-            Separator = "_";
-            StartSuffix = 'A';
-        }
+        protected override Regex Regex { get; } = new Regex(@"^(?<baseName>.+?)(?:_(?<suffix>[a-zA-Z]))?$");
+        protected override string Separator => "_";
+        protected override char StartSuffix => 'A';
 
         protected override char ParseSuffix(string value)
         {
@@ -126,13 +112,13 @@ namespace ERHMS.EpiInfo
             return char.IsLower(suffix) ? char.ToLower(nextSuffix) : nextSuffix;
         }
 
-        public override string MakeUnique(string name)
+        public override string Generate(string name)
         {
             while (true)
             {
                 try
                 {
-                    return base.MakeUnique(name);
+                    return base.Generate(name);
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -144,86 +130,114 @@ namespace ERHMS.EpiInfo
 
     public class TableNameGenerator : IntSuffixNameGenerator
     {
+        protected override string BaseName => null;
+        protected override ISet<string> Names { get; }
+
         public TableNameGenerator(Project project)
         {
-            Names = ToSet(GetTableAndViewNames(project));
+            Names = ToNameSet(GetTableNames(project), GetViewNames(project));
         }
     }
 
     public class ViewNameGenerator : CharSuffixNameGenerator
     {
-        public const int MaxLength = 64;
-        private static readonly Regex InvalidViewNameCharPattern = new Regex(@"[^a-zA-Z0-9_]");
-        private static readonly Regex InvalidViewNameBeginningPattern = new Regex(@"^[^a-zA-Z]+");
-        private static readonly Regex TrailingDigitsRegex = new Regex(@"[0-9]+$");
+        public const int MaxLength = 50;
+
+        private static readonly Regex invalidCharRegex = new Regex(@"[^a-zA-Z0-9_]");
+        private static readonly Regex invalidStartCharRegex = new Regex(@"^[^a-zA-Z]");
+        private static readonly Regex trailingDigitsRegex = new Regex(@"[0-9]+$");
 
         private readonly ISet<string> viewNames;
+        private readonly ISet<string> tableAndViewNames;
+
+        protected override string BaseName => null;
+        protected override ISet<string> Names => viewNames;
 
         public ViewNameGenerator(Project project)
         {
-            Names = ToSet(GetTableAndViewNames(project));
-            viewNames = ToSet(GetViewNames(project));
+            viewNames = ToNameSet(GetViewNames(project));
+            tableAndViewNames = ToNameSet(GetTableNames(project), viewNames);
         }
 
-        public bool IsConflict(string name)
+        public bool IsIdentical(string name)
         {
-            return viewNames.Contains(TrailingDigitsRegex.Replace(name, ""));
+            return tableAndViewNames.Contains(name);
+        }
+
+        public bool IsSimilar(string name)
+        {
+            return viewNames.Contains(trailingDigitsRegex.Replace(name, ""));
+        }
+
+        public override bool Exists(string name)
+        {
+            return IsIdentical(name) || IsSimilar(name);
+        }
+
+        public override void Add(string name)
+        {
+            viewNames.Add(name);
+            tableAndViewNames.Add(name);
         }
 
         public bool IsValid(string name, out InvalidViewNameReason reason)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
             reason = InvalidViewNameReason.None;
-            if (string.IsNullOrWhiteSpace(name))
+            if (name == "")
             {
                 reason = InvalidViewNameReason.Empty;
-            }
-            else if (InvalidViewNameCharPattern.IsMatch(name))
-            {
-                reason = InvalidViewNameReason.InvalidChar;
-            }
-            else if (InvalidViewNameBeginningPattern.IsMatch(name))
-            {
-                reason = InvalidViewNameReason.InvalidBeginning;
             }
             else if (name.Length > MaxLength)
             {
                 reason = InvalidViewNameReason.TooLong;
             }
-            else if (Exists(name))
+            else if (invalidCharRegex.IsMatch(name))
             {
-                reason = InvalidViewNameReason.Exists;
+                reason = InvalidViewNameReason.InvalidChar;
             }
-            else if (IsConflict(name))
+            else if (invalidStartCharRegex.IsMatch(name))
             {
-                reason = InvalidViewNameReason.IsConflict;
+                reason = InvalidViewNameReason.InvalidStartChar;
+            }
+            else if (IsIdentical(name))
+            {
+                reason = InvalidViewNameReason.Identical;
+            }
+            else if (IsSimilar(name))
+            {
+                reason = InvalidViewNameReason.Similar;
             }
             return reason == InvalidViewNameReason.None;
-        }
-
-        public override void Add(string name)
-        {
-            base.Add(name);
-            viewNames.Add(name);
         }
     }
 
     public class PageNameGenerator : IntSuffixNameGenerator
     {
+        protected override Regex Regex => null;
+        protected override string BaseName => "Page";
+        protected override string Separator => " ";
+        protected override int StartSuffix { get; }
+        protected override ISet<string> Names { get; }
+
         public PageNameGenerator(View view)
         {
-            Regex = null;
-            BaseName = "Page";
-            Separator = " ";
             StartSuffix = view.Pages.Count + 1;
-            Names = ToSet(view.Pages.Select(page => page.Name));
+            Names = ToNameSet(view.Pages.Select(page => page.Name));
         }
     }
 
     public class FieldNameGenerator : IntSuffixNameGenerator
     {
+        protected override string BaseName => null;
+        protected override ISet<string> Names { get; }
+
         public FieldNameGenerator(View view)
         {
-            Names = ToSet(view.Fields.Cast<Field>().Select(field => field.Name));
+            Names = ToNameSet(view.Fields.Cast<Field>().Select(field => field.Name));
         }
     }
 }

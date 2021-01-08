@@ -1,5 +1,4 @@
 ﻿using Epi;
-using ERHMS.EpiInfo.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -61,18 +60,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
             : this()
         {
             Add(element.Attributes());
-            foreach (XElement xField in element.Elements(ElementNames.Field))
+            foreach (XElement fieldElement in element.Elements(ElementNames.Field))
             {
-                Add(new XField(xField));
-            }
-        }
-
-        public void SetName(string name)
-        {
-            Name = name;
-            foreach (XField xField in XFields)
-            {
-                xField.PageName = name;
+                Add(new XField(fieldElement));
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using ERHMS.EpiInfo.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -11,32 +10,17 @@ namespace ERHMS.EpiInfo.Templating.Xml
     {
         public const string DateFormat = "F";
 
-        public static XmlWriterSettings XmlWriterSettings => new XmlWriterSettings
+        public static XmlWriterSettings GetXmlWriterSettings()
         {
-            Indent = true,
-            OmitXmlDeclaration = true
-        };
-
-        public static bool IsLevelSupported(TemplateLevel level)
-        {
-            switch (level)
+            return new XmlWriterSettings
             {
-                case TemplateLevel.Project:
-                case TemplateLevel.View:
-                case TemplateLevel.Page:
-                case TemplateLevel.Field:
-                    return true;
-                default:
-                    return false;
-            }
+                Indent = true,
+                OmitXmlDeclaration = true
+            };
         }
 
         public static XTemplate Create(TemplateLevel level)
         {
-            if (!IsLevelSupported(level))
-            {
-                throw new ArgumentOutOfRangeException(nameof(level));
-            }
             return new XTemplate
             {
                 Name = null,
@@ -81,17 +65,13 @@ namespace ERHMS.EpiInfo.Templating.Xml
             : this()
         {
             Add(element.Attributes());
-            if (!IsLevelSupported(Level))
-            {
-                throw new ArgumentException($"Template level '{Level}' is not supported.", nameof(element));
-            }
-            XElement xProject = element.Element(ElementNames.Project);
-            Add(new XProject(xProject, Level));
+            XElement projectElement = element.Element(ElementNames.Project);
+            Add(new XProject(projectElement));
             foreach (string elementName in ElementNames.Tables)
             {
-                foreach (XElement xTable in element.Elements(elementName))
+                foreach (XElement tableElement in element.Elements(elementName))
                 {
-                    Add(new XTable(xTable));
+                    Add(new XTable(tableElement));
                 }
             }
         }

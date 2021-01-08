@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,15 +17,25 @@ namespace ERHMS.EpiInfo
 
     public static class ModuleExtensions
     {
-        public static string ToFileName(this Module @this)
+        private static string ToFileName(this Module @this)
         {
             switch (@this)
             {
+                case Module.Analysis:
+                case Module.AnalysisDashboard:
+                case Module.Enter:
+                case Module.MakeView:
+                    return $"{@this}.exe";
                 case Module.Menu:
                     return "EpiInfo.exe";
                 default:
-                    return $"{@this}.exe";
+                    throw new ArgumentOutOfRangeException(nameof(@this));
             }
+        }
+
+        private static string Quote(string argument)
+        {
+            return string.Format("\"{0}\"", argument.Replace("\"", "\"\""));
         }
 
         public static Process Start(this Module @this, params string[] arguments)
@@ -35,7 +46,7 @@ namespace ERHMS.EpiInfo
                 UseShellExecute = false,
                 WorkingDirectory = entryDirectory,
                 FileName = Path.Combine(entryDirectory, @this.ToFileName()),
-                Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument.Replace("\"", "\"\"")}\""))
+                Arguments = string.Join(" ", arguments.Select(Quote))
             });
         }
     }

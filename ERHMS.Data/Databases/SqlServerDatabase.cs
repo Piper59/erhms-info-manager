@@ -1,38 +1,33 @@
 ﻿using Dapper;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace ERHMS.Data.Databases
 {
-    public class SqlServerDatabase : Database
+    public class SqlServerDatabase : Database<SqlConnectionStringBuilder, SqlConnection>
     {
-        private const string MasterDatabaseName = "master";
-
-        private readonly SqlConnectionStringBuilder connectionStringBuilder;
+        private readonly SqlConnectionStringBuilder masterConnectionStringBuilder;
 
         public override DatabaseType Type => DatabaseType.SqlServer;
-        protected override DbConnectionStringBuilder ConnectionStringBuilder => connectionStringBuilder;
-        public string Instance => connectionStringBuilder.DataSource;
-        public override string Name => connectionStringBuilder.InitialCatalog;
+        public override string Name => ConnectionStringBuilder.InitialCatalog;
 
         public SqlServerDatabase(string connectionString)
+            : base(connectionString)
         {
-            connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            masterConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
+            {
+                InitialCatalog = "master"
+            };
         }
 
-        private IDbConnection GetMasterConnection()
+        protected override string GetId(SqlConnectionStringBuilder connectionStringBuilder)
         {
-            DbConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString)
-            {
-                InitialCatalog = MasterDatabaseName
-            };
-            return new SqlConnection(connectionStringBuilder.ConnectionString);
+            return $"{connectionStringBuilder.DataSource}.{connectionStringBuilder.InitialCatalog}";
         }
 
         public override bool Exists()
         {
-            using (IDbConnection connection = Connect(GetMasterConnection()))
+            using (IDbConnection connection = Connect(masterConnectionStringBuilder))
             {
                 string sql = "SELECT COUNT(*) FROM sys.databases WHERE name = @name;";
                 ParameterCollection parameters = new ParameterCollection
@@ -45,27 +40,10 @@ namespace ERHMS.Data.Databases
 
         protected override void CreateCore()
         {
-            using (IDbConnection connection = Connect(GetMasterConnection()))
+            using (IDbConnection connection = Connect(masterConnectionStringBuilder))
             {
                 string sql = $"CREATE DATABASE {Quote(Name)};";
                 connection.Execute(sql);
-            }
-        }
-
-        protected override DbConnection GetConnection()
-        {
-            return new SqlConnection(ConnectionString);
-        }
-
-        public override string ToString()
-        {
-            if (Name == "")
-            {
-                return Instance;
-            }
-            else
-            {
-                return $"{Instance}.{Name}";
             }
         }
     }

@@ -1,7 +1,9 @@
 ﻿using Epi;
 using Epi.Data.Services;
 using Epi.Fields;
-using ERHMS.Common;
+using ERHMS.Common.Logging;
+using ERHMS.Data;
+using ERHMS.EpiInfo.Metadata;
 using ERHMS.EpiInfo.Templating.Xml;
 using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
@@ -13,43 +15,32 @@ namespace ERHMS.EpiInfo.Templating
 {
     public abstract class TemplateInstantiator
     {
-        private class Context
+        protected class Context
         {
             public TableNameGenerator TableNameGenerator { get; }
             public ViewNameGenerator ViewNameGenerator { get; }
             public PageNameGenerator PageNameGenerator { get; private set; }
             public FieldNameGenerator FieldNameGenerator { get; private set; }
-            public IDictionary<string, string> TableNameMap { get; }
-            public IDictionary<int, int> ViewIdMap { get; }
-            public IDictionary<int, int> FieldIdMap { get; }
-            public IDictionary<string, string> FieldNameMap { get; private set; }
+            public IDictionary<string, string> TableNameMap { get; } = new Dictionary<string, string>();
+            public IDictionary<string, string> FieldNameMap { get; } = new Dictionary<string, string>();
+            public IDictionary<int, int> ViewIdMap { get; } = new Dictionary<int, int>();
+            public IDictionary<int, int> FieldIdMap { get; } = new Dictionary<int, int>();
 
             public Context(Project project)
             {
                 TableNameGenerator = new TableNameGenerator(project);
                 ViewNameGenerator = new ViewNameGenerator(project);
-                TableNameMap = new Dictionary<string, string>();
-                ViewIdMap = new Dictionary<int, int>();
-                FieldIdMap = new Dictionary<int, int>();
             }
 
             public void SetView(View view)
             {
                 PageNameGenerator = new PageNameGenerator(view);
                 FieldNameGenerator = new FieldNameGenerator(view);
-                FieldNameMap = new Dictionary<string, string>();
+                FieldNameMap.Clear();
             }
         }
 
-        private static readonly IReadOnlyCollection<string> IgnoredGridColumnNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            ColumnNames.UNIQUE_ROW_ID,
-            ColumnNames.REC_STATUS,
-            ColumnNames.FOREIGN_KEY,
-            ColumnNames.GLOBAL_RECORD_ID
-        };
-
-        private Context context;
+        protected Context context;
 
         public abstract TemplateLevel Level { get; }
         public XTemplate XTemplate { get; }
@@ -67,23 +58,23 @@ namespace ERHMS.EpiInfo.Templating
             Metadata = metadata;
         }
 
-        protected abstract ICollection<Field> InstantiateCore();
+        protected abstract void InstantiateCore();
 
         public void Instantiate()
         {
-            Progress?.Report($"Instantiating template: {XTemplate.Name}");
+            Progress?.Report($"Instantiating Epi Info template: {XTemplate.Name}");
             context = new Context(Metadata.Project);
+            InstantiateSourceTables();
+            InstantiateCore();
+            InstantiateGridTables();
+        }
+
+        private void InstantiateSourceTables()
+        {
             Progress?.Report("Adding source tables");
             foreach (XTable xTable in XTemplate.XSourceTables)
             {
                 InstantiateSourceTable(xTable);
-            }
-            ICollection<Field> fields = InstantiateCore();
-            ProcessProjectFields(fields);
-            Progress?.Report("Adding grid tables");
-            foreach (XTable xTable in XTemplate.XGridTables)
-            {
-                InstantiateGridTable(xTable);
             }
         }
 
@@ -100,17 +91,19 @@ namespace ERHMS.EpiInfo.Templating
                 }
                 else
                 {
-                    table.TableName = context.TableNameGenerator.MakeUnique(table.TableName);
+                    table.TableName = context.TableNameGenerator.Generate(table.TableName);
                     Progress?.Report($"Renamed source table: {table.TableName}");
                 }
             }
             if (!exists)
             {
-                string[] columnNames = table.Columns.Cast<DataColumn>()
+                string[] columnNames = table.Columns
+                    .Cast<DataColumn>()
                     .Select(column => column.ColumnName)
                     .ToArray();
                 Metadata.CreateCodeTable(table.TableName, columnNames);
                 Metadata.SaveCodeTableData(table, table.TableName, columnNames);
+                context.TableNameGenerator.Add(table.TableName);
             }
             context.TableNameMap[xTable.TableName] = table.TableName;
         }
@@ -119,13 +112,14 @@ namespace ERHMS.EpiInfo.Templating
         {
             Progress?.Report($"Adding view: {xView.Name}");
             View view = xView.Instantiate(project);
-            if (context.ViewNameGenerator.Exists(view.Name) || context.ViewNameGenerator.IsConflict(view.Name))
+            if (context.ViewNameGenerator.Exists(view.Name))
             {
-                view.Name = context.ViewNameGenerator.MakeUnique(view.Name);
+                view.Name = context.ViewNameGenerator.Generate(view.Name);
                 Progress?.Report($"Renamed view: {view.Name}");
             }
             Metadata.InsertView(view);
             project.Views.Add(view);
+            context.ViewNameGenerator.Add(view.Name);
             context.ViewIdMap[xView.ViewId] = view.Id;
             return view;
         }
@@ -136,93 +130,106 @@ namespace ERHMS.EpiInfo.Templating
             Page page = xPage.Instantiate(view);
             if (context.PageNameGenerator.Exists(page.Name))
             {
-                page.Name = context.PageNameGenerator.MakeUnique(page.Name);
+                page.Name = context.PageNameGenerator.Generate(page.Name);
                 Progress?.Report($"Renamed page: {page.Name}");
             }
             page.Position = view.Pages.Count;
             Metadata.InsertPage(page);
             view.Pages.Add(page);
+            context.PageNameGenerator.Add(page.Name);
             return page;
         }
 
-        protected ICollection<Field> InstantiateFields(XView xView, View view)
-        {
-            context.SetView(view);
-            ICollection<Field> fields = new List<Field>();
-            foreach (XPage xPage in xView.XPages)
-            {
-                Page page = InstantiatePage(xPage, view);
-                foreach (XField xField in xPage.XFields)
-                {
-                    fields.Add(InstantiateField(xField, page));
-                }
-            }
-            ProcessViewFields(fields);
-            return fields;
-        }
-
-        protected ICollection<Field> InstantiateFields(XPage xPage, Page page)
-        {
-            context.SetView(page.GetView());
-            ICollection<Field> fields = new List<Field>();
-            foreach (XField xField in xPage.XFields)
-            {
-                fields.Add(InstantiateField(xField, page));
-            }
-            ProcessViewFields(fields);
-            return fields;
-        }
-
-        private Field InstantiateField(XField xField, Page page)
+        protected Field InstantiateField(XField xField, Page page)
         {
             View view = page.GetView();
             Progress?.Report($"Adding field: {view.Name}/{page.Name}/{xField.Name}");
             Field field = xField.Instantiate(page);
             if (context.FieldNameGenerator.Exists(field.Name))
             {
-                field.Name = context.FieldNameGenerator.MakeUnique(field.Name);
+                field.Name = context.FieldNameGenerator.Generate(field.Name);
                 Progress?.Report($"Renamed field: {field.Name}");
             }
-            if (field is RelatedViewField relatedViewField)
-            {
-                relatedViewField.RelatedViewID = context.ViewIdMap[relatedViewField.RelatedViewID];
-            }
-            else if (field is TableBasedDropDownField tableBasedDropDownField)
-            {
-                tableBasedDropDownField.SourceTableName = context.TableNameMap[tableBasedDropDownField.SourceTableName];
-            }
+            OnFieldInstantiating(field);
             field.SaveToDb();
-            context.FieldIdMap[xField.FieldId] = field.Id;
+            context.FieldNameGenerator.Add(field.Name);
             context.FieldNameMap[xField.Name] = field.Name;
+            context.FieldIdMap[xField.FieldId] = field.Id;
             return field;
         }
 
-        private void ProcessViewFields(IEnumerable<Field> fields)
+        private void OnFieldInstantiating(Field field)
+        {
+            if (field is RelatedViewField relatedViewField)
+            {
+                if (context.ViewIdMap.TryGetValue(relatedViewField.RelatedViewID, out int mappedRelatedViewId))
+                {
+                    relatedViewField.RelatedViewID = mappedRelatedViewId;
+                }
+                else
+                {
+                    Log.Instance.Warn($"Related view not found: {relatedViewField.RelatedViewID}");
+                }
+            }
+            else if (field is TableBasedDropDownField tableBasedDropDownField)
+            {
+                if (context.TableNameMap.TryGetValue(tableBasedDropDownField.SourceTableName, out string mappedSourceTableName))
+                {
+                    tableBasedDropDownField.SourceTableName = mappedSourceTableName;
+                }
+                else
+                {
+                    Log.Instance.Warn($"Source table not found: {tableBasedDropDownField.SourceTableName}");
+                }
+            }
+        }
+
+        protected void OnViewFieldsInstantiated(IEnumerable<Field> fields)
         {
             foreach (Field field in fields)
             {
                 if (field is GroupField groupField)
                 {
-                    GroupFieldMapper.MapChildFieldNames(groupField, context.FieldNameMap);
+                    groupField.ChildFieldNames = GroupFieldMapper.MapChildFieldNames(
+                        groupField.ChildFieldNames,
+                        context.FieldNameMap.TryGetValue);
                     groupField.SaveToDb();
+                }
+                else if (field is MirrorField mirrorField)
+                {
+                    if (context.FieldIdMap.TryGetValue(mirrorField.SourceFieldId, out int mappedSourceFieldId))
+                    {
+                        mirrorField.SourceFieldId = mappedSourceFieldId;
+                        mirrorField.SaveToDb();
+                    }
+                    else
+                    {
+                        Log.Instance.Warn($"Source field not found: {mirrorField.SourceFieldId}");
+                    }
                 }
             }
         }
 
-        private void ProcessProjectFields(IEnumerable<Field> fields)
+        protected void OnProjectFieldsInstantiated(IEnumerable<Field> fields)
         {
             foreach (Field field in fields)
             {
                 if (field is DDLFieldOfCodes ddlFieldOfCodes)
                 {
-                    DDLFieldOfCodesMapper.MapAssociatedFieldInformation(ddlFieldOfCodes, context.FieldIdMap);
+                    ddlFieldOfCodes.AssociatedFieldInformation = DDLFieldOfCodesMapper.MapAssociatedFieldInformation(
+                        ddlFieldOfCodes.AssociatedFieldInformation,
+                        context.FieldIdMap.TryGetValue);
                     ddlFieldOfCodes.SaveToDb();
                 }
-                else if (field is MirrorField mirrorField)
-                {
-                    mirrorField.SourceFieldId = context.FieldIdMap[mirrorField.SourceFieldId];
-                    mirrorField.SaveToDb();
-                }
+            }
+        }
+
+        private void InstantiateGridTables()
+        {
+            Progress?.Report("Adding grid tables");
+            foreach (XTable xTable in XTemplate.XGridTables)
+            {
+                InstantiateGridTable(xTable);
             }
         }
 
@@ -230,14 +237,31 @@ namespace ERHMS.EpiInfo.Templating
         {
             Progress?.Report($"Adding grid table: {xTable.TableName}");
             DataTable table = xTable.Instantiate();
-            foreach (DataRow item in table.Rows)
+            GridColumnDataTable gridColumns = new GridColumnDataTable(table);
+            foreach (GridColumnDataRow gridColumn in gridColumns.Where(gridColumn => !gridColumn.IsMetadata()))
             {
-                if (!IgnoredGridColumnNames.Contains(item.Field<string>(ColumnNames.NAME)))
-                {
-                    item.SetField(ColumnNames.FIELD_ID, context.FieldIdMap[item.Field<int>(ColumnNames.FIELD_ID)]);
-                    item.SetField(ColumnNames.SOURCE_TABLE_NAME, context.TableNameMap[item.Field<string>(ColumnNames.SOURCE_TABLE_NAME)]);
-                    Metadata.AddGridColumn(item);
-                }
+                OnGridColumnInstantiating(gridColumn);
+                Metadata.AddGridColumn(gridColumn);
+            }
+        }
+
+        private void OnGridColumnInstantiating(GridColumnDataRow gridColumn)
+        {
+            if (context.FieldIdMap.TryGetValue(gridColumn.FieldId, out int mappedFieldId))
+            {
+                gridColumn.FieldId = mappedFieldId;
+            }
+            else
+            {
+                Log.Instance.Warn($"Field not found: {gridColumn.FieldId}");
+            }
+            if (context.TableNameMap.TryGetValue(gridColumn.SourceTableName, out string mappedSourceTableName))
+            {
+                gridColumn.SourceTableName = mappedSourceTableName;
+            }
+            else
+            {
+                Log.Instance.Warn($"Source table not found: {gridColumn.SourceTableName}");
             }
         }
     }
@@ -253,20 +277,32 @@ namespace ERHMS.EpiInfo.Templating
             Project = project;
         }
 
-        protected override ICollection<Field> InstantiateCore()
+        protected override void InstantiateCore()
         {
-            List<Field> fields = new List<Field>();
-            ICollection<(XView, View)> views = new List<(XView, View)>();
             foreach (XView xView in XTemplate.XProject.XViews)
             {
-                View view = InstantiateView(xView, Project);
-                views.Add((xView, view));
+                InstantiateView(xView, Project);
             }
-            foreach ((XView xView, View view) in views)
+            ICollection<Field> projectFields = new List<Field>();
+            foreach (XView xView in XTemplate.XProject.XViews)
             {
-                fields.AddRange(InstantiateFields(xView, view));
+                int mappedViewId = context.ViewIdMap[xView.ViewId];
+                View view = Project.Views.GetViewById(mappedViewId);
+                context.SetView(view);
+                ICollection<Field> viewFields = new List<Field>();
+                foreach (XPage xPage in xView.XPages)
+                {
+                    Page page = InstantiatePage(xPage, view);
+                    foreach (XField xField in xPage.XFields)
+                    {
+                        Field field = InstantiateField(xField, page);
+                        viewFields.Add(field);
+                        projectFields.Add(field);
+                    }
+                }
+                OnViewFieldsInstantiated(viewFields);
             }
-            return fields;
+            OnProjectFieldsInstantiated(projectFields);
         }
     }
 
@@ -282,11 +318,23 @@ namespace ERHMS.EpiInfo.Templating
             Project = project;
         }
 
-        protected override ICollection<Field> InstantiateCore()
+        protected override void InstantiateCore()
         {
             XView xView = XTemplate.XProject.XView;
             View = InstantiateView(xView, Project);
-            return InstantiateFields(xView, View);
+            context.SetView(View);
+            ICollection<Field> fields = new List<Field>();
+            foreach (XPage xPage in xView.XPages)
+            {
+                Page page = InstantiatePage(xPage, View);
+                foreach (XField xField in xPage.XFields)
+                {
+                    Field field = InstantiateField(xField, page);
+                    fields.Add(field);
+                }
+            }
+            OnViewFieldsInstantiated(fields);
+            OnProjectFieldsInstantiated(fields);
         }
     }
 
@@ -302,8 +350,9 @@ namespace ERHMS.EpiInfo.Templating
             View = view;
         }
 
-        protected override ICollection<Field> InstantiateCore()
+        protected override void InstantiateCore()
         {
+            context.SetView(View);
             XView xView = XTemplate.XProject.XView;
             string checkCode = xView.CheckCode.Trim();
             if (!View.CheckCode.Contains(checkCode))
@@ -312,8 +361,14 @@ namespace ERHMS.EpiInfo.Templating
                 Metadata.UpdateView(View);
             }
             XPage xPage = xView.XPages.Single();
-            Page = InstantiatePage(xPage, View);
-            return InstantiateFields(xPage, Page);
+            ICollection<Field> fields = new List<Field>();
+            foreach (XField xField in xPage.XFields)
+            {
+                Field field = InstantiateField(xField, Page);
+                fields.Add(field);
+            }
+            OnViewFieldsInstantiated(fields);
+            OnProjectFieldsInstantiated(fields);
         }
     }
 }

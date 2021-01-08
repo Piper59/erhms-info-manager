@@ -1,33 +1,47 @@
 ﻿using Epi;
-using System.Linq;
-using System.Reflection;
+using ERHMS.Common.Collections;
+using System.Data.OleDb;
+using System.Data.SqlClient;
 
 namespace ERHMS.Data.Databases
 {
     public enum DatabaseType
     {
-        [Driver(Configuration.AccessDriver)]
         Access,
-
-        [Driver(Configuration.SqlDriver)]
         SqlServer
     }
 
     public static class DatabaseTypeExtensions
     {
-        public static string ToDriver(this DatabaseType @this)
+        private static readonly IReadOnlyTwoWayMap<DatabaseType, string> providerNames = new TwoWayMap<DatabaseType, string>
         {
-            return typeof(DatabaseType).GetField(@this.ToString())
-                .GetCustomAttribute<DriverAttribute>()
-                .Driver;
+            { DatabaseType.Access, typeof(OleDbConnection).Namespace },
+            { DatabaseType.SqlServer, typeof(SqlConnection).Namespace }
+        };
+        private static readonly IReadOnlyTwoWayMap<DatabaseType, string> epiInfoDriverNames = new TwoWayMap<DatabaseType, string>
+        {
+            { DatabaseType.Access, Configuration.AccessDriver },
+            { DatabaseType.SqlServer, Configuration.SqlDriver }
+        };
+
+        public static string ToProviderName(this DatabaseType @this)
+        {
+            return providerNames.Forward[@this];
         }
 
-        public static DatabaseType FromDriver(string driver)
+        public static DatabaseType FromProviderName(string providerName)
         {
-            object value = typeof(DatabaseType).GetFields(BindingFlags.Public | BindingFlags.Static)
-                .Single(field => field.GetCustomAttribute<DriverAttribute>().Driver == driver)
-                .GetValue(null);
-            return (DatabaseType)value;
+            return providerNames.Reverse[providerName];
+        }
+
+        public static string ToEpiInfoDriverName(this DatabaseType @this)
+        {
+            return epiInfoDriverNames.Forward[@this];
+        }
+
+        public static DatabaseType FromEpiInfoDriverName(string epiInfoDriverName)
+        {
+            return epiInfoDriverNames.Reverse[epiInfoDriverName];
         }
     }
 }

@@ -10,77 +10,62 @@ namespace ERHMS.EpiInfo.Data
 {
     public class Record : DynamicObject, INotifyPropertyChanged
     {
-        private static readonly Regex TableNamePrefixRegex = new Regex(@"^.+\.");
+        private static readonly Regex tableNamePrefixRegex = new Regex(@"^.+\.");
 
-        public IDictionary<string, object> Properties { get; } = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        public string GlobalRecordId => GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID)?.ToLower();
-        public int? UniqueKey => GetProperty<int?>(ColumnNames.UNIQUE_KEY);
+        private readonly Dictionary<string, object> properties = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        public IReadOnlyDictionary<string, object> Properties => properties;
 
-        public short? Status
+        public int UniqueKey => (int)properties[ColumnNames.UNIQUE_KEY];
+
+        public short RECSTATUS
         {
-            get { return GetProperty<short?>(ColumnNames.REC_STATUS); }
-            private set { SetProperty(ColumnNames.REC_STATUS, value); }
+            get
+            {
+                return (short)properties[ColumnNames.REC_STATUS];
+            }
+            private set
+            {
+                if (SetProperty(ColumnNames.REC_STATUS, value))
+                {
+                    OnPropertyChanged(nameof(Deleted));
+                }
+            }
         }
 
         public bool Deleted
         {
-            get
-            {
-                return RecordStatus.ToDeleted(Status);
-            }
-            set
-            {
-                Status = RecordStatus.FromDeleted(value);
-                OnPropertyChanged(nameof(Deleted));
-            }
+            get { return RECSTATUS == RecordStatuses.Deleted; }
+            internal set { RECSTATUS = value ? RecordStatuses.Deleted : RecordStatuses.Undeleted; }
         }
+
+        public string GlobalRecordId => (string)properties[ColumnNames.GLOBAL_RECORD_ID];
+
+        internal Record() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
         private void OnPropertyChanged(string propertyName) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
-        public bool TryGetProperty(string propertyName, out object value)
+        private bool SetProperty(string propertyName, object value)
         {
-            return Properties.TryGetValue(propertyName, out value);
-        }
-
-        public bool TryGetProperty<T>(string propertyName, out T value)
-        {
-            if (TryGetProperty(propertyName, out object obj))
+            if (properties.TryGetValue(propertyName, out object currentValue) && Equals(value, currentValue))
             {
-                value = (T)obj;
-                return true;
+                return false;
             }
             else
             {
-                value = default(T);
-                return false;
+                properties[propertyName] = value;
+                OnPropertyChanged(propertyName);
+                return true;
             }
         }
 
-        public object GetProperty(string propertyName)
-        {
-            TryGetProperty(propertyName, out object value);
-            return value;
-        }
-
-        public T GetProperty<T>(string propertyName)
-        {
-            TryGetProperty(propertyName, out T value);
-            return value;
-        }
-
-        public void SetProperty(string propertyName, object value)
-        {
-            Properties[propertyName] = value;
-            OnPropertyChanged(propertyName);
-        }
-
-        public void SetProperties(IDataRecord record)
+        internal void SetProperties(IDataRecord record)
         {
             for (int index = 0; index < record.FieldCount; index++)
             {
-                string propertyName = TableNamePrefixRegex.Replace(record.GetName(index), "");
+                string fieldName = record.GetName(index);
+                string propertyName = tableNamePrefixRegex.Replace(fieldName, "");
                 object value = record.IsDBNull(index) ? null : record.GetValue(index);
                 SetProperty(propertyName, value);
             }
@@ -88,23 +73,24 @@ namespace ERHMS.EpiInfo.Data
 
         public sealed override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            return TryGetProperty(binder.Name, out result);
+            return properties.TryGetValue(binder.Name, out result);
         }
 
         public sealed override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            SetProperty(binder.Name, value);
-            return true;
+            return false;
         }
 
         public override int GetHashCode()
         {
-            return GlobalRecordId == null ? 0 : GlobalRecordId.GetHashCode();
+            return GlobalRecordId == null ? 0 : GlobalRecordId.ToLower().GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Record record && record.GlobalRecordId == GlobalRecordId;
+            return obj is Record record
+                && record.GlobalRecordId != null
+                && record.GlobalRecordId.Equals(GlobalRecordId, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace ERHMS.EpiInfo.Templating.Xml.Mapping
 {
     public interface IFieldMapper
     {
-        void SetProperties(XField xField, Field field);
+        bool TrySetProperties(XField xField, Field field);
     }
 
     public interface IFieldMapper<TField> : IFieldMapper
