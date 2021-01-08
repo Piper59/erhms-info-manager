@@ -22,6 +22,7 @@ namespace ERHMS.EpiInfo
             Configuration configuration = Configuration.CreateDefaultConfiguration();
             configuration.RecentViews.Clear();
             configuration.RecentProjects.Clear();
+            Properties.Settings.Default.ApplyTo(configuration);
             return new Configuration(path, configuration.ConfigDataSet);
         }
 

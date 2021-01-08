@@ -6,7 +6,6 @@ using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace ERHMS.Console
@@ -72,17 +71,12 @@ namespace ERHMS.Console
 
         private static void Configure()
         {
-            if (ConfigurationExtensions.Exists())
+            if (!ConfigurationExtensions.Exists())
             {
-                ConfigurationExtensions.Load();
-            }
-            else
-            {
-                string path = Path.GetTempFileName();
-                Configuration configuration = ConfigurationExtensions.Create(path);
+                Configuration configuration = ConfigurationExtensions.Create();
                 configuration.Save();
-                ConfigurationExtensions.Load(path);
             }
+            ConfigurationExtensions.Load();
             Configuration.Environment = ExecutionEnvironment.Console;
         }
     }
