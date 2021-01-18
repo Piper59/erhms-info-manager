@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1022
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERHMS.Desktop", "ERHMS.Desktop\ERHMS.Desktop.csproj", "{F0080890-84E8-48F2-8B0E-2CECE4706CB2}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -28,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		LICENSE.txt = LICENSE.txt
+		NOTICE.txt = NOTICE.txt
 		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
