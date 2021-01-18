@@ -4,12 +4,12 @@
     <ItemGroup>
       <EpiInfoFile Include="$(EpiInfoDir)**\*" Exclude="$(EpiInfoDir)Projects\**\*" />
     </ItemGroup>
-    <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(OutputPath)%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(EpiInfoFile)" DestinationFolder="$(BuildDir)%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
 
   <Target Name="TouchTemplates" AfterTargets="CopyEpiInfoFiles">
     <ItemGroup>
-      <Template Include="$(OutputPath)Templates\**\*" />
+      <Template Include="$(BuildDir)Templates\**\*" />
     </ItemGroup>
     <Touch Files="@(Template)" />
   </Target>

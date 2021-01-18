@@ -2,11 +2,11 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <BuildContainerDir>..\Build\$(Configuration)\</BuildContainerDir>
-    <BuildDir>$(BuildContainerDir)ERHMS Info Manager</BuildDir>
+    <BuildDir>$(BuildContainerDir)ERHMS Info Manager\</BuildDir>
     <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="$(SolutionDir)\SolutionInfo.cs" />
+    <Compile Include="$(SolutionDir)SolutionInfo.cs" />
   </ItemGroup>
 </Project>
