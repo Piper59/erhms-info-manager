@@ -59,7 +59,6 @@ namespace ERHMS.Console.Utilities
             }
             instantiator.Progress = new LoggingProgress();
             instantiator.Instantiate();
-            Log.Instance.Debug("Template has been instantiated");
         }
     }
 }

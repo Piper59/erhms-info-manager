@@ -42,7 +42,6 @@ namespace ERHMS.Console.Utilities
             info.Database = database;
             Project project = ProjectExtensions.Create(info);
             project.Initialize();
-            Log.Instance.Debug("Project has been created");
         }
     }
 }

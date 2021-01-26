@@ -6,11 +6,6 @@ namespace ERHMS.Desktop.Views
 {
     public partial class DialogView : Window
     {
-        private static DialogButton GetDataContext(Button button)
-        {
-            return (DialogButton)button.DataContext;
-        }
-
         public DialogView()
         {
             InitializeComponent();
@@ -18,7 +13,9 @@ namespace ERHMS.Desktop.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool? result = GetDataContext((Button)e.Source).Result;
+            Button button = (Button)e.Source;
+            DialogButton dialogButton = (DialogButton)button.DataContext;
+            bool? result = dialogButton.Result;
             if (DialogResult == result)
             {
                 Close();

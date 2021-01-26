@@ -14,16 +14,15 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <OutputPath>$(BuildDir)</OutputPath>
     <ApplicationIcon>..\ERHMS.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <StartupObject>ERHMS.Desktop.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Build\Debug\ERHMS Info Manager\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,7 +31,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\Release\ERHMS Info Manager\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -77,7 +75,7 @@
     </ProjectReference>
     <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
       <Project>{181048fb-dae4-4875-9a58-461f81c4131a}</Project>
-      <Name>ERHMS.Model</Name>
+      <Name>ERHMS.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
@@ -94,45 +92,43 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCommands.cs" />
-    <Compile Include="Behaviors\AccessibleDataGridBehavior.cs" />
-    <Compile Include="Behaviors\DropDownButtonBehavior.cs" />
-    <Compile Include="Behaviors\InitialFocusBehavior.cs" />
-    <Compile Include="Behaviors\RelayEventBehavior.cs" />
+    <Compile Include="Behaviors\DispatchEvent.cs" />
+    <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
+    <Compile Include="Behaviors\OpenContextMenuOnClick.cs" />
+    <Compile Include="Behaviors\SetKeyboardFocusOnLoaded.cs" />
+    <Compile Include="Behaviors\SetMenuDropAlignment.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\ErrorBehavior.cs" />
+    <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\ActionTextBox.cs" />
     <Compile Include="Controls\PhaseHeading.cs" />
-    <Compile Include="Controls\WizardButton.cs" />
+    <Compile Include="Controls\VerboseButton.cs" />
     <Compile Include="Converters\ActionTextBoxPaddingConverter.cs" />
     <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
-    <Compile Include="Converters\IconToNameConverter.cs" />
-    <Compile Include="Converters\ObjectToResourceConverter.cs" />
-    <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="Converters\NullableToVisibilityConverter.cs" />
+    <Compile Include="Converters\ObjectTypeToResourceConverter.cs" />
     <Compile Include="Converters\PageCountToVisibilityConverter.cs" />
-    <Compile Include="Converters\PhaseHeadingBackgroundConverter.cs" />
+    <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\PhaseToDisplayTextConverter.cs" />
+    <Compile Include="Converters\SystemIconToNameConverter.cs" />
     <Compile Include="Data\CustomCollectionView.cs" />
     <Compile Include="Data\ICustomCollectionView.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
     <Compile Include="Data\ISelectable.cs" />
     <Compile Include="Data\ISelectableCollectionView.cs" />
+    <Compile Include="Dialogs\Dialog.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
-    <Compile Include="Dialogs\DialogInfo.cs" />
-    <Compile Include="Dialogs\DialogInfoPreset.cs" />
-    <Compile Include="Events\ErrorEventArgs.cs" />
-    <Compile Include="Events\ProcessStartedEventArgs.cs" />
+    <Compile Include="Dialogs\DialogPreset.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
-    <Compile Include="Infrastructure\ColorExtensions.cs" />
+    <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
-    <Compile Include="Integration.cs" />
-    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -141,8 +137,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ResX.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\ResXExtensions.cs" />
-    <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -151,25 +145,12 @@
     <Compile Include="Resources\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\DialogService.cs" />
-    <Compile Include="Services\FileDialogService.cs" />
     <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\IFileDialogService.cs" />
-    <Compile Include="Services\IProgressService.cs" />
-    <Compile Include="Services\IWizardService.cs" />
-    <Compile Include="Services\ProgressService.cs" />
+    <Compile Include="Services\Implementation\DialogService.cs" />
     <Compile Include="Services\ServiceProvider.cs" />
-    <Compile Include="Services\WizardService.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ProgressViewModel.cs" />
-    <Compile Include="ViewModels\ProjectViewModel.cs" />
-    <Compile Include="ViewModels\ProjectViewModel.Views.cs" />
-    <Compile Include="ViewModels\Wizards\CreateViewWizard.cs" />
-    <Compile Include="ViewModels\WizardViewModel.cs" />
-    <Compile Include="ViewModels\ViewViewModel.cs" />
-    <Compile Include="ViewModels\ViewViewModel.Records.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
@@ -179,20 +160,6 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProgressView.xaml.cs">
-      <DependentUpon>ProgressView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProjectView.xaml.cs">
-      <DependentUpon>ProjectView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\WizardView.xaml.cs">
-      <DependentUpon>WizardView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ViewView.xaml.cs">
-      <DependentUpon>ViewView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wizards\IStep.cs" />
-    <Compile Include="Wizards\IWizard.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\ResX.resx">
@@ -252,30 +219,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ProgressView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ProjectView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Wizards\CreateViewTemplates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Wizards\StepTitles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\WizardView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ViewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -4,7 +4,7 @@ using System.Media;
 
 namespace ERHMS.Desktop.Dialogs
 {
-    public class DialogInfo
+    public class Dialog
     {
         public SystemSound Sound { get; set; }
         public Icon Icon { get; set; }
@@ -13,27 +13,26 @@ namespace ERHMS.Desktop.Dialogs
         public string Details { get; set; }
         public DialogButtonCollection Buttons { get; set; }
 
-        public DialogInfo(DialogInfoPreset preset)
+        public Dialog(DialogPreset preset)
         {
             switch (preset)
             {
-                case DialogInfoPreset.Default:
+                case DialogPreset.Default:
                     Buttons = new DialogButtonCollection
                     {
-                        new DialogButton(null, "_OK", true, true)
+                        { "_OK", null, true, true }
                     };
                     break;
-                case DialogInfoPreset.Warning:
+                case DialogPreset.Warning:
                     Sound = SystemSounds.Asterisk;
                     Icon = SystemIcons.Warning;
-                    Buttons = new DialogButtonCollection();
                     break;
-                case DialogInfoPreset.Error:
+                case DialogPreset.Error:
                     Sound = SystemSounds.Asterisk;
                     Icon = SystemIcons.Error;
                     Buttons = new DialogButtonCollection
                     {
-                        new DialogButton(null, "_Close", true, true)
+                        { "_Close", null, true, true }
                     };
                     break;
                 default:

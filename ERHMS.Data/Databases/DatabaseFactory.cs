@@ -18,9 +18,9 @@ namespace ERHMS.Data.Databases
             }
         }
 
-        public static IDatabase GetDatabase(string epiInfoDriverName, string connectionString)
+        public static IDatabase GetDatabase(string driverName, string connectionString)
         {
-            return GetDatabase(DatabaseTypeExtensions.FromEpiInfoDriverName(epiInfoDriverName), connectionString);
+            return GetDatabase(DatabaseTypeExtensions.FromDriverName(driverName), connectionString);
         }
 
         public static IDatabase GetDatabase(Project project)

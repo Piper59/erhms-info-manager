@@ -1,32 +1,32 @@
-﻿using ERHMS.Common;
-using ERHMS.Desktop.Commands;
+﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class DialogViewModel : ObservableObject
     {
-        public DialogInfo Info { get; }
+        public Dialog Dialog { get; }
 
-        private bool isShowingDetails;
-        public bool IsShowingDetails
+        private bool showingDetails;
+        public bool ShowingDetails
         {
-            get { return isShowingDetails; }
-            set { SetProperty(ref isShowingDetails, value); }
+            get { return showingDetails; }
+            set { SetProperty(ref showingDetails, value); }
         }
 
         public ICommand ToggleShowingDetailsCommand { get; }
 
-        public DialogViewModel(DialogInfo info)
+        public DialogViewModel(Dialog dialog)
         {
-            Info = info;
+            Dialog = dialog;
             ToggleShowingDetailsCommand = new SyncCommand(ToggleShowingDetails);
         }
 
         public void ToggleShowingDetails()
         {
-            IsShowingDetails = !IsShowingDetails;
+            ShowingDetails = !ShowingDetails;
         }
     }
 }

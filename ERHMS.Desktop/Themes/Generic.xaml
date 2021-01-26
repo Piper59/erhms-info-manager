@@ -7,8 +7,8 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Converters:ActionTextBoxPaddingConverter x:Key="ActionTextBoxPaddingConverter" />
-    <Converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
-    <Converters:PhaseHeadingBackgroundConverter x:Key="PhaseHeadingBackgroundConverter" />
+    <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+    <Converters:PhaseToColorConverter x:Key="PhaseToColorConverter" />
     <Converters:PhaseToDisplayTextConverter x:Key="PhaseToDisplayTextConverter" />
 
     <Style TargetType="Controls:ActionTextBox">
@@ -29,9 +29,9 @@
                             </TextBox.Padding>
                         </TextBox>
                         <Button x:Name="PART_Button"
-                                AutomationProperties.Name="{TemplateBinding ActionName}"
-                                Command="{TemplateBinding Command}"
-                                Content="{TemplateBinding ActionText}"
+                                AutomationProperties.Name="{TemplateBinding ActionAutomationName}"
+                                Command="{TemplateBinding ActionCommand}"
+                                Content="{TemplateBinding ActionContent}"
                                 HorizontalAlignment="Right" />
                     </Grid>
                 </ControlTemplate>
@@ -43,10 +43,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Controls:PhaseHeading">
-                    <Border Background="{TemplateBinding Phase, Converter={StaticResource PhaseHeadingBackgroundConverter}}"
-                            Margin="{StaticResource DefaultMargin}"
+                    <Border Margin="{StaticResource DefaultMargin}"
                             Padding="{StaticResource SmallHorizontalPadding}"
                             SnapsToDevicePixels="True">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
+                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x40'}"
+                                              Offset="0" />
+                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x00'}"
+                                              Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
                         <TextBlock FontSize="{StaticResource LargeFontSize}"
                                    FontWeight="{StaticResource ThinFontWeight}"
                                    Margin="{StaticResource DefaultMargin}"
@@ -57,10 +64,10 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Controls:WizardButton">
+    <Style TargetType="Controls:VerboseButton">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="Controls:WizardButton">
+                <ControlTemplate TargetType="Controls:VerboseButton">
                     <Button AutomationProperties.HelpText="{TemplateBinding HelpText}"
                             AutomationProperties.Name="{TemplateBinding Text}"
                             Background="Transparent"
@@ -74,7 +81,7 @@
                             <TextBlock FontSize="{StaticResource SmallFontSize}"
                                        Text="{TemplateBinding HelpText}"
                                        TextWrapping="Wrap"
-                                       Visibility="{TemplateBinding HelpText, Converter={StaticResource ObjectToVisibilityConverter}}">
+                                       Visibility="{TemplateBinding HelpText, Converter={StaticResource NullableToVisibilityConverter}}">
                                 <TextBlock.Margin>
                                     <Thickness Top="{StaticResource SmallSpace}" />
                                 </TextBlock.Margin>

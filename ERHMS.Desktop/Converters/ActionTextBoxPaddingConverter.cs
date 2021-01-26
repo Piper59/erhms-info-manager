@@ -10,7 +10,8 @@ namespace ERHMS.Desktop.Converters
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             Thickness padding = (Thickness)values[0];
-            padding.Right += (double)values[1];
+            double buttonWidth = (double)values[1];
+            padding.Right += buttonWidth;
             return padding;
         }
 

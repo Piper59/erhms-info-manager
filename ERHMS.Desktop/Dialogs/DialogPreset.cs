@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Desktop.Dialogs
 {
-    public enum DialogInfoPreset
+    public enum DialogPreset
     {
         Default,
         Warning,

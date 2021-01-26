@@ -20,7 +20,7 @@ namespace ERHMS.EpiInfo
                 Name = info.Name,
                 Description = info.Description,
                 Location = info.Location,
-                CollectedDataDriver = info.Database.Type.ToEpiInfoDriverName(),
+                CollectedDataDriver = info.Database.Type.ToDriverName(),
                 CollectedDataConnectionString = info.Database.ConnectionString,
                 CollectedDataDbInfo = new DbDriverInfo
                 {

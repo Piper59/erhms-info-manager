@@ -1,6 +1,10 @@
-﻿namespace ERHMS.Desktop.Data
+﻿using System;
+
+namespace ERHMS.Desktop.Data
 {
-    public interface ICustomCollectionView<TSelectable> : ISelectableCollectionView<TSelectable>, IPagingCollectionView
-        where TSelectable : ISelectable
-    { }
+    public interface ICustomCollectionView<TItem> : ISelectableCollectionView<TItem>, IPagingCollectionView
+        where TItem : ISelectable
+    {
+        Predicate<TItem> TypedFilter { set; }
+    }
 }

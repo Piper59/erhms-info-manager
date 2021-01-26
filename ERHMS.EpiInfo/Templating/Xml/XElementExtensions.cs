@@ -18,13 +18,13 @@ namespace ERHMS.EpiInfo.Templating.Xml
             return @this.Attribute(attributeName);
         }
 
-        public static T? GetAttributeValueOrNull<T>(this XElement @this, [CallerMemberName] string attributeName = null)
-            where T : struct
+        public static TValue? GetAttributeValueOrNull<TValue>(this XElement @this, [CallerMemberName] string attributeName = null)
+            where TValue : struct
         {
             if (@this.TryGetAttribute(attributeName, out XAttribute attribute))
             {
-                TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
-                return (T)converter.ConvertFromString(attribute.Value);
+                TypeConverter converter = TypeDescriptor.GetConverter(typeof(TValue));
+                return (TValue)converter.ConvertFromString(attribute.Value);
             }
             else
             {

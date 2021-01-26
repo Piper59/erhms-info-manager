@@ -5,22 +5,28 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.Controls
 {
-    [TemplatePart(Name = "PART_TextBox", Type = typeof(TextBoxBase))]
-    [TemplatePart(Name = "PART_Button", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = TextBoxPartName, Type = typeof(TextBoxBase))]
+    [TemplatePart(Name = ButtonPartName, Type = typeof(ButtonBase))]
     public class ActionTextBox : TextBox
     {
-        public static readonly DependencyProperty ActionNameProperty = DependencyProperty.Register(
-            nameof(ActionName),
+        public const string TextBoxPartName = "PART_TextBox";
+        public const string ButtonPartName = "PART_Button";
+
+        public static readonly DependencyProperty ActionAutomationNameProperty = DependencyProperty.Register(
+            nameof(ActionAutomationName),
             typeof(string),
             typeof(ActionTextBox),
-            new PropertyMetadata(""));
+            new FrameworkPropertyMetadata(""));
 
-        public static readonly DependencyProperty ActionTextProperty = DependencyProperty.Register(
-            nameof(ActionText),
+        public static readonly DependencyProperty ActionContentProperty = DependencyProperty.Register(
+            nameof(ActionContent),
             typeof(object),
             typeof(ActionTextBox));
 
-        public static readonly DependencyProperty CommandProperty = ButtonBase.CommandProperty.AddOwner(typeof(ActionTextBox));
+        public static readonly DependencyProperty ActionCommandProperty = DependencyProperty.Register(
+            nameof(ActionCommand),
+            typeof(ICommand),
+            typeof(ActionTextBox));
 
         static ActionTextBox()
         {
@@ -28,39 +34,37 @@ namespace ERHMS.Desktop.Controls
             IsTabStopProperty.OverrideMetadata(typeof(ActionTextBox), new FrameworkPropertyMetadata(false));
         }
 
-        public string ActionName
+        public string ActionAutomationName
         {
-            get { return (string)GetValue(ActionNameProperty); }
-            set { SetValue(ActionNameProperty, value); }
+            get { return (string)GetValue(ActionAutomationNameProperty); }
+            set { SetValue(ActionAutomationNameProperty, value); }
         }
 
-        public object ActionText
+        public object ActionContent
         {
-            get { return GetValue(ActionTextProperty); }
-            set { SetValue(ActionTextProperty, value); }
+            get { return GetValue(ActionContentProperty); }
+            set { SetValue(ActionContentProperty, value); }
         }
 
-        public ICommand Command
+        public ICommand ActionCommand
         {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
+            get { return (ICommand)GetValue(ActionCommandProperty); }
+            set { SetValue(ActionCommandProperty, value); }
         }
 
-        private TextBox TextBox { get; set; }
-        private Button Button { get; set; }
+        private TextBoxBase textBox;
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            TextBox = (TextBox)Template.FindName("PART_TextBox", this);
-            Button = (Button)Template.FindName("PART_Button", this);
+            textBox = (TextBoxBase)Template.FindName(TextBoxPartName, this);
         }
 
         protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
         {
             if (e.NewFocus == this)
             {
-                TextBox.Focus();
+                textBox.Focus();
                 e.Handled = true;
             }
             base.OnGotKeyboardFocus(e);

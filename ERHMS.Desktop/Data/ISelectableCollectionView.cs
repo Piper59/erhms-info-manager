@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace ERHMS.Desktop.Data
 {
-    public interface ISelectableCollectionView<TSelectable> : ICollectionView
-        where TSelectable : ISelectable
+    public interface ISelectableCollectionView<TItem> : ICollectionView
+        where TItem : ISelectable
     {
-        Predicate<TSelectable> TypedFilter { set; }
-        TSelectable SelectedItem { get; }
-        IEnumerable<TSelectable> SelectedItems { get; }
+        TItem SelectedItem { get; }
+        IEnumerable<TItem> SelectedItems { get; }
 
-        bool HasSelectedItem();
+        bool HasSelection();
     }
 }

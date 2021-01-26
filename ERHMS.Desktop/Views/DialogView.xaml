@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
-        AutomationProperties.HelpText="{Binding Info.Lead}"
+        AutomationProperties.HelpText="{Binding Dialog.Lead}"
         Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         MaxWidth="560"
         MinWidth="320"
@@ -19,8 +19,8 @@
             </ResourceDictionary.MergedDictionaries>
             <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
-            <Converters:IconToNameConverter x:Key="IconToNameConverter" />
-            <Converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+            <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+            <Converters:SystemIconToNameConverter x:Key="SystemIconToNameConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
@@ -36,19 +36,19 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{Binding Info.Icon, Converter={StaticResource IconToNameConverter}}"
+                           AutomationProperties.Name="{Binding Dialog.Icon, Converter={StaticResource SystemIconToNameConverter}}"
                            Margin="{StaticResource DefaultMargin}"
-                           Source="{Binding Info.Icon, Converter={StaticResource IconToImageSourceConverter}}"
+                           Source="{Binding Dialog.Icon, Converter={StaticResource IconToImageSourceConverter}}"
                            VerticalAlignment="Top"
-                           Visibility="{Binding Info.Icon, Converter={StaticResource ObjectToVisibilityConverter}}" />
+                           Visibility="{Binding Dialog.Icon, Converter={StaticResource NullableToVisibilityConverter}}" />
                     <StackPanel Grid.Column="1">
-                        <TextBlock Foreground="{DynamicResource AccentTextBrush}"
+                        <TextBlock Foreground="{StaticResource AccentTextBrush}"
                                    Style="{StaticResource Lead}"
-                                   Text="{Binding Info.Lead}"
-                                   Visibility="{Binding Info.Lead, Converter={StaticResource ObjectToVisibilityConverter}}" />
+                                   Text="{Binding Dialog.Lead}"
+                                   Visibility="{Binding Dialog.Lead, Converter={StaticResource NullableToVisibilityConverter}}" />
                         <TextBlock Style="{StaticResource Body}"
-                                   Text="{Binding Info.Body}"
-                                   Visibility="{Binding Info.Body, Converter={StaticResource ObjectToVisibilityConverter}}" />
+                                   Text="{Binding Dialog.Body}"
+                                   Visibility="{Binding Dialog.Body, Converter={StaticResource NullableToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
             </DockPanel>
@@ -64,12 +64,12 @@
                 </Grid.Resources>
                 <Button Grid.Column="0"
                         Command="{Binding ToggleShowingDetailsCommand}"
-                        Visibility="{Binding Info.Details, Converter={StaticResource ObjectToVisibilityConverter}}">
+                        Visibility="{Binding Dialog.Details, Converter={StaticResource NullableToVisibilityConverter}}">
                     _Details
                 </Button>
                 <ItemsControl Grid.Column="1"
                               IsTabStop="False"
-                              ItemsSource="{Binding Info.Buttons}">
+                              ItemsSource="{Binding Dialog.Buttons}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel HorizontalAlignment="Right" />
@@ -78,7 +78,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Click="Button_Click"
-                                    Content="{Binding Text}"
+                                    Content="{Binding Content}"
                                     IsCancel="{Binding IsCancel}"
                                     IsDefault="{Binding IsDefault}" />
                         </DataTemplate>
@@ -89,12 +89,12 @@
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
                 SnapsToDevicePixels="True"
-                Visibility="{Binding IsShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding ShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
             <DockPanel Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="200"
                          Style="{StaticResource Preformatted}"
-                         Text="{Binding Info.Details}" />
+                         Text="{Binding Dialog.Details}" />
             </DockPanel>
         </Border>
     </StackPanel>

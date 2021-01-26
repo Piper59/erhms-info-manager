@@ -11,20 +11,20 @@ namespace ERHMS.Data.Databases
 
     public static class DatabaseTypeExtensions
     {
-        private static readonly ITwoWayMap<DatabaseType, string> epiInfoDriverNames = new TwoWayMap<DatabaseType, string>
+        private static readonly ITwoWayMap<DatabaseType, string> driverNames = new TwoWayMap<DatabaseType, string>
         {
             { DatabaseType.Access, Configuration.AccessDriver },
             { DatabaseType.SqlServer, Configuration.SqlDriver }
         };
 
-        public static string ToEpiInfoDriverName(this DatabaseType @this)
+        public static string ToDriverName(this DatabaseType @this)
         {
-            return epiInfoDriverNames.Forward[@this];
+            return driverNames.Forward[@this];
         }
 
-        public static DatabaseType FromEpiInfoDriverName(string epiInfoDriverName)
+        public static DatabaseType FromDriverName(string driverName)
         {
-            return epiInfoDriverNames.Reverse[epiInfoDriverName];
+            return driverNames.Reverse[driverName];
         }
     }
 }

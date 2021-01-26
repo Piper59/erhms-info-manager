@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace ERHMS.Data.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository<TEntity>
     {
         IDatabase Database { get; }
 
         int Count(string clauses, object parameters);
-        IEnumerable<T> Select(string clauses, object parameters);
+        IEnumerable<TEntity> Select(string clauses, object parameters);
     }
 }

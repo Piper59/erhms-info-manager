@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class IconToNameConverter : IValueConverter
+    public class SystemIconToNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

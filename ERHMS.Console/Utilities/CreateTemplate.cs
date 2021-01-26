@@ -45,7 +45,6 @@ namespace ERHMS.Console.Utilities
             {
                 xTemplate.Save(writer);
             }
-            Log.Instance.Debug("Template has been created");
         }
     }
 }

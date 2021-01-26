@@ -9,7 +9,7 @@ namespace ERHMS.Desktop.Services
 
         public static void Install<TService>(Func<TService> factory)
         {
-            factories[typeof(TService)] = factory;
+            factories.Add(typeof(TService), factory);
         }
 
         public static TService Resolve<TService>()

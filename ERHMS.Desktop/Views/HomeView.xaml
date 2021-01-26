@@ -1,10 +1,8 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Views.HomeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
-             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
-             xmlns:Projects="clr-namespace:ERHMS.EpiInfo.Projects;assembly=ERHMS.EpiInfo">
+             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -36,31 +34,12 @@
                 </Grid>
                 <StackPanel Style="{StaticResource Section}">
                     <Controls:PhaseHeading Phase="PreDeployment" />
-                    <Button>Plan for pre-deployment</Button>
-                    <Button Command="local:AppCommands.ViewWorkerProjectCommand">Customize worker forms</Button>
-                    <Button Command="local:AppCommands.ViewCoreViewCommand"
-                            CommandParameter="{x:Static Projects:CoreView.WorkerInfo}">
-                        Collect worker information
-                    </Button>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
                     <Controls:PhaseHeading Phase="Deployment" />
-                    <Button>Plan for deployment</Button>
-                    <Button Command="local:AppCommands.ViewIncidentProjectCommand">Customize incident forms</Button>
-                    <Button>In-process workers</Button>
-                    <Button Command="local:AppCommands.ViewCoreViewCommand"
-                            CommandParameter="{x:Static Projects:CoreView.WorkerStatus}">
-                        Collect worker status reports
-                    </Button>
-                    <Button>Collect incident status reports</Button>
-                    <Button>Out-process workers</Button>
                 </StackPanel>
                 <StackPanel Style="{StaticResource Section}">
                     <Controls:PhaseHeading Phase="PostDeployment" />
-                    <Button>Plan for post-deployment</Button>
-                    <Button Command="local:AppCommands.ViewIncidentProjectCommand">Customize incident forms</Button>
-                    <Button>Follow up with workers</Button>
-                    <Button>Collect after-action reports</Button>
                 </StackPanel>
             </StackPanel>
         </Border>

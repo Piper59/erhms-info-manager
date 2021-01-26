@@ -4,6 +4,6 @@ namespace ERHMS.Desktop.Services
 {
     public interface IDialogService
     {
-        bool? Show(DialogInfo info);
+        bool? Show(Dialog dialog);
     }
 }

@@ -1,45 +1,40 @@
-﻿using ERHMS.Desktop.Commands;
+﻿using ERHMS.Common.Logging;
+using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.Services.Implementation;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
 using log4net;
 using log4net.Appender;
 using log4net.Layout;
-using log4net.Repository.Hierarchy;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
-        private static readonly FieldInfo MenuDropAlignmentField = typeof(SystemParameters).GetField(
-            "_menuDropAlignment",
-            BindingFlags.NonPublic | BindingFlags.Static);
-
         private static App app;
-        private static int unhandledErrorCount;
+        private static int errorCount;
 
         [STAThread]
-        private static void Main(string[] args)
+        private static void Main()
         {
-            ConfigureLog();
-            Log.Default.Debug("Starting up");
+            Log.Initializing += Log_Initializing;
+            Log.Instance.Debug("Entering application");
             try
             {
+                ConfigureEpiInfo();
                 app = new App();
                 app.Run();
             }
@@ -47,18 +42,37 @@ namespace ERHMS.Desktop
             {
                 OnUnhandledError(ex);
             }
-            Log.Default.Debug("Shutting down");
+            Log.Instance.Debug("Exiting application");
         }
 
-        internal static void ConfigureLog()
+        private static string GetUserName()
         {
             try
             {
-                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
+                return WindowsIdentity.GetCurrent().Name;
             }
-            catch (SecurityException) { }
-            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+            catch
+            {
+                return "?";
+            }
+        }
+
+        private static int GetProcessId()
+        {
+            try
+            {
+                return Process.GetCurrentProcess().Id;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        private static void Log_Initializing(object sender, InitializingEventArgs e)
+        {
+            GlobalContext.Properties["user"] = GetUserName();
+            GlobalContext.Properties["process"] = GetProcessId();
             PatternLayout layout = new PatternLayout("%date | %property{user} | %property{process}(%thread) | %level | %message%newline");
             layout.ActivateOptions();
             FileAppender appender = new FileAppender
@@ -68,25 +82,35 @@ namespace ERHMS.Desktop
                 Layout = layout
             };
             appender.ActivateOptions();
-            hierarchy.Root.AddAppender(appender);
-            hierarchy.Configured = true;
+            e.Hierarchy.Root.AddAppender(appender);
         }
 
-        private static void OnUnhandledError(Exception ex)
+        private static void ConfigureEpiInfo()
         {
-            if (ex != null)
+            if (!ConfigurationExtensions.Exists())
             {
-                Log.Default.Fatal(ex);
+                Epi.Configuration configuration = ConfigurationExtensions.Create();
+                configuration.Save();
             }
-            if (Interlocked.Increment(ref unhandledErrorCount) == 1)
+            ConfigurationExtensions.Load();
+            Epi.Configuration.Environment = Epi.ExecutionEnvironment.WindowsApplication;
+        }
+
+        private static void OnUnhandledError(Exception exception)
+        {
+            if (exception != null)
+            {
+                Log.Instance.Fatal(exception);
+            }
+            if (Interlocked.Increment(ref errorCount) == 1)
             {
                 StringBuilder message = new StringBuilder();
                 message.Append(ResX.UnhandledErrorMessage);
-                if (ex != null)
+                if (exception != null)
                 {
                     message.AppendLine();
                     message.AppendLine();
-                    message.Append(ex.Message);
+                    message.Append(exception.Message);
                 }
                 MessageBox.Show(message.ToString(), ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -98,84 +122,52 @@ namespace ERHMS.Desktop
 
         public App()
         {
-            ShutdownMode = ShutdownMode.OnMainWindowClose;
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => OnUnhandledError(e.ExceptionObject as Exception);
-            DispatcherUnhandledException += OnDispatcherUnhandledException;
             ConfigureServices();
-            ConfigureEpiInfo();
-            InitializeComponent();
-            SetMenuDropAlignment();
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => OnUnhandledError(e.ExceptionObject as Exception);
+            DispatcherUnhandledException += (sender, e) =>
+            {
+                OnUnhandledError(e.Exception);
+                e.Handled = true;
+            };
             Command.GlobalError += (sender, e) => OnHandledError(e.Exception);
-        }
-
-        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            OnUnhandledError(e.Exception);
-            e.Handled = true;
+            InitializeComponent();
         }
 
         private void ConfigureServices()
         {
-            Log.Default.Debug("Configuring services");
             ServiceProvider.Install<IDialogService>(() => new DialogService(this));
-            ServiceProvider.Install<IFileDialogService>(() => new FileDialogService(this));
-            ServiceProvider.Install<IProgressService>(() => new ProgressService(this));
-            ServiceProvider.Install<IWizardService>(() => new WizardService(this));
         }
 
-        private void ConfigureEpiInfo()
+        private void OnHandledError(Exception exception)
         {
-            Log.Default.Debug("Configuring Epi Info");
-            if (!ConfigurationExtensions.Exists())
-            {
-                Log.Default.Debug($"Creating configuration file: {ConfigurationExtensions.FilePath}");
-                Epi.Configuration configuration = ConfigurationExtensions.Create();
-                Settings.Default.ApplyTo(configuration);
-                configuration.Save();
-            }
-            Log.Default.Debug($"Loading configuration file: {ConfigurationExtensions.FilePath}");
-            ConfigurationExtensions.Load();
-            Epi.Configuration.Environment = Epi.ExecutionEnvironment.WindowsApplication;
-        }
-
-        private void SetMenuDropAlignment()
-        {
-            if (SystemParameters.MenuDropAlignment && MenuDropAlignmentField != null)
-            {
-                MenuDropAlignmentField.SetValue(null, false);
-            }
-        }
-
-        private void OnHandledError(Exception ex)
-        {
-            Log.Default.Error(ex);
-            ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Error)
+            Log.Instance.Error(exception);
+            ServiceProvider.Resolve<IDialogService>().Show(new Dialog(DialogPreset.Error)
             {
                 Lead = ResX.HandledErrorLead,
-                Body = ex.Message,
-                Details = ex.ToString()
+                Body = exception.Message,
+                Details = exception.ToString()
             });
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            bool resetting = false;
+            bool reset = false;
             if (e.Args.Contains("/reset", StringComparer.OrdinalIgnoreCase))
             {
-                resetting = true;
-                Log.Default.Debug("Resetting settings");
+                Log.Instance.Debug("Resetting application settings");
                 Settings.Default.Reset();
+                reset = true;
             }
-            MainViewModel.Current.Content = new HomeViewModel();
+            MainViewModel.Instance.Content = new HomeViewModel();
             Window window = new MainView
             {
-                DataContext = MainViewModel.Current
+                DataContext = MainViewModel.Instance
             };
             window.Show();
-            if (resetting)
+            if (reset)
             {
-                ServiceProvider.Resolve<IDialogService>().Show(new DialogInfo(DialogInfoPreset.Default)
+                ServiceProvider.Resolve<IDialogService>().Show(new Dialog(DialogPreset.Default)
                 {
                     Lead = ResX.SettingsResetLead
                 });

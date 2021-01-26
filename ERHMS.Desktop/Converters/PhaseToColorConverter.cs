@@ -1,17 +1,24 @@
-﻿using System;
+﻿using ERHMS.Desktop.Infrastructure;
+using ERHMS.Domain;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class ObjectToResourceConverter : IValueConverter
+    public class PhaseToColorConverter : IValueConverter
     {
-        public ResourceDictionary Resources { get; set; }
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Resources[value.GetType()];
+            Color color = ((Phase)value).ToColor();
+            if (parameter != null)
+            {
+                byte alpha = System.Convert.ToByte((string)parameter, 16);
+                color.A = alpha;
+            }
+            return color;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

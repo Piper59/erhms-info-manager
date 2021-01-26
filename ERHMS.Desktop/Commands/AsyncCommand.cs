@@ -8,8 +8,8 @@ namespace ERHMS.Desktop.Commands
         private readonly Func<Task> executeAsync;
         private readonly Func<bool> canExecute;
 
-        public AsyncCommand(Func<Task> executeAsync, Func<bool> canExecute = null, ErrorBehavior errorBehavior = ErrorBehavior.Raise)
-            : base(executeAsync, errorBehavior)
+        public AsyncCommand(Func<Task> executeAsync, Func<bool> canExecute = null)
+            : base(executeAsync.Method)
         {
             this.executeAsync = executeAsync;
             this.canExecute = canExecute ?? Always;
@@ -26,13 +26,13 @@ namespace ERHMS.Desktop.Commands
         }
     }
 
-    public class AsyncCommand<T> : Command
+    public class AsyncCommand<TParameter> : Command
     {
-        private readonly Func<T, Task> executeAsync;
-        private readonly Func<T, bool> canExecute;
+        private readonly Func<TParameter, Task> executeAsync;
+        private readonly Func<TParameter, bool> canExecute;
 
-        public AsyncCommand(Func<T, Task> executeAsync, Func<T, bool> canExecute = null, ErrorBehavior errorBehavior = ErrorBehavior.Raise)
-            : base(executeAsync, errorBehavior)
+        public AsyncCommand(Func<TParameter, Task> executeAsync, Func<TParameter, bool> canExecute = null)
+            : base(executeAsync.Method)
         {
             this.executeAsync = executeAsync;
             this.canExecute = canExecute ?? Always;
@@ -40,12 +40,12 @@ namespace ERHMS.Desktop.Commands
 
         public override bool CanExecute(object parameter)
         {
-            return canExecute((T)parameter);
+            return canExecute((TParameter)parameter);
         }
 
         public override async Task ExecuteCore(object parameter)
         {
-            await executeAsync((T)parameter);
+            await executeAsync((TParameter)parameter);
         }
     }
 }

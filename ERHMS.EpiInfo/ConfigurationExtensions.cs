@@ -2,6 +2,7 @@
 using Epi.DataSets;
 using ERHMS.Common.Logging;
 using System.IO;
+using Settings = ERHMS.EpiInfo.Properties.Settings;
 
 namespace ERHMS.EpiInfo
 {
@@ -22,11 +23,22 @@ namespace ERHMS.EpiInfo
             Configuration configuration = Configuration.CreateDefaultConfiguration();
             configuration.RecentViews.Clear();
             configuration.RecentProjects.Clear();
-            Properties.Settings.Default.ApplyTo(configuration);
+            configuration.ReadSettings(Settings.Default);
             return new Configuration(path, configuration.ConfigDataSet);
         }
 
-        public static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
+        private static void ReadSettings(this Configuration @this, Settings settings)
+        {
+            @this.SetTextEncryptionModule(settings.FipsCompliant);
+            Config.SettingsRow row = @this.Settings;
+            row.ControlFontSize = settings.ControlFontSize;
+            row.DefaultPageHeight = settings.DefaultPageHeight;
+            row.DefaultPageWidth = settings.DefaultPageWidth;
+            row.EditorFontSize = settings.EditorFontSize;
+            row.GridSize = settings.GridSize;
+        }
+
+        private static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
         {
             Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
             table.Clear();

@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xaml.Behaviors;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.Behaviors
 {
-    public class InitialFocusBehavior : Behavior<Panel>
+    public class SetKeyboardFocusOnLoaded : Behavior<Panel>
     {
         public string ElementName { get; set; }
 
@@ -21,18 +22,22 @@ namespace ERHMS.Desktop.Behaviors
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e)
         {
-            IInputElement element;
-            if (ElementName == null)
+            SetFocus();
+        }
+
+        private bool SetFocus()
+        {
+            IInputElement element = ElementName == null
+                ? AssociatedObject.Children.Cast<IInputElement>().FirstOrDefault()
+                : AssociatedObject.FindName(ElementName) as IInputElement;
+            if (element == null)
             {
-                element = AssociatedObject.Children.Count == 0 ? null : AssociatedObject.Children[0];
+                return false;
             }
             else
             {
-                element = AssociatedObject.FindName(ElementName) as IInputElement;
-            }
-            if (element != null)
-            {
                 Keyboard.Focus(element);
+                return true;
             }
         }
     }

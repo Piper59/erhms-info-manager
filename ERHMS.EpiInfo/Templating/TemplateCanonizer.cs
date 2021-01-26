@@ -12,9 +12,9 @@ namespace ERHMS.EpiInfo.Templating
     {
         private class Context
         {
-            private static void AddToIdMap(int id, IDictionary<int, int> idMap)
+            private static void AddToMap(IDictionary<int, int> map, int value)
             {
-                idMap.Add(id, idMap.Count + 1);
+                map.Add(value, map.Count + 1);
             }
 
             public IDictionary<int, int> ViewIdMap { get; } = new Dictionary<int, int>();
@@ -25,13 +25,13 @@ namespace ERHMS.EpiInfo.Templating
             {
                 foreach (XView xView in xProject.XViews)
                 {
-                    AddToIdMap(xView.ViewId, ViewIdMap);
+                    AddToMap(ViewIdMap, xView.ViewId);
                     foreach (XPage xPage in xView.XPages)
                     {
-                        AddToIdMap(xPage.PageId, PageIdMap);
+                        AddToMap(PageIdMap, xPage.PageId);
                         foreach (XField xField in xPage.XFields)
                         {
-                            AddToIdMap(xField.FieldId, FieldIdMap);
+                            AddToMap(FieldIdMap, xField.FieldId);
                         }
                     }
                 }
@@ -53,7 +53,6 @@ namespace ERHMS.EpiInfo.Templating
 
         public void Canonize()
         {
-            Progress?.Report($"Canonizing Epi Info template: {XTemplate.Name}");
             context = new Context(XTemplate.XProject);
             CanonizeTemplate();
             if (XTemplate.Level == TemplateLevel.Project)

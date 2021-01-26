@@ -5,22 +5,22 @@ using System.Windows.Markup;
 namespace ERHMS.Desktop.Controls
 {
     [ContentProperty("Text")]
-    public class WizardButton : Button
+    public class VerboseButton : Button
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
             nameof(Text),
             typeof(string),
-            typeof(WizardButton));
+            typeof(VerboseButton));
 
         public static readonly DependencyProperty HelpTextProperty = DependencyProperty.Register(
             nameof(HelpText),
             typeof(string),
-            typeof(WizardButton));
+            typeof(VerboseButton));
 
-        static WizardButton()
+        static VerboseButton()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(WizardButton), new FrameworkPropertyMetadata(typeof(WizardButton)));
-            IsTabStopProperty.OverrideMetadata(typeof(WizardButton), new FrameworkPropertyMetadata(false));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(VerboseButton), new FrameworkPropertyMetadata(typeof(VerboseButton)));
+            IsTabStopProperty.OverrideMetadata(typeof(VerboseButton), new FrameworkPropertyMetadata(false));
         }
 
         public string Text

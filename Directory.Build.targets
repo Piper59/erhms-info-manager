@@ -3,4 +3,8 @@
   <Target Name="Require32Bit" BeforeTargets="Build">
     <Error Condition="'$(PlatformTarget)' != 'x86'" Text="Target platform must be x86." />
   </Target>
+
+  <Target Name="ProhibitRebuild" BeforeTargets="Rebuild">
+    <Error Text="Rebuilding prohibited. Clean and build instead." />
+  </Target>
 </Project>

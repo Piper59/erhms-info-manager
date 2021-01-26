@@ -5,11 +5,13 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class ObjectToVisibilityConverter : IValueConverter
+    public class ObjectTypeToResourceConverter : IValueConverter
     {
+        public ResourceDictionary Resources { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == null ? Visibility.Collapsed : Visibility.Visible;
+            return Resources[value.GetType()];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

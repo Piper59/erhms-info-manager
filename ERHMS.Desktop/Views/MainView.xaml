@@ -18,10 +18,9 @@
         </ResourceDictionary>
     </Window.Resources>
     <b:Interaction.Behaviors>
-        <Behaviors:RelayEventBehavior EventName="ProcessStarted"
-                                      HandlerName="DataContext_ProcessStarted" />
-        <Behaviors:RelayEventBehavior EventName="ExitRequested"
-                                      HandlerName="DataContext_ExitRequested" />
+        <Behaviors:SetMenuDropAlignment Value="False" />
+        <Behaviors:DispatchEvent EventName="ExitRequested"
+                                 HandlerName="DataContext_ExitRequested" />
     </b:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
@@ -46,12 +45,10 @@
                           InputGestureText="Alt+F4" />
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Command="{Binding GoHomeCommand}"
+                <MenuItem Command="{Binding ViewHomeCommand}"
                           Header="H_ome" />
-                <MenuItem Command="{Binding ViewWorkerProjectCommand}"
-                          Header="_Worker database" />
-                <MenuItem Command="{Binding ViewIncidentProjectCommand}"
-                          Header="_Incident database" />
+                <MenuItem Header="_Worker database" />
+                <MenuItem Header="_Incident database" />
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Data">
@@ -64,14 +61,11 @@
                     <MenuItem Header="_Export all" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Command="{Binding StartEpiInfoCommand}"
-                          Header="_Epi Info" />
-                <MenuItem Command="{Binding StartFileExplorerCommand}"
-                          Header="_File Explorer" />
+                <MenuItem Header="_Epi Info" />
+                <MenuItem Header="_File Explorer" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_View help" />
-                <MenuItem Header="_Take the tour" />
                 <Separator />
                 <MenuItem Header="_About ERHMS Info Manager" />
             </MenuItem>

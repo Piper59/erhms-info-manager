@@ -5,10 +5,4 @@
     <DataTemplate DataType="{x:Type ViewModels:HomeViewModel}">
         <Views:HomeView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type ViewModels:ProjectViewModel}">
-        <Views:ProjectView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type ViewModels:ViewViewModel}">
-        <Views:ViewView />
-    </DataTemplate>
 </ResourceDictionary>

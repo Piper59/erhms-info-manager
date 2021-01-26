@@ -1,7 +1,6 @@
 ﻿using Epi;
 using Epi.Data.Services;
 using Epi.Fields;
-using ERHMS.Common.Logging;
 using ERHMS.Data;
 using ERHMS.EpiInfo.Metadata;
 using ERHMS.EpiInfo.Templating.Xml;
@@ -62,7 +61,6 @@ namespace ERHMS.EpiInfo.Templating
 
         public void Instantiate()
         {
-            Progress?.Report($"Instantiating Epi Info template: {XTemplate.Name}");
             context = new Context(Metadata.Project);
             InstantiateSourceTables();
             InstantiateCore();
@@ -166,20 +164,12 @@ namespace ERHMS.EpiInfo.Templating
                 {
                     relatedViewField.RelatedViewID = mappedRelatedViewId;
                 }
-                else
-                {
-                    Log.Instance.Warn($"Related view not found: {relatedViewField.RelatedViewID}");
-                }
             }
             else if (field is TableBasedDropDownField tableBasedDropDownField)
             {
                 if (context.TableNameMap.TryGetValue(tableBasedDropDownField.SourceTableName, out string mappedSourceTableName))
                 {
                     tableBasedDropDownField.SourceTableName = mappedSourceTableName;
-                }
-                else
-                {
-                    Log.Instance.Warn($"Source table not found: {tableBasedDropDownField.SourceTableName}");
                 }
             }
         }
@@ -201,10 +191,6 @@ namespace ERHMS.EpiInfo.Templating
                     {
                         mirrorField.SourceFieldId = mappedSourceFieldId;
                         mirrorField.SaveToDb();
-                    }
-                    else
-                    {
-                        Log.Instance.Warn($"Source field not found: {mirrorField.SourceFieldId}");
                     }
                 }
             }
@@ -251,17 +237,9 @@ namespace ERHMS.EpiInfo.Templating
             {
                 gridColumn.FieldId = mappedFieldId;
             }
-            else
-            {
-                Log.Instance.Warn($"Field not found: {gridColumn.FieldId}");
-            }
             if (context.TableNameMap.TryGetValue(gridColumn.SourceTableName, out string mappedSourceTableName))
             {
                 gridColumn.SourceTableName = mappedSourceTableName;
-            }
-            else
-            {
-                Log.Instance.Warn($"Source table not found: {gridColumn.SourceTableName}");
             }
         }
     }

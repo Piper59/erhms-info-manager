@@ -9,7 +9,7 @@ namespace ERHMS.EpiInfo
 {
     public abstract class NameGenerator<TSuffix>
     {
-        protected static ISet<string> ToNameSet(params IEnumerable<string>[] sources)
+        protected static ISet<string> GetNameSet(params IEnumerable<string>[] sources)
         {
             return new HashSet<string>(sources.SelectMany(source => source), StringComparer.OrdinalIgnoreCase);
         }
@@ -135,7 +135,7 @@ namespace ERHMS.EpiInfo
 
         public TableNameGenerator(Project project)
         {
-            Names = ToNameSet(GetTableNames(project), GetViewNames(project));
+            Names = GetNameSet(GetTableNames(project), GetViewNames(project));
         }
     }
 
@@ -155,8 +155,8 @@ namespace ERHMS.EpiInfo
 
         public ViewNameGenerator(Project project)
         {
-            viewNames = ToNameSet(GetViewNames(project));
-            tableAndViewNames = ToNameSet(GetTableNames(project), viewNames);
+            viewNames = GetNameSet(GetViewNames(project));
+            tableAndViewNames = GetNameSet(GetTableNames(project), viewNames);
         }
 
         public bool IsIdentical(string name)
@@ -226,7 +226,7 @@ namespace ERHMS.EpiInfo
         public PageNameGenerator(View view)
         {
             StartSuffix = view.Pages.Count + 1;
-            Names = ToNameSet(view.Pages.Select(page => page.Name));
+            Names = GetNameSet(view.Pages.Select(page => page.Name));
         }
     }
 
@@ -237,7 +237,7 @@ namespace ERHMS.EpiInfo
 
         public FieldNameGenerator(View view)
         {
-            Names = ToNameSet(view.Fields.Cast<Field>().Select(field => field.Name));
+            Names = GetNameSet(view.Fields.Cast<Field>().Select(field => field.Name));
         }
     }
 }

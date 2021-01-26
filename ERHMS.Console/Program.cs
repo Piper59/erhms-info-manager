@@ -25,7 +25,7 @@ namespace ERHMS.Console
             Log.Initializing += Log_Initializing;
             try
             {
-                Configure();
+                ConfigureEpiInfo();
                 IUtility utility = Utility.Create(args[0], args.Skip(1).ToList());
                 utility.Run();
             }
@@ -69,7 +69,7 @@ namespace ERHMS.Console
             e.Hierarchy.Root.AddAppender(appender);
         }
 
-        private static void Configure()
+        private static void ConfigureEpiInfo()
         {
             if (!ConfigurationExtensions.Exists())
             {

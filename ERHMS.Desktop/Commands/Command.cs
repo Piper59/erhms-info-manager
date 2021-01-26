@@ -1,6 +1,7 @@
-﻿using ERHMS.Desktop.Events;
+﻿using ERHMS.Common.Logging;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -11,7 +12,10 @@ namespace ERHMS.Desktop.Commands
         private class NullCommand : Command
         {
             public NullCommand()
-                : base("Null", ErrorBehavior.Throw) { }
+                : base("Null")
+            {
+                ErrorBehavior = ErrorBehavior.ThrowException;
+            }
 
             public override bool CanExecute(object parameter)
             {
@@ -20,33 +24,39 @@ namespace ERHMS.Desktop.Commands
 
             public override Task ExecuteCore(object parameter)
             {
-                throw new InvalidOperationException("The null command cannot be executed.");
+                throw new InvalidOperationException("Null command cannot be executed.");
             }
         }
 
-        public static readonly ICommand Null = new NullCommand();
+        public static ICommand Null { get; } = new NullCommand();
 
         public static event EventHandler<ErrorEventArgs> GlobalError;
+
+        protected static bool Always()
+        {
+            return true;
+        }
+
+        protected static bool Always<TParameter>(TParameter _)
+        {
+            return true;
+        }
 
         public static void OnCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();
         }
 
-        protected static bool Always() => true;
-        protected static bool Always<T>(T parameter) => true;
-
         public string Name { get; }
-        public ErrorBehavior ErrorBehavior { get; }
+        public ErrorBehavior ErrorBehavior { get; set; } = ErrorBehavior.RaiseEvent;
 
-        protected Command(string name, ErrorBehavior errorBehavior)
+        protected Command(string name)
         {
             Name = name;
-            ErrorBehavior = errorBehavior;
         }
 
-        protected Command(Delegate execute, ErrorBehavior errorBehavior)
-            : this($"{execute.Method.DeclaringType}.{execute.Method.Name}", errorBehavior) { }
+        protected Command(MethodInfo method)
+            : this($"{method.DeclaringType.FullName}.{method.Name}") { }
 
         public event EventHandler CanExecuteChanged
         {
@@ -60,15 +70,15 @@ namespace ERHMS.Desktop.Commands
         {
             if (!e.Handled)
             {
-                OnErrorInternal(e, Error?.GetInvocationList());
+                OnErrorCore(e, Error?.GetInvocationList());
                 if (!e.Handled)
                 {
-                    OnErrorInternal(e, GlobalError?.GetInvocationList());
+                    OnErrorCore(e, GlobalError?.GetInvocationList());
                 }
             }
         }
 
-        private void OnErrorInternal(ErrorEventArgs e, IEnumerable<Delegate> handlers)
+        private void OnErrorCore(ErrorEventArgs e, IEnumerable<Delegate> handlers)
         {
             if (handlers != null)
             {
@@ -83,39 +93,35 @@ namespace ERHMS.Desktop.Commands
             }
         }
 
-        protected void OnError(Exception ex) => OnError(new ErrorEventArgs(ex));
+        protected void OnError(Exception exception) => OnError(new ErrorEventArgs(exception));
 
         public abstract bool CanExecute(object parameter);
         public abstract Task ExecuteCore(object parameter);
 
         public async void Execute(object parameter)
         {
-            Log.Default.Debug($"Executing: {this}");
+            Log.Instance.Debug($"Executing input command: {Name}");
             try
             {
                 await ExecuteCore(parameter);
             }
             catch (Exception ex)
             {
-                Log.Default.Warn(ex);
+                Log.Instance.Warn(ex);
                 switch (ErrorBehavior)
                 {
-                    case ErrorBehavior.Catch:
-                        break;
-                    case ErrorBehavior.Raise:
+                    case ErrorBehavior.ThrowException:
+                        throw;
+                    case ErrorBehavior.RaiseEvent:
                         OnError(ex);
                         break;
-                    case ErrorBehavior.Throw:
+                    case ErrorBehavior.Ignore:
+                        break;
                     default:
                         throw;
                 }
             }
-            Log.Default.Debug($"Executed: {this}");
-        }
-
-        public override string ToString()
-        {
-            return Name;
+            Log.Instance.Debug($"Executed input command: {Name}");
         }
     }
 }

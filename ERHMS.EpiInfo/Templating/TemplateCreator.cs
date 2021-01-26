@@ -25,7 +25,6 @@ namespace ERHMS.EpiInfo.Templating
 
         public XTemplate Create()
         {
-            Progress?.Report($"Creating Epi Info template: {DisplayName}");
             XTemplate xTemplate = CreateCore();
             AddSourceTables(xTemplate);
             AddGridTables(xTemplate);

@@ -75,10 +75,6 @@
     </Style>
 
     <!-- Other -->
-    <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="MinWidth" Value="100" />
-    </Style>
-
     <Style TargetType="DataGrid" BasedOn="{StaticResource DataGridBase}">
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="IsReadOnly" Value="True" />

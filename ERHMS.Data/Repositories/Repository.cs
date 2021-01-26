@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ERHMS.Data.Repositories
 {
-    public abstract class Repository<T> : IRepository<T>
+    public abstract class Repository<TEntity> : IRepository<TEntity>
     {
         public IDatabase Database { get; }
 
@@ -43,12 +43,12 @@ namespace ERHMS.Data.Repositories
             }
         }
 
-        public virtual IEnumerable<T> Select(string clauses = null, object parameters = null)
+        public virtual IEnumerable<TEntity> Select(string clauses = null, object parameters = null)
         {
             using (IDbConnection connection = Database.Connect())
             {
                 string sql = GetSelectQuery("*", clauses);
-                return connection.Query<T>(sql, parameters);
+                return connection.Query<TEntity>(sql, parameters);
             }
         }
     }

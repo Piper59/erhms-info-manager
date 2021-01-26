@@ -8,8 +8,8 @@ namespace ERHMS.Desktop.Commands
         private readonly Action execute;
         private readonly Func<bool> canExecute;
 
-        public SyncCommand(Action execute, Func<bool> canExecute = null, ErrorBehavior errorBehavior = ErrorBehavior.Raise)
-            : base(execute, errorBehavior)
+        public SyncCommand(Action execute, Func<bool> canExecute = null)
+            : base(execute.Method)
         {
             this.execute = execute;
             this.canExecute = canExecute ?? Always;
@@ -27,13 +27,13 @@ namespace ERHMS.Desktop.Commands
         }
     }
 
-    public class SyncCommand<T> : Command
+    public class SyncCommand<TParameter> : Command
     {
-        private readonly Action<T> execute;
-        private readonly Func<T, bool> canExecute;
+        private readonly Action<TParameter> execute;
+        private readonly Func<TParameter, bool> canExecute;
 
-        public SyncCommand(Action<T> execute, Func<T, bool> canExecute = null, ErrorBehavior errorBehavior = ErrorBehavior.Raise)
-            : base(execute, errorBehavior)
+        public SyncCommand(Action<TParameter> execute, Func<TParameter, bool> canExecute = null)
+            : base(execute.Method)
         {
             this.execute = execute;
             this.canExecute = canExecute ?? Always;
@@ -41,12 +41,12 @@ namespace ERHMS.Desktop.Commands
 
         public override bool CanExecute(object parameter)
         {
-            return canExecute((T)parameter);
+            return canExecute((TParameter)parameter);
         }
 
         public override Task ExecuteCore(object parameter)
         {
-            execute((T)parameter);
+            execute((TParameter)parameter);
             return Task.CompletedTask;
         }
     }
