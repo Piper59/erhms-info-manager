@@ -36,27 +36,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.2.0.35\lib\net461\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="Epi.Core">
       <HintPath>..\Epi Info 7\Epi.Core.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -69,10 +68,6 @@
       <Project>{16c636f8-a356-4e9e-9d60-4f825ed830a0}</Project>
       <Name>ERHMS.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ERHMS.Data\ERHMS.Data.csproj">
-      <Project>{ccebb7b1-4468-4b27-958e-79e86373a398}</Project>
-      <Name>ERHMS.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
       <Project>{181048fb-dae4-4875-9a58-461f81c4131a}</Project>
       <Name>ERHMS.Domain</Name>
@@ -80,10 +75,6 @@
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
       <Name>ERHMS.EpiInfo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ERHMS.Resources\ERHMS.Resources.csproj">
-      <Project>{a7f8931b-dbe9-41e8-8d9f-86e7635c83c3}</Project>
-      <Name>ERHMS.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
