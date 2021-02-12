@@ -1,19 +1,21 @@
 ﻿using Epi;
-using System;
+using ERHMS.EpiInfo.Naming;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace ERHMS.EpiInfo.Metadata
 {
     public class GridColumnDataRow
     {
-        private static readonly ISet<string> metadataNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            ColumnNames.UNIQUE_ROW_ID,
-            ColumnNames.REC_STATUS,
-            ColumnNames.FOREIGN_KEY,
-            ColumnNames.GLOBAL_RECORD_ID
-        };
+        private static readonly IReadOnlyCollection<string> MetadataNames =
+            new HashSet<string>(NameComparer.Default)
+            {
+                ColumnNames.UNIQUE_ROW_ID,
+                ColumnNames.REC_STATUS,
+                ColumnNames.FOREIGN_KEY,
+                ColumnNames.GLOBAL_RECORD_ID
+            };
 
         public static implicit operator DataRow(GridColumnDataRow gridColumn)
         {
@@ -45,7 +47,7 @@ namespace ERHMS.EpiInfo.Metadata
 
         public bool IsMetadata()
         {
-            return metadataNames.Contains(Name);
+            return MetadataNames.Contains(Name);
         }
     }
 }

@@ -9,12 +9,12 @@ namespace ERHMS.EpiInfo.Templating.Xml
         private const string Space = " ";
         private const string EscapedSpace = "__space__";
 
-        private static string Escape(string columnName)
+        private static string GetAttributeName(string columnName)
         {
             return columnName.Replace(Space, EscapedSpace);
         }
 
-        private static string Unescape(string attributeName)
+        private static string GetColumnName(string attributeName)
         {
             return attributeName.Replace(EscapedSpace, Space);
         }
@@ -30,9 +30,8 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 XElement xItem = new XElement(ElementNames.Item);
                 foreach (DataColumn column in table.Columns)
                 {
-                    string attributeName = Escape(column.ColumnName);
-                    object value = item[column];
-                    xItem.SetAttributeValue(value, attributeName);
+                    string attributeName = GetAttributeName(column.ColumnName);
+                    xItem.SetOrClearAttributeValue(item[column], attributeName);
                 }
                 xTable.Add(xItem);
             }
@@ -42,7 +41,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public string TableName
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public IEnumerable<XElement> XItems => Elements(ElementNames.Item);
@@ -60,7 +59,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 foreach (XAttribute attribute in xItem.Attributes())
                 {
-                    string columnName = Unescape(attribute.Name.LocalName);
+                    string columnName = GetColumnName(attribute.Name.LocalName);
                     if (!table.Columns.Contains(columnName))
                     {
                         table.Columns.Add(columnName);
@@ -69,8 +68,8 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 DataRow item = table.NewRow();
                 foreach (XAttribute attribute in xItem.Attributes())
                 {
-                    string columnName = Unescape(attribute.Name.LocalName);
-                    item.SetField(columnName, attribute.Value);
+                    string columnName = GetColumnName(attribute.Name.LocalName);
+                    item[columnName] = attribute.Value;
                 }
                 table.Rows.Add(item);
             }

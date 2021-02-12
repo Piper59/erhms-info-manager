@@ -25,42 +25,41 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public Guid? Id
         {
             get { return this.GetAttributeValueOrNull<Guid>(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string Location
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string Description
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string EpiVersion
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public DateTime? CreateDate
         {
             get { return this.GetAttributeValueOrNull<DateTime>(); }
-            set { this.SetAttributeValue(value?.ToString(XTemplate.DateFormat)); }
+            set { this.SetOrClearAttributeValue(value?.ToString(XTemplate.DateFormat)); }
         }
 
-        public IEnumerable<XView> XViews => Elements().OfType<XView>();
-        public XView XView => XViews.Single();
-        public IEnumerable<XField> XFields => Descendants().OfType<XField>();
+        public IEnumerable<XView> XViews => Elements(ElementNames.View).Cast<XView>();
+        public IEnumerable<XField> XFields => XViews.SelectMany(xView => xView.XFields);
 
         public XProject()
             : base(ElementNames.Project) { }
@@ -69,25 +68,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             : this()
         {
             Add(element.Attributes());
-            foreach (XElement viewElement in element.Elements(ElementNames.View))
-            {
-                Add(new XView(viewElement));
-            }
-        }
-
-        public void RemoveRelationships()
-        {
-            foreach (XField xField in XFields.ToList())
-            {
-                if (xField.FieldType == MetaFieldType.Relate)
-                {
-                    xField.Remove();
-                }
-            }
-            foreach (XView xView in XViews)
-            {
-                xView.IsRelatedView = false;
-            }
+            Add(element.Elements(ElementNames.View).Select(child => new XView(child)));
         }
     }
 }

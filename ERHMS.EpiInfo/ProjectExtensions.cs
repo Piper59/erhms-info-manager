@@ -2,43 +2,49 @@
 using Epi.Data;
 using Epi.Data.Services;
 using Epi.Fields;
-using ERHMS.Common.Logging;
-using ERHMS.Data.Databases;
+using ERHMS.Data;
+using ERHMS.EpiInfo.Data;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
+using DatabaseProviderExtensions = ERHMS.EpiInfo.Data.DatabaseProviderExtensions;
 
 namespace ERHMS.EpiInfo
 {
     public static class ProjectExtensions
     {
-        public static Project Create(ProjectCreationInfo info)
+        private static DbDriverInfo GetDriverInfo(IDatabase database)
         {
-            Log.Instance.Debug($"Creating Epi Info project: {info.FilePath}");
-            Directory.CreateDirectory(info.Location);
+            DbConnectionStringBuilder connectionStringBuilder = database.Provider.ToProviderFactory()
+                .CreateConnectionStringBuilder();
+            connectionStringBuilder.ConnectionString = database.ConnectionString;
+            return new DbDriverInfo
+            {
+                DBCnnStringBuilder = connectionStringBuilder,
+                DBName = database.Name
+            };
+        }
+
+        public static Project Create(ProjectCreationInfo creationInfo)
+        {
+            Log.Default.Debug($"Creating Epi Info project: {creationInfo.FilePath}");
+            Directory.CreateDirectory(creationInfo.Location);
             Project project = new Project
             {
-                Id = Util.GetFileGuid(info.FilePath),
-                Name = info.Name,
-                Description = info.Description,
-                Location = info.Location,
-                CollectedDataDriver = info.Database.Type.ToDriverName(),
-                CollectedDataConnectionString = info.Database.ConnectionString,
-                CollectedDataDbInfo = new DbDriverInfo
-                {
-                    DBCnnStringBuilder = info.Database.GetConnectionStringBuilder(),
-                    DBName = info.Database.Name
-                }
+                Id = Guid.NewGuid(),
+                Name = creationInfo.Name,
+                Description = creationInfo.Description,
+                Location = creationInfo.Location,
+                CollectedDataDriver = creationInfo.Database.Provider.ToDriverName(),
+                CollectedDataConnectionString = creationInfo.Database.ConnectionString,
+                CollectedDataDbInfo = GetDriverInfo(creationInfo.Database),
+                MetadataSource = MetadataSource.SameDb
             };
             project.CollectedData.Initialize(project.CollectedDataDbInfo, project.CollectedDataDriver, false);
-            project.MetadataSource = MetadataSource.SameDb;
             project.Metadata.AttachDbDriver(project.CollectedData.GetDbDriver());
             project.Save();
             return project;
-        }
-
-        public static Project Open(string path)
-        {
-            Log.Instance.Debug($"Opening Epi Info project: {path}");
-            return new Project(path);
         }
 
         public static bool IsInitialized(this Project @this)
@@ -48,35 +54,69 @@ namespace ERHMS.EpiInfo
 
         public static void Initialize(this Project @this)
         {
-            Log.Instance.Debug($"Initializing Epi Info project: {@this.FilePath}");
+            Log.Default.Debug($"Initializing Epi Info project: {@this.FilePath}");
             ((MetadataDbProvider)@this.Metadata).CreateMetadataTables();
+        }
+
+        public static Project Open(string path)
+        {
+            Log.Default.Debug($"Opening Epi Info project: {path}");
+            return new Project(path);
+        }
+
+        public static IDatabase GetDatabase(this Project @this)
+        {
+            return DatabaseProviderExtensions.FromDriverName(@this.CollectedDataDriver)
+                .ToDatabase(@this.CollectedDataConnectionString);
+        }
+
+        public static IEnumerable<string> GetTableNames(this Project @this, TableTypes tableTypes)
+        {
+            if (tableTypes.HasFlag(TableTypes.Existing))
+            {
+                foreach (string tableName in @this.CollectedData.GetDbDriver().GetTableNames())
+                {
+                    yield return tableName;
+                }
+            }
+            if (tableTypes.HasFlag(TableTypes.View)
+                || tableTypes.HasFlag(TableTypes.Page)
+                || tableTypes.HasFlag(TableTypes.GridField))
+            {
+                foreach (View view in @this.Views)
+                {
+                    if (tableTypes.HasFlag(TableTypes.View))
+                    {
+                        yield return view.TableName;
+                    }
+                    if (tableTypes.HasFlag(TableTypes.Page))
+                    {
+                        foreach (Page page in view.Pages)
+                        {
+                            yield return page.TableName;
+                        }
+                    }
+                    if (tableTypes.HasFlag(TableTypes.GridField))
+                    {
+                        foreach (GridField field in view.Fields.GridFields)
+                        {
+                            yield return field.TableName;
+                        }
+                    }
+                }
+            }
         }
 
         private static void DeleteViewCore(this Project @this, View view)
         {
-            foreach (Page page in view.Pages)
-            {
-                @this.Metadata.DeleteFields(page);
-                @this.Metadata.DeletePage(page);
-            }
-            @this.Metadata.DeleteView(view.Name);
+            view.DeleteDataTables();
+            view.DeleteMetadata();
             @this.Views.Remove(view.Name);
         }
 
         public static void DeleteViewTree(this Project @this, View view)
         {
-            view.DeleteDataTableTree();
-            if (view.IsRelatedView && view.ParentView != null)
-            {
-                foreach (RelatedViewField field in view.ParentView.Fields.RelatedFields)
-                {
-                    if (field.ChildView?.Id == view.Id)
-                    {
-                        @this.Metadata.DeleteField(field);
-                    }
-                }
-                view.ParentView.MustRefreshFieldCollection = true;
-            }
+            view.Unrelate();
             foreach (View descendantView in view.GetDescendantViews())
             {
                 @this.DeleteViewCore(descendantView);

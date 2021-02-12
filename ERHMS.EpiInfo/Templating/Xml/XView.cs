@@ -27,60 +27,60 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public int ViewId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public bool IsRelatedView
         {
             get { return (bool)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string CheckCode
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int Width
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int Height
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string Orientation
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string LabelAlign
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string SurveyId
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public XProject XProject => (XProject)Parent;
-        public IEnumerable<XPage> XPages => Elements().OfType<XPage>();
-        public IEnumerable<XField> XFields => Descendants().OfType<XField>();
+        public IEnumerable<XPage> XPages => Elements(ElementNames.Page).Cast<XPage>();
+        public IEnumerable<XField> XFields => XPages.SelectMany(xPage => xPage.XFields);
 
         public XView()
             : base(ElementNames.View) { }
@@ -89,10 +89,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             : this()
         {
             Add(element.Attributes());
-            foreach (XElement pageElement in element.Elements(ElementNames.Page))
-            {
-                Add(new XPage(pageElement));
-            }
+            Add(element.Elements(ElementNames.Page).Select(child => new XPage(child)));
         }
 
         public View Instantiate(Project project)
@@ -108,6 +105,17 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 PageOrientation = Orientation,
                 PageLabelAlign = LabelAlign
             };
+        }
+
+        public void Unrelate()
+        {
+            IsRelatedView = false;
+            IReadOnlyCollection<XField> relateXFields =
+                XFields.Where(xField => xField.FieldType == MetaFieldType.Relate).ToList();
+            foreach (XField relateXField in relateXFields)
+            {
+                relateXField.Remove();
+            }
         }
     }
 }

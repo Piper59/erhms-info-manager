@@ -10,28 +10,30 @@ namespace ERHMS.Launcher
     public class Program
     {
         private const string AppTitle = "ERHMS Info Manager";
+        private const string BuildDirName = AppTitle;
+        private const string ExecutableName = AppTitle + ".exe";
 
         [STAThread]
         private static void Main()
         {
-            string programPath = null;
+            string executablePath = null;
             try
             {
-                string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string workingDirectory = Path.Combine(currentDirectory, AppTitle);
-                programPath = Path.Combine(workingDirectory, $"{AppTitle}.exe");
+                string buildContainerDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string workingDirPath = Path.Combine(buildContainerDirPath, BuildDirName);
+                executablePath = Path.Combine(workingDirPath, ExecutableName);
                 Process.Start(new ProcessStartInfo
                 {
                     UseShellExecute = false,
-                    WorkingDirectory = workingDirectory,
-                    FileName = programPath
+                    WorkingDirectory = workingDirPath,
+                    FileName = executablePath
                 });
             }
             catch (Exception ex)
             {
                 StringBuilder message = new StringBuilder();
                 message.Append($"{AppTitle} could not be launched");
-                if (programPath == null)
+                if (executablePath == null)
                 {
                     message.AppendLine(".");
                 }
@@ -39,7 +41,7 @@ namespace ERHMS.Launcher
                 {
                     message.AppendLine(" from the following location:");
                     message.AppendLine();
-                    message.AppendLine(programPath);
+                    message.AppendLine(executablePath);
                 }
                 message.AppendLine();
                 message.Append(ex.Message);

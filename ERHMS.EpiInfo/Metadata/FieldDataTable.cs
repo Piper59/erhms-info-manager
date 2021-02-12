@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Epi;
+using ERHMS.Data;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 
@@ -15,6 +17,7 @@ namespace ERHMS.EpiInfo.Metadata
 
         public FieldDataTable(DataTable table)
         {
+            table.SetColumnDataType(ColumnNames.TAB_INDEX, typeof(double));
             Table = table;
         }
 

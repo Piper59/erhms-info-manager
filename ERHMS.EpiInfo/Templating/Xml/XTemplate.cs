@@ -10,16 +10,13 @@ namespace ERHMS.EpiInfo.Templating.Xml
     {
         public const string DateFormat = "F";
 
-        public static XmlWriterSettings XmlWriterSettings
+        public static XmlWriterSettings GetXmlWriterSettings()
         {
-            get
+            return new XmlWriterSettings
             {
-                return new XmlWriterSettings
-                {
-                    Indent = true,
-                    OmitXmlDeclaration = true
-                };
-            }
+                Indent = true,
+                OmitXmlDeclaration = true
+            };
         }
 
         public static XTemplate Create(TemplateLevel level)
@@ -33,33 +30,38 @@ namespace ERHMS.EpiInfo.Templating.Xml
             };
         }
 
+        public static new XTemplate Load(string path)
+        {
+            return new XTemplate(XElement.Load(path));
+        }
+
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string Description
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public DateTime? CreateDate
         {
             get { return this.GetAttributeValueOrNull<DateTime>(); }
-            set { this.SetAttributeValue(value?.ToString(DateFormat)); }
+            set { this.SetOrClearAttributeValue(value?.ToString(DateFormat)); }
         }
 
         public TemplateLevel Level
         {
             get { return TemplateLevelExtensions.Parse((string)this.GetAttribute()); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
-        public XProject XProject => Elements().OfType<XProject>().Single();
-        public IEnumerable<XTable> XSourceTables => Elements(ElementNames.SourceTable).OfType<XTable>();
-        public IEnumerable<XTable> XGridTables => Elements(ElementNames.GridTable).OfType<XTable>();
+        public XProject XProject => (XProject)Element(ElementNames.Project);
+        public IEnumerable<XTable> XSourceTables => Elements(ElementNames.SourceTable).Cast<XTable>();
+        public IEnumerable<XTable> XGridTables => Elements(ElementNames.GridTable).Cast<XTable>();
 
         public XTemplate()
             : base(ElementNames.Template) { }
@@ -68,14 +70,16 @@ namespace ERHMS.EpiInfo.Templating.Xml
             : this()
         {
             Add(element.Attributes());
-            XElement projectElement = element.Element(ElementNames.Project);
-            Add(new XProject(projectElement));
-            foreach (string elementName in ElementNames.Tables)
+            Add(new XProject(element.Element(ElementNames.Project)));
+            Add(element.Elements(ElementNames.SourceTable).Select(child => new XTable(child)));
+            Add(element.Elements(ElementNames.GridTable).Select(child => new XTable(child)));
+        }
+
+        public new void Save(string path)
+        {
+            using (XmlWriter writer = XmlWriter.Create(path, GetXmlWriterSettings()))
             {
-                foreach (XElement tableElement in element.Elements(elementName))
-                {
-                    Add(new XTable(tableElement));
-                }
+                Save(writer);
             }
         }
     }

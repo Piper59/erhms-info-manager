@@ -1,15 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace ERHMS.EpiInfo.Metadata
 {
     public class GridColumnDataTable : IEnumerable<GridColumnDataRow>
     {
-        public static implicit operator DataTable(GridColumnDataTable fields)
+        public static implicit operator DataTable(GridColumnDataTable gridTable)
         {
-            return fields.Table;
+            return gridTable.Table;
         }
 
         public DataTable Table { get; }

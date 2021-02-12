@@ -1,63 +1,59 @@
-﻿using ERHMS.Common.Logging;
-using System.Data;
+﻿using System.Data;
 
 namespace ERHMS.Data
 {
     public class LoggingConnection : IDbConnection
     {
-        public string DatabaseId { get; }
-        public IDbConnection UnderlyingConnection { get; }
+        public IDbConnection BaseConnection { get; }
 
         public string ConnectionString
         {
-            get { return UnderlyingConnection.ConnectionString; }
-            set { UnderlyingConnection.ConnectionString = value; }
+            get { return BaseConnection.ConnectionString; }
+            set { BaseConnection.ConnectionString = value; }
         }
 
-        public int ConnectionTimeout => UnderlyingConnection.ConnectionTimeout;
-        public string Database => UnderlyingConnection.Database;
-        public ConnectionState State => UnderlyingConnection.State;
+        public int ConnectionTimeout => BaseConnection.ConnectionTimeout;
+        public string Database => BaseConnection.Database;
+        public ConnectionState State => BaseConnection.State;
 
-        public LoggingConnection(string databaseId, IDbConnection connection)
+        public LoggingConnection(IDbConnection connection)
         {
-            DatabaseId = databaseId;
-            UnderlyingConnection = connection;
+            BaseConnection = connection;
         }
 
         public IDbTransaction BeginTransaction()
         {
-            return UnderlyingConnection.BeginTransaction();
+            return BaseConnection.BeginTransaction();
         }
 
-        public IDbTransaction BeginTransaction(IsolationLevel il)
+        public IDbTransaction BeginTransaction(IsolationLevel isolationLevel)
         {
-            return UnderlyingConnection.BeginTransaction(il);
+            return BaseConnection.BeginTransaction(isolationLevel);
         }
 
         public void ChangeDatabase(string databaseName)
         {
-            UnderlyingConnection.ChangeDatabase(databaseName);
+            BaseConnection.ChangeDatabase(databaseName);
         }
 
         public void Close()
         {
-            UnderlyingConnection.Close();
+            BaseConnection.Close();
         }
 
         public IDbCommand CreateCommand()
         {
-            return new LoggingCommand(UnderlyingConnection.CreateCommand());
+            return new LoggingCommand(BaseConnection.CreateCommand());
         }
 
         public void Dispose()
         {
-            UnderlyingConnection.Dispose();
+            BaseConnection.Dispose();
         }
 
         public void Open()
         {
-            Log.Instance.Debug($"Opening database connection: {DatabaseId}");
-            UnderlyingConnection.Open();
+            BaseConnection.Open();
         }
     }
 }

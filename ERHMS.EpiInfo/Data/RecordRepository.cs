@@ -1,110 +1,90 @@
 ﻿using Dapper;
 using Epi;
 using ERHMS.Data;
-using ERHMS.Data.Databases;
-using ERHMS.Data.Repositories;
-using System;
+using ERHMS.Data.Access;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Linq;
 using System.Text;
 
 namespace ERHMS.EpiInfo.Data
 {
     public class RecordRepository : Repository<Record>
     {
-        private static bool IsTooManyFieldsDefinedError(OleDbException exception)
-        {
-            return exception.Errors.Count == 1 && exception.Errors[0].SQLState == "3190";
-        }
-
         public View View { get; }
 
         public RecordRepository(View view)
-            : base(DatabaseFactory.GetDatabase(view.Project))
+            : base(view.Project.GetDatabase())
         {
             View = view;
         }
 
-        protected override string GetFromClause()
+        protected override string GetTableSource()
         {
-            StringBuilder clause = new StringBuilder();
-            clause.Append(Quote(View.TableName));
+            StringBuilder sql = new StringBuilder();
+            sql.Append(Quote(View.TableName));
             foreach (Page page in View.Pages)
             {
-                clause.Insert(0, "(");
-                clause.AppendFormat(
+                sql.Insert(0, "(");
+                sql.AppendFormat(
                     " INNER JOIN {0} ON {0}.{2} = {1}.{2})",
                     Quote(page.TableName),
                     Quote(View.TableName),
                     Quote(ColumnNames.GLOBAL_RECORD_ID));
             }
-            clause.Insert(0, "FROM ");
-            return clause.ToString();
+            return sql.ToString();
         }
 
-        private IEnumerable<Record> SingleQuerySelect(IDbConnection connection, string clauses, object parameters)
+        private void SelectCore(
+            IDbConnection connection,
+            string selectList,
+            string clauses,
+            object parameters,
+            RecordCollection records)
         {
-            string sql = GetSelectQuery("*", clauses);
+            string sql = GetSelectStatement(selectList, clauses);
             using (IDataReader reader = connection.ExecuteReader(sql, parameters))
             {
+                RecordMapper mapper = new RecordMapper(reader);
                 while (reader.Read())
                 {
-                    Record record = new Record();
-                    record.SetProperties(reader);
-                    yield return record;
+                    records.Update(mapper);
                 }
             }
         }
 
-        private IEnumerable<Record> MultipleQuerySelect(IDbConnection connection, string clauses, object parameters)
+        private IEnumerable<Record> SelectJointly(IDbConnection connection, string clauses, object parameters)
         {
-            string keyColumnName = ColumnNames.GLOBAL_RECORD_ID;
-            IDictionary<string, Record> records = new Dictionary<string, Record>(StringComparer.OrdinalIgnoreCase);
-            {
-                string sql = GetSelectQuery($"{Quote(View.TableName)}.*", clauses);
-                using (IDataReader reader = connection.ExecuteReader(sql, parameters))
-                {
-                    int keyOrdinal = reader.GetOrdinal(keyColumnName);
-                    while (reader.Read())
-                    {
-                        string key = reader.GetString(keyOrdinal);
-                        Record record = new Record();
-                        record.SetProperties(reader);
-                        records[key] = record;
-                    }
-                }
-            }
+            RecordCollection records = new RecordCollection();
+            SelectCore(connection, "*", clauses, parameters, records);
+            return records;
+        }
+
+        private IEnumerable<Record> SelectIncrementally(IDbConnection connection, string clauses, object parameters)
+        {
+            RecordCollection records = new RecordCollection();
+            SelectCore(connection, $"{Quote(View.TableName)}.*", clauses, parameters, records);
             foreach (Page page in View.Pages)
             {
-                string sql = GetSelectQuery($"{Quote(page.TableName)}.*", clauses);
-                using (IDataReader reader = connection.ExecuteReader(sql, parameters))
-                {
-                    int keyOrdinal = reader.GetOrdinal(keyColumnName);
-                    while (reader.Read())
-                    {
-                        string key = reader.GetString(keyOrdinal);
-                        Record record = records[key];
-                        record.SetProperties(reader);
-                    }
-                }
+                SelectCore(connection, $"{Quote(page.TableName)}.*", clauses, parameters, records);
             }
-            return records.Values;
+            return records;
         }
 
-        public override IEnumerable<Record> Select(string clauses = null, object parameters = null)
+        public override IEnumerable<Record> Select(string clauses, object parameters)
         {
             using (IDbConnection connection = Database.Connect())
             {
                 try
                 {
-                    return SingleQuerySelect(connection, clauses, parameters);
+                    return SelectJointly(connection, clauses, parameters);
                 }
                 catch (OleDbException ex)
                 {
-                    if (IsTooManyFieldsDefinedError(ex))
+                    if (ex.Errors.Count == 1 && ex.Errors[0].SQLState == ErrorCodes.TooManyFieldsDefined)
                     {
-                        return MultipleQuerySelect(connection, clauses, parameters);
+                        return SelectIncrementally(connection, clauses, parameters);
                     }
                     else
                     {
@@ -114,36 +94,46 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public IEnumerable<Record> SelectByDeleted(bool deleted)
+        public Record SelectByGlobalRecordId(string globalRecordId)
         {
-            string @operator = deleted ? "=" : "<>";
-            string clauses = $"WHERE {Quote(ColumnNames.REC_STATUS)} {@operator} @RECSTATUS";
+            string clauses = $"WHERE {Quote(View.TableName)}.{ColumnNames.GLOBAL_RECORD_ID} = @GlobalRecordId";
             ParameterCollection parameters = new ParameterCollection
             {
-                { "@RECSTATUS", RecordStatuses.Deleted }
+                { "@GlobalRecordId", globalRecordId }
+            };
+            return Select(clauses, parameters).SingleOrDefault();
+        }
+
+        public IEnumerable<Record> SelectByDeleted(bool deleted)
+        {
+            string op = deleted ? "=" : "<>";
+            string clauses = $"WHERE {Quote(ColumnNames.REC_STATUS)} {op} @RECSTATUS";
+            ParameterCollection parameters = new ParameterCollection
+            {
+                { "@RECSTATUS", RecordStatus.Deleted }
             };
             return Select(clauses, parameters);
         }
 
         public void SetDeleted(Record record, bool deleted)
         {
+            string sql = $@"
+                UPDATE {Quote(View.TableName)}
+                SET {Quote(ColumnNames.REC_STATUS)} = @RECSTATUS
+                WHERE {Quote(ColumnNames.UNIQUE_KEY)} = @UniqueKey;";
+            ParameterCollection parameters = new ParameterCollection
+            {
+                { "@RECSTATUS", deleted ? RecordStatus.Deleted : RecordStatus.Undeleted },
+                { "@UniqueKey", record.UniqueKey.Value }
+            };
             using (IDbConnection connection = Database.Connect())
             {
-                string sql = $@"
-                    UPDATE {Quote(View.TableName)}
-                    SET {Quote(ColumnNames.REC_STATUS)} = @RECSTATUS
-                    WHERE {Quote(ColumnNames.GLOBAL_RECORD_ID)} = @GlobalRecordId;";
-                ParameterCollection parameters = new ParameterCollection
-                {
-                    { "@RECSTATUS", deleted ? RecordStatuses.Deleted : RecordStatuses.Undeleted },
-                    { "@GlobalRecordId", record.GlobalRecordId }
-                };
                 connection.Execute(sql, parameters);
             }
             record.Deleted = deleted;
         }
 
-        public void Delete(Record record)
+        public override void Delete(Record record)
         {
             SetDeleted(record, true);
         }

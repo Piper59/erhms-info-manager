@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ERHMS.EpiInfo.Templating.Xml
+﻿namespace ERHMS.EpiInfo.Templating.Xml
 {
     public static class ElementNames
     {
@@ -12,11 +10,5 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public const string SourceTable = "SourceTable";
         public const string GridTable = "GridTable";
         public const string Item = "Item";
-
-        public static IEnumerable<string> Tables { get; } = new string[]
-        {
-            SourceTable,
-            GridTable
-        };
     }
 }

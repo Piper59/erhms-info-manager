@@ -1,6 +1,5 @@
 ﻿using Epi;
 using Epi.DataSets;
-using ERHMS.Common.Logging;
 using System.IO;
 using Settings = ERHMS.EpiInfo.Properties.Settings;
 
@@ -8,23 +7,23 @@ namespace ERHMS.EpiInfo
 {
     public static class ConfigurationExtensions
     {
+        private static string FilePath => Configuration.DefaultConfigurationPath;
+
         public static bool Exists()
         {
-            return File.Exists(Configuration.DefaultConfigurationPath);
+            return File.Exists(FilePath);
         }
 
-        public static Configuration Create(string path = null)
+        public static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
         {
-            if (path == null)
+            Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
+            table.Clear();
+            if (fipsCompliant)
             {
-                path = Configuration.DefaultConfigurationPath;
+                Config.TextEncryptionModuleRow row = table.NewTextEncryptionModuleRow();
+                row.FileName = "FipsCrypto.dll";
+                table.Rows.Add(row);
             }
-            Log.Instance.Debug($"Creating Epi Info configuration: {path}");
-            Configuration configuration = Configuration.CreateDefaultConfiguration();
-            configuration.RecentViews.Clear();
-            configuration.RecentProjects.Clear();
-            configuration.ReadSettings(Settings.Default);
-            return new Configuration(path, configuration.ConfigDataSet);
         }
 
         private static void ReadSettings(this Configuration @this, Settings settings)
@@ -38,32 +37,26 @@ namespace ERHMS.EpiInfo
             row.GridSize = settings.GridSize;
         }
 
-        private static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
+        public static Configuration Create()
         {
-            Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
-            table.Clear();
-            if (fipsCompliant)
-            {
-                Config.TextEncryptionModuleRow row = table.NewTextEncryptionModuleRow();
-                row.FileName = "FipsCrypto.dll";
-                table.Rows.Add(row);
-            }
+            Log.Default.Debug($"Creating Epi Info configuration: {FilePath}");
+            Configuration configuration = Configuration.CreateDefaultConfiguration();
+            configuration.RecentViews.Clear();
+            configuration.RecentProjects.Clear();
+            configuration.ReadSettings(Settings.Default);
+            return configuration;
         }
 
         public static void Save(this Configuration @this)
         {
-            Log.Instance.Debug($"Saving Epi Info configuration: {@this.ConfigFilePath}");
+            Log.Default.Debug($"Saving Epi Info configuration: {@this.ConfigFilePath}");
             Configuration.Save(@this);
         }
 
-        public static Configuration Load(string path = null)
+        public static Configuration Load()
         {
-            if (path == null)
-            {
-                path = Configuration.DefaultConfigurationPath;
-            }
-            Log.Instance.Debug($"Loading Epi Info configuration: {path}");
-            Configuration.Load(path);
+            Log.Default.Debug($"Loading Epi Info configuration: {FilePath}");
+            Configuration.Load(FilePath);
             return Configuration.GetNewInstance();
         }
     }

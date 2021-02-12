@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml
 {
-    internal static class XElementExtensions
+    public static class XElementExtensions
     {
         public static bool TryGetAttribute(this XElement @this, string attributeName, out XAttribute attribute)
         {
@@ -18,7 +18,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
             return @this.Attribute(attributeName);
         }
 
-        public static TValue? GetAttributeValueOrNull<TValue>(this XElement @this, [CallerMemberName] string attributeName = null)
+        public static TValue? GetAttributeValueOrNull<TValue>(
+            this XElement @this,
+            [CallerMemberName] string attributeName = null)
             where TValue : struct
         {
             if (@this.TryGetAttribute(attributeName, out XAttribute attribute))
@@ -32,7 +34,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
             }
         }
 
-        public static void SetAttributeValue(this XElement @this, object value, [CallerMemberName] string attributeName = null)
+        public static void SetOrClearAttributeValue(
+            this XElement @this,
+            object value,
+            [CallerMemberName] string attributeName = null)
         {
             if (value == null || value is DBNull)
             {

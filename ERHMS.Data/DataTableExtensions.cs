@@ -7,18 +7,14 @@ namespace ERHMS.Data
     {
         public static bool DataEquals(this DataTable table1, DataTable table2)
         {
-            if (table1.Columns.Count != table2.Columns.Count)
-            {
-                return false;
-            }
-            if (table1.Rows.Count != table2.Rows.Count)
+            if (table1.Columns.Count != table2.Columns.Count || table1.Rows.Count != table2.Rows.Count)
             {
                 return false;
             }
             foreach (DataColumn column1 in table1.Columns)
             {
                 DataColumn column2 = table2.Columns[column1.ColumnName];
-                if (column2 == null || column2.DataType != column1.DataType)
+                if (column2 == null || column1.DataType != column2.DataType)
                 {
                     return false;
                 }
@@ -46,15 +42,27 @@ namespace ERHMS.Data
             {
                 return;
             }
-            int ordinal = source.Ordinal;
-            DataColumn target = @this.Columns.Add(null, dataType);
-            foreach (DataRow row in @this.Rows)
+            if (!@this.Columns.CanRemove(source))
             {
-                if (!row.IsNull(source))
+                throw new ArgumentException($"Cannot remove column '{columnName}'.", nameof(columnName));
+            }
+            DataColumn target = @this.Columns.Add(null, dataType);
+            try
+            {
+                foreach (DataRow row in @this.Rows)
                 {
-                    row[target] = Convert.ChangeType(row[source], dataType);
+                    if (!row.IsNull(source))
+                    {
+                        row[target] = Convert.ChangeType(row[source], dataType);
+                    }
                 }
             }
+            catch
+            {
+                @this.Columns.Remove(target);
+                throw;
+            }
+            int ordinal = source.Ordinal;
             source.Table.Columns.Remove(source);
             target.ColumnName = columnName;
             target.SetOrdinal(ordinal);

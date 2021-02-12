@@ -1,41 +1,20 @@
 ﻿using Epi;
 using Epi.Fields;
-using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XField : XElement
     {
-        private static readonly ICollection<IFieldMapper> mappers = new IFieldMapper[]
-        {
-            new DateFieldMapper(),
-            new DDLFieldOfCodesMapper(),
-            new FieldWithSeparatePromptMapper(),
-            new GroupFieldMapper(),
-            new ImageFieldMapper(),
-            new InputFieldWithoutSeparatePromptMapper(),
-            new InputFieldWithSeparatePromptMapper(),
-            new MirrorFieldMapper(),
-            new NumberFieldMapper(),
-            new OptionFieldMapper(),
-            new PhoneNumberFieldMapper(),
-            new RelatedViewFieldMapper(),
-            new RenderableFieldMapper(),
-            new TableBasedDropDownFieldMapper(),
-            new TextFieldMapper()
-        };
-
         public static XField Create(DataRow field)
         {
             XField xField = new XField();
             foreach (DataColumn column in field.Table.Columns)
             {
-                xField.SetAttributeValue(field[column], column.ColumnName);
+                xField.SetOrClearAttributeValue(field[column], column.ColumnName);
             }
             return xField;
         }
@@ -43,37 +22,31 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int PageId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
-        }
-
-        public string PageName
-        {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int FieldId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public Guid? UniqueId
         {
             get { return this.GetAttributeValueOrNull<Guid>(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int FieldTypeId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public MetaFieldType FieldType
@@ -85,19 +58,19 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public string RelateCondition
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int? RelatedViewId
         {
             get { return this.GetAttributeValueOrNull<int>(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public string List
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public IEnumerable<string> ListItems
@@ -109,25 +82,25 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public string SourceTableName
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int? BackgroundColor
         {
             get { return this.GetAttributeValueOrNull<int>(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public double? TabIndex
         {
             get { return this.GetAttributeValueOrNull<double>(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int? SourceFieldId
         {
             get { return this.GetAttributeValueOrNull<int>(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public XPage XPage => (XPage)Parent;
@@ -138,32 +111,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XField(XElement element)
             : base(element) { }
 
-        public bool TryGetFont(string propertyName, out Font font)
-        {
-            if (this.TryGetAttribute($"{propertyName}Family", out XAttribute xFamily)
-                && this.TryGetAttribute($"{propertyName}Size", out XAttribute xSize)
-                && this.TryGetAttribute($"{propertyName}Style", out XAttribute xStyle))
-            {
-                FontFamily family = new FontFamily((string)xFamily);
-                FontStyle style = (FontStyle)Enum.Parse(typeof(FontStyle), (string)xStyle);
-                font = new Font(family, (float)xSize, style);
-                return true;
-            }
-            else
-            {
-                font = null;
-                return false;
-            }
-        }
-
         public Field Instantiate(Page page)
         {
             Field field = page.CreateField(FieldType);
             field.Name = Name;
-            foreach (IFieldMapper mapper in mappers)
-            {
-                mapper.TrySetProperties(this, field);
-            }
             return field;
         }
     }

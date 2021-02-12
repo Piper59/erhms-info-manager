@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="Require32Bit" BeforeTargets="Build">
+  <Target Name="Require32Bit" BeforeTargets="BeforeBuild">
     <Error Condition="'$(PlatformTarget)' != 'x86'" Text="Target platform must be x86." />
   </Target>
 
-  <Target Name="ProhibitRebuild" BeforeTargets="Rebuild">
-    <Error Text="Rebuilding prohibited. Clean and build instead." />
+  <Target Name="TouchTemplates" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <Template Include="$(BuildDir)Templates\**\*" />
+    </ItemGroup>
+    <Touch Files="@(Template)" />
   </Target>
 </Project>

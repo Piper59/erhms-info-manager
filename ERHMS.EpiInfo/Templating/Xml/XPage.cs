@@ -23,35 +23,35 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public int PageId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int Position
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int BackgroundId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public int ViewId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetAttributeValue(value); }
+            set { this.SetOrClearAttributeValue(value); }
         }
 
         public XView XView => (XView)Parent;
-        public IEnumerable<XField> XFields => Elements().OfType<XField>();
+        public IEnumerable<XField> XFields => Elements(ElementNames.Field).Cast<XField>();
 
         public XPage()
             : base(ElementNames.Page) { }
@@ -60,10 +60,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             : this()
         {
             Add(element.Attributes());
-            foreach (XElement fieldElement in element.Elements(ElementNames.Field))
-            {
-                Add(new XField(fieldElement));
-            }
+            Add(element.Elements(ElementNames.Field).Select(child => new XField(child)));
         }
 
         public Page Instantiate(View view)

@@ -1,6 +1,6 @@
 ﻿using Epi;
+using ERHMS.EpiInfo.Templating.Mapping;
 using ERHMS.EpiInfo.Templating.Xml;
-using ERHMS.EpiInfo.Templating.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,41 +10,86 @@ namespace ERHMS.EpiInfo.Templating
 {
     public class TemplateCanonizer
     {
-        private class Context
+        private class ContextImpl : IMappingContext, IDisposable
         {
-            private static void AddToMap(IDictionary<int, int> map, int value)
+            private int pageCount;
+            private int pageFieldCount;
+            private int gridColumnCount;
+            private readonly IDictionary<int, int> viewIdMap = new Dictionary<int, int>();
+            private readonly IDictionary<int, int> fieldIdMap = new Dictionary<int, int>();
+
+            public TemplateCanonizer Owner { get; }
+            public IReadOnlyCollection<IFieldMapper> FieldMappers { get; }
+
+            public ContextImpl(TemplateCanonizer owner)
             {
-                map.Add(value, map.Count + 1);
+                Owner = owner;
+                FieldMappers = FieldMapper.GetInstances(this).ToList();
             }
 
-            public IDictionary<int, int> ViewIdMap { get; } = new Dictionary<int, int>();
-            public IDictionary<int, int> PageIdMap { get; } = new Dictionary<int, int>();
-            public IDictionary<int, int> FieldIdMap { get; } = new Dictionary<int, int>();
-
-            public Context(XProject xProject)
+            public void OnXViewCanonizing(XView xView)
             {
-                foreach (XView xView in xProject.XViews)
-                {
-                    AddToMap(ViewIdMap, xView.ViewId);
-                    foreach (XPage xPage in xView.XPages)
-                    {
-                        AddToMap(PageIdMap, xPage.PageId);
-                        foreach (XField xField in xPage.XFields)
-                        {
-                            AddToMap(FieldIdMap, xField.FieldId);
-                        }
-                    }
-                }
+                int viewId = viewIdMap.Count + 1;
+                viewIdMap[xView.ViewId] = viewId;
+                xView.ViewId = viewId;
+            }
+
+            public void OnXPageCanonizing(XPage xPage)
+            {
+                xPage.PageId = ++pageCount;
+                pageFieldCount = 0;
+            }
+
+            public void OnXFieldCanonizing(XField xField)
+            {
+                int fieldId = fieldIdMap.Count + 1;
+                fieldIdMap[xField.FieldId] = fieldId;
+                xField.FieldId = fieldId;
+                xField.TabIndex = ++pageFieldCount;
+            }
+
+            public void OnXGridTableItemCanonizing(XElement xItem)
+            {
+                xItem.SetAttributeValue(ColumnNames.GRID_COLUMN_ID, ++gridColumnCount);
+            }
+
+            public void OnError(Exception exception, out bool handled)
+            {
+                Log.Default.Warn(exception);
+                handled = true;
+            }
+
+            public bool MapViewId(int value, out int result)
+            {
+                return viewIdMap.TryGetValue(value, out result);
+            }
+
+            public bool MapFieldId(int value, out int result)
+            {
+                return fieldIdMap.TryGetValue(value, out result);
+            }
+
+            public bool MapTableName(string value, out string result)
+            {
+                result = default;
+                return false;
+            }
+
+            public bool MapFieldName(string value, out string result)
+            {
+                result = default;
+                return false;
+            }
+
+            public void Dispose()
+            {
+                Owner.Context = null;
             }
         }
 
-        private const int DefaultBackgroundId = 0;
-        private const int Opaque = unchecked((int)0xff000000);
-
-        private Context context;
-
         public XTemplate XTemplate { get; }
         public IProgress<string> Progress { get; set; }
+        private ContextImpl Context { get; set; }
 
         public TemplateCanonizer(XTemplate xTemplate)
         {
@@ -53,131 +98,113 @@ namespace ERHMS.EpiInfo.Templating
 
         public void Canonize()
         {
-            context = new Context(XTemplate.XProject);
-            CanonizeTemplate();
-            if (XTemplate.Level == TemplateLevel.Project)
+            using (Context = new ContextImpl(this))
             {
-                CanonizeProject(XTemplate.XProject);
-            }
-            foreach (XView xView in XTemplate.XProject.XViews)
-            {
-                CanonizeView(xView);
-                foreach (XPage xPage in xView.XPages)
+                CanonizeXTemplate();
+                if (XTemplate.Level == TemplateLevel.Project)
                 {
-                    CanonizePage(xPage);
-                    int nextTabIndex = 1;
-                    foreach (XField xField in xPage.XFields)
-                    {
-                        CanonizeField(xField, nextTabIndex++);
-                    }
+                    CanonizeXProject(XTemplate.XProject);
                 }
+                foreach (XView xView in XTemplate.XProject.XViews)
+                {
+                    CanonizeXView(xView);
+                }
+                MapFieldProperties();
+                CanonizeXGridTables();
             }
-            CanonizeGridTables();
         }
 
-        private void CanonizeTemplate()
+        private void CanonizeXTemplate()
         {
             XTemplate.CreateDate = null;
         }
 
-        private void CanonizeProject(XProject xProject)
+        private void CanonizeXProject(XProject xProject)
         {
-            Progress?.Report($"Canonizing project: {xProject.Name}");
             xProject.Id = null;
             xProject.Location = null;
             xProject.CreateDate = null;
         }
 
-        private void CanonizeView(XView xView)
+        private void CanonizeXView(XView xView)
         {
             Progress?.Report($"Canonizing view: {xView.Name}");
-            xView.ViewId = context.ViewIdMap[xView.ViewId];
+            Context.OnXViewCanonizing(xView);
             xView.CheckCode = xView.CheckCode.Trim();
             xView.SurveyId = null;
-        }
-
-        private void CanonizePage(XPage xPage)
-        {
-            XView xView = xPage.XView;
-            Progress?.Report($"Canonizing page: {xView.Name}/{xPage.Name}");
-            xPage.PageId = context.PageIdMap[xPage.PageId];
-            xPage.BackgroundId = DefaultBackgroundId;
-            xPage.ViewId = xPage.XView.ViewId;
-        }
-
-        private void CanonizeField(XField xField, int tabIndex)
-        {
-            XPage xPage = xField.XPage;
-            XView xView = xPage.XView;
-            Progress?.Report($"Canonizing field: {xView.Name}/{xPage.Name}/{xField.Name}");
-            xField.PageId = xField.XPage.PageId;
-            xField.FieldId = context.FieldIdMap[xField.FieldId];
-            xField.UniqueId = null;
-            xField.TabIndex = tabIndex;
-            foreach (XAttribute attribute in xField.Attributes().ToList())
+            foreach (XPage xPage in xView.XPages)
             {
-                if (attribute.Name.LocalName.StartsWith("Expr"))
+                CanonizeXPage(xPage);
+            }
+        }
+
+        private void CanonizeXPage(XPage xPage)
+        {
+            Progress?.Report($"Canonizing page: {xPage.Name}");
+            Context.OnXPageCanonizing(xPage);
+            xPage.BackgroundId = 0;
+            xPage.ViewId = xPage.XView.ViewId;
+            foreach (XField xField in xPage.XFields)
+            {
+                CanonizeXField(xField);
+            }
+        }
+
+        private void CanonizeXField(XField xField)
+        {
+            Progress?.Report($"Canonizing field: {xField.Name}");
+            Context.OnXFieldCanonizing(xField);
+            xField.PageId = xField.XPage.PageId;
+            xField.UniqueId = null;
+            IReadOnlyCollection<XAttribute> exprAttributes = xField.Attributes()
+                .Where(attribute => attribute.Name.LocalName.StartsWith("Expr"))
+                .ToList();
+            foreach (XAttribute exprAttribute in exprAttributes)
+            {
+                exprAttribute.Remove();
+            }
+            foreach (IFieldMapper mapper in Context.FieldMappers)
+            {
+                if (mapper.IsCompatible(xField))
                 {
-                    attribute.Remove();
+                    mapper.Canonize(xField);
                 }
             }
-            switch (xField.FieldType)
+        }
+
+        private void MapFieldProperties()
+        {
+            foreach (XField xField in XTemplate.XProject.XFields)
             {
-                case MetaFieldType.Mirror:
-                    if (xField.SourceFieldId != null)
+                foreach (IFieldMapper mapper in Context.FieldMappers)
+                {
+                    if (mapper.IsCompatible(xField))
                     {
-                        xField.SourceFieldId = context.FieldIdMap[xField.SourceFieldId.Value];
+                        mapper.MapProperties(xField);
                     }
-                    break;
-                case MetaFieldType.Codes:
-                    if (xField.RelateCondition != null)
-                    {
-                        xField.RelateCondition = DDLFieldOfCodesMapper.MapAssociatedFieldInformation(
-                            xField.RelateCondition,
-                            context.FieldIdMap.TryGetValue);
-                    }
-                    break;
-                case MetaFieldType.Relate:
-                    if (xField.RelatedViewId != null)
-                    {
-                        xField.RelatedViewId = context.ViewIdMap[xField.RelatedViewId.Value];
-                    }
-                    break;
-                case MetaFieldType.Group:
-                    if (xField.BackgroundColor != null)
-                    {
-                        xField.BackgroundColor = xField.BackgroundColor.Value | Opaque;
-                    }
-                    if (xField.List != null)
-                    {
-                        IDictionary<string, double> tabIndices = xField.XPage.XFields.ToDictionary(
-                            pageXField => pageXField.Name,
-                            pageXField => pageXField.TabIndex.Value,
-                            StringComparer.OrdinalIgnoreCase);
-                        xField.ListItems = xField.ListItems.OrderBy(fieldName => tabIndices[fieldName]);
-                    }
-                    break;
+                }
             }
         }
 
-        private void CanonizeGridTables()
+        private void CanonizeXGridTables()
         {
-            Progress?.Report("Canonizing grid tables");
-            int nextGridColumnId = 1;
             foreach (XTable xTable in XTemplate.XGridTables)
             {
-                CanonizeGridTable(xTable, nextGridColumnId++);
+                CanonizeXGridTable(xTable);
             }
         }
 
-        private void CanonizeGridTable(XTable xTable, int gridColumnId)
+        private void CanonizeXGridTable(XTable xTable)
         {
             Progress?.Report($"Canonizing grid table: {xTable.TableName}");
             foreach (XElement xItem in xTable.XItems)
             {
-                xItem.SetAttributeValue(ColumnNames.GRID_COLUMN_ID, gridColumnId);
+                Context.OnXGridTableItemCanonizing(xItem);
                 int fieldId = (int)xItem.Attribute(ColumnNames.FIELD_ID);
-                xItem.SetAttributeValue(ColumnNames.FIELD_ID, context.FieldIdMap[fieldId]);
+                if (Context.MapFieldId(fieldId, out fieldId))
+                {
+                    xItem.SetAttributeValue(ColumnNames.FIELD_ID, fieldId);
+                }
             }
         }
     }

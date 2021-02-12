@@ -14,13 +14,7 @@ namespace ERHMS.EpiInfo.Metadata
         public DataRow Row { get; }
         public int FieldId => Row.Field<int>(ColumnNames.FIELD_ID);
         public string Name => Row.Field<string>(ColumnNames.NAME);
-
-        public double? TabIndex
-        {
-            get { return Row.Field<double?>(ColumnNames.TAB_INDEX); }
-            set { Row.SetField(ColumnNames.TAB_INDEX, value); }
-        }
-
+        public double? TabIndex => Row.Field<double?>(ColumnNames.TAB_INDEX);
         public int FieldTypeId => Row.Field<int>(ColumnNames.FIELD_TYPE_ID);
         public MetaFieldType FieldType => (MetaFieldType)FieldTypeId;
         public string List => Row.Field<string>(ColumnNames.LIST);

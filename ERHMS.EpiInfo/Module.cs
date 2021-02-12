@@ -33,20 +33,20 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        private static string Quote(string argument)
+        private static string Quote(string arg)
         {
-            return string.Format("\"{0}\"", argument.Replace("\"", "\"\""));
+            return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
         }
 
-        public static Process Start(this Module @this, params string[] arguments)
+        public static Process Start(this Module @this, params string[] args)
         {
-            string entryDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string buildDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             return Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,
-                WorkingDirectory = entryDirectory,
-                FileName = Path.Combine(entryDirectory, @this.ToFileName()),
-                Arguments = string.Join(" ", arguments.Select(Quote))
+                WorkingDirectory = buildDirPath,
+                FileName = Path.Combine(buildDirPath, @this.ToFileName()),
+                Arguments = string.Join(" ", args.Select(Quote))
             });
         }
     }

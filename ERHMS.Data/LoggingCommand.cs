@@ -1,107 +1,106 @@
-﻿using ERHMS.Common.Logging;
-using System.Data;
+﻿using System.Data;
 using System.Text.RegularExpressions;
 
 namespace ERHMS.Data
 {
     public class LoggingCommand : IDbCommand
     {
-        private static readonly Regex newLineAndIndentationRegex = new Regex(@"(?:\r\n?|\n)\s*");
+        private static readonly Regex LineBreakRegex = new Regex(@"(?:\r\n|\r|\n)\s*");
 
-        public IDbCommand UnderlyingCommand { get; }
+        public IDbCommand BaseCommand { get; }
 
         public IDbConnection Connection
         {
-            get { return UnderlyingCommand.Connection; }
-            set { UnderlyingCommand.Connection = value; }
+            get { return BaseCommand.Connection; }
+            set { BaseCommand.Connection = value; }
         }
 
         public IDbTransaction Transaction
         {
-            get { return UnderlyingCommand.Transaction; }
-            set { UnderlyingCommand.Transaction = value; }
+            get { return BaseCommand.Transaction; }
+            set { BaseCommand.Transaction = value; }
         }
 
         public string CommandText
         {
-            get { return UnderlyingCommand.CommandText; }
-            set { UnderlyingCommand.CommandText = value; }
+            get { return BaseCommand.CommandText; }
+            set { BaseCommand.CommandText = value; }
         }
 
-        public string CommandLogText => newLineAndIndentationRegex.Replace(CommandText, "");
+        private string CommandLogText => LineBreakRegex.Replace(CommandText, " ");
 
         public int CommandTimeout
         {
-            get { return UnderlyingCommand.CommandTimeout; }
-            set { UnderlyingCommand.CommandTimeout = value; }
+            get { return BaseCommand.CommandTimeout; }
+            set { BaseCommand.CommandTimeout = value; }
         }
 
         public CommandType CommandType
         {
-            get { return UnderlyingCommand.CommandType; }
-            set { UnderlyingCommand.CommandType = value; }
+            get { return BaseCommand.CommandType; }
+            set { BaseCommand.CommandType = value; }
         }
 
-        public IDataParameterCollection Parameters => UnderlyingCommand.Parameters;
+        public IDataParameterCollection Parameters => BaseCommand.Parameters;
 
         public UpdateRowSource UpdatedRowSource
         {
-            get { return UnderlyingCommand.UpdatedRowSource; }
-            set { UnderlyingCommand.UpdatedRowSource = value; }
+            get { return BaseCommand.UpdatedRowSource; }
+            set { BaseCommand.UpdatedRowSource = value; }
         }
 
         public LoggingCommand(IDbCommand command)
         {
-            UnderlyingCommand = command;
-        }
-
-        public void Prepare()
-        {
-            UnderlyingCommand.Prepare();
+            BaseCommand = command;
         }
 
         public void Cancel()
         {
-            UnderlyingCommand.Cancel();
+            BaseCommand.Cancel();
         }
 
         public IDbDataParameter CreateParameter()
         {
-            return UnderlyingCommand.CreateParameter();
+            return BaseCommand.CreateParameter();
+        }
+
+        public void Dispose()
+        {
+            BaseCommand.Dispose();
         }
 
         private void OnExecuting()
         {
-            Log.Instance.Debug($"Executing database command: {CommandLogText}");
+            Log.Default.Debug($"Executing database command: {CommandLogText}");
         }
 
         public int ExecuteNonQuery()
         {
             OnExecuting();
-            return UnderlyingCommand.ExecuteNonQuery();
+            return BaseCommand.ExecuteNonQuery();
         }
 
         public IDataReader ExecuteReader()
         {
             OnExecuting();
-            return UnderlyingCommand.ExecuteReader();
+            return BaseCommand.ExecuteReader();
         }
 
         public IDataReader ExecuteReader(CommandBehavior behavior)
         {
             OnExecuting();
-            return UnderlyingCommand.ExecuteReader(behavior);
+            return BaseCommand.ExecuteReader(behavior);
         }
 
         public object ExecuteScalar()
         {
             OnExecuting();
-            return UnderlyingCommand.ExecuteScalar();
+            return BaseCommand.ExecuteScalar();
         }
 
-        public void Dispose()
+        public void Prepare()
         {
-            UnderlyingCommand.Dispose();
+            BaseCommand.Prepare();
         }
     }
 }
