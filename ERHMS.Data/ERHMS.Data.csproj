@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Access\Access2003Database.cs" />
+    <Compile Include="Access\Access2007Database.cs" />
     <Compile Include="Access\AccessDatabase.cs" />
     <Compile Include="Access\ErrorCodes.cs" />
     <Compile Include="Database.cs" />
@@ -80,6 +81,9 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\Access2003Database.mdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Access2007Database.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

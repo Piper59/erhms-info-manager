@@ -1,43 +1,40 @@
 ﻿using Epi;
-using ERHMS.Common.Logging;
 using ERHMS.Console.Utilities;
 using ERHMS.EpiInfo;
+using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
+using log4net.Repository.Hierarchy;
 using System;
-using System.Linq;
 
 namespace ERHMS.Console
 {
     public class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
-            if (args.Length == 0)
-            {
-                using (new Highlighter())
-                {
-                    System.Console.Error.WriteLine(Utility.GetUsage());
-                }
-                return;
-            }
-            Log.Initializing += Log_Initializing;
+            IUtility utility = Utility.ParseArgs(args);
+            ConfigureLog();
+            Log.Default.Info("Running");
             try
             {
                 ConfigureEpiInfo();
-                IUtility utility = Utility.Create(args[0], args.Skip(1).ToList());
                 utility.Run();
+                Log.Default.Info("Completed");
+                return ErrorCodes.Success;
             }
             catch (Exception ex)
             {
-                Log.Instance.Fatal(ex.Message);
-                Log.Instance.Debug(ex.StackTrace);
+                Log.Default.Error(ex);
+                Log.Default.Warn("Completed with errors");
+                return ex.HResult;
             }
         }
 
-        private static void Log_Initializing(object sender, InitializingEventArgs e)
+        private static void ConfigureLog()
         {
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             PatternLayout layout = new PatternLayout("%message%newline");
             layout.ActivateOptions();
             ColoredConsoleAppender appender = new ColoredConsoleAppender
@@ -66,7 +63,8 @@ namespace ERHMS.Console
                 ForeColor = ColoredConsoleAppender.Colors.Red | ColoredConsoleAppender.Colors.HighIntensity
             });
             appender.ActivateOptions();
-            e.Hierarchy.Root.AddAppender(appender);
+            hierarchy.Root.AddAppender(appender);
+            hierarchy.Configured = true;
         }
 
         private static void ConfigureEpiInfo()

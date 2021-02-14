@@ -1,34 +1,32 @@
-﻿using ERHMS.Common.Logging;
-using ERHMS.EpiInfo.Templating;
+﻿using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
-using System.IO;
-using System.Xml;
-using System.Xml.Linq;
+using System;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CanonizeTemplate : Utility
+    public class CanonizeTemplate : IUtility
     {
-        public string TemplatePath { get; }
+        public string InputPath { get; }
+        public string OutputPath { get; }
 
         public CanonizeTemplate(string templatePath)
+            : this(templatePath, templatePath) { }
+
+        public CanonizeTemplate(string inputPath, string outputPath)
         {
-            TemplatePath = templatePath;
+            InputPath = inputPath;
+            OutputPath = outputPath;
         }
 
-        protected override void RunCore()
+        public void Run()
         {
-            XTemplate xTemplate = new XTemplate(XDocument.Load(TemplatePath).Root);
+            XTemplate xTemplate = XTemplate.Load(InputPath);
             TemplateCanonizer canonizer = new TemplateCanonizer(xTemplate)
             {
-                Progress = new LoggingProgress()
+                Progress = new Progress<string>(Log.Default.Debug)
             };
             canonizer.Canonize();
-            using (Stream stream = File.Create(TemplatePath))
-            using (XmlWriter writer = XmlWriter.Create(stream, XTemplate.XmlWriterSettings))
-            {
-                xTemplate.Save(writer);
-            }
+            xTemplate.Save(OutputPath);
         }
     }
 }

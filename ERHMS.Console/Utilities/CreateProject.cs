@@ -1,46 +1,49 @@
 ﻿using Epi;
-using ERHMS.Common.Logging;
-using ERHMS.Data.Databases;
+using ERHMS.Data;
 using ERHMS.EpiInfo;
 using System;
 using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CreateProject : Utility
+    public class CreateProject : IUtility
     {
-        public DatabaseType DatabaseType { get; }
+        public DatabaseProvider DatabaseProvider { get; }
         public string ConnectionString { get; }
         public string ProjectLocation { get; }
         public string ProjectName { get; }
 
-        public CreateProject(DatabaseType databaseType, string connectionString, string projectLocation, string projectName)
+        public CreateProject(
+            DatabaseProvider databaseProvider,
+            string connectionString,
+            string projectLocation,
+            string projectName)
         {
-            DatabaseType = databaseType;
+            DatabaseProvider = databaseProvider;
             ConnectionString = connectionString;
             ProjectLocation = projectLocation;
             ProjectName = projectName;
         }
 
-        protected override void RunCore()
+        public void Run()
         {
-            ProjectCreationInfo info = new ProjectCreationInfo
+            ProjectCreationInfo creationInfo = new ProjectCreationInfo
             {
-                Location = ProjectLocation,
-                Name = ProjectName
+                Name = ProjectName,
+                Location = ProjectLocation
             };
-            if (File.Exists(info.FilePath))
+            if (File.Exists(creationInfo.FilePath))
             {
-                throw new ArgumentException("Project already exists.");
+                throw new InvalidOperationException("Project already exists.");
             }
-            IDatabase database = DatabaseFactory.GetDatabase(DatabaseType, ConnectionString);
+            IDatabase database = DatabaseProvider.ToDatabase(ConnectionString);
             if (database.Exists())
             {
-                throw new ArgumentException("Database already exists.");
+                throw new InvalidOperationException("Database already exists.");
             }
             database.Create();
-            info.Database = database;
-            Project project = ProjectExtensions.Create(info);
+            creationInfo.Database = database;
+            Project project = ProjectExtensions.Create(creationInfo);
             project.Initialize();
         }
     }

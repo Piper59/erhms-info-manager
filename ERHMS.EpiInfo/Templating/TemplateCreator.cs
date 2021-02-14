@@ -18,8 +18,7 @@ namespace ERHMS.EpiInfo.Templating
             public XTemplate XTemplate { get; set; }
 
             private readonly ISet<string> sourceTableNames = new HashSet<string>(NameComparer.Default);
-            public IEnumerable<string> SourceTableNames => sourceTableNames
-                .OrderBy(tableName => tableName, NameComparer.Default);
+            public IEnumerable<string> SourceTableNames => sourceTableNames;
 
             private readonly ICollection<GridColumnDataTable> gridTables = new List<GridColumnDataTable>();
             public IEnumerable<GridColumnDataTable> GridTables => gridTables;
@@ -124,7 +123,7 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CreateXSourceTables()
         {
-            foreach (string tableName in Context.SourceTableNames)
+            foreach (string tableName in Context.SourceTableNames.OrderBy(tableName => tableName, NameComparer.Default))
             {
                 CreateXSourceTable(tableName);
             }

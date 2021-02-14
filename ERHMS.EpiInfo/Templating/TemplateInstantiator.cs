@@ -124,8 +124,9 @@ namespace ERHMS.EpiInfo.Templating
         {
             if (xTemplate.Level != Level)
             {
-                string message = $"Template level '{xTemplate.Level}' does not match instantiator level '{Level}'.";
-                throw new ArgumentException(message, nameof(xTemplate));
+                throw new ArgumentException(
+                    $"Template level '{xTemplate.Level}' does not match instantiator level '{Level}'.",
+                    nameof(xTemplate));
             }
             XTemplate = xTemplate;
             Metadata = metadata;

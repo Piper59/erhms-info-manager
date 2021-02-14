@@ -121,4 +121,7 @@
   <data name="Access2003Database" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Access2003Database.mdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Access2007Database" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Access2007Database.accdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

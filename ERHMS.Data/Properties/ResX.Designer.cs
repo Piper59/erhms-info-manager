@@ -69,5 +69,15 @@ namespace ERHMS.Data.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Access2007Database {
+            get {
+                object obj = ResourceManager.GetObject("Access2007Database", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

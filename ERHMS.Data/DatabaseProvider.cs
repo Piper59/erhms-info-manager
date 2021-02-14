@@ -10,6 +10,7 @@ namespace ERHMS.Data
     public enum DatabaseProvider
     {
         Access2003,
+        Access2007,
         SqlServer
     }
 
@@ -20,6 +21,7 @@ namespace ERHMS.Data
             switch (@this)
             {
                 case DatabaseProvider.Access2003:
+                case DatabaseProvider.Access2007:
                     return OleDbFactory.Instance;
                 case DatabaseProvider.SqlServer:
                     return SqlClientFactory.Instance;
@@ -34,6 +36,8 @@ namespace ERHMS.Data
             {
                 case DatabaseProvider.Access2003:
                     return new Access2003Database(connectionString);
+                case DatabaseProvider.Access2007:
+                    return new Access2007Database(connectionString);
                 case DatabaseProvider.SqlServer:
                     return new SqlServerUserDatabase(connectionString);
                 default:

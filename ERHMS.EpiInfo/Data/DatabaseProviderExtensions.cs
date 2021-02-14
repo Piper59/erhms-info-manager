@@ -12,6 +12,8 @@ namespace ERHMS.EpiInfo.Data
             {
                 case DatabaseProvider.Access2003:
                     return Configuration.AccessDriver;
+                case DatabaseProvider.Access2007:
+                    return Configuration.Access2007Driver;
                 case DatabaseProvider.SqlServer:
                     return Configuration.SqlDriver;
                 default:
@@ -25,6 +27,8 @@ namespace ERHMS.EpiInfo.Data
             {
                 case Configuration.AccessDriver:
                     return DatabaseProvider.Access2003;
+                case Configuration.Access2007Driver:
+                    return DatabaseProvider.Access2007;
                 case Configuration.SqlDriver:
                     return DatabaseProvider.SqlServer;
                 default:

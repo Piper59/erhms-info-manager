@@ -10,15 +10,8 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public static class FieldMapper
     {
         private static readonly IReadOnlyCollection<Type> InstanceTypes = typeof(IFieldMapper).Assembly.GetTypes()
-            .Where(IsInstanceType)
+            .Where(type => typeof(IFieldMapper).IsAssignableFrom(type) && !type.IsAbstract)
             .ToList();
-
-        private static bool IsInstanceType(Type type)
-        {
-            return typeof(IFieldMapper).IsAssignableFrom(type)
-                && !type.IsAbstract
-                && type.GetConstructor(Type.EmptyTypes) != null;
-        }
 
         public static IEnumerable<IFieldMapper> GetInstances(IMappingContext context)
         {
