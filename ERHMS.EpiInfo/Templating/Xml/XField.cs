@@ -14,6 +14,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
             XField xField = new XField();
             foreach (DataColumn column in field.Table.Columns)
             {
+                if (column.ColumnName == nameof(BackgroundColor) && field.IsNull(column))
+                {
+                    continue;
+                }
                 xField.SetOrClearAttributeValue(field[column], column.ColumnName);
             }
             return xField;

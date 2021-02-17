@@ -16,7 +16,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 Name = project.Name,
                 Location = project.Location,
                 Description = project.Description,
-                EpiVersion = project.EpiVersion,
+                EpiVersion = null,
                 CreateDate = project.CreateDate
             };
             return xProject;

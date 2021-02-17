@@ -4,6 +4,7 @@ using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating
@@ -87,6 +88,69 @@ namespace ERHMS.EpiInfo.Templating
             }
         }
 
+        private static readonly IReadOnlyCollection<string> XProjectAttributeNames = new HashSet<string>
+        {
+            nameof(XProject.Id),
+            nameof(XProject.Name),
+            nameof(XProject.Location),
+            nameof(XProject.Description),
+            nameof(XProject.EpiVersion),
+            nameof(XProject.CreateDate)
+        };
+        private static readonly IReadOnlyDictionary<string, string> XFieldAttributeNameMap =
+            new Dictionary<string, string>
+            {
+                { "Expr1015", "ControlFontFamily" },
+                { "Expr1016", "ControlFontSize" },
+                { "Expr1017", "ControlFontStyle" }
+            };
+        private static readonly Regex DuplicateXFieldAttributeNameRegex =
+            new Regex(@"^ControlFont(?:Family|Size|Style)1$");
+
+        private static IEnumerable<XAttribute> NormalizeAttributes(XProject xProject)
+        {
+            foreach (XAttribute attribute in xProject.Attributes())
+            {
+                if (XProjectAttributeNames.Contains(attribute.Name.LocalName))
+                {
+                    yield return attribute;
+                }
+            }
+        }
+
+        private static IEnumerable<XAttribute> NormalizeAttributes(XField xField)
+        {
+            bool usedNameMap = false;
+            foreach (XAttribute attribute in xField.Attributes())
+            {
+                if (XFieldAttributeNameMap.TryGetValue(attribute.Name.LocalName, out string attributeName))
+                {
+                    usedNameMap = true;
+                    yield return new XAttribute(attributeName, attribute.Value);
+                }
+                else if (usedNameMap && XFieldAttributeNameMap.Values.Contains(attribute.Name.LocalName))
+                {
+                    continue;
+                }
+                else if (DuplicateXFieldAttributeNameRegex.IsMatch(attribute.Name.LocalName))
+                {
+                    continue;
+                }
+                else if (attribute.Name.LocalName.EndsWith("Percentage"))
+                {
+                    if (double.TryParse(attribute.Value, out double value))
+                    {
+                        attribute.Value = value.ToString("F6");
+                    }
+                    yield return attribute;
+                }
+                else
+                {
+                    yield return attribute;
+                }
+            }
+        }
+
         public XTemplate XTemplate { get; }
         public IProgress<string> Progress { get; set; }
         private ContextImpl Context { get; set; }
@@ -101,10 +165,7 @@ namespace ERHMS.EpiInfo.Templating
             using (Context = new ContextImpl(this))
             {
                 CanonizeXTemplate();
-                if (XTemplate.Level == TemplateLevel.Project)
-                {
-                    CanonizeXProject(XTemplate.XProject);
-                }
+                CanonizeXProject(XTemplate.XProject);
                 foreach (XView xView in XTemplate.XProject.XViews)
                 {
                     CanonizeXView(xView);
@@ -121,9 +182,17 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXProject(XProject xProject)
         {
-            xProject.Id = null;
-            xProject.Location = null;
-            xProject.CreateDate = null;
+            if (XTemplate.Level == TemplateLevel.Project)
+            {
+                xProject.Id = null;
+                xProject.Location = null;
+                xProject.CreateDate = null;
+                xProject.ReplaceAttributes(NormalizeAttributes(xProject));
+            }
+            else
+            {
+                xProject.RemoveAttributes();
+            }
         }
 
         private void CanonizeXView(XView xView)
@@ -156,36 +225,13 @@ namespace ERHMS.EpiInfo.Templating
             Context.OnXFieldCanonizing(xField);
             xField.PageId = xField.XPage.PageId;
             xField.UniqueId = null;
-            FormatAttributes(xField);
-            RemoveAttributes(xField);
+            xField.ReplaceAttributes(NormalizeAttributes(xField));
             foreach (IFieldMapper mapper in Context.FieldMappers)
             {
                 if (mapper.IsCompatible(xField))
                 {
                     mapper.Canonize(xField);
                 }
-            }
-        }
-
-        private void FormatAttributes(XField xField)
-        {
-            foreach (XAttribute attribute in xField.Attributes()
-                .Where(attribute => attribute.Name.LocalName.EndsWith("Percentage")))
-            {
-                if (double.TryParse(attribute.Value, out double value))
-                {
-                    attribute.Value = value.ToString("F5");
-                }
-            }
-        }
-
-        private void RemoveAttributes(XField xField)
-        {
-            foreach (XAttribute attribute in xField.Attributes()
-                .Where(attribute => attribute.Name.LocalName.StartsWith("Expr"))
-                .ToList())
-            {
-                attribute.Remove();
             }
         }
 
