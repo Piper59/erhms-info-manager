@@ -1,23 +1,23 @@
 ﻿using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System.Windows;
 
-namespace ERHMS.Desktop.Services.Implementation
+namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class DialogService : IDialogService
     {
-        private readonly Application application;
+        public Application Application { get; }
 
         public DialogService(Application application)
         {
-            this.application = application;
+            Application = application;
         }
 
         public bool? Show(Dialog dialog)
         {
-            Window owner = application.GetActiveOrMainWindow();
+            Window owner = Application.GetActiveOrMainWindow();
             Window window = new DialogView
             {
                 Owner = owner,

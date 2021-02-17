@@ -20,7 +20,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         public override bool MapProperties(TableBasedDropDownField field)
         {
             bool changed = false;
-            if (field.SourceTableName != null && Context.MapTableName(field.SourceTableName, out string result))
+            if (field.SourceTableName != null && MappingContext.MapTableName(field.SourceTableName, out string result))
             {
                 field.SourceTableName = result;
                 changed = true;
@@ -31,7 +31,8 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         public override bool MapProperties(XField xField)
         {
             bool changed = false;
-            if (xField.SourceTableName != null && Context.MapTableName(xField.SourceTableName, out string result))
+            if (xField.SourceTableName != null
+                && MappingContext.MapTableName(xField.SourceTableName, out string result))
             {
                 xField.SourceTableName = result;
                 changed = true;

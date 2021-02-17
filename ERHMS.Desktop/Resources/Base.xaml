@@ -23,7 +23,7 @@
             <Style TargetType="ContentPresenter">
                 <Style.Resources>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="-2,1,2,-1" />
+                        <Setter Property="Margin" Value="1" />
                     </Style>
                 </Style.Resources>
             </Style>
@@ -35,15 +35,6 @@
     <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxBase}" />
 
     <Style x:Key="ComboBoxItemBase" TargetType="ComboBoxItem">
-        <Style.Resources>
-            <Style TargetType="ContentPresenter">
-                <Style.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="-4,-1,0,-1" />
-                    </Style>
-                </Style.Resources>
-            </Style>
-        </Style.Resources>
         <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}" />
@@ -64,13 +55,18 @@
                 <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
             </Style>
             <Style TargetType="ContentPresenter">
-                <Setter Property="Margin" Value="-1" />
+                <Setter Property="Margin" Value="-2,-1" />
             </Style>
         </Style.Resources>
     </Style>
     <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}" />
 
     <Style x:Key="DataGridColumnHeaderBase" TargetType="DataGridColumnHeader">
+        <Style.Resources>
+            <Style TargetType="ContentPresenter">
+                <Setter Property="Margin" Value="1,0" />
+            </Style>
+        </Style.Resources>
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
         <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
@@ -89,11 +85,7 @@
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
     </Style>
     <Style TargetType="ContextMenu" BasedOn="{StaticResource MenuBaseBase}" />
-
-    <Style x:Key="MenuBase" TargetType="Menu" BasedOn="{StaticResource MenuBaseBase}">
-        <Setter Property="Padding" Value="{StaticResource SmallPadding}" />
-    </Style>
-    <Style TargetType="Menu" BasedOn="{StaticResource MenuBase}" />
+    <Style TargetType="Menu" BasedOn="{StaticResource MenuBaseBase}" />
 
     <Style x:Key="MenuItemBase" TargetType="MenuItem">
         <Style.Triggers>
@@ -126,7 +118,7 @@
                 <DataTemplate>
                     <TextBlock FontSize="{StaticResource LargeFontSize}"
                                FontWeight="{StaticResource ThinFontWeight}"
-                               Margin="4,3"
+                               Margin="{StaticResource DefaultMargin}"
                                Text="{Binding}" />
                 </DataTemplate>
             </Setter.Value>

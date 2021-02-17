@@ -1,135 +1,98 @@
-﻿using ERHMS.Common.Logging;
+﻿using Epi;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure.Services;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
-using ERHMS.Desktop.Services.Implementation;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
 using log4net;
 using log4net.Appender;
 using log4net.Layout;
+using log4net.Repository.Hierarchy;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Security.Principal;
 using System.Text;
-using System.Threading;
 using System.Windows;
-using Settings = ERHMS.Desktop.Properties.Settings;
+using ErrorEventArgs = ERHMS.Desktop.Commands.ErrorEventArgs;
 
 namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
-        private static App app;
-        private static int errorCount;
-
         [STAThread]
         private static void Main()
         {
-            Log.Initializing += Log_Initializing;
-            Log.Instance.Debug("Entering application");
+            ConfigureLog();
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Log.Default.Debug("Entering application");
             try
             {
                 ConfigureEpiInfo();
-                app = new App();
+                App app = new App();
                 app.Run();
             }
             catch (Exception ex)
             {
-                OnUnhandledError(ex);
+                Log.Default.Fatal(ex);
+                StringBuilder message = new StringBuilder();
+                message.AppendLine(ResX.UnhandledErrorMessage);
+                message.AppendLine();
+                message.Append(ex.Message);
+                MessageBox.Show(message.ToString(), ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            Log.Instance.Debug("Exiting application");
+            finally
+            {
+                Log.Default.Debug("Exiting application");
+            }
         }
 
-        private static string GetUserName()
+        private static void ConfigureLog()
         {
             try
             {
-                return WindowsIdentity.GetCurrent().Name;
+                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
             }
-            catch
-            {
-                return "?";
-            }
-        }
-
-        private static int GetProcessId()
-        {
-            try
-            {
-                return Process.GetCurrentProcess().Id;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
-
-        private static void Log_Initializing(object sender, InitializingEventArgs e)
-        {
-            GlobalContext.Properties["user"] = GetUserName();
-            GlobalContext.Properties["process"] = GetProcessId();
-            PatternLayout layout = new PatternLayout("%date | %property{user} | %property{process}(%thread) | %level | %message%newline");
+            catch { }
+            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+            PatternLayout layout = new PatternLayout(
+                "%date | %property{user} | %property{process}(%thread) | %level | %message%newline");
             layout.ActivateOptions();
             FileAppender appender = new FileAppender
             {
-                File = Path.Combine("Logs", $"ERHMS.{DateTime.Now:yyyy-MM-dd}.txt"),
+                File = Path.Combine("Logs", $"ERHMS.{DateTime.Today:yyyy-MM-dd}.txt"),
                 LockingModel = new FileAppender.InterProcessLock(),
                 Layout = layout
             };
             appender.ActivateOptions();
-            e.Hierarchy.Root.AddAppender(appender);
+            hierarchy.Root.AddAppender(appender);
+            hierarchy.Configured = true;
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log.Default.Fatal(e.ExceptionObject);
         }
 
         private static void ConfigureEpiInfo()
         {
             if (!ConfigurationExtensions.Exists())
             {
-                Epi.Configuration configuration = ConfigurationExtensions.Create();
+                Configuration configuration = ConfigurationExtensions.Create();
                 configuration.Save();
             }
             ConfigurationExtensions.Load();
-            Epi.Configuration.Environment = Epi.ExecutionEnvironment.WindowsApplication;
-        }
-
-        private static void OnUnhandledError(Exception exception)
-        {
-            if (exception != null)
-            {
-                Log.Instance.Fatal(exception);
-            }
-            if (Interlocked.Increment(ref errorCount) == 1)
-            {
-                StringBuilder message = new StringBuilder();
-                message.Append(ResX.UnhandledErrorMessage);
-                if (exception != null)
-                {
-                    message.AppendLine();
-                    message.AppendLine();
-                    message.Append(exception.Message);
-                }
-                MessageBox.Show(message.ToString(), ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            if (app != null)
-            {
-                app.Shutdown(1);
-            }
+            Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }
 
         public App()
         {
             ConfigureServices();
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => OnUnhandledError(e.ExceptionObject as Exception);
-            DispatcherUnhandledException += (sender, e) =>
-            {
-                OnUnhandledError(e.Exception);
-                e.Handled = true;
-            };
-            Command.GlobalError += (sender, e) => OnHandledError(e.Exception);
+            Command.GlobalError += Command_GlobalError;
             InitializeComponent();
         }
 
@@ -138,40 +101,27 @@ namespace ERHMS.Desktop
             ServiceProvider.Install<IDialogService>(() => new DialogService(this));
         }
 
-        private void OnHandledError(Exception exception)
+        private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
-            Log.Instance.Error(exception);
+            Log.Default.Error(e.Exception);
             ServiceProvider.Resolve<IDialogService>().Show(new Dialog(DialogPreset.Error)
             {
                 Lead = ResX.HandledErrorLead,
-                Body = exception.Message,
-                Details = exception.ToString()
+                Body = e.Exception.Message,
+                Details = e.Exception.ToString()
             });
+            e.Handled = true;
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            bool reset = false;
-            if (e.Args.Contains("/reset", StringComparer.OrdinalIgnoreCase))
-            {
-                Log.Instance.Debug("Resetting application settings");
-                Settings.Default.Reset();
-                reset = true;
-            }
             MainViewModel.Instance.Content = new HomeViewModel();
             Window window = new MainView
             {
                 DataContext = MainViewModel.Instance
             };
             window.Show();
-            if (reset)
-            {
-                ServiceProvider.Resolve<IDialogService>().Show(new Dialog(DialogPreset.Default)
-                {
-                    Lead = ResX.SettingsResetLead
-                });
-            }
         }
     }
 }

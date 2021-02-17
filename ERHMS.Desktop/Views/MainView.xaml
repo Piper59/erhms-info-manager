@@ -18,9 +18,9 @@
         </ResourceDictionary>
     </Window.Resources>
     <b:Interaction.Behaviors>
+        <Behaviors:MarshalDataContextEvent EventName="ExitRequested"
+                                           HandlerName="DataContext_ExitRequested" />
         <Behaviors:SetMenuDropAlignment Value="False" />
-        <Behaviors:DispatchEvent EventName="ExitRequested"
-                                 HandlerName="DataContext_ExitRequested" />
     </b:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
@@ -57,12 +57,15 @@
                     <MenuItem Header="_Restore" />
                 </MenuItem>
                 <MenuItem Header="_Logs">
-                    <MenuItem Header="_View current" />
+                    <MenuItem Header="View _current" />
+                    <MenuItem Header="_View all" />
                     <MenuItem Header="_Export all" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="_Epi Info" />
-                <MenuItem Header="_File Explorer" />
+                <MenuItem Command="{Binding StartEpiInfoCommand}"
+                          Header="_Epi Info" />
+                <MenuItem Command="{Binding StartFileExplorerCommand}"
+                          Header="_File Explorer" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_View help" />

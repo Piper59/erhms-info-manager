@@ -7,7 +7,7 @@
     <ProjectGuid>{F0080890-84E8-48F2-8B0E-2CECE4706CB2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ERHMS.Desktop</RootNamespace>
-    <AssemblyName>ERHMS Info Manager</AssemblyName>
+    <AssemblyName>$(AppTitle)</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -64,10 +64,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ERHMS.Common\ERHMS.Common.csproj">
-      <Project>{16c636f8-a356-4e9e-9d60-4f825ed830a0}</Project>
-      <Name>ERHMS.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
       <Project>{181048fb-dae4-4875-9a58-461f81c4131a}</Project>
       <Name>ERHMS.Domain</Name>
@@ -83,11 +79,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCommands.cs" />
-    <Compile Include="Behaviors\DispatchEvent.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
+    <Compile Include="Behaviors\MarshalDataContextEvent.cs" />
+    <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
+    <Compile Include="Behaviors\MoveFocusInternallyOnControlArrow.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClick.cs" />
-    <Compile Include="Behaviors\SetKeyboardFocusOnLoaded.cs" />
+    <Compile Include="Behaviors\RestoreCurrentCellOnFocus.cs" />
     <Compile Include="Behaviors\SetMenuDropAlignment.cs" />
+    <Compile Include="Behaviors\ToggleSelectionOnSpace.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\Command.cs" />
@@ -109,17 +108,21 @@
     <Compile Include="Converters\PhaseToDisplayTextConverter.cs" />
     <Compile Include="Converters\SystemIconToNameConverter.cs" />
     <Compile Include="Data\CustomCollectionView.cs" />
-    <Compile Include="Data\ICustomCollectionView.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
     <Compile Include="Data\ISelectable.cs" />
     <Compile Include="Data\ISelectableCollectionView.cs" />
+    <Compile Include="Data\ITypedCollectionView.cs" />
     <Compile Include="Dialogs\Dialog.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogPreset.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
+    <Compile Include="Infrastructure\EventMarshaler.cs" />
+    <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
+    <Compile Include="Infrastructure\Services\DialogService.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,6 +131,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ResX.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -137,7 +141,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\Implementation\DialogService.cs" />
     <Compile Include="Services\ServiceProvider.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />

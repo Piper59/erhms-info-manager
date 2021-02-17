@@ -5,48 +5,48 @@ namespace ERHMS.Desktop.Commands
 {
     public class SyncCommand : Command
     {
-        private readonly Action execute;
-        private readonly Func<bool> canExecute;
+        private readonly Action action;
+        private readonly Func<bool> predicate;
 
-        public SyncCommand(Action execute, Func<bool> canExecute = null)
-            : base(execute.Method)
+        public SyncCommand(Action action, Func<bool> predicate = null)
+            : base(action)
         {
-            this.execute = execute;
-            this.canExecute = canExecute ?? Always;
+            this.action = action;
+            this.predicate = predicate ?? Always;
         }
 
         public override bool CanExecute(object parameter)
         {
-            return canExecute();
+            return predicate();
         }
 
         public override Task ExecuteCore(object parameter)
         {
-            execute();
+            action();
             return Task.CompletedTask;
         }
     }
 
     public class SyncCommand<TParameter> : Command
     {
-        private readonly Action<TParameter> execute;
-        private readonly Func<TParameter, bool> canExecute;
+        private readonly Action<TParameter> action;
+        private readonly Func<TParameter, bool> predicate;
 
-        public SyncCommand(Action<TParameter> execute, Func<TParameter, bool> canExecute = null)
-            : base(execute.Method)
+        public SyncCommand(Action<TParameter> action, Func<TParameter, bool> predicate = null)
+            : base(action)
         {
-            this.execute = execute;
-            this.canExecute = canExecute ?? Always;
+            this.action = action;
+            this.predicate = predicate ?? Always;
         }
 
         public override bool CanExecute(object parameter)
         {
-            return canExecute((TParameter)parameter);
+            return predicate((TParameter)parameter);
         }
 
         public override Task ExecuteCore(object parameter)
         {
-            execute((TParameter)parameter);
+            action((TParameter)parameter);
             return Task.CompletedTask;
         }
     }

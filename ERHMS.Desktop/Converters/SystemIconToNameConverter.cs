@@ -14,14 +14,11 @@ namespace ERHMS.Desktop.Converters
         {
             if (value == null)
             {
-                return null;
+                return DependencyProperty.UnsetValue;
             }
-            else
-            {
-                return typeof(SystemIcons).GetProperties(BindingFlags.Public | BindingFlags.Static)
-                    .SingleOrDefault(property => property.GetValue(null) == value)
-                    ?.Name;
-            }
+            return typeof(SystemIcons).GetProperties(BindingFlags.Public | BindingFlags.Static)
+                .SingleOrDefault(property => property.GetValue(null) == value)
+                .Name;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

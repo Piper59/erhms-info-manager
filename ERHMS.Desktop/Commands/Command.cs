@@ -1,7 +1,5 @@
-﻿using ERHMS.Common.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -9,27 +7,6 @@ namespace ERHMS.Desktop.Commands
 {
     public abstract class Command : ICommand
     {
-        private class NullCommand : Command
-        {
-            public NullCommand()
-                : base("Null")
-            {
-                ErrorBehavior = ErrorBehavior.ThrowException;
-            }
-
-            public override bool CanExecute(object parameter)
-            {
-                return false;
-            }
-
-            public override Task ExecuteCore(object parameter)
-            {
-                throw new InvalidOperationException("Null command cannot be executed.");
-            }
-        }
-
-        public static ICommand Null { get; } = new NullCommand();
-
         public static event EventHandler<ErrorEventArgs> GlobalError;
 
         protected static bool Always()
@@ -47,16 +24,13 @@ namespace ERHMS.Desktop.Commands
             CommandManager.InvalidateRequerySuggested();
         }
 
-        public string Name { get; }
-        public ErrorBehavior ErrorBehavior { get; set; } = ErrorBehavior.RaiseEvent;
+        protected Delegate Action { get; }
+        public ErrorBehavior ErrorBehavior { get; set; } = ErrorBehavior.RaiseAndThrow;
 
-        protected Command(string name)
+        protected Command(Delegate action)
         {
-            Name = name;
+            Action = action;
         }
-
-        protected Command(MethodInfo method)
-            : this($"{method.DeclaringType.FullName}.{method.Name}") { }
 
         public event EventHandler CanExecuteChanged
         {
@@ -65,18 +39,6 @@ namespace ERHMS.Desktop.Commands
         }
 
         public event EventHandler<ErrorEventArgs> Error;
-
-        protected virtual void OnError(ErrorEventArgs e)
-        {
-            if (!e.Handled)
-            {
-                OnErrorCore(e, Error?.GetInvocationList());
-                if (!e.Handled)
-                {
-                    OnErrorCore(e, GlobalError?.GetInvocationList());
-                }
-            }
-        }
 
         private void OnErrorCore(ErrorEventArgs e, IEnumerable<Delegate> handlers)
         {
@@ -93,6 +55,18 @@ namespace ERHMS.Desktop.Commands
             }
         }
 
+        protected virtual void OnError(ErrorEventArgs e)
+        {
+            if (!e.Handled)
+            {
+                OnErrorCore(e, Error?.GetInvocationList());
+                if (!e.Handled)
+                {
+                    OnErrorCore(e, GlobalError?.GetInvocationList());
+                }
+            }
+        }
+
         protected void OnError(Exception exception) => OnError(new ErrorEventArgs(exception));
 
         public abstract bool CanExecute(object parameter);
@@ -100,19 +74,27 @@ namespace ERHMS.Desktop.Commands
 
         public async void Execute(object parameter)
         {
-            Log.Instance.Debug($"Executing input command: {Name}");
+            Log.Default.Debug($"Executing input command: {this}");
             try
             {
                 await ExecuteCore(parameter);
             }
             catch (Exception ex)
             {
-                Log.Instance.Warn(ex);
+                Log.Default.Warn(ex);
                 switch (ErrorBehavior)
                 {
-                    case ErrorBehavior.ThrowException:
+                    case ErrorBehavior.Throw:
                         throw;
-                    case ErrorBehavior.RaiseEvent:
+                    case ErrorBehavior.RaiseAndThrow:
+                        ErrorEventArgs e = new ErrorEventArgs(ex);
+                        OnError(e);
+                        if (!e.Handled)
+                        {
+                            throw;
+                        }
+                        break;
+                    case ErrorBehavior.RaiseAndIgnore:
                         OnError(ex);
                         break;
                     case ErrorBehavior.Ignore:
@@ -121,7 +103,15 @@ namespace ERHMS.Desktop.Commands
                         throw;
                 }
             }
-            Log.Instance.Debug($"Executed input command: {Name}");
+            finally
+            {
+                Log.Default.Debug($"Executed input command: {this}");
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"{Action.Method.DeclaringType.FullName}.{Action.Method.Name}";
         }
     }
 }

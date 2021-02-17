@@ -10,22 +10,19 @@ namespace ERHMS.Desktop.Converters
 {
     public class IconToImageSourceConverter : IValueConverter
     {
-        public int DefaultSize { get; set; } = 32;
+        public int Size { get; set; } = 32;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
             {
-                return null;
+                return DependencyProperty.UnsetValue;
             }
-            else
-            {
-                int size = parameter == null ? DefaultSize : (int)parameter;
-                return Imaging.CreateBitmapSourceFromHIcon(
-                    ((Icon)value).Handle,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(size, size));
-            }
+            int size = parameter == null ? Size : (int)parameter;
+            return Imaging.CreateBitmapSourceFromHIcon(
+                ((Icon)value).Handle,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromWidthAndHeight(size, size));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

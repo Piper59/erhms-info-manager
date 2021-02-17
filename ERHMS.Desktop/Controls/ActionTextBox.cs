@@ -12,12 +12,6 @@ namespace ERHMS.Desktop.Controls
         public const string TextBoxPartName = "PART_TextBox";
         public const string ButtonPartName = "PART_Button";
 
-        public static readonly DependencyProperty ActionAutomationNameProperty = DependencyProperty.Register(
-            nameof(ActionAutomationName),
-            typeof(string),
-            typeof(ActionTextBox),
-            new FrameworkPropertyMetadata(""));
-
         public static readonly DependencyProperty ActionContentProperty = DependencyProperty.Register(
             nameof(ActionContent),
             typeof(object),
@@ -28,16 +22,18 @@ namespace ERHMS.Desktop.Controls
             typeof(ICommand),
             typeof(ActionTextBox));
 
+        public static readonly DependencyProperty ActionHelpTextProperty = DependencyProperty.Register(
+            nameof(ActionHelpText),
+            typeof(string),
+            typeof(ActionTextBox),
+            new FrameworkPropertyMetadata(""));
+
         static ActionTextBox()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ActionTextBox), new FrameworkPropertyMetadata(typeof(ActionTextBox)));
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(ActionTextBox),
+                new FrameworkPropertyMetadata(typeof(ActionTextBox)));
             IsTabStopProperty.OverrideMetadata(typeof(ActionTextBox), new FrameworkPropertyMetadata(false));
-        }
-
-        public string ActionAutomationName
-        {
-            get { return (string)GetValue(ActionAutomationNameProperty); }
-            set { SetValue(ActionAutomationNameProperty, value); }
         }
 
         public object ActionContent
@@ -52,6 +48,12 @@ namespace ERHMS.Desktop.Controls
             set { SetValue(ActionCommandProperty, value); }
         }
 
+        public string ActionHelpText
+        {
+            get { return (string)GetValue(ActionHelpTextProperty); }
+            set { SetValue(ActionHelpTextProperty, value); }
+        }
+
         private TextBoxBase textBox;
 
         public override void OnApplyTemplate()
@@ -60,14 +62,13 @@ namespace ERHMS.Desktop.Controls
             textBox = (TextBoxBase)Template.FindName(TextBoxPartName, this);
         }
 
-        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        protected override void OnPreviewGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
         {
             if (e.NewFocus == this)
             {
                 textBox.Focus();
                 e.Handled = true;
             }
-            base.OnGotKeyboardFocus(e);
         }
     }
 }

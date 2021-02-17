@@ -28,14 +28,14 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             }
             else
             {
-                return Context.MapViewId(xField.RelatedViewId.Value, out value);
+                return MappingContext.MapViewId(xField.RelatedViewId.Value, out value);
             }
         }
 
         public override bool MapProperties(XField xField)
         {
             bool changed = false;
-            if (xField.RelatedViewId != null && Context.MapViewId(xField.RelatedViewId.Value, out int result))
+            if (xField.RelatedViewId != null && MappingContext.MapViewId(xField.RelatedViewId.Value, out int result))
             {
                 xField.RelatedViewId = result;
                 changed = true;

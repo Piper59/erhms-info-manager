@@ -8,7 +8,10 @@
 
     <Converters:ActionTextBoxPaddingConverter x:Key="ActionTextBoxPaddingConverter" />
     <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
-    <Converters:PhaseToColorConverter x:Key="PhaseToColorConverter" />
+    <Converters:PhaseToColorConverter x:Key="PhaseToGradientStartColorConverter"
+                                      Alpha="0x40" />
+    <Converters:PhaseToColorConverter x:Key="PhaseToGradientStopColorConverter"
+                                      Alpha="0x00" />
     <Converters:PhaseToDisplayTextConverter x:Key="PhaseToDisplayTextConverter" />
 
     <Style TargetType="Controls:ActionTextBox">
@@ -29,7 +32,7 @@
                             </TextBox.Padding>
                         </TextBox>
                         <Button x:Name="PART_Button"
-                                AutomationProperties.Name="{TemplateBinding ActionAutomationName}"
+                                AutomationProperties.HelpText="{TemplateBinding ActionHelpText}"
                                 Command="{TemplateBinding ActionCommand}"
                                 Content="{TemplateBinding ActionContent}"
                                 HorizontalAlignment="Right" />
@@ -48,9 +51,9 @@
                             SnapsToDevicePixels="True">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
-                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x40'}"
+                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToGradientStartColorConverter}}"
                                               Offset="0" />
-                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x00'}"
+                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToGradientStopColorConverter}}"
                                               Offset="1" />
                             </LinearGradientBrush>
                         </Border.Background>

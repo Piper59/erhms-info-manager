@@ -13,7 +13,7 @@ namespace ERHMS.Desktop.Dialogs
         public string Details { get; set; }
         public DialogButtonCollection Buttons { get; set; }
 
-        public Dialog(DialogPreset preset)
+        public Dialog(DialogPreset preset = DialogPreset.Default)
         {
             switch (preset)
             {
@@ -26,6 +26,7 @@ namespace ERHMS.Desktop.Dialogs
                 case DialogPreset.Warning:
                     Sound = SystemSounds.Asterisk;
                     Icon = SystemIcons.Warning;
+                    Buttons = new DialogButtonCollection();
                     break;
                 case DialogPreset.Error:
                     Sound = SystemSounds.Asterisk;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace ERHMS.Desktop.Behaviors
@@ -29,17 +28,13 @@ namespace ERHMS.Desktop.Behaviors
 
         private bool OpenContextMenu()
         {
-            ContextMenu contextMenu = AssociatedObject.ContextMenu;
-            if (contextMenu == null)
+            if (AssociatedObject.ContextMenu == null)
             {
                 return false;
             }
-            else
-            {
-                contextMenu.PlacementTarget = AssociatedObject;
-                contextMenu.IsOpen = true;
-                return true;
-            }
+            AssociatedObject.ContextMenu.PlacementTarget = AssociatedObject;
+            AssociatedObject.ContextMenu.IsOpen = true;
+            return true;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace ERHMS.Desktop.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return DependencyProperty.UnsetValue;
+            return (Visibility)value == Visibility.Visible;
         }
     }
 }

@@ -2,8 +2,9 @@
 {
     public enum ErrorBehavior
     {
-        ThrowException,
-        RaiseEvent,
+        Throw,
+        RaiseAndThrow,
+        RaiseAndIgnore,
         Ignore
     }
 }

@@ -4,7 +4,7 @@ using System.Windows.Markup;
 
 namespace ERHMS.Desktop.Controls
 {
-    [ContentProperty("Text")]
+    [ContentProperty(nameof(Text))]
     public class VerboseButton : Button
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
@@ -19,7 +19,9 @@ namespace ERHMS.Desktop.Controls
 
         static VerboseButton()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(VerboseButton), new FrameworkPropertyMetadata(typeof(VerboseButton)));
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(VerboseButton),
+                new FrameworkPropertyMetadata(typeof(VerboseButton)));
             IsTabStopProperty.OverrideMetadata(typeof(VerboseButton), new FrameworkPropertyMetadata(false));
         }
 

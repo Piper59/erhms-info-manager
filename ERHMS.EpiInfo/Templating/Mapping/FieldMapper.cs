@@ -13,12 +13,12 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             .Where(type => typeof(IFieldMapper).IsAssignableFrom(type) && !type.IsAbstract)
             .ToList();
 
-        public static IEnumerable<IFieldMapper> GetInstances(IMappingContext context)
+        public static IEnumerable<IFieldMapper> GetInstances(IMappingContext mappingContext)
         {
             foreach (Type instanceType in InstanceTypes)
             {
                 IFieldMapper instance = (IFieldMapper)Activator.CreateInstance(instanceType);
-                instance.Context = context;
+                instance.MappingContext = mappingContext;
                 yield return instance;
             }
         }
@@ -29,7 +29,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     {
         protected abstract MetaFieldType? FieldType { get; }
         protected abstract FieldPropertySetterCollection<TField> PropertySetters { get; }
-        public IMappingContext Context { get; set; }
+        public IMappingContext MappingContext { get; set; }
 
         public bool IsCompatible(Field field)
         {
@@ -53,7 +53,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
                 }
                 catch (FieldPropertySetterException ex)
                 {
-                    Context.OnError(ex, out bool handled);
+                    MappingContext.OnError(ex, out bool handled);
                     if (!handled)
                     {
                         throw;

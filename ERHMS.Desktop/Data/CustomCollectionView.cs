@@ -10,15 +10,16 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.Data
 {
-    public class CustomCollectionView<TItem> : ListCollectionView, ICustomCollectionView<TItem>
+    public class CustomCollectionView<TItem>
+        : ListCollectionView, ITypedCollectionView<TItem>, ISelectableCollectionView<TItem>, IPagingCollectionView
         where TItem : ISelectable
     {
+        private readonly List<TItem> source;
         private bool refreshing;
         private bool pageResetDeferred;
         private object oldCurrentItem;
 
-        public List<TItem> Source { get; }
-        public override IEnumerable SourceCollection => new ArrayList(Source);
+        public override IEnumerable SourceCollection => new ArrayList(source);
         private new INotifyCollectionChanged SortDescriptions => base.SortDescriptions;
 
         public override Predicate<object> Filter
@@ -85,16 +86,18 @@ namespace ERHMS.Desktop.Data
         public CustomCollectionView(List<TItem> source)
             : base(new ArrayList(source))
         {
-            Source = source;
-            GroupDescriptions.CollectionChanged += (sender, e) => ResetPageOrDefer();
-            SortDescriptions.CollectionChanged += (sender, e) => ResetPageOrDefer();
+            this.source = source;
+            GroupDescriptions.CollectionChanged += Descriptions_CollectionChanged;
+            SortDescriptions.CollectionChanged += Descriptions_CollectionChanged;
             GoToPageCommand = new SyncCommand<int>(GoToPageCore, CanGoToPage);
             GoToNextPageCommand = new SyncCommand(GoToNextPageCore, CanGoToNextPage);
             GoToPreviousPageCommand = new SyncCommand(GoToPreviousPageCore, CanGoToPreviousPage);
         }
 
-        public CustomCollectionView()
-            : this(new List<TItem>()) { }
+        private void Descriptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ResetPageOrDefer();
+        }
 
         public bool HasSelection()
         {
@@ -239,8 +242,7 @@ namespace ERHMS.Desktop.Data
             }
             if (PageCount > 1)
             {
-                ICollection<object> page = InternalList
-                    .Cast<object>()
+                IReadOnlyCollection<object> page = InternalList.Cast<object>()
                     .Skip(pageSize.Value * PreviousPage)
                     .Take(pageSize.Value)
                     .ToList();
@@ -262,16 +264,14 @@ namespace ERHMS.Desktop.Data
             else
             {
                 position = InternalList.IndexOf(item);
-                if (position == -1)
-                {
-                    item = null;
-                }
-                else
-                {
-                    item = InternalList[position];
-                }
+                item = position == -1 ? null : InternalList[position];
             }
             SetCurrent(item, position);
+        }
+
+        IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
+        {
+            return this.Cast<TItem>().GetEnumerator();
         }
     }
 }

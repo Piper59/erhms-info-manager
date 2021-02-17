@@ -21,6 +21,7 @@
             <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
             <Converters:SystemIconToNameConverter x:Key="SystemIconToNameConverter" />
+            <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
@@ -57,17 +58,16 @@
             <Grid Style="{StaticResource Container}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
-                </Grid.Resources>
                 <Button Grid.Column="0"
                         Command="{Binding ToggleShowingDetailsCommand}"
+                        VerticalAlignment="Top"
                         Visibility="{Binding Dialog.Details, Converter={StaticResource NullableToVisibilityConverter}}">
                     _Details
                 </Button>
-                <ItemsControl Grid.Column="1"
+                <ItemsControl Grid.Column="2"
                               IsTabStop="False"
                               ItemsSource="{Binding Dialog.Buttons}">
                     <ItemsControl.ItemsPanel>
@@ -93,6 +93,7 @@
             <DockPanel Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="200"
+                         MinHeight="50"
                          Style="{StaticResource Preformatted}"
                          Text="{Binding Dialog.Details}" />
             </DockPanel>

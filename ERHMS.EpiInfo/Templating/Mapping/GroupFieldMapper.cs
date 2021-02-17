@@ -44,7 +44,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             for (int index = 0; index < fieldNames.Count; index++)
             {
                 string fieldName = fieldNames[index];
-                if (Context.MapFieldName(fieldName, out fieldName))
+                if (MappingContext.MapFieldName(fieldName, out fieldName))
                 {
                     fieldNames[index] = fieldName;
                     changed = true;

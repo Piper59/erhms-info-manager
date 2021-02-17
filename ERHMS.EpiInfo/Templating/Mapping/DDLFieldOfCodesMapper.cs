@@ -38,7 +38,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
                 {
                     continue;
                 }
-                if (Context.MapFieldId(fieldId, out fieldId))
+                if (MappingContext.MapFieldId(fieldId, out fieldId))
                 {
                     fieldInfos[index] = $"{columnName}{FieldInfoSeparator}{fieldId}";
                     changed = true;

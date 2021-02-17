@@ -5,16 +5,16 @@ namespace ERHMS.Desktop.Services
 {
     public static class ServiceProvider
     {
-        private static readonly IDictionary<Type, Delegate> factories = new Dictionary<Type, Delegate>();
+        private static readonly IDictionary<Type, Delegate> factoriesByServiceType = new Dictionary<Type, Delegate>();
 
         public static void Install<TService>(Func<TService> factory)
         {
-            factories.Add(typeof(TService), factory);
+            factoriesByServiceType[typeof(TService)] = factory;
         }
 
         public static TService Resolve<TService>()
         {
-            Func<TService> factory = (Func<TService>)factories[typeof(TService)];
+            Func<TService> factory = (Func<TService>)factoriesByServiceType[typeof(TService)];
             return factory();
         }
     }
