@@ -156,19 +156,36 @@ namespace ERHMS.EpiInfo.Templating
             Context.OnXFieldCanonizing(xField);
             xField.PageId = xField.XPage.PageId;
             xField.UniqueId = null;
-            IReadOnlyCollection<XAttribute> exprAttributes = xField.Attributes()
-                .Where(attribute => attribute.Name.LocalName.StartsWith("Expr"))
-                .ToList();
-            foreach (XAttribute exprAttribute in exprAttributes)
-            {
-                exprAttribute.Remove();
-            }
+            FormatAttributes(xField);
+            RemoveAttributes(xField);
             foreach (IFieldMapper mapper in Context.FieldMappers)
             {
                 if (mapper.IsCompatible(xField))
                 {
                     mapper.Canonize(xField);
                 }
+            }
+        }
+
+        private void FormatAttributes(XField xField)
+        {
+            foreach (XAttribute attribute in xField.Attributes()
+                .Where(attribute => attribute.Name.LocalName.EndsWith("Percentage")))
+            {
+                if (double.TryParse(attribute.Value, out double value))
+                {
+                    attribute.Value = value.ToString("F5");
+                }
+            }
+        }
+
+        private void RemoveAttributes(XField xField)
+        {
+            foreach (XAttribute attribute in xField.Attributes()
+                .Where(attribute => attribute.Name.LocalName.StartsWith("Expr"))
+                .ToList())
+            {
+                attribute.Remove();
             }
         }
 
