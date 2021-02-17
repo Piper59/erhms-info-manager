@@ -109,7 +109,7 @@ namespace ERHMS.EpiInfo.Templating
                 {
                     CanonizeXView(xView);
                 }
-                MapFieldProperties();
+                MapXFieldAttributes();
                 CanonizeXGridTables();
             }
         }
@@ -189,7 +189,7 @@ namespace ERHMS.EpiInfo.Templating
             }
         }
 
-        private void MapFieldProperties()
+        private void MapXFieldAttributes()
         {
             foreach (XField xField in XTemplate.XProject.XFields)
             {
@@ -197,7 +197,7 @@ namespace ERHMS.EpiInfo.Templating
                 {
                     if (mapper.IsCompatible(xField))
                     {
-                        mapper.MapProperties(xField);
+                        mapper.MapAttributes(xField);
                     }
                 }
             }

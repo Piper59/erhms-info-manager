@@ -11,7 +11,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         bool IsCompatible(XField xField);
         bool SetProperties(XField xField, Field field);
         bool MapProperties(Field field);
-        bool MapProperties(XField xField);
+        bool MapAttributes(XField xField);
         bool Canonize(XField xField);
     }
 

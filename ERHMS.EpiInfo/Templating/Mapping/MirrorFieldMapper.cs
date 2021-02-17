@@ -24,7 +24,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             return changed;
         }
 
-        public override bool MapProperties(XField xField)
+        public override bool MapAttributes(XField xField)
         {
             bool changed = false;
             if (xField.SourceFieldId != null && MappingContext.MapFieldId(xField.SourceFieldId.Value, out int result))

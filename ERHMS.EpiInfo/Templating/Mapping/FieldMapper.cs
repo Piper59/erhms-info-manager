@@ -78,7 +78,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             return MapProperties((TField)field);
         }
 
-        public virtual bool MapProperties(XField xField)
+        public virtual bool MapAttributes(XField xField)
         {
             return false;
         }

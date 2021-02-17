@@ -65,7 +65,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             return changed;
         }
 
-        public override bool MapProperties(XField xField)
+        public override bool MapAttributes(XField xField)
         {
             bool changed = false;
             if (MapChildFieldNames(xField.List, out string result))
