@@ -18,6 +18,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Windows;
 using ErrorEventArgs = ERHMS.Desktop.Commands.ErrorEventArgs;
+using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop
 {
@@ -31,6 +32,7 @@ namespace ERHMS.Desktop
             Log.Default.Debug("Entering application");
             try
             {
+                UpgradeSettings();
                 ConfigureEpiInfo();
                 App app = new App();
                 app.Run();
@@ -76,6 +78,18 @@ namespace ERHMS.Desktop
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Log.Default.Fatal(e.ExceptionObject);
+        }
+
+        private static bool UpgradeSettings()
+        {
+            if (!Settings.Default.UpgradeRequired)
+            {
+                return false;
+            }
+            Settings.Default.Upgrade();
+            Settings.Default.UpgradeRequired = false;
+            Settings.Default.Save();
+            return true;
         }
 
         private static void ConfigureEpiInfo()
