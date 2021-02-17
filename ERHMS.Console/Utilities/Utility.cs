@@ -27,7 +27,8 @@ namespace ERHMS.Console.Utilities
         {
             StringBuilder usage = new StringBuilder();
             usage.AppendLine("usage:");
-            usage.AppendLine($"  {ExecutableName} {HelpArgs[0]} [UTILITY]");
+            usage.AppendLine($"  {ExecutableName} {HelpArgs[0]}");
+            usage.AppendLine($"  {ExecutableName} UTILITY {HelpArgs[0]}");
             usage.AppendLine($"  {ExecutableName} UTILITY [ARGUMENT ...]");
             usage.AppendLine();
             usage.Append("utilities:");
@@ -110,11 +111,17 @@ namespace ERHMS.Console.Utilities
                 }
                 if (HelpArgs.Contains(args[0], ArgComparer))
                 {
-                    Out.WriteLine(args.Count == 1 ? GetUsage() : GetUsage(GetInstanceType(args[1])));
+                    Out.WriteLine(GetUsage());
                     Environment.Exit(ErrorCodes.Success);
                     return null;
                 }
                 instanceType = GetInstanceType(args[0]);
+                if (args.Count > 1 && HelpArgs.Contains(args[1]))
+                {
+                    Out.WriteLine(GetUsage(instanceType));
+                    Environment.Exit(ErrorCodes.Success);
+                    return null;
+                }
                 ConstructorInfo constructor = GetConstructor(instanceType, args.Count - 1);
                 object[] parameterValues = GetParameterValues(constructor, args.Skip(1).ToList()).ToArray();
                 return (IUtility)constructor.Invoke(parameterValues);
