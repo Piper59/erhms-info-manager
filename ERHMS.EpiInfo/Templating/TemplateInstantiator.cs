@@ -242,8 +242,8 @@ namespace ERHMS.EpiInfo.Templating
                 }
             }
             field.SaveToDb();
-            Context.View.Fields.Add(field);
             Context.View.MustRefreshFieldCollection = false;
+            Context.View.Fields.Add(field);
             Context.OnFieldInstantiated(xField, field);
             return field;
         }
