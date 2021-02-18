@@ -18,7 +18,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 {
                     continue;
                 }
-                xField.SetOrClearAttributeValue(field[column], column.ColumnName);
+                xField.SetOrClearAttributeValue(field[column].ToString(), column.ColumnName);
             }
             return xField;
         }

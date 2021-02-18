@@ -107,6 +107,15 @@ namespace ERHMS.EpiInfo.Templating
         private static readonly Regex DuplicateXFieldAttributeNameRegex =
             new Regex(@"^ControlFont(?:Family|Size|Style)1$");
 
+        private static IEnumerable<XAttribute> GetNormalizedAttributes(XTemplate xTemplate)
+        {
+            foreach (XAttribute attribute in XTemplate.Create(xTemplate.Level).Attributes())
+            {
+                string value = xTemplate.Attribute(attribute.Name)?.Value;
+                yield return new XAttribute(attribute.Name, value ?? "");
+            }
+        }
+
         private static IEnumerable<XAttribute> GetNormalizedAttributes(XProject xProject)
         {
             foreach (XAttribute attribute in xProject.Attributes())
@@ -177,6 +186,7 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXTemplate()
         {
+            XTemplate.ReplaceAttributes(GetNormalizedAttributes(XTemplate));
             XTemplate.CreateDate = null;
         }
 
