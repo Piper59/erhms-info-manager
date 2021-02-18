@@ -15,8 +15,11 @@ namespace ERHMS.Desktop.Views
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
-            WriteSettings(Settings.Default);
-            Settings.Default.DeferSave(TimeSpan.FromSeconds(1.0));
+            if (IsLoaded)
+            {
+                WriteSettings(Settings.Default);
+                Settings.Default.DeferSave(TimeSpan.FromSeconds(1.0));
+            }
         }
 
         private void ReadSettings(Settings settings)
