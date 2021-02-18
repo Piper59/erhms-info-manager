@@ -107,7 +107,7 @@ namespace ERHMS.EpiInfo.Templating
         private static readonly Regex DuplicateXFieldAttributeNameRegex =
             new Regex(@"^ControlFont(?:Family|Size|Style)1$");
 
-        private static IEnumerable<XAttribute> NormalizeAttributes(XProject xProject)
+        private static IEnumerable<XAttribute> GetNormalizedAttributes(XProject xProject)
         {
             foreach (XAttribute attribute in xProject.Attributes())
             {
@@ -118,7 +118,7 @@ namespace ERHMS.EpiInfo.Templating
             }
         }
 
-        private static IEnumerable<XAttribute> NormalizeAttributes(XField xField)
+        private static IEnumerable<XAttribute> GetNormalizedAttributes(XField xField)
         {
             bool usedNameMap = false;
             foreach (XAttribute attribute in xField.Attributes())
@@ -184,10 +184,11 @@ namespace ERHMS.EpiInfo.Templating
         {
             if (XTemplate.Level == TemplateLevel.Project)
             {
+                Progress?.Report($"Canonizing project: {xProject.Name}");
                 xProject.Id = null;
                 xProject.Location = null;
                 xProject.CreateDate = null;
-                xProject.ReplaceAttributes(NormalizeAttributes(xProject));
+                xProject.ReplaceAttributes(GetNormalizedAttributes(xProject));
             }
             else
             {
@@ -197,10 +198,19 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXView(XView xView)
         {
-            Progress?.Report($"Canonizing view: {xView.Name}");
-            Context.OnXViewCanonizing(xView);
-            xView.CheckCode = xView.CheckCode.Trim();
-            xView.SurveyId = null;
+            string checkCode = xView.CheckCode?.Trim();
+            if (XTemplate.Level >= TemplateLevel.View)
+            {
+                Progress?.Report($"Canonizing view: {xView.Name}");
+                Context.OnXViewCanonizing(xView);
+                xView.CheckCode = checkCode;
+                xView.SurveyId = null;
+            }
+            else
+            {
+                xView.RemoveAttributes();
+                xView.CheckCode = checkCode;
+            }
             foreach (XPage xPage in xView.XPages)
             {
                 CanonizeXPage(xPage);
@@ -209,10 +219,17 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXPage(XPage xPage)
         {
-            Progress?.Report($"Canonizing page: {xPage.Name}");
-            Context.OnXPageCanonizing(xPage);
-            xPage.BackgroundId = 0;
-            xPage.ViewId = xPage.XView.ViewId;
+            if (XTemplate.Level >= TemplateLevel.Page)
+            {
+                Progress?.Report($"Canonizing page: {xPage.Name}");
+                Context.OnXPageCanonizing(xPage);
+                xPage.BackgroundId = 0;
+                xPage.ViewId = XTemplate.Level == TemplateLevel.Page ? 1 : xPage.XView.ViewId;
+            }
+            else
+            {
+                xPage.RemoveAttributes();
+            }
             foreach (XField xField in xPage.XFields)
             {
                 CanonizeXField(xField);
@@ -225,7 +242,7 @@ namespace ERHMS.EpiInfo.Templating
             Context.OnXFieldCanonizing(xField);
             xField.PageId = xField.XPage.PageId;
             xField.UniqueId = null;
-            xField.ReplaceAttributes(NormalizeAttributes(xField));
+            xField.ReplaceAttributes(GetNormalizedAttributes(xField));
             foreach (IFieldMapper mapper in Context.FieldMappers)
             {
                 if (mapper.IsCompatible(xField))

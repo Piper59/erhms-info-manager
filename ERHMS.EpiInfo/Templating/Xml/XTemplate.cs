@@ -73,6 +73,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             Add(new XProject(element.Element(ElementNames.Project)));
             Add(element.Elements(ElementNames.SourceTable).Select(child => new XTable(child)));
             Add(element.Elements(ElementNames.GridTable).Select(child => new XTable(child)));
+            Add(element.Element(ElementNames.FieldFootprint));
         }
 
         public new void Save(string path)

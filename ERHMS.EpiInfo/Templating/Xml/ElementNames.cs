@@ -10,5 +10,6 @@
         public const string SourceTable = "SourceTable";
         public const string GridTable = "GridTable";
         public const string Item = "Item";
+        public const string FieldFootprint = "FieldFootprint";
     }
 }

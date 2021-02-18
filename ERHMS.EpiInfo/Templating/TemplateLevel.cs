@@ -4,11 +4,10 @@ namespace ERHMS.EpiInfo.Templating
 {
     public enum TemplateLevel
     {
-        Unknown,
-        Project,
-        View,
-        Page,
-        Field
+        Project = 4,
+        View = 3,
+        Page = 2,
+        Field = 1
     }
 
     public static class TemplateLevelExtensions
@@ -19,13 +18,9 @@ namespace ERHMS.EpiInfo.Templating
             {
                 return TemplateLevel.View;
             }
-            else if (Enum.TryParse(value, out TemplateLevel result))
-            {
-                return result;
-            }
             else
             {
-                return TemplateLevel.Unknown;
+                return (TemplateLevel)Enum.Parse(typeof(TemplateLevel), value);
             }
         }
     }
