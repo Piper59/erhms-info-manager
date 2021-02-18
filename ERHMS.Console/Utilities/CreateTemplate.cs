@@ -12,7 +12,7 @@ namespace ERHMS.Console.Utilities
     {
         public string TemplatePath { get; }
         public string ProjectPath { get; }
-        public string ViewName { get; }
+        public string FormName { get; }
         public string PageName { get; }
 
         public CreateTemplate(string templatePath, string projectPath)
@@ -21,14 +21,14 @@ namespace ERHMS.Console.Utilities
             ProjectPath = projectPath;
         }
 
-        public CreateTemplate(string templatePath, string projectPath, string viewName)
+        public CreateTemplate(string templatePath, string projectPath, string formName)
             : this(templatePath, projectPath)
         {
-            ViewName = viewName;
+            FormName = formName;
         }
 
-        public CreateTemplate(string templatePath, string projectPath, string viewName, string pageName)
-            : this(templatePath, projectPath, viewName)
+        public CreateTemplate(string templatePath, string projectPath, string formName, string pageName)
+            : this(templatePath, projectPath, formName)
         {
             PageName = pageName;
         }
@@ -37,13 +37,13 @@ namespace ERHMS.Console.Utilities
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             TemplateCreator creator;
-            if (ViewName == null)
+            if (FormName == null)
             {
                 creator = new ProjectTemplateCreator(project);
             }
             else
             {
-                View view = project.Views[ViewName];
+                View view = project.Views[FormName];
                 if (PageName == null)
                 {
                     creator = new ViewTemplateCreator(view);
