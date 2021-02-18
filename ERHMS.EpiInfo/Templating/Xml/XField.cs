@@ -59,6 +59,12 @@ namespace ERHMS.EpiInfo.Templating.Xml
             set { FieldTypeId = (int)value; }
         }
 
+        public string PageName
+        {
+            get { return (string)this.GetAttribute(); }
+            set { this.SetOrClearAttributeValue(value); }
+        }
+
         public string RelateCondition
         {
             get { return (string)this.GetAttribute(); }

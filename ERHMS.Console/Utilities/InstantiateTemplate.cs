@@ -12,6 +12,7 @@ namespace ERHMS.Console.Utilities
         public string TemplatePath { get; }
         public string ProjectPath { get; }
         public string ViewName { get; }
+        public string PageName { get; }
 
         public InstantiateTemplate(string templatePath, string projectPath)
         {
@@ -23,6 +24,12 @@ namespace ERHMS.Console.Utilities
             : this(templatePath, projectPath)
         {
             ViewName = viewName;
+        }
+
+        public InstantiateTemplate(string templatePath, string projectPath, string viewName, string pageName)
+            : this(templatePath, projectPath, viewName)
+        {
+            PageName = pageName;
         }
 
         public void Run()
@@ -41,17 +48,27 @@ namespace ERHMS.Console.Utilities
                     instantiator = new ProjectTemplateInstantiator(xTemplate, project);
                     break;
                 case TemplateLevel.View:
-                    instantiator = new ViewTemplateInstantiator(xTemplate, project);
+                    if (PageName != null)
+                    {
+                        throw new InvalidOperationException("Page name cannot be specified for a view-level template.");
+                    }
                     if (ViewName != null)
                     {
                         XView xView = xTemplate.XProject.XViews.Single();
                         xView.Name = ViewName;
                     }
+                    instantiator = new ViewTemplateInstantiator(xTemplate, project);
                     break;
                 case TemplateLevel.Page:
                     if (ViewName == null)
                     {
                         throw new InvalidOperationException("View name must be specified for a page-level template.");
+                    }
+                    if (PageName != null)
+                    {
+                        XView xView = xTemplate.XProject.XViews.Single();
+                        XPage xPage = xView.XPages.Single();
+                        xPage.Name = PageName;
                     }
                     View view = project.Views[ViewName];
                     instantiator = new PageTemplateInstantiator(xTemplate, view);

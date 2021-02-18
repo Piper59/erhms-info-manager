@@ -28,8 +28,18 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public new string Name
         {
-            get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            get
+            {
+                return (string)this.GetAttribute();
+            }
+            set
+            {
+                this.SetOrClearAttributeValue(value);
+                foreach (XField xField in XFields)
+                {
+                    xField.PageName = Value;
+                }
+            }
         }
 
         public int Position
