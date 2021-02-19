@@ -14,7 +14,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
         {
             return new XmlWriterSettings
             {
-                NewLineOnAttributes = true,
                 Indent = true,
                 OmitXmlDeclaration = true
             };
@@ -77,12 +76,17 @@ namespace ERHMS.EpiInfo.Templating.Xml
             Add(element.Element(ElementNames.FieldFootprint));
         }
 
-        public new void Save(string path)
+        public void Save(string path, XmlWriterSettings settings)
         {
-            using (XmlWriter writer = XmlWriter.Create(path, GetXmlWriterSettings()))
+            using (XmlWriter writer = XmlWriter.Create(path, settings))
             {
                 Save(writer);
             }
+        }
+
+        public new void Save(string path)
+        {
+            Save(path, GetXmlWriterSettings());
         }
     }
 }

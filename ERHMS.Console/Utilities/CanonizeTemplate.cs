@@ -1,6 +1,7 @@
 ﻿using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
+using System.Xml;
 
 namespace ERHMS.Console.Utilities
 {
@@ -26,7 +27,9 @@ namespace ERHMS.Console.Utilities
                 Progress = new Progress<string>(Log.Default.Debug)
             };
             canonizer.Canonize();
-            xTemplate.Save(OutputPath);
+            XmlWriterSettings settings = XTemplate.GetXmlWriterSettings();
+            settings.NewLineOnAttributes = true;
+            xTemplate.Save(OutputPath, settings);
         }
     }
 }
