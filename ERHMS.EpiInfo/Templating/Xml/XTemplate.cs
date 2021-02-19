@@ -14,6 +14,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         {
             return new XmlWriterSettings
             {
+                NewLineOnAttributes = true,
                 Indent = true,
                 OmitXmlDeclaration = true
             };
