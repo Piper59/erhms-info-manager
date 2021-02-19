@@ -1,12 +1,12 @@
 ﻿<Template
-  Name="BlankWithWorkerInfo"
+  Name="BlankFormWithWorkerInfo"
   Description="Blank form with worker information fields"
   CreateDate=""
   Level="View">
   <Project>
     <View
       ViewId="1"
-      Name="Blank"
+      Name="BlankFormWithWorkerInfo"
       IsRelatedView="false"
       CheckCode=""
       Width="816"
