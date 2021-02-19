@@ -414,7 +414,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="WorkerInfo_GetGlobalRecordId"
+          Name="WorkerInfo_LookUpID"
           PageId="1"
           FieldId="9"
           UniqueId=""
