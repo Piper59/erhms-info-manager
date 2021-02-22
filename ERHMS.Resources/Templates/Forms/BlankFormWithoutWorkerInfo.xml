@@ -1,6 +1,6 @@
 ﻿<Template
   Name="BlankFormWithoutWorkerInfo"
-  Description="Blank form without worker information fields"
+  Description=""
   CreateDate=""
   Level="View">
   <Project>
