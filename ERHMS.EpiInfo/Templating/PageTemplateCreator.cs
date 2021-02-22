@@ -27,7 +27,6 @@ namespace ERHMS.EpiInfo.Templating
             xProject.Add(xView);
             CreateXPage(xView, Page);
             xView.Unrelate();
-            xView.Attribute(nameof(XView.IsRelatedView)).Remove();
             return xTemplate;
         }
     }

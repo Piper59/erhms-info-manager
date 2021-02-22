@@ -10,10 +10,11 @@ namespace ERHMS.EpiInfo.Templating.Xml
     {
         public const string DateFormat = "F";
 
-        public static XmlWriterSettings GetXmlWriterSettings()
+        public static XmlWriterSettings GetXmlWriterSettings(bool canonical)
         {
             return new XmlWriterSettings
             {
+                NewLineOnAttributes = canonical,
                 Indent = true,
                 OmitXmlDeclaration = true
             };
@@ -76,9 +77,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
             Add(element.Element(ElementNames.FieldFootprint));
         }
 
-        public void Save(string path, XmlWriterSettings settings)
+        public void Save(string path, bool canonical)
         {
-            using (XmlWriter writer = XmlWriter.Create(path, settings))
+            using (XmlWriter writer = XmlWriter.Create(path, GetXmlWriterSettings(canonical)))
             {
                 Save(writer);
             }
@@ -86,7 +87,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public new void Save(string path)
         {
-            Save(path, GetXmlWriterSettings());
+            Save(path, false);
         }
     }
 }

@@ -109,7 +109,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public void Unrelate()
         {
-            IsRelatedView = false;
+            if (Attribute(nameof(IsRelatedView)) != null)
+            {
+                IsRelatedView = false;
+            }
             IReadOnlyCollection<XField> relateXFields =
                 XFields.Where(xField => xField.FieldType == MetaFieldType.Relate).ToList();
             foreach (XField relateXField in relateXFields)
