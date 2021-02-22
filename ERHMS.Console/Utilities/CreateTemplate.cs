@@ -4,6 +4,7 @@ using ERHMS.EpiInfo.Naming;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace ERHMS.Console.Utilities
@@ -56,6 +57,7 @@ namespace ERHMS.Console.Utilities
             }
             creator.Progress = new Progress<string>(Log.Default.Debug);
             XTemplate xTemplate = creator.Create();
+            Directory.CreateDirectory(Path.GetDirectoryName(TemplatePath));
             xTemplate.Save(TemplatePath);
         }
     }
