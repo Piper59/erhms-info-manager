@@ -76,7 +76,7 @@ namespace ERHMS.Console.Utilities
                 default:
                     throw new InvalidOperationException($"Template level '{xTemplate.Level}' is not supported.");
             }
-            instantiator.Progress = new Progress<string>(Log.Default.Debug);
+            instantiator.Progress = Log.Progress;
             instantiator.Instantiate();
         }
     }

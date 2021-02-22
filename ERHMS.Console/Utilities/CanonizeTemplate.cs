@@ -1,6 +1,5 @@
 ﻿using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
-using System;
 
 namespace ERHMS.Console.Utilities
 {
@@ -23,7 +22,7 @@ namespace ERHMS.Console.Utilities
             XTemplate xTemplate = XTemplate.Load(InputPath);
             TemplateCanonizer canonizer = new TemplateCanonizer(xTemplate)
             {
-                Progress = new Progress<string>(Log.Default.Debug)
+                Progress = Log.Progress
             };
             canonizer.Canonize();
             xTemplate.Save(OutputPath, true);
