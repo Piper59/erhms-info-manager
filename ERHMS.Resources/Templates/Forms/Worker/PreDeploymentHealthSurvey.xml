@@ -806,7 +806,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="CurrentMedicalTreatment"
+          Name="CurrentMedicalTreatmentDescription"
           PageId="1"
           FieldId="17"
           UniqueId=""
@@ -904,7 +904,7 @@
           HasTabStop="false"
           SourceFieldId="" />
         <Field
-          Name="Employed"
+          Name="IsEmployed"
           PageId="1"
           FieldId="19"
           UniqueId=""
@@ -1548,7 +1548,7 @@
           HasTabStop="false"
           SourceFieldId="" />
         <Field
-          Name="Allergies"
+          Name="AllergiesDescription"
           PageId="2"
           FieldId="32"
           UniqueId=""
@@ -1744,7 +1744,7 @@
           HasTabStop="false"
           SourceFieldId="" />
         <Field
-          Name="Medications"
+          Name="MedicationsDescription"
           PageId="2"
           FieldId="36"
           UniqueId=""

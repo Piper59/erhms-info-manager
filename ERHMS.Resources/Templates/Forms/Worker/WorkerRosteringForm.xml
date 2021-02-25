@@ -3255,7 +3255,7 @@
           RelateCondition=""
           ShouldReturnToParent="false"
           RelatedViewId=""
-          List="GeneralSafetyHeading,GeneralSafetyAwareness,EnvironmentalConditions,SelfCareBuddyCare,DisasterZoneSafety,DisasterZoneOperationsHeading,AccessControl,Rostering,Credentialing,Communications,DecontaminationHeading,GrossDecontamination,EquipmentDecontamination,ChemicalBiologicalDecontamination"
+          List="GeneralSafetyHeading,GeneralSafetyAwareness,EnvironmentalConditions,SelfCareBuddyCare,DisasterZoneSafety,DisasterZoneOperationsHeading,AccessControl,Rostering,Credentialing,CommunicationsTraining,DecontaminationHeading,GrossDecontamination,EquipmentDecontamination,ChemicalBiologicalDecontamination"
           SourceTableName=""
           CodeColumnName=""
           TextColumnName=""
@@ -3707,7 +3707,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="Communications"
+          Name="CommunicationsTraining"
           PageId="2"
           FieldId="76"
           UniqueId=""
@@ -4194,7 +4194,7 @@
           RelateCondition=""
           ShouldReturnToParent="false"
           RelatedViewId=""
-          List="Transportation,Communications1,PublicWorksAndEngineering,Firefighting,InformationAndPlanning,HumanServices,Logistics,PublicHealthAndMedicalServices,SearchAndRescue,OilAndHazardousMaterialsResponse,AgricultureAndNaturalResources,Energy,PublicSafetyAndSecurity,CrossSectorBusinessAndInfrastructure,ExternalAffairs,ExperienceOther"
+          List="Transportation,CommunicationsExperience,PublicWorksAndEngineering,Firefighting,InformationAndPlanning,HumanServices,Logistics,PublicHealthAndMedicalServices,SearchAndRescue,OilAndHazardousMaterialsResponse,AgricultureAndNaturalResources,Energy,PublicSafetyAndSecurity,CrossSectorBusinessAndInfrastructure,ExternalAffairs,ExperienceOther"
           SourceTableName=""
           CodeColumnName=""
           TextColumnName=""
@@ -4254,7 +4254,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="Communications1"
+          Name="CommunicationsExperience"
           PageId="3"
           FieldId="87"
           UniqueId=""
@@ -5185,7 +5185,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="ExpirationDate"
+          Name="LicenseExpirationDate"
           PageId="3"
           FieldId="106"
           UniqueId=""

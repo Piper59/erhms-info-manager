@@ -207,7 +207,7 @@
           RelateCondition=""
           ShouldReturnToParent="false"
           RelatedViewId=""
-          List="WorkerInfo_FirstName,WorkerInfo_LastName,WorkerInfo_EmailAddress,WorkerInfo_GlobalRecordId"
+          List="WorkerInfo_FirstName,WorkerInfo_LastName,WorkerInfo_EmailAddress,WorkerInfo_GlobalRecordId,WorkerInfo_LookUpID"
           SourceTableName=""
           CodeColumnName=""
           TextColumnName=""

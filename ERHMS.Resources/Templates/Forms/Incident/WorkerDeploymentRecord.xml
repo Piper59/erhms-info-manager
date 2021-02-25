@@ -512,7 +512,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="ExpectedDemobilizationDate"
+          Name="DemobilizationDateExpected"
           PageId="1"
           FieldId="11"
           UniqueId=""
@@ -561,7 +561,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="ActualDemobilizationDate"
+          Name="DemobilizationDateActual"
           PageId="1"
           FieldId="12"
           UniqueId=""
