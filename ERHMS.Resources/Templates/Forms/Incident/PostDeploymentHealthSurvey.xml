@@ -207,7 +207,7 @@
           RelateCondition=""
           ShouldReturnToParent="false"
           RelatedViewId=""
-          List="WorkerInfo_FirstName,WorkerInfo_LastName,WorkerInfo_EmailAddress,WorkerInfo_GlobalRecordId,WorkerInfo_LookUpID"
+          List="WorkerInfo_FirstName,WorkerInfo_LastName,WorkerInfo_EmailAddress,WorkerInfo_GlobalRecordId,WorkerInfo_GetGlobalRecordId"
           SourceTableName=""
           CodeColumnName=""
           TextColumnName=""
@@ -414,7 +414,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="WorkerInfo_LookUpID"
+          Name="WorkerInfo_GetGlobalRecordId"
           PageId="1"
           FieldId="9"
           UniqueId=""

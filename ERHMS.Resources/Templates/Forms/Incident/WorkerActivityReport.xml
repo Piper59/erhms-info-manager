@@ -8,7 +8,7 @@
       ViewId="1"
       Name="WorkerActivityReport"
       IsRelatedView="false"
-      CheckCode="Field LookUpLatitudeLongitude&#xA;&#x9;Click&#xA;&#x9;&#x9;GEOCODE Address, Latitude, Longitude&#xA;&#x9;End-Click&#xA;End-Field"
+      CheckCode="Field GetCoordinates&#xA;&#x9;Click&#xA;&#x9;&#x9;GEOCODE Address, Latitude, Longitude&#xA;&#x9;End-Click&#xA;End-Field"
       Width="816"
       Height="1056"
       Orientation="Portrait"
@@ -207,7 +207,7 @@
           RelateCondition=""
           ShouldReturnToParent="false"
           RelatedViewId=""
-          List="WorkerInfo_FirstName,WorkerInfo_LastName,WorkerInfo_EmailAddress,WorkerInfo_GlobalRecordId,WorkerInfo_LookUpID"
+          List="WorkerInfo_FirstName,WorkerInfo_LastName,WorkerInfo_EmailAddress,WorkerInfo_GlobalRecordId,WorkerInfo_GetGlobalRecordId"
           SourceTableName=""
           CodeColumnName=""
           TextColumnName=""
@@ -414,7 +414,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="WorkerInfo_LookUpID"
+          Name="WorkerInfo_GetGlobalRecordId"
           PageId="1"
           FieldId="9"
           UniqueId=""
@@ -757,7 +757,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="LookUpLatitudeLongitude"
+          Name="GetCoordinates"
           PageId="1"
           FieldId="16"
           UniqueId=""
