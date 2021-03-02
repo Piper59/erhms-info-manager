@@ -4194,7 +4194,7 @@
           RelateCondition=""
           ShouldReturnToParent="false"
           RelatedViewId=""
-          List="Transportation,CommunicationsExperience,PublicWorksAndEngineering,Firefighting,InformationAndPlanning,HumanServices,Logistics,PublicHealthAndMedicalServices,SearchAndRescue,OilAndHazardousMaterialsResponse,AgricultureAndNaturalResources,Energy,PublicSafetyAndSecurity,CrossSectorBusinessAndInfrastructure,ExternalAffairs,ExperienceOther"
+          List="Transportation,CommunicationsExperience,PublicWorksAndEngineering,Firefighting,InfoAndPlanning,HumanServices,Logistics,PublicHealthAndMedicalServices,SearchAndRescue,OilAndHazardousMaterialsResponse,AgricultureAndNaturalResources,Energy,PublicSafetyAndSecurity,CrossSectorBusinessAndInfrastructure,ExternalAffairs,ExperienceOther"
           SourceTableName=""
           CodeColumnName=""
           TextColumnName=""
@@ -4401,7 +4401,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="InformationAndPlanning"
+          Name="InfoAndPlanning"
           PageId="3"
           FieldId="90"
           UniqueId=""
@@ -4989,7 +4989,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="ProfessionalLicenseHeading"
+          Name="LicenseHeading"
           PageId="3"
           FieldId="102"
           UniqueId=""
@@ -5479,7 +5479,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="OtherComments"
+          Name="Comments"
           PageId="3"
           FieldId="112"
           UniqueId=""

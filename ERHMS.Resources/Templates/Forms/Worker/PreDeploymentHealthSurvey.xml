@@ -2038,7 +2038,7 @@
           HasTabStop="false"
           SourceFieldId="" />
         <Field
-          Name="AllWorkersVaccinationsLabel"
+          Name="VaccinationsAllWorkersHeading"
           PageId="2"
           FieldId="42"
           UniqueId=""
@@ -2087,7 +2087,7 @@
           HasTabStop="false"
           SourceFieldId="" />
         <Field
-          Name="SelectedWorkersVaccinationsLabel"
+          Name="VaccinationsSelectedWorkersHeading"
           PageId="2"
           FieldId="43"
           UniqueId=""
@@ -2283,7 +2283,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="TBSkinTestLabel"
+          Name="TBSkinTestHeading"
           PageId="2"
           FieldId="47"
           UniqueId=""
@@ -6858,7 +6858,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="HasCorrectedVision"
+          Name="WearsPrescriptionLenses"
           PageId="4"
           FieldId="140"
           UniqueId=""
@@ -6907,7 +6907,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="HasCorrectedHearing"
+          Name="WearsHearingAids"
           PageId="4"
           FieldId="141"
           UniqueId=""
@@ -7229,7 +7229,7 @@
           ControlScriptName=""
           PromptTopPositionPercentage="0.136364"
           PromptLeftPositionPercentage="0.058824"
-          PromptText="Have you ever smoked cigarettes or used&#xD;&#xA;other tobacco products?"
+          PromptText="Have you ever smoked cigarettes or&#xD;&#xA;used other tobacco products?"
           PromptFontFamily="Segoe UI"
           PromptFontSize="12"
           PromptFontStyle="Regular"

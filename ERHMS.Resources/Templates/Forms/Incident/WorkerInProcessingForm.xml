@@ -1499,7 +1499,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="TrainedForPPE"
+          Name="WasTrainedForPPE"
           PageId="2"
           FieldId="31"
           UniqueId=""
@@ -1548,7 +1548,7 @@
           HasTabStop="true"
           SourceFieldId="" />
         <Field
-          Name="FitTestedForPPE"
+          Name="WasFitTestedForPPE"
           PageId="2"
           FieldId="32"
           UniqueId=""
