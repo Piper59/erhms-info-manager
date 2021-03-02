@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common;
 using ERHMS.Console.Utilities;
 using ERHMS.EpiInfo;
 using log4net;

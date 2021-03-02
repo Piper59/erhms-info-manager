@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using ERHMS.Common;
+using System.Data;
 using System.Data.Common;
 
 namespace ERHMS.Data

@@ -1,9 +1,9 @@
 ﻿using log4net;
 using System;
 
-namespace ERHMS.Console
+namespace ERHMS.Common
 {
-    internal static class Log
+    public static class Log
     {
         private class ProgressImpl : IProgress<string>
         {

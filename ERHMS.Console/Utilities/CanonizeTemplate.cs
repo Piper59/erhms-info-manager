@@ -1,4 +1,5 @@
-﻿using ERHMS.EpiInfo.Templating;
+﻿using ERHMS.Common;
+using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 
 namespace ERHMS.Console.Utilities

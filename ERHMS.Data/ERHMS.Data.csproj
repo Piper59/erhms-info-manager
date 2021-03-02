@@ -48,6 +48,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.Common\ERHMS.Common.csproj">
+      <Project>{917efa87-37a3-49d1-9488-d130d29cd6d0}</Project>
+      <Name>ERHMS.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Access\Access2003Database.cs" />
     <Compile Include="Access\Access2007Database.cs" />
     <Compile Include="Access\AccessDatabase.cs" />
@@ -57,7 +63,6 @@
     <Compile Include="DataTableExtensions.cs" />
     <Compile Include="IDatabase.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="Log.cs" />
     <Compile Include="LoggingCommand.cs" />
     <Compile Include="LoggingConnection.cs" />
     <Compile Include="ParameterCollection.cs" />

@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.DataSets;
+using ERHMS.Common;
 using System.IO;
 using Settings = ERHMS.EpiInfo.Properties.Settings;
 
