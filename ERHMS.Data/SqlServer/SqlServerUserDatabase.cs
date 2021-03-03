@@ -34,5 +34,14 @@ namespace ERHMS.Data.SqlServer
                 connection.Execute(sql);
             }
         }
+
+        protected override void DeleteCore()
+        {
+            string sql = $"DROP DATABASE {Quote(Name)};";
+            using (IDbConnection connection = Master.Connect())
+            {
+                connection.Execute(sql);
+            }
+        }
     }
 }

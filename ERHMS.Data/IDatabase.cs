@@ -10,6 +10,7 @@ namespace ERHMS.Data
 
         bool Exists();
         void Create();
+        void Delete();
         IDbConnection Connect();
         string Quote(string identifier);
     }

@@ -33,6 +33,11 @@ namespace ERHMS.Data.Access
             }
         }
 
+        protected override void DeleteCore()
+        {
+            File.Delete(FilePath);
+        }
+
         public override string ToString()
         {
             return FilePath;

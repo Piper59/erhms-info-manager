@@ -36,5 +36,10 @@ namespace ERHMS.Data.SqlServer
         {
             throw new NotSupportedException();
         }
+
+        protected override void DeleteCore()
+        {
+            throw new NotSupportedException();
+        }
     }
 }

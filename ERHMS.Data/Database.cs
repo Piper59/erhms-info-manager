@@ -32,6 +32,14 @@ namespace ERHMS.Data
             CreateCore();
         }
 
+        protected abstract void DeleteCore();
+
+        public void Delete()
+        {
+            Log.Default.Debug($"Deleting database: {this}");
+            DeleteCore();
+        }
+
         private IDbConnection GetBaseConnection()
         {
             IDbConnection connection = providerFactory.CreateConnection();

@@ -74,6 +74,7 @@
     <Compile Include="Utilities\CreateProject.cs" />
     <Compile Include="Utilities\CreateTemplate.cs" />
     <Compile Include="Utilities\Decrypt.cs" />
+    <Compile Include="Utilities\DeleteDatabase.cs" />
     <Compile Include="Utilities\Encrypt.cs" />
     <Compile Include="Utilities\InitializeProject.cs" />
     <Compile Include="Utilities\InstantiateTemplate.cs" />
