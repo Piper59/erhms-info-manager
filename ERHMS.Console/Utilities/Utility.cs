@@ -10,13 +10,9 @@ namespace ERHMS.Console.Utilities
 {
     public static class Utility
     {
+        private const string HelpArg = "/?";
+
         private static readonly StringComparer ArgComparer = StringComparer.OrdinalIgnoreCase;
-        private static readonly IReadOnlyList<string> HelpArgs = new string[]
-        {
-            "--help",
-            "-h",
-            "/?"
-        };
         private static readonly IReadOnlyCollection<Type> InstanceTypes = typeof(IUtility).Assembly.GetTypes()
             .Where(type => typeof(IUtility).IsAssignableFrom(type) && !type.IsAbstract)
             .ToList();
@@ -26,12 +22,12 @@ namespace ERHMS.Console.Utilities
         private static string GetUsage()
         {
             StringBuilder usage = new StringBuilder();
-            usage.AppendLine("usage:");
-            usage.AppendLine($"  {ExecutableName} {HelpArgs[0]}");
-            usage.AppendLine($"  {ExecutableName} UTILITY {HelpArgs[0]}");
+            usage.AppendLine("Usage:");
+            usage.AppendLine($"  {ExecutableName} {HelpArg}");
+            usage.AppendLine($"  {ExecutableName} UTILITY {HelpArg}");
             usage.AppendLine($"  {ExecutableName} UTILITY [ARGUMENT ...]");
             usage.AppendLine();
-            usage.Append("utilities:");
+            usage.Append("Utilities:");
             foreach (Type instanceType in InstanceTypes.OrderBy(instanceType => instanceType.Name, ArgComparer))
             {
                 usage.AppendLine();
@@ -43,7 +39,7 @@ namespace ERHMS.Console.Utilities
         private static string GetUsage(Type instanceType)
         {
             StringBuilder usage = new StringBuilder();
-            usage.Append("usage:");
+            usage.Append("Usage:");
             foreach (ConstructorInfo constructor in instanceType.GetConstructors())
             {
                 usage.AppendLine();
@@ -109,14 +105,14 @@ namespace ERHMS.Console.Utilities
                 {
                     throw new ArgumentException("No utility specified.");
                 }
-                if (HelpArgs.Contains(args[0], ArgComparer))
+                if (ArgComparer.Equals(args[0], HelpArg))
                 {
                     Out.WriteLine(GetUsage());
                     Environment.Exit(ErrorCodes.Success);
                     return null;
                 }
                 instanceType = GetInstanceType(args[0]);
-                if (args.Count > 1 && HelpArgs.Contains(args[1]))
+                if (args.Count > 1 && ArgComparer.Equals(args[1], HelpArg))
                 {
                     Out.WriteLine(GetUsage(instanceType));
                     Environment.Exit(ErrorCodes.Success);
@@ -128,7 +124,9 @@ namespace ERHMS.Console.Utilities
             }
             catch (Exception ex)
             {
+                ForegroundColor = ConsoleColor.Red;
                 Error.WriteLine(ex.Message);
+                ResetColor();
                 Error.WriteLine();
                 Error.WriteLine(instanceType == null ? GetUsage() : GetUsage(instanceType));
                 Environment.Exit(ErrorCodes.InvalidCommandLine);

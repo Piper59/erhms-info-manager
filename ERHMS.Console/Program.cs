@@ -27,6 +27,7 @@ namespace ERHMS.Console
             }
             catch (Exception ex)
             {
+                Log.Default.Fatal(ex.Message);
                 Log.Default.Error(ex);
                 Log.Default.Warn("Completed with errors");
                 return ex.HResult;
