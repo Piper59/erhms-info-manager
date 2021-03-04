@@ -33,6 +33,7 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand ViewHomeCommand { get; }
         public ICommand StartEpiInfoCommand { get; }
         public ICommand StartFileExplorerCommand { get; }
+        public ICommand StartCommandPromptCommand { get; }
 
         private MainViewModel()
         {
@@ -40,6 +41,7 @@ namespace ERHMS.Desktop.ViewModels
             ViewHomeCommand = new SyncCommand(ViewHome);
             StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SyncCommand(StartFileExplorer);
+            StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
         }
 
         public event EventHandler ExitRequested;
@@ -65,6 +67,18 @@ namespace ERHMS.Desktop.ViewModels
         {
             string buildDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Process.Start(buildDirPath);
+        }
+
+        public void StartCommandPrompt()
+        {
+            string buildDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string executablePath = Environment.GetEnvironmentVariable("ComSpec");
+            Process.Start(new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                WorkingDirectory = buildDirPath,
+                FileName = executablePath
+            });
         }
     }
 }

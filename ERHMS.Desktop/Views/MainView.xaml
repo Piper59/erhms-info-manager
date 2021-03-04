@@ -66,6 +66,8 @@
                           Header="_Epi Info" />
                 <MenuItem Command="{Binding StartFileExplorerCommand}"
                           Header="_File Explorer" />
+                <MenuItem Command="{Binding StartCommandPromptCommand}"
+                          Header="_Command Prompt" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_View help" />
