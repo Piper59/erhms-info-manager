@@ -17,10 +17,10 @@ goto :eof
 
 :canonize
 set project_type=%~1
-set form_name=%~2
-set template_path=Templates\Forms\%project_type%\%form_name%.xml
+set view_name=%~2
+set template_path=Templates\Forms\%project_type%\%view_name%.xml
 set project_path=Projects\%project_type%\%project_type%.prj
-ERHMS.Console CreateTemplate "%template_path%" "%project_path%" "%form_name%" || exit /b 1
+ERHMS.Console CreateTemplate "%template_path%" "%project_path%" "%view_name%" || exit /b 1
 ERHMS.Console CanonizeTemplate "%template_path%" || exit /b 1
 copy /y "%template_path%" "%solution_dir_path%\ERHMS.Resources\%template_path%" || exit /b 1
 goto :eof

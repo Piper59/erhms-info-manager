@@ -12,7 +12,7 @@ namespace ERHMS.Console.Utilities
     {
         public string TemplatePath { get; }
         public string ProjectPath { get; }
-        public string FormName { get; }
+        public string ViewName { get; }
         public string PageName { get; }
 
         public InstantiateTemplate(string templatePath, string projectPath)
@@ -21,14 +21,14 @@ namespace ERHMS.Console.Utilities
             ProjectPath = projectPath;
         }
 
-        public InstantiateTemplate(string templatePath, string projectPath, string formName)
+        public InstantiateTemplate(string templatePath, string projectPath, string viewName)
             : this(templatePath, projectPath)
         {
-            FormName = formName;
+            ViewName = viewName;
         }
 
-        public InstantiateTemplate(string templatePath, string projectPath, string formName, string pageName)
-            : this(templatePath, projectPath, formName)
+        public InstantiateTemplate(string templatePath, string projectPath, string viewName, string pageName)
+            : this(templatePath, projectPath, viewName)
         {
             PageName = pageName;
         }
@@ -41,29 +41,29 @@ namespace ERHMS.Console.Utilities
             switch (xTemplate.Level)
             {
                 case TemplateLevel.Project:
-                    if (FormName != null)
+                    if (ViewName != null)
                     {
                         throw new InvalidOperationException(
-                            "Form name cannot be specified for a project-level template.");
+                            "View name cannot be specified for a project-level template.");
                     }
                     instantiator = new ProjectTemplateInstantiator(xTemplate, project);
                     break;
                 case TemplateLevel.View:
                     if (PageName != null)
                     {
-                        throw new InvalidOperationException("Page name cannot be specified for a form-level template.");
+                        throw new InvalidOperationException("Page name cannot be specified for a view-level template.");
                     }
-                    if (FormName != null)
+                    if (ViewName != null)
                     {
                         XView xView = xTemplate.XProject.XViews.Single();
-                        xView.Name = FormName;
+                        xView.Name = ViewName;
                     }
                     instantiator = new ViewTemplateInstantiator(xTemplate, project);
                     break;
                 case TemplateLevel.Page:
-                    if (FormName == null)
+                    if (ViewName == null)
                     {
-                        throw new InvalidOperationException("Form name must be specified for a page-level template.");
+                        throw new InvalidOperationException("View name must be specified for a page-level template.");
                     }
                     if (PageName != null)
                     {
@@ -71,7 +71,7 @@ namespace ERHMS.Console.Utilities
                         XPage xPage = xView.XPages.Single();
                         xPage.Name = PageName;
                     }
-                    View view = project.Views[FormName];
+                    View view = project.Views[ViewName];
                     instantiator = new PageTemplateInstantiator(xTemplate, view);
                     break;
                 default:
