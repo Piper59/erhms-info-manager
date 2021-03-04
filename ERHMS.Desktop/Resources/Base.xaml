@@ -133,18 +133,24 @@
     </Style>
 
     <Style x:Key="TextBoxBase" TargetType="TextBox">
-        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
-        <Setter Property="Padding" Value="{StaticResource SmallPadding}" />
         <Style.Triggers>
             <Trigger Property="IsReadOnly" Value="True">
                 <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}" />
             </Trigger>
         </Style.Triggers>
+        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Padding" Value="{StaticResource SmallPadding}" />
     </Style>
     <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}" />
 
     <Style x:Key="TextElementBase" TargetType="TextElement">
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
     </Style>
+
+    <Style x:Key="ToolTipBase" TargetType="ToolTip">
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
+    </Style>
+    <Style TargetType="ToolTip" BasedOn="{StaticResource ToolTipBase}" />
 </ResourceDictionary>
