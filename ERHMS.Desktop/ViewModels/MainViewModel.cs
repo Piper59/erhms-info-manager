@@ -4,8 +4,6 @@ using ERHMS.Desktop.Infrastructure;
 using ERHMS.EpiInfo;
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
 
@@ -65,19 +63,16 @@ namespace ERHMS.Desktop.ViewModels
 
         public void StartFileExplorer()
         {
-            string buildDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            Process.Start(buildDirPath);
+            Process.Start(AppDomain.CurrentDomain.BaseDirectory);
         }
 
         public void StartCommandPrompt()
         {
-            string buildDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string executablePath = Environment.GetEnvironmentVariable("ComSpec");
             Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,
-                WorkingDirectory = buildDirPath,
-                FileName = executablePath
+                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                FileName = Environment.GetEnvironmentVariable("ComSpec")
             });
         }
     }

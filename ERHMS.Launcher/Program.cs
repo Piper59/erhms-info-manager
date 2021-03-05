@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Windows;
 
@@ -19,7 +18,7 @@ namespace ERHMS.Launcher
             string executablePath = null;
             try
             {
-                string buildContainerDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string buildContainerDirPath = AppDomain.CurrentDomain.BaseDirectory;
                 string workingDirPath = Path.Combine(buildContainerDirPath, BuildDirName);
                 executablePath = Path.Combine(workingDirPath, ExecutableName);
                 Process.Start(new ProcessStartInfo

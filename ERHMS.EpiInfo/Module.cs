@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace ERHMS.EpiInfo
 {
@@ -40,12 +39,11 @@ namespace ERHMS.EpiInfo
 
         public static Process Start(this Module @this, params string[] args)
         {
-            string buildDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             return Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,
-                WorkingDirectory = buildDirPath,
-                FileName = Path.Combine(buildDirPath, @this.ToFileName()),
+                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @this.ToFileName()),
                 Arguments = string.Join(" ", args.Select(Quote))
             });
         }
