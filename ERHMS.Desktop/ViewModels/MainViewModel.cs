@@ -101,8 +101,10 @@ namespace ERHMS.Desktop.ViewModels
                 {
                     Uri logFileUri = new Uri(logFile.FullName);
                     string entryName = logDirectoryUri.MakeRelativeUri(logFileUri).ToString();
+                    ZipArchiveEntry entry = archive.CreateEntry(entryName);
+                    entry.LastWriteTime = logFile.LastWriteTime;
                     using (Stream logFileStream = logFile.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    using (Stream entryStream = archive.CreateEntry(entryName).Open())
+                    using (Stream entryStream = entry.Open())
                     {
                         logFileStream.CopyTo(entryStream);
                     }
