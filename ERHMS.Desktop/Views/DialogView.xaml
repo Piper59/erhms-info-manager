@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
-        AutomationProperties.HelpText="{Binding Dialog.Lead}"
+        AutomationProperties.HelpText="{Binding Lead}"
         Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         MaxWidth="560"
         MinWidth="320"
@@ -21,7 +21,10 @@
             <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
             <Converters:SystemIconToNameConverter x:Key="SystemIconToNameConverter" />
-            <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+                <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+                <Setter Property="MinWidth" Value="85" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
@@ -37,19 +40,19 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{Binding Dialog.Icon, Converter={StaticResource SystemIconToNameConverter}}"
+                           AutomationProperties.Name="{Binding Icon, Converter={StaticResource SystemIconToNameConverter}}"
                            Margin="{StaticResource DefaultMargin}"
-                           Source="{Binding Dialog.Icon, Converter={StaticResource IconToImageSourceConverter}}"
+                           Source="{Binding Icon, Converter={StaticResource IconToImageSourceConverter}}"
                            VerticalAlignment="Top"
-                           Visibility="{Binding Dialog.Icon, Converter={StaticResource NullableToVisibilityConverter}}" />
+                           Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}" />
                     <StackPanel Grid.Column="1">
                         <TextBlock Foreground="{StaticResource AccentTextBrush}"
                                    Style="{StaticResource Lead}"
-                                   Text="{Binding Dialog.Lead}"
-                                   Visibility="{Binding Dialog.Lead, Converter={StaticResource NullableToVisibilityConverter}}" />
+                                   Text="{Binding Lead}"
+                                   Visibility="{Binding Lead, Converter={StaticResource NullableToVisibilityConverter}}" />
                         <TextBlock Style="{StaticResource Body}"
-                                   Text="{Binding Dialog.Body}"
-                                   Visibility="{Binding Dialog.Body, Converter={StaticResource NullableToVisibilityConverter}}" />
+                                   Text="{Binding Body}"
+                                   Visibility="{Binding Body, Converter={StaticResource NullableToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
             </DockPanel>
@@ -64,12 +67,12 @@
                 <Button Grid.Column="0"
                         Command="{Binding ToggleShowingDetailsCommand}"
                         VerticalAlignment="Top"
-                        Visibility="{Binding Dialog.Details, Converter={StaticResource NullableToVisibilityConverter}}">
+                        Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}">
                     _Details
                 </Button>
                 <ItemsControl Grid.Column="2"
                               IsTabStop="False"
-                              ItemsSource="{Binding Dialog.Buttons}">
+                              ItemsSource="{Binding Buttons}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel HorizontalAlignment="Right" />
@@ -95,7 +98,7 @@
                          MaxHeight="200"
                          MinHeight="50"
                          Style="{StaticResource Preformatted}"
-                         Text="{Binding Dialog.Details}" />
+                         Text="{Binding Details, Mode=OneWay}" />
             </DockPanel>
         </Border>
     </StackPanel>

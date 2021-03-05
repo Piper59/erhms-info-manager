@@ -80,11 +80,6 @@
         <Setter Property="IsReadOnly" Value="True" />
     </Style>
 
-    <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="MinWidth" Value="85" />
-    </Style>
-
     <Style x:Key="Preformatted" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
         <Setter Property="FontFamily" Value="{StaticResource MonospacedFontFamily}" />
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />

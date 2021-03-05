@@ -1,4 +1,5 @@
 ﻿using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -6,6 +7,8 @@ namespace ERHMS.Desktop.Views
 {
     public partial class DialogView : Window
     {
+        public DialogViewModel ViewModel => (DialogViewModel)DataContext;
+
         public DialogView()
         {
             InitializeComponent();

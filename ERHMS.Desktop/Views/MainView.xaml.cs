@@ -1,4 +1,5 @@
 ﻿using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -7,6 +8,8 @@ namespace ERHMS.Desktop.Views
 {
     public partial class MainView : Window
     {
+        public MainViewModel ViewModel => (MainViewModel)DataContext;
+
         public MainView()
         {
             InitializeComponent();

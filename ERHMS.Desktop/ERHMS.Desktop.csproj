@@ -117,10 +117,9 @@
     <Compile Include="Data\ISelectable.cs" />
     <Compile Include="Data\ISelectableCollectionView.cs" />
     <Compile Include="Data\ITypedCollectionView.cs" />
-    <Compile Include="Dialogs\Dialog.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
-    <Compile Include="Dialogs\DialogPreset.cs" />
+    <Compile Include="Dialogs\DialogSeverity.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\EventMarshaler.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />

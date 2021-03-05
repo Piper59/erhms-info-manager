@@ -1,13 +1,19 @@
 ﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Infrastructure;
+using System.Drawing;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class DialogViewModel : ObservableObject
     {
-        public Dialog Dialog { get; }
+        public DialogSeverity Severity { get; }
+        public Icon Icon { get; }
+        public string Lead { get; }
+        public string Body { get; }
+        public string Details { get; }
+        public DialogButtonCollection Buttons { get; }
 
         private bool showingDetails;
         public bool ShowingDetails
@@ -18,9 +24,19 @@ namespace ERHMS.Desktop.ViewModels
 
         public ICommand ToggleShowingDetailsCommand { get; }
 
-        public DialogViewModel(Dialog dialog)
+        public DialogViewModel(
+            DialogSeverity severity,
+            string lead,
+            string body,
+            string details,
+            DialogButtonCollection buttons)
         {
-            Dialog = dialog;
+            Severity = severity;
+            Icon = severity.ToSystemIcon();
+            Lead = lead;
+            Body = body;
+            Details = details;
+            Buttons = buttons;
             ToggleShowingDetailsCommand = new SyncCommand(ToggleShowingDetails);
         }
 

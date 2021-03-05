@@ -119,12 +119,12 @@ namespace ERHMS.Desktop
         private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
             Log.Default.Error(e.Exception);
-            ServiceProvider.Resolve<IDialogService>().Show(new Dialog(DialogPreset.Error)
-            {
-                Lead = ResX.HandledErrorLead,
-                Body = e.Exception.Message,
-                Details = e.Exception.ToString()
-            });
+            ServiceProvider.Resolve<IDialogService>().Show(
+                DialogSeverity.Hand,
+                ResX.HandledErrorLead,
+                e.Exception.Message,
+                e.Exception.ToString(),
+                DialogButtonCollection.Close);
             e.Handled = true;
         }
 
