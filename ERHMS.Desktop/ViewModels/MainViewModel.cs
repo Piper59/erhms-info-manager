@@ -1,6 +1,7 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using log4net.Appender;
 using System;
@@ -90,8 +91,15 @@ namespace ERHMS.Desktop.ViewModels
 
         public void ExportLogs()
         {
-            string archivePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Logs.zip");
-            ZipExtensions.CreateFromDirectory(GetLogDirectoryPath(), archivePath);
+            bool? result = ServiceProvider.Resolve<IFileDialogService>().Save(
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"Logs-{DateTime.Now:yyyyMMdd-HHmmss}.zip",
+                "ZIP Files (*.zip)|*.zip",
+                out string path);
+            if (result == true)
+            {
+                ZipExtensions.CreateFromDirectory(GetLogDirectoryPath(), path);
+            }
         }
 
         public void StartEpiInfo()

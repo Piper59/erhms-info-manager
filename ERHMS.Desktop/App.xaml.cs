@@ -113,7 +113,8 @@ namespace ERHMS.Desktop
 
         private void ConfigureServices()
         {
-            ServiceProvider.Install<IDialogService>(() => new DialogService(this));
+            ServiceProvider.Install<IFileDialogService>(new FileDialogService(this));
+            ServiceProvider.Install<IDialogService>(new DialogService(this));
         }
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)

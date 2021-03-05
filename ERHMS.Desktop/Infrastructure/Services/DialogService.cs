@@ -22,10 +22,9 @@ namespace ERHMS.Desktop.Infrastructure.Services
             string details,
             DialogButtonCollection buttons)
         {
-            Window owner = Application.GetActiveOrMainWindow();
             Window window = new DialogView
             {
-                Owner = owner,
+                Owner = Application.GetActiveOrMainWindow(),
                 DataContext = new DialogViewModel(severity, lead, body, details, buttons)
             };
             severity.ToSystemSound()?.Play();

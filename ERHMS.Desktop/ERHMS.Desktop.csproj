@@ -125,6 +125,7 @@
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
+    <Compile Include="Infrastructure\Services\FileDialogService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -143,6 +144,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\ServiceProvider.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
