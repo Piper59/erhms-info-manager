@@ -66,14 +66,14 @@ namespace ERHMS.Domain
             .Select(property => (CoreView)property.GetValue(null))
             .ToList();
 
-        public CoreProject CoreProject { get; }
+        public CoreProject Project { get; }
         public Phase Phase { get; }
         public string Name { get; }
         public string Title { get; }
 
-        private CoreView(CoreProject coreProject, Phase phase, string name, string title)
+        private CoreView(CoreProject project, Phase phase, string name, string title)
         {
-            CoreProject = coreProject;
+            Project = project;
             Phase = phase;
             Name = name;
             Title = title;

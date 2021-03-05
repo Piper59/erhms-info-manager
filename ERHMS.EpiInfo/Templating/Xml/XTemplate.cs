@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -34,6 +35,11 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public static new XTemplate Load(string path)
         {
             return new XTemplate(XElement.Load(path));
+        }
+
+        public static new XTemplate Load(Stream stream)
+        {
+            return new XTemplate(XElement.Load(stream));
         }
 
         public new string Name
