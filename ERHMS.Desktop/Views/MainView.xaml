@@ -57,9 +57,12 @@
                     <MenuItem Header="_Restore" />
                 </MenuItem>
                 <MenuItem Header="_Logs">
-                    <MenuItem Header="View _current" />
-                    <MenuItem Header="_View all" />
-                    <MenuItem Header="_Export all" />
+                    <MenuItem Command="{Binding ViewLogCommand}"
+                              Header="View _current" />
+                    <MenuItem Command="{Binding ViewLogsCommand}"
+                              Header="_View all" />
+                    <MenuItem Command="{Binding ExportLogsCommand}"
+                              Header="_Export all" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Command="{Binding StartEpiInfoCommand}"

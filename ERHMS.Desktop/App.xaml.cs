@@ -67,7 +67,7 @@ namespace ERHMS.Desktop
             layout.ActivateOptions();
             FileAppender appender = new FileAppender
             {
-                File = Path.Combine("Logs", $"ERHMS.{DateTime.Today:yyyy-MM-dd}.txt"),
+                File = Path.Combine("Logs", $"{nameof(ERHMS)}.{DateTime.Today:yyyy-MM-dd}.txt"),
                 LockingModel = new FileAppender.InterProcessLock(),
                 Layout = layout
             };

@@ -82,7 +82,6 @@ namespace ERHMS.Desktop.Commands
             }
             catch (Exception ex)
             {
-                Log.Default.Warn(ex);
                 switch (ErrorBehavior)
                 {
                     case ErrorBehavior.Throw:
