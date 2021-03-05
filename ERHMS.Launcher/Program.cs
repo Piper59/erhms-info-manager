@@ -9,7 +9,7 @@ namespace ERHMS.Launcher
     public class Program
     {
         private const string AppTitle = "ERHMS Info Manager";
-        private const string BuildDirName = AppTitle;
+        private const string BuildDirectoryName = AppTitle;
         private const string ExecutableName = AppTitle + ".exe";
 
         [STAThread]
@@ -18,13 +18,13 @@ namespace ERHMS.Launcher
             string executablePath = null;
             try
             {
-                string buildContainerDirPath = AppDomain.CurrentDomain.BaseDirectory;
-                string workingDirPath = Path.Combine(buildContainerDirPath, BuildDirName);
-                executablePath = Path.Combine(workingDirPath, ExecutableName);
+                string buildContainerDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
+                string workingDirectoryPath = Path.Combine(buildContainerDirectoryPath, BuildDirectoryName);
+                executablePath = Path.Combine(workingDirectoryPath, ExecutableName);
                 Process.Start(new ProcessStartInfo
                 {
                     UseShellExecute = false,
-                    WorkingDirectory = workingDirPath,
+                    WorkingDirectory = workingDirectoryPath,
                     FileName = executablePath
                 });
             }
