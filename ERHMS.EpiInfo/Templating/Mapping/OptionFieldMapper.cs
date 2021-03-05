@@ -31,6 +31,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         }
 
         protected override MetaFieldType? FieldType => MetaFieldType.Option;
+
         protected override FieldPropertySetterCollection<OptionField> PropertySetters { get; } =
             new FieldPropertySetterCollection<OptionField>
             {

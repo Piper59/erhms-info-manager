@@ -25,6 +25,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         }
 
         protected override MetaFieldType? FieldType => MetaFieldType.Group;
+
         protected override FieldPropertySetterCollection<GroupField> PropertySetters { get; } =
             new FieldPropertySetterCollection<GroupField>
             {

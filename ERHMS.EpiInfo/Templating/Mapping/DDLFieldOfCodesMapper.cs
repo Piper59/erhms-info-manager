@@ -10,6 +10,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         private const char FieldInfoSeparator = ':';
 
         protected override MetaFieldType? FieldType => MetaFieldType.Codes;
+
         protected override FieldPropertySetterCollection<DDLFieldOfCodes> PropertySetters { get; } =
             new FieldPropertySetterCollection<DDLFieldOfCodes>
             {

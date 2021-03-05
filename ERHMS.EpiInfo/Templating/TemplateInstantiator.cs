@@ -20,8 +20,10 @@ namespace ERHMS.EpiInfo.Templating
         {
             private readonly IDictionary<int, int> viewIdMap = new Dictionary<int, int>();
             private readonly IDictionary<int, int> fieldIdMap = new Dictionary<int, int>();
+
             private readonly IDictionary<string, string> tableNameMap =
                 new Dictionary<string, string>(NameComparer.Default);
+
             private readonly IDictionary<int, IDictionary<string, string>> fieldNameMapsByViewId =
                 new Dictionary<int, IDictionary<string, string>>();
 

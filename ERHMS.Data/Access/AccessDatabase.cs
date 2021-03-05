@@ -7,6 +7,7 @@ namespace ERHMS.Data.Access
     {
         protected new OleDbConnectionStringBuilder ConnectionStringBuilder =>
             (OleDbConnectionStringBuilder)base.ConnectionStringBuilder;
+
         public string FilePath => ConnectionStringBuilder.DataSource;
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
 

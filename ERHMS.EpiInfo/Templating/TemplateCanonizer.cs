@@ -98,6 +98,7 @@ namespace ERHMS.EpiInfo.Templating
             nameof(XProject.EpiVersion),
             nameof(XProject.CreateDate)
         };
+
         private static readonly IReadOnlyDictionary<string, string> XFieldAttributeNameMap =
             new Dictionary<string, string>
             {
@@ -105,6 +106,7 @@ namespace ERHMS.EpiInfo.Templating
                 { "Expr1016", "ControlFontSize" },
                 { "Expr1017", "ControlFontStyle" }
             };
+
         private static readonly Regex DuplicateXFieldAttributeNameRegex =
             new Regex(@"^ControlFont(?:Family|Size|Style)1$");
 

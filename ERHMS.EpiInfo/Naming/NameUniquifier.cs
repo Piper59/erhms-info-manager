@@ -55,6 +55,7 @@ namespace ERHMS.EpiInfo.Naming
 
             protected override Regex NameRegex { get; } =
                 new Regex(@"^(?<baseName>.+?)(?:_(?<suffix>[A-Z]))?$", RegexOptions.IgnoreCase);
+
             protected override char InitialSuffix => Alphabet[1];
 
             protected override char ParseSuffix(string value)

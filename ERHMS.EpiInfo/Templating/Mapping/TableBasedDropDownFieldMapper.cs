@@ -7,6 +7,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class TableBasedDropDownFieldMapper : FieldMapper<TableBasedDropDownField>
     {
         protected override MetaFieldType? FieldType => null;
+
         protected override FieldPropertySetterCollection<TableBasedDropDownField> PropertySetters { get; } =
             new FieldPropertySetterCollection<TableBasedDropDownField>
             {

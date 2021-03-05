@@ -6,6 +6,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class TextFieldMapper : FieldMapper<TextField>
     {
         protected override MetaFieldType? FieldType => MetaFieldType.Text;
+
         protected override FieldPropertySetterCollection<TextField> PropertySetters { get; } =
             new FieldPropertySetterCollection<TextField>
             {

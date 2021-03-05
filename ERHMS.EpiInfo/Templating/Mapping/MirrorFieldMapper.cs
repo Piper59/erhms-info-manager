@@ -7,6 +7,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class MirrorFieldMapper : FieldMapper<MirrorField>
     {
         protected override MetaFieldType? FieldType => MetaFieldType.Mirror;
+
         protected override FieldPropertySetterCollection<MirrorField> PropertySetters { get; } =
             new FieldPropertySetterCollection<MirrorField>
             {

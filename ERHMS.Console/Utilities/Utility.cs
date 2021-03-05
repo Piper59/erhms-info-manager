@@ -13,6 +13,7 @@ namespace ERHMS.Console.Utilities
         private const string HelpArg = "/?";
 
         private static readonly StringComparer ArgComparer = StringComparer.OrdinalIgnoreCase;
+
         private static readonly IReadOnlyCollection<Type> InstanceTypes = typeof(IUtility).Assembly.GetTypes()
             .Where(type => typeof(IUtility).IsAssignableFrom(type) && !type.IsAbstract)
             .ToList();

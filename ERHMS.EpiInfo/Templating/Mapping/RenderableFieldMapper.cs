@@ -38,6 +38,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         }
 
         protected override MetaFieldType? FieldType => null;
+
         protected override FieldPropertySetterCollection<RenderableField> PropertySetters { get; } =
             new FieldPropertySetterCollection<RenderableField>
             {

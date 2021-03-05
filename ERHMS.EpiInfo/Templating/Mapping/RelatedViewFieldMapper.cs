@@ -7,6 +7,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class RelatedViewFieldMapper : FieldMapper<RelatedViewField>
     {
         protected override MetaFieldType? FieldType => MetaFieldType.Relate;
+
         protected override FieldPropertySetterCollection<RelatedViewField> PropertySetters { get; }
 
         public RelatedViewFieldMapper()
