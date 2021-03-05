@@ -6,7 +6,6 @@ using log4net.Appender;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
@@ -92,24 +91,7 @@ namespace ERHMS.Desktop.ViewModels
         public void ExportLogs()
         {
             string archivePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Logs.zip");
-            using (Stream archiveStream = File.Open(archivePath, FileMode.Create, FileAccess.Write))
-            using (ZipArchive archive = new ZipArchive(archiveStream, ZipArchiveMode.Create))
-            {
-                DirectoryInfo logDirectory = new DirectoryInfo(GetLogDirectoryPath());
-                Uri logDirectoryUri = new Uri(logDirectory.FullName);
-                foreach (FileInfo logFile in logDirectory.EnumerateFiles("*.txt", SearchOption.AllDirectories))
-                {
-                    Uri logFileUri = new Uri(logFile.FullName);
-                    string entryName = logDirectoryUri.MakeRelativeUri(logFileUri).ToString();
-                    ZipArchiveEntry entry = archive.CreateEntry(entryName);
-                    entry.LastWriteTime = logFile.LastWriteTime;
-                    using (Stream logFileStream = logFile.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    using (Stream entryStream = entry.Open())
-                    {
-                        logFileStream.CopyTo(entryStream);
-                    }
-                }
-            }
+            ZipExtensions.CreateFromDirectory(GetLogDirectoryPath(), archivePath);
         }
 
         public void StartEpiInfo()
