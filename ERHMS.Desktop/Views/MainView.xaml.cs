@@ -1,5 +1,6 @@
 ﻿using ERHMS.Desktop.Properties;
 using System;
+using System.ComponentModel;
 using System.Windows;
 
 namespace ERHMS.Desktop.Views
@@ -10,16 +11,6 @@ namespace ERHMS.Desktop.Views
         {
             InitializeComponent();
             ReadSettings(Settings.Default);
-        }
-
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            base.OnRenderSizeChanged(sizeInfo);
-            if (IsLoaded)
-            {
-                WriteSettings(Settings.Default);
-                Settings.Default.DeferSave(TimeSpan.FromSeconds(1.0));
-            }
         }
 
         private void ReadSettings(Settings settings)
@@ -41,10 +32,15 @@ namespace ERHMS.Desktop.Views
             Close();
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            base.OnClosed(e);
-            Settings.Default.FlushSave();
+            base.OnClosing(e);
+            if (e.Cancel)
+            {
+                return;
+            }
+            WriteSettings(Settings.Default);
+            Settings.Default.Save();
         }
     }
 }
