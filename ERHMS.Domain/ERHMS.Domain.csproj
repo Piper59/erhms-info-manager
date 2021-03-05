@@ -42,6 +42,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreProject.cs" />
+    <Compile Include="CoreView.cs" />
     <Compile Include="Phase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
