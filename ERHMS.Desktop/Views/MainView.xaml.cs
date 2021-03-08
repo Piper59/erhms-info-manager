@@ -1,4 +1,5 @@
 ﻿using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using System;
 using System.ComponentModel;
@@ -6,11 +7,13 @@ using System.Windows;
 
 namespace ERHMS.Desktop.Views
 {
-    public partial class MainView : Window
+    public partial class MainView : Window, INotificationService
     {
+        public static MainView Instance { get; } = new MainView();
+
         public MainViewModel ViewModel => (MainViewModel)DataContext;
 
-        public MainView()
+        private MainView()
         {
             InitializeComponent();
             ReadSettings(Settings.Default);
@@ -44,6 +47,11 @@ namespace ERHMS.Desktop.Views
             }
             WriteSettings(Settings.Default);
             Settings.Default.Save();
+        }
+
+        public void Notify(string message)
+        {
+            Toaster.Show(message);
         }
     }
 }

@@ -115,14 +115,14 @@ namespace ERHMS.Desktop
         {
             ServiceProvider.Install<IDialogService>(() => new DialogService(this));
             ServiceProvider.Install<IFileDialogService>(() => new FileDialogService(this));
+            ServiceProvider.Install<INotificationService>(() => MainView.Instance);
             ServiceProvider.Install<IProgressService>(() => new ProgressService(this));
         }
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
             Log.Default.Error(e.Exception);
-            IDialogService dialog = ServiceProvider.Resolve<IDialogService>();
-            dialog.Show(
+            ServiceProvider.Resolve<IDialogService>().Show(
                 DialogSeverity.Hand,
                 ResX.HandledErrorLead,
                 e.Exception.Message,
@@ -135,11 +135,8 @@ namespace ERHMS.Desktop
         {
             base.OnStartup(e);
             MainViewModel.Instance.Content = new HomeViewModel();
-            Window window = new MainView
-            {
-                DataContext = MainViewModel.Instance
-            };
-            window.Show();
+            MainView.Instance.DataContext = MainViewModel.Instance;
+            MainView.Instance.Show();
         }
     }
 }

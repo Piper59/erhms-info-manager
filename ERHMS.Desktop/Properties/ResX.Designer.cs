@@ -70,6 +70,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logs have been exported..
+        /// </summary>
+        public static string ExportedLogsMessage {
+            get {
+                return ResourceManager.GetString("ExportedLogsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exporting logs.
         /// </summary>
         public static string ExportingLogsLead {

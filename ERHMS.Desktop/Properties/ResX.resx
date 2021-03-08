@@ -120,6 +120,9 @@
   <data name="AppTitle" xml:space="preserve">
     <value>ERHMS Info Manager</value>
   </data>
+  <data name="ExportedLogsMessage" xml:space="preserve">
+    <value>Logs have been exported.</value>
+  </data>
   <data name="ExportingLogsLead" xml:space="preserve">
     <value>Exporting logs</value>
   </data>

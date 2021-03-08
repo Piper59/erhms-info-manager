@@ -2,4 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:ERHMS.Desktop">
     <SolidColorBrush x:Key="AccentTextBrush" Color="{x:Static local:Colors.Accent}" />
+    <SolidColorBrush x:Key="ToasterBrush" Color="{x:Static local:Colors.Accent}" />
+    <SolidColorBrush x:Key="ToasterBorderBrush" Color="{x:Static local:Colors.Accent}" />
+    <SolidColorBrush x:Key="ToasterTextBrush" Color="#ffffff" />
 </ResourceDictionary>

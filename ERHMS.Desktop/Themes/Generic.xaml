@@ -3,7 +3,7 @@
                     xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/Common.xaml" />
+        <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Converters:ActionTextBoxPaddingConverter x:Key="ActionTextBoxPaddingConverter" />
@@ -57,10 +57,57 @@
                                               Offset="1" />
                             </LinearGradientBrush>
                         </Border.Background>
-                        <TextBlock FontSize="{StaticResource LargeFontSize}"
-                                   FontWeight="{StaticResource ThinFontWeight}"
-                                   Margin="{StaticResource SmallThickness}"
+                        <TextBlock Style="{StaticResource Heading}"
                                    Text="{TemplateBinding Phase, Converter={StaticResource PhaseToDisplayTextConverter}}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Controls:Toaster">
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Controls:Toaster">
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Controls:Toaster.Shown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     Duration="0"
+                                                     To="0" />
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     Duration="0:0:0.1"
+                                                     To="1" />
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     BeginTime="0:0:5"
+                                                     Duration="0:0:1"
+                                                     To="0" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="Opacity" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                    <Border Background="{StaticResource ToasterBrush}"
+                            BorderBrush="{StaticResource ToasterBorderBrush}"
+                            BorderThickness="1"
+                            MaxWidth="400"
+                            MinWidth="200"
+                            Padding="{StaticResource LargeMixedThickness}"
+                            SnapsToDevicePixels="True">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="{StaticResource HugeSpace}"
+                                              Direction="270"
+                                              Opacity="0.5" />
+                        </Border.Effect>
+                        <TextBlock Foreground="{StaticResource ToasterTextBrush}"
+                                   HorizontalAlignment="Center"
+                                   Style="{StaticResource Body}"
+                                   Text="{TemplateBinding Message}"
+                                   VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -75,15 +122,13 @@
                             AutomationProperties.Name="{TemplateBinding Text}"
                             Background="Transparent"
                             Command="{TemplateBinding Command}"
-                            HorizontalContentAlignment="Left"
-                            Padding="{StaticResource LargeThickness}">
+                            HorizontalContentAlignment="Left">
                         <StackPanel>
-                            <TextBlock FontSize="{StaticResource DefaultFontSize}"
-                                       Text="{TemplateBinding Text}"
-                                       TextWrapping="Wrap" />
-                            <TextBlock FontSize="{StaticResource SmallFontSize}"
+                            <TextBlock Style="{StaticResource Body}"
+                                       Margin="0"
+                                       Text="{TemplateBinding Text}" />
+                            <TextBlock Style="{StaticResource Small}"
                                        Text="{TemplateBinding HelpText}"
-                                       TextWrapping="Wrap"
                                        Visibility="{TemplateBinding HelpText, Converter={StaticResource NullableToVisibilityConverter}}">
                                 <TextBlock.Margin>
                                     <Thickness Top="{StaticResource SmallSpace}" />

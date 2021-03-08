@@ -77,21 +77,20 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task ExportLogsAsync()
         {
-            IFileDialogService fileDialog = ServiceProvider.Resolve<IFileDialogService>();
-            bool? result = fileDialog.Save(
+            bool? result = ServiceProvider.Resolve<IFileDialogService>().Save(
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 $"Logs-{DateTime.Now:yyyyMMdd-HHmmss}.zip",
                 ResX.ZipFileFilter,
                 out string path);
-            if (result == true)
+            if (!result.GetValueOrDefault())
             {
-                IProgressService progress = ServiceProvider.Resolve<IProgressService>();
-                await progress.RunAsync(ResX.ExportingLogsLead, () =>
-                {
-                    ZipExtensions.CreateFromDirectory(Log.GetDefaultDirectoryPath(), path);
-                });
-                // TODO: Notify user?
+                return;
             }
+            await ServiceProvider.Resolve<IProgressService>().RunAsync(ResX.ExportingLogsLead, () =>
+            {
+                ZipExtensions.CreateFromDirectory(Log.GetDefaultDirectoryPath(), path);
+            });
+            ServiceProvider.Resolve<INotificationService>().Notify(ResX.ExportedLogsMessage);
         }
 
         public void StartEpiInfo()
