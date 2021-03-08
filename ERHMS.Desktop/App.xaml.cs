@@ -113,14 +113,16 @@ namespace ERHMS.Desktop
 
         private void ConfigureServices()
         {
-            ServiceProvider.Install<IFileDialogService>(new FileDialogService(this));
-            ServiceProvider.Install<IDialogService>(new DialogService(this));
+            ServiceProvider.Install<IDialogService>(() => new DialogService(this));
+            ServiceProvider.Install<IFileDialogService>(() => new FileDialogService(this));
+            ServiceProvider.Install<IProgressService>(() => new ProgressService(this));
         }
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
             Log.Default.Error(e.Exception);
-            ServiceProvider.Resolve<IDialogService>().Show(
+            IDialogService dialog = ServiceProvider.Resolve<IDialogService>();
+            dialog.Show(
                 DialogSeverity.Hand,
                 ResX.HandledErrorLead,
                 e.Exception.Message,

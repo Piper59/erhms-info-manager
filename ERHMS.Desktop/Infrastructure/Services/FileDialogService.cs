@@ -13,26 +13,23 @@ namespace ERHMS.Desktop.Infrastructure.Services
             Application = application;
         }
 
-        private bool? Show(FileDialog dialog, out string fileName)
-        {
-            bool? result = dialog.ShowDialog(Application.GetActiveOrMainWindow());
-            fileName = dialog.FileName;
-            return result;
-        }
-
         public bool? Open(string initialDirectory, string filter, out string fileName)
         {
+            Window owner = Application.GetActiveOrMainWindow();
             FileDialog dialog = new OpenFileDialog
             {
                 Title = "Open",
                 InitialDirectory = initialDirectory,
                 Filter = filter
             };
-            return Show(dialog, out fileName);
+            bool? result = dialog.ShowDialog(owner);
+            fileName = dialog.FileName;
+            return result;
         }
 
         public bool? Save(string initialDirectory, string initialFileName, string filter, out string fileName)
         {
+            Window owner = Application.GetActiveOrMainWindow();
             FileDialog dialog = new SaveFileDialog
             {
                 Title = "Save As",
@@ -40,7 +37,9 @@ namespace ERHMS.Desktop.Infrastructure.Services
                 FileName = initialFileName,
                 Filter = filter
             };
-            return Show(dialog, out fileName);
+            bool? result = dialog.ShowDialog(owner);
+            fileName = dialog.FileName;
+            return result;
         }
     }
 }

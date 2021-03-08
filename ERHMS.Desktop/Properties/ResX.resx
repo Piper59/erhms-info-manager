@@ -120,10 +120,16 @@
   <data name="AppTitle" xml:space="preserve">
     <value>ERHMS Info Manager</value>
   </data>
+  <data name="ExportingLogsLead" xml:space="preserve">
+    <value>Exporting logs</value>
+  </data>
   <data name="HandledErrorLead" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
   <data name="UnhandledErrorMessage" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.</value>
+  </data>
+  <data name="ZipFileFilter" xml:space="preserve">
+    <value>ZIP Files (*.zip)|*.zip</value>
   </data>
 </root>

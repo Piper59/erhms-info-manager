@@ -70,6 +70,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exporting logs.
+        /// </summary>
+        public static string ExportingLogsLead {
+            get {
+                return ResourceManager.GetString("ExportingLogsLead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
         /// </summary>
         public static string HandledErrorLead {
@@ -84,6 +93,15 @@ namespace ERHMS.Desktop.Properties {
         public static string UnhandledErrorMessage {
             get {
                 return ResourceManager.GetString("UnhandledErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ZIP Files (*.zip)|*.zip.
+        /// </summary>
+        public static string ZipFileFilter {
+            get {
+                return ResourceManager.GetString("ZipFileFilter", resourceCulture);
             }
         }
     }

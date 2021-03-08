@@ -1,13 +1,12 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
-using log4net.Appender;
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
 
@@ -16,19 +15,6 @@ namespace ERHMS.Desktop.ViewModels
     public class MainViewModel : ObservableObject
     {
         public static MainViewModel Instance { get; } = new MainViewModel();
-
-        private static string GetLogFilePath()
-        {
-            return Log.Default.Logger.Repository.GetAppenders()
-                .OfType<FileAppender>()
-                .Single()
-                .File;
-        }
-
-        private static string GetLogDirectoryPath()
-        {
-            return Path.GetDirectoryName(GetLogFilePath());
-        }
 
         private object content;
         public object Content
@@ -59,7 +45,7 @@ namespace ERHMS.Desktop.ViewModels
             ViewHomeCommand = new SyncCommand(ViewHome);
             ViewLogCommand = new SyncCommand(ViewLog);
             ViewLogsCommand = new SyncCommand(ViewLogs);
-            ExportLogsCommand = new SyncCommand(ExportLogs);
+            ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
             StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
             StartFileExplorerCommand = new SyncCommand(StartFileExplorer);
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
@@ -81,24 +67,30 @@ namespace ERHMS.Desktop.ViewModels
 
         public void ViewLog()
         {
-            Process.Start(GetLogFilePath());
+            Process.Start(Log.GetDefaultFilePath());
         }
 
         public void ViewLogs()
         {
-            Process.Start(GetLogDirectoryPath());
+            Process.Start(Log.GetDefaultDirectoryPath());
         }
 
-        public void ExportLogs()
+        public async Task ExportLogsAsync()
         {
-            bool? result = ServiceProvider.Resolve<IFileDialogService>().Save(
+            IFileDialogService fileDialog = ServiceProvider.Resolve<IFileDialogService>();
+            bool? result = fileDialog.Save(
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 $"Logs-{DateTime.Now:yyyyMMdd-HHmmss}.zip",
-                "ZIP Files (*.zip)|*.zip",
+                ResX.ZipFileFilter,
                 out string path);
             if (result == true)
             {
-                ZipExtensions.CreateFromDirectory(GetLogDirectoryPath(), path);
+                IProgressService progress = ServiceProvider.Resolve<IProgressService>();
+                await progress.RunAsync(ResX.ExportingLogsLead, () =>
+                {
+                    ZipExtensions.CreateFromDirectory(Log.GetDefaultDirectoryPath(), path);
+                });
+                // TODO: Notify user?
             }
         }
 
