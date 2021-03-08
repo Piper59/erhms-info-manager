@@ -46,8 +46,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Controls:PhaseHeading">
-                    <Border Margin="{StaticResource SmallThickness}"
-                            Padding="{StaticResource SmallHorizontalThickness}"
+                    <Border Margin="{StaticResource DefaultMargin}"
+                            Padding="{StaticResource DefaultPadding}"
                             SnapsToDevicePixels="True">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
@@ -94,20 +94,13 @@
                     <Border Background="{StaticResource ToasterBrush}"
                             BorderBrush="{StaticResource ToasterBorderBrush}"
                             BorderThickness="1"
-                            MaxWidth="400"
-                            MinWidth="200"
-                            Padding="{StaticResource LargeMixedThickness}"
-                            SnapsToDevicePixels="True">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="{StaticResource HugeSpace}"
-                                              Direction="270"
-                                              Opacity="0.5" />
-                        </Border.Effect>
+                            Padding="{StaticResource DefaultPadding}"
+                            SnapsToDevicePixels="True"
+                            Width="320">
                         <TextBlock Foreground="{StaticResource ToasterTextBrush}"
-                                   HorizontalAlignment="Center"
-                                   Style="{StaticResource Body}"
+                                   Style="{StaticResource Small}"
                                    Text="{TemplateBinding Message}"
-                                   VerticalAlignment="Center" />
+                                   TextAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

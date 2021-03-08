@@ -24,7 +24,7 @@
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
                 SnapsToDevicePixels="True"
-                Style="{StaticResource LayoutFull}">
+                Style="{StaticResource FluidLayout}">
             <StackPanel Style="{StaticResource Container}">
                 <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                            Style="{StaticResource Lead}"

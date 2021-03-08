@@ -6,14 +6,14 @@
 
     <Style x:Key="ButtonBase" TargetType="Button">
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
-        <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="Button" BasedOn="{StaticResource ButtonBase}" />
 
     <Style x:Key="CheckBoxBase" TargetType="CheckBox">
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
     <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxBase}" />
@@ -29,13 +29,13 @@
             </Style>
         </Style.Resources>
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
-        <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxBase}" />
 
     <Style x:Key="ComboBoxItemBase" TargetType="ComboBoxItem">
-        <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}" />
 
@@ -45,14 +45,14 @@
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="HorizontalGridLinesBrush" Value="{x:Static SystemColors.ControlLightBrush}" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
     <Style TargetType="DataGrid" BasedOn="{StaticResource DataGridBase}" />
 
     <Style x:Key="DataGridCellBase" TargetType="DataGridCell">
         <Style.Resources>
             <Style TargetType="Border">
-                <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+                <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
             </Style>
             <Style TargetType="ContentPresenter">
                 <Setter Property="Margin" Value="-2,-1" />
@@ -68,7 +68,7 @@
             </Style>
         </Style.Resources>
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
-        <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBase}" />
 
@@ -76,8 +76,13 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0,1" />
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
-        <Setter Property="Padding" Value="{StaticResource SmallVerticalThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Padding">
+            <Setter.Value>
+                <Thickness Bottom="{StaticResource SmallSpace}"
+                           Top="{StaticResource SmallSpace}" />
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style TargetType="Label" BasedOn="{StaticResource LabelBase}" />
 
@@ -90,10 +95,10 @@
     <Style x:Key="MenuItemBase" TargetType="MenuItem">
         <Style.Triggers>
             <Trigger Property="Role" Value="TopLevelHeader">
-                <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+                <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
             </Trigger>
             <Trigger Property="Role" Value="TopLevelItem">
-                <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+                <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
             </Trigger>
         </Style.Triggers>
         <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
@@ -102,12 +107,12 @@
 
     <Style x:Key="ProgressBarBase" TargetType="ProgressBar">
         <Setter Property="Height" Value="25" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
     <Style TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarBase}" />
 
     <Style x:Key="TabControlBase" TargetType="TabControl">
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="Padding" Value="0" />
     </Style>
     <Style TargetType="TabControl" BasedOn="{StaticResource TabControlBase}" />
@@ -118,7 +123,7 @@
                 <DataTemplate>
                     <TextBlock FontSize="{StaticResource LargeFontSize}"
                                FontWeight="{StaticResource ThinFontWeight}"
-                               Margin="{StaticResource SmallThickness}"
+                               Margin="{StaticResource DefaultMargin}"
                                Text="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
@@ -128,7 +133,7 @@
 
     <Style x:Key="TextBlockBase" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
@@ -139,7 +144,7 @@
             </Trigger>
         </Style.Triggers>
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
     </Style>
     <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}" />
@@ -150,7 +155,7 @@
 
     <Style x:Key="ToolTipBase" TargetType="ToolTip">
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="Padding" Value="{StaticResource SmallMixedThickness}" />
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="ToolTip" BasedOn="{StaticResource ToolTipBase}" />
 </ResourceDictionary>

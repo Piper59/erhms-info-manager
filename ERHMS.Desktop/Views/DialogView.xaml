@@ -28,7 +28,7 @@
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1"
                 SnapsToDevicePixels="True"
-                Style="{StaticResource LayoutFull}">
+                Style="{StaticResource FluidLayout}">
             <DockPanel MinHeight="100"
                        Style="{StaticResource Container}">
                 <Grid VerticalAlignment="Center">
@@ -38,7 +38,7 @@
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
                            AutomationProperties.Name="{Binding Icon, Converter={StaticResource SystemIconToNameConverter}}"
-                           Margin="{StaticResource SmallThickness}"
+                           Margin="{StaticResource DefaultMargin}"
                            Source="{Binding Icon, Converter={StaticResource IconToImageSourceConverter}}"
                            VerticalAlignment="Top"
                            Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}" />

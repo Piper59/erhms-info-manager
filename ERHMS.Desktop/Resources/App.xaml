@@ -8,20 +8,16 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Layout -->
-    <Style x:Key="LayoutFull" TargetType="Border">
+    <Style x:Key="FluidLayout" TargetType="Border">
         <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
     </Style>
 
-    <Style x:Key="LayoutLarge" TargetType="Border" BasedOn="{StaticResource LayoutFull}">
-        <Setter Property="MaxWidth" Value="{StaticResource LargeWidth}" />
-    </Style>
-
-    <Style x:Key="LayoutSmall" TargetType="Border" BasedOn="{StaticResource LayoutFull}">
-        <Setter Property="MaxWidth" Value="{StaticResource SmallWidth}" />
+    <Style x:Key="FixedLayout" TargetType="Border" BasedOn="{StaticResource FluidLayout}">
+        <Setter Property="MaxWidth" Value="1200" />
     </Style>
 
     <Style x:Key="Container" TargetType="Panel">
-        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
 
     <Style x:Key="Section" TargetType="Panel">
