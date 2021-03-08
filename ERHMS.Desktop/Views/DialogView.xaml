@@ -38,7 +38,7 @@
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
                            AutomationProperties.Name="{Binding Icon, Converter={StaticResource SystemIconToNameConverter}}"
-                           Margin="{StaticResource DefaultMargin}"
+                           Margin="{StaticResource SmallThickness}"
                            Source="{Binding Icon, Converter={StaticResource IconToImageSourceConverter}}"
                            VerticalAlignment="Top"
                            Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}" />

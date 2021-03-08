@@ -9,7 +9,7 @@
 
     <!-- Layout -->
     <Style x:Key="LayoutFull" TargetType="Border">
-        <Setter Property="Padding" Value="{StaticResource LargePadding}" />
+        <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
     </Style>
 
     <Style x:Key="LayoutLarge" TargetType="Border" BasedOn="{StaticResource LayoutFull}">
@@ -21,7 +21,7 @@
     </Style>
 
     <Style x:Key="Container" TargetType="Panel">
-        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Margin" Value="{StaticResource SmallThickness}" />
     </Style>
 
     <Style x:Key="Section" TargetType="Panel">

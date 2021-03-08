@@ -15,7 +15,7 @@
     <Converters:PhaseToDisplayTextConverter x:Key="PhaseToDisplayTextConverter" />
 
     <Style TargetType="Controls:ActionTextBox">
-        <Setter Property="Padding" Value="{StaticResource SmallPadding}" />
+        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Controls:ActionTextBox">
@@ -46,8 +46,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Controls:PhaseHeading">
-                    <Border Margin="{StaticResource DefaultMargin}"
-                            Padding="{StaticResource SmallHorizontalPadding}"
+                    <Border Margin="{StaticResource SmallThickness}"
+                            Padding="{StaticResource SmallHorizontalThickness}"
                             SnapsToDevicePixels="True">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
@@ -59,7 +59,7 @@
                         </Border.Background>
                         <TextBlock FontSize="{StaticResource LargeFontSize}"
                                    FontWeight="{StaticResource ThinFontWeight}"
-                                   Margin="{StaticResource DefaultMargin}"
+                                   Margin="{StaticResource SmallThickness}"
                                    Text="{TemplateBinding Phase, Converter={StaticResource PhaseToDisplayTextConverter}}" />
                     </Border>
                 </ControlTemplate>
@@ -76,7 +76,7 @@
                             Background="Transparent"
                             Command="{TemplateBinding Command}"
                             HorizontalContentAlignment="Left"
-                            Padding="{StaticResource LargePadding}">
+                            Padding="{StaticResource LargeThickness}">
                         <StackPanel>
                             <TextBlock FontSize="{StaticResource DefaultFontSize}"
                                        Text="{TemplateBinding Text}"
