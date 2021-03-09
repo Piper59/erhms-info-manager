@@ -1,8 +1,6 @@
 ﻿using log4net;
-using log4net.Appender;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace ERHMS.Common
 {
@@ -16,20 +14,13 @@ namespace ERHMS.Common
             }
         }
 
+        public static string DefaultDirectoryPath { get; } =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+
+        public static string DefaultFilePath { get; } =
+            Path.Combine(DefaultDirectoryPath, $"{nameof(ERHMS)}.{DateTime.Today:yyyy-MM-dd}.txt");
+
         public static ILog Default => LogManager.GetLogger(nameof(ERHMS));
         public static IProgress<string> Progress { get; } = new ProgressImpl();
-
-        public static string GetDefaultFilePath()
-        {
-            return Default.Logger.Repository.GetAppenders()
-                .OfType<FileAppender>()
-                .Single()
-                .File;
-        }
-
-        public static string GetDefaultDirectoryPath()
-        {
-            return Path.GetDirectoryName(GetDefaultFilePath());
-        }
     }
 }

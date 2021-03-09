@@ -14,7 +14,6 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Principal;
 using System.Text;
 using System.Windows;
@@ -67,7 +66,7 @@ namespace ERHMS.Desktop
             layout.ActivateOptions();
             FileAppender appender = new FileAppender
             {
-                File = Path.Combine("Logs", $"{nameof(ERHMS)}.{DateTime.Today:yyyy-MM-dd}.txt"),
+                File = Log.DefaultFilePath,
                 LockingModel = new FileAppender.InterProcessLock(),
                 Layout = layout
             };

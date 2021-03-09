@@ -67,12 +67,12 @@ namespace ERHMS.Desktop.ViewModels
 
         public void ViewLog()
         {
-            Process.Start(Log.GetDefaultFilePath());
+            Process.Start(Log.DefaultFilePath);
         }
 
         public void ViewLogs()
         {
-            Process.Start(Log.GetDefaultDirectoryPath());
+            Process.Start(Log.DefaultDirectoryPath);
         }
 
         public async Task ExportLogsAsync()
@@ -88,7 +88,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             await ServiceProvider.Resolve<IProgressService>().RunAsync(ResX.ExportingLogsLead, () =>
             {
-                ZipExtensions.CreateFromDirectory(Log.GetDefaultDirectoryPath(), path);
+                ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path);
             });
             ServiceProvider.Resolve<INotificationService>().Notify(ResX.ExportedLogsMessage);
         }
