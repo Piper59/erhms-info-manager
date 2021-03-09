@@ -10,12 +10,16 @@ namespace ERHMS.Desktop.Converters
 {
     public class PhaseToColorConverter : IValueConverter
     {
-        public byte Alpha { get; set; } = 0xff;
+        public byte? Alpha { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             Color color = ((Phase)value).ToColor();
-            color.A = parameter == null ? Alpha : (byte)parameter;
+            byte? alpha = parameter == null ? Alpha : (byte)parameter;
+            if (alpha != null)
+            {
+                color.A = alpha.Value;
+            }
             return color;
         }
 

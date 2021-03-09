@@ -8,7 +8,7 @@ namespace ERHMS.Desktop.Infrastructure
 {
     public static class WindowExtensions
     {
-        public class DialogShower : IDisposable
+        private class DialogShower : IDisposable
         {
             private bool closing;
             private Exception exception;
@@ -43,7 +43,7 @@ namespace ERHMS.Desktop.Infrastructure
                 }
             }
 
-            public void Close()
+            private void Close()
             {
                 closing = true;
                 Window.Closing -= Window_Closing;

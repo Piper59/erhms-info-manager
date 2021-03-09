@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class ProgressService : IProgressService
     {
-        private static readonly TimeSpan ShowDialogDelay = TimeSpan.FromSeconds(1.0);
+        private static readonly TimeSpan DialogDelay = TimeSpan.FromSeconds(1.0);
 
         private ProgressViewModel viewModel;
 
@@ -47,7 +47,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
                     });
                     try
                     {
-                        await Task.Delay(ShowDialogDelay, completionTokenSource.Token);
+                        await Task.Delay(DialogDelay, completionTokenSource.Token);
                     }
                     catch (TaskCanceledException)
                     {

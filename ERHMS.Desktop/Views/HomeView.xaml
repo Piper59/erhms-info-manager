@@ -11,7 +11,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-        <Border Style="{StaticResource FixedLayout}">
+        <Border Style="{StaticResource SmallLayout}">
             <StackPanel Style="{StaticResource Container}">
                 <Grid Style="{StaticResource Section}">
                     <Grid.ColumnDefinitions>

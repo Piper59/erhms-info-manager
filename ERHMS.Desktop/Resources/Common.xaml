@@ -40,4 +40,8 @@
                Left="{StaticResource LargeSpace}"
                Right="{StaticResource LargeSpace}"
                Top="{StaticResource SmallSpace}" />
+
+    <!-- Layout -->
+    <System:Double x:Key="SmallWidth">720</System:Double>
+    <System:Double x:Key="LargeWidth">1200</System:Double>
 </ResourceDictionary>

@@ -47,7 +47,7 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Command="{Binding ViewHomeCommand}"
-                          Header="H_ome" />
+                          Header="_Home" />
                 <MenuItem Header="_Worker database" />
                 <MenuItem Header="_Incident database" />
             </MenuItem>
@@ -61,7 +61,7 @@
                     <MenuItem Command="{Binding ViewLogCommand}"
                               Header="View _current" />
                     <MenuItem Command="{Binding ViewLogsCommand}"
-                              Header="_View all" />
+                              Header="View _all" />
                     <MenuItem Command="{Binding ExportLogsCommand}"
                               Header="_Export all" />
                 </MenuItem>

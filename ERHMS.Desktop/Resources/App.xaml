@@ -12,8 +12,12 @@
         <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
     </Style>
 
-    <Style x:Key="FixedLayout" TargetType="Border" BasedOn="{StaticResource FluidLayout}">
-        <Setter Property="MaxWidth" Value="1200" />
+    <Style x:Key="SmallLayout" TargetType="Border" BasedOn="{StaticResource FluidLayout}">
+        <Setter Property="MaxWidth" Value="{StaticResource SmallWidth}" />
+    </Style>
+
+    <Style x:Key="LargeLayout" TargetType="Border" BasedOn="{StaticResource FluidLayout}">
+        <Setter Property="MaxWidth" Value="{StaticResource LargeWidth}" />
     </Style>
 
     <Style x:Key="Container" TargetType="Panel">
