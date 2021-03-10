@@ -1,4 +1,7 @@
-﻿namespace ERHMS.Desktop.Properties
+﻿using ERHMS.Domain;
+using System;
+
+namespace ERHMS.Desktop.Properties
 {
     partial class Settings
     {
@@ -12,6 +15,19 @@
             {
                 IncidentProjectPaths.Remove(value);
                 IncidentProjectPaths.Insert(0, value);
+            }
+        }
+
+        public string GetProjectPath(CoreProject coreProject)
+        {
+            switch (coreProject)
+            {
+                case CoreProject.Worker:
+                    return WorkerProjectPath;
+                case CoreProject.Incident:
+                    return IncidentProjectPath;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(coreProject));
             }
         }
     }

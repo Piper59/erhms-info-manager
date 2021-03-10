@@ -1,24 +1,23 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Views.HomeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
-             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
-             xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain">
+             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Converters:KeyToResXResourceConverter x:Key="CoreProjectToNameConverter"
+                                                   Prefix="CoreProject.Name." />
+            <Converters:StringCaseConverter x:Key="CoreProjectToLowerCaseNameConverter"
+                                            BaseConverter="{StaticResource CoreProjectToNameConverter}"
+                                            Format="{}{0:L}" />
             <Converters:KeyToResXResourceConverter x:Key="CoreViewNameToDescriptionConverter"
                                                    Prefix="CoreView.Description." />
             <Converters:KeyToResXResourceConverter x:Key="CoreViewNameToTitleConverter"
                                                    Prefix="CoreView.Title." />
-            <Converters:PhaseToCoreViewsConverter x:Key="PhaseToCoreViewsConverter" />
-            <Converters:PhaseToColorConverter x:Key="PhaseToColorConverter" />
-            <Converters:PhaseToCoreProjectNameConverter x:Key="PhaseToCoreProjectNameConverter" />
-            <Converters:StringCaseConverter x:Key="PhaseToLowerCaseCoreProjectNameConverter"
-                                            BaseConverter="{StaticResource PhaseToCoreProjectNameConverter}"
-                                            Format="{}{0:L}" />
             <Converters:KeyToResXResourceConverter x:Key="PhaseToNameConverter"
                                                    Prefix="Phase.Name." />
             <Converters:PhaseToColorConverter x:Key="PhaseToStartColorConverter"
@@ -46,12 +45,8 @@
                                Text="{x:Static Properties:ResXResources.Title_App}"
                                VerticalAlignment="Center" />
                 </Grid>
-                <ItemsControl IsTabStop="False">
-                    <ItemsControl.Items>
-                        <Domain:Phase>PreDeployment</Domain:Phase>
-                        <Domain:Phase>Deployment</Domain:Phase>
-                        <Domain:Phase>PostDeployment</Domain:Phase>
-                    </ItemsControl.Items>
+                <ItemsControl IsTabStop="False"
+                              ItemsSource="{Binding Phases}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Style="{StaticResource Section}">
@@ -59,23 +54,26 @@
                                         Padding="{StaticResource DefaultPadding}">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
-                                            <GradientStop Color="{Binding Converter={StaticResource PhaseToStartColorConverter}}"
+                                            <GradientStop Color="{Binding Value, Converter={StaticResource PhaseToStartColorConverter}}"
                                                           Offset="0" />
-                                            <GradientStop Color="{Binding Converter={StaticResource PhaseToStopColorConverter}}"
+                                            <GradientStop Color="{Binding Value, Converter={StaticResource PhaseToStopColorConverter}}"
                                                           Offset="1" />
                                         </LinearGradientBrush>
                                     </Border.Background>
                                     <TextBlock Style="{StaticResource Heading}"
-                                               Text="{Binding Converter={StaticResource PhaseToNameConverter}}" />
+                                               Text="{Binding Value, Converter={StaticResource PhaseToNameConverter}}" />
                                 </Border>
                                 <TextBlock Style="{StaticResource Body}">
                                     <Run>Select a form or</Run>
-                                    <Hyperlink>view all forms</Hyperlink>
+                                    <Hyperlink Command="{x:Static local:AppCommands.ViewCoreProjectCommand}"
+                                               CommandParameter="{Binding CoreProject}">
+                                        view all forms
+                                    </Hyperlink>
                                     <Run>in the</Run>
-                                    <Run Text="{Binding Mode=OneWay, Converter={StaticResource PhaseToLowerCaseCoreProjectNameConverter}}" />
+                                    <Run Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource CoreProjectToLowerCaseNameConverter}}" />
                                 </TextBlock>
                                 <ItemsControl IsTabStop="False"
-                                              ItemsSource="{Binding Converter={StaticResource PhaseToCoreViewsConverter}}">
+                                              ItemsSource="{Binding CoreViews}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <UniformGrid Columns="2" />
@@ -85,7 +83,9 @@
                                         <DataTemplate>
                                             <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource CoreViewNameToDescriptionConverter}}"
                                                     AutomationProperties.Name="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}"
-                                                    Background="{x:Static SystemColors.ControlLightLightBrush}">
+                                                    Background="{x:Static SystemColors.ControlLightLightBrush}"
+                                                    Command="{x:Static local:AppCommands.ViewCoreViewCommand}"
+                                                    CommandParameter="{Binding}">
                                                 <Button.Resources>
                                                     <Style TargetType="TextBlock" BasedOn="{StaticResource Body}">
                                                         <Setter Property="HorizontalAlignment" Value="Center" />

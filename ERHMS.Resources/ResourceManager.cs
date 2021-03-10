@@ -21,7 +21,7 @@ namespace ERHMS.Resources
 
         public static XTemplate GetXTemplate(CoreView coreView)
         {
-            return GetXTemplate($"Templates.Forms.{coreView.Project}.{coreView.Name}.xml");
+            return GetXTemplate($"Templates.Forms.{coreView.CoreProject}.{coreView.Name}.xml");
         }
     }
 }

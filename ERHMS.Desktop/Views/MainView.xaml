@@ -2,9 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:ERHMS.Desktop"
         xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
         xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+        xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
         Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
@@ -48,8 +50,12 @@
             <MenuItem Header="_View">
                 <MenuItem Command="{Binding ViewHomeCommand}"
                           Header="_Home" />
-                <MenuItem Header="_Worker database" />
-                <MenuItem Header="_Incident database" />
+                <MenuItem Command="{x:Static local:AppCommands.ViewCoreProjectCommand}"
+                          CommandParameter="{x:Static Domain:CoreProject.Worker}"
+                          Header="_Worker database" />
+                <MenuItem Command="{x:Static local:AppCommands.ViewCoreProjectCommand}"
+                          CommandParameter="{x:Static Domain:CoreProject.Incident}"
+                          Header="_Incident database" />
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Data">

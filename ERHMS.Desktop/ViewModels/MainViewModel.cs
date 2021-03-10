@@ -3,6 +3,7 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using System;
 using System.Diagnostics;
@@ -32,6 +33,8 @@ namespace ERHMS.Desktop.ViewModels
 
         public ICommand ExitCommand { get; }
         public ICommand ViewHomeCommand { get; }
+        public ICommand ViewCoreProjectCommand { get; }
+        public ICommand ViewCoreViewCommand { get; }
         public ICommand ViewLogCommand { get; }
         public ICommand ViewLogsCommand { get; }
         public ICommand ExportLogsCommand { get; }
@@ -43,6 +46,8 @@ namespace ERHMS.Desktop.ViewModels
         {
             ExitCommand = new SyncCommand(Exit);
             ViewHomeCommand = new SyncCommand(ViewHome);
+            ViewCoreProjectCommand = new AsyncCommand<CoreProject>(ViewCoreProjectAsync);
+            ViewCoreViewCommand = new AsyncCommand<CoreView>(ViewCoreViewAsync);
             ViewLogCommand = new SyncCommand(ViewLog);
             ViewLogsCommand = new SyncCommand(ViewLogs);
             ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
@@ -63,6 +68,18 @@ namespace ERHMS.Desktop.ViewModels
         public void ViewHome()
         {
             Content = new HomeViewModel();
+        }
+
+        public async Task ViewCoreProjectAsync(CoreProject coreProject)
+        {
+            ServiceProvider.Resolve<INotificationService>().Notify(coreProject.ToString());
+            await Task.CompletedTask;
+        }
+
+        public async Task ViewCoreViewAsync(CoreView coreView)
+        {
+            ServiceProvider.Resolve<INotificationService>().Notify(coreView.Name);
+            await Task.CompletedTask;
         }
 
         public void ViewLog()

@@ -23,9 +23,9 @@ namespace ERHMS.Domain
             .Select(property => (CoreView)property.GetValue(null))
             .ToList();
 
-        public static IEnumerable<CoreView> GetInstances(CoreProject project)
+        public static IEnumerable<CoreView> GetInstances(CoreProject coreProject)
         {
-            return Instances.Where(coreView => coreView.Project == project);
+            return Instances.Where(coreView => coreView.CoreProject == coreProject);
         }
 
         public static IEnumerable<CoreView> GetInstances(Phase phase)
@@ -33,7 +33,7 @@ namespace ERHMS.Domain
             return Instances.Where(coreView => coreView.Phase == phase);
         }
 
-        public CoreProject Project => Phase.ToCoreProject();
+        public CoreProject CoreProject => Phase.ToCoreProject();
         public Phase Phase { get; }
         public string Name { get; }
 

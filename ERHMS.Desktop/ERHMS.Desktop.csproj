@@ -82,6 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AppCommands.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
     <Compile Include="Behaviors\MarshalDataContextEvent.cs" />
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
@@ -109,8 +110,6 @@
     <Compile Include="Converters\ObjectTypeToResourceConverter.cs" />
     <Compile Include="Converters\PageCountToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
-    <Compile Include="Converters\PhaseToCoreProjectNameConverter.cs" />
-    <Compile Include="Converters\PhaseToCoreViewsConverter.cs" />
     <Compile Include="Converters\StringCaseConverter.cs" />
     <Compile Include="Data\CustomCollectionView.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
@@ -154,6 +153,7 @@
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\PhaseViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
