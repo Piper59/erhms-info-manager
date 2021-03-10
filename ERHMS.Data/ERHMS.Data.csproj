@@ -67,10 +67,10 @@
     <Compile Include="LoggingConnection.cs" />
     <Compile Include="ParameterCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\ResX.Designer.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ResX.resx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Repository.cs" />
     <Compile Include="SqlServer\SqlServerDatabase.cs" />
@@ -78,9 +78,9 @@
     <Compile Include="SqlServer\SqlServerUserDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\ResX.resx">
+    <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ResX.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

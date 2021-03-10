@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.Services;
+﻿using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using Microsoft.Win32;
 using System.Windows;
 
@@ -18,7 +19,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
             Window owner = Application.GetActiveOrMainWindow();
             FileDialog dialog = new OpenFileDialog
             {
-                Title = "Open",
+                Title = ResXResources.FileDialog_Title_Open,
                 InitialDirectory = initialDirectory,
                 Filter = filter
             };
@@ -32,7 +33,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
             Window owner = Application.GetActiveOrMainWindow();
             FileDialog dialog = new SaveFileDialog
             {
-                Title = "Save As",
+                Title = ResXResources.FileDialog_Title_Save,
                 InitialDirectory = initialDirectory,
                 FileName = initialFileName,
                 Filter = filter

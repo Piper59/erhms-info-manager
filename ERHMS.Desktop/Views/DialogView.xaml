@@ -9,8 +9,8 @@
         MinWidth="320"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        SnapsToDevicePixels="True"
-        Title="{x:Static Properties:ResX.AppTitle}"
+        Title="{x:Static Properties:ResXResources.Title_App}"
+        UseLayoutRounding="True"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <ResourceDictionary>
@@ -18,16 +18,16 @@
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <Converters:KeyToResXResourceConverter x:Key="DialogTypeToNameConverter"
+                                                   Prefix="DialogType.Name." />
             <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
-            <Converters:SystemIconToNameConverter x:Key="SystemIconToNameConverter" />
             <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1"
-                SnapsToDevicePixels="True"
                 Style="{StaticResource FluidLayout}">
             <DockPanel MinHeight="100"
                        Style="{StaticResource Container}">
@@ -37,7 +37,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{Binding Icon, Converter={StaticResource SystemIconToNameConverter}}"
+                           AutomationProperties.Name="{Binding DialogType, Converter={StaticResource DialogTypeToNameConverter}}"
                            Margin="{StaticResource DefaultMargin}"
                            Source="{Binding Icon, Converter={StaticResource IconToImageSourceConverter}}"
                            VerticalAlignment="Top"
@@ -88,13 +88,12 @@
         </Border>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                SnapsToDevicePixels="True"
                 Visibility="{Binding ShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
             <DockPanel Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="200"
                          MinHeight="50"
-                         Style="{StaticResource Preformatted}"
+                         Style="{StaticResource CodeTextBox}"
                          Text="{Binding Details, Mode=OneWay}" />
             </DockPanel>
         </Border>

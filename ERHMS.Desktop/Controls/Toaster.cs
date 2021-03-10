@@ -19,6 +19,11 @@ namespace ERHMS.Desktop.Controls
 
         public static readonly DependencyProperty MessageProperty = MessagePropertyKey.DependencyProperty;
 
+        public static readonly DependencyProperty MessageStyleProperty = DependencyProperty.Register(
+            nameof(MessageStyle),
+            typeof(Style),
+            typeof(Toaster));
+
         public static readonly RoutedEvent ActivatingEvent = EventManager.RegisterRoutedEvent(
             nameof(Activating),
             RoutingStrategy.Bubble,
@@ -49,6 +54,12 @@ namespace ERHMS.Desktop.Controls
         {
             get { return (string)GetValue(MessageProperty); }
             private set { SetValue(MessagePropertyKey, value); }
+        }
+
+        public Style MessageStyle
+        {
+            get { return (Style)GetValue(MessageStyleProperty); }
+            set { SetValue(MessageStyleProperty, value); }
         }
 
         public Toaster()

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ERHMS.Desktop.Properties {
+namespace ERHMS.Data.Properties {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace ERHMS.Desktop.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ResX {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ResX() {
+        internal Resources() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ERHMS.Desktop.Properties.ResX", typeof(ResX).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ERHMS.Data.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace ERHMS.Desktop.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,56 +61,22 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static string AppTitle {
+        internal static byte[] Access2003Database {
             get {
-                return ResourceManager.GetString("AppTitle", resourceCulture);
+                object obj = ResourceManager.GetObject("Access2003Database", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logs have been exported..
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static string ExportedLogsMessage {
+        internal static byte[] Access2007Database {
             get {
-                return ResourceManager.GetString("ExportedLogsMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exporting logs.
-        /// </summary>
-        public static string ExportingLogsLead {
-            get {
-                return ResourceManager.GetString("ExportingLogsLead", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
-        /// </summary>
-        public static string HandledErrorLead {
-            get {
-                return ResourceManager.GetString("HandledErrorLead", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
-        /// </summary>
-        public static string UnhandledErrorMessage {
-            get {
-                return ResourceManager.GetString("UnhandledErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ZIP Files (*.zip)|*.zip.
-        /// </summary>
-        public static string ZipFileFilter {
-            get {
-                return ResourceManager.GetString("ZipFileFilter", resourceCulture);
+                object obj = ResourceManager.GetObject("Access2007Database", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

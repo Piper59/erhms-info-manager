@@ -7,8 +7,8 @@
         Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         ResizeMode="NoResize"
         SizeToContent="Height"
-        SnapsToDevicePixels="True"
-        Title="{x:Static Properties:ResX.AppTitle}"
+        Title="{x:Static Properties:ResXResources.Title_App}"
+        UseLayoutRounding="True"
         Width="480"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
@@ -23,7 +23,6 @@
     <StackPanel>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                SnapsToDevicePixels="True"
                 Style="{StaticResource FluidLayout}">
             <StackPanel Style="{StaticResource Container}">
                 <TextBlock Foreground="{DynamicResource AccentTextBrush}"
@@ -39,7 +38,6 @@
         <Border Background="{x:Static SystemColors.MenuBarBrush}"
                 BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                SnapsToDevicePixels="True"
                 Visibility="{Binding CanBeCanceled, Converter={StaticResource BoolToVisibilityConverter}}">
             <WrapPanel HorizontalAlignment="Right"
                        Style="{StaticResource Container}">

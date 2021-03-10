@@ -41,10 +41,14 @@ namespace ERHMS.Desktop
             {
                 Log.Default.Fatal(ex);
                 StringBuilder message = new StringBuilder();
-                message.AppendLine(ResX.UnhandledErrorMessage);
+                message.AppendLine(ResXResources.Body_CaughtFatalException);
                 message.AppendLine();
                 message.Append(ex.Message);
-                MessageBox.Show(message.ToString(), ResX.AppTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    message.ToString(),
+                    ResXResources.Title_App,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
             finally
             {
@@ -122,8 +126,8 @@ namespace ERHMS.Desktop
         {
             Log.Default.Error(e.Exception);
             ServiceProvider.Resolve<IDialogService>().Show(
-                DialogSeverity.Hand,
-                ResX.HandledErrorLead,
+                DialogType.Error,
+                ResXResources.Lead_CaughtNonFatalException,
                 e.Exception.Message,
                 e.Exception.ToString(),
                 DialogButtonCollection.Close);

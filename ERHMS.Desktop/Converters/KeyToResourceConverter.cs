@@ -1,17 +1,21 @@
-﻿using ERHMS.Desktop.Infrastructure;
-using ERHMS.Domain;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class PhaseToDisplayTextConverter : IValueConverter
+    public class KeyToResourceConverter : IValueConverter
     {
+        public ResourceDictionary Resources { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((Phase)value).ToDisplayText();
+            if (value == null)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+            return Resources == null ? Application.Current.FindResource(value) : Resources[value];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

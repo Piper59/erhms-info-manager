@@ -40,11 +40,13 @@
     <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}" />
 
     <Style x:Key="DataGridBase" TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="HorizontalGridLinesBrush" Value="{x:Static SystemColors.ControlLightBrush}" />
+        <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
     <Style TargetType="DataGrid" BasedOn="{StaticResource DataGridBase}" />

@@ -4,6 +4,6 @@ namespace ERHMS.Desktop.Services
 {
     public interface IDialogService
     {
-        bool? Show(DialogSeverity severity, string lead, string body, string details, DialogButtonCollection buttons);
+        bool? Show(DialogType dialogType, string lead, string body, string details, DialogButtonCollection buttons);
     }
 }

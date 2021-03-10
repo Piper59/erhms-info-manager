@@ -79,18 +79,18 @@ namespace ERHMS.Desktop.ViewModels
         {
             bool? result = ServiceProvider.Resolve<IFileDialogService>().Save(
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                $"Logs-{DateTime.Now:yyyyMMdd-HHmmss}.zip",
-                ResX.ZipFileFilter,
+                string.Format(ResXResources.FileName_LogArchive, DateTime.Now),
+                ResXResources.FileDialog_Filter_ZipFiles,
                 out string path);
             if (!result.GetValueOrDefault())
             {
                 return;
             }
-            await ServiceProvider.Resolve<IProgressService>().RunAsync(ResX.ExportingLogsLead, () =>
+            await ServiceProvider.Resolve<IProgressService>().RunAsync(ResXResources.Lead_ExportingLogs, () =>
             {
                 ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path);
             });
-            ServiceProvider.Resolve<INotificationService>().Notify(ResX.ExportedLogsMessage);
+            ServiceProvider.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
         }
 
         public void StartEpiInfo()

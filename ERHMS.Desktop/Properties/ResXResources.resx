@@ -117,22 +117,124 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppTitle" xml:space="preserve">
-    <value>ERHMS Info Manager</value>
+  <data name="AccessText.Close" xml:space="preserve">
+    <value>_Close</value>
   </data>
-  <data name="ExportedLogsMessage" xml:space="preserve">
-    <value>Logs have been exported.</value>
+  <data name="AccessText.Ok" xml:space="preserve">
+    <value>_OK</value>
   </data>
-  <data name="ExportingLogsLead" xml:space="preserve">
-    <value>Exporting logs</value>
-  </data>
-  <data name="HandledErrorLead" xml:space="preserve">
-    <value>ERHMS Info Manager has encountered an error</value>
-  </data>
-  <data name="UnhandledErrorMessage" xml:space="preserve">
+  <data name="Body.CaughtFatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.</value>
   </data>
-  <data name="ZipFileFilter" xml:space="preserve">
+  <data name="Body.ExportedLogs" xml:space="preserve">
+    <value>Logs have been exported.</value>
+  </data>
+  <data name="CoreProject.Name.Incident" xml:space="preserve">
+    <value>Incident database</value>
+  </data>
+  <data name="CoreProject.Name.Worker" xml:space="preserve">
+    <value>Worker database</value>
+  </data>
+  <data name="CoreView.Description.AfterActionReview" xml:space="preserve">
+    <value>Filled out as necessary after deployment. Captures feedback on the organization's ERHMS program.</value>
+  </data>
+  <data name="CoreView.Description.DeploymentHealthSurvey" xml:space="preserve">
+    <value>Filled out at least weekly during deployment for each worker. Captures information on acute health effects.</value>
+  </data>
+  <data name="CoreView.Description.PostDeploymentHealthSurvey" xml:space="preserve">
+    <value>Filled out as necessary after deployment. Captures information on chronic health effects.</value>
+  </data>
+  <data name="CoreView.Description.PreDeploymentHealthSurvey" xml:space="preserve">
+    <value>Filled out annually for each worker. Captures information on baseline health status.</value>
+  </data>
+  <data name="CoreView.Description.WorkerActivityReport" xml:space="preserve">
+    <value>Filled out daily during deployment for each worker. Captures information on work location and activity.</value>
+  </data>
+  <data name="CoreView.Description.WorkerDeploymentRecord" xml:space="preserve">
+    <value>Filled out once per deployment for each worker. Captures basic accountability information.</value>
+  </data>
+  <data name="CoreView.Description.WorkerInProcessingForm" xml:space="preserve">
+    <value>Filled out once per deployment during mobilization for each worker. Captures information on current health status and training/PPE distribution.</value>
+  </data>
+  <data name="CoreView.Description.WorkerOutProcessingForm" xml:space="preserve">
+    <value>Filled out once per deployment during demobilization for each worker. Captures information on training/PPE effectiveness.</value>
+  </data>
+  <data name="CoreView.Description.WorkerRosteringForm" xml:space="preserve">
+    <value>Filled out once for each worker and reviewed annually. Captures rostering and credentialing information.</value>
+  </data>
+  <data name="CoreView.Title.AfterActionReview" xml:space="preserve">
+    <value>After-Action Review</value>
+  </data>
+  <data name="CoreView.Title.DeploymentHealthSurvey" xml:space="preserve">
+    <value>Deployment Health Survey</value>
+  </data>
+  <data name="CoreView.Title.PostDeploymentHealthSurvey" xml:space="preserve">
+    <value>Post-Deployment Health Survey</value>
+  </data>
+  <data name="CoreView.Title.PreDeploymentHealthSurvey" xml:space="preserve">
+    <value>Pre-Deployment Health Survey</value>
+  </data>
+  <data name="CoreView.Title.WorkerActivityReport" xml:space="preserve">
+    <value>Worker Activity Report</value>
+  </data>
+  <data name="CoreView.Title.WorkerDeploymentRecord" xml:space="preserve">
+    <value>Worker Deployment Record</value>
+  </data>
+  <data name="CoreView.Title.WorkerInProcessingForm" xml:space="preserve">
+    <value>Worker In-Processing Form</value>
+  </data>
+  <data name="CoreView.Title.WorkerOutProcessingForm" xml:space="preserve">
+    <value>Worker Out-Processing Form</value>
+  </data>
+  <data name="CoreView.Title.WorkerRosteringForm" xml:space="preserve">
+    <value>Worker Rostering Form</value>
+  </data>
+  <data name="Description.AppLogo" xml:space="preserve">
+    <value>ERHMS Info Manager logo</value>
+  </data>
+  <data name="DialogType.Name.Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="DialogType.Name.Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="DialogType.Name.None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DialogType.Name.Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="DialogType.Name.Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="FileDialog.Filter.ZipFiles" xml:space="preserve">
     <value>ZIP Files (*.zip)|*.zip</value>
+  </data>
+  <data name="FileDialog.Title.Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="FileDialog.Title.Save" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="FileName.LogArchive" xml:space="preserve">
+    <value>Logs-{0:yyyyMMdd-HHmmss}.zip</value>
+  </data>
+  <data name="Lead.CaughtNonFatalException" xml:space="preserve">
+    <value>ERHMS Info Manager has encountered an error</value>
+  </data>
+  <data name="Lead.ExportingLogs" xml:space="preserve">
+    <value>Exporting logs</value>
+  </data>
+  <data name="Phase.Name.Deployment" xml:space="preserve">
+    <value>Deployment</value>
+  </data>
+  <data name="Phase.Name.PostDeployment" xml:space="preserve">
+    <value>Post-deployment</value>
+  </data>
+  <data name="Phase.Name.PreDeployment" xml:space="preserve">
+    <value>Pre-deployment</value>
+  </data>
+  <data name="Title.App" xml:space="preserve">
+    <value>ERHMS Info Manager</value>
   </data>
 </root>

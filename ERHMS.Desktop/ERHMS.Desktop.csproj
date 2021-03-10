@@ -82,7 +82,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AppCommands.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
     <Compile Include="Behaviors\MarshalDataContextEvent.cs" />
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
@@ -98,20 +97,21 @@
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\ActionTextBox.cs" />
-    <Compile Include="Controls\PhaseHeading.cs" />
     <Compile Include="Controls\Toaster.cs" />
-    <Compile Include="Controls\VerboseButton.cs" />
     <Compile Include="Converters\ActionTextBoxPaddingConverter.cs" />
     <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
+    <Compile Include="Converters\KeyToResourceConverter.cs" />
+    <Compile Include="Converters\KeyToResXResourceConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectTypeToResourceConverter.cs" />
     <Compile Include="Converters\PageCountToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
-    <Compile Include="Converters\PhaseToDisplayTextConverter.cs" />
-    <Compile Include="Converters\SystemIconToNameConverter.cs" />
+    <Compile Include="Converters\PhaseToCoreProjectNameConverter.cs" />
+    <Compile Include="Converters\PhaseToCoreViewsConverter.cs" />
+    <Compile Include="Converters\StringCaseConverter.cs" />
     <Compile Include="Data\CustomCollectionView.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
     <Compile Include="Data\ISelectable.cs" />
@@ -119,7 +119,7 @@
     <Compile Include="Data\ITypedCollectionView.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
-    <Compile Include="Dialogs\DialogSeverity.cs" />
+    <Compile Include="Dialogs\DialogType.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\EventMarshaler.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
@@ -132,10 +132,10 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\ResX.Designer.cs">
+    <Compile Include="Properties\ResXResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ResX.resx</DependentUpon>
+      <DependentUpon>ResXResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -169,9 +169,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\ResX.resx">
+    <EmbeddedResource Include="Properties\ResXResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ResX.Designer.cs</LastGenOutput>
+      <LastGenOutput>ResXResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -201,7 +201,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Templates.xaml">
+    <Page Include="Resources\ViewModels\Templates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

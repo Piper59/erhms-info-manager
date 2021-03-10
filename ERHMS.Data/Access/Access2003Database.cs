@@ -16,7 +16,7 @@ namespace ERHMS.Data.Access
 
         protected override void CreateCore(Stream stream)
         {
-            stream.Write(ResX.Access2003Database, 0, ResX.Access2003Database.Length);
+            stream.Write(Resources.Access2003Database, 0, Resources.Access2003Database.Length);
         }
     }
 }

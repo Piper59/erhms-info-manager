@@ -8,7 +8,7 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class DialogViewModel : ObservableObject
     {
-        public DialogSeverity Severity { get; }
+        public DialogType DialogType { get; }
         public Icon Icon { get; }
         public string Lead { get; }
         public string Body { get; }
@@ -25,14 +25,14 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand ToggleShowingDetailsCommand { get; }
 
         public DialogViewModel(
-            DialogSeverity severity,
+            DialogType dialogType,
             string lead,
             string body,
             string details,
             DialogButtonCollection buttons)
         {
-            Severity = severity;
-            Icon = severity.ToSystemIcon();
+            DialogType = dialogType;
+            Icon = dialogType.ToIcon();
             Lead = lead;
             Body = body;
             Details = details;

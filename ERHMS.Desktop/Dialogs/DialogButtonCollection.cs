@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ERHMS.Desktop.Properties;
+using System.Collections.Generic;
 
 namespace ERHMS.Desktop.Dialogs
 {
@@ -6,12 +7,12 @@ namespace ERHMS.Desktop.Dialogs
     {
         public static DialogButtonCollection Ok => new DialogButtonCollection
         {
-            { "_OK", null, true, true }
+            { ResXResources.AccessText_Ok, null, true, true }
         };
 
         public static DialogButtonCollection Close => new DialogButtonCollection
         {
-            { "_Close", null, true, true }
+            { ResXResources.AccessText_Close, null, true, true }
         };
 
         public void Add(object content, bool? result, bool isDefault, bool isCancel)

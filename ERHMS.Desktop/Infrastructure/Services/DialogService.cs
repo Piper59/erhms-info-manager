@@ -16,7 +16,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         }
 
         public bool? Show(
-            DialogSeverity severity,
+            DialogType dialogType,
             string lead,
             string body,
             string details,
@@ -26,9 +26,8 @@ namespace ERHMS.Desktop.Infrastructure.Services
             Window dialog = new DialogView
             {
                 Owner = owner,
-                DataContext = new DialogViewModel(severity, lead, body, details, buttons)
+                DataContext = new DialogViewModel(dialogType, lead, body, details, buttons)
             };
-            severity.ToSystemSound()?.Play();
             return dialog.ShowDialog();
         }
     }

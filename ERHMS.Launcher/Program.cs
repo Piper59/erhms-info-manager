@@ -10,7 +10,7 @@ namespace ERHMS.Launcher
     {
         private const string AppTitle = "ERHMS Info Manager";
         private const string BuildDirectoryName = AppTitle;
-        private const string ExecutableName = AppTitle + ".exe";
+        private static readonly string ExecutableName = $"{AppTitle}.exe";
 
         [STAThread]
         private static void Main()

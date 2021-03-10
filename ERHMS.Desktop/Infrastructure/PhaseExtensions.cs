@@ -20,20 +20,5 @@ namespace ERHMS.Desktop.Infrastructure
                     throw new ArgumentOutOfRangeException(nameof(@this));
             }
         }
-
-        public static string ToDisplayText(this Phase @this)
-        {
-            switch (@this)
-            {
-                case Phase.PreDeployment:
-                    return "Pre-deployment";
-                case Phase.Deployment:
-                    return "Deployment";
-                case Phase.PostDeployment:
-                    return "Post-deployment";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(@this));
-            }
-        }
     }
 }

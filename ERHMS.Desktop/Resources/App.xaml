@@ -13,11 +13,11 @@
     </Style>
 
     <Style x:Key="SmallLayout" TargetType="Border" BasedOn="{StaticResource FluidLayout}">
-        <Setter Property="MaxWidth" Value="{StaticResource SmallWidth}" />
+        <Setter Property="MaxWidth" Value="{StaticResource SmallLayoutWidth}" />
     </Style>
 
     <Style x:Key="LargeLayout" TargetType="Border" BasedOn="{StaticResource FluidLayout}">
-        <Setter Property="MaxWidth" Value="{StaticResource LargeWidth}" />
+        <Setter Property="MaxWidth" Value="{StaticResource LargeLayoutWidth}" />
     </Style>
 
     <Style x:Key="Container" TargetType="Panel">
@@ -34,6 +34,11 @@
 
     <!-- Text elements -->
     <Style x:Key="BodyText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}" />
+
+    <Style x:Key="CodeText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
+    </Style>
 
     <Style x:Key="HeadingText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
@@ -75,21 +80,16 @@
     </Style>
 
     <!-- Other -->
-    <Style TargetType="DataGrid" BasedOn="{StaticResource DataGridBase}">
-        <Setter Property="AutoGenerateColumns" Value="False" />
-        <Setter Property="IsReadOnly" Value="True" />
+    <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
+        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
 
     <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
         <Setter Property="MinWidth" Value="85" />
-    </Style>
-
-    <Style x:Key="Preformatted" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
-        <Setter Property="FontFamily" Value="{StaticResource MonospacedFontFamily}" />
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
 </ResourceDictionary>

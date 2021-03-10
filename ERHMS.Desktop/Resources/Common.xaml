@@ -9,7 +9,7 @@
     <System:Double x:Key="HugeFontSize">32</System:Double>
     <FontWeight x:Key="ThinFontWeight">Light</FontWeight>
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
-    <FontFamily x:Key="MonospacedFontFamily">Consolas</FontFamily>
+    <FontFamily x:Key="CodeFontFamily">Consolas</FontFamily>
 
     <!-- Spacing -->
     <System:Double x:Key="SmallSpace">5</System:Double>
@@ -41,7 +41,7 @@
                Right="{StaticResource LargeSpace}"
                Top="{StaticResource SmallSpace}" />
 
-    <!-- Layout -->
-    <System:Double x:Key="SmallWidth">720</System:Double>
-    <System:Double x:Key="LargeWidth">1200</System:Double>
+    <!-- Positioning -->
+    <System:Double x:Key="SmallLayoutWidth">720</System:Double>
+    <System:Double x:Key="LargeLayoutWidth">1200</System:Double>
 </ResourceDictionary>

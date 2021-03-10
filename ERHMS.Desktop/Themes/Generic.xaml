@@ -6,15 +6,10 @@
         <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Converters:ActionTextBoxPaddingConverter x:Key="ActionTextBoxPaddingConverter" />
-    <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
-    <Converters:PhaseToColorConverter x:Key="PhaseToGradientStartColorConverter"
-                                      Alpha="0x40" />
-    <Converters:PhaseToColorConverter x:Key="PhaseToGradientStopColorConverter"
-                                      Alpha="0x00" />
-    <Converters:PhaseToDisplayTextConverter x:Key="PhaseToDisplayTextConverter" />
-
     <Style TargetType="Controls:ActionTextBox">
+        <Style.Resources>
+            <Converters:ActionTextBoxPaddingConverter x:Key="ActionTextBoxPaddingConverter" />
+        </Style.Resources>
         <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -42,31 +37,16 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Controls:PhaseHeading">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Controls:PhaseHeading">
-                    <Border Margin="{StaticResource DefaultMargin}"
-                            Padding="{StaticResource DefaultPadding}"
-                            SnapsToDevicePixels="True">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
-                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToGradientStartColorConverter}}"
-                                              Offset="0" />
-                                <GradientStop Color="{Binding Phase, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhaseToGradientStopColorConverter}}"
-                                              Offset="1" />
-                            </LinearGradientBrush>
-                        </Border.Background>
-                        <TextBlock Style="{StaticResource Heading}"
-                                   Text="{TemplateBinding Phase, Converter={StaticResource PhaseToDisplayTextConverter}}" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="Controls:Toaster">
-        <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        <Setter Property="TextBlock.TextAlignment" Value="Left" />
+        <Setter Property="Background" Value="{StaticResource ToasterBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ToasterBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{StaticResource ToasterTextBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="MessageStyle" Value="{StaticResource Body}" />
+        <Setter Property="MinHeight" Value="100" />
+        <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
         <Setter Property="Opacity" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -97,7 +77,7 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     Duration="0:0:3"
+                                                     Duration="0:0:1"
                                                      To="0" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -106,47 +86,21 @@
                             <Setter Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
-                    <Border Background="{StaticResource ToasterBrush}"
-                            BorderBrush="{StaticResource ToasterBorderBrush}"
-                            BorderThickness="1"
-                            Padding="{StaticResource DefaultPadding}"
-                            SnapsToDevicePixels="True"
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
                             Width="{TemplateBinding Width}">
-                        <TextBlock Foreground="{StaticResource ToasterTextBrush}"
-                                   Style="{StaticResource Small}"
-                                   Text="{TemplateBinding Message}" />
+                        <TextBlock Foreground="{TemplateBinding Foreground}"
+                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                   Style="{TemplateBinding MessageStyle}"
+                                   Text="{TemplateBinding Message}"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Width" Value="320" />
-    </Style>
-
-    <Style TargetType="Controls:VerboseButton">
-        <Setter Property="TextBlock.TextAlignment" Value="Center" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Controls:VerboseButton">
-                    <Button AutomationProperties.HelpText="{TemplateBinding HelpText}"
-                            AutomationProperties.Name="{TemplateBinding Text}"
-                            Background="{TemplateBinding Background}"
-                            Command="{TemplateBinding Command}"
-                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
-                        <StackPanel>
-                            <TextBlock Style="{StaticResource Lead}"
-                                       Text="{TemplateBinding Text}" />
-                            <TextBlock Style="{StaticResource Small}"
-                                       Text="{TemplateBinding HelpText}"
-                                       Visibility="{TemplateBinding HelpText, Converter={StaticResource NullableToVisibilityConverter}}">
-                            </TextBlock>
-                        </StackPanel>
-                    </Button>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Width" Value="320" />
     </Style>
 </ResourceDictionary>
