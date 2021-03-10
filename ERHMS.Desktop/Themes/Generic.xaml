@@ -89,6 +89,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
+                            Effect="{StaticResource Shadow}"
                             Padding="{TemplateBinding Padding}"
                             Width="{TemplateBinding Width}">
                         <TextBlock Foreground="{TemplateBinding Foreground}"
@@ -101,6 +102,6 @@
             </Setter.Value>
         </Setter>
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Width" Value="320" />
+        <Setter Property="Width" Value="400" />
     </Style>
 </ResourceDictionary>

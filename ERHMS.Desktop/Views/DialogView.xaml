@@ -91,7 +91,7 @@
                 Visibility="{Binding ShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
             <DockPanel Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
-                         MaxHeight="200"
+                         MaxHeight="250"
                          MinHeight="50"
                          Style="{StaticResource CodeTextBox}"
                          Text="{Binding Details, Mode=OneWay}" />

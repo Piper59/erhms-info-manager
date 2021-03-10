@@ -89,7 +89,7 @@
             <ContentPresenter Content="{Binding Content}" />
             <Controls:Toaster x:Name="Toaster"
                               HorizontalAlignment="Right"
-                              Margin="{StaticResource HugeThickness}"
+                              Margin="50"
                               VerticalAlignment="Bottom" />
         </Grid>
     </Grid>
