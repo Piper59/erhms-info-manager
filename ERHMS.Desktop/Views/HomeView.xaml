@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
-             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties">
+             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+             xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -46,7 +47,7 @@
                                VerticalAlignment="Center" />
                 </Grid>
                 <ItemsControl IsTabStop="False"
-                              ItemsSource="{Binding Phases}">
+                              ItemsSource="{x:Static ViewModels:PhaseViewModel.Instances}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Style="{StaticResource Section}">
