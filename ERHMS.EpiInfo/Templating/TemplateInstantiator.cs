@@ -175,8 +175,7 @@ namespace ERHMS.EpiInfo.Templating
             }
             if (!exists)
             {
-                string[] columnNames = table.Columns
-                    .Cast<DataColumn>()
+                string[] columnNames = table.Columns.Cast<DataColumn>()
                     .Select(column => column.ColumnName)
                     .ToArray();
                 Metadata.CreateCodeTable(table.TableName, columnNames);

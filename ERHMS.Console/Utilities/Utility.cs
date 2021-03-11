@@ -67,7 +67,7 @@ namespace ERHMS.Console.Utilities
         private static ConstructorInfo GetConstructor(Type instanceType, int parameterCount)
         {
             ConstructorInfo constructor = instanceType.GetConstructors()
-                    .SingleOrDefault(_constructor => _constructor.GetParameters().Length == parameterCount);
+                .SingleOrDefault(_constructor => _constructor.GetParameters().Length == parameterCount);
             if (constructor == null)
             {
                 throw new ArgumentException(

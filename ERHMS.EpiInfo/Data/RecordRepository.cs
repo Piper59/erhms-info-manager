@@ -36,6 +36,17 @@ namespace ERHMS.EpiInfo.Data
             return sql.ToString();
         }
 
+        public int CountByDeleted(bool deleted)
+        {
+            string op = deleted ? "=" : "<>";
+            string clauses = $"WHERE {Quote(ColumnNames.REC_STATUS)} {op} @RECSTATUS";
+            ParameterCollection parameters = new ParameterCollection
+            {
+                { "@RECSTATUS", RecordStatus.Deleted }
+            };
+            return Count(clauses, parameters);
+        }
+
         private void SelectCore(
             IDbConnection connection,
             string selectList,

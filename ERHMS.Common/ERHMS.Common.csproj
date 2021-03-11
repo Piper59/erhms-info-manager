@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventMarshaler.cs" />
+    <Compile Include="HashCodeCalculator.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

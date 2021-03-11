@@ -225,6 +225,9 @@
   <data name="Lead.ExportingLogs" xml:space="preserve">
     <value>Exporting logs</value>
   </data>
+  <data name="Lead.OpeningProject" xml:space="preserve">
+    <value>Opening database</value>
+  </data>
   <data name="Phase.Name.Deployment" xml:space="preserve">
     <value>Deployment</value>
   </data>

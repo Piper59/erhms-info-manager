@@ -107,18 +107,20 @@ namespace ERHMS.Desktop
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }
 
+        public MainView MainView => (MainView)MainWindow;
+
         public App()
         {
+            InitializeComponent();
             ConfigureServices();
             Command.GlobalError += Command_GlobalError;
-            InitializeComponent();
         }
 
         private void ConfigureServices()
         {
             ServiceProvider.Install<IDialogService>(() => new DialogService(this));
             ServiceProvider.Install<IFileDialogService>(() => new FileDialogService(this));
-            ServiceProvider.Install<INotificationService>(() => MainView.Instance);
+            ServiceProvider.Install<INotificationService>(() => MainView);
             ServiceProvider.Install<IProgressService>(() => new ProgressService(this));
         }
 
@@ -138,8 +140,11 @@ namespace ERHMS.Desktop
         {
             base.OnStartup(e);
             MainViewModel.Instance.Content = new HomeViewModel();
-            MainView.Instance.DataContext = MainViewModel.Instance;
-            MainView.Instance.Show();
+            MainWindow = new MainView
+            {
+                DataContext = MainViewModel.Instance
+            };
+            MainWindow.Show();
         }
     }
 }

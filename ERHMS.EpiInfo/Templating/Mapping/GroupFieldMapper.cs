@@ -91,8 +91,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             {
                 IReadOnlyCollection<string> childFieldNames =
                     new HashSet<string>(xField.ListItems, NameComparer.Default);
-                xField.ListItems = xField.XPage.XFields
-                    .Select(pageXField => pageXField.Name)
+                xField.ListItems = xField.XPage.XFields.Select(pageXField => pageXField.Name)
                     .Where(fieldName => childFieldNames.Contains(fieldName));
                 changed = true;
             }

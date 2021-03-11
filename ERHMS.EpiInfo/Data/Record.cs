@@ -107,8 +107,8 @@ namespace ERHMS.EpiInfo.Data
 
         public override bool Equals(object obj)
         {
-            return GlobalRecordId != null
-                && obj is Record record
+            return obj is Record record
+                && GlobalRecordId != null
                 && GlobalRecordIdComparer.Equals(GlobalRecordId, record.GlobalRecordId);
         }
     }

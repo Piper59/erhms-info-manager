@@ -1,4 +1,5 @@
-﻿using ERHMS.Common;
+﻿using Epi;
+using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
+using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -71,13 +73,20 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task ViewCoreProjectAsync(CoreProject coreProject)
         {
-            ServiceProvider.Resolve<INotificationService>().Notify(coreProject.ToString());
-            await Task.CompletedTask;
+            await ServiceProvider.Resolve<IProgressService>().RunAsync(
+                ResXResources.Lead_OpeningProject,
+                async () =>
+                {
+                    string path = Settings.Default.GetProjectPath(coreProject);
+                    Project value = await Task.Run(() => ProjectExtensions.Open(path));
+                    ProjectViewModel project = new ProjectViewModel(value);
+                    await project.InitializeAsync();
+                    Content = project;
+                });
         }
 
         public async Task ViewCoreViewAsync(CoreView coreView)
         {
-            ServiceProvider.Resolve<INotificationService>().Notify(coreView.Name);
             await Task.CompletedTask;
         }
 
@@ -102,10 +111,9 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            await ServiceProvider.Resolve<IProgressService>().RunAsync(ResXResources.Lead_ExportingLogs, () =>
-            {
-                ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path);
-            });
+            await ServiceProvider.Resolve<IProgressService>().RunAsync(
+                ResXResources.Lead_ExportingLogs,
+                () => ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path));
             ServiceProvider.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
         }
 

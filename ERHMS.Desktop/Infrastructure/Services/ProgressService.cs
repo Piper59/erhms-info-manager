@@ -26,70 +26,59 @@ namespace ERHMS.Desktop.Infrastructure.Services
             Application.Dispatcher.Invoke(() => viewModel.Status = value);
         }
 
-        private async Task RunCoreAsync(
-            string title,
-            bool canBeCanceled,
-            Action<CancellationToken> action,
-            Action continuation)
+        private async Task RunCoreAsync(string title, bool canBeCanceled, Func<CancellationToken, Task> action)
         {
-            viewModel = new ProgressViewModel(title, canBeCanceled);
             try
             {
-                Window owner = Application.GetActiveOrMainWindow();
-                Window dialog = new ProgressView
+                using (viewModel = new ProgressViewModel(title, canBeCanceled))
                 {
-                    Owner = owner,
-                    DataContext = viewModel
-                };
-                using (owner.BeginDisable())
-                using (CancellationTokenSource completionTokenSource = new CancellationTokenSource())
-                {
-                    Task task = Task.Run(() =>
+                    Window owner = Application.GetActiveOrMainWindow();
+                    Window dialog = new ProgressView
                     {
+                        Owner = owner,
+                        DataContext = viewModel
+                    };
+                    using (owner.BeginDisable())
+                    using (CancellationTokenSource completionTokenSource = new CancellationTokenSource())
+                    {
+                        Task task = action(viewModel.CancellationToken);
+                        Task continuation = task.ContinueWith(_ => completionTokenSource.Cancel());
                         try
                         {
-                            action(viewModel.CancellationToken);
+                            await Task.Delay(Delay, completionTokenSource.Token);
                         }
-                        finally
+                        catch (TaskCanceledException) { }
+                        using (completionTokenSource.IsCancellationRequested ? null : dialog.BeginShowDialog())
                         {
-                            completionTokenSource.Cancel();
+                            await Task.WhenAll(task, continuation);
                         }
-                    });
-                    try
-                    {
-                        await Task.Delay(DialogDelay, completionTokenSource.Token);
-                    }
-                    catch (TaskCanceledException) { }
-                    IDisposable dialogShower =
-                        completionTokenSource.IsCancellationRequested
-                        ? null
-                        : dialog.BeginShowDialog();
-                    try
-                    {
-                        await task;
-                        continuation();
-                    }
-                    finally
-                    {
-                        dialogShower?.Dispose();
                     }
                 }
             }
             finally
             {
-                viewModel.Dispose();
                 viewModel = null;
             }
         }
 
-        public async Task RunAsync(string title, Action action, Action continuation)
+        public async Task RunAsync(string title, Action action)
         {
-            await RunCoreAsync(title, false, _ => action(), continuation);
+            await RunCoreAsync(title, false, _ => Task.Run(action));
         }
 
-        public async Task RunAsync(string title, Action<CancellationToken> action, Action continuation)
+        public async Task RunAsync(string title, Func<Task> action)
         {
-            await RunCoreAsync(title, true, action, continuation);
+            await RunCoreAsync(title, false, _ => action());
+        }
+
+        public async Task RunAsync(string title, Action<CancellationToken> action)
+        {
+            await RunCoreAsync(title, true, cancellationToken => Task.Run(() => action(cancellationToken)));
+        }
+
+        public async Task RunAsync(string title, Func<CancellationToken, Task> action)
+        {
+            await RunCoreAsync(title, true, action);
         }
     }
 }

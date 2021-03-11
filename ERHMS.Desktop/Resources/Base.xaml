@@ -70,6 +70,7 @@
             </Style>
         </Style.Resources>
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBase}" />

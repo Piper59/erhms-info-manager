@@ -7,9 +7,7 @@ namespace ERHMS.Desktop.Infrastructure
     {
         public static Window GetActiveWindow(this Application @this)
         {
-            return @this.Windows
-                .Cast<Window>()
-                .FirstOrDefault(window => window.IsActive);
+            return @this.Windows.Cast<Window>().FirstOrDefault(window => window.IsActive);
         }
 
         public static Window GetActiveOrMainWindow(this Application @this)

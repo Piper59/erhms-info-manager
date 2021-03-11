@@ -385,6 +385,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opening database.
+        /// </summary>
+        public static string Lead_OpeningProject {
+            get {
+                return ResourceManager.GetString("Lead.OpeningProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deployment.
         /// </summary>
         public static string Phase_Name_Deployment {

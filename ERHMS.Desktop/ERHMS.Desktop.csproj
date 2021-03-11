@@ -68,6 +68,10 @@
       <Project>{917efa87-37a3-49d1-9488-d130d29cd6d0}</Project>
       <Name>ERHMS.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Data\ERHMS.Data.csproj">
+      <Project>{ccebb7b1-4468-4b27-958e-79e86373a398}</Project>
+      <Name>ERHMS.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
       <Project>{181048fb-dae4-4875-9a58-461f81c4131a}</Project>
       <Name>ERHMS.Domain</Name>
@@ -148,11 +152,14 @@
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\IProgressService.cs" />
     <Compile Include="Services\ServiceProvider.cs" />
+    <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PhaseViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
+    <Compile Include="ViewModels\ProjectViewModel.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
@@ -164,6 +171,9 @@
     </Compile>
     <Compile Include="Views\ProgressView.xaml.cs">
       <DependentUpon>ProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProjectView.xaml.cs">
+      <DependentUpon>ProjectView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +238,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

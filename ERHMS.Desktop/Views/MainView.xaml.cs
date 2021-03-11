@@ -9,11 +9,9 @@ namespace ERHMS.Desktop.Views
 {
     public partial class MainView : Window, INotificationService
     {
-        public static MainView Instance { get; } = new MainView();
-
         public MainViewModel ViewModel => (MainViewModel)DataContext;
 
-        private MainView()
+        public MainView()
         {
             InitializeComponent();
             ReadSettings(Settings.Default);

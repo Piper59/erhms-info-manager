@@ -10,7 +10,7 @@ namespace ERHMS.EpiInfo
     {
         public static void CreateDataTables(this View @this)
         {
-            if (!@this.Project.CollectedData.TableExists(@this.TableName))
+            if (!@this.DataTableExists())
             {
                 @this.Project.CollectedData.CreateDataTableForView(@this, 1);
             }
@@ -23,6 +23,11 @@ namespace ERHMS.EpiInfo
             {
                 CreateDataTables(descendantView);
             }
+        }
+
+        public static bool DataTableExists(this View @this)
+        {
+            return @this.Project.CollectedData.TableExists(@this.TableName);
         }
 
         public static void DeleteDataTableTree(this View @this)
@@ -45,6 +50,12 @@ namespace ERHMS.EpiInfo
             metadata.DeleteView(@this.Name);
         }
 
+        public static void LoadFields(this View @this)
+        {
+            @this.MustRefreshFieldCollection = true;
+            _ = @this.Fields;
+        }
+
         public static void Unrelate(this View @this)
         {
             if (!@this.IsRelatedView)
@@ -54,8 +65,7 @@ namespace ERHMS.EpiInfo
             IMetadataProvider metadata = @this.GetMetadata();
             if (@this.ParentView != null)
             {
-                IReadOnlyCollection<Field> relatedViewFields = @this.ParentView.Fields
-                    .RelatedFields
+                IReadOnlyCollection<Field> relatedViewFields = @this.ParentView.Fields.RelatedFields
                     .Cast<RelatedViewField>()
                     .Where(field => field.RelatedViewID == @this.Id)
                     .ToList();
