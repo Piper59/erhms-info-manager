@@ -1,6 +1,5 @@
 ﻿using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.ViewModels;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,11 +12,11 @@ namespace ERHMS.Desktop.Views
         public DialogView()
         {
             InitializeComponent();
+            Loaded += DialogView_Loaded;
         }
 
-        protected override void OnContentRendered(EventArgs e)
+        private void DialogView_Loaded(object sender, RoutedEventArgs e)
         {
-            base.OnContentRendered(e);
             ViewModel.DialogType.ToSound().Play();
         }
 
