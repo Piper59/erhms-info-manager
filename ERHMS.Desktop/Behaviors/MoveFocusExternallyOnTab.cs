@@ -1,5 +1,6 @@
 ﻿using ERHMS.Desktop.Infrastructure;
 using Microsoft.Xaml.Behaviors;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -61,14 +62,15 @@ namespace ERHMS.Desktop.Behaviors
             void AssociatedObject_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
             {
                 intercepted = true;
-                result = MoveFocusExternally(forward);
+                result = MoveFocusExternally(e.NewFocus, forward);
+                e.Handled = true;
             }
 
             AssociatedObject.PreviewGotKeyboardFocus += AssociatedObject_PreviewGotKeyboardFocus;
             try
             {
                 MoveFocusTerminally(forward);
-                return intercepted ? result : MoveFocusExternally(forward);
+                return intercepted ? result : MoveFocusExternally(Keyboard.FocusedElement, forward);
             }
             finally
             {
@@ -81,9 +83,9 @@ namespace ERHMS.Desktop.Behaviors
             return AssociatedObject.MoveFocus(GetTerminalDirection(forward));
         }
 
-        private bool MoveFocusExternally(bool forward)
+        private bool MoveFocusExternally(IInputElement element, bool forward)
         {
-            return Keyboard.FocusedElement.MoveFocus(GetExternalDirection(forward));
+            return element.MoveFocus(GetExternalDirection(forward));
         }
     }
 }
