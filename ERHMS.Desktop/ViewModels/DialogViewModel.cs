@@ -1,12 +1,11 @@
 ﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Infrastructure;
 using System.Drawing;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class DialogViewModel : ObservableObject
+    public class DialogViewModel : ViewModel
     {
         public DialogType DialogType { get; }
         public Icon Icon { get; }

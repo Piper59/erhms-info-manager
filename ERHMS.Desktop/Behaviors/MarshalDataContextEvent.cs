@@ -1,4 +1,4 @@
-﻿using ERHMS.Desktop.Infrastructure;
+﻿using ERHMS.Common;
 using Microsoft.Xaml.Behaviors;
 using System;
 using System.Reflection;

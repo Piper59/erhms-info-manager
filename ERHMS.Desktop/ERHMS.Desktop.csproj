@@ -120,9 +120,7 @@
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogType.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
-    <Compile Include="Infrastructure\EventMarshaler.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
-    <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />

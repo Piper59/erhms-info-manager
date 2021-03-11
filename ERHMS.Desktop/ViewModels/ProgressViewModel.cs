@@ -1,12 +1,11 @@
 ﻿using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Infrastructure;
 using System;
 using System.Threading;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class ProgressViewModel : ObservableObject, IDisposable
+    public class ProgressViewModel : ViewModel, IDisposable
     {
         private readonly CancellationTokenSource cancellationTokenSource;
 

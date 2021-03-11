@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Common
 {
     public class EventMarshaler : IDisposable
     {
@@ -21,26 +21,18 @@ namespace ERHMS.Desktop.Infrastructure
         public EventInfo Event { get; }
         public Delegate MarshaledHandler { get; }
 
-        public EventMarshaler(
-            object source,
-            EventInfo @event,
-            Delegate handler,
-            SynchronizationContext synchronizationContext = null)
+        public EventMarshaler(object source, EventInfo @event, Delegate handler)
         {
-            Source = source;
-            Event = @event;
             if (handler.Method.ReturnType != typeof(void))
             {
                 throw new ArgumentException("Handler return type must be void.", nameof(handler));
             }
-            if (synchronizationContext == null)
+            if (SynchronizationContext.Current == null)
             {
-                synchronizationContext = SynchronizationContext.Current;
-                if (synchronizationContext == null)
-                {
-                    throw new ArgumentNullException(nameof(synchronizationContext));
-                }
+                throw new InvalidOperationException("Current synchronization context cannot be null.");
             }
+            Source = source;
+            Event = @event;
             IReadOnlyCollection<ParameterExpression> parameters = handler.Method.GetParameters()
                 .Select(parameter => Expression.Parameter(parameter.ParameterType, parameter.Name))
                 .ToList();
@@ -48,7 +40,7 @@ namespace ERHMS.Desktop.Infrastructure
             MarshaledHandler = Expression.Lambda(
                 handler.GetType(),
                 Expression.Call(
-                    Expression.Constant(synchronizationContext),
+                    Expression.Constant(SynchronizationContext.Current),
                     SynchronizationContextSendMethod,
                     Expression.Lambda(
                         typeof(SendOrPostCallback),

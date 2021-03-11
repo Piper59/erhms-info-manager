@@ -1,6 +1,5 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Domain;
@@ -13,7 +12,7 @@ using Module = ERHMS.EpiInfo.Module;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class MainViewModel : ObservableObject
+    public class MainViewModel : ViewModel
     {
         public static MainViewModel Instance { get; } = new MainViewModel();
 

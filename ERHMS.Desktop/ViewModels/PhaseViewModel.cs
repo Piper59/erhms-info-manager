@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class PhaseViewModel
+    public class PhaseViewModel : ViewModel
     {
         public static PhaseViewModel PreDeployment { get; } = new PhaseViewModel(Phase.PreDeployment);
         public static PhaseViewModel Deployment { get; } = new PhaseViewModel(Phase.Deployment);
