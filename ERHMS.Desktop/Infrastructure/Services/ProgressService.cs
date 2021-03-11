@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class ProgressService : IProgressService
     {
-        private static readonly TimeSpan DialogDelay = TimeSpan.FromSeconds(1.0);
+        private static readonly TimeSpan Delay = TimeSpan.FromSeconds(1.0);
 
         private ProgressViewModel viewModel;
 

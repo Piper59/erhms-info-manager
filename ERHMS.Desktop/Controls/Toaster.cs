@@ -8,8 +8,8 @@ namespace ERHMS.Desktop.Controls
 {
     public class Toaster : Control
     {
-        private static readonly TimeSpan DefaultDeactivationDelay = TimeSpan.FromSeconds(5.0);
-        private static readonly TimeSpan MouseLeaveDeactivationDelay = TimeSpan.FromSeconds(1.0);
+        private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(5.0);
+        private static readonly TimeSpan AfterMouseLeaveDuration = TimeSpan.FromSeconds(1.0);
 
         private static readonly DependencyPropertyKey MessagePropertyKey = DependencyProperty.RegisterReadOnly(
             nameof(Message),
@@ -48,7 +48,7 @@ namespace ERHMS.Desktop.Controls
             IsTabStopProperty.OverrideMetadata(typeof(Toaster), new FrameworkPropertyMetadata(false));
         }
 
-        private readonly DispatcherTimer deactivationTimer = new DispatcherTimer();
+        private readonly DispatcherTimer timer = new DispatcherTimer();
 
         public string Message
         {
@@ -64,7 +64,7 @@ namespace ERHMS.Desktop.Controls
 
         public Toaster()
         {
-            deactivationTimer.Tick += DeactivationTimer_Tick;
+            timer.Tick += Timer_Tick;
         }
 
         public event RoutedEventHandler Activating
@@ -100,24 +100,24 @@ namespace ERHMS.Desktop.Controls
             RaiseEvent(new RoutedEventArgs(DeactivatingEvent, this));
         }
 
-        private void DeactivationTimer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            deactivationTimer.Stop();
+            timer.Stop();
             OnDeactivating();
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
-            deactivationTimer.Stop();
+            timer.Stop();
             OnReactivating();
         }
 
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
-            deactivationTimer.Interval = MouseLeaveDeactivationDelay;
-            deactivationTimer.Start();
+            timer.Interval = AfterMouseLeaveDuration;
+            timer.Start();
         }
 
         public void Show(string message)
@@ -126,8 +126,8 @@ namespace ERHMS.Desktop.Controls
             OnActivating();
             if (!IsMouseOver)
             {
-                deactivationTimer.Interval = DefaultDeactivationDelay;
-                deactivationTimer.Start();
+                timer.Interval = DefaultDuration;
+                timer.Start();
             }
         }
     }
