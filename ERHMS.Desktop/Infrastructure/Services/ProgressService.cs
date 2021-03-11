@@ -26,7 +26,11 @@ namespace ERHMS.Desktop.Infrastructure.Services
             Application.Dispatcher.Invoke(() => viewModel.Status = value);
         }
 
-        private async Task RunCoreAsync(string title, bool canBeCanceled, Action<CancellationToken> action)
+        private async Task RunCoreAsync(
+            string title,
+            bool canBeCanceled,
+            Action<CancellationToken> action,
+            Action continuation)
         {
             viewModel = new ProgressViewModel(title, canBeCanceled);
             try
@@ -42,21 +46,32 @@ namespace ERHMS.Desktop.Infrastructure.Services
                 {
                     Task task = Task.Run(() =>
                     {
-                        action(viewModel.CancellationToken);
-                        completionTokenSource.Cancel();
+                        try
+                        {
+                            action(viewModel.CancellationToken);
+                        }
+                        finally
+                        {
+                            completionTokenSource.Cancel();
+                        }
                     });
                     try
                     {
                         await Task.Delay(DialogDelay, completionTokenSource.Token);
                     }
-                    catch (TaskCanceledException)
+                    catch (TaskCanceledException) { }
+                    IDisposable dialogShower =
+                        completionTokenSource.IsCancellationRequested
+                        ? null
+                        : dialog.BeginShowDialog();
+                    try
                     {
                         await task;
-                        return;
+                        continuation();
                     }
-                    using (dialog.BeginShowDialog())
+                    finally
                     {
-                        await task;
+                        dialogShower?.Dispose();
                     }
                 }
             }
@@ -67,14 +82,14 @@ namespace ERHMS.Desktop.Infrastructure.Services
             }
         }
 
-        public async Task RunAsync(string title, Action action)
+        public async Task RunAsync(string title, Action action, Action continuation)
         {
-            await RunCoreAsync(title, false, _ => action());
+            await RunCoreAsync(title, false, _ => action(), continuation);
         }
 
-        public async Task RunAsync(string title, Action<CancellationToken> action)
+        public async Task RunAsync(string title, Action<CancellationToken> action, Action continuation)
         {
-            await RunCoreAsync(title, true, action);
+            await RunCoreAsync(title, true, action, continuation);
         }
     }
 }
