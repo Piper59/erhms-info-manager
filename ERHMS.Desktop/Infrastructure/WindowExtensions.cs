@@ -62,19 +62,24 @@ namespace ERHMS.Desktop.Infrastructure
 
         private class Disabler : IDisposable
         {
+            private readonly bool oldIsEnabled;
+            private readonly Cursor oldOverrideCursor;
+
             public Window Window { get; }
 
             public Disabler(Window window)
             {
                 Window = window;
+                oldIsEnabled = window.IsEnabled;
+                oldOverrideCursor = Mouse.OverrideCursor;
                 window.IsEnabled = false;
                 Mouse.OverrideCursor = Cursors.Wait;
             }
 
             public void Dispose()
             {
-                Mouse.OverrideCursor = null;
-                Window.IsEnabled = true;
+                Mouse.OverrideCursor = oldOverrideCursor;
+                Window.IsEnabled = oldIsEnabled;
             }
         }
 
