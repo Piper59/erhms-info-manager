@@ -20,9 +20,9 @@ namespace ERHMS.Desktop.Commands
             return predicate();
         }
 
-        public override async Task ExecuteCore(object parameter)
+        public override Task ExecuteCore(object parameter)
         {
-            await action();
+            return action();
         }
     }
 
@@ -43,9 +43,9 @@ namespace ERHMS.Desktop.Commands
             return predicate((TParameter)parameter);
         }
 
-        public override async Task ExecuteCore(object parameter)
+        public override Task ExecuteCore(object parameter)
         {
-            await action((TParameter)parameter);
+            return action((TParameter)parameter);
         }
     }
 }

@@ -61,24 +61,24 @@ namespace ERHMS.Desktop.Infrastructure.Services
             }
         }
 
-        public async Task RunAsync(string title, Action action)
+        public Task RunAsync(string title, Action action)
         {
-            await RunCoreAsync(title, false, _ => Task.Run(action));
+            return RunCoreAsync(title, false, _ => Task.Run(action));
         }
 
-        public async Task RunAsync(string title, Func<Task> action)
+        public Task RunAsync(string title, Func<Task> action)
         {
-            await RunCoreAsync(title, false, _ => action());
+            return RunCoreAsync(title, false, _ => action());
         }
 
-        public async Task RunAsync(string title, Action<CancellationToken> action)
+        public Task RunAsync(string title, Action<CancellationToken> action)
         {
-            await RunCoreAsync(title, true, cancellationToken => Task.Run(() => action(cancellationToken)));
+            return RunCoreAsync(title, true, cancellationToken => Task.Run(() => action(cancellationToken)));
         }
 
-        public async Task RunAsync(string title, Func<CancellationToken, Task> action)
+        public Task RunAsync(string title, Func<CancellationToken, Task> action)
         {
-            await RunCoreAsync(title, true, action);
+            return RunCoreAsync(title, true, action);
         }
     }
 }
