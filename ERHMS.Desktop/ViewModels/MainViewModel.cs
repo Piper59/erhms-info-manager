@@ -73,7 +73,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task ViewCoreProjectAsync(CoreProject coreProject)
         {
-            await ServiceProvider.Resolve<IProgressService>().RunAsync(
+            await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_OpeningProject,
                 async () =>
                 {
@@ -102,7 +102,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task ExportLogsAsync()
         {
-            bool? result = ServiceProvider.Resolve<IFileDialogService>().Save(
+            bool? result = ServiceLocator.Resolve<IFileDialogService>().Save(
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 string.Format(ResXResources.FileName_LogArchive, DateTime.Now),
                 ResXResources.FileDialog_Filter_ZipFiles,
@@ -111,10 +111,10 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            await ServiceProvider.Resolve<IProgressService>().RunAsync(
+            await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_ExportingLogs,
                 () => ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path));
-            ServiceProvider.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
+            ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
         }
 
         public void StartEpiInfo()

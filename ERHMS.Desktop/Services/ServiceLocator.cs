@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ERHMS.Desktop.Services
 {
-    public static class ServiceProvider
+    public static class ServiceLocator
     {
         private static readonly IDictionary<Type, Delegate> factoriesByServiceType = new Dictionary<Type, Delegate>();
 

@@ -118,16 +118,16 @@ namespace ERHMS.Desktop
 
         private void ConfigureServices()
         {
-            ServiceProvider.Install<IDialogService>(() => new DialogService(this));
-            ServiceProvider.Install<IFileDialogService>(() => new FileDialogService(this));
-            ServiceProvider.Install<INotificationService>(() => MainView);
-            ServiceProvider.Install<IProgressService>(() => new ProgressService(this));
+            ServiceLocator.Install<IDialogService>(() => new DialogService(this));
+            ServiceLocator.Install<IFileDialogService>(() => new FileDialogService(this));
+            ServiceLocator.Install<INotificationService>(() => MainView);
+            ServiceLocator.Install<IProgressService>(() => new ProgressService(this));
         }
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
             Log.Default.Error(e.Exception);
-            ServiceProvider.Resolve<IDialogService>().Show(
+            ServiceLocator.Resolve<IDialogService>().Show(
                 DialogType.Error,
                 ResXResources.Lead_CaughtNonFatalException,
                 e.Exception.Message,

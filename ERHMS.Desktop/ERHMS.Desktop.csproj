@@ -151,7 +151,7 @@
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\IProgressService.cs" />
-    <Compile Include="Services\ServiceProvider.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
