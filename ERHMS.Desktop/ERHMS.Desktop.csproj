@@ -152,11 +152,11 @@
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\IProgressService.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="ViewModels\Collections\PhaseCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\PhaseViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />

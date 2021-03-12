@@ -47,7 +47,7 @@
                                VerticalAlignment="Center" />
                 </Grid>
                 <ItemsControl IsTabStop="False"
-                              ItemsSource="{x:Static ViewModels:PhaseViewModel.Instances}">
+                              ItemsSource="{Binding Phases.Items}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Style="{StaticResource Section}">
