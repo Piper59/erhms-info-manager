@@ -86,6 +86,7 @@ namespace ERHMS.Desktop.Data
         public CustomCollectionView(List<TItem> source)
             : base(new ArrayList(source))
         {
+            SetCurrent(null, -1);
             this.source = source;
             GroupDescriptions.CollectionChanged += Descriptions_CollectionChanged;
             SortDescriptions.CollectionChanged += Descriptions_CollectionChanged;

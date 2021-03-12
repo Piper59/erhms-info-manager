@@ -1,6 +1,6 @@
-﻿using Epi;
-using ERHMS.Common;
+﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Domain;
@@ -77,9 +77,10 @@ namespace ERHMS.Desktop.ViewModels
                 ResXResources.Lead_OpeningProject,
                 async () =>
                 {
-                    string path = Settings.Default.GetProjectPath(coreProject);
-                    Project value = await Task.Run(() => ProjectExtensions.Open(path));
-                    ProjectViewModel project = new ProjectViewModel(value);
+                    ProjectViewModel project = new ProjectViewModel(await Task.Run(() =>
+                    {
+                        return ProjectExtensions.Open(Settings.Default.GetProjectPath(coreProject));
+                    }));
                     await project.InitializeAsync();
                     Content = project;
                 });
@@ -113,7 +114,10 @@ namespace ERHMS.Desktop.ViewModels
             }
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_ExportingLogs,
-                () => ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path));
+                () =>
+                {
+                    ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path);
+                });
             ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
         }
 

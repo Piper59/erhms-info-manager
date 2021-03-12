@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.Common;
 using ERHMS.Desktop.Data;
+using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
@@ -11,19 +12,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
 {
     public class ViewCollectionViewModel : ViewModel
     {
-        public class ItemViewModel : ViewModel, ISelectable
+        public class ItemViewModel : SelectableViewModel
         {
             public View Value { get; }
             public int PageCount { get; private set; }
             public int FieldCount { get; private set; }
             public int RecordCount { get; private set; }
-
-            private bool selected;
-            public bool Selected
-            {
-                get { return selected; }
-                set { SetProperty(ref selected, value); }
-            }
 
             public ItemViewModel(View value)
             {
@@ -72,7 +66,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task InitializeAsync(IEnumerable<View> values)
         {
-            items.Clear();
             items.AddRange(values.Select(value => new ItemViewModel(value)));
             await Task.WhenAll(items.Select(item => item.InitializeAsync()));
         }

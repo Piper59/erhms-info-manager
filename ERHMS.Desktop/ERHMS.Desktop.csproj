@@ -129,6 +129,8 @@
     <Compile Include="Infrastructure\Services\DialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />
     <Compile Include="Infrastructure\Services\ProgressService.cs" />
+    <Compile Include="Infrastructure\ViewModels\SelectableViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\ViewModel.cs" />
     <Compile Include="Infrastructure\WindowExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -159,7 +161,6 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
-    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>

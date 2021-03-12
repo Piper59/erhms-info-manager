@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.ViewModels.Collections;
+﻿using ERHMS.Desktop.Infrastructure.ViewModels;
+using ERHMS.Desktop.ViewModels.Collections;
 
 namespace ERHMS.Desktop.ViewModels
 {

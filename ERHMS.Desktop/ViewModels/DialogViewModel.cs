@@ -1,5 +1,6 @@
 ﻿using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure.ViewModels;
 using System.Drawing;
 using System.Windows.Input;
 

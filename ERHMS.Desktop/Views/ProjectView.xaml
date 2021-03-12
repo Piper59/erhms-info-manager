@@ -12,7 +12,8 @@
     </UserControl.Resources>
     <Border Style="{StaticResource LargeLayout}">
         <DataGrid Grid.Column="0"
-                  ItemsSource="{Binding Views.Items}"
+                  DataContext="{Binding Views}"
+                  ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <b:Interaction.Behaviors>
                 <Behaviors:EnhanceKeyboardNavigation />

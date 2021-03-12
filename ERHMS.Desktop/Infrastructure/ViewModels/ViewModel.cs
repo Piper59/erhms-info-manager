@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 
-namespace ERHMS.Desktop.ViewModels
+namespace ERHMS.Desktop.Infrastructure.ViewModels
 {
     public abstract class ViewModel : ObservableObject
     {
