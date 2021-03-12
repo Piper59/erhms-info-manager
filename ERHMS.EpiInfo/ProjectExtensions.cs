@@ -29,7 +29,7 @@ namespace ERHMS.EpiInfo
 
         public static Project Create(ProjectCreationInfo creationInfo)
         {
-            Log.Default.Debug($"Creating Epi Info project: {creationInfo.FilePath}");
+            Log.Default.Debug($"Creating project: {creationInfo.FilePath}");
             Directory.CreateDirectory(creationInfo.Location);
             Project project = new Project
             {
@@ -55,13 +55,13 @@ namespace ERHMS.EpiInfo
 
         public static void Initialize(this Project @this)
         {
-            Log.Default.Debug($"Initializing Epi Info project: {@this.FilePath}");
+            Log.Default.Debug($"Initializing project: {@this.FilePath}");
             ((MetadataDbProvider)@this.Metadata).CreateMetadataTables();
         }
 
         public static Project Open(string path)
         {
-            Log.Default.Debug($"Opening Epi Info project: {path}");
+            Log.Default.Debug($"Opening project: {path}");
             return new Project(path);
         }
 
@@ -110,13 +110,15 @@ namespace ERHMS.EpiInfo
 
         private static void DeleteViewCore(this Project @this, View view)
         {
+            Log.Default.Debug($"Deleting view: {view.DisplayName}");
             view.DeleteDataTables();
             view.DeleteMetadata();
-            @this.Views.Remove(view.Name);
+            @this.Views.Remove(view);
         }
 
         public static void DeleteViewTree(this Project @this, View view)
         {
+            Log.Default.Debug($"Deleting view tree: {view.DisplayName}");
             view.Unrelate();
             foreach (View descendantView in view.GetDescendantViews())
             {

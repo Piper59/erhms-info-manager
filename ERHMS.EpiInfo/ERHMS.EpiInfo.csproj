@@ -85,6 +85,7 @@
     <Compile Include="Naming\TableNameUniquifier.cs" />
     <Compile Include="Naming\ViewNameUniquifier.cs" />
     <Compile Include="Naming\ViewNameValidator.cs" />
+    <Compile Include="PageExtensions.cs" />
     <Compile Include="ProjectCreationInfo.cs" />
     <Compile Include="ProjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

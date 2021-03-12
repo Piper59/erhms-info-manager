@@ -205,6 +205,10 @@ namespace ERHMS.EpiInfo.Templating
                     InstantiatePage(view, xPage);
                 }
             }
+            if (view.DataTableExists())
+            {
+                view.SynchronizeDataTables();
+            }
             return view;
         }
 

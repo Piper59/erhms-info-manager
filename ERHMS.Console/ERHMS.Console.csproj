@@ -71,17 +71,23 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\CanonizeTemplate.cs" />
     <Compile Include="Utilities\CreateDatabase.cs" />
+    <Compile Include="Utilities\CreatePage.cs" />
     <Compile Include="Utilities\CreateProject.cs" />
     <Compile Include="Utilities\CreateTemplate.cs" />
+    <Compile Include="Utilities\CreateView.cs" />
     <Compile Include="Utilities\Decrypt.cs" />
     <Compile Include="Utilities\DeleteDatabase.cs" />
+    <Compile Include="Utilities\DeletePage.cs" />
     <Compile Include="Utilities\DeleteProject.cs" />
+    <Compile Include="Utilities\DeleteTable.cs" />
+    <Compile Include="Utilities\DeleteView.cs" />
     <Compile Include="Utilities\Encrypt.cs" />
     <Compile Include="Utilities\ExportLogs.cs" />
     <Compile Include="Utilities\InitializeProject.cs" />
     <Compile Include="Utilities\InstantiateTemplate.cs" />
     <Compile Include="Utilities\IUtility.cs" />
     <Compile Include="Utilities\ResetConfiguration.cs" />
+    <Compile Include="Utilities\SynchronizeDataTables.cs" />
     <Compile Include="Utilities\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
