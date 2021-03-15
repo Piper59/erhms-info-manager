@@ -57,7 +57,7 @@ namespace ERHMS.EpiInfo.Templating
 
             public void OnError(Exception exception, out bool handled)
             {
-                Log.Default.Warn(exception);
+                Log.Instance.Warn(exception);
                 handled = true;
             }
 

@@ -75,7 +75,7 @@ namespace ERHMS.Desktop.Commands
 
         public async void Execute(object parameter)
         {
-            Log.Default.Debug($"Executing input command: {this}");
+            Log.Instance.Debug($"Executing input command: {this}");
             try
             {
                 await ExecuteCore(parameter);
@@ -105,7 +105,7 @@ namespace ERHMS.Desktop.Commands
             }
             finally
             {
-                Log.Default.Debug($"Executed input command: {this}");
+                Log.Instance.Debug($"Executed input command: {this}");
             }
         }
 

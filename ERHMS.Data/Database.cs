@@ -28,7 +28,7 @@ namespace ERHMS.Data
 
         public void Create()
         {
-            Log.Default.Debug($"Creating database: {this}");
+            Log.Instance.Debug($"Creating database: {this}");
             CreateCore();
         }
 
@@ -36,7 +36,7 @@ namespace ERHMS.Data
 
         public void Delete()
         {
-            Log.Default.Debug($"Deleting database: {this}");
+            Log.Instance.Debug($"Deleting database: {this}");
             DeleteCore();
         }
 
@@ -54,7 +54,7 @@ namespace ERHMS.Data
 
         public IDbConnection Connect()
         {
-            Log.Default.Debug($"Connecting to database: {this}");
+            Log.Instance.Debug($"Connecting to database: {this}");
             IDbConnection connection = GetLoggingConnection();
             connection.Open();
             return connection;

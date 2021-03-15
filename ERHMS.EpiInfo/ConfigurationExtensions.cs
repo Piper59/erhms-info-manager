@@ -40,7 +40,7 @@ namespace ERHMS.EpiInfo
 
         public static Configuration Create()
         {
-            Log.Default.Debug($"Creating configuration: {FilePath}");
+            Log.Instance.Debug($"Creating configuration: {FilePath}");
             Configuration configuration = Configuration.CreateDefaultConfiguration();
             configuration.RecentViews.Clear();
             configuration.RecentProjects.Clear();
@@ -50,13 +50,13 @@ namespace ERHMS.EpiInfo
 
         public static void Save(this Configuration @this)
         {
-            Log.Default.Debug($"Saving configuration: {@this.ConfigFilePath}");
+            Log.Instance.Debug($"Saving configuration: {@this.ConfigFilePath}");
             Configuration.Save(@this);
         }
 
         public static Configuration Load()
         {
-            Log.Default.Debug($"Loading configuration: {FilePath}");
+            Log.Instance.Debug($"Loading configuration: {FilePath}");
             Configuration.Load(FilePath);
             return Configuration.GetNewInstance();
         }

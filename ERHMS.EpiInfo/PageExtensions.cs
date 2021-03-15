@@ -9,7 +9,7 @@ namespace ERHMS.EpiInfo
     {
         public static void DeleteDataTables(this Page @this)
         {
-            Log.Default.Debug($"Deleting data tables: {@this.DisplayName}");
+            Log.Instance.Debug($"Deleting data tables: {@this.DisplayName}");
             View view = @this.GetView();
             CollectedDataProvider collectedData = @this.GetProject().CollectedData;
             foreach (Field field in @this.Fields)
@@ -27,7 +27,7 @@ namespace ERHMS.EpiInfo
 
         public static void DeleteMetadata(this Page @this)
         {
-            Log.Default.Debug($"Deleting metadata: {@this.DisplayName}");
+            Log.Instance.Debug($"Deleting metadata: {@this.DisplayName}");
             IMetadataProvider metadata = @this.GetMetadata();
             metadata.DeleteFields(@this);
             metadata.DeletePage(@this);

@@ -40,7 +40,7 @@ namespace ERHMS.EpiInfo
 
         public static Process Start(this Module @this, params string[] args)
         {
-            Log.Default.Debug($"Starting module: {@this}");
+            Log.Instance.Debug($"Starting module: {@this}");
             return Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,

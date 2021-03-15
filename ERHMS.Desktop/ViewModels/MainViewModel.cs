@@ -27,7 +27,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                Log.Default.Debug($"Displaying content: {value}");
+                Log.Instance.Debug($"Displaying content: {value}");
                 SetProperty(ref content, value);
             }
         }
@@ -99,12 +99,12 @@ namespace ERHMS.Desktop.ViewModels
 
         public void ViewLog()
         {
-            Process.Start(Log.DefaultFilePath);
+            Process.Start(Log.FilePath);
         }
 
         public void ViewLogs()
         {
-            Process.Start(Log.DefaultDirectoryPath);
+            Process.Start(Log.DirectoryPath);
         }
 
         public async Task ExportLogsAsync()
@@ -120,7 +120,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_ExportingLogs,
-                () => ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path));
+                () => ZipExtensions.CreateFromDirectory(Log.DirectoryPath, path));
             ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
         }
 

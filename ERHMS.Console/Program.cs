@@ -17,19 +17,19 @@ namespace ERHMS.Console
         {
             IUtility utility = Utility.ParseArgs(args);
             ConfigureLog();
-            Log.Default.Info("Running");
+            Log.Instance.Info("Running");
             try
             {
                 ConfigureEpiInfo();
                 utility.Run();
-                Log.Default.Info("Completed");
+                Log.Instance.Info("Completed");
                 return ErrorCodes.Success;
             }
             catch (Exception ex)
             {
-                Log.Default.Fatal(ex.Message);
-                Log.Default.Error(ex);
-                Log.Default.Warn("Completed with errors");
+                Log.Instance.Fatal(ex.Message);
+                Log.Instance.Error(ex);
+                Log.Instance.Warn("Completed with errors");
                 return ex.HResult;
             }
         }

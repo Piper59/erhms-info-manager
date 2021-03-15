@@ -29,7 +29,7 @@ namespace ERHMS.Desktop
         {
             ConfigureLog();
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            Log.Default.Debug("Entering application");
+            Log.Instance.Debug("Entering application");
             try
             {
                 UpgradeSettings();
@@ -39,7 +39,7 @@ namespace ERHMS.Desktop
             }
             catch (Exception ex)
             {
-                Log.Default.Fatal(ex);
+                Log.Instance.Fatal(ex);
                 StringBuilder message = new StringBuilder();
                 message.AppendLine(ResXResources.Body_CaughtFatalException);
                 message.AppendLine();
@@ -52,7 +52,7 @@ namespace ERHMS.Desktop
             }
             finally
             {
-                Log.Default.Debug("Exiting application");
+                Log.Instance.Debug("Exiting application");
             }
         }
 
@@ -70,7 +70,7 @@ namespace ERHMS.Desktop
             layout.ActivateOptions();
             FileAppender appender = new FileAppender
             {
-                File = Log.DefaultFilePath,
+                File = Log.FilePath,
                 LockingModel = new FileAppender.InterProcessLock(),
                 Layout = layout
             };
@@ -81,7 +81,7 @@ namespace ERHMS.Desktop
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Log.Default.Fatal(e.ExceptionObject);
+            Log.Instance.Fatal(e.ExceptionObject);
         }
 
         private static bool UpgradeSettings()
@@ -126,7 +126,7 @@ namespace ERHMS.Desktop
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)
         {
-            Log.Default.Error(e.Exception);
+            Log.Instance.Error(e.Exception);
             ServiceLocator.Resolve<IDialogService>().Show(
                 DialogType.Error,
                 ResXResources.Lead_CaughtNonFatalException,

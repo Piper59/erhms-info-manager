@@ -72,7 +72,7 @@ namespace ERHMS.Data
 
         private void OnExecuting()
         {
-            Log.Default.Debug($"Executing database command: {CommandLogText}");
+            Log.Instance.Debug($"Executing database command: {CommandLogText}");
         }
 
         public int ExecuteNonQuery()

@@ -19,13 +19,13 @@ namespace ERHMS.EpiInfo
 
         public static void DeleteDataTables(this View @this)
         {
-            Log.Default.Debug($"Deleting data tables: {@this.DisplayName}");
+            Log.Instance.Debug($"Deleting data tables: {@this.DisplayName}");
             @this.DeleteDataTables();
         }
 
         public static void DeleteDataTableTree(this View @this)
         {
-            Log.Default.Debug($"Deleting data table tree: {@this.DisplayName}");
+            Log.Instance.Debug($"Deleting data table tree: {@this.DisplayName}");
             foreach (View descendantView in @this.GetDescendantViews())
             {
                 DeleteDataTables(descendantView);
@@ -35,7 +35,7 @@ namespace ERHMS.EpiInfo
 
         public static void DeleteMetadata(this View @this)
         {
-            Log.Default.Debug($"Deleting metadata: {@this.DisplayName}");
+            Log.Instance.Debug($"Deleting metadata: {@this.DisplayName}");
             IMetadataProvider metadata = @this.GetMetadata();
             foreach (Page page in @this.Pages)
             {
@@ -47,7 +47,7 @@ namespace ERHMS.EpiInfo
 
         public static void DeletePage(this View @this, Page page)
         {
-            Log.Default.Debug($"Deleting page: {page.DisplayName}");
+            Log.Instance.Debug($"Deleting page: {page.DisplayName}");
             page.DeleteDataTables();
             page.DeleteMetadata();
             @this.Pages.Remove(page);
@@ -76,13 +76,13 @@ namespace ERHMS.EpiInfo
 
         public static void SynchronizeDataTables(this View @this)
         {
-            Log.Default.Debug($"Synchronizing data tables: {@this.DisplayName}");
+            Log.Instance.Debug($"Synchronizing data tables: {@this.DisplayName}");
             @this.Project.CollectedData.SynchronizeDataTable(@this);
         }
 
         public static void SynchronizeDataTableTree(this View @this)
         {
-            Log.Default.Debug($"Synchronizing data table tree: {@this.DisplayName}");
+            Log.Instance.Debug($"Synchronizing data table tree: {@this.DisplayName}");
             foreach (View descendantView in @this.GetDescendantViews())
             {
                 descendantView.SynchronizeDataTables();
@@ -92,7 +92,7 @@ namespace ERHMS.EpiInfo
 
         public static void Unrelate(this View @this)
         {
-            Log.Default.Debug($"Unrelating view: {@this.DisplayName}");
+            Log.Instance.Debug($"Unrelating view: {@this.DisplayName}");
             if (!@this.IsRelatedView)
             {
                 return;

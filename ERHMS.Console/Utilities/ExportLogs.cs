@@ -19,7 +19,7 @@ namespace ERHMS.Console.Utilities
             {
                 throw new InvalidOperationException("Archive already exists.");
             }
-            ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, ArchivePath);
+            ZipExtensions.CreateFromDirectory(Log.DirectoryPath, ArchivePath);
         }
     }
 }

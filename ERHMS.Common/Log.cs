@@ -10,17 +10,17 @@ namespace ERHMS.Common
         {
             public void Report(string value)
             {
-                Default.Debug(value);
+                Instance.Debug(value);
             }
         }
 
-        public static string DefaultDirectoryPath { get; } =
+        public static string DirectoryPath { get; } =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
 
-        public static string DefaultFilePath { get; } =
-            Path.Combine(DefaultDirectoryPath, $"{nameof(ERHMS)}.{DateTime.Today:yyyy-MM-dd}.txt");
+        public static string FilePath { get; } =
+            Path.Combine(DirectoryPath, $"{nameof(ERHMS)}.{DateTime.Today:yyyy-MM-dd}.txt");
 
-        public static ILog Default => LogManager.GetLogger(nameof(ERHMS));
+        public static ILog Instance => LogManager.GetLogger(nameof(ERHMS));
         public static IProgress<string> Progress { get; } = new ProgressImpl();
     }
 }
