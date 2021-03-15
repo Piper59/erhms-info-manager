@@ -394,6 +394,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opening form.
+        /// </summary>
+        public static string Lead_OpeningView {
+            get {
+                return ResourceManager.GetString("Lead.OpeningView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deployment.
         /// </summary>
         public static string Phase_Name_Deployment {

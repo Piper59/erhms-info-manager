@@ -32,8 +32,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
                     FieldCount = Value.Fields.InputFields.Count;
                     if (Value.DataTableExists())
                     {
-                        RecordRepository records = new RecordRepository(Value);
-                        RecordCount = records.CountByDeleted(false);
+                        RecordRepository repository = new RecordRepository(Value);
+                        RecordCount = repository.CountByDeleted(false);
                     }
                     else
                     {

@@ -79,7 +79,7 @@ namespace ERHMS.Desktop.ViewModels
                 {
                     ProjectViewModel project = new ProjectViewModel(await Task.Run(() =>
                     {
-                        return ProjectExtensions.Open(Settings.Default.GetProjectPath(coreProject));
+                        return Settings.Default.GetProject(coreProject);
                     }));
                     await project.InitializeAsync();
                     Content = project;
@@ -88,7 +88,17 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task ViewCoreViewAsync(CoreView coreView)
         {
-            await Task.CompletedTask;
+            await ServiceLocator.Resolve<IProgressService>().RunAsync(
+                ResXResources.Lead_OpeningView,
+                async () =>
+                {
+                    ViewViewModel view = new ViewViewModel(await Task.Run(() =>
+                    {
+                        return Settings.Default.GetView(coreView);
+                    }));
+                    await view.InitializeAsync();
+                    Content = view;
+                });
         }
 
         public void ViewLog()
