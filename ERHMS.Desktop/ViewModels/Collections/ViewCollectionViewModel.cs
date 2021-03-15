@@ -67,7 +67,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task InitializeAsync(IEnumerable<View> values)
         {
             items.AddRange(values.Select(value => new ItemViewModel(value)));
-            await Task.WhenAll(items.Select(item => item.InitializeAsync()));
+            foreach (ItemViewModel item in items)
+            {
+                await item.InitializeAsync();
+            }
         }
     }
 }

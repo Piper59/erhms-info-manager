@@ -1,8 +1,11 @@
 ﻿using Epi;
+using Epi.Data;
 using Epi.Data.Services;
 using Epi.Fields;
 using ERHMS.Common;
+using ERHMS.EpiInfo.Metadata;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace ERHMS.EpiInfo
@@ -49,6 +52,20 @@ namespace ERHMS.EpiInfo
             page.DeleteMetadata();
             @this.Pages.Remove(page);
             @this.MustRefreshFieldCollection = true;
+        }
+
+        public static FieldDataTable GetFields(this View @this)
+        {
+            string sql = $@"
+                SELECT
+                    F.*,
+                    P.[{ColumnNames.POSITION}]
+                FROM metaFields AS F
+                LEFT OUTER JOIN metaPages AS P ON P.[{ColumnNames.PAGE_ID}] = F.[{ColumnNames.PAGE_ID}]
+                WHERE F.[{ColumnNames.VIEW_ID}] = @ViewId;";
+            Query query = @this.Project.CollectedData.CreateQuery(sql);
+            query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, @this.Id));
+            return new FieldDataTable(@this.Project.CollectedData.Select(query));
         }
 
         public static void LoadFields(this View @this)

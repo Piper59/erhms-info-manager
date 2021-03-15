@@ -10,18 +10,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Border Style="{StaticResource LargeLayout}">
-        <DataGrid Grid.Column="0"
+    <Border Style="{StaticResource FluidLayout}">
+        <DataGrid x:Name="RecordDataGrid"
+                  Grid.Column="0"
                   DataContext="{Binding Records}"
                   ItemsSource="{Binding Items}">
             <b:Interaction.Behaviors>
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Value.GlobalRecordId}"
-                                    Header="GlobalRecordId"
-                                    Width="*" />
-            </DataGrid.Columns>
         </DataGrid>
     </Border>
 </UserControl>

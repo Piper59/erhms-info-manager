@@ -50,7 +50,8 @@ namespace ERHMS.Desktop.Infrastructure.Services
                         catch (TaskCanceledException) { }
                         using (completionTokenSource.IsCancellationRequested ? null : dialog.BeginShowDialog())
                         {
-                            await Task.WhenAll(task, continuation);
+                            await task;
+                            await continuation;
                         }
                     }
                 }

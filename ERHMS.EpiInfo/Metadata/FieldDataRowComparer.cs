@@ -14,11 +14,28 @@ namespace ERHMS.EpiInfo.Metadata
             }
         }
 
-        public class EffectiveTabIndexAware : IComparer<FieldDataRow>
+        public class ByPageAndTabIndex : IComparer<FieldDataRow>
+        {
+            public int Compare(FieldDataRow field1, FieldDataRow field2)
+            {
+                int result = Comparer<short>.Default.Compare(field1.Position, field2.Position);
+                if (result == 0)
+                {
+                    result = Comparer<double?>.Default.Compare(field1.TabIndex, field2.TabIndex);
+                }
+                if (result == 0)
+                {
+                    result = Default.Compare(field1, field2);
+                }
+                return result;
+            }
+        }
+
+        public class ByEffectiveTabIndex : IComparer<FieldDataRow>
         {
             private readonly IReadOnlyDictionary<string, double?> tabIndicesByFieldName;
 
-            public EffectiveTabIndexAware(IEnumerable<FieldDataRow> fields)
+            public ByEffectiveTabIndex(IEnumerable<FieldDataRow> fields)
             {
                 tabIndicesByFieldName = fields.ToDictionary(field => field.Name, field => field.TabIndex);
             }
@@ -52,7 +69,11 @@ namespace ERHMS.EpiInfo.Metadata
                 int result = Comparer<double?>.Default.Compare(
                     GetEffectiveTabIndex(field1),
                     GetEffectiveTabIndex(field2));
-                return result == 0 ? Default.Compare(field1, field2) : result;
+                if (result == 0)
+                {
+                    result = Default.Compare(field1, field2);
+                }
+                return result;
             }
         }
 

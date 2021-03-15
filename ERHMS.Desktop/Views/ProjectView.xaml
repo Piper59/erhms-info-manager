@@ -10,7 +10,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Border Style="{StaticResource LargeLayout}">
+    <Border Style="{StaticResource FluidLayout}">
         <DataGrid Grid.Column="0"
                   DataContext="{Binding Views}"
                   ItemsSource="{Binding Items}"

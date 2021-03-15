@@ -77,10 +77,8 @@ namespace ERHMS.Desktop.ViewModels
                 ResXResources.Lead_OpeningProject,
                 async () =>
                 {
-                    ProjectViewModel project = new ProjectViewModel(await Task.Run(() =>
-                    {
-                        return Settings.Default.GetProject(coreProject);
-                    }));
+                    ProjectViewModel project = new ProjectViewModel(
+                        await Task.Run(() => Settings.Default.GetProject(coreProject)));
                     await project.InitializeAsync();
                     Content = project;
                 });
@@ -92,10 +90,8 @@ namespace ERHMS.Desktop.ViewModels
                 ResXResources.Lead_OpeningView,
                 async () =>
                 {
-                    ViewViewModel view = new ViewViewModel(await Task.Run(() =>
-                    {
-                        return Settings.Default.GetView(coreView);
-                    }));
+                    ViewViewModel view = new ViewViewModel(
+                        await Task.Run(() => Settings.Default.GetView(coreView)));
                     await view.InitializeAsync();
                     Content = view;
                 });
@@ -124,10 +120,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_ExportingLogs,
-                () =>
-                {
-                    ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path);
-                });
+                () => ZipExtensions.CreateFromDirectory(Log.DefaultDirectoryPath, path));
             ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
         }
 
