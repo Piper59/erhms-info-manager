@@ -9,17 +9,16 @@ namespace ERHMS.Desktop.ViewModels
     public class ProjectViewModel : ViewModel
     {
         public Project Value { get; }
-        public ViewCollectionViewModel Views { get; }
+        public ViewCollectionViewModel Views { get; private set; }
 
         public ProjectViewModel(Project value)
         {
             Value = value;
-            Views = new ViewCollectionViewModel();
         }
 
         public async Task InitializeAsync()
         {
-            await Views.InitializeAsync(await Task.Run(() => Value.Views.Cast<View>().ToList()));
+            Views = new ViewCollectionViewModel(await Task.Run(() => Value.Views.Cast<View>().ToList()));
         }
     }
 }

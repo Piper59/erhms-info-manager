@@ -32,8 +32,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
                     FieldCount = Value.Fields.InputFields.Count;
                     if (Value.DataTableExists())
                     {
-                        RecordRepository repository = new RecordRepository(Value);
-                        RecordCount = repository.CountByDeleted(false);
+                        RecordRepository recordRepository = new RecordRepository(Value);
+                        RecordCount = recordRepository.CountByDeleted(false);
                     }
                     else
                     {
@@ -58,15 +58,14 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
 
-        public ViewCollectionViewModel()
+        public ViewCollectionViewModel(IEnumerable<View> values)
         {
-            items = new List<ItemViewModel>();
+            items = new List<ItemViewModel>(values.Select(value => new ItemViewModel(value)));
             Items = new CustomCollectionView<ItemViewModel>(items);
         }
 
-        public async Task InitializeAsync(IEnumerable<View> values)
+        public async Task InitializeAsync()
         {
-            items.AddRange(values.Select(value => new ItemViewModel(value)));
             foreach (ItemViewModel item in items)
             {
                 await item.InitializeAsync();

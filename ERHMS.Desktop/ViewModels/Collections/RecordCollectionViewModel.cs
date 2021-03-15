@@ -31,15 +31,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
 
-        public RecordCollectionViewModel()
+        public RecordCollectionViewModel(IEnumerable<Record> values)
         {
-            items = new List<ItemViewModel>();
+            items = new List<ItemViewModel>(values.Select(value => new ItemViewModel(value)));
             Items = new CustomCollectionView<ItemViewModel>(items);
-        }
-
-        public void Initialize(IEnumerable<Record> values)
-        {
-            items.AddRange(values.Select(value => new ItemViewModel(value)));
         }
     }
 }

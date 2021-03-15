@@ -18,7 +18,7 @@ namespace ERHMS.EpiInfo.Metadata
         {
             public int Compare(FieldDataRow field1, FieldDataRow field2)
             {
-                int result = Comparer<short>.Default.Compare(field1.Position, field2.Position);
+                int result = Comparer<short?>.Default.Compare(field1.Position, field2.Position);
                 if (result == 0)
                 {
                     result = Comparer<double?>.Default.Compare(field1.TabIndex, field2.TabIndex);

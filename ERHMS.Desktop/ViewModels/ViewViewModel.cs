@@ -13,24 +13,29 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class ViewViewModel : ViewModel
     {
+        private static bool IsDisplayable(MetaFieldType fieldType)
+        {
+            return fieldType == MetaFieldType.GlobalRecordId || fieldType.IsPrintableData();
+        }
+
         public View Value { get; }
-
-        private FieldDataTable fields;
-        public IEnumerable<FieldDataRow> Fields => fields;
-
-        public RecordCollectionViewModel Records { get; }
+        public IReadOnlyCollection<FieldDataRow> Fields { get; private set; }
+        public RecordCollectionViewModel Records { get; private set; }
 
         public ViewViewModel(View value)
         {
             Value = value;
-            Records = new RecordCollectionViewModel();
         }
 
         public async Task InitializeAsync()
         {
-            fields = await Task.Run(Value.GetFields);
-            RecordRepository repository = new RecordRepository(Value);
-            Records.Initialize(await Task.Run(() => repository.Select().ToList()));
+            IComparer<FieldDataRow> fieldComparer = new FieldDataRowComparer.ByPageAndTabIndex();
+            FieldDataTable fields = await Task.Run(Value.GetFields);
+            Fields = fields.Where(field => IsDisplayable(field.FieldType))
+                .OrderBy(field => field, fieldComparer)
+                .ToList();
+            RecordRepository recordRepository = new RecordRepository(Value);
+            Records = new RecordCollectionViewModel(await Task.Run(() => recordRepository.Select().ToList()));
         }
     }
 }
