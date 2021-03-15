@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo
             return @this.Project.CollectedData.TableExists(@this.TableName);
         }
 
-        public static void DeleteDataTablesEx(this View @this)
+        public static void DeleteDataTables(this View @this)
         {
             Log.Default.Debug($"Deleting data tables: {@this.DisplayName}");
             @this.DeleteDataTables();
@@ -25,9 +25,9 @@ namespace ERHMS.EpiInfo
             Log.Default.Debug($"Deleting data table tree: {@this.DisplayName}");
             foreach (View descendantView in @this.GetDescendantViews())
             {
-                descendantView.DeleteDataTablesEx();
+                DeleteDataTables(descendantView);
             }
-            @this.DeleteDataTablesEx();
+            DeleteDataTables(@this);
         }
 
         public static void DeleteMetadata(this View @this)
@@ -42,7 +42,7 @@ namespace ERHMS.EpiInfo
             metadata.DeleteView(@this.Name);
         }
 
-        public static void DeletePageEx(this View @this, Page page)
+        public static void DeletePage(this View @this, Page page)
         {
             Log.Default.Debug($"Deleting page: {page.DisplayName}");
             page.DeleteDataTables();
