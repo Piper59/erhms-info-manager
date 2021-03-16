@@ -15,16 +15,14 @@ namespace ERHMS.EpiInfo
             return File.Exists(FilePath);
         }
 
-        public static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
+        public static Configuration Create()
         {
-            Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
-            table.Clear();
-            if (fipsCompliant)
-            {
-                Config.TextEncryptionModuleRow row = table.NewTextEncryptionModuleRow();
-                row.FileName = "FipsCrypto.dll";
-                table.Rows.Add(row);
-            }
+            Log.Instance.Debug($"Creating configuration: {FilePath}");
+            Configuration configuration = Configuration.CreateDefaultConfiguration();
+            configuration.RecentViews.Clear();
+            configuration.RecentProjects.Clear();
+            configuration.ReadSettings(Settings.Default);
+            return configuration;
         }
 
         private static void ReadSettings(this Configuration @this, Settings settings)
@@ -38,14 +36,16 @@ namespace ERHMS.EpiInfo
             row.GridSize = settings.GridSize;
         }
 
-        public static Configuration Create()
+        public static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
         {
-            Log.Instance.Debug($"Creating configuration: {FilePath}");
-            Configuration configuration = Configuration.CreateDefaultConfiguration();
-            configuration.RecentViews.Clear();
-            configuration.RecentProjects.Clear();
-            configuration.ReadSettings(Settings.Default);
-            return configuration;
+            Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
+            table.Clear();
+            if (fipsCompliant)
+            {
+                Config.TextEncryptionModuleRow row = table.NewTextEncryptionModuleRow();
+                row.FileName = "FipsCrypto.dll";
+                table.Rows.Add(row);
+            }
         }
 
         public static void Save(this Configuration @this)

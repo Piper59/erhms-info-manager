@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace ERHMS.Domain
@@ -17,21 +15,18 @@ namespace ERHMS.Domain
         public static CoreView PostDeploymentHealthSurvey { get; } = new CoreView(Phase.PostDeployment);
         public static CoreView AfterActionReview { get; } = new CoreView(Phase.PostDeployment);
 
-        public static IReadOnlyCollection<CoreView> Instances { get; } = typeof(CoreView)
-            .GetProperties(BindingFlags.Public | BindingFlags.Static)
-            .Where(property => property.PropertyType == typeof(CoreView))
-            .Select(property => (CoreView)property.GetValue(null))
-            .ToList();
-
-        public static IEnumerable<CoreView> GetInstances(CoreProject coreProject)
+        public static IReadOnlyCollection<CoreView> Instances { get; } = new CoreView[]
         {
-            return Instances.Where(coreView => coreView.CoreProject == coreProject);
-        }
-
-        public static IEnumerable<CoreView> GetInstances(Phase phase)
-        {
-            return Instances.Where(coreView => coreView.Phase == phase);
-        }
+            WorkerRosteringForm,
+            PreDeploymentHealthSurvey,
+            WorkerDeploymentRecord,
+            WorkerInProcessingForm,
+            WorkerActivityReport,
+            DeploymentHealthSurvey,
+            WorkerOutProcessingForm,
+            PostDeploymentHealthSurvey,
+            AfterActionReview
+        };
 
         public CoreProject CoreProject => Phase.ToCoreProject();
         public Phase Phase { get; }

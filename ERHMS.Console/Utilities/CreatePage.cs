@@ -1,8 +1,6 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Naming;
 using System;
-using System.Linq;
 
 namespace ERHMS.Console.Utilities
 {
@@ -23,22 +21,19 @@ namespace ERHMS.Console.Utilities
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
-            if (view.Pages.Any(_page => NameComparer.Default.Equals(_page.Name, PageName)))
+            if (view.GetPageByName(PageName) != null)
             {
                 throw new InvalidOperationException("Page already exists.");
             }
-            int maxPosition = view.Pages.Select(_page => _page.Position)
-                .DefaultIfEmpty(-1)
-                .Max();
             Page page = new Page(view)
             {
                 Name = PageName,
-                Position = maxPosition + 1
+                Position = view.GetMaxPagePosition() + 1
             };
             project.Metadata.InsertPage(page);
-            if (view.DataTableExists())
+            if (view.TableExists())
             {
-                view.SynchronizeDataTables();
+                view.Synchronize();
             }
         }
     }

@@ -1,11 +1,9 @@
 ﻿using Epi;
 using ERHMS.Common;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Naming;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.IO;
-using System.Linq;
 
 namespace ERHMS.Console.Utilities
 {
@@ -51,7 +49,7 @@ namespace ERHMS.Console.Utilities
                 }
                 else
                 {
-                    Page page = view.Pages.Single(_page => NameComparer.Default.Equals(_page.Name, PageName));
+                    Page page = view.GetPageByName(PageName);
                     creator = new PageTemplateCreator(page);
                 }
             }

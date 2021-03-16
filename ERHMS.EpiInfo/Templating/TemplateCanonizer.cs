@@ -5,14 +5,13 @@ using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating
 {
     public class TemplateCanonizer
     {
-        private class ContextImpl : IMappingContext, IDisposable
+        protected class ContextImpl : IMappingContext
         {
             private int pageCount;
             private int pageFieldCount;
@@ -20,12 +19,10 @@ namespace ERHMS.EpiInfo.Templating
             private readonly IDictionary<int, int> viewIdMap = new Dictionary<int, int>();
             private readonly IDictionary<int, int> fieldIdMap = new Dictionary<int, int>();
 
-            public TemplateCanonizer Owner { get; }
             public IReadOnlyCollection<IFieldMapper> FieldMappers { get; }
 
-            public ContextImpl(TemplateCanonizer owner)
+            public ContextImpl()
             {
-                Owner = owner;
                 FieldMappers = FieldMapper.GetInstances(this).ToList();
             }
 
@@ -82,14 +79,9 @@ namespace ERHMS.EpiInfo.Templating
                 result = default;
                 return false;
             }
-
-            public void Dispose()
-            {
-                Owner.Context = null;
-            }
         }
 
-        private static readonly IReadOnlyCollection<string> XProjectAttributeNames = new HashSet<string>
+        private static readonly IReadOnlyCollection<string> xProjectAttributeNames = new HashSet<string>
         {
             nameof(XProject.Id),
             nameof(XProject.Name),
@@ -99,7 +91,7 @@ namespace ERHMS.EpiInfo.Templating
             nameof(XProject.CreateDate)
         };
 
-        private static readonly IReadOnlyDictionary<string, string> XFieldAttributeNameMap =
+        private static readonly IReadOnlyDictionary<string, string> xFieldAttributeNameMap =
             new Dictionary<string, string>
             {
                 { "Expr1015", "ControlFontFamily" },
@@ -107,8 +99,12 @@ namespace ERHMS.EpiInfo.Templating
                 { "Expr1017", "ControlFontStyle" }
             };
 
-        private static readonly Regex DuplicateXFieldAttributeNameRegex =
-            new Regex(@"^ControlFont(?:Family|Size|Style)1$");
+        private static readonly IReadOnlyCollection<string> xFieldDuplicateAttributeNames = new HashSet<string>
+        {
+            "ControlFontFamily1",
+            "ControlFontSize1",
+            "ControlFontStyle1"
+        };
 
         private static IEnumerable<XAttribute> GetNormalizedAttributes(XTemplate xTemplate)
         {
@@ -123,7 +119,7 @@ namespace ERHMS.EpiInfo.Templating
         {
             foreach (XAttribute attribute in xProject.Attributes())
             {
-                if (XProjectAttributeNames.Contains(attribute.Name.LocalName))
+                if (xProjectAttributeNames.Contains(attribute.Name.LocalName))
                 {
                     yield return attribute;
                 }
@@ -135,16 +131,16 @@ namespace ERHMS.EpiInfo.Templating
             bool usedNameMap = false;
             foreach (XAttribute attribute in xField.Attributes())
             {
-                if (XFieldAttributeNameMap.TryGetValue(attribute.Name.LocalName, out string attributeName))
+                if (xFieldAttributeNameMap.TryGetValue(attribute.Name.LocalName, out string attributeName))
                 {
                     usedNameMap = true;
                     yield return new XAttribute(attributeName, attribute.Value);
                 }
-                else if (usedNameMap && XFieldAttributeNameMap.Values.Contains(attribute.Name.LocalName))
+                else if (usedNameMap && xFieldAttributeNameMap.Values.Contains(attribute.Name.LocalName))
                 {
                     continue;
                 }
-                else if (DuplicateXFieldAttributeNameRegex.IsMatch(attribute.Name.LocalName))
+                else if (xFieldDuplicateAttributeNames.Contains(attribute.Name.LocalName))
                 {
                     continue;
                 }
@@ -165,7 +161,7 @@ namespace ERHMS.EpiInfo.Templating
 
         public XTemplate XTemplate { get; }
         public IProgress<string> Progress { get; set; }
-        private ContextImpl Context { get; set; }
+        protected ContextImpl Context { get; private set; }
 
         public TemplateCanonizer(XTemplate xTemplate)
         {
@@ -174,17 +170,15 @@ namespace ERHMS.EpiInfo.Templating
 
         public void Canonize()
         {
-            using (Context = new ContextImpl(this))
+            Context = new ContextImpl();
+            CanonizeXTemplate();
+            CanonizeXProject(XTemplate.XProject);
+            foreach (XView xView in XTemplate.XProject.XViews)
             {
-                CanonizeXTemplate();
-                CanonizeXProject(XTemplate.XProject);
-                foreach (XView xView in XTemplate.XProject.XViews)
-                {
-                    CanonizeXView(xView);
-                }
-                MapXFieldAttributes();
-                CanonizeXGridTables();
+                CanonizeXView(xView);
             }
+            MapXFieldAttributes();
+            CanonizeXGridTables();
         }
 
         private void CanonizeXTemplate()

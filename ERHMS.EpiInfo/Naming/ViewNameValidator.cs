@@ -8,8 +8,8 @@ namespace ERHMS.EpiInfo.Naming
     {
         public const int MaxLength = 40;
 
-        private static readonly Regex InvalidCharRegex = new Regex(@"[^A-Z0-9_]", RegexOptions.IgnoreCase);
-        private static readonly Regex InvalidStartCharRegex = new Regex(@"^[^A-Z]", RegexOptions.IgnoreCase);
+        private static readonly Regex invalidCharRegex = new Regex(@"[^A-Z0-9_]", RegexOptions.IgnoreCase);
+        private static readonly Regex invalidStartCharRegex = new Regex(@"^[^A-Z]", RegexOptions.IgnoreCase);
 
         private static Regex GetPageTableNameRegex(string viewTableName)
         {
@@ -60,12 +60,12 @@ namespace ERHMS.EpiInfo.Naming
                 reason = InvalidViewNameReason.TooLong;
                 return false;
             }
-            if (InvalidCharRegex.IsMatch(viewName))
+            if (invalidCharRegex.IsMatch(viewName))
             {
                 reason = InvalidViewNameReason.InvalidChar;
                 return false;
             }
-            if (InvalidStartCharRegex.IsMatch(viewName))
+            if (invalidStartCharRegex.IsMatch(viewName))
             {
                 reason = InvalidViewNameReason.InvalidStartChar;
                 return false;

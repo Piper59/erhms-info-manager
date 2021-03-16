@@ -8,20 +8,20 @@ namespace ERHMS.EpiInfo.Data
 {
     public class RecordMapper
     {
-        private static readonly Regex FieldNameQualifierRegex = new Regex(@"^.+\.");
+        private static readonly Regex fieldNameQualifierRegex = new Regex(@"^.+\.");
 
         private static string GetPropertyName(string fieldName)
         {
-            return FieldNameQualifierRegex.Replace(fieldName, "");
+            return fieldNameQualifierRegex.Replace(fieldName, "");
         }
 
         private static int GetOrdinal(IDataRecord source, string propertyName)
         {
             for (int index = 0; index < source.FieldCount; index++)
             {
-                string fieldName = source.GetName(index);
-                string currentPropertyName = GetPropertyName(fieldName);
-                if (NameComparer.Default.Equals(currentPropertyName, propertyName))
+                string sourceFieldName = source.GetName(index);
+                string sourcePropertyName = GetPropertyName(sourceFieldName);
+                if (NameComparer.Default.Equals(sourcePropertyName, propertyName))
                 {
                     return index;
                 }
@@ -29,15 +29,15 @@ namespace ERHMS.EpiInfo.Data
             throw new ArgumentOutOfRangeException(nameof(propertyName));
         }
 
-        private readonly int globalRecordIdOrdinal;
 
         public IDataRecord Source { get; }
-        public string GlobalRecordId => Source.GetString(globalRecordIdOrdinal);
+        public int GlobalRecordIdOrdinal { get; }
+        public string GlobalRecordId => Source.GetString(GlobalRecordIdOrdinal);
 
         public RecordMapper(IDataRecord source)
         {
             Source = source;
-            globalRecordIdOrdinal = GetOrdinal(source, ColumnNames.GLOBAL_RECORD_ID);
+            GlobalRecordIdOrdinal = GetOrdinal(source, ColumnNames.GLOBAL_RECORD_ID);
         }
 
         public void Update(Record target)

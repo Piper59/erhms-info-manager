@@ -27,10 +27,6 @@ namespace ERHMS.Console.Utilities
                 Name = ViewName
             };
             project.Metadata.InsertView(view);
-            if (view.DataTableExists())
-            {
-                view.SynchronizeDataTables();
-            }
         }
     }
 }

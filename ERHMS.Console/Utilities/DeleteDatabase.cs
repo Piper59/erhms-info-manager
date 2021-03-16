@@ -21,21 +21,11 @@ namespace ERHMS.Console.Utilities
             ConnectionString = connectionString;
         }
 
-        private IDatabase GetDatabase()
-        {
-            if (ProjectPath == null)
-            {
-                return DatabaseProvider.ToDatabase(ConnectionString);
-            }
-            else
-            {
-                return ProjectExtensions.Open(ProjectPath).GetDatabase();
-            }
-        }
-
         public void Run()
         {
-            IDatabase database = GetDatabase();
+            IDatabase database = ProjectPath == null
+                ? DatabaseProvider.ToDatabase(ConnectionString)
+                : ProjectExtensions.Open(ProjectPath).GetDatabase();
             if (!database.Exists())
             {
                 throw new InvalidOperationException("Database does not exist.");

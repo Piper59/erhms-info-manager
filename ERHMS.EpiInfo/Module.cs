@@ -41,11 +41,12 @@ namespace ERHMS.EpiInfo
         public static Process Start(this Module @this, params string[] args)
         {
             Log.Instance.Debug($"Starting module: {@this}");
+            string workingDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
             return Process.Start(new ProcessStartInfo
             {
                 UseShellExecute = false,
-                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @this.ToFileName()),
+                WorkingDirectory = workingDirectoryPath,
+                FileName = Path.Combine(workingDirectoryPath, @this.ToFileName()),
                 Arguments = string.Join(" ", args.Select(Quote))
             });
         }

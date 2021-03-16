@@ -4,6 +4,7 @@ using Epi.Data.Services;
 using Epi.Fields;
 using ERHMS.Common;
 using ERHMS.EpiInfo.Metadata;
+using ERHMS.EpiInfo.Naming;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -12,60 +13,38 @@ namespace ERHMS.EpiInfo
 {
     public static class ViewExtensions
     {
-        public static bool DataTableExists(this View @this)
+        public static Page GetPageByName(this View @this, string pageName)
         {
-            return @this.Project.CollectedData.TableExists(@this.TableName);
+            return @this.Pages.SingleOrDefault(page => NameComparer.Default.Equals(page.Name, pageName));
         }
 
-        public static void DeleteDataTables(this View @this)
+        public static int GetMaxPagePosition(this View @this)
         {
-            Log.Instance.Debug($"Deleting data tables: {@this.DisplayName}");
-            @this.DeleteDataTables();
-        }
-
-        public static void DeleteDataTableTree(this View @this)
-        {
-            Log.Instance.Debug($"Deleting data table tree: {@this.DisplayName}");
-            foreach (View descendantView in @this.GetDescendantViews())
-            {
-                DeleteDataTables(descendantView);
-            }
-            DeleteDataTables(@this);
-        }
-
-        public static void DeleteMetadata(this View @this)
-        {
-            Log.Instance.Debug($"Deleting metadata: {@this.DisplayName}");
-            IMetadataProvider metadata = @this.GetMetadata();
-            foreach (Page page in @this.Pages)
-            {
-                metadata.DeleteFields(page);
-                metadata.DeletePage(page);
-            }
-            metadata.DeleteView(@this.Name);
-        }
-
-        public static void DeletePage(this View @this, Page page)
-        {
-            Log.Instance.Debug($"Deleting page: {page.DisplayName}");
-            page.DeleteDataTables();
-            page.DeleteMetadata();
-            @this.Pages.Remove(page);
-            @this.MustRefreshFieldCollection = true;
+            return @this.Pages.Select(page => page.Position)
+                .DefaultIfEmpty(-1)
+                .Max();
         }
 
         public static FieldDataTable GetFields(this View @this)
         {
+            CollectedDataProvider collectedData = @this.Project.CollectedData;
+            IDbDriver driver = collectedData.GetDbDriver();
+
+            string Quote(string identifier)
+            {
+                return driver.InsertInEscape(identifier);
+            }
+
             string sql = $@"
                 SELECT
                     F.*,
-                    P.[{ColumnNames.POSITION}]
+                    P.{Quote(ColumnNames.POSITION)}
                 FROM metaFields AS F
-                LEFT OUTER JOIN metaPages AS P ON P.[{ColumnNames.PAGE_ID}] = F.[{ColumnNames.PAGE_ID}]
-                WHERE F.[{ColumnNames.VIEW_ID}] = @ViewId;";
-            Query query = @this.Project.CollectedData.CreateQuery(sql);
+                LEFT OUTER JOIN metaPages AS P ON P.{Quote(ColumnNames.PAGE_ID)} = F.{Quote(ColumnNames.PAGE_ID)}
+                WHERE F.{Quote(ColumnNames.VIEW_ID)} = @ViewId;";
+            Query query = collectedData.CreateQuery(sql);
             query.Parameters.Add(new QueryParameter("@ViewId", DbType.Int32, @this.Id));
-            return new FieldDataTable(@this.Project.CollectedData.Select(query));
+            return new FieldDataTable(collectedData.Select(query));
         }
 
         public static void LoadFields(this View @this)
@@ -74,29 +53,63 @@ namespace ERHMS.EpiInfo
             _ = @this.Fields;
         }
 
-        public static void SynchronizeDataTables(this View @this)
+        public static bool TableExists(this View @this)
         {
-            Log.Instance.Debug($"Synchronizing data tables: {@this.DisplayName}");
+            return @this.Project.CollectedData.TableExists(@this.TableName);
+        }
+
+        public static void Synchronize(this View @this)
+        {
+            Log.Instance.Debug($"Synchronizing view: {@this.DisplayName}");
             @this.Project.CollectedData.SynchronizeDataTable(@this);
         }
 
-        public static void SynchronizeDataTableTree(this View @this)
+        public static void SynchronizeTree(this View @this)
         {
-            Log.Instance.Debug($"Synchronizing data table tree: {@this.DisplayName}");
+            @this.Synchronize();
             foreach (View descendantView in @this.GetDescendantViews())
             {
-                descendantView.SynchronizeDataTables();
+                descendantView.Synchronize();
             }
-            @this.SynchronizeDataTables();
+        }
+
+        public static void DeleteData(this View @this)
+        {
+            Log.Instance.Debug($"Deleting view data: {@this.DisplayName}");
+            foreach (Page page in @this.Pages)
+            {
+                page.DeleteData();
+            }
+            CollectedDataProvider collectedData = @this.Project.CollectedData;
+            if (collectedData.TableExists(@this.TableName))
+            {
+                collectedData.DeleteTable(@this.TableName);
+            }
+        }
+
+        public static void DeleteMetadata(this View @this)
+        {
+            Log.Instance.Debug($"Deleting view metadata: {@this.DisplayName}");
+            foreach (Page page in @this.Pages)
+            {
+                page.DeleteMetadata();
+            }
+            @this.GetMetadata().DeleteView(@this.Name);
+        }
+
+        public static void Delete(this View @this, Page page)
+        {
+            Log.Instance.Debug($"Deleting page: {page.DisplayName}");
+            page.DeleteData();
+            page.DeleteMetadata();
+            @this.Pages.Remove(page);
+            @this.GetMetadata().SynchronizePageNumbersOnDelete(@this, page.Position);
+            @this.MustRefreshFieldCollection = true;
         }
 
         public static void Unrelate(this View @this)
         {
             Log.Instance.Debug($"Unrelating view: {@this.DisplayName}");
-            if (!@this.IsRelatedView)
-            {
-                return;
-            }
             IMetadataProvider metadata = @this.GetMetadata();
             if (@this.ParentView != null)
             {

@@ -16,7 +16,7 @@ namespace ERHMS.EpiInfo.Templating
 {
     public abstract class TemplateInstantiator
     {
-        protected class ContextImpl : IMappingContext, IDisposable
+        protected class ContextImpl : IMappingContext
         {
             private readonly IDictionary<int, int> viewIdMap = new Dictionary<int, int>();
             private readonly IDictionary<int, int> fieldIdMap = new Dictionary<int, int>();
@@ -27,7 +27,7 @@ namespace ERHMS.EpiInfo.Templating
             private readonly IDictionary<int, IDictionary<string, string>> fieldNameMapsByViewId =
                 new Dictionary<int, IDictionary<string, string>>();
 
-            public TemplateInstantiator Owner { get; }
+            public IMetadataProvider Metadata { get; }
             public IReadOnlyCollection<IFieldMapper> FieldMappers { get; }
             public TableNameUniquifier TableNameUniquifier { get; }
             public ViewNameUniquifier ViewNameUniquifier { get; }
@@ -60,12 +60,12 @@ namespace ERHMS.EpiInfo.Templating
             private readonly ICollection<Field> fields = new List<Field>();
             public IEnumerable<Field> Fields => fields;
 
-            public ContextImpl(TemplateInstantiator owner)
+            public ContextImpl(IMetadataProvider metadata)
             {
-                Owner = owner;
+                Metadata = metadata;
                 FieldMappers = FieldMapper.GetInstances(this).ToList();
-                TableNameUniquifier = new TableNameUniquifier(owner.Metadata.Project);
-                ViewNameUniquifier = new ViewNameUniquifier(owner.Metadata.Project);
+                TableNameUniquifier = new TableNameUniquifier(metadata.Project);
+                ViewNameUniquifier = new ViewNameUniquifier(metadata.Project);
             }
 
             public void OnSourceTableInstantiated(XTable xTable, DataTable table)
@@ -110,11 +110,6 @@ namespace ERHMS.EpiInfo.Templating
             {
                 return fieldNameMapsByViewId[view.Id].TryGetValue(value, out result);
             }
-
-            public void Dispose()
-            {
-                Owner.Context = null;
-            }
         }
 
         public abstract TemplateLevel Level { get; }
@@ -139,13 +134,11 @@ namespace ERHMS.EpiInfo.Templating
 
         public void Instantiate()
         {
-            using (Context = new ContextImpl(this))
-            {
-                InstantiateSourceTables();
-                InstantiateCore();
-                MapFieldProperties();
-                InstantiateGridTables();
-            }
+            Context = new ContextImpl(Metadata);
+            InstantiateSourceTables();
+            InstantiateCore();
+            MapFieldProperties();
+            InstantiateGridTables();
         }
 
         private void InstantiateSourceTables()
@@ -204,10 +197,6 @@ namespace ERHMS.EpiInfo.Templating
                 {
                     InstantiatePage(view, xPage);
                 }
-            }
-            if (view.DataTableExists())
-            {
-                view.SynchronizeDataTables();
             }
             return view;
         }

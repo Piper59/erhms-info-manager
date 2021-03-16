@@ -9,13 +9,13 @@ namespace ERHMS.EpiInfo.Templating.Mapping
 {
     public static class FieldMapper
     {
-        private static readonly IReadOnlyCollection<Type> InstanceTypes = typeof(IFieldMapper).Assembly.GetTypes()
+        private static readonly IReadOnlyCollection<Type> instanceTypes = typeof(IFieldMapper).Assembly.GetTypes()
             .Where(type => typeof(IFieldMapper).IsAssignableFrom(type) && !type.IsAbstract)
             .ToList();
 
         public static IEnumerable<IFieldMapper> GetInstances(IMappingContext mappingContext)
         {
-            foreach (Type instanceType in InstanceTypes)
+            foreach (Type instanceType in instanceTypes)
             {
                 IFieldMapper instance = (IFieldMapper)Activator.CreateInstance(instanceType);
                 instance.MappingContext = mappingContext;

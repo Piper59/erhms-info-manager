@@ -6,7 +6,7 @@ namespace ERHMS.Data
 {
     public class LoggingCommand : IDbCommand
     {
-        private static readonly Regex LineBreakRegex = new Regex(@"(?:\r\n|\r|\n)\s*");
+        private static readonly Regex lineBreakRegex = new Regex(@"(?:\r\n|\r|\n)\s*");
 
         public IDbCommand BaseCommand { get; }
 
@@ -28,7 +28,7 @@ namespace ERHMS.Data
             set { BaseCommand.CommandText = value; }
         }
 
-        private string CommandLogText => LineBreakRegex.Replace(CommandText, " ");
+        private string CommandLogText => lineBreakRegex.Replace(CommandText, " ");
 
         public int CommandTimeout
         {

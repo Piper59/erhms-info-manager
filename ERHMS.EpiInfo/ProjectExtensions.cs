@@ -108,23 +108,30 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        private static void DeleteViewCore(this Project @this, View view)
+        private static void DeleteCore(this Project @this, View view)
         {
             Log.Instance.Debug($"Deleting view: {view.DisplayName}");
-            view.DeleteDataTables();
+            view.DeleteData();
             view.DeleteMetadata();
             @this.Views.Remove(view);
         }
 
-        public static void DeleteViewTree(this Project @this, View view)
+        public static void Delete(this Project @this, View view)
         {
-            Log.Instance.Debug($"Deleting view tree: {view.DisplayName}");
-            view.Unrelate();
+            if (view.IsRelatedView)
+            {
+                view.Unrelate();
+            }
+            @this.DeleteCore(view);
+        }
+
+        public static void DeleteTree(this Project @this, View view)
+        {
             foreach (View descendantView in view.GetDescendantViews())
             {
-                @this.DeleteViewCore(descendantView);
+                @this.DeleteCore(descendantView);
             }
-            @this.DeleteViewCore(view);
+            @this.Delete(view);
         }
     }
 }

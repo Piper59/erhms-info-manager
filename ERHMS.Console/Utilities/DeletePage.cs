@@ -1,7 +1,5 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Naming;
-using System.Linq;
 
 namespace ERHMS.Console.Utilities
 {
@@ -22,8 +20,8 @@ namespace ERHMS.Console.Utilities
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
-            Page page = view.Pages.Single(_page => NameComparer.Default.Equals(_page.Name, PageName));
-            ViewExtensions.DeletePage(view, page);
+            Page page = view.GetPageByName(PageName);
+            view.Delete(page);
         }
     }
 }

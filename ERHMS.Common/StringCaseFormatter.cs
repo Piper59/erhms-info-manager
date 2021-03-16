@@ -5,6 +5,32 @@ namespace ERHMS.Common
 {
     public class StringCaseFormatter : ICustomFormatter, IFormatProvider
     {
+        private enum StringCase
+        {
+            Lower,
+            Upper,
+            Title
+        }
+
+        private static bool TryGetStringCase(string format, out StringCase value)
+        {
+            switch (format?.ToUpper())
+            {
+                case "L":
+                    value = StringCase.Lower;
+                    return true;
+                case "U":
+                    value = StringCase.Upper;
+                    return true;
+                case "T":
+                    value = StringCase.Title;
+                    return true;
+                default:
+                    value = default;
+                    return false;
+            }
+        }
+
         public CultureInfo Culture { get; set; } = CultureInfo.CurrentCulture;
         private TextInfo TextInfo => Culture.TextInfo;
 
@@ -15,17 +41,32 @@ namespace ERHMS.Common
 
         public string Format(string format, object arg, IFormatProvider formatProvider)
         {
-            string str = arg?.ToString();
-            switch (format?.ToUpper())
+            if (arg == null)
             {
-                case "U":
-                    return TextInfo.ToUpper(str);
-                case "L":
-                    return TextInfo.ToLower(str);
-                case "T":
-                    return TextInfo.ToTitleCase(str);
-                default:
-                    return arg is IFormattable formattable ? formattable.ToString(format, formatProvider) : str;
+                return "";
+            }
+            else if (arg.GetType() == typeof(string) && TryGetStringCase(format, out StringCase stringCase))
+            {
+                string str = (string)arg;
+                switch (stringCase)
+                {
+                    case StringCase.Lower:
+                        return TextInfo.ToLower(str);
+                    case StringCase.Upper:
+                        return TextInfo.ToUpper(str);
+                    case StringCase.Title:
+                        return TextInfo.ToTitleCase(str);
+                    default:
+                        throw new FormatException($"Format specifier '{format}' is not supported.");
+                }
+            }
+            else if (arg is IFormattable formattable)
+            {
+                return formattable.ToString(format, Culture);
+            }
+            else
+            {
+                return arg.ToString();
             }
         }
     }

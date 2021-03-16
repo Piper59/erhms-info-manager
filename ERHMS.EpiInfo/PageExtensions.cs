@@ -7,11 +7,11 @@ namespace ERHMS.EpiInfo
 {
     public static class PageExtensions
     {
-        public static void DeleteDataTables(this Page @this)
+        public static void DeleteData(this Page @this)
         {
-            Log.Instance.Debug($"Deleting data tables: {@this.DisplayName}");
+            Log.Instance.Debug($"Deleting page data: {@this.DisplayName}");
             View view = @this.GetView();
-            CollectedDataProvider collectedData = @this.GetProject().CollectedData;
+            CollectedDataProvider collectedData = view.Project.CollectedData;
             foreach (Field field in @this.Fields)
             {
                 if (field is GridField gridField)
@@ -27,11 +27,10 @@ namespace ERHMS.EpiInfo
 
         public static void DeleteMetadata(this Page @this)
         {
-            Log.Instance.Debug($"Deleting metadata: {@this.DisplayName}");
+            Log.Instance.Debug($"Deleting page metadata: {@this.DisplayName}");
             IMetadataProvider metadata = @this.GetMetadata();
             metadata.DeleteFields(@this);
             metadata.DeletePage(@this);
-            metadata.SynchronizePageNumbersOnDelete(@this.GetView(), @this.Position);
         }
     }
 }

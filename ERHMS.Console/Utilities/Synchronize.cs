@@ -3,16 +3,16 @@ using ERHMS.EpiInfo;
 
 namespace ERHMS.Console.Utilities
 {
-    public class DeleteView : IUtility
+    public class Synchronize : IUtility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
         public bool IncludeDescendants { get; }
 
-        public DeleteView(string projectPath, string viewName)
+        public Synchronize(string projectPath, string viewName)
             : this(projectPath, viewName, true) { }
 
-        public DeleteView(string projectPath, string viewName, bool includeDescendants)
+        public Synchronize(string projectPath, string viewName, bool includeDescendants)
         {
             ProjectPath = projectPath;
             ViewName = viewName;
@@ -25,11 +25,11 @@ namespace ERHMS.Console.Utilities
             View view = project.Views[ViewName];
             if (IncludeDescendants)
             {
-                project.DeleteTree(view);
+                view.SynchronizeTree();
             }
             else
             {
-                project.Delete(view);
+                view.Synchronize();
             }
         }
     }

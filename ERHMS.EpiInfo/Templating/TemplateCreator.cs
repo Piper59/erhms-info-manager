@@ -12,9 +12,9 @@ namespace ERHMS.EpiInfo.Templating
 {
     public abstract class TemplateCreator
     {
-        protected class ContextImpl : IDisposable
+        protected class ContextImpl
         {
-            public TemplateCreator Owner { get; }
+            public IMetadataProvider Metadata { get; }
             public XTemplate XTemplate { get; set; }
 
             private readonly ISet<string> sourceTableNames = new HashSet<string>(NameComparer.Default);
@@ -23,9 +23,9 @@ namespace ERHMS.EpiInfo.Templating
             private readonly ICollection<GridColumnDataTable> gridTables = new List<GridColumnDataTable>();
             public IEnumerable<GridColumnDataTable> GridTables => gridTables;
 
-            public ContextImpl(TemplateCreator owner)
+            public ContextImpl(IMetadataProvider metadata)
             {
-                Owner = owner;
+                Metadata = metadata;
             }
 
             private bool AddSourceTableName(MetaFieldType fieldType, string tableName)
@@ -45,7 +45,7 @@ namespace ERHMS.EpiInfo.Templating
                 AddSourceTableName(xField.FieldType, xField.SourceTableName);
                 if (xField.FieldType == MetaFieldType.Grid)
                 {
-                    DataTable gridTableData = Owner.Metadata.GetGridColumns(xField.FieldId);
+                    DataTable gridTableData = Metadata.GetGridColumns(xField.FieldId);
                     gridTableData.TableName = xField.Name;
                     GridColumnDataTable gridTable = new GridColumnDataTable(gridTableData);
                     gridTables.Add(gridTable);
@@ -54,11 +54,6 @@ namespace ERHMS.EpiInfo.Templating
                         AddSourceTableName(gridColumn.FieldType, gridColumn.SourceTableName);
                     }
                 }
-            }
-
-            public void Dispose()
-            {
-                Owner.Context = null;
             }
         }
 
@@ -76,13 +71,13 @@ namespace ERHMS.EpiInfo.Templating
 
         public XTemplate Create()
         {
-            using (Context = new ContextImpl(this))
+            Context = new ContextImpl(Metadata)
             {
-                Context.XTemplate = CreateCore();
-                CreateXSourceTables();
-                CreateXGridTables();
-                return Context.XTemplate;
-            }
+                XTemplate = CreateCore()
+            };
+            CreateXSourceTables();
+            CreateXGridTables();
+            return Context.XTemplate;
         }
 
         protected XView CreateXView(XProject xProject, View view)

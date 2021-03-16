@@ -14,8 +14,7 @@ namespace ERHMS.Common
             }
         }
 
-        public static string DirectoryPath { get; } =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+        public static string DirectoryPath { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
 
         public static string FilePath { get; } =
             Path.Combine(DirectoryPath, $"{nameof(ERHMS)}.{DateTime.Today:yyyy-MM-dd}.txt");

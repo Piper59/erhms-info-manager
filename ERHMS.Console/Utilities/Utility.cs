@@ -12,12 +12,11 @@ namespace ERHMS.Console.Utilities
     {
         private const string HelpArg = "/?";
 
-        private static readonly StringComparer ArgComparer = StringComparer.OrdinalIgnoreCase;
-
-        private static readonly IReadOnlyCollection<Type> InstanceTypes = typeof(IUtility).Assembly.GetTypes()
+        private static readonly IReadOnlyCollection<Type> instanceTypes = typeof(IUtility).Assembly.GetTypes()
             .Where(type => typeof(IUtility).IsAssignableFrom(type) && !type.IsAbstract)
             .ToList();
 
+        private static StringComparer ArgComparer => StringComparer.OrdinalIgnoreCase;
         private static string ExecutableName => Environment.GetCommandLineArgs()[0];
 
         private static string GetUsage()
@@ -29,7 +28,7 @@ namespace ERHMS.Console.Utilities
             usage.AppendLine($"  {ExecutableName} UTILITY [ARGUMENT ...]");
             usage.AppendLine();
             usage.Append("Utilities:");
-            foreach (Type instanceType in InstanceTypes.OrderBy(instanceType => instanceType.Name, ArgComparer))
+            foreach (Type instanceType in instanceTypes.OrderBy(instanceType => instanceType.Name, ArgComparer))
             {
                 usage.AppendLine();
                 usage.Append($"  {instanceType.Name}");
@@ -55,7 +54,7 @@ namespace ERHMS.Console.Utilities
 
         private static Type GetInstanceType(string instanceTypeName)
         {
-            Type instanceType = InstanceTypes
+            Type instanceType = instanceTypes
                 .SingleOrDefault(_instanceType => ArgComparer.Equals(_instanceType.Name, instanceTypeName));
             if (instanceType == null)
             {
@@ -112,15 +111,17 @@ namespace ERHMS.Console.Utilities
                     Environment.Exit(ErrorCodes.Success);
                     return null;
                 }
-                instanceType = GetInstanceType(args[0]);
-                if (args.Count > 1 && ArgComparer.Equals(args[1], HelpArg))
+                string instanceTypeName = args[0];
+                IReadOnlyList<string> constructorArgs = args.Skip(1).ToList();
+                instanceType = GetInstanceType(instanceTypeName);
+                if (constructorArgs.Count > 0 && ArgComparer.Equals(constructorArgs[0], HelpArg))
                 {
                     Out.WriteLine(GetUsage(instanceType));
                     Environment.Exit(ErrorCodes.Success);
                     return null;
                 }
-                ConstructorInfo constructor = GetConstructor(instanceType, args.Count - 1);
-                object[] parameterValues = GetParameterValues(constructor, args.Skip(1).ToList()).ToArray();
+                ConstructorInfo constructor = GetConstructor(instanceType, constructorArgs.Count);
+                object[] parameterValues = GetParameterValues(constructor, constructorArgs).ToArray();
                 return (IUtility)constructor.Invoke(parameterValues);
             }
             catch (Exception ex)

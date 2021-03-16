@@ -5,7 +5,7 @@ namespace ERHMS.EpiInfo.Metadata
 {
     public static class MetaFieldTypeExtensions
     {
-        public static bool IsNumericData(this MetaFieldType @this)
+        public static bool IsNumeric(this MetaFieldType @this)
         {
             switch (@this)
             {
@@ -44,7 +44,7 @@ namespace ERHMS.EpiInfo.Metadata
             }
         }
 
-        public static bool IsPrintableData(this MetaFieldType @this)
+        public static bool IsPrintable(this MetaFieldType @this)
         {
             switch (@this)
             {

@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo.Metadata
             }
         }
 
-        public class ByPageAndTabIndex : IComparer<FieldDataRow>
+        public class ByTabIndex : IComparer<FieldDataRow>
         {
             public int Compare(FieldDataRow field1, FieldDataRow field2)
             {
@@ -66,9 +66,13 @@ namespace ERHMS.EpiInfo.Metadata
 
             public int Compare(FieldDataRow field1, FieldDataRow field2)
             {
-                int result = Comparer<double?>.Default.Compare(
-                    GetEffectiveTabIndex(field1),
-                    GetEffectiveTabIndex(field2));
+                int result = Comparer<short?>.Default.Compare(field1.Position, field2.Position);
+                if (result == 0)
+                {
+                    result = Comparer<double?>.Default.Compare(
+                        GetEffectiveTabIndex(field1),
+                        GetEffectiveTabIndex(field2));
+                }
                 if (result == 0)
                 {
                     result = Default.Compare(field1, field2);

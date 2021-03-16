@@ -1,5 +1,4 @@
 ﻿using Epi;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo.Naming
@@ -18,7 +17,7 @@ namespace ERHMS.EpiInfo.Naming
 
         public override bool Exists(string name)
         {
-            return View.Pages.Any(page => NameComparer.Default.Equals(page.Name, name));
+            return View.GetPageByName(name) != null;
         }
 
         protected override string Format(string baseName, int suffix)

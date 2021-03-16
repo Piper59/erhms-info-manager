@@ -73,6 +73,10 @@ namespace ERHMS.Console.Utilities
                     }
                     View view = project.Views[ViewName];
                     instantiator = new PageTemplateInstantiator(xTemplate, view);
+                    if (view.TableExists())
+                    {
+                        view.Synchronize();
+                    }
                     break;
                 default:
                     throw new InvalidOperationException($"Template level '{xTemplate.Level}' is not supported.");
