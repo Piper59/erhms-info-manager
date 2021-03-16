@@ -171,14 +171,21 @@ namespace ERHMS.EpiInfo.Templating
         public void Canonize()
         {
             Context = new ContextImpl();
-            CanonizeXTemplate();
-            CanonizeXProject(XTemplate.XProject);
-            foreach (XView xView in XTemplate.XProject.XViews)
+            try
             {
-                CanonizeXView(xView);
+                CanonizeXTemplate();
+                CanonizeXProject(XTemplate.XProject);
+                foreach (XView xView in XTemplate.XProject.XViews)
+                {
+                    CanonizeXView(xView);
+                }
+                MapXFieldAttributes();
+                CanonizeXGridTables();
             }
-            MapXFieldAttributes();
-            CanonizeXGridTables();
+            finally
+            {
+                Context = null;
+            }
         }
 
         private void CanonizeXTemplate()

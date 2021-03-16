@@ -71,13 +71,18 @@ namespace ERHMS.EpiInfo.Templating
 
         public XTemplate Create()
         {
-            Context = new ContextImpl(Metadata)
+            Context = new ContextImpl(Metadata);
+            try
             {
-                XTemplate = CreateCore()
-            };
-            CreateXSourceTables();
-            CreateXGridTables();
-            return Context.XTemplate;
+                Context.XTemplate = CreateCore();
+                CreateXSourceTables();
+                CreateXGridTables();
+                return Context.XTemplate;
+            }
+            finally
+            {
+                Context = null;
+            }
         }
 
         protected XView CreateXView(XProject xProject, View view)

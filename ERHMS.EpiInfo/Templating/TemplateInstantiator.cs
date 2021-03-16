@@ -135,10 +135,17 @@ namespace ERHMS.EpiInfo.Templating
         public void Instantiate()
         {
             Context = new ContextImpl(Metadata);
-            InstantiateSourceTables();
-            InstantiateCore();
-            MapFieldProperties();
-            InstantiateGridTables();
+            try
+            {
+                InstantiateSourceTables();
+                InstantiateCore();
+                MapFieldProperties();
+                InstantiateGridTables();
+            }
+            finally
+            {
+                Context = null;
+            }
         }
 
         private void InstantiateSourceTables()
