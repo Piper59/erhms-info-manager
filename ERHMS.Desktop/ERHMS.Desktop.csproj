@@ -102,9 +102,7 @@
     <Compile Include="Commands\ErrorBehavior.cs" />
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
-    <Compile Include="Controls\ActionTextBox.cs" />
     <Compile Include="Controls\Toaster.cs" />
-    <Compile Include="Converters\ActionTextBoxPaddingConverter.cs" />
     <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
