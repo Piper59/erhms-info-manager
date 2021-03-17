@@ -45,9 +45,9 @@ namespace ERHMS.EpiInfo.Templating
                 AddSourceTableName(xField.FieldType, xField.SourceTableName);
                 if (xField.FieldType == MetaFieldType.Grid)
                 {
-                    DataTable gridTableData = Metadata.GetGridColumns(xField.FieldId);
-                    gridTableData.TableName = xField.Name;
-                    GridColumnDataTable gridTable = new GridColumnDataTable(gridTableData);
+                    DataTable gridColumnData = Metadata.GetGridColumns(xField.FieldId);
+                    gridColumnData.TableName = xField.Name;
+                    GridColumnDataTable gridTable = new GridColumnDataTable(gridColumnData);
                     gridTables.Add(gridTable);
                     foreach (GridColumnDataRow gridColumn in gridTable)
                     {
@@ -102,8 +102,8 @@ namespace ERHMS.EpiInfo.Templating
             Progress?.Report($"Adding page: {page.Name}");
             XPage xPage = XPage.Create(page);
             xView.Add(xPage);
-            DataTable fieldsData = Metadata.GetFieldsOnPageAsDataTable(page.Id);
-            FieldDataTable fields = new FieldDataTable(fieldsData);
+            DataTable fieldData = Metadata.GetFieldsOnPageAsDataTable(page.Id);
+            FieldDataTable fields = new FieldDataTable(fieldData);
             IComparer<FieldDataRow> fieldComparer = new FieldDataRowComparer.ByEffectiveTabIndex(fields);
             foreach (FieldDataRow field in fields.OrderBy(field => field, fieldComparer))
             {

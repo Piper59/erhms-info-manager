@@ -11,13 +11,18 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Border Style="{StaticResource FluidLayout}">
-        <DataGrid x:Name="RecordDataGrid"
-                  Grid.Column="0"
-                  DataContext="{Binding Records}"
-                  ItemsSource="{Binding Items}">
-            <b:Interaction.Behaviors>
-                <Behaviors:EnhanceKeyboardNavigation />
-            </b:Interaction.Behaviors>
-        </DataGrid>
+        <Border Background="{Binding Background, ElementName=RecordDataGrid}"
+                Margin="{StaticResource DefaultMargin}">
+            <DataGrid x:Name="RecordDataGrid"
+                      DataContext="{Binding Records}"
+                      HorizontalAlignment="Left"
+                      ItemsSource="{Binding Items}"
+                      Margin="0"
+                      MaxColumnWidth="320">
+                <b:Interaction.Behaviors>
+                    <Behaviors:EnhanceKeyboardNavigation />
+                </b:Interaction.Behaviors>
+            </DataGrid>
+        </Border>
     </Border>
 </UserControl>

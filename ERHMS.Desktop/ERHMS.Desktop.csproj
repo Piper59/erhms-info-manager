@@ -125,13 +125,14 @@
     <Compile Include="Dialogs\DialogType.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
+    <Compile Include="Infrastructure\NonBlockingModalDialog.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />
     <Compile Include="Infrastructure\Services\ProgressService.cs" />
     <Compile Include="Infrastructure\ViewModels\SelectableViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\ViewModel.cs" />
-    <Compile Include="Infrastructure\WindowExtensions.cs" />
+    <Compile Include="Infrastructure\WindowDisabler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

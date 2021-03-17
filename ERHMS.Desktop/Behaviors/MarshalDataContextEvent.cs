@@ -15,23 +15,23 @@ namespace ERHMS.Desktop.Behaviors
 
         protected override void OnAttached()
         {
-            CreateMarshaler();
+            AttachMarshaler();
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
 
         protected override void OnDetaching()
         {
             AssociatedObject.DataContextChanged -= AssociatedObject_DataContextChanged;
-            DestroyMarshaler();
+            DetachMarshaler();
         }
 
         private void AssociatedObject_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            DestroyMarshaler();
-            CreateMarshaler();
+            DetachMarshaler();
+            AttachMarshaler();
         }
 
-        private bool CreateMarshaler()
+        private bool AttachMarshaler()
         {
             if (AssociatedObject.DataContext == null)
             {
@@ -40,10 +40,11 @@ namespace ERHMS.Desktop.Behaviors
             EventInfo @event = AssociatedObject.DataContext.GetType().GetEvent(EventName);
             Delegate handler = Delegate.CreateDelegate(@event.EventHandlerType, AssociatedObject, HandlerName);
             marshaler = new EventMarshaler(AssociatedObject.DataContext, @event, handler);
+            marshaler.Attach();
             return true;
         }
 
-        private bool DestroyMarshaler()
+        private bool DetachMarshaler()
         {
             if (marshaler == null)
             {

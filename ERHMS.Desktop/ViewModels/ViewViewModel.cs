@@ -15,7 +15,7 @@ namespace ERHMS.Desktop.ViewModels
     {
         private static bool IsDisplayable(MetaFieldType fieldType)
         {
-            return fieldType == MetaFieldType.GlobalRecordId || fieldType.IsPrintableData();
+            return fieldType == MetaFieldType.GlobalRecordId || fieldType.IsPrintable();
         }
 
         public View Value { get; }
@@ -29,13 +29,18 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task InitializeAsync()
         {
-            IComparer<FieldDataRow> fieldComparer = new FieldDataRowComparer.ByPageAndTabIndex();
-            FieldDataTable fields = await Task.Run(Value.GetFields);
-            Fields = fields.Where(field => IsDisplayable(field.FieldType))
-                .OrderBy(field => field, fieldComparer)
-                .ToList();
-            RecordRepository recordRepository = new RecordRepository(Value);
-            Records = new RecordCollectionViewModel(await Task.Run(() => recordRepository.Select().ToList()));
+            Fields = await Task.Run(() =>
+            {
+                return Value.GetFields()
+                    .Where(field => IsDisplayable(field.FieldType))
+                    .OrderBy(field => field, new FieldDataRowComparer.ByTabIndex())
+                    .ToList();
+            });
+            Records = new RecordCollectionViewModel(await Task.Run(() =>
+            {
+                RecordRepository recordRepository = new RecordRepository(Value);
+                return recordRepository.Select().ToList();
+            }));
         }
     }
 }

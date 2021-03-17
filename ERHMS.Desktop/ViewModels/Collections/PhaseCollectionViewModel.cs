@@ -18,7 +18,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 Value = value;
                 CoreProject = value.ToCoreProject();
-                CoreViews = CoreView.GetInstances(value).ToList();
+                CoreViews = CoreView.Instances.Where(coreView => coreView.Phase == value).ToList();
             }
 
             public override int GetHashCode()

@@ -5,12 +5,12 @@ namespace ERHMS.Desktop.Dialogs
 {
     public class DialogButtonCollection : List<DialogButton>
     {
-        public static DialogButtonCollection Ok => new DialogButtonCollection
+        public static IReadOnlyCollection<DialogButton> Ok { get; } = new DialogButtonCollection
         {
             { ResXResources.AccessText_Ok, null, true, true }
         };
 
-        public static DialogButtonCollection Close => new DialogButtonCollection
+        public static IReadOnlyCollection<DialogButton> Close { get; } = new DialogButtonCollection
         {
             { ResXResources.AccessText_Close, null, true, true }
         };

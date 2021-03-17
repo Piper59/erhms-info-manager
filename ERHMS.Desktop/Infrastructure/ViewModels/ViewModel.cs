@@ -9,14 +9,17 @@ namespace ERHMS.Desktop.Infrastructure.ViewModels
     {
         protected SynchronizationContext SynchronizationContext { get; }
 
-        protected ViewModel()
+        protected ViewModel(SynchronizationContext synchronizationContext)
         {
-            if (SynchronizationContext.Current == null)
+            if (synchronizationContext == null)
             {
-                throw new InvalidOperationException("Current synchronization context cannot be null.");
+                throw new ArgumentNullException(nameof(synchronizationContext));
             }
-            SynchronizationContext = SynchronizationContext.Current;
+            SynchronizationContext = synchronizationContext;
         }
+
+        protected ViewModel()
+            : this(SynchronizationContext.Current) { }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {

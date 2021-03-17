@@ -17,11 +17,11 @@ namespace ERHMS.Desktop.Converters
             {
                 value = BaseConverter.Convert(value, targetType, parameter, culture);
             }
-            IFormatProvider formatProvider = new StringCaseFormatter
+            IFormatProvider formatter = new StringCaseFormatter
             {
                 Culture = culture
             };
-            return string.Format(formatProvider, Format, value);
+            return string.Format(formatter, Format, value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

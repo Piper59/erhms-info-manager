@@ -30,7 +30,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 {
                     PageCount = Value.Pages.Count;
                     FieldCount = Value.Fields.InputFields.Count;
-                    if (Value.DataTableExists())
+                    if (Value.TableExists())
                     {
                         RecordRepository recordRepository = new RecordRepository(Value);
                         RecordCount = recordRepository.CountByDeleted(false);

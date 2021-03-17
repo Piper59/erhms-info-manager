@@ -33,12 +33,12 @@ namespace ERHMS.Desktop.Infrastructure.Services
                 using (viewModel = new ProgressViewModel(title, canBeCanceled))
                 {
                     Window owner = Application.GetActiveOrMainWindow();
-                    Window dialog = new ProgressView
+                    NonBlockingModalDialog dialog = new NonBlockingModalDialog(new ProgressView
                     {
                         Owner = owner,
                         DataContext = viewModel
-                    };
-                    using (owner.BeginDisable())
+                    });
+                    using (WindowDisabler.Begin(owner))
                     using (CancellationTokenSource completionTokenSource = new CancellationTokenSource())
                     {
                         Task task = action(viewModel.CancellationToken);
@@ -48,11 +48,12 @@ namespace ERHMS.Desktop.Infrastructure.Services
                             await Task.Delay(Delay, completionTokenSource.Token);
                         }
                         catch (TaskCanceledException) { }
-                        using (completionTokenSource.IsCancellationRequested ? null : dialog.BeginShowDialog())
+                        using (completionTokenSource.IsCancellationRequested ? null : dialog.BeginShow())
                         {
                             await task;
                             await continuation;
                         }
+                        await dialog.EndShowAsync();
                     }
                 }
             }

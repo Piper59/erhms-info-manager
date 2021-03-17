@@ -6,7 +6,7 @@ namespace ERHMS.Desktop.Behaviors
 {
     public class SetMenuDropAlignment : Behavior<DependencyObject>
     {
-        private static readonly FieldInfo Field = typeof(SystemParameters)
+        private static readonly FieldInfo field = typeof(SystemParameters)
             .GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
 
         static SetMenuDropAlignment()
@@ -20,7 +20,7 @@ namespace ERHMS.Desktop.Behaviors
         {
             try
             {
-                Field.SetValue(null, Value);
+                field.SetValue(null, Value);
             }
             catch { }
         }

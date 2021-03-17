@@ -18,8 +18,8 @@ namespace ERHMS.Desktop.ViewModels
     {
         public static MainViewModel Instance { get; } = new MainViewModel();
 
-        private object content;
-        public object Content
+        private ViewModel content;
+        public ViewModel Content
         {
             get
             {
@@ -27,7 +27,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                Log.Instance.Debug($"Displaying content: {value}");
+                Log.Instance.Debug($"Setting main content: {value}");
                 SetProperty(ref content, value);
             }
         }
@@ -77,8 +77,10 @@ namespace ERHMS.Desktop.ViewModels
                 ResXResources.Lead_OpeningProject,
                 async () =>
                 {
-                    ProjectViewModel project = new ProjectViewModel(
-                        await Task.Run(() => Settings.Default.GetProject(coreProject)));
+                    ProjectViewModel project = new ProjectViewModel(await Task.Run(() =>
+                    {
+                        return Settings.Default.GetProject(coreProject);
+                    }));
                     await project.InitializeAsync();
                     Content = project;
                 });
@@ -90,8 +92,10 @@ namespace ERHMS.Desktop.ViewModels
                 ResXResources.Lead_OpeningView,
                 async () =>
                 {
-                    ViewViewModel view = new ViewViewModel(
-                        await Task.Run(() => Settings.Default.GetView(coreView)));
+                    ViewViewModel view = new ViewViewModel(await Task.Run(() =>
+                    {
+                        return Settings.Default.GetView(coreView);
+                    }));
                     await view.InitializeAsync();
                     Content = view;
                 });
@@ -114,13 +118,16 @@ namespace ERHMS.Desktop.ViewModels
                 string.Format(ResXResources.FileName_LogArchive, DateTime.Now),
                 ResXResources.FileDialog_Filter_ZipFiles,
                 out string path);
-            if (!result.GetValueOrDefault())
+            if (result != true)
             {
                 return;
             }
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_ExportingLogs,
-                () => ZipExtensions.CreateFromDirectory(Log.DirectoryPath, path));
+                () =>
+                {
+                    ZipExtensions.CreateFromDirectory(Log.DirectoryPath, path);
+                });
             ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
         }
 

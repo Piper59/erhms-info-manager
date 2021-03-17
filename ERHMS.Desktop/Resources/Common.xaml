@@ -14,7 +14,7 @@
     <!-- Spacing -->
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
-    <System:Double x:Key="HugeSpace">20</System:Double>
+    <System:Double x:Key="HugeSpace">25</System:Double>
     <Thickness x:Key="SmallThickness"
                Bottom="{StaticResource SmallSpace}"
                Left="{StaticResource SmallSpace}"

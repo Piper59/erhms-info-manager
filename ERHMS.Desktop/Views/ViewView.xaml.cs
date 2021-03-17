@@ -25,11 +25,16 @@ namespace ERHMS.Desktop.Views
         {
             foreach (FieldDataRow field in ViewModel.Fields)
             {
-                RecordDataGrid.Columns.Add(new DataGridTextColumn
+                DataGridColumn column = new DataGridTextColumn
                 {
                     Binding = new Binding($"Value.{field.Name}"),
                     Header = field.Name.Replace("_", "__")
-                });
+                };
+                if (field.FieldType.IsNumeric())
+                {
+                    column.CellStyle = (Style)FindResource("NumericDataGridCell");
+                }
+                RecordDataGrid.Columns.Add(column);
             }
         }
     }

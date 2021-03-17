@@ -2,6 +2,7 @@
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace ERHMS.Desktop.Infrastructure.Services
@@ -20,7 +21,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
             string lead,
             string body,
             string details,
-            DialogButtonCollection buttons)
+            IReadOnlyCollection<DialogButton> buttons)
         {
             Window owner = Application.GetActiveOrMainWindow();
             Window dialog = new DialogView

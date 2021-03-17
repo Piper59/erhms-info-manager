@@ -18,7 +18,11 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task InitializeAsync()
         {
-            Views = new ViewCollectionViewModel(await Task.Run(() => Value.Views.Cast<View>().ToList()));
+            Views = new ViewCollectionViewModel(await Task.Run(() =>
+            {
+                return Value.Views.Cast<View>().ToList();
+            }));
+            await Views.InitializeAsync();
         }
     }
 }
