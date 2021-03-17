@@ -126,7 +126,7 @@
   <data name="Body.CaughtFatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.</value>
   </data>
-  <data name="Body.ExportedLogs" xml:space="preserve">
+  <data name="Body.ExportedLogDirectory" xml:space="preserve">
     <value>Logs have been exported.</value>
   </data>
   <data name="CoreProject.Name.Incident" xml:space="preserve">
@@ -216,13 +216,13 @@
   <data name="FileDialog.Title.Save" xml:space="preserve">
     <value>Save As</value>
   </data>
-  <data name="FileName.LogArchive" xml:space="preserve">
+  <data name="FileName.LogDirectoryArchive" xml:space="preserve">
     <value>Logs-{0:yyyyMMdd-HHmmss}.zip</value>
   </data>
   <data name="Lead.CaughtNonFatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
-  <data name="Lead.ExportingLogs" xml:space="preserve">
+  <data name="Lead.ExportingLogDirectory" xml:space="preserve">
     <value>Exporting logs</value>
   </data>
   <data name="Lead.OpeningProject" xml:space="preserve">

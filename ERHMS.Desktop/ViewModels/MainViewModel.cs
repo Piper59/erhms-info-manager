@@ -32,46 +32,41 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public ICommand ExitCommand { get; }
-        public ICommand ViewHomeCommand { get; }
-        public ICommand ViewCoreProjectCommand { get; }
-        public ICommand ViewCoreViewCommand { get; }
-        public ICommand ViewLogCommand { get; }
-        public ICommand ViewLogsCommand { get; }
-        public ICommand ExportLogsCommand { get; }
-        public ICommand StartEpiInfoCommand { get; }
+        public ICommand GoToHomeCommand { get; }
+        public ICommand GoToCoreProjectCommand { get; }
+        public ICommand GoToCoreViewCommand { get; }
+        public ICommand OpenLogFileCommand { get; }
+        public ICommand OpenLogDirectoryCommand { get; }
+        public ICommand ExportLogDirectoryCommand { get; }
+        public ICommand StartEpiInfoMenuCommand { get; }
         public ICommand StartFileExplorerCommand { get; }
         public ICommand StartCommandPromptCommand { get; }
+        public ICommand ExitCommand { get; }
 
         private MainViewModel()
         {
-            ExitCommand = new SyncCommand(Exit);
-            ViewHomeCommand = new SyncCommand(ViewHome);
-            ViewCoreProjectCommand = new AsyncCommand<CoreProject>(ViewCoreProjectAsync);
-            ViewCoreViewCommand = new AsyncCommand<CoreView>(ViewCoreViewAsync);
-            ViewLogCommand = new SyncCommand(ViewLog);
-            ViewLogsCommand = new SyncCommand(ViewLogs);
-            ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
-            StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
+            GoToHomeCommand = new SyncCommand(GoToHome);
+            GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
+            GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
+            OpenLogFileCommand = new SyncCommand(OpenLogFile);
+            OpenLogDirectoryCommand = new SyncCommand(OpenLogDirectory);
+            ExportLogDirectoryCommand = new AsyncCommand(ExportLogDirectoryAsync);
+            StartEpiInfoMenuCommand = new SyncCommand(StartEpiInfoMenu);
             StartFileExplorerCommand = new SyncCommand(StartFileExplorer);
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
+            ExitCommand = new SyncCommand(Exit);
         }
 
         public event EventHandler ExitRequested;
         private void OnExitRequested(EventArgs e) => ExitRequested?.Invoke(this, e);
         private void OnExitRequested() => OnExitRequested(EventArgs.Empty);
 
-        public void Exit()
-        {
-            OnExitRequested();
-        }
-
-        public void ViewHome()
+        public void GoToHome()
         {
             Content = new HomeViewModel();
         }
 
-        public async Task ViewCoreProjectAsync(CoreProject coreProject)
+        public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_OpeningProject,
@@ -86,7 +81,7 @@ namespace ERHMS.Desktop.ViewModels
                 });
         }
 
-        public async Task ViewCoreViewAsync(CoreView coreView)
+        public async Task GoToCoreViewAsync(CoreView coreView)
         {
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_OpeningView,
@@ -101,21 +96,21 @@ namespace ERHMS.Desktop.ViewModels
                 });
         }
 
-        public void ViewLog()
+        public void OpenLogFile()
         {
             Process.Start(Log.FilePath);
         }
 
-        public void ViewLogs()
+        public void OpenLogDirectory()
         {
             Process.Start(Log.DirectoryPath);
         }
 
-        public async Task ExportLogsAsync()
+        public async Task ExportLogDirectoryAsync()
         {
             bool? result = ServiceLocator.Resolve<IFileDialogService>().Save(
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                string.Format(ResXResources.FileName_LogArchive, DateTime.Now),
+                string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now),
                 ResXResources.FileDialog_Filter_ZipFiles,
                 out string path);
             if (result != true)
@@ -123,15 +118,15 @@ namespace ERHMS.Desktop.ViewModels
                 return;
             }
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
-                ResXResources.Lead_ExportingLogs,
+                ResXResources.Lead_ExportingLogDirectory,
                 () =>
                 {
                     ZipExtensions.CreateFromDirectory(Log.DirectoryPath, path);
                 });
-            ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogs);
+            ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogDirectory);
         }
 
-        public void StartEpiInfo()
+        public void StartEpiInfoMenu()
         {
             Module.Menu.Start();
         }
@@ -149,6 +144,11 @@ namespace ERHMS.Desktop.ViewModels
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 FileName = Environment.GetEnvironmentVariable("ComSpec")
             });
+        }
+
+        public void Exit()
+        {
+            OnExitRequested();
         }
     }
 }

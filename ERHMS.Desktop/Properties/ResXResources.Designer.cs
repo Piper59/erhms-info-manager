@@ -90,9 +90,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Logs have been exported..
         /// </summary>
-        public static string Body_ExportedLogs {
+        public static string Body_ExportedLogDirectory {
             get {
-                return ResourceManager.GetString("Body.ExportedLogs", resourceCulture);
+                return ResourceManager.GetString("Body.ExportedLogDirectory", resourceCulture);
             }
         }
         
@@ -360,9 +360,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Logs-{0:yyyyMMdd-HHmmss}.zip.
         /// </summary>
-        public static string FileName_LogArchive {
+        public static string FileName_LogDirectoryArchive {
             get {
-                return ResourceManager.GetString("FileName.LogArchive", resourceCulture);
+                return ResourceManager.GetString("FileName.LogDirectoryArchive", resourceCulture);
             }
         }
         
@@ -378,9 +378,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Exporting logs.
         /// </summary>
-        public static string Lead_ExportingLogs {
+        public static string Lead_ExportingLogDirectory {
             get {
-                return ResourceManager.GetString("Lead.ExportingLogs", resourceCulture);
+                return ResourceManager.GetString("Lead.ExportingLogDirectory", resourceCulture);
             }
         }
         
