@@ -87,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCommands.cs" />
+    <Compile Include="Behaviors\CopyCurrentCellToClipboard.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
     <Compile Include="Behaviors\MarshalDataContextEvent.cs" />
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
