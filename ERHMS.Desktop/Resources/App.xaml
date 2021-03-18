@@ -27,7 +27,7 @@
     <Style x:Key="Section" TargetType="Panel">
         <Setter Property="Margin">
             <Setter.Value>
-                <Thickness Bottom="{StaticResource HugeSpace}" />
+                <Thickness Bottom="{StaticResource LargeSpace}" />
             </Setter.Value>
         </Setter>
     </Style>
@@ -80,6 +80,10 @@
     </Style>
 
     <!-- Other -->
+    <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="MinWidth" Value="100" />
+    </Style>
+
     <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
         <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />

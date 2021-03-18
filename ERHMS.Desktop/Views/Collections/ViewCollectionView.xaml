@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Views.Collections.ViewCollectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Style="{StaticResource Body}">
+            <Run>Select a form or</Run>
+            <Hyperlink Command="{Binding CreateCommand}">create a new form</Hyperlink>
+            <Run>in this database</Run>
+        </TextBlock>
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Items}"
+                  SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Value.Name}"
+                                    Header="Name"
+                                    Width="3*" />
+                <DataGridTextColumn Binding="{Binding PageCount}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Pages"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding FieldCount}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Fields"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding RecordCount}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Records"
+                                    Width="*" />
+            </DataGrid.Columns>
+            <b:Interaction.Behaviors>
+                <Behaviors:EnhanceKeyboardNavigation />
+            </b:Interaction.Behaviors>
+        </DataGrid>
+        <WrapPanel Grid.Row="2"
+                   HorizontalAlignment="Center">
+            <WrapPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+            </WrapPanel.Resources>
+            <Button Command="{Binding CustomizeCommand}">_Customize</Button>
+            <Button Command="{Binding EnterDataCommand}">_Enter data</Button>
+            <Button Command="{Binding ViewDataCommand}">V_iew data</Button>
+            <Button Command="{Binding RefreshCommand}">_Refresh</Button>
+            <Button x:Name="AdvancedButton">
+                <Button.ContextMenu>
+                    <ContextMenu Placement="Bottom"
+                                 PlacementTarget="{x:Reference AdvancedButton}">
+                        <MenuItem Command="{Binding ExportDataCommand}"
+                                  Header="_Export data" />
+                        <MenuItem Command="{Binding ImportDataCommand}"
+                                  Header="_Import data" />
+                        <MenuItem Command="{Binding DeleteCommand}"
+                                  Header="_Delete" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <b:Interaction.Behaviors>
+                    <Behaviors:OpenContextMenuOnClick />
+                </b:Interaction.Behaviors>
+                _Advanced
+            </Button>
+        </WrapPanel>
+    </Grid>
+</UserControl>

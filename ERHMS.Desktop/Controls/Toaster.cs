@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace ERHMS.Desktop.Controls
 {
+    [TemplatePart(Name = CloseButtonPartName, Type = typeof(ButtonBase))]
     public class Toaster : Control
     {
+        public const string CloseButtonPartName = "PART_CloseButton";
+
         private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(5.0);
-        private static readonly TimeSpan AfterMouseLeaveDuration = TimeSpan.FromSeconds(1.0);
+        private static readonly TimeSpan UserInitiatedDuration = TimeSpan.FromSeconds(1.0);
 
         private static readonly DependencyPropertyKey MessagePropertyKey = DependencyProperty.RegisterReadOnly(
             nameof(Message),
@@ -42,6 +46,12 @@ namespace ERHMS.Desktop.Controls
             typeof(RoutedEventHandler),
             typeof(Toaster));
 
+        public static readonly RoutedEvent ClosingEvent = EventManager.RegisterRoutedEvent(
+            nameof(Closing),
+            RoutingStrategy.Bubble,
+            typeof(RoutedEventHandler),
+            typeof(Toaster));
+
         static Toaster()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Toaster), new FrameworkPropertyMetadata(typeof(Toaster)));
@@ -62,9 +72,16 @@ namespace ERHMS.Desktop.Controls
             set { SetValue(MessageStyleProperty, value); }
         }
 
+        private ButtonBase closeButton;
+
         public Toaster()
         {
             timer.Tick += Timer_Tick;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            OnDeactivating();
         }
 
         public event RoutedEventHandler Activating
@@ -100,10 +117,52 @@ namespace ERHMS.Desktop.Controls
             RaiseEvent(new RoutedEventArgs(DeactivatingEvent, this));
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        public event RoutedEventHandler Closing
+        {
+            add { AddHandler(ClosingEvent, value); }
+            remove { RemoveHandler(ClosingEvent, value); }
+        }
+
+        private void OnClosing()
+        {
+            RaiseEvent(new RoutedEventArgs(ClosingEvent, this));
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            if (closeButton != null)
+            {
+                closeButton.Click -= CloseButton_Click;
+            }
+            closeButton = (ButtonBase)Template.FindName(CloseButtonPartName, this);
+            if (closeButton != null)
+            {
+                closeButton.Click += CloseButton_Click;
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             timer.Stop();
-            OnDeactivating();
+            OnClosing();
+        }
+
+        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            base.OnGotKeyboardFocus(e);
+            timer.Stop();
+            OnReactivating();
+        }
+
+        protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            base.OnLostKeyboardFocus(e);
+            if (!IsMouseOver)
+            {
+                timer.Interval = UserInitiatedDuration;
+                timer.Start();
+            }
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)
@@ -116,15 +175,18 @@ namespace ERHMS.Desktop.Controls
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
-            timer.Interval = AfterMouseLeaveDuration;
-            timer.Start();
+            if (!IsKeyboardFocusWithin)
+            {
+                timer.Interval = UserInitiatedDuration;
+                timer.Start();
+            }
         }
 
         public void Show(string message)
         {
             Message = message;
             OnActivating();
-            if (!IsMouseOver)
+            if (!IsKeyboardFocusWithin && !IsMouseOver)
             {
                 timer.Interval = DefaultDuration;
                 timer.Start();

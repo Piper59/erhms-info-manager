@@ -15,12 +15,14 @@ namespace ERHMS.Desktop.Behaviors
 
         protected override void OnAttached()
         {
+            base.OnAttached();
             AttachMarshaler();
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
         }
 
         protected override void OnDetaching()
         {
+            base.OnDetaching();
             AssociatedObject.DataContextChanged -= AssociatedObject_DataContextChanged;
             DetachMarshaler();
         }

@@ -6,9 +6,11 @@
     <DropShadowEffect x:Key="Shadow"
                       BlurRadius="25"
                       Color="{x:Static SystemColors.ControlDarkColor}"
-                      Direction="270" />
+                      Direction="270"
+                      Opacity="0.5" />
 
     <SolidColorBrush x:Key="ToasterBrush" Color="{x:Static local:Colors.Accent}" />
-    <SolidColorBrush x:Key="ToasterBorderBrush" Color="{x:Static local:Colors.Accent}" />
+    <SolidColorBrush x:Key="ToasterBorderBrush" Color="Transparent" />
+    <Thickness x:Key="ToasterBorderThickness">0</Thickness>
     <SolidColorBrush x:Key="ToasterTextBrush" Color="#ffffff" />
 </ResourceDictionary>

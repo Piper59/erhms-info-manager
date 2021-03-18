@@ -8,12 +8,14 @@ namespace ERHMS.Desktop.Behaviors
     {
         protected override void OnAttached()
         {
+            base.OnAttached();
             AssociatedObject.PreviewMouseDown += AssociatedObject_MouseEvent;
             AssociatedObject.Click += AssociatedObject_MouseEvent;
         }
 
         protected override void OnDetaching()
         {
+            base.OnDetaching();
             AssociatedObject.PreviewMouseDown -= AssociatedObject_MouseEvent;
             AssociatedObject.Click -= AssociatedObject_MouseEvent;
         }
@@ -32,7 +34,6 @@ namespace ERHMS.Desktop.Behaviors
             {
                 return false;
             }
-            AssociatedObject.ContextMenu.PlacementTarget = AssociatedObject;
             AssociatedObject.ContextMenu.IsOpen = true;
             return true;
         }

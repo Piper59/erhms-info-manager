@@ -14,12 +14,14 @@ namespace ERHMS.Desktop.Behaviors
 
         protected override void OnAttached()
         {
+            base.OnAttached();
             AssociatedObject.CurrentCellChanged += AssociatedObject_CurrentCellChanged;
             AssociatedObject.PreviewGotKeyboardFocus += AssociatedObject_PreviewGotKeyboardFocus;
         }
 
         protected override void OnDetaching()
         {
+            base.OnDetaching();
             AssociatedObject.CurrentCellChanged -= AssociatedObject_CurrentCellChanged;
             AssociatedObject.PreviewGotKeyboardFocus -= AssociatedObject_PreviewGotKeyboardFocus;
         }
@@ -33,8 +35,7 @@ namespace ERHMS.Desktop.Behaviors
         {
             if (!restoring
                 && e.KeyboardDevice.IsKeyDown(Key.Tab)
-                && e.OldFocus is Visual visual
-                && !visual.IsDescendantOf(AssociatedObject)
+                && (!(e.OldFocus is Visual visual) || !visual.IsDescendantOf(AssociatedObject) )
                 && RestoreCurrentCell())
             {
                 e.Handled = true;

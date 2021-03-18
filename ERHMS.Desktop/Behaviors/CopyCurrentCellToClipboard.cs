@@ -8,11 +8,13 @@ namespace ERHMS.Desktop.Behaviors
     {
         protected override void OnAttached()
         {
+            base.OnAttached();
             AssociatedObject.CopyingRowClipboardContent += AssociatedObject_CopyingRowClipboardContent;
         }
 
         protected override void OnDetaching()
         {
+            base.OnDetaching();
             AssociatedObject.CopyingRowClipboardContent -= AssociatedObject_CopyingRowClipboardContent;
         }
 

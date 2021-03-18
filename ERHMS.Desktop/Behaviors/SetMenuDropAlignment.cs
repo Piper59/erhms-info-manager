@@ -18,6 +18,7 @@ namespace ERHMS.Desktop.Behaviors
 
         protected override void OnAttached()
         {
+            base.OnAttached();
             try
             {
                 field.SetValue(null, Value);

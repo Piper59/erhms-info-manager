@@ -10,11 +10,11 @@
     <FontWeight x:Key="ThinFontWeight">Light</FontWeight>
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
     <FontFamily x:Key="CodeFontFamily">Consolas</FontFamily>
+    <FontFamily x:Key="IconFontFamily">pack://application:,,,/Resources/#Font Awesome 5 Free Solid</FontFamily>
 
     <!-- Spacing -->
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
-    <System:Double x:Key="HugeSpace">25</System:Double>
     <Thickness x:Key="SmallThickness"
                Bottom="{StaticResource SmallSpace}"
                Left="{StaticResource SmallSpace}"
@@ -25,11 +25,6 @@
                Left="{StaticResource LargeSpace}"
                Right="{StaticResource LargeSpace}"
                Top="{StaticResource LargeSpace}" />
-    <Thickness x:Key="HugeThickness"
-               Bottom="{StaticResource HugeSpace}"
-               Left="{StaticResource HugeSpace}"
-               Right="{StaticResource HugeSpace}"
-               Top="{StaticResource HugeSpace}" />
     <Thickness x:Key="DefaultMargin"
                Bottom="{StaticResource SmallSpace}"
                Left="{StaticResource SmallSpace}"
@@ -42,6 +37,6 @@
                Top="{StaticResource SmallSpace}" />
 
     <!-- Positioning -->
-    <System:Double x:Key="SmallLayoutWidth">720</System:Double>
-    <System:Double x:Key="LargeLayoutWidth">1200</System:Double>
+    <System:Double x:Key="SmallLayoutWidth">700</System:Double>
+    <System:Double x:Key="LargeLayoutWidth">1180</System:Double>
 </ResourceDictionary>

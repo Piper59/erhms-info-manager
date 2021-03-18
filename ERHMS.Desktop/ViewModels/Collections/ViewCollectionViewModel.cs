@@ -55,11 +55,14 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
+        public Project Project { get; }
+
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
 
-        public ViewCollectionViewModel(IEnumerable<View> values)
+        public ViewCollectionViewModel(Project project, IEnumerable<View> values)
         {
+            Project = project;
             items = new List<ItemViewModel>(values.Select(value => new ItemViewModel(value)));
             Items = new CustomCollectionView<ItemViewModel>(items);
         }

@@ -35,6 +35,7 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand GoToHomeCommand { get; }
         public ICommand GoToCoreProjectCommand { get; }
         public ICommand GoToCoreViewCommand { get; }
+        public ICommand GoToHelpCommand { get; }
         public ICommand OpenLogFileCommand { get; }
         public ICommand OpenLogDirectoryCommand { get; }
         public ICommand ExportLogDirectoryCommand { get; }

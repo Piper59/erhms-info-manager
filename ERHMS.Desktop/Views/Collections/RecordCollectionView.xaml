@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Views.Collections.RecordCollectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Style="{StaticResource Body}">
+            <Run>Select a record or</Run>
+            <Hyperlink Command="{Binding CreateCommand}">create a new record</Hyperlink>
+            <Run>in this form</Run>
+        </TextBlock>
+        <Border Grid.Row="1"
+                Background="{Binding Background, ElementName=RecordDataGrid}"
+                Margin="{StaticResource DefaultMargin}">
+            <DataGrid x:Name="RecordDataGrid"
+                      HorizontalAlignment="Left"
+                      ItemsSource="{Binding Items}"
+                      Margin="0">
+                <b:Interaction.Behaviors>
+                    <Behaviors:EnhanceKeyboardNavigation />
+                </b:Interaction.Behaviors>
+            </DataGrid>
+        </Border>
+        <WrapPanel Grid.Row="2"
+                   HorizontalAlignment="Center">
+            <WrapPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource ActionButton}" />
+            </WrapPanel.Resources>
+            <Button Command="{Binding EditCommand}">_Edit</Button>
+            <Button Command="{Binding DeleteCommand}">_Delete</Button>
+            <Button Command="{Binding UndeleteCommand}">_Undelete</Button>
+        </WrapPanel>
+    </Grid>
+</UserControl>

@@ -96,6 +96,7 @@
     <Style TargetType="Menu" BasedOn="{StaticResource MenuBaseBase}" />
 
     <Style x:Key="MenuItemBase" TargetType="MenuItem">
+        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
         <Style.Triggers>
             <Trigger Property="Role" Value="TopLevelHeader">
                 <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
@@ -104,7 +105,6 @@
                 <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
             </Trigger>
         </Style.Triggers>
-        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
     </Style>
     <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}" />
 
@@ -141,14 +141,14 @@
     </Style>
 
     <Style x:Key="TextBoxBase" TargetType="TextBox">
+        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
         <Style.Triggers>
             <Trigger Property="IsReadOnly" Value="True">
                 <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}" />
             </Trigger>
         </Style.Triggers>
-        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
-        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
     </Style>
     <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}" />
 

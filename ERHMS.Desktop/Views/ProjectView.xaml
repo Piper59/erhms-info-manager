@@ -1,8 +1,9 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Views.ProjectView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors">
+             xmlns:local="clr-namespace:ERHMS.Desktop"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -10,31 +11,50 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Border Style="{StaticResource FluidLayout}">
-        <DataGrid Grid.Column="0"
-                  DataContext="{Binding Views}"
-                  ItemsSource="{Binding Items}"
-                  SelectionMode="Single">
-            <b:Interaction.Behaviors>
-                <Behaviors:EnhanceKeyboardNavigation />
-            </b:Interaction.Behaviors>
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Value.Name}"
-                                    Header="Name"
-                                    Width="3*" />
-                <DataGridTextColumn Binding="{Binding PageCount}"
-                                    Header="Pages"
-                                    CellStyle="{StaticResource NumericDataGridCell}"
-                                    Width="*" />
-                <DataGridTextColumn Binding="{Binding FieldCount}"
-                                    Header="Fields"
-                                    CellStyle="{StaticResource NumericDataGridCell}"
-                                    Width="*" />
-                <DataGridTextColumn Binding="{Binding RecordCount}"
-                                    Header="Records"
-                                    CellStyle="{StaticResource NumericDataGridCell}"
-                                    Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+    <Border Style="{StaticResource LargeLayout}">
+        <Grid Style="{StaticResource Container}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"
+                  Style="{StaticResource Section}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Style="{StaticResource Title}">
+                    <Run FontWeight="{StaticResource ThinFontWeight}">Database:</Run>
+                    <Run Text="{Binding Value.Name}"
+                         ToolTip="{Binding Value.FilePath}" />
+                </TextBlock>
+                <WrapPanel Grid.Column="1"
+                           VerticalAlignment="Center">
+                    <WrapPanel.Resources>
+                        <Style TargetType="Controls:IconButton">
+                            <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+                        </Style>
+                    </WrapPanel.Resources>
+                    <Controls:IconButton AltText="Home"
+                                         Command="{x:Static local:AppCommands.GoToHomeCommand}"
+                                         Content="{x:Static local:Icons.Home}" />
+                    <Controls:IconButton AltText="Help"
+                                         Command="{x:Static local:AppCommands.GoToHelpCommand}"
+                                         Content="{x:Static local:Icons.Help}" />
+                </WrapPanel>
+            </Grid>
+            <TabControl Grid.Row="1">
+                <TabItem Header="Forms">
+                    <Border Style="{StaticResource FluidLayout}">
+                        <Grid Style="{StaticResource Container}">
+                            <Collections:ViewCollectionView DataContext="{Binding Views}" />
+                        </Grid>
+                    </Border>
+                </TabItem>
+                <TabItem Header="Dashboards" />
+                <TabItem Header="Analyses" />
+            </TabControl>
+        </Grid>
     </Border>
 </UserControl>

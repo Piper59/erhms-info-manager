@@ -21,6 +21,7 @@ namespace ERHMS.Desktop.Behaviors
 
         protected override void OnAttached()
         {
+            base.OnAttached();
             if (CopyCurrentCellToClipboard)
             {
                 Attach(copyCurrentCellToClipboard);
@@ -51,6 +52,7 @@ namespace ERHMS.Desktop.Behaviors
 
         protected override void OnDetaching()
         {
+            base.OnDetaching();
             while (attachedBehaviors.Count > 0)
             {
                 attachedBehaviors.Peek().Detach();

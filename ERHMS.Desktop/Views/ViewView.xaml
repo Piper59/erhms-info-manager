@@ -1,8 +1,9 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Views.ViewView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors">
+             xmlns:local="clr-namespace:ERHMS.Desktop"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -10,19 +11,47 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Border Style="{StaticResource FluidLayout}">
-        <Border Background="{Binding Background, ElementName=RecordDataGrid}"
-                Margin="{StaticResource DefaultMargin}">
-            <DataGrid x:Name="RecordDataGrid"
-                      DataContext="{Binding Records}"
-                      HorizontalAlignment="Left"
-                      ItemsSource="{Binding Items}"
-                      Margin="0"
-                      MaxColumnWidth="320">
-                <b:Interaction.Behaviors>
-                    <Behaviors:EnhanceKeyboardNavigation />
-                </b:Interaction.Behaviors>
-            </DataGrid>
-        </Border>
+    <Border Style="{StaticResource LargeLayout}">
+        <Grid Style="{StaticResource Container}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"
+                  Style="{StaticResource Section}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Style="{StaticResource Title}">
+                    <Run FontWeight="{StaticResource ThinFontWeight}">Form:</Run>
+                    <Run Text="{Binding Value.Project.Name}"
+                         ToolTip="{Binding Value.Project.FilePath}" />
+                    <Run FontFamily="{StaticResource IconFontFamily}"
+                         Text="{x:Static local:Icons.ChevronRight}" />
+                    <Run Text="{Binding Value.Name}" />
+                </TextBlock>
+                <WrapPanel Grid.Column="1"
+                           VerticalAlignment="Center">
+                    <WrapPanel.Resources>
+                        <Style TargetType="Controls:IconButton">
+                            <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+                        </Style>
+                    </WrapPanel.Resources>
+                    <Controls:IconButton AltText="Back to database"
+                                         Command="{Binding GoToProjectCommand}"
+                                         Content="{x:Static local:Icons.ChevronLeft}" />
+                    <Controls:IconButton AltText="Home"
+                                         Command="{x:Static local:AppCommands.GoToHomeCommand}"
+                                         Content="{x:Static local:Icons.Home}" />
+                    <Controls:IconButton AltText="Help"
+                                         Command="{x:Static local:AppCommands.GoToHelpCommand}"
+                                         Content="{x:Static local:Icons.Help}" />
+                </WrapPanel>
+            </Grid>
+            <Collections:RecordCollectionView Grid.Row="1"
+                                              DataContext="{Binding Records}" />
+        </Grid>
     </Border>
 </UserControl>

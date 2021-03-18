@@ -93,6 +93,7 @@
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
     <Compile Include="Behaviors\MoveFocusInternallyOnControlArrow.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClick.cs" />
+    <Compile Include="Behaviors\RemoveEmptyRuns.cs" />
     <Compile Include="Behaviors\RestoreCurrentCellOnFocus.cs" />
     <Compile Include="Behaviors\SetMenuDropAlignment.cs" />
     <Compile Include="Behaviors\ToggleSelectionOnSpace.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Commands\ErrorBehavior.cs" />
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
+    <Compile Include="Controls\IconButton.cs" />
     <Compile Include="Controls\Toaster.cs" />
     <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogType.cs" />
+    <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\NonBlockingModalDialog.cs" />
@@ -163,6 +166,15 @@
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
+    <Compile Include="Views\Collections\PhaseCollectionView.xaml.cs">
+      <DependentUpon>PhaseCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Collections\RecordCollectionView.xaml.cs">
+      <DependentUpon>RecordCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Collections\ViewCollectionView.xaml.cs">
+      <DependentUpon>ViewCollectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
@@ -231,6 +243,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Collections\PhaseCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Collections\RecordCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Collections\ViewCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -260,6 +284,7 @@
     <Resource Include="..\ERHMS.ico">
       <Link>Resources\ERHMS.ico</Link>
     </Resource>
+    <Resource Include="Resources\FontAwesome.otf" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,5 +6,6 @@
 
     <SolidColorBrush x:Key="ToasterBrush" Color="{x:Static SystemColors.WindowColor}" />
     <SolidColorBrush x:Key="ToasterBorderBrush" Color="{x:Static SystemColors.WindowFrameColor}" />
+    <Thickness x:Key="ToasterBorderThickness">1</Thickness>
     <SolidColorBrush x:Key="ToasterTextBrush" Color="{x:Static SystemColors.WindowTextColor}" />
 </ResourceDictionary>

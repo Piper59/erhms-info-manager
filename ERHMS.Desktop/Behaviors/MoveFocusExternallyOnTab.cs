@@ -36,11 +36,13 @@ namespace ERHMS.Desktop.Behaviors
 
         protected override void OnAttached()
         {
+            base.OnAttached();
             AssociatedObject.PreviewKeyDown += AssociatedObject_PreviewKeyDown;
         }
 
         protected override void OnDetaching()
         {
+            base.OnDetaching();
             AssociatedObject.PreviewKeyDown -= AssociatedObject_PreviewKeyDown;
         }
 
