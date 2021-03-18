@@ -1,6 +1,4 @@
-﻿using Epi;
-using ERHMS.Domain;
-using ERHMS.EpiInfo;
+﻿using ERHMS.Domain;
 using System;
 
 namespace ERHMS.Desktop.Properties
@@ -31,16 +29,6 @@ namespace ERHMS.Desktop.Properties
                 default:
                     throw new ArgumentOutOfRangeException(nameof(coreProject));
             }
-        }
-
-        public Project GetProject(CoreProject coreProject)
-        {
-            return ProjectExtensions.Open(GetProjectPath(coreProject));
-        }
-
-        public View GetView(CoreView coreView)
-        {
-            return GetProject(coreView.CoreProject).Views[coreView.Name];
         }
     }
 }

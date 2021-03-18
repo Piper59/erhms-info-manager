@@ -51,7 +51,7 @@ namespace ERHMS.Desktop.Data
         }
 
         public TItem SelectedItem => (TItem)CurrentItem;
-        public IEnumerable<TItem> SelectedItems => this.Cast<TItem>().Where(item => item.Selected);
+        public IEnumerable<TItem> SelectedItems => this.Where(item => item.Selected);
 
         private int? pageSize;
         public int? PageSize
@@ -272,7 +272,7 @@ namespace ERHMS.Desktop.Data
 
         IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
         {
-            return this.Cast<TItem>().GetEnumerator();
+            return InternalList.Cast<TItem>().GetEnumerator();
         }
     }
 }

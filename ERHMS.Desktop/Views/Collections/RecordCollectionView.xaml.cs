@@ -26,6 +26,7 @@ namespace ERHMS.Desktop.Views.Collections
                 DataGridColumn column = new DataGridTextColumn
                 {
                     Binding = new Binding($"Value.{field.Name}"),
+                    ElementStyle = (Style)FindResource("RecordProperty"),
                     Header = field.Name.Replace("_", "__")
                 };
                 if (field.FieldType.IsNumeric())

@@ -222,6 +222,9 @@
   <data name="Lead.CaughtNonFatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
+  <data name="Lead.DeletingRecords" xml:space="preserve">
+    <value>Deleting records</value>
+  </data>
   <data name="Lead.ExportingLogDirectory" xml:space="preserve">
     <value>Exporting logs</value>
   </data>
@@ -230,6 +233,12 @@
   </data>
   <data name="Lead.OpeningView" xml:space="preserve">
     <value>Opening form</value>
+  </data>
+  <data name="Lead.StartingEpiInfo" xml:space="preserve">
+    <value>Starting Epi Info</value>
+  </data>
+  <data name="Lead.UndeletingRecords" xml:space="preserve">
+    <value>Undeleting records</value>
   </data>
   <data name="Phase.Name.Deployment" xml:space="preserve">
     <value>Deployment</value>

@@ -10,11 +10,10 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class ProgressService : IProgressService
     {
-        private static readonly TimeSpan Delay = TimeSpan.FromSeconds(1.0);
-
         private ProgressViewModel viewModel;
 
         public Application Application { get; }
+        public TimeSpan FeedbackDelay { get; set; } = TimeSpan.FromSeconds(1.0);
 
         public ProgressService(Application application)
         {
@@ -45,7 +44,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
                         Task continuation = task.ContinueWith(_ => completionTokenSource.Cancel());
                         try
                         {
-                            await Task.Delay(Delay, completionTokenSource.Token);
+                            await Task.Delay(FeedbackDelay, completionTokenSource.Token);
                         }
                         catch (TaskCanceledException) { }
                         using (completionTokenSource.IsCancellationRequested ? null : dialog.BeginShow())

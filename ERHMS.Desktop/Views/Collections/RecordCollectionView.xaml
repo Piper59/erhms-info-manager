@@ -8,6 +8,13 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="RecordProperty" TargetType="TextBlock">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Item.Value.Deleted, RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" Value="True">
+                        <Setter Property="TextDecorations" Value="Strikethrough" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -29,6 +36,11 @@
                       HorizontalAlignment="Left"
                       ItemsSource="{Binding Items}"
                       Margin="0">
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="IsSelected" Value="{Binding Selected}" />
+                    </Style>
+                </DataGrid.ItemContainerStyle>
                 <b:Interaction.Behaviors>
                     <Behaviors:EnhanceKeyboardNavigation />
                 </b:Interaction.Behaviors>

@@ -4,6 +4,7 @@
     {
         public const string Times = "\uf00d";
         public const string Home = "\uf015";
+        public const string Sync = "\uf021";
         public const string ChevronLeft = "\uf053";
         public const string ChevronRight = "\uf054";
         public const string ArrowLeft = "\uf060";

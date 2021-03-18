@@ -36,6 +36,9 @@
                             <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
                         </Style>
                     </WrapPanel.Resources>
+                    <Controls:IconButton AltText="Refresh"
+                                         Command="{Binding RefreshCommand}"
+                                         Content="{x:Static local:Icons.Sync}" />
                     <Controls:IconButton AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />

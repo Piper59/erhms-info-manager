@@ -42,6 +42,15 @@
                                     Header="Records"
                                     Width="*" />
             </DataGrid.Columns>
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding ViewDataCommand}"
+                              MouseAction="LeftDoubleClick" />
+            </DataGrid.InputBindings>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="IsSelected" Value="{Binding Selected}" />
+                </Style>
+            </DataGrid.ItemContainerStyle>
             <b:Interaction.Behaviors>
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>
@@ -54,7 +63,6 @@
             <Button Command="{Binding CustomizeCommand}">_Customize</Button>
             <Button Command="{Binding EnterDataCommand}">_Enter data</Button>
             <Button Command="{Binding ViewDataCommand}">V_iew data</Button>
-            <Button Command="{Binding RefreshCommand}">_Refresh</Button>
             <Button x:Name="AdvancedButton">
                 <Button.ContextMenu>
                     <ContextMenu Placement="Bottom"

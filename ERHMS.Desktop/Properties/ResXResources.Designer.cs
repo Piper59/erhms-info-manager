@@ -376,6 +376,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deleting records.
+        /// </summary>
+        public static string Lead_DeletingRecords {
+            get {
+                return ResourceManager.GetString("Lead.DeletingRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exporting logs.
         /// </summary>
         public static string Lead_ExportingLogDirectory {
@@ -399,6 +408,24 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_OpeningView {
             get {
                 return ResourceManager.GetString("Lead.OpeningView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting Epi Info.
+        /// </summary>
+        public static string Lead_StartingEpiInfo {
+            get {
+                return ResourceManager.GetString("Lead.StartingEpiInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undeleting records.
+        /// </summary>
+        public static string Lead_UndeletingRecords {
+            get {
+                return ResourceManager.GetString("Lead.UndeletingRecords", resourceCulture);
             }
         }
         

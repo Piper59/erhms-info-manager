@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Common;
+using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.EpiInfo;
@@ -7,6 +8,7 @@ using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
@@ -60,11 +62,25 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
 
+        public ItemViewModel SelectedItem => Items.SelectedItem;
+        public View SelectedValue => SelectedItem?.Value;
+
+        public ICommand CreateCommand { get; }
+        public ICommand CustomizeCommand { get; }
+        public ICommand EnterDataCommand { get; }
+        public ICommand ViewDataCommand { get; }
+        public ICommand ExportDataCommand { get; }
+        public ICommand ImportDataCommand { get; }
+        public ICommand DeleteCommand { get; }
+
         public ViewCollectionViewModel(Project project, IEnumerable<View> values)
         {
             Project = project;
             items = new List<ItemViewModel>(values.Select(value => new ItemViewModel(value)));
             Items = new CustomCollectionView<ItemViewModel>(items);
+            CustomizeCommand = new AsyncCommand(CustomizeAsync, Items.HasSelection);
+            EnterDataCommand = new AsyncCommand(EnterDataAsync, Items.HasSelection);
+            ViewDataCommand = new AsyncCommand(ViewDataAsync, Items.HasSelection);
         }
 
         public async Task InitializeAsync()
@@ -73,6 +89,32 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 await item.InitializeAsync();
             }
+        }
+
+        public async Task CustomizeAsync()
+        {
+            await MainViewModel.Instance.StartEpiInfoAsync(
+                Module.MakeView,
+                $"/project:{Project.FilePath}",
+                $"/view:{SelectedValue.Name}");
+        }
+
+        public async Task EnterDataAsync()
+        {
+            await MainViewModel.Instance.StartEpiInfoAsync(
+                Module.Enter,
+                $"/project:{Project.FilePath}",
+                $"/view:{SelectedValue.Name}",
+                "/record:*");
+        }
+
+        public async Task ViewDataAsync()
+        {
+            await MainViewModel.Instance.GoToViewAsync(Task.Run(() =>
+            {
+                SelectedValue.LoadFields();
+                return SelectedValue;
+            }));
         }
     }
 }

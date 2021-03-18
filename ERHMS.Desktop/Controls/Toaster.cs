@@ -13,7 +13,7 @@ namespace ERHMS.Desktop.Controls
         public const string CloseButtonPartName = "PART_CloseButton";
 
         private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(5.0);
-        private static readonly TimeSpan UserInitiatedDuration = TimeSpan.FromSeconds(1.0);
+        private static readonly TimeSpan UserExtendedDuration = TimeSpan.FromSeconds(1.0);
 
         private static readonly DependencyPropertyKey MessagePropertyKey = DependencyProperty.RegisterReadOnly(
             nameof(Message),
@@ -160,7 +160,7 @@ namespace ERHMS.Desktop.Controls
             base.OnLostKeyboardFocus(e);
             if (!IsMouseOver)
             {
-                timer.Interval = UserInitiatedDuration;
+                timer.Interval = UserExtendedDuration;
                 timer.Start();
             }
         }
@@ -177,7 +177,7 @@ namespace ERHMS.Desktop.Controls
             base.OnMouseLeave(e);
             if (!IsKeyboardFocusWithin)
             {
-                timer.Interval = UserInitiatedDuration;
+                timer.Interval = UserExtendedDuration;
                 timer.Start();
             }
         }

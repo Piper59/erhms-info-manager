@@ -42,6 +42,9 @@
                     <Controls:IconButton AltText="Back to database"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{x:Static local:Icons.ChevronLeft}" />
+                    <Controls:IconButton AltText="Refresh"
+                                         Command="{Binding RefreshCommand}"
+                                         Content="{x:Static local:Icons.Sync}" />
                     <Controls:IconButton AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
