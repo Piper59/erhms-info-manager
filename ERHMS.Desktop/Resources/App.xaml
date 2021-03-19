@@ -27,7 +27,7 @@
     <Style x:Key="Section" TargetType="Panel">
         <Setter Property="Margin">
             <Setter.Value>
-                <Thickness Bottom="{StaticResource LargeSpace}" />
+                <Thickness Bottom="{StaticResource HugeSpace}" />
             </Setter.Value>
         </Setter>
     </Style>

@@ -109,7 +109,7 @@
     <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}" />
 
     <Style x:Key="ProgressBarBase" TargetType="ProgressBar">
-        <Setter Property="Height" Value="25" />
+        <Setter Property="Height" Value="{StaticResource HugeSpace}" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
     <Style TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarBase}" />
