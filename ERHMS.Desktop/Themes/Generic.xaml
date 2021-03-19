@@ -18,7 +18,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Controls:IconButton">
-                    <Button AutomationProperties.Name="{TemplateBinding AltText}"
+                    <Button AutomationProperties.AcceleratorKey="{TemplateBinding AccessKey}"
+                            AutomationProperties.Name="{TemplateBinding AltText}"
                             ToolTipService.ShowOnDisabled="True"
                             Command="{TemplateBinding Command}"
                             CommandParameter="{TemplateBinding CommandParameter}"

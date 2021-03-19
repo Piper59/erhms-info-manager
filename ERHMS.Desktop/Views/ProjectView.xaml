@@ -30,13 +30,16 @@
                 </TextBlock>
                 <WrapPanel Grid.Column="1"
                            VerticalAlignment="Center">
-                    <Controls:IconButton AltText="Refresh"
+                    <Controls:IconButton AccessKey="R"
+                                         AltText="Refresh"
                                          Command="{Binding RefreshCommand}"
                                          Content="{x:Static local:Icons.sync}" />
-                    <Controls:IconButton AltText="Home"
+                    <Controls:IconButton AccessKey="O"
+                                         AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.home}" />
-                    <Controls:IconButton AltText="Help"
+                    <Controls:IconButton AccessKey="P"
+                                         AltText="Help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.question}" />
                 </WrapPanel>

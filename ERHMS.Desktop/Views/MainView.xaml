@@ -74,12 +74,12 @@
                 <MenuItem Command="{Binding StartEpiInfoMenuCommand}"
                           Header="_Epi Info" />
                 <MenuItem Command="{Binding StartFileExplorerCommand}"
-                          Header="_File Explorer" />
+                          Header="F_ile Explorer" />
                 <MenuItem Command="{Binding StartCommandPromptCommand}"
                           Header="_Command Prompt" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_View help" />
+                <MenuItem Header="V_iew help" />
                 <Separator />
                 <MenuItem Header="_About ERHMS Info Manager" />
             </MenuItem>
