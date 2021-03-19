@@ -55,7 +55,6 @@ namespace ERHMS.Desktop.Controls
         static Toaster()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Toaster), new FrameworkPropertyMetadata(typeof(Toaster)));
-            IsTabStopProperty.OverrideMetadata(typeof(Toaster), new FrameworkPropertyMetadata(false));
         }
 
         private readonly DispatcherTimer timer = new DispatcherTimer();

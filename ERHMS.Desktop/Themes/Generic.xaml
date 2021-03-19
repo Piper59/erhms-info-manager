@@ -41,6 +41,7 @@
         <Setter Property="BorderThickness" Value="{StaticResource ToasterBorderThickness}" />
         <Setter Property="Effect" Value="{StaticResource Shadow}" />
         <Setter Property="Foreground" Value="{StaticResource ToasterTextBrush}" />
+        <Setter Property="IsTabStop" Value="False" />
         <Setter Property="MessageStyle" Value="{StaticResource Body}" />
         <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
         <Setter Property="Opacity" Value="0" />
@@ -83,10 +84,8 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
-                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0"
-                                                                Value="1e-3" />
-                                        <LinearDoubleKeyFrame KeyTime="0:0:0.1"
-                                                              Value="1" />
+                                        <DiscreteDoubleKeyFrame KeyTime="0" Value="1e-3" />
+                                        <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="1" />
                                     </DoubleAnimationUsingKeyFrames>
                                 </Storyboard>
                             </BeginStoryboard>
@@ -94,27 +93,21 @@
                         <EventTrigger RoutedEvent="Reactivating">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     Duration="0:0:0"
-                                                     To="1" />
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0" To="1" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
                         <EventTrigger RoutedEvent="Deactivating">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     Duration="0:0:1"
-                                                     To="0" />
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:1" To="0" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
                         <EventTrigger RoutedEvent="Closing">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                     Duration="0:0:0"
-                                                     To="0" />
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0" To="0" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
