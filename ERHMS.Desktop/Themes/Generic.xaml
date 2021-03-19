@@ -8,6 +8,7 @@
 
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
         <Setter Property="Padding">
             <Setter.Value>
                 <Thickness Bottom="{StaticResource SmallSpace}"
@@ -18,6 +19,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Controls:IconButton">
                     <Button AutomationProperties.Name="{TemplateBinding AltText}"
+                            ToolTipService.ShowOnDisabled="True"
                             Command="{TemplateBinding Command}"
                             CommandParameter="{TemplateBinding CommandParameter}"
                             Content="{TemplateBinding Content}"

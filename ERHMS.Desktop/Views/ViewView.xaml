@@ -33,11 +33,6 @@
                 </TextBlock>
                 <WrapPanel Grid.Column="1"
                            VerticalAlignment="Center">
-                    <WrapPanel.Resources>
-                        <Style TargetType="Controls:IconButton">
-                            <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
-                        </Style>
-                    </WrapPanel.Resources>
                     <Controls:IconButton AltText="Back to database"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{x:Static local:Icons.chevron_left}" />
