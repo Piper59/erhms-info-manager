@@ -1,32 +1,15 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace ERHMS.Desktop.Controls
 {
-    [TemplatePart(Name = CloseButtonPartName, Type = typeof(ButtonBase))]
-    public class Toaster : Control
+    public partial class Toaster : UserControl
     {
-        public const string CloseButtonPartName = "PART_CloseButton";
-
         private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(5.0);
         private static readonly TimeSpan UserExtendedDuration = TimeSpan.FromSeconds(1.0);
-
-        private static readonly DependencyPropertyKey MessagePropertyKey = DependencyProperty.RegisterReadOnly(
-            nameof(Message),
-            typeof(string),
-            typeof(Toaster),
-            new FrameworkPropertyMetadata());
-
-        public static readonly DependencyProperty MessageProperty = MessagePropertyKey.DependencyProperty;
-
-        public static readonly DependencyProperty MessageStyleProperty = DependencyProperty.Register(
-            nameof(MessageStyle),
-            typeof(Style),
-            typeof(Toaster));
 
         public static readonly RoutedEvent ActivatingEvent = EventManager.RegisterRoutedEvent(
             nameof(Activating),
@@ -52,35 +35,12 @@ namespace ERHMS.Desktop.Controls
             typeof(RoutedEventHandler),
             typeof(Toaster));
 
-        static Toaster()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(Toaster), new FrameworkPropertyMetadata(typeof(Toaster)));
-        }
-
         private readonly DispatcherTimer timer = new DispatcherTimer();
-
-        public string Message
-        {
-            get { return (string)GetValue(MessageProperty); }
-            private set { SetValue(MessagePropertyKey, value); }
-        }
-
-        public Style MessageStyle
-        {
-            get { return (Style)GetValue(MessageStyleProperty); }
-            set { SetValue(MessageStyleProperty, value); }
-        }
-
-        private ButtonBase closeButton;
 
         public Toaster()
         {
+            InitializeComponent();
             timer.Tick += Timer_Tick;
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            OnDeactivating();
         }
 
         public event RoutedEventHandler Activating
@@ -127,18 +87,9 @@ namespace ERHMS.Desktop.Controls
             RaiseEvent(new RoutedEventArgs(ClosingEvent, this));
         }
 
-        public override void OnApplyTemplate()
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            base.OnApplyTemplate();
-            if (closeButton != null)
-            {
-                closeButton.Click -= CloseButton_Click;
-            }
-            closeButton = (ButtonBase)Template.FindName(CloseButtonPartName, this);
-            if (closeButton != null)
-            {
-                closeButton.Click += CloseButton_Click;
-            }
+            OnDeactivating();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -183,7 +134,7 @@ namespace ERHMS.Desktop.Controls
 
         public void Show(string message)
         {
-            Message = message;
+            MessageTextBlock.Text = message;
             OnActivating();
             if (!IsKeyboardFocusWithin && !IsMouseOver)
             {
