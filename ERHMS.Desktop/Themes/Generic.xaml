@@ -58,7 +58,7 @@
                             <Button x:Name="PART_CloseButton"
                                     Grid.Row="0"
                                     AutomationProperties.Name="Dismiss"
-                                    Content="{x:Static local:Icons.Times}"
+                                    Content="{x:Static local:Icons.times}"
                                     FontFamily="{StaticResource IconFontFamily}"
                                     Foreground="{TemplateBinding Foreground}"
                                     HorizontalAlignment="Right"

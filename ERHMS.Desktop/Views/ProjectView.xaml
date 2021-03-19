@@ -37,13 +37,13 @@
                     </WrapPanel.Resources>
                     <Controls:IconButton AltText="Refresh"
                                          Command="{Binding RefreshCommand}"
-                                         Content="{x:Static local:Icons.Sync}" />
+                                         Content="{x:Static local:Icons.sync}" />
                     <Controls:IconButton AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
-                                         Content="{x:Static local:Icons.Home}" />
+                                         Content="{x:Static local:Icons.home}" />
                     <Controls:IconButton AltText="Help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
-                                         Content="{x:Static local:Icons.Help}" />
+                                         Content="{x:Static local:Icons.question}" />
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">
