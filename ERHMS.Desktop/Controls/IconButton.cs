@@ -17,14 +17,6 @@ namespace ERHMS.Desktop.Controls
             typeof(string),
             typeof(IconButton));
 
-        static IconButton()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(IconButton),
-                new FrameworkPropertyMetadata(typeof(IconButton)));
-            IsTabStopProperty.OverrideMetadata(typeof(IconButton), new FrameworkPropertyMetadata(false));
-        }
-
         private static void AccessKeyProperty_DependencyPropertyChanged(
             DependencyObject sender,
             DependencyPropertyChangedEventArgs e)

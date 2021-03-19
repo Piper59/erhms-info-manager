@@ -35,11 +35,11 @@
                                          Command="{Binding RefreshCommand}"
                                          Content="{x:Static local:Icons.sync}" />
                     <Controls:IconButton AccessKey="O"
-                                         AltText="Home"
+                                         AltText="View home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.home}" />
-                    <Controls:IconButton AccessKey="P"
-                                         AltText="Help"
+                    <Controls:IconButton AccessKey="E"
+                                         AltText="View help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.question}" />
                 </WrapPanel>

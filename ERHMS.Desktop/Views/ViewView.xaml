@@ -34,19 +34,19 @@
                 <WrapPanel Grid.Column="1"
                            VerticalAlignment="Center">
                     <Controls:IconButton AccessKey="D"
-                                         AltText="Database"
+                                         AltText="Return to database"
                                          Command="{Binding GoToProjectCommand}"
-                                         Content="{x:Static local:Icons.database}" />
+                                         Content="{x:Static local:Icons.chevron_left}" />
                     <Controls:IconButton AccessKey="R"
                                          AltText="Refresh"
                                          Command="{Binding RefreshCommand}"
                                          Content="{x:Static local:Icons.sync}" />
                     <Controls:IconButton AccessKey="O"
-                                         AltText="Home"
+                                         AltText="View home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.home}" />
-                    <Controls:IconButton AccessKey="P"
-                                         AltText="Help"
+                    <Controls:IconButton AccessKey="E"
+                                         AltText="View help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.question}" />
                 </WrapPanel>

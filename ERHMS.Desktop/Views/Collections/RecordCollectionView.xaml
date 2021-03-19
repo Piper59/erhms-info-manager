@@ -25,6 +25,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
+            <!-- TODO: Add AccessKeys -->
             <Controls:IconButton AltText="Create"
                                  Command="{Binding CreateCommand}"
                                  Content="{x:Static local:Icons.plus}" />
