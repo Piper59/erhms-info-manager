@@ -47,8 +47,15 @@
                                          Content="{x:Static local:Icons.question}" />
                 </WrapPanel>
             </Grid>
-            <Collections:RecordCollectionView Grid.Row="1"
-                                              DataContext="{Binding Records}" />
+            <TabControl Grid.Row="1">
+                <TabItem Header="Records">
+                    <Border Style="{StaticResource FluidLayout}">
+                        <Grid Style="{StaticResource Container}">
+                            <Collections:RecordCollectionView DataContext="{Binding Records}" />
+                        </Grid>
+                    </Border>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Border>
 </UserControl>
