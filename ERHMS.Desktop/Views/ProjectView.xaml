@@ -33,15 +33,15 @@
                     <Controls:IconButton AccessKey="R"
                                          AltText="Refresh"
                                          Command="{Binding RefreshCommand}"
-                                         Content="{x:Static local:Icons.sync}" />
+                                         Content="{x:Static local:Icons.Refresh}" />
                     <Controls:IconButton AccessKey="O"
                                          AltText="View home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
-                                         Content="{x:Static local:Icons.home}" />
+                                         Content="{x:Static local:Icons.Home}" />
                     <Controls:IconButton AccessKey="E"
                                          AltText="View help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
-                                         Content="{x:Static local:Icons.question}" />
+                                         Content="{x:Static local:Icons.Help}" />
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">

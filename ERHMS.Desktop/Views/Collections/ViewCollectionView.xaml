@@ -18,37 +18,34 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <!-- TODO: Add AccessKeys -->
-            <Controls:IconButton AltText="Create"
+            <Controls:IconButton AccessKey="C"
+                                 AltText="Create"
                                  Command="{Binding CreateCommand}"
-                                 Content="{x:Static local:Icons.plus}" />
-            <Controls:IconButton AltText="Customize"
+                                 Content="{x:Static local:Icons.Create}" />
+            <Controls:IconButton AccessKey="U"
+                                 AltText="Customize"
                                  Command="{Binding CustomizeCommand}"
-                                 Content="{x:Static local:Icons.wrench}" />
-            <Controls:IconButton AltText="Enter data"
+                                 Content="{x:Static local:Icons.Customize}" />
+            <Controls:IconButton AccessKey="E"
+                                 AltText="Enter data"
                                  Command="{Binding EnterDataCommand}"
-                                 Content="{x:Static local:Icons.pen}" />
-            <Controls:IconButton AltText="View data"
+                                 Content="{x:Static local:Icons.Edit}" />
+            <Controls:IconButton AccessKey="I"
+                                 AltText="View data"
                                  Command="{Binding ViewDataCommand}"
-                                 Content="{x:Static local:Icons.eye}" />
-            <Controls:IconButton x:Name="AdvancedButton"
-                                 AltText="Advanced"
-                                 Content="{x:Static local:Icons.cog}">
-                <Controls:IconButton.ContextMenu>
-                    <ContextMenu Placement="Bottom"
-                                 PlacementTarget="{x:Reference AdvancedButton}">
-                        <MenuItem Command="{Binding ExportDataCommand}"
-                                  Header="_Export data" />
-                        <MenuItem Command="{Binding ImportDataCommand}"
-                                  Header="_Import data" />
-                        <MenuItem Command="{Binding DeleteCommand}"
-                                  Header="_Delete" />
-                    </ContextMenu>
-                </Controls:IconButton.ContextMenu>
-                <b:Interaction.Behaviors>
-                    <Behaviors:OpenContextMenuOnClick />
-                </b:Interaction.Behaviors>
-            </Controls:IconButton>
+                                 Content="{x:Static local:Icons.View}" />
+            <Controls:IconButton AccessKey="X"
+                                 AltText="Export data"
+                                 Command="{Binding ExportDataCommand}"
+                                 Content="{x:Static local:Icons.Export}" />
+            <Controls:IconButton AccessKey="M"
+                                 AltText="Import data"
+                                 Command="{Binding ImportDataCommand}"
+                                 Content="{x:Static local:Icons.Import}" />
+            <Controls:IconButton AccessKey="D"
+                                 AltText="Delete"
+                                 Command="{Binding DeleteCommand}"
+                                 Content="{x:Static local:Icons.Delete}" />
         </WrapPanel>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Items}"

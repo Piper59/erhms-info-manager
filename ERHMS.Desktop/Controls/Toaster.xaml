@@ -23,7 +23,7 @@
                 Grid.Row="0"
                 AutomationProperties.Name="Dismiss"
                 Click="CloseButton_Click"
-                Content="{x:Static local:Icons.times}"
+                Content="{x:Static local:Icons.Close}"
                 FontFamily="{StaticResource IconFontFamily}"
                 Foreground="{StaticResource ToasterTextBrush}"
                 HorizontalAlignment="Right"
