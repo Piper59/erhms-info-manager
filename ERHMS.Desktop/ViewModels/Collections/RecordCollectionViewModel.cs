@@ -38,7 +38,9 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private static bool IsDisplayable(MetaFieldType fieldType)
         {
-            return fieldType == MetaFieldType.GlobalRecordId || fieldType.IsPrintable();
+            return fieldType == MetaFieldType.RecStatus
+                || fieldType == MetaFieldType.GlobalRecordId
+                || fieldType.IsPrintable();
         }
 
         public Project Project => View.Project;
