@@ -104,6 +104,9 @@
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\IconButton.cs" />
+    <Compile Include="Controls\ItemsControlWatermark.xaml.cs">
+      <DependentUpon>ItemsControlWatermark.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Pager.xaml.cs">
       <DependentUpon>Pager.xaml</DependentUpon>
     </Compile>
@@ -113,12 +116,12 @@
     <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
+    <Compile Include="Converters\CountToVisibilityConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
     <Compile Include="Converters\KeyToResourceConverter.cs" />
     <Compile Include="Converters\KeyToResXResourceConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectTypeToResourceConverter.cs" />
-    <Compile Include="Converters\PageCountToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\StringCaseConverter.cs" />
     <Compile Include="Data\CustomCollectionView.cs" />
@@ -217,6 +220,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ItemsControlWatermark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

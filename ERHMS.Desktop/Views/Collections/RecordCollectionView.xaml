@@ -91,6 +91,7 @@
                       HorizontalAlignment="Left"
                       ItemsSource="{Binding Items}"
                       Margin="0"
+                      MinColumnWidth="80"
                       MaxColumnWidth="640">
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
@@ -102,5 +103,7 @@
                 </b:Interaction.Behaviors>
             </DataGrid>
         </Border>
+        <Controls:ItemsControlWatermark Grid.Row="2"
+                                        ItemsControl="{Binding ElementName=RecordDataGrid}" />
     </Grid>
 </UserControl>

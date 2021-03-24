@@ -9,11 +9,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Converters:PageCountToVisibilityConverter x:Key="PageCountToVisibilityConverter" />
+            <Converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Visibility>
-        <Binding Converter="{StaticResource PageCountToVisibilityConverter}"
+        <Binding Converter="{StaticResource CountToVisibilityConverter}"
                  Path="PageCount" />
     </UserControl.Visibility>
     <StackPanel Orientation="Horizontal">

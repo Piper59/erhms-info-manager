@@ -385,6 +385,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No items found.
+        /// </summary>
+        public static string Lead_EmptyItemsControl {
+            get {
+                return ResourceManager.GetString("Lead.EmptyItemsControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exporting logs.
         /// </summary>
         public static string Lead_ExportingLogDirectory {

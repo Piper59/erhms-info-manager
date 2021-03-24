@@ -225,6 +225,9 @@
   <data name="Lead.DeletingRecords" xml:space="preserve">
     <value>Deleting records</value>
   </data>
+  <data name="Lead.EmptyItemsControl" xml:space="preserve">
+    <value>No items found</value>
+  </data>
   <data name="Lead.ExportingLogDirectory" xml:space="preserve">
     <value>Exporting logs</value>
   </data>
