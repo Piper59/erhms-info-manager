@@ -110,6 +110,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UndeleteCommand { get; }
+        public ICommand RefreshCommand { get; }
 
         public RecordCollectionViewModel(View view)
         {
@@ -128,6 +129,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             EditCommand = new AsyncCommand(EditAsync, Items.HasSelection);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasSelection);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, Items.HasSelection);
+            RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
         private void Statuses_CurrentChanged(object sender, EventArgs e)
@@ -151,12 +153,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
             });
             items.AddRange(values.Select(value => new ItemViewModel(value)).ToList());
             Items.Refresh();
-        }
-
-        public async Task RefreshAsync()
-        {
-            items.Clear();
-            await InitializeAsync();
         }
 
         private bool IsStatusMatch(ItemViewModel item)
@@ -242,6 +238,17 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task UndeleteAsync()
         {
             await SetDeletedAsync(ResXResources.Lead_UndeletingRecords, false);
+        }
+
+        public async Task RefreshAsync()
+        {
+            await ServiceLocator.Resolve<IProgressService>().RunAsync(
+                ResXResources.Lead_RefreshingRecords,
+                async () =>
+                {
+                    items.Clear();
+                    await InitializeAsync();
+                });
         }
     }
 }

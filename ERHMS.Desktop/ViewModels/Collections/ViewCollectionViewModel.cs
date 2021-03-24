@@ -3,6 +3,8 @@ using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure.ViewModels;
+using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
@@ -70,6 +72,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand ExportDataCommand { get; }
         public ICommand ImportDataCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand RefreshCommand { get; }
 
         public ViewCollectionViewModel(Project project)
         {
@@ -79,6 +82,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             CustomizeCommand = new AsyncCommand(CustomizeAsync, Items.HasSelection);
             EnterDataCommand = new AsyncCommand(EnterDataAsync, Items.HasSelection);
             ViewDataCommand = new AsyncCommand(ViewDataAsync, Items.HasSelection);
+            RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
         public async Task InitializeAsync()
@@ -93,16 +97,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 await item.InitializeAsync();
             }
             Items.Refresh();
-        }
-
-        public async Task RefreshAsync()
-        {
-            await Task.Run(() =>
-            {
-                Project.LoadViews();
-            });
-            items.Clear();
-            await InitializeAsync();
         }
 
         public async Task CustomizeAsync()
@@ -125,6 +119,21 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task ViewDataAsync()
         {
             await MainViewModel.Instance.GoToViewAsync(Project.FilePath, SelectedValue.Name);
+        }
+
+        public async Task RefreshAsync()
+        {
+            await ServiceLocator.Resolve<IProgressService>().RunAsync(
+                ResXResources.Lead_RefreshingViews,
+                async () =>
+                {
+                    await Task.Run(() =>
+                    {
+                        Project.LoadViews();
+                    });
+                    items.Clear();
+                    await InitializeAsync();
+                });
         }
     }
 }

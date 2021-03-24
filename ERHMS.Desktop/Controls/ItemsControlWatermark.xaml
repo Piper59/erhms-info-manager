@@ -18,8 +18,8 @@
                  ElementName="Root"
                  Path="ItemsControl.HasItems" />
     </UserControl.Visibility>
-    <Border Background="{x:Static SystemColors.WindowBrush}"
-            BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
+    <Border Background="{x:Static SystemColors.ControlLightLightBrush}"
+            BorderBrush="{x:Static SystemColors.ControlLightBrush}"
             BorderThickness="1"
             Padding="{StaticResource DefaultPadding}">
         <TextBlock Style="{StaticResource Body}"

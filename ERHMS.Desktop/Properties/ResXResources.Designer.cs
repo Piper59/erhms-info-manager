@@ -79,20 +79,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
-        /// </summary>
-        public static string Body_CaughtFatalException {
-            get {
-                return ResourceManager.GetString("Body.CaughtFatalException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Logs have been exported..
         /// </summary>
         public static string Body_ExportedLogDirectory {
             get {
                 return ResourceManager.GetString("Body.ExportedLogDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
+        /// </summary>
+        public static string Body_FatalException {
+            get {
+                return ResourceManager.GetString("Body.FatalException", resourceCulture);
             }
         }
         
@@ -367,15 +367,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
-        /// </summary>
-        public static string Lead_CaughtNonFatalException {
-            get {
-                return ResourceManager.GetString("Lead.CaughtNonFatalException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Deleting records.
         /// </summary>
         public static string Lead_DeletingRecords {
@@ -385,20 +376,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No items found.
-        /// </summary>
-        public static string Lead_EmptyItemsControl {
-            get {
-                return ResourceManager.GetString("Lead.EmptyItemsControl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Exporting logs.
         /// </summary>
         public static string Lead_ExportingLogDirectory {
             get {
                 return ResourceManager.GetString("Lead.ExportingLogDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No items found.
+        /// </summary>
+        public static string Lead_ItemsControlWatermark {
+            get {
+                return ResourceManager.GetString("Lead.ItemsControlWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
+        /// </summary>
+        public static string Lead_NonFatalException {
+            get {
+                return ResourceManager.GetString("Lead.NonFatalException", resourceCulture);
             }
         }
         
@@ -421,20 +421,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refreshing database.
+        ///   Looks up a localized string similar to Refreshing records.
         /// </summary>
-        public static string Lead_RefreshingProject {
+        public static string Lead_RefreshingRecords {
             get {
-                return ResourceManager.GetString("Lead.RefreshingProject", resourceCulture);
+                return ResourceManager.GetString("Lead.RefreshingRecords", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refreshing form.
+        ///   Looks up a localized string similar to Refreshing forms.
         /// </summary>
-        public static string Lead_RefreshingView {
+        public static string Lead_RefreshingViews {
             get {
-                return ResourceManager.GetString("Lead.RefreshingView", resourceCulture);
+                return ResourceManager.GetString("Lead.RefreshingViews", resourceCulture);
             }
         }
         

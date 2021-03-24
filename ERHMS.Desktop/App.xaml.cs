@@ -41,7 +41,7 @@ namespace ERHMS.Desktop
             {
                 Log.Instance.Fatal(ex);
                 StringBuilder message = new StringBuilder();
-                message.AppendLine(ResXResources.Body_CaughtFatalException);
+                message.AppendLine(ResXResources.Body_FatalException);
                 message.AppendLine();
                 message.Append(ex.Message);
                 MessageBox.Show(
@@ -126,7 +126,7 @@ namespace ERHMS.Desktop
             Log.Instance.Error(e.Exception);
             ServiceLocator.Resolve<IDialogService>().Show(
                 DialogType.Error,
-                ResXResources.Lead_CaughtNonFatalException,
+                ResXResources.Lead_NonFatalException,
                 e.Exception.Message,
                 e.Exception.ToString(),
                 DialogButtonCollection.Close);

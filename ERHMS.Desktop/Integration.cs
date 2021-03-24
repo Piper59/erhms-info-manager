@@ -55,7 +55,7 @@ namespace ERHMS.Desktop
                 Log.Instance.Error(ex);
                 ServiceLocator.Resolve<IDialogService>().Show(
                     DialogType.Error,
-                    ResXResources.Lead_CaughtNonFatalException,
+                    ResXResources.Lead_NonFatalException,
                     ex.Message,
                     ex.ToString(),
                     DialogButtonCollection.Close);

@@ -31,22 +31,17 @@
                          Text="{x:Static local:Icons.Separator}" />
                     <Run Text="{Binding Value.Name}" />
                 </TextBlock>
-                <WrapPanel Grid.Column="1"
-                           VerticalAlignment="Center">
-                    <Controls:IconButton AccessKey="D"
+                <WrapPanel Grid.Column="1">
+                    <Controls:IconButton AccessKey="U"
                                          AltText="Up to database"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{x:Static local:Icons.Up}" />
-                    <Controls:IconButton AccessKey="R"
-                                         AltText="Refresh"
-                                         Command="{Binding RefreshCommand}"
-                                         Content="{x:Static local:Icons.Refresh}" />
                     <Controls:IconButton AccessKey="O"
-                                         AltText="View home"
+                                         AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
                     <Controls:IconButton AccessKey="E"
-                                         AltText="View help"
+                                         AltText="Help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.Help}" />
                 </WrapPanel>

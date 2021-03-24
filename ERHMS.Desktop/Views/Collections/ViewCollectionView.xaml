@@ -46,6 +46,10 @@
                                  AltText="Delete"
                                  Command="{Binding DeleteCommand}"
                                  Content="{x:Static local:Icons.Delete}" />
+            <Controls:IconButton AccessKey="R"
+                                 AltText="Refresh"
+                                 Command="{Binding RefreshCommand}"
+                                 Content="{x:Static local:Icons.Refresh}" />
         </WrapPanel>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Items}"

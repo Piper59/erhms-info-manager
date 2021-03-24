@@ -80,6 +80,10 @@
                                      AltText="Undelete"
                                      Command="{Binding UndeleteCommand}"
                                      Content="{x:Static local:Icons.Undelete}" />
+                <Controls:IconButton AccessKey="R"
+                                     AltText="Refresh"
+                                     Command="{Binding RefreshCommand}"
+                                     Content="{x:Static local:Icons.Refresh}" />
             </WrapPanel>
             <Controls:Pager Grid.Column="1"
                             DataContext="{Binding Items}" />

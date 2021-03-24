@@ -1465,7 +1465,7 @@
         public static string Clear => times;
         public static string Close => times;
         public static string Create => plus;
-        public static string Customize => tools;
+        public static string Customize => wrench;
         public static string Delete => trash;
         public static string Edit => pen;
         public static string Export => file_export;
@@ -1474,7 +1474,7 @@
         public static string Import => file_import;
         public static string Next => chevron_right;
         public static string Previous => chevron_left;
-        public static string Refresh => redo;
+        public static string Refresh => sync;
         public static string Undelete => trash_restore;
         public static string Separator => angle_right;
         public static string Up => arrow_up;
