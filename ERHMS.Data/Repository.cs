@@ -15,7 +15,7 @@ namespace ERHMS.Data
             Database = database;
         }
 
-        protected string Quote(string identifier)
+        public string Quote(string identifier)
         {
             return Database.Quote(identifier);
         }

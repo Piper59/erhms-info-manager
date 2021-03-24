@@ -50,13 +50,10 @@ namespace ERHMS.Desktop
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
-            finally
-            {
-                Log.Instance.Debug("Exiting application");
-            }
+            Log.Instance.Debug("Exiting application");
         }
 
-        private static void ConfigureLog()
+        internal static void ConfigureLog()
         {
             try
             {

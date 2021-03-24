@@ -4,6 +4,7 @@ namespace ERHMS.Data
 {
     public interface IRepository<TEntity>
     {
+        string Quote(string identifier);
         int Count(string clauses, object parameters);
         IEnumerable<TEntity> Select(string clauses, object parameters);
         void Insert(TEntity entity);
