@@ -28,7 +28,7 @@ namespace ERHMS.Desktop.Views
             settings.WindowMaximized = WindowState == WindowState.Maximized;
         }
 
-        private void DataContext_ExitRequested(object sender, EventArgs e)
+        private void ViewModel_ExitRequested(object sender, EventArgs e)
         {
             Close();
         }

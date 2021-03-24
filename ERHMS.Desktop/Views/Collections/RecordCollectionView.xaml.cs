@@ -1,5 +1,9 @@
 ﻿using ERHMS.Desktop.ViewModels.Collections;
 using ERHMS.EpiInfo.Metadata;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,46 +12,62 @@ namespace ERHMS.Desktop.Views.Collections
 {
     public partial class RecordCollectionView : UserControl
     {
-        private const double InitialMaxColumnWidth = 320.0;
-
         public RecordCollectionViewModel ViewModel => (RecordCollectionViewModel)DataContext;
 
         public RecordCollectionView()
         {
             InitializeComponent();
             Loaded += RecordCollectionView_Loaded;
-            RecordDataGrid.LayoutUpdated += RecordDataGrid_LayoutUpdated;
         }
 
         private void RecordCollectionView_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (FieldDataRow field in ViewModel.Fields)
+            SetRecordDataGridColumns();
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(RecordCollectionViewModel.Fields))
             {
-                DataGridColumn column = new DataGridTextColumn
-                {
-                    Binding = new Binding($"Value.{field.Name}"),
-                    Header = field.Name.Replace("_", "__")
-                };
-                if (field.FieldType.IsNumeric())
-                {
-                    column.CellStyle = (Style)FindResource("NumericDataGridCell");
-                }
-                RecordDataGrid.Columns.Add(column);
+                SetRecordDataGridColumns();
             }
         }
 
-        private void RecordDataGrid_LayoutUpdated(object sender, System.EventArgs e)
+        private void SetRecordDataGridColumns()
         {
-            if (RecordDataGrid.Columns.Count > 0)
+            IReadOnlyList<FieldDataRow> fields = ViewModel.Fields.ToList();
+            ObservableCollection<DataGridColumn> columns = RecordDataGrid.Columns;
+            IDictionary<string, DataGridColumn> columnsByHeader = columns.ToDictionary(column => (string)column.Header);
+            for (int fieldIndex = 0; fieldIndex < fields.Count; fieldIndex++)
             {
-                RecordDataGrid.LayoutUpdated -= RecordDataGrid_LayoutUpdated;
-            }
-            foreach (DataGridColumn column in RecordDataGrid.Columns)
-            {
-                if (column.ActualWidth > InitialMaxColumnWidth)
+                FieldDataRow field = fields[fieldIndex];
+                string header = field.Name.Replace("_", "__");
+                if (columnsByHeader.TryGetValue(header, out DataGridColumn column))
                 {
-                    column.Width = new DataGridLength(InitialMaxColumnWidth);
+                    int columnIndex = columns.IndexOf(column);
+                    if (columnIndex != fieldIndex)
+                    {
+                        columns.Move(columnIndex, fieldIndex);
+                    }
                 }
+                else
+                {
+                    column = new DataGridTextColumn
+                    {
+                        Binding = new Binding($"Value.{field.Name}"),
+                        ElementStyle = (Style)FindResource("CellTextBlock"),
+                        Header = header
+                    };
+                    if (field.FieldType.IsNumeric())
+                    {
+                        column.CellStyle = (Style)FindResource("NumericDataGridCell");
+                    }
+                    columns.Insert(fieldIndex, column);
+                }
+            }
+            while (columns.Count > fields.Count)
+            {
+                columns.RemoveAt(columns.Count - 1);
             }
         }
     }

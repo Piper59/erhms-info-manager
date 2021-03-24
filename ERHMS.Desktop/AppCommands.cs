@@ -5,6 +5,7 @@ namespace ERHMS.Desktop
 {
     public static class AppCommands
     {
+        public static ICommand ExitCommand => MainViewModel.Instance.ExitCommand;
         public static ICommand GoToHomeCommand => MainViewModel.Instance.GoToHomeCommand;
         public static ICommand GoToHelpCommand => MainViewModel.Instance.GoToHelpCommand;
         public static ICommand GoToCoreProjectCommand => MainViewModel.Instance.GoToCoreProjectCommand;

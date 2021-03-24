@@ -21,7 +21,7 @@
     </Window.Resources>
     <b:Interaction.Behaviors>
         <Behaviors:MarshalDataContextEvent EventName="ExitRequested"
-                                           HandlerName="DataContext_ExitRequested" />
+                                           HandlerName="ViewModel_ExitRequested" />
         <Behaviors:SetMenuDropAlignment Value="False" />
     </b:Interaction.Behaviors>
     <Grid>

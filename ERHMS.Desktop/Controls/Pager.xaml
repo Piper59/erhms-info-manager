@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Controls.Pager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ERHMS.Desktop"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Converters:PageCountToVisibilityConverter x:Key="PageCountToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.Visibility>
+        <Binding Converter="{StaticResource PageCountToVisibilityConverter}"
+                 Path="PageCount" />
+    </UserControl.Visibility>
+    <StackPanel Orientation="Horizontal">
+        <TextBlock Style="{StaticResource Body}"
+                   VerticalAlignment="Center">
+            <Run>Page</Run>
+            <Run Text="{Binding CurrentPage, Mode=OneWay}" />
+            <Run>of</Run>
+            <Run Text="{Binding PageCount, Mode=OneWay}" />
+        </TextBlock>
+        <Controls:IconButton AccessKey="P"
+                             AltText="Previous page"
+                             Command="{Binding GoToPreviousPageCommand}"
+                             Content="{x:Static local:Icons.Previous}" />
+        <Controls:IconButton AccessKey="N"
+                             AltText="Next page"
+                             Command="{Binding GoToNextPageCommand}"
+                             Content="{x:Static local:Icons.Next}" />
+    </StackPanel>
+</UserControl>

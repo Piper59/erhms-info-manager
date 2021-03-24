@@ -105,6 +105,11 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
+        public IEnumerable<Record> Select()
+        {
+            return Select($"ORDER BY {Quote(ColumnNames.UNIQUE_KEY)}", null);
+        }
+
         public Record SelectByGlobalRecordId(string globalRecordId)
         {
             string clauses = $"WHERE {Quote(View.TableName)}.{ColumnNames.GLOBAL_RECORD_ID} = @GlobalRecordId";

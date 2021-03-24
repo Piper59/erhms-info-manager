@@ -234,6 +234,12 @@
   <data name="Lead.OpeningView" xml:space="preserve">
     <value>Opening form</value>
   </data>
+  <data name="Lead.RefreshingProject" xml:space="preserve">
+    <value>Refreshing database</value>
+  </data>
+  <data name="Lead.RefreshingView" xml:space="preserve">
+    <value>Refreshing form</value>
+  </data>
   <data name="Lead.StartingEpiInfo" xml:space="preserve">
     <value>Starting Epi Info</value>
   </data>
@@ -248,6 +254,15 @@
   </data>
   <data name="Phase.Name.PreDeployment" xml:space="preserve">
     <value>Pre-deployment</value>
+  </data>
+  <data name="RecordStatus.All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="RecordStatus.Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="RecordStatus.Undeleted" xml:space="preserve">
+    <value>Undeleted</value>
   </data>
   <data name="Title.App" xml:space="preserve">
     <value>ERHMS Info Manager</value>

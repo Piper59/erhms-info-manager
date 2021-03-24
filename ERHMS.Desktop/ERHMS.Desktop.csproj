@@ -104,6 +104,9 @@
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\IconButton.cs" />
+    <Compile Include="Controls\Pager.xaml.cs">
+      <DependentUpon>Pager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Toaster.xaml.cs">
       <DependentUpon>Toaster.xaml</DependentUpon>
     </Compile>
@@ -214,6 +217,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Pager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

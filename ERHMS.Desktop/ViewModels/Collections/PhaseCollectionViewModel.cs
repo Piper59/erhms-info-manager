@@ -10,11 +10,22 @@ namespace ERHMS.Desktop.ViewModels.Collections
     {
         public class ItemViewModel : SelectableViewModel
         {
+            public static ItemViewModel PreDeployment { get; } = new ItemViewModel(Phase.PreDeployment);
+            public static ItemViewModel Deployment { get; } = new ItemViewModel(Phase.Deployment);
+            public static ItemViewModel PostDeployment { get; } = new ItemViewModel(Phase.PostDeployment);
+
+            public static IReadOnlyCollection<ItemViewModel> Instances { get; } = new ItemViewModel[]
+            {
+                PreDeployment,
+                Deployment,
+                PostDeployment
+            };
+
             public Phase Value { get; }
             public CoreProject CoreProject { get; }
             public IReadOnlyCollection<CoreView> CoreViews { get; }
 
-            public ItemViewModel(Phase value)
+            private ItemViewModel(Phase value)
             {
                 Value = value;
                 CoreProject = value.ToCoreProject();
@@ -37,12 +48,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public PhaseCollectionViewModel()
         {
-            items = new List<ItemViewModel>
-            {
-                new ItemViewModel(Phase.PreDeployment),
-                new ItemViewModel(Phase.Deployment),
-                new ItemViewModel(Phase.PostDeployment)
-            };
+            items = ItemViewModel.Instances.ToList();
             Items = new CustomCollectionView<ItemViewModel>(items);
         }
     }

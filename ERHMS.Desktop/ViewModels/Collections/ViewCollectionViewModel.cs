@@ -34,8 +34,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
                     FieldCount = Value.Fields.InputFields.Count;
                     if (Value.TableExists())
                     {
-                        RecordRepository recordRepository = new RecordRepository(Value);
-                        RecordCount = recordRepository.CountByDeleted(false);
+                        RecordRepository repository = new RecordRepository(Value);
+                        RecordCount = repository.CountByDeleted(false);
                     }
                     else
                     {
@@ -61,9 +61,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
-
-        public ItemViewModel SelectedItem => Items.SelectedItem;
-        public View SelectedValue => SelectedItem?.Value;
+        public View SelectedValue => Items.SelectedItem?.Value;
 
         public ICommand CreateCommand { get; }
         public ICommand CustomizeCommand { get; }
@@ -73,10 +71,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand ImportDataCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        public ViewCollectionViewModel(Project project, IEnumerable<View> values)
+        public ViewCollectionViewModel(Project project)
         {
             Project = project;
-            items = new List<ItemViewModel>(values.Select(value => new ItemViewModel(value)));
+            items = new List<ItemViewModel>();
             Items = new CustomCollectionView<ItemViewModel>(items);
             CustomizeCommand = new AsyncCommand(CustomizeAsync, Items.HasSelection);
             EnterDataCommand = new AsyncCommand(EnterDataAsync, Items.HasSelection);
@@ -85,10 +83,26 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task InitializeAsync()
         {
+            IReadOnlyCollection<View> values = await Task.Run(() =>
+            {
+                return Project.Views.Cast<View>().ToList();
+            });
+            items.AddRange(values.Select(value => new ItemViewModel(value)).ToList());
             foreach (ItemViewModel item in items)
             {
                 await item.InitializeAsync();
             }
+            Items.Refresh();
+        }
+
+        public async Task RefreshAsync()
+        {
+            await Task.Run(() =>
+            {
+                Project.LoadViews();
+            });
+            items.Clear();
+            await InitializeAsync();
         }
 
         public async Task CustomizeAsync()
@@ -110,11 +124,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task ViewDataAsync()
         {
-            await MainViewModel.Instance.GoToViewAsync(Task.Run(() =>
-            {
-                SelectedValue.LoadFields();
-                return SelectedValue;
-            }));
+            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, SelectedValue.Name);
         }
     }
 }

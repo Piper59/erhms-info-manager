@@ -412,6 +412,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshing database.
+        /// </summary>
+        public static string Lead_RefreshingProject {
+            get {
+                return ResourceManager.GetString("Lead.RefreshingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshing form.
+        /// </summary>
+        public static string Lead_RefreshingView {
+            get {
+                return ResourceManager.GetString("Lead.RefreshingView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting Epi Info.
         /// </summary>
         public static string Lead_StartingEpiInfo {
@@ -453,6 +471,33 @@ namespace ERHMS.Desktop.Properties {
         public static string Phase_Name_PreDeployment {
             get {
                 return ResourceManager.GetString("Phase.Name.PreDeployment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string RecordStatus_All {
+            get {
+                return ResourceManager.GetString("RecordStatus.All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        public static string RecordStatus_Deleted {
+            get {
+                return ResourceManager.GetString("RecordStatus.Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undeleted.
+        /// </summary>
+        public static string RecordStatus_Undeleted {
+            get {
+                return ResourceManager.GetString("RecordStatus.Undeleted", resourceCulture);
             }
         }
         

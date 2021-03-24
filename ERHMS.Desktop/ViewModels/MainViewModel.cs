@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.Common;
+﻿using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.Desktop.Properties;
@@ -33,20 +32,21 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
+        public ICommand ExitCommand { get; }
         public ICommand GoToHomeCommand { get; }
+        public ICommand GoToHelpCommand { get; }
         public ICommand GoToCoreProjectCommand { get; }
         public ICommand GoToCoreViewCommand { get; }
-        public ICommand GoToHelpCommand { get; }
         public ICommand OpenLogFileCommand { get; }
         public ICommand OpenLogDirectoryCommand { get; }
         public ICommand ExportLogDirectoryCommand { get; }
         public ICommand StartEpiInfoMenuCommand { get; }
         public ICommand StartFileExplorerCommand { get; }
         public ICommand StartCommandPromptCommand { get; }
-        public ICommand ExitCommand { get; }
 
         private MainViewModel()
         {
+            ExitCommand = new SyncCommand(Exit);
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
             GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
@@ -56,25 +56,32 @@ namespace ERHMS.Desktop.ViewModels
             StartEpiInfoMenuCommand = new SyncCommand(StartEpiInfoMenu);
             StartFileExplorerCommand = new SyncCommand(StartFileExplorer);
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
-            ExitCommand = new SyncCommand(Exit);
         }
 
         public event EventHandler ExitRequested;
         private void OnExitRequested(EventArgs e) => ExitRequested?.Invoke(this, e);
         private void OnExitRequested() => OnExitRequested(EventArgs.Empty);
 
+        public void Exit()
+        {
+            OnExitRequested();
+        }
+
         public void GoToHome()
         {
             Content = new HomeViewModel();
         }
 
-        public async Task GoToProjectAsync(Task<Project> task)
+        public async Task GoToProjectAsync(string projectPath)
         {
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_OpeningProject,
                 async () =>
                 {
-                    ProjectViewModel project = new ProjectViewModel(await task);
+                    ProjectViewModel project = new ProjectViewModel(await Task.Run(() =>
+                    {
+                        return ProjectExtensions.Open(projectPath);
+                    }));
                     await project.InitializeAsync();
                     Content = project;
                 });
@@ -82,20 +89,19 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
-            await GoToProjectAsync(Task.Run(() =>
-            {
-                string path = Settings.Default.GetProjectPath(coreProject);
-                return ProjectExtensions.Open(path);
-            }));
+            await GoToProjectAsync(Settings.Default.GetProjectPath(coreProject));
         }
 
-        public async Task GoToViewAsync(Task<View> task)
+        public async Task GoToViewAsync(string projectPath, string viewName)
         {
             await ServiceLocator.Resolve<IProgressService>().RunAsync(
                 ResXResources.Lead_OpeningView,
                 async () =>
                 {
-                    ViewViewModel view = new ViewViewModel(await task);
+                    ViewViewModel view = new ViewViewModel(await Task.Run(() =>
+                    {
+                        return ProjectExtensions.Open(projectPath).Views[viewName];
+                    }));
                     await view.InitializeAsync();
                     Content = view;
                 });
@@ -103,12 +109,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToCoreViewAsync(CoreView coreView)
         {
-            await GoToViewAsync(Task.Run(() =>
-            {
-                string path = Settings.Default.GetProjectPath(coreView.CoreProject);
-                Project project = ProjectExtensions.Open(path);
-                return project.Views[coreView.Name];
-            }));
+            await GoToViewAsync(Settings.Default.GetProjectPath(coreView.CoreProject), coreView.Name);
         }
 
         public void OpenLogFile()
@@ -172,11 +173,6 @@ namespace ERHMS.Desktop.ViewModels
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 FileName = Environment.GetEnvironmentVariable("ComSpec")
             });
-        }
-
-        public void Exit()
-        {
-            OnExitRequested();
         }
     }
 }

@@ -1462,6 +1462,7 @@
         private const string youtube_square = "\uf431";
         private const string zhihu = "\uf63f";
 
+        public static string Clear => times;
         public static string Close => times;
         public static string Create => plus;
         public static string Customize => tools;
@@ -1471,6 +1472,8 @@
         public static string Help => question;
         public static string Home => home;
         public static string Import => file_import;
+        public static string Next => chevron_right;
+        public static string Previous => chevron_left;
         public static string Refresh => redo;
         public static string Undelete => trash_restore;
         public static string Separator => angle_right;

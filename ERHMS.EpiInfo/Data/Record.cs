@@ -65,9 +65,14 @@ namespace ERHMS.EpiInfo.Data
             return propertiesByName.Keys;
         }
 
+        public object GetProperty(string propertyName)
+        {
+            return propertiesByName[propertyName];
+        }
+
         public TProperty GetProperty<TProperty>(string propertyName)
         {
-            return (TProperty)propertiesByName[propertyName];
+            return (TProperty)GetProperty(propertyName);
         }
 
         public bool SetProperty(string propertyName, object value)

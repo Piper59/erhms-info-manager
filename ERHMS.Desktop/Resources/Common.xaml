@@ -17,6 +17,9 @@
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
     <System:Double x:Key="HugeSpace">25</System:Double>
+    <System:Double x:Key="NegativeSmallSpace">-5</System:Double>
+    <System:Double x:Key="NegativeLargeSpace">-10</System:Double>
+    <System:Double x:Key="NegativeHugeSpace">-25</System:Double>
     <Thickness x:Key="SmallThickness"
                Bottom="{StaticResource SmallSpace}"
                Left="{StaticResource SmallSpace}"

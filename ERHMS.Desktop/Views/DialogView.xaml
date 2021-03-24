@@ -36,8 +36,8 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0"
-                           AutomationProperties.Name="{Binding DialogType, Converter={StaticResource DialogTypeToNameConverter}}"
+                    <Image AutomationProperties.Name="{Binding DialogType, Converter={StaticResource DialogTypeToNameConverter}}"
+                           Grid.Column="0"
                            Margin="{StaticResource DefaultMargin}"
                            Source="{Binding Icon, Converter={StaticResource IconToImageSourceConverter}}"
                            VerticalAlignment="Top"

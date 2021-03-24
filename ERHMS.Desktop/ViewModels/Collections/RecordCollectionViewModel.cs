@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Data;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure.ViewModels;
@@ -7,6 +8,7 @@ using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +18,33 @@ namespace ERHMS.Desktop.ViewModels.Collections
 {
     public class RecordCollectionViewModel : ViewModel
     {
+        public class StatusViewModel : SelectableViewModel
+        {
+            public static StatusViewModel Undeleted { get; } =
+                new StatusViewModel(RecordStatus.Undeleted, ResXResources.RecordStatus_Undeleted);
+
+            public static StatusViewModel Deleted { get; } =
+                new StatusViewModel(RecordStatus.Deleted, ResXResources.RecordStatus_Deleted);
+
+            public static StatusViewModel All { get; } = new StatusViewModel(null, ResXResources.RecordStatus_All);
+
+            public static IReadOnlyCollection<StatusViewModel> Instances { get; } = new StatusViewModel[]
+            {
+                Undeleted,
+                Deleted,
+                All
+            };
+
+            public RecordStatus? Value { get; }
+            public string Text { get; }
+
+            private StatusViewModel(RecordStatus? value, string text)
+            {
+                Value = value;
+                Text = text;
+            }
+        }
+
         public class ItemViewModel : SelectableViewModel
         {
             public Record Value { get; }
@@ -45,28 +74,65 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public Project Project => View.Project;
         public View View { get; }
-        public IReadOnlyCollection<FieldDataRow> Fields { get; private set; }
+
+        private string searchText;
+        public string SearchText
+        {
+            get
+            {
+                return searchText;
+            }
+            set
+            {
+                if (SetProperty(ref searchText, value))
+                {
+                    Items.Refresh();
+                }
+            }
+        }
+
+        private readonly List<StatusViewModel> statuses;
+        public CustomCollectionView<StatusViewModel> Statuses { get; }
+
+        private IReadOnlyCollection<FieldDataRow> fields;
+        public IReadOnlyCollection<FieldDataRow> Fields
+        {
+            get { return fields; }
+            private set { SetProperty(ref fields, value); }
+        }
 
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
+        public Record SelectedValue => Items.SelectedItem?.Value;
 
-        public ItemViewModel SelectedItem => Items.SelectedItem;
-        public Record SelectedValue => SelectedItem?.Value;
-
+        public ICommand ClearSearchTextCommand { get; }
         public ICommand CreateCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UndeleteCommand { get; }
 
-        public RecordCollectionViewModel(View view, IEnumerable<Record> values)
+        public RecordCollectionViewModel(View view)
         {
             View = view;
-            items = new List<ItemViewModel>(values.Select(value => new ItemViewModel(value)));
-            Items = new CustomCollectionView<ItemViewModel>(items);
+            statuses = StatusViewModel.Instances.ToList();
+            Statuses = new CustomCollectionView<StatusViewModel>(statuses);
+            Statuses.CurrentChanged += Statuses_CurrentChanged;
+            items = new List<ItemViewModel>();
+            Items = new CustomCollectionView<ItemViewModel>(items)
+            {
+                TypedFilter = IsMatch,
+                PageSize = 100
+            };
+            ClearSearchTextCommand = new SyncCommand(ClearSearchText);
             CreateCommand = new AsyncCommand(CreateAsync);
             EditCommand = new AsyncCommand(EditAsync, Items.HasSelection);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasSelection);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, Items.HasSelection);
+        }
+
+        private void Statuses_CurrentChanged(object sender, EventArgs e)
+        {
+            Items.Refresh();
         }
 
         public async Task InitializeAsync()
@@ -78,6 +144,56 @@ namespace ERHMS.Desktop.ViewModels.Collections
                     .OrderBy(field => field, new FieldDataRowComparer.ByTabIndex())
                     .ToList();
             });
+            IReadOnlyCollection<Record> values = await Task.Run(() =>
+            {
+                RecordRepository repository = new RecordRepository(View);
+                return repository.Select().ToList();
+            });
+            items.AddRange(values.Select(value => new ItemViewModel(value)).ToList());
+            Items.Refresh();
+        }
+
+        public async Task RefreshAsync()
+        {
+            items.Clear();
+            await InitializeAsync();
+        }
+
+        private bool IsStatusMatch(ItemViewModel item)
+        {
+            RecordStatus? status = Statuses.SelectedItem?.Value;
+            return status == null || status.Value.IsEquivalent(item.Value.RECSTATUS);
+        }
+
+        private bool IsSearchMatch(ItemViewModel item)
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return true;
+            }
+            foreach (FieldDataRow field in Fields)
+            {
+                object propertyValue = item.Value.GetProperty(field.Name);
+                if (propertyValue == null)
+                {
+                    continue;
+                }
+                if (propertyValue.ToString().IndexOf(searchText, StringComparison.OrdinalIgnoreCase) != -1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsMatch(ItemViewModel item)
+        {
+            return IsStatusMatch(item) && IsSearchMatch(item);
+        }
+
+        public void ClearSearchText()
+        {
+            SearchText = "";
         }
 
         public async Task CreateAsync()
@@ -100,16 +216,22 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private async Task SetDeletedAsync(string lead, bool deleted)
         {
-            await ServiceLocator.Resolve<IProgressService>().RunAsync(
-                lead,
-                () =>
-                {
-                    RecordRepository recordRepository = new RecordRepository(View);
-                    foreach (ItemViewModel item in Items.SelectedItems)
+            try
+            {
+                await ServiceLocator.Resolve<IProgressService>().RunAsync(
+                    lead,
+                    token =>
                     {
-                        recordRepository.SetDeleted(item.Value, deleted);
-                    }
-                });
+                        RecordRepository repository = new RecordRepository(View);
+                        foreach (ItemViewModel item in Items.SelectedItems)
+                        {
+                            token.ThrowIfCancellationRequested();
+                            repository.SetDeleted(item.Value, deleted);
+                        }
+                    });
+            }
+            catch (OperationCanceledException) { }
+            Items.Refresh();
         }
 
         public async Task DeleteAsync()
