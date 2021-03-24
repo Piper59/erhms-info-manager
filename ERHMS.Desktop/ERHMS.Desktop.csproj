@@ -143,6 +143,7 @@
     <Compile Include="Infrastructure\ViewModels\SelectableViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\ViewModel.cs" />
     <Compile Include="Infrastructure\WindowDisabler.cs" />
+    <Compile Include="Integration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
