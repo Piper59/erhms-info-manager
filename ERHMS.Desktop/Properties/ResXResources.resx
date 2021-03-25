@@ -123,9 +123,6 @@
   <data name="AccessText.Ok" xml:space="preserve">
     <value>_OK</value>
   </data>
-  <data name="Body.ExportedLogDirectory" xml:space="preserve">
-    <value>Logs have been exported.</value>
-  </data>
   <data name="Body.FatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.</value>
   </data>

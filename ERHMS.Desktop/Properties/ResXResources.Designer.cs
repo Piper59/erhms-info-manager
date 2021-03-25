@@ -79,15 +79,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logs have been exported..
-        /// </summary>
-        public static string Body_ExportedLogDirectory {
-            get {
-                return ResourceManager.GetString("Body.ExportedLogDirectory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
         /// </summary>
         public static string Body_FatalException {

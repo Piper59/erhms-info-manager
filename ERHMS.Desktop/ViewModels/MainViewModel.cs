@@ -140,7 +140,6 @@ namespace ERHMS.Desktop.ViewModels
                 {
                     ZipExtensions.CreateFromDirectory(Log.DirectoryPath, path);
                 });
-            ServiceLocator.Resolve<INotificationService>().Notify(ResXResources.Body_ExportedLogDirectory);
         }
 
         public async Task StartEpiInfoAsync(Module module, params string[] args)
