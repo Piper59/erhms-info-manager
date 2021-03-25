@@ -67,11 +67,11 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public ICommand CreateCommand { get; }
         public ICommand CustomizeCommand { get; }
-        public ICommand EnterDataCommand { get; }
-        public ICommand ViewDataCommand { get; }
-        public ICommand ExportDataCommand { get; }
-        public ICommand ImportDataCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand ViewDataCommand { get; }
+        public ICommand EnterDataCommand { get; }
+        public ICommand ImportDataCommand { get; }
+        public ICommand ExportDataCommand { get; }
         public ICommand RefreshCommand { get; }
 
         public ViewCollectionViewModel(Project project)
@@ -79,9 +79,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Project = project;
             items = new List<ItemViewModel>();
             Items = new CustomCollectionView<ItemViewModel>(items);
+            CreateCommand = Command.Null;
             CustomizeCommand = new AsyncCommand(CustomizeAsync, Items.HasSelection);
-            EnterDataCommand = new AsyncCommand(EnterDataAsync, Items.HasSelection);
+            DeleteCommand = Command.Null;
             ViewDataCommand = new AsyncCommand(ViewDataAsync, Items.HasSelection);
+            EnterDataCommand = new AsyncCommand(EnterDataAsync, Items.HasSelection);
+            ImportDataCommand = Command.Null;
+            ExportDataCommand = Command.Null;
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
@@ -107,6 +111,11 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 $"/view:{SelectedValue.Name}");
         }
 
+        public async Task ViewDataAsync()
+        {
+            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, SelectedValue.Name);
+        }
+
         public async Task EnterDataAsync()
         {
             await MainViewModel.Instance.StartEpiInfoAsync(
@@ -114,11 +123,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 $"/project:{Project.FilePath}",
                 $"/view:{SelectedValue.Name}",
                 "/record:*");
-        }
-
-        public async Task ViewDataAsync()
-        {
-            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, SelectedValue.Name);
         }
 
         public async Task RefreshAsync()

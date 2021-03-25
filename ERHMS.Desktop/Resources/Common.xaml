@@ -46,7 +46,7 @@
                Right="{StaticResource LargeSpace}"
                Top="{StaticResource SmallSpace}" />
 
-    <!-- Positioning -->
+    <!-- Layout -->
     <System:Double x:Key="SmallLayoutWidth">700</System:Double>
     <System:Double x:Key="LargeLayoutWidth">1180</System:Double>
 </ResourceDictionary>

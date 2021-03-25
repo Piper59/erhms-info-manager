@@ -1462,16 +1462,17 @@
         private const string youtube_square = "\uf431";
         private const string zhihu = "\uf63f";
 
+        public static string Add => plus;
+        public static string Build => wrench;
         public static string Clear => times;
         public static string Close => times;
-        public static string Create => plus;
-        public static string Customize => wrench;
         public static string Delete => trash;
         public static string Edit => pen;
         public static string Export => file_export;
         public static string Help => question;
         public static string Home => home;
         public static string Import => file_import;
+        public static string New => file;
         public static string Next => chevron_right;
         public static string Previous => chevron_left;
         public static string Refresh => sync;

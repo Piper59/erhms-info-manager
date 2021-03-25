@@ -96,4 +96,18 @@
     <Style x:Key="NumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">
         <Setter Property="TextBlock.TextAlignment" Value="Right" />
     </Style>
+
+    <Style x:Key="Separator" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlLightBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Margin">
+            <Setter.Value>
+                <Thickness Bottom="{StaticResource SmallSpace}"
+                           Left="{StaticResource LargeSpace}"
+                           Right="{StaticResource LargeSpace}"
+                           Top="{StaticResource SmallSpace}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Width" Value="1" />
+    </Style>
 </ResourceDictionary>

@@ -9,7 +9,7 @@ namespace ERHMS.Desktop.Commands
         private readonly Func<bool> predicate;
 
         public AsyncCommand(Func<Task> action, Func<bool> predicate = null)
-            : base(action)
+            : base(action.Method)
         {
             this.action = action;
             this.predicate = predicate ?? Always;
@@ -32,7 +32,7 @@ namespace ERHMS.Desktop.Commands
         private readonly Func<TParameter, bool> predicate;
 
         public AsyncCommand(Func<TParameter, Task> action, Func<TParameter, bool> predicate = null)
-            : base(action)
+            : base(action.Method)
         {
             this.action = action;
             this.predicate = predicate ?? Always;

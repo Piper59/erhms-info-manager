@@ -48,6 +48,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             ExitCommand = new SyncCommand(Exit);
             GoToHomeCommand = new SyncCommand(GoToHome);
+            GoToHelpCommand = Command.Null;
             GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
             GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
             OpenLogFileCommand = new SyncCommand(OpenLogFile);

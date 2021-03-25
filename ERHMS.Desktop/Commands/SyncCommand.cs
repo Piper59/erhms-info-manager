@@ -9,7 +9,7 @@ namespace ERHMS.Desktop.Commands
         private readonly Func<bool> predicate;
 
         public SyncCommand(Action action, Func<bool> predicate = null)
-            : base(action)
+            : base(action.Method)
         {
             this.action = action;
             this.predicate = predicate ?? Always;
@@ -33,7 +33,7 @@ namespace ERHMS.Desktop.Commands
         private readonly Func<TParameter, bool> predicate;
 
         public SyncCommand(Action<TParameter> action, Func<TParameter, bool> predicate = null)
-            : base(action)
+            : base(action.Method)
         {
             this.action = action;
             this.predicate = predicate ?? Always;

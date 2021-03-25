@@ -1,6 +1,7 @@
 ﻿using ERHMS.Common;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -8,6 +9,24 @@ namespace ERHMS.Desktop.Commands
 {
     public abstract class Command : ICommand
     {
+        private class NullImpl : Command
+        {
+            public NullImpl()
+                : base(nameof(Null)) { }
+
+            public override bool CanExecute(object parameter)
+            {
+                return false;
+            }
+
+            public override Task ExecuteCore(object parameter)
+            {
+                throw new NotSupportedException("The null command cannot be executed.");
+            }
+        }
+
+        public static Command Null { get; } = new NullImpl();
+
         public static event EventHandler<ErrorEventArgs> GlobalError;
 
         protected static bool Always()
@@ -25,13 +44,16 @@ namespace ERHMS.Desktop.Commands
             CommandManager.InvalidateRequerySuggested();
         }
 
-        protected Delegate Action { get; }
+        protected string Name { get; }
         public ErrorBehavior ErrorBehavior { get; set; } = ErrorBehavior.RaiseAndThrow;
 
-        protected Command(Delegate action)
+        protected Command(string name)
         {
-            Action = action;
+            Name = name;
         }
+
+        protected Command(MethodInfo method)
+            : this($"{method.DeclaringType.FullName}.{method.Name}") { }
 
         public event EventHandler CanExecuteChanged
         {
@@ -111,7 +133,7 @@ namespace ERHMS.Desktop.Commands
 
         public override string ToString()
         {
-            return $"{Action.Method.DeclaringType.FullName}.{Action.Method.Name}";
+            return Name;
         }
     }
 }

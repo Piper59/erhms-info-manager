@@ -21,37 +21,41 @@
             <Controls:IconButton AccessKey="C"
                                  AltText="Create"
                                  Command="{Binding CreateCommand}"
-                                 Content="{x:Static local:Icons.Create}" />
+                                 Content="{x:Static local:Icons.New}" />
             <Controls:IconButton AccessKey="U"
                                  AltText="Customize"
                                  Command="{Binding CustomizeCommand}"
-                                 Content="{x:Static local:Icons.Customize}" />
-            <Controls:IconButton AccessKey="E"
-                                 AltText="Enter data"
-                                 Command="{Binding EnterDataCommand}"
-                                 Content="{x:Static local:Icons.Edit}" />
-            <Controls:IconButton AccessKey="I"
-                                 AltText="View data"
-                                 Command="{Binding ViewDataCommand}"
-                                 Content="{x:Static local:Icons.View}" />
-            <Controls:IconButton AccessKey="X"
-                                 AltText="Export data"
-                                 Command="{Binding ExportDataCommand}"
-                                 Content="{x:Static local:Icons.Export}" />
-            <Controls:IconButton AccessKey="M"
-                                 AltText="Import data"
-                                 Command="{Binding ImportDataCommand}"
-                                 Content="{x:Static local:Icons.Import}" />
+                                 Content="{x:Static local:Icons.Build}" />
             <Controls:IconButton AccessKey="D"
                                  AltText="Delete"
                                  Command="{Binding DeleteCommand}"
                                  Content="{x:Static local:Icons.Delete}" />
+            <Border Style="{StaticResource Separator}" />
+            <Controls:IconButton AccessKey="I"
+                                 AltText="View data"
+                                 Command="{Binding ViewDataCommand}"
+                                 Content="{x:Static local:Icons.View}" />
+            <Controls:IconButton AccessKey="E"
+                                 AltText="Enter data"
+                                 Command="{Binding EnterDataCommand}"
+                                 Content="{x:Static local:Icons.Edit}" />
+            <Border Style="{StaticResource Separator}" />
+            <Controls:IconButton AccessKey="M"
+                                 AltText="Import data"
+                                 Command="{Binding ImportDataCommand}"
+                                 Content="{x:Static local:Icons.Import}" />
+            <Controls:IconButton AccessKey="X"
+                                 AltText="Export data"
+                                 Command="{Binding ExportDataCommand}"
+                                 Content="{x:Static local:Icons.Export}" />
+            <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AccessKey="R"
                                  AltText="Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Content="{x:Static local:Icons.Refresh}" />
         </WrapPanel>
-        <DataGrid Grid.Row="1"
+        <DataGrid x:Name="ViewDataGrid"
+                  Grid.Row="1"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <DataGrid.Columns>
@@ -84,5 +88,7 @@
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>
         </DataGrid>
+        <Controls:ItemsControlWatermark Grid.Row="1"
+                                        ItemsControl="{Binding ElementName=ViewDataGrid}" />
     </Grid>
 </UserControl>

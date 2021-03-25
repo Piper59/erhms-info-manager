@@ -106,7 +106,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public Record SelectedValue => Items.SelectedItem?.Value;
 
         public ICommand ClearSearchTextCommand { get; }
-        public ICommand CreateCommand { get; }
+        public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UndeleteCommand { get; }
@@ -125,7 +125,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 PageSize = 100
             };
             ClearSearchTextCommand = new SyncCommand(ClearSearchText);
-            CreateCommand = new AsyncCommand(CreateAsync);
+            AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, Items.HasSelection);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasSelection);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, Items.HasSelection);
@@ -192,7 +192,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             SearchText = "";
         }
 
-        public async Task CreateAsync()
+        public async Task AddAsync()
         {
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.Enter,
