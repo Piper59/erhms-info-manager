@@ -49,6 +49,7 @@
                 </TabItem>
                 <TabItem Header="Dashboards" />
                 <TabItem Header="Analyses" />
+                <TabItem Header="Maps" />
             </TabControl>
         </Grid>
     </Border>
