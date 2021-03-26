@@ -32,22 +32,19 @@
                     <Run Text="{Binding Value.Name}" />
                 </TextBlock>
                 <WrapPanel Grid.Column="1">
-                    <Controls:IconButton AccessKey="U"
-                                         AltText="Up to database"
+                    <Controls:IconButton AltText="Up to database"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{x:Static local:Icons.Up}" />
-                    <Controls:IconButton AccessKey="O"
-                                         AltText="Home"
+                    <Controls:IconButton AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
-                    <Controls:IconButton AccessKey="E"
-                                         AltText="Help"
+                    <Controls:IconButton AltText="Help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.Help}" />
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">
-                <TabItem Header="Records">
+                <TabItem Header="_Records">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
                             <Collections:RecordCollectionView DataContext="{Binding Records}" />

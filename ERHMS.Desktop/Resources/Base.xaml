@@ -142,10 +142,10 @@
         <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock FontSize="{StaticResource LargeFontSize}"
-                               FontWeight="{StaticResource ThinFontWeight}"
-                               Margin="{StaticResource DefaultMargin}"
-                               Text="{Binding}" />
+                    <AccessText FontSize="{StaticResource LargeFontSize}"
+                                FontWeight="{StaticResource ThinFontWeight}"
+                                Margin="{StaticResource DefaultMargin}"
+                                Text="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>

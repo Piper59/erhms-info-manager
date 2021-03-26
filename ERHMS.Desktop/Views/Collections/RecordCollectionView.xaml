@@ -52,7 +52,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
                    Target="{x:Reference SearchTextBox}">
-                _Search:
+                Search:
             </Label>
             <TextBox x:Name="SearchTextBox"
                      AutomationProperties.Name="Search"
@@ -82,16 +82,13 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <WrapPanel Grid.Column="0">
-                <Controls:IconButton AccessKey="A"
-                                     AltText="Add"
+                <Controls:IconButton AltText="Add"
                                      Command="{Binding AddCommand}"
                                      Content="{x:Static local:Icons.Add}" />
-                <Controls:IconButton AccessKey="E"
-                                     AltText="Edit"
+                <Controls:IconButton AltText="Edit"
                                      Command="{Binding EditCommand}"
                                      Content="{x:Static local:Icons.Edit}" />
                 <Controls:IconButton x:Name="CopyColumnDataButton"
-                                     AccessKey="C"
                                      AltText="Copy to clipboard"
                                      Content="{x:Static local:Icons.Clipboard}"
                                      IsEnabled="{Binding Items.CurrentPosition, Converter={StaticResource IndexToBoolConverter}}">
@@ -106,17 +103,14 @@
                     </b:Interaction.Behaviors>
                 </Controls:IconButton>
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AccessKey="D"
-                                     AltText="Delete"
+                <Controls:IconButton AltText="Delete"
                                      Command="{Binding DeleteCommand}"
                                      Content="{x:Static local:Icons.Delete}" />
-                <Controls:IconButton AccessKey="U"
-                                     AltText="Undelete"
+                <Controls:IconButton AltText="Undelete"
                                      Command="{Binding UndeleteCommand}"
                                      Content="{x:Static local:Icons.Undelete}" />
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AccessKey="R"
-                                     AltText="Refresh"
+                <Controls:IconButton AltText="Refresh"
                                      Command="{Binding RefreshCommand}"
                                      Content="{x:Static local:Icons.Refresh}" />
             </WrapPanel>

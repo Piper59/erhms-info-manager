@@ -24,12 +24,10 @@
             <Run>of</Run>
             <Run Text="{Binding PageCount, Mode=OneWay}" />
         </TextBlock>
-        <Controls:IconButton AccessKey="P"
-                             AltText="Previous page"
+        <Controls:IconButton AltText="Previous page"
                              Command="{Binding GoToPreviousPageCommand}"
                              Content="{x:Static local:Icons.Previous}" />
-        <Controls:IconButton AccessKey="N"
-                             AltText="Next page"
+        <Controls:IconButton AltText="Next page"
                              Command="{Binding GoToNextPageCommand}"
                              Content="{x:Static local:Icons.Next}" />
     </StackPanel>

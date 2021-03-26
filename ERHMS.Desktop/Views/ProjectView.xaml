@@ -29,27 +29,25 @@
                          ToolTip="{Binding Value.FilePath}" />
                 </TextBlock>
                 <WrapPanel Grid.Column="1">
-                    <Controls:IconButton AccessKey="O"
-                                         AltText="Home"
+                    <Controls:IconButton AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
-                    <Controls:IconButton AccessKey="E"
-                                         AltText="Help"
+                    <Controls:IconButton AltText="Help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.Help}" />
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="1">
-                <TabItem Header="Forms">
+                <TabItem Header="F_orms">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
                             <Collections:ViewCollectionView DataContext="{Binding Views}" />
                         </Grid>
                     </Border>
                 </TabItem>
-                <TabItem Header="Dashboards" />
-                <TabItem Header="Analyses" />
-                <TabItem Header="Maps" />
+                <TabItem Header="_Dashboards" />
+                <TabItem Header="_Analyses" />
+                <TabItem Header="_Maps" />
             </TabControl>
         </Grid>
     </Border>
