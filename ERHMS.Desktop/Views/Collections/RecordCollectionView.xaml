@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Views.Collections.RecordCollectionView"
+             x:Name="Root"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
@@ -14,6 +15,21 @@
             <Converters:IndexToBoolConverter x:Key="IndexToBoolConverter" />
             <Style x:Key="CellTextBlock" TargetType="TextBlock">
                 <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+            <Style x:Key="CopyableDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">
+                <Setter Property="ContextMenu">
+                    <Setter.Value>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding CopyCellDataCommand, Source={x:Reference Root}}"
+                                      CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
+                                      Header="_Copy to clipboard" />
+                        </ContextMenu>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}" />
+            <Style x:Key="CopyableNumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}">
+                <Setter Property="TextBlock.TextAlignment" Value="Right" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -74,15 +90,15 @@
                                      AltText="Edit"
                                      Command="{Binding EditCommand}"
                                      Content="{x:Static local:Icons.Edit}" />
-                <Controls:IconButton x:Name="CopyDataButton"
+                <Controls:IconButton x:Name="CopyColumnDataButton"
                                      AccessKey="C"
                                      AltText="Copy to clipboard"
                                      Content="{x:Static local:Icons.Clipboard}"
                                      IsEnabled="{Binding Items.CurrentPosition, Converter={StaticResource IndexToBoolConverter}}">
                     <Controls:IconButton.ContextMenu>
-                        <ContextMenu x:Name="CopyDataContextMenu"
+                        <ContextMenu x:Name="CopyColumnDataContextMenu"
                                      Placement="Bottom"
-                                     PlacementTarget="{x:Reference CopyDataButton}">
+                                     PlacementTarget="{x:Reference CopyColumnDataButton}">
                         </ContextMenu>
                     </Controls:IconButton.ContextMenu>
                     <b:Interaction.Behaviors>

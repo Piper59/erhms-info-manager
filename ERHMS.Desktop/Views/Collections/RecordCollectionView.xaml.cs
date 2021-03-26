@@ -18,13 +18,15 @@ namespace ERHMS.Desktop.Views.Collections
     {
         public RecordCollectionViewModel ViewModel => (RecordCollectionViewModel)DataContext;
 
-        public ICommand CopyDataCommand { get; }
+        public ICommand CopyColumnDataCommand { get; }
+        public ICommand CopyCellDataCommand { get; }
 
         public RecordCollectionView()
         {
             InitializeComponent();
             Loaded += RecordCollectionView_Loaded;
-            CopyDataCommand = new SyncCommand<DataGridColumn>(CopyData);
+            CopyColumnDataCommand = new SyncCommand<DataGridColumn>(CopyColumnData);
+            CopyCellDataCommand = new SyncCommand<DataGridCell>(CopyCellData);
         }
 
         private void RecordCollectionView_Loaded(object sender, RoutedEventArgs e)
@@ -43,7 +45,7 @@ namespace ERHMS.Desktop.Views.Collections
         private void UpdateFields()
         {
             SetItemDataGridColumns();
-            SetCopyDataContextMenuItems();
+            SetCopyColumnDataContextMenuItems();
         }
 
         private void SetItemDataGridColumns()
@@ -73,7 +75,7 @@ namespace ERHMS.Desktop.Views.Collections
                     };
                     if (field.FieldType.IsNumeric())
                     {
-                        column.CellStyle = (Style)FindResource("NumericDataGridCell");
+                        column.CellStyle = (Style)FindResource("CopyableNumericDataGridCell");
                     }
                     columns.Insert(fieldIndex, column);
                 }
@@ -84,9 +86,9 @@ namespace ERHMS.Desktop.Views.Collections
             }
         }
 
-        private void SetCopyDataContextMenuItems()
+        private void SetCopyColumnDataContextMenuItems()
         {
-            ItemCollection items = CopyDataContextMenu.Items;
+            ItemCollection items = CopyColumnDataContextMenu.Items;
             items.Clear();
             if (ItemDataGrid.Columns.Count == 0)
             {
@@ -94,7 +96,7 @@ namespace ERHMS.Desktop.Views.Collections
             }
             items.Add(new MenuItem
             {
-                Command = CopyDataCommand,
+                Command = CopyColumnDataCommand,
                 Header = ResXResources.AccessText_All
             });
             items.Add(new Separator());
@@ -102,33 +104,17 @@ namespace ERHMS.Desktop.Views.Collections
             {
                 items.Add(new MenuItem
                 {
-                    Command = CopyDataCommand,
+                    Command = CopyColumnDataCommand,
                     CommandParameter = column,
                     Header = $"_{column.Header}"
                 });
             }
         }
 
-        public void CopyData(DataGridColumn column)
+        private void CopyData(IReadOnlyCollection<DataGridColumn> columns, IEnumerable<object> items)
         {
-            IReadOnlyCollection<DataGridColumn> columns;
-            int minColumnDisplayIndex;
-            int maxColumnDisplayIndex;
-            if (column == null)
-            {
-                columns = ItemDataGrid.Columns.OrderBy(_column => _column.DisplayIndex).ToList();
-                minColumnDisplayIndex = columns.Min(_column => _column.DisplayIndex);
-                maxColumnDisplayIndex = columns.Max(_column => _column.DisplayIndex);
-            }
-            else
-            {
-                columns = new DataGridColumn[]
-                {
-                    column
-                };
-                minColumnDisplayIndex = column.DisplayIndex;
-                maxColumnDisplayIndex = column.DisplayIndex;
-            }
+            int minColumnDisplayIndex = columns.Min(column => column.DisplayIndex);
+            int maxColumnDisplayIndex = columns.Max(column => column.DisplayIndex);
             IReadOnlyCollection<string> formats = new string[]
             {
                 DataFormats.Text,
@@ -137,14 +123,14 @@ namespace ERHMS.Desktop.Views.Collections
             };
             IReadOnlyDictionary<string, StringBuilder> builders =
                 formats.ToDictionary(format => format, _ => new StringBuilder());
-            foreach (RecordCollectionViewModel.ItemViewModel item in ViewModel.Items.SelectedItems)
+            foreach (object item in items)
             {
                 DataGridRowClipboardEventArgs e =
                     new DataGridRowClipboardEventArgs(item, minColumnDisplayIndex, maxColumnDisplayIndex, false);
-                foreach (DataGridColumn _column in columns)
+                foreach (DataGridColumn column in columns)
                 {
                     e.ClipboardRowContent.Add(
-                        new DataGridClipboardCellContent(item, _column, _column.OnCopyingCellClipboardContent(item)));
+                        new DataGridClipboardCellContent(item, column, column.OnCopyingCellClipboardContent(item)));
                 }
                 foreach (string format in formats)
                 {
@@ -157,6 +143,36 @@ namespace ERHMS.Desktop.Views.Collections
                 data.SetData(format, builders[format].ToString());
             }
             Clipboard.SetDataObject(data);
+        }
+
+        public void CopyColumnData(DataGridColumn column)
+        {
+            IReadOnlyCollection<DataGridColumn> columns;
+            if (column == null)
+            {
+                columns = ItemDataGrid.Columns.OrderBy(_column => _column.DisplayIndex).ToList();
+            }
+            else
+            {
+                columns = new DataGridColumn[]
+                {
+                    column
+                };
+            }
+            CopyData(columns, ViewModel.Items.SelectedItems);
+        }
+
+        public void CopyCellData(DataGridCell cell)
+        {
+            IReadOnlyCollection<DataGridColumn> columns = new DataGridColumn[]
+            {
+                cell.Column
+            };
+            IEnumerable<object> items = new object[]
+            {
+                cell.DataContext
+            };
+            CopyData(columns, items);
         }
     }
 }
