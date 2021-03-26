@@ -1,8 +1,10 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
+using ERHMS.Desktop.ViewModels.Collections;
 using ERHMS.Desktop.Views;
 using System;
 using System.Collections.Generic;
@@ -63,7 +65,19 @@ namespace ERHMS.Desktop
             Log.Instance.Debug($"Executed integration command: {methodName}");
         }
 
-        public static string WorkerInfo_GetGlobalRecordId(
+        private static bool? ShowDialog(ViewModel content)
+        {
+            Window dialog = new IntegrationView
+            {
+                DataContext = new IntegrationViewModel
+                {
+                    Content = content
+                }
+            };
+            return dialog.ShowDialog();
+        }
+
+        public static string GetGlobalRecordId(
             string firstName,
             string lastName,
             string emailAddress,
@@ -71,7 +85,11 @@ namespace ERHMS.Desktop
         {
             Run(() =>
             {
-                // TODO
+                WorkerCollectionViewModel content = new WorkerCollectionViewModel();
+                if (ShowDialog(content) == true)
+                {
+                    // TODO
+                }
             });
             return globalRecordId;
         }

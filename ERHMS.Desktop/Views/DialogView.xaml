@@ -29,8 +29,8 @@
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1"
                 Style="{StaticResource FluidLayout}">
-            <DockPanel MinHeight="100"
-                       Style="{StaticResource Container}">
+            <Grid MinHeight="100"
+                  Style="{StaticResource Container}">
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -52,7 +52,7 @@
                                    Visibility="{Binding Body, Converter={StaticResource NullableToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
-            </DockPanel>
+            </Grid>
         </Border>
         <Border Background="{x:Static SystemColors.MenuBarBrush}">
             <Grid Style="{StaticResource Container}">
@@ -89,13 +89,13 @@
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
                 Visibility="{Binding ShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
-            <DockPanel Style="{StaticResource Container}">
+            <Grid Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="250"
                          MinHeight="50"
                          Style="{StaticResource CodeTextBox}"
                          Text="{Binding Details, Mode=OneWay}" />
-            </DockPanel>
+            </Grid>
         </Border>
     </StackPanel>
 </Window>

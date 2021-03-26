@@ -169,8 +169,10 @@
     <Compile Include="ViewModels\Collections\PhaseCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Collections\WorkerCollectionViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\IntegrationViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
@@ -184,11 +186,17 @@
     <Compile Include="Views\Collections\ViewCollectionView.xaml.cs">
       <DependentUpon>ViewCollectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Collections\WorkerCollectionView.xaml.cs">
+      <DependentUpon>WorkerCollectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IntegrationView.xaml.cs">
+      <DependentUpon>IntegrationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -276,11 +284,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Collections\WorkerCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IntegrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
