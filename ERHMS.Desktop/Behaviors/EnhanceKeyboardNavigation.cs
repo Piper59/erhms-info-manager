@@ -6,14 +6,12 @@ namespace ERHMS.Desktop.Behaviors
 {
     public class EnhanceKeyboardNavigation : Behavior<DataGrid>
     {
-        private readonly Behavior copyCurrentCellToClipboard = new CopyCurrentCellToClipboard();
         private readonly Behavior moveFocusExternallyOnTab = new MoveFocusExternallyOnTab();
         private readonly Behavior moveFocusInternallyOnControlArrow = new MoveFocusInternallyOnControlArrow();
         private readonly Behavior restoreCurrentCellOnFocus = new RestoreCurrentCellOnFocus();
         private readonly Behavior toggleSelectionOnSpace = new ToggleSelectionOnSpace();
         private readonly Stack<Behavior> attachedBehaviors = new Stack<Behavior>();
 
-        public bool CopyCurrentCellToClipboard { get; set; } = true;
         public bool MoveFocusExternallyOnTab { get; set; } = true;
         public bool MoveFocusInternallyOnControlArrow { get; set; } = true;
         public bool RestoreCurrentCellOnFocus { get; set; } = true;
@@ -22,10 +20,6 @@ namespace ERHMS.Desktop.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
-            if (CopyCurrentCellToClipboard)
-            {
-                Attach(copyCurrentCellToClipboard);
-            }
             if (MoveFocusExternallyOnTab)
             {
                 Attach(moveFocusExternallyOnTab);

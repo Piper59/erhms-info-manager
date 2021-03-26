@@ -87,7 +87,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCommands.cs" />
-    <Compile Include="Behaviors\CopyCurrentCellToClipboard.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
     <Compile Include="Behaviors\MarshalDataContextEvent.cs" />
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
@@ -118,6 +117,7 @@
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
     <Compile Include="Converters\CountToVisibilityConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
+    <Compile Include="Converters\IndexToBoolConverter.cs" />
     <Compile Include="Converters\KeyToResourceConverter.cs" />
     <Compile Include="Converters\KeyToResXResourceConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />

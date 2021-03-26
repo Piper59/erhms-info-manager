@@ -4,12 +4,14 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Converters:IndexToBoolConverter x:Key="IndexToBoolConverter" />
             <Style x:Key="CellTextBlock" TargetType="TextBlock">
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
@@ -33,7 +35,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Target="{Binding ElementName=SearchTextBox}">
+                   Target="{x:Reference SearchTextBox}">
                 _Search:
             </Label>
             <TextBox x:Name="SearchTextBox"
@@ -72,6 +74,21 @@
                                      AltText="Edit"
                                      Command="{Binding EditCommand}"
                                      Content="{x:Static local:Icons.Edit}" />
+                <Controls:IconButton x:Name="CopyDataButton"
+                                     AccessKey="C"
+                                     AltText="Copy to clipboard"
+                                     Content="{x:Static local:Icons.Clipboard}"
+                                     IsEnabled="{Binding Items.CurrentPosition, Converter={StaticResource IndexToBoolConverter}}">
+                    <Controls:IconButton.ContextMenu>
+                        <ContextMenu x:Name="CopyDataContextMenu"
+                                     Placement="Bottom"
+                                     PlacementTarget="{x:Reference CopyDataButton}">
+                        </ContextMenu>
+                    </Controls:IconButton.ContextMenu>
+                    <b:Interaction.Behaviors>
+                        <Behaviors:OpenContextMenuOnClick />
+                    </b:Interaction.Behaviors>
+                </Controls:IconButton>
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AccessKey="D"
                                      AltText="Delete"
@@ -91,9 +108,9 @@
                             DataContext="{Binding Items}" />
         </Grid>
         <Border Grid.Row="2"
-                Background="{Binding Background, ElementName=RecordDataGrid}"
+                Background="{Binding Background, ElementName=ItemDataGrid}"
                 Margin="{StaticResource DefaultMargin}">
-            <DataGrid x:Name="RecordDataGrid"
+            <DataGrid x:Name="ItemDataGrid"
                       HorizontalAlignment="Left"
                       ItemsSource="{Binding Items}"
                       Margin="0"
@@ -110,6 +127,6 @@
             </DataGrid>
         </Border>
         <Controls:ItemsControlWatermark Grid.Row="2"
-                                        ItemsControl="{Binding ElementName=RecordDataGrid}" />
+                                        ItemsControl="{x:Reference ItemDataGrid}" />
     </Grid>
 </UserControl>

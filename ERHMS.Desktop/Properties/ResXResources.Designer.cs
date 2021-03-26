@@ -61,6 +61,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _All.
+        /// </summary>
+        public static string AccessText_All {
+            get {
+                return ResourceManager.GetString("AccessText.All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Close.
         /// </summary>
         public static string AccessText_Close {

@@ -1465,6 +1465,7 @@
         public static string Add => plus;
         public static string Build => wrench;
         public static string Clear => times;
+        public static string Clipboard => clipboard;
         public static string Close => times;
         public static string Delete => trash;
         public static string Edit => pen;

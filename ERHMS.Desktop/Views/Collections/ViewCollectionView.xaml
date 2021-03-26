@@ -54,7 +54,7 @@
                                  Command="{Binding RefreshCommand}"
                                  Content="{x:Static local:Icons.Refresh}" />
         </WrapPanel>
-        <DataGrid x:Name="ViewDataGrid"
+        <DataGrid x:Name="ItemDataGrid"
                   Grid.Row="1"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
@@ -89,6 +89,6 @@
             </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="1"
-                                        ItemsControl="{Binding ElementName=ViewDataGrid}" />
+                                        ItemsControl="{x:Reference ItemDataGrid}" />
     </Grid>
 </UserControl>
