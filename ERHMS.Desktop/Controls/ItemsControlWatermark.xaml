@@ -18,11 +18,12 @@
                  ElementName="Root"
                  Path="ItemsControl.HasItems" />
     </UserControl.Visibility>
-    <Border Background="{x:Static SystemColors.ControlLightLightBrush}"
-            BorderBrush="{x:Static SystemColors.ControlLightBrush}"
+    <Border Background="{x:Static SystemColors.WindowBrush}"
+            BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
             BorderThickness="1"
             Padding="{StaticResource DefaultPadding}">
-        <TextBlock Style="{StaticResource Body}"
+        <TextBlock Foreground="{x:Static SystemColors.WindowTextBrush}"
+                   Style="{StaticResource Body}"
                    Text="{Binding Text, ElementName=Root}" />
     </Border>
 </UserControl>

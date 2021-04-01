@@ -4,17 +4,10 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
     <SolidColorBrush x:Key="AccentTextBrush" Color="{x:Static local:Colors.Accent}" />
-
     <DropShadowEffect x:Key="Shadow"
                       BlurRadius="{StaticResource HugeSpace}"
                       Color="{x:Static SystemColors.ControlDarkColor}"
                       Direction="270"
                       Opacity="0.5" />
-
-    <SolidColorBrush x:Key="ToasterBrush" Color="{x:Static local:Colors.Accent}" />
-    <SolidColorBrush x:Key="ToasterBorderBrush" Color="Transparent" />
-    <Thickness x:Key="ToasterBorderThickness">0</Thickness>
-    <SolidColorBrush x:Key="ToasterTextBrush" Color="#ffffff" />
 </ResourceDictionary>

@@ -63,7 +63,6 @@
                             <DataTemplate>
                                 <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource CoreViewNameToDescriptionConverter}}"
                                         AutomationProperties.Name="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}"
-                                        Background="{x:Static SystemColors.ControlLightLightBrush}"
                                         Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
                                         CommandParameter="{Binding}">
                                     <Button.Resources>

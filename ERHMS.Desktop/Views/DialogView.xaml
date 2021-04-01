@@ -43,7 +43,7 @@
                            VerticalAlignment="Top"
                            Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}" />
                     <StackPanel Grid.Column="1">
-                        <TextBlock Foreground="{StaticResource AccentTextBrush}"
+                        <TextBlock Foreground="{DynamicResource AccentTextBrush}"
                                    Style="{StaticResource Lead}"
                                    Text="{Binding Lead}"
                                    Visibility="{Binding Lead, Converter={StaticResource NullableToVisibilityConverter}}" />

@@ -25,7 +25,7 @@
                 Click="CloseButton_Click"
                 Content="{x:Static local:Icons.Close}"
                 FontFamily="{StaticResource IconFontFamily}"
-                Foreground="{StaticResource ToasterTextBrush}"
+                Foreground="{x:Static SystemColors.WindowTextBrush}"
                 HorizontalAlignment="Right"
                 ToolTip="{Binding (AutomationProperties.Name), RelativeSource={RelativeSource Self}}">
             <Button.Template>
@@ -56,11 +56,11 @@
     </Grid>
     <UserControl.Style>
         <Style TargetType="UserControl">
-            <Setter Property="Background" Value="{StaticResource ToasterBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource ToasterBorderBrush}" />
-            <Setter Property="BorderThickness" Value="{StaticResource ToasterBorderThickness}" />
-            <Setter Property="Effect" Value="{StaticResource Shadow}" />
-            <Setter Property="Foreground" Value="{StaticResource ToasterTextBrush}" />
+            <Setter Property="Background" Value="{x:Static SystemColors.WindowBrush}" />
+            <Setter Property="BorderBrush" Value="{x:Static SystemColors.WindowFrameBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Effect" Value="{DynamicResource Shadow}" />
+            <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
             <Setter Property="Opacity" Value="0" />
             <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
             <Style.Triggers>

@@ -46,7 +46,6 @@
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="HeadersVisibility" Value="Column" />
-        <Setter Property="HorizontalGridLinesBrush" Value="{x:Static SystemColors.ControlLightBrush}" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
     </Style>
