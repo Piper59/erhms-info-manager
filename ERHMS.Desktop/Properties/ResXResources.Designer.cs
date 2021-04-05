@@ -61,11 +61,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _All.
+        ///   Looks up a localized string similar to _All columns.
         /// </summary>
-        public static string AccessText_All {
+        public static string AccessText_AllColumns {
             get {
-                return ResourceManager.GetString("AccessText.All", resourceCulture);
+                return ResourceManager.GetString("AccessText.AllColumns", resourceCulture);
             }
         }
         

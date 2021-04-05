@@ -97,7 +97,7 @@ namespace ERHMS.Desktop.Views.Collections
             items.Add(new MenuItem
             {
                 Command = CopyColumnDataCommand,
-                Header = ResXResources.AccessText_All
+                Header = ResXResources.AccessText_AllColumns
             });
             items.Add(new Separator());
             foreach (DataGridColumn column in ItemDataGrid.Columns)
@@ -111,46 +111,57 @@ namespace ERHMS.Desktop.Views.Collections
             }
         }
 
-        private void CopyData(IReadOnlyCollection<DataGridColumn> columns, IEnumerable<object> items)
+        private void CopyData(IEnumerable<object> items, IReadOnlyCollection<DataGridColumn> columns)
         {
-            int minColumnDisplayIndex = columns.Min(column => column.DisplayIndex);
-            int maxColumnDisplayIndex = columns.Max(column => column.DisplayIndex);
             IReadOnlyCollection<string> formats = new string[]
             {
                 DataFormats.Text,
                 DataFormats.UnicodeText,
                 DataFormats.CommaSeparatedValue
             };
-            IReadOnlyDictionary<string, StringBuilder> builders =
+            IReadOnlyDictionary<string, StringBuilder> buildersByFormat =
                 formats.ToDictionary(format => format, _ => new StringBuilder());
+            int minColumnDisplayIndex = columns.Min(column => column.DisplayIndex);
+            int maxColumnDisplayIndex = columns.Max(column => column.DisplayIndex);
             foreach (object item in items)
             {
                 DataGridRowClipboardEventArgs e =
                     new DataGridRowClipboardEventArgs(item, minColumnDisplayIndex, maxColumnDisplayIndex, false);
                 foreach (DataGridColumn column in columns)
                 {
-                    e.ClipboardRowContent.Add(
-                        new DataGridClipboardCellContent(item, column, column.OnCopyingCellClipboardContent(item)));
+                    object content = column.OnCopyingCellClipboardContent(item);
+                    e.ClipboardRowContent.Add(new DataGridClipboardCellContent(item, column, content));
                 }
                 foreach (string format in formats)
                 {
-                    builders[format].Append(e.FormatClipboardCellValues(format));
+                    buildersByFormat[format].Append(e.FormatClipboardCellValues(format));
                 }
             }
             DataObject data = new DataObject();
             foreach (string format in formats)
             {
-                data.SetData(format, builders[format].ToString());
+                data.SetData(format, buildersByFormat[format].ToString());
             }
             Clipboard.SetDataObject(data);
         }
 
         public void CopyColumnData(DataGridColumn column)
         {
+            IEnumerable<object> items;
+            if (ItemDataGrid.SelectedIndex == -1)
+            {
+                items = ItemDataGrid.Items.Cast<object>();
+            }
+            else
+            {
+                items = ItemDataGrid.SelectedItems.Cast<object>();
+            }
             IReadOnlyCollection<DataGridColumn> columns;
             if (column == null)
             {
-                columns = ItemDataGrid.Columns.OrderBy(_column => _column.DisplayIndex).ToList();
+                columns = ItemDataGrid.Columns.Where(_column => _column.Visibility == Visibility.Visible)
+                    .OrderBy(_column => _column.DisplayIndex)
+                    .ToList();
             }
             else
             {
@@ -159,20 +170,20 @@ namespace ERHMS.Desktop.Views.Collections
                     column
                 };
             }
-            CopyData(columns, ViewModel.Items.SelectedItems);
+            CopyData(items, columns);
         }
 
         public void CopyCellData(DataGridCell cell)
         {
-            IReadOnlyCollection<DataGridColumn> columns = new DataGridColumn[]
-            {
-                cell.Column
-            };
             IEnumerable<object> items = new object[]
             {
                 cell.DataContext
             };
-            CopyData(columns, items);
+            IReadOnlyCollection<DataGridColumn> columns = new DataGridColumn[]
+            {
+                cell.Column
+            };
+            CopyData(items, columns);
         }
     }
 }

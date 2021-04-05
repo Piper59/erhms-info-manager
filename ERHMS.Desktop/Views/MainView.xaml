@@ -62,6 +62,10 @@
                     <MenuItem Header="_Back up" />
                     <MenuItem Header="_Restore" />
                 </MenuItem>
+                <MenuItem Header="_Reports">
+                    <MenuItem Header="_Worker report" />
+                    <MenuItem Header="_Incident report" />
+                </MenuItem>
                 <MenuItem Header="_Logs">
                     <MenuItem Command="{Binding OpenLogFileCommand}"
                               Header="View _current" />

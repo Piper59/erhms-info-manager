@@ -5,14 +5,12 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
-             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Converters:IndexToBoolConverter x:Key="IndexToBoolConverter" />
             <Style x:Key="CellTextBlock" TargetType="TextBlock">
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
@@ -22,7 +20,7 @@
                         <ContextMenu>
                             <MenuItem Command="{Binding CopyCellDataCommand, Source={x:Reference Root}}"
                                       CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
-                                      Header="_Copy to clipboard" />
+                                      Header="_Copy cell to clipboard" />
                         </ContextMenu>
                     </Setter.Value>
                 </Setter>
@@ -95,9 +93,8 @@
                                      Command="{Binding EditCommand}"
                                      Content="{x:Static local:Icons.Edit}" />
                 <Controls:IconButton x:Name="CopyColumnDataButton"
-                                     AltText="Copy to clipboard"
-                                     Content="{x:Static local:Icons.Clipboard}"
-                                     IsEnabled="{Binding Items.CurrentPosition, Converter={StaticResource IndexToBoolConverter}}">
+                                     AltText="Copy column to clipboard"
+                                     Content="{x:Static local:Icons.Clipboard}">
                     <Controls:IconButton.ContextMenu>
                         <ContextMenu x:Name="CopyColumnDataContextMenu"
                                      Placement="Bottom"
