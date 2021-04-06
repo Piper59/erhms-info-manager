@@ -94,7 +94,8 @@
                                      Content="{x:Static local:Icons.Edit}" />
                 <Controls:IconButton x:Name="CopyColumnDataButton"
                                      AltText="Copy column to clipboard"
-                                     Content="{x:Static local:Icons.Clipboard}">
+                                     Content="{x:Static local:Icons.Clipboard}"
+                                     IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
                         <ContextMenu x:Name="CopyColumnDataContextMenu"
                                      Placement="Bottom"
