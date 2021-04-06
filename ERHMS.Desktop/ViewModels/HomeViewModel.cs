@@ -1,10 +1,10 @@
-﻿using ERHMS.Desktop.Infrastructure.ViewModels;
-using ERHMS.Desktop.ViewModels.Collections;
+﻿using ERHMS.Desktop.Collections;
+using ERHMS.Desktop.Infrastructure.ViewModels;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class HomeViewModel : ViewModel
     {
-        public PhaseCollectionViewModel Phases { get; } = new PhaseCollectionViewModel();
+        public PhaseCollection Phases { get; } = new PhaseCollection();
     }
 }

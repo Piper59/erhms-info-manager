@@ -5,12 +5,16 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Converters:KeyToResXResourceConverter x:Key="RecordStatusToNameConverter"
+                                                   NullValue="All"
+                                                   Prefix="RecordStatus.Name." />
             <Style x:Key="CellTextBlock" TargetType="TextBlock">
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
@@ -70,14 +74,18 @@
             </Controls:IconButton>
             <ComboBox AutomationProperties.Name="Status"
                       Grid.Column="3"
-                      DisplayMemberPath="Text"
                       ItemsSource="{Binding Statuses}"
                       MinWidth="125">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}">
-                        <Setter Property="AutomationProperties.Name" Value="{Binding Text}" />
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Value, Converter={StaticResource RecordStatusToNameConverter}}" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Value, Converter={StaticResource RecordStatusToNameConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
         <Grid Grid.Row="1">

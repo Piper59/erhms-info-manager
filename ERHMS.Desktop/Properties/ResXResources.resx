@@ -258,13 +258,13 @@
   <data name="Phase.Name.PreDeployment" xml:space="preserve">
     <value>Pre-deployment</value>
   </data>
-  <data name="RecordStatus.All" xml:space="preserve">
+  <data name="RecordStatus.Name.All" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="RecordStatus.Deleted" xml:space="preserve">
+  <data name="RecordStatus.Name.Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
-  <data name="RecordStatus.Undeleted" xml:space="preserve">
+  <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
   </data>
   <data name="Title.App" xml:space="preserve">

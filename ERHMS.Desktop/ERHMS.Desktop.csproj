@@ -96,6 +96,8 @@
     <Compile Include="Behaviors\RestoreCurrentCellOnFocus.cs" />
     <Compile Include="Behaviors\SetMenuDropAlignment.cs" />
     <Compile Include="Behaviors\ToggleSelectionOnSpace.cs" />
+    <Compile Include="Collections\PhaseCollection.cs" />
+    <Compile Include="Collections\RecordStatusCollection.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\Command.cs" />
@@ -166,7 +168,6 @@
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\IProgressService.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
-    <Compile Include="ViewModels\Collections\PhaseCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\WorkerCollectionViewModel.cs" />
@@ -177,9 +178,6 @@
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
-    <Compile Include="Views\Collections\PhaseCollectionView.xaml.cs">
-      <DependentUpon>PhaseCollectionView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Collections\RecordCollectionView.xaml.cs">
       <DependentUpon>RecordCollectionView.xaml</DependentUpon>
     </Compile>
@@ -269,10 +267,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\HighContrast.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Collections\PhaseCollectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -486,27 +486,27 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
-        public static string RecordStatus_All {
+        public static string RecordStatus_Name_All {
             get {
-                return ResourceManager.GetString("RecordStatus.All", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Name.All", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Deleted.
         /// </summary>
-        public static string RecordStatus_Deleted {
+        public static string RecordStatus_Name_Deleted {
             get {
-                return ResourceManager.GetString("RecordStatus.Deleted", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Name.Deleted", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Undeleted.
         /// </summary>
-        public static string RecordStatus_Undeleted {
+        public static string RecordStatus_Name_Undeleted {
             get {
-                return ResourceManager.GetString("RecordStatus.Undeleted", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Name.Undeleted", resourceCulture);
             }
         }
         

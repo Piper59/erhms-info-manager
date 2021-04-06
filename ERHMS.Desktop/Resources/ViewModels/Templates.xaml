@@ -13,9 +13,6 @@
     <DataTemplate DataType="{x:Type ViewModels:ViewViewModel}">
         <Views:ViewView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type ViewModelsCollections:PhaseCollectionViewModel}">
-        <ViewsCollections:PhaseCollectionView />
-    </DataTemplate>
     <DataTemplate DataType="{x:Type ViewModelsCollections:RecordCollectionViewModel}">
         <ViewsCollections:RecordCollectionView />
     </DataTemplate>

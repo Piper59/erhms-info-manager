@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Data;
+using ERHMS.Desktop.Collections;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure.ViewModels;
@@ -18,33 +19,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
 {
     public class RecordCollectionViewModel : ViewModel
     {
-        public class StatusViewModel : SelectableViewModel
-        {
-            public static StatusViewModel Undeleted { get; } =
-                new StatusViewModel(RecordStatus.Undeleted, ResXResources.RecordStatus_Undeleted);
-
-            public static StatusViewModel Deleted { get; } =
-                new StatusViewModel(RecordStatus.Deleted, ResXResources.RecordStatus_Deleted);
-
-            public static StatusViewModel All { get; } = new StatusViewModel(null, ResXResources.RecordStatus_All);
-
-            public static IReadOnlyCollection<StatusViewModel> Instances { get; } = new StatusViewModel[]
-            {
-                Undeleted,
-                Deleted,
-                All
-            };
-
-            public RecordStatus? Value { get; }
-            public string Text { get; }
-
-            private StatusViewModel(RecordStatus? value, string text)
-            {
-                Value = value;
-                Text = text;
-            }
-        }
-
         public class ItemViewModel : SelectableViewModel
         {
             public Record Value { get; }
@@ -91,8 +65,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        private readonly List<StatusViewModel> statuses;
-        public CustomCollectionView<StatusViewModel> Statuses { get; }
+        public RecordStatusCollection Statuses { get; } = new RecordStatusCollection();
 
         private IReadOnlyCollection<FieldDataRow> fields;
         public IReadOnlyCollection<FieldDataRow> Fields
@@ -103,7 +76,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
-        public Record SelectedValue => Items.SelectedItem?.Value;
 
         public ICommand ClearSearchTextCommand { get; }
         public ICommand AddCommand { get; }
@@ -115,8 +87,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public RecordCollectionViewModel(View view)
         {
             View = view;
-            statuses = StatusViewModel.Instances.ToList();
-            Statuses = new CustomCollectionView<StatusViewModel>(statuses);
             Statuses.CurrentChanged += Statuses_CurrentChanged;
             items = new List<ItemViewModel>();
             Items = new CustomCollectionView<ItemViewModel>(items)
@@ -207,7 +177,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 Module.Enter,
                 $"/project:{Project.FilePath}",
                 $"/view:{View.Name}",
-                $"/record:{SelectedValue.UniqueKey}");
+                $"/record:{Items.SelectedItem.Value.UniqueKey}");
         }
 
         private async Task SetDeletedAsync(string lead, bool deleted)

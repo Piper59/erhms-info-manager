@@ -63,7 +63,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
-        public View SelectedValue => Items.SelectedItem?.Value;
 
         public ICommand CreateCommand { get; }
         public ICommand CustomizeCommand { get; }
@@ -108,12 +107,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.MakeView,
                 $"/project:{Project.FilePath}",
-                $"/view:{SelectedValue.Name}");
+                $"/view:{Items.SelectedItem.Value.Name}");
         }
 
         public async Task ViewDataAsync()
         {
-            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, SelectedValue.Name);
+            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, Items.SelectedItem.Value.Name);
         }
 
         public async Task EnterDataAsync()
@@ -121,7 +120,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.Enter,
                 $"/project:{Project.FilePath}",
-                $"/view:{SelectedValue.Name}",
+                $"/view:{Items.SelectedItem.Value.Name}",
                 "/record:*");
         }
 
