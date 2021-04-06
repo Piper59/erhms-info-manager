@@ -77,7 +77,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
 
-        public ICommand ClearSearchTextCommand { get; }
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -94,7 +93,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 TypedFilter = IsMatch,
                 PageSize = 100
             };
-            ClearSearchTextCommand = new SyncCommand(ClearSearchText);
             AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, Items.HasSelection);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasSelection);
@@ -155,11 +153,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private bool IsMatch(ItemViewModel item)
         {
             return IsStatusMatch(item) && IsSearchMatch(item);
-        }
-
-        public void ClearSearchText()
-        {
-            SearchText = "";
         }
 
         public async Task AddAsync()

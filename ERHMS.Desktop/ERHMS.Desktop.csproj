@@ -111,6 +111,12 @@
     <Compile Include="Controls\Pager.xaml.cs">
       <DependentUpon>Pager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RecordStatusComboBox.xaml.cs">
+      <DependentUpon>RecordStatusComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SearchTextBox.xaml.cs">
+      <DependentUpon>SearchTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Toaster.xaml.cs">
       <DependentUpon>Toaster.xaml</DependentUpon>
     </Compile>
@@ -235,6 +241,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Pager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RecordStatusComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SearchTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
