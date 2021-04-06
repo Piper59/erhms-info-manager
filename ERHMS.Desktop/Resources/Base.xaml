@@ -158,6 +158,15 @@
     </Style>
 
     <Style x:Key="TextBoxBase" TargetType="TextBox">
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu>
+                    <MenuItem Command="Cut" />
+                    <MenuItem Command="Copy" />
+                    <MenuItem Command="Paste" />
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
