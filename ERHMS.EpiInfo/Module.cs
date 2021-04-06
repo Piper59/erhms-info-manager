@@ -12,6 +12,7 @@ namespace ERHMS.EpiInfo
         AnalysisDashboard,
         Enter,
         MakeView,
+        Mapping,
         Menu
     }
 
