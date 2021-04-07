@@ -3,15 +3,16 @@ using System.Collections.Generic;
 
 namespace ERHMS.EpiInfo.Data
 {
-    public class RecordCollection : ICollection<Record>
+    public class RecordCollection<TRecord> : ICollection<TRecord>
+        where TRecord : Record, new()
     {
-        private readonly IDictionary<string, Record> itemsByGlobalRecordId =
-            new Dictionary<string, Record>(Record.GlobalRecordIdComparer);
+        private readonly IDictionary<string, TRecord> itemsByGlobalRecordId =
+            new Dictionary<string, TRecord>(Record.GlobalRecordIdComparer);
 
         public int Count => itemsByGlobalRecordId.Count;
         public bool IsReadOnly => false;
 
-        public void Add(Record item)
+        public void Add(TRecord item)
         {
             itemsByGlobalRecordId.Add(item.GlobalRecordId, item);
         }
@@ -21,24 +22,24 @@ namespace ERHMS.EpiInfo.Data
             itemsByGlobalRecordId.Clear();
         }
 
-        public bool Contains(Record item)
+        public bool Contains(TRecord item)
         {
             return itemsByGlobalRecordId.ContainsKey(item.GlobalRecordId);
         }
 
-        public void CopyTo(Record[] array, int index)
+        public void CopyTo(TRecord[] array, int index)
         {
             itemsByGlobalRecordId.Values.CopyTo(array, index);
         }
 
-        public bool Remove(Record item)
+        public bool Remove(TRecord item)
         {
             return itemsByGlobalRecordId.Remove(item.GlobalRecordId);
         }
 
-        public void Update(RecordMapper mapper)
+        public void Update(RecordMapper<TRecord> mapper)
         {
-            if (itemsByGlobalRecordId.TryGetValue(mapper.GlobalRecordId, out Record record))
+            if (itemsByGlobalRecordId.TryGetValue(mapper.GlobalRecordId, out TRecord record))
             {
                 mapper.Update(record);
             }
@@ -48,7 +49,7 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public IEnumerator<Record> GetEnumerator()
+        public IEnumerator<TRecord> GetEnumerator()
         {
             return itemsByGlobalRecordId.Values.GetEnumerator();
         }

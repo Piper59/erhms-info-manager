@@ -6,7 +6,8 @@ using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo.Data
 {
-    public class RecordMapper
+    public class RecordMapper<TRecord>
+        where TRecord : Record, new()
     {
         private static readonly Regex fieldNameQualifierRegex = new Regex(@"^.+\.");
 
@@ -40,7 +41,7 @@ namespace ERHMS.EpiInfo.Data
             GlobalRecordIdOrdinal = GetOrdinal(source, ColumnNames.GLOBAL_RECORD_ID);
         }
 
-        public void Update(Record target)
+        public void Update(TRecord target)
         {
             for (int index = 0; index < Source.FieldCount; index++)
             {
@@ -51,9 +52,9 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public Record Create()
+        public TRecord Create()
         {
-            Record target = new Record();
+            TRecord target = new TRecord();
             Update(target);
             return target;
         }

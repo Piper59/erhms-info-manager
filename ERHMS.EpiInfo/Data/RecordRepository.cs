@@ -10,7 +10,8 @@ using System.Text;
 
 namespace ERHMS.EpiInfo.Data
 {
-    public class RecordRepository : Repository<Record>
+    public class RecordRepository<TRecord> : Repository<TRecord>
+        where TRecord : Record, new()
     {
         public View View { get; }
 
@@ -52,12 +53,12 @@ namespace ERHMS.EpiInfo.Data
             string selectList,
             string clauses,
             object parameters,
-            RecordCollection records)
+            RecordCollection<TRecord> records)
         {
             string sql = GetSelectStatement(selectList, clauses);
             using (IDataReader reader = connection.ExecuteReader(sql, parameters))
             {
-                RecordMapper mapper = new RecordMapper(reader);
+                RecordMapper<TRecord> mapper = new RecordMapper<TRecord>(reader);
                 while (reader.Read())
                 {
                     records.Update(mapper);
@@ -65,16 +66,16 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        private IEnumerable<Record> SelectJointly(IDbConnection connection, string clauses, object parameters)
+        private IEnumerable<TRecord> SelectJointly(IDbConnection connection, string clauses, object parameters)
         {
-            RecordCollection records = new RecordCollection();
+            RecordCollection<TRecord> records = new RecordCollection<TRecord>();
             SelectCore(connection, "*", clauses, parameters, records);
             return records;
         }
 
-        private IEnumerable<Record> SelectIncrementally(IDbConnection connection, string clauses, object parameters)
+        private IEnumerable<TRecord> SelectIncrementally(IDbConnection connection, string clauses, object parameters)
         {
-            RecordCollection records = new RecordCollection();
+            RecordCollection<TRecord> records = new RecordCollection<TRecord>();
             SelectCore(connection, $"{Quote(View.TableName)}.*", clauses, parameters, records);
             foreach (Page page in View.Pages)
             {
@@ -83,7 +84,7 @@ namespace ERHMS.EpiInfo.Data
             return records;
         }
 
-        public override IEnumerable<Record> Select(string clauses, object parameters)
+        public override IEnumerable<TRecord> Select(string clauses, object parameters)
         {
             using (IDbConnection connection = Database.Connect())
             {
@@ -105,12 +106,12 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public IEnumerable<Record> Select()
+        public IEnumerable<TRecord> Select()
         {
             return Select($"ORDER BY {Quote(ColumnNames.UNIQUE_KEY)}", null);
         }
 
-        public Record SelectByGlobalRecordId(string globalRecordId)
+        public TRecord SelectByGlobalRecordId(string globalRecordId)
         {
             string clauses = $"WHERE {Quote(View.TableName)}.{ColumnNames.GLOBAL_RECORD_ID} = @GlobalRecordId";
             ParameterCollection parameters = new ParameterCollection
@@ -120,7 +121,7 @@ namespace ERHMS.EpiInfo.Data
             return Select(clauses, parameters).SingleOrDefault();
         }
 
-        public IEnumerable<Record> SelectByDeleted(bool deleted)
+        public IEnumerable<TRecord> SelectByDeleted(bool deleted)
         {
             string op = deleted ? "=" : "<>";
             string clauses = $"WHERE {Quote(ColumnNames.REC_STATUS)} {op} @RECSTATUS";
@@ -131,7 +132,7 @@ namespace ERHMS.EpiInfo.Data
             return Select(clauses, parameters);
         }
 
-        public void SetDeleted(Record record, bool deleted)
+        public void SetDeleted(TRecord record, bool deleted)
         {
             string sql = $@"
                 UPDATE {Quote(View.TableName)}
@@ -149,14 +150,20 @@ namespace ERHMS.EpiInfo.Data
             record.Deleted = deleted;
         }
 
-        public override void Delete(Record record)
+        public override void Delete(TRecord record)
         {
             SetDeleted(record, true);
         }
 
-        public void Undelete(Record record)
+        public void Undelete(TRecord record)
         {
             SetDeleted(record, false);
         }
+    }
+
+    public class RecordRepository : RecordRepository<Record>
+    {
+        public RecordRepository(View view)
+            : base(view) { }
     }
 }
