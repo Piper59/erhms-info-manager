@@ -2,7 +2,6 @@
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/ERHMS Info Manager;component/Themes/Default.xaml" />
         <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/Common.xaml" />
         <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/Base.xaml" />
     </ResourceDictionary.MergedDictionaries>

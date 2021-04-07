@@ -24,8 +24,7 @@
                 BorderThickness="0,1,0,0"
                 Style="{StaticResource FluidLayout}">
             <StackPanel Style="{StaticResource Container}">
-                <TextBlock Foreground="{DynamicResource AccentTextBrush}"
-                           Style="{StaticResource Lead}"
+                <TextBlock Style="{StaticResource Lead}"
                            Text="{Binding Title}" />
                 <ProgressBar IsIndeterminate="True" />
                 <TextBlock Style="{StaticResource Body}"
@@ -34,7 +33,7 @@
                            TextWrapping="NoWrap" />
             </StackPanel>
         </Border>
-        <Border Background="{x:Static SystemColors.MenuBarBrush}"
+        <Border Background="{x:Static SystemColors.MenuBrush}"
                 BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
                 Visibility="{Binding CanBeCanceled, Converter={StaticResource BoolToVisibilityConverter}}">

@@ -17,7 +17,7 @@ namespace ERHMS.Desktop.Views
 
         private void DialogView_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.DialogType.ToSound().Play();
+            ViewModel.DialogType.ToSound()?.Play();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

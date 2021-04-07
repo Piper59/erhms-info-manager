@@ -10,6 +10,5 @@ namespace ERHMS.Desktop
         public static Color PreDeployment => ThemeBlue;
         public static Color Deployment => ThemeRed;
         public static Color PostDeployment => ThemeGreen;
-        public static Color Accent => ThemeBlue;
     }
 }

@@ -42,8 +42,7 @@
                            VerticalAlignment="Top"
                            Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}" />
                     <StackPanel Grid.Column="1">
-                        <TextBlock Foreground="{DynamicResource AccentTextBrush}"
-                                   Style="{StaticResource Lead}"
+                        <TextBlock Style="{StaticResource Lead}"
                                    Text="{Binding Lead}"
                                    Visibility="{Binding Lead, Converter={StaticResource NullableToVisibilityConverter}}" />
                         <TextBlock Style="{StaticResource Body}"
@@ -53,7 +52,7 @@
                 </Grid>
             </Grid>
         </Border>
-        <Border Background="{x:Static SystemColors.MenuBarBrush}">
+        <Border Background="{x:Static SystemColors.MenuBrush}">
             <Grid Style="{StaticResource Container}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
