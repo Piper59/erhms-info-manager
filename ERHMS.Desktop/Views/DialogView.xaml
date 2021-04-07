@@ -22,7 +22,6 @@
                                                    Prefix="DialogType.Name." />
             <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
-            <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
@@ -61,6 +60,9 @@
                     <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource SmallDialogButton}" />
+                </Grid.Resources>
                 <Button Grid.Column="0"
                         Command="{Binding ToggleShowingDetailsCommand}"
                         VerticalAlignment="Top"

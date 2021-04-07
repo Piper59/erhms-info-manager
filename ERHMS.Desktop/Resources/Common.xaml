@@ -11,7 +11,7 @@
     <FontWeight x:Key="ThinFontWeight">Light</FontWeight>
     <FontWeight x:Key="ThickFontWeight">SemiBold</FontWeight>
     <FontFamily x:Key="CodeFontFamily">Consolas</FontFamily>
-    <FontFamily x:Key="IconFontFamily">pack://application:,,,/Resources/#Font Awesome 5 Free Solid</FontFamily>
+    <FontFamily x:Key="IconFontFamily">pack://application:,,,/ERHMS Info Manager;component/Resources/#Font Awesome 5 Free Solid</FontFamily>
 
     <!-- Spacing -->
     <System:Double x:Key="SmallSpace">5</System:Double>

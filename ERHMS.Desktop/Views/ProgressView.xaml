@@ -17,7 +17,6 @@
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel>
@@ -41,6 +40,9 @@
                 Visibility="{Binding CanBeCanceled, Converter={StaticResource BoolToVisibilityConverter}}">
             <WrapPanel HorizontalAlignment="Right"
                        Style="{StaticResource Container}">
+                <WrapPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource SmallDialogButton}" />
+                </WrapPanel.Resources>
                 <Button Command="{Binding CancelCommand}"
                         IsCancel="True">
                     Cancel

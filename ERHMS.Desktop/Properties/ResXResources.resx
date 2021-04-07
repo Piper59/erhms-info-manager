@@ -120,6 +120,9 @@
   <data name="AccessText.AllColumns" xml:space="preserve">
     <value>_All columns</value>
   </data>
+  <data name="AccessText.Cancel" xml:space="preserve">
+    <value>_Cancel</value>
+  </data>
   <data name="AccessText.Close" xml:space="preserve">
     <value>_Close</value>
   </data>
