@@ -5,15 +5,22 @@ namespace ERHMS.Common
     // https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance#Optimal_string_alignment_distance
     public static class StringDistanceCalculator
     {
-        private class OneIndexedString
+        private class String
         {
             public string Value { get; }
             public int Length => Value.Length;
             public char this[int index] => Value[index - 1];
 
-            public OneIndexedString(string value)
+            public String(string value)
             {
-                Value = value;
+                if (value == null)
+                {
+                    Value = "";
+                }
+                else
+                {
+                    Value = value.ToLower();
+                }
             }
         }
 
@@ -24,8 +31,8 @@ namespace ERHMS.Common
 
         public static int GetDistance(string str1, string str2)
         {
-            OneIndexedString a = new OneIndexedString(str1.ToLower());
-            OneIndexedString b = new OneIndexedString(str2.ToLower());
+            String a = new String(str1);
+            String b = new String(str2);
             int[,] d = new int[a.Length + 1, b.Length + 1];
             for (int i = 0; i <= a.Length; i++)
             {
