@@ -8,8 +8,10 @@ using ERHMS.Desktop.ViewModels.Collections;
 using ERHMS.Desktop.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Interop;
 using Action = System.Action;
 
 namespace ERHMS.Desktop
@@ -73,6 +75,10 @@ namespace ERHMS.Desktop
                 {
                     Content = content
                 }
+            };
+            new WindowInteropHelper(dialog)
+            {
+                Owner = Process.GetCurrentProcess().MainWindowHandle
             };
             return dialog.ShowDialog();
         }
