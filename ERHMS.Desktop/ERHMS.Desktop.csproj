@@ -120,16 +120,11 @@
     <Compile Include="Controls\Toaster.xaml.cs">
       <DependentUpon>Toaster.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\BoolInverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
-    <Compile Include="Converters\CountToVisibilityConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
-    <Compile Include="Converters\IndexToBoolConverter.cs" />
-    <Compile Include="Converters\KeyToResourceConverter.cs" />
     <Compile Include="Converters\KeyToResXResourceConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
-    <Compile Include="Converters\ObjectTypeToResourceConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\StringCaseConverter.cs" />
     <Compile Include="Data\CustomCollectionView.cs" />
