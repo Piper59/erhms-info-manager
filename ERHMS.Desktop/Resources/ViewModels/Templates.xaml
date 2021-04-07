@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
-                    xmlns:ViewModelsCollections="clr-namespace:ERHMS.Desktop.ViewModels.Collections"
-                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views"
-                    xmlns:ViewsCollections="clr-namespace:ERHMS.Desktop.Views.Collections">
+                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
     <DataTemplate DataType="{x:Type ViewModels:HomeViewModel}">
         <Views:HomeView />
     </DataTemplate>
@@ -12,14 +10,5 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type ViewModels:ViewViewModel}">
         <Views:ViewView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type ViewModelsCollections:RecordCollectionViewModel}">
-        <ViewsCollections:RecordCollectionView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type ViewModelsCollections:ViewCollectionViewModel}">
-        <ViewsCollections:ViewCollectionView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type ViewModelsCollections:WorkerCollectionViewModel}">
-        <ViewsCollections:WorkerCollectionView />
     </DataTemplate>
 </ResourceDictionary>

@@ -91,7 +91,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items = new CustomCollectionView<ItemViewModel>(items)
             {
                 TypedFilter = IsMatch,
-                PageSize = 100
+                PageSize = 25
             };
             AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, Items.HasSelection);

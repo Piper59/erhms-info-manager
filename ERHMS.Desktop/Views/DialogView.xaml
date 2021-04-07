@@ -60,7 +60,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource SmallDialogButton}" />
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </Grid.Resources>
                 <Button Grid.Column="0"
                         Command="{Binding ToggleShowingDetailsCommand}"

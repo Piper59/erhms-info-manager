@@ -171,7 +171,7 @@
     <Compile Include="ViewModels\Collections\WorkerCollectionViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
-    <Compile Include="ViewModels\IntegrationViewModel.cs" />
+    <Compile Include="ViewModels\Integration\GetWorkerIdViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
@@ -191,8 +191,8 @@
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\IntegrationView.xaml.cs">
-      <DependentUpon>IntegrationView.xaml</DependentUpon>
+    <Compile Include="Views\Integration\GetWorkerIdView.xaml.cs">
+      <DependentUpon>GetWorkerIdView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -288,7 +288,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\IntegrationView.xaml">
+    <Page Include="Views\Integration\GetWorkerIdView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

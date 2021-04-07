@@ -40,7 +40,7 @@
             <WrapPanel HorizontalAlignment="Right"
                        Style="{StaticResource Container}">
                 <WrapPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource SmallDialogButton}" />
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </WrapPanel.Resources>
                 <Button Command="{Binding CancelCommand}"
                         IsCancel="True">

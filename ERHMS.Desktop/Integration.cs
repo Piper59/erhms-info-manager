@@ -1,11 +1,11 @@
 ﻿using ERHMS.Common;
 using ERHMS.Desktop.Dialogs;
-using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
-using ERHMS.Desktop.ViewModels.Collections;
+using ERHMS.Desktop.ViewModels.Integration;
 using ERHMS.Desktop.Views;
+using ERHMS.Desktop.Views.Integration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,12 +36,6 @@ namespace ERHMS.Desktop
             }
         }
 
-        static Integration()
-        {
-            App.ConfigureLog();
-            ConfigureServices();
-        }
-
         private static void ConfigureServices()
         {
             ServiceLocator.Install<IDialogService>(() => new DialogService());
@@ -49,6 +43,8 @@ namespace ERHMS.Desktop
 
         private static void Run(Action action, [CallerMemberName] string methodName = null)
         {
+            App.ConfigureLog();
+            ConfigureServices();
             Log.Instance.Debug($"Executing integration command: {methodName}");
             try
             {
@@ -67,15 +63,8 @@ namespace ERHMS.Desktop
             Log.Instance.Debug($"Executed integration command: {methodName}");
         }
 
-        private static bool? ShowDialog(ViewModel content)
+        private static bool? ShowDialog(Window dialog)
         {
-            Window dialog = new IntegrationView
-            {
-                DataContext = new IntegrationViewModel
-                {
-                    Content = content
-                }
-            };
             new WindowInteropHelper(dialog)
             {
                 Owner = Process.GetCurrentProcess().MainWindowHandle
@@ -83,21 +72,21 @@ namespace ERHMS.Desktop
             return dialog.ShowDialog();
         }
 
-        public static string GetGlobalRecordId(
-            string firstName,
-            string lastName,
-            string emailAddress,
-            string globalRecordId)
+        public static string GetWorkerId(string firstName, string lastName, string emailAddress)
         {
+            string workerId = null;
             Run(() =>
             {
-                WorkerCollectionViewModel content = new WorkerCollectionViewModel();
-                if (ShowDialog(content) == true)
+                Window dialog = new GetWorkerIdView
+                {
+                    DataContext = new GetWorkerIdViewModel()
+                };
+                if (ShowDialog(dialog) == true)
                 {
                     // TODO
                 }
             });
-            return globalRecordId;
+            return workerId;
         }
     }
 }

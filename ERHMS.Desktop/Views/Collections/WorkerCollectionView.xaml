@@ -15,8 +15,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -28,8 +28,11 @@
             <Controls:RecordStatusComboBox Grid.Column="1"
                                            ItemsSource="{Binding RecordStatuses}" />
         </Grid>
+        <Controls:Pager Grid.Row="1"
+                        DataContext="{Binding Items}"
+                        HorizontalAlignment="Right" />
         <DataGrid x:Name="ItemDataGrid"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <DataGrid.Columns>
@@ -37,14 +40,14 @@
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="Similarity"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding Value.GlobalRecordId}"
-                                    Header="Worker ID"
-                                    Width="3*" />
                 <DataGridTextColumn Binding="{Binding Value.FullName}"
                                     Header="Full name"
                                     Width="3*" />
                 <DataGridTextColumn Binding="{Binding Value.EmailAddress}"
                                     Header="Email address"
+                                    Width="3*" />
+                <DataGridTextColumn Binding="{Binding Value.GlobalRecordId}"
+                                    Header="Worker ID"
                                     Width="3*" />
             </DataGrid.Columns>
             <DataGrid.InputBindings>
@@ -60,19 +63,7 @@
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>
         </DataGrid>
-        <Controls:ItemsControlWatermark Grid.Row="1"
+        <Controls:ItemsControlWatermark Grid.Row="2"
                                         ItemsControl="{x:Reference ItemDataGrid}" />
-        <WrapPanel Grid.Row="2"
-                   HorizontalAlignment="Right">
-            <WrapPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
-            </WrapPanel.Resources>
-            <Button Command="{Binding CommitCommand}"
-                    Content="{x:Static Properties:ResXResources.AccessText_Ok}"
-                    IsDefault="True" />
-            <Button Command="{Binding CancelCommand}"
-                    Content="{x:Static Properties:ResXResources.AccessText_Cancel}"
-                    IsCancel="True" />
-        </WrapPanel>
     </Grid>
 </UserControl>
