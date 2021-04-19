@@ -6,11 +6,12 @@ namespace ERHMS.Desktop.Services
 {
     public interface IProgressService : IProgress<string>
     {
-        TimeSpan FeedbackDelay { get; set; }
+        TimeSpan Delay { get; set; }
+        string Title { get; set; }
 
-        Task RunAsync(string title, Action action);
-        Task RunAsync(string title, Func<Task> action);
-        Task RunAsync(string title, Action<CancellationToken> action);
-        Task RunAsync(string title, Func<CancellationToken, Task> action);
+        Task RunAsync(Action action);
+        Task RunAsync(Func<Task> action);
+        Task RunAsync(Action<CancellationToken> action);
+        Task RunAsync(Func<CancellationToken, Task> action);
     }
 }

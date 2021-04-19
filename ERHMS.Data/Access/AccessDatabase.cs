@@ -10,6 +10,7 @@ namespace ERHMS.Data.Access
 
         public string FilePath => ConnectionStringBuilder.DataSource;
         public override string Name => Path.GetFileNameWithoutExtension(FilePath);
+        protected abstract byte[] EmptyDatabase { get; }
 
         protected AccessDatabase(DatabaseProvider provider, string connectionString)
             : base(provider, connectionString)
@@ -23,14 +24,12 @@ namespace ERHMS.Data.Access
             return File.Exists(FilePath);
         }
 
-        protected abstract void CreateCore(Stream stream);
-
         protected override void CreateCore()
         {
             Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
             using (Stream stream = File.Open(FilePath, FileMode.CreateNew, FileAccess.Write))
             {
-                CreateCore(stream);
+                stream.Write(EmptyDatabase, 0, EmptyDatabase.Length);
             }
         }
 

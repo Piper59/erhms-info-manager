@@ -29,13 +29,13 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             for (int index = 0; index < fieldInfos.Count; index++)
             {
                 string fieldInfo = fieldInfos[index];
-                IList<string> chunks = fieldInfo.Split(FieldInfoSeparator);
-                if (chunks.Count != 2)
+                IList<string> components = fieldInfo.Split(FieldInfoSeparator);
+                if (components.Count != 2)
                 {
                     continue;
                 }
-                string columnName = chunks[0];
-                if (!int.TryParse(chunks[1], out int fieldId))
+                string columnName = components[0];
+                if (!int.TryParse(components[1], out int fieldId))
                 {
                     continue;
                 }

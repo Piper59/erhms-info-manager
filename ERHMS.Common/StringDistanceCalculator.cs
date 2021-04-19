@@ -1,38 +1,14 @@
-﻿using System.Linq;
+﻿using System;
 
 namespace ERHMS.Common
 {
     // https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance#Optimal_string_alignment_distance
     public static class StringDistanceCalculator
     {
-        private class String
-        {
-            public string Value { get; }
-            public int Length => Value.Length;
-            public char this[int index] => Value[index - 1];
-
-            public String(string value)
-            {
-                if (value == null)
-                {
-                    Value = "";
-                }
-                else
-                {
-                    Value = value.ToLower();
-                }
-            }
-        }
-
-        private static int Min(params int[] values)
-        {
-            return values.Min();
-        }
-
         public static int GetDistance(string str1, string str2)
         {
-            String a = new String(str1);
-            String b = new String(str2);
+            string a = str1.ToLower();
+            string b = str2.ToLower();
             int[,] d = new int[a.Length + 1, b.Length + 1];
             for (int i = 0; i <= a.Length; i++)
             {
@@ -46,19 +22,26 @@ namespace ERHMS.Common
             {
                 for (int j = 1; j <= b.Length; j++)
                 {
-                    int cost = a[i] == b[j] ? 0 : 1;
+                    int cost = a[i - 1] == b[j - 1] ? 0 : 1;
                     int deletion = d[i - 1, j] + 1;
                     int insertion = d[i, j - 1] + 1;
                     int substitution = d[i - 1, j - 1] + cost;
-                    d[i, j] = Min(deletion, insertion, substitution);
-                    if (i > 1 && j > 1 && a[i] == b[j - 1] && a[i - 1] == b[j])
+                    int d_ij = Math.Min(Math.Min(deletion, insertion), substitution);
+                    if (i > 1 && j > 1 && a[i - 1] == b[j - 2] && a[i - 2] == b[j - 1])
                     {
                         int transposition = d[i - 2, j - 2] + 1;
-                        d[i, j] = Min(d[i, j], transposition);
+                        d_ij = Math.Min(d_ij, transposition);
                     }
+                    d[i, j] = d_ij;
                 }
             }
             return d[a.Length, b.Length];
+        }
+
+        public static double GetSimilarity(string str1, string str2)
+        {
+            int maxDistance = Math.Max(str1.Length, str2.Length);
+            return maxDistance == 0 ? 1.0 : 1.0 - (double)GetDistance(str1, str2) / maxDistance;
         }
     }
 }

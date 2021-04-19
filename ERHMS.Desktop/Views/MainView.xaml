@@ -1,9 +1,9 @@
 ﻿<Window x:Class="ERHMS.Desktop.Views.MainView"
+        x:Name="Root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-        xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
         Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
@@ -20,8 +20,6 @@
         </ResourceDictionary>
     </Window.Resources>
     <b:Interaction.Behaviors>
-        <Behaviors:MarshalDataContextEvent EventName="ExitRequested"
-                                           HandlerName="ViewModel_ExitRequested" />
         <Behaviors:SetMenuDropAlignment Value="False" />
     </b:Interaction.Behaviors>
     <Grid>
@@ -42,7 +40,7 @@
                     <MenuItem Header="_Incident database" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Command="{Binding ExitCommand}"
+                <MenuItem Command="{Binding ExitCommand, ElementName=Root}"
                           Header="E_xit"
                           InputGestureText="Alt+F4" />
             </MenuItem>
@@ -88,12 +86,7 @@
                 <MenuItem Header="_About ERHMS Info Manager" />
             </MenuItem>
         </Menu>
-        <Grid Grid.Row="1">
-            <ContentPresenter Content="{Binding Content}" />
-            <Controls:Toaster x:Name="Toaster"
-                              HorizontalAlignment="Right"
-                              Margin="{StaticResource HugeThickness}"
-                              VerticalAlignment="Bottom" />
-        </Grid>
+        <ContentPresenter Grid.Row="1"
+                          Content="{Binding Content}" />
     </Grid>
 </Window>

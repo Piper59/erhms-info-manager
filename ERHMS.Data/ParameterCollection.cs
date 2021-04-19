@@ -6,9 +6,9 @@ namespace ERHMS.Data
 {
     public class ParameterCollection : DynamicParameters, IEnumerable<string>
     {
-        public void Add(string parameterName, object value)
+        public void Add(string name, object value)
         {
-            base.Add(parameterName, value);
+            base.Add(name, value);
         }
 
         public IEnumerator<string> GetEnumerator()

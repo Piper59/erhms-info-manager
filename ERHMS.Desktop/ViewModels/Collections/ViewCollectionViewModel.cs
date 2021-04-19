@@ -2,7 +2,6 @@
 using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
-using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
@@ -14,36 +13,40 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class ViewCollectionViewModel : ViewModel
+    public class ViewCollectionViewModel : ObservableObject
     {
-        public class ItemViewModel : SelectableViewModel
+        public class ItemViewModel : ObservableObject, ISelectable
         {
             public View Value { get; }
             public int PageCount { get; private set; }
             public int FieldCount { get; private set; }
             public int RecordCount { get; private set; }
 
+            private bool selected;
+            public bool Selected
+            {
+                get { return selected; }
+                set { SetProperty(ref selected, value); }
+            }
+
             public ItemViewModel(View value)
             {
                 Value = value;
             }
 
-            public async Task InitializeAsync()
+            public void Initialize()
             {
-                await Task.Run(() =>
+                PageCount = Value.Pages.Count;
+                FieldCount = Value.Fields.InputFields.Count;
+                if (Value.TableExists())
                 {
-                    PageCount = Value.Pages.Count;
-                    FieldCount = Value.Fields.InputFields.Count;
-                    if (Value.TableExists())
-                    {
-                        RecordRepository repository = new RecordRepository(Value);
-                        RecordCount = repository.CountByDeleted(false);
-                    }
-                    else
-                    {
-                        RecordCount = 0;
-                    }
-                });
+                    RecordRepository repository = new RecordRepository(Value);
+                    RecordCount = repository.CountByDeleted(false);
+                }
+                else
+                {
+                    RecordCount = 0;
+                }
             }
 
             public override int GetHashCode()
@@ -59,6 +62,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
+        public static async Task<ViewCollectionViewModel> CreateAsync(Project project)
+        {
+            ViewCollectionViewModel result = new ViewCollectionViewModel(project);
+            await result.InitializeAsync();
+            return result;
+        }
+
         public Project Project { get; }
 
         private readonly List<ItemViewModel> items;
@@ -67,13 +77,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand CreateCommand { get; }
         public ICommand CustomizeCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ICommand ViewDataCommand { get; }
-        public ICommand EnterDataCommand { get; }
-        public ICommand ImportDataCommand { get; }
-        public ICommand ExportDataCommand { get; }
+        public ICommand ViewRecordsCommand { get; }
+        public ICommand EnterRecordsCommand { get; }
+        public ICommand ImportRecordsCommand { get; }
+        public ICommand ExportRecordsCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public ViewCollectionViewModel(Project project)
+        private ViewCollectionViewModel(Project project)
         {
             Project = project;
             items = new List<ItemViewModel>();
@@ -81,24 +91,29 @@ namespace ERHMS.Desktop.ViewModels.Collections
             CreateCommand = Command.Null;
             CustomizeCommand = new AsyncCommand(CustomizeAsync, Items.HasSelection);
             DeleteCommand = Command.Null;
-            ViewDataCommand = new AsyncCommand(ViewDataAsync, Items.HasSelection);
-            EnterDataCommand = new AsyncCommand(EnterDataAsync, Items.HasSelection);
-            ImportDataCommand = Command.Null;
-            ExportDataCommand = Command.Null;
+            ViewRecordsCommand = new AsyncCommand(ViewRecordsAsync, Items.HasSelection);
+            EnterRecordsCommand = new AsyncCommand(EnterRecordsAsync, Items.HasSelection);
+            ImportRecordsCommand = Command.Null;
+            ExportRecordsCommand = Command.Null;
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
-        public async Task InitializeAsync()
+        private async Task InitializeAsync()
         {
             IReadOnlyCollection<View> values = await Task.Run(() =>
             {
+                Project.LoadViews();
                 return Project.Views.Cast<View>().ToList();
             });
-            items.AddRange(values.Select(value => new ItemViewModel(value)).ToList());
-            foreach (ItemViewModel item in items)
+            items.Clear();
+            items.AddRange(values.Select(value => new ItemViewModel(value)));
+            await Task.Run(() =>
             {
-                await item.InitializeAsync();
-            }
+                foreach (ItemViewModel item in items)
+                {
+                    item.Initialize();
+                }
+            });
             Items.Refresh();
         }
 
@@ -110,12 +125,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 $"/view:{Items.SelectedItem.Value.Name}");
         }
 
-        public async Task ViewDataAsync()
+        public async Task ViewRecordsAsync()
         {
             await MainViewModel.Instance.GoToViewAsync(Project.FilePath, Items.SelectedItem.Value.Name);
         }
 
-        public async Task EnterDataAsync()
+        public async Task EnterRecordsAsync()
         {
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.Enter,
@@ -126,17 +141,9 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task RefreshAsync()
         {
-            await ServiceLocator.Resolve<IProgressService>().RunAsync(
-                ResXResources.Lead_RefreshingViews,
-                async () =>
-                {
-                    await Task.Run(() =>
-                    {
-                        Project.LoadViews();
-                    });
-                    items.Clear();
-                    await InitializeAsync();
-                });
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Title = ResXResources.Lead_RefreshingViews;
+            await progress.RunAsync(InitializeAsync);
         }
     }
 }

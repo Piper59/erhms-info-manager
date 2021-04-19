@@ -9,8 +9,7 @@
         SizeToContent="Height"
         Title="{x:Static Properties:ResXResources.Title_App}"
         UseLayoutRounding="True"
-        Width="480"
-        WindowStartupLocation="CenterOwner">
+        Width="480">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

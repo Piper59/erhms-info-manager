@@ -297,45 +297,45 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        public static string DialogType_Name_Error {
+        public static string DialogSeverity_Name_Error {
             get {
-                return ResourceManager.GetString("DialogType.Name.Error", resourceCulture);
+                return ResourceManager.GetString("DialogSeverity.Name.Error", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Information.
         /// </summary>
-        public static string DialogType_Name_Information {
+        public static string DialogSeverity_Name_Information {
             get {
-                return ResourceManager.GetString("DialogType.Name.Information", resourceCulture);
+                return ResourceManager.GetString("DialogSeverity.Name.Information", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        public static string DialogType_Name_None {
+        public static string DialogSeverity_Name_None {
             get {
-                return ResourceManager.GetString("DialogType.Name.None", resourceCulture);
+                return ResourceManager.GetString("DialogSeverity.Name.None", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Question.
         /// </summary>
-        public static string DialogType_Name_Question {
+        public static string DialogSeverity_Name_Question {
             get {
-                return ResourceManager.GetString("DialogType.Name.Question", resourceCulture);
+                return ResourceManager.GetString("DialogSeverity.Name.Question", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Warning.
         /// </summary>
-        public static string DialogType_Name_Warning {
+        public static string DialogSeverity_Name_Warning {
             get {
-                return ResourceManager.GetString("DialogType.Name.Warning", resourceCulture);
+                return ResourceManager.GetString("DialogSeverity.Name.Warning", resourceCulture);
             }
         }
         
@@ -403,29 +403,38 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading database.
+        /// </summary>
+        public static string Lead_LoadingProject {
+            get {
+                return ResourceManager.GetString("Lead.LoadingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading form.
+        /// </summary>
+        public static string Lead_LoadingView {
+            get {
+                return ResourceManager.GetString("Lead.LoadingView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading workers.
+        /// </summary>
+        public static string Lead_LoadingWorkers {
+            get {
+                return ResourceManager.GetString("Lead.LoadingWorkers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
         /// </summary>
         public static string Lead_NonFatalException {
             get {
                 return ResourceManager.GetString("Lead.NonFatalException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Opening database.
-        /// </summary>
-        public static string Lead_OpeningProject {
-            get {
-                return ResourceManager.GetString("Lead.OpeningProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Opening form.
-        /// </summary>
-        public static string Lead_OpeningView {
-            get {
-                return ResourceManager.GetString("Lead.OpeningView", resourceCulture);
             }
         }
         
@@ -493,20 +502,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All.
-        /// </summary>
-        public static string RecordStatus_Name_All {
-            get {
-                return ResourceManager.GetString("RecordStatus.Name.All", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Deleted.
         /// </summary>
         public static string RecordStatus_Name_Deleted {
             get {
                 return ResourceManager.GetString("RecordStatus.Name.Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string RecordStatus_Name_Null {
+            get {
+                return ResourceManager.GetString("RecordStatus.Name.Null", resourceCulture);
             }
         }
         

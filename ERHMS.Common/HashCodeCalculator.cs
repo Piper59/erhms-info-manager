@@ -6,7 +6,9 @@
         private const int OffsetBasis = unchecked((int)2166136261);
         private const int Prime = 16777619;
 
-        private static int Combine(int hashCode, object obj)
+        public static int Seed => OffsetBasis;
+
+        public static int Combine(int hashCode, object obj)
         {
             if (obj != null)
             {
@@ -15,16 +17,9 @@
             return hashCode * Prime;
         }
 
-        public static int GetHashCode(object obj)
-        {
-            int hashCode = OffsetBasis;
-            hashCode = Combine(hashCode, obj);
-            return hashCode;
-        }
-
         public static int GetHashCode(object obj1, object obj2)
         {
-            int hashCode = OffsetBasis;
+            int hashCode = Seed;
             hashCode = Combine(hashCode, obj1);
             hashCode = Combine(hashCode, obj2);
             return hashCode;
@@ -32,7 +27,7 @@
 
         public static int GetHashCode(object obj1, object obj2, object obj3)
         {
-            int hashCode = OffsetBasis;
+            int hashCode = Seed;
             hashCode = Combine(hashCode, obj1);
             hashCode = Combine(hashCode, obj2);
             hashCode = Combine(hashCode, obj3);
@@ -41,7 +36,7 @@
 
         public static int GetHashCode(object obj1, object obj2, object obj3, object obj4)
         {
-            int hashCode = OffsetBasis;
+            int hashCode = Seed;
             hashCode = Combine(hashCode, obj1);
             hashCode = Combine(hashCode, obj2);
             hashCode = Combine(hashCode, obj3);
@@ -51,7 +46,7 @@
 
         public static int GetHashCode(object obj1, object obj2, object obj3, object obj4, object obj5)
         {
-            int hashCode = OffsetBasis;
+            int hashCode = Seed;
             hashCode = Combine(hashCode, obj1);
             hashCode = Combine(hashCode, obj2);
             hashCode = Combine(hashCode, obj3);

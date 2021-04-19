@@ -9,7 +9,7 @@
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Converters:KeyToResXResourceConverter x:Key="RecordStatusToNameConverter"
-                                                   NullValue="All"
+                                                   NullValue="Null"
                                                    Prefix="RecordStatus.Name." />
         </ResourceDictionary>
     </UserControl.Resources>

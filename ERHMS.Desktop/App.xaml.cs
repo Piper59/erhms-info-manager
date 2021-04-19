@@ -8,13 +8,8 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
-using log4net;
-using log4net.Appender;
-using log4net.Layout;
-using log4net.Repository.Hierarchy;
 using System;
-using System.Diagnostics;
-using System.Security.Principal;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using ErrorEventArgs = ERHMS.Desktop.Commands.ErrorEventArgs;
@@ -29,56 +24,70 @@ namespace ERHMS.Desktop
         {
             ConfigureLog();
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Command.GlobalError += Command_GlobalError;
             Log.Instance.Debug("Entering application");
             try
             {
                 UpgradeSettings();
+                ConfigureServices();
                 ConfigureEpiInfo();
                 App app = new App();
                 app.Run();
             }
             catch (Exception ex)
             {
-                Log.Instance.Fatal(ex);
-                StringBuilder message = new StringBuilder();
-                message.AppendLine(ResXResources.Body_FatalException);
-                message.AppendLine();
-                message.Append(ex.Message);
-                MessageBox.Show(
-                    message.ToString(),
-                    ResXResources.Title_App,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                OnFatalException(ex);
             }
             Log.Instance.Debug("Exiting application");
         }
 
         internal static void ConfigureLog()
         {
-            try
-            {
-                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
-            }
-            catch { }
-            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
-            PatternLayout layout = new PatternLayout(
-                "%date | %property{user} | %property{process}(%thread) | %level | %message%newline");
-            layout.ActivateOptions();
-            FileAppender appender = new FileAppender
-            {
-                File = Log.FilePath,
-                LockingModel = new FileAppender.InterProcessLock(),
-                Layout = layout
-            };
-            appender.ActivateOptions();
-            hierarchy.Root.AddAppender(appender);
-            hierarchy.Configured = true;
+            Log.Configure(Log.Appenders.File);
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Log.Instance.Fatal(e.ExceptionObject);
+        }
+
+        private static void Command_GlobalError(object sender, ErrorEventArgs e)
+        {
+            OnNonFatalException(e.Exception);
+            e.Handled = true;
+        }
+
+        internal static void OnFatalException(Exception exception)
+        {
+            Log.Instance.Fatal(exception);
+            StringBuilder message = new StringBuilder();
+            message.AppendLine(ResXResources.Body_FatalException);
+            message.AppendLine();
+            message.Append(exception.Message);
+            MessageBox.Show(
+                message.ToString(),
+                ResXResources.Title_App,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+
+        internal static void OnNonFatalException(Exception exception)
+        {
+            Log.Instance.Error(exception);
+            IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+            dialog.Severity = DialogSeverity.Error;
+            dialog.Lead = ResXResources.Lead_NonFatalException;
+            if (exception is AggregateException aggregateException)
+            {
+                dialog.Body = aggregateException.Flatten().InnerExceptions.First().Message;
+            }
+            else
+            {
+                dialog.Body = exception.Message;
+            }
+            dialog.Details = exception.ToString();
+            dialog.Buttons = DialogButtonCollection.Close;
+            dialog.Show();
         }
 
         private static bool UpgradeSettings()
@@ -93,6 +102,14 @@ namespace ERHMS.Desktop
             return true;
         }
 
+        private static void ConfigureServices()
+        {
+            ServiceLocator.Install<IDialogService>(() => new DialogService());
+            ServiceLocator.Install<IFileDialogService>(() => new FileDialogService());
+            ServiceLocator.Install<IProgressService>(() => new ProgressService());
+            ServiceLocator.Install<IWindowingService>(() => new WpfWindowingService());
+        }
+
         private static void ConfigureEpiInfo()
         {
             if (!ConfigurationExtensions.Exists())
@@ -104,43 +121,22 @@ namespace ERHMS.Desktop
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }
 
-        public MainView MainView => (MainView)MainWindow;
+        public new MainView MainWindow
+        {
+            get { return (MainView)base.MainWindow; }
+            private set { base.MainWindow = value; }
+        }
 
         public App()
         {
             InitializeComponent();
-            ConfigureServices();
-            Command.GlobalError += Command_GlobalError;
-        }
-
-        private void ConfigureServices()
-        {
-            ServiceLocator.Install<IDialogService>(() => new DialogService(this));
-            ServiceLocator.Install<IFileDialogService>(() => new FileDialogService(this));
-            ServiceLocator.Install<INotificationService>(() => MainView);
-            ServiceLocator.Install<IProgressService>(() => new ProgressService(this));
-        }
-
-        private void Command_GlobalError(object sender, ErrorEventArgs e)
-        {
-            Log.Instance.Error(e.Exception);
-            ServiceLocator.Resolve<IDialogService>().Show(
-                DialogType.Error,
-                ResXResources.Lead_NonFatalException,
-                e.Exception.Message,
-                e.Exception.ToString(),
-                DialogButtonCollection.Close);
-            e.Handled = true;
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             MainViewModel.Instance.Content = new HomeViewModel();
-            MainWindow = new MainView
-            {
-                DataContext = MainViewModel.Instance
-            };
+            MainWindow = new MainView();
             MainWindow.Show();
         }
     }

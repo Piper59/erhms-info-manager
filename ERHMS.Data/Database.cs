@@ -6,9 +6,8 @@ namespace ERHMS.Data
 {
     public abstract class Database : IDatabase
     {
-        private readonly DbProviderFactory providerFactory;
-
         public DatabaseProvider Provider { get; }
+        protected DbProviderFactory ProviderFactory { get; }
         protected DbConnectionStringBuilder ConnectionStringBuilder { get; }
         protected DbCommandBuilder CommandBuilder { get; }
         public abstract string Name { get; }
@@ -17,10 +16,10 @@ namespace ERHMS.Data
         protected Database(DatabaseProvider provider, string connectionString)
         {
             Provider = provider;
-            providerFactory = provider.ToProviderFactory();
-            ConnectionStringBuilder = providerFactory.CreateConnectionStringBuilder();
+            ProviderFactory = provider.ToProviderFactory();
+            ConnectionStringBuilder = ProviderFactory.CreateConnectionStringBuilder();
             ConnectionStringBuilder.ConnectionString = connectionString;
-            CommandBuilder = providerFactory.CreateCommandBuilder();
+            CommandBuilder = ProviderFactory.CreateCommandBuilder();
         }
 
         public abstract bool Exists();
@@ -42,7 +41,7 @@ namespace ERHMS.Data
 
         private IDbConnection GetBaseConnection()
         {
-            IDbConnection connection = providerFactory.CreateConnection();
+            IDbConnection connection = ProviderFactory.CreateConnection();
             connection.ConnectionString = ConnectionString;
             return connection;
         }

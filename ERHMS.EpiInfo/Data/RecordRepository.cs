@@ -15,26 +15,29 @@ namespace ERHMS.EpiInfo.Data
     {
         public View View { get; }
 
+        protected override string TableSource
+        {
+            get
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.Append(Quote(View.TableName));
+                foreach (Page page in View.Pages)
+                {
+                    sql.Insert(0, "(");
+                    sql.AppendFormat(
+                        " INNER JOIN {0} ON {0}.{2} = {1}.{2})",
+                        Quote(page.TableName),
+                        Quote(View.TableName),
+                        Quote(ColumnNames.GLOBAL_RECORD_ID));
+                }
+                return sql.ToString();
+            }
+        }
+
         public RecordRepository(View view)
             : base(view.Project.GetDatabase())
         {
             View = view;
-        }
-
-        protected override string GetTableSource()
-        {
-            StringBuilder sql = new StringBuilder();
-            sql.Append(Quote(View.TableName));
-            foreach (Page page in View.Pages)
-            {
-                sql.Insert(0, "(");
-                sql.AppendFormat(
-                    " INNER JOIN {0} ON {0}.{2} = {1}.{2})",
-                    Quote(page.TableName),
-                    Quote(View.TableName),
-                    Quote(ColumnNames.GLOBAL_RECORD_ID));
-            }
-            return sql.ToString();
         }
 
         public int CountByDeleted(bool deleted)
@@ -140,7 +143,7 @@ namespace ERHMS.EpiInfo.Data
                 WHERE {Quote(ColumnNames.UNIQUE_KEY)} = @UniqueKey;";
             ParameterCollection parameters = new ParameterCollection
             {
-                { "@RECSTATUS", deleted ? RecordStatus.Deleted : RecordStatus.Undeleted },
+                { "@RECSTATUS", RecordStatusExtensions.FromDeleted(deleted) },
                 { "@UniqueKey", record.UniqueKey.Value }
             };
             using (IDbConnection connection = Database.Connect())

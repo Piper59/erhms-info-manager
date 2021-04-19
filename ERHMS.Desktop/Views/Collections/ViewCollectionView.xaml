@@ -28,18 +28,18 @@
                                  Command="{Binding DeleteCommand}"
                                  Content="{x:Static local:Icons.Delete}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AltText="View data"
-                                 Command="{Binding ViewDataCommand}"
+            <Controls:IconButton AltText="View records"
+                                 Command="{Binding ViewRecordsCommand}"
                                  Content="{x:Static local:Icons.View}" />
-            <Controls:IconButton AltText="Enter data"
-                                 Command="{Binding EnterDataCommand}"
+            <Controls:IconButton AltText="Enter records"
+                                 Command="{Binding EnterRecordsCommand}"
                                  Content="{x:Static local:Icons.Edit}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AltText="Import data"
-                                 Command="{Binding ImportDataCommand}"
+            <Controls:IconButton AltText="Import records"
+                                 Command="{Binding ImportRecordsCommand}"
                                  Content="{x:Static local:Icons.Import}" />
-            <Controls:IconButton AltText="Export data"
-                                 Command="{Binding ExportDataCommand}"
+            <Controls:IconButton AltText="Export records"
+                                 Command="{Binding ExportRecordsCommand}"
                                  Content="{x:Static local:Icons.Export}" />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AltText="Refresh"
@@ -67,10 +67,6 @@
                                     Header="Records"
                                     Width="*" />
             </DataGrid.Columns>
-            <DataGrid.InputBindings>
-                <MouseBinding Command="{Binding ViewDataCommand}"
-                              MouseAction="LeftDoubleClick" />
-            </DataGrid.InputBindings>
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="IsSelected" Value="{Binding Selected}" />

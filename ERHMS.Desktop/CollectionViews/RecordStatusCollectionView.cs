@@ -1,14 +1,14 @@
-﻿using ERHMS.Desktop.Data;
-using ERHMS.Desktop.Infrastructure.ViewModels;
+﻿using ERHMS.Common;
+using ERHMS.Desktop.Data;
 using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ERHMS.Desktop.Collections
+namespace ERHMS.Desktop.CollectionViews
 {
-    public class RecordStatusCollection : CustomCollectionView<RecordStatusCollection.Item>
+    public class RecordStatusCollectionView : CustomCollectionView<RecordStatusCollectionView.Item>
     {
-        public class Item : SelectableViewModel
+        public class Item : ObservableObject, ISelectable
         {
             public static Item Undeleted { get; } = new Item(RecordStatus.Undeleted);
             public static Item Deleted { get; } = new Item(RecordStatus.Deleted);
@@ -23,13 +23,20 @@ namespace ERHMS.Desktop.Collections
 
             public RecordStatus? Value { get; }
 
+            private bool selected;
+            public bool Selected
+            {
+                get { return selected; }
+                set { SetProperty(ref selected, value); }
+            }
+
             private Item(RecordStatus? value)
             {
                 Value = value;
             }
         }
 
-        public RecordStatusCollection()
+        public RecordStatusCollectionView()
             : base(Item.Instances.ToList()) { }
     }
 }

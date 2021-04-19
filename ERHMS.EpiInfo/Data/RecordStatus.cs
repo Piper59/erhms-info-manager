@@ -8,14 +8,19 @@
 
     public static class RecordStatusExtensions
     {
-        public static bool IsEquivalent(this RecordStatus @this, RecordStatus value)
+        public static bool ToDeleted(this RecordStatus @this)
         {
-            return @this == RecordStatus.Deleted ? value == RecordStatus.Deleted : value != RecordStatus.Deleted;
+            return @this == RecordStatus.Deleted;
         }
 
-        public static bool IsEquivalent(this RecordStatus @this, bool deleted)
+        public static RecordStatus FromDeleted(bool deleted)
         {
-            return @this == RecordStatus.Deleted ? deleted : !deleted;
+            return deleted ? RecordStatus.Deleted : RecordStatus.Undeleted;
+        }
+
+        public static bool IsEquivalent(this RecordStatus status1, RecordStatus status2)
+        {
+            return status1.ToDeleted() == status2.ToDeleted();
         }
     }
 }

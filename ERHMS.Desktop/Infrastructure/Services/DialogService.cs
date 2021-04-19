@@ -9,27 +9,26 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class DialogService : IDialogService
     {
-        public Application Application { get; }
+        private readonly IWindowingService windowing;
 
-        public DialogService(Application application)
+        public DialogSeverity Severity { get; set; }
+        public string Lead { get; set; }
+        public string Body { get; set; }
+        public string Details { get; set; }
+        public IReadOnlyCollection<DialogButton> Buttons { get; set; }
+
+        public DialogService()
         {
-            Application = application;
+            windowing = ServiceLocator.Resolve<IWindowingService>();
         }
 
-        public bool? Show(
-            DialogType dialogType,
-            string lead,
-            string body,
-            string details,
-            IReadOnlyCollection<DialogButton> buttons)
+        public bool? Show()
         {
-            Window owner = Application.GetActiveOrMainWindow();
-            Window dialog = new DialogView
+            Window window = new DialogView
             {
-                Owner = owner,
-                DataContext = new DialogViewModel(dialogType, lead, body, details, buttons)
+                DataContext = new DialogViewModel(Severity, Lead, Body, Details, Buttons)
             };
-            return dialog.ShowDialog();
+            return windowing.ShowDialog(window);
         }
     }
 }

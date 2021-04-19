@@ -1,5 +1,4 @@
 ﻿using ERHMS.Data.Properties;
-using System.IO;
 
 namespace ERHMS.Data.Access
 {
@@ -11,12 +10,9 @@ namespace ERHMS.Data.Access
             public const string FileExtension = ".accdb";
         }
 
+        protected override byte[] EmptyDatabase => Resources.Access2007Database;
+
         public Access2007Database(string connectionString)
             : base(DatabaseProvider.Access2007, connectionString) { }
-
-        protected override void CreateCore(Stream stream)
-        {
-            stream.Write(Resources.Access2007Database, 0, Resources.Access2007Database.Length);
-        }
     }
 }

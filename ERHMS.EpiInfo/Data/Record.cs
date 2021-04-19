@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
+using System.Runtime.CompilerServices;
 
 namespace ERHMS.EpiInfo.Data
 {
@@ -16,7 +17,7 @@ namespace ERHMS.EpiInfo.Data
 
         public int? UniqueKey
         {
-            get { return GetProperty<int?>(ColumnNames.UNIQUE_KEY); }
+            get { return (int?)GetProperty(ColumnNames.UNIQUE_KEY); }
             set { SetProperty(ColumnNames.UNIQUE_KEY, value); }
         }
 
@@ -24,7 +25,7 @@ namespace ERHMS.EpiInfo.Data
         {
             get
             {
-                return GetProperty<RecordStatus>(ColumnNames.REC_STATUS);
+                return (RecordStatus)GetProperty(ColumnNames.REC_STATUS);
             }
             set
             {
@@ -37,20 +38,20 @@ namespace ERHMS.EpiInfo.Data
 
         public bool Deleted
         {
-            get { return RECSTATUS == RecordStatus.Deleted; }
-            set { RECSTATUS = value ? RecordStatus.Deleted : RecordStatus.Undeleted; }
+            get { return RECSTATUS.ToDeleted(); }
+            set { RECSTATUS = RecordStatusExtensions.FromDeleted(value); }
         }
 
         public string GlobalRecordId
         {
-            get { return GetProperty<string>(ColumnNames.GLOBAL_RECORD_ID); }
+            get { return (string)GetProperty(ColumnNames.GLOBAL_RECORD_ID); }
             set { SetProperty(ColumnNames.GLOBAL_RECORD_ID, value); }
         }
 
         public Record()
         {
             UniqueKey = null;
-            RECSTATUS = RecordStatus.Undeleted;
+            Deleted = false;
             GlobalRecordId = null;
         }
 
@@ -65,17 +66,17 @@ namespace ERHMS.EpiInfo.Data
             return propertiesByName.Keys;
         }
 
-        public object GetProperty(string propertyName)
+        protected object GetPropertyCore([CallerMemberName] string propertyName = null)
         {
             return propertiesByName[propertyName];
         }
 
-        public TProperty GetProperty<TProperty>(string propertyName)
+        public object GetProperty(string propertyName)
         {
-            return (TProperty)GetProperty(propertyName);
+            return GetPropertyCore(propertyName);
         }
 
-        public bool SetProperty(string propertyName, object value)
+        protected bool SetPropertyCore(object value, [CallerMemberName] string propertyName = null)
         {
             if (propertiesByName.TryGetValue(propertyName, out object currentValue) && Equals(value, currentValue))
             {
@@ -87,6 +88,11 @@ namespace ERHMS.EpiInfo.Data
                 OnPropertyChanged(propertyName);
                 return true;
             }
+        }
+
+        public bool SetProperty(string propertyName, object value)
+        {
+            return SetPropertyCore(value, propertyName);
         }
 
         public override IEnumerable<string> GetDynamicMemberNames()

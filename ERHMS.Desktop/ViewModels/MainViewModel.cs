@@ -1,12 +1,13 @@
-﻿using ERHMS.Common;
+﻿using Epi;
+using ERHMS.Common;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
@@ -14,12 +15,12 @@ using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class MainViewModel : ViewModel
+    public class MainViewModel : ObservableObject
     {
         public static MainViewModel Instance { get; } = new MainViewModel();
 
-        private ViewModel content;
-        public ViewModel Content
+        private object content;
+        public object Content
         {
             get
             {
@@ -32,7 +33,6 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public ICommand ExitCommand { get; }
         public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
         public ICommand GoToCoreProjectCommand { get; }
@@ -46,7 +46,6 @@ namespace ERHMS.Desktop.ViewModels
 
         private MainViewModel()
         {
-            ExitCommand = new SyncCommand(Exit);
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = Command.Null;
             GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
@@ -59,15 +58,6 @@ namespace ERHMS.Desktop.ViewModels
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
         }
 
-        public event EventHandler ExitRequested;
-        private void OnExitRequested(EventArgs e) => ExitRequested?.Invoke(this, e);
-        private void OnExitRequested() => OnExitRequested(EventArgs.Empty);
-
-        public void Exit()
-        {
-            OnExitRequested();
-        }
-
         public void GoToHome()
         {
             Content = new HomeViewModel();
@@ -75,17 +65,16 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToProjectAsync(string projectPath)
         {
-            await ServiceLocator.Resolve<IProgressService>().RunAsync(
-                ResXResources.Lead_OpeningProject,
-                async () =>
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Title = ResXResources.Lead_LoadingProject;
+            await progress.RunAsync(async () =>
+            {
+                Project value = await Task.Run(() =>
                 {
-                    ProjectViewModel project = new ProjectViewModel(await Task.Run(() =>
-                    {
-                        return ProjectExtensions.Open(projectPath);
-                    }));
-                    await project.InitializeAsync();
-                    Content = project;
+                    return ProjectExtensions.Open(projectPath);
                 });
+                Content = await ProjectViewModel.CreateAsync(value);
+            });
         }
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
@@ -95,17 +84,16 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToViewAsync(string projectPath, string viewName)
         {
-            await ServiceLocator.Resolve<IProgressService>().RunAsync(
-                ResXResources.Lead_OpeningView,
-                async () =>
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Title = ResXResources.Lead_LoadingView;
+            await progress.RunAsync(async () =>
+            {
+                View value = await Task.Run(() =>
                 {
-                    ViewViewModel view = new ViewViewModel(await Task.Run(() =>
-                    {
-                        return ProjectExtensions.Open(projectPath).Views[viewName];
-                    }));
-                    await view.InitializeAsync();
-                    Content = view;
+                    return ProjectExtensions.Open(projectPath).Views[viewName];
                 });
+                Content = await ViewViewModel.CreateAsync(value);
+            });
         }
 
         public async Task GoToCoreViewAsync(CoreView coreView)
@@ -125,34 +113,38 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task ExportLogDirectoryAsync()
         {
-            bool? result = ServiceLocator.Resolve<IFileDialogService>().Save(
-                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now),
-                ResXResources.FileDialog_Filter_ZipFiles,
-                out string path);
-            if (result != true)
+            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+            fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            fileDialog.FileName = string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now);
+            fileDialog.Filter = ResXResources.FileDialog_Filter_ZipFiles;
+            if (fileDialog.Save() == true)
             {
-                return;
-            }
-            await ServiceLocator.Resolve<IProgressService>().RunAsync(
-                ResXResources.Lead_ExportingLogDirectory,
-                () =>
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Title = ResXResources.Lead_ExportingLogDirectory;
+                await progress.RunAsync(() =>
                 {
-                    ZipExtensions.CreateFromDirectory(Log.DirectoryPath, path);
+                    ZipExtensions.CreateFromDirectory(
+                        Log.DirectoryPath,
+                        fileDialog.FileName,
+                        "*.txt",
+                        FileShare.ReadWrite);
                 });
+            }
         }
 
         public async Task StartEpiInfoAsync(Module module, params string[] args)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.FeedbackDelay = TimeSpan.Zero;
-            await progress.RunAsync(
-                ResXResources.Lead_StartingEpiInfo,
-                async () =>
+            progress.Delay = TimeSpan.Zero;
+            progress.Title = ResXResources.Lead_StartingEpiInfo;
+            await progress.RunAsync(async () =>
+            {
+                Process process = module.Start(args);
+                await Task.Run(() =>
                 {
-                    module.Start(args);
-                    await Task.Delay(TimeSpan.FromSeconds(1.0));
+                    process.WaitForExit(3000);
                 });
+            });
         }
 
         public void StartEpiInfoMenu()

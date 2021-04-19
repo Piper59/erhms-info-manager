@@ -1,17 +1,28 @@
-﻿using ERHMS.Desktop.Properties;
-using ERHMS.Desktop.Services;
-using System;
+﻿using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.ViewModels;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.Views
 {
-    public partial class MainView : Window, INotificationService
+    public partial class MainView : Window
     {
+        public new MainViewModel DataContext
+        {
+            get { return (MainViewModel)base.DataContext; }
+            private set { base.DataContext = value; }
+        }
+
+        public ICommand ExitCommand { get; }
+
         public MainView()
         {
+            ExitCommand = new SyncCommand(Exit);
             InitializeComponent();
             ReadSettings(Settings.Default);
+            DataContext = MainViewModel.Instance;
         }
 
         private void ReadSettings(Settings settings)
@@ -28,11 +39,6 @@ namespace ERHMS.Desktop.Views
             settings.WindowMaximized = WindowState == WindowState.Maximized;
         }
 
-        private void ViewModel_ExitRequested(object sender, EventArgs e)
-        {
-            Close();
-        }
-
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -44,9 +50,9 @@ namespace ERHMS.Desktop.Views
             Settings.Default.Save();
         }
 
-        public void Notify(string message)
+        public void Exit()
         {
-            Toaster.Show(message);
+            Close();
         }
     }
 }

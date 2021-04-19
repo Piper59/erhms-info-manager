@@ -9,6 +9,7 @@ namespace ERHMS.Data
     public abstract class Repository<TEntity> : IRepository<TEntity>
     {
         public IDatabase Database { get; }
+        protected abstract string TableSource { get; }
 
         protected Repository(IDatabase database)
         {
@@ -20,12 +21,10 @@ namespace ERHMS.Data
             return Database.Quote(identifier);
         }
 
-        protected abstract string GetTableSource();
-
         protected string GetSelectStatement(string selectList, string clauses)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append($"SELECT {selectList} FROM {GetTableSource()}");
+            sql.Append($"SELECT {selectList} FROM {TableSource}");
             if (clauses != null)
             {
                 sql.Append($" {clauses}");

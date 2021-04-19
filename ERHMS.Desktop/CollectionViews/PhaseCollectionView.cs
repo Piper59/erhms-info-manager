@@ -1,14 +1,14 @@
-﻿using ERHMS.Desktop.Data;
-using ERHMS.Desktop.Infrastructure.ViewModels;
+﻿using ERHMS.Common;
+using ERHMS.Desktop.Data;
 using ERHMS.Domain;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ERHMS.Desktop.Collections
+namespace ERHMS.Desktop.CollectionViews
 {
-    public class PhaseCollection : CustomCollectionView<PhaseCollection.Item>
+    public class PhaseCollectionView : CustomCollectionView<PhaseCollectionView.Item>
     {
-        public class Item : SelectableViewModel
+        public class Item : ObservableObject, ISelectable
         {
             public static Item PreDeployment { get; } = new Item(Phase.PreDeployment);
             public static Item Deployment { get; } = new Item(Phase.Deployment);
@@ -25,6 +25,13 @@ namespace ERHMS.Desktop.Collections
             public CoreProject CoreProject { get; }
             public IReadOnlyCollection<CoreView> CoreViews { get; }
 
+            private bool selected;
+            public bool Selected
+            {
+                get { return selected; }
+                set { SetProperty(ref selected, value); }
+            }
+
             private Item(Phase value)
             {
                 Value = value;
@@ -33,7 +40,7 @@ namespace ERHMS.Desktop.Collections
             }
         }
 
-        public PhaseCollection()
+        public PhaseCollectionView()
             : base(Item.Instances.ToList()) { }
     }
 }

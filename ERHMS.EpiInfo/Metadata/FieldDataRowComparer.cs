@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo.Metadata
             }
         }
 
-        public class ByTabIndex : IComparer<FieldDataRow>
+        public class ByTabOrder : IComparer<FieldDataRow>
         {
             public int Compare(FieldDataRow field1, FieldDataRow field2)
             {
@@ -31,16 +31,16 @@ namespace ERHMS.EpiInfo.Metadata
             }
         }
 
-        public class ByEffectiveTabIndex : IComparer<FieldDataRow>
+        public class ByGroupHoistingTabOrder : IComparer<FieldDataRow>
         {
             private readonly IReadOnlyDictionary<string, double?> tabIndicesByFieldName;
 
-            public ByEffectiveTabIndex(IEnumerable<FieldDataRow> fields)
+            public ByGroupHoistingTabOrder(IEnumerable<FieldDataRow> fields)
             {
                 tabIndicesByFieldName = fields.ToDictionary(field => field.Name, field => field.TabIndex);
             }
 
-            public double? GetEffectiveTabIndex(FieldDataRow field)
+            private double? GetTabOrder(FieldDataRow field)
             {
                 if (field.FieldType == MetaFieldType.Group && field.List != null)
                 {
@@ -69,9 +69,7 @@ namespace ERHMS.EpiInfo.Metadata
                 int result = Comparer<short?>.Default.Compare(field1.Position, field2.Position);
                 if (result == 0)
                 {
-                    result = Comparer<double?>.Default.Compare(
-                        GetEffectiveTabIndex(field1),
-                        GetEffectiveTabIndex(field2));
+                    result = Comparer<double?>.Default.Compare(GetTabOrder(field1), GetTabOrder(field2));
                 }
                 if (result == 0)
                 {

@@ -195,19 +195,19 @@
   <data name="Description.AppLogo" xml:space="preserve">
     <value>ERHMS Info Manager logo</value>
   </data>
-  <data name="DialogType.Name.Error" xml:space="preserve">
+  <data name="DialogSeverity.Name.Error" xml:space="preserve">
     <value>Error</value>
   </data>
-  <data name="DialogType.Name.Information" xml:space="preserve">
+  <data name="DialogSeverity.Name.Information" xml:space="preserve">
     <value>Information</value>
   </data>
-  <data name="DialogType.Name.None" xml:space="preserve">
+  <data name="DialogSeverity.Name.None" xml:space="preserve">
     <value />
   </data>
-  <data name="DialogType.Name.Question" xml:space="preserve">
+  <data name="DialogSeverity.Name.Question" xml:space="preserve">
     <value>Question</value>
   </data>
-  <data name="DialogType.Name.Warning" xml:space="preserve">
+  <data name="DialogSeverity.Name.Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
   <data name="FileDialog.Filter.ZipFiles" xml:space="preserve">
@@ -231,14 +231,17 @@
   <data name="Lead.ItemsControlWatermark" xml:space="preserve">
     <value>No items found</value>
   </data>
+  <data name="Lead.LoadingProject" xml:space="preserve">
+    <value>Loading database</value>
+  </data>
+  <data name="Lead.LoadingView" xml:space="preserve">
+    <value>Loading form</value>
+  </data>
+  <data name="Lead.LoadingWorkers" xml:space="preserve">
+    <value>Loading workers</value>
+  </data>
   <data name="Lead.NonFatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
-  </data>
-  <data name="Lead.OpeningProject" xml:space="preserve">
-    <value>Opening database</value>
-  </data>
-  <data name="Lead.OpeningView" xml:space="preserve">
-    <value>Opening form</value>
   </data>
   <data name="Lead.RefreshingRecords" xml:space="preserve">
     <value>Refreshing records</value>
@@ -261,11 +264,11 @@
   <data name="Phase.Name.PreDeployment" xml:space="preserve">
     <value>Pre-deployment</value>
   </data>
-  <data name="RecordStatus.Name.All" xml:space="preserve">
-    <value>All</value>
-  </data>
   <data name="RecordStatus.Name.Deleted" xml:space="preserve">
     <value>Deleted</value>
+  </data>
+  <data name="RecordStatus.Name.Null" xml:space="preserve">
+    <value>All</value>
   </data>
   <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
     <value>Undeleted</value>

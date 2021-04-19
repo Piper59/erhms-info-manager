@@ -28,7 +28,7 @@ namespace ERHMS.Data
             set { BaseCommand.CommandText = value; }
         }
 
-        private string CommandLogText => lineBreakRegex.Replace(CommandText, " ");
+        private string CommandLogText => CommandText == null ? null : lineBreakRegex.Replace(CommandText, " ");
 
         public int CommandTimeout
         {

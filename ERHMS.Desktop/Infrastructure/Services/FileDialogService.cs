@@ -7,40 +7,36 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class FileDialogService : IFileDialogService
     {
-        public Application Application { get; }
+        public string InitialDirectory { get; set; }
+        public string FileName { get; set; }
+        public string Filter { get; set; }
 
-        public FileDialogService(Application application)
+        private bool? Show(FileDialog dialog)
         {
-            Application = application;
+            bool? result = dialog.ShowDialog(Application.Current.MainWindow);
+            FileName = dialog.FileName;
+            return result;
         }
 
-        public bool? Open(string initialDirectory, string filter, out string fileName)
+        public bool? Open()
         {
-            Window owner = Application.GetActiveOrMainWindow();
-            FileDialog dialog = new OpenFileDialog
+            return Show(new OpenFileDialog
             {
                 Title = ResXResources.FileDialog_Title_Open,
-                InitialDirectory = initialDirectory,
-                Filter = filter
-            };
-            bool? result = dialog.ShowDialog(owner);
-            fileName = dialog.FileName;
-            return result;
+                InitialDirectory = InitialDirectory,
+                Filter = Filter
+            });
         }
 
-        public bool? Save(string initialDirectory, string initialFileName, string filter, out string fileName)
+        public bool? Save()
         {
-            Window owner = Application.GetActiveOrMainWindow();
-            FileDialog dialog = new SaveFileDialog
+            return Show(new SaveFileDialog
             {
                 Title = ResXResources.FileDialog_Title_Save,
-                InitialDirectory = initialDirectory,
-                FileName = initialFileName,
-                Filter = filter
-            };
-            bool? result = dialog.ShowDialog(owner);
-            fileName = dialog.FileName;
-            return result;
+                InitialDirectory = InitialDirectory,
+                FileName = FileName,
+                Filter = Filter
+            });
         }
     }
 }

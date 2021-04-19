@@ -2,6 +2,7 @@
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.ViewModels.Collections;
 using ERHMS.EpiInfo.Metadata;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -16,25 +17,37 @@ namespace ERHMS.Desktop.Views.Collections
 {
     public partial class RecordCollectionView : UserControl
     {
-        public RecordCollectionViewModel ViewModel => (RecordCollectionViewModel)DataContext;
+        public new RecordCollectionViewModel DataContext
+        {
+            get { return (RecordCollectionViewModel)base.DataContext; }
+            set { base.DataContext = value; }
+        }
 
         public ICommand CopyColumnDataCommand { get; }
         public ICommand CopyCellDataCommand { get; }
 
         public RecordCollectionView()
         {
-            InitializeComponent();
-            Loaded += RecordCollectionView_Loaded;
             CopyColumnDataCommand = new SyncCommand<DataGridColumn>(CopyColumnData);
             CopyCellDataCommand = new SyncCommand<DataGridCell>(CopyCellData);
+            InitializeComponent();
+            DataContextChanged += RecordCollectionView_DataContextChanged;
         }
 
-        private void RecordCollectionView_Loaded(object sender, RoutedEventArgs e)
+        private void RecordCollectionView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            UpdateFields();
+            if (e.OldValue != null)
+            {
+                ((INotifyPropertyChanged)e.OldValue).PropertyChanged -= DataContext_PropertyChanged;
+            }
+            if (e.NewValue != null)
+            {
+                ((INotifyPropertyChanged)e.NewValue).PropertyChanged += DataContext_PropertyChanged;
+                UpdateFields();
+            }
         }
 
-        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void DataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(RecordCollectionViewModel.Fields))
             {
@@ -50,7 +63,7 @@ namespace ERHMS.Desktop.Views.Collections
 
         private void SetItemDataGridColumns()
         {
-            IReadOnlyList<FieldDataRow> fields = ViewModel.Fields.ToList();
+            IReadOnlyList<FieldDataRow> fields = DataContext.Fields;
             ObservableCollection<DataGridColumn> columns = ItemDataGrid.Columns;
             IDictionary<string, DataGridColumn> columnsByHeader = columns.ToDictionary(column => (string)column.Header);
             for (int fieldIndex = 0; fieldIndex < fields.Count; fieldIndex++)
@@ -147,15 +160,7 @@ namespace ERHMS.Desktop.Views.Collections
 
         public void CopyColumnData(DataGridColumn column)
         {
-            IEnumerable<object> items;
-            if (ItemDataGrid.SelectedIndex == -1)
-            {
-                items = ItemDataGrid.Items.Cast<object>();
-            }
-            else
-            {
-                items = ItemDataGrid.SelectedItems.Cast<object>();
-            }
+            ICollection items = ItemDataGrid.SelectedIndex == -1 ? ItemDataGrid.Items : ItemDataGrid.SelectedItems;
             IReadOnlyCollection<DataGridColumn> columns;
             if (column == null)
             {
@@ -170,12 +175,12 @@ namespace ERHMS.Desktop.Views.Collections
                     column
                 };
             }
-            CopyData(items, columns);
+            CopyData(items.Cast<object>(), columns);
         }
 
         public void CopyCellData(DataGridCell cell)
         {
-            IEnumerable<object> items = new object[]
+            IReadOnlyCollection<object> items = new object[]
             {
                 cell.DataContext
             };

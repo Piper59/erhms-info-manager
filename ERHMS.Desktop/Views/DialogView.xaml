@@ -10,16 +10,15 @@
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
         Title="{x:Static Properties:ResXResources.Title_App}"
-        UseLayoutRounding="True"
-        WindowStartupLocation="CenterOwner">
+        UseLayoutRounding="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <Converters:KeyToResXResourceConverter x:Key="DialogTypeToNameConverter"
-                                                   Prefix="DialogType.Name." />
+            <Converters:KeyToResXResourceConverter x:Key="DialogSeverityToNameConverter"
+                                                   Prefix="DialogSeverity.Name." />
             <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         </ResourceDictionary>
@@ -35,7 +34,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Image AutomationProperties.Name="{Binding DialogType, Converter={StaticResource DialogTypeToNameConverter}}"
+                    <Image AutomationProperties.Name="{Binding Severity, Converter={StaticResource DialogSeverityToNameConverter}}"
                            Grid.Column="0"
                            Margin="{StaticResource DefaultMargin}"
                            Source="{Binding Icon, Converter={StaticResource IconToImageSourceConverter}}"

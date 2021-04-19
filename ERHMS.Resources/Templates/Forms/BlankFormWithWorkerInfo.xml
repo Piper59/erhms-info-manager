@@ -8,7 +8,7 @@
       ViewId="1"
       Name="BlankFormWithWorkerInfo"
       IsRelatedView="false"
-      CheckCode="DefineVariables&#xA;&#x9;DEFINE ERHMS NETOBJECT &quot;ERHMS Info Manager.Integration&quot;&#xA;&#x9;DEFINE WorkerId TEXTINPUT&#xA;End-DefineVariables&#xA;&#xA;Field WorkerInfo_GetGlobalRecordId&#xA;&#x9;Click&#xA;&#x9;&#x9;ASSIGN WorkerId = ERHMS.GetWorkerId(WorkerInfo_FirstName, WorkerInfo_LastName, WorkerInfo_EmailAddress)&#xA;&#x9;&#x9;IF WorkerId &lt;&gt; &quot;&quot; THEN&#xA;&#x9;&#x9;&#x9;ASSIGN WorkerInfo_GlobalRecordId = WorkerId&#xA;&#x9;&#x9;END-IF&#xA;&#x9;End-Click&#xA;End-Field"
+      CheckCode="DefineVariables&#xA;&#x9;DEFINE ERHMS NETOBJECT &quot;ERHMS Info Manager.Integration&quot;&#xA;&#x9;DEFINE WorkerId TEXTINPUT&#xA;End-DefineVariables&#xA;&#xA;Field WorkerInfo_GetGlobalRecordId&#xA;&#x9;Click&#xA;&#x9;&#x9;ASSIGN WorkerId = ERHMS.GetWorkerId(WorkerInfo_FirstName, WorkerInfo_LastName, WorkerInfo_EmailAddress, WorkerInfo_GlobalRecordId)&#xA;&#x9;&#x9;IF WorkerId &lt;&gt; &quot;&quot; THEN&#xA;&#x9;&#x9;&#x9;ASSIGN WorkerInfo_GlobalRecordId = WorkerId&#xA;&#x9;&#x9;END-IF&#xA;&#x9;End-Click&#xA;End-Field"
       Width="816"
       Height="1056"
       Orientation="Portrait"

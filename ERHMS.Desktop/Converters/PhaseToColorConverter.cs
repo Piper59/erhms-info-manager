@@ -1,5 +1,4 @@
-﻿using ERHMS.Desktop.Infrastructure;
-using ERHMS.Domain;
+﻿using ERHMS.Domain;
 using System;
 using System.Globalization;
 using System.Windows;
@@ -10,11 +9,26 @@ namespace ERHMS.Desktop.Converters
 {
     public class PhaseToColorConverter : IValueConverter
     {
+        private static Color GetColor(Phase phase)
+        {
+            switch (phase)
+            {
+                case Phase.PreDeployment:
+                    return Colors.PreDeployment;
+                case Phase.Deployment:
+                    return Colors.Deployment;
+                case Phase.PostDeployment:
+                    return Colors.PostDeployment;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(phase));
+            }
+        }
+
         public byte? Alpha { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Color color = ((Phase)value).ToColor();
+            Color color = GetColor((Phase)value);
             byte? alpha = parameter == null ? Alpha : (byte)parameter;
             if (alpha != null)
             {

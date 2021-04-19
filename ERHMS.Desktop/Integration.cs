@@ -1,50 +1,43 @@
 ﻿using ERHMS.Common;
-using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure.Services;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
-using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.ViewModels.Integration;
-using ERHMS.Desktop.Views;
 using ERHMS.Desktop.Views.Integration;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
+using System.Windows.Threading;
 using Action = System.Action;
 
 namespace ERHMS.Desktop
 {
     public static class Integration
     {
-        private class DialogService : IDialogService
+        static Integration()
         {
-            public bool? Show(
-                DialogType dialogType,
-                string lead,
-                string body,
-                string details,
-                IReadOnlyCollection<DialogButton> buttons)
-            {
-                Window dialog = new DialogView
-                {
-                    DataContext = new DialogViewModel(dialogType, lead, body, details, buttons),
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen
-                };
-                return dialog.ShowDialog();
-            }
+            App.ConfigureLog();
+            ConfigureServices();
         }
 
         private static void ConfigureServices()
         {
             ServiceLocator.Install<IDialogService>(() => new DialogService());
+            ServiceLocator.Install<IProgressService>(() => new ProgressService());
+            ServiceLocator.Install<IWindowingService>(() => new WinFormsWindowingService());
+        }
+
+        private static void RunSynchronously(Task task)
+        {
+            DispatcherFrame frame = new DispatcherFrame();
+            task.ContinueWith(_ => frame.Continue = false);
+            Dispatcher.PushFrame(frame);
+            task.Wait();
         }
 
         private static void Run(Action action, [CallerMemberName] string methodName = null)
         {
-            App.ConfigureLog();
-            ConfigureServices();
             Log.Instance.Debug($"Executing integration command: {methodName}");
             try
             {
@@ -52,38 +45,36 @@ namespace ERHMS.Desktop
             }
             catch (Exception ex)
             {
-                Log.Instance.Error(ex);
-                ServiceLocator.Resolve<IDialogService>().Show(
-                    DialogType.Error,
-                    ResXResources.Lead_NonFatalException,
-                    ex.Message,
-                    ex.ToString(),
-                    DialogButtonCollection.Close);
+                App.OnNonFatalException(ex);
             }
             Log.Instance.Debug($"Executed integration command: {methodName}");
         }
 
-        private static bool? ShowDialog(Window dialog)
-        {
-            new WindowInteropHelper(dialog)
-            {
-                Owner = Process.GetCurrentProcess().MainWindowHandle
-            };
-            return dialog.ShowDialog();
-        }
-
-        public static string GetWorkerId(string firstName, string lastName, string emailAddress)
+        public static string GetWorkerId(string firstName, string lastName, string emailAddress, string globalRecordId)
         {
             string workerId = null;
             Run(() =>
             {
-                Window dialog = new GetWorkerIdView
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Title = ResXResources.Lead_LoadingWorkers;
+                GetWorkerIdViewModel dataContext = null;
+                Task task = progress.RunAsync(async () =>
                 {
-                    DataContext = new GetWorkerIdViewModel()
+                    dataContext = await GetWorkerIdViewModel.CreateAsync(
+                        firstName,
+                        lastName,
+                        emailAddress,
+                        globalRecordId);
+                });
+                RunSynchronously(task);
+                Window window = new GetWorkerIdView
+                {
+                    DataContext = dataContext
                 };
-                if (ShowDialog(dialog) == true)
+                IWindowingService windowing = ServiceLocator.Resolve<IWindowingService>();
+                if (windowing.ShowDialog(window) == true)
                 {
-                    // TODO
+                    workerId = dataContext.Workers.Items.SelectedItem.Value.GlobalRecordId;
                 }
             });
             return workerId;

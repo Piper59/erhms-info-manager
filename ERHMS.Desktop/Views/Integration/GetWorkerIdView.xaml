@@ -1,16 +1,16 @@
 ﻿<Window x:Class="ERHMS.Desktop.Views.Integration.GetWorkerIdView"
+        x:Name="Root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+        xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections"
         Height="768"
         Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
         Title="{x:Static Properties:ResXResources.Title_App}"
         UseLayoutRounding="True"
-        Width="1024"
-        WindowStartupLocation="CenterScreen">
+        Width="1024">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,7 +28,9 @@
                 BorderThickness="0,1"
                 Style="{StaticResource FluidLayout}">
             <Grid Style="{StaticResource Container}">
-                <Collections:WorkerCollectionView DataContext="{Binding Workers}" />
+                <Collections:WorkerCollectionView x:Name="WorkerCollectionView"
+                                                  CommitCommand="{Binding CommitCommand, ElementName=Root}"
+                                                  DataContext="{Binding Workers}" />
             </Grid>
         </Border>
         <Border Grid.Row="1"
@@ -38,10 +40,10 @@
                 <WrapPanel.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </WrapPanel.Resources>
-                <Button Command="{Binding CommitCommand}"
+                <Button Command="{Binding CommitCommand, ElementName=Root}"
                         Content="{x:Static Properties:ResXResources.AccessText_Ok}"
                         IsDefault="True" />
-                <Button Command="{Binding CancelCommand}"
+                <Button Command="{Binding CancelCommand, ElementName=Root}"
                         Content="{x:Static Properties:ResXResources.AccessText_Cancel}"
                         IsCancel="True" />
             </WrapPanel>

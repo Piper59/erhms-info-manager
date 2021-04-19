@@ -104,7 +104,7 @@ namespace ERHMS.EpiInfo.Templating
             xView.Add(xPage);
             DataTable fieldData = Metadata.GetFieldsOnPageAsDataTable(page.Id);
             FieldDataTable fields = new FieldDataTable(fieldData);
-            IComparer<FieldDataRow> fieldComparer = new FieldDataRowComparer.ByEffectiveTabIndex(fields);
+            IComparer<FieldDataRow> fieldComparer = new FieldDataRowComparer.ByGroupHoistingTabOrder(fields);
             foreach (FieldDataRow field in fields.OrderBy(field => field, fieldComparer))
             {
                 CreateXField(xPage, field);

@@ -30,15 +30,15 @@ namespace ERHMS.EpiInfo.Data
             throw new ArgumentOutOfRangeException(nameof(propertyName));
         }
 
+        private readonly int globalRecordIdOrdinal;
 
         public IDataRecord Source { get; }
-        public int GlobalRecordIdOrdinal { get; }
-        public string GlobalRecordId => Source.GetString(GlobalRecordIdOrdinal);
+        public string GlobalRecordId => Source.GetString(globalRecordIdOrdinal);
 
         public RecordMapper(IDataRecord source)
         {
             Source = source;
-            GlobalRecordIdOrdinal = GetOrdinal(source, ColumnNames.GLOBAL_RECORD_ID);
+            globalRecordIdOrdinal = GetOrdinal(source, ColumnNames.GLOBAL_RECORD_ID);
         }
 
         public void Update(TRecord target)

@@ -12,7 +12,7 @@ namespace ERHMS.Desktop.Commands
         private class NullImpl : Command
         {
             public NullImpl()
-                : base(nameof(Null)) { }
+                : base("Null") { }
 
             public override bool CanExecute(object parameter)
             {

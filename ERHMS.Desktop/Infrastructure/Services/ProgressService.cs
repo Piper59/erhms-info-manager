@@ -4,82 +4,96 @@ using ERHMS.Desktop.Views;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class ProgressService : IProgressService
     {
-        private ProgressViewModel viewModel;
+        private readonly IWindowingService windowing;
+        private string status;
 
-        public Application Application { get; }
-        public TimeSpan FeedbackDelay { get; set; } = TimeSpan.FromSeconds(1.0);
+        public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
+        public string Title { get; set; }
 
-        public ProgressService(Application application)
+        public ProgressService()
         {
-            Application = application;
+            windowing = ServiceLocator.Resolve<IWindowingService>();
         }
+
+        private event EventHandler StatusUpdated;
+        private void OnStatusUpdated(EventArgs e) => StatusUpdated?.Invoke(this, e);
+        private void OnStatusUpdated() => OnStatusUpdated(EventArgs.Empty);
 
         public void Report(string value)
         {
-            Application.Dispatcher.Invoke(() => viewModel.Status = value);
+            status = value;
+            OnStatusUpdated();
         }
 
-        private async Task RunCoreAsync(string title, bool canBeCanceled, Func<CancellationToken, Task> action)
+        private async Task RunCoreAsync(bool canBeCanceled, Func<CancellationToken, Task> action)
         {
-            try
+            using (ProgressViewModel dataContext = new ProgressViewModel(Title, canBeCanceled))
             {
-                using (viewModel = new ProgressViewModel(title, canBeCanceled))
+                void ProgressService_StatusUpdated(object sender, EventArgs e)
                 {
-                    Window owner = Application.GetActiveOrMainWindow();
-                    NonBlockingModalDialog dialog = new NonBlockingModalDialog(new ProgressView
+                    dataContext.Status = status;
+                }
+
+                dataContext.Status = status;
+                StatusUpdated += ProgressService_StatusUpdated;
+                try
+                {
+                    ProgressView window = new ProgressView
                     {
-                        Owner = owner,
-                        DataContext = viewModel
-                    });
-                    using (WindowDisabler.Begin(owner))
-                    using (CancellationTokenSource completionTokenSource = new CancellationTokenSource())
+                        DataContext = dataContext
+                    };
+                    using (windowing.Disable())
                     {
-                        Task task = action(viewModel.CancellationToken);
-                        Task continuation = task.ContinueWith(_ => completionTokenSource.Cancel());
-                        try
+                        Task task = action(dataContext.CancellationToken);
+                        Task continuation = task.ContinueWith(
+                            _ =>
+                            {
+                                window.CanClose = true;
+                                window.Close();
+                            },
+                            TaskScheduler.FromCurrentSynchronizationContext());
+                        await Task.Run(() =>
                         {
-                            await Task.Delay(FeedbackDelay, completionTokenSource.Token);
-                        }
-                        catch (TaskCanceledException) { }
-                        using (completionTokenSource.IsCancellationRequested ? null : dialog.BeginShow())
+                            task.Wait(Delay);
+                        });
+                        if (!task.IsCompleted)
                         {
-                            await task;
-                            await continuation;
+                            windowing.ShowDialog(window);
                         }
-                        await dialog.EndShowAsync();
+                        await task;
+                        await continuation;
                     }
                 }
+                finally
+                {
+                    StatusUpdated -= ProgressService_StatusUpdated;
+                }
             }
-            finally
-            {
-                viewModel = null;
-            }
         }
 
-        public Task RunAsync(string title, Action action)
+        public Task RunAsync(Action action)
         {
-            return RunCoreAsync(title, false, _ => Task.Run(action));
+            return RunCoreAsync(false, _ => Task.Run(action));
         }
 
-        public Task RunAsync(string title, Func<Task> action)
+        public Task RunAsync(Func<Task> action)
         {
-            return RunCoreAsync(title, false, _ => action());
+            return RunCoreAsync(false, _ => action());
         }
 
-        public Task RunAsync(string title, Action<CancellationToken> action)
+        public Task RunAsync(Action<CancellationToken> action)
         {
-            return RunCoreAsync(title, true, cancellationToken => Task.Run(() => action(cancellationToken)));
+            return RunCoreAsync(true, cancellationToken => Task.Run(() => action(cancellationToken)));
         }
 
-        public Task RunAsync(string title, Func<CancellationToken, Task> action)
+        public Task RunAsync(Func<CancellationToken, Task> action)
         {
-            return RunCoreAsync(title, true, action);
+            return RunCoreAsync(true, action);
         }
     }
 }

@@ -42,8 +42,19 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ERHMS.Common\ERHMS.Common.csproj">
+      <Project>{917efa87-37a3-49d1-9488-d130d29cd6d0}</Project>
+      <Name>ERHMS.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
+      <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
+      <Name>ERHMS.EpiInfo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="CoreProject.cs" />
     <Compile Include="CoreView.cs" />
+    <Compile Include="Data\Worker.cs" />
     <Compile Include="Phase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

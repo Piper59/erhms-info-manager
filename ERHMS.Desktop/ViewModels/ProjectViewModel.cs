@@ -1,24 +1,29 @@
 ﻿using Epi;
-using ERHMS.Desktop.Infrastructure.ViewModels;
 using ERHMS.Desktop.ViewModels.Collections;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class ProjectViewModel : ViewModel
+    public class ProjectViewModel
     {
-        public Project Value { get; }
-        public ViewCollectionViewModel Views { get; }
-
-        public ProjectViewModel(Project value)
+        public static async Task<ProjectViewModel> CreateAsync(Project value)
         {
-            Value = value;
-            Views = new ViewCollectionViewModel(value);
+            ProjectViewModel result = new ProjectViewModel(value);
+            await result.InitializeAsync();
+            return result;
         }
 
-        public async Task InitializeAsync()
+        public Project Value { get; }
+        public ViewCollectionViewModel Views { get; private set; }
+
+        private ProjectViewModel(Project value)
         {
-            await Views.InitializeAsync();
+            Value = value;
+        }
+
+        private async Task InitializeAsync()
+        {
+            Views = await ViewCollectionViewModel.CreateAsync(Value);
         }
     }
 }

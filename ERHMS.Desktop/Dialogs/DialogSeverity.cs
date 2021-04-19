@@ -4,7 +4,7 @@ using System.Media;
 
 namespace ERHMS.Desktop.Dialogs
 {
-    public enum DialogType
+    public enum DialogSeverity
     {
         None,
         Information,
@@ -13,38 +13,38 @@ namespace ERHMS.Desktop.Dialogs
         Error
     }
 
-    public static class DialogTypeExtensions
+    public static class DialogSeverityExtensions
     {
-        public static Icon ToIcon(this DialogType @this)
+        public static Icon ToIcon(this DialogSeverity @this)
         {
             switch (@this)
             {
-                case DialogType.None:
+                case DialogSeverity.None:
                     return null;
-                case DialogType.Information:
+                case DialogSeverity.Information:
                     return SystemIcons.Information;
-                case DialogType.Question:
+                case DialogSeverity.Question:
                     return SystemIcons.Question;
-                case DialogType.Warning:
+                case DialogSeverity.Warning:
                     return SystemIcons.Exclamation;
-                case DialogType.Error:
+                case DialogSeverity.Error:
                     return SystemIcons.Hand;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(@this));
             }
         }
 
-        public static SystemSound ToSound(this DialogType @this)
+        public static SystemSound ToSound(this DialogSeverity @this)
         {
             switch (@this)
             {
-                case DialogType.None:
-                case DialogType.Information:
-                case DialogType.Question:
+                case DialogSeverity.None:
+                case DialogSeverity.Information:
+                case DialogSeverity.Question:
                     return null;
-                case DialogType.Warning:
+                case DialogSeverity.Warning:
                     return SystemSounds.Exclamation;
-                case DialogType.Error:
+                case DialogSeverity.Error:
                     return SystemSounds.Hand;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(@this));
