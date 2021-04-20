@@ -17,7 +17,7 @@ namespace ERHMS.Desktop
     {
         static Integration()
         {
-            App.ConfigureLog();
+            Log.Configure(Log.Appenders.File);
             ConfigureServices();
         }
 

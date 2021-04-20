@@ -22,7 +22,7 @@ namespace ERHMS.Desktop
         [STAThread]
         private static void Main()
         {
-            ConfigureLog();
+            Log.Configure(Log.Appenders.File);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Command.GlobalError += Command_GlobalError;
             Log.Instance.Debug("Entering application");
@@ -39,11 +39,6 @@ namespace ERHMS.Desktop
                 OnFatalException(ex);
             }
             Log.Instance.Debug("Exiting application");
-        }
-
-        internal static void ConfigureLog()
-        {
-            Log.Configure(Log.Appenders.File);
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
