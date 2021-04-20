@@ -2,8 +2,6 @@
         x:Name="Root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
         Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
@@ -19,9 +17,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <b:Interaction.Behaviors>
-        <Behaviors:SetMenuDropAlignment Value="False" />
-    </b:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

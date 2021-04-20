@@ -92,7 +92,6 @@
     <Compile Include="Behaviors\MoveFocusInternallyOnControlArrow.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClick.cs" />
     <Compile Include="Behaviors\RestoreCurrentCellOnFocus.cs" />
-    <Compile Include="Behaviors\SetMenuDropAlignment.cs" />
     <Compile Include="Behaviors\ToggleSelectionOnSpace.cs" />
     <Compile Include="CollectionViews\PhaseCollectionView.cs" />
     <Compile Include="CollectionViews\RecordStatusCollectionView.cs" />
@@ -132,6 +131,7 @@
     <Compile Include="Dialogs\DialogSeverity.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
+    <Compile Include="Infrastructure\MenuDropAlignment.cs" />
     <Compile Include="Infrastructure\NativeMethods.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />

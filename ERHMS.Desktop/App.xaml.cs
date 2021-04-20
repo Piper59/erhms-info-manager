@@ -2,6 +2,7 @@
 using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Infrastructure.Services;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -31,6 +32,7 @@ namespace ERHMS.Desktop
                 UpgradeSettings();
                 ConfigureServices();
                 ConfigureEpiInfo();
+                MenuDropAlignment.Value = false;
                 App app = new App();
                 app.Run();
             }
