@@ -7,5 +7,8 @@ namespace ERHMS.Desktop.Infrastructure
     {
         [DllImport("user32.dll")]
         public static extern bool EnableWindow(IntPtr hWnd, bool bEnable);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetActiveWindow();
     }
 }

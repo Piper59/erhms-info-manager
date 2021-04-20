@@ -25,7 +25,7 @@ namespace ERHMS.Desktop
         {
             ServiceLocator.Install<IDialogService>(() => new DialogService());
             ServiceLocator.Install<IProgressService>(() => new ProgressService());
-            ServiceLocator.Install<IWindowingService>(() => new WinFormsWindowingService());
+            ServiceLocator.Install<IWindowingService>(() => new NativeWindowingService());
         }
 
         private static void RunSynchronously(Task task)

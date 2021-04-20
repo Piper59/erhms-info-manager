@@ -1,12 +1,11 @@
 ﻿using ERHMS.Desktop.Services;
 using System;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Interop;
 
 namespace ERHMS.Desktop.Infrastructure.Services
 {
-    public class WinFormsWindowingService : IWindowingService
+    public class NativeWindowingService : IWindowingService
     {
         private class Disabler : IDisposable
         {
@@ -42,15 +41,20 @@ namespace ERHMS.Desktop.Infrastructure.Services
 
         public IDisposable Disable()
         {
-            return Disabler.Begin(Form.ActiveForm.Handle);
+            IntPtr handle = NativeMethods.GetActiveWindow();
+            return handle == IntPtr.Zero ? null : Disabler.Begin(handle);
         }
 
         public bool? ShowDialog(Window window)
         {
-            new WindowInteropHelper(window)
+            IntPtr handle = NativeMethods.GetActiveWindow();
+            if (handle != IntPtr.Zero)
             {
-                Owner = Form.ActiveForm.Handle
-            };
+                new WindowInteropHelper(window)
+                {
+                    Owner = handle
+                };
+            }
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             return window.ShowDialog();
         }
