@@ -4,19 +4,14 @@
         xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         AutomationProperties.HelpText="{Binding Title}"
-        Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
+        Icon="/Resources/ERHMS.ico"
         ResizeMode="NoResize"
         SizeToContent="Height"
         Title="{x:Static Properties:ResXResources.Title_App}"
         UseLayoutRounding="True"
         Width="480">
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        </ResourceDictionary>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"

@@ -6,12 +6,7 @@
              HorizontalAlignment="Center"
              VerticalAlignment="Center">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <Converters:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
-        </ResourceDictionary>
+        <Converters:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
     </UserControl.Resources>
     <UserControl.Visibility>
         <Binding Converter="{StaticResource BoolToVisibilityInverter}"

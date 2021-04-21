@@ -4,19 +4,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
-        Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
+        Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
         Title="{x:Static Properties:ResXResources.Title_App}"
         UseLayoutRounding="True">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
-                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/ViewModels/Templates.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

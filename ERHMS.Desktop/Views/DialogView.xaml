@@ -4,7 +4,7 @@
         xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
         AutomationProperties.HelpText="{Binding Lead}"
-        Icon="/ERHMS Info Manager;component/Resources/ERHMS.ico"
+        Icon="/Resources/ERHMS.ico"
         MaxWidth="560"
         MinWidth="320"
         ResizeMode="NoResize"
@@ -12,16 +12,11 @@
         Title="{x:Static Properties:ResXResources.Title_App}"
         UseLayoutRounding="True">
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <Converters:KeyToResXResourceConverter x:Key="DialogSeverityToNameConverter"
-                                                   Prefix="DialogSeverity.Name." />
-            <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
-            <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
-        </ResourceDictionary>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Converters:KeyToResXResourceConverter x:Key="DialogSeverityToNameConverter"
+                                               Prefix="DialogSeverity.Name." />
+        <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
+        <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
     </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"

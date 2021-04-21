@@ -7,29 +7,24 @@
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ERHMS Info Manager;component/Resources/App.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="CellTextBlock" TargetType="TextBlock">
-                <Setter Property="TextWrapping" Value="Wrap" />
-            </Style>
-            <Style x:Key="CopyableDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">
-                <Setter Property="ContextMenu">
-                    <Setter.Value>
-                        <ContextMenu>
-                            <MenuItem Command="{Binding CopyCellDataCommand, Source={x:Reference Root}}"
-                                      CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
-                                      Header="_Copy cell to clipboard" />
-                        </ContextMenu>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}" />
-            <Style x:Key="CopyableNumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}">
-                <Setter Property="TextBlock.TextAlignment" Value="Right" />
-            </Style>
-        </ResourceDictionary>
+        <Style x:Key="CellTextBlock" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="CopyableDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">
+            <Setter Property="ContextMenu">
+                <Setter.Value>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding CopyCellDataCommand, Source={x:Reference Root}}"
+                                  CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
+                                  Header="_Copy cell to clipboard" />
+                    </ContextMenu>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}" />
+        <Style x:Key="CopyableNumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}">
+            <Setter Property="TextBlock.TextAlignment" Value="Right" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
