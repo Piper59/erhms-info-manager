@@ -1,5 +1,5 @@
 ﻿
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop.Utilities
 {
     partial class IntegrationForm
     {

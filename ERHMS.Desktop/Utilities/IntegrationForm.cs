@@ -2,7 +2,7 @@
 using System.Text;
 using System.Windows.Forms;
 
-namespace ERHMS.Desktop.Infrastructure
+namespace ERHMS.Desktop.Utilities
 {
     public partial class IntegrationForm : Form
     {
