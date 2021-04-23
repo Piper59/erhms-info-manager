@@ -389,7 +389,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a worker in ERHMS Info Manager to continue..
+        ///   Looks up a localized string similar to Select a worker in ERHMS Info Manager to continue.
         /// </summary>
         public static string Instructions_GetWorkerId {
             get {

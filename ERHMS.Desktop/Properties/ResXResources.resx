@@ -230,7 +230,7 @@
     <value>Logs-{0:yyyyMMdd-HHmmss}.zip</value>
   </data>
   <data name="Instructions.GetWorkerId" xml:space="preserve">
-    <value>Select a worker in ERHMS Info Manager to continue.</value>
+    <value>Select a worker in ERHMS Info Manager to continue</value>
   </data>
   <data name="Lead.DeletingRecords" xml:space="preserve">
     <value>Deleting records</value>

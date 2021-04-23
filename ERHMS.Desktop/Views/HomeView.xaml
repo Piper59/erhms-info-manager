@@ -59,13 +59,11 @@
                                                Text="{Binding Value, Converter={StaticResource PhaseToNameConverter}}" />
                                 </Border>
                                 <TextBlock Style="{StaticResource Body}">
-                                    <Run>Select a form or</Run>
+                                    <Run>Select a form or view the</Run>
                                     <Hyperlink Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
                                                CommandParameter="{Binding CoreProject}">
-                                        view all forms
+                                        <Run Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource CoreProjectToLowerCaseNameConverter}}" />
                                     </Hyperlink>
-                                    <Run>in the</Run>
-                                    <Run Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource CoreProjectToLowerCaseNameConverter}}" />
                                 </TextBlock>
                                 <ItemsControl IsTabStop="False"
                                               ItemsSource="{Binding CoreViews}">
