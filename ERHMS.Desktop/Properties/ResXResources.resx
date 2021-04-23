@@ -130,7 +130,14 @@
     <value>_OK</value>
   </data>
   <data name="Body.FatalException" xml:space="preserve">
-    <value>ERHMS Info Manager has encountered an error and must shut down.</value>
+    <value>ERHMS Info Manager has encountered an error and must shut down.
+
+{0}</value>
+  </data>
+  <data name="Body.IntegrationException" xml:space="preserve">
+    <value>ERHMS Info Manager has encountered an error.
+
+{0}</value>
   </data>
   <data name="CoreProject.Name.Incident" xml:space="preserve">
     <value>Incident database</value>
@@ -222,6 +229,9 @@
   <data name="FileName.LogDirectoryArchive" xml:space="preserve">
     <value>Logs-{0:yyyyMMdd-HHmmss}.zip</value>
   </data>
+  <data name="Instructions.GetWorkerId" xml:space="preserve">
+    <value>Select a worker in ERHMS Info Manager to continue.</value>
+  </data>
   <data name="Lead.DeletingRecords" xml:space="preserve">
     <value>Deleting records</value>
   </data>
@@ -236,9 +246,6 @@
   </data>
   <data name="Lead.LoadingView" xml:space="preserve">
     <value>Loading form</value>
-  </data>
-  <data name="Lead.LoadingWorkers" xml:space="preserve">
-    <value>Loading workers</value>
   </data>
   <data name="Lead.NonFatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>

@@ -20,7 +20,8 @@ namespace ERHMS.EpiInfo.Metadata
         public string List => Row.Field<string>(ColumnNames.LIST);
         public IEnumerable<string> ListItems => List.Split(Constants.LIST_SEPARATOR);
 
-        public short? Position => Row.Table.Columns.Contains(ColumnNames.POSITION)
+        public short? Position =>
+            Row.Table.Columns.Contains(ColumnNames.POSITION)
             ? Row.Field<short?>(ColumnNames.POSITION)
             : null;
 

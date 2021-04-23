@@ -21,13 +21,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public class ItemViewModel : ObservableObject, ISelectable
         {
             public Worker Value { get; }
-
-            private double similarity;
-            public double Similarity
-            {
-                get { return similarity; }
-                set { SetProperty(ref similarity, value); }
-            }
+            public double Similarity { get; private set; }
 
             private bool selected;
             public bool Selected
@@ -60,13 +54,16 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public static async Task<WorkerCollectionViewModel> CreateAsync(
             string firstName,
             string lastName,
-            string emailAddress,
-            string globalRecordId)
+            string emailAddress)
         {
-            WorkerCollectionViewModel result = new WorkerCollectionViewModel();
-            await result.InitializeAsync(firstName, lastName, emailAddress, globalRecordId);
+            WorkerCollectionViewModel result = new WorkerCollectionViewModel(firstName, lastName, emailAddress);
+            await result.InitializeAsync();
             return result;
         }
+
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string EmailAddress { get; }
 
         private string searchText;
         public string SearchText
@@ -89,8 +86,11 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
 
-        private WorkerCollectionViewModel()
+        private WorkerCollectionViewModel(string firstName, string lastName, string emailAddress)
         {
+            FirstName = firstName;
+            LastName = lastName;
+            EmailAddress = emailAddress;
             Statuses.CurrentChanged += Statuses_CurrentChanged;
             items = new List<ItemViewModel>();
             Items = new CustomCollectionView<ItemViewModel>(items)
@@ -108,11 +108,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.Refresh();
         }
 
-        private async Task InitializeAsync(
-            string firstName,
-            string lastName,
-            string emailAddress,
-            string globalRecordId)
+        private async Task InitializeAsync()
         {
             IReadOnlyCollection<Worker> values = await Task.Run(() =>
             {
@@ -127,11 +123,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 foreach (ItemViewModel item in items)
                 {
-                    item.Initialize(firstName, lastName, emailAddress);
-                    if (Record.GlobalRecordIdComparer.Equals(item.Value.GlobalRecordId, globalRecordId))
-                    {
-                        item.Selected = true;
-                    }
+                    item.Initialize(FirstName, LastName, EmailAddress);
                 }
             });
             Items.Refresh();

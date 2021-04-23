@@ -6,12 +6,11 @@ using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Infrastructure.Services;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.Utilities;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using ERHMS.EpiInfo;
 using System;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using ErrorEventArgs = ERHMS.Desktop.Commands.ErrorEventArgs;
 using Settings = ERHMS.Desktop.Properties.Settings;
@@ -26,12 +25,12 @@ namespace ERHMS.Desktop
             Log.Configure(Log.Appenders.File);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Command.GlobalError += Command_GlobalError;
-            Log.Instance.Debug("Entering application");
+            Log.Instance.Debug("Starting up");
             try
             {
                 UpgradeSettings();
-                ConfigureServices();
                 ConfigureEpiInfo();
+                ConfigureServices();
                 MenuDropAlignment.Value = false;
                 App app = new App();
                 app.Run();
@@ -40,7 +39,10 @@ namespace ERHMS.Desktop
             {
                 OnFatalException(ex);
             }
-            Log.Instance.Debug("Exiting application");
+            finally
+            {
+                Log.Instance.Debug("Shutting down");
+            }
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -54,34 +56,23 @@ namespace ERHMS.Desktop
             e.Handled = true;
         }
 
-        internal static void OnFatalException(Exception exception)
+        private static void OnFatalException(Exception exception)
         {
             Log.Instance.Fatal(exception);
-            StringBuilder message = new StringBuilder();
-            message.AppendLine(ResXResources.Body_FatalException);
-            message.AppendLine();
-            message.Append(exception.Message);
             MessageBox.Show(
-                message.ToString(),
+                string.Format(ResXResources.Body_FatalException, exception.Message),
                 ResXResources.Title_App,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
 
-        internal static void OnNonFatalException(Exception exception)
+        private static void OnNonFatalException(Exception exception)
         {
             Log.Instance.Error(exception);
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
             dialog.Severity = DialogSeverity.Error;
             dialog.Lead = ResXResources.Lead_NonFatalException;
-            if (exception is AggregateException aggregateException)
-            {
-                dialog.Body = aggregateException.Flatten().InnerExceptions.First().Message;
-            }
-            else
-            {
-                dialog.Body = exception.Message;
-            }
+            dialog.Body = exception.Message;
             dialog.Details = exception.ToString();
             dialog.Buttons = DialogButtonCollection.Close;
             dialog.Show();
@@ -99,14 +90,6 @@ namespace ERHMS.Desktop
             return true;
         }
 
-        private static void ConfigureServices()
-        {
-            ServiceLocator.Install<IDialogService>(() => new DialogService());
-            ServiceLocator.Install<IFileDialogService>(() => new FileDialogService());
-            ServiceLocator.Install<IProgressService>(() => new ProgressService());
-            ServiceLocator.Install<IWindowingService>(() => new WpfWindowingService());
-        }
-
         private static void ConfigureEpiInfo()
         {
             if (!ConfigurationExtensions.Exists())
@@ -118,10 +101,11 @@ namespace ERHMS.Desktop
             Configuration.Environment = ExecutionEnvironment.WindowsApplication;
         }
 
-        public new MainView MainWindow
+        private static void ConfigureServices()
         {
-            get { return (MainView)base.MainWindow; }
-            private set { base.MainWindow = value; }
+            ServiceLocator.Install<IDialogService>(() => new DialogService());
+            ServiceLocator.Install<IFileDialogService>(() => new FileDialogService());
+            ServiceLocator.Install<IProgressService>(() => new ProgressService());
         }
 
         public App()
@@ -129,12 +113,30 @@ namespace ERHMS.Desktop
             InitializeComponent();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainViewModel.Instance.Content = new HomeViewModel();
-            MainWindow = new MainView();
-            MainWindow.Show();
+            if (e.Args.Length > 0)
+            {
+                Log.Instance.Debug("Running in integration mode");
+                ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                try
+                {
+                    await Utility.ExecuteAsync(e.Args);
+                }
+                finally
+                {
+                    Shutdown();
+                }
+            }
+            else
+            {
+                Log.Instance.Debug("Running in standard mode");
+                ShutdownMode = ShutdownMode.OnMainWindowClose;
+                MainViewModel.Instance.Content = new HomeViewModel();
+                MainWindow = new MainView();
+                MainWindow.Show();
+            }
         }
     }
 }

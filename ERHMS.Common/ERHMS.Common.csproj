@@ -46,6 +46,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLine.cs" />
     <Compile Include="HashCodeCalculator.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logging\ConsoleAppender.cs" />

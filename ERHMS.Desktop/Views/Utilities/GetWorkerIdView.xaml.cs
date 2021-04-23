@@ -1,9 +1,9 @@
 ﻿using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.ViewModels.Integration;
+using ERHMS.Desktop.ViewModels.Utilities;
 using System.Windows;
 using System.Windows.Input;
 
-namespace ERHMS.Desktop.Views.Integration
+namespace ERHMS.Desktop.Views.Utilities
 {
     public partial class GetWorkerIdView : Window
     {
@@ -25,7 +25,7 @@ namespace ERHMS.Desktop.Views.Integration
 
         public bool CanCommit()
         {
-            return DataContext?.Workers != null && DataContext.Workers.Items.HasSelection();
+            return DataContext != null && DataContext.Workers.Items.HasSelection();
         }
 
         public void Commit()

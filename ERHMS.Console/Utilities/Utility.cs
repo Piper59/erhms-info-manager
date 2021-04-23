@@ -70,7 +70,7 @@ namespace ERHMS.Console.Utilities
             if (constructor == null)
             {
                 throw new ArgumentException(
-                    $"Utility '{instanceType.Name}' cannot be created with the specified arguments.");
+                    $"Utility '{instanceType.Name}' cannot be executed with the specified arguments.");
             }
             return constructor;
         }

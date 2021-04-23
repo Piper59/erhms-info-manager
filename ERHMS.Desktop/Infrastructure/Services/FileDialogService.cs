@@ -13,7 +13,9 @@ namespace ERHMS.Desktop.Infrastructure.Services
 
         private bool? Show(FileDialog dialog)
         {
-            bool? result = dialog.ShowDialog(Application.Current.MainWindow);
+            Window owner = Application.Current.MainWindow;
+            owner.EnsureHandle();
+            bool? result = dialog.ShowDialog(owner);
             FileName = dialog.FileName;
             return result;
         }

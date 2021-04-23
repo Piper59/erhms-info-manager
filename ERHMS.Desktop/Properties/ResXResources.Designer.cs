@@ -97,11 +97,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down..
+        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down.
+        ///
+        ///{0}.
         /// </summary>
         public static string Body_FatalException {
             get {
                 return ResourceManager.GetString("Body.FatalException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
+        ///
+        ///{0}.
+        /// </summary>
+        public static string Body_IntegrationException {
+            get {
+                return ResourceManager.GetString("Body.IntegrationException", resourceCulture);
             }
         }
         
@@ -376,6 +389,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a worker in ERHMS Info Manager to continue..
+        /// </summary>
+        public static string Instructions_GetWorkerId {
+            get {
+                return ResourceManager.GetString("Instructions.GetWorkerId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting records.
         /// </summary>
         public static string Lead_DeletingRecords {
@@ -417,15 +439,6 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_LoadingView {
             get {
                 return ResourceManager.GetString("Lead.LoadingView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Loading workers.
-        /// </summary>
-        public static string Lead_LoadingWorkers {
-            get {
-                return ResourceManager.GetString("Lead.LoadingWorkers", resourceCulture);
             }
         }
         

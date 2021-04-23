@@ -4,21 +4,16 @@ using ERHMS.Desktop.Views;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class ProgressService : IProgressService
     {
-        private readonly IWindowingService windowing;
         private string status;
 
         public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
         public string Title { get; set; }
-
-        public ProgressService()
-        {
-            windowing = ServiceLocator.Resolve<IWindowingService>();
-        }
 
         private event EventHandler StatusUpdated;
         private void OnStatusUpdated(EventArgs e) => StatusUpdated?.Invoke(this, e);
@@ -43,27 +38,32 @@ namespace ERHMS.Desktop.Infrastructure.Services
                 StatusUpdated += ProgressService_StatusUpdated;
                 try
                 {
+                    Window owner = Application.Current.MainWindow;
                     ProgressView window = new ProgressView
                     {
                         DataContext = dataContext
                     };
-                    using (windowing.Disable())
+                    window.SetOwner(owner);
+                    using (WindowDisabler.Begin(owner))
+                    using (CancellationTokenSource completionTokenSource = new CancellationTokenSource())
                     {
                         Task task = action(dataContext.CancellationToken);
                         Task continuation = task.ContinueWith(
                             _ =>
                             {
-                                window.CanClose = true;
+                                completionTokenSource.Cancel();
+                                window.Done = true;
                                 window.Close();
                             },
                             TaskScheduler.FromCurrentSynchronizationContext());
-                        await Task.Run(() =>
+                        try
                         {
-                            task.Wait(Delay);
-                        });
+                            await Task.Delay(Delay, completionTokenSource.Token);
+                        }
+                        catch (TaskCanceledException) { }
                         if (!task.IsCompleted)
                         {
-                            windowing.ShowDialog(window);
+                            window.ShowDialog();
                         }
                         await task;
                         await continuation;

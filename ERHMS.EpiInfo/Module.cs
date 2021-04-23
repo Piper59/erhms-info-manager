@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 
 namespace ERHMS.EpiInfo
 {
@@ -34,11 +33,6 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        private static string Quote(string arg)
-        {
-            return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
-        }
-
         public static Process Start(this Module @this, params string[] args)
         {
             Log.Instance.Debug($"Starting module: {@this}");
@@ -48,7 +42,7 @@ namespace ERHMS.EpiInfo
                 UseShellExecute = false,
                 WorkingDirectory = workingDirectoryPath,
                 FileName = Path.Combine(workingDirectoryPath, @this.ToFileName()),
-                Arguments = string.Join(" ", args.Select(Quote))
+                Arguments = CommandLine.GetArguments(args)
             });
         }
     }

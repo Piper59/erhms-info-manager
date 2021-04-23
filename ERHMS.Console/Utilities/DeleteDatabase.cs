@@ -23,7 +23,8 @@ namespace ERHMS.Console.Utilities
 
         public void Run()
         {
-            IDatabase database = ProjectPath == null
+            IDatabase database =
+                ProjectPath == null
                 ? DatabaseProvider.ToDatabase(ConnectionString)
                 : ProjectExtensions.Open(ProjectPath).GetDatabase();
             if (!database.Exists())

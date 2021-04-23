@@ -1,4 +1,4 @@
-﻿<Window x:Class="ERHMS.Desktop.Views.Integration.GetWorkerIdView"
+﻿<Window x:Class="ERHMS.Desktop.Views.Utilities.GetWorkerIdView"
         x:Name="Root"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
