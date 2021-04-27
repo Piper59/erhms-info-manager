@@ -13,7 +13,7 @@
         <WrapPanel Grid.Row="0">
             <Controls:IconButton AltText="Create"
                                  Command="{Binding CreateCommand}"
-                                 Content="{x:Static local:Icons.New}" />
+                                 Content="{x:Static local:Icons.Create}" />
             <Controls:IconButton AltText="Open"
                                  Command="{Binding OpenCommand}"
                                  Content="{x:Static local:Icons.Open}" />
@@ -34,6 +34,10 @@
                                     Header="Name"
                                     Width="*" />
             </DataGrid.Columns>
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding OpenCommand}"
+                              MouseAction="LeftDoubleClick" />
+            </DataGrid.InputBindings>
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="IsSelected" Value="{Binding Selected}" />

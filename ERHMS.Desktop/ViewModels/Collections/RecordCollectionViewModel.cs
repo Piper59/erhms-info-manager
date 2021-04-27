@@ -97,7 +97,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private readonly List<ItemViewModel> items;
         public CustomCollectionView<ItemViewModel> Items { get; }
 
-        public ICommand CustomizeViewCommand { get; }
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -116,7 +115,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 TypedFilter = IsMatch,
                 PageSize = 100
             };
-            CustomizeViewCommand = new AsyncCommand(CustomizeViewAsync);
             AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, Items.HasSelection);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasSelection);
@@ -176,14 +174,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         private bool IsMatch(ItemViewModel item)
         {
             return IsStatusMatch(item.Value) && IsSearchMatch(item.Value);
-        }
-
-        public async Task CustomizeViewAsync()
-        {
-            await MainViewModel.Instance.StartEpiInfoAsync(
-                Module.MakeView,
-                $"/project:{Project.FilePath}",
-                $"/view:{View.Name}");
         }
 
         public async Task AddAsync()

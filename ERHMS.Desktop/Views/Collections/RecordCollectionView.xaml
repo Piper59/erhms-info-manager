@@ -48,10 +48,6 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <WrapPanel Grid.Column="0">
-                <Controls:IconButton AltText="Customize form"
-                                     Command="{Binding CustomizeViewCommand}"
-                                     Content="{x:Static local:Icons.Build}" />
-                <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AltText="Add"
                                      Command="{Binding AddCommand}"
                                      Content="{x:Static local:Icons.Add}" />
@@ -60,7 +56,7 @@
                                      Content="{x:Static local:Icons.Edit}" />
                 <Controls:IconButton x:Name="CopyColumnButton"
                                      AltText="Copy column"
-                                     Content="{x:Static local:Icons.Clipboard}"
+                                     Content="{x:Static local:Icons.Copy}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
                         <ContextMenu x:Name="CopyColumnContextMenu"

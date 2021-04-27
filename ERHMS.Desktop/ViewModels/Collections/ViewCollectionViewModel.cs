@@ -75,12 +75,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public CustomCollectionView<ItemViewModel> Items { get; }
 
         public ICommand CreateCommand { get; }
-        public ICommand CustomizeCommand { get; }
+        public ICommand OpenCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ICommand ViewRecordsCommand { get; }
-        public ICommand EnterRecordsCommand { get; }
-        public ICommand ImportRecordsCommand { get; }
-        public ICommand ExportRecordsCommand { get; }
+        public ICommand DesignCommand { get; }
+        public ICommand EnterCommand { get; }
         public ICommand RefreshCommand { get; }
 
         private ViewCollectionViewModel(Project project)
@@ -89,12 +87,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
             items = new List<ItemViewModel>();
             Items = new CustomCollectionView<ItemViewModel>(items);
             CreateCommand = Command.Null;
-            CustomizeCommand = new AsyncCommand(CustomizeAsync, Items.HasSelection);
+            OpenCommand = new AsyncCommand(OpenAsync, Items.HasSelection);
             DeleteCommand = Command.Null;
-            ViewRecordsCommand = new AsyncCommand(ViewRecordsAsync, Items.HasSelection);
-            EnterRecordsCommand = new AsyncCommand(EnterRecordsAsync, Items.HasSelection);
-            ImportRecordsCommand = Command.Null;
-            ExportRecordsCommand = Command.Null;
+            DesignCommand = new AsyncCommand(DesignAsync, Items.HasSelection);
+            EnterCommand = new AsyncCommand(EnterAsync, Items.HasSelection);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
@@ -117,7 +113,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.Refresh();
         }
 
-        public async Task CustomizeAsync()
+        public async Task OpenAsync()
+        {
+            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, Items.SelectedItem.Value.Name);
+        }
+
+        public async Task DesignAsync()
         {
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.MakeView,
@@ -125,12 +126,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 $"/view:{Items.SelectedItem.Value.Name}");
         }
 
-        public async Task ViewRecordsAsync()
-        {
-            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, Items.SelectedItem.Value.Name);
-        }
-
-        public async Task EnterRecordsAsync()
+        public async Task EnterAsync()
         {
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.Enter,

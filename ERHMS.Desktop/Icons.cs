@@ -1463,24 +1463,25 @@
         private const string _zhihu = "\uf63f";
 
         public static string Add => _plus;
-        public static string Build => _wrench;
         public static string Clear => _times;
-        public static string Clipboard => _clipboard;
         public static string Close => _times;
+        public static string Copy => _copy;
+        public static string Create => _file;
         public static string Delete => _trash;
+        public static string Design => _tools;
         public static string Edit => _pen;
+        public static string Enter => _pen;
         public static string Export => _file_export;
         public static string Help => _question;
         public static string Home => _home;
         public static string Import => _file_import;
-        public static string New => _file;
-        public static string Next => _chevron_right;
+        public static string LevelParent => _arrow_up;
+        public static string LevelSeparator => _angle_right;
         public static string Open => _folder_open;
-        public static string Previous => _chevron_left;
+        public static string PageNext => _chevron_right;
+        public static string PagePrevious => _chevron_left;
         public static string Refresh => _sync;
-        public static string Separator => _angle_right;
         public static string Undelete => _trash_restore;
-        public static string Up => _arrow_up;
-        public static string View => _eye;
+
     }
 }

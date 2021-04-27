@@ -21,13 +21,13 @@
                     <Run Text="{Binding Value.Project.Name}"
                          ToolTip="{Binding Value.Project.FilePath}" />
                     <Run FontFamily="{StaticResource IconFontFamily}"
-                         Text="{x:Static local:Icons.Separator}" />
+                         Text="{x:Static local:Icons.LevelSeparator}" />
                     <Run Text="{Binding Value.Name}" />
                 </TextBlock>
                 <WrapPanel Grid.Column="1">
                     <Controls:IconButton AltText="Up to database"
                                          Command="{Binding GoToProjectCommand}"
-                                         Content="{x:Static local:Icons.Up}" />
+                                         Content="{x:Static local:Icons.LevelParent}" />
                     <Controls:IconButton AltText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
