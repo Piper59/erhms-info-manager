@@ -452,6 +452,33 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshing dashboards.
+        /// </summary>
+        public static string Lead_RefreshingCanvases {
+            get {
+                return ResourceManager.GetString("Lead.RefreshingCanvases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshing maps.
+        /// </summary>
+        public static string Lead_RefreshingMaps {
+            get {
+                return ResourceManager.GetString("Lead.RefreshingMaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshing analyses.
+        /// </summary>
+        public static string Lead_RefreshingPrograms {
+            get {
+                return ResourceManager.GetString("Lead.RefreshingPrograms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refreshing records.
         /// </summary>
         public static string Lead_RefreshingRecords {

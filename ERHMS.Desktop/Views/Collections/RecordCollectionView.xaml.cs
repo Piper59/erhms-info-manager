@@ -23,13 +23,13 @@ namespace ERHMS.Desktop.Views.Collections
             set { base.DataContext = value; }
         }
 
-        public ICommand CopyColumnDataCommand { get; }
-        public ICommand CopyCellDataCommand { get; }
+        public ICommand CopyColumnCommand { get; }
+        public ICommand CopyCellCommand { get; }
 
         public RecordCollectionView()
         {
-            CopyColumnDataCommand = new SyncCommand<DataGridColumn>(CopyColumnData);
-            CopyCellDataCommand = new SyncCommand<DataGridCell>(CopyCellData);
+            CopyColumnCommand = new SyncCommand<DataGridColumn>(CopyColumn);
+            CopyCellCommand = new SyncCommand<DataGridCell>(CopyCell);
             InitializeComponent();
             DataContextChanged += RecordCollectionView_DataContextChanged;
         }
@@ -58,7 +58,7 @@ namespace ERHMS.Desktop.Views.Collections
         private void UpdateFields()
         {
             SetItemDataGridColumns();
-            SetCopyColumnDataContextMenuItems();
+            SetCopyColumnContextMenuItems();
         }
 
         private void SetItemDataGridColumns()
@@ -99,9 +99,9 @@ namespace ERHMS.Desktop.Views.Collections
             }
         }
 
-        private void SetCopyColumnDataContextMenuItems()
+        private void SetCopyColumnContextMenuItems()
         {
-            ItemCollection items = CopyColumnDataContextMenu.Items;
+            ItemCollection items = CopyColumnContextMenu.Items;
             items.Clear();
             if (ItemDataGrid.Columns.Count == 0)
             {
@@ -109,7 +109,7 @@ namespace ERHMS.Desktop.Views.Collections
             }
             items.Add(new MenuItem
             {
-                Command = CopyColumnDataCommand,
+                Command = CopyColumnCommand,
                 Header = ResXResources.AccessText_AllColumns
             });
             items.Add(new Separator());
@@ -117,14 +117,14 @@ namespace ERHMS.Desktop.Views.Collections
             {
                 items.Add(new MenuItem
                 {
-                    Command = CopyColumnDataCommand,
+                    Command = CopyColumnCommand,
                     CommandParameter = column,
                     Header = $"_{column.Header}"
                 });
             }
         }
 
-        private void CopyData(IEnumerable<object> items, IReadOnlyCollection<DataGridColumn> columns)
+        private void Copy(IEnumerable<object> items, IReadOnlyCollection<DataGridColumn> columns)
         {
             IReadOnlyCollection<string> formats = new string[]
             {
@@ -158,7 +158,7 @@ namespace ERHMS.Desktop.Views.Collections
             Clipboard.SetDataObject(data);
         }
 
-        public void CopyColumnData(DataGridColumn column)
+        public void CopyColumn(DataGridColumn column)
         {
             ICollection items = ItemDataGrid.SelectedIndex == -1 ? ItemDataGrid.Items : ItemDataGrid.SelectedItems;
             IReadOnlyCollection<DataGridColumn> columns;
@@ -175,10 +175,10 @@ namespace ERHMS.Desktop.Views.Collections
                     column
                 };
             }
-            CopyData(items.Cast<object>(), columns);
+            Copy(items.Cast<object>(), columns);
         }
 
-        public void CopyCellData(DataGridCell cell)
+        public void CopyCell(DataGridCell cell)
         {
             IReadOnlyCollection<object> items = new object[]
             {
@@ -188,7 +188,7 @@ namespace ERHMS.Desktop.Views.Collections
             {
                 cell.Column
             };
-            CopyData(items, columns);
+            Copy(items, columns);
         }
     }
 }

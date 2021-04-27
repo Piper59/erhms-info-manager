@@ -15,6 +15,9 @@ namespace ERHMS.Desktop.ViewModels
 
         public Project Value { get; }
         public ViewCollectionViewModel Views { get; private set; }
+        public CanvasCollectionViewModel Canvases { get; private set; }
+        public ProgramCollectionViewModel Programs { get; private set; }
+        public MapCollectionViewModel Maps { get; private set; }
 
         private ProjectViewModel(Project value)
         {
@@ -24,6 +27,9 @@ namespace ERHMS.Desktop.ViewModels
         private async Task InitializeAsync()
         {
             Views = await ViewCollectionViewModel.CreateAsync(Value);
+            Canvases = await CanvasCollectionViewModel.CreateAsync(Value);
+            Programs = await ProgramCollectionViewModel.CreateAsync(Value);
+            Maps = await MapCollectionViewModel.CreateAsync(Value);
         }
     }
 }

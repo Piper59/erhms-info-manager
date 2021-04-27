@@ -250,6 +250,15 @@
   <data name="Lead.NonFatalException" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
+  <data name="Lead.RefreshingCanvases" xml:space="preserve">
+    <value>Refreshing dashboards</value>
+  </data>
+  <data name="Lead.RefreshingMaps" xml:space="preserve">
+    <value>Refreshing maps</value>
+  </data>
+  <data name="Lead.RefreshingPrograms" xml:space="preserve">
+    <value>Refreshing analyses</value>
+  </data>
   <data name="Lead.RefreshingRecords" xml:space="preserve">
     <value>Refreshing records</value>
   </data>

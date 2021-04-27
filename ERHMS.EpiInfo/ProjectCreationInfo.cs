@@ -1,5 +1,4 @@
-﻿using Epi;
-using ERHMS.Data;
+﻿using ERHMS.Data;
 using System.IO;
 
 namespace ERHMS.EpiInfo
@@ -9,7 +8,7 @@ namespace ERHMS.EpiInfo
         public string Name { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
-        public string FilePath => Path.Combine(Location, $"{Name}{FileExtensions.EPI_PROJ}");
+        public string FilePath => Path.Combine(Location, $"{Name}.prj");
         public IDatabase Database { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using ERHMS.Common;
-using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using System;
 using System.Collections.Generic;

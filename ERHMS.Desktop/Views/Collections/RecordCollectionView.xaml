@@ -14,9 +14,9 @@
             <Setter Property="ContextMenu">
                 <Setter.Value>
                     <ContextMenu>
-                        <MenuItem Command="{Binding CopyCellDataCommand, Source={x:Reference Root}}"
+                        <MenuItem Command="{Binding CopyCellCommand, Source={x:Reference Root}}"
                                   CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
-                                  Header="_Copy cell to clipboard" />
+                                  Header="_Copy cell" />
                     </ContextMenu>
                 </Setter.Value>
             </Setter>
@@ -58,14 +58,14 @@
                 <Controls:IconButton AltText="Edit"
                                      Command="{Binding EditCommand}"
                                      Content="{x:Static local:Icons.Edit}" />
-                <Controls:IconButton x:Name="CopyColumnDataButton"
-                                     AltText="Copy column to clipboard"
+                <Controls:IconButton x:Name="CopyColumnButton"
+                                     AltText="Copy column"
                                      Content="{x:Static local:Icons.Clipboard}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
-                        <ContextMenu x:Name="CopyColumnDataContextMenu"
+                        <ContextMenu x:Name="CopyColumnContextMenu"
                                      Placement="Bottom"
-                                     PlacementTarget="{x:Reference CopyColumnDataButton}">
+                                     PlacementTarget="{x:Reference CopyColumnButton}">
                         </ContextMenu>
                     </Controls:IconButton.ContextMenu>
                     <b:Interaction.Behaviors>

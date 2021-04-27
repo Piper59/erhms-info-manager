@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class ViewCollectionViewModel : ObservableObject
+    public class ViewCollectionViewModel
     {
         public class ItemViewModel : ObservableObject, ISelectable
         {
