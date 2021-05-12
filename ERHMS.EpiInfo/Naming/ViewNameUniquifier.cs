@@ -7,7 +7,6 @@ namespace ERHMS.EpiInfo.Naming
         private readonly ViewNameValidator validator;
 
         public Project Project { get; }
-        protected override string InitialBaseName => null;
 
         public ViewNameUniquifier(Project project)
         {

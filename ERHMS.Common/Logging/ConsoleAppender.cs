@@ -6,33 +6,32 @@ namespace ERHMS.Common.Logging
 {
     public class ConsoleAppender : ColoredConsoleAppender
     {
+        private readonly PatternLayout layout;
+
         public ConsoleAppender()
         {
             Target = ConsoleError;
-            PatternLayout layout = new PatternLayout("%message%newline");
-            layout.ActivateOptions();
+            AddMapping(Level.Info, Colors.Green);
+            AddMapping(Level.Warn, Colors.Yellow);
+            AddMapping(Level.Error, Colors.Red);
+            AddMapping(Level.Fatal, Colors.Red | Colors.HighIntensity);
+            layout = new PatternLayout("%message%newline");
             Layout = layout;
+        }
+
+        private void AddMapping(Level level, Colors foreColor)
+        {
             AddMapping(new LevelColors
             {
-                Level = Level.Info,
-                ForeColor = Colors.Green
+                Level = level,
+                ForeColor = foreColor
             });
-            AddMapping(new LevelColors
-            {
-                Level = Level.Warn,
-                ForeColor = Colors.Yellow
-            });
-            AddMapping(new LevelColors
-            {
-                Level = Level.Error,
-                ForeColor = Colors.Red
-            });
-            AddMapping(new LevelColors
-            {
-                Level = Level.Fatal,
-                ForeColor = Colors.Red | Colors.HighIntensity
-            });
-            ActivateOptions();
+        }
+
+        public override void ActivateOptions()
+        {
+            layout.ActivateOptions();
+            base.ActivateOptions();
         }
     }
 }

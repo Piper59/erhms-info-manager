@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.EpiInfo.Naming;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +15,7 @@ namespace ERHMS.EpiInfo.Metadata
             }
         }
 
-        public class ByTabOrder : IComparer<FieldDataRow>
+        public class ByTabIndex : IComparer<FieldDataRow>
         {
             public int Compare(FieldDataRow field1, FieldDataRow field2)
             {
@@ -31,37 +32,44 @@ namespace ERHMS.EpiInfo.Metadata
             }
         }
 
-        public class ByGroupHoistingTabOrder : IComparer<FieldDataRow>
+        public class ByEffectiveTabIndex : IComparer<FieldDataRow>
         {
             private readonly IReadOnlyDictionary<string, double?> tabIndicesByFieldName;
 
-            public ByGroupHoistingTabOrder(IEnumerable<FieldDataRow> fields)
+            public ByEffectiveTabIndex(IEnumerable<FieldDataRow> fields)
             {
-                tabIndicesByFieldName = fields.ToDictionary(field => field.Name, field => field.TabIndex);
+                tabIndicesByFieldName = fields.ToDictionary(
+                    field => field.Name,
+                    field => field.TabIndex,
+                    NameComparer.Default);
             }
 
-            private double? GetTabOrder(FieldDataRow field)
+            private IEnumerable<double?> GetChildTabIndices(FieldDataRow groupField)
             {
-                if (field.FieldType == MetaFieldType.Group && field.List != null)
+                if (groupField.List == null)
                 {
-                    double? minChildTabIndex = null;
-                    foreach (string childFieldName in field.ListItems)
+                    yield break;
+                }
+                foreach (string childFieldName in groupField.ListItems)
+                {
+                    if (tabIndicesByFieldName.TryGetValue(childFieldName, out double? childTabIndex))
                     {
-                        if (!tabIndicesByFieldName.TryGetValue(childFieldName, out double? childTabIndex))
-                        {
-                            continue;
-                        }
-                        if (minChildTabIndex == null || childTabIndex < minChildTabIndex)
-                        {
-                            minChildTabIndex = childTabIndex;
-                        }
+                        yield return childTabIndex;
                     }
-                    return minChildTabIndex == null ? field.TabIndex : minChildTabIndex - 0.5;
                 }
-                else
+            }
+
+            private double? GetEffectiveTabIndex(FieldDataRow field)
+            {
+                if (field.FieldType == MetaFieldType.Group)
                 {
-                    return field.TabIndex;
+                    double? minChildTabIndex = GetChildTabIndices(field).Min();
+                    if (minChildTabIndex != null)
+                    {
+                        return minChildTabIndex - 0.5;
+                    }
                 }
+                return field.TabIndex;
             }
 
             public int Compare(FieldDataRow field1, FieldDataRow field2)
@@ -69,7 +77,9 @@ namespace ERHMS.EpiInfo.Metadata
                 int result = Comparer<short?>.Default.Compare(field1.Position, field2.Position);
                 if (result == 0)
                 {
-                    result = Comparer<double?>.Default.Compare(GetTabOrder(field1), GetTabOrder(field2));
+                    result = Comparer<double?>.Default.Compare(
+                        GetEffectiveTabIndex(field1),
+                        GetEffectiveTabIndex(field2));
                 }
                 if (result == 0)
                 {

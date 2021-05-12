@@ -8,11 +8,11 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     {
         protected override MetaFieldType? FieldType => MetaFieldType.Relate;
 
-        protected override FieldPropertySetterCollection<RelatedViewField> PropertySetters { get; }
+        protected override FieldPropertySetterCollection<RelatedViewField> Setters { get; }
 
         public RelatedViewFieldMapper()
         {
-            PropertySetters = new FieldPropertySetterCollection<RelatedViewField>
+            Setters = new FieldPropertySetterCollection<RelatedViewField>
             {
                 { field => field.RelatedViewID, TryGetRelatedViewId },
                 { field => field.ShouldReturnToParent },
@@ -29,14 +29,14 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             }
             else
             {
-                return MappingContext.MapViewId(xField.RelatedViewId.Value, out value);
+                return Context.MapViewId(xField.RelatedViewId.Value, out value);
             }
         }
 
         public override bool MapAttributes(XField xField)
         {
             bool changed = false;
-            if (xField.RelatedViewId != null && MappingContext.MapViewId(xField.RelatedViewId.Value, out int result))
+            if (xField.RelatedViewId != null && Context.MapViewId(xField.RelatedViewId.Value, out int result))
             {
                 xField.RelatedViewId = result;
                 changed = true;

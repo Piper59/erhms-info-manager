@@ -6,8 +6,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class TextFieldMapper : FieldMapper<TextField>
     {
         protected override MetaFieldType? FieldType => MetaFieldType.Text;
-
-        protected override FieldPropertySetterCollection<TextField> PropertySetters { get; } =
+        protected override FieldPropertySetterCollection<TextField> Setters { get; } =
             new FieldPropertySetterCollection<TextField>
             {
                 { field => field.MaxLength },

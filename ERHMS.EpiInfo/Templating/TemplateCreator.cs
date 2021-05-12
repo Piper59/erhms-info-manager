@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating
 {
@@ -14,16 +15,16 @@ namespace ERHMS.EpiInfo.Templating
     {
         protected class ContextImpl
         {
-            public IMetadataProvider Metadata { get; }
+            public MetadataDbProvider Metadata { get; }
             public XTemplate XTemplate { get; set; }
 
-            private readonly ISet<string> sourceTableNames = new HashSet<string>(NameComparer.Default);
+            private readonly ISet<string> sourceTableNames = new SortedSet<string>(NameComparer.Default);
             public IEnumerable<string> SourceTableNames => sourceTableNames;
 
             private readonly ICollection<GridColumnDataTable> gridTables = new List<GridColumnDataTable>();
             public IEnumerable<GridColumnDataTable> GridTables => gridTables;
 
-            public ContextImpl(IMetadataProvider metadata)
+            public ContextImpl(MetadataDbProvider metadata)
             {
                 Metadata = metadata;
             }
@@ -45,11 +46,10 @@ namespace ERHMS.EpiInfo.Templating
                 AddSourceTableName(xField.FieldType, xField.SourceTableName);
                 if (xField.FieldType == MetaFieldType.Grid)
                 {
-                    DataTable gridColumnData = Metadata.GetGridColumns(xField.FieldId);
-                    gridColumnData.TableName = xField.Name;
-                    GridColumnDataTable gridTable = new GridColumnDataTable(gridColumnData);
-                    gridTables.Add(gridTable);
-                    foreach (GridColumnDataRow gridColumn in gridTable)
+                    GridColumnDataTable gridColumns = Metadata.GetGridColumnDataTable(xField.FieldId);
+                    gridColumns.Table.TableName = xField.Name;
+                    gridTables.Add(gridColumns);
+                    foreach (GridColumnDataRow gridColumn in gridColumns)
                     {
                         AddSourceTableName(gridColumn.FieldType, gridColumn.SourceTableName);
                     }
@@ -57,14 +57,13 @@ namespace ERHMS.EpiInfo.Templating
             }
         }
 
-        protected IMetadataProvider Metadata { get; }
-        protected abstract string DisplayName { get; }
+        protected MetadataDbProvider Metadata { get; }
         public IProgress<string> Progress { get; set; }
         protected ContextImpl Context { get; private set; }
 
         protected TemplateCreator(IMetadataProvider metadata)
         {
-            Metadata = metadata;
+            Metadata = (MetadataDbProvider)metadata;
         }
 
         protected abstract XTemplate CreateCore();
@@ -102,10 +101,9 @@ namespace ERHMS.EpiInfo.Templating
             Progress?.Report($"Adding page: {page.Name}");
             XPage xPage = XPage.Create(page);
             xView.Add(xPage);
-            DataTable fieldData = Metadata.GetFieldsOnPageAsDataTable(page.Id);
-            FieldDataTable fields = new FieldDataTable(fieldData);
-            IComparer<FieldDataRow> fieldComparer = new FieldDataRowComparer.ByGroupHoistingTabOrder(fields);
-            foreach (FieldDataRow field in fields.OrderBy(field => field, fieldComparer))
+            FieldDataTable fields = Metadata.GetFieldDataTableForPage(page.Id);
+            IComparer<FieldDataRow> comparer = new FieldDataRowComparer.ByEffectiveTabIndex(fields);
+            foreach (FieldDataRow field in fields.OrderBy(field => field, comparer))
             {
                 CreateXField(xPage, field);
             }
@@ -123,33 +121,31 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CreateXSourceTables()
         {
-            foreach (string tableName in Context.SourceTableNames.OrderBy(tableName => tableName, NameComparer.Default))
+            foreach (string tableName in Context.SourceTableNames)
             {
-                CreateXSourceTable(tableName);
+                Progress?.Report($"Adding source table: {tableName}");
+                DataTable table = Metadata.GetCodeTableData(tableName);
+                table.TableName = tableName;
+                CreateXTable(ElementNames.SourceTable, table);
             }
-        }
-
-        private XTable CreateXSourceTable(string tableName)
-        {
-            Progress?.Report($"Adding source table: {tableName}");
-            DataTable table = Metadata.GetCodeTableData(tableName);
-            XTable xTable = XTable.Create(ElementNames.SourceTable, table);
-            Context.XTemplate.Add(xTable);
-            return xTable;
         }
 
         private void CreateXGridTables()
         {
-            foreach (GridColumnDataTable gridTable in Context.GridTables)
+            foreach (GridColumnDataTable gridColumns in Context.GridTables)
             {
-                CreateXGridTable(gridTable);
+                Progress?.Report($"Adding grid table: {gridColumns.Table.TableName}");
+                CreateXTable(ElementNames.GridTable, gridColumns);
             }
         }
 
-        private XTable CreateXGridTable(GridColumnDataTable gridTable)
+        private XTable CreateXTable(XName name, DataTable table)
         {
-            Progress?.Report($"Adding grid table: {gridTable.Table.TableName}");
-            XTable xTable = XTable.Create(ElementNames.GridTable, gridTable);
+            XTable xTable = XTable.Create(name, table);
+            foreach (DataRow item in table.Rows)
+            {
+                xTable.Add(XItem.Create(item));
+            }
             Context.XTemplate.Add(xTable);
             return xTable;
         }

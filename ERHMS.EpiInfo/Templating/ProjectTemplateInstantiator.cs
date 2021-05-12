@@ -20,14 +20,14 @@ namespace ERHMS.EpiInfo.Templating
             IDictionary<XView, View> viewsByXView = new Dictionary<XView, View>();
             foreach (XView xView in XTemplate.XProject.XViews)
             {
-                viewsByXView[xView] = InstantiateView(Project, xView, false);
+                viewsByXView[xView] = InstantiateViewCore(Project, xView);
             }
-            foreach (XView xView in XTemplate.XProject.XViews)
+            foreach (KeyValuePair<XView, View> viewByXView in viewsByXView)
             {
-                Context.View = viewsByXView[xView];
-                foreach (XPage xPage in xView.XPages)
+                Context.View = viewByXView.Value;
+                foreach (XPage xPage in viewByXView.Key.XPages)
                 {
-                    InstantiatePage(Context.View, xPage);
+                    InstantiatePage(viewByXView.Value, xPage);
                 }
             }
         }

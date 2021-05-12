@@ -6,7 +6,6 @@ namespace ERHMS.EpiInfo.Naming
     public class TableNameUniquifier : NameUniquifier.IntSuffixed
     {
         public Project Project { get; }
-        protected override string InitialBaseName => null;
 
         public TableNameUniquifier(Project project)
         {

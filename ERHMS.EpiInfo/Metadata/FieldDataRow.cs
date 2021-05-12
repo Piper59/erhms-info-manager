@@ -19,11 +19,7 @@ namespace ERHMS.EpiInfo.Metadata
         public MetaFieldType FieldType => (MetaFieldType)FieldTypeId;
         public string List => Row.Field<string>(ColumnNames.LIST);
         public IEnumerable<string> ListItems => List.Split(Constants.LIST_SEPARATOR);
-
-        public short? Position =>
-            Row.Table.Columns.Contains(ColumnNames.POSITION)
-            ? Row.Field<short?>(ColumnNames.POSITION)
-            : null;
+        public short? Position => Row.Field<short?>(ColumnNames.POSITION);
 
         public FieldDataRow(DataRow row)
         {

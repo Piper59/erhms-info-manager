@@ -7,8 +7,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class TableBasedDropDownFieldMapper : FieldMapper<TableBasedDropDownField>
     {
         protected override MetaFieldType? FieldType => null;
-
-        protected override FieldPropertySetterCollection<TableBasedDropDownField> PropertySetters { get; } =
+        protected override FieldPropertySetterCollection<TableBasedDropDownField> Setters { get; } =
             new FieldPropertySetterCollection<TableBasedDropDownField>
             {
                 { field => field.ShouldSort, ColumnNames.SORT },
@@ -21,7 +20,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         public override bool MapProperties(TableBasedDropDownField field)
         {
             bool changed = false;
-            if (field.SourceTableName != null && MappingContext.MapTableName(field.SourceTableName, out string result))
+            if (Context.MapTableName(field.SourceTableName, out string result))
             {
                 field.SourceTableName = result;
                 changed = true;
@@ -32,8 +31,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         public override bool MapAttributes(XField xField)
         {
             bool changed = false;
-            if (xField.SourceTableName != null
-                && MappingContext.MapTableName(xField.SourceTableName, out string result))
+            if (Context.MapTableName(xField.SourceTableName, out string result))
             {
                 xField.SourceTableName = result;
                 changed = true;

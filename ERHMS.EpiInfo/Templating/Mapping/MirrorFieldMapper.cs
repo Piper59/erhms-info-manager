@@ -7,8 +7,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class MirrorFieldMapper : FieldMapper<MirrorField>
     {
         protected override MetaFieldType? FieldType => MetaFieldType.Mirror;
-
-        protected override FieldPropertySetterCollection<MirrorField> PropertySetters { get; } =
+        protected override FieldPropertySetterCollection<MirrorField> Setters { get; } =
             new FieldPropertySetterCollection<MirrorField>
             {
                 { field => field.SourceFieldId }
@@ -17,7 +16,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         public override bool MapProperties(MirrorField field)
         {
             bool changed = false;
-            if (MappingContext.MapFieldId(field.SourceFieldId, out int result))
+            if (Context.MapFieldId(field.SourceFieldId, out int result))
             {
                 field.SourceFieldId = result;
                 changed = true;
@@ -28,7 +27,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         public override bool MapAttributes(XField xField)
         {
             bool changed = false;
-            if (xField.SourceFieldId != null && MappingContext.MapFieldId(xField.SourceFieldId.Value, out int result))
+            if (xField.SourceFieldId != null && Context.MapFieldId(xField.SourceFieldId.Value, out int result))
             {
                 xField.SourceFieldId = result;
                 changed = true;

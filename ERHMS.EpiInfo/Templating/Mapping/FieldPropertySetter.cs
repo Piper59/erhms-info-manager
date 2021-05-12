@@ -8,44 +8,41 @@ using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Mapping
 {
-    public static class FieldPropertySetter<TField, TProperty>
+    public abstract class FieldPropertySetter<TField, TProperty> : IFieldPropertySetter<TField>
         where TField : Field
     {
-        public abstract class Base : IFieldPropertySetter<TField>
+        public PropertyInfo Property { get; }
+
+        protected FieldPropertySetter(Expression<Func<TField, TProperty>> expression)
         {
-            public PropertyInfo Property { get; }
+            Property = (PropertyInfo)((MemberExpression)expression.Body).Member;
+        }
 
-            protected Base(Expression<Func<TField, TProperty>> getter)
+        protected abstract bool TryGetValue(XField xField, out TProperty value);
+
+        public void SetProperty(XField xField, TField field)
+        {
+            try
             {
-                Property = (PropertyInfo)((MemberExpression)getter.Body).Member;
+                if (TryGetValue(xField, out TProperty value))
+                {
+                    Property.SetValue(field, value);
+                }
             }
-
-            protected abstract bool TryGetValue(XField xField, out TProperty value);
-
-            public void SetProperty(XField xField, TField field)
+            catch (Exception ex)
             {
-                try
-                {
-                    if (TryGetValue(xField, out TProperty value))
-                    {
-                        Property.SetValue(field, value);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new FieldPropertySetterException(xField, Property.Name, ex);
-                }
+                throw new FieldPropertySetterException(xField, Property.Name, ex);
             }
         }
 
-        public class Simple : Base
+        public class Simple : FieldPropertySetter<TField, TProperty>
         {
             private readonly TypeConverter converter = TypeDescriptor.GetConverter(typeof(TProperty));
 
             public string AttributeName { get; }
 
-            public Simple(Expression<Func<TField, TProperty>> getter, string attributeName = null)
-                : base(getter)
+            public Simple(Expression<Func<TField, TProperty>> expression, string attributeName = null)
+                : base(expression)
             {
                 AttributeName = attributeName ?? Property.Name;
             }
@@ -65,12 +62,14 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             }
         }
 
-        public class Delegated : Base
+        public class Delegated : FieldPropertySetter<TField, TProperty>
         {
             private readonly FieldPropertyConverter<TProperty> converter;
 
-            public Delegated(Expression<Func<TField, TProperty>> getter, FieldPropertyConverter<TProperty> converter)
-                : base(getter)
+            public Delegated(
+                Expression<Func<TField, TProperty>> expression,
+                FieldPropertyConverter<TProperty> converter)
+                : base(expression)
             {
                 this.converter = converter;
             }

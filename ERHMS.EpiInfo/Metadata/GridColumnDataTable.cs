@@ -6,9 +6,9 @@ namespace ERHMS.EpiInfo.Metadata
 {
     public class GridColumnDataTable : IEnumerable<GridColumnDataRow>
     {
-        public static implicit operator DataTable(GridColumnDataTable gridTable)
+        public static implicit operator DataTable(GridColumnDataTable gridColumns)
         {
-            return gridTable.Table;
+            return gridColumns.Table;
         }
 
         public DataTable Table { get; }

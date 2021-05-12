@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Data;
 
-namespace ERHMS.Data
+namespace ERHMS.Common.Data
 {
     public static class DataTableExtensions
     {
-        public static bool DataEquals(this DataTable table1, DataTable table2)
+        public static bool DeepEquals(this DataTable table1, DataTable table2)
         {
-            if (table1.Columns.Count != table2.Columns.Count || table1.Rows.Count != table2.Rows.Count)
+            if (table1.Columns.Count != table2.Columns.Count)
+            {
+                return false;
+            }
+            if (table1.Rows.Count != table2.Rows.Count)
             {
                 return false;
             }

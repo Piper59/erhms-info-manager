@@ -47,15 +47,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine.cs" />
+    <Compile Include="ComponentModel\ObservableObject.cs" />
+    <Compile Include="Compression\ZipFileExtensions.cs" />
+    <Compile Include="Data\DataTableExtensions.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="HashCodeCalculator.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Linq\EnumerableExtensions.cs" />
+    <Compile Include="Linq\Iterator.cs" />
     <Compile Include="Logging\ConsoleAppender.cs" />
     <Compile Include="Logging\FileAppender.cs" />
-    <Compile Include="ObservableObject.cs" />
+    <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringCaseFormatter.cs" />
-    <Compile Include="StringDistanceCalculator.cs" />
-    <Compile Include="ZipExtensions.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
+    <Compile Include="Text\ByteCountFormatter.cs" />
+    <Compile Include="Text\StringCaseFormatter.cs" />
+    <Compile Include="Text\StringDistanceCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

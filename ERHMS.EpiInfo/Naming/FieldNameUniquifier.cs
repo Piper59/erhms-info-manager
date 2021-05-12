@@ -6,7 +6,6 @@ namespace ERHMS.EpiInfo.Naming
     public class FieldNameUniquifier : NameUniquifier.IntSuffixed
     {
         public View View { get; }
-        protected override string InitialBaseName => null;
 
         public FieldNameUniquifier(View view)
         {

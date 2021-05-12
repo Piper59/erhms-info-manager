@@ -6,7 +6,6 @@ namespace ERHMS.Data.SqlServer
     {
         protected new SqlConnectionStringBuilder ConnectionStringBuilder =>
             (SqlConnectionStringBuilder)base.ConnectionStringBuilder;
-
         public string Instance => ConnectionStringBuilder.DataSource;
         public override string Name => ConnectionStringBuilder.InitialCatalog;
 

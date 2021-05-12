@@ -6,8 +6,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class NumberFieldMapper : FieldMapper<NumberField>
     {
         protected override MetaFieldType? FieldType => MetaFieldType.Number;
-
-        protected override FieldPropertySetterCollection<NumberField> PropertySetters { get; } =
+        protected override FieldPropertySetterCollection<NumberField> Setters { get; } =
             new FieldPropertySetterCollection<NumberField>
             {
                 { field => field.Pattern },

@@ -1,23 +1,15 @@
 ﻿using log4net;
 using log4net.Appender;
+using log4net.Core;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Principal;
-using ConsoleAppender = ERHMS.Common.Logging.ConsoleAppender;
-using FileAppender = ERHMS.Common.Logging.FileAppender;
 
-namespace ERHMS.Common
+namespace ERHMS.Common.Logging
 {
     public static class Log
     {
-        public static class Appenders
-        {
-            public static IAppender File { get; } = new FileAppender(FilePath);
-            public static IAppender Console { get; } = new ConsoleAppender();
-        }
-
         private class ProgressImpl : IProgress<string>
         {
             public void Report(string value)
@@ -26,11 +18,6 @@ namespace ERHMS.Common
             }
         }
 
-        public static string DirectoryPath { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-
-        public static string FilePath { get; }
-            = Path.Combine(DirectoryPath, $"{nameof(ERHMS)}.{DateTime.Today:yyyy-MM-dd}.txt");
-
         public static ILog Instance => LogManager.GetLogger(typeof(Log));
         public static IProgress<string> Progress { get; } = new ProgressImpl();
 
@@ -38,10 +25,20 @@ namespace ERHMS.Common
         {
             try
             {
-                GlobalContext.Properties["user"] = WindowsIdentity.GetCurrent().Name;
+                using (WindowsIdentity user = WindowsIdentity.GetCurrent())
+                {
+                    GlobalContext.Properties["user"] = user.Name;
+                }
             }
             catch { }
-            GlobalContext.Properties["process"] = Process.GetCurrentProcess().Id;
+            try
+            {
+                using (Process process = Process.GetCurrentProcess())
+                {
+                    GlobalContext.Properties["process"] = process.Id;
+                }
+            }
+            catch { }
         }
 
         public static void Configure(params IAppender[] appenders)
@@ -49,6 +46,10 @@ namespace ERHMS.Common
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             foreach (IAppender appender in appenders)
             {
+                if (appender is IOptionHandler optionHandler)
+                {
+                    optionHandler.ActivateOptions();
+                }
                 hierarchy.Root.AddAppender(appender);
             }
             hierarchy.Configured = true;

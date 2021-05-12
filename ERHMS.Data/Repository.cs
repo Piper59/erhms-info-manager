@@ -1,69 +1,39 @@
 ﻿using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace ERHMS.Data
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity>
+    public abstract class Repository<TEntity>
     {
         public IDatabase Database { get; }
-        protected abstract string TableSource { get; }
 
         protected Repository(IDatabase database)
         {
             Database = database;
         }
 
-        public string Quote(string identifier)
+        protected string Quote(string identifier)
         {
             return Database.Quote(identifier);
         }
 
-        protected string GetSelectStatement(string selectList, string clauses)
+        protected TResult ExecuteScalar<TResult>(QueryInfo query, string selectList)
         {
-            StringBuilder sql = new StringBuilder();
-            sql.Append($"SELECT {selectList} FROM {TableSource}");
-            if (clauses != null)
-            {
-                sql.Append($" {clauses}");
-            }
-            sql.Append(";");
-            return sql.ToString();
-        }
-
-        public virtual int Count(string clauses, object parameters)
-        {
-            string sql = GetSelectStatement("COUNT(*)", clauses);
+            string sql = query.GetSql(selectList);
             using (IDbConnection connection = Database.Connect())
             {
-                return connection.ExecuteScalar<int>(sql, parameters);
+                return connection.ExecuteScalar<TResult>(sql, query.Parameters);
             }
         }
 
-        public virtual IEnumerable<TEntity> Select(string clauses, object parameters)
+        protected IEnumerable<TEntity> Query(QueryInfo query, string selectList)
         {
-            string sql = GetSelectStatement("*", clauses);
+            string sql = query.GetSql(selectList);
             using (IDbConnection connection = Database.Connect())
             {
-                return connection.Query<TEntity>(sql, parameters);
+                return connection.Query<TEntity>(sql, query.Parameters);
             }
-        }
-
-        public virtual void Insert(TEntity entity)
-        {
-            throw new NotSupportedException();
-        }
-
-        public virtual void Update(TEntity entity)
-        {
-            throw new NotSupportedException();
-        }
-
-        public virtual void Delete(TEntity entity)
-        {
-            throw new NotSupportedException();
         }
     }
 }

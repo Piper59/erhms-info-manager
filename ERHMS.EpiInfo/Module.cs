@@ -1,4 +1,5 @@
 ﻿using ERHMS.Common;
+using ERHMS.Common.Logging;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -25,6 +26,7 @@ namespace ERHMS.EpiInfo
                 case Module.AnalysisDashboard:
                 case Module.Enter:
                 case Module.MakeView:
+                case Module.Mapping:
                     return $"{@this}.exe";
                 case Module.Menu:
                     return "EpiInfo.exe";
@@ -42,7 +44,7 @@ namespace ERHMS.EpiInfo
                 UseShellExecute = false,
                 WorkingDirectory = workingDirectoryPath,
                 FileName = Path.Combine(workingDirectoryPath, @this.ToFileName()),
-                Arguments = CommandLine.GetArguments(args)
+                Arguments = CommandLine.Quote(args)
             });
         }
     }

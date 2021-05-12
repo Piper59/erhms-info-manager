@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.DataSets;
-using ERHMS.Common;
+using ERHMS.Data;
+using System;
 using System.IO;
 using Settings = ERHMS.EpiInfo.Properties.Settings;
 
@@ -8,32 +9,34 @@ namespace ERHMS.EpiInfo
 {
     public static class ConfigurationExtensions
     {
-        private static string FilePath => Configuration.DefaultConfigurationPath;
-
-        public static bool Exists()
+        public static string GetDatabaseDriver(DatabaseProvider provider)
         {
-            return File.Exists(FilePath);
+            switch (provider)
+            {
+                case DatabaseProvider.Access2003:
+                    return Configuration.AccessDriver;
+                case DatabaseProvider.Access2007:
+                    return Configuration.Access2007Driver;
+                case DatabaseProvider.SqlServer:
+                    return Configuration.SqlDriver;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(provider));
+            }
         }
 
-        public static Configuration Create()
+        public static DatabaseProvider GetDatabaseProvider(string driver)
         {
-            Log.Instance.Debug($"Creating configuration: {FilePath}");
-            Configuration configuration = Configuration.CreateDefaultConfiguration();
-            configuration.RecentViews.Clear();
-            configuration.RecentProjects.Clear();
-            configuration.ReadSettings(Settings.Default);
-            return configuration;
-        }
-
-        private static void ReadSettings(this Configuration @this, Settings settings)
-        {
-            @this.SetTextEncryptionModule(settings.FipsCompliant);
-            Config.SettingsRow row = @this.Settings;
-            row.ControlFontSize = settings.ControlFontSize;
-            row.DefaultPageHeight = settings.DefaultPageHeight;
-            row.DefaultPageWidth = settings.DefaultPageWidth;
-            row.EditorFontSize = settings.EditorFontSize;
-            row.GridSize = settings.GridSize;
+            switch (driver)
+            {
+                case Configuration.AccessDriver:
+                    return DatabaseProvider.Access2003;
+                case Configuration.Access2007Driver:
+                    return DatabaseProvider.Access2007;
+                case Configuration.SqlDriver:
+                    return DatabaseProvider.SqlServer;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(driver));
+            }
         }
 
         public static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
@@ -48,17 +51,34 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        public static void Save(this Configuration @this)
+        private static void ReadSettings(this Configuration @this, Settings settings)
         {
-            Log.Instance.Debug($"Saving configuration: {@this.ConfigFilePath}");
-            Configuration.Save(@this);
+            @this.SetTextEncryptionModule(settings.FipsCompliant);
+            Config.SettingsRow row = @this.Settings;
+            row.ControlFontSize = settings.ControlFontSize;
+            row.DefaultPageHeight = settings.DefaultPageHeight;
+            row.DefaultPageWidth = settings.DefaultPageWidth;
+            row.EditorFontSize = settings.EditorFontSize;
+            row.GridSize = settings.GridSize;
         }
 
-        public static Configuration Load()
+        public static Configuration Create()
         {
-            Log.Instance.Debug($"Loading configuration: {FilePath}");
-            Configuration.Load(FilePath);
-            return Configuration.GetNewInstance();
+            Configuration configuration = Configuration.CreateDefaultConfiguration();
+            configuration.RecentViews.Clear();
+            configuration.RecentProjects.Clear();
+            configuration.ReadSettings(Settings.Default);
+            return configuration;
+        }
+
+        public static void Configure(ExecutionEnvironment environment)
+        {
+            if (!File.Exists(Configuration.DefaultConfigurationPath))
+            {
+                Configuration.Save(Create());
+            }
+            Configuration.Load(Configuration.DefaultConfigurationPath);
+            Configuration.Environment = environment;
         }
     }
 }

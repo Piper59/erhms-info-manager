@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq;
-using System.Text;
 
 namespace ERHMS.EpiInfo.Data
 {
@@ -15,91 +14,77 @@ namespace ERHMS.EpiInfo.Data
     {
         public View View { get; }
 
-        protected override string TableSource
-        {
-            get
-            {
-                StringBuilder sql = new StringBuilder();
-                sql.Append(Quote(View.TableName));
-                foreach (Page page in View.Pages)
-                {
-                    sql.Insert(0, "(");
-                    sql.AppendFormat(
-                        " INNER JOIN {0} ON {0}.{2} = {1}.{2})",
-                        Quote(page.TableName),
-                        Quote(View.TableName),
-                        Quote(ColumnNames.GLOBAL_RECORD_ID));
-                }
-                return sql.ToString();
-            }
-        }
-
         public RecordRepository(View view)
             : base(view.Project.GetDatabase())
         {
             View = view;
         }
 
-        public int CountByDeleted(bool deleted)
+        protected int CountCore(QueryInfo query)
         {
-            string op = deleted ? "=" : "<>";
-            string clauses = $"WHERE {Quote(ColumnNames.REC_STATUS)} {op} @RECSTATUS";
-            ParameterCollection parameters = new ParameterCollection
-            {
-                { "@RECSTATUS", RecordStatus.Deleted }
-            };
-            return Count(clauses, parameters);
+            return ExecuteScalar<int>(query, "COUNT(*)");
         }
 
-        private void SelectCore(
-            IDbConnection connection,
+        public int Count()
+        {
+            QueryInfo query = new RecordQueryInfo(View);
+            return CountCore(query);
+        }
+
+        public int CountByDeleted(bool deleted)
+        {
+            QueryInfo query = new RecordQueryInfo(View, deleted);
+            return CountCore(query);
+        }
+
+        private void Map(
+            QueryInfo query,
             string selectList,
-            string clauses,
-            object parameters,
+            IDbConnection connection,
             RecordCollection<TRecord> records)
         {
-            string sql = GetSelectStatement(selectList, clauses);
-            using (IDataReader reader = connection.ExecuteReader(sql, parameters))
+            string sql = query.GetSql(selectList);
+            using (IDataReader reader = connection.ExecuteReader(sql, query.Parameters))
             {
                 RecordMapper<TRecord> mapper = new RecordMapper<TRecord>(reader);
                 while (reader.Read())
                 {
-                    records.Update(mapper);
+                    records.Map(mapper);
                 }
             }
         }
 
-        private IEnumerable<TRecord> SelectJointly(IDbConnection connection, string clauses, object parameters)
+        private IEnumerable<TRecord> SelectJointly(QueryInfo query, IDbConnection connection)
         {
             RecordCollection<TRecord> records = new RecordCollection<TRecord>();
-            SelectCore(connection, "*", clauses, parameters, records);
+            Map(query, "*", connection, records);
             return records;
         }
 
-        private IEnumerable<TRecord> SelectIncrementally(IDbConnection connection, string clauses, object parameters)
+        private IEnumerable<TRecord> SelectIncrementally(QueryInfo query, IDbConnection connection)
         {
             RecordCollection<TRecord> records = new RecordCollection<TRecord>();
-            SelectCore(connection, $"{Quote(View.TableName)}.*", clauses, parameters, records);
+            Map(query, $"{Quote(View.TableName)}.*", connection, records);
             foreach (Page page in View.Pages)
             {
-                SelectCore(connection, $"{Quote(page.TableName)}.*", clauses, parameters, records);
+                Map(query, $"{Quote(page.TableName)}.*", connection, records);
             }
             return records;
         }
 
-        public override IEnumerable<TRecord> Select(string clauses, object parameters)
+        protected IEnumerable<TRecord> SelectCore(QueryInfo query)
         {
             using (IDbConnection connection = Database.Connect())
             {
                 try
                 {
-                    return SelectJointly(connection, clauses, parameters);
+                    return SelectJointly(query, connection);
                 }
                 catch (OleDbException ex)
                 {
                     if (ex.Errors.Count == 1 && ex.Errors[0].SQLState == ErrorCodes.TooManyFieldsDefined)
                     {
-                        return SelectIncrementally(connection, clauses, parameters);
+                        return SelectIncrementally(query, connection);
                     }
                     else
                     {
@@ -111,28 +96,27 @@ namespace ERHMS.EpiInfo.Data
 
         public IEnumerable<TRecord> Select()
         {
-            return Select($"ORDER BY {Quote(ColumnNames.UNIQUE_KEY)}", null);
-        }
-
-        public TRecord SelectByGlobalRecordId(string globalRecordId)
-        {
-            string clauses = $"WHERE {Quote(View.TableName)}.{ColumnNames.GLOBAL_RECORD_ID} = @GlobalRecordId";
-            ParameterCollection parameters = new ParameterCollection
-            {
-                { "@GlobalRecordId", globalRecordId }
-            };
-            return Select(clauses, parameters).SingleOrDefault();
+            QueryInfo query = new RecordQueryInfo(View);
+            return SelectCore(query);
         }
 
         public IEnumerable<TRecord> SelectByDeleted(bool deleted)
         {
-            string op = deleted ? "=" : "<>";
-            string clauses = $"WHERE {Quote(ColumnNames.REC_STATUS)} {op} @RECSTATUS";
-            ParameterCollection parameters = new ParameterCollection
+            QueryInfo query = new RecordQueryInfo(View, deleted);
+            return SelectCore(query);
+        }
+
+        public TRecord SelectByGlobalRecordId(string globalRecordId)
+        {
+            QueryInfo query = new RecordQueryInfo(View)
             {
-                { "@RECSTATUS", RecordStatus.Deleted }
+                Clauses = $"WHERE {Quote(View.TableName)}.{Quote(ColumnNames.GLOBAL_RECORD_ID)} = @GlobalRecordId",
+                Parameters = new ParameterCollection
+                {
+                    { "@GlobalRecordId", globalRecordId }
+                }
             };
-            return Select(clauses, parameters);
+            return SelectCore(query).SingleOrDefault();
         }
 
         public void SetDeleted(TRecord record, bool deleted)
@@ -153,7 +137,7 @@ namespace ERHMS.EpiInfo.Data
             record.Deleted = deleted;
         }
 
-        public override void Delete(TRecord record)
+        public void Delete(TRecord record)
         {
             SetDeleted(record, true);
         }

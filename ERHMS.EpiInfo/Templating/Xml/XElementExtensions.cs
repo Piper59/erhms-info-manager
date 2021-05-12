@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating.Xml
 {
-    public static class XElementExtensions
+    internal static class XElementExtensions
     {
         public static bool TryGetAttribute(this XElement @this, string attributeName, out XAttribute attribute)
         {
@@ -18,7 +18,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             return @this.Attribute(attributeName);
         }
 
-        public static TValue? GetAttributeValueOrNull<TValue>(
+        public static TValue? GetAttributeValue<TValue>(
             this XElement @this,
             [CallerMemberName] string attributeName = null)
             where TValue : struct
@@ -34,7 +34,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
             }
         }
 
-        public static void SetOrClearAttributeValue(
+        public static void SetAttributeValue(
             this XElement @this,
             object value,
             [CallerMemberName] string attributeName = null)
@@ -44,6 +44,11 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 value = "";
             }
             @this.SetAttributeValue(attributeName, value);
+        }
+
+        public static XAttribute CopyAttribute(this XElement @this, string attributeName)
+        {
+            return new XAttribute(attributeName, @this.Attribute(attributeName)?.Value ?? "");
         }
     }
 }

@@ -6,7 +6,6 @@ namespace ERHMS.EpiInfo.Templating
     public class ProjectTemplateCreator : TemplateCreator
     {
         public Project Project { get; }
-        protected override string DisplayName => Project.DisplayName;
 
         public ProjectTemplateCreator(Project project)
             : base(project.Metadata)

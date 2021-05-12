@@ -32,12 +32,7 @@ namespace ERHMS.EpiInfo.Data
             itemsByGlobalRecordId.Values.CopyTo(array, index);
         }
 
-        public bool Remove(TRecord item)
-        {
-            return itemsByGlobalRecordId.Remove(item.GlobalRecordId);
-        }
-
-        public void Update(RecordMapper<TRecord> mapper)
+        public void Map(RecordMapper<TRecord> mapper)
         {
             if (itemsByGlobalRecordId.TryGetValue(mapper.GlobalRecordId, out TRecord record))
             {
@@ -45,8 +40,13 @@ namespace ERHMS.EpiInfo.Data
             }
             else
             {
-                itemsByGlobalRecordId[mapper.GlobalRecordId] = mapper.Create();
+                Add(mapper.Create());
             }
+        }
+
+        public bool Remove(TRecord item)
+        {
+            return itemsByGlobalRecordId.Remove(item.GlobalRecordId);
         }
 
         public IEnumerator<TRecord> GetEnumerator()

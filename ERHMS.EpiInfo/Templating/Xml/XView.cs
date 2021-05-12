@@ -1,4 +1,5 @@
 ﻿using Epi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -9,7 +10,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
     {
         public static XView Create(View view)
         {
-            XView xView = new XView
+            return new XView
             {
                 ViewId = view.Id,
                 Name = view.Name,
@@ -21,61 +22,70 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 LabelAlign = view.PageLabelAlign,
                 SurveyId = view.WebSurveyId
             };
-            return xView;
         }
 
         public int ViewId
         {
-            get { return (int)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            get
+            {
+                return (int)this.GetAttribute();
+            }
+            set
+            {
+                this.SetAttributeValue(value);
+                foreach (XPage xPage in XPages)
+                {
+                    xPage.ViewId = value;
+                }
+            }
         }
 
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public bool IsRelatedView
         {
             get { return (bool)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string CheckCode
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Width
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int Height
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Orientation
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string LabelAlign
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string SurveyId
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XProject XProject => (XProject)Parent;
@@ -88,6 +98,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XView(XElement element)
             : this()
         {
+            if (element.Name != ElementNames.View)
+            {
+                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
+            }
             Add(element.Attributes());
             Add(element.Elements(ElementNames.Page).Select(child => new XPage(child)));
         }
@@ -113,11 +127,25 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 IsRelatedView = false;
             }
-            IReadOnlyCollection<XField> relateXFields =
-                XFields.Where(xField => xField.FieldType == MetaFieldType.Relate).ToList();
-            foreach (XField relateXField in relateXFields)
+            IEnumerable<XField> relateXFields = XFields.Where(xField => xField.FieldType == MetaFieldType.Relate);
+            foreach (XField relateXField in relateXFields.ToList())
             {
                 relateXField.Remove();
+            }
+        }
+
+        public void Canonize(TemplateLevel level)
+        {
+            string checkCode = CheckCode.Trim();
+            if (level >= TemplateLevel.View)
+            {
+                CheckCode = checkCode;
+                SurveyId = null;
+            }
+            else
+            {
+                RemoveAttributes();
+                CheckCode = checkCode;
             }
         }
     }

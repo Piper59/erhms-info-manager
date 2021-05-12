@@ -5,7 +5,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
 {
     public interface IFieldMapper
     {
-        IMappingContext MappingContext { get; set; }
+        IMappingContext Context { get; set; }
 
         bool IsCompatible(Field field);
         bool IsCompatible(XField xField);

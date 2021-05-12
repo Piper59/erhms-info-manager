@@ -6,10 +6,10 @@ namespace ERHMS.EpiInfo.Naming
 {
     public class ViewNameValidator
     {
-        public const int MaxLength = 40;
-
         private static readonly Regex invalidCharRegex = new Regex(@"[^A-Z0-9_]", RegexOptions.IgnoreCase);
         private static readonly Regex invalidStartCharRegex = new Regex(@"^[^A-Z]", RegexOptions.IgnoreCase);
+
+        public static int MaxLength => 40;
 
         private static Regex GetPageTableNameRegex(string viewTableName)
         {

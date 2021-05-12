@@ -1,4 +1,5 @@
 ﻿using Epi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -9,7 +10,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
     {
         public static XPage Create(Page page)
         {
-            XPage xPage = new XPage
+            return new XPage
             {
                 PageId = page.Id,
                 Name = page.Name,
@@ -17,13 +18,22 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 BackgroundId = page.BackgroundId,
                 ViewId = page.GetView().Id
             };
-            return xPage;
         }
 
         public int PageId
         {
-            get { return (int)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            get
+            {
+                return (int)this.GetAttribute();
+            }
+            set
+            {
+                this.SetAttributeValue(value);
+                foreach (XField xField in XFields)
+                {
+                    xField.PageId = value;
+                }
+            }
         }
 
         public new string Name
@@ -34,10 +44,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
             }
             set
             {
-                this.SetOrClearAttributeValue(value);
+                this.SetAttributeValue(value);
                 foreach (XField xField in XFields)
                 {
-                    xField.PageName = Value;
+                    xField.PageName = value;
                 }
             }
         }
@@ -45,19 +55,19 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public int Position
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int BackgroundId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public int ViewId
         {
             get { return (int)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XView XView => (XView)Parent;
@@ -69,6 +79,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XPage(XElement element)
             : this()
         {
+            if (element.Name != ElementNames.Page)
+            {
+                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
+            }
             Add(element.Attributes());
             Add(element.Elements(ElementNames.Field).Select(child => new XField(child)));
         }
@@ -82,6 +96,18 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 Position = Position,
                 BackgroundId = BackgroundId
             };
+        }
+
+        public void Canonize(TemplateLevel level)
+        {
+            if (level >= TemplateLevel.Page)
+            {
+                BackgroundId = 0;
+            }
+            else
+            {
+                RemoveAttributes();
+            }
         }
     }
 }

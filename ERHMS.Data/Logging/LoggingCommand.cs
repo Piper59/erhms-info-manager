@@ -1,8 +1,8 @@
-﻿using ERHMS.Common;
+﻿using ERHMS.Common.Logging;
 using System.Data;
 using System.Text.RegularExpressions;
 
-namespace ERHMS.Data
+namespace ERHMS.Data.Logging
 {
     public class LoggingCommand : IDbCommand
     {
@@ -28,7 +28,7 @@ namespace ERHMS.Data
             set { BaseCommand.CommandText = value; }
         }
 
-        private string CommandLogText => CommandText == null ? null : lineBreakRegex.Replace(CommandText, " ");
+        private string CommandLogText => lineBreakRegex.Replace(CommandText, " ");
 
         public int CommandTimeout
         {

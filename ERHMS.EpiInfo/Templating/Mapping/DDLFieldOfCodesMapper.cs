@@ -7,11 +7,8 @@ namespace ERHMS.EpiInfo.Templating.Mapping
 {
     public class DDLFieldOfCodesMapper : FieldMapper<DDLFieldOfCodes>
     {
-        private const char FieldInfoSeparator = ':';
-
         protected override MetaFieldType? FieldType => MetaFieldType.Codes;
-
-        protected override FieldPropertySetterCollection<DDLFieldOfCodes> PropertySetters { get; } =
+        protected override FieldPropertySetterCollection<DDLFieldOfCodes> Setters { get; } =
             new FieldPropertySetterCollection<DDLFieldOfCodes>
             {
                 { field => field.AssociatedFieldInformation, nameof(XField.RelateCondition) }
@@ -29,7 +26,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             for (int index = 0; index < fieldInfos.Count; index++)
             {
                 string fieldInfo = fieldInfos[index];
-                IList<string> components = fieldInfo.Split(FieldInfoSeparator);
+                IReadOnlyList<string> components = fieldInfo.Split(':');
                 if (components.Count != 2)
                 {
                     continue;
@@ -39,9 +36,9 @@ namespace ERHMS.EpiInfo.Templating.Mapping
                 {
                     continue;
                 }
-                if (MappingContext.MapFieldId(fieldId, out fieldId))
+                if (Context.MapFieldId(fieldId, out fieldId))
                 {
-                    fieldInfos[index] = $"{columnName}{FieldInfoSeparator}{fieldId}";
+                    fieldInfos[index] = $"{columnName}:{fieldId}";
                     changed = true;
                 }
             }

@@ -1,17 +1,16 @@
 ﻿using Epi;
-using ERHMS.Common;
+using ERHMS.Common.Logging;
 using ERHMS.EpiInfo.Templating.Mapping;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace ERHMS.EpiInfo.Templating
 {
     public class TemplateCanonizer
     {
-        protected class ContextImpl : IMappingContext
+        private class ContextImpl : IMappingContext
         {
             private int pageCount;
             private int pageFieldCount;
@@ -19,7 +18,7 @@ namespace ERHMS.EpiInfo.Templating
             private readonly IDictionary<int, int> viewIdMap = new Dictionary<int, int>();
             private readonly IDictionary<int, int> fieldIdMap = new Dictionary<int, int>();
 
-            public IReadOnlyCollection<IFieldMapper> FieldMappers { get; }
+            public IEnumerable<IFieldMapper> FieldMappers { get; }
 
             public ContextImpl()
             {
@@ -47,7 +46,7 @@ namespace ERHMS.EpiInfo.Templating
                 xField.TabIndex = ++pageFieldCount;
             }
 
-            public void OnXGridTableItemCanonizing(XElement xItem)
+            public void OnXGridColumnCanonizing(XItem xItem)
             {
                 xItem.SetAttributeValue(ColumnNames.GRID_COLUMN_ID, ++gridColumnCount);
             }
@@ -81,87 +80,8 @@ namespace ERHMS.EpiInfo.Templating
             }
         }
 
-        private static readonly IReadOnlyCollection<string> xProjectAttributeNames = new HashSet<string>
-        {
-            nameof(XProject.Id),
-            nameof(XProject.Name),
-            nameof(XProject.Location),
-            nameof(XProject.Description),
-            nameof(XProject.EpiVersion),
-            nameof(XProject.CreateDate)
-        };
-
-        private static readonly IReadOnlyDictionary<string, string> xFieldAttributeNameMap =
-            new Dictionary<string, string>
-            {
-                { "Expr1015", "ControlFontFamily" },
-                { "Expr1016", "ControlFontSize" },
-                { "Expr1017", "ControlFontStyle" }
-            };
-
-        private static readonly IReadOnlyCollection<string> xFieldDuplicateAttributeNames = new HashSet<string>
-        {
-            "ControlFontFamily1",
-            "ControlFontSize1",
-            "ControlFontStyle1"
-        };
-
-        private static IEnumerable<XAttribute> GetNormalizedAttributes(XTemplate xTemplate)
-        {
-            foreach (XAttribute attribute in XTemplate.Create(xTemplate.Level).Attributes())
-            {
-                string value = xTemplate.Attribute(attribute.Name)?.Value;
-                yield return new XAttribute(attribute.Name, value ?? "");
-            }
-        }
-
-        private static IEnumerable<XAttribute> GetNormalizedAttributes(XProject xProject)
-        {
-            foreach (XAttribute attribute in xProject.Attributes())
-            {
-                if (xProjectAttributeNames.Contains(attribute.Name.LocalName))
-                {
-                    yield return attribute;
-                }
-            }
-        }
-
-        private static IEnumerable<XAttribute> GetNormalizedAttributes(XField xField)
-        {
-            bool usedNameMap = false;
-            foreach (XAttribute attribute in xField.Attributes())
-            {
-                if (xFieldAttributeNameMap.TryGetValue(attribute.Name.LocalName, out string attributeName))
-                {
-                    usedNameMap = true;
-                    yield return new XAttribute(attributeName, attribute.Value);
-                }
-                else if (usedNameMap && xFieldAttributeNameMap.Values.Contains(attribute.Name.LocalName))
-                {
-                    continue;
-                }
-                else if (xFieldDuplicateAttributeNames.Contains(attribute.Name.LocalName))
-                {
-                    continue;
-                }
-                else if (attribute.Name.LocalName.EndsWith("Percentage"))
-                {
-                    if (double.TryParse(attribute.Value, out double value))
-                    {
-                        attribute.Value = value.ToString("F6");
-                    }
-                    yield return attribute;
-                }
-                else
-                {
-                    yield return attribute;
-                }
-            }
-        }
-
         public XTemplate XTemplate { get; }
-        public IProgress<string> Progress { get; set; }
-        protected ContextImpl Context { get; private set; }
+        private ContextImpl Context { get; set; }
 
         public TemplateCanonizer(XTemplate xTemplate)
         {
@@ -173,12 +93,8 @@ namespace ERHMS.EpiInfo.Templating
             Context = new ContextImpl();
             try
             {
-                CanonizeXTemplate();
-                CanonizeXProject(XTemplate.XProject);
-                foreach (XView xView in XTemplate.XProject.XViews)
-                {
-                    CanonizeXView(xView);
-                }
+                XTemplate.Canonize();
+                CanonizeXProject();
                 MapXFieldAttributes();
                 CanonizeXGridTables();
             }
@@ -188,43 +104,19 @@ namespace ERHMS.EpiInfo.Templating
             }
         }
 
-        private void CanonizeXTemplate()
+        private void CanonizeXProject()
         {
-            XTemplate.ReplaceAttributes(GetNormalizedAttributes(XTemplate));
-            XTemplate.CreateDate = null;
-        }
-
-        private void CanonizeXProject(XProject xProject)
-        {
-            if (XTemplate.Level == TemplateLevel.Project)
+            XTemplate.XProject.Canonize(XTemplate.Level);
+            foreach (XView xView in XTemplate.XProject.XViews)
             {
-                Progress?.Report($"Canonizing project: {xProject.Name}");
-                xProject.Id = null;
-                xProject.Location = null;
-                xProject.CreateDate = null;
-                xProject.ReplaceAttributes(GetNormalizedAttributes(xProject));
-            }
-            else
-            {
-                xProject.RemoveAttributes();
+                CanonizeXView(xView);
             }
         }
 
         private void CanonizeXView(XView xView)
         {
-            string checkCode = xView.CheckCode?.Trim();
-            if (XTemplate.Level >= TemplateLevel.View)
-            {
-                Progress?.Report($"Canonizing view: {xView.Name}");
-                Context.OnXViewCanonizing(xView);
-                xView.CheckCode = checkCode;
-                xView.SurveyId = null;
-            }
-            else
-            {
-                xView.RemoveAttributes();
-                xView.CheckCode = checkCode;
-            }
+            Context.OnXViewCanonizing(xView);
+            xView.Canonize(XTemplate.Level);
             foreach (XPage xPage in xView.XPages)
             {
                 CanonizeXPage(xPage);
@@ -233,17 +125,8 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXPage(XPage xPage)
         {
-            if (XTemplate.Level >= TemplateLevel.Page)
-            {
-                Progress?.Report($"Canonizing page: {xPage.Name}");
-                Context.OnXPageCanonizing(xPage);
-                xPage.BackgroundId = 0;
-                xPage.ViewId = XTemplate.Level == TemplateLevel.Page ? 1 : xPage.XView.ViewId;
-            }
-            else
-            {
-                xPage.RemoveAttributes();
-            }
+            Context.OnXPageCanonizing(xPage);
+            xPage.Canonize(XTemplate.Level);
             foreach (XField xField in xPage.XFields)
             {
                 CanonizeXField(xField);
@@ -252,11 +135,8 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXField(XField xField)
         {
-            Progress?.Report($"Canonizing field: {xField.Name}");
             Context.OnXFieldCanonizing(xField);
-            xField.PageId = xField.XPage.PageId;
-            xField.UniqueId = null;
-            xField.ReplaceAttributes(GetNormalizedAttributes(xField));
+            xField.Canonize();
             foreach (IFieldMapper mapper in Context.FieldMappers)
             {
                 if (mapper.IsCompatible(xField))
@@ -284,20 +164,14 @@ namespace ERHMS.EpiInfo.Templating
         {
             foreach (XTable xTable in XTemplate.XGridTables)
             {
-                CanonizeXGridTable(xTable);
-            }
-        }
-
-        private void CanonizeXGridTable(XTable xTable)
-        {
-            Progress?.Report($"Canonizing grid table: {xTable.TableName}");
-            foreach (XElement xItem in xTable.XItems)
-            {
-                Context.OnXGridTableItemCanonizing(xItem);
-                int fieldId = (int)xItem.Attribute(ColumnNames.FIELD_ID);
-                if (Context.MapFieldId(fieldId, out fieldId))
+                foreach (XItem xItem in xTable.XItems)
                 {
-                    xItem.SetAttributeValue(ColumnNames.FIELD_ID, fieldId);
+                    Context.OnXGridColumnCanonizing(xItem);
+                    int fieldId = (int)xItem.Attribute(ColumnNames.FIELD_ID);
+                    if (Context.MapFieldId(fieldId, out fieldId))
+                    {
+                        xItem.SetAttributeValue(ColumnNames.FIELD_ID, fieldId);
+                    }
                 }
             }
         }

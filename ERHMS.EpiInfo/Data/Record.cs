@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
-using System.Runtime.CompilerServices;
 
 namespace ERHMS.EpiInfo.Data
 {
@@ -57,7 +56,6 @@ namespace ERHMS.EpiInfo.Data
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
-
         private void OnPropertyChanged(string propertyName) =>
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
@@ -66,17 +64,12 @@ namespace ERHMS.EpiInfo.Data
             return propertiesByName.Keys;
         }
 
-        protected object GetPropertyCore([CallerMemberName] string propertyName = null)
+        public object GetProperty(string propertyName)
         {
             return propertiesByName[propertyName];
         }
 
-        public object GetProperty(string propertyName)
-        {
-            return GetPropertyCore(propertyName);
-        }
-
-        protected bool SetPropertyCore(object value, [CallerMemberName] string propertyName = null)
+        protected internal bool SetProperty(string propertyName, object value)
         {
             if (propertiesByName.TryGetValue(propertyName, out object currentValue) && Equals(value, currentValue))
             {
@@ -90,11 +83,6 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public bool SetProperty(string propertyName, object value)
-        {
-            return SetPropertyCore(value, propertyName);
-        }
-
         public override IEnumerable<string> GetDynamicMemberNames()
         {
             return GetPropertyNames();
@@ -103,12 +91,6 @@ namespace ERHMS.EpiInfo.Data
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             return propertiesByName.TryGetValue(binder.Name, out result);
-        }
-
-        public override bool TrySetMember(SetMemberBinder binder, object value)
-        {
-            SetProperty(binder.Name, value);
-            return true;
         }
 
         public override int GetHashCode()

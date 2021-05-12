@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace ERHMS.Data
+namespace ERHMS.Data.Logging
 {
     public class LoggingConnection : IDbConnection
     {

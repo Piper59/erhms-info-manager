@@ -8,7 +8,6 @@ namespace ERHMS.EpiInfo.Naming
         public abstract class Suffixed<TSuffix> : INameUniquifier
         {
             protected abstract Regex NameRegex { get; }
-            protected abstract string InitialBaseName { get; }
             protected abstract TSuffix InitialSuffix { get; }
 
             public abstract bool Exists(string name);
@@ -18,24 +17,18 @@ namespace ERHMS.EpiInfo.Naming
 
             public virtual string Uniquify(string name)
             {
-                string baseName = InitialBaseName;
-                TSuffix suffix = InitialSuffix;
-                if (NameRegex != null)
+                string baseName;
+                TSuffix suffix;
+                Match match = NameRegex.Match(name);
+                if (match.Success)
                 {
-                    Match match = NameRegex.Match(name);
-                    if (match.Success)
-                    {
-                        Group baseNameGroup = match.Groups["baseName"];
-                        if (baseNameGroup.Success)
-                        {
-                            baseName = baseNameGroup.Value;
-                        }
-                        Group suffixGroup = match.Groups["suffix"];
-                        if (suffixGroup.Success)
-                        {
-                            suffix = GetNextSuffix(ParseSuffix(suffixGroup.Value));
-                        }
-                    }
+                    baseName = match.Groups["baseName"].Value;
+                    suffix = GetNextSuffix(ParseSuffix(match.Groups["suffix"].Value));
+                }
+                else
+                {
+                    baseName = name;
+                    suffix = InitialSuffix;
                 }
                 while (true)
                 {
@@ -51,12 +44,11 @@ namespace ERHMS.EpiInfo.Naming
 
         public abstract class CharSuffixed : Suffixed<char>
         {
-            private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            private static readonly string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
             protected override Regex NameRegex { get; } =
-                new Regex(@"^(?<baseName>.+?)(?:_(?<suffix>[A-Z]))?$", RegexOptions.IgnoreCase);
-
-            protected override char InitialSuffix => Alphabet[1];
+                new Regex(@"^(?<baseName>.+?)(?:_(?<suffix>[A-Z]))$", RegexOptions.IgnoreCase);
+            protected override char InitialSuffix => alphabet[1];
 
             protected override char ParseSuffix(string value)
             {
@@ -65,12 +57,12 @@ namespace ERHMS.EpiInfo.Naming
 
             protected override char GetNextSuffix(char suffix)
             {
-                int index = Alphabet.IndexOf(char.ToUpper(suffix));
+                int index = alphabet.IndexOf(char.ToUpper(suffix));
                 if (index == -1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(suffix));
                 }
-                char nextSuffix = Alphabet[index + 1];
+                char nextSuffix = alphabet[index + 1];
                 return char.IsLower(suffix) ? char.ToLower(nextSuffix) : nextSuffix;
             }
 
@@ -90,6 +82,10 @@ namespace ERHMS.EpiInfo.Naming
                     catch (IndexOutOfRangeException)
                     {
                         name = Format(name, InitialSuffix);
+                        if (!Exists(name))
+                        {
+                            return name;
+                        }
                     }
                 }
             }
@@ -97,7 +93,7 @@ namespace ERHMS.EpiInfo.Naming
 
         public abstract class IntSuffixed : Suffixed<int>
         {
-            protected override Regex NameRegex { get; } = new Regex(@"^(?<baseName>.*[^0-9])(?<suffix>[0-9]+)?$");
+            protected override Regex NameRegex { get; } = new Regex(@"^(?<baseName>.*[^0-9])(?<suffix>[0-9]+)$");
             protected override int InitialSuffix => 2;
 
             protected override int ParseSuffix(string value)

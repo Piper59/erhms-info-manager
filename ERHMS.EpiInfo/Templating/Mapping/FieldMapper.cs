@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.Common.Reflection;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
 using System.Collections.Generic;
@@ -9,16 +10,14 @@ namespace ERHMS.EpiInfo.Templating.Mapping
 {
     public static class FieldMapper
     {
-        private static readonly IReadOnlyCollection<Type> instanceTypes = typeof(IFieldMapper).Assembly.GetTypes()
-            .Where(type => typeof(IFieldMapper).IsAssignableFrom(type) && !type.IsAbstract)
-            .ToList();
+        private static readonly IEnumerable<Type> instanceTypes = typeof(IFieldMapper).GetInstanceTypes().ToList();
 
-        public static IEnumerable<IFieldMapper> GetInstances(IMappingContext mappingContext)
+        public static IEnumerable<IFieldMapper> GetInstances(IMappingContext context)
         {
             foreach (Type instanceType in instanceTypes)
             {
                 IFieldMapper instance = (IFieldMapper)Activator.CreateInstance(instanceType);
-                instance.MappingContext = mappingContext;
+                instance.Context = context;
                 yield return instance;
             }
         }
@@ -28,8 +27,8 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         where TField : Field
     {
         protected abstract MetaFieldType? FieldType { get; }
-        protected abstract FieldPropertySetterCollection<TField> PropertySetters { get; }
-        public IMappingContext MappingContext { get; set; }
+        protected abstract FieldPropertySetterCollection<TField> Setters { get; }
+        public IMappingContext Context { get; set; }
 
         public bool IsCompatible(Field field)
         {
@@ -44,16 +43,16 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         public bool SetProperties(XField xField, TField field)
         {
             bool changed = false;
-            foreach (IFieldPropertySetter<TField> propertySetter in PropertySetters)
+            foreach (IFieldPropertySetter<TField> setter in Setters)
             {
                 try
                 {
-                    propertySetter.SetProperty(xField, field);
+                    setter.SetProperty(xField, field);
                     changed = true;
                 }
                 catch (FieldPropertySetterException ex)
                 {
-                    MappingContext.OnError(ex, out bool handled);
+                    Context.OnError(ex, out bool handled);
                     if (!handled)
                     {
                         throw;

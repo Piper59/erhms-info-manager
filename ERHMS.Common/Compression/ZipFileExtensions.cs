@@ -2,9 +2,9 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace ERHMS.Common
+namespace ERHMS.Common.Compression
 {
-    public static class ZipExtensions
+    public static class ZipFileExtensions
     {
         public static void CreateFromDirectory(
             string directoryPath,

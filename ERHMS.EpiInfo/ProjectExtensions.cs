@@ -3,22 +3,23 @@ using Epi.Data;
 using Epi.Data.Services;
 using Epi.Fields;
 using ERHMS.Common;
+using ERHMS.Common.Logging;
 using ERHMS.Data;
 using ERHMS.EpiInfo.Data;
+using ERHMS.EpiInfo.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
-using DatabaseProviderExtensions = ERHMS.EpiInfo.Data.DatabaseProviderExtensions;
 
 namespace ERHMS.EpiInfo
 {
     public static class ProjectExtensions
     {
-        private static DbDriverInfo GetDriverInfo(IDatabase database)
+        private static DbDriverInfo GetDbDriverInfo(IDatabase database)
         {
-            DbConnectionStringBuilder connectionStringBuilder = database.Provider.ToProviderFactory()
-                .CreateConnectionStringBuilder();
+            DbProviderFactory providerFactory = database.Provider.ToProviderFactory();
+            DbConnectionStringBuilder connectionStringBuilder = providerFactory.CreateConnectionStringBuilder();
             connectionStringBuilder.ConnectionString = database.ConnectionString;
             return new DbDriverInfo
             {
@@ -37,15 +38,21 @@ namespace ERHMS.EpiInfo
                 Name = creationInfo.Name,
                 Description = creationInfo.Description,
                 Location = creationInfo.Location,
-                CollectedDataDriver = creationInfo.Database.Provider.ToDriverName(),
+                CollectedDataDriver = ConfigurationExtensions.GetDatabaseDriver(creationInfo.Database.Provider),
                 CollectedDataConnectionString = creationInfo.Database.ConnectionString,
-                CollectedDataDbInfo = GetDriverInfo(creationInfo.Database),
+                CollectedDataDbInfo = GetDbDriverInfo(creationInfo.Database),
                 MetadataSource = MetadataSource.SameDb
             };
             project.CollectedData.Initialize(project.CollectedDataDbInfo, project.CollectedDataDriver, false);
             project.Metadata.AttachDbDriver(project.CollectedData.GetDbDriver());
             project.Save();
             return project;
+        }
+
+        public static Project Open(string path)
+        {
+            Log.Instance.Debug($"Opening project: {path}");
+            return new Project(path);
         }
 
         public static bool IsInitialized(this Project @this)
@@ -59,16 +66,10 @@ namespace ERHMS.EpiInfo
             ((MetadataDbProvider)@this.Metadata).CreateMetadataTables();
         }
 
-        public static Project Open(string path)
-        {
-            Log.Instance.Debug($"Opening project: {path}");
-            return new Project(path);
-        }
-
         public static IDatabase GetDatabase(this Project @this)
         {
-            return DatabaseProviderExtensions.FromDriverName(@this.CollectedDataDriver)
-                .ToDatabase(@this.CollectedDataConnectionString);
+            DatabaseProvider provider = ConfigurationExtensions.GetDatabaseProvider(@this.CollectedDataDriver);
+            return provider.ToDatabase(@this.CollectedDataConnectionString);
         }
 
         public static IEnumerable<string> GetTableNames(this Project @this, TableTypes tableTypes)
@@ -80,9 +81,7 @@ namespace ERHMS.EpiInfo
                     yield return tableName;
                 }
             }
-            if (tableTypes.HasFlag(TableTypes.View)
-                || tableTypes.HasFlag(TableTypes.Page)
-                || tableTypes.HasFlag(TableTypes.GridField))
+            if (tableTypes.HasAnyFlag(TableTypes.View, TableTypes.Page, TableTypes.GridField))
             {
                 foreach (View view in @this.Views)
                 {
@@ -108,30 +107,41 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        private static void DeleteCore(this Project @this, View view)
+        public static void DeletePage(this Project @this, Page page)
+        {
+            Log.Instance.Debug($"Deleting page: {page.DisplayName}");
+            View view = page.GetView();
+            @this.CollectedData.DeletePage(page);
+            @this.Metadata.DeepDeletePage(page);
+            view.Pages.Remove(page);
+            @this.Metadata.SynchronizePageNumbersOnDelete(view, page.Position);
+            view.MustRefreshFieldCollection = true;
+        }
+
+        private static void DeleteViewCore(this Project @this, View view)
         {
             Log.Instance.Debug($"Deleting view: {view.DisplayName}");
-            view.DeleteData();
-            view.DeleteMetadata();
+            @this.CollectedData.DeleteView(view);
+            @this.Metadata.DeepDeleteView(view);
             @this.Views.Remove(view);
         }
 
-        public static void Delete(this Project @this, View view)
+        public static void DeleteView(this Project @this, View view)
         {
             if (view.IsRelatedView)
             {
                 view.Unrelate();
             }
-            @this.DeleteCore(view);
+            @this.DeleteViewCore(view);
         }
 
-        public static void DeleteTree(this Project @this, View view)
+        public static void DeleteViewTree(this Project @this, View view)
         {
             foreach (View descendantView in view.GetDescendantViews())
             {
-                @this.DeleteCore(descendantView);
+                @this.DeleteViewCore(descendantView);
             }
-            @this.Delete(view);
+            @this.DeleteViewCore(view);
         }
     }
 }

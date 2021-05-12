@@ -6,8 +6,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public class InputFieldWithoutSeparatePromptMapper : FieldMapper<InputFieldWithoutSeparatePrompt>
     {
         protected override MetaFieldType? FieldType => null;
-
-        protected override FieldPropertySetterCollection<InputFieldWithoutSeparatePrompt> PropertySetters { get; } =
+        protected override FieldPropertySetterCollection<InputFieldWithoutSeparatePrompt> Setters { get; } =
             new FieldPropertySetterCollection<InputFieldWithoutSeparatePrompt>
             {
                 { field => field.ShouldRepeatLast },

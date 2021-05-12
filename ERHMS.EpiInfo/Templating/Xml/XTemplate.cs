@@ -9,17 +9,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XTemplate : XElement
     {
-        public const string DateFormat = "F";
-
-        public static XmlWriterSettings GetXmlWriterSettings(bool canonical)
-        {
-            return new XmlWriterSettings
-            {
-                NewLineOnAttributes = canonical,
-                Indent = true,
-                OmitXmlDeclaration = true
-            };
-        }
+        public static string DateFormat => "F";
 
         public static XTemplate Create(TemplateLevel level)
         {
@@ -45,30 +35,31 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public new string Name
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public string Description
         {
             get { return (string)this.GetAttribute(); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public DateTime? CreateDate
         {
-            get { return this.GetAttributeValueOrNull<DateTime>(); }
-            set { this.SetOrClearAttributeValue(value?.ToString(DateFormat)); }
+            get { return this.GetAttributeValue<DateTime>(); }
+            set { this.SetAttributeValue(value?.ToString(DateFormat)); }
         }
 
         public TemplateLevel Level
         {
             get { return TemplateLevelExtensions.Parse((string)this.GetAttribute()); }
-            set { this.SetOrClearAttributeValue(value); }
+            set { this.SetAttributeValue(value); }
         }
 
         public XProject XProject => (XProject)Element(ElementNames.Project);
         public IEnumerable<XTable> XSourceTables => Elements(ElementNames.SourceTable).Cast<XTable>();
         public IEnumerable<XTable> XGridTables => Elements(ElementNames.GridTable).Cast<XTable>();
+        public bool Canonized { get; set; }
 
         public XTemplate()
             : base(ElementNames.Template) { }
@@ -76,6 +67,10 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XTemplate(XElement element)
             : this()
         {
+            if (element.Name != ElementNames.Template)
+            {
+                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
+            }
             Add(element.Attributes());
             Add(new XProject(element.Element(ElementNames.Project)));
             Add(element.Elements(ElementNames.SourceTable).Select(child => new XTable(child)));
@@ -83,17 +78,22 @@ namespace ERHMS.EpiInfo.Templating.Xml
             Add(element.Element(ElementNames.FieldFootprint));
         }
 
-        public void Save(string path, bool canonical)
+        public override void WriteTo(XmlWriter writer)
         {
-            using (XmlWriter writer = XmlWriter.Create(path, GetXmlWriterSettings(canonical)))
-            {
-                Save(writer);
-            }
+            writer.Settings.OmitXmlDeclaration = true;
+            writer.Settings.Indent = true;
+            writer.Settings.NewLineOnAttributes = Canonized;
+            base.WriteTo(writer);
         }
 
-        public new void Save(string path)
+        public void Canonize()
         {
-            Save(path, false);
+            Canonized = true;
+            ReplaceAttributes(
+                this.CopyAttribute(nameof(Name)),
+                this.CopyAttribute(nameof(Description)),
+                new XAttribute(nameof(CreateDate), ""),
+                this.CopyAttribute(nameof(Level)));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ERHMS.EpiInfo.Metadata
 {
     public class GridColumnDataRow
     {
-        private static readonly IReadOnlyCollection<string> metadataNames =
+        private static readonly IEnumerable<string> metadataNames =
             new HashSet<string>(NameComparer.Default)
             {
                 ColumnNames.UNIQUE_ROW_ID,

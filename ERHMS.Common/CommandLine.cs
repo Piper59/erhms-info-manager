@@ -5,12 +5,17 @@ namespace ERHMS.Common
 {
     public static class CommandLine
     {
-        public static string Quote(string arg)
+        public static string Escape(string arg)
         {
-            return string.Format("\"{0}\"", arg.Replace("\"", "\"\""));
+            return arg.Replace("\"", "\"\"");
         }
 
-        public static string GetArguments(IEnumerable<string> args)
+        public static string Quote(string arg)
+        {
+            return $"\"{Escape(arg)}\"";
+        }
+
+        public static string Quote(IEnumerable<string> args)
         {
             return string.Join(" ", args.Select(Quote));
         }

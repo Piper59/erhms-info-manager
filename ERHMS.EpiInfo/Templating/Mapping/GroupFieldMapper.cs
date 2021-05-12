@@ -25,8 +25,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         }
 
         protected override MetaFieldType? FieldType => MetaFieldType.Group;
-
-        protected override FieldPropertySetterCollection<GroupField> PropertySetters { get; } =
+        protected override FieldPropertySetterCollection<GroupField> Setters { get; } =
             new FieldPropertySetterCollection<GroupField>
             {
                 { field => field.ChildFieldNames, nameof(XField.List) },
@@ -45,7 +44,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             for (int index = 0; index < fieldNames.Count; index++)
             {
                 string fieldName = fieldNames[index];
-                if (MappingContext.MapFieldName(fieldName, out fieldName))
+                if (Context.MapFieldName(fieldName, out fieldName))
                 {
                     fieldNames[index] = fieldName;
                     changed = true;
@@ -83,16 +82,13 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             if (xField.BackgroundColor != null)
             {
                 Color backgroundColor = Color.FromArgb(xField.BackgroundColor.Value);
-                Color opaqueBackgroundColor = Color.FromArgb(0xff, backgroundColor);
-                xField.BackgroundColor = opaqueBackgroundColor.ToArgb();
+                xField.BackgroundColor = Color.FromArgb(0xff, backgroundColor).ToArgb();
                 changed = true;
             }
             if (xField.List != null)
             {
-                IReadOnlyCollection<string> childFieldNames =
-                    new HashSet<string>(xField.ListItems, NameComparer.Default);
-                xField.ListItems = xField.XPage.XFields.Select(pageXField => pageXField.Name)
-                    .Where(fieldName => childFieldNames.Contains(fieldName));
+                IEnumerable<string> childFieldNames = new HashSet<string>(xField.ListItems, NameComparer.Default);
+                xField.ListItems = xField.XPage.XFields.Select(_xField => _xField.Name).Where(childFieldNames.Contains);
                 changed = true;
             }
             return changed;

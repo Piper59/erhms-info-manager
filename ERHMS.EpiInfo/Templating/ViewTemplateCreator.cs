@@ -6,7 +6,6 @@ namespace ERHMS.EpiInfo.Templating
     public class ViewTemplateCreator : TemplateCreator
     {
         public View View { get; }
-        protected override string DisplayName => View.DisplayName;
 
         public ViewTemplateCreator(View view)
             : base(view.GetMetadata())

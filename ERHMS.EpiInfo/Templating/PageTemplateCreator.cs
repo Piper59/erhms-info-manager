@@ -6,7 +6,6 @@ namespace ERHMS.EpiInfo.Templating
     public class PageTemplateCreator : TemplateCreator
     {
         public Page Page { get; }
-        protected override string DisplayName => Page.DisplayName;
 
         public PageTemplateCreator(Page page)
             : base(page.GetMetadata())

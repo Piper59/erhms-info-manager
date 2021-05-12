@@ -1,4 +1,5 @@
-﻿using ERHMS.Common;
+﻿using ERHMS.Common.Logging;
+using ERHMS.Data.Logging;
 using System.Data;
 using System.Data.Common;
 
@@ -24,14 +25,13 @@ namespace ERHMS.Data
 
         public abstract bool Exists();
         protected abstract void CreateCore();
+        protected abstract void DeleteCore();
 
         public void Create()
         {
             Log.Instance.Debug($"Creating database: {this}");
             CreateCore();
         }
-
-        protected abstract void DeleteCore();
 
         public void Delete()
         {

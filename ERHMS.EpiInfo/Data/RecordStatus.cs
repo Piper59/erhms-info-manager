@@ -17,10 +17,5 @@
         {
             return deleted ? RecordStatus.Deleted : RecordStatus.Undeleted;
         }
-
-        public static bool IsEquivalent(this RecordStatus status1, RecordStatus status2)
-        {
-            return status1.ToDeleted() == status2.ToDeleted();
-        }
     }
 }

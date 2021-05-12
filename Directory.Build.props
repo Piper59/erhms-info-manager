@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
     <AppTitle>ERHMS Info Manager</AppTitle>
-    <BuildContainerDir>$(SolutionDir)Build\$(Configuration)\</BuildContainerDir>
-    <BuildDirName>$(AppTitle)</BuildDirName>
-    <BuildDir>$(BuildContainerDir)$(BuildDirName)\</BuildDir>
+    <EpiInfoDir>$(SolutionDir)Epi Info 7\</EpiInfoDir>
+    <BuildDir>$(SolutionDir)Build\$(Configuration)\$(AppTitle)\</BuildDir>
   </PropertyGroup>
 
   <ItemGroup>

@@ -18,7 +18,8 @@ namespace ERHMS.EpiInfo.Templating
 
         protected override void InstantiateCore()
         {
-            View = InstantiateView(Project, XTemplate.XProject.XViews.Single(), true);
+            XView xView = XTemplate.XProject.XViews.Single();
+            View = InstantiateView(Project, xView);
         }
     }
 }

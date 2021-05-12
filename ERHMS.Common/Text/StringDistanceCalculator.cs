@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ERHMS.Common
+namespace ERHMS.Common.Text
 {
     // https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance#Optimal_string_alignment_distance
     public static class StringDistanceCalculator
@@ -41,7 +41,15 @@ namespace ERHMS.Common
         public static double GetSimilarity(string str1, string str2)
         {
             int maxDistance = Math.Max(str1.Length, str2.Length);
-            return maxDistance == 0 ? 1.0 : 1.0 - (double)GetDistance(str1, str2) / maxDistance;
+            if (maxDistance == 0)
+            {
+                return 1.0;
+            }
+            else
+            {
+                int distance = GetDistance(str1, str2);
+                return (double)distance / maxDistance;
+            }
         }
     }
 }

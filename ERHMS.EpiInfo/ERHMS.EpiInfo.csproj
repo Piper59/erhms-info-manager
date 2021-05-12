@@ -63,10 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationExtensions.cs" />
-    <Compile Include="Data\DatabaseProviderExtensions.cs" />
+    <Compile Include="Data\CollectedDataProviderExtensions.cs" />
+    <Compile Include="Data\IDbDriverExtensions.cs" />
     <Compile Include="Data\Record.cs" />
     <Compile Include="Data\RecordCollection.cs" />
     <Compile Include="Data\RecordMapper.cs" />
+    <Compile Include="Data\RecordQueryInfo.cs" />
     <Compile Include="Data\RecordRepository.cs" />
     <Compile Include="Data\RecordStatus.cs" />
     <Compile Include="Metadata\FieldDataRow.cs" />
@@ -74,6 +76,8 @@
     <Compile Include="Metadata\FieldDataTable.cs" />
     <Compile Include="Metadata\GridColumnDataRow.cs" />
     <Compile Include="Metadata\GridColumnDataTable.cs" />
+    <Compile Include="Metadata\IMetadataProviderExtensions.cs" />
+    <Compile Include="Metadata\MetadataDbProviderExtensions.cs" />
     <Compile Include="Metadata\MetaFieldTypeExtensions.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Naming\FieldNameUniquifier.cs" />
@@ -85,7 +89,6 @@
     <Compile Include="Naming\TableNameUniquifier.cs" />
     <Compile Include="Naming\ViewNameUniquifier.cs" />
     <Compile Include="Naming\ViewNameValidator.cs" />
-    <Compile Include="PageExtensions.cs" />
     <Compile Include="ProjectCreationInfo.cs" />
     <Compile Include="ProjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,6 +134,7 @@
     <Compile Include="Templating\Xml\ElementNames.cs" />
     <Compile Include="Templating\Xml\XElementExtensions.cs" />
     <Compile Include="Templating\Xml\XField.cs" />
+    <Compile Include="Templating\Xml\XItem.cs" />
     <Compile Include="Templating\Xml\XPage.cs" />
     <Compile Include="Templating\Xml\XProject.cs" />
     <Compile Include="Templating\Xml\XTable.cs" />
