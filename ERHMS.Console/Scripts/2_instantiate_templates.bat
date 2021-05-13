@@ -19,5 +19,5 @@ set view_name=%~2
 set template_path=Templates\Forms\%project_type%\%view_name%.xml
 set project_path=Projects\%project_type%\%project_type%.prj
 ERHMS.Console InstantiateTemplate "%template_path%" "%project_path%" "%view_name%" || exit /b 1
-ERHMS.Console Synchronize "%project_path%" "%view_name%" || exit /b 1
+ERHMS.Console SynchronizeView "%project_path%" "%view_name%" || exit /b 1
 goto :eof

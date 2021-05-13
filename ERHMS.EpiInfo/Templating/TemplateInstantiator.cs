@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo.Templating
                 new Dictionary<int, IDictionary<string, string>>();
 
             public IMetadataProvider Metadata { get; }
-            public IReadOnlyCollection<IFieldMapper> FieldMappers { get; }
+            public IEnumerable<IFieldMapper> FieldMappers { get; }
             public TableNameUniquifier TableNames { get; }
             public ViewNameUniquifier ViewNames { get; }
             public PageNameUniquifier PageNames { get; private set; }

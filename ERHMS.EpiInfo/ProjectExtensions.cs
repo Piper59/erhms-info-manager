@@ -38,7 +38,7 @@ namespace ERHMS.EpiInfo
                 Name = creationInfo.Name,
                 Description = creationInfo.Description,
                 Location = creationInfo.Location,
-                CollectedDataDriver = ConfigurationExtensions.GetDatabaseDriver(creationInfo.Database.Provider),
+                CollectedDataDriver = Configuration.GetDatabaseDriver(creationInfo.Database.Provider),
                 CollectedDataConnectionString = creationInfo.Database.ConnectionString,
                 CollectedDataDbInfo = GetDbDriverInfo(creationInfo.Database),
                 MetadataSource = MetadataSource.SameDb
@@ -68,7 +68,7 @@ namespace ERHMS.EpiInfo
 
         public static IDatabase GetDatabase(this Project @this)
         {
-            DatabaseProvider provider = ConfigurationExtensions.GetDatabaseProvider(@this.CollectedDataDriver);
+            DatabaseProvider provider = Configuration.GetDatabaseProvider(@this.CollectedDataDriver);
             return provider.ToDatabase(@this.CollectedDataConnectionString);
         }
 

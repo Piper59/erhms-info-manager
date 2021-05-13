@@ -4,6 +4,7 @@ using log4net.Core;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
 
 namespace ERHMS.Common.Logging
@@ -41,7 +42,7 @@ namespace ERHMS.Common.Logging
             catch { }
         }
 
-        public static void Configure(params IAppender[] appenders)
+        public static void Initialize(params IAppender[] appenders)
         {
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             foreach (IAppender appender in appenders)
@@ -53,6 +54,14 @@ namespace ERHMS.Common.Logging
                 hierarchy.Root.AddAppender(appender);
             }
             hierarchy.Configured = true;
+        }
+
+        public static string GetFile(this ILog @this)
+        {
+            return @this.Logger.Repository.GetAppenders()
+                .OfType<FileAppender>()
+                .FirstOrDefault()
+                ?.File;
         }
     }
 }

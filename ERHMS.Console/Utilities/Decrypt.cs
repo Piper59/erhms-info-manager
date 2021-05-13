@@ -1,5 +1,4 @@
-﻿using Epi;
-using static System.Console;
+﻿using static System.Console;
 
 namespace ERHMS.Console.Utilities
 {
@@ -14,7 +13,7 @@ namespace ERHMS.Console.Utilities
 
         public void Run()
         {
-            Out.WriteLine(Configuration.Decrypt(Text));
+            Out.WriteLine(Epi.Configuration.Decrypt(Text));
         }
     }
 }

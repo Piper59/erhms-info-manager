@@ -15,7 +15,7 @@ namespace ERHMS.Domain
         public static CoreView PostDeploymentHealthSurvey { get; } = new CoreView(Phase.PostDeployment);
         public static CoreView AfterActionReview { get; } = new CoreView(Phase.PostDeployment);
 
-        public static IReadOnlyCollection<CoreView> Instances { get; } = new CoreView[]
+        public static IEnumerable<CoreView> Instances { get; } = new CoreView[]
         {
             WorkerRosteringForm,
             PreDeploymentHealthSurvey,

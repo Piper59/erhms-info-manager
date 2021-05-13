@@ -1,6 +1,7 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
 using System;
+using System.Linq;
 
 namespace ERHMS.Console.Utilities
 {
@@ -28,13 +29,9 @@ namespace ERHMS.Console.Utilities
             Page page = new Page(view)
             {
                 Name = PageName,
-                Position = view.GetMaxPagePosition() + 1
+                Position = view.Pages.Count == 0 ? 0 : view.Pages.Last().Position + 1
             };
             project.Metadata.InsertPage(page);
-            if (view.TableExists())
-            {
-                view.Synchronize();
-            }
         }
     }
 }

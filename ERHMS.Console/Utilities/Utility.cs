@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Common.Reflection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,25 +11,21 @@ namespace ERHMS.Console.Utilities
 {
     public static class Utility
     {
-        private const string HelpArg = "/?";
-
-        private static readonly IReadOnlyCollection<Type> instanceTypes = typeof(IUtility).Assembly.GetTypes()
-            .Where(type => typeof(IUtility).IsAssignableFrom(type) && !type.IsAbstract)
-            .ToList();
-
-        private static StringComparer ArgComparer => StringComparer.OrdinalIgnoreCase;
-        private static string ExecutableName => Environment.GetCommandLineArgs()[0];
+        private static readonly IEnumerable<Type> instanceTypes = typeof(IUtility).GetInstanceTypes().ToList();
+        private static readonly StringComparer argComparer = StringComparer.OrdinalIgnoreCase;
+        private static readonly string executableName = Environment.GetCommandLineArgs()[0];
+        private static readonly string helpArg = "/?";
 
         private static string GetUsage()
         {
             StringBuilder usage = new StringBuilder();
             usage.AppendLine("Usage:");
-            usage.AppendLine($"  {ExecutableName} {HelpArg}");
-            usage.AppendLine($"  {ExecutableName} UTILITY {HelpArg}");
-            usage.AppendLine($"  {ExecutableName} UTILITY [ARGUMENT ...]");
+            usage.AppendLine($"  {executableName} {helpArg}");
+            usage.AppendLine($"  {executableName} UTILITY {helpArg}");
+            usage.AppendLine($"  {executableName} UTILITY [ARGUMENT ...]");
             usage.AppendLine();
             usage.Append("Utilities:");
-            foreach (Type instanceType in instanceTypes.OrderBy(instanceType => instanceType.Name, ArgComparer))
+            foreach (Type instanceType in instanceTypes.OrderBy(instanceType => instanceType.Name, argComparer))
             {
                 usage.AppendLine();
                 usage.Append($"  {instanceType.Name}");
@@ -38,12 +35,16 @@ namespace ERHMS.Console.Utilities
 
         private static string GetUsage(Type instanceType)
         {
+            if (instanceType == null)
+            {
+                return GetUsage();
+            }
             StringBuilder usage = new StringBuilder();
             usage.Append("Usage:");
             foreach (ConstructorInfo constructor in instanceType.GetConstructors())
             {
                 usage.AppendLine();
-                usage.Append($"  {ExecutableName} {instanceType.Name}");
+                usage.Append($"  {executableName} {instanceType.Name}");
                 foreach (ParameterInfo parameter in constructor.GetParameters())
                 {
                     usage.Append($" {parameter.Name}");
@@ -54,75 +55,70 @@ namespace ERHMS.Console.Utilities
 
         private static Type GetInstanceType(string instanceTypeName)
         {
-            Type instanceType = instanceTypes
-                .SingleOrDefault(_instanceType => ArgComparer.Equals(_instanceType.Name, instanceTypeName));
-            if (instanceType == null)
+            foreach (Type instanceType in instanceTypes)
             {
-                throw new ArgumentException($"Utility '{instanceTypeName}' does not exist.");
+                if (argComparer.Equals(instanceType.Name, instanceTypeName))
+                {
+                    return instanceType;
+                }
             }
-            return instanceType;
+            throw new ArgumentException($"Utility '{instanceTypeName}' does not exist.");
         }
 
         private static ConstructorInfo GetConstructor(Type instanceType, int parameterCount)
         {
-            ConstructorInfo constructor = instanceType.GetConstructors()
-                .SingleOrDefault(_constructor => _constructor.GetParameters().Length == parameterCount);
-            if (constructor == null)
+            foreach (ConstructorInfo constructor in instanceType.GetConstructors())
+            {
+                if (constructor.GetParameters().Length == parameterCount)
+                {
+                    return constructor;
+                }
+            }
+            throw new ArgumentException(
+                $"Utility '{instanceType.Name}' cannot be executed with the specified arguments.");
+        }
+
+        private static object GetParameter(ParameterInfo parameter, string arg)
+        {
+            try
+            {
+                TypeConverter converter = TypeDescriptor.GetConverter(parameter.ParameterType);
+                return converter.ConvertFromString(arg);
+            }
+            catch (Exception ex)
             {
                 throw new ArgumentException(
-                    $"Utility '{instanceType.Name}' cannot be executed with the specified arguments.");
+                    $"An error occurred while parsing argument '{parameter.Name}': {ex.Message}");
             }
-            return constructor;
         }
 
-        private static IEnumerable<object> GetParameterValues(ConstructorInfo constructor, IReadOnlyList<string> args)
-        {
-            IReadOnlyList<ParameterInfo> parameters = constructor.GetParameters();
-            IList<object> parameterValues = new List<object>(parameters.Count);
-            for (int index = 0; index < parameters.Count; index++)
-            {
-                ParameterInfo parameter = parameters[index];
-                try
-                {
-                    TypeConverter converter = TypeDescriptor.GetConverter(parameter.ParameterType);
-                    parameterValues.Add(converter.ConvertFromString(args[index]));
-                }
-                catch (Exception ex)
-                {
-                    throw new ArgumentException(
-                        $"An error occurred while parsing argument '{parameter.Name}': {ex.Message}");
-                }
-            }
-            return parameterValues;
-        }
-
-        public static IUtility ParseArgs(IReadOnlyList<string> args)
+        public static IUtility ParseArgs(string[] args)
         {
             Type instanceType = null;
             try
             {
-                if (args.Count == 0)
+                if (args.Length == 0)
                 {
                     throw new ArgumentException("No utility specified.");
                 }
-                if (ArgComparer.Equals(args[0], HelpArg))
+                if (argComparer.Equals(args[0], helpArg))
                 {
                     Out.WriteLine(GetUsage());
                     Environment.Exit(ErrorCodes.Success);
                     return null;
                 }
-                string instanceTypeName = args[0];
-                IReadOnlyList<string> constructorArgs = args.Skip(1).ToList();
-                instanceType = GetInstanceType(instanceTypeName);
-                if (constructorArgs.Count > 0 && ArgComparer.Equals(constructorArgs[0], HelpArg))
+                instanceType = GetInstanceType(args[0]);
+                if (args.Length > 1 && argComparer.Equals(args[1], helpArg))
                 {
                     Out.WriteLine(GetUsage(instanceType));
                     Environment.Exit(ErrorCodes.Success);
                     return null;
                 }
-                ConstructorInfo constructor = GetConstructor(instanceType, constructorArgs.Count);
-                object[] parameterValues = GetParameterValues(constructor, constructorArgs).ToArray();
-                return (IUtility)constructor.Invoke(parameterValues);
+                ConstructorInfo constructor = GetConstructor(instanceType, args.Length - 1);
+                object[] parameters = constructor.GetParameters()
+                    .Zip(args.Skip(1), GetParameter)
+                    .ToArray();
+                return (IUtility)constructor.Invoke(parameters);
             }
             catch (Exception ex)
             {
@@ -130,7 +126,7 @@ namespace ERHMS.Console.Utilities
                 Error.WriteLine(ex.Message);
                 ResetColor();
                 Error.WriteLine();
-                Error.WriteLine(instanceType == null ? GetUsage() : GetUsage(instanceType));
+                Error.WriteLine(GetUsage(instanceType));
                 Environment.Exit(ErrorCodes.InvalidCommandLine);
                 return null;
             }

@@ -1,5 +1,5 @@
 ﻿using Epi;
-using ERHMS.Common;
+using ERHMS.Common.Logging;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
@@ -32,27 +32,31 @@ namespace ERHMS.Console.Utilities
             PageName = pageName;
         }
 
-        public void Run()
+        private TemplateCreator GetCreator()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
-            TemplateCreator creator;
             if (ViewName == null)
             {
-                creator = new ProjectTemplateCreator(project);
+                return new ProjectTemplateCreator(project);
             }
             else
             {
                 View view = project.Views[ViewName];
                 if (PageName == null)
                 {
-                    creator = new ViewTemplateCreator(view);
+                    return new ViewTemplateCreator(view);
                 }
                 else
                 {
                     Page page = view.GetPageByName(PageName);
-                    creator = new PageTemplateCreator(page);
+                    return new PageTemplateCreator(page);
                 }
             }
+        }
+
+        public void Run()
+        {
+            TemplateCreator creator = GetCreator();
             creator.Progress = Log.Progress;
             XTemplate xTemplate = creator.Create();
             Directory.CreateDirectory(Path.GetDirectoryName(TemplatePath));

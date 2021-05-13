@@ -7,29 +7,29 @@ namespace ERHMS.Console.Utilities
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
-        public bool IncludeDescendants { get; }
+        public bool Tree { get; }
 
-        public DeleteView(string projectPath, string viewName)
-            : this(projectPath, viewName, true) { }
-
-        public DeleteView(string projectPath, string viewName, bool includeDescendants)
+        public DeleteView(string projectPath, string viewName, bool tree)
         {
             ProjectPath = projectPath;
             ViewName = viewName;
-            IncludeDescendants = includeDescendants;
+            Tree = tree;
         }
+
+        public DeleteView(string projectPath, string viewName)
+            : this(projectPath, viewName, true) { }
 
         public void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
-            if (IncludeDescendants)
+            if (Tree)
             {
-                project.DeleteTree(view);
+                project.DeleteViewTree(view);
             }
             else
             {
-                project.Delete(view);
+                project.DeleteView(view);
             }
         }
     }

@@ -84,7 +84,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
                     new XAttribute(nameof(Location), ""),
                     this.CopyAttribute(nameof(Description)),
                     this.CopyAttribute(nameof(EpiVersion)),
-                    new XAttribute(nameof(CreateDate), "")));
+                    new XAttribute(nameof(CreateDate), ""));
             }
             else
             {

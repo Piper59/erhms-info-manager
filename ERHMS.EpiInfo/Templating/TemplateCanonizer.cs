@@ -81,6 +81,7 @@ namespace ERHMS.EpiInfo.Templating
         }
 
         public XTemplate XTemplate { get; }
+        public IProgress<string> Progress { get; set; }
         private ContextImpl Context { get; set; }
 
         public TemplateCanonizer(XTemplate xTemplate)
@@ -115,6 +116,7 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXView(XView xView)
         {
+            Progress?.Report($"Canonizing view: {xView.Name}");
             Context.OnXViewCanonizing(xView);
             xView.Canonize(XTemplate.Level);
             foreach (XPage xPage in xView.XPages)
@@ -125,6 +127,7 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXPage(XPage xPage)
         {
+            Progress?.Report($"Canonizing page: {xPage.Name}");
             Context.OnXPageCanonizing(xPage);
             xPage.Canonize(XTemplate.Level);
             foreach (XField xField in xPage.XFields)
@@ -135,6 +138,7 @@ namespace ERHMS.EpiInfo.Templating
 
         private void CanonizeXField(XField xField)
         {
+            Progress?.Report($"Canonizing field: {xField.Name}");
             Context.OnXFieldCanonizing(xField);
             xField.Canonize();
             foreach (IFieldMapper mapper in Context.FieldMappers)
@@ -164,6 +168,7 @@ namespace ERHMS.EpiInfo.Templating
         {
             foreach (XTable xTable in XTemplate.XGridTables)
             {
+                Progress?.Report($"Canonizing grid table: {xTable.TableName}");
                 foreach (XItem xItem in xTable.XItems)
                 {
                     Context.OnXGridColumnCanonizing(xItem);

@@ -1,5 +1,4 @@
 ﻿using Epi;
-using System.Linq;
 
 namespace ERHMS.EpiInfo.Naming
 {
@@ -14,7 +13,7 @@ namespace ERHMS.EpiInfo.Naming
 
         public override bool Exists(string name)
         {
-            return View.Fields.Keys.Contains(name);
+            return View.Fields.Contains(name);
         }
     }
 }

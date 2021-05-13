@@ -21,7 +21,7 @@ namespace ERHMS.Console.Utilities
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
             Page page = view.GetPageByName(PageName);
-            view.Delete(page);
+            project.DeletePage(page);
         }
     }
 }

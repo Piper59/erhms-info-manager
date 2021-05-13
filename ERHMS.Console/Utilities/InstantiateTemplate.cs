@@ -1,5 +1,5 @@
 ﻿using Epi;
-using ERHMS.Common;
+using ERHMS.Common.Logging;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
@@ -33,11 +33,10 @@ namespace ERHMS.Console.Utilities
             PageName = pageName;
         }
 
-        public void Run()
+        private TemplateInstantiator GetInstantiator()
         {
             XTemplate xTemplate = XTemplate.Load(TemplatePath);
             Project project = ProjectExtensions.Open(ProjectPath);
-            TemplateInstantiator instantiator;
             switch (xTemplate.Level)
             {
                 case TemplateLevel.Project:
@@ -46,8 +45,7 @@ namespace ERHMS.Console.Utilities
                         throw new InvalidOperationException(
                             "View name cannot be specified for a project-level template.");
                     }
-                    instantiator = new ProjectTemplateInstantiator(xTemplate, project);
-                    break;
+                    return new ProjectTemplateInstantiator(xTemplate, project);
                 case TemplateLevel.View:
                     if (PageName != null)
                     {
@@ -58,8 +56,7 @@ namespace ERHMS.Console.Utilities
                         XView xView = xTemplate.XProject.XViews.Single();
                         xView.Name = ViewName;
                     }
-                    instantiator = new ViewTemplateInstantiator(xTemplate, project);
-                    break;
+                    return new ViewTemplateInstantiator(xTemplate, project);
                 case TemplateLevel.Page:
                     if (ViewName == null)
                     {
@@ -72,15 +69,15 @@ namespace ERHMS.Console.Utilities
                         xPage.Name = PageName;
                     }
                     View view = project.Views[ViewName];
-                    instantiator = new PageTemplateInstantiator(xTemplate, view);
-                    if (view.TableExists())
-                    {
-                        view.Synchronize();
-                    }
-                    break;
+                    return new PageTemplateInstantiator(xTemplate, view);
                 default:
                     throw new InvalidOperationException($"Template level '{xTemplate.Level}' is not supported.");
             }
+        }
+
+        public void Run()
+        {
+            TemplateInstantiator instantiator = GetInstantiator();
             instantiator.Progress = Log.Progress;
             instantiator.Instantiate();
         }

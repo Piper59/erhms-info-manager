@@ -5,20 +5,22 @@ using System;
 using System.IO;
 using Settings = ERHMS.EpiInfo.Properties.Settings;
 
-namespace ERHMS.EpiInfo
+namespace ERHMS
 {
-    public static class ConfigurationExtensions
+    public static class Configuration
     {
+        public static string FilePath => Epi.Configuration.DefaultConfigurationPath;
+
         public static string GetDatabaseDriver(DatabaseProvider provider)
         {
             switch (provider)
             {
                 case DatabaseProvider.Access2003:
-                    return Configuration.AccessDriver;
+                    return Epi.Configuration.AccessDriver;
                 case DatabaseProvider.Access2007:
-                    return Configuration.Access2007Driver;
+                    return Epi.Configuration.Access2007Driver;
                 case DatabaseProvider.SqlServer:
-                    return Configuration.SqlDriver;
+                    return Epi.Configuration.SqlDriver;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(provider));
             }
@@ -28,18 +30,18 @@ namespace ERHMS.EpiInfo
         {
             switch (driver)
             {
-                case Configuration.AccessDriver:
+                case Epi.Configuration.AccessDriver:
                     return DatabaseProvider.Access2003;
-                case Configuration.Access2007Driver:
+                case Epi.Configuration.Access2007Driver:
                     return DatabaseProvider.Access2007;
-                case Configuration.SqlDriver:
+                case Epi.Configuration.SqlDriver:
                     return DatabaseProvider.SqlServer;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(driver));
             }
         }
 
-        public static void SetTextEncryptionModule(this Configuration @this, bool fipsCompliant)
+        public static void SetTextEncryptionModule(this Epi.Configuration @this, bool fipsCompliant)
         {
             Config.TextEncryptionModuleDataTable table = @this.ConfigDataSet.TextEncryptionModule;
             table.Clear();
@@ -51,7 +53,7 @@ namespace ERHMS.EpiInfo
             }
         }
 
-        private static void ReadSettings(this Configuration @this, Settings settings)
+        private static void ReadSettings(this Epi.Configuration @this, Settings settings)
         {
             @this.SetTextEncryptionModule(settings.FipsCompliant);
             Config.SettingsRow row = @this.Settings;
@@ -62,23 +64,23 @@ namespace ERHMS.EpiInfo
             row.GridSize = settings.GridSize;
         }
 
-        public static Configuration Create()
+        public static Epi.Configuration Create()
         {
-            Configuration configuration = Configuration.CreateDefaultConfiguration();
+            Epi.Configuration configuration = Epi.Configuration.CreateDefaultConfiguration();
             configuration.RecentViews.Clear();
             configuration.RecentProjects.Clear();
             configuration.ReadSettings(Settings.Default);
             return configuration;
         }
 
-        public static void Configure(ExecutionEnvironment environment)
+        public static void Initialize(ExecutionEnvironment environment)
         {
-            if (!File.Exists(Configuration.DefaultConfigurationPath))
+            if (!File.Exists(FilePath))
             {
-                Configuration.Save(Create());
+                Epi.Configuration.Save(Create());
             }
-            Configuration.Load(Configuration.DefaultConfigurationPath);
-            Configuration.Environment = environment;
+            Epi.Configuration.Load(FilePath);
+            Epi.Configuration.Environment = environment;
         }
     }
 }

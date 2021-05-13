@@ -62,7 +62,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigurationExtensions.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Data\CollectedDataProviderExtensions.cs" />
     <Compile Include="Data\IDbDriverExtensions.cs" />
     <Compile Include="Data\Record.cs" />

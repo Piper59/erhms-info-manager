@@ -1,7 +1,4 @@
-﻿using Epi;
-using ERHMS.EpiInfo;
-
-namespace ERHMS.Console.Utilities
+﻿namespace ERHMS.Console.Utilities
 {
     public class ResetConfiguration : IUtility
     {
@@ -17,12 +14,12 @@ namespace ERHMS.Console.Utilities
 
         public void Run()
         {
-            Configuration configuration = ConfigurationExtensions.Create();
+            Epi.Configuration configuration = Configuration.Create();
             if (FipsCompliant != null)
             {
                 configuration.SetTextEncryptionModule(FipsCompliant.Value);
             }
-            configuration.Save();
+            Epi.Configuration.Save(configuration);
         }
     }
 }

@@ -1,21 +1,20 @@
 ﻿using Epi;
-using ERHMS.Common;
+using ERHMS.Common.Logging;
 using ERHMS.Console.Utilities;
-using ERHMS.EpiInfo;
 using System;
 
 namespace ERHMS.Console
 {
-    public class Program
+    internal static class Program
     {
         private static int Main(string[] args)
         {
             IUtility utility = Utility.ParseArgs(args);
-            Log.Configure(Log.Appenders.Console);
+            Log.Initialize(new ConsoleAppender());
             Log.Instance.Info("Running");
             try
             {
-                ConfigureEpiInfo();
+                Configuration.Initialize(ExecutionEnvironment.Console);
                 utility.Run();
                 Log.Instance.Info("Completed");
                 return ErrorCodes.Success;
@@ -27,17 +26,6 @@ namespace ERHMS.Console
                 Log.Instance.Warn("Completed with errors");
                 return ex.HResult;
             }
-        }
-
-        private static void ConfigureEpiInfo()
-        {
-            if (!ConfigurationExtensions.Exists())
-            {
-                Configuration configuration = ConfigurationExtensions.Create();
-                configuration.Save();
-            }
-            ConfigurationExtensions.Load();
-            Configuration.Environment = ExecutionEnvironment.Console;
         }
     }
 }

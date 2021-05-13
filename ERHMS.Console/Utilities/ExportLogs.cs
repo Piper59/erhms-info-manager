@@ -1,4 +1,5 @@
-﻿using ERHMS.Common;
+﻿using ERHMS.Common.Compression;
+using ERHMS.Common.Logging;
 using System;
 using System.IO;
 
@@ -19,7 +20,7 @@ namespace ERHMS.Console.Utilities
             {
                 throw new InvalidOperationException("Archive already exists.");
             }
-            ZipExtensions.CreateFromDirectory(Log.DirectoryPath, ArchivePath, "*.txt", FileShare.ReadWrite);
+            ZipFileExtensions.CreateFromDirectory(FileAppender.Directory, ArchivePath, "*.txt", FileShare.ReadWrite);
         }
     }
 }

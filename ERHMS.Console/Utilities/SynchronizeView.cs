@@ -1,35 +1,36 @@
 ﻿using Epi;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Data;
 
 namespace ERHMS.Console.Utilities
 {
-    public class Synchronize : IUtility
+    public class SynchronizeView : IUtility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
-        public bool IncludeDescendants { get; }
+        public bool Tree { get; }
 
-        public Synchronize(string projectPath, string viewName)
-            : this(projectPath, viewName, true) { }
-
-        public Synchronize(string projectPath, string viewName, bool includeDescendants)
+        public SynchronizeView(string projectPath, string viewName, bool tree)
         {
             ProjectPath = projectPath;
             ViewName = viewName;
-            IncludeDescendants = includeDescendants;
+            Tree = tree;
         }
+
+        public SynchronizeView(string projectPath, string viewName)
+            : this(projectPath, viewName, true) { }
 
         public void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
-            if (IncludeDescendants)
+            if (Tree)
             {
-                view.SynchronizeTree();
+                project.CollectedData.SynchronizeViewTree(view);
             }
             else
             {
-                view.Synchronize();
+                project.CollectedData.SynchronizeView(view);
             }
         }
     }

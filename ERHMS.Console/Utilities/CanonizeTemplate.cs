@@ -1,4 +1,4 @@
-﻿using ERHMS.Common;
+﻿using ERHMS.Common.Logging;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 
@@ -9,14 +9,14 @@ namespace ERHMS.Console.Utilities
         public string InputPath { get; }
         public string OutputPath { get; }
 
-        public CanonizeTemplate(string templatePath)
-            : this(templatePath, templatePath) { }
-
         public CanonizeTemplate(string inputPath, string outputPath)
         {
             InputPath = inputPath;
             OutputPath = outputPath;
         }
+
+        public CanonizeTemplate(string templatePath)
+            : this(templatePath, templatePath) { }
 
         public void Run()
         {
@@ -26,7 +26,7 @@ namespace ERHMS.Console.Utilities
                 Progress = Log.Progress
             };
             canonizer.Canonize();
-            xTemplate.Save(OutputPath, true);
+            xTemplate.Save(OutputPath);
         }
     }
 }
