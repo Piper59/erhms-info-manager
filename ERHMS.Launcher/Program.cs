@@ -21,12 +21,12 @@ namespace ERHMS.Launcher
                     WorkingDirectory = workingDirectoryPath,
                     FileName = Path.Combine(workingDirectoryPath, $"{appTitle}.exe")
                 };
-                using (Process.Start(startInfo)) { }
+                Process.Start(startInfo).Dispose();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    string.Format(Resources.Body_Exception, ex.Message),
+                    string.Format(Resources.Body_Error, ex.Message),
                     Resources.Title_App,
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);

@@ -1,7 +1,9 @@
-﻿using ERHMS.Desktop.Commands;
+﻿using ERHMS.Common.Linq;
+using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.ViewModels.Collections;
 using ERHMS.EpiInfo.Metadata;
+using ERHMS.EpiInfo.Naming;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,10 +30,11 @@ namespace ERHMS.Desktop.Views.Collections
 
         public RecordCollectionView()
         {
-            CopyColumnCommand = new SyncCommand<DataGridColumn>(CopyColumn);
-            CopyCellCommand = new SyncCommand<DataGridCell>(CopyCell);
             InitializeComponent();
             DataContextChanged += RecordCollectionView_DataContextChanged;
+            CopyColumnCommand = new SyncCommand<DataGridColumn>(CopyColumn);
+            CopyCellCommand = new SyncCommand<DataGridCell>(CopyCell);
+            // TODO: Make sure commands work
         }
 
         private void RecordCollectionView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -63,12 +66,13 @@ namespace ERHMS.Desktop.Views.Collections
 
         private void SetItemDataGridColumns()
         {
-            IReadOnlyList<FieldDataRow> fields = DataContext.Fields;
             ObservableCollection<DataGridColumn> columns = ItemDataGrid.Columns;
-            IDictionary<string, DataGridColumn> columnsByHeader = columns.ToDictionary(column => (string)column.Header);
-            for (int fieldIndex = 0; fieldIndex < fields.Count; fieldIndex++)
+            IDictionary<string, DataGridColumn> columnsByHeader =
+                columns.ToDictionary(column => (string)column.Header, NameComparer.Default);
+            int fieldIndex = -1;
+            foreach (FieldDataRow field in DataContext.Fields)
             {
-                FieldDataRow field = fields[fieldIndex];
+                fieldIndex++;
                 string header = field.Name.Replace("_", "__");
                 if (columnsByHeader.TryGetValue(header, out DataGridColumn column))
                 {
@@ -93,7 +97,7 @@ namespace ERHMS.Desktop.Views.Collections
                     columns.Insert(fieldIndex, column);
                 }
             }
-            while (columns.Count > fields.Count)
+            while (columns.Count > fieldIndex + 1)
             {
                 columns.RemoveAt(columns.Count - 1);
             }
@@ -124,24 +128,26 @@ namespace ERHMS.Desktop.Views.Collections
             }
         }
 
-        private void Copy(IEnumerable<object> items, IReadOnlyCollection<DataGridColumn> columns)
+        private void Copy(IEnumerable items, int startColumnDisplayIndex, int endColumnDisplayIndex)
         {
-            IReadOnlyCollection<string> formats = new string[]
+            IEnumerable<string> formats = new string[]
             {
                 DataFormats.Text,
                 DataFormats.UnicodeText,
                 DataFormats.CommaSeparatedValue
             };
-            IReadOnlyDictionary<string, StringBuilder> buildersByFormat =
+            IDictionary<string, StringBuilder> buildersByFormat =
                 formats.ToDictionary(format => format, _ => new StringBuilder());
-            int minColumnDisplayIndex = columns.Min(column => column.DisplayIndex);
-            int maxColumnDisplayIndex = columns.Max(column => column.DisplayIndex);
             foreach (object item in items)
             {
                 DataGridRowClipboardEventArgs e =
-                    new DataGridRowClipboardEventArgs(item, minColumnDisplayIndex, maxColumnDisplayIndex, false);
-                foreach (DataGridColumn column in columns)
+                    new DataGridRowClipboardEventArgs(item, startColumnDisplayIndex, endColumnDisplayIndex, false);
+                foreach (DataGridColumn column in ItemDataGrid.Columns)
                 {
+                    if (column.DisplayIndex < startColumnDisplayIndex || column.DisplayIndex > endColumnDisplayIndex)
+                    {
+                        continue;
+                    }
                     object content = column.OnCopyingCellClipboardContent(item);
                     e.ClipboardRowContent.Add(new DataGridClipboardCellContent(item, column, content));
                 }
@@ -160,35 +166,21 @@ namespace ERHMS.Desktop.Views.Collections
 
         public void CopyColumn(DataGridColumn column)
         {
-            ICollection items = ItemDataGrid.SelectedIndex == -1 ? ItemDataGrid.Items : ItemDataGrid.SelectedItems;
-            IReadOnlyCollection<DataGridColumn> columns;
+            IEnumerable items = ItemDataGrid.SelectedIndex == -1 ? ItemDataGrid.Items : ItemDataGrid.SelectedItems;
             if (column == null)
             {
-                columns = ItemDataGrid.Columns.Where(_column => _column.Visibility == Visibility.Visible)
-                    .OrderBy(_column => _column.DisplayIndex)
-                    .ToList();
+                Copy(items, 0, ItemDataGrid.Columns.Count - 1);
             }
             else
             {
-                columns = new DataGridColumn[]
-                {
-                    column
-                };
+                Copy(items, column.DisplayIndex, column.DisplayIndex);
             }
-            Copy(items.Cast<object>(), columns);
         }
 
         public void CopyCell(DataGridCell cell)
         {
-            IReadOnlyCollection<object> items = new object[]
-            {
-                cell.DataContext
-            };
-            IReadOnlyCollection<DataGridColumn> columns = new DataGridColumn[]
-            {
-                cell.Column
-            };
-            Copy(items, columns);
+            IEnumerable items = IEnumerableExtensions.Yield(cell.DataContext);
+            Copy(items, cell.Column.DisplayIndex, cell.Column.DisplayIndex);
         }
     }
 }

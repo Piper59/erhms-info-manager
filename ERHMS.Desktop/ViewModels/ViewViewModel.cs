@@ -33,7 +33,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToProjectAsync()
         {
-            await MainViewModel.Instance.GoToProjectAsync(Value.Project.FilePath);
+            await MainViewModel.Instance.GoToProjectAsync(Task.FromResult(Value.Project));
         }
     }
 }

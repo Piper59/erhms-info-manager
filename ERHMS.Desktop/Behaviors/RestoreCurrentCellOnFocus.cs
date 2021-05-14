@@ -1,9 +1,9 @@
-﻿using Microsoft.Xaml.Behaviors;
+﻿using ERHMS.Desktop.Infrastructure;
+using Microsoft.Xaml.Behaviors;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace ERHMS.Desktop.Behaviors
 {
@@ -35,7 +35,7 @@ namespace ERHMS.Desktop.Behaviors
         {
             if (!restoring
                 && e.KeyboardDevice.IsKeyDown(Key.Tab)
-                && (!(e.OldFocus is Visual visual) || !visual.IsDescendantOf(AssociatedObject) )
+                && !e.OldFocus.IsDescendantOf(AssociatedObject)
                 && RestoreCurrentCell())
             {
                 e.Handled = true;
@@ -44,12 +44,15 @@ namespace ERHMS.Desktop.Behaviors
 
         private bool SaveCurrentCell()
         {
-            if (!AssociatedObject.CurrentCell.IsValid)
+            if (AssociatedObject.CurrentCell.IsValid)
+            {
+                oldCurrentCell = AssociatedObject.CurrentCell;
+                return true;
+            }
+            else
             {
                 return false;
             }
-            oldCurrentCell = AssociatedObject.CurrentCell;
-            return true;
         }
 
         private bool RestoreCurrentCell()

@@ -1,20 +1,20 @@
-﻿using ERHMS.Common;
-using ERHMS.Desktop.Data;
+﻿using ERHMS.Common.ComponentModel;
 using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Data;
 
 namespace ERHMS.Desktop.CollectionViews
 {
-    public class RecordStatusCollectionView : CustomCollectionView<RecordStatusCollectionView.Item>
+    public class RecordStatusCollectionView : ListCollectionView
     {
-        public class Item : ObservableObject, ISelectable
+        public class Item : ObservableObject
         {
             public static Item Undeleted { get; } = new Item(RecordStatus.Undeleted);
             public static Item Deleted { get; } = new Item(RecordStatus.Deleted);
             public static Item All { get; } = new Item(null);
 
-            public static IReadOnlyCollection<Item> Instances { get; } = new Item[]
+            public static IEnumerable<Item> Instances { get; } = new Item[]
             {
                 Undeleted,
                 Deleted,
@@ -35,6 +35,8 @@ namespace ERHMS.Desktop.CollectionViews
                 Value = value;
             }
         }
+
+        public RecordStatus? CurrentValue => ((Item)CurrentItem)?.Value;
 
         public RecordStatusCollectionView()
             : base(Item.Instances.ToList()) { }

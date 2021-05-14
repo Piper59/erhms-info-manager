@@ -11,24 +11,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <Controls:IconButton AltText="Create"
+            <Controls:IconButton AlternativeText="Create"
                                  Command="{Binding CreateCommand}"
                                  Content="{x:Static local:Icons.Create}" />
-            <Controls:IconButton AltText="Open"
+            <Controls:IconButton AlternativeText="Open"
                                  Command="{Binding OpenCommand}"
                                  Content="{x:Static local:Icons.Open}" />
-            <Controls:IconButton AltText="Delete"
+            <Controls:IconButton AlternativeText="Delete"
                                  Command="{Binding DeleteCommand}"
                                  Content="{x:Static local:Icons.Delete}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AltText="Design"
+            <Controls:IconButton AlternativeText="Design"
                                  Command="{Binding DesignCommand}"
                                  Content="{x:Static local:Icons.Design}" />
-            <Controls:IconButton AltText="Enter"
+            <Controls:IconButton AlternativeText="Enter"
                                  Command="{Binding EnterCommand}"
                                  Content="{x:Static local:Icons.Enter}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AltText="Refresh"
+            <Controls:IconButton AlternativeText="Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Content="{x:Static local:Icons.Refresh}" />
         </WrapPanel>

@@ -34,7 +34,7 @@ namespace ERHMS.EpiInfo.Metadata
 
         public class ByEffectiveTabIndex : IComparer<FieldDataRow>
         {
-            private readonly IReadOnlyDictionary<string, double?> tabIndicesByFieldName;
+            private readonly IDictionary<string, double?> tabIndicesByFieldName;
 
             public ByEffectiveTabIndex(IEnumerable<FieldDataRow> fields)
             {

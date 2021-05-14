@@ -1,12 +1,11 @@
-﻿using ERHMS.Common;
+﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
-using System;
 using System.Threading;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class ProgressViewModel : ObservableObject, IDisposable
+    public class ProgressViewModel : ObservableObject
     {
         private readonly CancellationTokenSource cancellationTokenSource;
 
@@ -19,8 +18,8 @@ namespace ERHMS.Desktop.ViewModels
             set { SetProperty(ref status, value); }
         }
 
-        public CancellationToken CancellationToken => cancellationTokenSource?.Token ?? CancellationToken.None;
-        public bool CanBeCanceled => cancellationTokenSource != null;
+        public CancellationToken CancellationToken { get; }
+        public bool CanBeCanceled => CancellationToken.CanBeCanceled;
 
         public ICommand CancelCommand { get; }
 
@@ -30,23 +29,19 @@ namespace ERHMS.Desktop.ViewModels
             if (canBeCanceled)
             {
                 cancellationTokenSource = new CancellationTokenSource();
+                CancellationToken = cancellationTokenSource.Token;
             }
             CancelCommand = new SyncCommand(Cancel, CanCancel);
         }
 
         public bool CanCancel()
         {
-            return CanBeCanceled && !cancellationTokenSource.IsCancellationRequested;
+            return CanBeCanceled && !CancellationToken.IsCancellationRequested;
         }
 
         public void Cancel()
         {
             cancellationTokenSource.Cancel();
-        }
-
-        public void Dispose()
-        {
-            cancellationTokenSource?.Dispose();
         }
     }
 }

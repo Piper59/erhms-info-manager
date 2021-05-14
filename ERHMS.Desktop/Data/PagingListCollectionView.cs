@@ -10,13 +10,11 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.Data
 {
-    public class CustomCollectionView<TItem>
-        : ListCollectionView, ITypedCollectionView<TItem>, ISelectableCollectionView<TItem>, IPagingCollectionView
-        where TItem : ISelectable
+    public class PagingListCollectionView : ListCollectionView, IPagingCollectionView
     {
-        private readonly List<TItem> source;
+        private readonly IList source;
         private bool refreshing;
-        private bool pageResetDeferred;
+        private bool repaging;
         private object oldCurrentItem;
 
         public override IEnumerable SourceCollection => new ArrayList(source);
@@ -30,28 +28,10 @@ namespace ERHMS.Desktop.Data
             }
             set
             {
-                pageResetDeferred = true;
+                repaging = true;
                 base.Filter = value;
             }
         }
-
-        public Predicate<TItem> TypedFilter
-        {
-            set
-            {
-                if (value == null)
-                {
-                    Filter = null;
-                }
-                else
-                {
-                    Filter = item => value((TItem)item);
-                }
-            }
-        }
-
-        public TItem SelectedItem => (TItem)CurrentItem;
-        public IEnumerable<TItem> SelectedItems => this.Where(item => item.Selected);
 
         private int? pageSize;
         public int? PageSize
@@ -69,6 +49,7 @@ namespace ERHMS.Desktop.Data
                 if (value != pageSize)
                 {
                     pageSize = value;
+                    repaging = true;
                     RefreshOrDefer();
                 }
             }
@@ -83,7 +64,7 @@ namespace ERHMS.Desktop.Data
         public ICommand GoToNextPageCommand { get; }
         public ICommand GoToPreviousPageCommand { get; }
 
-        public CustomCollectionView(List<TItem> source)
+        public PagingListCollectionView(IList source)
             : base(new ArrayList(source))
         {
             this.source = source;
@@ -96,12 +77,8 @@ namespace ERHMS.Desktop.Data
 
         private void Descriptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            ResetPageOrDefer();
-        }
-
-        public bool HasSelection()
-        {
-            return CurrentPosition != -1;
+            repaging = true;
+            RefreshOrDefer();
         }
 
         private bool CanGoToPage(int page)
@@ -131,51 +108,17 @@ namespace ERHMS.Desktop.Data
             }
         }
 
-        private bool CanGoToNextPage()
-        {
-            return CanGoToPage(NextPage);
-        }
+        private bool CanGoToNextPage() => CanGoToPage(NextPage);
+        private void GoToNextPageCore() => GoToPageCore(NextPage);
+        public bool GoToNextPage() => GoToPage(NextPage);
 
-        private void GoToNextPageCore()
-        {
-            GoToPageCore(NextPage);
-        }
-
-        public bool GoToNextPage()
-        {
-            return GoToPage(NextPage);
-        }
-
-        private bool CanGoToPreviousPage()
-        {
-            return CanGoToPage(PreviousPage);
-        }
-
-        private void GoToPreviousPageCore()
-        {
-            GoToPageCore(PreviousPage);
-        }
-
-        public bool GoToPreviousPage()
-        {
-            return GoToPage(PreviousPage);
-        }
-
-        private void ResetPageOrDefer()
-        {
-            if (IsRefreshDeferred)
-            {
-                pageResetDeferred = true;
-            }
-            else
-            {
-                GoToPage(1);
-            }
-        }
+        private bool CanGoToPreviousPage() => CanGoToPage(PreviousPage);
+        private void GoToPreviousPageCore() => GoToPageCore(PreviousPage);
+        public bool GoToPreviousPage() => GoToPage(PreviousPage);
 
         public override void Refresh()
         {
-            pageResetDeferred = true;
+            repaging = true;
             base.Refresh();
         }
 
@@ -199,15 +142,19 @@ namespace ERHMS.Desktop.Data
         {
             if (refreshing)
             {
-                Repage();
-                SetCurrent(oldCurrentItem);
+                OnRefresh();
             }
             base.OnCollectionChanged(args);
         }
 
-        private void Repage()
+        private void OnRefresh()
         {
-            if (IsEmpty)
+            if (repaging)
+            {
+                CurrentPage = 1;
+                repaging = false;
+            }
+            if (InternalList.Count == 0)
             {
                 PageCount = 0;
                 CurrentPage = 0;
@@ -226,12 +173,7 @@ namespace ERHMS.Desktop.Data
                         PageCount++;
                     }
                 }
-                if (pageResetDeferred)
-                {
-                    CurrentPage = 1;
-                    pageResetDeferred = false;
-                }
-                else if (CurrentPage == 0)
+                if (CurrentPage == 0)
                 {
                     CurrentPage = 1;
                 }
@@ -242,7 +184,7 @@ namespace ERHMS.Desktop.Data
             }
             if (PageCount > 1)
             {
-                IReadOnlyCollection<object> page = InternalList.Cast<object>()
+                IEnumerable<object> page = InternalList.Cast<object>()
                     .Skip(pageSize.Value * PreviousPage)
                     .Take(pageSize.Value)
                     .ToList();
@@ -252,6 +194,7 @@ namespace ERHMS.Desktop.Data
                     InternalList.Add(item);
                 }
             }
+            SetCurrent(oldCurrentItem);
         }
 
         private void SetCurrent(object item)
@@ -264,14 +207,12 @@ namespace ERHMS.Desktop.Data
             else
             {
                 position = InternalList.IndexOf(item);
-                item = position == -1 ? null : InternalList[position];
+                if (position != -1)
+                {
+                    item = InternalList[position];
+                }
             }
             SetCurrent(item, position);
-        }
-
-        IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
-        {
-            return InternalList.Cast<TItem>().GetEnumerator();
         }
     }
 }

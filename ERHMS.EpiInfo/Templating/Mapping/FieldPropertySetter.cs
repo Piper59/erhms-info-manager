@@ -11,30 +11,6 @@ namespace ERHMS.EpiInfo.Templating.Mapping
     public abstract class FieldPropertySetter<TField, TProperty> : IFieldPropertySetter<TField>
         where TField : Field
     {
-        public PropertyInfo Property { get; }
-
-        protected FieldPropertySetter(Expression<Func<TField, TProperty>> expression)
-        {
-            Property = (PropertyInfo)((MemberExpression)expression.Body).Member;
-        }
-
-        protected abstract bool TryGetValue(XField xField, out TProperty value);
-
-        public void SetProperty(XField xField, TField field)
-        {
-            try
-            {
-                if (TryGetValue(xField, out TProperty value))
-                {
-                    Property.SetValue(field, value);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new FieldPropertySetterException(xField, Property.Name, ex);
-            }
-        }
-
         public class Simple : FieldPropertySetter<TField, TProperty>
         {
             private readonly TypeConverter converter = TypeDescriptor.GetConverter(typeof(TProperty));
@@ -77,6 +53,30 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             protected override bool TryGetValue(XField xField, out TProperty value)
             {
                 return converter(xField, out value);
+            }
+        }
+
+        public PropertyInfo Property { get; }
+
+        protected FieldPropertySetter(Expression<Func<TField, TProperty>> expression)
+        {
+            Property = (PropertyInfo)((MemberExpression)expression.Body).Member;
+        }
+
+        protected abstract bool TryGetValue(XField xField, out TProperty value);
+
+        public void SetProperty(XField xField, TField field)
+        {
+            try
+            {
+                if (TryGetValue(xField, out TProperty value))
+                {
+                    Property.SetValue(field, value);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new FieldPropertySetterException(xField, Property.Name, ex);
             }
         }
     }

@@ -21,7 +21,8 @@ namespace ERHMS.Desktop.Converters
                     return DependencyProperty.UnsetValue;
                 }
             }
-            return ResXResources.ResourceManager.GetObject($"{Prefix}{value}", ResXResources.Culture);
+            string key = $"{Prefix}{value}";
+            return ResXResources.ResourceManager.GetObject(key, ResXResources.Culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

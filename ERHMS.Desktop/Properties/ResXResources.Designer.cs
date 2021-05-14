@@ -101,9 +101,20 @@ namespace ERHMS.Desktop.Properties {
         ///
         ///{0}.
         /// </summary>
-        public static string Body_FatalException {
+        public static string Body_FatalError {
             get {
-                return ResourceManager.GetString("Body.FatalException", resourceCulture);
+                return ResourceManager.GetString("Body.FatalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager is still working.
+        ///
+        ///Close anyway?.
+        /// </summary>
+        public static string Body_UtilityClosing {
+            get {
+                return ResourceManager.GetString("Body.UtilityClosing", resourceCulture);
             }
         }
         
@@ -112,9 +123,9 @@ namespace ERHMS.Desktop.Properties {
         ///
         ///{0}.
         /// </summary>
-        public static string Body_IntegrationException {
+        public static string Body_UtilityError {
             get {
-                return ResourceManager.GetString("Body.IntegrationException", resourceCulture);
+                return ResourceManager.GetString("Body.UtilityError", resourceCulture);
             }
         }
         
@@ -445,9 +456,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
         /// </summary>
-        public static string Lead_NonFatalException {
+        public static string Lead_NonFatalError {
             get {
-                return ResourceManager.GetString("Lead.NonFatalException", resourceCulture);
+                return ResourceManager.GetString("Lead.NonFatalError", resourceCulture);
             }
         }
         

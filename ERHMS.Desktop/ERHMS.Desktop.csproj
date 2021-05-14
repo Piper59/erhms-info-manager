@@ -117,16 +117,15 @@
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
+    <Compile Include="Converters\ByteCountConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
     <Compile Include="Converters\KeyToResXResourceConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\StringCaseConverter.cs" />
-    <Compile Include="Data\CustomCollectionView.cs" />
+    <Compile Include="Data\ICollectionViewExtensions.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
-    <Compile Include="Data\ISelectable.cs" />
-    <Compile Include="Data\ISelectableCollectionView.cs" />
-    <Compile Include="Data\ITypedCollectionView.cs" />
+    <Compile Include="Data\PagingListCollectionView.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />
@@ -140,6 +139,7 @@
     <Compile Include="Infrastructure\WindowDisabler.cs" />
     <Compile Include="Infrastructure\WindowExtensions.cs" />
     <Compile Include="Integration.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -159,15 +159,19 @@
     <Compile Include="Services\IProgressService.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Utilities\GetWorkerId.cs" />
-    <Compile Include="Utilities\IntegrationForm.cs">
+    <Compile Include="Utilities\IUtility.cs" />
+    <Compile Include="Utilities\Utility.Execution.cs" />
+    <Compile Include="Utilities\Utility.Invocation.cs" />
+    <Compile Include="Utilities\UtilityDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Utilities\IntegrationForm.Designer.cs">
-      <DependentUpon>IntegrationForm.cs</DependentUpon>
+    <Compile Include="Utilities\UtilityDialog.Designer.cs">
+      <DependentUpon>UtilityDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\IUtility.cs" />
-    <Compile Include="Utilities\Utility.cs" />
+    <Compile Include="ViewModels\Collections\CanvasCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\FileInfoCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Collections\MapCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Collections\ProgramCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\WorkerCollectionViewModel.cs" />
@@ -218,8 +222,8 @@
       <LastGenOutput>ResXResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\IntegrationForm.resx">
-      <DependentUpon>IntegrationForm.cs</DependentUpon>
+    <EmbeddedResource Include="Utilities\UtilityDialog.resx">
+      <DependentUpon>UtilityDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

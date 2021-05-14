@@ -1,5 +1,4 @@
 ﻿using ERHMS.Desktop.ViewModels.Collections;
-using ERHMS.EpiInfo.Data;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.ViewModels.Utilities
@@ -23,21 +22,8 @@ namespace ERHMS.Desktop.ViewModels.Utilities
 
         public string WorkerId
         {
-            get
-            {
-                return Workers.Items.SelectedItem?.Value.GlobalRecordId;
-            }
-            set
-            {
-                foreach (WorkerCollectionViewModel.ItemViewModel item in Workers.Items)
-                {
-                    if (Record.GlobalRecordIdComparer.Equals(item.Value.GlobalRecordId, value))
-                    {
-                        Workers.Items.MoveCurrentTo(item);
-                        break;
-                    }
-                }
-            }
+            get { return Workers.CurrentValue?.GlobalRecordId; }
+            set { Workers.MoveCurrentToGlobalRecordId(value); }
         }
 
         private GetWorkerIdViewModel(string firstName, string lastName, string emailAddress)

@@ -28,8 +28,9 @@ namespace ERHMS.Desktop.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Color color = GetColor((Phase)value);
-            byte? alpha = parameter == null ? Alpha : (byte)parameter;
+            Phase phase = (Phase)value;
+            Color color = GetColor(phase);
+            byte? alpha = (byte?)parameter ?? Alpha;
             if (alpha != null)
             {
                 color.A = alpha.Value;

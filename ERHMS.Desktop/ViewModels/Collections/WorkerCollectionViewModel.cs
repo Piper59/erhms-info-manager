@@ -1,5 +1,5 @@
 ﻿using Epi;
-using ERHMS.Common;
+using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.CollectionViews;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure;
@@ -7,7 +7,6 @@ using ERHMS.Domain;
 using ERHMS.Domain.Data;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 {
     public class WorkerCollectionViewModel : ObservableObject
     {
-        public class ItemViewModel : ObservableObject, ISelectable
+        public class ItemViewModel : ObservableObject
         {
             public Worker Value { get; }
             public double Similarity { get; private set; }
@@ -84,18 +83,20 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public RecordStatusCollectionView Statuses { get; } = new RecordStatusCollectionView();
 
         private readonly List<ItemViewModel> items;
-        public CustomCollectionView<ItemViewModel> Items { get; }
+        public PagingListCollectionView Items { get; }
+
+        public Worker CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 
         private WorkerCollectionViewModel(string firstName, string lastName, string emailAddress)
         {
             FirstName = firstName;
             LastName = lastName;
             EmailAddress = emailAddress;
-            Statuses.CurrentChanged += Statuses_CurrentChanged;
+            Statuses.CurrentChanged += (sender, e) => Items.Refresh();
             items = new List<ItemViewModel>();
-            Items = new CustomCollectionView<ItemViewModel>(items)
+            Items = new PagingListCollectionView(items)
             {
-                TypedFilter = IsMatch,
+                Filter = IsMatch,
                 PageSize = 100
             };
             Items.SortDescriptions.Add(
@@ -103,14 +104,9 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 ListSortDirection.Descending));
         }
 
-        private void Statuses_CurrentChanged(object sender, EventArgs e)
-        {
-            Items.Refresh();
-        }
-
         private async Task InitializeAsync()
         {
-            IReadOnlyCollection<Worker> values = await Task.Run(() =>
+            IEnumerable<Worker> values = await Task.Run(() =>
             {
                 Project project = ProjectExtensions.Open(Settings.Default.WorkerProjectPath);
                 View view = project.Views[CoreView.WorkerRosteringForm.Name];
@@ -131,8 +127,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private bool IsStatusMatch(Worker value)
         {
-            RecordStatus? status = Statuses.SelectedItem?.Value;
-            return status == null || value.RECSTATUS.IsEquivalent(status.Value);
+            return value.RECSTATUS == Statuses.CurrentValue;
         }
 
         private bool IsSearchMatch(Worker value)
@@ -152,9 +147,24 @@ namespace ERHMS.Desktop.ViewModels.Collections
             return false;
         }
 
-        private bool IsMatch(ItemViewModel item)
+        private bool IsMatch(object item)
         {
-            return IsStatusMatch(item.Value) && IsSearchMatch(item.Value);
+            Worker value = ((ItemViewModel)item).Value;
+            return IsStatusMatch(value) && IsSearchMatch(value);
+        }
+
+        public bool MoveCurrentToGlobalRecordId(string globalRecordId)
+        {
+            int itemIndex = -1;
+            foreach (ItemViewModel item in Items.Cast<ItemViewModel>())
+            {
+                itemIndex++;
+                if (Record.GlobalRecordIdComparer.Equals(item.Value.GlobalRecordId, globalRecordId))
+                {
+                    return Items.MoveCurrentToPosition(itemIndex);
+                }
+            }
+            return false;
         }
     }
 }

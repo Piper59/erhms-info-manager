@@ -22,10 +22,10 @@
                          ToolTip="{Binding Value.FilePath}" />
                 </TextBlock>
                 <WrapPanel Grid.Column="1">
-                    <Controls:IconButton AltText="Home"
+                    <Controls:IconButton AlternativeText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
-                    <Controls:IconButton AltText="Help"
+                    <Controls:IconButton AlternativeText="Help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.Help}" />
                 </WrapPanel>

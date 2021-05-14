@@ -6,21 +6,13 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class StringCaseConverter : IValueConverter
+    public class ByteCountConverter : IValueConverter
     {
-        public IValueConverter BaseConverter { get; set; }
-        public string Format { get; set; }
+        public string Format { get; set; } = "N0";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (BaseConverter != null)
-            {
-                value = BaseConverter.Convert(value, targetType, parameter, culture);
-            }
-            IFormatProvider formatter = new StringCaseFormatter
-            {
-                Culture = culture
-            };
+            IFormatProvider formatter = new ByteCountFormatter();
             return string.Format(formatter, Format, value);
         }
 

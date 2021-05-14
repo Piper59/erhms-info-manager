@@ -1,4 +1,4 @@
-﻿using ERHMS.Common;
+﻿using ERHMS.Common.Logging;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -29,15 +29,8 @@ namespace ERHMS.Desktop.Commands
 
         public static event EventHandler<ErrorEventArgs> GlobalError;
 
-        protected static bool Always()
-        {
-            return true;
-        }
-
-        protected static bool Always<TParameter>(TParameter _)
-        {
-            return true;
-        }
+        protected static bool Always() => true;
+        protected static bool Always<TParameter>(TParameter _) => true;
 
         public static void OnCanExecuteChanged()
         {
@@ -65,29 +58,24 @@ namespace ERHMS.Desktop.Commands
 
         private void OnErrorCore(ErrorEventArgs e, IEnumerable<Delegate> handlers)
         {
-            if (handlers != null)
+            if (handlers == null)
             {
-                foreach (EventHandler<ErrorEventArgs> handler in handlers)
+                return;
+            }
+            foreach (EventHandler<ErrorEventArgs> handler in handlers)
+            {
+                if (e.Handled)
                 {
-                    handler(this, e);
-                    if (e.Handled)
-                    {
-                        break;
-                    }
+                    break;
                 }
+                handler(this, e);
             }
         }
 
         protected virtual void OnError(ErrorEventArgs e)
         {
-            if (!e.Handled)
-            {
-                OnErrorCore(e, Error?.GetInvocationList());
-                if (!e.Handled)
-                {
-                    OnErrorCore(e, GlobalError?.GetInvocationList());
-                }
-            }
+            OnErrorCore(e, Error?.GetInvocationList());
+            OnErrorCore(e, GlobalError?.GetInvocationList());
         }
 
         protected void OnError(Exception exception) => OnError(new ErrorEventArgs(exception));

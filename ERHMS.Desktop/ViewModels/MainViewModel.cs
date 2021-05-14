@@ -1,5 +1,7 @@
 ﻿using Epi;
-using ERHMS.Common;
+using ERHMS.Common.ComponentModel;
+using ERHMS.Common.Compression;
+using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -63,73 +65,75 @@ namespace ERHMS.Desktop.ViewModels
             Content = new HomeViewModel();
         }
 
-        public async Task GoToProjectAsync(string projectPath)
+        public async Task GoToProjectAsync(Task<Project> task)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_LoadingProject;
             await progress.RunAsync(async () =>
             {
-                Project value = await Task.Run(() =>
-                {
-                    return ProjectExtensions.Open(projectPath);
-                });
-                Content = await ProjectViewModel.CreateAsync(value);
+                Project project = await task;
+                Content = await ProjectViewModel.CreateAsync(project);
             });
         }
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
-            await GoToProjectAsync(Settings.Default.GetProjectPath(coreProject));
+            await GoToProjectAsync(Task.Run(() =>
+            {
+                return ProjectExtensions.Open(Settings.Default.GetProjectPath(coreProject));
+            }));
         }
 
-        public async Task GoToViewAsync(string projectPath, string viewName)
+        public async Task GoToViewAsync(Task<View> task)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_LoadingView;
             await progress.RunAsync(async () =>
             {
-                View value = await Task.Run(() =>
-                {
-                    return ProjectExtensions.Open(projectPath).Views[viewName];
-                });
-                Content = await ViewViewModel.CreateAsync(value);
+                View view = await task;
+                Content = await ViewViewModel.CreateAsync(view);
             });
         }
 
         public async Task GoToCoreViewAsync(CoreView coreView)
         {
-            await GoToViewAsync(Settings.Default.GetProjectPath(coreView.CoreProject), coreView.Name);
+            await GoToViewAsync(Task.Run(() =>
+            {
+                Project project = ProjectExtensions.Open(Settings.Default.GetProjectPath(coreView.CoreProject));
+                return project.Views[coreView.Name];
+            }));
         }
 
         public void OpenLogFile()
         {
-            Process.Start(Log.FilePath);
+            Process.Start(Log.Instance.GetFile()).Dispose();
         }
 
         public void OpenLogDirectory()
         {
-            Process.Start(Log.DirectoryPath);
+            Process.Start(FileAppender.Directory).Dispose();
         }
 
         public async Task ExportLogDirectoryAsync()
         {
-            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-            fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            fileDialog.FileName = string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now);
-            fileDialog.Filter = ResXResources.FileDialog_Filter_ZipFiles;
-            if (fileDialog.Save() == true)
+            IFileDialogService dialog = ServiceLocator.Resolve<IFileDialogService>();
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            dialog.FileName = string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now);
+            dialog.Filter = ResXResources.FileDialog_Filter_ZipFiles;
+            if (dialog.Save() != true)
             {
-                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                progress.Title = ResXResources.Lead_ExportingLogDirectory;
-                await progress.RunAsync(() =>
-                {
-                    ZipExtensions.CreateFromDirectory(
-                        Log.DirectoryPath,
-                        fileDialog.FileName,
-                        "*.txt",
-                        FileShare.ReadWrite);
-                });
+                return;
             }
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Title = ResXResources.Lead_ExportingLogDirectory;
+            await progress.RunAsync(() =>
+            {
+                ZipFileExtensions.CreateFromDirectory(
+                    FileAppender.Directory,
+                    dialog.FileName,
+                    "*.txt",
+                    FileShare.ReadWrite);
+            });
         }
 
         public async Task StartEpiInfoAsync(Module module, params string[] args)
@@ -137,34 +141,34 @@ namespace ERHMS.Desktop.ViewModels
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Delay = TimeSpan.Zero;
             progress.Title = ResXResources.Lead_StartingEpiInfo;
-            await progress.RunAsync(async () =>
+            await progress.RunAsync(() =>
             {
-                Process process = module.Start(args);
-                await Task.Run(() =>
+                using (Process process = module.Start(args))
                 {
                     process.WaitForExit(3000);
-                });
+                }
             });
         }
 
         public void StartEpiInfoMenu()
         {
-            Module.Menu.Start();
+            Module.Menu.Start().Dispose();
         }
 
         public void StartFileExplorer()
         {
-            Process.Start(AppDomain.CurrentDomain.BaseDirectory);
+            Process.Start(AppDomain.CurrentDomain.BaseDirectory).Dispose();
         }
 
         public void StartCommandPrompt()
         {
-            Process.Start(new ProcessStartInfo
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 UseShellExecute = false,
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 FileName = Environment.GetEnvironmentVariable("ComSpec")
-            });
+            };
+            Process.Start(startInfo).Dispose();
         }
     }
 }

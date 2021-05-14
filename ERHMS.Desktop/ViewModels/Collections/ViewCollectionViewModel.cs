@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Common;
+using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Properties;
@@ -15,7 +16,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 {
     public class ViewCollectionViewModel
     {
-        public class ItemViewModel : ObservableObject, ISelectable
+        public class ItemViewModel : ObservableObject
         {
             public View Value { get; }
             public int PageCount { get; private set; }
@@ -38,7 +39,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 PageCount = Value.Pages.Count;
                 FieldCount = Value.Fields.InputFields.Count;
-                if (Value.TableExists())
+                if (Value.Project.CollectedData.TableExists(Value.TableName))
                 {
                     RecordRepository repository = new RecordRepository(Value);
                     RecordCount = repository.CountByDeleted(false);
@@ -72,7 +73,9 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public Project Project { get; }
 
         private readonly List<ItemViewModel> items;
-        public CustomCollectionView<ItemViewModel> Items { get; }
+        public PagingListCollectionView Items { get; }
+
+        public View CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 
         public ICommand CreateCommand { get; }
         public ICommand OpenCommand { get; }
@@ -85,18 +88,18 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Project = project;
             items = new List<ItemViewModel>();
-            Items = new CustomCollectionView<ItemViewModel>(items);
+            Items = new PagingListCollectionView(items);
             CreateCommand = Command.Null;
-            OpenCommand = new AsyncCommand(OpenAsync, Items.HasSelection);
+            OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
             DeleteCommand = Command.Null;
-            DesignCommand = new AsyncCommand(DesignAsync, Items.HasSelection);
-            EnterCommand = new AsyncCommand(EnterAsync, Items.HasSelection);
+            DesignCommand = new AsyncCommand(DesignAsync, Items.HasCurrent);
+            EnterCommand = new AsyncCommand(EnterAsync, Items.HasCurrent);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
         private async Task InitializeAsync()
         {
-            IReadOnlyCollection<View> values = await Task.Run(() =>
+            IEnumerable<View> values = await Task.Run(() =>
             {
                 Project.LoadViews();
                 return Project.Views.Cast<View>().ToList();
@@ -115,7 +118,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task OpenAsync()
         {
-            await MainViewModel.Instance.GoToViewAsync(Project.FilePath, Items.SelectedItem.Value.Name);
+            await MainViewModel.Instance.GoToViewAsync(Task.FromResult(CurrentValue));
         }
 
         public async Task DesignAsync()
@@ -123,7 +126,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.MakeView,
                 $"/project:{Project.FilePath}",
-                $"/view:{Items.SelectedItem.Value.Name}");
+                $"/view:{CurrentValue.Name}");
         }
 
         public async Task EnterAsync()
@@ -131,7 +134,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.Enter,
                 $"/project:{Project.FilePath}",
-                $"/view:{Items.SelectedItem.Value.Name}",
+                $"/view:{CurrentValue.Name}",
                 "/record:*");
         }
 

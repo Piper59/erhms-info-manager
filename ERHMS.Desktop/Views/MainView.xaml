@@ -68,7 +68,8 @@
                           Header="_Command Prompt" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="V_iew help" />
+                <MenuItem Command="{Binding GoToHelpCommand}"
+                          Header="V_iew help" />
                 <Separator />
                 <MenuItem Header="_About ERHMS Info Manager" />
             </MenuItem>

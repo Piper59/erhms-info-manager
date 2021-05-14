@@ -1,7 +1,6 @@
-﻿using ERHMS.Common;
+﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Input;
 
@@ -14,7 +13,7 @@ namespace ERHMS.Desktop.ViewModels
         public string Lead { get; }
         public string Body { get; }
         public string Details { get; }
-        public IReadOnlyCollection<DialogButton> Buttons { get; }
+        public DialogButtonCollection Buttons { get; }
 
         private bool showingDetails;
         public bool ShowingDetails
@@ -30,7 +29,7 @@ namespace ERHMS.Desktop.ViewModels
             string lead,
             string body,
             string details,
-            IReadOnlyCollection<DialogButton> buttons)
+            DialogButtonCollection buttons)
         {
             Severity = severity;
             Icon = severity.ToIcon();

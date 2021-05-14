@@ -129,12 +129,17 @@
   <data name="AccessText.Ok" xml:space="preserve">
     <value>_OK</value>
   </data>
-  <data name="Body.FatalException" xml:space="preserve">
+  <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
 
 {0}</value>
   </data>
-  <data name="Body.IntegrationException" xml:space="preserve">
+  <data name="Body.UtilityClosing" xml:space="preserve">
+    <value>ERHMS Info Manager is still working.
+
+Close anyway?</value>
+  </data>
+  <data name="Body.UtilityError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error.
 
 {0}</value>
@@ -247,7 +252,7 @@
   <data name="Lead.LoadingView" xml:space="preserve">
     <value>Loading form</value>
   </data>
-  <data name="Lead.NonFatalException" xml:space="preserve">
+  <data name="Lead.NonFatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
   <data name="Lead.RefreshingCanvases" xml:space="preserve">

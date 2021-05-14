@@ -127,8 +127,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
             {
                 IsRelatedView = false;
             }
-            IEnumerable<XField> relateXFields = XFields.Where(xField => xField.FieldType == MetaFieldType.Relate);
-            foreach (XField relateXField in relateXFields.ToList())
+            IEnumerable<XField> relateXFields =
+                XFields.Where(xField => xField.FieldType == MetaFieldType.Relate).ToList();
+            foreach (XField relateXField in relateXFields)
             {
                 relateXField.Remove();
             }

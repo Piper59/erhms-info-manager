@@ -15,64 +15,63 @@ namespace ERHMS.Desktop.Infrastructure.Services
         public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
         public string Title { get; set; }
 
-        private event EventHandler StatusUpdated;
-        private void OnStatusUpdated(EventArgs e) => StatusUpdated?.Invoke(this, e);
-        private void OnStatusUpdated() => OnStatusUpdated(EventArgs.Empty);
+        private event EventHandler Reporting;
+        private void OnReporting(EventArgs e) => Reporting?.Invoke(this, e);
+        private void OnReporting() => OnReporting(EventArgs.Empty);
 
         public void Report(string value)
         {
             status = value;
-            OnStatusUpdated();
+            OnReporting();
         }
 
         private async Task RunCoreAsync(bool canBeCanceled, Func<CancellationToken, Task> action)
         {
-            using (ProgressViewModel dataContext = new ProgressViewModel(Title, canBeCanceled))
-            {
-                void ProgressService_StatusUpdated(object sender, EventArgs e)
-                {
-                    dataContext.Status = status;
-                }
+            ProgressViewModel dataContext = new ProgressViewModel(Title, canBeCanceled);
 
+            void ProgressService_Reporting(object sender, EventArgs e)
+            {
                 dataContext.Status = status;
-                StatusUpdated += ProgressService_StatusUpdated;
-                try
+            }
+
+            dataContext.Status = status;
+            Reporting += ProgressService_Reporting;
+            try
+            {
+                Window owner = Application.Current.MainWindow;
+                ProgressView window = new ProgressView
                 {
-                    Window owner = Application.Current.MainWindow;
-                    ProgressView window = new ProgressView
-                    {
-                        DataContext = dataContext
-                    };
-                    window.SetOwner(owner);
-                    using (WindowDisabler.Begin(owner))
-                    using (CancellationTokenSource completionTokenSource = new CancellationTokenSource())
-                    {
-                        Task task = action(dataContext.CancellationToken);
-                        Task continuation = task.ContinueWith(
-                            _ =>
-                            {
-                                completionTokenSource.Cancel();
-                                window.Done = true;
-                                window.Close();
-                            },
-                            TaskScheduler.FromCurrentSynchronizationContext());
-                        try
+                    DataContext = dataContext
+                };
+                window.SetOwner(owner);
+                using (WindowDisabler.Begin(owner))
+                {
+                    CancellationTokenSource completionTokenSource = new CancellationTokenSource();
+                    Task task = action(dataContext.CancellationToken);
+                    Task continuation = task.ContinueWith(
+                        _ =>
                         {
-                            await Task.Delay(Delay, completionTokenSource.Token);
-                        }
-                        catch (TaskCanceledException) { }
-                        if (!task.IsCompleted)
-                        {
-                            window.ShowDialog();
-                        }
-                        await task;
-                        await continuation;
+                            completionTokenSource.Cancel();
+                            window.Done = true;
+                            window.Close();
+                        },
+                        TaskScheduler.FromCurrentSynchronizationContext());
+                    try
+                    {
+                        await Task.Delay(Delay, completionTokenSource.Token);
                     }
+                    catch (TaskCanceledException) { }
+                    if (!task.IsCompleted)
+                    {
+                        window.ShowDialog();
+                    }
+                    await task;
+                    await continuation;
                 }
-                finally
-                {
-                    StatusUpdated -= ProgressService_StatusUpdated;
-                }
+            }
+            finally
+            {
+                Reporting -= ProgressService_Reporting;
             }
         }
 

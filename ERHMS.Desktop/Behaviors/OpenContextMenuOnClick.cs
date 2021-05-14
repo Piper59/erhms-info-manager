@@ -34,8 +34,11 @@ namespace ERHMS.Desktop.Behaviors
             {
                 return false;
             }
-            AssociatedObject.ContextMenu.IsOpen = true;
-            return true;
+            else
+            {
+                AssociatedObject.ContextMenu.IsOpen = true;
+                return true;
+            }
         }
     }
 }

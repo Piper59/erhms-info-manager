@@ -11,10 +11,10 @@
             <Run>of</Run>
             <Run Text="{Binding PageCount, Mode=OneWay}" />
         </TextBlock>
-        <Controls:IconButton AltText="Previous page"
+        <Controls:IconButton AlternativeText="Previous page"
                              Command="{Binding GoToPreviousPageCommand}"
                              Content="{x:Static local:Icons.PagePrevious}" />
-        <Controls:IconButton AltText="Next page"
+        <Controls:IconButton AlternativeText="Next page"
                              Command="{Binding GoToNextPageCommand}"
                              Content="{x:Static local:Icons.PageNext}" />
     </StackPanel>

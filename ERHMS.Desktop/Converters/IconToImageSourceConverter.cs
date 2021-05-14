@@ -16,10 +16,9 @@ namespace ERHMS.Desktop.Converters
             {
                 return DependencyProperty.UnsetValue;
             }
-            return Imaging.CreateBitmapSourceFromHIcon(
-                ((Icon)value).Handle,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions());
+            Icon icon = (Icon)value;
+            BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromEmptyOptions();
+            return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, sizeOptions);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

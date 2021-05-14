@@ -1,5 +1,4 @@
 ﻿using ERHMS.Desktop.Dialogs;
-using System.Collections.Generic;
 
 namespace ERHMS.Desktop.Services
 {
@@ -9,7 +8,7 @@ namespace ERHMS.Desktop.Services
         string Lead { get; set; }
         string Body { get; set; }
         string Details { get; set; }
-        IReadOnlyCollection<DialogButton> Buttons { get; set; }
+        DialogButtonCollection Buttons { get; set; }
 
         bool? Show();
     }

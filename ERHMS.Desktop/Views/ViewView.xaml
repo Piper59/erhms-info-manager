@@ -25,13 +25,13 @@
                     <Run Text="{Binding Value.Name}" />
                 </TextBlock>
                 <WrapPanel Grid.Column="1">
-                    <Controls:IconButton AltText="Up to database"
+                    <Controls:IconButton AlternativeText="Up to database"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{x:Static local:Icons.LevelParent}" />
-                    <Controls:IconButton AltText="Home"
+                    <Controls:IconButton AlternativeText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
-                    <Controls:IconButton AltText="Help"
+                    <Controls:IconButton AlternativeText="Help"
                                          Command="{x:Static local:AppCommands.GoToHelpCommand}"
                                          Content="{x:Static local:Icons.Help}" />
                 </WrapPanel>

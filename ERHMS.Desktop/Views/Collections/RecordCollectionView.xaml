@@ -16,7 +16,7 @@
                     <ContextMenu>
                         <MenuItem Command="{Binding CopyCellCommand, Source={x:Reference Root}}"
                                   CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
-                                  Header="_Copy cell" />
+                                  Header="_Copy cell to clipboard" />
                     </ContextMenu>
                 </Setter.Value>
             </Setter>
@@ -48,15 +48,15 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <WrapPanel Grid.Column="0">
-                <Controls:IconButton AltText="Add"
+                <Controls:IconButton AlternativeText="Add"
                                      Command="{Binding AddCommand}"
                                      Content="{x:Static local:Icons.Add}" />
-                <Controls:IconButton AltText="Edit"
+                <Controls:IconButton AlternativeText="Edit"
                                      Command="{Binding EditCommand}"
                                      Content="{x:Static local:Icons.Edit}" />
                 <Controls:IconButton x:Name="CopyColumnButton"
-                                     AltText="Copy column"
-                                     Content="{x:Static local:Icons.Copy}"
+                                     AlternativeText="Copy column to clipboard"
+                                     Content="{x:Static local:Icons.Clipboard}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
                         <ContextMenu x:Name="CopyColumnContextMenu"
@@ -69,21 +69,21 @@
                     </b:Interaction.Behaviors>
                 </Controls:IconButton>
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AltText="Delete"
+                <Controls:IconButton AlternativeText="Delete"
                                      Command="{Binding DeleteCommand}"
                                      Content="{x:Static local:Icons.Delete}" />
-                <Controls:IconButton AltText="Undelete"
+                <Controls:IconButton AlternativeText="Undelete"
                                      Command="{Binding UndeleteCommand}"
                                      Content="{x:Static local:Icons.Undelete}" />
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AltText="Import"
+                <Controls:IconButton AlternativeText="Import"
                                      Command="{Binding ImportCommand}"
                                      Content="{x:Static local:Icons.Import}" />
-                <Controls:IconButton AltText="Export"
+                <Controls:IconButton AlternativeText="Export"
                                      Command="{Binding ExportCommand}"
                                      Content="{x:Static local:Icons.Export}" />
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AltText="Refresh"
+                <Controls:IconButton AlternativeText="Refresh"
                                      Command="{Binding RefreshCommand}"
                                      Content="{x:Static local:Icons.Refresh}" />
             </WrapPanel>

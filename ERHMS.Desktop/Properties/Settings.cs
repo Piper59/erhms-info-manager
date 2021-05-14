@@ -18,6 +18,16 @@ namespace ERHMS.Desktop.Properties
             }
         }
 
+        public void Initialize()
+        {
+            if (UpgradeRequired)
+            {
+                Upgrade();
+                UpgradeRequired = false;
+                Save();
+            }
+        }
+
         public string GetProjectPath(CoreProject coreProject)
         {
             switch (coreProject)

@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.Properties;
+﻿using ERHMS.Common.Linq;
+using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.ViewModels.Utilities;
 using ERHMS.Desktop.Views.Utilities;
 using System.Collections.Generic;
@@ -9,27 +10,29 @@ namespace ERHMS.Desktop.Utilities
 {
     public class GetWorkerId : IUtility
     {
-        public string Instructions => ResXResources.Instructions_GetWorkerId;
-
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string GlobalRecordId { get; set; }
+        public string Instructions => ResXResources.Instructions_GetWorkerId;
 
-        public IEnumerable<string> GetParameters()
+        public IEnumerable<string> Parameters
         {
-            yield return FirstName;
-            yield return LastName;
-            yield return EmailAddress;
-            yield return GlobalRecordId;
-        }
-
-        public void ParseParameters(IReadOnlyList<string> parameters)
-        {
-            FirstName = parameters[0];
-            LastName = parameters[1];
-            EmailAddress = parameters[2];
-            GlobalRecordId = parameters[3];
+            get
+            {
+                yield return FirstName;
+                yield return LastName;
+                yield return EmailAddress;
+                yield return GlobalRecordId;
+            }
+            set
+            {
+                IEnumerator<string> enumerator = value.GetEnumerator();
+                FirstName = enumerator.GetNext();
+                LastName = enumerator.GetNext();
+                EmailAddress = enumerator.GetNext();
+                GlobalRecordId = enumerator.GetNext();
+            }
         }
 
         public async Task<string> ExecuteAsync()

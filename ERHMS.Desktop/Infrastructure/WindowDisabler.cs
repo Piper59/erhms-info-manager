@@ -18,6 +18,9 @@ namespace ERHMS.Desktop.Infrastructure
             return disabler;
         }
 
+        private bool oldIsEnabled;
+        private Cursor oldOverrideCursor;
+
         public Window Window { get; }
 
         private WindowDisabler(Window window)
@@ -32,6 +35,8 @@ namespace ERHMS.Desktop.Infrastructure
 
         private void Begin()
         {
+            oldIsEnabled = Window.IsEnabled;
+            oldOverrideCursor = Mouse.OverrideCursor;
             Window.Closing += Window_Closing;
             Window.IsEnabled = false;
             Mouse.OverrideCursor = Cursors.Wait;
@@ -39,8 +44,8 @@ namespace ERHMS.Desktop.Infrastructure
 
         public void End()
         {
-            Mouse.OverrideCursor = null;
-            Window.IsEnabled = true;
+            Mouse.OverrideCursor = oldOverrideCursor;
+            Window.IsEnabled = oldIsEnabled;
             Window.Closing -= Window_Closing;
         }
 

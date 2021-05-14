@@ -139,7 +139,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         private IEnumerable<XAttribute> GetCanonizedAttributes()
         {
             bool usedNameMap = false;
-            IReadOnlyDictionary<string, string> nameMap = new Dictionary<string, string>
+            IDictionary<string, string> nameMap = new Dictionary<string, string>
             {
                 { "Expr1015", "ControlFontFamily" },
                 { "Expr1016", "ControlFontSize" },

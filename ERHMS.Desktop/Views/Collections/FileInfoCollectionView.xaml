@@ -4,24 +4,28 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
+    <UserControl.Resources>
+        <Converters:ByteCountConverter x:Key="ByteCountConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <Controls:IconButton AltText="Create"
+            <Controls:IconButton AlternativeText="Create"
                                  Command="{Binding CreateCommand}"
                                  Content="{x:Static local:Icons.Create}" />
-            <Controls:IconButton AltText="Open"
+            <Controls:IconButton AlternativeText="Open"
                                  Command="{Binding OpenCommand}"
                                  Content="{x:Static local:Icons.Open}" />
-            <Controls:IconButton AltText="Delete"
+            <Controls:IconButton AlternativeText="Delete"
                                  Command="{Binding DeleteCommand}"
                                  Content="{x:Static local:Icons.Delete}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AltText="Refresh"
+            <Controls:IconButton AlternativeText="Refresh"
                                  Command="{Binding RefreshCommand}"
                                  Content="{x:Static local:Icons.Refresh}" />
         </WrapPanel>
@@ -32,6 +36,14 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Value.Name}"
                                     Header="Name"
+                                    Width="3*" />
+                <DataGridTextColumn Binding="{Binding Value.LastWriteTime}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Date modified"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding Value.Length, Converter={StaticResource ByteCountConverter}}"
+                                    CellStyle="{StaticResource NumericDataGridCell}"
+                                    Header="Size"
                                     Width="*" />
             </DataGrid.Columns>
             <DataGrid.InputBindings>

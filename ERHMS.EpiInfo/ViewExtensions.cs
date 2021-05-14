@@ -24,8 +24,9 @@ namespace ERHMS.EpiInfo
             {
                 IEnumerable<Field> relateFields = @this.ParentView.Fields.RelatedFields
                     .Cast<RelatedViewField>()
-                    .Where(field => field.RelatedViewID == @this.Id);
-                foreach (Field relateField in relateFields.ToList())
+                    .Where(field => field.RelatedViewID == @this.Id)
+                    .ToList();
+                foreach (Field relateField in relateFields)
                 {
                     metadata.DeleteField(relateField);
                     @this.ParentView.Fields.Remove(relateField);

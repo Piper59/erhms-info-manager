@@ -6,7 +6,7 @@ namespace ERHMS.Desktop.Infrastructure
     {
         public static bool Search(this string @this, string value)
         {
-            return @this.IndexOf(value, StringComparison.OrdinalIgnoreCase) != -1;
+            return @this.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) != -1;
         }
     }
 }

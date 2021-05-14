@@ -1,4 +1,5 @@
 ﻿using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Data;
 using ERHMS.Desktop.ViewModels.Utilities;
 using System.Windows;
 using System.Windows.Input;
@@ -18,14 +19,15 @@ namespace ERHMS.Desktop.Views.Utilities
 
         public GetWorkerIdView()
         {
+            InitializeComponent();
             CommitCommand = new SyncCommand(Commit, CanCommit);
             CancelCommand = new SyncCommand(Cancel);
-            InitializeComponent();
+            // TODO: Make sure commands work
         }
 
         public bool CanCommit()
         {
-            return DataContext != null && DataContext.Workers.Items.HasSelection();
+            return DataContext?.Workers.Items.HasCurrent() ?? false;
         }
 
         public void Commit()

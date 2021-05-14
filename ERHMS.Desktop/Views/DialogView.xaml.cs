@@ -27,8 +27,8 @@ namespace ERHMS.Desktop.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)e.Source;
-            DialogButton dialogButton = (DialogButton)button.DataContext;
-            DialogResult = dialogButton.Result;
+            DialogButton dataContext = (DialogButton)button.DataContext;
+            DialogResult = dataContext.Result;
             Close();
         }
     }

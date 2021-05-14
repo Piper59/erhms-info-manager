@@ -24,14 +24,14 @@ namespace ERHMS.Desktop.Behaviors
             }
         }
 
-        private static FocusNavigationDirection GetExternalDirection(bool forward)
-        {
-            return forward ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous;
-        }
-
         private static FocusNavigationDirection GetTerminalDirection(bool forward)
         {
             return forward ? FocusNavigationDirection.Last : FocusNavigationDirection.First;
+        }
+
+        private static FocusNavigationDirection GetExternalDirection(bool forward)
+        {
+            return forward ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous;
         }
 
         protected override void OnAttached()

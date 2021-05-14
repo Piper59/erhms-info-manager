@@ -65,9 +65,9 @@ namespace ERHMS.Launcher.Properties {
         ///
         ///{0}.
         /// </summary>
-        internal static string Body_Exception {
+        internal static string Body_Error {
             get {
-                return ResourceManager.GetString("Body.Exception", resourceCulture);
+                return ResourceManager.GetString("Body.Error", resourceCulture);
             }
         }
         

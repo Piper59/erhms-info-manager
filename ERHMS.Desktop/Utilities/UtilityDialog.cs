@@ -1,10 +1,10 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using ERHMS.Desktop.Properties;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace ERHMS.Desktop.Utilities
 {
-    public partial class IntegrationForm : Form
+    public partial class UtilityDialog : Form
     {
         public string Body
         {
@@ -14,7 +14,7 @@ namespace ERHMS.Desktop.Utilities
 
         public bool Done { get; set; }
 
-        public IntegrationForm()
+        public UtilityDialog()
         {
             InitializeComponent();
         }
@@ -40,17 +40,13 @@ namespace ERHMS.Desktop.Utilities
             }
             else
             {
-                StringBuilder message = new StringBuilder();
-                message.AppendLine("ERHMS Info Manager is still working.");
-                message.AppendLine();
-                message.AppendLine("Close anyway?");
-                DialogResult dialogResult = MessageBox.Show(
+                DialogResult result = MessageBox.Show(
                     this,
-                    message.ToString(),
-                    Text,
+                    ResXResources.Body_UtilityClosing,
+                    ResXResources.Title_App,
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
-                if (dialogResult == DialogResult.No)
+                if (result == DialogResult.No)
                 {
                     e.Cancel = true;
                 }

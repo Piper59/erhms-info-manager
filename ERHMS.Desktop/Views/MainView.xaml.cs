@@ -12,17 +12,28 @@ namespace ERHMS.Desktop.Views
         public new MainViewModel DataContext
         {
             get { return (MainViewModel)base.DataContext; }
-            private set { base.DataContext = value; }
+            set { base.DataContext = value; }
         }
 
         public ICommand ExitCommand { get; }
 
         public MainView()
         {
-            ExitCommand = new SyncCommand(Exit);
             InitializeComponent();
             ReadSettings(Settings.Default);
-            DataContext = MainViewModel.Instance;
+            ExitCommand = new SyncCommand(Exit);
+            // TODO: Make sure commands work
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            if (e.Cancel)
+            {
+                return;
+            }
+            WriteSettings(Settings.Default);
+            Settings.Default.Save();
         }
 
         private void ReadSettings(Settings settings)
@@ -37,17 +48,6 @@ namespace ERHMS.Desktop.Views
             settings.WindowWidth = RestoreBounds.Width;
             settings.WindowHeight = RestoreBounds.Height;
             settings.WindowMaximized = WindowState == WindowState.Maximized;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            if (e.Cancel)
-            {
-                return;
-            }
-            WriteSettings(Settings.Default);
-            Settings.Default.Save();
         }
 
         public void Exit()

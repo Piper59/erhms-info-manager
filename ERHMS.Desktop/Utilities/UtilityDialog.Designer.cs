@@ -1,7 +1,7 @@
 ﻿
 namespace ERHMS.Desktop.Utilities
 {
-    partial class IntegrationForm
+    partial class UtilityDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace ERHMS.Desktop.Utilities
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IntegrationForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UtilityDialog));
             this.LeadLabel = new System.Windows.Forms.Label();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.BodyLabel = new System.Windows.Forms.Label();
@@ -68,7 +68,7 @@ namespace ERHMS.Desktop.Utilities
             this.BodyLabel.TabIndex = 2;
             this.BodyLabel.UseWaitCursor = true;
             // 
-            // IntegrationForm
+            // UtilityDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -86,7 +86,7 @@ namespace ERHMS.Desktop.Utilities
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "IntegrationForm";
+            this.Name = "UtilityDialog";
             this.Padding = new System.Windows.Forms.Padding(15);
             this.Text = "ERHMS Info Manager";
             this.UseWaitCursor = true;

@@ -1,20 +1,20 @@
-﻿using ERHMS.Common;
-using ERHMS.Desktop.Data;
+﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Data;
 
 namespace ERHMS.Desktop.CollectionViews
 {
-    public class PhaseCollectionView : CustomCollectionView<PhaseCollectionView.Item>
+    public class PhaseCollectionView : ListCollectionView
     {
-        public class Item : ObservableObject, ISelectable
+        public class Item : ObservableObject
         {
             public static Item PreDeployment { get; } = new Item(Phase.PreDeployment);
             public static Item Deployment { get; } = new Item(Phase.Deployment);
             public static Item PostDeployment { get; } = new Item(Phase.PostDeployment);
 
-            public static IReadOnlyCollection<Item> Instances { get; } = new Item[]
+            public static IEnumerable<Item> Instances { get; } = new Item[]
             {
                 PreDeployment,
                 Deployment,
@@ -23,7 +23,7 @@ namespace ERHMS.Desktop.CollectionViews
 
             public Phase Value { get; }
             public CoreProject CoreProject { get; }
-            public IReadOnlyCollection<CoreView> CoreViews { get; }
+            public IEnumerable<CoreView> CoreViews { get; }
 
             private bool selected;
             public bool Selected

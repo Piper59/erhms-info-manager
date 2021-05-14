@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             for (int index = 0; index < fieldInfos.Count; index++)
             {
                 string fieldInfo = fieldInfos[index];
-                IReadOnlyList<string> components = fieldInfo.Split(':');
+                IList<string> components = fieldInfo.Split(':');
                 if (components.Count != 2)
                 {
                     continue;

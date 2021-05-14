@@ -16,7 +16,7 @@ namespace ERHMS.EpiInfo.Data
             return fieldNameQualifierRegex.Replace(fieldName, "");
         }
 
-        private readonly IReadOnlyDictionary<string, int> ordinalsByPropertyName;
+        private readonly IDictionary<string, int> ordinalsByPropertyName;
 
         public IDataRecord Source { get; }
         public object this[int ordinal] => Source.GetValue(ordinal);
@@ -26,7 +26,7 @@ namespace ERHMS.EpiInfo.Data
         public RecordMapper(IDataRecord source)
         {
             Source = source;
-            Dictionary<string, int> ordinalsByPropertyName = new Dictionary<string, int>(NameComparer.Default);
+            ordinalsByPropertyName = new Dictionary<string, int>(NameComparer.Default);
             for (int index = 0; index < source.FieldCount; index++)
             {
                 string fieldName = source.GetName(index);
@@ -36,7 +36,6 @@ namespace ERHMS.EpiInfo.Data
                     ordinalsByPropertyName[propertyName] = index;
                 }
             }
-            this.ordinalsByPropertyName = ordinalsByPropertyName;
         }
 
         public void Update(TRecord target)
