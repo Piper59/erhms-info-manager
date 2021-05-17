@@ -16,7 +16,7 @@ namespace ERHMS.Common.Logging
             LockingModel = new InterProcessLock();
             layout = new PatternLayout(string.Join(
                 " | ",
-                "%timestamp",
+                "%date",
                 "%property{user}",
                 "%property{process}(%thread)",
                 "%level",

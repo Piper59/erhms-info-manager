@@ -19,10 +19,9 @@ namespace ERHMS.Desktop.Views
 
         public MainView()
         {
+            ExitCommand = new SyncCommand(Exit);
             InitializeComponent();
             ReadSettings(Settings.Default);
-            ExitCommand = new SyncCommand(Exit);
-            // TODO: Make sure commands work
         }
 
         protected override void OnClosing(CancelEventArgs e)

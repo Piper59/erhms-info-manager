@@ -19,10 +19,9 @@ namespace ERHMS.Desktop.Views.Utilities
 
         public GetWorkerIdView()
         {
-            InitializeComponent();
             CommitCommand = new SyncCommand(Commit, CanCommit);
             CancelCommand = new SyncCommand(Cancel);
-            // TODO: Make sure commands work
+            InitializeComponent();
         }
 
         public bool CanCommit()

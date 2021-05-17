@@ -5,8 +5,9 @@ namespace ERHMS.Desktop.Controls
 {
     public partial class SearchTextBox : UserControl
     {
-        // TODO: Does this work properly without specifying two-way binding?
-        public static readonly DependencyProperty TextProperty = TextBox.TextProperty.AddOwner(typeof(SearchTextBox));
+        public static readonly DependencyProperty TextProperty = TextBox.TextProperty.AddOwner(
+            typeof(SearchTextBox),
+            new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Text
         {
@@ -20,7 +21,6 @@ namespace ERHMS.Desktop.Controls
             SetClearButtonMargin();
         }
 
-        // TODO: Does this work?
         private void SetClearButtonMargin()
         {
             Thickness margin = ClearButton.Margin;

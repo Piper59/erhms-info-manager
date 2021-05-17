@@ -154,7 +154,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private bool IsStatusMatch(Record value)
         {
-            return value.RECSTATUS == Statuses.CurrentValue;
+            return Statuses.CurrentValue == null || value.RECSTATUS == Statuses.CurrentValue;
         }
 
         private bool IsSearchMatch(Record value)

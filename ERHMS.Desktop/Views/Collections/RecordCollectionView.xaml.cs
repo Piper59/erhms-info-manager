@@ -30,11 +30,10 @@ namespace ERHMS.Desktop.Views.Collections
 
         public RecordCollectionView()
         {
-            InitializeComponent();
-            DataContextChanged += RecordCollectionView_DataContextChanged;
             CopyColumnCommand = new SyncCommand<DataGridColumn>(CopyColumn);
             CopyCellCommand = new SyncCommand<DataGridCell>(CopyCell);
-            // TODO: Make sure commands work
+            InitializeComponent();
+            DataContextChanged += RecordCollectionView_DataContextChanged;
         }
 
         private void RecordCollectionView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

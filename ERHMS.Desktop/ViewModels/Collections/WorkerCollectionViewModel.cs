@@ -127,7 +127,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         private bool IsStatusMatch(Worker value)
         {
-            return value.RECSTATUS == Statuses.CurrentValue;
+            return Statuses.CurrentValue == null || value.RECSTATUS == Statuses.CurrentValue;
         }
 
         private bool IsSearchMatch(Worker value)

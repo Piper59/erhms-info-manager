@@ -8,7 +8,7 @@ namespace ERHMS.Desktop.Converters
 {
     public class ByteCountConverter : IValueConverter
     {
-        public string Format { get; set; } = "N0";
+        public string Format { get; set; } = "{0:N0}";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

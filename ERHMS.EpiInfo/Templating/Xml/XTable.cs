@@ -36,6 +36,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XTable(XElement element)
             : this(element.Name)
         {
+            Add(element.Attributes());
             Add(element.Elements(ElementNames.Item).Select(child => new XItem(child)));
         }
 

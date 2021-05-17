@@ -48,7 +48,7 @@ namespace ERHMS.Common.Text
             else
             {
                 int distance = GetDistance(str1, str2);
-                return (double)distance / maxDistance;
+                return 1.0 - (double)distance / maxDistance;
             }
         }
     }
