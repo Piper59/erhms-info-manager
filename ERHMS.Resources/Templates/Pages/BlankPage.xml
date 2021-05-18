@@ -8,7 +8,7 @@
       CheckCode="">
       <Page
         PageId="1"
-        Name="Page X"
+        Name="BlankPage"
         Position="0"
         BackgroundId="0"
         ViewId="1">
@@ -20,7 +20,7 @@
           FieldTypeId="2"
           ControlAfterCheckCode=""
           ControlBeforeCheckCode=""
-          PageName="Page X"
+          PageName="BlankPage"
           PageBeforeCheckCode=""
           PageAfterCheckCode=""
           Position="0"
@@ -69,7 +69,7 @@
           FieldTypeId="2"
           ControlAfterCheckCode=""
           ControlBeforeCheckCode=""
-          PageName="Page X"
+          PageName="BlankPage"
           PageBeforeCheckCode=""
           PageAfterCheckCode=""
           Position="0"

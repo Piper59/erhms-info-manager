@@ -25,10 +25,13 @@ namespace ERHMS.EpiInfo.Templating
                 FieldMappers = FieldMapper.GetInstances(this).ToList();
             }
 
-            public void OnXViewCanonizing(XView xView)
+            public void OnXViewCanonizing(XView xView, TemplateLevel level)
             {
                 int viewId = viewIdMap.Count + 1;
-                viewIdMap[xView.ViewId] = viewId;
+                if (level >= TemplateLevel.View)
+                {
+                    viewIdMap[xView.ViewId] = viewId;
+                }
                 xView.ViewId = viewId;
             }
 
@@ -117,7 +120,7 @@ namespace ERHMS.EpiInfo.Templating
         private void CanonizeXView(XView xView)
         {
             Progress?.Report($"Canonizing view: {xView.Name}");
-            Context.OnXViewCanonizing(xView);
+            Context.OnXViewCanonizing(xView, XTemplate.Level);
             xView.Canonize(XTemplate.Level);
             foreach (XPage xPage in xView.XPages)
             {

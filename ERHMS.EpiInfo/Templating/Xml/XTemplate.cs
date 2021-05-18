@@ -78,14 +78,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
             Add(element.Element(ElementNames.FieldFootprint));
         }
 
-        public override void WriteTo(XmlWriter writer)
-        {
-            writer.Settings.OmitXmlDeclaration = true;
-            writer.Settings.Indent = true;
-            writer.Settings.NewLineOnAttributes = Canonized;
-            base.WriteTo(writer);
-        }
-
         public void Canonize()
         {
             Canonized = true;
@@ -94,6 +86,24 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 this.CopyAttribute(nameof(Description)),
                 new XAttribute(nameof(CreateDate), ""),
                 this.CopyAttribute(nameof(Level)));
+        }
+
+        public XmlWriterSettings GetXmlWriterSettings()
+        {
+            return new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true,
+                NewLineOnAttributes = Canonized
+            };
+        }
+
+        public new void Save(string path)
+        {
+            using (XmlWriter writer = XmlWriter.Create(path, GetXmlWriterSettings()))
+            {
+                Save(writer);
+            }
         }
     }
 }

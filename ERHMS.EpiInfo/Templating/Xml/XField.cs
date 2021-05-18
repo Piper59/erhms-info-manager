@@ -163,8 +163,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 {
                     continue;
                 }
-                if (nameMap.TryGetValue(name, out name))
+                if (nameMap.TryGetValue(name, out string mappedName))
                 {
+                    name = mappedName;
                     usedNameMap = true;
                 }
                 if (name.EndsWith("Percentage"))
