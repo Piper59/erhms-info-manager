@@ -17,6 +17,11 @@ namespace ERHMS.Desktop.Controls
             typeof(string),
             typeof(IconButton));
 
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
+            nameof(Description),
+            typeof(string),
+            typeof(IconButton));
+
         private static void AccessKeyProperty_DependencyPropertyChanged(
             DependencyObject sender,
             DependencyPropertyChangedEventArgs e)
@@ -42,6 +47,12 @@ namespace ERHMS.Desktop.Controls
         {
             get { return (string)GetValue(AlternativeTextProperty); }
             set { SetValue(AlternativeTextProperty, value); }
+        }
+
+        public string Description
+        {
+            get { return (string)GetValue(DescriptionProperty); }
+            set { SetValue(DescriptionProperty, value); }
         }
     }
 }

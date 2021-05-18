@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+                    xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -76,8 +78,13 @@
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBase}" />
 
     <Style x:Key="IconButtonBase" TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
+        <Style.Resources>
+            <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+        </Style.Resources>
         <Setter Property="AutomationProperties.AcceleratorKey" Value="{Binding AccessKey, RelativeSource={RelativeSource Self}}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding AlternativeText, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="AutomationProperties.HelpText" Value="{Binding Description, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="ToolTipService.ShowDuration" Value="{x:Static sys:Int32.MaxValue}" />
         <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
         <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
         <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
@@ -87,7 +94,28 @@
                            Bottom="{StaticResource SmallSpace}" />
             </Setter.Value>
         </Setter>
-        <Setter Property="ToolTip" Value="{Binding AlternativeText, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="ToolTip">
+            <Setter.Value>
+                <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}"
+                         MaxWidth="240">
+                    <ToolTip.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </Style>
+                    </ToolTip.Resources>
+                    <StackPanel>
+                        <TextBlock FontWeight="{StaticResource ThickFontWeight}"
+                                   Text="{Binding AlternativeText}" />
+                        <TextBlock Text="{Binding Description}"
+                                   Visibility="{Binding Description, Converter={StaticResource NullableToVisibilityConverter}}">
+                            <TextBlock.Margin>
+                                <Thickness Top="{StaticResource SmallSpace}" />
+                            </TextBlock.Margin>
+                        </TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
     </Style>
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}" />
