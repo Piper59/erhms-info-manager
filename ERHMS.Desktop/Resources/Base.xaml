@@ -86,9 +86,9 @@
                                              FalseValue="{StaticResource DefaultFontWeight}" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         </Style.Resources>
-        <Setter Property="AutomationProperties.AcceleratorKey" Value="{Binding AccessKey, RelativeSource={RelativeSource Self}}" />
-        <Setter Property="AutomationProperties.Name" Value="{Binding AlternativeText, RelativeSource={RelativeSource Self}}" />
-        <Setter Property="AutomationProperties.HelpText" Value="{Binding Description, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="AutomationProperties.AcceleratorKey" Value="{Binding AccessKey, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
+        <Setter Property="AutomationProperties.Name" Value="{Binding AlternativeText, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
+        <Setter Property="AutomationProperties.HelpText" Value="{Binding Description, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
         <Setter Property="ToolTipService.ShowDuration" Value="{x:Static sys:Int32.MaxValue}" />
         <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
         <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
