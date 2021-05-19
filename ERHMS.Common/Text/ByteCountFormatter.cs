@@ -51,7 +51,11 @@ namespace ERHMS.Common.Text
         {
             long absValue = Math.Abs(value);
             Unit unit = unitsDescending.FirstOrDefault(_unit => _unit.Magnitude <= absValue) ?? Unit.Kilobyte;
-            double unitValue = (double)value / unit.Magnitude;
+            long unitValue = Math.DivRem(value, unit.Magnitude, out long remainder);
+            if (remainder != 0)
+            {
+                unitValue += Math.Sign(value);
+            }
             return $"{unitValue.ToString(format)} {unit.Symbol}";
         }
 
