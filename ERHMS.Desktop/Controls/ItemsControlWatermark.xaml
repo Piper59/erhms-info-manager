@@ -14,7 +14,7 @@
                  Path="ItemsControl.HasItems" />
     </UserControl.Visibility>
     <Border Background="{x:Static SystemColors.WindowBrush}"
-            BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
+            BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
             BorderThickness="1"
             Padding="{StaticResource DefaultPadding}">
         <TextBlock Foreground="{x:Static SystemColors.WindowTextBrush}"
