@@ -79,6 +79,11 @@
 
     <Style x:Key="IconButtonBase" TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
         <Style.Resources>
+            <Converters:NullableToBoolConverter x:Key="NullableToBoolConverter" />
+            <Converters:ConditionalConverter x:Key="DescriptionToAlternativeTextFontWeightConverter"
+                                             BaseConverter="{StaticResource NullableToBoolConverter}"
+                                             TrueValue="{StaticResource ThickFontWeight}"
+                                             FalseValue="{StaticResource DefaultFontWeight}" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         </Style.Resources>
         <Setter Property="AutomationProperties.AcceleratorKey" Value="{Binding AccessKey, RelativeSource={RelativeSource Self}}" />
@@ -104,7 +109,7 @@
                         </Style>
                     </ToolTip.Resources>
                     <StackPanel>
-                        <TextBlock FontWeight="{StaticResource ThickFontWeight}"
+                        <TextBlock FontWeight="{Binding Description, Converter={StaticResource DescriptionToAlternativeTextFontWeightConverter}}"
                                    Text="{Binding AlternativeText}" />
                         <TextBlock Text="{Binding Description}"
                                    Visibility="{Binding Description, Converter={StaticResource NullableToVisibilityConverter}}">

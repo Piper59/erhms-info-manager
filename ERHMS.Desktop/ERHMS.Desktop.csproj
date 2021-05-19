@@ -118,8 +118,10 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverter.cs" />
     <Compile Include="Converters\ByteCountConverter.cs" />
+    <Compile Include="Converters\ConditionalConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
     <Compile Include="Converters\KeyToResXResourceConverter.cs" />
+    <Compile Include="Converters\NullableToBoolConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\StringCaseConverter.cs" />

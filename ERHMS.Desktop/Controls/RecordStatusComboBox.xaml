@@ -4,7 +4,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <UserControl.Resources>
-        <Converters:KeyToResXResourceConverter x:Key="RecordStatusToNameConverter" NullValue="Null" Prefix="RecordStatus.Name." />
+        <Converters:KeyToResXResourceConverter x:Key="RecordStatusToNameConverter"
+                                               Prefix="RecordStatus.Name."
+                                               NullValue="Null" />
     </UserControl.Resources>
     <ComboBox AutomationProperties.Name="Record status"
               ItemsSource="{Binding ItemsSource, ElementName=Root}"

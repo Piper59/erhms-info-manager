@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccessText.AllColumns" xml:space="preserve">
-    <value>_All columns</value>
+  <data name="AccessText.AllFields" xml:space="preserve">
+    <value>_All fields</value>
   </data>
   <data name="AccessText.Cancel" xml:space="preserve">
     <value>_Cancel</value>

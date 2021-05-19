@@ -13,24 +13,30 @@
         <WrapPanel Grid.Row="0">
             <Controls:IconButton AlternativeText="Create"
                                  Command="{Binding CreateCommand}"
-                                 Content="{x:Static local:Icons.Create}" />
+                                 Content="{x:Static local:Icons.Create}"
+                                 Description="Create a new form in the Epi Info Form Designer module." />
             <Controls:IconButton AlternativeText="Open"
                                  Command="{Binding OpenCommand}"
-                                 Content="{x:Static local:Icons.Open}" />
+                                 Content="{x:Static local:Icons.Open}"
+                                 Description="Open the selected form to view and manage associated records." />
             <Controls:IconButton AlternativeText="Delete"
                                  Command="{Binding DeleteCommand}"
-                                 Content="{x:Static local:Icons.Delete}" />
+                                 Content="{x:Static local:Icons.Delete}"
+                                 Description="Permanently delete the selected form, any related forms, and all associated records." />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AlternativeText="Design"
                                  Command="{Binding DesignCommand}"
-                                 Content="{x:Static local:Icons.Design}" />
+                                 Content="{x:Static local:Icons.Design}"
+                                 Description="Open the selected form in the Epi Info Form Designer module." />
             <Controls:IconButton AlternativeText="Enter"
                                  Command="{Binding EnterCommand}"
-                                 Content="{x:Static local:Icons.Enter}" />
+                                 Content="{x:Static local:Icons.Enter}"
+                                 Description="Open the selected form in the Epi Info Enter Data module." />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AlternativeText="Refresh"
                                  Command="{Binding RefreshCommand}"
-                                 Content="{x:Static local:Icons.Refresh}" />
+                                 Content="{x:Static local:Icons.Refresh}"
+                                 Description="Refresh the information displayed on this screen." />
         </WrapPanel>
         <DataGrid x:Name="ItemDataGrid"
                   Grid.Row="1"
@@ -67,6 +73,7 @@
             </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="1"
-                                        ItemsControl="{x:Reference ItemDataGrid}" />
+                                        ItemsControl="{x:Reference ItemDataGrid}"
+                                        Text="No forms found" />
     </Grid>
 </UserControl>

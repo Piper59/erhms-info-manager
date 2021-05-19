@@ -14,9 +14,9 @@
             <Setter Property="ContextMenu">
                 <Setter.Value>
                     <ContextMenu>
-                        <MenuItem Command="{Binding CopyCellCommand, Source={x:Reference Root}}"
+                        <MenuItem Command="{Binding CopyValueCommand, Source={x:Reference Root}}"
                                   CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
-                                  Header="_Copy cell to clipboard" />
+                                  Header="_Copy value to Clipboard" />
                     </ContextMenu>
                 </Setter.Value>
             </Setter>
@@ -50,18 +50,21 @@
             <WrapPanel Grid.Column="0">
                 <Controls:IconButton AlternativeText="Add"
                                      Command="{Binding AddCommand}"
-                                     Content="{x:Static local:Icons.Add}" />
+                                     Content="{x:Static local:Icons.Add}"
+                                     Description="Add a new record in the Epi Info Enter Data module." />
                 <Controls:IconButton AlternativeText="Edit"
                                      Command="{Binding EditCommand}"
-                                     Content="{x:Static local:Icons.Edit}" />
-                <Controls:IconButton x:Name="CopyColumnButton"
-                                     AlternativeText="Copy column to clipboard"
+                                     Content="{x:Static local:Icons.Edit}"
+                                     Description="Edit the selected record in the Epi Info Enter Data module." />
+                <Controls:IconButton x:Name="CopyFieldButton"
+                                     AlternativeText="Copy"
                                      Content="{x:Static local:Icons.Clipboard}"
+                                     Description="Copy values to the Clipboard from one or all fields."
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
-                        <ContextMenu x:Name="CopyColumnContextMenu"
+                        <ContextMenu x:Name="CopyFieldContextMenu"
                                      Placement="Bottom"
-                                     PlacementTarget="{x:Reference CopyColumnButton}">
+                                     PlacementTarget="{x:Reference CopyFieldButton}">
                         </ContextMenu>
                     </Controls:IconButton.ContextMenu>
                     <b:Interaction.Behaviors>
@@ -71,21 +74,26 @@
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AlternativeText="Delete"
                                      Command="{Binding DeleteCommand}"
-                                     Content="{x:Static local:Icons.Delete}" />
+                                     Content="{x:Static local:Icons.Delete}"
+                                     Description="Mark the selected records as deleted (without permanently deleting them)." />
                 <Controls:IconButton AlternativeText="Undelete"
                                      Command="{Binding UndeleteCommand}"
-                                     Content="{x:Static local:Icons.Undelete}" />
+                                     Content="{x:Static local:Icons.Undelete}"
+                                     Description="Mark the selected records as undeleted." />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AlternativeText="Import"
                                      Command="{Binding ImportCommand}"
-                                     Content="{x:Static local:Icons.Import}" />
+                                     Content="{x:Static local:Icons.Import}"
+                                     Description="Import records into the current form." />
                 <Controls:IconButton AlternativeText="Export"
                                      Command="{Binding ExportCommand}"
-                                     Content="{x:Static local:Icons.Export}" />
+                                     Content="{x:Static local:Icons.Export}"
+                                     Description="Export records from the current form." />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AlternativeText="Refresh"
                                      Command="{Binding RefreshCommand}"
-                                     Content="{x:Static local:Icons.Refresh}" />
+                                     Content="{x:Static local:Icons.Refresh}"
+                                     Description="Refresh the information displayed on this screen." />
             </WrapPanel>
             <Controls:Pager Grid.Column="1"
                             DataContext="{Binding Items}" />
@@ -110,6 +118,7 @@
             </DataGrid>
         </Border>
         <Controls:ItemsControlWatermark Grid.Row="2"
-                                        ItemsControl="{x:Reference ItemDataGrid}" />
+                                        ItemsControl="{x:Reference ItemDataGrid}"
+                                        Text="No records found" />
     </Grid>
 </UserControl>

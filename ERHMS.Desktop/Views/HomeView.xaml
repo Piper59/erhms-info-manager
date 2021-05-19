@@ -6,7 +6,9 @@
              xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties">
     <UserControl.Resources>
         <Converters:KeyToResXResourceConverter x:Key="CoreProjectToNameConverter" Prefix="CoreProject.Name." />
-        <Converters:StringCaseConverter x:Key="CoreProjectToLowerCaseNameConverter" BaseConverter="{StaticResource CoreProjectToNameConverter}" Format="{}{0:L}" />
+        <Converters:StringCaseConverter x:Key="CoreProjectToLowerCaseNameConverter"
+                                        BaseConverter="{StaticResource CoreProjectToNameConverter}"
+                                        Format="{}{0:L}" />
         <Converters:KeyToResXResourceConverter x:Key="CoreViewNameToDescriptionConverter" Prefix="CoreView.Description." />
         <Converters:KeyToResXResourceConverter x:Key="CoreViewNameToTitleConverter" Prefix="CoreView.Title." />
         <Converters:KeyToResXResourceConverter x:Key="PhaseToNameConverter" Prefix="Phase.Name." />
