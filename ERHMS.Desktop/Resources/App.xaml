@@ -98,6 +98,11 @@
         <Setter Property="TextBlock.TextAlignment" Value="Right" />
     </Style>
 
+    <Style x:Key="PlainHyperlink" TargetType="Hyperlink">
+        <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
+        <Setter Property="TextDecorations" Value="None" />
+    </Style>
+
     <Style x:Key="Separator" TargetType="Border">
         <Setter Property="BorderBrush" Value="{x:Static SystemColors.WindowFrameBrush}" />
         <Setter Property="BorderThickness" Value="1" />

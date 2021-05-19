@@ -70,8 +70,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             return fieldType.IsPrintable();
         }
 
-        public Project Project => View.Project;
         public View View { get; }
+        public Project Project => View.Project;
 
         private string searchText;
         public string SearchText
