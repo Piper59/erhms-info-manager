@@ -6,15 +6,11 @@ if "%~1" == "/?" (
     call :usage
     goto :eof
 )
-set valid=1
 if "%~1" == "" (
-    set valid=0
-) else (
-    set templates_dir=%~1
-)
-if "%valid%" == "0" (
     call :usage >&2
     exit /b 1
+) else (
+    set templates_dir=%~1
 )
 goto :main
 
