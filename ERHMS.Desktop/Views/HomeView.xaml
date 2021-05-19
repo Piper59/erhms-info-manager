@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
-             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties">
+             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+             xmlns:System="clr-namespace:System;assembly=mscorlib">
     <UserControl.Resources>
         <Converters:KeyToResXResourceConverter x:Key="CoreProjectToNameConverter" Prefix="CoreProject.Name." />
         <Converters:StringCaseConverter x:Key="CoreProjectToLowerCaseNameConverter"
@@ -61,29 +62,21 @@
                                 </TextBlock>
                                 <ItemsControl IsTabStop="False"
                                               ItemsSource="{Binding CoreViews}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <UniformGrid Columns="2" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource CoreViewNameToDescriptionConverter}}"
                                                     AutomationProperties.Name="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}"
+                                                    ToolTipService.ShowDuration="{x:Static System:Int32.MaxValue}"
                                                     Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
-                                                    CommandParameter="{Binding}">
-                                                <Button.Resources>
-                                                    <Style TargetType="TextBlock" BasedOn="{StaticResource Body}">
-                                                        <Setter Property="HorizontalAlignment" Value="Center" />
-                                                        <Setter Property="TextAlignment" Value="Center" />
-                                                    </Style>
-                                                </Button.Resources>
-                                                <StackPanel>
-                                                    <TextBlock FontSize="{StaticResource MediumFontSize}"
-                                                               Text="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}" />
-                                                    <TextBlock FontSize="{StaticResource SmallFontSize}"
-                                                               Text="{Binding Name, Converter={StaticResource CoreViewNameToDescriptionConverter}}" />
-                                                </StackPanel>
+                                                    CommandParameter="{Binding}"
+                                                    Content="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}"
+                                                    Padding="{StaticResource LargeThickness}">
+                                                <Button.ToolTip>
+                                                    <ToolTip MaxWidth="{StaticResource PopupWidth}">
+                                                        <TextBlock Text="{Binding Name, Converter={StaticResource CoreViewNameToDescriptionConverter}}"
+                                                                   TextWrapping="Wrap" />
+                                                    </ToolTip>
+                                                </Button.ToolTip>
                                             </Button>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
