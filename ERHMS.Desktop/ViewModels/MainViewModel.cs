@@ -131,7 +131,8 @@ namespace ERHMS.Desktop.ViewModels
                 ZipFileExtensions.CreateFromDirectory(
                     FileAppender.Directory,
                     dialog.FileName,
-                    "*.txt",
+                    $"*{FileAppender.Extension}",
+                    FileMode.Create,
                     FileShare.ReadWrite);
             });
         }

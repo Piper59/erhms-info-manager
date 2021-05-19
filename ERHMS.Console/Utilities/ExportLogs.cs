@@ -20,7 +20,7 @@ namespace ERHMS.Console.Utilities
             {
                 throw new InvalidOperationException("Archive already exists.");
             }
-            ZipFileExtensions.CreateFromDirectory(FileAppender.Directory, ArchivePath, "*.txt", FileShare.ReadWrite);
+            ZipFileExtensions.CreateFromDirectory(FileAppender.Directory, ArchivePath, $"*{FileAppender.Extension}");
         }
     }
 }
