@@ -21,7 +21,7 @@ namespace ERHMS.Launcher
                     WorkingDirectory = workingDirectoryPath,
                     FileName = Path.Combine(workingDirectoryPath, $"{appTitle}.exe")
                 };
-                Process.Start(startInfo).Dispose();
+                Process.Start(startInfo)?.Dispose();
             }
             catch (Exception ex)
             {

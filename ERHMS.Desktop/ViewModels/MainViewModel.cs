@@ -106,12 +106,12 @@ namespace ERHMS.Desktop.ViewModels
 
         public void OpenLogFile()
         {
-            Process.Start(Log.Instance.GetFile()).Dispose();
+            Process.Start(Log.Instance.GetFile())?.Dispose();
         }
 
         public void OpenLogDirectory()
         {
-            Process.Start(FileAppender.Directory).Dispose();
+            Process.Start(FileAppender.Directory)?.Dispose();
         }
 
         public async Task ExportLogDirectoryAsync()
@@ -153,12 +153,12 @@ namespace ERHMS.Desktop.ViewModels
 
         public void StartEpiInfoMenu()
         {
-            Module.Menu.Start().Dispose();
+            Module.Menu.Start()?.Dispose();
         }
 
         public void StartFileExplorer()
         {
-            Process.Start(AppDomain.CurrentDomain.BaseDirectory).Dispose();
+            Process.Start(AppDomain.CurrentDomain.BaseDirectory)?.Dispose();
         }
 
         public void StartCommandPrompt()
@@ -169,7 +169,7 @@ namespace ERHMS.Desktop.ViewModels
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 FileName = Environment.GetEnvironmentVariable("ComSpec")
             };
-            Process.Start(startInfo).Dispose();
+            Process.Start(startInfo)?.Dispose();
         }
     }
 }
