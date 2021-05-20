@@ -11,7 +11,7 @@ namespace ERHMS.Console
         {
             IUtility utility = Utility.ParseArgs(args);
             Log.Initialize(new ConsoleAppender());
-            Log.Instance.Info("Running");
+            Log.Instance.Info($"Running: {string.Join(" ", args)}");
             try
             {
                 Configuration.Initialize(ExecutionEnvironment.Console);

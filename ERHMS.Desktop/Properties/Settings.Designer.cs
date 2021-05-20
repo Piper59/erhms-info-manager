@@ -27,7 +27,8 @@ namespace ERHMS.Desktop.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>Projects\\Incident\\Incident.prj</string>\r\n</ArrayOfString>")]
+            "tring>Projects\\Incidents\\SampleIncident\\SampleIncident.prj</string>\r\n</ArrayOfSt" +
+            "ring>")]
         public global::System.Collections.Specialized.StringCollection IncidentProjectPaths {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["IncidentProjectPaths"]));
@@ -87,7 +88,7 @@ namespace ERHMS.Desktop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Projects\\Worker\\Worker.prj")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Projects\\Workers\\Workers.prj")]
         public string WorkerProjectPath {
             get {
                 return ((string)(this["WorkerProjectPath"]));
