@@ -16,11 +16,14 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
-                           Style="{StaticResource Title}">
-                    <Run FontWeight="{StaticResource ThinFontWeight}">Database:</Run>
+                           Style="{StaticResource Heading}"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap">
+                    <Run>Database:</Run>
                     <Hyperlink Command="{Binding OpenLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
-                        <Run Text="{Binding Value.Name}"
+                        <Run FontWeight="{StaticResource DefaultFontWeight}"
+                             Text="{Binding Value.Name}"
                              ToolTip="{Binding Value.FilePath}" />
                     </Hyperlink>
                 </TextBlock>

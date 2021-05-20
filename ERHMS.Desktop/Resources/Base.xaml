@@ -123,7 +123,7 @@
         <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <AccessText FontSize="{StaticResource LargeFontSize}"
+                    <AccessText FontSize="{StaticResource MediumFontSize}"
                                 FontWeight="{StaticResource ThinFontWeight}"
                                 Margin="{StaticResource DefaultMargin}"
                                 Text="{Binding}" />

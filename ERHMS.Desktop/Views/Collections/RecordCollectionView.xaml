@@ -96,7 +96,8 @@
                                      Description="Refresh the information displayed on this screen." />
             </WrapPanel>
             <Controls:Pager Grid.Column="1"
-                            DataContext="{Binding Items}" />
+                            DataContext="{Binding Items}"
+                            VerticalAlignment="Top" />
         </Grid>
         <Border Grid.Row="2"
                 Background="{Binding Background, ElementName=ItemDataGrid}"

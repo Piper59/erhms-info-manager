@@ -16,16 +16,20 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
-                           Style="{StaticResource Title}">
-                    <Run FontWeight="{StaticResource ThinFontWeight}">Form:</Run>
+                           Style="{StaticResource Heading}"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap">
+                    <Run>Form:</Run>
                     <Hyperlink Command="{Binding OpenProjectLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
-                        <Run Text="{Binding Value.Project.Name}"
+                        <Run FontWeight="{StaticResource DefaultFontWeight}"
+                             Text="{Binding Value.Project.Name}"
                              ToolTip="{Binding Value.Project.FilePath}" />
                     </Hyperlink>
                     <Run FontFamily="{StaticResource IconFontFamily}"
                          Text="{x:Static local:Icons.LevelSeparator}" />
-                    <Run Text="{Binding Value.Name}" />
+                    <Run FontWeight="{StaticResource DefaultFontWeight}"
+                         Text="{Binding Value.Name}" />
                 </TextBlock>
                 <WrapPanel Grid.Column="1">
                     <Controls:IconButton AlternativeText="Up to database"
