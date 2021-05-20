@@ -66,12 +66,10 @@ set page_name=%~n1
 set view_name=%page_name%
 ERHMS.Console CreateView "%project_path%" "%view_name%"
 ERHMS.Console InstantiateTemplate "%template_path%" "%project_path%" "%view_name%" || exit /b 1
-ERHMS.Console SynchronizeView "%project_path%" "%view_name%" || exit /b 1
 goto :eof
 
 :create_view
 set template_path=Templates\Forms\%~1.xml
 set view_name=%~n1
 ERHMS.Console InstantiateTemplate "%template_path%" "%project_path%" || exit /b 1
-ERHMS.Console SynchronizeView "%project_path%" "%view_name%" || exit /b 1
 goto :eof

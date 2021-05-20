@@ -144,8 +144,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
             });
             IEnumerable<Record> values = await Task.Run(() =>
             {
-                RecordRepository repository = new RecordRepository(View);
-                return repository.Select().ToList();
+                if (Project.CollectedData.TableExists(View.TableName))
+                {
+                    RecordRepository repository = new RecordRepository(View);
+                    return repository.Select().ToList();
+                }
+                else
+                {
+                    return Enumerable.Empty<Record>();
+                }
             });
             items.Clear();
             items.AddRange(values.Select(value => new ItemViewModel(value)));
