@@ -10,17 +10,7 @@ namespace ERHMS.EpiInfo.Metadata
     {
         public static FieldDataTable GetFieldDataTableForPage(this MetadataDbProvider @this, int pageId)
         {
-            string sql = $@"
-                SELECT
-                    F.*,
-                    P.{@this.db.Quote(ColumnNames.POSITION)}
-                FROM metaFields AS F
-                INNER JOIN metaPages AS P ON
-                    P.{@this.db.Quote(ColumnNames.PAGE_ID)} = F.{@this.db.Quote(ColumnNames.PAGE_ID)}
-                WHERE F.{@this.db.Quote(ColumnNames.PAGE_ID)} = @PageId;";
-            Query query = @this.db.CreateQuery(sql);
-            query.Parameters.Add(new QueryParameter("@PageId", DbType.Int32, pageId));
-            return new FieldDataTable(@this.db.Select(query));
+            return new FieldDataTable(@this.GetFieldsOnPageAsDataTable(pageId));
         }
 
         public static FieldDataTable GetFieldDataTableForView(this MetadataDbProvider @this, int viewId)

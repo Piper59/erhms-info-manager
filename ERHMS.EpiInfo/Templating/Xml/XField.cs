@@ -179,7 +179,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
             }
         }
 
-        // TODO: Address differences between Access and SQL Server
         public void Canonize()
         {
             UniqueId = null;
