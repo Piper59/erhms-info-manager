@@ -24,24 +24,24 @@ echo   SqlServer
 goto :eof
 
 :main
-call :initialize_project Blank || exit /b 1
-call :initialize_project Worker || exit /b 1
-call :initialize_project Incident || exit /b 1
-call :initialize_view Blank BlankFormWithWorkerInfo || exit /b 1
-call :initialize_view Blank BlankFormWithoutWorkerInfo || exit /b 1
-call :initialize_page Blank BlankPage || exit /b 1
-call :initialize_view Worker WorkerRosteringForm || exit /b 1
-call :initialize_view Worker PreDeploymentHealthSurvey || exit /b 1
-call :initialize_view Incident WorkerDeploymentRecord || exit /b 1
-call :initialize_view Incident WorkerInProcessingForm || exit /b 1
-call :initialize_view Incident WorkerActivityReport || exit /b 1
-call :initialize_view Incident DeploymentHealthSurvey || exit /b 1
-call :initialize_view Incident WorkerOutProcessingForm || exit /b 1
-call :initialize_view Incident PostDeploymentHealthSurvey || exit /b 1
-call :initialize_view Incident AfterActionReview || exit /b 1
+call :create_project Blank || exit /b 1
+call :create_project Worker || exit /b 1
+call :create_project Incident || exit /b 1
+call :create_view Blank BlankFormWithWorkerInfo || exit /b 1
+call :create_view Blank BlankFormWithoutWorkerInfo || exit /b 1
+call :create_page Blank BlankPage || exit /b 1
+call :create_view Worker WorkerRosteringForm || exit /b 1
+call :create_view Worker PreDeploymentHealthSurvey || exit /b 1
+call :create_view Incident WorkerDeploymentRecord || exit /b 1
+call :create_view Incident WorkerInProcessingForm || exit /b 1
+call :create_view Incident WorkerActivityReport || exit /b 1
+call :create_view Incident DeploymentHealthSurvey || exit /b 1
+call :create_view Incident WorkerOutProcessingForm || exit /b 1
+call :create_view Incident PostDeploymentHealthSurvey || exit /b 1
+call :create_view Incident AfterActionReview || exit /b 1
 goto :eof
 
-:initialize_project
+:create_project
 set project_name=%~1
 if "%database_provider%" == "Access2003" (
     set connection_string=Provider=Microsoft.Jet.OLEDB.4.0;Data Source=""%CD%\Projects\%project_name%\%project_name%.mdb""
@@ -60,7 +60,7 @@ ERHMS.Console CreateProject "%database_provider%" "%connection_string%" "%projec
 ERHMS.Console InitializeProject "%project_path%" || exit /b 1
 goto :eof
 
-:initialize_view
+:create_view
 set project_name=%~1
 set view_name=%~2
 set project_path=Projects\%project_name%\%project_name%.prj
@@ -73,7 +73,7 @@ ERHMS.Console InstantiateTemplate "%template_path%" "%project_path%" "%view_name
 ERHMS.Console SynchronizeView "%project_path%" "%view_name%" || exit /b 1
 goto :eof
 
-:initialize_page
+:create_page
 set project_name=%~1
 set page_name=%~2
 set view_name=%page_name%
