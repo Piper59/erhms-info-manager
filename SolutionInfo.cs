@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.InteropServices;
 
 [assembly: AssemblyProduct("ERHMS Info Manager")]
 [assembly: AssemblyCompany("NIOSH")]
