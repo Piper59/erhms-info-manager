@@ -119,7 +119,6 @@
             </DataGrid>
         </Border>
         <Controls:ItemsControlWatermark Grid.Row="2"
-                                        ItemsControl="{x:Reference ItemDataGrid}"
-                                        Text="No records found" />
+                                        ItemsControl="{x:Reference ItemDataGrid}" />
     </Grid>
 </UserControl>

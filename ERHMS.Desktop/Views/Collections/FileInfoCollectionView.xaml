@@ -64,7 +64,6 @@
             </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="1"
-                                        ItemsControl="{x:Reference ItemDataGrid}"
-                                        Text="No files found" />
+                                        ItemsControl="{x:Reference ItemDataGrid}" />
     </Grid>
 </UserControl>
