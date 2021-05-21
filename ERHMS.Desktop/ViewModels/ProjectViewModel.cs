@@ -19,7 +19,7 @@ namespace ERHMS.Desktop.ViewModels
         public Project Value { get; }
         public ViewCollectionViewModel Views { get; private set; }
         public CanvasCollectionViewModel Canvases { get; private set; }
-        public ProgramCollectionViewModel Programs { get; private set; }
+        public PgmCollectionViewModel Pgms { get; private set; }
         public MapCollectionViewModel Maps { get; private set; }
 
         public ICommand OpenLocationCommand { get; }
@@ -34,7 +34,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             Views = await ViewCollectionViewModel.CreateAsync(Value);
             Canvases = await CanvasCollectionViewModel.CreateAsync(Value);
-            Programs = await ProgramCollectionViewModel.CreateAsync(Value);
+            Pgms = await PgmCollectionViewModel.CreateAsync(Value);
             Maps = await MapCollectionViewModel.CreateAsync(Value);
         }
 

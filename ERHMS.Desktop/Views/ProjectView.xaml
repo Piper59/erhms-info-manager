@@ -54,7 +54,7 @@
                 <TabItem Header="_Analyses">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:FileInfoCollectionView DataContext="{Binding Programs}" />
+                            <Collections:FileInfoCollectionView DataContext="{Binding Pgms}" />
                         </Grid>
                     </Border>
                 </TabItem>

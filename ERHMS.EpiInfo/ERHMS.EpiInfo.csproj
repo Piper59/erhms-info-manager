@@ -64,7 +64,7 @@
   <ItemGroup>
     <Compile Include="Analysis\Canvas.cs" />
     <Compile Include="Analysis\Map.cs" />
-    <Compile Include="Analysis\Program.cs" />
+    <Compile Include="Analysis\Pgm.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Data\CollectedDataProviderExtensions.cs" />
     <Compile Include="Data\IDbDriverExtensions.cs" />

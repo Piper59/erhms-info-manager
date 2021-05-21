@@ -18,11 +18,16 @@ namespace ERHMS.EpiInfo.Analysis
 
         public View View { get; }
         public string MapServer { get; set; } = Settings.Default.MapServer;
-        public Color PointColor { get; set; } = Color.FromArgb(0x80, 0xff, 0x00, 0x00);
+        public Color PointColor { get; set; } = Color.Red;
 
         public Map(View view)
         {
             View = view;
+        }
+
+        private bool IsNumberField(string fieldName)
+        {
+            return View.Fields.Contains(fieldName) && View.Fields[fieldName].FieldType == MetaFieldType.Number;
         }
 
         public void Save(string path)
@@ -34,12 +39,9 @@ namespace ERHMS.EpiInfo.Analysis
             }
             XElement dataLayer = document.Root.Element("dataLayer");
             dataLayer.Element("color").Value = $"#{PointColor.ToArgb():X}";
-            if (View.Fields["Latitude"]?.FieldType == MetaFieldType.Number)
+            if (IsNumberField("Latitude") && IsNumberField("Longitude"))
             {
                 dataLayer.Element("latitude").Value = "Latitude";
-            }
-            if (View.Fields["Longitude"]?.FieldType == MetaFieldType.Number)
-            {
                 dataLayer.Element("longitude").Value = "Longitude";
             }
             XElement dashboardHelper = dataLayer.Element("dashboardHelper");

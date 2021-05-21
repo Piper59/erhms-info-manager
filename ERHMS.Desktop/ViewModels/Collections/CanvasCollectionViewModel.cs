@@ -1,6 +1,6 @@
 ﻿using Epi;
-using ERHMS.Desktop.Properties;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Analysis;
 using System.Threading.Tasks;
 using FileExtensions = ERHMS.EpiInfo.FileExtensions;
 
@@ -17,9 +17,14 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         protected override Module Module => Module.AnalysisDashboard;
         protected override string Extension => FileExtensions.Canvas;
-        protected override string RefreshingLead => ResXResources.Lead_RefreshingCanvases;
 
         private CanvasCollectionViewModel(Project project)
             : base(project) { }
+
+        protected override void CreateCore(View view, string path)
+        {
+            Canvas canvas = new Canvas(view);
+            canvas.Save(path);
+        }
     }
 }

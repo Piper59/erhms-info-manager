@@ -246,6 +246,9 @@ Close anyway?</value>
   <data name="Lead.ConfirmDeleteFile" xml:space="preserve">
     <value>Are you sure you want to move this file to the Recycle Bin?</value>
   </data>
+  <data name="Lead.CreatingFile" xml:space="preserve">
+    <value>Creating file</value>
+  </data>
   <data name="Lead.DeletingRecords" xml:space="preserve">
     <value>Deleting records</value>
   </data>
@@ -264,14 +267,8 @@ Close anyway?</value>
   <data name="Lead.NonFatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
   </data>
-  <data name="Lead.RefreshingCanvases" xml:space="preserve">
-    <value>Refreshing dashboards</value>
-  </data>
-  <data name="Lead.RefreshingMaps" xml:space="preserve">
-    <value>Refreshing maps</value>
-  </data>
-  <data name="Lead.RefreshingPrograms" xml:space="preserve">
-    <value>Refreshing analyses</value>
+  <data name="Lead.RefreshingFiles" xml:space="preserve">
+    <value>Refreshing files</value>
   </data>
   <data name="Lead.RefreshingRecords" xml:space="preserve">
     <value>Refreshing records</value>

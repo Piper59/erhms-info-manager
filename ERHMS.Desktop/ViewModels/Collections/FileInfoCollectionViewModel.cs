@@ -51,7 +51,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         protected abstract Module Module { get; }
         protected abstract string Extension { get; }
-        protected abstract string RefreshingLead { get; }
         public Project Project { get; }
 
         private readonly List<ItemViewModel> items;
@@ -88,6 +87,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.Refresh();
         }
 
+        protected abstract void CreateCore(View view, string path);
+
         public async Task CreateAsync()
         {
             await MainViewModel.Instance.StartEpiInfoAsync(Module);
@@ -116,7 +117,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = RefreshingLead;
+            progress.Title = ResXResources.Lead_RefreshingFiles;
             await progress.RunAsync(InitializeAsync);
         }
     }

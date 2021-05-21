@@ -3,11 +3,11 @@ using System.IO;
 
 namespace ERHMS.EpiInfo.Analysis
 {
-    public class Program
+    public class Pgm
     {
         public View View { get; }
 
-        public Program(View view)
+        public Pgm(View view)
         {
             View = view;
         }

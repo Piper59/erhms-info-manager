@@ -436,6 +436,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating file.
+        /// </summary>
+        public static string Lead_CreatingFile {
+            get {
+                return ResourceManager.GetString("Lead.CreatingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting records.
         /// </summary>
         public static string Lead_DeletingRecords {
@@ -490,29 +499,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refreshing dashboards.
+        ///   Looks up a localized string similar to Refreshing files.
         /// </summary>
-        public static string Lead_RefreshingCanvases {
+        public static string Lead_RefreshingFiles {
             get {
-                return ResourceManager.GetString("Lead.RefreshingCanvases", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Refreshing maps.
-        /// </summary>
-        public static string Lead_RefreshingMaps {
-            get {
-                return ResourceManager.GetString("Lead.RefreshingMaps", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Refreshing analyses.
-        /// </summary>
-        public static string Lead_RefreshingPrograms {
-            get {
-                return ResourceManager.GetString("Lead.RefreshingPrograms", resourceCulture);
+                return ResourceManager.GetString("Lead.RefreshingFiles", resourceCulture);
             }
         }
         
