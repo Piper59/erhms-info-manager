@@ -116,11 +116,11 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task ExportLogDirectoryAsync()
         {
-            IFileDialogService dialog = ServiceLocator.Resolve<IFileDialogService>();
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            dialog.FileName = string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now);
-            dialog.Filter = ResXResources.FileDialog_Filter_ZipFiles;
-            if (dialog.Save() != true)
+            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+            fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            fileDialog.FileName = string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now);
+            fileDialog.Filter = ResXResources.FileDialog_Filter_ZipFiles;
+            if (fileDialog.Save() != true)
             {
                 return;
             }
@@ -130,7 +130,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 ZipFileExtensions.CreateFromDirectory(
                     FileAppender.Directory,
-                    dialog.FileName,
+                    fileDialog.FileName,
                     $"*{FileAppender.Extension}",
                     FileMode.Create,
                     FileShare.ReadWrite);
