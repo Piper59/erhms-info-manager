@@ -1,0 +1,25 @@
+﻿<Layers baseMapType="blank">
+  <dataLayer layerType="EpiDashboard.Mapping.ClusterLayerProperties">
+    <description>
+    </description>
+    <color></color>
+    <latitude></latitude>
+    <longitude></longitude>
+    <dashboardHelper>
+      <projectPath></projectPath>
+      <viewName></viewName>
+      <useAdvancedDataFilterCondition>False</useAdvancedDataFilterCondition>
+      <advancedDataFilterCondition>
+      </advancedDataFilterCondition>
+      <relatedDataConnections />
+      <dataFilters recordProcessScope="undeleted" />
+      <dashboardRules />
+    </dashboardHelper>
+  </dataLayer>
+  <referenceLayer layerType="EpiDashboard.Mapping.MapServerLayerProperties">
+    <referenceLayer>
+      <serverName></serverName>
+      <visibleLayers />
+    </referenceLayer>
+  </referenceLayer>
+</Layers>

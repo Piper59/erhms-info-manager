@@ -8,7 +8,7 @@ namespace ERHMS.EpiInfo
         public string Name { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
-        public string FilePath => Path.Combine(Location, $"{Name}.prj");
+        public string FilePath => Path.Combine(Location, $"{Name}{FileExtensions.Project}");
         public IDatabase Database { get; set; }
     }
 }

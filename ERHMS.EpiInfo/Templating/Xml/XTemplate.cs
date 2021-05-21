@@ -60,6 +60,12 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public IEnumerable<XTable> XSourceTables => Elements(ElementNames.SourceTable).Cast<XTable>();
         public IEnumerable<XTable> XGridTables => Elements(ElementNames.GridTable).Cast<XTable>();
         public bool Canonized { get; set; }
+        private XmlWriterSettings XmlWriterSettings => new XmlWriterSettings
+        {
+            OmitXmlDeclaration = true,
+            Indent = true,
+            NewLineOnAttributes = Canonized
+        };
 
         public XTemplate()
             : base(ElementNames.Template) { }
@@ -88,19 +94,9 @@ namespace ERHMS.EpiInfo.Templating.Xml
                 this.CopyAttribute(nameof(Level)));
         }
 
-        public XmlWriterSettings GetXmlWriterSettings()
-        {
-            return new XmlWriterSettings
-            {
-                OmitXmlDeclaration = true,
-                Indent = true,
-                NewLineOnAttributes = Canonized
-            };
-        }
-
         public new void Save(string path)
         {
-            using (XmlWriter writer = XmlWriter.Create(path, GetXmlWriterSettings()))
+            using (XmlWriter writer = XmlWriter.Create(path, XmlWriterSettings))
             {
                 Save(writer);
             }

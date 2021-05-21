@@ -2,6 +2,7 @@
 using ERHMS.Desktop.Properties;
 using ERHMS.EpiInfo;
 using System.Threading.Tasks;
+using FileExtensions = ERHMS.EpiInfo.FileExtensions;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
@@ -15,7 +16,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         }
 
         protected override Module Module => Module.AnalysisDashboard;
-        protected override string Extension => ".cvs7";
+        protected override string Extension => FileExtensions.Canvas;
         protected override string RefreshingLead => ResXResources.Lead_RefreshingCanvases;
 
         private CanvasCollectionViewModel(Project project)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -15,6 +16,11 @@ namespace ERHMS.Common.Reflection
         public static IEnumerable<Type> GetInstanceTypes(this Type @this)
         {
             return @this.GetInstanceTypes(Assembly.GetCallingAssembly());
+        }
+
+        public static Stream GetManifestResourceStream(this Type @this, string resourceName)
+        {
+            return @this.Assembly.GetManifestResourceStream(@this, resourceName);
         }
     }
 }

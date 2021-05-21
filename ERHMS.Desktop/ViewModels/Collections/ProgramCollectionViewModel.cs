@@ -2,6 +2,7 @@
 using ERHMS.Desktop.Properties;
 using ERHMS.EpiInfo;
 using System.Threading.Tasks;
+using FileExtensions = ERHMS.EpiInfo.FileExtensions;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
@@ -15,7 +16,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         }
 
         protected override Module Module => Module.Analysis;
-        protected override string Extension => ".pgm7";
+        protected override string Extension => FileExtensions.Program;
         protected override string RefreshingLead => ResXResources.Lead_RefreshingPrograms;
 
         private ProgramCollectionViewModel(Project project)
