@@ -12,5 +12,5 @@ set project_location=Projects\%~1
 set project_name=%~n1
 set project_path=%project_location%\%project_name%.prj
 ERHMS.Console DeleteDatabase "%project_path%" || exit /b 1
-ERHMS.Console DeleteProject "%project_path%" || exit /b 1
+ERHMS.Console DeleteProject "%project_path%" true || exit /b 1
 goto :eof
