@@ -5,14 +5,20 @@ namespace ERHMS.Desktop.Dialogs
 {
     public class DialogButtonCollection : List<DialogButton>
     {
+        public static DialogButtonCollection Close => new DialogButtonCollection
+        {
+            { ResXResources.AccessText_Close, null, true, true }
+        };
+
         public static DialogButtonCollection Ok => new DialogButtonCollection
         {
             { ResXResources.AccessText_Ok, null, true, true }
         };
 
-        public static DialogButtonCollection Close => new DialogButtonCollection
+        public static DialogButtonCollection YesNo => new DialogButtonCollection
         {
-            { ResXResources.AccessText_Close, null, true, true }
+            { ResXResources.AccessText_Yes, true, true, false },
+            { ResXResources.AccessText_No, false, false, true }
         };
 
         public void Add(object content, bool? result, bool isDefault, bool isCancel)

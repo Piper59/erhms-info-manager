@@ -26,7 +26,7 @@
             <Controls:IconButton AlternativeText="Delete"
                                  Command="{Binding DeleteCommand}"
                                  Content="{x:Static local:Icons.Delete}"
-                                 Description="Permanently delete the selected file." />
+                                 Description="Move the selected file to the Recycle Bin." />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AlternativeText="Refresh"
                                  Command="{Binding RefreshCommand}"
@@ -40,6 +40,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Value.Name}"
                                     Header="Name"
+                                    SortDirection="Ascending"
                                     Width="3*" />
                 <DataGridTextColumn Binding="{Binding Value.LastWriteTime}"
                                     CellStyle="{StaticResource NumericDataGridCell}"

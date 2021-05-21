@@ -34,7 +34,7 @@ namespace ERHMS.Desktop
         {
             Log.Instance.Error(e.Exception);
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-            dialog.Severity = DialogSeverity.Error;
+            dialog.Severity = DialogSeverity.Warning;
             dialog.Lead = ResXResources.Lead_NonFatalError;
             dialog.Body = e.Exception.Message;
             dialog.Details = e.Exception.ToString();

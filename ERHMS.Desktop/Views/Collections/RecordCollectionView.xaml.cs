@@ -106,10 +106,6 @@ namespace ERHMS.Desktop.Views.Collections
         {
             ItemCollection items = CopyFieldContextMenu.Items;
             items.Clear();
-            if (ItemDataGrid.Columns.Count == 0)
-            {
-                return;
-            }
             items.Add(new MenuItem
             {
                 Command = CopyFieldCommand,

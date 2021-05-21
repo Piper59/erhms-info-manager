@@ -126,8 +126,14 @@
   <data name="AccessText.Close" xml:space="preserve">
     <value>_Close</value>
   </data>
+  <data name="AccessText.No" xml:space="preserve">
+    <value>_No</value>
+  </data>
   <data name="AccessText.Ok" xml:space="preserve">
     <value>_OK</value>
+  </data>
+  <data name="AccessText.Yes" xml:space="preserve">
+    <value>_Yes</value>
   </data>
   <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
@@ -236,6 +242,9 @@ Close anyway?</value>
   </data>
   <data name="Instructions.GetWorkerId" xml:space="preserve">
     <value>Select a worker in ERHMS Info Manager to continue</value>
+  </data>
+  <data name="Lead.ConfirmDeleteFile" xml:space="preserve">
+    <value>Are you sure you want to move this file to the Recycle Bin?</value>
   </data>
   <data name="Lead.DeletingRecords" xml:space="preserve">
     <value>Deleting records</value>

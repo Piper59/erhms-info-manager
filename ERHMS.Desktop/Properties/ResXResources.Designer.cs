@@ -88,11 +88,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _No.
+        /// </summary>
+        public static string AccessText_No {
+            get {
+                return ResourceManager.GetString("AccessText.No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _OK.
         /// </summary>
         public static string AccessText_Ok {
             get {
                 return ResourceManager.GetString("AccessText.Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Yes.
+        /// </summary>
+        public static string AccessText_Yes {
+            get {
+                return ResourceManager.GetString("AccessText.Yes", resourceCulture);
             }
         }
         
@@ -405,6 +423,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Instructions_GetWorkerId {
             get {
                 return ResourceManager.GetString("Instructions.GetWorkerId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to move this file to the Recycle Bin?.
+        /// </summary>
+        public static string Lead_ConfirmDeleteFile {
+            get {
+                return ResourceManager.GetString("Lead.ConfirmDeleteFile", resourceCulture);
             }
         }
         

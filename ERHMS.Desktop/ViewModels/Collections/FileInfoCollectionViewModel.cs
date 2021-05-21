@@ -2,14 +2,19 @@
 using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
+using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using SearchOption = System.IO.SearchOption;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
@@ -64,9 +69,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Project = project;
             items = new List<ItemViewModel>();
             Items = new PagingListCollectionView(items);
+            Items.SortDescriptions.Add(new SortDescription(nameof(FileInfo.Name), ListSortDirection.Ascending));
             CreateCommand = new AsyncCommand(CreateAsync);
             OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
-            DeleteCommand = Command.Null;
+            DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
@@ -90,6 +96,21 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task OpenAsync()
         {
             await MainViewModel.Instance.StartEpiInfoAsync(Module, CurrentValue.FullName);
+        }
+
+        public async Task DeleteAsync()
+        {
+            IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+            dialog.Severity = DialogSeverity.Question;
+            dialog.Lead = ResXResources.Lead_ConfirmDeleteFile;
+            dialog.Body = CurrentValue.Name;
+            dialog.Buttons = DialogButtonCollection.YesNo;
+            if (dialog.Show() != true)
+            {
+                return;
+            }
+            FileSystem.DeleteFile(CurrentValue.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            await RefreshAsync();
         }
 
         public async Task RefreshAsync()
