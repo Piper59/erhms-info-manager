@@ -17,11 +17,11 @@ namespace ERHMS.Desktop.Views
             set { base.DataContext = value; }
         }
 
-        public ICommand ExitCommand { get; }
+        public ICommand CloseCommand { get; }
 
         public MainView()
         {
-            ExitCommand = new SyncCommand(Exit);
+            CloseCommand = new SyncCommand(Close);
             InitializeComponent();
             ReadSettings(Settings.Default);
         }
@@ -72,11 +72,6 @@ namespace ERHMS.Desktop.Views
             }
             WriteSettings(Settings.Default);
             Settings.Default.Save();
-        }
-
-        public void Exit()
-        {
-            Close();
         }
     }
 }

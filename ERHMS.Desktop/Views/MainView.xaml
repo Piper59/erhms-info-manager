@@ -27,7 +27,7 @@
                     <MenuItem Header="_Incident database" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Command="{Binding ExitCommand, ElementName=Root}"
+                <MenuItem Command="{Binding CloseCommand, ElementName=Root}"
                           Header="E_xit"
                           InputGestureText="Alt+F4" />
             </MenuItem>
