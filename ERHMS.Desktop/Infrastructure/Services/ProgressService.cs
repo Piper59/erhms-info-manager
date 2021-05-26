@@ -13,7 +13,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         private string status;
 
         public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
-        public string Title { get; set; }
+        public string Lead { get; set; }
 
         private event EventHandler Reporting;
         private void OnReporting(EventArgs e) => Reporting?.Invoke(this, e);
@@ -27,7 +27,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
 
         private async Task RunCoreAsync(bool canBeCanceled, Func<CancellationToken, Task> action)
         {
-            ProgressViewModel dataContext = new ProgressViewModel(Title, canBeCanceled);
+            ProgressViewModel dataContext = new ProgressViewModel(Lead, canBeCanceled);
 
             void ProgressService_Reporting(object sender, EventArgs e)
             {

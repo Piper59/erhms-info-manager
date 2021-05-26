@@ -55,7 +55,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task GoToProjectAsync(Task<Project> task)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_LoadingProject;
+            progress.Lead = ResXResources.Lead_LoadingProject;
             await progress.RunAsync(async () =>
             {
                 Project project = await task;
@@ -75,7 +75,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task GoToViewAsync(Task<View> task)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_LoadingView;
+            progress.Lead = ResXResources.Lead_LoadingView;
             await progress.RunAsync(async () =>
             {
                 View view = await task;
@@ -114,7 +114,7 @@ namespace ERHMS.Desktop.ViewModels
                 return;
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_ExportingLogDirectory;
+            progress.Lead = ResXResources.Lead_ExportingLogDirectory;
             await progress.RunAsync(() =>
             {
                 ZipFileExtensions.CreateFromDirectory(
@@ -130,7 +130,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Delay = TimeSpan.Zero;
-            progress.Title = ResXResources.Lead_StartingEpiInfo;
+            progress.Lead = ResXResources.Lead_StartingEpiInfo;
             await progress.RunAsync(() =>
             {
                 using (Process process = module.Start(args))

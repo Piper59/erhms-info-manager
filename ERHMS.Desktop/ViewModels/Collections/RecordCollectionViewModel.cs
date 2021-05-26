@@ -205,10 +205,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 $"/record:{CurrentValue.UniqueKey}");
         }
 
-        private async Task SetDeletedAsync(string title, bool deleted)
+        private async Task SetDeletedAsync(string lead, bool deleted)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = title;
+            progress.Lead = lead;
             try
             {
                 await progress.RunAsync(token =>
@@ -238,7 +238,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_RefreshingRecords;
+            progress.Lead = ResXResources.Lead_RefreshingRecords;
             await progress.RunAsync(InitializeAsync);
         }
     }

@@ -7,7 +7,7 @@ namespace ERHMS.Desktop.Services
     public interface IProgressService : IProgress<string>
     {
         TimeSpan Delay { get; set; }
-        string Title { get; set; }
+        string Lead { get; set; }
 
         Task RunAsync(Action action);
         Task RunAsync(Func<Task> action);

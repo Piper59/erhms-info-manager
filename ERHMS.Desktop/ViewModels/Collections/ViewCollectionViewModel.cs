@@ -141,7 +141,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_RefreshingViews;
+            progress.Lead = ResXResources.Lead_RefreshingViews;
             await progress.RunAsync(InitializeAsync);
         }
     }
