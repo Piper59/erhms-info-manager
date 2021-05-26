@@ -74,7 +74,7 @@
                 <MenuItem Header="_About ERHMS Info Manager" />
             </MenuItem>
         </Menu>
-        <ContentPresenter Grid.Row="1"
-                          Content="{Binding Content}" />
+        <ContentPresenter x:Name="ContentPresenter"
+                          Grid.Row="1" />
     </Grid>
 </Window>

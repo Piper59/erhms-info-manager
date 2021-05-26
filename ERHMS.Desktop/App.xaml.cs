@@ -15,6 +15,12 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
+        public new MainView MainWindow
+        {
+            get { return (MainView)base.MainWindow; }
+            set { base.MainWindow = value; }
+        }
+
         public App()
         {
             InitializeComponent();
@@ -25,6 +31,7 @@ namespace ERHMS.Desktop
 
         private void InitializeServices()
         {
+            ServiceLocator.Install<IContentService>(() => MainWindow);
             ServiceLocator.Install<IDialogService>(() => new DialogService());
             ServiceLocator.Install<IFileDialogService>(() => new FileDialogService());
             ServiceLocator.Install<IProgressService>(() => new ProgressService());
@@ -63,11 +70,11 @@ namespace ERHMS.Desktop
             {
                 Log.Instance.Debug("Running in standard mode");
                 ShutdownMode = ShutdownMode.OnMainWindowClose;
-                MainViewModel.Instance.Content = new HomeViewModel();
                 MainWindow = new MainView
                 {
                     DataContext = MainViewModel.Instance
                 };
+                MainWindow.ShowContent(new HomeViewModel());
                 MainWindow.Show();
             }
         }
