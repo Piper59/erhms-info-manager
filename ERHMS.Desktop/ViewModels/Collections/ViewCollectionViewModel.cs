@@ -3,6 +3,7 @@ using ERHMS.Common;
 using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
+using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
@@ -91,7 +92,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items = new PagingListCollectionView(items);
             CreateCommand = Command.Null;
             OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
-            DeleteCommand = Command.Null;
+            DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);
             DesignCommand = new AsyncCommand(DesignAsync, Items.HasCurrent);
             EnterCommand = new AsyncCommand(EnterAsync, Items.HasCurrent);
             RefreshCommand = new AsyncCommand(RefreshAsync);
@@ -119,6 +120,26 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task OpenAsync()
         {
             await MainViewModel.Instance.GoToViewAsync(Task.FromResult(CurrentValue));
+        }
+
+        public async Task DeleteAsync()
+        {
+            IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+            dialog.Severity = DialogSeverity.Warning;
+            dialog.Lead = ResXResources.Lead_ConfirmViewDeletion;
+            dialog.Body = string.Format(ResXResources.Body_ConfirmViewDeletion, CurrentValue.Name);
+            dialog.Buttons = DialogButtonCollection.VerbCancel(ResXResources.AccessText_Delete);
+            if (dialog.Show() != true)
+            {
+                return;
+            }
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = ResXResources.Lead_DeletingView;
+            await progress.RunAsync(() =>
+            {
+                Project.DeleteView(CurrentValue);
+            });
+            await RefreshAsync();
         }
 
         public async Task DesignAsync()

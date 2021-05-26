@@ -21,6 +21,15 @@ namespace ERHMS.Desktop.Dialogs
             { ResXResources.AccessText_No, false, false, true }
         };
 
+        public static DialogButtonCollection VerbCancel(object content)
+        {
+            return new DialogButtonCollection
+            {
+                { content, true, true, false },
+                { ResXResources.AccessText_Cancel, false, false, true }
+            };
+        }
+
         public void Add(object content, bool? result, bool isDefault, bool isCancel)
         {
             Add(new DialogButton(content, result, isDefault, isCancel));

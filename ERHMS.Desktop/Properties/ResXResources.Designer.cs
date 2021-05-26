@@ -88,6 +88,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Delete.
+        /// </summary>
+        public static string AccessText_Delete {
+            get {
+                return ResourceManager.GetString("AccessText.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Finish.
         /// </summary>
         public static string AccessText_Finish {
@@ -129,6 +138,26 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Yes {
             get {
                 return ResourceManager.GetString("AccessText.Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File name: {0}.
+        /// </summary>
+        public static string Body_ConfirmFileDeletion {
+            get {
+                return ResourceManager.GetString("Body.ConfirmFileDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Form name: {0}
+        ///
+        ///This form, any related forms, and all associated records will be permanently deleted. This operation cannot be undone..
+        /// </summary>
+        public static string Body_ConfirmViewDeletion {
+            get {
+                return ResourceManager.GetString("Body.ConfirmViewDeletion", resourceCulture);
             }
         }
         
@@ -447,9 +476,18 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to move this file to the Recycle Bin?.
         /// </summary>
-        public static string Lead_ConfirmDeleteFile {
+        public static string Lead_ConfirmFileDeletion {
             get {
-                return ResourceManager.GetString("Lead.ConfirmDeleteFile", resourceCulture);
+                return ResourceManager.GetString("Lead.ConfirmFileDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this form?.
+        /// </summary>
+        public static string Lead_ConfirmViewDeletion {
+            get {
+                return ResourceManager.GetString("Lead.ConfirmViewDeletion", resourceCulture);
             }
         }
         
@@ -468,6 +506,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_DeletingRecords {
             get {
                 return ResourceManager.GetString("Lead.DeletingRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleting form.
+        /// </summary>
+        public static string Lead_DeletingView {
+            get {
+                return ResourceManager.GetString("Lead.DeletingView", resourceCulture);
             }
         }
         

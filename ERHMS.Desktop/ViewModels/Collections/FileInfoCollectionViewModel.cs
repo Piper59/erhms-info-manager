@@ -102,10 +102,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task DeleteAsync()
         {
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-            dialog.Severity = DialogSeverity.Question;
-            dialog.Lead = ResXResources.Lead_ConfirmDeleteFile;
-            dialog.Body = CurrentValue.Name;
-            dialog.Buttons = DialogButtonCollection.YesNo;
+            dialog.Severity = DialogSeverity.Warning;
+            dialog.Lead = ResXResources.Lead_ConfirmFileDeletion;
+            dialog.Body = string.Format(ResXResources.Body_ConfirmFileDeletion, CurrentValue.Name);
+            dialog.Buttons = DialogButtonCollection.VerbCancel(ResXResources.AccessText_Delete);
             if (dialog.Show() != true)
             {
                 return;

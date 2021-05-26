@@ -24,8 +24,10 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Border Style="{StaticResource FluidLayout}">
                     <StackPanel Style="{StaticResource Container}">
-                        <TextBlock Style="{StaticResource Lead}"
-                                   Text="{Binding Step.Lead}" />
+                        <Grid Style="{StaticResource Section}">
+                            <TextBlock Style="{StaticResource Lead}"
+                                       Text="{Binding Step.Lead}" />
+                        </Grid>
                         <ContentPresenter Content="{Binding Step}" />
                     </StackPanel>
                 </Border>

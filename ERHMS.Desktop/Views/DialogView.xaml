@@ -40,7 +40,14 @@
                                    Visibility="{Binding Lead, Converter={StaticResource NullableToVisibilityConverter}}" />
                         <TextBlock Style="{StaticResource Body}"
                                    Text="{Binding Body}"
-                                   Visibility="{Binding Body, Converter={StaticResource NullableToVisibilityConverter}}" />
+                                   Visibility="{Binding Body, Converter={StaticResource NullableToVisibilityConverter}}">
+                            <TextBlock.Margin>
+                                <Thickness Left="{StaticResource SmallSpace}"
+                                           Top="{StaticResource DefaultFontSize}"
+                                           Right="{StaticResource SmallSpace}"
+                                           Bottom="{StaticResource SmallSpace}" />
+                            </TextBlock.Margin>
+                        </TextBlock>
                     </StackPanel>
                 </Grid>
             </Grid>
