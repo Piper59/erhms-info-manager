@@ -1,0 +1,57 @@
+﻿<Window x:Class="ERHMS.Desktop.Views.WizardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
+        xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+        AutomationProperties.HelpText="{Binding Step.Lead}"
+        Icon="/Resources/ERHMS.ico"
+        Height="480"
+        ResizeMode="NoResize"
+        Title="{x:Static Properties:ResXResources.Title_App}"
+        UseLayoutRounding="True"
+        Width="640">
+    <Window.Resources>
+        <Converters:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"
+                BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
+                BorderThickness="0,1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Border Style="{StaticResource FluidLayout}">
+                    <StackPanel Style="{StaticResource Container}">
+                        <TextBlock Style="{StaticResource Lead}"
+                                   Text="{Binding Step.Lead}" />
+                        <ContentPresenter Content="{Binding Step}" />
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="1"
+                Background="{x:Static SystemColors.MenuBrush}">
+            <WrapPanel DataContext="{Binding Step}"
+                       HorizontalAlignment="Right"
+                       Style="{StaticResource Container}">
+                <WrapPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
+                </WrapPanel.Resources>
+                <Button Command="{Binding ReturnCommand}"
+                        Visibility="{Binding Committed, Converter={StaticResource BoolToVisibilityInverter}}">
+                    _Back
+                </Button>
+                <Button Command="{Binding ContinueCommand}"
+                        Content="{Binding ContinueAccessText}"
+                        IsDefault="True" />
+                <Button Command="{Binding CancelCommand}"
+                        IsCancel="True"
+                        Visibility="{Binding Committed, Converter={StaticResource BoolToVisibilityInverter}}">
+                    _Cancel
+                </Button>
+            </WrapPanel>
+        </Border>
+    </Grid>
+</Window>

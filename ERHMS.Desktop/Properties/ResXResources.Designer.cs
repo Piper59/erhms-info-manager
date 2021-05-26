@@ -88,6 +88,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Finish.
+        /// </summary>
+        public static string AccessText_Finish {
+            get {
+                return ResourceManager.GetString("AccessText.Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Next.
+        /// </summary>
+        public static string AccessText_Next {
+            get {
+                return ResourceManager.GetString("AccessText.Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _No.
         /// </summary>
         public static string AccessText_No {

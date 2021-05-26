@@ -126,6 +126,12 @@
   <data name="AccessText.Close" xml:space="preserve">
     <value>_Close</value>
   </data>
+  <data name="AccessText.Finish" xml:space="preserve">
+    <value>_Finish</value>
+  </data>
+  <data name="AccessText.Next" xml:space="preserve">
+    <value>_Next</value>
+  </data>
   <data name="AccessText.No" xml:space="preserve">
     <value>_No</value>
   </data>

@@ -34,6 +34,7 @@ namespace ERHMS.Desktop
             ServiceLocator.Install<IDialogService>(() => new DialogService());
             ServiceLocator.Install<IFileDialogService>(() => new FileDialogService());
             ServiceLocator.Install<IProgressService>(() => new ProgressService());
+            ServiceLocator.Install<IWizardService>(() => new WizardService());
         }
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)
