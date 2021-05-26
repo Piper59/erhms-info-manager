@@ -14,7 +14,7 @@ namespace ERHMS.Desktop.Utilities
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string GlobalRecordId { get; set; }
-        public string Instructions => ResXResources.Instructions_GetWorkerId;
+        public string Instructions => ResXResources.Body_GetWorkerId;
 
         public IEnumerable<string> Parameters
         {

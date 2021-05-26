@@ -140,6 +140,9 @@
 
 {0}</value>
   </data>
+  <data name="Body.GetWorkerId" xml:space="preserve">
+    <value>Select a worker in ERHMS Info Manager to continue.</value>
+  </data>
   <data name="Body.UtilityClosing" xml:space="preserve">
     <value>ERHMS Info Manager is still working.
 
@@ -239,9 +242,6 @@ Close anyway?</value>
   </data>
   <data name="FileName.LogDirectoryArchive" xml:space="preserve">
     <value>Logs-{0:yyyyMMdd-HHmmss}.zip</value>
-  </data>
-  <data name="Instructions.GetWorkerId" xml:space="preserve">
-    <value>Select a worker in ERHMS Info Manager to continue</value>
   </data>
   <data name="Lead.ConfirmDeleteFile" xml:space="preserve">
     <value>Are you sure you want to move this file to the Recycle Bin?</value>

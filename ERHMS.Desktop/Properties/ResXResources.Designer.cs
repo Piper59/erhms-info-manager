@@ -126,6 +126,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a worker in ERHMS Info Manager to continue..
+        /// </summary>
+        public static string Body_GetWorkerId {
+            get {
+                return ResourceManager.GetString("Body.GetWorkerId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager is still working.
         ///
         ///Close anyway?.
@@ -414,15 +423,6 @@ namespace ERHMS.Desktop.Properties {
         public static string FileName_LogDirectoryArchive {
             get {
                 return ResourceManager.GetString("FileName.LogDirectoryArchive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select a worker in ERHMS Info Manager to continue.
-        /// </summary>
-        public static string Instructions_GetWorkerId {
-            get {
-                return ResourceManager.GetString("Instructions.GetWorkerId", resourceCulture);
             }
         }
         
