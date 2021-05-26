@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System.Windows;
-using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Behaviors
 {
-    public class OpenContextMenuOnClick : Behavior<ButtonBase>
+    public class OpenContextMenuOnClick : Behavior<Button>
     {
         protected override void OnAttached()
         {
