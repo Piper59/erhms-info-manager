@@ -23,11 +23,13 @@ namespace ERHMS.Desktop.ViewModels
         public MapCollectionViewModel Maps { get; private set; }
 
         public ICommand OpenLocationCommand { get; }
+        public ICommand GoToHelpCommand { get; }
 
         private ProjectViewModel(Project value)
         {
             Value = value;
             OpenLocationCommand = new SyncCommand(OpenLocation);
+            GoToHelpCommand = Command.Null;
         }
 
         private async Task InitializeAsync()

@@ -20,28 +20,29 @@
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap">
                     <Run>Form:</Run>
-                    <Run FontWeight="{StaticResource DefaultFontWeight}"
-                         Text="{Binding Value.Project.Name}"
-                         ToolTip="{Binding Value.Project.FilePath}" />
+                    <Hyperlink Command="{Binding OpenProjectLocationCommand}"
+                               Style="{StaticResource PlainHyperlink}">
+                        <Run FontWeight="{StaticResource DefaultFontWeight}"
+                             Text="{Binding Value.Project.Name}"
+                             ToolTip="{Binding Value.Project.FilePath}" />
+                    </Hyperlink>
                     <Run FontFamily="{StaticResource IconFontFamily}"
                          Text="{x:Static local:Icons.LevelSeparator}" />
                     <Run FontWeight="{StaticResource DefaultFontWeight}"
                          Text="{Binding Value.Name}" />
                 </TextBlock>
-                <WrapPanel Grid.Column="1">
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal">
                     <Controls:IconButton AlternativeText="Up to database"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{x:Static local:Icons.LevelParent}" />
-                    <Controls:IconButton AlternativeText="Open in File Explorer"
-                                         Command="{Binding OpenProjectLocationCommand}"
-                                         Content="{x:Static local:Icons.Open}" />
                     <Controls:IconButton AlternativeText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{x:Static local:Icons.Home}" />
                     <Controls:IconButton AlternativeText="Help"
-                                         Command="{x:Static local:AppCommands.GoToHelpCommand}"
+                                         Command="{Binding GoToHelpCommand}"
                                          Content="{x:Static local:Icons.Help}" />
-                </WrapPanel>
+                </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">
                 <TabItem Header="_Records">
