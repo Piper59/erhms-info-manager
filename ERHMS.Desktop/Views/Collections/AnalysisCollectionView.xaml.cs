@@ -3,15 +3,15 @@ using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Views.Collections
 {
-    public partial class FileInfoCollectionView : UserControl
+    public partial class AnalysisCollectionView : UserControl
     {
-        public new FileInfoCollectionViewModel DataContext
+        public new AnalysisCollectionViewModel DataContext
         {
-            get { return (FileInfoCollectionViewModel)base.DataContext; }
+            get { return (AnalysisCollectionViewModel)base.DataContext; }
             set { base.DataContext = value; }
         }
 
-        public FileInfoCollectionView()
+        public AnalysisCollectionView()
         {
             InitializeComponent();
         }

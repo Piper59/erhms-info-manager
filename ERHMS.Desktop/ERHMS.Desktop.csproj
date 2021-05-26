@@ -173,8 +173,8 @@
     <Compile Include="Utilities\UtilityDialog.Designer.cs">
       <DependentUpon>UtilityDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Collections\AnalysisCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\CanvasCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Collections\FileInfoCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\MapCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\PgmCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
@@ -188,8 +188,8 @@
     <Compile Include="ViewModels\Utilities\GetWorkerIdViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
-    <Compile Include="Views\Collections\FileInfoCollectionView.xaml.cs">
-      <DependentUpon>FileInfoCollectionView.xaml</DependentUpon>
+    <Compile Include="Views\Collections\AnalysisCollectionView.xaml.cs">
+      <DependentUpon>AnalysisCollectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Collections\RecordCollectionView.xaml.cs">
       <DependentUpon>RecordCollectionView.xaml</DependentUpon>
@@ -286,7 +286,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Collections\FileInfoCollectionView.xaml">
+    <Page Include="Views\Collections\AnalysisCollectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

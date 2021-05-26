@@ -6,7 +6,7 @@ using FileExtensions = ERHMS.EpiInfo.FileExtensions;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class CanvasCollectionViewModel : FileInfoCollectionViewModel
+    public class CanvasCollectionViewModel : AnalysisCollectionViewModel
     {
         public static async Task<CanvasCollectionViewModel> CreateAsync(Project project)
         {

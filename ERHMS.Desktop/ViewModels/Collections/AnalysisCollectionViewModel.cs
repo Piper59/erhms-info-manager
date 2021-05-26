@@ -18,7 +18,7 @@ using SearchOption = System.IO.SearchOption;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public abstract class FileInfoCollectionViewModel
+    public abstract class AnalysisCollectionViewModel
     {
         public class ItemViewModel : ObservableObject
         {
@@ -63,7 +63,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        protected FileInfoCollectionViewModel(Project project)
+        protected AnalysisCollectionViewModel(Project project)
         {
             Project = project;
             items = new List<ItemViewModel>();
