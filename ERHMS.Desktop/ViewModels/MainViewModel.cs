@@ -21,6 +21,20 @@ namespace ERHMS.Desktop.ViewModels
     {
         public static MainViewModel Instance { get; } = new MainViewModel();
 
+        private object content;
+        public object Content
+        {
+            get
+            {
+                return content;
+            }
+            set
+            {
+                Log.Instance.Debug($"Setting main content: {value}");
+                SetProperty(ref content, value);
+            }
+        }
+
         public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
         public ICommand GoToCoreProjectCommand { get; }
@@ -48,8 +62,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void GoToHome()
         {
-            IContentService content = ServiceLocator.Resolve<IContentService>();
-            content.Show(new HomeViewModel());
+            Content = new HomeViewModel();
         }
 
         public async Task GoToProjectAsync(Task<Project> task)
@@ -59,8 +72,7 @@ namespace ERHMS.Desktop.ViewModels
             await progress.RunAsync(async () =>
             {
                 Project project = await task;
-                IContentService content = ServiceLocator.Resolve<IContentService>();
-                content.Show(await ProjectViewModel.CreateAsync(project));
+                Content = await ProjectViewModel.CreateAsync(project);
             });
         }
 
@@ -79,8 +91,7 @@ namespace ERHMS.Desktop.ViewModels
             await progress.RunAsync(async () =>
             {
                 View view = await task;
-                IContentService content = ServiceLocator.Resolve<IContentService>();
-                content.Show(await ViewViewModel.CreateAsync(view));
+                Content = await ViewViewModel.CreateAsync(view);
             });
         }
 

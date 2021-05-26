@@ -157,7 +157,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Services\IContentService.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IProgressService.cs" />
