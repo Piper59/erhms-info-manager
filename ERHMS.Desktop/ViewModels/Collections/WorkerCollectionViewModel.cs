@@ -83,7 +83,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public RecordStatusCollectionView Statuses { get; } = new RecordStatusCollectionView();
 
         private readonly List<ItemViewModel> items;
-        public PagingListCollectionView Items { get; }
+        public ICollectionView Items { get; }
 
         public Worker CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 

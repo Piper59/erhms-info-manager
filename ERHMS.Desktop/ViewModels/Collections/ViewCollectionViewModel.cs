@@ -9,8 +9,10 @@ using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
@@ -74,7 +76,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public Project Project { get; }
 
         private readonly List<ItemViewModel> items;
-        public PagingListCollectionView Items { get; }
+        public ICollectionView Items { get; }
 
         public View CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 
@@ -89,7 +91,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Project = project;
             items = new List<ItemViewModel>();
-            Items = new PagingListCollectionView(items);
+            Items = new ListCollectionView(items);
             CreateCommand = Command.Null;
             OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);

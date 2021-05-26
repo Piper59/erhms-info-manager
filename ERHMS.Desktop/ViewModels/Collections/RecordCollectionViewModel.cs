@@ -12,6 +12,7 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -99,7 +100,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         }
 
         private readonly List<ItemViewModel> items;
-        public PagingListCollectionView Items { get; }
+        public ICollectionView Items { get; }
 
         public Record CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
         public IEnumerable<Record> SelectedValues => Items.Cast<ItemViewModel>()

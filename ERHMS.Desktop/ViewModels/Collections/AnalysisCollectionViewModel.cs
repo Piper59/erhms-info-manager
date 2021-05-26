@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using SearchOption = System.IO.SearchOption;
 
@@ -54,7 +55,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public Project Project { get; }
 
         private readonly List<ItemViewModel> items;
-        public PagingListCollectionView Items { get; }
+        public ICollectionView Items { get; }
 
         public FileInfo CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 
@@ -67,7 +68,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Project = project;
             items = new List<ItemViewModel>();
-            Items = new PagingListCollectionView(items);
+            Items = new ListCollectionView(items);
             Items.SortDescriptions.Add(new SortDescription(nameof(FileInfo.Name), ListSortDirection.Ascending));
             CreateCommand = new AsyncCommand(CreateAsync);
             OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
