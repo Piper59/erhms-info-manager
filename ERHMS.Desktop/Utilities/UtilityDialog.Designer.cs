@@ -42,9 +42,8 @@ namespace ERHMS.Desktop.Utilities
             this.LeadLabel.Location = new System.Drawing.Point(20, 20);
             this.LeadLabel.Margin = new System.Windows.Forms.Padding(5);
             this.LeadLabel.Name = "LeadLabel";
-            this.LeadLabel.Size = new System.Drawing.Size(99, 28);
+            this.LeadLabel.Size = new System.Drawing.Size(0, 28);
             this.LeadLabel.TabIndex = 0;
-            this.LeadLabel.Text = "Working...";
             this.LeadLabel.UseWaitCursor = true;
             // 
             // ProgressBar
@@ -88,7 +87,6 @@ namespace ERHMS.Desktop.Utilities
             this.MinimizeBox = false;
             this.Name = "UtilityDialog";
             this.Padding = new System.Windows.Forms.Padding(15);
-            this.Text = "ERHMS Info Manager";
             this.UseWaitCursor = true;
             this.ResumeLayout(false);
             this.PerformLayout();

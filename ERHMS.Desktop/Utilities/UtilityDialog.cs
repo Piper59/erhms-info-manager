@@ -17,6 +17,8 @@ namespace ERHMS.Desktop.Utilities
         public UtilityDialog()
         {
             InitializeComponent();
+            Text = ResXResources.Title_App;
+            LeadLabel.Text = ResXResources.Lead_Working;
         }
 
         protected override void OnPaint(PaintEventArgs e)

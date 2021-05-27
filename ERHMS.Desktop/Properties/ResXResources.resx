@@ -305,6 +305,9 @@ Close anyway?</value>
   <data name="Lead.UndeletingRecords" xml:space="preserve">
     <value>Undeleting records</value>
   </data>
+  <data name="Lead.Working" xml:space="preserve">
+    <value>Working...</value>
+  </data>
   <data name="Phase.Name.Deployment" xml:space="preserve">
     <value>Deployment</value>
   </data>

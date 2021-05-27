@@ -609,6 +609,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Working....
+        /// </summary>
+        public static string Lead_Working {
+            get {
+                return ResourceManager.GetString("Lead.Working", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deployment.
         /// </summary>
         public static string Phase_Name_Deployment {
