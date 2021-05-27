@@ -153,7 +153,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Form name: {0}
         ///
-        ///This form, any related forms, and all associated records will be permanently deleted. This operation cannot be undone..
+        ///This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone..
         /// </summary>
         public static string Body_ConfirmViewDeletion {
             get {

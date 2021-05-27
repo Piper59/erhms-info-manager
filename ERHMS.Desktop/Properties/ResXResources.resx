@@ -150,7 +150,7 @@
   <data name="Body.ConfirmViewDeletion" xml:space="preserve">
     <value>Form name: {0}
 
-This form, any related forms, and all associated records will be permanently deleted. This operation cannot be undone.</value>
+This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
   <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
