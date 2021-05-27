@@ -136,7 +136,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 return;
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = ResXResources.Lead_DeletingView;
+            progress.Title = ResXResources.Lead_DeletingView;
             await progress.RunAsync(() =>
             {
                 Project.DeleteView(CurrentValue);
@@ -164,7 +164,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = ResXResources.Lead_RefreshingViews;
+            progress.Title = ResXResources.Lead_RefreshingViews;
             await progress.RunAsync(InitializeAsync);
         }
     }

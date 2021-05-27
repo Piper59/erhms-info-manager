@@ -19,7 +19,7 @@
                 Style="{StaticResource FluidLayout}">
             <StackPanel Style="{StaticResource Container}">
                 <TextBlock Style="{StaticResource Lead}"
-                           Text="{Binding Lead}" />
+                           Text="{Binding Title}" />
                 <ProgressBar IsIndeterminate="True" />
                 <TextBlock Style="{StaticResource Body}"
                            Text="{Binding Status}"

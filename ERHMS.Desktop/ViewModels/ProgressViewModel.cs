@@ -9,7 +9,7 @@ namespace ERHMS.Desktop.ViewModels
     {
         private readonly CancellationTokenSource cancellationTokenSource;
 
-        public string Lead { get; }
+        public string Title { get; }
 
         private string status;
         public string Status
@@ -23,9 +23,9 @@ namespace ERHMS.Desktop.ViewModels
 
         public ICommand CancelCommand { get; }
 
-        public ProgressViewModel(string lead, bool canBeCanceled)
+        public ProgressViewModel(string title, bool canBeCanceled)
         {
-            Lead = lead;
+            Title = title;
             if (canBeCanceled)
             {
                 cancellationTokenSource = new CancellationTokenSource();
