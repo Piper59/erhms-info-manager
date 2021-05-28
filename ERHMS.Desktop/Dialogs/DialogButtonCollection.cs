@@ -5,23 +5,23 @@ namespace ERHMS.Desktop.Dialogs
 {
     public class DialogButtonCollection : List<DialogButton>
     {
-        public static DialogButtonCollection Close => new DialogButtonCollection
-        {
-            { ResXResources.AccessText_Close, null, true, true }
-        };
-
         public static DialogButtonCollection Ok => new DialogButtonCollection
         {
             { ResXResources.AccessText_Ok, null, true, true }
         };
 
-        public static DialogButtonCollection YesNo => new DialogButtonCollection
+        public static DialogButtonCollection Close => new DialogButtonCollection
+        {
+            { ResXResources.AccessText_Close, null, true, true }
+        };
+
+        public static DialogButtonCollection YesOrNo => new DialogButtonCollection
         {
             { ResXResources.AccessText_Yes, true, true, false },
             { ResXResources.AccessText_No, false, false, true }
         };
 
-        public static DialogButtonCollection VerbCancel(object content)
+        public static DialogButtonCollection ActionOrCancel(object content)
         {
             return new DialogButtonCollection
             {

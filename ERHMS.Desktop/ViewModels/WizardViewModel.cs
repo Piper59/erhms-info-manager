@@ -1,41 +1,24 @@
 ﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
+using ERHMS.Desktop.Wizards;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public abstract class WizardViewModel : ObservableObject
+    public abstract class WizardViewModel : ObservableObject, IWizard
     {
-        public abstract class StepViewModel : ObservableObject
+        public abstract class StepViewModel<TWizard> : ObservableObject, IStep
+            where TWizard : WizardViewModel
         {
-            public WizardViewModel Wizard { get; protected set; }
-            public StepViewModel Antecedent { get; protected set; }
-            public bool First => Antecedent == null;
-            public virtual bool Committing => false;
-            public bool Committed => !First && Antecedent.Committing;
-            public abstract string Lead { get; }
-
-            public string ContinueAccessText
-            {
-                get
-                {
-                    if (Committed)
-                    {
-                        return ResXResources.AccessText_Close;
-                    }
-                    else if (Committing)
-                    {
-                        return ResXResources.AccessText_Finish;
-                    }
-                    else
-                    {
-                        return ResXResources.AccessText_Next;
-                    }
-                }
-            }
+            public TWizard Wizard { get; private set; }
+            IWizard IStep.Wizard => Wizard;
+            public StepViewModel<TWizard> Antecedent { get; private set; }
+            public abstract string Title { get; }
+            public virtual string ContinueAction => ResXResources.AccessText_Next;
 
             public ICommand ReturnCommand { get; }
             public ICommand ContinueCommand { get; }
@@ -45,20 +28,35 @@ namespace ERHMS.Desktop.ViewModels
             {
                 ReturnCommand = new SyncCommand(Return, CanReturn);
                 ContinueCommand = new AsyncCommand(ContinueAsync, CanContinue);
+                CancelCommand = new SyncCommand(Cancel, CanCancel);
             }
 
-            protected void OnCloseRequested() => Wizard.OnCloseRequested();
-
-            protected void ContinueTo(StepViewModel step)
+            protected StepViewModel(TWizard wizard)
+                : this()
             {
+                Wizard = wizard;
+            }
+
+            protected void ContinueTo(StepViewModel<TWizard> step, bool commit = false)
+            {
+                if (commit)
+                {
+                    Wizard.Committed = true;
+                }
                 step.Wizard = Wizard;
                 step.Antecedent = this;
                 Wizard.Step = step;
             }
 
+            protected void RequestClose(bool? result)
+            {
+                Wizard.Result = result;
+                Wizard.OnCloseRequested();
+            }
+
             public virtual bool CanReturn()
             {
-                return !First && !Committed;
+                return Antecedent != null && !Wizard.Committed;
             }
 
             public virtual void Return()
@@ -71,24 +69,38 @@ namespace ERHMS.Desktop.ViewModels
 
             public virtual bool CanCancel()
             {
-                return !Committed;
+                return !Wizard.Committed;
             }
 
             public virtual void Cancel()
             {
-                OnCloseRequested();
+                RequestClose(false);
             }
         }
 
-        protected StepViewModel step;
-        public StepViewModel Step
+        protected IStep step;
+        public IStep Step
         {
             get { return step; }
             protected set { SetProperty(ref step, value); }
         }
 
+        protected bool committed;
+        public bool Committed
+        {
+            get { return committed; }
+            protected set { SetProperty(ref committed, value); }
+        }
+
+        public bool? Result { get; protected set; }
+
         public event EventHandler CloseRequested;
         protected virtual void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);
         protected void OnCloseRequested() => OnCloseRequested(EventArgs.Empty);
+
+        public bool? Show()
+        {
+            return ServiceLocator.Resolve<IWizardService>().Show(this);
+        }
     }
 }

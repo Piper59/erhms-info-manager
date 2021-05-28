@@ -1,21 +1,24 @@
 ﻿using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
+using ERHMS.Desktop.Wizards;
 using System.Windows;
 
 namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class WizardService : IWizardService
     {
-        public bool? Show(object wizard)
+        public bool? Show(IWizard wizard)
         {
-            Window owner = Application.Current.MainWindow;
+            WizardViewModel dataContext = (WizardViewModel)wizard;
+            Window owner = Application.Current.GetActiveWindow();
             Window window = new WizardView
             {
-                DataContext = (WizardViewModel)wizard
+                DataContext = dataContext
             };
             window.SetOwner(owner);
-            return window.ShowDialog();
+            window.ShowDialog();
+            return wizard.Result;
         }
     }
 }

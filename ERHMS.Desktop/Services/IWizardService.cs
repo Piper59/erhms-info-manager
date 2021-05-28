@@ -1,7 +1,9 @@
-﻿namespace ERHMS.Desktop.Services
+﻿using ERHMS.Desktop.Wizards;
+
+namespace ERHMS.Desktop.Services
 {
     public interface IWizardService
     {
-        bool? Show(object wizard);
+        bool? Show(IWizard wizard);
     }
 }

@@ -62,9 +62,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\Canvas.cs" />
-    <Compile Include="Analysis\Map.cs" />
-    <Compile Include="Analysis\Pgm.cs" />
+    <Compile Include="Analytics\Asset.cs" />
+    <Compile Include="Analytics\Canvas.cs" />
+    <Compile Include="Analytics\Map.cs" />
+    <Compile Include="Analytics\Pgm.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Data\CollectedDataProviderExtensions.cs" />
     <Compile Include="Data\IDbDriverExtensions.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Data\RecordRepository.cs" />
     <Compile Include="Data\RecordStatus.cs" />
     <Compile Include="FileExtensions.cs" />
+    <Compile Include="Metadata\FieldCollectionMasterExtensions.cs" />
     <Compile Include="Metadata\FieldDataRow.cs" />
     <Compile Include="Metadata\FieldDataRowComparer.cs" />
     <Compile Include="Metadata\FieldDataTable.cs" />
@@ -147,8 +149,8 @@
     <Compile Include="ViewExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Analysis\Canvas.cvs7" />
-    <EmbeddedResource Include="Analysis\Map.map7" />
+    <EmbeddedResource Include="Analytics\Template.cvs7" />
+    <EmbeddedResource Include="Analytics\Template.map7" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

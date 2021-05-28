@@ -1,0 +1,70 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
+    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CollectViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"
+                   Target="{x:Reference View}">
+                Form:
+            </Label>
+            <ComboBox x:Name="View"
+                      AutomationProperties.Name="Form"
+                      Grid.Column="1"
+                      DisplayMemberPath="Name"
+                      ItemsSource="{Binding Views}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+ConfirmViewModel}">
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Body}" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0"
+                       Grid.Row="0">
+                Form:
+            </TextBlock>
+            <TextBlock Grid.Column="1"
+                       Grid.Row="0"
+                       Text="{Binding Wizard.View.Name}" />
+            <TextBlock Grid.Column="0"
+                       Grid.Row="1">
+                Location:
+            </TextBlock>
+            <TextBlock Grid.Column="1"
+                       Grid.Row="1"
+                       Text="{Binding Wizard.Asset.DirectoryName}" />
+            <TextBlock Grid.Column="0"
+                       Grid.Row="2">
+                File name:
+            </TextBlock>
+            <TextBlock Grid.Column="1"
+                       Grid.Row="2"
+                       Text="{Binding Wizard.Asset.Name}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CompleteViewModel}">
+        <CheckBox IsChecked="{Binding Open}"
+                  Content="Open in Epi Info" />
+    </DataTemplate>
+</ResourceDictionary>

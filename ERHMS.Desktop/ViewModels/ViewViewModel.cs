@@ -20,16 +20,16 @@ namespace ERHMS.Desktop.ViewModels
         public Project Project => Value.Project;
         public RecordCollectionViewModel Records { get; private set; }
 
-        public ICommand OpenProjectLocationCommand { get; }
-        public ICommand GoToProjectCommand { get; }
         public ICommand GoToHelpCommand { get; }
+        public ICommand GoToProjectCommand { get; }
+        public ICommand OpenProjectLocationCommand { get; }
 
         private ViewViewModel(View value)
         {
             Value = value;
-            OpenProjectLocationCommand = new SyncCommand(OpenProjectLocation);
-            GoToProjectCommand = new AsyncCommand(GoToProjectAsync);
             GoToHelpCommand = Command.Null;
+            GoToProjectCommand = new AsyncCommand(GoToProjectAsync);
+            OpenProjectLocationCommand = new SyncCommand(OpenProjectLocation);
         }
 
         private async Task InitializeAsync()

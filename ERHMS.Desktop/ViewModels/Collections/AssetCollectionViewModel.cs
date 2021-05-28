@@ -5,6 +5,7 @@ using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
 using Microsoft.VisualBasic.FileIO;
 using System;
@@ -15,11 +16,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using SearchOption = System.IO.SearchOption;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public abstract class AnalysisCollectionViewModel
+    public abstract class AssetCollectionViewModel
     {
         public class ItemViewModel : ObservableObject
         {
@@ -51,7 +51,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         }
 
         protected abstract Module Module { get; }
-        protected abstract string Extension { get; }
+        protected abstract string FileExtension { get; }
         public Project Project { get; }
 
         private readonly List<ItemViewModel> items;
@@ -64,7 +64,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        protected AnalysisCollectionViewModel(Project project)
+        protected AssetCollectionViewModel(Project project)
         {
             Project = project;
             items = new List<ItemViewModel>();
@@ -81,18 +81,28 @@ namespace ERHMS.Desktop.ViewModels.Collections
             IEnumerable<FileInfo> values = await Task.Run(() =>
             {
                 DirectoryInfo directory = new DirectoryInfo(Project.Location);
-                return directory.GetFiles($"*{Extension}", SearchOption.AllDirectories);
+                return directory.GetFiles($"*{FileExtension}");
             });
             items.Clear();
             items.AddRange(values.Select(value => new ItemViewModel(value)));
             Items.Refresh();
         }
 
-        protected abstract void CreateCore(View view, string path);
+        protected abstract Task<CreateAssetViewModel> GetCreateWizardAsync();
 
         public async Task CreateAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(Module);
+            CreateAssetViewModel wizard = null;
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Title = ResXResources.Lead_Working;
+            await progress.RunAsync(async () =>
+            {
+                wizard = await GetCreateWizardAsync();
+            });
+            if (wizard.Show() == true)
+            {
+                await RefreshAsync();
+            }
         }
 
         public async Task OpenAsync()
@@ -104,21 +114,32 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
             dialog.Severity = DialogSeverity.Warning;
-            dialog.Lead = ResXResources.Lead_ConfirmFileDeletion;
-            dialog.Body = string.Format(ResXResources.Body_ConfirmFileDeletion, CurrentValue.Name);
-            dialog.Buttons = DialogButtonCollection.VerbCancel(ResXResources.AccessText_Delete);
+            dialog.Lead = ResXResources.Lead_ConfirmAssetDeletion;
+            dialog.Body = string.Format(ResXResources.Body_ConfirmAssetDeletion, CurrentValue.Name);
+            dialog.Buttons = DialogButtonCollection.ActionOrCancel(ResXResources.AccessText_Delete);
             if (dialog.Show() != true)
             {
                 return;
             }
-            FileSystem.DeleteFile(CurrentValue.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-            await RefreshAsync();
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Title = ResXResources.Lead_DeletingAsset;
+            await progress.RunAsync(async () =>
+            {
+                await Task.Run(() =>
+                {
+                    FileSystem.DeleteFile(
+                        CurrentValue.FullName,
+                        UIOption.OnlyErrorDialogs,
+                        RecycleOption.SendToRecycleBin);
+                });
+                await InitializeAsync();
+            });
         }
 
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_RefreshingFiles;
+            progress.Title = ResXResources.Lead_RefreshingAssets;
             await progress.RunAsync(InitializeAsync);
         }
     }

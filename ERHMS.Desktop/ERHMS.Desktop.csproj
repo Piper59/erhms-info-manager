@@ -133,8 +133,10 @@
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />
     <Compile Include="Icons.cs" />
+    <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\MenuDropAlignment.cs" />
+    <Compile Include="Infrastructure\NativeMethods.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />
     <Compile Include="Infrastructure\Services\ProgressService.cs" />
@@ -173,7 +175,7 @@
     <Compile Include="Utilities\UtilityDialog.Designer.cs">
       <DependentUpon>UtilityDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Collections\AnalysisCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Collections\AssetCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\CanvasCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\MapCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\PgmCollectionViewModel.cs" />
@@ -187,9 +189,13 @@
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\Utilities\GetWorkerIdViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateAssetViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateCanvasViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateMapViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreatePgmViewModel.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
-    <Compile Include="Views\Collections\AnalysisCollectionView.xaml.cs">
-      <DependentUpon>AnalysisCollectionView.xaml</DependentUpon>
+    <Compile Include="Views\Collections\AssetCollectionView.xaml.cs">
+      <DependentUpon>AssetCollectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Collections\RecordCollectionView.xaml.cs">
       <DependentUpon>RecordCollectionView.xaml</DependentUpon>
@@ -224,6 +230,8 @@
     <Compile Include="Views\WizardView.xaml.cs">
       <DependentUpon>WizardView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wizards\IStep.cs" />
+    <Compile Include="Wizards\IWizard.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\ResXResources.resx">
@@ -286,7 +294,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Collections\AnalysisCollectionView.xaml">
+    <Page Include="Views\Collections\AssetCollectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -327,6 +335,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ViewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\CreateAssetViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,14 +1,15 @@
 ﻿using Epi;
 using ERHMS.Common.Reflection;
+using ERHMS.EpiInfo.Metadata;
 using System.Drawing;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using Settings = ERHMS.EpiInfo.Properties.Settings;
 
-namespace ERHMS.EpiInfo.Analysis
+namespace ERHMS.EpiInfo.Analytics
 {
-    public class Map
+    public class Map : Asset
     {
         private static XmlWriterSettings XmlWriterSettings => new XmlWriterSettings
         {
@@ -16,30 +17,27 @@ namespace ERHMS.EpiInfo.Analysis
             Indent = true
         };
 
-        public View View { get; }
+        private static XDocument GetTemplate()
+        {
+            using (Stream stream = typeof(Map).GetManifestResourceStream("Template.map7"))
+            {
+                return XDocument.Load(stream, LoadOptions.PreserveWhitespace);
+            }
+        }
+
         public string MapServer { get; set; } = Settings.Default.MapServer;
         public Color PointColor { get; set; } = Color.Red;
 
         public Map(View view)
-        {
-            View = view;
-        }
+            : base(view) { }
 
-        private bool IsNumberField(string fieldName)
+        public override void Save(Stream stream)
         {
-            return View.Fields.Contains(fieldName) && View.Fields[fieldName].FieldType == MetaFieldType.Number;
-        }
-
-        public void Save(string path)
-        {
-            XDocument document;
-            using (Stream stream = typeof(Canvas).GetManifestResourceStream("Map.map7"))
-            {
-                document = XDocument.Load(stream, LoadOptions.PreserveWhitespace);
-            }
+            XDocument document = GetTemplate();
             XElement dataLayer = document.Root.Element("dataLayer");
             dataLayer.Element("color").Value = $"#{PointColor.ToArgb():X}";
-            if (IsNumberField("Latitude") && IsNumberField("Longitude"))
+            if (View.Fields.Contains("Latitude", MetaFieldType.Number)
+                && View.Fields.Contains("Longitude", MetaFieldType.Number))
             {
                 dataLayer.Element("latitude").Value = "Latitude";
                 dataLayer.Element("longitude").Value = "Longitude";
@@ -47,12 +45,11 @@ namespace ERHMS.EpiInfo.Analysis
             XElement dashboardHelper = dataLayer.Element("dashboardHelper");
             dashboardHelper.Element("projectPath").Value = View.Project.FilePath;
             dashboardHelper.Element("viewName").Value = View.Name;
-            XElement serverName = document.Root
-                .Element("referenceLayer")
+            XElement serverName = document.Root.Element("referenceLayer")
                 .Element("referenceLayer")
                 .Element("serverName");
             serverName.Value = MapServer;
-            using (XmlWriter writer = XmlWriter.Create(path, XmlWriterSettings))
+            using (XmlWriter writer = XmlWriter.Create(stream, XmlWriterSettings))
             {
                 document.Save(writer);
             }

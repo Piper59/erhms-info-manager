@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
-        AutomationProperties.HelpText="{Binding Step.Lead}"
+        AutomationProperties.HelpText="{Binding Step.Title}"
         Icon="/Resources/ERHMS.ico"
         Height="480"
         ResizeMode="NoResize"
@@ -11,7 +11,12 @@
         UseLayoutRounding="True"
         Width="640">
     <Window.Resources>
-        <Converters:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Wizards/CreateAssetViews.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Converters:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -24,10 +29,15 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Border Style="{StaticResource FluidLayout}">
                     <StackPanel Style="{StaticResource Container}">
-                        <Grid Style="{StaticResource Section}">
-                            <TextBlock Style="{StaticResource Lead}"
-                                       Text="{Binding Step.Lead}" />
-                        </Grid>
+                        <TextBlock Style="{StaticResource Lead}"
+                                   Text="{Binding Step.Title}">
+                            <TextBlock.Margin>
+                                <Thickness Left="{StaticResource SmallSpace}"
+                                           Top="{StaticResource SmallSpace}"
+                                           Right="{StaticResource SmallSpace}"
+                                           Bottom="{StaticResource MediumFontSize}" />
+                            </TextBlock.Margin>
+                        </TextBlock>
                         <ContentPresenter Content="{Binding Step}" />
                     </StackPanel>
                 </Border>
@@ -35,20 +45,19 @@
         </Border>
         <Border Grid.Row="1"
                 Background="{x:Static SystemColors.MenuBrush}">
-            <WrapPanel DataContext="{Binding Step}"
-                       HorizontalAlignment="Right"
+            <WrapPanel HorizontalAlignment="Right"
                        Style="{StaticResource Container}">
                 <WrapPanel.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </WrapPanel.Resources>
-                <Button Command="{Binding ReturnCommand}"
+                <Button Command="{Binding Step.ReturnCommand}"
                         Visibility="{Binding Committed, Converter={StaticResource BoolToVisibilityInverter}}">
                     _Back
                 </Button>
-                <Button Command="{Binding ContinueCommand}"
-                        Content="{Binding ContinueAccessText}"
+                <Button Command="{Binding Step.ContinueCommand}"
+                        Content="{Binding Step.ContinueAction}"
                         IsDefault="True" />
-                <Button Command="{Binding CancelCommand}"
+                <Button Command="{Binding Step.CancelCommand}"
                         IsCancel="True"
                         Visibility="{Binding Committed, Converter={StaticResource BoolToVisibilityInverter}}">
                     _Cancel

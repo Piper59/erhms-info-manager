@@ -4,9 +4,9 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace ERHMS.EpiInfo.Analysis
+namespace ERHMS.EpiInfo.Analytics
 {
-    public class Canvas
+    public class Canvas : Asset
     {
         private static XmlWriterSettings XmlWriterSettings => new XmlWriterSettings
         {
@@ -14,24 +14,24 @@ namespace ERHMS.EpiInfo.Analysis
             Indent = true
         };
 
-        public View View { get; }
-
-        public Canvas(View view)
+        private static XDocument GetTemplate()
         {
-            View = view;
+            using (Stream stream = typeof(Canvas).GetManifestResourceStream("Template.cvs7"))
+            {
+                return XDocument.Load(stream, LoadOptions.PreserveWhitespace);
+            }
         }
 
-        public void Save(string path)
+        public Canvas(View view)
+            : base(view) { }
+
+        public override void Save(Stream stream)
         {
-            XDocument document;
-            using (Stream stream = typeof(Canvas).GetManifestResourceStream("Canvas.cvs7"))
-            {
-                document = XDocument.Load(stream, LoadOptions.PreserveWhitespace);
-            }
+            XDocument document = GetTemplate();
             XElement dashboardHelper = document.Root.Element("dashboardHelper");
             dashboardHelper.Element("projectPath").Value = View.Project.FilePath;
             dashboardHelper.Element("viewName").Value = View.Name;
-            using (XmlWriter writer = XmlWriter.Create(path, XmlWriterSettings))
+            using (XmlWriter writer = XmlWriter.Create(stream, XmlWriterSettings))
             {
                 document.Save(writer);
             }

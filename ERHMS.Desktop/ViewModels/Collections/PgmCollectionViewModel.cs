@@ -1,12 +1,12 @@
 ﻿using Epi;
+using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Analysis;
 using System.Threading.Tasks;
 using FileExtensions = ERHMS.EpiInfo.FileExtensions;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class PgmCollectionViewModel : AnalysisCollectionViewModel
+    public class PgmCollectionViewModel : AssetCollectionViewModel
     {
         public static async Task<PgmCollectionViewModel> CreateAsync(Project project)
         {
@@ -16,15 +16,14 @@ namespace ERHMS.Desktop.ViewModels.Collections
         }
 
         protected override Module Module => Module.Analysis;
-        protected override string Extension => FileExtensions.Pgm;
+        protected override string FileExtension => FileExtensions.Pgm;
 
         private PgmCollectionViewModel(Project project)
             : base(project) { }
 
-        protected override void CreateCore(View view, string path)
+        protected override async Task<CreateAssetViewModel> GetCreateWizardAsync()
         {
-            Pgm pgm = new Pgm(view);
-            pgm.Save(path);
+            return await CreatePgmViewModel.CreateAsync(Project);
         }
     }
 }

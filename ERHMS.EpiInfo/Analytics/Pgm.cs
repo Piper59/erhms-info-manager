@@ -1,20 +1,15 @@
 ﻿using Epi;
 using System.IO;
 
-namespace ERHMS.EpiInfo.Analysis
+namespace ERHMS.EpiInfo.Analytics
 {
-    public class Pgm
+    public class Pgm : Asset
     {
-        public View View { get; }
-
         public Pgm(View view)
-        {
-            View = view;
-        }
+            : base(view) { }
 
-        public void Save(string path)
+        public override void Save(Stream stream)
         {
-            using (Stream stream = File.Open(path, FileMode.Create, FileAccess.Write))
             using (TextWriter writer = new StreamWriter(stream))
             {
                 writer.WriteLine($"READ {{{View.Project.FilePath}}}:{View.Name}");

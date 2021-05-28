@@ -38,7 +38,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
             Reporting += ProgressService_Reporting;
             try
             {
-                Window owner = Application.Current.MainWindow;
+                Window owner = Application.Current.GetActiveWindow();
                 ProgressView window = new ProgressView
                 {
                     DataContext = dataContext

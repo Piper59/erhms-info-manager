@@ -16,13 +16,15 @@ namespace ERHMS.Desktop.Infrastructure.Services
 
         public bool? Show()
         {
-            Window owner = Application.Current.MainWindow;
+            DialogViewModel dataContext = new DialogViewModel(Severity, Lead, Body, Details, Buttons);
+            Window owner = Application.Current.GetActiveWindow();
             Window window = new DialogView
             {
-                DataContext = new DialogViewModel(Severity, Lead, Body, Details, Buttons)
+                DataContext = dataContext
             };
             window.SetOwner(owner);
-            return window.ShowDialog();
+            window.ShowDialog();
+            return dataContext.Result;
         }
     }
 }

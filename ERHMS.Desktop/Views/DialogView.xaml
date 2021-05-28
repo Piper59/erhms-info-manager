@@ -36,14 +36,13 @@
                            Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}" />
                     <StackPanel Grid.Column="1">
                         <TextBlock Style="{StaticResource Lead}"
-                                   Text="{Binding Lead}"
-                                   Visibility="{Binding Lead, Converter={StaticResource NullableToVisibilityConverter}}" />
+                                   Text="{Binding Lead}" />
                         <TextBlock Style="{StaticResource Body}"
                                    Text="{Binding Body}"
                                    Visibility="{Binding Body, Converter={StaticResource NullableToVisibilityConverter}}">
                             <TextBlock.Margin>
                                 <Thickness Left="{StaticResource SmallSpace}"
-                                           Top="{StaticResource DefaultFontSize}"
+                                           Top="{StaticResource MediumFontSize}"
                                            Right="{StaticResource SmallSpace}"
                                            Bottom="{StaticResource SmallSpace}" />
                             </TextBlock.Margin>
@@ -63,7 +62,7 @@
                     <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </Grid.Resources>
                 <Button Grid.Column="0"
-                        Command="{Binding ToggleShowingDetailsCommand}"
+                        Command="{Binding ToggleDetailedCommand}"
                         VerticalAlignment="Top"
                         Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}">
                     _Details
@@ -89,7 +88,7 @@
         </Border>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                Visibility="{Binding ShowingDetails, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding Detailed, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="250"

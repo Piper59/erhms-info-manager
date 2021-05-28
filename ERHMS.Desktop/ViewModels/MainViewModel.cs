@@ -30,7 +30,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             set
             {
-                Log.Instance.Debug($"Setting main content: {value}");
+                Log.Instance.Debug($"Navigating: {value}");
                 SetProperty(ref content, value);
             }
         }

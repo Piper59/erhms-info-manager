@@ -1,4 +1,5 @@
 ﻿using ERHMS.Desktop.ViewModels;
+using System;
 using System.Windows;
 
 namespace ERHMS.Desktop.Views
@@ -29,7 +30,7 @@ namespace ERHMS.Desktop.Views
             }
         }
 
-        private void DataContext_CloseRequested(object sender, System.EventArgs e)
+        private void DataContext_CloseRequested(object sender, EventArgs e)
         {
             Close();
         }

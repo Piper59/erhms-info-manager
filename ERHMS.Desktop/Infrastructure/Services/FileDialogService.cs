@@ -13,7 +13,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
 
         private bool? Show(FileDialog dialog)
         {
-            Window owner = Application.Current.MainWindow;
+            Window owner = Application.Current.GetActiveWindow();
             owner.EnsureHandle();
             bool? result = dialog.ShowDialog(owner);
             FileName = dialog.FileName;

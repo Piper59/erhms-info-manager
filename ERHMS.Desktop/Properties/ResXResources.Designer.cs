@@ -142,11 +142,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File name: {0}.
+        ///   Looks up a localized string similar to File name: {0}
+        ///
+        ///This file will be moved to the Recycle Bin..
         /// </summary>
-        public static string Body_ConfirmFileDeletion {
+        public static string Body_ConfirmAssetDeletion {
             get {
-                return ResourceManager.GetString("Body.ConfirmFileDeletion", resourceCulture);
+                return ResourceManager.GetString("Body.ConfirmAssetDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location: {0}
+        ///
+        ///ERHMS Info Manager will only recognize files that are in the same location as the current database. Are you sure you want to use this location?.
+        /// </summary>
+        public static string Body_ConfirmOrphanAssetCreation {
+            get {
+                return ResourceManager.GetString("Body.ConfirmOrphanAssetCreation", resourceCulture);
             }
         }
         
@@ -438,6 +451,42 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Epi Info Dashboards (*.cvs7)|*.cvs7.
+        /// </summary>
+        public static string FileDialog_Filter_Canvases {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.Canvases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epi Info Maps (*.map7)|*.map7.
+        /// </summary>
+        public static string FileDialog_Filter_Maps {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.Maps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epi Info Analyses (*.pgm7)|*.pgm7.
+        /// </summary>
+        public static string FileDialog_Filter_Pgms {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.Pgms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epi Info Databases (*.prj)|*.prj.
+        /// </summary>
+        public static string FileDialog_Filter_Projects {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ZIP Files (*.zip)|*.zip.
         /// </summary>
         public static string FileDialog_Filter_ZipFiles {
@@ -474,11 +523,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to move this file to the Recycle Bin?.
+        ///   Looks up a localized string similar to Are you sure you want to delete this file?.
         /// </summary>
-        public static string Lead_ConfirmFileDeletion {
+        public static string Lead_ConfirmAssetDeletion {
             get {
-                return ResourceManager.GetString("Lead.ConfirmFileDeletion", resourceCulture);
+                return ResourceManager.GetString("Lead.ConfirmAssetDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified file is in an unsupported location.
+        /// </summary>
+        public static string Lead_ConfirmOrphanAssetCreation {
+            get {
+                return ResourceManager.GetString("Lead.ConfirmOrphanAssetCreation", resourceCulture);
             }
         }
         
@@ -492,11 +550,47 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a form to analyze.
+        /// </summary>
+        public static string Lead_CreateAsset_Collect {
+            get {
+                return ResourceManager.GetString("Lead.CreateAsset.Collect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File has been created.
+        /// </summary>
+        public static string Lead_CreateAsset_Complete {
+            get {
+                return ResourceManager.GetString("Lead.CreateAsset.Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify the information below.
+        /// </summary>
+        public static string Lead_CreateAsset_Confirm {
+            get {
+                return ResourceManager.GetString("Lead.CreateAsset.Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating file.
         /// </summary>
-        public static string Lead_CreatingFile {
+        public static string Lead_CreatingAsset {
             get {
-                return ResourceManager.GetString("Lead.CreatingFile", resourceCulture);
+                return ResourceManager.GetString("Lead.CreatingAsset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleting file.
+        /// </summary>
+        public static string Lead_DeletingAsset {
+            get {
+                return ResourceManager.GetString("Lead.DeletingAsset", resourceCulture);
             }
         }
         
@@ -566,9 +660,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Refreshing files.
         /// </summary>
-        public static string Lead_RefreshingFiles {
+        public static string Lead_RefreshingAssets {
             get {
-                return ResourceManager.GetString("Lead.RefreshingFiles", resourceCulture);
+                return ResourceManager.GetString("Lead.RefreshingAssets", resourceCulture);
             }
         }
         

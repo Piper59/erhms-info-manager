@@ -130,18 +130,21 @@ namespace ERHMS.Desktop.ViewModels.Collections
             dialog.Severity = DialogSeverity.Warning;
             dialog.Lead = ResXResources.Lead_ConfirmViewDeletion;
             dialog.Body = string.Format(ResXResources.Body_ConfirmViewDeletion, CurrentValue.Name);
-            dialog.Buttons = DialogButtonCollection.VerbCancel(ResXResources.AccessText_Delete);
+            dialog.Buttons = DialogButtonCollection.ActionOrCancel(ResXResources.AccessText_Delete);
             if (dialog.Show() != true)
             {
                 return;
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_DeletingView;
-            await progress.RunAsync(() =>
+            await progress.RunAsync(async () =>
             {
-                Project.DeleteView(CurrentValue);
+                await Task.Run(() =>
+                {
+                    Project.DeleteView(CurrentValue);
+                });
+                await InitializeAsync();
             });
-            await RefreshAsync();
         }
 
         public async Task DesignAsync()

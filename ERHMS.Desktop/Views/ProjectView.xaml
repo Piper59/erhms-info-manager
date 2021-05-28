@@ -48,21 +48,21 @@
                 <TabItem Header="_Dashboards">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:AnalysisCollectionView DataContext="{Binding Canvases}" />
+                            <Collections:AssetCollectionView DataContext="{Binding Canvases}" />
                         </Grid>
                     </Border>
                 </TabItem>
                 <TabItem Header="_Analyses">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:AnalysisCollectionView DataContext="{Binding Pgms}" />
+                            <Collections:AssetCollectionView DataContext="{Binding Pgms}" />
                         </Grid>
                     </Border>
                 </TabItem>
                 <TabItem Header="_Maps">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:AnalysisCollectionView DataContext="{Binding Maps}" />
+                            <Collections:AssetCollectionView DataContext="{Binding Maps}" />
                         </Grid>
                     </Border>
                 </TabItem>
