@@ -25,8 +25,8 @@ namespace ERHMS.EpiInfo.Analytics
             }
         }
 
-        public string MapServer { get; set; } = Settings.Default.MapServer;
-        public Color PointColor { get; set; } = Color.Red;
+        public string Server { get; set; } = Settings.Default.MapServer;
+        public Color PointColor { get; set; } = Color.FromArgb(Settings.Default.MapPointColor);
 
         public Map(View view)
             : base(view) { }
@@ -48,7 +48,7 @@ namespace ERHMS.EpiInfo.Analytics
             XElement serverName = document.Root.Element("referenceLayer")
                 .Element("referenceLayer")
                 .Element("serverName");
-            serverName.Value = MapServer;
+            serverName.Value = Server;
             using (XmlWriter writer = XmlWriter.Create(stream, XmlWriterSettings))
             {
                 document.Save(writer);

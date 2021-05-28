@@ -79,6 +79,15 @@ namespace ERHMS.EpiInfo.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1424587")]
+        public int MapPointColor {
+            get {
+                return ((int)(this["MapPointColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer")]
         public string MapServer {
             get {

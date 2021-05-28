@@ -20,6 +20,9 @@
     <Setting Name="GridSize" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">3</Value>
     </Setting>
+    <Setting Name="MapPointColor" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">-1424587</Value>
+    </Setting>
     <Setting Name="MapServer" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer</Value>
     </Setting>
