@@ -99,7 +99,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override async Task ContinueAsync()
             {
                 await Wizard.CreateAsync();
-                ContinueTo(new CompleteViewModel(), true);
+                Commit();
+                SetResult(true);
+                ContinueTo(new CompleteViewModel());
             }
         }
 
@@ -126,7 +128,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     await Wizard.OpenAsync();
                 }
-                RequestClose(true);
+                Close();
             }
         }
 

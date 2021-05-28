@@ -37,20 +37,25 @@ namespace ERHMS.Desktop.ViewModels
                 Wizard = wizard;
             }
 
-            protected void ContinueTo(StepViewModel<TWizard> step, bool commit = false)
+            protected void ContinueTo(StepViewModel<TWizard> step)
             {
-                if (commit)
-                {
-                    Wizard.Committed = true;
-                }
                 step.Wizard = Wizard;
                 step.Antecedent = this;
                 Wizard.Step = step;
             }
 
-            protected void RequestClose(bool? result)
+            protected void Commit()
+            {
+                Wizard.Committed = true;
+            }
+
+            protected void SetResult(bool? result)
             {
                 Wizard.Result = result;
+            }
+
+            protected void Close()
+            {
                 Wizard.OnCloseRequested();
             }
 
@@ -74,7 +79,7 @@ namespace ERHMS.Desktop.ViewModels
 
             public virtual void Cancel()
             {
-                RequestClose(false);
+                Close();
             }
         }
 

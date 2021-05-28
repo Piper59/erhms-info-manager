@@ -52,7 +52,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
                         _ =>
                         {
                             completionTokenSource.Cancel();
-                            window.Done = true;
+                            dataContext.Done = true;
                             window.Close();
                         },
                         TaskScheduler.FromCurrentSynchronizationContext());

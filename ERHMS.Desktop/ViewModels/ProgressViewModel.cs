@@ -21,6 +21,8 @@ namespace ERHMS.Desktop.ViewModels
         public CancellationToken CancellationToken { get; }
         public bool CanBeCanceled => CancellationToken.CanBeCanceled;
 
+        public bool Done { get; set; }
+
         public ICommand CancelCommand { get; }
 
         public ProgressViewModel(string title, bool canBeCanceled)
