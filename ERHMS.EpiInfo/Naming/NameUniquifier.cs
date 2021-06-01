@@ -10,10 +10,15 @@ namespace ERHMS.EpiInfo.Naming
             protected abstract Regex NameRegex { get; }
             protected abstract TSuffix InitialSuffix { get; }
 
-            public abstract bool Exists(string name);
+            protected virtual string GetInitialBaseName(string name)
+            {
+                return name;
+            }
+
             protected abstract TSuffix ParseSuffix(string value);
             protected abstract TSuffix GetNextSuffix(TSuffix suffix);
             protected abstract string Format(string baseName, TSuffix suffix);
+            public abstract bool Exists(string name);
 
             public virtual string Uniquify(string name)
             {
@@ -27,7 +32,7 @@ namespace ERHMS.EpiInfo.Naming
                 }
                 else
                 {
-                    baseName = name;
+                    baseName = GetInitialBaseName(name);
                     suffix = InitialSuffix;
                 }
                 while (true)
