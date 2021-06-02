@@ -15,7 +15,7 @@ namespace ERHMS.EpiInfo.Naming
         public FileNameUniquifier(string directoryPath, string extension)
         {
             nameRegex = new Regex(
-                $@"^(?<baseName>.*[^0-9])(?<suffix>[0-9]+)(?:{Regex.Escape(extension)})$",
+                $@"^(?<baseName>.+) \((?<suffix>[0-9]+)\){Regex.Escape(extension)}$",
                 RegexOptions.IgnoreCase);
             DirectoryPath = directoryPath;
             Extension = extension;
@@ -33,7 +33,7 @@ namespace ERHMS.EpiInfo.Naming
 
         protected override string Format(string baseName, int suffix)
         {
-            return $"{baseName}{suffix}{Extension}";
+            return $"{baseName} ({suffix}){Extension}";
         }
 
         public override bool Exists(string name)
