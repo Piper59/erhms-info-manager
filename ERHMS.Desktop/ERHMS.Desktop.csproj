@@ -167,6 +167,7 @@
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Utilities\GetWorkerId.cs" />
     <Compile Include="Utilities\IUtility.cs" />
+    <Compile Include="Utilities\ResetSettings.cs" />
     <Compile Include="Utilities\Utility.Execution.cs" />
     <Compile Include="Utilities\Utility.Invocation.cs" />
     <Compile Include="Utilities\UtilityDialog.cs">

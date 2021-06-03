@@ -195,6 +195,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings have been reset..
+        /// </summary>
+        public static string Body_SettingsReset {
+            get {
+                return ResourceManager.GetString("Body.SettingsReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager is still working.
         ///
         ///Close anyway?.

@@ -167,6 +167,9 @@ This form, any related forms, and all associated records will be permanently del
   <data name="Body.GetWorkerId" xml:space="preserve">
     <value>Select a worker in ERHMS Info Manager to continue.</value>
   </data>
+  <data name="Body.SettingsReset" xml:space="preserve">
+    <value>Settings have been reset.</value>
+  </data>
   <data name="Body.UtilityClosing" xml:space="preserve">
     <value>ERHMS Info Manager is still working.
 
