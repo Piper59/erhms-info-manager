@@ -5,16 +5,6 @@ namespace ERHMS.Desktop.ViewModels.Utilities
 {
     public class GetWorkerIdViewModel
     {
-        public static async Task<GetWorkerIdViewModel> CreateAsync(
-            string firstName,
-            string lastName,
-            string emailAddress)
-        {
-            GetWorkerIdViewModel result = new GetWorkerIdViewModel(firstName, lastName, emailAddress);
-            await result.InitializeAsync();
-            return result;
-        }
-
         public string FirstName { get; }
         public string LastName { get; }
         public string EmailAddress { get; }
@@ -26,16 +16,17 @@ namespace ERHMS.Desktop.ViewModels.Utilities
             set { Workers.MoveCurrentToGlobalRecordId(value); }
         }
 
-        private GetWorkerIdViewModel(string firstName, string lastName, string emailAddress)
+        public GetWorkerIdViewModel(string firstName, string lastName, string emailAddress)
         {
             FirstName = firstName;
             LastName = lastName;
             EmailAddress = emailAddress;
+            Workers = new WorkerCollectionViewModel();
         }
 
-        private async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            Workers = await WorkerCollectionViewModel.CreateAsync(FirstName, LastName, EmailAddress);
+            await Workers.InitializeAsync(FirstName, LastName, EmailAddress);
         }
     }
 }

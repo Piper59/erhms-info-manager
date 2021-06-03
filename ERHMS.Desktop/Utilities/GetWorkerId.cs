@@ -37,8 +37,8 @@ namespace ERHMS.Desktop.Utilities
 
         public async Task<string> ExecuteAsync()
         {
-            GetWorkerIdViewModel dataContext =
-                await GetWorkerIdViewModel.CreateAsync(FirstName, LastName, EmailAddress);
+            GetWorkerIdViewModel dataContext = new GetWorkerIdViewModel(FirstName, LastName, EmailAddress);
+            await dataContext.InitializeAsync();
             dataContext.WorkerId = GlobalRecordId;
             Window window = new GetWorkerIdView
             {

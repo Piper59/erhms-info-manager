@@ -8,13 +8,13 @@ namespace ERHMS.Console.Utilities
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
-        public bool Tree { get; }
+        public bool Recursive { get; }
 
-        public SynchronizeView(string projectPath, string viewName, bool tree)
+        public SynchronizeView(string projectPath, string viewName, bool recursive)
         {
             ProjectPath = projectPath;
             ViewName = viewName;
-            Tree = tree;
+            Recursive = recursive;
         }
 
         public SynchronizeView(string projectPath, string viewName)
@@ -24,7 +24,7 @@ namespace ERHMS.Console.Utilities
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
-            if (Tree)
+            if (Recursive)
             {
                 project.CollectedData.SynchronizeViewTree(view);
             }

@@ -5,23 +5,23 @@ namespace ERHMS.Console.Utilities
     public class DeleteProject : IUtility
     {
         public string ProjectPath { get; }
-        public bool Full { get; }
+        public bool Recursive { get; }
 
         public DeleteProject(string projectPath)
         {
             ProjectPath = projectPath;
         }
 
-        public DeleteProject(string projectPath, bool full)
+        public DeleteProject(string projectPath, bool recursive)
             : this(projectPath)
         {
-            Full = full;
+            Recursive = recursive;
         }
 
         public void Run()
         {
             File.Delete(ProjectPath);
-            Directory.Delete(Path.GetDirectoryName(ProjectPath), Full);
+            Directory.Delete(Path.GetDirectoryName(ProjectPath), Recursive);
         }
     }
 }

@@ -14,9 +14,9 @@ namespace ERHMS.Desktop.ViewModels
         public abstract class StepViewModel<TWizard> : ObservableObject, IStep
             where TWizard : WizardViewModel
         {
-            public TWizard Wizard { get; private set; }
+            public TWizard Wizard { get; }
             IWizard IStep.Wizard => Wizard;
-            public StepViewModel<TWizard> Antecedent { get; private set; }
+            public IStep Antecedent { get; }
             public abstract string Title { get; }
             public virtual string ContinueAction => ResXResources.AccessText_Next;
 
@@ -24,24 +24,24 @@ namespace ERHMS.Desktop.ViewModels
             public ICommand ContinueCommand { get; }
             public ICommand CancelCommand { get; }
 
-            protected StepViewModel()
+            protected StepViewModel(TWizard wizard, IStep antecedent = null)
             {
+                Wizard = wizard;
+                Antecedent = antecedent;
                 ReturnCommand = new SyncCommand(Return, CanReturn);
                 ContinueCommand = new AsyncCommand(ContinueAsync, CanContinue);
                 CancelCommand = new SyncCommand(Cancel, CanCancel);
             }
 
-            protected StepViewModel(TWizard wizard)
-                : this()
-            {
-                Wizard = wizard;
-            }
-
             protected void ContinueTo(StepViewModel<TWizard> step)
             {
-                step.Wizard = Wizard;
-                step.Antecedent = this;
                 Wizard.Step = step;
+            }
+
+            protected async Task ContinueToAsync(Func<Task<StepViewModel<TWizard>>> action)
+            {
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                ContinueTo(await progress.Run(action));
             }
 
             protected void Commit()
@@ -83,25 +83,30 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        protected IStep step;
+        private IStep step;
         public IStep Step
         {
             get { return step; }
-            protected set { SetProperty(ref step, value); }
+            private set { SetProperty(ref step, value); }
         }
 
-        protected bool committed;
+        private bool committed;
         public bool Committed
         {
             get { return committed; }
-            protected set { SetProperty(ref committed, value); }
+            private set { SetProperty(ref committed, value); }
         }
 
         public bool? Result { get; protected set; }
 
         public event EventHandler CloseRequested;
-        protected virtual void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);
-        protected void OnCloseRequested() => OnCloseRequested(EventArgs.Empty);
+        private void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);
+        private void OnCloseRequested() => OnCloseRequested(EventArgs.Empty);
+
+        protected void Initialize(IStep step)
+        {
+            this.step = step;
+        }
 
         public bool? Show()
         {

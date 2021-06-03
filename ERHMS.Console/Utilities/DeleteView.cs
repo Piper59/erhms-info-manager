@@ -7,13 +7,13 @@ namespace ERHMS.Console.Utilities
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
-        public bool Tree { get; }
+        public bool Recursive { get; }
 
-        public DeleteView(string projectPath, string viewName, bool tree)
+        public DeleteView(string projectPath, string viewName, bool recursive)
         {
             ProjectPath = projectPath;
             ViewName = viewName;
-            Tree = tree;
+            Recursive = recursive;
         }
 
         public DeleteView(string projectPath, string viewName)
@@ -23,7 +23,7 @@ namespace ERHMS.Console.Utilities
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
-            if (Tree)
+            if (Recursive)
             {
                 project.DeleteViewTree(view);
             }

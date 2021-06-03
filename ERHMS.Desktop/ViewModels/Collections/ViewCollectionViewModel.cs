@@ -66,13 +66,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        public static async Task<ViewCollectionViewModel> CreateAsync(Project project)
-        {
-            ViewCollectionViewModel result = new ViewCollectionViewModel(project);
-            await result.InitializeAsync();
-            return result;
-        }
-
         public Project Project { get; }
 
         private readonly List<ItemViewModel> items;
@@ -87,7 +80,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand EnterCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        private ViewCollectionViewModel(Project project)
+        public ViewCollectionViewModel(Project project)
         {
             Project = project;
             items = new List<ItemViewModel>();
@@ -100,7 +93,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
-        private async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             IEnumerable<View> values = await Task.Run(() =>
             {
@@ -121,7 +114,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task OpenAsync()
         {
-            await MainViewModel.Instance.GoToViewAsync(Task.FromResult(CurrentValue));
+            await MainViewModel.Instance.GoToViewAsync(() => Task.FromResult(CurrentValue));
         }
 
         public async Task DeleteAsync()
@@ -137,7 +130,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_DeletingView;
-            await progress.RunAsync(async () =>
+            await progress.Run(async () =>
             {
                 await Task.Run(() =>
                 {
@@ -168,7 +161,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_RefreshingViews;
-            await progress.RunAsync(InitializeAsync);
+            await progress.Run(InitializeAsync);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Common.ComponentModel;
+using ERHMS.Common.Text;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Dialogs;
@@ -8,7 +9,6 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
 using Microsoft.VisualBasic.FileIO;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -23,8 +23,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
     {
         public class ItemViewModel : ObservableObject
         {
-            private static readonly StringComparer pathComparer = StringComparer.OrdinalIgnoreCase;
-
             public FileInfo Value { get; }
 
             private bool selected;
@@ -41,12 +39,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
             public override int GetHashCode()
             {
-                return pathComparer.GetHashCode(Value.FullName);
+                return Comparers.Path.GetHashCode(Value.FullName);
             }
 
             public override bool Equals(object obj)
             {
-                return obj is ItemViewModel item && pathComparer.Equals(Value.FullName, item.Value.FullName);
+                return obj is ItemViewModel item && Comparers.Path.Equals(Value.FullName, item.Value.FullName);
             }
         }
 
@@ -76,7 +74,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
-        protected async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             IEnumerable<FileInfo> values = await Task.Run(() =>
             {
@@ -88,17 +86,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.Refresh();
         }
 
-        protected abstract Task<CreateAssetViewModel> GetCreateWizardAsync();
+        protected abstract CreateAssetViewModel GetCreateWizard();
 
         public async Task CreateAsync()
         {
-            CreateAssetViewModel wizard = null;
+            CreateAssetViewModel wizard = GetCreateWizard();
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_Working;
-            await progress.RunAsync(async () =>
-            {
-                wizard = await GetCreateWizardAsync();
-            });
+            await progress.Run(wizard.InitializeAsync);
             if (wizard.Show() == true)
             {
                 await RefreshAsync();
@@ -123,7 +117,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_DeletingAsset;
-            await progress.RunAsync(async () =>
+            await progress.Run(async () =>
             {
                 await Task.Run(() =>
                 {
@@ -140,7 +134,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_RefreshingAssets;
-            await progress.RunAsync(InitializeAsync);
+            await progress.Run(InitializeAsync);
         }
     }
 }

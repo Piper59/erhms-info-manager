@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.Services
@@ -8,10 +7,23 @@ namespace ERHMS.Desktop.Services
     {
         TimeSpan Delay { get; set; }
         string Title { get; set; }
+        bool CanBeCanceled { get; set; }
 
-        Task RunAsync(Action action);
-        Task RunAsync(Func<Task> action);
-        Task RunAsync(Action<CancellationToken> action);
-        Task RunAsync(Func<CancellationToken, Task> action);
+        Task Run(Func<Task> action);
+        Task<TResult> Run<TResult>(Func<Task<TResult>> action);
+        void ThrowIfCancellationRequested();
+    }
+
+    public static class IProgressServiceExtensions
+    {
+        public static Task Run(this IProgressService @this, Action action)
+        {
+            return @this.Run(() => Task.Run(action));
+        }
+
+        public static Task<TResult> Run<TResult>(this IProgressService @this, Func<TResult> action)
+        {
+            return @this.Run(() => Task.Run(action));
+        }
     }
 }

@@ -9,37 +9,31 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class ViewViewModel
     {
-        public static async Task<ViewViewModel> CreateAsync(View value)
-        {
-            ViewViewModel result = new ViewViewModel(value);
-            await result.InitializeAsync();
-            return result;
-        }
-
         public View Value { get; }
         public Project Project => Value.Project;
-        public RecordCollectionViewModel Records { get; private set; }
+        public RecordCollectionViewModel Records { get; }
 
         public ICommand GoToHelpCommand { get; }
         public ICommand GoToProjectCommand { get; }
         public ICommand OpenProjectLocationCommand { get; }
 
-        private ViewViewModel(View value)
+        public ViewViewModel(View value)
         {
             Value = value;
+            Records = new RecordCollectionViewModel(value);
             GoToHelpCommand = Command.Null;
             GoToProjectCommand = new AsyncCommand(GoToProjectAsync);
             OpenProjectLocationCommand = new SyncCommand(OpenProjectLocation);
         }
 
-        private async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            Records = await RecordCollectionViewModel.CreateAsync(Value);
+            await Records.InitializeAsync();
         }
 
         public async Task GoToProjectAsync()
         {
-            await MainViewModel.Instance.GoToProjectAsync(Task.FromResult(Project));
+            await MainViewModel.Instance.GoToProjectAsync(() => Task.FromResult(Project));
         }
 
         public void OpenProjectLocation()

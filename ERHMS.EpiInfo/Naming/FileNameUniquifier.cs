@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERHMS.Common.Text;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -24,7 +25,7 @@ namespace ERHMS.EpiInfo.Naming
         protected override string GetInitialBaseName(string name)
         {
             string extension = Path.GetExtension(name);
-            if (!extension.Equals(Extension, StringComparison.OrdinalIgnoreCase))
+            if (!Comparers.Path.Equals(extension, Extension))
             {
                 throw new ArgumentException($"Unexpected extension '{extension}'.", nameof(name));
             }

@@ -68,35 +68,34 @@ namespace ERHMS.Desktop.Views.Collections
             ObservableCollection<DataGridColumn> columns = ItemDataGrid.Columns;
             IDictionary<string, DataGridColumn> columnsByHeader =
                 columns.ToDictionary(column => (string)column.Header, NameComparer.Default);
-            int fieldIndex = -1;
-            foreach (FieldDataRow field in DataContext.Fields)
+            foreach (Iterator<FieldDataRow> field in DataContext.Fields.Iterate())
             {
-                fieldIndex++;
-                string header = field.Name.Replace("_", "__");
+                string header = field.Value.Name.Replace("_", "__");
                 if (columnsByHeader.TryGetValue(header, out DataGridColumn column))
                 {
                     int columnIndex = columns.IndexOf(column);
-                    if (columnIndex != fieldIndex)
+                    if (columnIndex != field.Index)
                     {
-                        columns.Move(columnIndex, fieldIndex);
+                        columns.Move(columnIndex, field.Index);
                     }
                 }
                 else
                 {
                     column = new DataGridTextColumn
                     {
-                        Binding = new Binding($"Value.{field.Name}"),
+                        Binding = new Binding($"Value.{field.Value.Name}"),
                         ElementStyle = (Style)FindResource("CellTextBlock"),
                         Header = header
                     };
-                    if (field.FieldType.IsNumeric())
+                    if (field.Value.FieldType.IsNumeric())
                     {
                         column.CellStyle = (Style)FindResource("CopyableNumericDataGridCell");
                     }
-                    columns.Insert(fieldIndex, column);
+                    columns.Insert(field.Index, column);
                 }
             }
-            while (columns.Count > fieldIndex + 1)
+            int fieldCount = DataContext.Fields.Count();
+            while (columns.Count > fieldCount)
             {
                 columns.RemoveAt(columns.Count - 1);
             }

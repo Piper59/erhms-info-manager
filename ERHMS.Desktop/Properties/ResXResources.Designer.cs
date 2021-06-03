@@ -550,29 +550,38 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a form to analyze.
-        /// </summary>
-        public static string Lead_CreateAsset_Collect {
-            get {
-                return ResourceManager.GetString("Lead.CreateAsset.Collect", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File has been created.
         /// </summary>
-        public static string Lead_CreateAsset_Complete {
+        public static string Lead_CreateAsset_Close {
             get {
-                return ResourceManager.GetString("Lead.CreateAsset.Complete", resourceCulture);
+                return ResourceManager.GetString("Lead.CreateAsset.Close", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Verify the information below.
         /// </summary>
-        public static string Lead_CreateAsset_Confirm {
+        public static string Lead_CreateAsset_Commit {
             get {
-                return ResourceManager.GetString("Lead.CreateAsset.Confirm", resourceCulture);
+                return ResourceManager.GetString("Lead.CreateAsset.Commit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a file name.
+        /// </summary>
+        public static string Lead_CreateAsset_SetFileInfo {
+            get {
+                return ResourceManager.GetString("Lead.CreateAsset.SetFileInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a form to analyze.
+        /// </summary>
+        public static string Lead_CreateAsset_SetView {
+            get {
+                return ResourceManager.GetString("Lead.CreateAsset.SetView", resourceCulture);
             }
         }
         

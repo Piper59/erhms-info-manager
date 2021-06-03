@@ -19,5 +19,10 @@ namespace ERHMS.Common.Linq
         {
             return Yield(item).Concat(@this);
         }
+
+        public static IEnumerable<Iterator<TItem>> Iterate<TItem>(this IEnumerable<TItem> @this)
+        {
+            return @this.Select((value, index) => new Iterator<TItem>(index, value));
+        }
     }
 }

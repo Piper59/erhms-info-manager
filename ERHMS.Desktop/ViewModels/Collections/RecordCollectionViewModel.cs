@@ -48,13 +48,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        public static async Task<RecordCollectionViewModel> CreateAsync(View view)
-        {
-            RecordCollectionViewModel result = new RecordCollectionViewModel(view);
-            await result.InitializeAsync();
-            return result;
-        }
-
         private static bool IsDisplayable(MetaFieldType fieldType)
         {
             if (fieldType.IsMetadata())
@@ -115,16 +108,16 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand ExportCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        private RecordCollectionViewModel(View view)
+        public RecordCollectionViewModel(View view)
         {
             View = view;
-            Statuses.CurrentChanged += (sender, e) => Items.Refresh();
             items = new List<ItemViewModel>();
             Items = new PagingListCollectionView(items)
             {
                 Filter = IsMatch,
                 PageSize = 100
             };
+            Statuses.CurrentChanged += (sender, e) => Items.Refresh();
             AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, Items.HasCurrent);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);
@@ -134,7 +127,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
-        private async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             Fields = await Task.Run(() =>
             {
@@ -174,7 +167,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             foreach (FieldDataRow field in fields)
             {
                 object propertyValue = value.GetProperty(field.Name);
-                if (propertyValue != null && propertyValue.ToString().Search(searchText))
+                if (propertyValue?.ToString().Search(SearchText) ?? false)
                 {
                     return true;
                 }
@@ -210,19 +203,20 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = title;
-            try
+            progress.CanBeCanceled = true;
+            await progress.Run(() =>
             {
-                await progress.RunAsync(token =>
+                try
                 {
                     RecordRepository repository = new RecordRepository(View);
                     foreach (Record value in SelectedValues)
                     {
-                        token.ThrowIfCancellationRequested();
+                        progress.ThrowIfCancellationRequested();
                         repository.SetDeleted(value, deleted);
                     }
-                });
-            }
-            catch (OperationCanceledException) { }
+                }
+                catch (OperationCanceledException) { }
+            });
             Items.Refresh();
         }
 
@@ -240,7 +234,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_RefreshingRecords;
-            await progress.RunAsync(InitializeAsync);
+            await progress.Run(InitializeAsync);
         }
     }
 }

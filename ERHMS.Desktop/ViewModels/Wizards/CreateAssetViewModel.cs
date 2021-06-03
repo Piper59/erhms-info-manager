@@ -1,32 +1,36 @@
 ﻿using Epi;
+using ERHMS.Common.Text;
+using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analytics;
-using System;
+using ERHMS.EpiInfo.Naming;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
     public abstract class CreateAssetViewModel : WizardViewModel
     {
-        public class CollectViewModel : StepViewModel<CreateAssetViewModel>
+        public class SetViewViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateAsset_Collect;
+            public override string Title => ResXResources.Lead_CreateAsset_SetView;
 
             private readonly List<View> views;
             public ICollectionView Views { get; }
 
             public View CurrentView => (View)Views.CurrentItem;
 
-            public CollectViewModel(CreateAssetViewModel wizard)
+            public SetViewViewModel(CreateAssetViewModel wizard)
                 : base(wizard)
             {
                 views = new List<View>();
@@ -35,37 +39,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public async Task InitializeAsync()
             {
-                await Task.Run(() =>
+                IEnumerable<View> views = await Task.Run(() =>
                 {
                     Wizard.Project.LoadViews();
-                    views.Clear();
-                    views.AddRange(Wizard.Project.Views.Cast<View>());
+                    return Wizard.Project.Views.Cast<View>().ToList();
                 });
+                this.views.Clear();
+                this.views.AddRange(views);
                 Views.Refresh();
-            }
-
-            private string GetFilePath()
-            {
-                IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                fileDialog.InitialDirectory = Wizard.Project.Location;
-                fileDialog.FileName = $"{CurrentView.Name}{Wizard.FileExtension}";
-                fileDialog.Filter = Wizard.FileFilter;
-                if (fileDialog.Save() != true)
-                {
-                    return null;
-                }
-                string filePath = fileDialog.FileName;
-                string location = Path.GetDirectoryName(filePath);
-                if (location.Equals(Wizard.Project.Location, StringComparison.OrdinalIgnoreCase))
-                {
-                    return filePath;
-                }
-                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                dialog.Severity = DialogSeverity.Warning;
-                dialog.Lead = ResXResources.Lead_ConfirmOrphanAssetCreation;
-                dialog.Body = string.Format(ResXResources.Body_ConfirmOrphanAssetCreation, location);
-                dialog.Buttons = DialogButtonCollection.YesOrNo;
-                return dialog.Show() == true ? filePath : null;
             }
 
             public override bool CanContinue()
@@ -73,23 +54,98 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 return Views.HasCurrent();
             }
 
-            public override Task ContinueAsync()
+            public override async Task ContinueAsync()
             {
                 Wizard.View = CurrentView;
-                string filePath = GetFilePath();
-                if (filePath != null)
+                await ContinueToAsync(async () =>
                 {
-                    Wizard.Asset = new FileInfo(filePath);
-                    ContinueTo(new ConfirmViewModel());
+                    SetFileInfoViewModel step = new SetFileInfoViewModel(Wizard, this);
+                    await step.InitializeAsync();
+                    return step;
+                });
+            }
+        }
+
+        public class SetFileInfoViewModel : StepViewModel<CreateAssetViewModel>
+        {
+            public override string Title => ResXResources.Lead_CreateAsset_SetFileInfo;
+
+            private FileInfo fileInfo;
+            public FileInfo FileInfo
+            {
+                get { return fileInfo; }
+                set { SetProperty(ref fileInfo, value); }
+            }
+
+            public ICommand BrowseCommand { get; }
+
+            public SetFileInfoViewModel(CreateAssetViewModel wizard, IStep antecedent)
+                : base(wizard, antecedent)
+            {
+                BrowseCommand = new SyncCommand(Browse);
+            }
+
+            public async Task InitializeAsync()
+            {
+                string fileName = $"{Wizard.View.Name}{Wizard.FileExtension}";
+                await Task.Run(() =>
+                {
+                    FileNameUniquifier fileNames =
+                        new FileNameUniquifier(Wizard.Project.Location, Wizard.FileExtension);
+                    if (fileNames.Exists(fileName))
+                    {
+                        fileName = fileNames.Uniquify(fileName);
+                    }
+                });
+                fileInfo = new FileInfo(Path.Combine(Wizard.Project.Location, fileName));
+            }
+
+            public void Browse()
+            {
+                IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+                fileDialog.InitialDirectory = this.fileInfo.DirectoryName;
+                fileDialog.FileName = this.fileInfo.Name;
+                fileDialog.Filter = Wizard.FileFilter;
+                if (fileDialog.Save() != true)
+                {
+                    return;
                 }
+                FileInfo fileInfo = new FileInfo(fileDialog.FileName);
+                if (!Comparers.Path.Equals(fileInfo.DirectoryName, Wizard.Project.Location))
+                {
+                    IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                    dialog.Severity = DialogSeverity.Warning;
+                    dialog.Lead = ResXResources.Lead_ConfirmOrphanAssetCreation;
+                    dialog.Body = string.Format(ResXResources.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
+                    dialog.Buttons = DialogButtonCollection.YesOrNo;
+                    if (dialog.Show() != true)
+                    {
+                        return;
+                    }
+                }
+                FileInfo = fileInfo;
+            }
+
+            public override bool CanContinue()
+            {
+                return fileInfo != null;
+            }
+
+            public override Task ContinueAsync()
+            {
+                Wizard.FileInfo = fileInfo;
+                ContinueTo(new CommitViewModel(Wizard, this));
                 return Task.CompletedTask;
             }
         }
 
-        public class ConfirmViewModel : StepViewModel<CreateAssetViewModel>
+        public class CommitViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateAsset_Confirm;
+            public override string Title => ResXResources.Lead_CreateAsset_Commit;
             public override string ContinueAction => ResXResources.AccessText_Finish;
+
+            public CommitViewModel(CreateAssetViewModel wizard, IStep antecedent)
+                : base(wizard, antecedent) { }
 
             public override bool CanContinue()
             {
@@ -101,21 +157,24 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 await Wizard.CreateAsync();
                 Commit();
                 SetResult(true);
-                ContinueTo(new CompleteViewModel());
+                ContinueTo(new CloseViewModel(Wizard, this));
             }
         }
 
-        public class CompleteViewModel : StepViewModel<CreateAssetViewModel>
+        public class CloseViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateAsset_Complete;
+            public override string Title => ResXResources.Lead_CreateAsset_Close;
             public override string ContinueAction => ResXResources.AccessText_Close;
 
-            private bool open = true;
-            public bool Open
+            private bool opening = true;
+            public bool Opening
             {
-                get { return open; }
-                set { SetProperty(ref open, value); }
+                get { return opening; }
+                set { SetProperty(ref opening, value); }
             }
+
+            public CloseViewModel(CreateAssetViewModel wizard, IStep antecedent)
+                : base(wizard, antecedent) { }
 
             public override bool CanContinue()
             {
@@ -124,7 +183,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                if (open)
+                if (opening)
                 {
                     await Wizard.OpenAsync();
                 }
@@ -137,30 +196,30 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         protected abstract string FileFilter { get; }
         public Project Project { get; }
         public View View { get; private set; }
-        public FileInfo Asset { get; private set; }
+        public FileInfo FileInfo { get; private set; }
 
         protected CreateAssetViewModel(Project project)
         {
             Project = project;
         }
 
-        protected async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            CollectViewModel step = new CollectViewModel(this);
+            SetViewViewModel step = new SetViewViewModel(this);
             await step.InitializeAsync();
-            this.step = step;
+            Initialize(step);
         }
 
-        protected abstract Asset GetAsset();
+        protected abstract Asset CreateCore();
 
         protected async Task CreateAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_CreatingAsset;
-            await progress.RunAsync(() =>
+            await progress.Run(() =>
             {
-                Asset asset = GetAsset();
-                using (Stream stream = File.Open(Asset.FullName, FileMode.Create, FileAccess.Write))
+                Asset asset = CreateCore();
+                using (Stream stream = FileInfo.Open(FileMode.Create, FileAccess.Write))
                 {
                     asset.Save(stream);
                 }
@@ -169,7 +228,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         protected async Task OpenAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(Module, Asset.FullName);
+            await MainViewModel.Instance.StartEpiInfoAsync(Module, FileInfo.FullName);
         }
     }
 }

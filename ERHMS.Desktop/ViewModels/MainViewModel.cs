@@ -65,41 +65,45 @@ namespace ERHMS.Desktop.ViewModels
             Content = new HomeViewModel();
         }
 
-        public async Task GoToProjectAsync(Task<Project> task)
+        public async Task GoToProjectAsync(Func<Task<Project>> action)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_LoadingProject;
-            await progress.RunAsync(async () =>
+            Content = await progress.Run(async () =>
             {
-                Project project = await task;
-                Content = await ProjectViewModel.CreateAsync(project);
+                ProjectViewModel content = new ProjectViewModel(await action());
+                await content.InitializeAsync();
+                return content;
             });
         }
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
-            await GoToProjectAsync(Task.Run(() =>
+            await GoToProjectAsync(() => Task.Run(() =>
             {
-                return ProjectExtensions.Open(Settings.Default.GetProjectPath(coreProject));
+                string projectPath = Settings.Default.GetProjectPath(coreProject);
+                return ProjectExtensions.Open(projectPath);
             }));
         }
 
-        public async Task GoToViewAsync(Task<View> task)
+        public async Task GoToViewAsync(Func<Task<View>> action)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_LoadingView;
-            await progress.RunAsync(async () =>
+            Content = await progress.Run(async () =>
             {
-                View view = await task;
-                Content = await ViewViewModel.CreateAsync(view);
+                ViewViewModel content = new ViewViewModel(await action());
+                await content.InitializeAsync();
+                return content;
             });
         }
 
         public async Task GoToCoreViewAsync(CoreView coreView)
         {
-            await GoToViewAsync(Task.Run(() =>
+            await GoToViewAsync(() => Task.Run(() =>
             {
-                Project project = ProjectExtensions.Open(Settings.Default.GetProjectPath(coreView.CoreProject));
+                string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
+                Project project = ProjectExtensions.Open(projectPath);
                 return project.Views[coreView.Name];
             }));
         }
@@ -126,7 +130,7 @@ namespace ERHMS.Desktop.ViewModels
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Title = ResXResources.Lead_ExportingLogDirectory;
-            await progress.RunAsync(() =>
+            await progress.Run(() =>
             {
                 ZipFileExtensions.CreateFromDirectory(
                     FileAppender.Directory,
@@ -142,7 +146,7 @@ namespace ERHMS.Desktop.ViewModels
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Delay = TimeSpan.Zero;
             progress.Title = ResXResources.Lead_StartingEpiInfo;
-            await progress.RunAsync(() =>
+            await progress.Run(() =>
             {
                 using (Process process = module.Start(args))
                 {

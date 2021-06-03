@@ -54,12 +54,14 @@
     <Compile Include="HashCodeCalculator.cs" />
     <Compile Include="Linq\IEnumerableExtensions.cs" />
     <Compile Include="Linq\IEnumeratorExtensions.cs" />
+    <Compile Include="Linq\Iterator.cs" />
     <Compile Include="Logging\ConsoleAppender.cs" />
     <Compile Include="Logging\FileAppender.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Text\ByteCountFormatter.cs" />
+    <Compile Include="Text\Comparers.cs" />
     <Compile Include="Text\StringCaseFormatter.cs" />
     <Compile Include="Text\StringDistanceCalculator.cs" />
   </ItemGroup>

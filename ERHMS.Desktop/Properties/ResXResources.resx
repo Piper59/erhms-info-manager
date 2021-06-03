@@ -288,14 +288,17 @@ Close anyway?</value>
   <data name="Lead.ConfirmViewDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this form?</value>
   </data>
-  <data name="Lead.CreateAsset.Collect" xml:space="preserve">
-    <value>Choose a form to analyze</value>
-  </data>
-  <data name="Lead.CreateAsset.Complete" xml:space="preserve">
+  <data name="Lead.CreateAsset.Close" xml:space="preserve">
     <value>File has been created</value>
   </data>
-  <data name="Lead.CreateAsset.Confirm" xml:space="preserve">
+  <data name="Lead.CreateAsset.Commit" xml:space="preserve">
     <value>Verify the information below</value>
+  </data>
+  <data name="Lead.CreateAsset.SetFileInfo" xml:space="preserve">
+    <value>Choose a file name</value>
+  </data>
+  <data name="Lead.CreateAsset.SetView" xml:space="preserve">
+    <value>Choose a form to analyze</value>
   </data>
   <data name="Lead.CreatingAsset" xml:space="preserve">
     <value>Creating file</value>

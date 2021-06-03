@@ -9,35 +9,32 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class ProjectViewModel
     {
-        public static async Task<ProjectViewModel> CreateAsync(Project value)
-        {
-            ProjectViewModel result = new ProjectViewModel(value);
-            await result.InitializeAsync();
-            return result;
-        }
-
         public Project Value { get; }
-        public ViewCollectionViewModel Views { get; private set; }
-        public CanvasCollectionViewModel Canvases { get; private set; }
-        public PgmCollectionViewModel Pgms { get; private set; }
-        public MapCollectionViewModel Maps { get; private set; }
+        public ViewCollectionViewModel Views { get; }
+        public CanvasCollectionViewModel Canvases { get; }
+        public PgmCollectionViewModel Pgms { get; }
+        public MapCollectionViewModel Maps { get; }
 
         public ICommand GoToHelpCommand { get; }
         public ICommand OpenLocationCommand { get; }
 
-        private ProjectViewModel(Project value)
+        public ProjectViewModel(Project value)
         {
             Value = value;
+            Views = new ViewCollectionViewModel(value);
+            Canvases = new CanvasCollectionViewModel(value);
+            Pgms = new PgmCollectionViewModel(value);
+            Maps = new MapCollectionViewModel(value);
             GoToHelpCommand = Command.Null;
             OpenLocationCommand = new SyncCommand(OpenLocation);
         }
 
-        private async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            Views = await ViewCollectionViewModel.CreateAsync(Value);
-            Canvases = await CanvasCollectionViewModel.CreateAsync(Value);
-            Pgms = await PgmCollectionViewModel.CreateAsync(Value);
-            Maps = await MapCollectionViewModel.CreateAsync(Value);
+            await Views.InitializeAsync();
+            await Canvases.InitializeAsync();
+            await Pgms.InitializeAsync();
+            await Maps.InitializeAsync();
         }
 
         public void OpenLocation()

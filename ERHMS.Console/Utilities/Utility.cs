@@ -1,4 +1,5 @@
 ﻿using ERHMS.Common.Reflection;
+using ERHMS.Common.Text;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +13,6 @@ namespace ERHMS.Console.Utilities
     public static class Utility
     {
         private static readonly IEnumerable<Type> instanceTypes = typeof(IUtility).GetInstanceTypes().ToList();
-        private static readonly StringComparer argComparer = StringComparer.OrdinalIgnoreCase;
         private static readonly string executableName = Environment.GetCommandLineArgs()[0];
         private static readonly string helpArg = "/?";
 
@@ -25,7 +25,7 @@ namespace ERHMS.Console.Utilities
             usage.AppendLine($"  {executableName} UTILITY [ARGUMENT ...]");
             usage.AppendLine();
             usage.Append("Utilities:");
-            foreach (Type instanceType in instanceTypes.OrderBy(instanceType => instanceType.Name, argComparer))
+            foreach (Type instanceType in instanceTypes.OrderBy(instanceType => instanceType.Name, Comparers.Arg))
             {
                 usage.AppendLine();
                 usage.Append($"  {instanceType.Name}");
@@ -57,7 +57,7 @@ namespace ERHMS.Console.Utilities
         {
             foreach (Type instanceType in instanceTypes)
             {
-                if (argComparer.Equals(instanceType.Name, instanceTypeName))
+                if (Comparers.Arg.Equals(instanceType.Name, instanceTypeName))
                 {
                     return instanceType;
                 }
@@ -101,14 +101,14 @@ namespace ERHMS.Console.Utilities
                 {
                     throw new ArgumentException("No utility specified.");
                 }
-                if (argComparer.Equals(args[0], helpArg))
+                if (Comparers.Arg.Equals(args[0], helpArg))
                 {
                     Out.WriteLine(GetUsage());
                     Environment.Exit(ErrorCodes.Success);
                     return null;
                 }
                 instanceType = GetInstanceType(args[0]);
-                if (args.Length > 1 && argComparer.Equals(args[1], helpArg))
+                if (args.Length > 1 && Comparers.Arg.Equals(args[1], helpArg))
                 {
                     Out.WriteLine(GetUsage(instanceType));
                     Environment.Exit(ErrorCodes.Success);

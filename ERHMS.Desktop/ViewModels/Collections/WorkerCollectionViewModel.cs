@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Common.ComponentModel;
+using ERHMS.Common.Linq;
 using ERHMS.Desktop.CollectionViews;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure;
@@ -50,20 +51,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        public static async Task<WorkerCollectionViewModel> CreateAsync(
-            string firstName,
-            string lastName,
-            string emailAddress)
-        {
-            WorkerCollectionViewModel result = new WorkerCollectionViewModel(firstName, lastName, emailAddress);
-            await result.InitializeAsync();
-            return result;
-        }
-
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string EmailAddress { get; }
-
         private string searchText;
         public string SearchText
         {
@@ -87,12 +74,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public Worker CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 
-        private WorkerCollectionViewModel(string firstName, string lastName, string emailAddress)
+        public WorkerCollectionViewModel()
         {
-            FirstName = firstName;
-            LastName = lastName;
-            EmailAddress = emailAddress;
-            Statuses.CurrentChanged += (sender, e) => Items.Refresh();
             items = new List<ItemViewModel>();
             Items = new PagingListCollectionView(items)
             {
@@ -102,13 +85,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.SortDescriptions.Add(
                 new SortDescription(nameof(ItemViewModel.Similarity),
                 ListSortDirection.Descending));
+            Statuses.CurrentChanged += (sender, e) => Items.Refresh();
         }
 
-        private async Task InitializeAsync()
+        public async Task InitializeAsync(string firstName, string lastName, string emailAddress)
         {
             IEnumerable<Worker> values = await Task.Run(() =>
             {
-                Project project = ProjectExtensions.Open(Settings.Default.WorkerProjectPath);
+                string projectPath = Settings.Default.WorkerProjectPath;
+                Project project = ProjectExtensions.Open(projectPath);
                 View view = project.Views[CoreView.WorkerRosteringForm.Name];
                 RecordRepository<Worker> repository = new RecordRepository<Worker>(view);
                 return repository.Select().ToList();
@@ -119,7 +104,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 foreach (ItemViewModel item in items)
                 {
-                    item.Initialize(FirstName, LastName, EmailAddress);
+                    item.Initialize(firstName, lastName, emailAddress);
                 }
             });
             Items.Refresh();
@@ -155,13 +140,11 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public bool MoveCurrentToGlobalRecordId(string globalRecordId)
         {
-            int itemIndex = -1;
-            foreach (ItemViewModel item in Items.Cast<ItemViewModel>())
+            foreach (Iterator<ItemViewModel> item in Items.Cast<ItemViewModel>().Iterate())
             {
-                itemIndex++;
-                if (Record.GlobalRecordIdComparer.Equals(item.Value.GlobalRecordId, globalRecordId))
+                if (Record.GlobalRecordIdComparer.Equals(item.Value.Value.GlobalRecordId, globalRecordId))
                 {
-                    return Items.MoveCurrentToPosition(itemIndex);
+                    return Items.MoveCurrentToPosition(item.Index);
                 }
             }
             return false;

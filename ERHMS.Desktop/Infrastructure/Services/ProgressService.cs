@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.Services;
+﻿using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels;
 using ERHMS.Desktop.Views;
 using System;
@@ -10,32 +11,16 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class ProgressService : IProgressService
     {
-        private string status;
+        private ProgressViewModel dataContext;
 
         public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
-        public string Title { get; set; }
+        public string Title { get; set; } = ResXResources.Lead_Working;
+        public bool CanBeCanceled { get; set; } = false;
 
-        private event EventHandler Reporting;
-        private void OnReporting(EventArgs e) => Reporting?.Invoke(this, e);
-        private void OnReporting() => OnReporting(EventArgs.Empty);
-
-        public void Report(string value)
+        private async Task<TTask> RunCore<TTask>(Func<TTask> action)
+            where TTask : Task
         {
-            status = value;
-            OnReporting();
-        }
-
-        private async Task RunCoreAsync(bool canBeCanceled, Func<CancellationToken, Task> action)
-        {
-            ProgressViewModel dataContext = new ProgressViewModel(Title, canBeCanceled);
-
-            void ProgressService_Reporting(object sender, EventArgs e)
-            {
-                dataContext.Status = status;
-            }
-
-            dataContext.Status = status;
-            Reporting += ProgressService_Reporting;
+            dataContext = new ProgressViewModel(Title, CanBeCanceled);
             try
             {
                 Window owner = Application.Current.GetActiveWindow();
@@ -47,7 +32,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
                 using (WindowDisabler.Begin(owner))
                 {
                     CancellationTokenSource completionTokenSource = new CancellationTokenSource();
-                    Task task = action(dataContext.CancellationToken);
+                    TTask task = action();
                     Task continuation = task.ContinueWith(
                         _ =>
                         {
@@ -67,32 +52,45 @@ namespace ERHMS.Desktop.Infrastructure.Services
                     }
                     await task;
                     await continuation;
+                    return task;
                 }
             }
             finally
             {
-                Reporting -= ProgressService_Reporting;
+                dataContext = null;
             }
         }
 
-        public Task RunAsync(Action action)
+        public Task Run(Func<Task> action)
         {
-            return RunCoreAsync(false, _ => Task.Run(action));
+            return RunCore(action).Unwrap();
         }
 
-        public Task RunAsync(Func<Task> action)
+        public Task<TResult> Run<TResult>(Func<Task<TResult>> action)
         {
-            return RunCoreAsync(false, _ => action());
+            return RunCore(action).Unwrap();
         }
 
-        public Task RunAsync(Action<CancellationToken> action)
+        public void ThrowIfCancellationRequested()
         {
-            return RunCoreAsync(true, cancellationToken => Task.Run(() => action(cancellationToken)));
+            if (dataContext == null)
+            {
+                throw new InvalidOperationException("This method may only be called while a task is running.");
+            }
+            if (!CanBeCanceled)
+            {
+                throw new InvalidOperationException("Task cannot be canceled.");
+            }
+            dataContext.CancellationToken.ThrowIfCancellationRequested();
         }
 
-        public Task RunAsync(Func<CancellationToken, Task> action)
+        public void Report(string value)
         {
-            return RunCoreAsync(true, action);
+            if (dataContext == null)
+            {
+                throw new InvalidOperationException("This method may only be called while a task is running.");
+            }
+            dataContext.Status = value;
         }
     }
 }
