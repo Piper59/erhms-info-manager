@@ -1,4 +1,4 @@
-﻿namespace ERHMS.EpiInfo.Naming
+﻿namespace ERHMS.Common.Naming
 {
     public interface INameUniquifier
     {

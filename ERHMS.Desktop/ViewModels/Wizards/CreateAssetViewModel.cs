@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common.Naming;
 using ERHMS.Common.Text;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
@@ -8,7 +9,6 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analytics;
-using ERHMS.EpiInfo.Naming;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;

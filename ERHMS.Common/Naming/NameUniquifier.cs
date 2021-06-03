@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace ERHMS.EpiInfo.Naming
+namespace ERHMS.Common.Naming
 {
     public static class NameUniquifier
     {

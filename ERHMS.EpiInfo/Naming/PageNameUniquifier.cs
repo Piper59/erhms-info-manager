@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common.Naming;
 
 namespace ERHMS.EpiInfo.Naming
 {

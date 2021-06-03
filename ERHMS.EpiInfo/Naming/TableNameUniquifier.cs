@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common.Naming;
 using System.Linq;
 
 namespace ERHMS.EpiInfo.Naming

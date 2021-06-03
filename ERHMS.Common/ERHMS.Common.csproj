@@ -58,6 +58,9 @@
     <Compile Include="Logging\ConsoleAppender.cs" />
     <Compile Include="Logging\FileAppender.cs" />
     <Compile Include="Logging\Log.cs" />
+    <Compile Include="Naming\FileNameUniquifier.cs" />
+    <Compile Include="Naming\INameUniquifier.cs" />
+    <Compile Include="Naming\NameUniquifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Text\ByteCountFormatter.cs" />
