@@ -88,6 +88,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Continue.
+        /// </summary>
+        public static string AccessText_Continue {
+            get {
+                return ResourceManager.GetString("AccessText_Continue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Delete.
         /// </summary>
         public static string AccessText_Delete {
@@ -155,7 +164,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Location: {0}
         ///
-        ///ERHMS Info Manager will only recognize files that are in the same location as the current database. Are you sure you want to use this location?.
+        ///ERHMS Info Manager will only recognize files that are in the same location as the current database. Continue with this location?.
         /// </summary>
         public static string Body_ConfirmOrphanAssetCreation {
             get {

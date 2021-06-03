@@ -144,6 +144,9 @@
   <data name="AccessText.Yes" xml:space="preserve">
     <value>_Yes</value>
   </data>
+  <data name="AccessText_Continue" xml:space="preserve">
+    <value>_Continue</value>
+  </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
     <value>File name: {0}
 
@@ -152,7 +155,7 @@ This file will be moved to the Recycle Bin.</value>
   <data name="Body.ConfirmOrphanAssetCreation" xml:space="preserve">
     <value>Location: {0}
 
-ERHMS Info Manager will only recognize files that are in the same location as the current database. Are you sure you want to use this location?</value>
+ERHMS Info Manager will only recognize files that are in the same location as the current database. Continue with this location?</value>
   </data>
   <data name="Body.ConfirmViewDeletion" xml:space="preserve">
     <value>Form name: {0}

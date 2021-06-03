@@ -117,7 +117,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     dialog.Severity = DialogSeverity.Warning;
                     dialog.Lead = ResXResources.Lead_ConfirmOrphanAssetCreation;
                     dialog.Body = string.Format(ResXResources.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
-                    dialog.Buttons = DialogButtonCollection.YesOrNo;
+                    dialog.Buttons = DialogButtonCollection.ActionOrCancel(ResXResources.AccessText_Continue);
                     if (dialog.Show() != true)
                     {
                         return;
