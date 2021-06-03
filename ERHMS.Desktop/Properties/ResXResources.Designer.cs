@@ -541,6 +541,33 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File name:.
+        /// </summary>
+        public static string Key_FileName {
+            get {
+                return ResourceManager.GetString("Key_FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location:.
+        /// </summary>
+        public static string Key_Location {
+            get {
+                return ResourceManager.GetString("Key_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Form:.
+        /// </summary>
+        public static string Key_View {
+            get {
+                return ResourceManager.GetString("Key_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this file?.
         /// </summary>
         public static string Lead_ConfirmAssetDeletion {

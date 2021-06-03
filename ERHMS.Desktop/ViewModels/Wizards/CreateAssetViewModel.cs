@@ -143,9 +143,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string Title => ResXResources.Lead_CreateAsset_Commit;
             public override string ContinueAction => ResXResources.AccessText_Finish;
+            public DetailsViewModel Details { get; }
 
             public CommitViewModel(CreateAssetViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent) { }
+                : base(wizard, antecedent)
+            {
+                Details = new DetailsViewModel
+                {
+                    { ResXResources.Key_View, wizard.View.Name },
+                    { ResXResources.Key_FileName, wizard.FileInfo.Name },
+                    { ResXResources.Key_Location, wizard.FileInfo.DirectoryName }
+                };
+            }
 
             public override bool CanContinue()
             {

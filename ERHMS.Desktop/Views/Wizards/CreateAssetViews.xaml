@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
+                    xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
     <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+SetViewViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -66,39 +67,8 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CommitViewModel}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Grid.Column="0"
-                   Grid.Row="0">
-                Form:
-            </Label>
-            <Label Grid.Column="1"
-                   Grid.Row="0"
-                   Content="{Binding Wizard.View.Name}" />
-            <Label Grid.Column="0"
-                   Grid.Row="1">
-                File name:
-            </Label>
-            <Label Grid.Column="1"
-                   Grid.Row="1"
-                   Content="{Binding Wizard.FileInfo.Name}" />
-            <Label Grid.Column="0"
-                   Grid.Row="2">
-                Location:
-            </Label>
-            <Label Grid.Column="1"
-                   Grid.Row="2">
-                <TextBlock Text="{Binding Wizard.FileInfo.DirectoryName}"
-                           TextWrapping="Wrap" />
-            </Label>
+        <Grid Grid.IsSharedSizeScope="True">
+            <Views:DetailsView ItemsSource="{Binding Details}" />
         </Grid>
     </DataTemplate>
 
