@@ -10,6 +10,7 @@ namespace ERHMS
     public static class Configuration
     {
         public static string FilePath => Epi.Configuration.DefaultConfigurationPath;
+        public static Epi.Configuration Instance { get; private set; }
 
         public static string GetDatabaseDriver(DatabaseProvider provider)
         {
@@ -80,6 +81,7 @@ namespace ERHMS
                 Epi.Configuration.Save(Create());
             }
             Epi.Configuration.Load(FilePath);
+            Instance = Epi.Configuration.GetNewInstance();
             Epi.Configuration.Environment = environment;
         }
     }
