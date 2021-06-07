@@ -13,7 +13,7 @@
         UseLayoutRounding="True">
     <Window.Resources>
         <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <Converters:KeyToResXResourceConverter x:Key="DialogSeverityToNameConverter" Prefix="DialogSeverity.Name." />
+        <Converters:KeyToResXResourceConverter x:Key="DialogSeverityToNameConverter" Prefix="DialogSeverity.Name" />
         <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
         <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
     </Window.Resources>

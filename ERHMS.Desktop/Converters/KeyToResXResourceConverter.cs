@@ -21,7 +21,7 @@ namespace ERHMS.Desktop.Converters
                     return DependencyProperty.UnsetValue;
                 }
             }
-            string key = $"{Prefix}{value}";
+            string key = $"{Prefix}.{value}";
             return ResXResources.ResourceManager.GetObject(key, ResXResources.Culture);
         }
 

@@ -5,7 +5,7 @@
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <UserControl.Resources>
         <Converters:KeyToResXResourceConverter x:Key="RecordStatusToNameConverter"
-                                               Prefix="RecordStatus.Name."
+                                               Prefix="RecordStatus.Name"
                                                NullValue="Null" />
     </UserControl.Resources>
     <ComboBox AutomationProperties.Name="Record status"
