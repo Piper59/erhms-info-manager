@@ -126,6 +126,9 @@
   <data name="AccessText.Close" xml:space="preserve">
     <value>_Close</value>
   </data>
+  <data name="AccessText.Continue" xml:space="preserve">
+    <value>_Continue</value>
+  </data>
   <data name="AccessText.Delete" xml:space="preserve">
     <value>_Delete</value>
   </data>
@@ -143,9 +146,6 @@
   </data>
   <data name="AccessText.Yes" xml:space="preserve">
     <value>_Yes</value>
-  </data>
-  <data name="AccessText_Continue" xml:space="preserve">
-    <value>_Continue</value>
   </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
     <value>File: {0}

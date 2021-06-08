@@ -92,7 +92,7 @@ namespace ERHMS.Desktop.Properties {
         /// </summary>
         public static string AccessText_Continue {
             get {
-                return ResourceManager.GetString("AccessText_Continue", resourceCulture);
+                return ResourceManager.GetString("AccessText.Continue", resourceCulture);
             }
         }
         
