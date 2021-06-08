@@ -2,12 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
-        xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+        xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
         AutomationProperties.HelpText="{Binding Title}"
         Icon="/Resources/ERHMS.ico"
         ResizeMode="NoResize"
         SizeToContent="Height"
-        Title="{x:Static Properties:Strings.Title_App}"
+        Title="{Markup:String Title.App}"
         UseLayoutRounding="True"
         Width="480">
     <Window.Resources>

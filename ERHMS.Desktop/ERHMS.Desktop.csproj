@@ -151,6 +151,7 @@
     <Compile Include="Infrastructure\WindowDisabler.cs" />
     <Compile Include="Infrastructure\WindowExtensions.cs" />
     <Compile Include="Integration.cs" />
+    <Compile Include="Markup\StringExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

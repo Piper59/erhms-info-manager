@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
-             xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:System="clr-namespace:System;assembly=mscorlib">
     <UserControl.Resources>
         <Converters:ResourceNameToStringConverter x:Key="CoreProjectToNameConverter" Prefix="CoreProject.Name" />
@@ -25,14 +25,14 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{x:Static Properties:Strings.Description_AppLogo}"
+                           AutomationProperties.Name="{Markup:String Description.AppLogo}"
                            Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
                            Width="64">
                     </Image>
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
-                               Text="{x:Static Properties:Strings.Title_App}"
+                               Text="{Markup:String Title.App}"
                                VerticalAlignment="Center" />
                 </Grid>
                 <ItemsControl IsTabStop="False"
