@@ -67,9 +67,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CommitViewModel}">
-        <Grid Grid.IsSharedSizeScope="True">
-            <Views:DetailsView ItemsSource="{Binding Details}" />
-        </Grid>
+        <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CloseViewModel}">
