@@ -23,7 +23,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public class SetViewViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateAsset_SetView;
+            public override string Title => Strings.Lead_CreateAsset_SetView;
 
             private readonly List<View> views;
             public ICollectionView Views { get; }
@@ -68,7 +68,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class SetFileInfoViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateAsset_SetFileInfo;
+            public override string Title => Strings.Lead_CreateAsset_SetFileInfo;
 
             private FileInfo fileInfo;
             public FileInfo FileInfo
@@ -115,9 +115,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
                     dialog.Severity = DialogSeverity.Warning;
-                    dialog.Lead = ResXResources.Lead_ConfirmOrphanAssetCreation;
-                    dialog.Body = string.Format(ResXResources.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
-                    dialog.Buttons = DialogButtonCollection.ActionOrCancel(ResXResources.AccessText_Continue);
+                    dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
+                    dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
+                    dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
                     if (dialog.Show() != true)
                     {
                         return;
@@ -141,8 +141,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CommitViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateAsset_Commit;
-            public override string ContinueAction => ResXResources.AccessText_Finish;
+            public override string Title => Strings.Lead_CreateAsset_Commit;
+            public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
 
             public CommitViewModel(CreateAssetViewModel wizard, IStep antecedent)
@@ -150,9 +150,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 Details = new DetailsViewModel
                 {
-                    { ResXResources.Key_View, wizard.View.Name },
-                    { ResXResources.Key_FileName, wizard.FileInfo.Name },
-                    { ResXResources.Key_Location, wizard.FileInfo.DirectoryName }
+                    { Strings.Key_View, wizard.View.Name },
+                    { Strings.Key_FileName, wizard.FileInfo.Name },
+                    { Strings.Key_Location, wizard.FileInfo.DirectoryName }
                 };
             }
 
@@ -164,7 +164,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override async Task ContinueAsync()
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                progress.Title = ResXResources.Lead_CreatingAsset;
+                progress.Title = Strings.Lead_CreatingAsset;
                 await progress.Run(() =>
                 {
                     Asset asset = Wizard.CreateCore();
@@ -181,8 +181,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CloseViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateAsset_Close;
-            public override string ContinueAction => ResXResources.AccessText_Close;
+            public override string Title => Strings.Lead_CreateAsset_Close;
+            public override string ContinueAction => Strings.AccessText_Close;
 
             private bool opening = true;
             public bool Opening

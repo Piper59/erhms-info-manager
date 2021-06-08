@@ -26,8 +26,8 @@ namespace ERHMS.Desktop
             {
                 Log.Instance.Fatal(ex);
                 MessageBox.Show(
-                    string.Format(ResXResources.Body_FatalError, ex.Message),
-                    ResXResources.Title_App,
+                    string.Format(Strings.Body_FatalError, ex.Message),
+                    Strings.Title_App,
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }

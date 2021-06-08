@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         protected override Module Module => Module.Analysis;
         protected override string FileExtension => FileExtensions.Pgm;
-        protected override string FileFilter => ResXResources.FileDialog_Filter_Pgms;
+        protected override string FileFilter => Strings.FileDialog_Filter_Pgms;
 
         public CreatePgmViewModel(Project project)
             : base(project) { }

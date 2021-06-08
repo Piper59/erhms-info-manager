@@ -9,11 +9,11 @@
         MinWidth="320"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        Title="{x:Static Properties:ResXResources.Title_App}"
+        Title="{x:Static Properties:Strings.Title_App}"
         UseLayoutRounding="True">
     <Window.Resources>
         <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <Converters:KeyToResXResourceConverter x:Key="DialogSeverityToNameConverter" Prefix="DialogSeverity.Name" />
+        <Converters:ResourceNameToStringConverter x:Key="DialogSeverityToNameConverter" Prefix="DialogSeverity.Name" />
         <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
         <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
     </Window.Resources>

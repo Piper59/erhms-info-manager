@@ -222,18 +222,18 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task DeleteAsync()
         {
-            await SetDeletedAsync(ResXResources.Lead_DeletingRecords, true);
+            await SetDeletedAsync(Strings.Lead_DeletingRecords, true);
         }
 
         public async Task UndeleteAsync()
         {
-            await SetDeletedAsync(ResXResources.Lead_UndeletingRecords, false);
+            await SetDeletedAsync(Strings.Lead_UndeletingRecords, false);
         }
 
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_RefreshingRecords;
+            progress.Title = Strings.Lead_RefreshingRecords;
             await progress.Run(InitializeAsync);
         }
     }

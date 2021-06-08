@@ -6,7 +6,7 @@ namespace ERHMS.Desktop.Infrastructure
     {
         public static string AsString(this bool @this)
         {
-            return @this ? ResXResources.Boolean_True : ResXResources.Boolean_False;
+            return @this ? Strings.Boolean_True : Strings.Boolean_False;
         }
     }
 }

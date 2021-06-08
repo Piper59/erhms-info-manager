@@ -108,15 +108,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
             dialog.Severity = DialogSeverity.Warning;
-            dialog.Lead = ResXResources.Lead_ConfirmAssetDeletion;
-            dialog.Body = string.Format(ResXResources.Body_ConfirmAssetDeletion, CurrentValue.Name);
-            dialog.Buttons = DialogButtonCollection.ActionOrCancel(ResXResources.AccessText_Delete);
+            dialog.Lead = Strings.Lead_ConfirmAssetDeletion;
+            dialog.Body = string.Format(Strings.Body_ConfirmAssetDeletion, CurrentValue.Name);
+            dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Delete);
             if (dialog.Show() != true)
             {
                 return;
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_DeletingAsset;
+            progress.Title = Strings.Lead_DeletingAsset;
             await progress.Run(async () =>
             {
                 await Task.Run(() =>
@@ -133,7 +133,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task RefreshAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_RefreshingAssets;
+            progress.Title = Strings.Lead_RefreshingAssets;
             await progress.Run(InitializeAsync);
         }
     }

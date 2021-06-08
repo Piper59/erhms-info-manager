@@ -13,7 +13,7 @@ namespace ERHMS.Desktop.Utilities
         public Task<string> ExecuteAsync()
         {
             Settings.Default.Reset();
-            MessageBox.Show(ResXResources.Body_SettingsReset, ResXResources.Title_App);
+            MessageBox.Show(Strings.Body_SettingsReset, Strings.Title_App);
             return Task.FromResult((string)null);
         }
     }

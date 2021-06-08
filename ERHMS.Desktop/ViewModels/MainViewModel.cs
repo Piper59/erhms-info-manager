@@ -68,7 +68,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task GoToProjectAsync(Func<Task<Project>> action)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_LoadingProject;
+            progress.Title = Strings.Lead_LoadingProject;
             Content = await progress.Run(async () =>
             {
                 ProjectViewModel content = new ProjectViewModel(await action());
@@ -89,7 +89,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task GoToViewAsync(Func<Task<View>> action)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_LoadingView;
+            progress.Title = Strings.Lead_LoadingView;
             Content = await progress.Run(async () =>
             {
                 ViewViewModel content = new ViewViewModel(await action());
@@ -122,14 +122,14 @@ namespace ERHMS.Desktop.ViewModels
         {
             IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
             fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            fileDialog.FileName = string.Format(ResXResources.FileName_LogDirectoryArchive, DateTime.Now);
-            fileDialog.Filter = ResXResources.FileDialog_Filter_ZipFiles;
+            fileDialog.FileName = string.Format(Strings.FileName_LogDirectoryArchive, DateTime.Now);
+            fileDialog.Filter = Strings.FileDialog_Filter_ZipFiles;
             if (fileDialog.Save() != true)
             {
                 return;
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_ExportingLogDirectory;
+            progress.Title = Strings.Lead_ExportingLogDirectory;
             await progress.Run(() =>
             {
                 ZipFileExtensions.CreateFromDirectory(
@@ -145,7 +145,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Delay = TimeSpan.Zero;
-            progress.Title = ResXResources.Lead_StartingEpiInfo;
+            progress.Title = Strings.Lead_StartingEpiInfo;
             await progress.Run(() =>
             {
                 using (Process process = module.Start(args))

@@ -14,7 +14,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         private ProgressViewModel dataContext;
 
         public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
-        public string Title { get; set; } = ResXResources.Lead_Working;
+        public string Title { get; set; } = Strings.Lead_Working;
         public bool CanBeCanceled { get; set; } = false;
 
         private async Task<TTask> RunCore<TTask>(Func<TTask> action)

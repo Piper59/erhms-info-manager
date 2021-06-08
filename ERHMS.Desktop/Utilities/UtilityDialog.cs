@@ -17,8 +17,8 @@ namespace ERHMS.Desktop.Utilities
         public UtilityDialog()
         {
             InitializeComponent();
-            Text = ResXResources.Title_App;
-            LeadLabel.Text = ResXResources.Lead_Working;
+            Text = Strings.Title_App;
+            LeadLabel.Text = Strings.Lead_Working;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -44,8 +44,8 @@ namespace ERHMS.Desktop.Utilities
             {
                 DialogResult result = MessageBox.Show(
                     this,
-                    ResXResources.Body_UtilityClosing,
-                    ResXResources.Title_App,
+                    Strings.Body_UtilityClosing,
+                    Strings.Title_App,
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
                 if (result == DialogResult.No)

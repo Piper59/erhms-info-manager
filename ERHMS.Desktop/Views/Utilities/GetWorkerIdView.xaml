@@ -8,7 +8,7 @@
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
-        Title="{x:Static Properties:ResXResources.Title_App}"
+        Title="{x:Static Properties:Strings.Title_App}"
         UseLayoutRounding="True"
         Width="1024">
     <Grid>
@@ -34,10 +34,10 @@
                     <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </WrapPanel.Resources>
                 <Button Command="{Binding CommitCommand, ElementName=Root}"
-                        Content="{x:Static Properties:ResXResources.AccessText_Ok}"
+                        Content="{x:Static Properties:Strings.AccessText_Ok}"
                         IsDefault="True" />
                 <Button Command="{Binding CancelCommand, ElementName=Root}"
-                        Content="{x:Static Properties:ResXResources.AccessText_Cancel}"
+                        Content="{x:Static Properties:Strings.AccessText_Cancel}"
                         IsCancel="True" />
             </WrapPanel>
         </Border>

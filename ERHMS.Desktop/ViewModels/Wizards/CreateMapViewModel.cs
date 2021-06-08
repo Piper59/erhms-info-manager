@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         protected override Module Module => Module.Mapping;
         protected override string FileExtension => FileExtensions.Map;
-        protected override string FileFilter => ResXResources.FileDialog_Filter_Maps;
+        protected override string FileFilter => Strings.FileDialog_Filter_Maps;
 
         public CreateMapViewModel(Project project)
             : base(project) { }

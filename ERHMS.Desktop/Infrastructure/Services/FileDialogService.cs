@@ -24,7 +24,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         {
             return Show(new OpenFileDialog
             {
-                Title = ResXResources.FileDialog_Title_Open,
+                Title = Strings.FileDialog_Title_Open,
                 InitialDirectory = InitialDirectory,
                 Filter = Filter
             });
@@ -34,7 +34,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         {
             return Show(new SaveFileDialog
             {
-                Title = ResXResources.FileDialog_Title_Save,
+                Title = Strings.FileDialog_Title_Save,
                 InitialDirectory = InitialDirectory,
                 FileName = FileName,
                 Filter = Filter

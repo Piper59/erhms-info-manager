@@ -16,7 +16,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public class SetViewNameViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => ResXResources.Lead_CreateView_Blank_SetViewName;
+                public override string Title => Strings.Lead_CreateView_Blank_SetViewName;
 
                 private string viewName = "";
                 public string ViewName
@@ -46,7 +46,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class SetWithWorkerInfoViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => ResXResources.Lead_CreateView_Blank_SetWithWorkerInfo;
+                public override string Title => Strings.Lead_CreateView_Blank_SetWithWorkerInfo;
 
                 private bool withWorkerInfo;
                 public bool WithWorkerInfo
@@ -73,8 +73,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class CommitViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => ResXResources.Lead_CreateView_Commit;
-                public override string ContinueAction => ResXResources.AccessText_Finish;
+                public override string Title => Strings.Lead_CreateView_Commit;
+                public override string ContinueAction => Strings.AccessText_Finish;
                 public DetailsViewModel Details { get; }
 
                 public CommitViewModel(CreateViewViewModel wizard, IStep antecedent)
@@ -82,8 +82,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
-                        { ResXResources.Key_ViewName, Wizard.Blank_ViewName },
-                        { ResXResources.Key_WithWorkerInfo, Wizard.Blank_WithWorkerInfo.AsString() }
+                        { Strings.Key_ViewName, Wizard.Blank_ViewName },
+                        { Strings.Key_WithWorkerInfo, Wizard.Blank_WithWorkerInfo.AsString() }
                     };
                 }
 
@@ -95,7 +95,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public override async Task ContinueAsync()
                 {
                     IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    progress.Title = ResXResources.Lead_CreatingView;
+                    progress.Title = Strings.Lead_CreatingView;
                     Wizard.View = await progress.Run(() =>
                     {
                         string conjunction = Wizard.Blank_WithWorkerInfo ? "With" : "Without";

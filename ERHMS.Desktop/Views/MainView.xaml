@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
-        Title="{x:Static Properties:ResXResources.Title_App}"
+        Title="{x:Static Properties:Strings.Title_App}"
         UseLayoutRounding="True">
     <Grid>
         <Grid.RowDefinitions>

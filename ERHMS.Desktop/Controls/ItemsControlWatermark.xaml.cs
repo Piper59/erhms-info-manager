@@ -15,7 +15,7 @@ namespace ERHMS.Desktop.Controls
             nameof(Text),
             typeof(string),
             typeof(ItemsControlWatermark),
-            new FrameworkPropertyMetadata(ResXResources.Lead_ItemsControlWatermark));
+            new FrameworkPropertyMetadata(Strings.Lead_ItemsControlWatermark));
 
         public ItemsControl ItemsControl
         {

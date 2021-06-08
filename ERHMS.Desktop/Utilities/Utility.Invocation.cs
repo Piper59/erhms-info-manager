@@ -88,8 +88,8 @@ namespace ERHMS.Desktop.Utilities
         {
             Log.Instance.Error(exception);
             MessageBox.Show(
-                string.Format(ResXResources.Body_UtilityError, exception.Message),
-                ResXResources.Title_App,
+                string.Format(Strings.Body_UtilityError, exception.Message),
+                Strings.Title_App,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }

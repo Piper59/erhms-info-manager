@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         Height="480"
         ResizeMode="NoResize"
-        Title="{x:Static Properties:ResXResources.Title_App}"
+        Title="{x:Static Properties:Strings.Title_App}"
         UseLayoutRounding="True"
         Width="640">
     <Window.Resources>

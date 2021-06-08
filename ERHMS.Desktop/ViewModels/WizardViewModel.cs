@@ -18,7 +18,7 @@ namespace ERHMS.Desktop.ViewModels
             IWizard IStep.Wizard => Wizard;
             public IStep Antecedent { get; }
             public abstract string Title { get; }
-            public virtual string ContinueAction => ResXResources.AccessText_Next;
+            public virtual string ContinueAction => Strings.AccessText_Next;
 
             public ICommand ReturnCommand { get; }
             public ICommand ContinueCommand { get; }

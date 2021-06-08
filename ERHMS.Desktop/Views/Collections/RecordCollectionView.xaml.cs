@@ -108,7 +108,7 @@ namespace ERHMS.Desktop.Views.Collections
             items.Add(new MenuItem
             {
                 Command = CopyFieldCommand,
-                Header = ResXResources.AccessText_AllFields
+                Header = Strings.AccessText_AllFields
             });
             items.Add(new Separator());
             foreach (DataGridColumn column in ItemDataGrid.Columns)

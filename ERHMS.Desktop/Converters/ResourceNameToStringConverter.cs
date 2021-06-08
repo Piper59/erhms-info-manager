@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class KeyToResXResourceConverter : IValueConverter
+    public class ResourceNameToStringConverter : IValueConverter
     {
         public string Prefix { get; set; }
         public string NullValue { get; set; }
@@ -21,8 +21,8 @@ namespace ERHMS.Desktop.Converters
                     return DependencyProperty.UnsetValue;
                 }
             }
-            string key = $"{Prefix}.{value}";
-            return ResXResources.ResourceManager.GetObject(key, ResXResources.Culture);
+            string resourceName = $"{Prefix}.{value}";
+            return Strings.ResourceManager.GetObject(resourceName, Strings.Culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

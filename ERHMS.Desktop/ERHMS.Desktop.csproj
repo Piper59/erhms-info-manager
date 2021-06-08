@@ -125,10 +125,10 @@
     <Compile Include="Converters\ByteCountConverter.cs" />
     <Compile Include="Converters\ConditionalConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
-    <Compile Include="Converters\KeyToResXResourceConverter.cs" />
     <Compile Include="Converters\NullableToBoolConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
+    <Compile Include="Converters\ResourceNameToStringConverter.cs" />
     <Compile Include="Converters\StringCaseConverter.cs" />
     <Compile Include="Data\ICollectionViewExtensions.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
@@ -155,16 +155,16 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\ResXResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ResXResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
@@ -247,9 +247,9 @@
     <Compile Include="Wizards\IWizard.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\ResXResources.resx">
+    <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ResXResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Utilities\UtilityDialog.resx">

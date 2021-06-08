@@ -10,7 +10,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         protected override Module Module => Module.AnalysisDashboard;
         protected override string FileExtension => FileExtensions.Canvas;
-        protected override string FileFilter => ResXResources.FileDialog_Filter_Canvases;
+        protected override string FileFilter => Strings.FileDialog_Filter_Canvases;
 
         public CreateCanvasViewModel(Project project)
             : base(project) { }

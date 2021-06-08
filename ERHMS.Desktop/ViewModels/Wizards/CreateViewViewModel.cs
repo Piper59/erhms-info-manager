@@ -16,7 +16,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public class InitializeViewModel : StepViewModel<CreateViewViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateView_Initialize;
+            public override string Title => Strings.Lead_CreateView_Initialize;
 
             public ICommand CreateBlankCommand { get; }
             public ICommand CreateFromTemplateCommand { get; }
@@ -38,8 +38,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CloseViewModel : StepViewModel<CreateViewViewModel>
         {
-            public override string Title => ResXResources.Lead_CreateView_Close;
-            public override string ContinueAction => ResXResources.AccessText_Close;
+            public override string Title => Strings.Lead_CreateView_Close;
+            public override string ContinueAction => Strings.AccessText_Close;
 
             private bool opening = true;
             public bool Opening
@@ -81,7 +81,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         private async Task<bool> ValidateAsync(string viewName)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_ValidatingViewName;
+            progress.Title = Strings.Lead_ValidatingViewName;
             bool result = false;
             InvalidViewNameReason reason = InvalidViewNameReason.None;
             await progress.Run(() =>

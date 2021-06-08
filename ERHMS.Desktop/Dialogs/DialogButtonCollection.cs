@@ -7,18 +7,18 @@ namespace ERHMS.Desktop.Dialogs
     {
         public static DialogButtonCollection Ok => new DialogButtonCollection
         {
-            { ResXResources.AccessText_Ok, null, true, true }
+            { Strings.AccessText_Ok, null, true, true }
         };
 
         public static DialogButtonCollection Close => new DialogButtonCollection
         {
-            { ResXResources.AccessText_Close, null, true, true }
+            { Strings.AccessText_Close, null, true, true }
         };
 
         public static DialogButtonCollection YesOrNo => new DialogButtonCollection
         {
-            { ResXResources.AccessText_Yes, true, true, false },
-            { ResXResources.AccessText_No, false, false, true }
+            { Strings.AccessText_Yes, true, true, false },
+            { Strings.AccessText_No, false, false, true }
         };
 
         public static DialogButtonCollection ActionOrCancel(object content)
@@ -26,7 +26,7 @@ namespace ERHMS.Desktop.Dialogs
             return new DialogButtonCollection
             {
                 { content, true, true, false },
-                { ResXResources.AccessText_Cancel, false, false, true }
+                { Strings.AccessText_Cancel, false, false, true }
             };
         }
 

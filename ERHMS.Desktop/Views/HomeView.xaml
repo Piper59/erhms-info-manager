@@ -6,13 +6,13 @@
              xmlns:Properties="clr-namespace:ERHMS.Desktop.Properties"
              xmlns:System="clr-namespace:System;assembly=mscorlib">
     <UserControl.Resources>
-        <Converters:KeyToResXResourceConverter x:Key="CoreProjectToNameConverter" Prefix="CoreProject.Name" />
+        <Converters:ResourceNameToStringConverter x:Key="CoreProjectToNameConverter" Prefix="CoreProject.Name" />
         <Converters:StringCaseConverter x:Key="CoreProjectToLowerCaseNameConverter"
                                         BaseConverter="{StaticResource CoreProjectToNameConverter}"
                                         Format="{}{0:L}" />
-        <Converters:KeyToResXResourceConverter x:Key="CoreViewNameToDescriptionConverter" Prefix="CoreView.Description" />
-        <Converters:KeyToResXResourceConverter x:Key="CoreViewNameToTitleConverter" Prefix="CoreView.Title" />
-        <Converters:KeyToResXResourceConverter x:Key="PhaseToNameConverter" Prefix="Phase.Name" />
+        <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToDescriptionConverter" Prefix="CoreView.Description" />
+        <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToTitleConverter" Prefix="CoreView.Title" />
+        <Converters:ResourceNameToStringConverter x:Key="PhaseToNameConverter" Prefix="Phase.Name" />
         <Converters:PhaseToColorConverter x:Key="PhaseToStartColorConverter" Alpha="0x40" />
         <Converters:PhaseToColorConverter x:Key="PhaseToStopColorConverter" Alpha="0x00" />
     </UserControl.Resources>
@@ -25,14 +25,14 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{x:Static Properties:ResXResources.Description_AppLogo}"
+                           AutomationProperties.Name="{x:Static Properties:Strings.Description_AppLogo}"
                            Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
                            Width="64">
                     </Image>
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
-                               Text="{x:Static Properties:ResXResources.Title_App}"
+                               Text="{x:Static Properties:Strings.Title_App}"
                                VerticalAlignment="Center" />
                 </Grid>
                 <ItemsControl IsTabStop="False"
