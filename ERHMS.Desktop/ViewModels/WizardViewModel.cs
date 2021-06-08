@@ -69,8 +69,15 @@ namespace ERHMS.Desktop.ViewModels
                 Wizard.Step = Antecedent;
             }
 
-            public abstract bool CanContinue();
-            public abstract Task ContinueAsync();
+            public virtual bool CanContinue()
+            {
+                return false;
+            }
+
+            public virtual Task ContinueAsync()
+            {
+                throw new NotSupportedException("Cannot continue from this step.");
+            }
 
             public virtual bool CanCancel()
             {

@@ -6,6 +6,7 @@ using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
@@ -85,7 +86,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Project = project;
             items = new List<ItemViewModel>();
             Items = new ListCollectionView(items);
-            CreateCommand = Command.Null;
+            CreateCommand = new AsyncCommand(CreateAsync);
             OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
             DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);
             DesignCommand = new AsyncCommand(DesignAsync, Items.HasCurrent);
@@ -110,6 +111,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 }
             });
             Items.Refresh();
+        }
+
+        public async Task CreateAsync()
+        {
+            CreateViewViewModel wizard = new CreateViewViewModel(Project);
+            if (wizard.Show() == true)
+            {
+                await RefreshAsync();
+            }
         }
 
         public async Task OpenAsync()

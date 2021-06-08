@@ -82,6 +82,10 @@
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
       <Name>ERHMS.EpiInfo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Resources\ERHMS.Resources.csproj">
+      <Project>{a7f8931b-dbe9-41e8-8d9f-86e7635c83c3}</Project>
+      <Name>ERHMS.Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -134,7 +138,9 @@
     <Compile Include="Dialogs\DialogSeverity.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
+    <Compile Include="Infrastructure\BooleanExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
+    <Compile Include="Infrastructure\InvalidViewNameReasonExtensions.cs" />
     <Compile Include="Infrastructure\MenuDropAlignment.cs" />
     <Compile Include="Infrastructure\NativeMethods.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
@@ -195,6 +201,8 @@
     <Compile Include="ViewModels\Wizards\CreateCanvasViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateMapViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreatePgmViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModel.Blank.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModel.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
     <Compile Include="Views\Collections\AssetCollectionView.xaml.cs">
       <DependentUpon>AssetCollectionView.xaml</DependentUpon>
@@ -348,6 +356,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Wizards\CreateAssetViews.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\CreateViewViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

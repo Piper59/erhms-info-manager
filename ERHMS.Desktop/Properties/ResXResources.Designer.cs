@@ -151,7 +151,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File name: {0}
+        ///   Looks up a localized string similar to File: {0}
         ///
         ///This file will be moved to the Recycle Bin..
         /// </summary>
@@ -164,7 +164,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Location: {0}
         ///
-        ///ERHMS Info Manager will only recognize files that are in the same location as the current database. Continue with this location?.
+        ///ERHMS Info Manager will only recognize files that are in the same location as the current Epi Info project (.prj) file. Continue with this location anyway?.
         /// </summary>
         public static string Body_ConfirmOrphanAssetCreation {
             get {
@@ -173,7 +173,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Form name: {0}
+        ///   Looks up a localized string similar to Form: {0}
         ///
         ///This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone..
         /// </summary>
@@ -231,6 +231,24 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_UtilityError {
             get {
                 return ResourceManager.GetString("Body.UtilityError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Boolean_False {
+            get {
+                return ResourceManager.GetString("Boolean.False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Boolean_True {
+            get {
+                return ResourceManager.GetString("Boolean.True", resourceCulture);
             }
         }
         
@@ -496,7 +514,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Epi Info Databases (*.prj)|*.prj.
+        ///   Looks up a localized string similar to Epi Info Projects (*.prj)|*.prj.
         /// </summary>
         public static string FileDialog_Filter_Projects {
             get {
@@ -541,11 +559,92 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please specify a form name..
+        /// </summary>
+        public static string InvalidViewNameReason_Body_Empty {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Body.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A form or table with this name already exists in the current database. Please specify a different form name..
+        /// </summary>
+        public static string InvalidViewNameReason_Body_Identical {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Body.Identical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a form name that contains only letters, numbers, and underscores..
+        /// </summary>
+        public static string InvalidViewNameReason_Body_InvalidChar {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Body.InvalidChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a form name that begins with a letter..
+        /// </summary>
+        public static string InvalidViewNameReason_Body_InvalidStartChar {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Body.InvalidStartChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A form with a similar name already exists in the current database. To avoid a possible conflict, please specify a different form name..
+        /// </summary>
+        public static string InvalidViewNameReason_Body_Similar {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Body.Similar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a form name that is no longer than {0} characters..
+        /// </summary>
+        public static string InvalidViewNameReason_Body_TooLong {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Body.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This form name is invalid.
+        /// </summary>
+        public static string InvalidViewNameReason_Lead {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Lead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No form name was specified.
+        /// </summary>
+        public static string InvalidViewNameReason_Lead_Empty {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Lead.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This form name is too long.
+        /// </summary>
+        public static string InvalidViewNameReason_Lead_TooLong {
+            get {
+                return ResourceManager.GetString("InvalidViewNameReason.Lead.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File name:.
         /// </summary>
         public static string Key_FileName {
             get {
-                return ResourceManager.GetString("Key_FileName", resourceCulture);
+                return ResourceManager.GetString("Key.FileName", resourceCulture);
             }
         }
         
@@ -554,7 +653,7 @@ namespace ERHMS.Desktop.Properties {
         /// </summary>
         public static string Key_Location {
             get {
-                return ResourceManager.GetString("Key_Location", resourceCulture);
+                return ResourceManager.GetString("Key.Location", resourceCulture);
             }
         }
         
@@ -563,7 +662,25 @@ namespace ERHMS.Desktop.Properties {
         /// </summary>
         public static string Key_View {
             get {
-                return ResourceManager.GetString("Key_View", resourceCulture);
+                return ResourceManager.GetString("Key.View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Form name:.
+        /// </summary>
+        public static string Key_ViewName {
+            get {
+                return ResourceManager.GetString("Key.ViewName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker information:.
+        /// </summary>
+        public static string Key_WithWorkerInfo {
+            get {
+                return ResourceManager.GetString("Key.WithWorkerInfo", resourceCulture);
             }
         }
         
@@ -577,7 +694,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified file is in an unsupported location.
+        ///   Looks up a localized string similar to The specified location is not supported.
         /// </summary>
         public static string Lead_ConfirmOrphanAssetCreation {
             get {
@@ -613,7 +730,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a file name.
+        ///   Looks up a localized string similar to Choose a file name and location.
         /// </summary>
         public static string Lead_CreateAsset_SetFileInfo {
             get {
@@ -631,11 +748,65 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a form name.
+        /// </summary>
+        public static string Lead_CreateView_Blank_SetViewName {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.Blank.SetViewName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include worker information fields?.
+        /// </summary>
+        public static string Lead_CreateView_Blank_SetWithWorkerInfo {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.Blank.SetWithWorkerInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Form has been created.
+        /// </summary>
+        public static string Lead_CreateView_Close {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify the information below.
+        /// </summary>
+        public static string Lead_CreateView_Commit {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.Commit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of form do you want to create?.
+        /// </summary>
+        public static string Lead_CreateView_Initialize {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.Initialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating file.
         /// </summary>
         public static string Lead_CreatingAsset {
             get {
                 return ResourceManager.GetString("Lead.CreatingAsset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating form.
+        /// </summary>
+        public static string Lead_CreatingView {
+            get {
+                return ResourceManager.GetString("Lead.CreatingView", resourceCulture);
             }
         }
         
@@ -753,6 +924,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_UndeletingRecords {
             get {
                 return ResourceManager.GetString("Lead.UndeletingRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validating form name.
+        /// </summary>
+        public static string Lead_ValidatingViewName {
+            get {
+                return ResourceManager.GetString("Lead.ValidatingViewName", resourceCulture);
             }
         }
         

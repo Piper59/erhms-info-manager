@@ -71,7 +71,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CloseViewModel}">
-        <CheckBox IsChecked="{Binding Opening}"
-                  Content="Open in Epi Info" />
+        <CheckBox Content="Open in Epi Info"
+                  IsChecked="{Binding Opening}" />
     </DataTemplate>
 </ResourceDictionary>

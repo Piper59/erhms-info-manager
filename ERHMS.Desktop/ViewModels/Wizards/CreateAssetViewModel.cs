@@ -163,7 +163,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                await Wizard.CreateAsync();
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Title = ResXResources.Lead_CreatingAsset;
+                await progress.Run(() =>
+                {
+                    Asset asset = Wizard.CreateCore();
+                    using (Stream stream = Wizard.FileInfo.Open(FileMode.Create, FileAccess.Write))
+                    {
+                        asset.Save(stream);
+                    }
+                });
                 Commit();
                 SetResult(true);
                 ContinueTo(new CloseViewModel(Wizard, this));
@@ -194,7 +203,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 if (opening)
                 {
-                    await Wizard.OpenAsync();
+                    await MainViewModel.Instance.StartEpiInfoAsync(Wizard.Module, Wizard.FileInfo.FullName);
                 }
                 Close();
             }
@@ -220,24 +229,5 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         }
 
         protected abstract Asset CreateCore();
-
-        protected async Task CreateAsync()
-        {
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = ResXResources.Lead_CreatingAsset;
-            await progress.Run(() =>
-            {
-                Asset asset = CreateCore();
-                using (Stream stream = FileInfo.Open(FileMode.Create, FileAccess.Write))
-                {
-                    asset.Save(stream);
-                }
-            });
-        }
-
-        protected async Task OpenAsync()
-        {
-            await MainViewModel.Instance.StartEpiInfoAsync(Module, FileInfo.FullName);
-        }
     }
 }
