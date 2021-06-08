@@ -11,7 +11,7 @@
         UseLayoutRounding="True"
         Width="480">
     <Window.Resources>
-        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <StackPanel>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
@@ -30,7 +30,7 @@
         <Border Background="{x:Static SystemColors.MenuBrush}"
                 BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                Visibility="{Binding CanBeCanceled, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding CanBeCanceled, Converter={StaticResource BooleanToVisibilityConverter}}">
             <WrapPanel HorizontalAlignment="Right"
                        Style="{StaticResource Container}">
                 <WrapPanel.Resources>

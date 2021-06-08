@@ -12,7 +12,7 @@
         Title="{x:Static Properties:Strings.Title_App}"
         UseLayoutRounding="True">
     <Window.Resources>
-        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Converters:ResourceNameToStringConverter x:Key="DialogSeverityToNameConverter" Prefix="DialogSeverity.Name" />
         <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
         <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
@@ -88,7 +88,7 @@
         </Border>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                Visibility="{Binding Detailed, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding Detailed, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="250"

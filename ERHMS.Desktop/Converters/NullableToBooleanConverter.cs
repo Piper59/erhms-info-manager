@@ -5,16 +5,16 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class BoolToVisibilityInverter : IValueConverter
+    public class NullableToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (bool)value ? Visibility.Collapsed : Visibility.Visible;
+            return value != null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (Visibility)value != Visibility.Visible;
+            return DependencyProperty.UnsetValue;
         }
     }
 }

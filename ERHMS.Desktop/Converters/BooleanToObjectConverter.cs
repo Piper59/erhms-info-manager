@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class ConditionalConverter : IValueConverter
+    public class BooleanToObjectConverter : IValueConverter
     {
         public IValueConverter BaseConverter { get; set; }
         public object TrueValue { get; set; }

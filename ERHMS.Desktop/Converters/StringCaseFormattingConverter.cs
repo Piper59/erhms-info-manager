@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class StringCaseConverter : IValueConverter
+    public class StringCaseFormattingConverter : IValueConverter
     {
         public IValueConverter BaseConverter { get; set; }
         public string Format { get; set; }

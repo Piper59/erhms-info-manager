@@ -7,7 +7,7 @@
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
     <UserControl.Resources>
-        <Converters:ByteCountConverter x:Key="ByteCountConverter" />
+        <Converters:ByteCountFormattingConverter x:Key="ByteCountFormattingConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -46,7 +46,7 @@
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="Date modified"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding Value.Length, Converter={StaticResource ByteCountConverter}}"
+                <DataGridTextColumn Binding="{Binding Value.Length, Converter={StaticResource ByteCountFormattingConverter}}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="Size"
                                     Width="*" />

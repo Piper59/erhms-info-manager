@@ -6,10 +6,10 @@
              HorizontalAlignment="Center"
              VerticalAlignment="Center">
     <UserControl.Resources>
-        <Converters:BoolToVisibilityInverter x:Key="BoolToVisibilityInverter" />
+        <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
     </UserControl.Resources>
     <UserControl.Visibility>
-        <Binding Converter="{StaticResource BoolToVisibilityInverter}"
+        <Binding Converter="{StaticResource BooleanToVisibilityInverter}"
                  ElementName="Root"
                  Path="ItemsControl.HasItems" />
     </UserControl.Visibility>

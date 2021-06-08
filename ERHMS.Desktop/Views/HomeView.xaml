@@ -7,9 +7,9 @@
              xmlns:System="clr-namespace:System;assembly=mscorlib">
     <UserControl.Resources>
         <Converters:ResourceNameToStringConverter x:Key="CoreProjectToNameConverter" Prefix="CoreProject.Name" />
-        <Converters:StringCaseConverter x:Key="CoreProjectToLowerCaseNameConverter"
-                                        BaseConverter="{StaticResource CoreProjectToNameConverter}"
-                                        Format="{}{0:L}" />
+        <Converters:StringCaseFormattingConverter x:Key="CoreProjectToLowerCaseNameConverter"
+                                                  BaseConverter="{StaticResource CoreProjectToNameConverter}"
+                                                  Format="{}{0:L}" />
         <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToDescriptionConverter" Prefix="CoreView.Description" />
         <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToTitleConverter" Prefix="CoreView.Title" />
         <Converters:ResourceNameToStringConverter x:Key="PhaseToNameConverter" Prefix="Phase.Name" />

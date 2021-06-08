@@ -121,11 +121,11 @@
 
     <Style x:Key="IconButtonBase" TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
         <Style.Resources>
-            <Converters:NullableToBoolConverter x:Key="NullableToBoolConverter" />
-            <Converters:ConditionalConverter x:Key="DescriptionToAlternativeTextFontWeightConverter"
-                                             BaseConverter="{StaticResource NullableToBoolConverter}"
-                                             TrueValue="{StaticResource ThickFontWeight}"
-                                             FalseValue="{StaticResource DefaultFontWeight}" />
+            <Converters:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
+            <Converters:BooleanToObjectConverter x:Key="DescriptionToAlternativeTextFontWeightConverter"
+                                                 BaseConverter="{StaticResource NullableToBooleanConverter}"
+                                                 FalseValue="{StaticResource DefaultFontWeight}"
+                                                 TrueValue="{StaticResource ThickFontWeight}" />
             <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
         </Style.Resources>
         <Setter Property="AutomationProperties.AcceleratorKey" Value="{Binding AccessKey, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />

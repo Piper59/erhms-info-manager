@@ -120,16 +120,16 @@
     <Compile Include="Controls\SearchTextBox.xaml.cs">
       <DependentUpon>SearchTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\BoolToVisibilityInverter.cs" />
-    <Compile Include="Converters\ByteCountConverter.cs" />
-    <Compile Include="Converters\ConditionalConverter.cs" />
+    <Compile Include="Converters\BooleanToObjectConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
+    <Compile Include="Converters\ByteCountFormattingConverter.cs" />
     <Compile Include="Converters\IconToImageSourceConverter.cs" />
-    <Compile Include="Converters\NullableToBoolConverter.cs" />
+    <Compile Include="Converters\NullableToBooleanConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\ResourceNameToStringConverter.cs" />
-    <Compile Include="Converters\StringCaseConverter.cs" />
+    <Compile Include="Converters\StringCaseFormattingConverter.cs" />
     <Compile Include="Data\ICollectionViewExtensions.cs" />
     <Compile Include="Data\IPagingCollectionView.cs" />
     <Compile Include="Data\PagingListCollectionView.cs" />

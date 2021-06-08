@@ -22,7 +22,7 @@ namespace ERHMS.Desktop.Converters
                 }
             }
             string resourceName = $"{Prefix}.{value}";
-            return Strings.ResourceManager.GetObject(resourceName, Strings.Culture);
+            return Strings.ResourceManager.GetString(resourceName, Strings.Culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
