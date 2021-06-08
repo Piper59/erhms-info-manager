@@ -99,7 +99,7 @@ namespace ERHMS.Console.Utilities
             {
                 if (args.Length == 0)
                 {
-                    throw new ArgumentException("No utility specified.");
+                    throw new ArgumentException("No utility was specified.");
                 }
                 if (Comparers.Arg.Equals(args[0], helpArg))
                 {
