@@ -71,6 +71,7 @@
     <Compile Include="Data\IDbDriverExtensions.cs" />
     <Compile Include="Data\Record.cs" />
     <Compile Include="Data\RecordCollection.cs" />
+    <Compile Include="Data\RecordExporter.cs" />
     <Compile Include="Data\RecordMapper.cs" />
     <Compile Include="Data\RecordQueryInfo.cs" />
     <Compile Include="Data\RecordRepository.cs" />

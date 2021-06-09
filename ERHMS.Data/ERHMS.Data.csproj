@@ -75,6 +75,7 @@
     <Compile Include="SqlServer\SqlServerDatabase.cs" />
     <Compile Include="SqlServer\SqlServerMasterDatabase.cs" />
     <Compile Include="SqlServer\SqlServerUserDatabase.cs" />
+    <Compile Include="Transport\Exporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
