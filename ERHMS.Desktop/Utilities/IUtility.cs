@@ -5,9 +5,9 @@ namespace ERHMS.Desktop.Utilities
 {
     public interface IUtility
     {
-        string Instructions { get; }
         IEnumerable<string> Parameters { get; set; }
 
-        Task<string> ExecuteAsync();
+        void Invoke();
+        Task ExecuteAsync();
     }
 }

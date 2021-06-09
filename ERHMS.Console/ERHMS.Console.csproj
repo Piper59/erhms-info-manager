@@ -60,6 +60,10 @@
       <Project>{ccebb7b1-4468-4b27-958e-79e86373a398}</Project>
       <Name>ERHMS.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Desktop\ERHMS.Desktop.csproj">
+      <Project>{f0080890-84e8-48f2-8b0e-2cece4706cb2}</Project>
+      <Name>ERHMS.Desktop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
       <Name>ERHMS.EpiInfo</Name>
@@ -87,6 +91,7 @@
     <Compile Include="Utilities\InstantiateTemplate.cs" />
     <Compile Include="Utilities\IUtility.cs" />
     <Compile Include="Utilities\ResetConfiguration.cs" />
+    <Compile Include="Utilities\ResetSettings.cs" />
     <Compile Include="Utilities\SynchronizeView.cs" />
     <Compile Include="Utilities\Utility.cs" />
   </ItemGroup>

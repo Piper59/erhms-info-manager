@@ -6,13 +6,15 @@ namespace ERHMS.Desktop
     {
         public static string GetWorkerId(string firstName, string lastName, string emailAddress, string globalRecordId)
         {
-            return Utility.Invoke(new GetWorkerId
+            GetWorkerId utility = new GetWorkerId
             {
                 FirstName = firstName,
                 LastName = lastName,
                 EmailAddress = emailAddress,
                 GlobalRecordId = globalRecordId
-            });
+            };
+            utility.Invoke();
+            return utility.WorkerId;
         }
     }
 }

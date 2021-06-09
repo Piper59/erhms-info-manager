@@ -2,21 +2,22 @@
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.ViewModels.Utilities;
 using ERHMS.Desktop.Views.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace ERHMS.Desktop.Utilities
 {
-    public class GetWorkerId : IUtility
+    public class GetWorkerId : Utility.Graphical
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string GlobalRecordId { get; set; }
-        public string Instructions => Strings.Body_GetWorkerId;
+        public string WorkerId => Output;
 
-        public IEnumerable<string> Parameters
+        public override IEnumerable<string> Parameters
         {
             get
             {
@@ -27,15 +28,19 @@ namespace ERHMS.Desktop.Utilities
             }
             set
             {
-                IEnumerator<string> enumerator = value.GetEnumerator();
-                FirstName = enumerator.GetNext();
-                LastName = enumerator.GetNext();
-                EmailAddress = enumerator.GetNext();
-                GlobalRecordId = enumerator.GetNext();
+                using (IEnumerator<string> enumerator = value.GetEnumerator())
+                {
+                    FirstName = enumerator.GetNext();
+                    LastName = enumerator.GetNext();
+                    EmailAddress = enumerator.GetNext();
+                    GlobalRecordId = enumerator.GetNext();
+                }
             }
         }
 
-        public async Task<string> ExecuteAsync()
+        protected override string Instructions => Strings.Body_GetWorkerId;
+
+        public override async Task ExecuteAsync()
         {
             GetWorkerIdViewModel dataContext = new GetWorkerIdViewModel(FirstName, LastName, EmailAddress);
             await dataContext.InitializeAsync();
@@ -45,7 +50,10 @@ namespace ERHMS.Desktop.Utilities
                 DataContext = dataContext,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
-            return window.ShowDialog() == true ? dataContext.WorkerId : null;
+            if (window.ShowDialog() == true)
+            {
+                Console.Out.Write(dataContext.WorkerId);
+            }
         }
     }
 }
