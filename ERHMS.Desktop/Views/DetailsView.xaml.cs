@@ -5,7 +5,7 @@ namespace ERHMS.Desktop.Views
 {
     public partial class DetailsView : ItemsControl
     {
-        public string SharedSizeGroup { get; } = string.Format("Id_{0:N}", Guid.NewGuid());
+        public string SharedSizeGroup { get; } = $"Group_{Guid.NewGuid():N}";
 
         public DetailsView()
         {
