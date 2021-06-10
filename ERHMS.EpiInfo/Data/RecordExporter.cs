@@ -1,15 +1,27 @@
 ﻿using Epi;
 using Epi.Fields;
-using ERHMS.Data.Transport;
+using ERHMS.Common.IO;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace ERHMS.EpiInfo.Data
 {
-    public class RecordExporter<TRecord> : Exporter<TRecord>
-        where TRecord : Record
+    public class RecordExporter : CsvWriter
     {
+        private static IEnumerable<string> GetHeaderValues(IEnumerable<Field> fields)
+        {
+            return fields.Select(field => field.Name);
+        }
+
+        private static IEnumerable<string> GetRecordValues(IEnumerable<Field> fields, Record record)
+        {
+            foreach (Field field in fields)
+            {
+                yield return record.GetProperty(field.Name)?.ToString() ?? "";
+            }
+        }
+
         public View View { get; }
 
         public RecordExporter(TextWriter writer, View view)
@@ -18,28 +30,15 @@ namespace ERHMS.EpiInfo.Data
             View = view;
         }
 
-        private IEnumerable<Field> GetFields()
+        public void Export()
         {
-            return View.Fields.TableColumnFields.Cast<Field>();
-        }
-
-        protected override IEnumerable<string> GetHeaders()
-        {
-            return GetFields().Select(field => field.Name);
-        }
-
-        protected override IEnumerable<string> GetFields(TRecord entity)
-        {
-            foreach (Field field in GetFields())
+            IEnumerable<Field> fields = View.Fields.TableColumnFields.Cast<Field>().ToList();
+            WriteValues(GetHeaderValues(fields));
+            RecordRepository repository = new RecordRepository(View);
+            foreach (Record record in repository.Select())
             {
-                yield return entity.GetProperty(field.Name)?.ToString() ?? "";
+                WriteValues(GetRecordValues(fields, record));
             }
         }
-    }
-
-    public class RecordExporter : RecordExporter<Record>
-    {
-        public RecordExporter(TextWriter writer, View view)
-            : base(writer, view) { }
     }
 }

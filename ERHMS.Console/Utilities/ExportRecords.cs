@@ -20,9 +20,8 @@ namespace ERHMS.Console.Utilities
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];
-            RecordRepository repository = new RecordRepository(view);
             RecordExporter exporter = new RecordExporter(Out, view);
-            exporter.Export(repository.Select());
+            exporter.Export();
         }
     }
 }
