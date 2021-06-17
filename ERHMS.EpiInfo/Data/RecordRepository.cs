@@ -1,15 +1,11 @@
-﻿using Dapper;
-using Epi;
+﻿using Epi;
 using ERHMS.Data;
-using ERHMS.Data.Access;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
-using System.Linq;
+using ERHMS.Data.Querying;
+using System;
 
 namespace ERHMS.EpiInfo.Data
 {
-    public class RecordRepository<TRecord> : Repository<TRecord>
+    public partial class RecordRepository<TRecord> : Repository
         where TRecord : Record, new()
     {
         public View View { get; }
@@ -20,131 +16,41 @@ namespace ERHMS.EpiInfo.Data
             View = view;
         }
 
-        protected int CountCore(QueryInfo query)
+        protected IQuery GetDeletedPredicate(bool deleted)
         {
-            return ExecuteScalar<int>(query, "COUNT(*)");
-        }
-
-        public int Count()
-        {
-            QueryInfo query = new RecordQueryInfo(View);
-            return CountCore(query);
-        }
-
-        public int CountByDeleted(bool deleted)
-        {
-            QueryInfo query = new RecordQueryInfo(View, deleted);
-            return CountCore(query);
-        }
-
-        private void Map(
-            QueryInfo query,
-            string selectList,
-            IDbConnection connection,
-            RecordCollection<TRecord> records)
-        {
-            string sql = query.GetSql(selectList);
-            using (IDataReader reader = connection.ExecuteReader(sql, query.Parameters))
+            string op = deleted ? "=" : "<>";
+            return new Query.Literal
             {
-                RecordMapper<TRecord> mapper = new RecordMapper<TRecord>(reader);
-                while (reader.Read())
+                Sql = $"WHERE {Quote(ColumnNames.REC_STATUS)} {op} @RECSTATUS",
+                Parameters = new ParameterCollection
                 {
-                    records.Map(mapper);
+                    { "@RECSTATUS", RecordStatus.Deleted }
                 }
-            }
+            };
         }
 
-        private IEnumerable<TRecord> SelectJointly(QueryInfo query, IDbConnection connection)
+        protected IQuery GetGlobalRecordIdPredicate(string globalRecordId)
         {
-            RecordCollection<TRecord> records = new RecordCollection<TRecord>();
-            Map(query, "*", connection, records);
-            return records;
-        }
-
-        private IEnumerable<TRecord> SelectIncrementally(QueryInfo query, IDbConnection connection)
-        {
-            RecordCollection<TRecord> records = new RecordCollection<TRecord>();
-            Map(query, $"{Quote(View.TableName)}.*", connection, records);
-            foreach (Page page in View.Pages)
+            if (globalRecordId == null)
             {
-                Map(query, $"{Quote(page.TableName)}.*", connection, records);
+                throw new ArgumentNullException(nameof(globalRecordId));
             }
-            return records;
-        }
-
-        protected IEnumerable<TRecord> SelectCore(QueryInfo query)
-        {
-            using (IDbConnection connection = Database.Connect())
+            return new Query.Literal
             {
-                try
-                {
-                    return SelectJointly(query, connection);
-                }
-                catch (OleDbException ex)
-                {
-                    if (ex.Errors.Count == 1 && ex.Errors[0].SQLState == ErrorCodes.TooManyFieldsDefined)
-                    {
-                        return SelectIncrementally(query, connection);
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-        }
-
-        public IEnumerable<TRecord> Select()
-        {
-            QueryInfo query = new RecordQueryInfo(View);
-            return SelectCore(query);
-        }
-
-        public IEnumerable<TRecord> SelectByDeleted(bool deleted)
-        {
-            QueryInfo query = new RecordQueryInfo(View, deleted);
-            return SelectCore(query);
-        }
-
-        public TRecord SelectByGlobalRecordId(string globalRecordId)
-        {
-            QueryInfo query = new RecordQueryInfo(View)
-            {
-                Clauses = $"WHERE {Quote(View.TableName)}.{Quote(ColumnNames.GLOBAL_RECORD_ID)} = @GlobalRecordId",
+                Sql = $"WHERE {Quote(ColumnNames.GLOBAL_RECORD_ID)} = @GlobalRecordId",
                 Parameters = new ParameterCollection
                 {
                     { "@GlobalRecordId", globalRecordId }
                 }
             };
-            return SelectCore(query).SingleOrDefault();
         }
 
-        public void SetDeleted(TRecord record, bool deleted)
+        protected IQuery GetDefaultSortClause()
         {
-            string sql = $@"
-                UPDATE {Quote(View.TableName)}
-                SET {Quote(ColumnNames.REC_STATUS)} = @RECSTATUS
-                WHERE {Quote(ColumnNames.UNIQUE_KEY)} = @UniqueKey;";
-            ParameterCollection parameters = new ParameterCollection
+            return new Query.Literal
             {
-                { "@RECSTATUS", RecordStatusExtensions.FromDeleted(deleted) },
-                { "@UniqueKey", record.UniqueKey.Value }
+                Sql = $"ORDER BY {Quote(ColumnNames.UNIQUE_KEY)}"
             };
-            using (IDbConnection connection = Database.Connect())
-            {
-                connection.Execute(sql, parameters);
-            }
-            record.Deleted = deleted;
-        }
-
-        public void Delete(TRecord record)
-        {
-            SetDeleted(record, true);
-        }
-
-        public void Undelete(TRecord record)
-        {
-            SetDeleted(record, false);
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System.Data;
+﻿using ERHMS.Data.Querying;
 
 namespace ERHMS.Data.SqlServer
 {
@@ -15,32 +14,41 @@ namespace ERHMS.Data.SqlServer
 
         public override bool Exists()
         {
-            string sql = "SELECT COUNT(*) FROM sys.databases WHERE name = @name;";
-            ParameterCollection parameters = new ParameterCollection
+            IQuery query = new Query.Literal
             {
-                { "@name", Name }
+                Sql = "SELECT COUNT(*) FROM sys.databases WHERE name = @name;",
+                Parameters = new ParameterCollection
+                {
+                    { "@name", Name }
+                }
             };
-            using (IDbConnection connection = Master.Connect())
+            using (Master.Connect())
             {
-                return connection.ExecuteScalar<int>(sql, parameters) > 0;
+                return Master.ExecuteScalar<int>(query) > 0;
             }
         }
 
         protected override void CreateCore()
         {
-            string sql = $"CREATE DATABASE {Quote(Name)};";
-            using (IDbConnection connection = Master.Connect())
+            IQuery query = new Query.Literal
             {
-                connection.Execute(sql);
+                Sql = $"CREATE DATABASE {Quote(Name)};"
+            };
+            using (Master.Connect())
+            {
+                Master.Execute(query);
             }
         }
 
         protected override void DeleteCore()
         {
-            string sql = $"DROP DATABASE {Quote(Name)};";
-            using (IDbConnection connection = Master.Connect())
+            IQuery query = new Query.Literal
             {
-                connection.Execute(sql);
+                Sql = $"DROP DATABASE {Quote(Name)};"
+            };
+            using (Master.Connect())
+            {
+                Master.Execute(query);
             }
         }
     }

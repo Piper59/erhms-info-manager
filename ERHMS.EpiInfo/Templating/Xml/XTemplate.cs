@@ -60,12 +60,6 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public IEnumerable<XTable> XSourceTables => Elements(ElementNames.SourceTable).Cast<XTable>();
         public IEnumerable<XTable> XGridTables => Elements(ElementNames.GridTable).Cast<XTable>();
         public bool Canonized { get; set; }
-        private XmlWriterSettings XmlWriterSettings => new XmlWriterSettings
-        {
-            OmitXmlDeclaration = true,
-            Indent = true,
-            NewLineOnAttributes = Canonized
-        };
 
         public XTemplate()
             : base(ElementNames.Template) { }
@@ -73,10 +67,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XTemplate(XElement element)
             : this()
         {
-            if (element.Name != ElementNames.Template)
-            {
-                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
-            }
+            element.VerifyName(ElementNames.Template);
             Add(element.Attributes());
             Add(new XProject(element.Element(ElementNames.Project)));
             Add(element.Elements(ElementNames.SourceTable).Select(child => new XTable(child)));
@@ -96,7 +87,13 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public new void Save(string path)
         {
-            using (XmlWriter writer = XmlWriter.Create(path, XmlWriterSettings))
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true,
+                NewLineOnAttributes = Canonized
+            };
+            using (XmlWriter writer = XmlWriter.Create(path, settings))
             {
                 Save(writer);
             }

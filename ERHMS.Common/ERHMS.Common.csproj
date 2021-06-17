@@ -50,8 +50,10 @@
     <Compile Include="ComponentModel\ObservableObject.cs" />
     <Compile Include="Compression\ZipFileExtensions.cs" />
     <Compile Include="Data\DataTableExtensions.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="HashCodeCalculator.cs" />
+    <Compile Include="IO\CsvReader.cs" />
     <Compile Include="IO\CsvWriter.cs" />
     <Compile Include="Linq\IEnumerableExtensions.cs" />
     <Compile Include="Linq\IEnumeratorExtensions.cs" />

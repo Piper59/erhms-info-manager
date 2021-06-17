@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using ERHMS.Data.Querying;
+using System.Data;
 
 namespace ERHMS.Data
 {
@@ -8,10 +9,15 @@ namespace ERHMS.Data
         string Name { get; }
         string ConnectionString { get; }
 
+        string Quote(string identifier);
         bool Exists();
         void Create();
         void Delete();
-        IDbConnection Connect();
-        string Quote(string identifier);
+        IConnector Connect();
+        ITransactor Transact();
+        int Execute(IQuery query);
+        TResult ExecuteScalar<TResult>(IQuery query);
+        IDataReader ExecuteReader(IQuery query);
+        int GetLastId();
     }
 }

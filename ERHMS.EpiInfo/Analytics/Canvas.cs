@@ -8,12 +8,6 @@ namespace ERHMS.EpiInfo.Analytics
 {
     public class Canvas : Asset
     {
-        private static XmlWriterSettings XmlWriterSettings => new XmlWriterSettings
-        {
-            OmitXmlDeclaration = true,
-            Indent = true
-        };
-
         private static XDocument GetTemplate()
         {
             using (Stream stream = typeof(Canvas).GetManifestResourceStream("Template.cvs7"))
@@ -31,7 +25,12 @@ namespace ERHMS.EpiInfo.Analytics
             XElement dashboardHelper = document.Root.Element("dashboardHelper");
             dashboardHelper.Element("projectPath").Value = View.Project.FilePath;
             dashboardHelper.Element("viewName").Value = View.Name;
-            using (XmlWriter writer = XmlWriter.Create(stream, XmlWriterSettings))
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true
+            };
+            using (XmlWriter writer = XmlWriter.Create(stream, settings))
             {
                 document.Save(writer);
             }

@@ -26,9 +26,9 @@ namespace ERHMS.Common.Logging
         {
             try
             {
-                using (WindowsIdentity user = WindowsIdentity.GetCurrent())
+                using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
                 {
-                    GlobalContext.Properties["user"] = user.Name;
+                    GlobalContext.Properties["user"] = identity.Name;
                 }
             }
             catch { }

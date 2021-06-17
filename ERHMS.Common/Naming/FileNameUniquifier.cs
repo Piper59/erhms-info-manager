@@ -28,7 +28,7 @@ namespace ERHMS.Common.Naming
             if (!Comparers.Path.Equals(extension, Extension))
             {
                 throw new ArgumentException(
-                    $"Specified extension '{extension}' does not match expected extension '{Extension}'.",
+                    $"Unexpected extension '{extension}' (expected '{Extension}').",
                     nameof(name));
             }
             return Path.GetFileNameWithoutExtension(name);

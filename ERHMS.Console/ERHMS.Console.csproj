@@ -94,6 +94,7 @@
     <Compile Include="Utilities\EncryptFile.cs" />
     <Compile Include="Utilities\ExportLogs.cs" />
     <Compile Include="Utilities\ExportRecords.cs" />
+    <Compile Include="Utilities\ImportRecords.cs" />
     <Compile Include="Utilities\InitializeProject.cs" />
     <Compile Include="Utilities\InstantiateTemplate.cs" />
     <Compile Include="Utilities\IUtility.cs" />

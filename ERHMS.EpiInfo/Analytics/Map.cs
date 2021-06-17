@@ -11,12 +11,6 @@ namespace ERHMS.EpiInfo.Analytics
 {
     public class Map : Asset
     {
-        private static XmlWriterSettings XmlWriterSettings => new XmlWriterSettings
-        {
-            OmitXmlDeclaration = true,
-            Indent = true
-        };
-
         private static XDocument GetTemplate()
         {
             using (Stream stream = typeof(Map).GetManifestResourceStream("Template.map7"))
@@ -25,8 +19,8 @@ namespace ERHMS.EpiInfo.Analytics
             }
         }
 
-        public string Server { get; set; } = Settings.Default.MapServer;
-        public Color PointColor { get; set; } = Color.FromArgb(Settings.Default.MapPointColor);
+        public string BaseServer { get; set; } = Settings.Default.MapBaseServer;
+        public Color DataColor { get; set; } = Color.FromArgb(Settings.Default.MapDataColor);
 
         public Map(View view)
             : base(view) { }
@@ -35,7 +29,7 @@ namespace ERHMS.EpiInfo.Analytics
         {
             XDocument document = GetTemplate();
             XElement dataLayer = document.Root.Element("dataLayer");
-            dataLayer.Element("color").Value = $"#{PointColor.ToArgb():X}";
+            dataLayer.Element("color").Value = $"#{DataColor.ToArgb():X}";
             if (View.Fields.Contains("Latitude", MetaFieldType.Number)
                 && View.Fields.Contains("Longitude", MetaFieldType.Number))
             {
@@ -48,8 +42,13 @@ namespace ERHMS.EpiInfo.Analytics
             XElement serverName = document.Root.Element("referenceLayer")
                 .Element("referenceLayer")
                 .Element("serverName");
-            serverName.Value = Server;
-            using (XmlWriter writer = XmlWriter.Create(stream, XmlWriterSettings))
+            serverName.Value = BaseServer;
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true
+            };
+            using (XmlWriter writer = XmlWriter.Create(stream, settings))
             {
                 document.Save(writer);
             }

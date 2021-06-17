@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
+using System.Security.Principal;
 
 namespace ERHMS.EpiInfo.Data
 {
@@ -24,7 +25,7 @@ namespace ERHMS.EpiInfo.Data
         {
             get
             {
-                return (RecordStatus)GetProperty(ColumnNames.REC_STATUS);
+                return (RecordStatus)GetProperty(ColumnNames.REC_STATUS, RecordStatus.Undeleted);
             }
             set
             {
@@ -47,11 +48,28 @@ namespace ERHMS.EpiInfo.Data
             set { SetProperty(ColumnNames.GLOBAL_RECORD_ID, value); }
         }
 
-        public Record()
+        public string FirstSaveLogonName
         {
-            UniqueKey = null;
-            Deleted = false;
-            GlobalRecordId = null;
+            get { return (string)GetProperty(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME); }
+            set { SetProperty(ColumnNames.RECORD_FIRST_SAVE_LOGON_NAME, value); }
+        }
+
+        public DateTime? FirstSaveTime
+        {
+            get { return (DateTime?)GetProperty(ColumnNames.RECORD_FIRST_SAVE_TIME); }
+            set { SetProperty(ColumnNames.RECORD_FIRST_SAVE_TIME, value); }
+        }
+
+        public string LastSaveLogonName
+        {
+            get { return (string)GetProperty(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME); }
+            set { SetProperty(ColumnNames.RECORD_LAST_SAVE_LOGON_NAME, value); }
+        }
+
+        public DateTime? LastSaveTime
+        {
+            get { return (DateTime?)GetProperty(ColumnNames.RECORD_LAST_SAVE_TIME); }
+            set { SetProperty(ColumnNames.RECORD_LAST_SAVE_TIME, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -59,14 +77,14 @@ namespace ERHMS.EpiInfo.Data
         private void OnPropertyChanged(string propertyName) =>
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
-        public IEnumerable<string> GetPropertyNames()
+        public bool TryGetProperty(string propertyName, out object value)
         {
-            return propertiesByName.Keys;
+            return propertiesByName.TryGetValue(propertyName, out value);
         }
 
-        public object GetProperty(string propertyName)
+        public object GetProperty(string propertyName, object defaultValue = null)
         {
-            return propertiesByName[propertyName];
+            return propertiesByName.TryGetValue(propertyName, out object value) ? value : defaultValue;
         }
 
         protected internal bool SetProperty(string propertyName, object value)
@@ -83,9 +101,30 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
+        public void Touch(bool creating)
+        {
+            string userName = null;
+            try
+            {
+                using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+                {
+                    userName = identity.Name;
+                }
+            }
+            catch { }
+            DateTime now = DateTime.Now;
+            if (creating)
+            {
+                FirstSaveLogonName = userName;
+                FirstSaveTime = now;
+            }
+            LastSaveLogonName = userName;
+            LastSaveTime = now;
+        }
+
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            return GetPropertyNames();
+            return propertiesByName.Keys;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)

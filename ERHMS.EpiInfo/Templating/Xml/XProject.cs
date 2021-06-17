@@ -66,10 +66,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XProject(XElement element)
             : this()
         {
-            if (element.Name != ElementNames.Project)
-            {
-                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
-            }
+            element.VerifyName(ElementNames.Project);
             Add(element.Attributes());
             Add(element.Elements(ElementNames.View).Select(child => new XView(child)));
         }

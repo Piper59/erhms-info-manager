@@ -139,7 +139,7 @@ namespace ERHMS.EpiInfo.Templating
             if (xTemplate.Level != Level)
             {
                 throw new ArgumentException(
-                    $"Template level '{xTemplate.Level}' does not match instantiator level '{Level}'.",
+                    $"Unexpected template level '{xTemplate.Level}' (expected '{Level}').",
                     nameof(xTemplate));
             }
             XTemplate = xTemplate;

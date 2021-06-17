@@ -122,10 +122,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XField(XElement element)
             : this()
         {
-            if (element.Name != ElementNames.Field)
-            {
-                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
-            }
+            element.VerifyName(ElementNames.Field);
             Add(element.Attributes());
         }
 

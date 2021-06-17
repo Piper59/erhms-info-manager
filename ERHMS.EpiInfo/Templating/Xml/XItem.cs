@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Xml.Linq;
 
@@ -39,10 +38,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XItem(XElement element)
             : this()
         {
-            if (element.Name != ElementNames.Item)
-            {
-                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
-            }
+            element.VerifyName(ElementNames.Item);
             Add(element.Attributes());
         }
 

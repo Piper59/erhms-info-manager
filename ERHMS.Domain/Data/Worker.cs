@@ -80,16 +80,6 @@ namespace ERHMS.Domain.Data
             set { SetProperty(nameof(EmailAddress), value); }
         }
 
-        public Worker()
-        {
-            FirstName = null;
-            PreferredName = null;
-            MiddleInitial = null;
-            LastName = null;
-            NameSuffix = null;
-            EmailAddress = null;
-        }
-
         public double GetSimilarity(string firstName, string lastName, string emailAddress)
         {
             ICollection<double> similarities = new List<double>();

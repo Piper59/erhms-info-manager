@@ -140,8 +140,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 if (Project.CollectedData.TableExists(View.TableName))
                 {
-                    RecordRepository repository = new RecordRepository(View);
-                    return repository.Select().ToList();
+                    using (RecordRepository repository = new RecordRepository(View))
+                    {
+                        return repository.Select().ToList();
+                    }
                 }
                 else
                 {
@@ -208,11 +210,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 try
                 {
-                    RecordRepository repository = new RecordRepository(View);
-                    foreach (Record value in SelectedValues)
+                    using (RecordRepository repository = new RecordRepository(View))
                     {
-                        progress.ThrowIfCancellationRequested();
-                        repository.SetDeleted(value, deleted);
+                        foreach (Record value in SelectedValues)
+                        {
+                            progress.ThrowIfCancellationRequested();
+                            repository.SetDeleted(value, deleted);
+                        }
                     }
                 }
                 catch (OperationCanceledException) { }

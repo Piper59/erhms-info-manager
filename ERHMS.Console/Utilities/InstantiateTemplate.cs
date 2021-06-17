@@ -71,7 +71,7 @@ namespace ERHMS.Console.Utilities
                     View view = project.Views[ViewName];
                     return new PageTemplateInstantiator(xTemplate, view);
                 default:
-                    throw new InvalidOperationException($"Template level '{xTemplate.Level}' is not supported.");
+                    throw new InvalidOperationException($"Unsupported template level '{xTemplate.Level}'.");
             }
         }
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ERHMS.Data
+namespace ERHMS.Data.Querying
 {
     public class ParameterCollection : DynamicParameters, IEnumerable<string>
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Xml.Linq;
@@ -27,10 +26,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XTable(XName name)
             : base(name)
         {
-            if (name != ElementNames.SourceTable && name != ElementNames.GridTable)
-            {
-                throw new ArgumentException($"Unexpected element name '{name}'.");
-            }
+            this.VerifyName(ElementNames.SourceTable, ElementNames.GridTable);
         }
 
         public XTable(XElement element)

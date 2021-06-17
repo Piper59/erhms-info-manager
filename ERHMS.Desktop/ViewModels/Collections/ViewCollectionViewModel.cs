@@ -45,8 +45,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 FieldCount = Value.Fields.InputFields.Count;
                 if (Value.Project.CollectedData.TableExists(Value.TableName))
                 {
-                    RecordRepository repository = new RecordRepository(Value);
-                    RecordCount = repository.CountByDeleted(false);
+                    using (RecordRepository repository = new RecordRepository(Value))
+                    {
+                        RecordCount = repository.CountByDeleted(false);
+                    }
                 }
                 else
                 {

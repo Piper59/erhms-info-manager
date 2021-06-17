@@ -6,14 +6,6 @@ namespace ERHMS.Common.IO
 {
     public class CsvWriter
     {
-        private static readonly char[] controlChars = new char[]
-        {
-            '\r',
-            '\n',
-            ',',
-            '"'
-        };
-
         private static string Escape(string value)
         {
             return value.Replace("\"", "\"\"");
@@ -25,6 +17,7 @@ namespace ERHMS.Common.IO
         }
 
         public TextWriter Writer { get; }
+        public int FieldCount { get; private set; } = -1;
 
         public CsvWriter(TextWriter writer)
         {
@@ -33,23 +26,38 @@ namespace ERHMS.Common.IO
 
         private void WriteValue(string value)
         {
-            Writer.Write(value.IndexOfAny(controlChars) == -1 ? value : Quote(value));
+            foreach (char ch in value)
+            {
+                if (ch == '\r' || ch == '\n' || ch == ',' || ch == '"')
+                {
+                    Writer.Write(Quote(value));
+                    return;
+                }
+            }
+            Writer.Write(value);
         }
 
-        public void WriteValues(IEnumerable<string> values)
+        public void WriteRow(IList<string> values)
         {
-            using (IEnumerator<string> enumerator = values.GetEnumerator())
+            if (FieldCount == -1)
             {
-                if (!enumerator.MoveNext())
+                if (values.Count == 0)
                 {
-                    throw new ArgumentException("Sequence is empty.", nameof(values));
+                    throw new ArgumentException("Field count must be greater than zero.", nameof(values));
                 }
-                WriteValue(enumerator.Current);
-                while (enumerator.MoveNext())
-                {
-                    Writer.Write(",");
-                    WriteValue(enumerator.Current);
-                }
+                FieldCount = values.Count;
+            }
+            else if (values.Count != FieldCount)
+            {
+                throw new ArgumentException(
+                    $"Unexpected field count {values.Count} (expected {FieldCount}).",
+                    nameof(values));
+            }
+            WriteValue(values[0]);
+            for (int index = 1; index < values.Count; index++)
+            {
+                Writer.Write(",");
+                WriteValue(values[index]);
             }
             Writer.Write("\r\n");
         }

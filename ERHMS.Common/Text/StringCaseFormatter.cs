@@ -23,7 +23,7 @@ namespace ERHMS.Common.Text
                 case "T":
                     return Culture.TextInfo.ToTitleCase(value);
             }
-            throw new FormatException($"Format specifier '{format}' is not supported.");
+            throw new FormatException($"Unsupported format '{format}'.");
         }
 
         public string Format(string format, object arg, IFormatProvider formatProvider)

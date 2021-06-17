@@ -9,7 +9,7 @@ namespace ERHMS.Common.Linq
         {
             if (!@this.MoveNext())
             {
-                throw new InvalidOperationException("Enumerator cannot be advanced.");
+                throw new InvalidOperationException("Cannot advance enumerator.");
             }
             return @this.Current;
         }

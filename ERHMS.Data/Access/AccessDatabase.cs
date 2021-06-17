@@ -12,11 +12,7 @@ namespace ERHMS.Data.Access
         protected abstract byte[] EmptyDatabase { get; }
 
         protected AccessDatabase(DatabaseProvider provider, string connectionString)
-            : base(provider, connectionString)
-        {
-            CommandBuilder.QuotePrefix = "[";
-            CommandBuilder.QuoteSuffix = "]";
-        }
+            : base(provider, connectionString) { }
 
         public override bool Exists()
         {

@@ -75,7 +75,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         {
             if (dataContext == null)
             {
-                throw new InvalidOperationException("Method may only be called while a task is running.");
+                throw new InvalidOperationException("Task is not running.");
             }
             if (!CanBeCanceled)
             {
@@ -88,7 +88,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         {
             if (dataContext == null)
             {
-                throw new InvalidOperationException("Method may only be called while a task is running.");
+                throw new InvalidOperationException("Task is not running.");
             }
             dataContext.Status = value;
         }

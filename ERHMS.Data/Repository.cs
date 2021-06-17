@@ -1,16 +1,17 @@
-﻿using Dapper;
-using System.Collections.Generic;
-using System.Data;
+﻿using System;
 
 namespace ERHMS.Data
 {
-    public abstract class Repository<TEntity>
+    public abstract class Repository : IDisposable
     {
-        public IDatabase Database { get; }
+        private readonly IConnector connector;
+
+        protected IDatabase Database { get; }
 
         protected Repository(IDatabase database)
         {
             Database = database;
+            connector = database.Connect();
         }
 
         protected string Quote(string identifier)
@@ -18,22 +19,14 @@ namespace ERHMS.Data
             return Database.Quote(identifier);
         }
 
-        protected TResult ExecuteScalar<TResult>(QueryInfo query, string selectList)
+        public ITransactor Transact()
         {
-            string sql = query.GetSql(selectList);
-            using (IDbConnection connection = Database.Connect())
-            {
-                return connection.ExecuteScalar<TResult>(sql, query.Parameters);
-            }
+            return Database.Transact();
         }
 
-        protected IEnumerable<TEntity> Query(QueryInfo query, string selectList)
+        public void Dispose()
         {
-            string sql = query.GetSql(selectList);
-            using (IDbConnection connection = Database.Connect())
-            {
-                return connection.Query<TEntity>(sql, query.Parameters);
-            }
+            connector.Dispose();
         }
     }
 }

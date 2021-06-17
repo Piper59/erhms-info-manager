@@ -1,5 +1,4 @@
 ﻿using Epi;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -79,10 +78,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         public XPage(XElement element)
             : this()
         {
-            if (element.Name != ElementNames.Page)
-            {
-                throw new ArgumentException($"Unexpected element name '{element.Name}'.");
-            }
+            element.VerifyName(ElementNames.Page);
             Add(element.Attributes());
             Add(element.Elements(ElementNames.Field).Select(child => new XField(child)));
         }

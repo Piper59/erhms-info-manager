@@ -9,35 +9,37 @@ namespace ERHMS.EpiInfo.Data
 {
     public class RecordExporter : CsvWriter
     {
-        private static IEnumerable<string> GetHeaderValues(IEnumerable<Field> fields)
-        {
-            return fields.Select(field => field.Name);
-        }
-
-        private static IEnumerable<string> GetRecordValues(IEnumerable<Field> fields, Record record)
-        {
-            foreach (Field field in fields)
-            {
-                yield return record.GetProperty(field.Name)?.ToString() ?? "";
-            }
-        }
-
         public View View { get; }
+        private IEnumerable<Field> Fields => View.Fields.DataFields.Cast<Field>();
 
-        public RecordExporter(TextWriter writer, View view)
+        public RecordExporter(View view, TextWriter writer)
             : base(writer)
         {
             View = view;
         }
 
+        private IEnumerable<string> GetHeaders()
+        {
+            return Fields.Select(field => field.Name);
+        }
+
+        private IEnumerable<string> GetValues(Record record)
+        {
+            foreach (Field field in Fields)
+            {
+                yield return record.GetProperty(field.Name)?.ToString() ?? "";
+            }
+        }
+
         public void Export()
         {
-            IEnumerable<Field> fields = View.Fields.TableColumnFields.Cast<Field>().ToList();
-            WriteValues(GetHeaderValues(fields));
-            RecordRepository repository = new RecordRepository(View);
-            foreach (Record record in repository.Select())
+            WriteRow(GetHeaders().ToList());
+            using (RecordRepository repository = new RecordRepository(View))
             {
-                WriteValues(GetRecordValues(fields, record));
+                foreach (Record record in repository.Select())
+                {
+                    WriteRow(GetValues(record).ToList());
+                }
             }
         }
     }

@@ -95,8 +95,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 string projectPath = Settings.Default.WorkerProjectPath;
                 Project project = ProjectExtensions.Open(projectPath);
                 View view = project.Views[CoreView.WorkerRosteringForm.Name];
-                RecordRepository<Worker> repository = new RecordRepository<Worker>(view);
-                return repository.Select().ToList();
+                using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
+                {
+                    return repository.Select().ToList();
+                }
             });
             items.Clear();
             items.AddRange(values.Select(value => new ItemViewModel(value)));

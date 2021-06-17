@@ -23,10 +23,10 @@ namespace ERHMS.EpiInfo.Metadata
                 if (result == 0)
                 {
                     result = Comparer<double?>.Default.Compare(field1.TabIndex, field2.TabIndex);
-                }
-                if (result == 0)
-                {
-                    result = Default.Compare(field1, field2);
+                    if (result == 0)
+                    {
+                        result = Default.Compare(field1, field2);
+                    }
                 }
                 return result;
             }
@@ -80,10 +80,10 @@ namespace ERHMS.EpiInfo.Metadata
                     result = Comparer<double?>.Default.Compare(
                         GetEffectiveTabIndex(field1),
                         GetEffectiveTabIndex(field2));
-                }
-                if (result == 0)
-                {
-                    result = Default.Compare(field1, field2);
+                    if (result == 0)
+                    {
+                        result = Default.Compare(field1, field2);
+                    }
                 }
                 return result;
             }

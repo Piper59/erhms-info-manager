@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -79,19 +79,19 @@ namespace ERHMS.EpiInfo.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1424587")]
-        public int MapPointColor {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer")]
+        public string MapBaseServer {
             get {
-                return ((int)(this["MapPointColor"]));
+                return ((string)(this["MapBaseServer"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer")]
-        public string MapServer {
+        [global::System.Configuration.DefaultSettingValueAttribute("-1424587")]
+        public int MapDataColor {
             get {
-                return ((string)(this["MapServer"]));
+                return ((int)(this["MapDataColor"]));
             }
         }
     }

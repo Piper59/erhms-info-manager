@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
@@ -7,6 +8,14 @@ namespace ERHMS.EpiInfo.Templating.Xml
 {
     internal static class XElementExtensions
     {
+        public static void VerifyName(this XElement @this, params XName[] validNames)
+        {
+            if (!validNames.Contains(@this.Name))
+            {
+                throw new ArgumentException($"Unexpected element name '{@this.Name}'.", nameof(@this));
+            }
+        }
+
         public static bool TryGetAttribute(this XElement @this, string attributeName, out XAttribute attribute)
         {
             attribute = @this.Attribute(attributeName);
