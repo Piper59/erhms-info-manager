@@ -56,8 +56,11 @@ namespace ERHMS.EpiInfo.Data
                 string text = texts[index];
                 try
                 {
-                    // TODO: Convert empty string to null if field is not required
                     object value = converter.ConvertFromString(texts[index]);
+                    if (value is string str && str == "" && !field.IsRequired)
+                    {
+                        value = null;
+                    }
                     record.SetProperty(field.Name, value);
                 }
                 catch
