@@ -58,7 +58,6 @@
     <Compile Include="Access\Access2007Database.cs" />
     <Compile Include="Access\AccessDatabase.cs" />
     <Compile Include="Access\ErrorCodes.cs" />
-    <Compile Include="Access\Providers.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseProvider.cs" />
     <Compile Include="IConnector.cs" />

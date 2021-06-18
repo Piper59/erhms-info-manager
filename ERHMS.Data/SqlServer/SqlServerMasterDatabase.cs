@@ -5,6 +5,11 @@ namespace ERHMS.Data.SqlServer
 {
     public class SqlServerMasterDatabase : SqlServerDatabase
     {
+        public static class Constants
+        {
+            public const string InitialCatalog = "master";
+        }
+
         public static SqlServerMasterDatabase FromMasterConnectionString(string connectionString)
         {
             return new SqlServerMasterDatabase(connectionString);
@@ -14,7 +19,7 @@ namespace ERHMS.Data.SqlServer
         {
             SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(connectionString)
             {
-                InitialCatalog = "master"
+                InitialCatalog = Constants.InitialCatalog
             };
             return new SqlServerMasterDatabase(connectionStringBuilder.ConnectionString);
         }
