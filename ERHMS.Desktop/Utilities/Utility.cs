@@ -39,7 +39,8 @@ namespace ERHMS.Desktop.Utilities
                     MessageBoxIcon.Error);
             }
 
-            protected abstract string Instructions { get; }
+            protected virtual string Lead => Strings.Lead_Working;
+            protected virtual string Body => "";
 
             private UtilityDialog GetDialog()
             {
@@ -47,7 +48,8 @@ namespace ERHMS.Desktop.Utilities
                 {
                     Owner = Form.ActiveForm,
                     StartPosition = FormStartPosition.CenterParent,
-                    Body = Instructions
+                    Lead = Lead,
+                    Body = Body
                 };
             }
 

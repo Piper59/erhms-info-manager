@@ -6,6 +6,12 @@ namespace ERHMS.Desktop.Utilities
 {
     public partial class UtilityDialog : Form
     {
+        public string Lead
+        {
+            get { return LeadLabel.Text; }
+            set { LeadLabel.Text = value; }
+        }
+
         public string Body
         {
             get { return BodyLabel.Text; }
@@ -18,7 +24,6 @@ namespace ERHMS.Desktop.Utilities
         {
             InitializeComponent();
             Text = Strings.App_Title;
-            LeadLabel.Text = Strings.Lead_Working;
         }
 
         protected override void OnPaint(PaintEventArgs e)

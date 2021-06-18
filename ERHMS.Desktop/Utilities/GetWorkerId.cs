@@ -38,7 +38,7 @@ namespace ERHMS.Desktop.Utilities
             }
         }
 
-        protected override string Instructions => Strings.Body_GetWorkerId;
+        protected override string Body => Strings.Body_GetWorkerId;
 
         public override async Task ExecuteAsync()
         {
