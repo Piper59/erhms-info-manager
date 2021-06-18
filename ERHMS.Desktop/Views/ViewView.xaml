@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections">
     <Border Style="{StaticResource FluidLayout}">
         <Grid Style="{StaticResource Container}">
@@ -27,7 +28,7 @@
                              ToolTip="{Binding Value.Project.FilePath}" />
                     </Hyperlink>
                     <Run FontFamily="{StaticResource IconFontFamily}"
-                         Text="{x:Static local:Icons.LevelSeparator}" />
+                         Text="{Markup:Icon Level.Separator}" />
                     <Run FontWeight="{StaticResource DefaultFontWeight}"
                          Text="{Binding Value.Name}" />
                 </TextBlock>
@@ -35,13 +36,13 @@
                             Orientation="Horizontal">
                     <Controls:IconButton AlternativeText="Up to database"
                                          Command="{Binding GoToProjectCommand}"
-                                         Content="{x:Static local:Icons.LevelParent}" />
+                                         Content="{Markup:Icon Level.Parent}" />
                     <Controls:IconButton AlternativeText="Home"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
-                                         Content="{x:Static local:Icons.Home}" />
+                                         Content="{Markup:Icon Home}" />
                     <Controls:IconButton AlternativeText="Help"
                                          Command="{Binding GoToHelpCommand}"
-                                         Content="{x:Static local:Icons.Help}" />
+                                         Content="{Markup:Icon Help}" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">

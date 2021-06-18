@@ -3,9 +3,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <UserControl.Resources>
         <Style x:Key="CellTextBlock" TargetType="TextBlock">
             <Setter Property="TextWrapping" Value="Wrap" />
@@ -50,15 +50,15 @@
             <WrapPanel Grid.Column="0">
                 <Controls:IconButton AlternativeText="Add"
                                      Command="{Binding AddCommand}"
-                                     Content="{x:Static local:Icons.Add}"
+                                     Content="{Markup:Icon Add}"
                                      Description="Add a new record in the Epi Info Enter Data module." />
                 <Controls:IconButton AlternativeText="Edit"
                                      Command="{Binding EditCommand}"
-                                     Content="{x:Static local:Icons.Edit}"
+                                     Content="{Markup:Icon Edit}"
                                      Description="Edit the selected record in the Epi Info Enter Data module." />
                 <Controls:IconButton x:Name="CopyFieldButton"
                                      AlternativeText="Copy"
-                                     Content="{x:Static local:Icons.Clipboard}"
+                                     Content="{Markup:Icon Clipboard}"
                                      Description="Copy values to the Clipboard from one or all fields."
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
@@ -74,25 +74,25 @@
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AlternativeText="Delete"
                                      Command="{Binding DeleteCommand}"
-                                     Content="{x:Static local:Icons.Delete}"
+                                     Content="{Markup:Icon Delete}"
                                      Description="Mark the selected records as deleted (without permanently deleting them)." />
                 <Controls:IconButton AlternativeText="Undelete"
                                      Command="{Binding UndeleteCommand}"
-                                     Content="{x:Static local:Icons.Undelete}"
+                                     Content="{Markup:Icon Undelete}"
                                      Description="Mark the selected records as undeleted." />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AlternativeText="Import"
                                      Command="{Binding ImportCommand}"
-                                     Content="{x:Static local:Icons.Import}"
+                                     Content="{Markup:Icon Import}"
                                      Description="Import records into the current form." />
                 <Controls:IconButton AlternativeText="Export"
                                      Command="{Binding ExportCommand}"
-                                     Content="{x:Static local:Icons.Export}"
+                                     Content="{Markup:Icon Export}"
                                      Description="Export records from the current form." />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AlternativeText="Refresh"
                                      Command="{Binding RefreshCommand}"
-                                     Content="{x:Static local:Icons.Refresh}"
+                                     Content="{Markup:Icon Refresh}"
                                      Description="Refresh the information displayed on this screen." />
             </WrapPanel>
             <Controls:Pager Grid.Column="1"

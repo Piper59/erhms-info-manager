@@ -2,8 +2,8 @@
              x:Name="Root"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ERHMS.Desktop"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -23,6 +23,6 @@
                              Grid.Column="2"
                              AlternativeText="Clear search"
                              Click="ClearButton_Click"
-                             Content="{x:Static local:Icons.Clear}" />
+                             Content="{Markup:Icon Clear}" />
     </Grid>
 </UserControl>

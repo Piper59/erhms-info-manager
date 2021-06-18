@@ -2,9 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -13,29 +13,29 @@
         <WrapPanel Grid.Row="0">
             <Controls:IconButton AlternativeText="Create"
                                  Command="{Binding CreateCommand}"
-                                 Content="{x:Static local:Icons.Create}"
+                                 Content="{Markup:Icon Create}"
                                  Description="Create a new form in the Epi Info Form Designer module." />
             <Controls:IconButton AlternativeText="Open"
                                  Command="{Binding OpenCommand}"
-                                 Content="{x:Static local:Icons.Open}"
+                                 Content="{Markup:Icon Open}"
                                  Description="Open the selected form to view and manage associated records." />
             <Controls:IconButton AlternativeText="Delete"
                                  Command="{Binding DeleteCommand}"
-                                 Content="{x:Static local:Icons.Delete}"
+                                 Content="{Markup:Icon Delete}"
                                  Description="Permanently delete the selected form, any related forms, and all associated records." />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AlternativeText="Design"
                                  Command="{Binding DesignCommand}"
-                                 Content="{x:Static local:Icons.Design}"
+                                 Content="{Markup:Icon Design}"
                                  Description="Open the selected form in the Epi Info Form Designer module." />
             <Controls:IconButton AlternativeText="Enter"
                                  Command="{Binding EnterCommand}"
-                                 Content="{x:Static local:Icons.Enter}"
+                                 Content="{Markup:Icon Enter}"
                                  Description="Open the selected form in the Epi Info Enter Data module." />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AlternativeText="Refresh"
                                  Command="{Binding RefreshCommand}"
-                                 Content="{x:Static local:Icons.Refresh}"
+                                 Content="{Markup:Icon Refresh}"
                                  Description="Refresh the information displayed on this screen." />
         </WrapPanel>
         <DataGrid x:Name="ItemDataGrid"

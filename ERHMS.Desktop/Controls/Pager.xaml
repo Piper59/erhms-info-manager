@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Controls.Pager"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ERHMS.Desktop"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <StackPanel Orientation="Horizontal">
         <TextBlock Style="{StaticResource Body}"
                    VerticalAlignment="Center">
@@ -13,9 +13,9 @@
         </TextBlock>
         <Controls:IconButton AlternativeText="Previous page"
                              Command="{Binding GoToPreviousPageCommand}"
-                             Content="{x:Static local:Icons.PagePrevious}" />
+                             Content="{Markup:Icon Page.Previous}" />
         <Controls:IconButton AlternativeText="Next page"
                              Command="{Binding GoToNextPageCommand}"
-                             Content="{x:Static local:Icons.PageNext}" />
+                             Content="{Markup:Icon Page.Next}" />
     </StackPanel>
 </UserControl>

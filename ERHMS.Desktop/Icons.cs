@@ -4,7 +4,7 @@ namespace ERHMS.Desktop
 {
     public static class Icons
     {
-        private static readonly IDictionary<string, string> instancesByName = new Dictionary<string, string>
+        private static readonly IDictionary<string, string> instancesByKey = new Dictionary<string, string>
         {
             { "500px", "\uf26e" },
             { "accessible_icon", "\uf368" },
@@ -1466,31 +1466,34 @@ namespace ERHMS.Desktop
             { "youtube_square", "\uf431" },
             { "zhihu", "\uf63f" }
         };
-
-        public static string Add => GetInstance("plus");
-        public static string Clear => GetInstance("times");
-        public static string Clipboard => GetInstance("clipboard");
-        public static string Close => GetInstance("times");
-        public static string Create => GetInstance("file");
-        public static string Delete => GetInstance("trash");
-        public static string Design => GetInstance("tools");
-        public static string Edit => GetInstance("pen");
-        public static string Enter => GetInstance("pen");
-        public static string Export => GetInstance("file_export");
-        public static string Help => GetInstance("question");
-        public static string Home => GetInstance("home");
-        public static string Import => GetInstance("file_import");
-        public static string LevelParent => GetInstance("arrow_up");
-        public static string LevelSeparator => GetInstance("angle_right");
-        public static string Open => GetInstance("folder_open");
-        public static string PageNext => GetInstance("chevron_right");
-        public static string PagePrevious => GetInstance("chevron_left");
-        public static string Refresh => GetInstance("sync");
-        public static string Undelete => GetInstance("trash_restore");
-
-        private static string GetInstance(string name)
+        private static readonly IDictionary<string, string> keysByName = new Dictionary<string, string>
         {
-            return instancesByName[name];
+            { "Add", "plus" },
+            { "Clear", "times" },
+            { "Clipboard", "clipboard" },
+            { "Close", "times" },
+            { "Create", "file" },
+            { "Delete", "trash" },
+            { "Design", "tools" },
+            { "Edit", "pen" },
+            { "Enter", "pen" },
+            { "Export", "file_export" },
+            { "Help", "question" },
+            { "Home", "home" },
+            { "Import", "file_import" },
+            { "Level.Parent", "arrow_up" },
+            { "Level.Separator", "angle_right" },
+            { "Open", "folder_open" },
+            { "Page.Next", "chevron_right" },
+            { "Page.Previous", "chevron_left" },
+            { "Refresh", "sync" },
+            { "Undelete", "trash_restore" }
+        };
+
+        public static string GetInstance(string name)
+        {
+            string key = keysByName[name];
+            return instancesByKey[key];
         }
     }
 }

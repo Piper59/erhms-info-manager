@@ -2,10 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
-             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
+             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <UserControl.Resources>
         <Converters:ByteCountFormattingConverter x:Key="ByteCountFormattingConverter" />
     </UserControl.Resources>
@@ -17,20 +17,20 @@
         <WrapPanel Grid.Row="0">
             <Controls:IconButton AlternativeText="Create"
                                  Command="{Binding CreateCommand}"
-                                 Content="{x:Static local:Icons.Create}"
+                                 Content="{Markup:Icon Create}"
                                  Description="Create a new file in Epi Info." />
             <Controls:IconButton AlternativeText="Open"
                                  Command="{Binding OpenCommand}"
-                                 Content="{x:Static local:Icons.Open}"
+                                 Content="{Markup:Icon Open}"
                                  Description="Open the selected file in Epi Info." />
             <Controls:IconButton AlternativeText="Delete"
                                  Command="{Binding DeleteCommand}"
-                                 Content="{x:Static local:Icons.Delete}"
+                                 Content="{Markup:Icon Delete}"
                                  Description="Move the selected file to the Recycle Bin." />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AlternativeText="Refresh"
                                  Command="{Binding RefreshCommand}"
-                                 Content="{x:Static local:Icons.Refresh}"
+                                 Content="{Markup:Icon Refresh}"
                                  Description="Refresh the information displayed on this screen." />
         </WrapPanel>
         <DataGrid x:Name="ItemDataGrid"
