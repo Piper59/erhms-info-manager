@@ -6,7 +6,7 @@
         {
             Desktop.Utilities.ResetSettings utility = new Desktop.Utilities.ResetSettings
             {
-                Quiet = true
+                Verbose = false
             };
             utility.Invoke();
         }

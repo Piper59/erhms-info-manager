@@ -8,19 +8,19 @@ namespace ERHMS.Desktop.Utilities
 {
     public class ResetSettings : Utility.Headless
     {
-        public bool Quiet { get; set; }
+        public bool Verbose { get; set; }
 
         public override IEnumerable<string> Parameters
         {
             get
             {
-                yield return Quiet.ToString();
+                yield return Verbose.ToString();
             }
             set
             {
                 using (IEnumerator<string> enumerator = value.GetEnumerator())
                 {
-                    Quiet = bool.Parse(enumerator.GetNextOrDefault(bool.FalseString));
+                    Verbose = bool.Parse(enumerator.GetNextOrDefault(bool.TrueString));
                 }
             }
         }
@@ -28,7 +28,7 @@ namespace ERHMS.Desktop.Utilities
         public override Task ExecuteAsync()
         {
             Settings.Default.Reset();
-            if (!Quiet)
+            if (Verbose)
             {
                 MessageBox.Show(Strings.Body_SettingsReset, Strings.Title_App);
             }
