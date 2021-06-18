@@ -18,6 +18,8 @@ namespace ERHMS.Common.IO
 
         public TextWriter Writer { get; }
         public int FieldCount { get; private set; } = -1;
+        public int RowNumber { get; private set; }
+        public IProgress<int> Progress { get; set; }
 
         public CsvWriter(TextWriter writer)
         {
@@ -53,6 +55,7 @@ namespace ERHMS.Common.IO
                     $"Unexpected field count {values.Count} (expected {FieldCount}).",
                     nameof(values));
             }
+            RowNumber++;
             WriteValue(values[0]);
             for (int index = 1; index < values.Count; index++)
             {
@@ -60,6 +63,7 @@ namespace ERHMS.Common.IO
                 WriteValue(values[index]);
             }
             Writer.Write("\r\n");
+            Progress?.Report(RowNumber);
         }
     }
 }

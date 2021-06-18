@@ -27,6 +27,7 @@ namespace ERHMS.Common.IO
         public TextReader Reader { get; }
         public int FieldCount { get; private set; } = -1;
         public int RowNumber { get; private set; }
+        public IProgress<int> Progress { get; set; }
 
         public CsvReader(TextReader reader)
         {
@@ -149,6 +150,7 @@ namespace ERHMS.Common.IO
             {
                 throw GetException($"Unexpected field count {values.Count} (expected {FieldCount})");
             }
+            Progress?.Report(RowNumber);
             return values;
         }
     }

@@ -56,7 +56,7 @@ namespace ERHMS.Data.Querying
         {
             protected static string GetParameterName(int index)
             {
-                return $"@P{index + 1:D3}";
+                return $"@P{index + 1}";
             }
 
             public string TableName { get; set; }
