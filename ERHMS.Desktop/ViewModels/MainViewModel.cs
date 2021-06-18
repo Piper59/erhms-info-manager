@@ -122,8 +122,8 @@ namespace ERHMS.Desktop.ViewModels
         {
             IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
             fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            fileDialog.FileName = string.Format(Strings.FileName_LogDirectoryArchive, DateTime.Now);
-            fileDialog.Filter = Strings.FileDialog_Filter_ZipFiles;
+            fileDialog.FileName = $"Logs_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
+            fileDialog.Filter = Strings.FileDialog_Filter_Archives;
             if (fileDialog.Save() != true)
             {
                 return;

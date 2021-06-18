@@ -37,11 +37,10 @@
 
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetWithWorkerInfoViewModel}">
         <StackPanel>
-            <TextBlock Style="{StaticResource Body}">
-                To link each record to a worker, include worker information fields on the form.
-                These fields will allow you to look up a worker's unique ID based on their name and email address.
-            </TextBlock>
-            <CheckBox Content="Include worker information fields?"
+            <Label>
+                <TextBlock>If you choose to collect worker information, this form will include fields for the worker's name, email address, and unique ID.</TextBlock>
+            </Label>
+            <CheckBox Content="Collect worker information?"
                       IsChecked="{Binding WithWorkerInfo}" />
         </StackPanel>
     </DataTemplate>

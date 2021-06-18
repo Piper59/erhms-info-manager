@@ -151,6 +151,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager logo.
+        /// </summary>
+        public static string App_Logo {
+            get {
+                return ResourceManager.GetString("App.Logo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager.
+        /// </summary>
+        public static string App_Title {
+            get {
+                return ResourceManager.GetString("App.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
         ///This file will be moved to the Recycle Bin..
@@ -433,15 +451,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager logo.
-        /// </summary>
-        public static string Description_AppLogo {
-            get {
-                return ResourceManager.GetString("Description.AppLogo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string DialogSeverity_Name_Error {
@@ -487,6 +496,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ZIP Files (*.zip)|*.zip.
+        /// </summary>
+        public static string FileDialog_Filter_Archives {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.Archives", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Epi Info Dashboards (*.cvs7)|*.cvs7.
         /// </summary>
         public static string FileDialog_Filter_Canvases {
@@ -523,15 +541,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ZIP Files (*.zip)|*.zip.
-        /// </summary>
-        public static string FileDialog_Filter_ZipFiles {
-            get {
-                return ResourceManager.GetString("FileDialog.Filter.ZipFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string FileDialog_Title_Open {
@@ -546,15 +555,6 @@ namespace ERHMS.Desktop.Properties {
         public static string FileDialog_Title_Save {
             get {
                 return ResourceManager.GetString("FileDialog.Title.Save", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logs-{0:yyyyMMdd-HHmmss}.zip.
-        /// </summary>
-        public static string FileName_LogDirectoryArchive {
-            get {
-                return ResourceManager.GetString("FileName.LogDirectoryArchive", resourceCulture);
             }
         }
         
@@ -642,45 +642,45 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File name:.
         /// </summary>
-        public static string Key_FileName {
+        public static string Label_FileName {
             get {
-                return ResourceManager.GetString("Key.FileName", resourceCulture);
+                return ResourceManager.GetString("Label.FileName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Location:.
         /// </summary>
-        public static string Key_Location {
+        public static string Label_Location {
             get {
-                return ResourceManager.GetString("Key.Location", resourceCulture);
+                return ResourceManager.GetString("Label.Location", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Form:.
         /// </summary>
-        public static string Key_View {
+        public static string Label_View {
             get {
-                return ResourceManager.GetString("Key.View", resourceCulture);
+                return ResourceManager.GetString("Label.View", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Form name:.
         /// </summary>
-        public static string Key_ViewName {
+        public static string Label_ViewName {
             get {
-                return ResourceManager.GetString("Key.ViewName", resourceCulture);
+                return ResourceManager.GetString("Label.ViewName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Worker information:.
         /// </summary>
-        public static string Key_WithWorkerInfo {
+        public static string Label_WithWorkerInfo {
             get {
-                return ResourceManager.GetString("Key.WithWorkerInfo", resourceCulture);
+                return ResourceManager.GetString("Label.WithWorkerInfo", resourceCulture);
             }
         }
         
@@ -757,7 +757,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include worker information fields?.
+        ///   Looks up a localized string similar to Choose whether to collect worker information.
         /// </summary>
         public static string Lead_CreateView_Blank_SetWithWorkerInfo {
             get {
@@ -784,7 +784,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What type of form do you want to create?.
+        ///   Looks up a localized string similar to Choose a type of form to create.
         /// </summary>
         public static string Lead_CreateView_Initialize {
             get {
@@ -996,15 +996,6 @@ namespace ERHMS.Desktop.Properties {
         public static string RecordStatus_Name_Undeleted {
             get {
                 return ResourceManager.GetString("RecordStatus.Name.Undeleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager.
-        /// </summary>
-        public static string Title_App {
-            get {
-                return ResourceManager.GetString("Title.App", resourceCulture);
             }
         }
     }

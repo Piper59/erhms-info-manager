@@ -16,12 +16,10 @@
                                       Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0">
-                    <TextBlock Text="{Binding Key}" />
-                </Label>
+                <Label Grid.Column="0"
+                       Content="{Binding Key}" />
                 <Label Grid.Column="1">
-                    <TextBlock Text="{Binding Value}"
-                               TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Value}" />
                 </Label>
             </Grid>
         </DataTemplate>

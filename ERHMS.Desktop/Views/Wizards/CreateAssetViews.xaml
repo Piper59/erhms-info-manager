@@ -60,8 +60,7 @@
             <Label Grid.Column="1"
                    Grid.ColumnSpan="2"
                    Grid.Row="1">
-                <TextBlock Text="{Binding FileInfo.DirectoryName}"
-                           TextWrapping="Wrap" />
+                <TextBlock Text="{Binding FileInfo.DirectoryName}" />
             </Label>
         </Grid>
     </DataTemplate>

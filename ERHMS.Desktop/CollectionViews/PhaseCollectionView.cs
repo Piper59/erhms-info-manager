@@ -40,6 +40,8 @@ namespace ERHMS.Desktop.CollectionViews
             }
         }
 
+        public Phase? CurrentValue => ((Item)CurrentItem)?.Value;
+
         public PhaseCollectionView()
             : base(Item.Instances.ToList()) { }
     }

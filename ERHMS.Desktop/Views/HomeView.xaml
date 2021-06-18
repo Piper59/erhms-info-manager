@@ -25,14 +25,14 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{Markup:String Description.AppLogo}"
+                           AutomationProperties.Name="{Markup:String App.Logo}"
                            Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
                            Width="64">
                     </Image>
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
-                               Text="{Markup:String Title.App}"
+                               Text="{Markup:String App.Title}"
                                VerticalAlignment="Center" />
                 </Grid>
                 <ItemsControl IsTabStop="False"

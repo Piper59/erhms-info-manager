@@ -1,7 +1,7 @@
-﻿using ERHMS.Launcher.Properties;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows;
 
 namespace ERHMS.Launcher
@@ -13,23 +13,22 @@ namespace ERHMS.Launcher
         {
             try
             {
-                string appTitle = "ERHMS Info Manager";
-                string workingDirectoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, appTitle);
+                string workingDirectoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ERHMS Info Manager");
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     UseShellExecute = false,
                     WorkingDirectory = workingDirectoryPath,
-                    FileName = Path.Combine(workingDirectoryPath, $"{appTitle}.exe")
+                    FileName = Path.Combine(workingDirectoryPath, "ERHMS Info Manager.exe")
                 };
                 Process.Start(startInfo)?.Dispose();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    string.Format(Resources.Body_Error, ex.Message),
-                    Resources.Title_App,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                StringBuilder message = new StringBuilder();
+                message.AppendLine("ERHMS Info Manager has encountered an error and must shut down.");
+                message.AppendLine();
+                message.Append(ex.Message);
+                MessageBox.Show(message.ToString(), "ERHMS Info Manager", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

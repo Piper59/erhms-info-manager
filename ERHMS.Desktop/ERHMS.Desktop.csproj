@@ -138,6 +138,7 @@
     <Compile Include="Dialogs\DialogSeverity.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
+    <Compile Include="Infrastructure\BooleanExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\InvalidViewNameReasonExtensions.cs" />
     <Compile Include="Infrastructure\MenuDropAlignment.cs" />

@@ -147,6 +147,12 @@
   <data name="AccessText.Yes" xml:space="preserve">
     <value>_Yes</value>
   </data>
+  <data name="App.Logo" xml:space="preserve">
+    <value>ERHMS Info Manager logo</value>
+  </data>
+  <data name="App.Title" xml:space="preserve">
+    <value>ERHMS Info Manager</value>
+  </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
     <value>File: {0}
 
@@ -249,9 +255,6 @@ Close anyway?</value>
   <data name="CoreView.Title.WorkerRosteringForm" xml:space="preserve">
     <value>Worker Rostering Form</value>
   </data>
-  <data name="Description.AppLogo" xml:space="preserve">
-    <value>ERHMS Info Manager logo</value>
-  </data>
   <data name="DialogSeverity.Name.Error" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -267,6 +270,9 @@ Close anyway?</value>
   <data name="DialogSeverity.Name.Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="FileDialog.Filter.Archives" xml:space="preserve">
+    <value>ZIP Files (*.zip)|*.zip</value>
+  </data>
   <data name="FileDialog.Filter.Canvases" xml:space="preserve">
     <value>Epi Info Dashboards (*.cvs7)|*.cvs7</value>
   </data>
@@ -279,17 +285,11 @@ Close anyway?</value>
   <data name="FileDialog.Filter.Projects" xml:space="preserve">
     <value>Epi Info Projects (*.prj)|*.prj</value>
   </data>
-  <data name="FileDialog.Filter.ZipFiles" xml:space="preserve">
-    <value>ZIP Files (*.zip)|*.zip</value>
-  </data>
   <data name="FileDialog.Title.Open" xml:space="preserve">
     <value>Open</value>
   </data>
   <data name="FileDialog.Title.Save" xml:space="preserve">
     <value>Save As</value>
-  </data>
-  <data name="FileName.LogDirectoryArchive" xml:space="preserve">
-    <value>Logs-{0:yyyyMMdd-HHmmss}.zip</value>
   </data>
   <data name="InvalidViewNameReason.Body.Empty" xml:space="preserve">
     <value>Please specify a form name.</value>
@@ -318,19 +318,19 @@ Close anyway?</value>
   <data name="InvalidViewNameReason.Lead.TooLong" xml:space="preserve">
     <value>This form name is too long</value>
   </data>
-  <data name="Key.FileName" xml:space="preserve">
+  <data name="Label.FileName" xml:space="preserve">
     <value>File name:</value>
   </data>
-  <data name="Key.Location" xml:space="preserve">
+  <data name="Label.Location" xml:space="preserve">
     <value>Location:</value>
   </data>
-  <data name="Key.View" xml:space="preserve">
+  <data name="Label.View" xml:space="preserve">
     <value>Form:</value>
   </data>
-  <data name="Key.ViewName" xml:space="preserve">
+  <data name="Label.ViewName" xml:space="preserve">
     <value>Form name:</value>
   </data>
-  <data name="Key.WithWorkerInfo" xml:space="preserve">
+  <data name="Label.WithWorkerInfo" xml:space="preserve">
     <value>Worker information:</value>
   </data>
   <data name="Lead.ConfirmAssetDeletion" xml:space="preserve">
@@ -358,7 +358,7 @@ Close anyway?</value>
     <value>Enter a form name</value>
   </data>
   <data name="Lead.CreateView.Blank.SetWithWorkerInfo" xml:space="preserve">
-    <value>Include worker information fields?</value>
+    <value>Choose whether to collect worker information</value>
   </data>
   <data name="Lead.CreateView.Close" xml:space="preserve">
     <value>Form has been created</value>
@@ -367,7 +367,7 @@ Close anyway?</value>
     <value>Verify the information below</value>
   </data>
   <data name="Lead.CreateView.Initialize" xml:space="preserve">
-    <value>What type of form do you want to create?</value>
+    <value>Choose a type of form to create</value>
   </data>
   <data name="Lead.CreatingAsset" xml:space="preserve">
     <value>Creating file</value>
@@ -437,8 +437,5 @@ Close anyway?</value>
   </data>
   <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
-  </data>
-  <data name="Title.App" xml:space="preserve">
-    <value>ERHMS Info Manager</value>
   </data>
 </root>

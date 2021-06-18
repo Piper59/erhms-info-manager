@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.Properties;
+﻿using ERHMS.Desktop.Infrastructure;
+using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Templating;
@@ -81,9 +82,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Key_ViewName, Wizard.Blank_ViewName },
-                        // TODO: Localize
-                        { Strings.Key_WithWorkerInfo, Wizard.Blank_WithWorkerInfo.ToString() }
+                        { Strings.Label_ViewName, Wizard.Blank_ViewName },
+                        { Strings.Label_WithWorkerInfo, Wizard.Blank_WithWorkerInfo.ToLocalizedString() }
                     };
                 }
 
