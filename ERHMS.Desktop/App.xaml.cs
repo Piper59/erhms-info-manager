@@ -70,7 +70,6 @@ namespace ERHMS.Desktop
             {
                 Log.Instance.Debug("Running in standard mode");
                 ShutdownMode = ShutdownMode.OnMainWindowClose;
-                MainViewModel.Instance.GoToHome();
                 MainWindow = new MainView
                 {
                     DataContext = MainViewModel.Instance

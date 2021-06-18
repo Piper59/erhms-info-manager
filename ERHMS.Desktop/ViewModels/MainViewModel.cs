@@ -21,7 +21,7 @@ namespace ERHMS.Desktop.ViewModels
     {
         public static MainViewModel Instance { get; } = new MainViewModel();
 
-        private object content;
+        private object content = new HomeViewModel();
         public object Content
         {
             get
