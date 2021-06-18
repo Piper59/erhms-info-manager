@@ -18,7 +18,7 @@ namespace ERHMS.Desktop.Infrastructure
                 case InvalidViewNameReason.InvalidStartChar:
                 case InvalidViewNameReason.Identical:
                 case InvalidViewNameReason.Similar:
-                    return Strings.InvalidViewNameReason_Lead;
+                    return Strings.InvalidViewNameReason_Lead_Default;
                 case InvalidViewNameReason.None:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(@this));

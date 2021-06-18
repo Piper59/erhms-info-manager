@@ -9,7 +9,7 @@
         MinWidth="320"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        Title="{Markup:String App.Title}"
+        Title="{Markup:String Title.App}"
         UseLayoutRounding="True">
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

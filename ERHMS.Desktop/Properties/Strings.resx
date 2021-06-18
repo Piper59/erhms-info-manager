@@ -147,11 +147,8 @@
   <data name="AccessText.Yes" xml:space="preserve">
     <value>_Yes</value>
   </data>
-  <data name="App.Logo" xml:space="preserve">
+  <data name="AlternativeText.AppLogo" xml:space="preserve">
     <value>ERHMS Info Manager logo</value>
-  </data>
-  <data name="App.Title" xml:space="preserve">
-    <value>ERHMS Info Manager</value>
   </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
     <value>File: {0}
@@ -189,10 +186,10 @@ Close anyway?</value>
 
 {0}</value>
   </data>
-  <data name="Boolean.False" xml:space="preserve">
+  <data name="Boolean.Name.False" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="Boolean.True" xml:space="preserve">
+  <data name="Boolean.Name.True" xml:space="preserve">
     <value>Yes</value>
   </data>
   <data name="CoreProject.Name.Incident" xml:space="preserve">
@@ -309,7 +306,7 @@ Close anyway?</value>
   <data name="InvalidViewNameReason.Body.TooLong" xml:space="preserve">
     <value>Please specify a form name that is no longer than {0} characters.</value>
   </data>
-  <data name="InvalidViewNameReason.Lead" xml:space="preserve">
+  <data name="InvalidViewNameReason.Lead.Default" xml:space="preserve">
     <value>This form name is invalid</value>
   </data>
   <data name="InvalidViewNameReason.Lead.Empty" xml:space="preserve">
@@ -437,5 +434,8 @@ Close anyway?</value>
   </data>
   <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
+  </data>
+  <data name="Title.App" xml:space="preserve">
+    <value>ERHMS Info Manager</value>
   </data>
 </root>

@@ -153,18 +153,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager logo.
         /// </summary>
-        public static string App_Logo {
+        public static string AlternativeText_AppLogo {
             get {
-                return ResourceManager.GetString("App.Logo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager.
-        /// </summary>
-        public static string App_Title {
-            get {
-                return ResourceManager.GetString("App.Title", resourceCulture);
+                return ResourceManager.GetString("AlternativeText.AppLogo", resourceCulture);
             }
         }
         
@@ -255,18 +246,18 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        public static string Boolean_False {
+        public static string Boolean_Name_False {
             get {
-                return ResourceManager.GetString("Boolean.False", resourceCulture);
+                return ResourceManager.GetString("Boolean.Name.False", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        public static string Boolean_True {
+        public static string Boolean_Name_True {
             get {
-                return ResourceManager.GetString("Boolean.True", resourceCulture);
+                return ResourceManager.GetString("Boolean.Name.True", resourceCulture);
             }
         }
         
@@ -615,9 +606,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to This form name is invalid.
         /// </summary>
-        public static string InvalidViewNameReason_Lead {
+        public static string InvalidViewNameReason_Lead_Default {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Lead", resourceCulture);
+                return ResourceManager.GetString("InvalidViewNameReason.Lead.Default", resourceCulture);
             }
         }
         
@@ -996,6 +987,15 @@ namespace ERHMS.Desktop.Properties {
         public static string RecordStatus_Name_Undeleted {
             get {
                 return ResourceManager.GetString("RecordStatus.Name.Undeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager.
+        /// </summary>
+        public static string Title_App {
+            get {
+                return ResourceManager.GetString("Title.App", resourceCulture);
             }
         }
     }

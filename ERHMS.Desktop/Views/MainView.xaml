@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
-        Title="{Markup:String App.Title}"
+        Title="{Markup:String Title.App}"
         UseLayoutRounding="True">
     <Grid>
         <Grid.RowDefinitions>
