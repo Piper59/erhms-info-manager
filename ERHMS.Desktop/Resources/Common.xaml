@@ -46,5 +46,5 @@
     <!-- Layout -->
     <System:Double x:Key="SmallLayoutWidth">700</System:Double>
     <System:Double x:Key="LargeLayoutWidth">1180</System:Double>
-    <System:Double x:Key="PopupWidth">240</System:Double>
+    <System:Double x:Key="ToolTipWidth">240</System:Double>
 </ResourceDictionary>

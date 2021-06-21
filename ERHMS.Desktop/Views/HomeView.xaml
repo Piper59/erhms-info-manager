@@ -6,11 +6,7 @@
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:System="clr-namespace:System;assembly=mscorlib">
     <UserControl.Resources>
-        <Converters:ResourceNameToStringConverter x:Key="CoreProjectToNameConverter" Prefix="CoreProject.Name" />
-        <Converters:StringCaseFormattingConverter x:Key="CoreProjectToLowerCaseNameConverter"
-                                                  BaseConverter="{StaticResource CoreProjectToNameConverter}"
-                                                  Format="{}{0:L}" />
-        <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToDescriptionConverter" Prefix="CoreView.Description" />
+        <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToHelpTextConverter" Prefix="CoreView.HelpText" />
         <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToTitleConverter" Prefix="CoreView.Title" />
         <Converters:ResourceNameToStringConverter x:Key="PhaseToNameConverter" Prefix="Phase.Name" />
         <Converters:PhaseToColorConverter x:Key="PhaseToStartColorConverter" Alpha="0x40" />
@@ -25,14 +21,14 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{Markup:String AlternativeText.AppLogo}"
+                           AutomationProperties.Name="{Markup:String App.Logo}"
                            Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
                            Width="64">
                     </Image>
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
-                               Text="{Markup:String Title.App}"
+                               Text="{Markup:String App.Title}"
                                VerticalAlignment="Center" />
                 </Grid>
                 <ItemsControl IsTabStop="False"
@@ -53,31 +49,17 @@
                                     <TextBlock Style="{StaticResource Heading}"
                                                Text="{Binding Value, Converter={StaticResource PhaseToNameConverter}}" />
                                 </Border>
-                                <TextBlock Style="{StaticResource Body}">
-                                    <Run>Select a form or view the</Run>
-                                    <Hyperlink Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
-                                               CommandParameter="{Binding CoreProject}">
-                                        <Run Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource CoreProjectToLowerCaseNameConverter}}" />
-                                    </Hyperlink>
-                                </TextBlock>
                                 <ItemsControl IsTabStop="False"
                                               ItemsSource="{Binding CoreViews}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource CoreViewNameToDescriptionConverter}}"
+                                            <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource CoreViewNameToHelpTextConverter}}"
                                                     AutomationProperties.Name="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}"
-                                                    ToolTipService.ShowDuration="{x:Static System:Int32.MaxValue}"
                                                     Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
                                                     CommandParameter="{Binding}"
                                                     Content="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}"
-                                                    Padding="{StaticResource LargeThickness}">
-                                                <Button.ToolTip>
-                                                    <ToolTip MaxWidth="{StaticResource PopupWidth}">
-                                                        <TextBlock Text="{Binding Name, Converter={StaticResource CoreViewNameToDescriptionConverter}}"
-                                                                   TextWrapping="Wrap" />
-                                                    </ToolTip>
-                                                </Button.ToolTip>
-                                            </Button>
+                                                    Padding="{StaticResource LargeThickness}"
+                                                    ToolTip="{Binding Name, Converter={StaticResource CoreViewNameToHelpTextConverter}}" />
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>

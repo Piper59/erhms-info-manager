@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
     <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+SetViewViewModel}">
@@ -9,11 +10,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Target="{x:Reference View}">
-                Form:
-            </Label>
-            <ComboBox x:Name="View"
-                      AutomationProperties.Name="Form"
+                   Content="{Markup:String Label.View}"
+                   Target="{x:Reference ViewComboBox}" />
+            <ComboBox x:Name="ViewComboBox"
+                      AutomationProperties.Name="{Markup:String Label.View}"
                       Grid.Column="1"
                       DisplayMemberPath="Name"
                       ItemsSource="{Binding Views}">
@@ -39,24 +39,21 @@
             </Grid.RowDefinitions>
             <Label Grid.Column="0"
                    Grid.Row="0"
-                   Target="{x:Reference FileName}">
-                File name:
-            </Label>
-            <TextBox x:Name="FileName"
-                     AutomationProperties.Name="File name"
+                   Content="{Markup:String Label.FileName}"
+                   Target="{x:Reference FileNameTextBox}" />
+            <TextBox x:Name="FileNameTextBox"
+                     AutomationProperties.Name="{Markup:String Label.FileName}"
                      Grid.Column="1"
                      Grid.Row="0"
                      IsReadOnly="True"
                      Text="{Binding FileInfo.Name, Mode=OneWay}" />
             <Button Grid.Column="2"
                     Grid.Row="0"
-                    Command="{Binding BrowseCommand}">
-                Browse...
-            </Button>
+                    Command="{Binding BrowseCommand}"
+                    Content="{Markup:String AccessText.Browse}" />
             <Label Grid.Column="0"
-                   Grid.Row="1">
-                Location:
-            </Label>
+                   Grid.Row="1"
+                   Content="{Markup:String Label.DirectoryPath}" />
             <Label Grid.Column="1"
                    Grid.ColumnSpan="2"
                    Grid.Row="1">
@@ -70,7 +67,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CloseViewModel}">
-        <CheckBox Content="Open in Epi Info"
+        <CheckBox Content="{Markup:String Label.Opening}"
                   IsChecked="{Binding Opening}" />
     </DataTemplate>
 </ResourceDictionary>

@@ -30,37 +30,37 @@
                 </TextBlock>
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal">
-                    <Controls:IconButton AlternativeText="Home"
+                    <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{Markup:Icon Home}" />
-                    <Controls:IconButton AlternativeText="Help"
+                    <Controls:IconButton AltText="{Markup:String AltText.Help}"
                                          Command="{Binding GoToHelpCommand}"
                                          Content="{Markup:Icon Help}" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">
-                <TabItem Header="F_orms">
+                <TabItem Header="{Markup:String AccessText.Views}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
                             <Collections:ViewCollectionView DataContext="{Binding Views}" />
                         </Grid>
                     </Border>
                 </TabItem>
-                <TabItem Header="_Dashboards">
+                <TabItem Header="{Markup:String AccessText.Canvases}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
                             <Collections:AssetCollectionView DataContext="{Binding Canvases}" />
                         </Grid>
                     </Border>
                 </TabItem>
-                <TabItem Header="_Analyses">
+                <TabItem Header="{Markup:String AccessText.Pgms}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
                             <Collections:AssetCollectionView DataContext="{Binding Pgms}" />
                         </Grid>
                     </Border>
                 </TabItem>
-                <TabItem Header="_Maps">
+                <TabItem Header="{Markup:String AccessText.Maps}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
                             <Collections:AssetCollectionView DataContext="{Binding Maps}" />

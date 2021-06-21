@@ -152,7 +152,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     { Strings.Label_View, wizard.View.Name },
                     { Strings.Label_FileName, wizard.FileInfo.Name },
-                    { Strings.Label_Location, wizard.FileInfo.DirectoryName }
+                    { Strings.Label_DirectoryPath, wizard.FileInfo.DirectoryName }
                 };
             }
 

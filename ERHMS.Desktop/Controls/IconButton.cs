@@ -12,13 +12,13 @@ namespace ERHMS.Desktop.Controls
             typeof(IconButton),
             new FrameworkPropertyMetadata(AccessKeyProperty_DependencyPropertyChanged));
 
-        public static readonly DependencyProperty AlternativeTextProperty = DependencyProperty.Register(
-            nameof(AlternativeText),
+        public static readonly DependencyProperty AltTextProperty = DependencyProperty.Register(
+            nameof(AltText),
             typeof(string),
             typeof(IconButton));
 
-        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
-            nameof(Description),
+        public static readonly DependencyProperty HelpTextProperty = DependencyProperty.Register(
+            nameof(HelpText),
             typeof(string),
             typeof(IconButton));
 
@@ -43,16 +43,16 @@ namespace ERHMS.Desktop.Controls
             set { SetValue(AccessKeyProperty, value); }
         }
 
-        public string AlternativeText
+        public string AltText
         {
-            get { return (string)GetValue(AlternativeTextProperty); }
-            set { SetValue(AlternativeTextProperty, value); }
+            get { return (string)GetValue(AltTextProperty); }
+            set { SetValue(AltTextProperty, value); }
         }
 
-        public string Description
+        public string HelpText
         {
-            get { return (string)GetValue(DescriptionProperty); }
-            set { SetValue(DescriptionProperty, value); }
+            get { return (string)GetValue(HelpTextProperty); }
+            set { SetValue(HelpTextProperty, value); }
         }
     }
 }

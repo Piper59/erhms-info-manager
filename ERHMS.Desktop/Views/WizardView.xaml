@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         Height="480"
         ResizeMode="NoResize"
-        Title="{Markup:String Title.App}"
+        Title="{Markup:String App.Title}"
         UseLayoutRounding="True"
         Width="640">
     <Window.Resources>
@@ -52,9 +52,8 @@
                     <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </WrapPanel.Resources>
                 <Button Command="{Binding Step.ReturnCommand}"
-                        Visibility="{Binding Committed, Converter={StaticResource BooleanToVisibilityInverter}}">
-                    _Back
-                </Button>
+                        Content="{Markup:String AccessText.Back}"
+                        Visibility="{Binding Committed, Converter={StaticResource BooleanToVisibilityInverter}}" />
                 <Button Command="{Binding Step.ContinueCommand}"
                         Content="{Binding Step.ContinueAction}"
                         IsDefault="True" />

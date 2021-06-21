@@ -2,13 +2,14 @@
              x:Name="Root"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
+             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <UserControl.Resources>
         <Converters:ResourceNameToStringConverter x:Key="RecordStatusToNameConverter"
                                                   NullValue="Null"
                                                   Prefix="RecordStatus.Name" />
     </UserControl.Resources>
-    <ComboBox AutomationProperties.Name="Record status"
+    <ComboBox AutomationProperties.Name="{Markup:String Label.RecordStatus}"
               ItemsSource="{Binding ItemsSource, ElementName=Root}"
               MinWidth="125">
         <ComboBox.ItemContainerStyle>

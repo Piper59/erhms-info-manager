@@ -61,11 +61,47 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _About ERHMS Info Manager.
+        /// </summary>
+        public static string AccessText_AboutApp {
+            get {
+                return ResourceManager.GetString("AccessText.AboutApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _All fields.
         /// </summary>
         public static string AccessText_AllFields {
             get {
                 return ResourceManager.GetString("AccessText.AllFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Back.
+        /// </summary>
+        public static string AccessText_Back {
+            get {
+                return ResourceManager.GetString("AccessText.Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Back up.
+        /// </summary>
+        public static string AccessText_BackUp {
+            get {
+                return ResourceManager.GetString("AccessText.BackUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Browse....
+        /// </summary>
+        public static string AccessText_Browse {
+            get {
+                return ResourceManager.GetString("AccessText.Browse", resourceCulture);
             }
         }
         
@@ -79,11 +115,38 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Dashboards.
+        /// </summary>
+        public static string AccessText_Canvases {
+            get {
+                return ResourceManager.GetString("AccessText.Canvases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Check integrity.
+        /// </summary>
+        public static string AccessText_CheckIntegrity {
+            get {
+                return ResourceManager.GetString("AccessText.CheckIntegrity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Close.
         /// </summary>
         public static string AccessText_Close {
             get {
                 return ResourceManager.GetString("AccessText.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Command Prompt.
+        /// </summary>
+        public static string AccessText_CommandPrompt {
+            get {
+                return ResourceManager.GetString("AccessText.CommandPrompt", resourceCulture);
             }
         }
         
@@ -97,6 +160,60 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Copy value to Clipboard.
+        /// </summary>
+        public static string AccessText_CopyValue {
+            get {
+                return ResourceManager.GetString("AccessText.CopyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a _blank form.
+        /// </summary>
+        public static string AccessText_CreateView_Blank {
+            get {
+                return ResourceManager.GetString("AccessText.CreateView.Blank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy an _existing form.
+        /// </summary>
+        public static string AccessText_CreateView_FromExisting {
+            get {
+                return ResourceManager.GetString("AccessText.CreateView.FromExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a form based on a _template.
+        /// </summary>
+        public static string AccessText_CreateView_FromTemplate {
+            get {
+                return ResourceManager.GetString("AccessText.CreateView.FromTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Data.
+        /// </summary>
+        public static string AccessText_Data {
+            get {
+                return ResourceManager.GetString("AccessText.Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Date modified.
+        /// </summary>
+        public static string AccessText_DateModified {
+            get {
+                return ResourceManager.GetString("AccessText.DateModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Delete.
         /// </summary>
         public static string AccessText_Delete {
@@ -106,11 +223,164 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Details.
+        /// </summary>
+        public static string AccessText_Details {
+            get {
+                return ResourceManager.GetString("AccessText.Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Email address.
+        /// </summary>
+        public static string AccessText_EmailAddress {
+            get {
+                return ResourceManager.GetString("AccessText.EmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Epi Info.
+        /// </summary>
+        public static string AccessText_EpiInfo {
+            get {
+                return ResourceManager.GetString("AccessText.EpiInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E_xit.
+        /// </summary>
+        public static string AccessText_Exit {
+            get {
+                return ResourceManager.GetString("AccessText.Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Export all.
+        /// </summary>
+        public static string AccessText_ExportAll {
+            get {
+                return ResourceManager.GetString("AccessText.ExportAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to F_ields.
+        /// </summary>
+        public static string AccessText_Fields {
+            get {
+                return ResourceManager.GetString("AccessText.Fields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _File.
+        /// </summary>
+        public static string AccessText_File {
+            get {
+                return ResourceManager.GetString("AccessText.File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to F_ile Explorer.
+        /// </summary>
+        public static string AccessText_FileExplorer {
+            get {
+                return ResourceManager.GetString("AccessText.FileExplorer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Finish.
         /// </summary>
         public static string AccessText_Finish {
             get {
                 return ResourceManager.GetString("AccessText.Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Full name.
+        /// </summary>
+        public static string AccessText_FullName {
+            get {
+                return ResourceManager.GetString("AccessText.FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Help.
+        /// </summary>
+        public static string AccessText_Help {
+            get {
+                return ResourceManager.GetString("AccessText.Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to H_ome.
+        /// </summary>
+        public static string AccessText_Home {
+            get {
+                return ResourceManager.GetString("AccessText.Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Incident database.
+        /// </summary>
+        public static string AccessText_IncidentProject {
+            get {
+                return ResourceManager.GetString("AccessText.IncidentProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Incident report.
+        /// </summary>
+        public static string AccessText_IncidentReport {
+            get {
+                return ResourceManager.GetString("AccessText.IncidentReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Logs.
+        /// </summary>
+        public static string AccessText_Logs {
+            get {
+                return ResourceManager.GetString("AccessText.Logs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Maps.
+        /// </summary>
+        public static string AccessText_Maps {
+            get {
+                return ResourceManager.GetString("AccessText.Maps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Name.
+        /// </summary>
+        public static string AccessText_Name {
+            get {
+                return ResourceManager.GetString("AccessText.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _New.
+        /// </summary>
+        public static string AccessText_New {
+            get {
+                return ResourceManager.GetString("AccessText.New", resourceCulture);
             }
         }
         
@@ -142,6 +412,159 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Open.
+        /// </summary>
+        public static string AccessText_Open {
+            get {
+                return ResourceManager.GetString("AccessText.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Pages.
+        /// </summary>
+        public static string AccessText_Pages {
+            get {
+                return ResourceManager.GetString("AccessText.Pages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Analyses.
+        /// </summary>
+        public static string AccessText_Pgms {
+            get {
+                return ResourceManager.GetString("AccessText.Pgms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Records.
+        /// </summary>
+        public static string AccessText_Records {
+            get {
+                return ResourceManager.GetString("AccessText.Records", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Reports.
+        /// </summary>
+        public static string AccessText_Reports {
+            get {
+                return ResourceManager.GetString("AccessText.Reports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Restore.
+        /// </summary>
+        public static string AccessText_Restore {
+            get {
+                return ResourceManager.GetString("AccessText.Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _View.
+        /// </summary>
+        public static string AccessText_See {
+            get {
+                return ResourceManager.GetString("AccessText.See", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View _all.
+        /// </summary>
+        public static string AccessText_SeeAll {
+            get {
+                return ResourceManager.GetString("AccessText.SeeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View _current.
+        /// </summary>
+        public static string AccessText_SeeCurrent {
+            get {
+                return ResourceManager.GetString("AccessText.SeeCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to V_iew help.
+        /// </summary>
+        public static string AccessText_SeeHelp {
+            get {
+                return ResourceManager.GetString("AccessText.SeeHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Similarity.
+        /// </summary>
+        public static string AccessText_Similarity {
+            get {
+                return ResourceManager.GetString("AccessText.Similarity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Size.
+        /// </summary>
+        public static string AccessText_Size {
+            get {
+                return ResourceManager.GetString("AccessText.Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Tools.
+        /// </summary>
+        public static string AccessText_Tools {
+            get {
+                return ResourceManager.GetString("AccessText.Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to F_orms.
+        /// </summary>
+        public static string AccessText_Views {
+            get {
+                return ResourceManager.GetString("AccessText.Views", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Worker ID.
+        /// </summary>
+        public static string AccessText_WorkerId {
+            get {
+                return ResourceManager.GetString("AccessText.WorkerId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Worker database.
+        /// </summary>
+        public static string AccessText_WorkerProject {
+            get {
+                return ResourceManager.GetString("AccessText.WorkerProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Worker report.
+        /// </summary>
+        public static string AccessText_WorkerReport {
+            get {
+                return ResourceManager.GetString("AccessText.WorkerReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Yes.
         /// </summary>
         public static string AccessText_Yes {
@@ -151,11 +574,182 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string AltText_Add {
+            get {
+                return ResourceManager.GetString("AltText.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear search.
+        /// </summary>
+        public static string AltText_ClearSearch {
+            get {
+                return ResourceManager.GetString("AltText.ClearSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string AltText_Copy {
+            get {
+                return ResourceManager.GetString("AltText.Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string AltText_Create {
+            get {
+                return ResourceManager.GetString("AltText.Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string AltText_Delete {
+            get {
+                return ResourceManager.GetString("AltText.Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Design.
+        /// </summary>
+        public static string AltText_Design {
+            get {
+                return ResourceManager.GetString("AltText.Design", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string AltText_Edit {
+            get {
+                return ResourceManager.GetString("AltText.Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter.
+        /// </summary>
+        public static string AltText_Enter {
+            get {
+                return ResourceManager.GetString("AltText.Enter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string AltText_Export {
+            get {
+                return ResourceManager.GetString("AltText.Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string AltText_Help {
+            get {
+                return ResourceManager.GetString("AltText.Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string AltText_Home {
+            get {
+                return ResourceManager.GetString("AltText.Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string AltText_Import {
+            get {
+                return ResourceManager.GetString("AltText.Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next page.
+        /// </summary>
+        public static string AltText_NextPage {
+            get {
+                return ResourceManager.GetString("AltText.NextPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string AltText_Open {
+            get {
+                return ResourceManager.GetString("AltText.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous page.
+        /// </summary>
+        public static string AltText_PreviousPage {
+            get {
+                return ResourceManager.GetString("AltText.PreviousPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string AltText_Refresh {
+            get {
+                return ResourceManager.GetString("AltText.Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undelete.
+        /// </summary>
+        public static string AltText_Undelete {
+            get {
+                return ResourceManager.GetString("AltText.Undelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Up to database.
+        /// </summary>
+        public static string AltText_UpToProject {
+            get {
+                return ResourceManager.GetString("AltText.UpToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager logo.
         /// </summary>
-        public static string AlternativeText_AppLogo {
+        public static string App_Logo {
             get {
-                return ResourceManager.GetString("AlternativeText.AppLogo", resourceCulture);
+                return ResourceManager.GetString("App.Logo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager.
+        /// </summary>
+        public static string App_Title {
+            get {
+                return ResourceManager.GetString("App.Title", resourceCulture);
             }
         }
         
@@ -189,6 +783,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_ConfirmViewDeletion {
             get {
                 return ResourceManager.GetString("Body.ConfirmViewDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you choose to collect worker information, the new form will contain fields for the worker&apos;s name, email address, and unique ID. You can use these fields to link each record with the associated worker..
+        /// </summary>
+        public static string Body_CreateView_SetWithWorkerInfo {
+            get {
+                return ResourceManager.GetString("Body.CreateView.SetWithWorkerInfo", resourceCulture);
             }
         }
         
@@ -282,81 +885,81 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Filled out as necessary after deployment. Captures feedback on the organization&apos;s ERHMS program..
         /// </summary>
-        public static string CoreView_Description_AfterActionReview {
+        public static string CoreView_HelpText_AfterActionReview {
             get {
-                return ResourceManager.GetString("CoreView.Description.AfterActionReview", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.AfterActionReview", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out at least weekly during deployment for each worker. Captures information on acute health effects..
         /// </summary>
-        public static string CoreView_Description_DeploymentHealthSurvey {
+        public static string CoreView_HelpText_DeploymentHealthSurvey {
             get {
-                return ResourceManager.GetString("CoreView.Description.DeploymentHealthSurvey", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.DeploymentHealthSurvey", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out as necessary after deployment. Captures information on chronic health effects..
         /// </summary>
-        public static string CoreView_Description_PostDeploymentHealthSurvey {
+        public static string CoreView_HelpText_PostDeploymentHealthSurvey {
             get {
-                return ResourceManager.GetString("CoreView.Description.PostDeploymentHealthSurvey", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.PostDeploymentHealthSurvey", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out annually for each worker. Captures information on baseline health status..
         /// </summary>
-        public static string CoreView_Description_PreDeploymentHealthSurvey {
+        public static string CoreView_HelpText_PreDeploymentHealthSurvey {
             get {
-                return ResourceManager.GetString("CoreView.Description.PreDeploymentHealthSurvey", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.PreDeploymentHealthSurvey", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out daily during deployment for each worker. Captures information on work location and activity..
         /// </summary>
-        public static string CoreView_Description_WorkerActivityReport {
+        public static string CoreView_HelpText_WorkerActivityReport {
             get {
-                return ResourceManager.GetString("CoreView.Description.WorkerActivityReport", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.WorkerActivityReport", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out once per deployment for each worker. Captures basic accountability information..
         /// </summary>
-        public static string CoreView_Description_WorkerDeploymentRecord {
+        public static string CoreView_HelpText_WorkerDeploymentRecord {
             get {
-                return ResourceManager.GetString("CoreView.Description.WorkerDeploymentRecord", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.WorkerDeploymentRecord", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out once per deployment during mobilization for each worker. Captures information on current health status and training/PPE distribution..
         /// </summary>
-        public static string CoreView_Description_WorkerInProcessingForm {
+        public static string CoreView_HelpText_WorkerInProcessingForm {
             get {
-                return ResourceManager.GetString("CoreView.Description.WorkerInProcessingForm", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.WorkerInProcessingForm", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out once per deployment during demobilization for each worker. Captures information on training/PPE effectiveness..
         /// </summary>
-        public static string CoreView_Description_WorkerOutProcessingForm {
+        public static string CoreView_HelpText_WorkerOutProcessingForm {
             get {
-                return ResourceManager.GetString("CoreView.Description.WorkerOutProcessingForm", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.WorkerOutProcessingForm", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Filled out once for each worker and reviewed annually. Captures rostering and credentialing information..
         /// </summary>
-        public static string CoreView_Description_WorkerRosteringForm {
+        public static string CoreView_HelpText_WorkerRosteringForm {
             get {
-                return ResourceManager.GetString("CoreView.Description.WorkerRosteringForm", resourceCulture);
+                return ResourceManager.GetString("CoreView.HelpText.WorkerRosteringForm", resourceCulture);
             }
         }
         
@@ -550,6 +1153,195 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a new record in the Epi Info Enter Data module..
+        /// </summary>
+        public static string HelpText_AddRecord {
+            get {
+                return ResourceManager.GetString("HelpText.AddRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy values to the Clipboard from one or all fields..
+        /// </summary>
+        public static string HelpText_CopyField {
+            get {
+                return ResourceManager.GetString("HelpText.CopyField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new file in Epi Info..
+        /// </summary>
+        public static string HelpText_CreateAsset {
+            get {
+                return ResourceManager.GetString("HelpText.CreateAsset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new form in the Epi Info Form Designer module..
+        /// </summary>
+        public static string HelpText_CreateView {
+            get {
+                return ResourceManager.GetString("HelpText.CreateView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this option to create a new, blank form. Once the form is created, you can add fields to it..
+        /// </summary>
+        public static string HelpText_CreateView_Blank {
+            get {
+                return ResourceManager.GetString("HelpText.CreateView.Blank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this option to create a new form containing fields copied from an existing form. The existing form&apos;s data will not be copied. Once the form is created, you can add, edit, and remove fields..
+        /// </summary>
+        public static string HelpText_CreateView_FromExisting {
+            get {
+                return ResourceManager.GetString("HelpText.CreateView.FromExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this option to create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields..
+        /// </summary>
+        public static string HelpText_CreateView_FromTemplate {
+            get {
+                return ResourceManager.GetString("HelpText.CreateView.FromTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move the selected file to the Recycle Bin..
+        /// </summary>
+        public static string HelpText_DeleteAsset {
+            get {
+                return ResourceManager.GetString("HelpText.DeleteAsset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mark the selected records as deleted (without permanently deleting them)..
+        /// </summary>
+        public static string HelpText_DeleteRecords {
+            get {
+                return ResourceManager.GetString("HelpText.DeleteRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permanently delete the selected form, any related forms, and all associated records..
+        /// </summary>
+        public static string HelpText_DeleteView {
+            get {
+                return ResourceManager.GetString("HelpText.DeleteView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected form in the Epi Info Form Designer module..
+        /// </summary>
+        public static string HelpText_DesignView {
+            get {
+                return ResourceManager.GetString("HelpText.DesignView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit the selected record in the Epi Info Enter Data module..
+        /// </summary>
+        public static string HelpText_EditRecord {
+            get {
+                return ResourceManager.GetString("HelpText.EditRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected form in the Epi Info Enter Data module..
+        /// </summary>
+        public static string HelpText_EnterView {
+            get {
+                return ResourceManager.GetString("HelpText.EnterView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export records from the current form..
+        /// </summary>
+        public static string HelpText_ExportRecords {
+            get {
+                return ResourceManager.GetString("HelpText.ExportRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import records into the current form..
+        /// </summary>
+        public static string HelpText_ImportRecords {
+            get {
+                return ResourceManager.GetString("HelpText.ImportRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected file in Epi Info..
+        /// </summary>
+        public static string HelpText_OpenAsset {
+            get {
+                return ResourceManager.GetString("HelpText.OpenAsset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected form to view and manage associated records..
+        /// </summary>
+        public static string HelpText_OpenView {
+            get {
+                return ResourceManager.GetString("HelpText.OpenView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh the information displayed on this screen..
+        /// </summary>
+        public static string HelpText_RefreshAssets {
+            get {
+                return ResourceManager.GetString("HelpText.RefreshAssets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh the information displayed on this screen..
+        /// </summary>
+        public static string HelpText_RefreshRecords {
+            get {
+                return ResourceManager.GetString("HelpText.RefreshRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh the information displayed on this screen..
+        /// </summary>
+        public static string HelpText_RefreshViews {
+            get {
+                return ResourceManager.GetString("HelpText.RefreshViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mark the selected records as undeleted..
+        /// </summary>
+        public static string HelpText_UndeleteRecords {
+            get {
+                return ResourceManager.GetString("HelpText.UndeleteRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please specify a form name..
         /// </summary>
         public static string InvalidViewNameReason_Body_Empty {
@@ -631,6 +1423,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location:.
+        /// </summary>
+        public static string Label_DirectoryPath {
+            get {
+                return ResourceManager.GetString("Label.DirectoryPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File name:.
         /// </summary>
         public static string Label_FileName {
@@ -640,11 +1441,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location:.
+        ///   Looks up a localized string similar to Open in Epi Info?.
         /// </summary>
-        public static string Label_Location {
+        public static string Label_Opening {
             get {
-                return ResourceManager.GetString("Label.Location", resourceCulture);
+                return ResourceManager.GetString("Label.Opening", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record status:.
+        /// </summary>
+        public static string Label_RecordStatus {
+            get {
+                return ResourceManager.GetString("Label.RecordStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search:.
+        /// </summary>
+        public static string Label_Search {
+            get {
+                return ResourceManager.GetString("Label.Search", resourceCulture);
             }
         }
         
@@ -667,7 +1486,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker information:.
+        ///   Looks up a localized string similar to Collect worker information?.
         /// </summary>
         public static string Label_WithWorkerInfo {
             get {
@@ -937,6 +1756,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Page {0} of {1}.
+        /// </summary>
+        public static string Pager_Status {
+            get {
+                return ResourceManager.GetString("Pager.Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deployment.
         /// </summary>
         public static string Phase_Name_Deployment {
@@ -987,15 +1815,6 @@ namespace ERHMS.Desktop.Properties {
         public static string RecordStatus_Name_Undeleted {
             get {
                 return ResourceManager.GetString("RecordStatus.Name.Undeleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager.
-        /// </summary>
-        public static string Title_App {
-            get {
-                return ResourceManager.GetString("Title.App", resourceCulture);
             }
         }
     }

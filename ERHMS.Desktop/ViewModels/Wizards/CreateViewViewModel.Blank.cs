@@ -48,7 +48,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 public override string Title => Strings.Lead_CreateView_Blank_SetWithWorkerInfo;
 
-                private bool withWorkerInfo;
+                private bool withWorkerInfo = true;
                 public bool WithWorkerInfo
                 {
                     get { return withWorkerInfo; }

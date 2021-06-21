@@ -11,32 +11,32 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <Controls:IconButton AlternativeText="Create"
+            <Controls:IconButton AltText="{Markup:String AltText.Create}"
                                  Command="{Binding CreateCommand}"
                                  Content="{Markup:Icon Create}"
-                                 Description="Create a new form in the Epi Info Form Designer module." />
-            <Controls:IconButton AlternativeText="Open"
+                                 HelpText="{Markup:String HelpText.CreateView}" />
+            <Controls:IconButton AltText="{Markup:String AltText.Open}"
                                  Command="{Binding OpenCommand}"
                                  Content="{Markup:Icon Open}"
-                                 Description="Open the selected form to view and manage associated records." />
-            <Controls:IconButton AlternativeText="Delete"
+                                 HelpText="{Markup:String HelpText.OpenView}" />
+            <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
                                  Content="{Markup:Icon Delete}"
-                                 Description="Permanently delete the selected form, any related forms, and all associated records." />
+                                 HelpText="{Markup:String HelpText.DeleteView}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AlternativeText="Design"
+            <Controls:IconButton AltText="{Markup:String AltText.Design}"
                                  Command="{Binding DesignCommand}"
                                  Content="{Markup:Icon Design}"
-                                 Description="Open the selected form in the Epi Info Form Designer module." />
-            <Controls:IconButton AlternativeText="Enter"
+                                 HelpText="{Markup:String HelpText.DesignView}" />
+            <Controls:IconButton AltText="{Markup:String AltText.Enter}"
                                  Command="{Binding EnterCommand}"
                                  Content="{Markup:Icon Enter}"
-                                 Description="Open the selected form in the Epi Info Enter Data module." />
+                                 HelpText="{Markup:String HelpText.EnterView}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AlternativeText="Refresh"
+            <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"
                                  Content="{Markup:Icon Refresh}"
-                                 Description="Refresh the information displayed on this screen." />
+                                 HelpText="{Markup:String HelpText.RefreshViews}" />
         </WrapPanel>
         <DataGrid x:Name="ItemDataGrid"
                   Grid.Row="1"
@@ -44,19 +44,19 @@
                   SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Value.Name}"
-                                    Header="Name"
+                                    Header="{Markup:String AccessText.Name}"
                                     Width="3*" />
                 <DataGridTextColumn Binding="{Binding PageCount}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
-                                    Header="Pages"
+                                    Header="{Markup:String AccessText.Pages}"
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding FieldCount}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
-                                    Header="Fields"
+                                    Header="{Markup:String AccessText.Fields}"
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding RecordCount}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
-                                    Header="Records"
+                                    Header="{Markup:String AccessText.Records}"
                                     Width="*" />
             </DataGrid.Columns>
             <DataGrid.InputBindings>

@@ -4,7 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -31,17 +32,17 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Similarity, StringFormat={}{0:P0}}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
-                                    Header="Similarity"
+                                    Header="{Markup:String AccessText.Similarity}"
                                     SortDirection="Descending"
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding Value.FullName}"
-                                    Header="Full name"
+                                    Header="{Markup:String AccessText.FullName}"
                                     Width="3*" />
                 <DataGridTextColumn Binding="{Binding Value.EmailAddress}"
-                                    Header="Email address"
+                                    Header="{Markup:String AccessText.EmailAddress}"
                                     Width="3*" />
                 <DataGridTextColumn Binding="{Binding Value.GlobalRecordId}"
-                                    Header="Worker ID"
+                                    Header="{Markup:String AccessText.WorkerId}"
                                     Width="3*" />
             </DataGrid.Columns>
             <DataGrid.InputBindings>

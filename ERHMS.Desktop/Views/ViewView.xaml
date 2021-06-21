@@ -34,19 +34,19 @@
                 </TextBlock>
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal">
-                    <Controls:IconButton AlternativeText="Up to database"
+                    <Controls:IconButton AltText="{Markup:String AltText.UpToProject}"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{Markup:Icon Level.Parent}" />
-                    <Controls:IconButton AlternativeText="Home"
+                    <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{Markup:Icon Home}" />
-                    <Controls:IconButton AlternativeText="Help"
+                    <Controls:IconButton AltText="{Markup:String AltText.Help}"
                                          Command="{Binding GoToHelpCommand}"
                                          Content="{Markup:Icon Help}" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">
-                <TabItem Header="_Records">
+                <TabItem Header="{Markup:String AccessText.Records}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
                             <Collections:RecordCollectionView DataContext="{Binding Records}" />

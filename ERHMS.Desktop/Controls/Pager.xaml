@@ -6,15 +6,17 @@
     <StackPanel Orientation="Horizontal">
         <TextBlock Style="{StaticResource Body}"
                    VerticalAlignment="Center">
-            <Run>Page</Run>
-            <Run Text="{Binding CurrentPage, Mode=OneWay}" />
-            <Run>of</Run>
-            <Run Text="{Binding PageCount, Mode=OneWay}" />
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{Markup:String Pager.Status}">
+                    <Binding Path="CurrentPage" />
+                    <Binding Path="PageCount" />
+                </MultiBinding>
+            </TextBlock.Text>
         </TextBlock>
-        <Controls:IconButton AlternativeText="Previous page"
+        <Controls:IconButton AltText="{Markup:String AltText.PreviousPage}"
                              Command="{Binding GoToPreviousPageCommand}"
                              Content="{Markup:Icon Page.Previous}" />
-        <Controls:IconButton AlternativeText="Next page"
+        <Controls:IconButton AltText="{Markup:String AltText.NextPage}"
                              Command="{Binding GoToNextPageCommand}"
                              Content="{Markup:Icon Page.Next}" />
     </StackPanel>

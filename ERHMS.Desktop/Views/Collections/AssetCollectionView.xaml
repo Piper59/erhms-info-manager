@@ -15,23 +15,23 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <Controls:IconButton AlternativeText="Create"
+            <Controls:IconButton AltText="{Markup:String AltText.Create}"
                                  Command="{Binding CreateCommand}"
                                  Content="{Markup:Icon Create}"
-                                 Description="Create a new file in Epi Info." />
-            <Controls:IconButton AlternativeText="Open"
+                                 HelpText="{Markup:String HelpText.CreateAsset}" />
+            <Controls:IconButton AltText="{Markup:String AltText.Open}"
                                  Command="{Binding OpenCommand}"
                                  Content="{Markup:Icon Open}"
-                                 Description="Open the selected file in Epi Info." />
-            <Controls:IconButton AlternativeText="Delete"
+                                 HelpText="{Markup:String HelpText.OpenAsset}" />
+            <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
                                  Content="{Markup:Icon Delete}"
-                                 Description="Move the selected file to the Recycle Bin." />
+                                 HelpText="{Markup:String HelpText.DeleteAsset}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AlternativeText="Refresh"
+            <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"
                                  Content="{Markup:Icon Refresh}"
-                                 Description="Refresh the information displayed on this screen." />
+                                 HelpText="{Markup:String HelpText.RefreshAssets}" />
         </WrapPanel>
         <DataGrid x:Name="ItemDataGrid"
                   Grid.Row="1"
@@ -39,16 +39,16 @@
                   SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Value.Name}"
-                                    Header="Name"
+                                    Header="{Markup:String AccessText.Name}"
                                     SortDirection="Ascending"
                                     Width="3*" />
                 <DataGridTextColumn Binding="{Binding Value.LastWriteTime}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
-                                    Header="Date modified"
+                                    Header="{Markup:String AccessText.DateModified}"
                                     Width="*" />
                 <DataGridTextColumn Binding="{Binding Value.Length, Converter={StaticResource ByteCountFormattingConverter}}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
-                                    Header="Size"
+                                    Header="{Markup:String AccessText.Size}"
                                     Width="*" />
             </DataGrid.Columns>
             <DataGrid.InputBindings>

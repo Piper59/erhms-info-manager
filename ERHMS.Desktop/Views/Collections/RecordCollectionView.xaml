@@ -16,7 +16,7 @@
                     <ContextMenu>
                         <MenuItem Command="{Binding CopyValueCommand, Source={x:Reference Root}}"
                                   CommandParameter="{Binding Parent.PlacementTarget, RelativeSource={RelativeSource Self}}"
-                                  Header="_Copy value to Clipboard" />
+                                  Header="{Markup:String AccessText.CopyValue}" />
                     </ContextMenu>
                 </Setter.Value>
             </Setter>
@@ -48,18 +48,18 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <WrapPanel Grid.Column="0">
-                <Controls:IconButton AlternativeText="Add"
+                <Controls:IconButton AltText="{Markup:String AltText.Add}"
                                      Command="{Binding AddCommand}"
                                      Content="{Markup:Icon Add}"
-                                     Description="Add a new record in the Epi Info Enter Data module." />
-                <Controls:IconButton AlternativeText="Edit"
+                                     HelpText="{Markup:String HelpText.AddRecord}" />
+                <Controls:IconButton AltText="{Markup:String AltText.Edit}"
                                      Command="{Binding EditCommand}"
                                      Content="{Markup:Icon Edit}"
-                                     Description="Edit the selected record in the Epi Info Enter Data module." />
+                                     HelpText="{Markup:String HelpText.EditRecord}" />
                 <Controls:IconButton x:Name="CopyFieldButton"
-                                     AlternativeText="Copy"
+                                     AltText="{Markup:String AltText.Copy}"
                                      Content="{Markup:Icon Clipboard}"
-                                     Description="Copy values to the Clipboard from one or all fields."
+                                     HelpText="{Markup:String HelpText.CopyField}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
                         <ContextMenu x:Name="CopyFieldContextMenu"
@@ -72,28 +72,28 @@
                     </b:Interaction.Behaviors>
                 </Controls:IconButton>
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AlternativeText="Delete"
+                <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                      Command="{Binding DeleteCommand}"
                                      Content="{Markup:Icon Delete}"
-                                     Description="Mark the selected records as deleted (without permanently deleting them)." />
-                <Controls:IconButton AlternativeText="Undelete"
+                                     HelpText="{Markup:String HelpText.DeleteRecords}" />
+                <Controls:IconButton AltText="{Markup:String AltText.Undelete}"
                                      Command="{Binding UndeleteCommand}"
                                      Content="{Markup:Icon Undelete}"
-                                     Description="Mark the selected records as undeleted." />
+                                     HelpText="{Markup:String HelpText.UndeleteRecords}" />
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AlternativeText="Import"
+                <Controls:IconButton AltText="{Markup:String AltText.Import}"
                                      Command="{Binding ImportCommand}"
                                      Content="{Markup:Icon Import}"
-                                     Description="Import records into the current form." />
-                <Controls:IconButton AlternativeText="Export"
+                                     HelpText="{Markup:String HelpText.ImportRecords}" />
+                <Controls:IconButton AltText="{Markup:String AltText.Export}"
                                      Command="{Binding ExportCommand}"
                                      Content="{Markup:Icon Export}"
-                                     Description="Export records from the current form." />
+                                     HelpText="{Markup:String HelpText.ExportRecords}" />
                 <Border Style="{StaticResource Separator}" />
-                <Controls:IconButton AlternativeText="Refresh"
+                <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                      Command="{Binding RefreshCommand}"
                                      Content="{Markup:Icon Refresh}"
-                                     Description="Refresh the information displayed on this screen." />
+                                     HelpText="{Markup:String HelpText.RefreshRecords}" />
             </WrapPanel>
             <Controls:Pager Grid.Column="1"
                             DataContext="{Binding Items}"

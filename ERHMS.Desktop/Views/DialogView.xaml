@@ -9,7 +9,7 @@
         MinWidth="320"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        Title="{Markup:String Title.App}"
+        Title="{Markup:String App.Title}"
         UseLayoutRounding="True">
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -63,10 +63,9 @@
                 </Grid.Resources>
                 <Button Grid.Column="0"
                         Command="{Binding ToggleDetailedCommand}"
+                        Content="{Markup:String AccessText.Details}"
                         VerticalAlignment="Top"
-                        Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}">
-                    _Details
-                </Button>
+                        Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}" />
                 <ItemsControl Grid.Column="2"
                               IsTabStop="False"
                               ItemsSource="{Binding Buttons}">

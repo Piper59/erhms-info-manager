@@ -117,23 +117,113 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccessText.AboutApp" xml:space="preserve">
+    <value>_About ERHMS Info Manager</value>
+  </data>
   <data name="AccessText.AllFields" xml:space="preserve">
     <value>_All fields</value>
+  </data>
+  <data name="AccessText.Back" xml:space="preserve">
+    <value>_Back</value>
+  </data>
+  <data name="AccessText.BackUp" xml:space="preserve">
+    <value>_Back up</value>
+  </data>
+  <data name="AccessText.Browse" xml:space="preserve">
+    <value>_Browse...</value>
   </data>
   <data name="AccessText.Cancel" xml:space="preserve">
     <value>_Cancel</value>
   </data>
+  <data name="AccessText.Canvases" xml:space="preserve">
+    <value>_Dashboards</value>
+  </data>
+  <data name="AccessText.CheckIntegrity" xml:space="preserve">
+    <value>_Check integrity</value>
+  </data>
   <data name="AccessText.Close" xml:space="preserve">
     <value>_Close</value>
+  </data>
+  <data name="AccessText.CommandPrompt" xml:space="preserve">
+    <value>_Command Prompt</value>
   </data>
   <data name="AccessText.Continue" xml:space="preserve">
     <value>_Continue</value>
   </data>
+  <data name="AccessText.CopyValue" xml:space="preserve">
+    <value>_Copy value to Clipboard</value>
+  </data>
+  <data name="AccessText.CreateView.Blank" xml:space="preserve">
+    <value>Create a _blank form</value>
+  </data>
+  <data name="AccessText.CreateView.FromExisting" xml:space="preserve">
+    <value>Copy an _existing form</value>
+  </data>
+  <data name="AccessText.CreateView.FromTemplate" xml:space="preserve">
+    <value>Create a form based on a _template</value>
+  </data>
+  <data name="AccessText.Data" xml:space="preserve">
+    <value>_Data</value>
+  </data>
+  <data name="AccessText.DateModified" xml:space="preserve">
+    <value>_Date modified</value>
+  </data>
   <data name="AccessText.Delete" xml:space="preserve">
     <value>_Delete</value>
   </data>
+  <data name="AccessText.Details" xml:space="preserve">
+    <value>_Details</value>
+  </data>
+  <data name="AccessText.EmailAddress" xml:space="preserve">
+    <value>_Email address</value>
+  </data>
+  <data name="AccessText.EpiInfo" xml:space="preserve">
+    <value>_Epi Info</value>
+  </data>
+  <data name="AccessText.Exit" xml:space="preserve">
+    <value>E_xit</value>
+  </data>
+  <data name="AccessText.ExportAll" xml:space="preserve">
+    <value>_Export all</value>
+  </data>
+  <data name="AccessText.Fields" xml:space="preserve">
+    <value>F_ields</value>
+  </data>
+  <data name="AccessText.File" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="AccessText.FileExplorer" xml:space="preserve">
+    <value>F_ile Explorer</value>
+  </data>
   <data name="AccessText.Finish" xml:space="preserve">
     <value>_Finish</value>
+  </data>
+  <data name="AccessText.FullName" xml:space="preserve">
+    <value>_Full name</value>
+  </data>
+  <data name="AccessText.Help" xml:space="preserve">
+    <value>_Help</value>
+  </data>
+  <data name="AccessText.Home" xml:space="preserve">
+    <value>H_ome</value>
+  </data>
+  <data name="AccessText.IncidentProject" xml:space="preserve">
+    <value>_Incident database</value>
+  </data>
+  <data name="AccessText.IncidentReport" xml:space="preserve">
+    <value>_Incident report</value>
+  </data>
+  <data name="AccessText.Logs" xml:space="preserve">
+    <value>_Logs</value>
+  </data>
+  <data name="AccessText.Maps" xml:space="preserve">
+    <value>_Maps</value>
+  </data>
+  <data name="AccessText.Name" xml:space="preserve">
+    <value>_Name</value>
+  </data>
+  <data name="AccessText.New" xml:space="preserve">
+    <value>_New</value>
   </data>
   <data name="AccessText.Next" xml:space="preserve">
     <value>_Next</value>
@@ -144,11 +234,119 @@
   <data name="AccessText.Ok" xml:space="preserve">
     <value>_OK</value>
   </data>
+  <data name="AccessText.Open" xml:space="preserve">
+    <value>_Open</value>
+  </data>
+  <data name="AccessText.Pages" xml:space="preserve">
+    <value>_Pages</value>
+  </data>
+  <data name="AccessText.Pgms" xml:space="preserve">
+    <value>_Analyses</value>
+  </data>
+  <data name="AccessText.Records" xml:space="preserve">
+    <value>_Records</value>
+  </data>
+  <data name="AccessText.Reports" xml:space="preserve">
+    <value>_Reports</value>
+  </data>
+  <data name="AccessText.Restore" xml:space="preserve">
+    <value>_Restore</value>
+  </data>
+  <data name="AccessText.See" xml:space="preserve">
+    <value>_View</value>
+  </data>
+  <data name="AccessText.SeeAll" xml:space="preserve">
+    <value>View _all</value>
+  </data>
+  <data name="AccessText.SeeCurrent" xml:space="preserve">
+    <value>View _current</value>
+  </data>
+  <data name="AccessText.SeeHelp" xml:space="preserve">
+    <value>V_iew help</value>
+  </data>
+  <data name="AccessText.Similarity" xml:space="preserve">
+    <value>_Similarity</value>
+  </data>
+  <data name="AccessText.Size" xml:space="preserve">
+    <value>_Size</value>
+  </data>
+  <data name="AccessText.Tools" xml:space="preserve">
+    <value>_Tools</value>
+  </data>
+  <data name="AccessText.Views" xml:space="preserve">
+    <value>F_orms</value>
+  </data>
+  <data name="AccessText.WorkerId" xml:space="preserve">
+    <value>_Worker ID</value>
+  </data>
+  <data name="AccessText.WorkerProject" xml:space="preserve">
+    <value>_Worker database</value>
+  </data>
+  <data name="AccessText.WorkerReport" xml:space="preserve">
+    <value>_Worker report</value>
+  </data>
   <data name="AccessText.Yes" xml:space="preserve">
     <value>_Yes</value>
   </data>
-  <data name="AlternativeText.AppLogo" xml:space="preserve">
+  <data name="AltText.Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AltText.ClearSearch" xml:space="preserve">
+    <value>Clear search</value>
+  </data>
+  <data name="AltText.Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="AltText.Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="AltText.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AltText.Design" xml:space="preserve">
+    <value>Design</value>
+  </data>
+  <data name="AltText.Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="AltText.Enter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="AltText.Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="AltText.Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="AltText.Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="AltText.Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="AltText.NextPage" xml:space="preserve">
+    <value>Next page</value>
+  </data>
+  <data name="AltText.Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="AltText.PreviousPage" xml:space="preserve">
+    <value>Previous page</value>
+  </data>
+  <data name="AltText.Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="AltText.Undelete" xml:space="preserve">
+    <value>Undelete</value>
+  </data>
+  <data name="AltText.UpToProject" xml:space="preserve">
+    <value>Up to database</value>
+  </data>
+  <data name="App.Logo" xml:space="preserve">
     <value>ERHMS Info Manager logo</value>
+  </data>
+  <data name="App.Title" xml:space="preserve">
+    <value>ERHMS Info Manager</value>
   </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
     <value>File: {0}
@@ -164,6 +362,9 @@ ERHMS Info Manager will only recognize files that are in the same location as th
     <value>Form: {0}
 
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
+  </data>
+  <data name="Body.CreateView.SetWithWorkerInfo" xml:space="preserve">
+    <value>If you choose to collect worker information, the new form will contain fields for the worker's name, email address, and unique ID. You can use these fields to link each record with the associated worker.</value>
   </data>
   <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
@@ -198,31 +399,31 @@ Close anyway?</value>
   <data name="CoreProject.Name.Worker" xml:space="preserve">
     <value>Worker database</value>
   </data>
-  <data name="CoreView.Description.AfterActionReview" xml:space="preserve">
+  <data name="CoreView.HelpText.AfterActionReview" xml:space="preserve">
     <value>Filled out as necessary after deployment. Captures feedback on the organization's ERHMS program.</value>
   </data>
-  <data name="CoreView.Description.DeploymentHealthSurvey" xml:space="preserve">
+  <data name="CoreView.HelpText.DeploymentHealthSurvey" xml:space="preserve">
     <value>Filled out at least weekly during deployment for each worker. Captures information on acute health effects.</value>
   </data>
-  <data name="CoreView.Description.PostDeploymentHealthSurvey" xml:space="preserve">
+  <data name="CoreView.HelpText.PostDeploymentHealthSurvey" xml:space="preserve">
     <value>Filled out as necessary after deployment. Captures information on chronic health effects.</value>
   </data>
-  <data name="CoreView.Description.PreDeploymentHealthSurvey" xml:space="preserve">
+  <data name="CoreView.HelpText.PreDeploymentHealthSurvey" xml:space="preserve">
     <value>Filled out annually for each worker. Captures information on baseline health status.</value>
   </data>
-  <data name="CoreView.Description.WorkerActivityReport" xml:space="preserve">
+  <data name="CoreView.HelpText.WorkerActivityReport" xml:space="preserve">
     <value>Filled out daily during deployment for each worker. Captures information on work location and activity.</value>
   </data>
-  <data name="CoreView.Description.WorkerDeploymentRecord" xml:space="preserve">
+  <data name="CoreView.HelpText.WorkerDeploymentRecord" xml:space="preserve">
     <value>Filled out once per deployment for each worker. Captures basic accountability information.</value>
   </data>
-  <data name="CoreView.Description.WorkerInProcessingForm" xml:space="preserve">
+  <data name="CoreView.HelpText.WorkerInProcessingForm" xml:space="preserve">
     <value>Filled out once per deployment during mobilization for each worker. Captures information on current health status and training/PPE distribution.</value>
   </data>
-  <data name="CoreView.Description.WorkerOutProcessingForm" xml:space="preserve">
+  <data name="CoreView.HelpText.WorkerOutProcessingForm" xml:space="preserve">
     <value>Filled out once per deployment during demobilization for each worker. Captures information on training/PPE effectiveness.</value>
   </data>
-  <data name="CoreView.Description.WorkerRosteringForm" xml:space="preserve">
+  <data name="CoreView.HelpText.WorkerRosteringForm" xml:space="preserve">
     <value>Filled out once for each worker and reviewed annually. Captures rostering and credentialing information.</value>
   </data>
   <data name="CoreView.Title.AfterActionReview" xml:space="preserve">
@@ -288,6 +489,69 @@ Close anyway?</value>
   <data name="FileDialog.Title.Save" xml:space="preserve">
     <value>Save As</value>
   </data>
+  <data name="HelpText.AddRecord" xml:space="preserve">
+    <value>Add a new record in the Epi Info Enter Data module.</value>
+  </data>
+  <data name="HelpText.CopyField" xml:space="preserve">
+    <value>Copy values to the Clipboard from one or all fields.</value>
+  </data>
+  <data name="HelpText.CreateAsset" xml:space="preserve">
+    <value>Create a new file in Epi Info.</value>
+  </data>
+  <data name="HelpText.CreateView" xml:space="preserve">
+    <value>Create a new form in the Epi Info Form Designer module.</value>
+  </data>
+  <data name="HelpText.CreateView.Blank" xml:space="preserve">
+    <value>Use this option to create a new, blank form. Once the form is created, you can add fields to it.</value>
+  </data>
+  <data name="HelpText.CreateView.FromExisting" xml:space="preserve">
+    <value>Use this option to create a new form containing fields copied from an existing form. The existing form's data will not be copied. Once the form is created, you can add, edit, and remove fields.</value>
+  </data>
+  <data name="HelpText.CreateView.FromTemplate" xml:space="preserve">
+    <value>Use this option to create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields.</value>
+  </data>
+  <data name="HelpText.DeleteAsset" xml:space="preserve">
+    <value>Move the selected file to the Recycle Bin.</value>
+  </data>
+  <data name="HelpText.DeleteRecords" xml:space="preserve">
+    <value>Mark the selected records as deleted (without permanently deleting them).</value>
+  </data>
+  <data name="HelpText.DeleteView" xml:space="preserve">
+    <value>Permanently delete the selected form, any related forms, and all associated records.</value>
+  </data>
+  <data name="HelpText.DesignView" xml:space="preserve">
+    <value>Open the selected form in the Epi Info Form Designer module.</value>
+  </data>
+  <data name="HelpText.EditRecord" xml:space="preserve">
+    <value>Edit the selected record in the Epi Info Enter Data module.</value>
+  </data>
+  <data name="HelpText.EnterView" xml:space="preserve">
+    <value>Open the selected form in the Epi Info Enter Data module.</value>
+  </data>
+  <data name="HelpText.ExportRecords" xml:space="preserve">
+    <value>Export records from the current form.</value>
+  </data>
+  <data name="HelpText.ImportRecords" xml:space="preserve">
+    <value>Import records into the current form.</value>
+  </data>
+  <data name="HelpText.OpenAsset" xml:space="preserve">
+    <value>Open the selected file in Epi Info.</value>
+  </data>
+  <data name="HelpText.OpenView" xml:space="preserve">
+    <value>Open the selected form to view and manage associated records.</value>
+  </data>
+  <data name="HelpText.RefreshAssets" xml:space="preserve">
+    <value>Refresh the information displayed on this screen.</value>
+  </data>
+  <data name="HelpText.RefreshRecords" xml:space="preserve">
+    <value>Refresh the information displayed on this screen.</value>
+  </data>
+  <data name="HelpText.RefreshViews" xml:space="preserve">
+    <value>Refresh the information displayed on this screen.</value>
+  </data>
+  <data name="HelpText.UndeleteRecords" xml:space="preserve">
+    <value>Mark the selected records as undeleted.</value>
+  </data>
   <data name="InvalidViewNameReason.Body.Empty" xml:space="preserve">
     <value>Please specify a form name.</value>
   </data>
@@ -315,11 +579,20 @@ Close anyway?</value>
   <data name="InvalidViewNameReason.Lead.TooLong" xml:space="preserve">
     <value>This form name is too long</value>
   </data>
+  <data name="Label.DirectoryPath" xml:space="preserve">
+    <value>Location:</value>
+  </data>
   <data name="Label.FileName" xml:space="preserve">
     <value>File name:</value>
   </data>
-  <data name="Label.Location" xml:space="preserve">
-    <value>Location:</value>
+  <data name="Label.Opening" xml:space="preserve">
+    <value>Open in Epi Info?</value>
+  </data>
+  <data name="Label.RecordStatus" xml:space="preserve">
+    <value>Record status:</value>
+  </data>
+  <data name="Label.Search" xml:space="preserve">
+    <value>Search:</value>
   </data>
   <data name="Label.View" xml:space="preserve">
     <value>Form:</value>
@@ -328,7 +601,7 @@ Close anyway?</value>
     <value>Form name:</value>
   </data>
   <data name="Label.WithWorkerInfo" xml:space="preserve">
-    <value>Worker information:</value>
+    <value>Collect worker information?</value>
   </data>
   <data name="Lead.ConfirmAssetDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this file?</value>
@@ -417,6 +690,9 @@ Close anyway?</value>
   <data name="Lead.Working" xml:space="preserve">
     <value>Working...</value>
   </data>
+  <data name="Pager.Status" xml:space="preserve">
+    <value>Page {0} of {1}</value>
+  </data>
   <data name="Phase.Name.Deployment" xml:space="preserve">
     <value>Deployment</value>
   </data>
@@ -434,8 +710,5 @@ Close anyway?</value>
   </data>
   <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
-  </data>
-  <data name="Title.App" xml:space="preserve">
-    <value>ERHMS Info Manager</value>
   </data>
 </root>

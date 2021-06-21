@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         ResizeMode="NoResize"
         SizeToContent="Height"
-        Title="{Markup:String Title.App}"
+        Title="{Markup:String App.Title}"
         UseLayoutRounding="True"
         Width="480">
     <Window.Resources>
@@ -37,9 +37,8 @@
                     <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
                 </WrapPanel.Resources>
                 <Button Command="{Binding CancelCommand}"
-                        IsCancel="True">
-                    Cancel
-                </Button>
+                        Content="{Markup:String AccessText.Cancel}"
+                        IsCancel="True" />
             </WrapPanel>
         </Border>
     </StackPanel>

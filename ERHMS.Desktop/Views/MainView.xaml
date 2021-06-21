@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
-        Title="{Markup:String Title.App}"
+        Title="{Markup:String App.Title}"
         UseLayoutRounding="True">
     <Grid>
         <Grid.RowDefinitions>
@@ -17,61 +17,61 @@
         <Menu Grid.Row="0"
               BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
               BorderThickness="0,1">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New">
-                    <MenuItem Header="_Worker database" />
-                    <MenuItem Header="_Incident database" />
+            <MenuItem Header="{Markup:String AccessText.File}">
+                <MenuItem Header="{Markup:String AccessText.New}">
+                    <MenuItem Header="{Markup:String AccessText.WorkerProject}" />
+                    <MenuItem Header="{Markup:String AccessText.IncidentProject}" />
                 </MenuItem>
-                <MenuItem Header="_Open">
-                    <MenuItem Header="_Worker database" />
-                    <MenuItem Header="_Incident database" />
+                <MenuItem Header="{Markup:String AccessText.Open}">
+                    <MenuItem Header="{Markup:String AccessText.WorkerProject}" />
+                    <MenuItem Header="{Markup:String AccessText.IncidentProject}" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Command="{Binding CloseCommand, ElementName=Root}"
-                          Header="E_xit"
+                          Header="{Markup:String AccessText.Exit}"
                           InputGestureText="Alt+F4" />
             </MenuItem>
-            <MenuItem Header="_View">
+            <MenuItem Header="{Markup:String AccessText.See}">
                 <MenuItem Command="{Binding GoToHomeCommand}"
-                          Header="H_ome" />
+                          Header="{Markup:String AccessText.Home}" />
                 <MenuItem Command="{Binding GoToCoreProjectCommand}"
                           CommandParameter="{x:Static Domain:CoreProject.Worker}"
-                          Header="_Worker database" />
+                          Header="{Markup:String AccessText.WorkerProject}" />
                 <MenuItem Command="{Binding GoToCoreProjectCommand}"
                           CommandParameter="{x:Static Domain:CoreProject.Incident}"
-                          Header="_Incident database" />
+                          Header="{Markup:String AccessText.IncidentProject}" />
             </MenuItem>
-            <MenuItem Header="_Tools">
-                <MenuItem Header="_Data">
-                    <MenuItem Header="_Check integrity" />
-                    <MenuItem Header="_Back up" />
-                    <MenuItem Header="_Restore" />
+            <MenuItem Header="{Markup:String AccessText.Tools}">
+                <MenuItem Header="{Markup:String AccessText.Data}">
+                    <MenuItem Header="{Markup:String AccessText.CheckIntegrity}" />
+                    <MenuItem Header="{Markup:String AccessText.BackUp}" />
+                    <MenuItem Header="{Markup:String AccessText.Restore}" />
                 </MenuItem>
-                <MenuItem Header="_Reports">
-                    <MenuItem Header="_Worker report" />
-                    <MenuItem Header="_Incident report" />
+                <MenuItem Header="{Markup:String AccessText.Reports}">
+                    <MenuItem Header="{Markup:String AccessText.WorkerReport}" />
+                    <MenuItem Header="{Markup:String AccessText.IncidentReport}" />
                 </MenuItem>
-                <MenuItem Header="_Logs">
+                <MenuItem Header="{Markup:String AccessText.Logs}">
                     <MenuItem Command="{Binding OpenLogFileCommand}"
-                              Header="View _current" />
+                              Header="{Markup:String AccessText.SeeCurrent}" />
                     <MenuItem Command="{Binding OpenLogDirectoryCommand}"
-                              Header="View _all" />
+                              Header="{Markup:String AccessText.SeeAll}" />
                     <MenuItem Command="{Binding ExportLogDirectoryCommand}"
-                              Header="_Export all" />
+                              Header="{Markup:String AccessText.ExportAll}" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Command="{Binding StartEpiInfoMenuCommand}"
-                          Header="_Epi Info" />
+                          Header="{Markup:String AccessText.EpiInfo}" />
                 <MenuItem Command="{Binding StartFileExplorerCommand}"
-                          Header="F_ile Explorer" />
+                          Header="{Markup:String AccessText.FileExplorer}" />
                 <MenuItem Command="{Binding StartCommandPromptCommand}"
-                          Header="_Command Prompt" />
+                          Header="{Markup:String AccessText.CommandPrompt}" />
             </MenuItem>
-            <MenuItem Header="_Help">
+            <MenuItem Header="{Markup:String AccessText.Help}">
                 <MenuItem Command="{Binding GoToHelpCommand}"
-                          Header="V_iew help" />
+                          Header="{Markup:String AccessText.SeeHelp}" />
                 <Separator />
-                <MenuItem Header="_About ERHMS Info Manager" />
+                <MenuItem Header="{Markup:String AccessText.AboutApp}" />
             </MenuItem>
         </Menu>
         <ContentPresenter Grid.Row="1"

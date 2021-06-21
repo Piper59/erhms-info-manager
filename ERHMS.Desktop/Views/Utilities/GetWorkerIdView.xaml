@@ -8,7 +8,7 @@
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
-        Title="{Markup:String Title.App}"
+        Title="{Markup:String App.Title}"
         UseLayoutRounding="True"
         Width="1024">
     <Grid>
@@ -21,8 +21,7 @@
                 BorderThickness="0,1"
                 Style="{StaticResource FluidLayout}">
             <Grid Style="{StaticResource Container}">
-                <Collections:WorkerCollectionView x:Name="WorkerCollectionView"
-                                                  CommitCommand="{Binding CommitCommand, ElementName=Root}"
+                <Collections:WorkerCollectionView CommitCommand="{Binding CommitCommand, ElementName=Root}"
                                                   DataContext="{Binding Workers}" />
             </Grid>
         </Border>
