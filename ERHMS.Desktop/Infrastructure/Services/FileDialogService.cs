@@ -1,6 +1,7 @@
 ﻿using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using Microsoft.Win32;
+using System.ComponentModel;
 using System.Windows;
 
 namespace ERHMS.Desktop.Infrastructure.Services
@@ -8,16 +9,22 @@ namespace ERHMS.Desktop.Infrastructure.Services
     public class FileDialogService : IFileDialogService
     {
         public string InitialDirectory { get; set; }
+        public string InitialFileName { get; set; }
         public string FileName { get; set; }
         public string Filter { get; set; }
 
+        public event CancelEventHandler FileOk;
+
         private bool? Show(FileDialog dialog)
         {
+            dialog.FileOk += (sender, e) =>
+            {
+                FileName = dialog.FileName;
+                FileOk?.Invoke(sender, e);
+            };
             Window owner = Application.Current.GetActiveWindow();
             owner.EnsureHandle();
-            bool? result = dialog.ShowDialog(owner);
-            FileName = dialog.FileName;
-            return result;
+            return dialog.ShowDialog(owner);
         }
 
         public bool? Open()
@@ -36,7 +43,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
             {
                 Title = Strings.FileDialog_Title_Save,
                 InitialDirectory = InitialDirectory,
-                FileName = FileName,
+                FileName = InitialFileName,
                 Filter = Filter
             });
         }

@@ -103,27 +103,30 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public void Browse()
             {
                 IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                fileDialog.InitialDirectory = this.fileInfo.DirectoryName;
-                fileDialog.FileName = this.fileInfo.Name;
+                fileDialog.InitialDirectory = fileInfo.DirectoryName;
+                fileDialog.InitialFileName = fileInfo.Name;
                 fileDialog.Filter = Wizard.FileFilter;
+                fileDialog.FileOk += (sender, e) =>
+                {
+                    FileInfo fileInfo = new FileInfo(fileDialog.FileName);
+                    if (!Comparers.Path.Equals(fileInfo.DirectoryName, Wizard.Project.Location))
+                    {
+                        IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                        dialog.Severity = DialogSeverity.Warning;
+                        dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
+                        dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
+                        dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
+                        if (dialog.Show() != true)
+                        {
+                            e.Cancel = true;
+                        }
+                    }
+                };
                 if (fileDialog.Save() != true)
                 {
                     return;
                 }
-                FileInfo fileInfo = new FileInfo(fileDialog.FileName);
-                if (!Comparers.Path.Equals(fileInfo.DirectoryName, Wizard.Project.Location))
-                {
-                    IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                    dialog.Severity = DialogSeverity.Warning;
-                    dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
-                    dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
-                    dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
-                    if (dialog.Show() != true)
-                    {
-                        return;
-                    }
-                }
-                FileInfo = fileInfo;
+                FileInfo = new FileInfo(fileDialog.FileName);
             }
 
             public override bool CanContinue()
