@@ -20,7 +20,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
             dialog.FileOk += (sender, e) =>
             {
                 FileName = dialog.FileName;
-                FileOk?.Invoke(sender, e);
+                FileOk?.Invoke(this, e);
             };
             Window owner = Application.Current.GetActiveWindow();
             owner.EnsureHandle();

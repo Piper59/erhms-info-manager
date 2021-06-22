@@ -87,17 +87,17 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public async Task InitializeAsync()
             {
-                string fileName = $"{Wizard.View.Name}{Wizard.FileExtension}";
                 await Task.Run(() =>
                 {
+                    string fileName = $"{Wizard.View.Name}{Wizard.FileExtension}";
                     FileNameUniquifier fileNames =
                         new FileNameUniquifier(Wizard.Project.Location, Wizard.FileExtension);
                     if (fileNames.Exists(fileName))
                     {
                         fileName = fileNames.Uniquify(fileName);
                     }
+                    fileInfo = new FileInfo(Path.Combine(Wizard.Project.Location, fileName));
                 });
-                fileInfo = new FileInfo(Path.Combine(Wizard.Project.Location, fileName));
             }
 
             public void Browse()
@@ -106,27 +106,30 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 fileDialog.InitialDirectory = fileInfo.DirectoryName;
                 fileDialog.InitialFileName = fileInfo.Name;
                 fileDialog.Filter = Wizard.FileFilter;
-                fileDialog.FileOk += (sender, e) =>
-                {
-                    FileInfo fileInfo = new FileInfo(fileDialog.FileName);
-                    if (!Comparers.Path.Equals(fileInfo.DirectoryName, Wizard.Project.Location))
-                    {
-                        IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                        dialog.Severity = DialogSeverity.Warning;
-                        dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
-                        dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
-                        dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
-                        if (dialog.Show() != true)
-                        {
-                            e.Cancel = true;
-                        }
-                    }
-                };
+                fileDialog.FileOk += FileDialog_FileOk;
                 if (fileDialog.Save() != true)
                 {
                     return;
                 }
                 FileInfo = new FileInfo(fileDialog.FileName);
+            }
+
+            private void FileDialog_FileOk(object sender, CancelEventArgs e)
+            {
+                IFileDialogService fileDialog = (IFileDialogService)sender;
+                FileInfo fileInfo = new FileInfo(fileDialog.FileName);
+                if (!Comparers.Path.Equals(fileInfo.DirectoryName, Wizard.Project.Location))
+                {
+                    IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                    dialog.Severity = DialogSeverity.Warning;
+                    dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
+                    dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
+                    dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
+                    if (dialog.Show() != true)
+                    {
+                        e.Cancel = true;
+                    }
+                }
             }
 
             public override bool CanContinue()
@@ -167,7 +170,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override async Task ContinueAsync()
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                progress.Title = Strings.Lead_CreatingAsset;
+                progress.Lead = Strings.Lead_CreatingAsset;
                 await progress.Run(() =>
                 {
                     Asset asset = Wizard.CreateCore();
@@ -187,11 +190,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override string Title => Strings.Lead_CreateAsset_Close;
             public override string ContinueAction => Strings.AccessText_Close;
 
-            private bool opening = true;
-            public bool Opening
+            private bool openInEpiInfo = true;
+            public bool OpenInEpiInfo
             {
-                get { return opening; }
-                set { SetProperty(ref opening, value); }
+                get { return openInEpiInfo; }
+                set { SetProperty(ref openInEpiInfo, value); }
             }
 
             public CloseViewModel(CreateAssetViewModel wizard, IStep antecedent)
@@ -204,7 +207,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                if (opening)
+                if (openInEpiInfo)
                 {
                     await MainViewModel.Instance.StartEpiInfoAsync(Wizard.Module, Wizard.FileInfo.FullName);
                 }

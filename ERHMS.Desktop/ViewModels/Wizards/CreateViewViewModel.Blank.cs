@@ -16,7 +16,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public class SetViewNameViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => Strings.Lead_CreateView_Blank_SetViewName;
+                public override string Title => Strings.Lead_CreateView_SetViewName;
 
                 private string viewName = "";
                 public string ViewName
@@ -46,7 +46,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class SetWithWorkerInfoViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => Strings.Lead_CreateView_Blank_SetWithWorkerInfo;
+                public override string Title => Strings.Lead_CreateView_SetWithWorkerInfo;
 
                 private bool withWorkerInfo = true;
                 public bool WithWorkerInfo
@@ -95,7 +95,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public override async Task ContinueAsync()
                 {
                     IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    progress.Title = Strings.Lead_CreatingView;
+                    progress.Lead = Strings.Lead_CreatingView;
                     Wizard.View = await progress.Run(() =>
                     {
                         string conjunction = Wizard.Blank_WithWorkerInfo ? "With" : "Without";

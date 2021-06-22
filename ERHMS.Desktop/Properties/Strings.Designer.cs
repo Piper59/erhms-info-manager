@@ -787,15 +787,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you choose to collect worker information, the new form will contain fields for the worker&apos;s name, email address, and unique ID. You can use these fields to link each record with the associated worker..
-        /// </summary>
-        public static string Body_CreateView_SetWithWorkerInfo {
-            get {
-                return ResourceManager.GetString("Body.CreateView.SetWithWorkerInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down.
         ///
         ///{0}.
@@ -816,11 +807,53 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File: {0}
+        ///
+        ///This file is not a project-level Epi Info template. .
+        /// </summary>
+        public static string Body_InvalidProjectTemplatePath {
+            get {
+                return ResourceManager.GetString("Body.InvalidProjectTemplatePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File: {0}
+        ///
+        ///This file does not appear to be an Epi Info template..
+        /// </summary>
+        public static string Body_InvalidTemplatePath {
+            get {
+                return ResourceManager.GetString("Body.InvalidTemplatePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File: {0}
+        ///
+        ///This file is not a form-level Epi Info template..
+        /// </summary>
+        public static string Body_InvalidViewTemplatePath {
+            get {
+                return ResourceManager.GetString("Body.InvalidViewTemplatePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings have been reset..
         /// </summary>
         public static string Body_SettingsReset {
             get {
                 return ResourceManager.GetString("Body.SettingsReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you choose to collect worker information, the new form will contain fields for the worker&apos;s name, email address, and unique ID. You can use these fields to link each record with the associated worker..
+        /// </summary>
+        public static string Body_SetWithWorkerInfo {
+            get {
+                return ResourceManager.GetString("Body.SetWithWorkerInfo", resourceCulture);
             }
         }
         
@@ -1135,6 +1168,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Epi Info Templates (*.xml)|*.xml.
+        /// </summary>
+        public static string FileDialog_Filter_Templates {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.Templates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string FileDialog_Title_Open {
@@ -1396,7 +1438,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This form name is invalid.
+        ///   Looks up a localized string similar to This form name is not valid.
         /// </summary>
         public static string InvalidViewNameReason_Lead_Default {
             get {
@@ -1443,9 +1485,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Open in Epi Info?.
         /// </summary>
-        public static string Label_Opening {
+        public static string Label_OpenInEpiInfo {
             get {
-                return ResourceManager.GetString("Label.Opening", resourceCulture);
+                return ResourceManager.GetString("Label.OpenInEpiInfo", resourceCulture);
             }
         }
         
@@ -1464,6 +1506,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Label_Search {
             get {
                 return ResourceManager.GetString("Label.Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template:.
+        /// </summary>
+        public static string Label_TemplatePath {
+            get {
+                return ResourceManager.GetString("Label.TemplatePath", resourceCulture);
             }
         }
         
@@ -1504,7 +1555,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified location is not supported.
+        ///   Looks up a localized string similar to This location is not supported.
         /// </summary>
         public static string Lead_ConfirmOrphanAssetCreation {
             get {
@@ -1558,24 +1609,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a form name.
-        /// </summary>
-        public static string Lead_CreateView_Blank_SetViewName {
-            get {
-                return ResourceManager.GetString("Lead.CreateView.Blank.SetViewName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Choose whether to collect worker information.
-        /// </summary>
-        public static string Lead_CreateView_Blank_SetWithWorkerInfo {
-            get {
-                return ResourceManager.GetString("Lead.CreateView.Blank.SetWithWorkerInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Form has been created.
         /// </summary>
         public static string Lead_CreateView_Close {
@@ -1599,6 +1632,33 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_CreateView_Initialize {
             get {
                 return ResourceManager.GetString("Lead.CreateView.Initialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a form name.
+        /// </summary>
+        public static string Lead_CreateView_SetViewName {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.SetViewName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose whether to collect worker information.
+        /// </summary>
+        public static string Lead_CreateView_SetWithWorkerInfo {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.SetWithWorkerInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a template.
+        /// </summary>
+        public static string Lead_CreateView_SetXTemplate {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.SetXTemplate", resourceCulture);
             }
         }
         
@@ -1657,6 +1717,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This file is not valid.
+        /// </summary>
+        public static string Lead_InvalidTemplatePath {
+            get {
+                return ResourceManager.GetString("Lead.InvalidTemplatePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No items found.
         /// </summary>
         public static string Lead_ItemsControlWatermark {
@@ -1671,6 +1740,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_LoadingProject {
             get {
                 return ResourceManager.GetString("Lead.LoadingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading template.
+        /// </summary>
+        public static string Lead_LoadingTemplate {
+            get {
+                return ResourceManager.GetString("Lead.LoadingTemplate", resourceCulture);
             }
         }
         

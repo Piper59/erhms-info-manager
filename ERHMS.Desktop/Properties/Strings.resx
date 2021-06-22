@@ -363,9 +363,6 @@ ERHMS Info Manager will only recognize files that are in the same location as th
 
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
-  <data name="Body.CreateView.SetWithWorkerInfo" xml:space="preserve">
-    <value>If you choose to collect worker information, the new form will contain fields for the worker's name, email address, and unique ID. You can use these fields to link each record with the associated worker.</value>
-  </data>
   <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
 
@@ -374,8 +371,26 @@ This form, any related forms, and all associated records will be permanently del
   <data name="Body.GetWorkerId" xml:space="preserve">
     <value>Select a worker in ERHMS Info Manager to continue.</value>
   </data>
+  <data name="Body.InvalidProjectTemplatePath" xml:space="preserve">
+    <value>File: {0}
+
+This file is not a project-level Epi Info template. </value>
+  </data>
+  <data name="Body.InvalidTemplatePath" xml:space="preserve">
+    <value>File: {0}
+
+This file does not appear to be an Epi Info template.</value>
+  </data>
+  <data name="Body.InvalidViewTemplatePath" xml:space="preserve">
+    <value>File: {0}
+
+This file is not a form-level Epi Info template.</value>
+  </data>
   <data name="Body.SettingsReset" xml:space="preserve">
     <value>Settings have been reset.</value>
+  </data>
+  <data name="Body.SetWithWorkerInfo" xml:space="preserve">
+    <value>If you choose to collect worker information, the new form will contain fields for the worker's name, email address, and unique ID. You can use these fields to link each record with the associated worker.</value>
   </data>
   <data name="Body.UtilityClosing" xml:space="preserve">
     <value>ERHMS Info Manager is still working.
@@ -483,6 +498,9 @@ Close anyway?</value>
   <data name="FileDialog.Filter.Projects" xml:space="preserve">
     <value>Epi Info Projects (*.prj)|*.prj</value>
   </data>
+  <data name="FileDialog.Filter.Templates" xml:space="preserve">
+    <value>Epi Info Templates (*.xml)|*.xml</value>
+  </data>
   <data name="FileDialog.Title.Open" xml:space="preserve">
     <value>Open</value>
   </data>
@@ -571,7 +589,7 @@ Close anyway?</value>
     <value>Please specify a form name that is no longer than {0} characters.</value>
   </data>
   <data name="InvalidViewNameReason.Lead.Default" xml:space="preserve">
-    <value>This form name is invalid</value>
+    <value>This form name is not valid</value>
   </data>
   <data name="InvalidViewNameReason.Lead.Empty" xml:space="preserve">
     <value>No form name was specified</value>
@@ -585,7 +603,7 @@ Close anyway?</value>
   <data name="Label.FileName" xml:space="preserve">
     <value>File name:</value>
   </data>
-  <data name="Label.Opening" xml:space="preserve">
+  <data name="Label.OpenInEpiInfo" xml:space="preserve">
     <value>Open in Epi Info?</value>
   </data>
   <data name="Label.RecordStatus" xml:space="preserve">
@@ -593,6 +611,9 @@ Close anyway?</value>
   </data>
   <data name="Label.Search" xml:space="preserve">
     <value>Search:</value>
+  </data>
+  <data name="Label.TemplatePath" xml:space="preserve">
+    <value>Template:</value>
   </data>
   <data name="Label.View" xml:space="preserve">
     <value>Form:</value>
@@ -607,7 +628,7 @@ Close anyway?</value>
     <value>Are you sure you want to delete this file?</value>
   </data>
   <data name="Lead.ConfirmOrphanAssetCreation" xml:space="preserve">
-    <value>The specified location is not supported</value>
+    <value>This location is not supported</value>
   </data>
   <data name="Lead.ConfirmViewDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this form?</value>
@@ -624,12 +645,6 @@ Close anyway?</value>
   <data name="Lead.CreateAsset.SetView" xml:space="preserve">
     <value>Choose a form to analyze</value>
   </data>
-  <data name="Lead.CreateView.Blank.SetViewName" xml:space="preserve">
-    <value>Enter a form name</value>
-  </data>
-  <data name="Lead.CreateView.Blank.SetWithWorkerInfo" xml:space="preserve">
-    <value>Choose whether to collect worker information</value>
-  </data>
   <data name="Lead.CreateView.Close" xml:space="preserve">
     <value>Form has been created</value>
   </data>
@@ -638,6 +653,15 @@ Close anyway?</value>
   </data>
   <data name="Lead.CreateView.Initialize" xml:space="preserve">
     <value>Choose a type of form to create</value>
+  </data>
+  <data name="Lead.CreateView.SetViewName" xml:space="preserve">
+    <value>Enter a form name</value>
+  </data>
+  <data name="Lead.CreateView.SetWithWorkerInfo" xml:space="preserve">
+    <value>Choose whether to collect worker information</value>
+  </data>
+  <data name="Lead.CreateView.SetXTemplate" xml:space="preserve">
+    <value>Choose a template</value>
   </data>
   <data name="Lead.CreatingAsset" xml:space="preserve">
     <value>Creating file</value>
@@ -657,11 +681,17 @@ Close anyway?</value>
   <data name="Lead.ExportingLogDirectory" xml:space="preserve">
     <value>Exporting logs</value>
   </data>
+  <data name="Lead.InvalidTemplatePath" xml:space="preserve">
+    <value>This file is not valid</value>
+  </data>
   <data name="Lead.ItemsControlWatermark" xml:space="preserve">
     <value>No items found</value>
   </data>
   <data name="Lead.LoadingProject" xml:space="preserve">
     <value>Loading database</value>
+  </data>
+  <data name="Lead.LoadingTemplate" xml:space="preserve">
+    <value>Loading template</value>
   </data>
   <data name="Lead.LoadingView" xml:space="preserve">
     <value>Loading form</value>

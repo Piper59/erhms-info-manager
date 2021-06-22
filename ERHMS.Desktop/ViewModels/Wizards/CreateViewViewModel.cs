@@ -26,13 +26,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 : base(wizard)
             {
                 CreateBlankCommand = new SyncCommand(CreateBlank);
-                CreateFromTemplateCommand = Command.Null;
+                CreateFromTemplateCommand = new SyncCommand(CreateFromTemplate);
                 CreateFromExistingCommand = Command.Null;
             }
 
             public void CreateBlank()
             {
                 ContinueTo(new Blank.SetViewNameViewModel(Wizard, this));
+            }
+
+            public void CreateFromTemplate()
+            {
+                ContinueTo(new FromTemplate.SetXTemplateViewModel(Wizard, this));
             }
         }
 
@@ -41,11 +46,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override string Title => Strings.Lead_CreateView_Close;
             public override string ContinueAction => Strings.AccessText_Close;
 
-            private bool opening = true;
-            public bool Opening
+            private bool openInEpiInfo = true;
+            public bool OpenInEpiInfo
             {
-                get { return opening; }
-                set { SetProperty(ref opening, value); }
+                get { return openInEpiInfo; }
+                set { SetProperty(ref openInEpiInfo, value); }
             }
 
             public CloseViewModel(CreateViewViewModel wizard, IStep antecedent)
@@ -58,7 +63,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                if (opening)
+                if (openInEpiInfo)
                 {
                     await MainViewModel.Instance.StartEpiInfoAsync(
                         Module.MakeView,
@@ -81,7 +86,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         private async Task<bool> ValidateAsync(string viewName)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Title = Strings.Lead_ValidatingViewName;
+            progress.Lead = Strings.Lead_ValidatingViewName;
             bool result = false;
             InvalidViewNameReason reason = InvalidViewNameReason.None;
             await progress.Run(() =>

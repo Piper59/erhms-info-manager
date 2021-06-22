@@ -6,8 +6,7 @@
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+InitializeViewModel}">
         <StackPanel>
             <StackPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
-                </Style>
+                <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
             <Button Command="{Binding CreateBlankCommand}"
                     Content="{Markup:String AccessText.CreateView.Blank}"
@@ -21,6 +20,12 @@
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+CloseViewModel}">
+        <CheckBox Content="{Markup:String Label.OpenInEpiInfo}"
+                  IsChecked="{Binding OpenInEpiInfo}" />
+    </DataTemplate>
+
+    <!-- TODO: This is duplicated -->
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetViewNameViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -40,7 +45,7 @@
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetWithWorkerInfoViewModel}">
         <StackPanel>
             <Label>
-                <TextBlock Text="{Markup:String Body.CreateView.SetWithWorkerInfo}" />
+                <TextBlock Text="{Markup:String Body.SetWithWorkerInfo}" />
             </Label>
             <CheckBox Content="{Markup:String Label.WithWorkerInfo}"
                       IsChecked="{Binding WithWorkerInfo}" />
@@ -51,8 +56,47 @@
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+CloseViewModel}">
-        <CheckBox Content="{Markup:String Label.Opening}"
-                  IsChecked="{Binding Opening}" />
+    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+SetXTemplateViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"
+                   Grid.Row="0"
+                   Content="{Markup:String Label.TemplatePath}"
+                   Target="{x:Reference TemplatePathTextBox}" />
+            <TextBox x:Name="TemplatePathTextBox"
+                     AutomationProperties.Name="{Markup:String Label.TemplatePath}"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     IsReadOnly="True"
+                     Text="{Binding TemplatePath, Mode=OneWay}" />
+            <Button Grid.Column="2"
+                    Grid.Row="0"
+                    Command="{Binding BrowseCommand}"
+                    Content="{Markup:String AccessText.Browse}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+SetViewNameViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"
+                   Content="{Markup:String Label.ViewName}"
+                   Target="{x:Reference ViewNameTextBox}" />
+            <TextBox x:Name="ViewNameTextBox"
+                     AutomationProperties.Name="{Markup:String Label.ViewName}"
+                     Grid.Column="1"
+                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+CommitViewModel}">
+        <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 </ResourceDictionary>
