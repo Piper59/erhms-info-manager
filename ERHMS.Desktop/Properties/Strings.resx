@@ -483,9 +483,6 @@ Close anyway?</value>
   <data name="DialogSeverity.Name.Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
-  <data name="FileDialog.Filter.Archives" xml:space="preserve">
-    <value>ZIP Files (*.zip)|*.zip</value>
-  </data>
   <data name="FileDialog.Filter.Canvases" xml:space="preserve">
     <value>Epi Info Dashboards (*.cvs7)|*.cvs7</value>
   </data>
@@ -500,6 +497,9 @@ Close anyway?</value>
   </data>
   <data name="FileDialog.Filter.Templates" xml:space="preserve">
     <value>Epi Info Templates (*.xml)|*.xml</value>
+  </data>
+  <data name="FileDialog.Filter.ZipFiles" xml:space="preserve">
+    <value>ZIP Files (*.zip)|*.zip</value>
   </data>
   <data name="FileDialog.Title.Open" xml:space="preserve">
     <value>Open</value>

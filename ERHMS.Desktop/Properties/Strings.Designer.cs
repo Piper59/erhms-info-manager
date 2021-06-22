@@ -1123,15 +1123,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ZIP Files (*.zip)|*.zip.
-        /// </summary>
-        public static string FileDialog_Filter_Archives {
-            get {
-                return ResourceManager.GetString("FileDialog.Filter.Archives", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Epi Info Dashboards (*.cvs7)|*.cvs7.
         /// </summary>
         public static string FileDialog_Filter_Canvases {
@@ -1173,6 +1164,15 @@ namespace ERHMS.Desktop.Properties {
         public static string FileDialog_Filter_Templates {
             get {
                 return ResourceManager.GetString("FileDialog.Filter.Templates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ZIP Files (*.zip)|*.zip.
+        /// </summary>
+        public static string FileDialog_Filter_ZipFiles {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.ZipFiles", resourceCulture);
             }
         }
         

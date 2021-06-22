@@ -6,18 +6,18 @@ namespace ERHMS.Console.Utilities
 {
     public class ExportLogs : IUtility
     {
-        public string ArchivePath { get; }
+        public string OutputPath { get; }
 
-        public ExportLogs(string archivePath)
+        public ExportLogs(string outputPath)
         {
-            ArchivePath = archivePath;
+            OutputPath = outputPath;
         }
 
         public void Run()
         {
             ZipFileExtensions.CreateFromDirectory(
                 FileAppender.Directory,
-                ArchivePath,
+                OutputPath,
                 $"*{FileAppender.Extension}",
                 FileMode.Create,
                 FileShare.ReadWrite);
