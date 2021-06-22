@@ -8,11 +8,11 @@ using static System.Console;
 
 namespace ERHMS.Console.Utilities
 {
-    public class ListFields : IUtility
+    public class ShowProject : IUtility
     {
         public string ProjectPath { get; }
 
-        public ListFields(string projectPath)
+        public ShowProject(string projectPath)
         {
             ProjectPath = projectPath;
         }
