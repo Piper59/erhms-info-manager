@@ -22,6 +22,7 @@ namespace ERHMS.Desktop.Utilities
             {
                 using (Process process = GetProcess())
                 {
+                    process.Start();
                     Output = process.StandardOutput.ReadToEnd();
                 }
             }
