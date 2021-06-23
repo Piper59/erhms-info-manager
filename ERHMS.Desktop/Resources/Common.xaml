@@ -4,7 +4,7 @@
     <!-- Fonts -->
     <System:Double x:Key="SmallFontSize">13.333</System:Double>
     <System:Double x:Key="DefaultFontSize">16</System:Double>
-    <System:Double x:Key="MediumFontSize">20</System:Double>
+    <System:Double x:Key="MediumFontSize">18.667</System:Double>
     <System:Double x:Key="LargeFontSize">24</System:Double>
     <System:Double x:Key="HugeFontSize">32</System:Double>
     <FontWeight x:Key="ThinFontWeight">Light</FontWeight>

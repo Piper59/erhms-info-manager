@@ -53,14 +53,14 @@
         </Border>
         <Border Background="{x:Static SystemColors.MenuBrush}">
             <Grid Style="{StaticResource Container}">
+                <Grid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
+                </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
-                </Grid.Resources>
                 <Button Grid.Column="0"
                         Command="{Binding ToggleDetailedCommand}"
                         Content="{Markup:String AccessText.Details}"

@@ -997,6 +997,87 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_AfterActionReview {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.AfterActionReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_DeploymentHealthSurvey {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.DeploymentHealthSurvey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_PostDeploymentHealthSurvey {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.PostDeploymentHealthSurvey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_PreDeploymentHealthSurvey {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.PreDeploymentHealthSurvey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_WorkerActivityReport {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.WorkerActivityReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_WorkerDeploymentRecord {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.WorkerDeploymentRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_WorkerInProcessingForm {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.WorkerInProcessingForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_WorkerOutProcessingForm {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.WorkerOutProcessingForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CoreView_Icon_WorkerRosteringForm {
+            get {
+                return ResourceManager.GetString("CoreView.Icon.WorkerRosteringForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to After-Action Review.
         /// </summary>
         public static string CoreView_Title_AfterActionReview {

@@ -441,6 +441,33 @@ Close anyway?</value>
   <data name="CoreView.HelpText.WorkerRosteringForm" xml:space="preserve">
     <value>Filled out once for each worker and reviewed annually. Captures rostering and credentialing information.</value>
   </data>
+  <data name="CoreView.Icon.AfterActionReview" xml:space="preserve">
+    <value>&#xf559;</value>
+  </data>
+  <data name="CoreView.Icon.DeploymentHealthSurvey" xml:space="preserve">
+    <value>&#xf21e;</value>
+  </data>
+  <data name="CoreView.Icon.PostDeploymentHealthSurvey" xml:space="preserve">
+    <value>&#xf21e;</value>
+  </data>
+  <data name="CoreView.Icon.PreDeploymentHealthSurvey" xml:space="preserve">
+    <value>&#xf21e;</value>
+  </data>
+  <data name="CoreView.Icon.WorkerActivityReport" xml:space="preserve">
+    <value>&#xf807;</value>
+  </data>
+  <data name="CoreView.Icon.WorkerDeploymentRecord" xml:space="preserve">
+    <value>&#xf57d;</value>
+  </data>
+  <data name="CoreView.Icon.WorkerInProcessingForm" xml:space="preserve">
+    <value>&#xf2f6;</value>
+  </data>
+  <data name="CoreView.Icon.WorkerOutProcessingForm" xml:space="preserve">
+    <value>&#xf2f5;</value>
+  </data>
+  <data name="CoreView.Icon.WorkerRosteringForm" xml:space="preserve">
+    <value>&#xf2c1;</value>
+  </data>
   <data name="CoreView.Title.AfterActionReview" xml:space="preserve">
     <value>After-Action Review</value>
   </data>

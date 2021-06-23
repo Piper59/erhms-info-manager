@@ -1474,7 +1474,7 @@ namespace ERHMS.Desktop
             { "Close", "times" },
             { "Create", "file" },
             { "Delete", "trash" },
-            { "Design", "tools" },
+            { "Design", "wrench" },
             { "Edit", "pen" },
             { "Enter", "pen" },
             { "Export", "file_export" },
