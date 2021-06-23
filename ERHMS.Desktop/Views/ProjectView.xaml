@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-             xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections">
+             xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections"
+             xmlns:System="clr-namespace:System;assembly=mscorlib">
     <Border Style="{StaticResource FluidLayout}">
         <Grid Style="{StaticResource Container}">
             <Grid.RowDefinitions>
@@ -24,8 +25,12 @@
                     <Hyperlink Command="{Binding OpenLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
                         <Run FontWeight="{StaticResource DefaultFontWeight}"
-                             Text="{Binding Value.Name}"
-                             ToolTip="{Binding Value.FilePath}" />
+                             Text="{Binding Value.Name}">
+                            <Run.ToolTip>
+                                <ToolTip Content="{Binding Value.FilePath}"
+                                         MaxWidth="{x:Static System:Double.PositiveInfinity}" />
+                            </Run.ToolTip>
+                        </Run>
                     </Hyperlink>
                 </TextBlock>
                 <StackPanel Grid.Column="1"
