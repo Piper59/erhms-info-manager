@@ -132,7 +132,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Fields = await Task.Run(() =>
             {
                 return ((MetadataDbProvider)Project.Metadata).GetFieldDataTableForView(View.Id)
-                    .Where(field => IsDisplayable(field.FieldType))
+                    .Where(field => field.Position.GetValueOrDefault() == 0 && IsDisplayable(field.FieldType))
                     .OrderBy(field => field, new FieldDataRowComparer.ByTabIndex())
                     .ToList();
             });
