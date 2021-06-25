@@ -34,9 +34,9 @@ namespace ERHMS.Common.IO
             Reader = reader;
         }
 
-        protected Exception GetException(string reason)
+        protected Exception GetException(string reason, Exception innerException = null)
         {
-            return new IOException($"{reason} in row {RowNumber}.");
+            return new IOException($"{reason} in row {RowNumber}.", innerException);
         }
 
         private int ReadChar(ref Mode mode, out Flags flags)

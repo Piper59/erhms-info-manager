@@ -18,8 +18,8 @@ namespace ERHMS.EpiInfo.Data
         public View View { get; }
         public IEnumerable<string> Headers { get; }
 
-        private readonly ICollection<string> errors = new List<string>();
-        public IEnumerable<string> Errors => errors;
+        private readonly ICollection<Exception> errors = new List<Exception>();
+        public IEnumerable<Exception> Errors => errors;
 
         public RecordImporter(View view, TextReader reader)
             : base(reader)
@@ -63,9 +63,9 @@ namespace ERHMS.EpiInfo.Data
                     }
                     record.SetProperty(field.Name, value);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    throw GetException($"An error occurred while importing to field '{field.Name}'");
+                    throw GetException($"An error occurred while importing to field '{field.Name}'", ex);
                 }
             }
             return record;
@@ -93,14 +93,14 @@ namespace ERHMS.EpiInfo.Data
                         {
                             repository.Save(record);
                         }
-                        catch
+                        catch (Exception ex)
                         {
-                            throw GetException("An error occurred while saving the record");
+                            throw GetException("An error occurred while saving the record", ex);
                         }
                     }
                     catch (Exception ex)
                     {
-                        errors.Add(ex.Message);
+                        errors.Add(ex);
                     }
                 }
                 if (errors.Count == 0)

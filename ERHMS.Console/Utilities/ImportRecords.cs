@@ -3,6 +3,7 @@ using ERHMS.Common.Linq;
 using ERHMS.Common.Logging;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
+using System;
 using System.IO;
 
 namespace ERHMS.Console.Utilities
@@ -36,9 +37,13 @@ namespace ERHMS.Console.Utilities
                     }
                 }
                 importer.Import();
-                foreach (string error in importer.Errors)
+                foreach (Exception error in importer.Errors)
                 {
-                    Log.Instance.Warn(error);
+                    Log.Instance.Warn(error.Message);
+                    if (error.InnerException != null)
+                    {
+                        Log.Instance.Debug($"  {error.InnerException.Message}");
+                    }
                 }
             }
         }
