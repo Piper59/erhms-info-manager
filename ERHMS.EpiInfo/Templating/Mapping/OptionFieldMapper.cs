@@ -12,7 +12,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         {
             if (xField.List == null)
             {
-                value = default;
+                value = default(List<string>);
                 return false;
             }
             else

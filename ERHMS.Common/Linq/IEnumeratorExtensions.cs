@@ -14,7 +14,7 @@ namespace ERHMS.Common.Linq
             return @this.Current;
         }
 
-        public static TItem GetNextOrDefault<TItem>(this IEnumerator<TItem> @this, TItem defaultValue = default)
+        public static TItem GetNextOrDefault<TItem>(this IEnumerator<TItem> @this, TItem defaultValue = default(TItem))
         {
             return @this.MoveNext() ? @this.Current : defaultValue;
         }

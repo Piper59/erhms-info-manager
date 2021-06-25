@@ -32,7 +32,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
                 }
                 else
                 {
-                    value = default;
+                    value = default(TProperty);
                     return false;
                 }
             }

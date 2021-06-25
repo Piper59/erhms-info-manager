@@ -72,13 +72,13 @@ namespace ERHMS.EpiInfo.Templating
 
             public bool MapTableName(string value, out string result)
             {
-                result = default;
+                result = default(string);
                 return false;
             }
 
             public bool MapFieldName(string value, out string result)
             {
-                result = default;
+                result = default(string);
                 return false;
             }
         }

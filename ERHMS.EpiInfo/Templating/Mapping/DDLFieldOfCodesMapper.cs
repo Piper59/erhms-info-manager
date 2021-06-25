@@ -18,7 +18,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         {
             if (value == null)
             {
-                result = default;
+                result = default(string);
                 return false;
             }
             bool changed = false;

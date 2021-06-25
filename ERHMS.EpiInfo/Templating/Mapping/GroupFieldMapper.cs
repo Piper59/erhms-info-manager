@@ -14,7 +14,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         {
             if (xField.BackgroundColor == null)
             {
-                value = default;
+                value = default(Color);
                 return false;
             }
             else
@@ -36,7 +36,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         {
             if (value == null)
             {
-                result = default;
+                result = default(string);
                 return false;
             }
             bool changed = false;

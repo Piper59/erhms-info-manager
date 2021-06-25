@@ -60,7 +60,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
             }
             else
             {
-                font = default;
+                font = default(Font);
                 return false;
             }
         }

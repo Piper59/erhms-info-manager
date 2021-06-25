@@ -24,7 +24,7 @@ namespace ERHMS.EpiInfo.Templating.Mapping
         {
             if (xField.RelatedViewId == null)
             {
-                value = default;
+                value = default(int);
                 return false;
             }
             else

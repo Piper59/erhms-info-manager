@@ -42,7 +42,7 @@ namespace ERHMS.Common.Text
             }
             catch (InvalidCastException)
             {
-                value = default;
+                value = default(long);
                 return false;
             }
         }

@@ -105,7 +105,7 @@ namespace ERHMS.EpiInfo.Templating
             {
                 if (value == null)
                 {
-                    result = default;
+                    result = default(string);
                     return false;
                 }
                 else
@@ -118,7 +118,7 @@ namespace ERHMS.EpiInfo.Templating
             {
                 if (value == null)
                 {
-                    result = default;
+                    result = default(string);
                     return false;
                 }
                 else

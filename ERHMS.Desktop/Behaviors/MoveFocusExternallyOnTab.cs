@@ -19,7 +19,7 @@ namespace ERHMS.Desktop.Behaviors
                     forward = false;
                     return true;
                 default:
-                    forward = default;
+                    forward = default(bool);
                     return false;
             }
         }
