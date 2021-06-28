@@ -1,8 +1,5 @@
 ﻿using Epi;
-using ERHMS.Common;
-using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -10,31 +7,21 @@ using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class ViewCollectionViewModel
+    public class ViewCollectionViewModel : CollectionViewModelBase<ViewCollectionViewModel.Item>
     {
-        public class ItemViewModel : ObservableObject
+        public class Item
         {
             public View Value { get; }
             public int PageCount { get; private set; }
             public int FieldCount { get; private set; }
             public int RecordCount { get; private set; }
 
-            private bool selected;
-            public bool Selected
-            {
-                get { return selected; }
-                set { SetProperty(ref selected, value); }
-            }
-
-            public ItemViewModel(View value)
+            public Item(View value)
             {
                 Value = value;
             }
@@ -58,23 +45,16 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
             public override int GetHashCode()
             {
-                return HashCodeCalculator.GetHashCode(Value.Project.Id, Value.Id);
+                return Value.Id.GetHashCode();
             }
 
             public override bool Equals(object obj)
             {
-                return obj is ItemViewModel item
-                    && Value.Project.Id == item.Value.Project.Id
-                    && Value.Id == item.Value.Id;
+                return obj is Item item && Value.Id == item.Value.Id;
             }
         }
 
         public Project Project { get; }
-
-        private readonly List<ItemViewModel> items;
-        public ICollectionView Items { get; }
-
-        public View CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 
         public ICommand CreateCommand { get; }
         public ICommand OpenCommand { get; }
@@ -86,32 +66,29 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ViewCollectionViewModel(Project project)
         {
             Project = project;
-            items = new List<ItemViewModel>();
-            Items = new ListCollectionView(items);
             CreateCommand = new AsyncCommand(CreateAsync);
-            OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
-            DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);
-            DesignCommand = new AsyncCommand(DesignAsync, Items.HasCurrent);
-            EnterCommand = new AsyncCommand(EnterAsync, Items.HasCurrent);
+            OpenCommand = new AsyncCommand(OpenAsync, HasCurrentItem);
+            DeleteCommand = new AsyncCommand(DeleteAsync, HasCurrentItem);
+            DesignCommand = new AsyncCommand(DesignAsync, HasCurrentItem);
+            EnterCommand = new AsyncCommand(EnterAsync, HasCurrentItem);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
         public async Task InitializeAsync()
         {
-            IEnumerable<View> values = await Task.Run(() =>
+            items.Clear();
+            items.AddRange(await Task.Run(() =>
             {
                 Project.LoadViews();
-                return Project.Views.Cast<View>().ToList();
-            });
-            items.Clear();
-            items.AddRange(values.Select(value => new ItemViewModel(value)));
-            await Task.Run(() =>
-            {
-                foreach (ItemViewModel item in items)
+                ICollection<Item> items = new List<Item>();
+                foreach (View view in Project.Views)
                 {
+                    Item item = new Item(view);
                     item.Initialize();
+                    items.Add(item);
                 }
-            });
+                return items;
+            }));
             Items.Refresh();
         }
 
@@ -126,7 +103,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task OpenAsync()
         {
-            await MainViewModel.Instance.GoToViewAsync(() => Task.FromResult(CurrentValue));
+            await MainViewModel.Instance.GoToViewAsync(() => Task.FromResult(CurrentItem.Value));
         }
 
         public async Task DeleteAsync()
@@ -134,7 +111,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
             dialog.Severity = DialogSeverity.Warning;
             dialog.Lead = Strings.Lead_ConfirmViewDeletion;
-            dialog.Body = string.Format(Strings.Body_ConfirmViewDeletion, CurrentValue.Name);
+            dialog.Body = string.Format(Strings.Body_ConfirmViewDeletion, CurrentItem.Value.Name);
             dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Delete);
             if (dialog.Show() != true)
             {
@@ -146,7 +123,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 await Task.Run(() =>
                 {
-                    Project.DeleteView(CurrentValue);
+                    Project.DeleteView(CurrentItem.Value);
                 });
                 await InitializeAsync();
             });
@@ -157,7 +134,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.MakeView,
                 $"/project:{Project.FilePath}",
-                $"/view:{CurrentValue.Name}");
+                $"/view:{CurrentItem.Value.Name}");
         }
 
         public async Task EnterAsync()
@@ -165,7 +142,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await MainViewModel.Instance.StartEpiInfoAsync(
                 Module.Enter,
                 $"/project:{Project.FilePath}",
-                $"/view:{CurrentValue.Name}",
+                $"/view:{CurrentItem.Value.Name}",
                 "/record:*");
         }
 

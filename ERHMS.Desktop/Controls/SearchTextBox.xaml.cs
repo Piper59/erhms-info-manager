@@ -18,17 +18,12 @@ namespace ERHMS.Desktop.Controls
         public SearchTextBox()
         {
             InitializeComponent();
-            SetClearButtonMargin();
-        }
-
-        private void SetClearButtonMargin()
-        {
-            Thickness margin = ClearButton.Margin;
+            Thickness margin = Button.Margin;
             margin.Left *= -1;
-            ClearButton.Margin = margin;
+            Button.Margin = margin;
         }
 
-        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             Text = "";
         }

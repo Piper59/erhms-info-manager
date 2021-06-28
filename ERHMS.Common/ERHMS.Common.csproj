@@ -61,6 +61,7 @@
     <Compile Include="Logging\ConsoleAppender.cs" />
     <Compile Include="Logging\FileAppender.cs" />
     <Compile Include="Logging\Log.cs" />
+    <Compile Include="MathExtensions.cs" />
     <Compile Include="Naming\FileNameUniquifier.cs" />
     <Compile Include="Naming\INameUniquifier.cs" />
     <Compile Include="Naming\NameUniquifier.cs" />

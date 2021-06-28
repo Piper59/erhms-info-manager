@@ -21,7 +21,7 @@
                            Style="{StaticResource Heading}"
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap">
-                    <Run>Database:</Run>
+                    <Run Text="{Markup:String Label.Project}" />
                     <Hyperlink Command="{Binding OpenLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
                         <Run FontWeight="{StaticResource DefaultFontWeight}"
@@ -37,10 +37,10 @@
                             Orientation="Horizontal">
                     <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
-                                         Content="{Markup:Icon Home}" />
+                                         Content="Home" />
                     <Controls:IconButton AltText="{Markup:String AltText.Help}"
                                          Command="{Binding GoToHelpCommand}"
-                                         Content="{Markup:Icon Help}" />
+                                         Content="Help" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">

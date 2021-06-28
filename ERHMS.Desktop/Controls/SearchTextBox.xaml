@@ -18,10 +18,10 @@
                  Grid.Column="1"
                  Text="{Binding Text, ElementName=Root, UpdateSourceTrigger=PropertyChanged, Delay=500}">
         </TextBox>
-        <Controls:IconButton x:Name="ClearButton"
+        <Controls:IconButton x:Name="Button"
                              Grid.Column="2"
                              AltText="{Markup:String AltText.ClearSearch}"
-                             Click="ClearButton_Click"
-                             Content="{Markup:Icon Clear}" />
+                             Click="Button_Click"
+                             Content="Clear" />
     </Grid>
 </UserControl>

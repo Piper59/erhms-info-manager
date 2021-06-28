@@ -9,12 +9,9 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analytics;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
@@ -25,28 +22,17 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string Title => Strings.Lead_CreateAsset_SetView;
 
-            private readonly List<View> views;
-            public ICollectionView Views { get; }
-
-            public View CurrentView => (View)Views.CurrentItem;
+            public ViewCollectionView Views { get; }
 
             public SetViewViewModel(CreateAssetViewModel wizard)
                 : base(wizard)
             {
-                views = new List<View>();
-                Views = new ListCollectionView(views);
+                Views = new ViewCollectionView(wizard.Project);
             }
 
             public async Task InitializeAsync()
             {
-                IEnumerable<View> views = await Task.Run(() =>
-                {
-                    Wizard.Project.LoadViews();
-                    return Wizard.Project.Views.Cast<View>().ToList();
-                });
-                this.views.Clear();
-                this.views.AddRange(views);
-                Views.Refresh();
+                await Views.InitializeAsync();
             }
 
             public override bool CanContinue()
@@ -56,13 +42,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                Wizard.View = CurrentView;
-                await ContinueToAsync(async () =>
-                {
-                    SetFileInfoViewModel step = new SetFileInfoViewModel(Wizard, this);
-                    await step.InitializeAsync();
-                    return step;
-                });
+                Wizard.View = Views.CurrentItem;
+                SetFileInfoViewModel step = new SetFileInfoViewModel(Wizard, this);
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                await progress.Run(step.InitializeAsync);
+                ContinueTo(step);
             }
         }
 
@@ -207,11 +191,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
+                Close();
                 if (openInEpiInfo)
                 {
                     await MainViewModel.Instance.StartEpiInfoAsync(Wizard.Module, Wizard.FileInfo.FullName);
                 }
-                Close();
             }
         }
 

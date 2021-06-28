@@ -1,5 +1,4 @@
-﻿using ERHMS.Desktop.Properties;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
@@ -11,22 +10,10 @@ namespace ERHMS.Desktop.Controls
             typeof(ItemsControl),
             typeof(ItemsControlWatermark));
 
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            nameof(Text),
-            typeof(string),
-            typeof(ItemsControlWatermark),
-            new FrameworkPropertyMetadata(Strings.Lead_ItemsControlWatermark));
-
         public ItemsControl ItemsControl
         {
             get { return (ItemsControl)GetValue(ItemsControlProperty); }
             set { SetValue(ItemsControlProperty, value); }
-        }
-
-        public string Text
-        {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
         }
 
         public ItemsControlWatermark()

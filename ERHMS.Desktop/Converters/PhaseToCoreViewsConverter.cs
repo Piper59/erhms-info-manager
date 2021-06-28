@@ -1,24 +1,17 @@
 ﻿using ERHMS.Domain;
 using System;
-using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class PhaseToColorConverter : IValueConverter
+    public class PhaseToCoreViewsConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Color color = Colors.FromPhase((Phase)value);
-            if (parameter != null)
-            {
-                TypeConverter converter = new ByteConverter();
-                color.A = (byte)converter.ConvertFrom(parameter);
-            }
-            return color;
+            return CoreView.Instances.Where(coreView => coreView.Phase == (Phase)value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

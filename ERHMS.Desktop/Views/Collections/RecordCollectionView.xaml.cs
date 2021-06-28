@@ -83,8 +83,7 @@ namespace ERHMS.Desktop.Views.Collections
                 {
                     column = new DataGridTextColumn
                     {
-                        Binding = new Binding($"Value.{field.Value.Name}"),
-                        ElementStyle = (Style)FindResource("CellTextBlock"),
+                        Binding = new Binding(field.Value.Name),
                         Header = header
                     };
                     if (field.Value.FieldType.IsNumeric())

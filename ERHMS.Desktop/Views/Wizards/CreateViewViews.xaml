@@ -25,7 +25,6 @@
                   IsChecked="{Binding OpenInEpiInfo}" />
     </DataTemplate>
 
-    <!-- TODO: This is duplicated -->
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetViewNameViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -34,11 +33,11 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
                    Content="{Markup:String Label.ViewName}"
-                   Target="{x:Reference ViewNameTextBox}" />
-            <TextBox x:Name="ViewNameTextBox"
+                   Target="{x:Reference TextBox}" />
+            <TextBox x:Name="TextBox"
                      AutomationProperties.Name="{Markup:String Label.ViewName}"
                      Grid.Column="1"
-                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding Text, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </DataTemplate>
 
@@ -66,8 +65,8 @@
             <Label Grid.Column="0"
                    Grid.Row="0"
                    Content="{Markup:String Label.TemplatePath}"
-                   Target="{x:Reference TemplatePathTextBox}" />
-            <TextBox x:Name="TemplatePathTextBox"
+                   Target="{x:Reference TextBox}" />
+            <TextBox x:Name="TextBox"
                      AutomationProperties.Name="{Markup:String Label.TemplatePath}"
                      Grid.Column="1"
                      Grid.Row="0"
@@ -88,11 +87,11 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
                    Content="{Markup:String Label.ViewName}"
-                   Target="{x:Reference ViewNameTextBox}" />
-            <TextBox x:Name="ViewNameTextBox"
+                   Target="{x:Reference TextBox}" />
+            <TextBox x:Name="TextBox"
                      AutomationProperties.Name="{Markup:String Label.ViewName}"
                      Grid.Column="1"
-                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding Text, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </DataTemplate>
 

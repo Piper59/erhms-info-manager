@@ -7,9 +7,6 @@
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <UserControl.Resources>
-        <Style x:Key="CellTextBlock" TargetType="TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap" />
-        </Style>
         <Style x:Key="CopyableDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">
             <Setter Property="ContextMenu">
                 <Setter.Value>
@@ -21,10 +18,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}" />
         <Style x:Key="CopyableNumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}">
             <Setter Property="TextBlock.TextAlignment" Value="Right" />
         </Style>
+        <Style TargetType="DataGridCell" BasedOn="{StaticResource CopyableDataGridCell}" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -39,8 +36,9 @@
             </Grid.ColumnDefinitions>
             <Controls:SearchTextBox Grid.Column="0"
                                     Text="{Binding SearchText}" />
-            <Controls:RecordStatusComboBox Grid.Column="1"
-                                           ItemsSource="{Binding Statuses}" />
+            <ComboBox Grid.Column="1"
+                      ItemsSource="{Binding Statuses}"
+                      Style="{StaticResource RecordStatusComboBox}" />
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -50,15 +48,15 @@
             <WrapPanel Grid.Column="0">
                 <Controls:IconButton AltText="{Markup:String AltText.Add}"
                                      Command="{Binding AddCommand}"
-                                     Content="{Markup:Icon Add}"
+                                     Content="Add"
                                      HelpText="{Markup:String HelpText.AddRecord}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Edit}"
                                      Command="{Binding EditCommand}"
-                                     Content="{Markup:Icon Edit}"
+                                     Content="Edit"
                                      HelpText="{Markup:String HelpText.EditRecord}" />
                 <Controls:IconButton x:Name="CopyFieldButton"
                                      AltText="{Markup:String AltText.Copy}"
-                                     Content="{Markup:Icon Clipboard}"
+                                     Content="Clipboard"
                                      HelpText="{Markup:String HelpText.CopyField}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
@@ -74,50 +72,41 @@
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                      Command="{Binding DeleteCommand}"
-                                     Content="{Markup:Icon Delete}"
+                                     Content="Delete"
                                      HelpText="{Markup:String HelpText.DeleteRecords}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Undelete}"
                                      Command="{Binding UndeleteCommand}"
-                                     Content="{Markup:Icon Undelete}"
+                                     Content="Undelete"
                                      HelpText="{Markup:String HelpText.UndeleteRecords}" />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Import}"
                                      Command="{Binding ImportCommand}"
-                                     Content="{Markup:Icon Import}"
+                                     Content="Import"
                                      HelpText="{Markup:String HelpText.ImportRecords}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Export}"
                                      Command="{Binding ExportCommand}"
-                                     Content="{Markup:Icon Export}"
+                                     Content="Export"
                                      HelpText="{Markup:String HelpText.ExportRecords}" />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                      Command="{Binding RefreshCommand}"
-                                     Content="{Markup:Icon Refresh}"
+                                     Content="Refresh"
                                      HelpText="{Markup:String HelpText.RefreshRecords}" />
             </WrapPanel>
             <Controls:Pager Grid.Column="1"
                             DataContext="{Binding Items}"
                             VerticalAlignment="Top" />
         </Grid>
-        <Border Grid.Row="2"
-                Background="{Binding Background, ElementName=ItemDataGrid}"
-                Margin="{StaticResource DefaultMargin}">
-            <DataGrid x:Name="ItemDataGrid"
-                      HorizontalAlignment="Left"
-                      ItemsSource="{Binding Items}"
-                      Margin="0"
-                      MinColumnWidth="80"
-                      MaxColumnWidth="640">
-                <DataGrid.ItemContainerStyle>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="IsSelected" Value="{Binding Selected}" />
-                    </Style>
-                </DataGrid.ItemContainerStyle>
-                <b:Interaction.Behaviors>
-                    <Behaviors:EnhanceKeyboardNavigation />
-                </b:Interaction.Behaviors>
-            </DataGrid>
-        </Border>
+        <DataGrid x:Name="ItemDataGrid"
+                  Grid.Row="2"
+                  ItemsSource="{Binding Items}"
+                  MinColumnWidth="80"
+                  MaxColumnWidth="320">
+            <b:Interaction.Behaviors>
+                <Behaviors:BindSelectedItems SelectedItems="{Binding SelectedItems, Mode=OneWayToSource}" />
+                <Behaviors:EnhanceKeyboardNavigation />
+            </b:Interaction.Behaviors>
+        </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="2"
                                         ItemsControl="{x:Reference ItemDataGrid}" />
     </Grid>

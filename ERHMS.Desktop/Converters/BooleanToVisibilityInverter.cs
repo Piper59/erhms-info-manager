@@ -1,20 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
+﻿using System.Windows;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class BooleanToVisibilityInverter : IValueConverter
+    public class BooleanToVisibilityInverter : ConditionalConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public BooleanToVisibilityInverter()
         {
-            return (bool)value ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (Visibility)value != Visibility.Visible;
+            TrueValue = Visibility.Collapsed;
+            FalseValue = Visibility.Visible;
         }
     }
 }

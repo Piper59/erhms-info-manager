@@ -7,7 +7,7 @@
         <TextBlock Style="{StaticResource Body}"
                    VerticalAlignment="Center">
             <TextBlock.Text>
-                <MultiBinding StringFormat="{Markup:String Pager.Status}">
+                <MultiBinding StringFormat="{Markup:String Pager}">
                     <Binding Path="CurrentPage" />
                     <Binding Path="PageCount" />
                 </MultiBinding>
@@ -15,9 +15,9 @@
         </TextBlock>
         <Controls:IconButton AltText="{Markup:String AltText.PreviousPage}"
                              Command="{Binding GoToPreviousPageCommand}"
-                             Content="{Markup:Icon Page.Previous}" />
+                             Content="Page.Previous" />
         <Controls:IconButton AltText="{Markup:String AltText.NextPage}"
                              Command="{Binding GoToNextPageCommand}"
-                             Content="{Markup:Icon Page.Next}" />
+                             Content="Page.Next" />
     </StackPanel>
 </UserControl>

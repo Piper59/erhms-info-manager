@@ -38,12 +38,6 @@ namespace ERHMS.Desktop.ViewModels
                 Wizard.Step = step;
             }
 
-            protected async Task ContinueToAsync(Func<Task<StepViewModel<TWizard>>> action)
-            {
-                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                ContinueTo(await progress.Run(action));
-            }
-
             protected void Commit()
             {
                 Wizard.Committed = true;
@@ -104,7 +98,7 @@ namespace ERHMS.Desktop.ViewModels
             private set { SetProperty(ref committed, value); }
         }
 
-        public bool? Result { get; protected set; }
+        public bool? Result { get; private set; }
 
         public event EventHandler CloseRequested;
         private void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);

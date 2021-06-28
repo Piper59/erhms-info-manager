@@ -23,7 +23,7 @@ namespace ERHMS.Desktop.Utilities
         public UtilityDialog()
         {
             InitializeComponent();
-            Text = Strings.App_Title;
+            Text = Strings.AppTitle;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -50,7 +50,7 @@ namespace ERHMS.Desktop.Utilities
                 DialogResult result = MessageBox.Show(
                     this,
                     Strings.Body_UtilityClosing,
-                    Strings.App_Title,
+                    Strings.AppTitle,
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
                 if (result == DialogResult.No)

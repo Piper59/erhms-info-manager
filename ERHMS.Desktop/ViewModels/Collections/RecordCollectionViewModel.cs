@@ -1,7 +1,5 @@
 ﻿using Epi;
 using Epi.Data.Services;
-using ERHMS.Common.ComponentModel;
-using ERHMS.Desktop.CollectionViews;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure;
@@ -12,42 +10,14 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class RecordCollectionViewModel : ObservableObject
+    public class RecordCollectionViewModel : CollectionViewModelBase<Record>
     {
-        public class ItemViewModel : ObservableObject
-        {
-            public Record Value { get; }
-
-            private bool selected;
-            public bool Selected
-            {
-                get { return selected; }
-                set { SetProperty(ref selected, value); }
-            }
-
-            public ItemViewModel(Record value)
-            {
-                Value = value;
-            }
-
-            public override int GetHashCode()
-            {
-                return Value.GetHashCode();
-            }
-
-            public override bool Equals(object obj)
-            {
-                return obj is ItemViewModel item && Value.Equals(item.Value);
-            }
-        }
-
         private static bool IsDisplayable(MetaFieldType fieldType)
         {
             if (fieldType.IsMetadata())
@@ -92,14 +62,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
             private set { SetProperty(ref fields, value); }
         }
 
-        private readonly List<ItemViewModel> items;
-        public ICollectionView Items { get; }
-
-        public Record CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
-        public IEnumerable<Record> SelectedValues => Items.Cast<ItemViewModel>()
-            .Where(item => item.Selected)
-            .Select(item => item.Value);
-
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -111,17 +73,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public RecordCollectionViewModel(View view)
         {
             View = view;
-            items = new List<ItemViewModel>();
-            Items = new PagingListCollectionView(items)
-            {
-                Filter = IsMatch,
-                PageSize = 100
-            };
+            Items.Filter = IsMatch;
+            Items.PageSize = 100;
             Statuses.CurrentChanged += (sender, e) => Items.Refresh();
             AddCommand = new AsyncCommand(AddAsync);
-            EditCommand = new AsyncCommand(EditAsync, Items.HasCurrent);
-            DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);
-            UndeleteCommand = new AsyncCommand(UndeleteAsync, Items.HasCurrent);
+            EditCommand = new AsyncCommand(EditAsync, HasCurrentItem);
+            DeleteCommand = new AsyncCommand(DeleteAsync, HasSelectedItems);
+            UndeleteCommand = new AsyncCommand(UndeleteAsync, HasSelectedItems);
             ImportCommand = Command.Null;
             ExportCommand = Command.Null;
             RefreshCommand = new AsyncCommand(RefreshAsync);
@@ -136,7 +94,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
                     .OrderBy(field => field, new FieldDataRowComparer.ByTabIndex())
                     .ToList();
             });
-            IEnumerable<Record> values = await Task.Run(() =>
+            items.Clear();
+            items.AddRange(await Task.Run(() =>
             {
                 if (Project.CollectedData.TableExists(View.TableName))
                 {
@@ -149,18 +108,17 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 {
                     return Enumerable.Empty<Record>();
                 }
-            });
-            items.Clear();
-            items.AddRange(values.Select(value => new ItemViewModel(value)));
+            }));
             Items.Refresh();
         }
 
-        private bool IsStatusMatch(Record value)
+        private bool IsStatusMatch(Record item)
         {
-            return Statuses.CurrentValue == null || value.RECSTATUS == Statuses.CurrentValue;
+            RecordStatus? status = Statuses.CurrentItem?.Value;
+            return status == null || item.RECSTATUS == status;
         }
 
-        private bool IsSearchMatch(Record value)
+        private bool IsSearchMatch(Record item)
         {
             if (string.IsNullOrEmpty(searchText))
             {
@@ -168,8 +126,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
             foreach (FieldDataRow field in fields)
             {
-                object propertyValue = value.GetProperty(field.Name);
-                if (propertyValue?.ToString().Search(SearchText) ?? false)
+                object value = item.GetProperty(field.Name);
+                if (value?.ToString().Search(SearchText) ?? false)
                 {
                     return true;
                 }
@@ -177,10 +135,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
             return false;
         }
 
-        private bool IsMatch(object item)
+        private bool IsMatch(object obj)
         {
-            Record value = ((ItemViewModel)item).Value;
-            return IsStatusMatch(value) && IsSearchMatch(value);
+            Record item = (Record)obj;
+            return IsStatusMatch(item) && IsSearchMatch(item);
         }
 
         public async Task AddAsync()
@@ -198,7 +156,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 Module.Enter,
                 $"/project:{Project.FilePath}",
                 $"/view:{View.Name}",
-                $"/record:{CurrentValue.UniqueKey}");
+                $"/record:{CurrentItem.UniqueKey}");
         }
 
         private async Task SetDeletedAsync(string lead, bool deleted)
@@ -212,10 +170,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 {
                     using (RecordRepository repository = new RecordRepository(View))
                     {
-                        foreach (Record value in SelectedValues)
+                        foreach (Record item in SelectedItems)
                         {
                             progress.ThrowIfCancellationRequested();
-                            repository.SetDeleted(value, deleted);
+                            repository.SetDeleted(item, deleted);
                         }
                     }
                 }

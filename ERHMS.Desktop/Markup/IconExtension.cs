@@ -6,20 +6,19 @@ namespace ERHMS.Desktop.Markup
     [MarkupExtensionReturnType(typeof(string))]
     public class IconExtension : MarkupExtension
     {
-        [ConstructorArgument("name")]
-        public string Name { get; set; }
+        [ConstructorArgument("iconName")]
+        public string IconName { get; set; }
 
         public IconExtension() { }
 
-        public IconExtension(string name)
-            : this()
+        public IconExtension(string iconName)
         {
-            Name = name;
+            IconName = iconName;
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            return Icons.GetInstance(Name);
+            return Icons.GetInstance(IconName);
         }
     }
 }

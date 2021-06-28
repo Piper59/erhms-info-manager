@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         Height="480"
         ResizeMode="NoResize"
-        Title="{Markup:String App.Title}"
+        Title="{Markup:String AppTitle}"
         UseLayoutRounding="True"
         Width="640">
     <Window.Resources>

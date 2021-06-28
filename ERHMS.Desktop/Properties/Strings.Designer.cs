@@ -736,20 +736,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager logo.
-        /// </summary>
-        public static string App_Logo {
-            get {
-                return ResourceManager.GetString("App.Logo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager.
         /// </summary>
-        public static string App_Title {
+        public static string AppTitle {
             get {
-                return ResourceManager.GetString("App.Title", resourceCulture);
+                return ResourceManager.GetString("AppTitle", resourceCulture);
             }
         }
         
@@ -849,7 +840,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you choose to collect worker information, the new form will contain fields for the worker&apos;s name, email address, and unique ID. You can use these fields to link each record with the associated worker..
+        ///   Looks up a localized string similar to If you choose to collect worker information, the form will contain fields for the worker&apos;s name, email address, and unique ID. You can use these fields to associate each record with the corresponding worker..
         /// </summary>
         public static string Body_SetWithWorkerInfo {
             get {
@@ -997,87 +988,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_AfterActionReview {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.AfterActionReview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_DeploymentHealthSurvey {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.DeploymentHealthSurvey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_PostDeploymentHealthSurvey {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.PostDeploymentHealthSurvey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_PreDeploymentHealthSurvey {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.PreDeploymentHealthSurvey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_WorkerActivityReport {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.WorkerActivityReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_WorkerDeploymentRecord {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.WorkerDeploymentRecord", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_WorkerInProcessingForm {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.WorkerInProcessingForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_WorkerOutProcessingForm {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.WorkerOutProcessingForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string CoreView_Icon_WorkerRosteringForm {
-            get {
-                return ResourceManager.GetString("CoreView.Icon.WorkerRosteringForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to After-Action Review.
         /// </summary>
         public static string CoreView_Title_AfterActionReview {
@@ -1155,51 +1065,6 @@ namespace ERHMS.Desktop.Properties {
         public static string CoreView_Title_WorkerRosteringForm {
             get {
                 return ResourceManager.GetString("CoreView.Title.WorkerRosteringForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error.
-        /// </summary>
-        public static string DialogSeverity_Name_Error {
-            get {
-                return ResourceManager.GetString("DialogSeverity.Name.Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Information.
-        /// </summary>
-        public static string DialogSeverity_Name_Information {
-            get {
-                return ResourceManager.GetString("DialogSeverity.Name.Information", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string DialogSeverity_Name_None {
-            get {
-                return ResourceManager.GetString("DialogSeverity.Name.None", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Question.
-        /// </summary>
-        public static string DialogSeverity_Name_Question {
-            get {
-                return ResourceManager.GetString("DialogSeverity.Name.Question", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Warning.
-        /// </summary>
-        public static string DialogSeverity_Name_Warning {
-            get {
-                return ResourceManager.GetString("DialogSeverity.Name.Warning", resourceCulture);
             }
         }
         
@@ -1546,6 +1411,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No items found.
+        /// </summary>
+        public static string ItemsControlWatermark {
+            get {
+                return ResourceManager.GetString("ItemsControlWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location:.
         /// </summary>
         public static string Label_DirectoryPath {
@@ -1569,6 +1443,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Label_OpenInEpiInfo {
             get {
                 return ResourceManager.GetString("Label.OpenInEpiInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database:.
+        /// </summary>
+        public static string Label_Project {
+            get {
+                return ResourceManager.GetString("Label.Project", resourceCulture);
             }
         }
         
@@ -1807,15 +1690,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No items found.
-        /// </summary>
-        public static string Lead_ItemsControlWatermark {
-            get {
-                return ResourceManager.GetString("Lead.ItemsControlWatermark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Loading database.
         /// </summary>
         public static string Lead_LoadingProject {
@@ -1917,9 +1791,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Page {0} of {1}.
         /// </summary>
-        public static string Pager_Status {
+        public static string Pager {
             get {
-                return ResourceManager.GetString("Pager.Status", resourceCulture);
+                return ResourceManager.GetString("Pager", resourceCulture);
             }
         }
         
@@ -1962,9 +1836,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
-        public static string RecordStatus_Name_Null {
+        public static string RecordStatus_Name_NULL {
             get {
-                return ResourceManager.GetString("RecordStatus.Name.Null", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Name.NULL", resourceCulture);
             }
         }
         

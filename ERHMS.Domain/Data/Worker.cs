@@ -80,7 +80,21 @@ namespace ERHMS.Domain.Data
             set { SetProperty(nameof(EmailAddress), value); }
         }
 
-        public double GetSimilarity(string firstName, string lastName, string emailAddress)
+        private double similarity;
+        public double Similarity
+        {
+            get
+            {
+                return similarity;
+            }
+            private set
+            {
+                similarity = value;
+                OnPropertyChanged(nameof(Similarity));
+            }
+        }
+
+        public void SetSimilarity(string firstName, string lastName, string emailAddress)
         {
             ICollection<double> similarities = new List<double>();
             if (!string.IsNullOrEmpty(firstName))
@@ -97,7 +111,7 @@ namespace ERHMS.Domain.Data
             {
                 similarities.Add(StringDistanceCalculator.GetSimilarity(emailAddress, EmailAddress ?? ""));
             }
-            return similarities.Count == 0 ? 0.0 : similarities.Average();
+            Similarity = similarities.Count == 0 ? 0.0 : similarities.Average();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Data;
 using ERHMS.Desktop.ViewModels.Utilities;
 using System.Windows;
 using System.Windows.Input;
@@ -26,7 +25,7 @@ namespace ERHMS.Desktop.Views.Utilities
 
         public bool CanCommit()
         {
-            return DataContext?.Workers.Items.HasCurrent() ?? false;
+            return DataContext?.Workers.HasCurrentItem() ?? false;
         }
 
         public void Commit()

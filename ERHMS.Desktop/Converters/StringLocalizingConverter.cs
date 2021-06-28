@@ -6,22 +6,14 @@ using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class ResourceNameToStringConverter : IValueConverter
+    public class StringLocalizingConverter : IValueConverter
     {
-        public string Prefix { get; set; }
-        public string NullValue { get; set; }
+        public string Format { get; set; } = "{0}";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-            {
-                value = NullValue;
-                if (value == null)
-                {
-                    return DependencyProperty.UnsetValue;
-                }
-            }
-            string resourceName = $"{Prefix}.{value}";
+            string format = (string)parameter ?? Format;
+            string resourceName = string.Format(format, value ?? "NULL");
             return Strings.ResourceManager.GetString(resourceName);
         }
 

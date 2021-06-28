@@ -342,10 +342,7 @@
   <data name="AltText.UpToProject" xml:space="preserve">
     <value>Up to database</value>
   </data>
-  <data name="App.Logo" xml:space="preserve">
-    <value>ERHMS Info Manager logo</value>
-  </data>
-  <data name="App.Title" xml:space="preserve">
+  <data name="AppTitle" xml:space="preserve">
     <value>ERHMS Info Manager</value>
   </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
@@ -390,7 +387,7 @@ This file is not a form-level Epi Info template.</value>
     <value>Settings have been reset.</value>
   </data>
   <data name="Body.SetWithWorkerInfo" xml:space="preserve">
-    <value>If you choose to collect worker information, the new form will contain fields for the worker's name, email address, and unique ID. You can use these fields to link each record with the associated worker.</value>
+    <value>If you choose to collect worker information, the form will contain fields for the worker's name, email address, and unique ID. You can use these fields to associate each record with the corresponding worker.</value>
   </data>
   <data name="Body.UtilityClosing" xml:space="preserve">
     <value>ERHMS Info Manager is still working.
@@ -441,33 +438,6 @@ Close anyway?</value>
   <data name="CoreView.HelpText.WorkerRosteringForm" xml:space="preserve">
     <value>Filled out once for each worker and reviewed annually. Captures rostering and credentialing information.</value>
   </data>
-  <data name="CoreView.Icon.AfterActionReview" xml:space="preserve">
-    <value>&#xf559;</value>
-  </data>
-  <data name="CoreView.Icon.DeploymentHealthSurvey" xml:space="preserve">
-    <value>&#xf21e;</value>
-  </data>
-  <data name="CoreView.Icon.PostDeploymentHealthSurvey" xml:space="preserve">
-    <value>&#xf21e;</value>
-  </data>
-  <data name="CoreView.Icon.PreDeploymentHealthSurvey" xml:space="preserve">
-    <value>&#xf21e;</value>
-  </data>
-  <data name="CoreView.Icon.WorkerActivityReport" xml:space="preserve">
-    <value>&#xf807;</value>
-  </data>
-  <data name="CoreView.Icon.WorkerDeploymentRecord" xml:space="preserve">
-    <value>&#xf57d;</value>
-  </data>
-  <data name="CoreView.Icon.WorkerInProcessingForm" xml:space="preserve">
-    <value>&#xf2f6;</value>
-  </data>
-  <data name="CoreView.Icon.WorkerOutProcessingForm" xml:space="preserve">
-    <value>&#xf2f5;</value>
-  </data>
-  <data name="CoreView.Icon.WorkerRosteringForm" xml:space="preserve">
-    <value>&#xf2c1;</value>
-  </data>
   <data name="CoreView.Title.AfterActionReview" xml:space="preserve">
     <value>After-Action Review</value>
   </data>
@@ -494,21 +464,6 @@ Close anyway?</value>
   </data>
   <data name="CoreView.Title.WorkerRosteringForm" xml:space="preserve">
     <value>Worker Rostering Form</value>
-  </data>
-  <data name="DialogSeverity.Name.Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="DialogSeverity.Name.Information" xml:space="preserve">
-    <value>Information</value>
-  </data>
-  <data name="DialogSeverity.Name.None" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DialogSeverity.Name.Question" xml:space="preserve">
-    <value>Question</value>
-  </data>
-  <data name="DialogSeverity.Name.Warning" xml:space="preserve">
-    <value>Warning</value>
   </data>
   <data name="FileDialog.Filter.Canvases" xml:space="preserve">
     <value>Epi Info Dashboards (*.cvs7)|*.cvs7</value>
@@ -624,6 +579,9 @@ Close anyway?</value>
   <data name="InvalidViewNameReason.Lead.TooLong" xml:space="preserve">
     <value>This form name is too long</value>
   </data>
+  <data name="ItemsControlWatermark" xml:space="preserve">
+    <value>No items found</value>
+  </data>
   <data name="Label.DirectoryPath" xml:space="preserve">
     <value>Location:</value>
   </data>
@@ -632,6 +590,9 @@ Close anyway?</value>
   </data>
   <data name="Label.OpenInEpiInfo" xml:space="preserve">
     <value>Open in Epi Info?</value>
+  </data>
+  <data name="Label.Project" xml:space="preserve">
+    <value>Database:</value>
   </data>
   <data name="Label.RecordStatus" xml:space="preserve">
     <value>Record status:</value>
@@ -711,9 +672,6 @@ Close anyway?</value>
   <data name="Lead.InvalidTemplatePath" xml:space="preserve">
     <value>This file is not valid</value>
   </data>
-  <data name="Lead.ItemsControlWatermark" xml:space="preserve">
-    <value>No items found</value>
-  </data>
   <data name="Lead.LoadingProject" xml:space="preserve">
     <value>Loading database</value>
   </data>
@@ -747,7 +705,7 @@ Close anyway?</value>
   <data name="Lead.Working" xml:space="preserve">
     <value>Working...</value>
   </data>
-  <data name="Pager.Status" xml:space="preserve">
+  <data name="Pager" xml:space="preserve">
     <value>Page {0} of {1}</value>
   </data>
   <data name="Phase.Name.Deployment" xml:space="preserve">
@@ -762,7 +720,7 @@ Close anyway?</value>
   <data name="RecordStatus.Name.Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
-  <data name="RecordStatus.Name.Null" xml:space="preserve">
+  <data name="RecordStatus.Name.NULL" xml:space="preserve">
     <value>All</value>
   </data>
   <data name="RecordStatus.Name.Undeleted" xml:space="preserve">

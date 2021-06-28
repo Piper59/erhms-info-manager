@@ -8,20 +8,16 @@ namespace ERHMS.Desktop.Converters
 {
     public class StringCaseFormattingConverter : IValueConverter
     {
-        public IValueConverter BaseConverter { get; set; }
-        public string Format { get; set; }
+        public string Format { get; set; } = "{0}";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (BaseConverter != null)
-            {
-                value = BaseConverter.Convert(value, targetType, parameter, culture);
-            }
             IFormatProvider formatter = new StringCaseFormatter
             {
                 Culture = culture
             };
-            return string.Format(formatter, Format, value);
+            string format = (string)parameter ?? Format;
+            return string.Format(formatter, format, value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

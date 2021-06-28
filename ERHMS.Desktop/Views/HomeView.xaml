@@ -3,14 +3,91 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
+             xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <UserControl.Resources>
-        <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToHelpTextConverter" Prefix="CoreView.HelpText" />
-        <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToIconConverter" Prefix="CoreView.Icon" />
-        <Converters:ResourceNameToStringConverter x:Key="CoreViewNameToTitleConverter" Prefix="CoreView.Title" />
-        <Converters:ResourceNameToStringConverter x:Key="PhaseToNameConverter" Prefix="Phase.Name" />
-        <Converters:PhaseToColorConverter x:Key="PhaseToStartColorConverter" Alpha="0x40" />
-        <Converters:PhaseToColorConverter x:Key="PhaseToStopColorConverter" Alpha="0x00" />
+        <Converters:IconNameToInstanceConverter x:Key="IconNameToInstanceConverter" />
+        <Converters:PhaseToColorConverter x:Key="PhaseToColorConverter" />
+        <Converters:PhaseToCoreViewsConverter x:Key="PhaseToCoreViewsConverter" />
+        <Converters:StringLocalizingConverter x:Key="StringLocalizingConverter" />
+        <DataTemplate DataType="{x:Type Domain:Phase}">
+            <StackPanel Style="{StaticResource Section}">
+                <Border Margin="{StaticResource DefaultMargin}"
+                        Padding="{StaticResource DefaultPadding}">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0.5,0"
+                                             EndPoint="1,0">
+                            <GradientStop Color="{Binding ., Converter={StaticResource PhaseToColorConverter}, ConverterParameter=0x40}"
+                                          Offset="0" />
+                            <GradientStop Color="{Binding ., Converter={StaticResource PhaseToColorConverter}, ConverterParameter=0x00}"
+                                          Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock Style="{StaticResource Heading}"
+                               Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.Name.{0}'}" />
+                </Border>
+                <ItemsControl Grid.IsSharedSizeScope="True"
+                              IsTabStop="False"
+                              ItemsSource="{Binding ., Converter={StaticResource PhaseToCoreViewsConverter}}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"
+                                                   SharedSizeGroup="ButtonGroup" />
+                                </Grid.RowDefinitions>
+                                <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
+                                        AutomationProperties.Name="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
+                                        Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource WorkflowButton}">
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </Grid.Resources>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="IconGroup"
+                                                              Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Grid.Row="0"
+                                                   Grid.RowSpan="2"
+                                                   FontFamily="{StaticResource IconFontFamily}"
+                                                   FontSize="{StaticResource HugeFontSize}"
+                                                   Text="{Binding Name, Converter={StaticResource IconNameToInstanceConverter}, ConverterParameter='CoreView.{0}'}"
+                                                   TextAlignment="Center"
+                                                   VerticalAlignment="Center">
+                                            <TextBlock.Margin>
+                                                <Thickness Right="{StaticResource LargeSpace}" />
+                                            </TextBlock.Margin>
+                                        </TextBlock>
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="0"
+                                                   FontSize="{StaticResource MediumFontSize}"
+                                                   Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}">
+                                            <TextBlock.Margin>
+                                                <Thickness Bottom="{StaticResource SmallSpace}" />
+                                            </TextBlock.Margin>
+                                        </TextBlock>
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="1"
+                                                   FontSize="{StaticResource SmallFontSize}"
+                                                   Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}" />
+                                    </Grid>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
     <ScrollViewer>
         <Border Style="{StaticResource SmallLayout}">
@@ -21,98 +98,18 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0"
-                           AutomationProperties.Name="{Markup:String App.Logo}"
                            Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
                            Width="64">
                     </Image>
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
-                               Text="{Markup:String App.Title}"
+                               Text="{Markup:String AppTitle}"
                                VerticalAlignment="Center" />
                 </Grid>
-                <ItemsControl Grid.IsSharedSizeScope="True"
-                              IsTabStop="False"
-                              ItemsSource="{Binding Phases}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Style="{StaticResource Section}">
-                                <Border Margin="{StaticResource DefaultMargin}"
-                                        Padding="{StaticResource DefaultPadding}">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
-                                            <GradientStop Color="{Binding Value, Converter={StaticResource PhaseToStartColorConverter}}"
-                                                          Offset="0" />
-                                            <GradientStop Color="{Binding Value, Converter={StaticResource PhaseToStopColorConverter}}"
-                                                          Offset="1" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <TextBlock Style="{StaticResource Heading}"
-                                               Text="{Binding Value, Converter={StaticResource PhaseToNameConverter}}" />
-                                </Border>
-                                <ItemsControl IsTabStop="False"
-                                              ItemsSource="{Binding CoreViews}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"
-                                                                   SharedSizeGroup="ButtonGroup" />
-                                                </Grid.RowDefinitions>
-                                                <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource CoreViewNameToHelpTextConverter}}"
-                                                        AutomationProperties.Name="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}"
-                                                        Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
-                                                        CommandParameter="{Binding}"
-                                                        Style="{StaticResource WorkflowButton}">
-                                                    <Grid>
-                                                        <Grid.Resources>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="TextWrapping" Value="Wrap" />
-                                                            </Style>
-                                                        </Grid.Resources>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition SharedSizeGroup="IconGroup"
-                                                                              Width="Auto" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="Auto" />
-                                                        </Grid.RowDefinitions>
-                                                        <TextBlock Grid.Column="0"
-                                                                   Grid.Row="0"
-                                                                   Grid.RowSpan="2"
-                                                                   FontFamily="{StaticResource IconFontFamily}"
-                                                                   FontSize="{StaticResource HugeFontSize}"
-                                                                   Text="{Binding Name, Converter={StaticResource CoreViewNameToIconConverter}}"
-                                                                   TextAlignment="Center"
-                                                                   VerticalAlignment="Center">
-                                                            <TextBlock.Margin>
-                                                                <Thickness Right="{StaticResource LargeSpace}" />
-                                                            </TextBlock.Margin>
-                                                        </TextBlock>
-                                                        <TextBlock Grid.Column="1"
-                                                                   Grid.Row="0"
-                                                                   FontSize="{StaticResource MediumFontSize}"
-                                                                   Text="{Binding Name, Converter={StaticResource CoreViewNameToTitleConverter}}">
-                                                            <TextBlock.Margin>
-                                                                <Thickness Bottom="{StaticResource SmallSpace}" />
-                                                            </TextBlock.Margin>
-                                                        </TextBlock>
-                                                        <TextBlock Grid.Column="1"
-                                                                   Grid.Row="1"
-                                                                   FontSize="{StaticResource SmallFontSize}"
-                                                                   Text="{Binding Name, Converter={StaticResource CoreViewNameToHelpTextConverter}}" />
-                                                    </Grid>
-                                                </Button>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <ContentPresenter Content="{x:Static Domain:Phase.PreDeployment}" />
+                <ContentPresenter Content="{x:Static Domain:Phase.Deployment}" />
+                <ContentPresenter Content="{x:Static Domain:Phase.PostDeployment}" />
             </StackPanel>
         </Border>
     </ScrollViewer>

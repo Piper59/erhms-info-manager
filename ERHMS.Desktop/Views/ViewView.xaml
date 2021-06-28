@@ -21,7 +21,7 @@
                            Style="{StaticResource Heading}"
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap">
-                    <Run>Form:</Run>
+                    <Run Text="{Markup:String Label.View}" />
                     <Hyperlink Command="{Binding OpenProjectLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
                         <Run FontWeight="{StaticResource DefaultFontWeight}"
@@ -41,13 +41,13 @@
                             Orientation="Horizontal">
                     <Controls:IconButton AltText="{Markup:String AltText.UpToProject}"
                                          Command="{Binding GoToProjectCommand}"
-                                         Content="{Markup:Icon Level.Parent}" />
+                                         Content="Level.Parent" />
                     <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
-                                         Content="{Markup:Icon Home}" />
+                                         Content="Home" />
                     <Controls:IconButton AltText="{Markup:String AltText.Help}"
                                          Command="{Binding GoToHelpCommand}"
-                                         Content="{Markup:Icon Help}" />
+                                         Content="Help" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">

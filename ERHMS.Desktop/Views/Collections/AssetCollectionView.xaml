@@ -17,20 +17,20 @@
         <WrapPanel Grid.Row="0">
             <Controls:IconButton AltText="{Markup:String AltText.Create}"
                                  Command="{Binding CreateCommand}"
-                                 Content="{Markup:Icon Create}"
+                                 Content="Create"
                                  HelpText="{Markup:String HelpText.CreateAsset}" />
             <Controls:IconButton AltText="{Markup:String AltText.Open}"
                                  Command="{Binding OpenCommand}"
-                                 Content="{Markup:Icon Open}"
+                                 Content="Open"
                                  HelpText="{Markup:String HelpText.OpenAsset}" />
             <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
-                                 Content="{Markup:Icon Delete}"
+                                 Content="Delete"
                                  HelpText="{Markup:String HelpText.DeleteAsset}" />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"
-                                 Content="{Markup:Icon Refresh}"
+                                 Content="Refresh"
                                  HelpText="{Markup:String HelpText.RefreshAssets}" />
         </WrapPanel>
         <DataGrid x:Name="ItemDataGrid"
@@ -38,15 +38,15 @@
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Value.Name}"
+                <DataGridTextColumn Binding="{Binding Name}"
                                     Header="{Markup:String AccessText.Name}"
                                     SortDirection="Ascending"
                                     Width="3*" />
-                <DataGridTextColumn Binding="{Binding Value.LastWriteTime}"
+                <DataGridTextColumn Binding="{Binding LastWriteTime}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="{Markup:String AccessText.DateModified}"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding Value.Length, Converter={StaticResource ByteCountFormattingConverter}}"
+                <DataGridTextColumn Binding="{Binding Length, Converter={StaticResource ByteCountFormattingConverter}}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="{Markup:String AccessText.Size}"
                                     Width="*" />
@@ -55,11 +55,6 @@
                 <MouseBinding Command="{Binding OpenCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="IsSelected" Value="{Binding Selected}" />
-                </Style>
-            </DataGrid.ItemContainerStyle>
             <b:Interaction.Behaviors>
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>

@@ -1,61 +1,23 @@
 ﻿using Epi;
-using ERHMS.Common.ComponentModel;
-using ERHMS.Common.Text;
 using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
 using Microsoft.VisualBasic.FileIO;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public abstract class AssetCollectionViewModel
+    public abstract class AssetCollectionViewModel : CollectionViewModelBase<FileInfo>
     {
-        public class ItemViewModel : ObservableObject
-        {
-            public FileInfo Value { get; }
-
-            private bool selected;
-            public bool Selected
-            {
-                get { return selected; }
-                set { SetProperty(ref selected, value); }
-            }
-
-            public ItemViewModel(FileInfo value)
-            {
-                Value = value;
-            }
-
-            public override int GetHashCode()
-            {
-                return Comparers.Path.GetHashCode(Value.FullName);
-            }
-
-            public override bool Equals(object obj)
-            {
-                return obj is ItemViewModel item && Comparers.Path.Equals(Value.FullName, item.Value.FullName);
-            }
-        }
-
         protected abstract Module Module { get; }
         protected abstract string FileExtension { get; }
         public Project Project { get; }
-
-        private readonly List<ItemViewModel> items;
-        public ICollectionView Items { get; }
-
-        public FileInfo CurrentValue => ((ItemViewModel)Items.CurrentItem)?.Value;
 
         public ICommand CreateCommand { get; }
         public ICommand OpenCommand { get; }
@@ -65,24 +27,21 @@ namespace ERHMS.Desktop.ViewModels.Collections
         protected AssetCollectionViewModel(Project project)
         {
             Project = project;
-            items = new List<ItemViewModel>();
-            Items = new ListCollectionView(items);
             Items.SortDescriptions.Add(new SortDescription(nameof(FileInfo.Name), ListSortDirection.Ascending));
             CreateCommand = new AsyncCommand(CreateAsync);
-            OpenCommand = new AsyncCommand(OpenAsync, Items.HasCurrent);
-            DeleteCommand = new AsyncCommand(DeleteAsync, Items.HasCurrent);
+            OpenCommand = new AsyncCommand(OpenAsync, HasCurrentItem);
+            DeleteCommand = new AsyncCommand(DeleteAsync, HasCurrentItem);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
         public async Task InitializeAsync()
         {
-            IEnumerable<FileInfo> values = await Task.Run(() =>
+            items.Clear();
+            items.AddRange(await Task.Run(() =>
             {
                 DirectoryInfo directory = new DirectoryInfo(Project.Location);
                 return directory.GetFiles($"*{FileExtension}");
-            });
-            items.Clear();
-            items.AddRange(values.Select(value => new ItemViewModel(value)));
+            }));
             Items.Refresh();
         }
 
@@ -101,7 +60,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task OpenAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(Module, CurrentValue.FullName);
+            await MainViewModel.Instance.StartEpiInfoAsync(Module, CurrentItem.FullName);
         }
 
         public async Task DeleteAsync()
@@ -109,7 +68,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
             dialog.Severity = DialogSeverity.Warning;
             dialog.Lead = Strings.Lead_ConfirmAssetDeletion;
-            dialog.Body = string.Format(Strings.Body_ConfirmAssetDeletion, CurrentValue.Name);
+            dialog.Body = string.Format(Strings.Body_ConfirmAssetDeletion, CurrentItem.Name);
             dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Delete);
             if (dialog.Show() != true)
             {
@@ -122,7 +81,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 await Task.Run(() =>
                 {
                     FileSystem.DeleteFile(
-                        CurrentValue.FullName,
+                        CurrentItem.FullName,
                         UIOption.OnlyErrorDialogs,
                         RecycleOption.SendToRecycleBin);
                 });

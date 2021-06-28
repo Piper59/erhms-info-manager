@@ -19,8 +19,9 @@
             </Grid.ColumnDefinitions>
             <Controls:SearchTextBox Grid.Column="0"
                                     Text="{Binding SearchText}" />
-            <Controls:RecordStatusComboBox Grid.Column="1"
-                                           ItemsSource="{Binding Statuses}" />
+            <ComboBox Grid.Column="1"
+                      ItemsSource="{Binding Statuses}"
+                      Style="{StaticResource RecordStatusComboBox}" />
         </Grid>
         <Controls:Pager Grid.Row="1"
                         DataContext="{Binding Items}"
@@ -30,18 +31,18 @@
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Similarity, StringFormat={}{0:P0}}"
+                <DataGridTextColumn Binding="{Binding Similarity, StringFormat='{}{0:P0}'}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="{Markup:String AccessText.Similarity}"
                                     SortDirection="Descending"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding Value.FullName}"
+                <DataGridTextColumn Binding="{Binding FullName}"
                                     Header="{Markup:String AccessText.FullName}"
                                     Width="3*" />
-                <DataGridTextColumn Binding="{Binding Value.EmailAddress}"
+                <DataGridTextColumn Binding="{Binding EmailAddress}"
                                     Header="{Markup:String AccessText.EmailAddress}"
                                     Width="3*" />
-                <DataGridTextColumn Binding="{Binding Value.GlobalRecordId}"
+                <DataGridTextColumn Binding="{Binding GlobalRecordId}"
                                     Header="{Markup:String AccessText.WorkerId}"
                                     Width="3*" />
             </DataGrid.Columns>
@@ -49,11 +50,6 @@
                 <MouseBinding Command="{Binding CommitCommand, ElementName=Root}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="IsSelected" Value="{Binding Selected}" />
-                </Style>
-            </DataGrid.ItemContainerStyle>
             <b:Interaction.Behaviors>
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>

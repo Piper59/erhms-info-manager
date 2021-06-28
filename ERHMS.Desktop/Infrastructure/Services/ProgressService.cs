@@ -15,7 +15,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
 
         public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
         public string Lead { get; set; } = Strings.Lead_Working;
-        public bool CanBeCanceled { get; set; } = false;
+        public bool CanBeCanceled { get; set; }
 
         private async Task<TTask> RunCore<TTask>(Func<TTask> action)
             where TTask : Task

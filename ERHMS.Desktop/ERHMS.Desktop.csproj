@@ -93,14 +93,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCommands.cs" />
+    <Compile Include="Behaviors\BindSelectedItems.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
     <Compile Include="Behaviors\MoveFocusInternallyOnControlArrow.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClick.cs" />
     <Compile Include="Behaviors\RestoreCurrentCellOnFocus.cs" />
     <Compile Include="Behaviors\ToggleSelectionOnSpace.cs" />
-    <Compile Include="CollectionViews\PhaseCollectionView.cs" />
-    <Compile Include="CollectionViews\RecordStatusCollectionView.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\Command.cs" />
@@ -114,25 +113,25 @@
     <Compile Include="Controls\Pager.xaml.cs">
       <DependentUpon>Pager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RecordStatusComboBox.xaml.cs">
-      <DependentUpon>RecordStatusComboBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SearchTextBox.xaml.cs">
       <DependentUpon>SearchTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\BooleanToObjectConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
     <Compile Include="Converters\ByteCountFormattingConverter.cs" />
-    <Compile Include="Converters\IconToImageSourceConverter.cs" />
+    <Compile Include="Converters\ConditionalConverter.cs" />
+    <Compile Include="Converters\IconNameToInstanceConverter.cs" />
     <Compile Include="Converters\NullableToBooleanConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
-    <Compile Include="Converters\ResourceNameToStringConverter.cs" />
+    <Compile Include="Converters\PhaseToCoreViewsConverter.cs" />
     <Compile Include="Converters\StringCaseFormattingConverter.cs" />
+    <Compile Include="Converters\StringLocalizingConverter.cs" />
     <Compile Include="Data\ICollectionViewExtensions.cs" />
-    <Compile Include="Data\IPagingCollectionView.cs" />
     <Compile Include="Data\PagingListCollectionView.cs" />
+    <Compile Include="Data\RecordStatusCollectionView.cs" />
+    <Compile Include="Data\TypedListCollectionView.cs" />
+    <Compile Include="Data\ViewCollectionView.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />
@@ -185,6 +184,7 @@
     </Compile>
     <Compile Include="ViewModels\Collections\AssetCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\CanvasCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Collections\CollectionViewModelBase.cs" />
     <Compile Include="ViewModels\Collections\MapCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\PgmCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
@@ -278,10 +278,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Pager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\RecordStatusComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

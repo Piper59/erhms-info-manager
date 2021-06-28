@@ -63,6 +63,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
+                Close();
                 if (openInEpiInfo)
                 {
                     await MainViewModel.Instance.StartEpiInfoAsync(
@@ -70,7 +71,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         $"/project:{Wizard.Project.FilePath}",
                         $"/view:{Wizard.View.Name}");
                 }
-                Close();
             }
         }
 

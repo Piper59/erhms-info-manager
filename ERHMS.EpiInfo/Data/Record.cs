@@ -74,7 +74,7 @@ namespace ERHMS.EpiInfo.Data
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
-        private void OnPropertyChanged(string propertyName) =>
+        protected void OnPropertyChanged(string propertyName) =>
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
         public bool TryGetProperty(string propertyName, out object value)

@@ -9,12 +9,10 @@
         MinWidth="320"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        Title="{Markup:String App.Title}"
+        Title="{Markup:String AppTitle}"
         UseLayoutRounding="True">
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <Converters:ResourceNameToStringConverter x:Key="DialogSeverityToNameConverter" Prefix="DialogSeverity.Name" />
-        <Converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter" />
         <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
     </Window.Resources>
     <StackPanel>
@@ -28,12 +26,12 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Image AutomationProperties.Name="{Binding Severity, Converter={StaticResource DialogSeverityToNameConverter}}"
-                           Grid.Column="0"
+                    <Image Grid.Column="0"
                            Margin="{StaticResource DefaultMargin}"
-                           Source="{Binding Icon, Converter={StaticResource IconToImageSourceConverter}}"
+                           Source="{Binding Image}"
                            VerticalAlignment="Top"
-                           Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}" />
+                           Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}">
+                    </Image>
                     <StackPanel Grid.Column="1">
                         <TextBlock Style="{StaticResource Lead}"
                                    Text="{Binding Lead}" />
@@ -62,7 +60,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
-                        Command="{Binding ToggleDetailedCommand}"
+                        Command="{Binding ToggleShowingDetailsCommand}"
                         Content="{Markup:String AccessText.Details}"
                         VerticalAlignment="Top"
                         Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}" />
@@ -87,7 +85,7 @@
         </Border>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                Visibility="{Binding Detailed, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding ShowingDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          MaxHeight="250"

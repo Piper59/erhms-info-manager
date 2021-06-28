@@ -13,7 +13,8 @@ namespace ERHMS.Desktop.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             IFormatProvider formatter = new ByteCountFormatter();
-            return string.Format(formatter, Format, value);
+            string format = (string)parameter ?? Format;
+            return string.Format(formatter, format, value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

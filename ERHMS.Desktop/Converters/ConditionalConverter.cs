@@ -1,24 +1,23 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class IconToImageSourceConverter : IValueConverter
+    public class ConditionalConverter : IValueConverter
     {
+        public IValueConverter BaseConverter { get; set; }
+        public object TrueValue { get; set; }
+        public object FalseValue { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            if (BaseConverter != null)
             {
-                return DependencyProperty.UnsetValue;
+                value = BaseConverter.Convert(value, typeof(bool), parameter, culture);
             }
-            Icon icon = (Icon)value;
-            BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromEmptyOptions();
-            return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, sizeOptions);
+            return (bool)value ? TrueValue : FalseValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
