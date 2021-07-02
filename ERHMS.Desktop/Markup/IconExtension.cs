@@ -12,6 +12,7 @@ namespace ERHMS.Desktop.Markup
         public IconExtension() { }
 
         public IconExtension(string iconName)
+            : this()
         {
             IconName = iconName;
         }

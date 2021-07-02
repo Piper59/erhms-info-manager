@@ -89,7 +89,7 @@ namespace ERHMS.EpiInfo.Data
 
         protected internal bool SetProperty(string propertyName, object value)
         {
-            if (propertiesByName.TryGetValue(propertyName, out object currentValue) && Equals(value, currentValue))
+            if (propertiesByName.TryGetValue(propertyName, out object currentValue) && Equals(currentValue, value))
             {
                 return false;
             }

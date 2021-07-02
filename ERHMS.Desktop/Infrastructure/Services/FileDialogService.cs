@@ -2,6 +2,7 @@
 using ERHMS.Desktop.Services;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 
 namespace ERHMS.Desktop.Infrastructure.Services
@@ -10,17 +11,49 @@ namespace ERHMS.Desktop.Infrastructure.Services
     {
         public string InitialDirectory { get; set; }
         public string InitialFileName { get; set; }
-        public string FileName { get; set; }
+
+        private string fileName;
+        public string FileName
+        {
+            get
+            {
+                return fileName;
+            }
+            set
+            {
+                SetInitialPath(value);
+                fileName = value;
+            }
+        }
+
         public string Filter { get; set; }
 
         public event CancelEventHandler FileOk;
 
+        private void SetInitialPath(string path)
+        {
+            InitialDirectory = Path.GetDirectoryName(path);
+            InitialFileName = Path.GetFileName(path);
+        }
+
         private bool? Show(FileDialog dialog)
         {
+            dialog.InitialDirectory = InitialDirectory;
+            dialog.FileName = InitialFileName;
+            dialog.Filter = Filter;
             dialog.FileOk += (sender, e) =>
             {
-                FileName = dialog.FileName;
+                string oldFileName = FileName;
+                fileName = dialog.FileName;
                 FileOk?.Invoke(this, e);
+                if (e.Cancel)
+                {
+                    fileName = oldFileName;
+                }
+                else
+                {
+                    SetInitialPath(fileName);
+                }
             };
             Window owner = Application.Current.GetActiveWindow();
             owner.EnsureHandle();
@@ -31,9 +64,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         {
             return Show(new OpenFileDialog
             {
-                Title = Strings.FileDialog_Title_Open,
-                InitialDirectory = InitialDirectory,
-                Filter = Filter
+                Title = Strings.FileDialog_Title_Open
             });
         }
 
@@ -41,10 +72,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
         {
             return Show(new SaveFileDialog
             {
-                Title = Strings.FileDialog_Title_Save,
-                InitialDirectory = InitialDirectory,
-                FileName = InitialFileName,
-                Filter = Filter
+                Title = Strings.FileDialog_Title_Save
             });
         }
     }

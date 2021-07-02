@@ -37,7 +37,7 @@ namespace ERHMS.Desktop.ViewModels
             DialogButtonCollection buttons)
         {
             Severity = severity;
-            Icon icon = severity.ToIcon();
+            Icon icon = severity.ToSystemIcon();
             if (icon != null)
             {
                 Image = Imaging.CreateBitmapSourceFromHIcon(

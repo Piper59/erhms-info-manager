@@ -71,9 +71,7 @@ namespace ERHMS.Desktop.ViewModels
             progress.Lead = Strings.Lead_LoadingProject;
             Content = await progress.Run(async () =>
             {
-                ProjectViewModel content = new ProjectViewModel(await action());
-                await content.InitializeAsync();
-                return content;
+                return await ProjectViewModel.CreateAsync(await action());
             });
         }
 
@@ -92,9 +90,7 @@ namespace ERHMS.Desktop.ViewModels
             progress.Lead = Strings.Lead_LoadingView;
             Content = await progress.Run(async () =>
             {
-                ViewViewModel content = new ViewViewModel(await action());
-                await content.InitializeAsync();
-                return content;
+                return await ViewViewModel.CreateAsync(await action());
             });
         }
 
@@ -129,7 +125,7 @@ namespace ERHMS.Desktop.ViewModels
                 return;
             }
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = Strings.Lead_ExportingLogDirectory;
+            progress.Lead = Strings.Lead_ExportingLogs;
             await progress.Run(() =>
             {
                 ZipFileExtensions.CreateFromDirectory(
@@ -138,20 +134,6 @@ namespace ERHMS.Desktop.ViewModels
                     $"*{FileAppender.Extension}",
                     FileMode.Create,
                     FileShare.ReadWrite);
-            });
-        }
-
-        public async Task StartEpiInfoAsync(Module module, params string[] args)
-        {
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Delay = TimeSpan.Zero;
-            progress.Lead = Strings.Lead_StartingEpiInfo;
-            await progress.Run(() =>
-            {
-                using (Process process = module.Start(args))
-                {
-                    process.WaitForExit(3000);
-                }
             });
         }
 

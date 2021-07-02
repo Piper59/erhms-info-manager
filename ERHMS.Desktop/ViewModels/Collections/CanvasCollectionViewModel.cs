@@ -1,21 +1,29 @@
 ﻿using Epi;
 using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.EpiInfo;
+using System.Threading.Tasks;
 using FileExtensions = ERHMS.EpiInfo.FileExtensions;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
     public class CanvasCollectionViewModel : AssetCollectionViewModel
     {
+        public static async Task<CanvasCollectionViewModel> CreateAsync(Project project)
+        {
+            CanvasCollectionViewModel result = new CanvasCollectionViewModel(project);
+            await result.InitializeAsync();
+            return result;
+        }
+
         protected override Module Module => Module.AnalysisDashboard;
         protected override string FileExtension => FileExtensions.Canvas;
 
-        public CanvasCollectionViewModel(Project project)
+        private CanvasCollectionViewModel(Project project)
             : base(project) { }
 
-        protected override CreateAssetViewModel GetCreateWizard()
+        protected override async Task<CreateAssetViewModel> GetCreateWizardAsync()
         {
-            return new CreateCanvasViewModel(Project);
+            return await CreateCanvasViewModel.CreateAsync(Project);
         }
     }
 }

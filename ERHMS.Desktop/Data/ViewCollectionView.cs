@@ -1,26 +1,34 @@
 ﻿using Epi;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.Data
 {
-    public class ViewCollectionView : TypedListCollectionView<View>
+    public class ViewCollectionView : ListCollectionView<View>
     {
+        public static async Task<ViewCollectionView> CreateAsync(Project project)
+        {
+            ViewCollectionView result = new ViewCollectionView(project);
+            await result.InitializeAsync();
+            return result;
+        }
+
         public Project Project { get; }
 
-        public ViewCollectionView(Project project)
+        private ViewCollectionView(Project project)
+            : base(new List<View>())
         {
             Project = project;
         }
 
-        public async Task InitializeAsync()
+        private async Task InitializeAsync()
         {
-            SourceCollection.Clear();
-            SourceCollection.AddRange(await Task.Run(() =>
+            await Task.Run(() =>
             {
                 Project.LoadViews();
-                return Project.Views.Cast<View>().ToList();
-            }));
+                List.AddRange(Project.Views.Cast<View>());
+            });
             Refresh();
         }
     }

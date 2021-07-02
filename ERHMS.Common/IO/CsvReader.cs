@@ -24,6 +24,8 @@ namespace ERHMS.Common.IO
             EndOfFile = 1 << 2 | EndOfRow
         }
 
+        private Mode mode;
+
         public TextReader Reader { get; }
         public int FieldCount { get; private set; } = -1;
         public int RowNumber { get; private set; }
@@ -39,7 +41,7 @@ namespace ERHMS.Common.IO
             return new IOException($"{reason} in row {RowNumber}.", innerException);
         }
 
-        private int ReadChar(ref Mode mode, out Flags flags)
+        private int ReadChar(out Flags flags)
         {
             flags = Flags.None;
             int ch = Reader.Read();
@@ -110,11 +112,11 @@ namespace ERHMS.Common.IO
 
         private string ReadValue(out Flags flags)
         {
-            Mode mode = Mode.Initial;
+            mode = Mode.Initial;
             StringBuilder value = new StringBuilder();
             while (true)
             {
-                int ch = ReadChar(ref mode, out flags);
+                int ch = ReadChar(out flags);
                 if (ch != -1)
                 {
                     value.Append((char)ch);

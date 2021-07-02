@@ -59,13 +59,13 @@ namespace ERHMS.Desktop.Views.Collections
 
         private void UpdateFields()
         {
-            SetItemDataGridColumns();
+            SetItemsDataGridColumns();
             SetCopyFieldContextMenuItems();
         }
 
-        private void SetItemDataGridColumns()
+        private void SetItemsDataGridColumns()
         {
-            ObservableCollection<DataGridColumn> columns = ItemDataGrid.Columns;
+            ObservableCollection<DataGridColumn> columns = ItemsDataGrid.Columns;
             IDictionary<string, DataGridColumn> columnsByHeader =
                 columns.ToDictionary(column => (string)column.Header, NameComparer.Default);
             foreach (Iterator<FieldDataRow> field in DataContext.Fields.Iterate())
@@ -110,7 +110,7 @@ namespace ERHMS.Desktop.Views.Collections
                 Header = Strings.AccessText_AllFields
             });
             items.Add(new Separator());
-            foreach (DataGridColumn column in ItemDataGrid.Columns)
+            foreach (DataGridColumn column in ItemsDataGrid.Columns)
             {
                 items.Add(new MenuItem
                 {
@@ -135,7 +135,7 @@ namespace ERHMS.Desktop.Views.Collections
             {
                 DataGridRowClipboardEventArgs e =
                     new DataGridRowClipboardEventArgs(item, startColumnDisplayIndex, endColumnDisplayIndex, false);
-                foreach (DataGridColumn column in ItemDataGrid.Columns)
+                foreach (DataGridColumn column in ItemsDataGrid.Columns)
                 {
                     if (column.DisplayIndex < startColumnDisplayIndex || column.DisplayIndex > endColumnDisplayIndex)
                     {
@@ -159,10 +159,10 @@ namespace ERHMS.Desktop.Views.Collections
 
         public void CopyField(DataGridColumn column)
         {
-            IEnumerable items = ItemDataGrid.SelectedIndex == -1 ? ItemDataGrid.Items : ItemDataGrid.SelectedItems;
+            IEnumerable items = ItemsDataGrid.SelectedIndex == -1 ? ItemsDataGrid.Items : ItemsDataGrid.SelectedItems;
             if (column == null)
             {
-                Copy(items, 0, ItemDataGrid.Columns.Count - 1);
+                Copy(items, 0, ItemsDataGrid.Columns.Count - 1);
             }
             else
             {

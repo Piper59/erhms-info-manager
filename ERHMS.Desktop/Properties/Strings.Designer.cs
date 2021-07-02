@@ -295,7 +295,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Finish.
+        ///   Looks up a localized string similar to F_inish.
         /// </summary>
         public static string AccessText_Finish {
             get {
@@ -304,7 +304,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Full name.
+        ///   Looks up a localized string similar to F_ull name.
         /// </summary>
         public static string AccessText_FullName {
             get {
@@ -390,15 +390,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Next {
             get {
                 return ResourceManager.GetString("AccessText.Next", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _No.
-        /// </summary>
-        public static string AccessText_No {
-            get {
-                return ResourceManager.GetString("AccessText.No", resourceCulture);
             }
         }
         
@@ -565,15 +556,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Yes.
-        /// </summary>
-        public static string AccessText_Yes {
-            get {
-                return ResourceManager.GetString("AccessText.Yes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string AltText_Add {
@@ -655,6 +637,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First page.
+        /// </summary>
+        public static string AltText_FirstPage {
+            get {
+                return ResourceManager.GetString("AltText.FirstPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string AltText_Help {
@@ -678,6 +669,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AltText_Import {
             get {
                 return ResourceManager.GetString("AltText.Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last page.
+        /// </summary>
+        public static string AltText_LastPage {
+            get {
+                return ResourceManager.GetString("AltText.LastPage", resourceCulture);
             }
         }
         
@@ -778,6 +778,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you choose to collect worker information, the form will contain fields for the worker&apos;s name, email address, and ID. You can use these fields to associate each record with the corresponding worker..
+        /// </summary>
+        public static string Body_CreateView_SetWithWorkerInfo {
+            get {
+                return ResourceManager.GetString("Body.CreateView.SetWithWorkerInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down.
         ///
         ///{0}.
@@ -789,7 +798,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a worker in ERHMS Info Manager to continue..
+        ///   Looks up a localized string similar to Choose a worker in ERHMS Info Manager to continue..
         /// </summary>
         public static string Body_GetWorkerId {
             get {
@@ -800,7 +809,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
-        ///This file is not a project-level Epi Info template. .
+        ///This file is not a project-level Epi Info template..
         /// </summary>
         public static string Body_InvalidProjectTemplatePath {
             get {
@@ -811,7 +820,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
-        ///This file does not appear to be an Epi Info template..
+        ///This file is not a valid Epi Info template..
         /// </summary>
         public static string Body_InvalidTemplatePath {
             get {
@@ -836,15 +845,6 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_SettingsReset {
             get {
                 return ResourceManager.GetString("Body.SettingsReset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If you choose to collect worker information, the form will contain fields for the worker&apos;s name, email address, and unique ID. You can use these fields to associate each record with the corresponding worker..
-        /// </summary>
-        public static string Body_SetWithWorkerInfo {
-            get {
-                return ResourceManager.GetString("Body.SetWithWorkerInfo", resourceCulture);
             }
         }
         
@@ -1069,7 +1069,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Epi Info Dashboards (*.cvs7)|*.cvs7.
+        ///   Looks up a localized string similar to Epi Info Canvases (*.cvs7)|*.cvs7.
         /// </summary>
         public static string FileDialog_Filter_Canvases {
             get {
@@ -1087,7 +1087,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Epi Info Analyses (*.pgm7)|*.pgm7.
+        ///   Looks up a localized string similar to Epi Info Programs (*.pgm7)|*.pgm7.
         /// </summary>
         public static string FileDialog_Filter_Pgms {
             get {
@@ -1177,7 +1177,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this option to create a new, blank form. Once the form is created, you can add fields to it..
+        ///   Looks up a localized string similar to Create a new, blank form. Once the form is created, you can add fields to it..
         /// </summary>
         public static string HelpText_CreateView_Blank {
             get {
@@ -1186,7 +1186,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this option to create a new form containing fields copied from an existing form. The existing form&apos;s data will not be copied. Once the form is created, you can add, edit, and remove fields..
+        ///   Looks up a localized string similar to Create a new form containing fields copied from an existing form. The existing form&apos;s data will not be copied. Once the form is created, you can add, edit, and remove fields..
         /// </summary>
         public static string HelpText_CreateView_FromExisting {
             get {
@@ -1195,7 +1195,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use this option to create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields..
+        ///   Looks up a localized string similar to Create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields..
         /// </summary>
         public static string HelpText_CreateView_FromTemplate {
             get {
@@ -1296,27 +1296,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Refresh the information displayed on this screen..
         /// </summary>
-        public static string HelpText_RefreshAssets {
+        public static string HelpText_Refresh {
             get {
-                return ResourceManager.GetString("HelpText.RefreshAssets", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Refresh the information displayed on this screen..
-        /// </summary>
-        public static string HelpText_RefreshRecords {
-            get {
-                return ResourceManager.GetString("HelpText.RefreshRecords", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Refresh the information displayed on this screen..
-        /// </summary>
-        public static string HelpText_RefreshViews {
-            get {
-                return ResourceManager.GetString("HelpText.RefreshViews", resourceCulture);
+                return ResourceManager.GetString("HelpText.Refresh", resourceCulture);
             }
         }
         
@@ -1420,20 +1402,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location:.
-        /// </summary>
-        public static string Label_DirectoryPath {
-            get {
-                return ResourceManager.GetString("Label.DirectoryPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File name:.
         /// </summary>
         public static string Label_FileName {
             get {
                 return ResourceManager.GetString("Label.FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location:.
+        /// </summary>
+        public static string Label_Location {
+            get {
+                return ResourceManager.GetString("Label.Location", resourceCulture);
             }
         }
         
@@ -1476,9 +1458,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Template:.
         /// </summary>
-        public static string Label_TemplatePath {
+        public static string Label_Template {
             get {
-                return ResourceManager.GetString("Label.TemplatePath", resourceCulture);
+                return ResourceManager.GetString("Label.Template", resourceCulture);
             }
         }
         
@@ -1600,6 +1582,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose an existing form.
+        /// </summary>
+        public static string Lead_CreateView_SetSourceView {
+            get {
+                return ResourceManager.GetString("Lead.CreateView.SetSourceView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a form name.
         /// </summary>
         public static string Lead_CreateView_SetViewName {
@@ -1674,9 +1665,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Exporting logs.
         /// </summary>
-        public static string Lead_ExportingLogDirectory {
+        public static string Lead_ExportingLogs {
             get {
-                return ResourceManager.GetString("Lead.ExportingLogDirectory", resourceCulture);
+                return ResourceManager.GetString("Lead.ExportingLogs", resourceCulture);
             }
         }
         

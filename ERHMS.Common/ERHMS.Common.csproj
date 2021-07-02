@@ -36,6 +36,7 @@
       <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -55,6 +56,7 @@
     <Compile Include="HashCodeCalculator.cs" />
     <Compile Include="IO\CsvReader.cs" />
     <Compile Include="IO\CsvWriter.cs" />
+    <Compile Include="IO\FileSystemExtensions.cs" />
     <Compile Include="Linq\IEnumerableExtensions.cs" />
     <Compile Include="Linq\IEnumeratorExtensions.cs" />
     <Compile Include="Linq\Iterator.cs" />

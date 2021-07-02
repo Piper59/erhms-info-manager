@@ -1,7 +1,6 @@
 ﻿<Window x:Class="ERHMS.Desktop.Views.ProgressView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
         AutomationProperties.HelpText="{Binding Lead}"
         Icon="/Resources/ERHMS.ico"
@@ -10,36 +9,17 @@
         Title="{Markup:String AppTitle}"
         UseLayoutRounding="True"
         Width="480">
-    <Window.Resources>
-        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-    </Window.Resources>
-    <StackPanel>
-        <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
-                BorderThickness="0,1,0,0"
-                Style="{StaticResource FluidLayout}">
-            <StackPanel Style="{StaticResource Container}">
-                <TextBlock Style="{StaticResource Lead}"
-                           Text="{Binding Lead}" />
-                <ProgressBar IsIndeterminate="True" />
-                <TextBlock Style="{StaticResource Body}"
-                           Text="{Binding Status}"
-                           TextTrimming="CharacterEllipsis"
-                           TextWrapping="NoWrap" />
-            </StackPanel>
-        </Border>
-        <Border Background="{x:Static SystemColors.MenuBrush}"
-                BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
-                BorderThickness="0,1,0,0"
-                Visibility="{Binding CanBeCanceled, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <WrapPanel HorizontalAlignment="Right"
-                       Style="{StaticResource Container}">
-                <WrapPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource DialogButton}" />
-                </WrapPanel.Resources>
-                <Button Command="{Binding CancelCommand}"
-                        Content="{Markup:String AccessText.Cancel}"
-                        IsCancel="True" />
-            </WrapPanel>
-        </Border>
-    </StackPanel>
+    <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
+            BorderThickness="0,1,0,0"
+            Style="{StaticResource FluidLayout}">
+        <StackPanel Style="{StaticResource Container}">
+            <TextBlock Style="{StaticResource Lead}"
+                       Text="{Binding Lead}" />
+            <ProgressBar IsIndeterminate="True" />
+            <TextBlock Style="{StaticResource Body}"
+                       Text="{Binding Body}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap" />
+        </StackPanel>
+    </Border>
 </Window>

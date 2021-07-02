@@ -48,15 +48,15 @@
             <WrapPanel Grid.Column="0">
                 <Controls:IconButton AltText="{Markup:String AltText.Add}"
                                      Command="{Binding AddCommand}"
-                                     Content="Add"
+                                     Content="{Markup:Icon Add}"
                                      HelpText="{Markup:String HelpText.AddRecord}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Edit}"
                                      Command="{Binding EditCommand}"
-                                     Content="Edit"
+                                     Content="{Markup:Icon Edit}"
                                      HelpText="{Markup:String HelpText.EditRecord}" />
                 <Controls:IconButton x:Name="CopyFieldButton"
                                      AltText="{Markup:String AltText.Copy}"
-                                     Content="Clipboard"
+                                     Content="{Markup:Icon Clipboard}"
                                      HelpText="{Markup:String HelpText.CopyField}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
                     <Controls:IconButton.ContextMenu>
@@ -72,32 +72,32 @@
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                      Command="{Binding DeleteCommand}"
-                                     Content="Delete"
+                                     Content="{Markup:Icon Delete}"
                                      HelpText="{Markup:String HelpText.DeleteRecords}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Undelete}"
                                      Command="{Binding UndeleteCommand}"
-                                     Content="Undelete"
+                                     Content="{Markup:Icon Undelete}"
                                      HelpText="{Markup:String HelpText.UndeleteRecords}" />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Import}"
                                      Command="{Binding ImportCommand}"
-                                     Content="Import"
+                                     Content="{Markup:Icon Import}"
                                      HelpText="{Markup:String HelpText.ImportRecords}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Export}"
                                      Command="{Binding ExportCommand}"
-                                     Content="Export"
+                                     Content="{Markup:Icon Export}"
                                      HelpText="{Markup:String HelpText.ExportRecords}" />
                 <Border Style="{StaticResource Separator}" />
                 <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                      Command="{Binding RefreshCommand}"
-                                     Content="Refresh"
-                                     HelpText="{Markup:String HelpText.RefreshRecords}" />
+                                     Content="{Markup:Icon Refresh}"
+                                     HelpText="{Markup:String HelpText.Refresh}" />
             </WrapPanel>
             <Controls:Pager Grid.Column="1"
                             DataContext="{Binding Items}"
                             VerticalAlignment="Top" />
         </Grid>
-        <DataGrid x:Name="ItemDataGrid"
+        <DataGrid x:Name="ItemsDataGrid"
                   Grid.Row="2"
                   ItemsSource="{Binding Items}"
                   MinColumnWidth="80"
@@ -108,6 +108,6 @@
             </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="2"
-                                        ItemsControl="{x:Reference ItemDataGrid}" />
+                                        ItemsControl="{x:Reference ItemsDataGrid}" />
     </Grid>
 </UserControl>

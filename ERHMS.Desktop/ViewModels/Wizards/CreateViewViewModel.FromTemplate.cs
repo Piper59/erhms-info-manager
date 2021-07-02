@@ -5,7 +5,6 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -17,13 +16,15 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public class SetXTemplateViewModel : StepViewModel<CreateViewViewModel>
             {
+                private readonly IFileDialogService fileDialog;
+
                 public override string Title => Strings.Lead_CreateView_SetXTemplate;
 
                 private string templatePath;
                 public string TemplatePath
                 {
                     get { return templatePath; }
-                    set { SetProperty(ref templatePath, value); }
+                    private set { SetProperty(ref templatePath, value); }
                 }
 
                 public ICommand BrowseCommand { get; }
@@ -31,14 +32,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public SetXTemplateViewModel(CreateViewViewModel wizard, IStep antecedent)
                     : base(wizard, antecedent)
                 {
+                    fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+                    fileDialog.InitialDirectory = Configuration.Instance.Directories.Templates;
+                    fileDialog.Filter = Strings.FileDialog_Filter_Templates;
                     BrowseCommand = new SyncCommand(Browse);
                 }
 
                 public void Browse()
                 {
-                    IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                    fileDialog.InitialDirectory = Configuration.Instance.Directories.Templates;
-                    fileDialog.Filter = Strings.FileDialog_Filter_Templates;
                     if (fileDialog.Open() != true)
                     {
                         return;
@@ -48,77 +49,61 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public override bool CanContinue()
                 {
-                    return templatePath != null;
+                    return TemplatePath != null;
                 }
 
                 public override async Task ContinueAsync()
                 {
-                    XTemplate xTemplate = null;
                     IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                     progress.Lead = Strings.Lead_LoadingTemplate;
-                    try
+                    XTemplate xTemplate = await progress.Run(() =>
                     {
-                        xTemplate = await progress.Run(() =>
+                        try
                         {
-                            return XTemplate.Load(templatePath);
-                        });
-                        if (xTemplate.Level != TemplateLevel.View)
-                        {
-                            ShowDialog(Strings.Body_InvalidViewTemplatePath);
-                            return;
+                            return XTemplate.Load(TemplatePath);
                         }
-                    }
-                    catch
+                        catch
+                        {
+                            return null;
+                        }
+                    });
+                    if (xTemplate == null)
                     {
-                        ShowDialog(Strings.Body_InvalidTemplatePath);
+                        OnError(Strings.Body_InvalidTemplatePath);
                         return;
                     }
-                    Wizard.FromTemplate_TemplatePath = templatePath;
-                    Wizard.FromTemplate_XTemplate = xTemplate;
-                    ContinueTo(new SetViewNameViewModel(Wizard, this));
+                    if (xTemplate.Level != TemplateLevel.View)
+                    {
+                        OnError(Strings.Body_InvalidViewTemplatePath);
+                        return;
+                    }
+                    Wizard.TemplatePath = TemplatePath;
+                    Wizard.XTemplate = xTemplate;
+                    GoToStep(new SetViewNameViewModel(Wizard, this));
                 }
 
-                private void ShowDialog(string body)
+                private void OnError(string body)
                 {
                     IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
                     dialog.Severity = DialogSeverity.Warning;
                     dialog.Lead = Strings.Lead_InvalidTemplatePath;
-                    dialog.Body = string.Format(body, templatePath);
+                    dialog.Body = string.Format(body, TemplatePath);
                     dialog.Buttons = DialogButtonCollection.Close;
                     dialog.Show();
                 }
             }
 
-            public class SetViewNameViewModel : StepViewModel<CreateViewViewModel>
+            public class SetViewNameViewModel : CreateViewViewModel.SetViewNameViewModel
             {
-                public override string Title => Strings.Lead_CreateView_SetViewName;
-
-                private string viewName;
-                public string ViewName
-                {
-                    get { return viewName; }
-                    set { SetProperty(ref viewName, value); }
-                }
-
                 public SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
                     : base(wizard, step)
                 {
-                    viewName = wizard.FromTemplate_XView.Name;
+                    ViewName = wizard.XTemplate.XProject.XView.Name;
                 }
 
-                public override bool CanContinue()
+                protected override void GoToNextStep()
                 {
-                    return true;
-                }
-
-                public override async Task ContinueAsync()
-                {
-                    if (!await Wizard.ValidateAsync(viewName))
-                    {
-                        return;
-                    }
-                    Wizard.FromTemplate_ViewName = viewName;
-                    ContinueTo(new CommitViewModel(Wizard, this));
+                    GoToStep(new CommitViewModel(Wizard, this));
                 }
             }
 
@@ -133,8 +118,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Label_TemplatePath, Wizard.FromTemplate_TemplatePath },
-                        { Strings.Label_ViewName, Wizard.FromTemplate_ViewName }
+                        { Strings.Label_Template, wizard.TemplatePath },
+                        { Strings.Label_ViewName, wizard.ViewName }
                     };
                 }
 
@@ -149,25 +134,22 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     progress.Lead = Strings.Lead_CreatingView;
                     Wizard.View = await progress.Run(() =>
                     {
-                        Wizard.FromTemplate_XView.Name = Wizard.FromTemplate_ViewName;
+                        Wizard.XTemplate.XProject.XView.Name = Wizard.ViewName;
                         ViewTemplateInstantiator instantiator =
-                            new ViewTemplateInstantiator(Wizard.FromTemplate_XTemplate, Wizard.Project)
+                            new ViewTemplateInstantiator(Wizard.XTemplate, Wizard.Project)
                             {
                                 Progress = progress
                             };
                         instantiator.Instantiate();
                         return instantiator.View;
                     });
-                    Commit();
-                    SetResult(true);
-                    ContinueTo(new CloseViewModel(Wizard, this));
+                    Commit(true);
+                    GoToStep(new CloseViewModel(Wizard, this));
                 }
             }
         }
 
-        private string FromTemplate_TemplatePath { get; set; }
-        private XTemplate FromTemplate_XTemplate { get; set; }
-        private XView FromTemplate_XView => FromTemplate_XTemplate.XProject.XViews.Single();
-        private string FromTemplate_ViewName { get; set; }
+        public string TemplatePath { get; private set; }
+        public XTemplate XTemplate { get; private set; }
     }
 }

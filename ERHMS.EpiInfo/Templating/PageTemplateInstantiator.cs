@@ -1,6 +1,5 @@
 ﻿using Epi;
 using ERHMS.EpiInfo.Templating.Xml;
-using System.Linq;
 
 namespace ERHMS.EpiInfo.Templating
 {
@@ -18,8 +17,7 @@ namespace ERHMS.EpiInfo.Templating
 
         protected override void InstantiateCore()
         {
-            XView xView = XTemplate.XProject.XViews.Single();
-            XPage xPage = xView.XPages.Single();
+            XView xView = XTemplate.XProject.XView;
             string checkCode = xView.CheckCode.Trim();
             if (!View.CheckCode.Contains(checkCode))
             {
@@ -27,7 +25,7 @@ namespace ERHMS.EpiInfo.Templating
                 Metadata.UpdateView(View);
             }
             Context.View = View;
-            Page = InstantiatePage(View, xPage);
+            Page = InstantiatePage(View, xView.XPage);
         }
     }
 }

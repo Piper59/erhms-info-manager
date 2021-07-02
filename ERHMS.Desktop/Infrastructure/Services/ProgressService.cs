@@ -11,53 +11,62 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class ProgressService : IProgressService
     {
-        private ProgressViewModel dataContext;
+        private readonly ProgressViewModel dataContext;
 
         public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
-        public string Lead { get; set; } = Strings.Lead_Working;
-        public bool CanBeCanceled { get; set; }
+
+        public string Lead
+        {
+            get { return dataContext.Lead; }
+            set { dataContext.Lead = value; }
+        }
+
+        public ProgressService()
+        {
+            dataContext = new ProgressViewModel
+            {
+                Lead = Strings.Lead_Working
+            };
+        }
+
+        public void Report(string value)
+        {
+            dataContext.Body = value;
+        }
 
         private async Task<TTask> RunCore<TTask>(Func<TTask> action)
             where TTask : Task
         {
-            dataContext = new ProgressViewModel(Lead, CanBeCanceled);
-            try
+            Window owner = Application.Current.GetActiveWindow();
+            using (WindowDisabler.Begin(owner))
             {
-                Window owner = Application.Current.GetActiveWindow();
                 ProgressView window = new ProgressView
                 {
                     DataContext = dataContext
                 };
                 window.SetOwner(owner);
-                using (WindowDisabler.Begin(owner))
+                TTask task = action();
+                CancellationTokenSource delaying = new CancellationTokenSource();
+                Task continuation = task.ContinueWith(
+                    _ =>
+                    {
+                        delaying.Cancel();
+                        window.CanClose = true;
+                        window.Close();
+                    },
+                    TaskScheduler.FromCurrentSynchronizationContext());
+                try
                 {
-                    CancellationTokenSource completionTokenSource = new CancellationTokenSource();
-                    TTask task = action();
-                    Task continuation = task.ContinueWith(
-                        _ =>
-                        {
-                            completionTokenSource.Cancel();
-                            dataContext.Done = true;
-                            window.Close();
-                        },
-                        TaskScheduler.FromCurrentSynchronizationContext());
-                    try
-                    {
-                        await Task.Delay(Delay, completionTokenSource.Token);
-                    }
-                    catch (TaskCanceledException) { }
-                    if (!task.IsCompleted)
-                    {
-                        window.ShowDialog();
-                    }
-                    await task;
-                    await continuation;
-                    return task;
+                    await Task.Delay(Delay, delaying.Token);
                 }
-            }
-            finally
-            {
-                dataContext = null;
+                catch (TaskCanceledException) { }
+                if (!task.IsCompleted)
+                {
+                    window.ShowDialog();
+                }
+                await task;
+                await continuation;
+                return task;
             }
         }
 
@@ -69,28 +78,6 @@ namespace ERHMS.Desktop.Infrastructure.Services
         public Task<TResult> Run<TResult>(Func<Task<TResult>> action)
         {
             return RunCore(action).Unwrap();
-        }
-
-        public void ThrowIfCancellationRequested()
-        {
-            if (dataContext == null)
-            {
-                throw new InvalidOperationException("Task is not running.");
-            }
-            if (!CanBeCanceled)
-            {
-                throw new InvalidOperationException("Task cannot be canceled.");
-            }
-            dataContext.CancellationToken.ThrowIfCancellationRequested();
-        }
-
-        public void Report(string value)
-        {
-            if (dataContext == null)
-            {
-                throw new InvalidOperationException("Task is not running.");
-            }
-            dataContext.Status = value;
         }
     }
 }

@@ -43,7 +43,6 @@
       <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -123,14 +122,16 @@
     <Compile Include="Converters\IconNameToInstanceConverter.cs" />
     <Compile Include="Converters\NullableToBooleanConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
+    <Compile Include="Converters\PathToDirectoryNameConverter.cs" />
+    <Compile Include="Converters\PathToFileNameConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
     <Compile Include="Converters\PhaseToCoreViewsConverter.cs" />
     <Compile Include="Converters\StringCaseFormattingConverter.cs" />
     <Compile Include="Converters\StringLocalizingConverter.cs" />
     <Compile Include="Data\ICollectionViewExtensions.cs" />
+    <Compile Include="Data\ListCollectionView.cs" />
     <Compile Include="Data\PagingListCollectionView.cs" />
     <Compile Include="Data\RecordStatusCollectionView.cs" />
-    <Compile Include="Data\TypedListCollectionView.cs" />
     <Compile Include="Data\ViewCollectionView.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Infrastructure\Services\ProgressService.cs" />
     <Compile Include="Infrastructure\Services\WizardService.cs" />
     <Compile Include="Infrastructure\StringExtensions.cs" />
+    <Compile Include="Infrastructure\ThicknessExtensions.cs" />
     <Compile Include="Infrastructure\WindowDisabler.cs" />
     <Compile Include="Infrastructure\WindowExtensions.cs" />
     <Compile Include="Integration.cs" />
@@ -184,7 +186,7 @@
     </Compile>
     <Compile Include="ViewModels\Collections\AssetCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\CanvasCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Collections\CollectionViewModelBase.cs" />
+    <Compile Include="ViewModels\Collections\CollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\MapCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\PgmCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
@@ -204,6 +206,7 @@
     <Compile Include="ViewModels\Wizards\CreatePgmViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.Blank.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromExisting.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromTemplate.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
     <Compile Include="Views\Collections\AssetCollectionView.xaml.cs">
@@ -298,10 +301,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Templates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -26,7 +26,7 @@
         <Controls:Pager Grid.Row="1"
                         DataContext="{Binding Items}"
                         HorizontalAlignment="Right" />
-        <DataGrid x:Name="ItemDataGrid"
+        <DataGrid x:Name="ItemsDataGrid"
                   Grid.Row="2"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
@@ -55,6 +55,6 @@
             </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="2"
-                                        ItemsControl="{x:Reference ItemDataGrid}" />
+                                        ItemsControl="{x:Reference ItemsDataGrid}" />
     </Grid>
 </UserControl>

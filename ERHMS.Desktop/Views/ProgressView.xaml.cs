@@ -12,6 +12,8 @@ namespace ERHMS.Desktop.Views
             set { base.DataContext = value; }
         }
 
+        public bool CanClose { get; set; }
+
         public ProgressView()
         {
             InitializeComponent();
@@ -19,7 +21,7 @@ namespace ERHMS.Desktop.Views
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (DataContext.Done)
+            if (CanClose)
             {
                 base.OnClosing(e);
             }

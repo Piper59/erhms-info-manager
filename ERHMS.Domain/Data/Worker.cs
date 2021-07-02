@@ -89,8 +89,11 @@ namespace ERHMS.Domain.Data
             }
             private set
             {
-                similarity = value;
-                OnPropertyChanged(nameof(Similarity));
+                if (similarity != value)
+                {
+                    similarity = value;
+                    OnPropertyChanged(nameof(Similarity));
+                }
             }
         }
 

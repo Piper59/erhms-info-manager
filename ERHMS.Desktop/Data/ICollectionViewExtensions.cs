@@ -5,7 +5,7 @@ namespace ERHMS.Desktop.Data
 {
     public static class ICollectionViewExtensions
     {
-        public static bool HasCurrent(this ICollectionView @this)
+        public static bool HasCurrentItem(this ICollectionView @this)
         {
             return @this.CurrentPosition != -1;
         }

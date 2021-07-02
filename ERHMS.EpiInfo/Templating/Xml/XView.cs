@@ -89,6 +89,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
 
         public XProject XProject => (XProject)Parent;
         public IEnumerable<XPage> XPages => Elements(ElementNames.Page).Cast<XPage>();
+        public XPage XPage => XPages.Single();
         public IEnumerable<XField> XFields => XPages.SelectMany(xPage => xPage.XFields);
 
         public XView()

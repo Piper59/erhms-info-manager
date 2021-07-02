@@ -17,36 +17,36 @@
         <WrapPanel Grid.Row="0">
             <Controls:IconButton AltText="{Markup:String AltText.Create}"
                                  Command="{Binding CreateCommand}"
-                                 Content="Create"
+                                 Content="{Markup:Icon Create}"
                                  HelpText="{Markup:String HelpText.CreateAsset}" />
             <Controls:IconButton AltText="{Markup:String AltText.Open}"
                                  Command="{Binding OpenCommand}"
-                                 Content="Open"
+                                 Content="{Markup:Icon Open}"
                                  HelpText="{Markup:String HelpText.OpenAsset}" />
             <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
-                                 Content="Delete"
+                                 Content="{Markup:Icon Delete}"
                                  HelpText="{Markup:String HelpText.DeleteAsset}" />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"
-                                 Content="Refresh"
-                                 HelpText="{Markup:String HelpText.RefreshAssets}" />
+                                 Content="{Markup:Icon Refresh}"
+                                 HelpText="{Markup:String HelpText.Refresh}" />
         </WrapPanel>
-        <DataGrid x:Name="ItemDataGrid"
+        <DataGrid x:Name="ItemsDataGrid"
                   Grid.Row="1"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}"
+                <DataGridTextColumn Binding="{Binding Value.Name}"
                                     Header="{Markup:String AccessText.Name}"
                                     SortDirection="Ascending"
                                     Width="3*" />
-                <DataGridTextColumn Binding="{Binding LastWriteTime}"
+                <DataGridTextColumn Binding="{Binding Value.LastWriteTime}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="{Markup:String AccessText.DateModified}"
                                     Width="*" />
-                <DataGridTextColumn Binding="{Binding Length, Converter={StaticResource ByteCountFormattingConverter}}"
+                <DataGridTextColumn Binding="{Binding Value.Length, Converter={StaticResource ByteCountFormattingConverter}}"
                                     CellStyle="{StaticResource NumericDataGridCell}"
                                     Header="{Markup:String AccessText.Size}"
                                     Width="*" />
@@ -60,6 +60,6 @@
             </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="1"
-                                        ItemsControl="{x:Reference ItemDataGrid}" />
+                                        ItemsControl="{x:Reference ItemsDataGrid}" />
     </Grid>
 </UserControl>

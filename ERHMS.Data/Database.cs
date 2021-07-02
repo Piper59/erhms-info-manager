@@ -167,12 +167,12 @@ namespace ERHMS.Data
 
         public virtual int GetLastId()
         {
-            IQuery query = new Query.Literal
-            {
-                Sql = "SELECT @@IDENTITY;"
-            };
             using (Connect())
             {
+                IQuery query = new Query.Literal
+                {
+                    Sql = "SELECT @@IDENTITY;"
+                };
                 return ExecuteScalar<int>(query);
             }
         }

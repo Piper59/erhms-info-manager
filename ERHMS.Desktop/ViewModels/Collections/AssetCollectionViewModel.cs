@@ -1,11 +1,13 @@
 ﻿using Epi;
+using ERHMS.Common.IO;
+using ERHMS.Common.Text;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
+using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
-using Microsoft.VisualBasic.FileIO;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,8 +15,28 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public abstract class AssetCollectionViewModel : CollectionViewModelBase<FileInfo>
+    public abstract class AssetCollectionViewModel : CollectionViewModel<AssetCollectionViewModel.Item>
     {
+        public class Item
+        {
+            public FileInfo Value { get; }
+
+            public Item(FileInfo value)
+            {
+                Value = value;
+            }
+
+            public override int GetHashCode()
+            {
+                return Comparers.Path.GetHashCode(Value.FullName);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is Item item && Comparers.Path.Equals(Value.FullName, item.Value.FullName);
+            }
+        }
+
         protected abstract Module Module { get; }
         protected abstract string FileExtension { get; }
         public Project Project { get; }
@@ -34,25 +56,35 @@ namespace ERHMS.Desktop.ViewModels.Collections
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
-        public async Task InitializeAsync()
+        protected async Task InitializeAsync()
         {
-            items.Clear();
-            items.AddRange(await Task.Run(() =>
+            await Task.Run(() =>
             {
+                List.Clear();
                 DirectoryInfo directory = new DirectoryInfo(Project.Location);
-                return directory.GetFiles($"*{FileExtension}");
-            }));
+                foreach (FileInfo value in directory.EnumerateFiles($"*{FileExtension}"))
+                {
+                    List.Add(new Item(value));
+                }
+            });
             Items.Refresh();
         }
 
-        protected abstract CreateAssetViewModel GetCreateWizard();
+        protected abstract Task<CreateAssetViewModel> GetCreateWizardAsync();
 
         public async Task CreateAsync()
         {
-            CreateAssetViewModel wizard = GetCreateWizard();
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            await progress.Run(wizard.InitializeAsync);
-            if (wizard.Show() == true)
+            CreateAssetViewModel wizard = await progress.Run(GetCreateWizardAsync);
+            if (wizard.Show() != true)
+            {
+                return;
+            }
+            if (wizard.OpenInEpiInfo)
+            {
+                await Integration.StartWithBackgroundTaskAsync(InitializeAsync, Module, wizard.AssetPath);
+            }
+            else
             {
                 await RefreshAsync();
             }
@@ -60,7 +92,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task OpenAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(Module, CurrentItem.FullName);
+            await Integration.StartAsync(Module, CurrentItem.Value.FullName);
         }
 
         public async Task DeleteAsync()
@@ -68,7 +100,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
             dialog.Severity = DialogSeverity.Warning;
             dialog.Lead = Strings.Lead_ConfirmAssetDeletion;
-            dialog.Body = string.Format(Strings.Body_ConfirmAssetDeletion, CurrentItem.Name);
+            dialog.Body = string.Format(Strings.Body_ConfirmAssetDeletion, CurrentItem.Value.Name);
             dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Delete);
             if (dialog.Show() != true)
             {
@@ -80,10 +112,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 await Task.Run(() =>
                 {
-                    FileSystem.DeleteFile(
-                        CurrentItem.FullName,
-                        UIOption.OnlyErrorDialogs,
-                        RecycleOption.SendToRecycleBin);
+                    FileSystemExtensions.Recycle(CurrentItem.Value.FullName);
                 });
                 await InitializeAsync();
             });

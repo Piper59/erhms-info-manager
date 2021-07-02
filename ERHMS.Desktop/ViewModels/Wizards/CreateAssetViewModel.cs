@@ -20,111 +20,126 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public class SetViewViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => Strings.Lead_CreateAsset_SetView;
-
-            public ViewCollectionView Views { get; }
-
-            public SetViewViewModel(CreateAssetViewModel wizard)
-                : base(wizard)
+            public static async Task<SetViewViewModel> CreateAsync(CreateAssetViewModel wizard)
             {
-                Views = new ViewCollectionView(wizard.Project);
+                SetViewViewModel result = new SetViewViewModel(wizard);
+                await result.InitializeAsync();
+                return result;
             }
 
-            public async Task InitializeAsync()
+            public override string Title => Strings.Lead_CreateAsset_SetView;
+            public ViewCollectionView Views { get; private set; }
+
+            private SetViewViewModel(CreateAssetViewModel wizard)
+                : base(wizard) { }
+
+            private async Task InitializeAsync()
             {
-                await Views.InitializeAsync();
+                Views = await ViewCollectionView.CreateAsync(Wizard.Project);
             }
 
             public override bool CanContinue()
             {
-                return Views.HasCurrent();
+                return Views.HasCurrentItem();
             }
 
             public override async Task ContinueAsync()
             {
                 Wizard.View = Views.CurrentItem;
-                SetFileInfoViewModel step = new SetFileInfoViewModel(Wizard, this);
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                await progress.Run(step.InitializeAsync);
-                ContinueTo(step);
+                IStep step = await progress.Run(async () =>
+                {
+                    return await SetAssetPathViewModel.CreateAsync(Wizard, this);
+                });
+                GoToStep(step);
             }
         }
 
-        public class SetFileInfoViewModel : StepViewModel<CreateAssetViewModel>
+        public class SetAssetPathViewModel : StepViewModel<CreateAssetViewModel>
         {
+            public static async Task<SetAssetPathViewModel> CreateAsync(CreateAssetViewModel wizard, IStep antecedent)
+            {
+                SetAssetPathViewModel result = new SetAssetPathViewModel(wizard, antecedent);
+                await result.InitializeAsync();
+                return result;
+            }
+
+            private readonly IFileDialogService fileDialog;
+
             public override string Title => Strings.Lead_CreateAsset_SetFileInfo;
 
-            private FileInfo fileInfo;
-            public FileInfo FileInfo
+            private string assetPath;
+            public string AssetPath
             {
-                get { return fileInfo; }
-                set { SetProperty(ref fileInfo, value); }
+                get { return assetPath; }
+                private set { SetProperty(ref assetPath, value); }
             }
 
             public ICommand BrowseCommand { get; }
 
-            public SetFileInfoViewModel(CreateAssetViewModel wizard, IStep antecedent)
+            private SetAssetPathViewModel(CreateAssetViewModel wizard, IStep antecedent)
                 : base(wizard, antecedent)
             {
+                fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+                fileDialog.Filter = Wizard.FileFilter;
+                fileDialog.FileOk += FileDialog_FileOk;
                 BrowseCommand = new SyncCommand(Browse);
             }
 
-            public async Task InitializeAsync()
+            private async Task InitializeAsync()
             {
-                await Task.Run(() =>
+                string assetPath = await Task.Run(() =>
                 {
-                    string fileName = $"{Wizard.View.Name}{Wizard.FileExtension}";
-                    FileNameUniquifier fileNames =
-                        new FileNameUniquifier(Wizard.Project.Location, Wizard.FileExtension);
+                    string directoryPath = Wizard.Project.Location;
+                    string extension = Wizard.FileExtension;
+                    string fileName = $"{Wizard.View.Name}{extension}";
+                    FileNameUniquifier fileNames = new FileNameUniquifier(directoryPath, extension);
                     if (fileNames.Exists(fileName))
                     {
                         fileName = fileNames.Uniquify(fileName);
                     }
-                    fileInfo = new FileInfo(Path.Combine(Wizard.Project.Location, fileName));
+                    return Path.Combine(directoryPath, fileName);
                 });
-            }
-
-            public void Browse()
-            {
-                IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                fileDialog.InitialDirectory = fileInfo.DirectoryName;
-                fileDialog.InitialFileName = fileInfo.Name;
-                fileDialog.Filter = Wizard.FileFilter;
-                fileDialog.FileOk += FileDialog_FileOk;
-                if (fileDialog.Save() != true)
-                {
-                    return;
-                }
-                FileInfo = new FileInfo(fileDialog.FileName);
+                fileDialog.FileName = assetPath;
+                AssetPath = assetPath;
             }
 
             private void FileDialog_FileOk(object sender, CancelEventArgs e)
             {
-                IFileDialogService fileDialog = (IFileDialogService)sender;
-                FileInfo fileInfo = new FileInfo(fileDialog.FileName);
-                if (!Comparers.Path.Equals(fileInfo.DirectoryName, Wizard.Project.Location))
+                string directoryPath = Path.GetDirectoryName(fileDialog.FileName);
+                if (Comparers.Path.Equals(directoryPath, Wizard.Project.Location))
                 {
-                    IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                    dialog.Severity = DialogSeverity.Warning;
-                    dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
-                    dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, fileInfo.DirectoryName);
-                    dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
-                    if (dialog.Show() != true)
-                    {
-                        e.Cancel = true;
-                    }
+                    return;
                 }
+                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                dialog.Severity = DialogSeverity.Warning;
+                dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
+                dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, directoryPath);
+                dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
+                if (dialog.Show() != true)
+                {
+                    e.Cancel = true;
+                }
+            }
+
+            public void Browse()
+            {
+                if (fileDialog.Save() != true)
+                {
+                    return;
+                }
+                AssetPath = fileDialog.FileName;
             }
 
             public override bool CanContinue()
             {
-                return fileInfo != null;
+                return AssetPath != null;
             }
 
             public override Task ContinueAsync()
             {
-                Wizard.FileInfo = fileInfo;
-                ContinueTo(new CommitViewModel(Wizard, this));
+                Wizard.AssetPath = AssetPath;
+                GoToStep(new CommitViewModel(Wizard, this));
                 return Task.CompletedTask;
             }
         }
@@ -141,8 +156,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 Details = new DetailsViewModel
                 {
                     { Strings.Label_View, wizard.View.Name },
-                    { Strings.Label_FileName, wizard.FileInfo.Name },
-                    { Strings.Label_DirectoryPath, wizard.FileInfo.DirectoryName }
+                    { Strings.Label_FileName, Path.GetFileName(wizard.AssetPath) },
+                    { Strings.Label_Location, Path.GetDirectoryName(wizard.AssetPath) }
                 };
             }
 
@@ -158,14 +173,13 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 await progress.Run(() =>
                 {
                     Asset asset = Wizard.CreateCore();
-                    using (Stream stream = Wizard.FileInfo.Open(FileMode.Create, FileAccess.Write))
+                    using (Stream stream = File.Open(Wizard.AssetPath, FileMode.Create, FileAccess.Write))
                     {
                         asset.Save(stream);
                     }
                 });
-                Commit();
-                SetResult(true);
-                ContinueTo(new CloseViewModel(Wizard, this));
+                Commit(true);
+                GoToStep(new CloseViewModel(Wizard, this));
             }
         }
 
@@ -189,13 +203,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 return true;
             }
 
-            public override async Task ContinueAsync()
+            public override Task ContinueAsync()
             {
+                Wizard.OpenInEpiInfo = OpenInEpiInfo;
                 Close();
-                if (openInEpiInfo)
-                {
-                    await MainViewModel.Instance.StartEpiInfoAsync(Wizard.Module, Wizard.FileInfo.FullName);
-                }
+                return Task.CompletedTask;
             }
         }
 
@@ -204,18 +216,17 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         protected abstract string FileFilter { get; }
         public Project Project { get; }
         public View View { get; private set; }
-        public FileInfo FileInfo { get; private set; }
+        public string AssetPath { get; private set; }
+        public bool OpenInEpiInfo { get; private set; }
 
         protected CreateAssetViewModel(Project project)
         {
             Project = project;
         }
 
-        public async Task InitializeAsync()
+        protected async Task InitializeAsync()
         {
-            SetViewViewModel step = new SetViewViewModel(this);
-            await step.InitializeAsync();
-            Initialize(step);
+            Step = await SetViewViewModel.CreateAsync(this);
         }
 
         protected abstract Asset CreateCore();

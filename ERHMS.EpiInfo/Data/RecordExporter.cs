@@ -10,7 +10,6 @@ namespace ERHMS.EpiInfo.Data
     public class RecordExporter : CsvWriter
     {
         public View View { get; }
-        private IEnumerable<Field> Fields => View.Fields.DataFields.Cast<Field>();
 
         public RecordExporter(View view, TextWriter writer)
             : base(writer)
@@ -18,14 +17,19 @@ namespace ERHMS.EpiInfo.Data
             View = view;
         }
 
+        private IEnumerable<Field> GetFields()
+        {
+            return View.Fields.DataFields.Cast<Field>();
+        }
+
         private IEnumerable<string> GetHeaders()
         {
-            return Fields.Select(field => field.Name);
+            return GetFields().Select(field => field.Name);
         }
 
         private IEnumerable<string> GetValues(Record record)
         {
-            foreach (Field field in Fields)
+            foreach (Field field in GetFields())
             {
                 yield return record.GetProperty(field.Name)?.ToString() ?? "";
             }

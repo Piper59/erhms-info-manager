@@ -13,7 +13,7 @@ namespace ERHMS.Common.Logging
 
         public FileAppender()
         {
-            File = Path.Combine(Directory, $"ERHMS.{DateTime.Now:yyyy-MM-dd}{Extension}");
+            File = Path.Combine(Directory, $"ERHMS_{DateTime.Now:yyyyMMdd}{Extension}");
             LockingModel = new InterProcessLock();
             layout = new PatternLayout(string.Join(
                 " | ",

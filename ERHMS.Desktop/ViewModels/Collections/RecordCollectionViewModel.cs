@@ -8,7 +8,6 @@ using ERHMS.Desktop.Services;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,8 +15,15 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class RecordCollectionViewModel : CollectionViewModelBase<Record>
+    public class RecordCollectionViewModel : CollectionViewModel<Record>
     {
+        public static async Task<RecordCollectionViewModel> CreateAsync(View view)
+        {
+            RecordCollectionViewModel result = new RecordCollectionViewModel(view);
+            await result.InitializeAsync();
+            return result;
+        }
+
         private static bool IsDisplayable(MetaFieldType fieldType)
         {
             if (fieldType.IsMetadata())
@@ -70,7 +76,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand ExportCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public RecordCollectionViewModel(View view)
+        private RecordCollectionViewModel(View view)
         {
             View = view;
             Items.Filter = IsMatch;
@@ -85,40 +91,33 @@ namespace ERHMS.Desktop.ViewModels.Collections
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
-        public async Task InitializeAsync()
+        private async Task InitializeAsync()
         {
-            Fields = await Task.Run(() =>
+            await Task.Run(() =>
             {
-                return ((MetadataDbProvider)Project.Metadata).GetFieldDataTableForView(View.Id)
+                Fields = ((MetadataDbProvider)Project.Metadata).GetFieldDataTableForView(View.Id)
                     .Where(field => field.Position.GetValueOrDefault() == 0 && IsDisplayable(field.FieldType))
                     .OrderBy(field => field, new FieldDataRowComparer.ByTabIndex())
                     .ToList();
-            });
-            items.Clear();
-            items.AddRange(await Task.Run(() =>
-            {
+                List.Clear();
                 if (Project.CollectedData.TableExists(View.TableName))
                 {
                     using (RecordRepository repository = new RecordRepository(View))
                     {
-                        return repository.Select().ToList();
+                        List.AddRange(repository.Select());
                     }
                 }
-                else
-                {
-                    return Enumerable.Empty<Record>();
-                }
-            }));
+            });
             Items.Refresh();
         }
 
-        private bool IsStatusMatch(Record item)
+        private bool IsStatusMatch(Record record)
         {
             RecordStatus? status = Statuses.CurrentItem?.Value;
-            return status == null || item.RECSTATUS == status;
+            return status == null || record.RECSTATUS == status;
         }
 
-        private bool IsSearchMatch(Record item)
+        private bool IsSearchMatch(Record record)
         {
             if (string.IsNullOrEmpty(searchText))
             {
@@ -126,7 +125,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
             foreach (FieldDataRow field in fields)
             {
-                object value = item.GetProperty(field.Name);
+                object value = record.GetProperty(field.Name);
                 if (value?.ToString().Search(SearchText) ?? false)
                 {
                     return true;
@@ -135,15 +134,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
             return false;
         }
 
-        private bool IsMatch(object obj)
+        private bool IsMatch(object item)
         {
-            Record item = (Record)obj;
-            return IsStatusMatch(item) && IsSearchMatch(item);
+            Record record = (Record)item;
+            return IsStatusMatch(record) && IsSearchMatch(record);
         }
 
         public async Task AddAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(
+            await Integration.StartAsync(
                 Module.Enter,
                 $"/project:{Project.FilePath}",
                 $"/view:{View.Name}",
@@ -152,7 +151,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task EditAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(
+            await Integration.StartAsync(
                 Module.Enter,
                 $"/project:{Project.FilePath}",
                 $"/view:{View.Name}",
@@ -163,21 +162,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = lead;
-            progress.CanBeCanceled = true;
             await progress.Run(() =>
             {
-                try
+                using (RecordRepository repository = new RecordRepository(View))
                 {
-                    using (RecordRepository repository = new RecordRepository(View))
+                    foreach (Record record in SelectedItems)
                     {
-                        foreach (Record item in SelectedItems)
-                        {
-                            progress.ThrowIfCancellationRequested();
-                            repository.SetDeleted(item, deleted);
-                        }
+                        repository.SetDeleted(record, deleted);
                     }
                 }
-                catch (OperationCanceledException) { }
             });
             Items.Refresh();
         }

@@ -196,10 +196,10 @@
     <value>F_ile Explorer</value>
   </data>
   <data name="AccessText.Finish" xml:space="preserve">
-    <value>_Finish</value>
+    <value>F_inish</value>
   </data>
   <data name="AccessText.FullName" xml:space="preserve">
-    <value>_Full name</value>
+    <value>F_ull name</value>
   </data>
   <data name="AccessText.Help" xml:space="preserve">
     <value>_Help</value>
@@ -227,9 +227,6 @@
   </data>
   <data name="AccessText.Next" xml:space="preserve">
     <value>_Next</value>
-  </data>
-  <data name="AccessText.No" xml:space="preserve">
-    <value>_No</value>
   </data>
   <data name="AccessText.Ok" xml:space="preserve">
     <value>_OK</value>
@@ -285,9 +282,6 @@
   <data name="AccessText.WorkerReport" xml:space="preserve">
     <value>_Worker report</value>
   </data>
-  <data name="AccessText.Yes" xml:space="preserve">
-    <value>_Yes</value>
-  </data>
   <data name="AltText.Add" xml:space="preserve">
     <value>Add</value>
   </data>
@@ -315,6 +309,9 @@
   <data name="AltText.Export" xml:space="preserve">
     <value>Export</value>
   </data>
+  <data name="AltText.FirstPage" xml:space="preserve">
+    <value>First page</value>
+  </data>
   <data name="AltText.Help" xml:space="preserve">
     <value>Help</value>
   </data>
@@ -323,6 +320,9 @@
   </data>
   <data name="AltText.Import" xml:space="preserve">
     <value>Import</value>
+  </data>
+  <data name="AltText.LastPage" xml:space="preserve">
+    <value>Last page</value>
   </data>
   <data name="AltText.NextPage" xml:space="preserve">
     <value>Next page</value>
@@ -360,23 +360,26 @@ ERHMS Info Manager will only recognize files that are in the same location as th
 
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
+  <data name="Body.CreateView.SetWithWorkerInfo" xml:space="preserve">
+    <value>If you choose to collect worker information, the form will contain fields for the worker's name, email address, and ID. You can use these fields to associate each record with the corresponding worker.</value>
+  </data>
   <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
 
 {0}</value>
   </data>
   <data name="Body.GetWorkerId" xml:space="preserve">
-    <value>Select a worker in ERHMS Info Manager to continue.</value>
+    <value>Choose a worker in ERHMS Info Manager to continue.</value>
   </data>
   <data name="Body.InvalidProjectTemplatePath" xml:space="preserve">
     <value>File: {0}
 
-This file is not a project-level Epi Info template. </value>
+This file is not a project-level Epi Info template.</value>
   </data>
   <data name="Body.InvalidTemplatePath" xml:space="preserve">
     <value>File: {0}
 
-This file does not appear to be an Epi Info template.</value>
+This file is not a valid Epi Info template.</value>
   </data>
   <data name="Body.InvalidViewTemplatePath" xml:space="preserve">
     <value>File: {0}
@@ -385,9 +388,6 @@ This file is not a form-level Epi Info template.</value>
   </data>
   <data name="Body.SettingsReset" xml:space="preserve">
     <value>Settings have been reset.</value>
-  </data>
-  <data name="Body.SetWithWorkerInfo" xml:space="preserve">
-    <value>If you choose to collect worker information, the form will contain fields for the worker's name, email address, and unique ID. You can use these fields to associate each record with the corresponding worker.</value>
   </data>
   <data name="Body.UtilityClosing" xml:space="preserve">
     <value>ERHMS Info Manager is still working.
@@ -466,13 +466,13 @@ Close anyway?</value>
     <value>Worker Rostering Form</value>
   </data>
   <data name="FileDialog.Filter.Canvases" xml:space="preserve">
-    <value>Epi Info Dashboards (*.cvs7)|*.cvs7</value>
+    <value>Epi Info Canvases (*.cvs7)|*.cvs7</value>
   </data>
   <data name="FileDialog.Filter.Maps" xml:space="preserve">
     <value>Epi Info Maps (*.map7)|*.map7</value>
   </data>
   <data name="FileDialog.Filter.Pgms" xml:space="preserve">
-    <value>Epi Info Analyses (*.pgm7)|*.pgm7</value>
+    <value>Epi Info Programs (*.pgm7)|*.pgm7</value>
   </data>
   <data name="FileDialog.Filter.Projects" xml:space="preserve">
     <value>Epi Info Projects (*.prj)|*.prj</value>
@@ -502,13 +502,13 @@ Close anyway?</value>
     <value>Create a new form in the Epi Info Form Designer module.</value>
   </data>
   <data name="HelpText.CreateView.Blank" xml:space="preserve">
-    <value>Use this option to create a new, blank form. Once the form is created, you can add fields to it.</value>
+    <value>Create a new, blank form. Once the form is created, you can add fields to it.</value>
   </data>
   <data name="HelpText.CreateView.FromExisting" xml:space="preserve">
-    <value>Use this option to create a new form containing fields copied from an existing form. The existing form's data will not be copied. Once the form is created, you can add, edit, and remove fields.</value>
+    <value>Create a new form containing fields copied from an existing form. The existing form's data will not be copied. Once the form is created, you can add, edit, and remove fields.</value>
   </data>
   <data name="HelpText.CreateView.FromTemplate" xml:space="preserve">
-    <value>Use this option to create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields.</value>
+    <value>Create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields.</value>
   </data>
   <data name="HelpText.DeleteAsset" xml:space="preserve">
     <value>Move the selected file to the Recycle Bin.</value>
@@ -540,13 +540,7 @@ Close anyway?</value>
   <data name="HelpText.OpenView" xml:space="preserve">
     <value>Open the selected form to view and manage associated records.</value>
   </data>
-  <data name="HelpText.RefreshAssets" xml:space="preserve">
-    <value>Refresh the information displayed on this screen.</value>
-  </data>
-  <data name="HelpText.RefreshRecords" xml:space="preserve">
-    <value>Refresh the information displayed on this screen.</value>
-  </data>
-  <data name="HelpText.RefreshViews" xml:space="preserve">
+  <data name="HelpText.Refresh" xml:space="preserve">
     <value>Refresh the information displayed on this screen.</value>
   </data>
   <data name="HelpText.UndeleteRecords" xml:space="preserve">
@@ -582,11 +576,11 @@ Close anyway?</value>
   <data name="ItemsControlWatermark" xml:space="preserve">
     <value>No items found</value>
   </data>
-  <data name="Label.DirectoryPath" xml:space="preserve">
-    <value>Location:</value>
-  </data>
   <data name="Label.FileName" xml:space="preserve">
     <value>File name:</value>
+  </data>
+  <data name="Label.Location" xml:space="preserve">
+    <value>Location:</value>
   </data>
   <data name="Label.OpenInEpiInfo" xml:space="preserve">
     <value>Open in Epi Info?</value>
@@ -600,7 +594,7 @@ Close anyway?</value>
   <data name="Label.Search" xml:space="preserve">
     <value>Search:</value>
   </data>
-  <data name="Label.TemplatePath" xml:space="preserve">
+  <data name="Label.Template" xml:space="preserve">
     <value>Template:</value>
   </data>
   <data name="Label.View" xml:space="preserve">
@@ -642,6 +636,9 @@ Close anyway?</value>
   <data name="Lead.CreateView.Initialize" xml:space="preserve">
     <value>Choose a type of form to create</value>
   </data>
+  <data name="Lead.CreateView.SetSourceView" xml:space="preserve">
+    <value>Choose an existing form</value>
+  </data>
   <data name="Lead.CreateView.SetViewName" xml:space="preserve">
     <value>Enter a form name</value>
   </data>
@@ -666,7 +663,7 @@ Close anyway?</value>
   <data name="Lead.DeletingView" xml:space="preserve">
     <value>Deleting form</value>
   </data>
-  <data name="Lead.ExportingLogDirectory" xml:space="preserve">
+  <data name="Lead.ExportingLogs" xml:space="preserve">
     <value>Exporting logs</value>
   </data>
   <data name="Lead.InvalidTemplatePath" xml:space="preserve">

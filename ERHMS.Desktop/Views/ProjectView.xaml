@@ -25,9 +25,9 @@
                     <Hyperlink Command="{Binding OpenLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
                         <Run FontWeight="{StaticResource DefaultFontWeight}"
-                             Text="{Binding Value.Name}">
+                             Text="{Binding Project.Name}">
                             <Run.ToolTip>
-                                <ToolTip Content="{Binding Value.FilePath}"
+                                <ToolTip Content="{Binding Project.FilePath}"
                                          MaxWidth="{x:Static System:Double.PositiveInfinity}" />
                             </Run.ToolTip>
                         </Run>
@@ -37,10 +37,10 @@
                             Orientation="Horizontal">
                     <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
-                                         Content="Home" />
+                                         Content="{Markup:Icon Home}" />
                     <Controls:IconButton AltText="{Markup:String AltText.Help}"
                                          Command="{Binding GoToHelpCommand}"
-                                         Content="Help" />
+                                         Content="{Markup:Icon Help}" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">

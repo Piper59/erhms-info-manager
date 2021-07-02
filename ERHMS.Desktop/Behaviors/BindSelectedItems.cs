@@ -17,10 +17,7 @@ namespace ERHMS.Desktop.Behaviors
 
         private static void SelectedItems_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (!((BindSelectedItems)sender).updating)
-            {
-                throw new NotSupportedException("Cannot update selected items programmatically.");
-            }
+            ((BindSelectedItems)sender).VerifyUpdating();
         }
 
         private bool updating;
@@ -53,6 +50,14 @@ namespace ERHMS.Desktop.Behaviors
             finally
             {
                 updating = false;
+            }
+        }
+
+        private void VerifyUpdating()
+        {
+            if (!updating)
+            {
+                throw new NotSupportedException("Cannot update selected items programmatically.");
             }
         }
     }

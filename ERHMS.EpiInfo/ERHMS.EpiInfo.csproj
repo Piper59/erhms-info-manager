@@ -99,6 +99,7 @@
     <Compile Include="Naming\ViewNameValidator.cs" />
     <Compile Include="ProjectCreationInfo.cs" />
     <Compile Include="ProjectExtensions.cs" />
+    <Compile Include="ProjectInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

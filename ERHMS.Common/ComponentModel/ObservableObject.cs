@@ -16,7 +16,7 @@ namespace ERHMS.Common.ComponentModel
             TProperty value,
             [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<TProperty>.Default.Equals(value, field))
+            if (EqualityComparer<TProperty>.Default.Equals(field, value))
             {
                 return false;
             }

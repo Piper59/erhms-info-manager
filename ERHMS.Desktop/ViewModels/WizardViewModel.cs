@@ -1,7 +1,6 @@
 ﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
-using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using System;
 using System.Threading.Tasks;
@@ -33,7 +32,7 @@ namespace ERHMS.Desktop.ViewModels
                 CancelCommand = new SyncCommand(Cancel, CanCancel);
             }
 
-            protected void ContinueTo(StepViewModel<TWizard> step)
+            protected void GoToStep(IStep step)
             {
                 Wizard.Step = step;
             }
@@ -41,6 +40,12 @@ namespace ERHMS.Desktop.ViewModels
             protected void Commit()
             {
                 Wizard.Committed = true;
+            }
+
+            protected void Commit(bool? result)
+            {
+                Commit();
+                SetResult(result);
             }
 
             protected void SetResult(bool? result)
@@ -88,7 +93,7 @@ namespace ERHMS.Desktop.ViewModels
         public IStep Step
         {
             get { return step; }
-            private set { SetProperty(ref step, value); }
+            protected set { SetProperty(ref step, value); }
         }
 
         private bool committed;
@@ -101,17 +106,7 @@ namespace ERHMS.Desktop.ViewModels
         public bool? Result { get; private set; }
 
         public event EventHandler CloseRequested;
-        private void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);
-        private void OnCloseRequested() => OnCloseRequested(EventArgs.Empty);
-
-        protected void Initialize(IStep step)
-        {
-            this.step = step;
-        }
-
-        public bool? Show()
-        {
-            return ServiceLocator.Resolve<IWizardService>().Show(this);
-        }
+        protected virtual void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);
+        protected void OnCloseRequested() => OnCloseRequested(EventArgs.Empty);
     }
 }

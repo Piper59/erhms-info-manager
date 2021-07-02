@@ -7,11 +7,9 @@ namespace ERHMS.Desktop.Services
     {
         TimeSpan Delay { get; set; }
         string Lead { get; set; }
-        bool CanBeCanceled { get; set; }
 
         Task Run(Func<Task> action);
         Task<TResult> Run<TResult>(Func<Task<TResult>> action);
-        void ThrowIfCancellationRequested();
     }
 
     public static class IProgressServiceExtensions

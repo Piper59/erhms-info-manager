@@ -30,9 +30,6 @@ namespace ERHMS.Common.Text
             }
         }
 
-        private static readonly IEnumerable<Unit> unitsDescending =
-            Unit.Instances.OrderByDescending(unit => unit.Magnitude).ToList();
-
         private static bool TryGetValue(object arg, out long value)
         {
             try
@@ -49,8 +46,9 @@ namespace ERHMS.Common.Text
 
         public static string Format(string format, long value)
         {
-            long absValue = Math.Abs(value);
-            Unit unit = unitsDescending.FirstOrDefault(_unit => _unit.Magnitude <= absValue) ?? Unit.Kilobyte;
+            Unit unit = Unit.Instances.OrderByDescending(_unit => _unit.Magnitude)
+                .FirstOrDefault(_unit => _unit.Magnitude <= Math.Abs(value))
+                ?? Unit.Kilobyte;
             long unitValue = Math.DivRem(value, unit.Magnitude, out long remainder);
             if (remainder != 0)
             {

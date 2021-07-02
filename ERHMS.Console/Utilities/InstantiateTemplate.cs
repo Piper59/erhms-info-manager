@@ -4,7 +4,6 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System;
-using System.Linq;
 
 namespace ERHMS.Console.Utilities
 {
@@ -53,8 +52,7 @@ namespace ERHMS.Console.Utilities
                     }
                     if (ViewName != null)
                     {
-                        XView xView = xTemplate.XProject.XViews.Single();
-                        xView.Name = ViewName;
+                        xTemplate.XProject.XView.Name = ViewName;
                     }
                     return new ViewTemplateInstantiator(xTemplate, project);
                 case TemplateLevel.Page:
@@ -64,9 +62,7 @@ namespace ERHMS.Console.Utilities
                     }
                     if (PageName != null)
                     {
-                        XView xView = xTemplate.XProject.XViews.Single();
-                        XPage xPage = xView.XPages.Single();
-                        xPage.Name = PageName;
+                        xTemplate.XProject.XView.XPage.Name = PageName;
                     }
                     View view = project.Views[ViewName];
                     return new PageTemplateInstantiator(xTemplate, view);

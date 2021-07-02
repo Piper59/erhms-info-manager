@@ -18,12 +18,12 @@ namespace ERHMS.Desktop.Utilities
     {
         public abstract class Headless : Utility
         {
-            public override void Invoke()
+            public override string Invoke()
             {
                 using (Process process = GetProcess())
                 {
                     process.Start();
-                    Output = process.StandardOutput.ReadToEnd();
+                    return process.StandardOutput.ReadToEnd();
                 }
             }
         }
@@ -54,8 +54,9 @@ namespace ERHMS.Desktop.Utilities
                 };
             }
 
-            public override void Invoke()
+            public override string Invoke()
             {
+                string result = null;
                 try
                 {
                     using (Process process = GetProcess())
@@ -65,7 +66,7 @@ namespace ERHMS.Desktop.Utilities
                         worker.DoWork += (sender, e) =>
                         {
                             process.Start();
-                            Output = process.StandardOutput.ReadToEnd();
+                            result = process.StandardOutput.ReadToEnd();
                         };
                         worker.RunWorkerCompleted += (sender, e) =>
                         {
@@ -73,7 +74,7 @@ namespace ERHMS.Desktop.Utilities
                             {
                                 OnError(e.Error);
                             }
-                            dialog.Done = true;
+                            dialog.CanClose = true;
                             dialog.Close();
                         };
                         dialog.Shown += (sender, e) =>
@@ -94,6 +95,7 @@ namespace ERHMS.Desktop.Utilities
                 {
                     OnError(ex);
                 }
+                return result;
             }
         }
 
@@ -117,11 +119,11 @@ namespace ERHMS.Desktop.Utilities
             Log.Instance.Debug($"Executing utility: {instanceType.Name}");
             IUtility utility = (IUtility)Activator.CreateInstance(instanceType);
             utility.Parameters = args.Skip(1);
-            await utility.ExecuteAsync();
+            Console.Out.Write(await utility.ExecuteAsync());
+            Console.Out.Close();
         }
 
         public virtual IEnumerable<string> Parameters { get; set; }
-        protected string Output { get; private set; }
 
         private Process GetProcess()
         {
@@ -140,7 +142,7 @@ namespace ERHMS.Desktop.Utilities
             };
         }
 
-        public abstract void Invoke();
-        public abstract Task ExecuteAsync();
+        public abstract string Invoke();
+        public abstract Task<string> ExecuteAsync();
     }
 }

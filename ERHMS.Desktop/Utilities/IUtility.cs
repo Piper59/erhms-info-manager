@@ -7,7 +7,7 @@ namespace ERHMS.Desktop.Utilities
     {
         IEnumerable<string> Parameters { get; set; }
 
-        void Invoke();
-        Task ExecuteAsync();
+        string Invoke();
+        Task<string> ExecuteAsync();
     }
 }

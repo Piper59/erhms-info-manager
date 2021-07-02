@@ -6,11 +6,7 @@ namespace ERHMS.Desktop.Behaviors
 {
     public class EnhanceKeyboardNavigation : Behavior<DataGrid>
     {
-        private readonly Behavior moveFocusExternallyOnTab = new MoveFocusExternallyOnTab();
-        private readonly Behavior moveFocusInternallyOnControlArrow = new MoveFocusInternallyOnControlArrow();
-        private readonly Behavior restoreCurrentCellOnFocus = new RestoreCurrentCellOnFocus();
-        private readonly Behavior toggleSelectionOnSpace = new ToggleSelectionOnSpace();
-        private readonly Stack<Behavior> attachedBehaviors = new Stack<Behavior>();
+        private readonly Stack<Behavior> behaviors = new Stack<Behavior>();
 
         public bool MoveFocusExternallyOnTab { get; set; } = true;
         public bool MoveFocusInternallyOnControlArrow { get; set; } = true;
@@ -22,35 +18,34 @@ namespace ERHMS.Desktop.Behaviors
             base.OnAttached();
             if (MoveFocusExternallyOnTab)
             {
-                Attach(moveFocusExternallyOnTab);
+                Attach(new MoveFocusExternallyOnTab());
             }
             if (MoveFocusInternallyOnControlArrow)
             {
-                Attach(moveFocusInternallyOnControlArrow);
+                Attach(new MoveFocusInternallyOnControlArrow());
             }
             if (RestoreCurrentCellOnFocus)
             {
-                Attach(restoreCurrentCellOnFocus);
+                Attach(new RestoreCurrentCellOnFocus());
             }
             if (ToggleSelectionOnSpace)
             {
-                Attach(toggleSelectionOnSpace);
+                Attach(new ToggleSelectionOnSpace());
             }
         }
 
         private void Attach(Behavior behavior)
         {
             behavior.Attach(AssociatedObject);
-            attachedBehaviors.Push(behavior);
+            behaviors.Push(behavior);
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            while (attachedBehaviors.Count > 0)
+            while (behaviors.Count > 0)
             {
-                attachedBehaviors.Peek().Detach();
-                attachedBehaviors.Pop();
+                behaviors.Pop().Detach();
             }
         }
     }

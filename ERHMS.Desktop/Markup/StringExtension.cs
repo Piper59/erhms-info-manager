@@ -13,6 +13,7 @@ namespace ERHMS.Desktop.Markup
         public StringExtension() { }
 
         public StringExtension(string resourceName)
+            : this()
         {
             ResourceName = resourceName;
         }

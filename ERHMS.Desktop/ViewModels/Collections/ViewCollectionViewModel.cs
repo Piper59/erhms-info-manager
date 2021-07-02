@@ -4,29 +4,36 @@ using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
+using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class ViewCollectionViewModel : CollectionViewModelBase<ViewCollectionViewModel.Item>
+    public class ViewCollectionViewModel : CollectionViewModel<ViewCollectionViewModel.Item>
     {
         public class Item
         {
+            public static Item Create(View value)
+            {
+                Item result = new Item(value);
+                result.Initialize();
+                return result;
+            }
+
             public View Value { get; }
             public int PageCount { get; private set; }
             public int FieldCount { get; private set; }
             public int RecordCount { get; private set; }
 
-            public Item(View value)
+            private Item(View value)
             {
                 Value = value;
             }
 
-            public void Initialize()
+            private void Initialize()
             {
                 PageCount = Value.Pages.Count;
                 FieldCount = Value.Fields.InputFields.Count;
@@ -54,6 +61,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
+        public static async Task<ViewCollectionViewModel> CreateAsync(Project project)
+        {
+            ViewCollectionViewModel result = new ViewCollectionViewModel(project);
+            await result.InitializeAsync();
+            return result;
+        }
+
         public Project Project { get; }
 
         public ICommand CreateCommand { get; }
@@ -63,7 +77,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand EnterCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public ViewCollectionViewModel(Project project)
+        private ViewCollectionViewModel(Project project)
         {
             Project = project;
             CreateCommand = new AsyncCommand(CreateAsync);
@@ -74,28 +88,36 @@ namespace ERHMS.Desktop.ViewModels.Collections
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
-        public async Task InitializeAsync()
+        private async Task InitializeAsync()
         {
-            items.Clear();
-            items.AddRange(await Task.Run(() =>
+            await Task.Run(() =>
             {
+                List.Clear();
                 Project.LoadViews();
-                ICollection<Item> items = new List<Item>();
-                foreach (View view in Project.Views)
+                foreach (View value in Project.Views)
                 {
-                    Item item = new Item(view);
-                    item.Initialize();
-                    items.Add(item);
+                    List.Add(Item.Create(value));
                 }
-                return items;
-            }));
+            });
             Items.Refresh();
         }
 
         public async Task CreateAsync()
         {
             CreateViewViewModel wizard = new CreateViewViewModel(Project);
-            if (wizard.Show() == true)
+            if (wizard.Show() != true)
+            {
+                return;
+            }
+            if (wizard.OpenInEpiInfo)
+            {
+                await Integration.StartWithBackgroundTaskAsync(
+                    InitializeAsync,
+                    Module.MakeView,
+                    $"/project:{wizard.View.Project.FilePath}",
+                    $"/view:{wizard.View.Name}");
+            }
+            else
             {
                 await RefreshAsync();
             }
@@ -131,7 +153,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task DesignAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(
+            await Integration.StartAsync(
                 Module.MakeView,
                 $"/project:{Project.FilePath}",
                 $"/view:{CurrentItem.Value.Name}");
@@ -139,7 +161,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task EnterAsync()
         {
-            await MainViewModel.Instance.StartEpiInfoAsync(
+            await Integration.StartAsync(
                 Module.Enter,
                 $"/project:{Project.FilePath}",
                 $"/view:{CurrentItem.Value.Name}",

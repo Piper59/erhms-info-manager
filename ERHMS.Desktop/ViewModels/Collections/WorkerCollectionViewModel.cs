@@ -5,15 +5,28 @@ using ERHMS.Domain;
 using ERHMS.Domain.Data;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public class WorkerCollectionViewModel : CollectionViewModelBase<Worker>
+    public class WorkerCollectionViewModel : CollectionViewModel<Worker>
     {
+        public static async Task<WorkerCollectionViewModel> CreateAsync(
+            string firstName,
+            string lastName,
+            string emailAddress)
+        {
+            WorkerCollectionViewModel result = new WorkerCollectionViewModel(firstName, lastName, emailAddress);
+            await result.InitializeAsync();
+            return result;
+        }
+
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string EmailAddress { get; }
+
         private string searchText;
         public string SearchText
         {
@@ -32,63 +45,64 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public RecordStatusCollectionView Statuses { get; } = new RecordStatusCollectionView();
 
-        public WorkerCollectionViewModel()
+        private WorkerCollectionViewModel(string firstName, string lastName, string emailAddress)
         {
+            FirstName = firstName;
+            LastName = lastName;
+            EmailAddress = emailAddress;
             Items.Filter = IsMatch;
             Items.PageSize = 100;
             Items.SortDescriptions.Add(new SortDescription(nameof(Worker.Similarity), ListSortDirection.Descending));
             Statuses.CurrentChanged += (sender, e) => Items.Refresh();
         }
 
-        public async Task InitializeAsync(string firstName, string lastName, string emailAddress)
+        private async Task InitializeAsync()
         {
-            items.Clear();
-            items.AddRange(await Task.Run(() =>
+            await Task.Run(() =>
             {
+                List.Clear();
                 string projectPath = Settings.Default.WorkerProjectPath;
                 Project project = ProjectExtensions.Open(projectPath);
                 View view = project.Views[CoreView.WorkerRosteringForm.Name];
-                ICollection<Worker> items = new List<Worker>();
                 using (RecordRepository<Worker> repository = new RecordRepository<Worker>(view))
                 {
-                    foreach (Worker item in repository.Select())
+                    foreach (Worker worker in repository.Select())
                     {
-                        item.SetSimilarity(firstName, lastName, emailAddress);
-                        items.Add(item);
+                        worker.SetSimilarity(FirstName, LastName, EmailAddress);
+                        List.Add(worker);
                     }
                 }
-                return items;
-            }));
+            });
             Items.Refresh();
         }
 
-        private bool IsStatusMatch(Worker item)
+        private bool IsStatusMatch(Worker worker)
         {
             RecordStatus? status = Statuses.CurrentItem?.Value;
-            return status == null || item.RECSTATUS == status;
+            return status == null || worker.RECSTATUS == status;
         }
 
-        private bool IsSearchMatch(Worker item)
+        private bool IsSearchMatch(Worker worker)
         {
             if (string.IsNullOrEmpty(searchText))
             {
                 return true;
             }
-            if (item.FullName?.Search(searchText) == true)
+            if (worker.FullName?.Search(searchText) == true)
             {
                 return true;
             }
-            if (item.EmailAddress?.Search(searchText) == true)
+            if (worker.EmailAddress?.Search(searchText) == true)
             {
                 return true;
             }
             return false;
         }
 
-        private bool IsMatch(object obj)
+        private bool IsMatch(object item)
         {
-            Worker item = (Worker)obj;
-            return IsStatusMatch(item) && IsSearchMatch(item);
+            Worker worker = (Worker)item;
+            return IsStatusMatch(worker) && IsSearchMatch(worker);
         }
     }
 }

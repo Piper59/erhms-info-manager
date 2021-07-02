@@ -5,22 +5,22 @@ using System.Collections.Generic;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public abstract class CollectionViewModelBase<TItem> : ObservableObject
+    public abstract class CollectionViewModel<TItem> : ObservableObject
     {
-        protected readonly List<TItem> items;
-        public PagingListCollectionView Items { get; }
-        public TItem CurrentItem => (TItem)Items.CurrentItem;
+        protected List<TItem> List { get; }
+        public PagingListCollectionView<TItem> Items { get; }
+        public TItem CurrentItem => Items.CurrentItem;
         public IList SelectedItems { get; set; }
 
-        protected CollectionViewModelBase()
+        protected CollectionViewModel()
         {
-            items = new List<TItem>();
-            Items = new PagingListCollectionView(items);
+            List = new List<TItem>();
+            Items = new PagingListCollectionView<TItem>(List);
         }
 
         public bool HasCurrentItem()
         {
-            return Items.HasCurrent();
+            return Items.HasCurrentItem();
         }
 
         public bool HasSelectedItems()

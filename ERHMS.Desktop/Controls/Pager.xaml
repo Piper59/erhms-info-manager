@@ -15,9 +15,9 @@
         </TextBlock>
         <Controls:IconButton AltText="{Markup:String AltText.PreviousPage}"
                              Command="{Binding GoToPreviousPageCommand}"
-                             Content="Page.Previous" />
+                             Content="{Markup:Icon Page.Previous}" />
         <Controls:IconButton AltText="{Markup:String AltText.NextPage}"
                              Command="{Binding GoToNextPageCommand}"
-                             Content="Page.Next" />
+                             Content="{Markup:Icon Page.Next}" />
     </StackPanel>
 </UserControl>

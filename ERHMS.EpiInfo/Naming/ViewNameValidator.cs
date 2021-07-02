@@ -50,7 +50,7 @@ namespace ERHMS.EpiInfo.Naming
 
         public bool IsValid(string viewName, out InvalidViewNameReason reason)
         {
-            if (viewName == "")
+            if (string.IsNullOrEmpty(viewName))
             {
                 reason = InvalidViewNameReason.Empty;
                 return false;

@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
@@ -10,10 +11,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Content="{Markup:String Label.View}"
-                   Target="{x:Reference ViewComboBox}" />
-            <ComboBox x:Name="ViewComboBox"
-                      AutomationProperties.Name="{Markup:String Label.View}"
+                   Content="{Markup:String Label.View}" />
+            <ComboBox AutomationProperties.Name="{Markup:String Label.View}"
                       Grid.Column="1"
                       DisplayMemberPath="Name"
                       ItemsSource="{Binding Views}">
@@ -26,7 +25,11 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+SetFileInfoViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+SetAssetPathViewModel}">
+        <DataTemplate.Resources>
+            <Converters:PathToDirectoryNameConverter x:Key="PathToDirectoryNameConverter" />
+            <Converters:PathToFileNameConverter x:Key="PathToFileNameConverter" />
+        </DataTemplate.Resources>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -39,25 +42,23 @@
             </Grid.RowDefinitions>
             <Label Grid.Column="0"
                    Grid.Row="0"
-                   Content="{Markup:String Label.FileName}"
-                   Target="{x:Reference FileNameTextBox}" />
-            <TextBox x:Name="FileNameTextBox"
-                     AutomationProperties.Name="{Markup:String Label.FileName}"
+                   Content="{Markup:String Label.FileName}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.FileName}"
                      Grid.Column="1"
                      Grid.Row="0"
                      IsReadOnly="True"
-                     Text="{Binding FileInfo.Name, Mode=OneWay}" />
+                     Text="{Binding AssetPath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}" />
             <Button Grid.Column="2"
                     Grid.Row="0"
                     Command="{Binding BrowseCommand}"
                     Content="{Markup:String AccessText.Browse}" />
             <Label Grid.Column="0"
                    Grid.Row="1"
-                   Content="{Markup:String Label.DirectoryPath}" />
+                   Content="{Markup:String Label.Location}" />
             <Label Grid.Column="1"
                    Grid.ColumnSpan="2"
                    Grid.Row="1">
-                <TextBlock Text="{Binding FileInfo.DirectoryName}" />
+                <TextBlock Text="{Binding AssetPath, Converter={StaticResource PathToDirectoryNameConverter}}" />
             </Label>
         </Grid>
     </DataTemplate>

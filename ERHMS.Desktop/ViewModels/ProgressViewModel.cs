@@ -1,49 +1,21 @@
 ﻿using ERHMS.Common.ComponentModel;
-using ERHMS.Desktop.Commands;
-using System.Threading;
-using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
     public class ProgressViewModel : ObservableObject
     {
-        private readonly CancellationTokenSource cancellationTokenSource;
-
-        public string Lead { get; }
-
-        private string status;
-        public string Status
+        private string lead;
+        public string Lead
         {
-            get { return status; }
-            set { SetProperty(ref status, value); }
+            get { return lead; }
+            set { SetProperty(ref lead, value); }
         }
 
-        public CancellationToken CancellationToken { get; }
-        public bool CanBeCanceled => CancellationToken.CanBeCanceled;
-
-        public bool Done { get; set; }
-
-        public ICommand CancelCommand { get; }
-
-        public ProgressViewModel(string lead, bool canBeCanceled)
+        private string body;
+        public string Body
         {
-            Lead = lead;
-            if (canBeCanceled)
-            {
-                cancellationTokenSource = new CancellationTokenSource();
-                CancellationToken = cancellationTokenSource.Token;
-            }
-            CancelCommand = new SyncCommand(Cancel, CanCancel);
-        }
-
-        public bool CanCancel()
-        {
-            return CanBeCanceled && !CancellationToken.IsCancellationRequested;
-        }
-
-        public void Cancel()
-        {
-            cancellationTokenSource.Cancel();
+            get { return body; }
+            set { SetProperty(ref body, value); }
         }
     }
 }

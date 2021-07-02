@@ -32,19 +32,17 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Content="{Markup:String Label.ViewName}"
-                   Target="{x:Reference TextBox}" />
-            <TextBox x:Name="TextBox"
-                     AutomationProperties.Name="{Markup:String Label.ViewName}"
+                   Content="{Markup:String Label.ViewName}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.ViewName}"
                      Grid.Column="1"
-                     Text="{Binding Text, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetWithWorkerInfoViewModel}">
         <StackPanel>
             <Label>
-                <TextBlock Text="{Markup:String Body.SetWithWorkerInfo}" />
+                <TextBlock Text="{Markup:String Body.CreateView.SetWithWorkerInfo}" />
             </Label>
             <CheckBox Content="{Markup:String Label.WithWorkerInfo}"
                       IsChecked="{Binding WithWorkerInfo}" />
@@ -63,17 +61,12 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Grid.Row="0"
-                   Content="{Markup:String Label.TemplatePath}"
-                   Target="{x:Reference TextBox}" />
-            <TextBox x:Name="TextBox"
-                     AutomationProperties.Name="{Markup:String Label.TemplatePath}"
+                   Content="{Markup:String Label.Template}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.Template}"
                      Grid.Column="1"
-                     Grid.Row="0"
                      IsReadOnly="True"
                      Text="{Binding TemplatePath, Mode=OneWay}" />
             <Button Grid.Column="2"
-                    Grid.Row="0"
                     Command="{Binding BrowseCommand}"
                     Content="{Markup:String AccessText.Browse}" />
         </Grid>
@@ -86,16 +79,74 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"
-                   Content="{Markup:String Label.ViewName}"
-                   Target="{x:Reference TextBox}" />
-            <TextBox x:Name="TextBox"
-                     AutomationProperties.Name="{Markup:String Label.ViewName}"
+                   Content="{Markup:String Label.ViewName}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.ViewName}"
                      Grid.Column="1"
-                     Text="{Binding Text, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+CommitViewModel}">
+        <Views:DetailsView ItemsSource="{Binding Details}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromExisting+SetSourceViewViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!-- TODO: Use a VS-inspired template -->
+            <Label Grid.Column="0"
+                   Grid.Row="0"
+                   Content="{Markup:String Label.Project}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.Project}"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     IsReadOnly="True"
+                     Text="{Binding Views.Project.FilePath, Mode=OneWay}" />
+            <Button Grid.Column="2"
+                    Grid.Row="0"
+                    Command="{Binding BrowseCommand}"
+                    Content="{Markup:String AccessText.Browse}" />
+            <Label Grid.Column="0"
+                   Grid.Row="1"
+                   Content="{Markup:String Label.View}" />
+            <ComboBox AutomationProperties.Name="{Markup:String Label.View}"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      Grid.Row="1"
+                      DisplayMemberPath="Name"
+                      ItemsSource="{Binding Views}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromExisting+SetViewNameViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"
+                   Content="{Markup:String Label.ViewName}" />
+            <TextBox AutomationProperties.Name="{Markup:String Label.ViewName}"
+                     Grid.Column="1"
+                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromExisting+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 </ResourceDictionary>

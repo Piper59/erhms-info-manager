@@ -15,7 +15,7 @@ namespace ERHMS.Desktop.Dialogs
 
     public static class DialogSeverityExtensions
     {
-        public static Icon ToIcon(this DialogSeverity @this)
+        public static Icon ToSystemIcon(this DialogSeverity @this)
         {
             switch (@this)
             {
@@ -34,7 +34,7 @@ namespace ERHMS.Desktop.Dialogs
             }
         }
 
-        public static SystemSound ToSound(this DialogSeverity @this)
+        public static SystemSound ToSystemSound(this DialogSeverity @this)
         {
             switch (@this)
             {

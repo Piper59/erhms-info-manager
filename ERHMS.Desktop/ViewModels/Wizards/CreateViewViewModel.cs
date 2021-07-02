@@ -5,7 +5,6 @@ using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
-using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Naming;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -27,17 +26,60 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 CreateBlankCommand = new SyncCommand(CreateBlank);
                 CreateFromTemplateCommand = new SyncCommand(CreateFromTemplate);
-                CreateFromExistingCommand = Command.Null;
+                CreateFromExistingCommand = new AsyncCommand(CreateFromExistingAsync);
             }
 
             public void CreateBlank()
             {
-                ContinueTo(new Blank.SetViewNameViewModel(Wizard, this));
+                GoToStep(new Blank.SetViewNameViewModel(Wizard, this));
             }
 
             public void CreateFromTemplate()
             {
-                ContinueTo(new FromTemplate.SetXTemplateViewModel(Wizard, this));
+                GoToStep(new FromTemplate.SetXTemplateViewModel(Wizard, this));
+            }
+
+            public async Task CreateFromExistingAsync()
+            {
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                IStep step = await progress.Run(async () =>
+                {
+                    return await FromExisting.SetSourceViewViewModel.CreateAsync(Wizard, this);
+                });
+                GoToStep(step);
+            }
+        }
+
+        // TODO: Ensure view name is initially unique?
+        public abstract class SetViewNameViewModel : StepViewModel<CreateViewViewModel>
+        {
+            public override string Title => Strings.Lead_CreateView_SetViewName;
+
+            private string viewName;
+            public string ViewName
+            {
+                get { return viewName; }
+                set { SetProperty(ref viewName, value); }
+            }
+
+            protected SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
+                : base(wizard, step) { }
+
+            protected abstract void GoToNextStep();
+
+            public override bool CanContinue()
+            {
+                return true;
+            }
+
+            public override async Task ContinueAsync()
+            {
+                if (!await Wizard.ValidateAsync(ViewName))
+                {
+                    return;
+                }
+                Wizard.ViewName = ViewName;
+                GoToNextStep();
             }
         }
 
@@ -61,38 +103,34 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 return true;
             }
 
-            public override async Task ContinueAsync()
+            public override Task ContinueAsync()
             {
+                Wizard.OpenInEpiInfo = OpenInEpiInfo;
                 Close();
-                if (openInEpiInfo)
-                {
-                    await MainViewModel.Instance.StartEpiInfoAsync(
-                        Module.MakeView,
-                        $"/project:{Wizard.Project.FilePath}",
-                        $"/view:{Wizard.View.Name}");
-                }
+                return Task.CompletedTask;
             }
         }
 
         public Project Project { get; }
+        public string ViewName { get; private set; }
         public View View { get; private set; }
+        public bool OpenInEpiInfo { get; private set; }
 
         public CreateViewViewModel(Project project)
         {
             Project = project;
-            Initialize(new InitializeViewModel(this));
+            Step = new InitializeViewModel(this);
         }
 
         private async Task<bool> ValidateAsync(string viewName)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_ValidatingViewName;
-            bool result = false;
             InvalidViewNameReason reason = InvalidViewNameReason.None;
-            await progress.Run(() =>
+            bool result = await progress.Run(() =>
             {
                 ViewNameValidator validator = new ViewNameValidator(Project);
-                result = validator.IsValid(viewName, out reason);
+                return validator.IsValid(viewName, out reason);
             });
             if (reason != InvalidViewNameReason.None)
             {
@@ -100,7 +138,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 dialog.Severity = DialogSeverity.Warning;
                 dialog.Lead = reason.GetLead();
                 dialog.Body = reason.GetBody();
-                dialog.Buttons = DialogButtonCollection.Ok;
+                dialog.Buttons = DialogButtonCollection.Close;
                 dialog.Show();
             }
             return result;

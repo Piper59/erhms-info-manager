@@ -71,6 +71,18 @@ namespace ERHMS.EpiInfo.Data
             return record;
         }
 
+        private void SaveRecord(RecordRepository repository, Record record)
+        {
+            try
+            {
+                repository.Save(record);
+            }
+            catch (Exception ex)
+            {
+                throw GetException("An error occurred while saving the record", ex);
+            }
+        }
+
         public bool Import()
         {
             if (fieldsByIndex.Count == 0)
@@ -89,14 +101,7 @@ namespace ERHMS.EpiInfo.Data
                         {
                             break;
                         }
-                        try
-                        {
-                            repository.Save(record);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw GetException("An error occurred while saving the record", ex);
-                        }
+                        SaveRecord(repository, record);
                     }
                     catch (Exception ex)
                     {

@@ -41,21 +41,20 @@ namespace ERHMS.EpiInfo.Templating
                 }
                 set
                 {
-                    if (value == view)
+                    if (view != value)
                     {
-                        return;
+                        PageNames = new PageNameUniquifier(value);
+                        FieldNames = new FieldNameUniquifier(value);
+                        if (!fieldNameMapsByViewId.ContainsKey(value.Id))
+                        {
+                            fieldNameMapsByViewId[value.Id] = new Dictionary<string, string>(NameComparer.Default);
+                        }
+                        view = value;
                     }
-                    PageNames = new PageNameUniquifier(value);
-                    FieldNames = new FieldNameUniquifier(value);
-                    if (!fieldNameMapsByViewId.ContainsKey(value.Id))
-                    {
-                        fieldNameMapsByViewId[value.Id] = new Dictionary<string, string>(NameComparer.Default);
-                    }
-                    view = value;
                 }
             }
 
-            private IDictionary<string, string> FieldNameMap => fieldNameMapsByViewId[view.Id];
+            private IDictionary<string, string> FieldNameMap => fieldNameMapsByViewId[View.Id];
 
             private readonly ICollection<Field> fields = new List<Field>();
             public IEnumerable<Field> Fields => fields;
@@ -108,10 +107,7 @@ namespace ERHMS.EpiInfo.Templating
                     result = default(string);
                     return false;
                 }
-                else
-                {
-                    return tableNameMap.TryGetValue(value, out result);
-                }
+                return tableNameMap.TryGetValue(value, out result);
             }
 
             public bool MapFieldName(string value, out string result)
@@ -121,10 +117,7 @@ namespace ERHMS.EpiInfo.Templating
                     result = default(string);
                     return false;
                 }
-                else
-                {
-                    return FieldNameMap.TryGetValue(value, out result);
-                }
+                return FieldNameMap.TryGetValue(value, out result);
             }
         }
 

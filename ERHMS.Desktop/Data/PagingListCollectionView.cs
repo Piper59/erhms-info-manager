@@ -2,22 +2,21 @@
 using ERHMS.Desktop.Commands;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.Data
 {
-    public class PagingListCollectionView : ListCollectionView
+    public class PagingListCollectionView<TItem> : ListCollectionView<TItem>
     {
-        private readonly IList sourceItems;
-        private IList unpagedItems;
         private bool refreshing;
         private bool repaging;
         private object oldCurrentItem;
 
-        public override IEnumerable SourceCollection => IsPaging ? new ArrayList(sourceItems) : sourceItems;
+        public override IEnumerable SourceCollection => IsPaging ? new List<TItem>(List) : List;
+        protected IList UnpagedInternalList { get; private set; }
 
         public override Predicate<object> Filter
         {
@@ -56,10 +55,7 @@ namespace ERHMS.Desktop.Data
             }
         }
 
-        private bool IsPaging => pageSize != null;
-
-        private int currentPage;
-        public int CurrentPage => currentPage;
+        private bool IsPaging => PageSize != null;
 
         public int PageCount
         {
@@ -67,19 +63,20 @@ namespace ERHMS.Desktop.Data
             {
                 if (IsPaging)
                 {
-                    int quotient = Math.DivRem(unpagedItems.Count, pageSize.Value, out int remainder);
+                    int quotient = Math.DivRem(UnpagedInternalList.Count, PageSize.Value, out int remainder);
                     return remainder == 0 ? quotient : quotient + 1;
                 }
                 else
                 {
-                    return unpagedItems.Count == 0 ? 0 : 1;
+                    return UnpagedInternalList.Count == 0 ? 0 : 1;
                 }
             }
         }
 
+        public int CurrentPage { get; private set; }
         private int FirstPage => 1;
-        private int PreviousPage => currentPage - 1;
-        private int NextPage => currentPage + 1;
+        private int PreviousPage => CurrentPage - 1;
+        private int NextPage => CurrentPage + 1;
         private int LastPage => PageCount;
 
         public ICommand GoToPageCommand { get; }
@@ -88,10 +85,9 @@ namespace ERHMS.Desktop.Data
         public ICommand GoToNextPageCommand { get; }
         public ICommand GoToLastPageCommand { get; }
 
-        public PagingListCollectionView(IList items)
-            : base(items)
+        public PagingListCollectionView(List<TItem> list)
+            : base(list)
         {
-            sourceItems = items;
             GroupDescriptions.CollectionChanged += Descriptions_CollectionChanged;
             SortDescriptions.CollectionChanged += Descriptions_CollectionChanged;
             GoToPageCommand = new SyncCommand<int>(GoToPageCore, CanGoToPage);
@@ -119,9 +115,9 @@ namespace ERHMS.Desktop.Data
 
         private void GoToPageCore(int page)
         {
-            if (page != currentPage)
+            if (page != CurrentPage)
             {
-                currentPage = page;
+                CurrentPage = page;
                 RefreshOrDefer();
             }
         }
@@ -149,7 +145,7 @@ namespace ERHMS.Desktop.Data
         public bool GoToNextPage() => GoToPage(NextPage);
         public bool GoToLastPage() => GoToPage(LastPage);
 
-        public IEnumerable GetPage(int page)
+        public IEnumerable<TItem> GetPage(int page)
         {
             if (!CanGoToPage(page))
             {
@@ -159,17 +155,17 @@ namespace ERHMS.Desktop.Data
             int endIndex;
             if (IsPaging)
             {
-                startIndex = pageSize.Value * (page - 1);
-                endIndex = Math.Min(startIndex + pageSize.Value, unpagedItems.Count);
+                startIndex = PageSize.Value * (page - 1);
+                endIndex = Math.Min(startIndex + PageSize.Value, UnpagedInternalList.Count);
             }
             else
             {
                 startIndex = 0;
-                endIndex = unpagedItems.Count;
+                endIndex = UnpagedInternalList.Count;
             }
             for (int index = startIndex; index < endIndex; index++)
             {
-                yield return unpagedItems[index];
+                yield return (TItem)UnpagedInternalList[index];
             }
         }
 
@@ -201,17 +197,17 @@ namespace ERHMS.Desktop.Data
 
         private void OnRefreshed()
         {
-            unpagedItems = IsPaging ? new ArrayList(InternalList) : InternalList;
+            UnpagedInternalList = IsPaging ? new ArrayList(InternalList) : InternalList;
             if (repaging)
             {
-                currentPage = 1;
+                CurrentPage = FirstPage;
                 repaging = false;
             }
-            currentPage = currentPage.Clamp(FirstPage, LastPage);
+            CurrentPage = CurrentPage.Clamp(FirstPage, LastPage);
             if (PageCount > 1)
             {
                 InternalList.Clear();
-                foreach (object item in GetPage(currentPage))
+                foreach (object item in GetPage(CurrentPage))
                 {
                     InternalList.Add(item);
                 }

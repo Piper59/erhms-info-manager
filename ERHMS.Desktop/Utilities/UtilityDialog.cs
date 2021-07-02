@@ -18,7 +18,7 @@ namespace ERHMS.Desktop.Utilities
             set { BodyLabel.Text = value; }
         }
 
-        public bool Done { get; set; }
+        public bool CanClose { get; set; }
 
         public UtilityDialog()
         {
@@ -40,7 +40,7 @@ namespace ERHMS.Desktop.Utilities
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (Done)
+            if (CanClose)
             {
                 DialogResult = DialogResult.OK;
                 base.OnFormClosing(e);

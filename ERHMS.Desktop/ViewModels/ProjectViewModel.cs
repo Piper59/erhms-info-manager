@@ -9,37 +9,40 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class ProjectViewModel
     {
-        public Project Value { get; }
-        public ViewCollectionViewModel Views { get; }
-        public CanvasCollectionViewModel Canvases { get; }
-        public PgmCollectionViewModel Pgms { get; }
-        public MapCollectionViewModel Maps { get; }
+        public static async Task<ProjectViewModel> CreateAsync(Project project)
+        {
+            ProjectViewModel result = new ProjectViewModel(project);
+            await result.InitializeAsync();
+            return result;
+        }
+
+        public Project Project { get; }
+        public ViewCollectionViewModel Views { get; private set; }
+        public CanvasCollectionViewModel Canvases { get; private set; }
+        public PgmCollectionViewModel Pgms { get; private set; }
+        public MapCollectionViewModel Maps { get; private set; }
 
         public ICommand GoToHelpCommand { get; }
         public ICommand OpenLocationCommand { get; }
 
-        public ProjectViewModel(Project value)
+        private ProjectViewModel(Project project)
         {
-            Value = value;
-            Views = new ViewCollectionViewModel(value);
-            Canvases = new CanvasCollectionViewModel(value);
-            Pgms = new PgmCollectionViewModel(value);
-            Maps = new MapCollectionViewModel(value);
+            Project = project;
             GoToHelpCommand = Command.Null;
             OpenLocationCommand = new SyncCommand(OpenLocation);
         }
 
-        public async Task InitializeAsync()
+        private async Task InitializeAsync()
         {
-            await Views.InitializeAsync();
-            await Canvases.InitializeAsync();
-            await Pgms.InitializeAsync();
-            await Maps.InitializeAsync();
+            Views = await ViewCollectionViewModel.CreateAsync(Project);
+            Canvases = await CanvasCollectionViewModel.CreateAsync(Project);
+            Pgms = await PgmCollectionViewModel.CreateAsync(Project);
+            Maps = await MapCollectionViewModel.CreateAsync(Project);
         }
 
         public void OpenLocation()
         {
-            Process.Start(Value.Location)?.Dispose();
+            Process.Start(Project.Location)?.Dispose();
         }
     }
 }

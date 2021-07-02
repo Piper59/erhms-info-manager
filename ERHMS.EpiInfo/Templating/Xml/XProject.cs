@@ -58,6 +58,7 @@ namespace ERHMS.EpiInfo.Templating.Xml
         }
 
         public IEnumerable<XView> XViews => Elements(ElementNames.View).Cast<XView>();
+        public XView XView => XViews.Single();
         public IEnumerable<XField> XFields => XViews.SelectMany(xView => xView.XFields);
 
         public XProject()

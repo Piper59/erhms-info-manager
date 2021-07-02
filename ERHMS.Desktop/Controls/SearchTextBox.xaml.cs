@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ERHMS.Desktop.Infrastructure;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
@@ -18,9 +19,7 @@ namespace ERHMS.Desktop.Controls
         public SearchTextBox()
         {
             InitializeComponent();
-            Thickness margin = Button.Margin;
-            margin.Left *= -1;
-            Button.Margin = margin;
+            Button.Margin = Button.Margin.Scale(left: -1.0);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

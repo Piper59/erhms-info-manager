@@ -25,14 +25,14 @@ namespace ERHMS.Desktop.Utilities
             }
         }
 
-        public override Task ExecuteAsync()
+        public override Task<string> ExecuteAsync()
         {
             Settings.Default.Reset();
             if (Verbose)
             {
                 MessageBox.Show(Strings.Body_SettingsReset, Strings.AppTitle);
             }
-            return Task.CompletedTask;
+            return Task.FromResult((string)null);
         }
     }
 }

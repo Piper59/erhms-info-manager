@@ -5,7 +5,6 @@ using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using ERHMS.Resources;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
@@ -14,33 +13,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public static class Blank
         {
-            public class SetViewNameViewModel : StepViewModel<CreateViewViewModel>
+            public class SetViewNameViewModel : CreateViewViewModel.SetViewNameViewModel
             {
-                public override string Title => Strings.Lead_CreateView_SetViewName;
-
-                private string viewName = "";
-                public string ViewName
-                {
-                    get { return viewName; }
-                    set { SetProperty(ref viewName, value); }
-                }
-
                 public SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
                     : base(wizard, step) { }
 
-                public override bool CanContinue()
+                protected override void GoToNextStep()
                 {
-                    return true;
-                }
-
-                public override async Task ContinueAsync()
-                {
-                    if (!await Wizard.ValidateAsync(viewName))
-                    {
-                        return;
-                    }
-                    Wizard.Blank_ViewName = viewName;
-                    ContinueTo(new SetWithWorkerInfoViewModel(Wizard, this));
+                    GoToStep(new SetWithWorkerInfoViewModel(Wizard, this));
                 }
             }
 
@@ -65,8 +45,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public override Task ContinueAsync()
                 {
-                    Wizard.Blank_WithWorkerInfo = withWorkerInfo;
-                    ContinueTo(new CommitViewModel(Wizard, this));
+                    Wizard.WithWorkerInfo = WithWorkerInfo;
+                    GoToStep(new CommitViewModel(Wizard, this));
                     return Task.CompletedTask;
                 }
             }
@@ -82,8 +62,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Label_ViewName, Wizard.Blank_ViewName },
-                        { Strings.Label_WithWorkerInfo, Wizard.Blank_WithWorkerInfo.ToLocalizedString() }
+                        { Strings.Label_ViewName, wizard.ViewName },
+                        { Strings.Label_WithWorkerInfo, wizard.WithWorkerInfo.ToLocalizedString() }
                     };
                 }
 
@@ -98,10 +78,10 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     progress.Lead = Strings.Lead_CreatingView;
                     Wizard.View = await progress.Run(() =>
                     {
-                        string conjunction = Wizard.Blank_WithWorkerInfo ? "With" : "Without";
+                        string conjunction = Wizard.WithWorkerInfo ? "With" : "Without";
                         string resourceName = $"Templates.Forms.BlankForm{conjunction}WorkerInfo.xml";
                         XTemplate xTemplate = ResourceManager.GetXTemplate(resourceName);
-                        xTemplate.XProject.XViews.Single().Name = Wizard.Blank_ViewName;
+                        xTemplate.XProject.XView.Name = Wizard.ViewName;
                         ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
                         {
                             Progress = progress
@@ -109,14 +89,12 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         instantiator.Instantiate();
                         return instantiator.View;
                     });
-                    Commit();
-                    SetResult(true);
-                    ContinueTo(new CloseViewModel(Wizard, this));
+                    Commit(true);
+                    GoToStep(new CloseViewModel(Wizard, this));
                 }
             }
         }
 
-        private string Blank_ViewName { get; set; }
-        private bool Blank_WithWorkerInfo { get; set; }
+        public bool WithWorkerInfo { get; private set; }
     }
 }

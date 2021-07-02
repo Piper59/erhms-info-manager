@@ -21,7 +21,7 @@ namespace ERHMS.Desktop.Views
 
         private void DialogView_Loaded(object sender, RoutedEventArgs e)
         {
-            DataContext.Severity.ToSound()?.Play();
+            DataContext.Severity.ToSystemSound()?.Play();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -18,7 +17,14 @@ namespace ERHMS.Desktop.Infrastructure
                     return window;
                 }
             }
-            return @this.Windows.OfType<Window>().FirstOrDefault(window => window.IsActive) ?? @this.MainWindow;
+            foreach (Window window in @this.Windows)
+            {
+                if (window.IsActive)
+                {
+                    return window;
+                }
+            }
+            return @this.MainWindow;
         }
     }
 }

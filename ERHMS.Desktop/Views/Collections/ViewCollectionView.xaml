@@ -13,32 +13,32 @@
         <WrapPanel Grid.Row="0">
             <Controls:IconButton AltText="{Markup:String AltText.Create}"
                                  Command="{Binding CreateCommand}"
-                                 Content="Create"
+                                 Content="{Markup:Icon Create}"
                                  HelpText="{Markup:String HelpText.CreateView}" />
             <Controls:IconButton AltText="{Markup:String AltText.Open}"
                                  Command="{Binding OpenCommand}"
-                                 Content="Open"
+                                 Content="{Markup:Icon Open}"
                                  HelpText="{Markup:String HelpText.OpenView}" />
             <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
-                                 Content="Delete"
+                                 Content="{Markup:Icon Delete}"
                                  HelpText="{Markup:String HelpText.DeleteView}" />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AltText="{Markup:String AltText.Design}"
                                  Command="{Binding DesignCommand}"
-                                 Content="Design"
+                                 Content="{Markup:Icon Design}"
                                  HelpText="{Markup:String HelpText.DesignView}" />
             <Controls:IconButton AltText="{Markup:String AltText.Enter}"
                                  Command="{Binding EnterCommand}"
-                                 Content="Enter"
+                                 Content="{Markup:Icon Enter}"
                                  HelpText="{Markup:String HelpText.EnterView}" />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"
-                                 Content="Refresh"
-                                 HelpText="{Markup:String HelpText.RefreshViews}" />
+                                 Content="{Markup:Icon Refresh}"
+                                 HelpText="{Markup:String HelpText.Refresh}" />
         </WrapPanel>
-        <DataGrid x:Name="ItemDataGrid"
+        <DataGrid x:Name="ItemsDataGrid"
                   Grid.Row="1"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
@@ -68,6 +68,6 @@
             </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:ItemsControlWatermark Grid.Row="1"
-                                        ItemsControl="{x:Reference ItemDataGrid}" />
+                                        ItemsControl="{x:Reference ItemsDataGrid}" />
     </Grid>
 </UserControl>

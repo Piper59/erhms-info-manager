@@ -11,10 +11,8 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0"
-               Content="{Markup:String Label.Search}"
-               Target="{x:Reference TextBox}" />
-        <TextBox x:Name="TextBox"
-                 AutomationProperties.Name="{Markup:String Label.Search}"
+               Content="{Markup:String Label.Search}" />
+        <TextBox AutomationProperties.Name="{Markup:String Label.Search}"
                  Grid.Column="1"
                  Text="{Binding Text, ElementName=Root, UpdateSourceTrigger=PropertyChanged, Delay=500}">
         </TextBox>
@@ -22,6 +20,6 @@
                              Grid.Column="2"
                              AltText="{Markup:String AltText.ClearSearch}"
                              Click="Button_Click"
-                             Content="Clear" />
+                             Content="{Markup:Icon Clear}" />
     </Grid>
 </UserControl>

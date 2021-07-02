@@ -1,9 +1,10 @@
 ﻿using ERHMS.EpiInfo.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ERHMS.Desktop.Data
 {
-    public class RecordStatusCollectionView : TypedListCollectionView<RecordStatusCollectionView.Item>
+    public class RecordStatusCollectionView : ListCollectionView<RecordStatusCollectionView.Item>
     {
         public class Item
         {
@@ -27,6 +28,6 @@ namespace ERHMS.Desktop.Data
         }
 
         public RecordStatusCollectionView()
-            : base(Item.Instances) { }
+            : base(Item.Instances.ToList()) { }
     }
 }

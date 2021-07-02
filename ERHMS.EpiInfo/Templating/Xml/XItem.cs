@@ -6,17 +6,17 @@ namespace ERHMS.EpiInfo.Templating.Xml
 {
     public class XItem : XElement
     {
-        private static readonly string space = " ";
-        private static readonly string escapedSpace = "__space__";
+        private const string Space = " ";
+        private const string EscapedSpace = "__space__";
 
         private static string GetAttributeName(DataColumn column)
         {
-            return column.ColumnName.Replace(space, escapedSpace);
+            return column.ColumnName.Replace(Space, EscapedSpace);
         }
 
         private static string GetColumnName(XAttribute attribute)
         {
-            return attribute.Name.LocalName.Replace(escapedSpace, space);
+            return attribute.Name.LocalName.Replace(EscapedSpace, Space);
         }
 
         public static XItem Create(DataRow item)

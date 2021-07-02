@@ -25,9 +25,9 @@
                     <Hyperlink Command="{Binding OpenProjectLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
                         <Run FontWeight="{StaticResource DefaultFontWeight}"
-                             Text="{Binding Value.Project.Name}">
+                             Text="{Binding View.Project.Name}">
                             <Run.ToolTip>
-                                <ToolTip Content="{Binding Value.Project.FilePath}"
+                                <ToolTip Content="{Binding View.Project.FilePath}"
                                          MaxWidth="{x:Static System:Double.PositiveInfinity}" />
                             </Run.ToolTip>
                         </Run>
@@ -35,19 +35,19 @@
                     <Run FontFamily="{StaticResource IconFontFamily}"
                          Text="{Markup:Icon Level.Separator}" />
                     <Run FontWeight="{StaticResource DefaultFontWeight}"
-                         Text="{Binding Value.Name}" />
+                         Text="{Binding View.Name}" />
                 </TextBlock>
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal">
                     <Controls:IconButton AltText="{Markup:String AltText.UpToProject}"
                                          Command="{Binding GoToProjectCommand}"
-                                         Content="Level.Parent" />
+                                         Content="{Markup:Icon Level.Parent}" />
                     <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
-                                         Content="Home" />
+                                         Content="{Markup:Icon Home}" />
                     <Controls:IconButton AltText="{Markup:String AltText.Help}"
                                          Command="{Binding GoToHelpCommand}"
-                                         Content="Help" />
+                                         Content="{Markup:Icon Help}" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">
