@@ -1472,7 +1472,7 @@ namespace ERHMS.Desktop
             { "Clear", "times" },
             { "Clipboard", "clipboard" },
             { "Close", "times" },
-            { "CoreView.AfterActionReview", "award" },
+            { "CoreView.AfterActionReview", "chart-line" },
             { "CoreView.DeploymentHealthSurvey", "heartbeat" },
             { "CoreView.PostDeploymentHealthSurvey", "heartbeat" },
             { "CoreView.PreDeploymentHealthSurvey", "heartbeat" },
