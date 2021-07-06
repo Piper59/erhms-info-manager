@@ -8,6 +8,7 @@
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
     <UserControl.Resources>
         <Converters:ByteCountFormattingConverter x:Key="ByteCountFormattingConverter" />
+        <Converters:StringLocalizingConverter x:Key="StringLocalizingConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -18,15 +19,15 @@
             <Controls:IconButton AltText="{Markup:String AltText.Create}"
                                  Command="{Binding CreateCommand}"
                                  Content="{Markup:Icon Create}"
-                                 HelpText="{Markup:String HelpText.CreateAsset}" />
+                                 HelpText="{Binding Module, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.CreateAsset.{0}'}" />
             <Controls:IconButton AltText="{Markup:String AltText.Open}"
                                  Command="{Binding OpenCommand}"
                                  Content="{Markup:Icon Open}"
-                                 HelpText="{Markup:String HelpText.OpenAsset}" />
+                                 HelpText="{Binding Module, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.OpenAsset.{0}'}" />
             <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
                                  Content="{Markup:Icon Delete}"
-                                 HelpText="{Markup:String HelpText.DeleteAsset}" />
+                                 HelpText="{Binding Module, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.DeleteAsset.{0}'}" />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"

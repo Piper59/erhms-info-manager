@@ -361,7 +361,7 @@ ERHMS Info Manager will only recognize files that are in the same location as th
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
   <data name="Body.CreateView.SetWithWorkerInfo" xml:space="preserve">
-    <value>If you choose to collect worker information, the form will contain fields for the worker's name, email address, and ID. You can use these fields to associate each record with the corresponding worker.</value>
+    <value>If you choose to collect worker information, the new form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker.</value>
   </data>
   <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
@@ -374,7 +374,7 @@ This form, any related forms, and all associated records will be permanently del
   <data name="Body.InvalidProjectTemplatePath" xml:space="preserve">
     <value>File: {0}
 
-This file is not a project-level Epi Info template.</value>
+This file is not a valid project-level Epi Info template.</value>
   </data>
   <data name="Body.InvalidTemplatePath" xml:space="preserve">
     <value>File: {0}
@@ -384,7 +384,7 @@ This file is not a valid Epi Info template.</value>
   <data name="Body.InvalidViewTemplatePath" xml:space="preserve">
     <value>File: {0}
 
-This file is not a form-level Epi Info template.</value>
+This file is not a valid form-level Epi Info template.</value>
   </data>
   <data name="Body.SettingsReset" xml:space="preserve">
     <value>Settings have been reset.</value>
@@ -495,8 +495,14 @@ Close anyway?</value>
   <data name="HelpText.CopyField" xml:space="preserve">
     <value>Copy values to the Clipboard from one or all fields.</value>
   </data>
-  <data name="HelpText.CreateAsset" xml:space="preserve">
-    <value>Create a new file in Epi Info.</value>
+  <data name="HelpText.CreateAsset.Analysis" xml:space="preserve">
+    <value>Create a new analysis in the Epi Info Classic Analysis module.</value>
+  </data>
+  <data name="HelpText.CreateAsset.AnalysisDashboard" xml:space="preserve">
+    <value>Create a new dashboard in the Epi Info Visual Dashboard module.</value>
+  </data>
+  <data name="HelpText.CreateAsset.Mapping" xml:space="preserve">
+    <value>Create a new map in the Epi Info Maps module.</value>
   </data>
   <data name="HelpText.CreateView" xml:space="preserve">
     <value>Create a new form in the Epi Info Form Designer module.</value>
@@ -510,8 +516,14 @@ Close anyway?</value>
   <data name="HelpText.CreateView.FromTemplate" xml:space="preserve">
     <value>Create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields.</value>
   </data>
-  <data name="HelpText.DeleteAsset" xml:space="preserve">
-    <value>Move the selected file to the Recycle Bin.</value>
+  <data name="HelpText.DeleteAsset.Analysis" xml:space="preserve">
+    <value>Move the selected analysis to the Recycle Bin.</value>
+  </data>
+  <data name="HelpText.DeleteAsset.AnalysisDashboard" xml:space="preserve">
+    <value>Move the selected dashboard to the Recycle Bin.</value>
+  </data>
+  <data name="HelpText.DeleteAsset.Mapping" xml:space="preserve">
+    <value>Move the selected map to the Recycle Bin.</value>
   </data>
   <data name="HelpText.DeleteRecords" xml:space="preserve">
     <value>Mark the selected records as deleted (without permanently deleting them).</value>
@@ -534,11 +546,17 @@ Close anyway?</value>
   <data name="HelpText.ImportRecords" xml:space="preserve">
     <value>Import records into the current form.</value>
   </data>
-  <data name="HelpText.OpenAsset" xml:space="preserve">
-    <value>Open the selected file in Epi Info.</value>
+  <data name="HelpText.OpenAsset.Analysis" xml:space="preserve">
+    <value>Open the selected analysis in the Epi Info Classic Analysis module.</value>
+  </data>
+  <data name="HelpText.OpenAsset.AnalysisDashboard" xml:space="preserve">
+    <value>Open the selected dashboard in the Epi Info Visual Dashboard module.</value>
+  </data>
+  <data name="HelpText.OpenAsset.Mapping" xml:space="preserve">
+    <value>Open the selected map in the Epi Info Maps module.</value>
   </data>
   <data name="HelpText.OpenView" xml:space="preserve">
-    <value>Open the selected form to view and manage associated records.</value>
+    <value>Open the selected form to view and manage records.</value>
   </data>
   <data name="HelpText.Refresh" xml:space="preserve">
     <value>Refresh the information displayed on this screen.</value>
@@ -576,8 +594,8 @@ Close anyway?</value>
   <data name="ItemsControlWatermark" xml:space="preserve">
     <value>No items found</value>
   </data>
-  <data name="Label.FileName" xml:space="preserve">
-    <value>File name:</value>
+  <data name="Label.File" xml:space="preserve">
+    <value>File:</value>
   </data>
   <data name="Label.Location" xml:space="preserve">
     <value>Location:</value>
@@ -594,14 +612,17 @@ Close anyway?</value>
   <data name="Label.Search" xml:space="preserve">
     <value>Search:</value>
   </data>
+  <data name="Label.SourceView" xml:space="preserve">
+    <value>Existing form:</value>
+  </data>
+  <data name="Label.TargetView" xml:space="preserve">
+    <value>New form:</value>
+  </data>
   <data name="Label.Template" xml:space="preserve">
     <value>Template:</value>
   </data>
   <data name="Label.View" xml:space="preserve">
     <value>Form:</value>
-  </data>
-  <data name="Label.ViewName" xml:space="preserve">
-    <value>Form name:</value>
   </data>
   <data name="Label.WithWorkerInfo" xml:space="preserve">
     <value>Collect worker information?</value>
@@ -621,11 +642,11 @@ Close anyway?</value>
   <data name="Lead.CreateAsset.Commit" xml:space="preserve">
     <value>Verify the information below</value>
   </data>
-  <data name="Lead.CreateAsset.SetFileInfo" xml:space="preserve">
-    <value>Choose a file name and location</value>
+  <data name="Lead.CreateAsset.SetAssetPath" xml:space="preserve">
+    <value>Choose a name and location for the new file</value>
   </data>
   <data name="Lead.CreateAsset.SetView" xml:space="preserve">
-    <value>Choose a form to analyze</value>
+    <value>Choose a form to use as a data source</value>
   </data>
   <data name="Lead.CreateView.Close" xml:space="preserve">
     <value>Form has been created</value>
@@ -640,7 +661,7 @@ Close anyway?</value>
     <value>Choose an existing form</value>
   </data>
   <data name="Lead.CreateView.SetViewName" xml:space="preserve">
-    <value>Enter a form name</value>
+    <value>Enter a name for the new form</value>
   </data>
   <data name="Lead.CreateView.SetWithWorkerInfo" xml:space="preserve">
     <value>Choose whether to collect worker information</value>

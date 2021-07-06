@@ -38,7 +38,8 @@
                          Text="{Binding View.Name}" />
                 </TextBlock>
                 <StackPanel Grid.Column="1"
-                            Orientation="Horizontal">
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top">
                     <Controls:IconButton AltText="{Markup:String AltText.UpToProject}"
                                          Command="{Binding GoToProjectCommand}"
                                          Content="{Markup:Icon Level.Parent}" />

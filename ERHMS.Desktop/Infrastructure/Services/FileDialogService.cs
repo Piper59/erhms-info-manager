@@ -1,7 +1,6 @@
 ﻿using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using Microsoft.Win32;
-using System.ComponentModel;
 using System.IO;
 using System.Windows;
 
@@ -21,43 +20,30 @@ namespace ERHMS.Desktop.Infrastructure.Services
             }
             set
             {
-                SetInitialPath(value);
+                InitialDirectory = Path.GetDirectoryName(value);
+                InitialFileName = Path.GetFileName(value);
                 fileName = value;
             }
         }
 
         public string Filter { get; set; }
 
-        public event CancelEventHandler FileOk;
-
-        private void SetInitialPath(string path)
-        {
-            InitialDirectory = Path.GetDirectoryName(path);
-            InitialFileName = Path.GetFileName(path);
-        }
-
         private bool? Show(FileDialog dialog)
         {
             dialog.InitialDirectory = InitialDirectory;
             dialog.FileName = InitialFileName;
             dialog.Filter = Filter;
-            dialog.FileOk += (sender, e) =>
-            {
-                string oldFileName = FileName;
-                fileName = dialog.FileName;
-                FileOk?.Invoke(this, e);
-                if (e.Cancel)
-                {
-                    fileName = oldFileName;
-                }
-                else
-                {
-                    SetInitialPath(fileName);
-                }
-            };
             Window owner = Application.Current.GetActiveWindow();
             owner.EnsureHandle();
-            return dialog.ShowDialog(owner);
+            if (dialog.ShowDialog(owner) == true)
+            {
+                FileName = dialog.FileName;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool? Open()

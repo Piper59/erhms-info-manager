@@ -50,7 +50,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
-        // TODO: Ensure view name is initially unique?
         public abstract class SetViewNameViewModel : StepViewModel<CreateViewViewModel>
         {
             public override string Title => Strings.Lead_CreateView_SetViewName;

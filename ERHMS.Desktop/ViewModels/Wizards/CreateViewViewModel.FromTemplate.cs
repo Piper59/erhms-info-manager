@@ -3,6 +3,7 @@ using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
+using ERHMS.EpiInfo.Naming;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public class SetXTemplateViewModel : StepViewModel<CreateViewViewModel>
             {
                 private readonly IFileDialogService fileDialog;
+                private XTemplate xTemplate;
 
                 public override string Title => Strings.Lead_CreateView_SetXTemplate;
 
@@ -35,14 +37,42 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                     fileDialog.InitialDirectory = Configuration.Instance.Directories.Templates;
                     fileDialog.Filter = Strings.FileDialog_Filter_Templates;
-                    BrowseCommand = new SyncCommand(Browse);
+                    BrowseCommand = new AsyncCommand(BrowseAsync);
                 }
 
-                public void Browse()
+                public async Task BrowseAsync()
                 {
-                    if (fileDialog.Open() != true)
+                    while (true)
                     {
-                        return;
+                        if (fileDialog.Open() != true)
+                        {
+                            return;
+                        }
+                        IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                        progress.Lead = Strings.Lead_LoadingTemplate;
+                        XTemplate xTemplate = await progress.Run(() =>
+                        {
+                            try
+                            {
+                                return XTemplate.Load(fileDialog.FileName);
+                            }
+                            catch
+                            {
+                                return null;
+                            }
+                        });
+                        if (xTemplate == null || xTemplate.Level != TemplateLevel.View)
+                        {
+                            IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                            dialog.Severity = DialogSeverity.Warning;
+                            dialog.Lead = Strings.Lead_InvalidTemplatePath;
+                            dialog.Body = string.Format(Strings.Body_InvalidViewTemplatePath, fileDialog.FileName);
+                            dialog.Buttons = DialogButtonCollection.Close;
+                            dialog.Show();
+                            continue;
+                        }
+                        this.xTemplate = xTemplate;
+                        break;
                     }
                     TemplatePath = fileDialog.FileName;
                 }
@@ -54,51 +84,40 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public override async Task ContinueAsync()
                 {
-                    IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    progress.Lead = Strings.Lead_LoadingTemplate;
-                    XTemplate xTemplate = await progress.Run(() =>
-                    {
-                        try
-                        {
-                            return XTemplate.Load(TemplatePath);
-                        }
-                        catch
-                        {
-                            return null;
-                        }
-                    });
-                    if (xTemplate == null)
-                    {
-                        OnError(Strings.Body_InvalidTemplatePath);
-                        return;
-                    }
-                    if (xTemplate.Level != TemplateLevel.View)
-                    {
-                        OnError(Strings.Body_InvalidViewTemplatePath);
-                        return;
-                    }
                     Wizard.TemplatePath = TemplatePath;
                     Wizard.XTemplate = xTemplate;
-                    GoToStep(new SetViewNameViewModel(Wizard, this));
-                }
-
-                private void OnError(string body)
-                {
-                    IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                    dialog.Severity = DialogSeverity.Warning;
-                    dialog.Lead = Strings.Lead_InvalidTemplatePath;
-                    dialog.Body = string.Format(body, TemplatePath);
-                    dialog.Buttons = DialogButtonCollection.Close;
-                    dialog.Show();
+                    IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                    IStep step = await progress.Run(async () =>
+                    {
+                        return await SetViewNameViewModel.CreateAsync(Wizard, this);
+                    });
+                    GoToStep(step);
                 }
             }
 
             public class SetViewNameViewModel : CreateViewViewModel.SetViewNameViewModel
             {
-                public SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
-                    : base(wizard, step)
+                public static async Task<SetViewNameViewModel> CreateAsync(CreateViewViewModel wizard, IStep antecedent)
                 {
-                    ViewName = wizard.XTemplate.XProject.XView.Name;
+                    SetViewNameViewModel result = new SetViewNameViewModel(wizard, antecedent);
+                    await result.InitializeAsync();
+                    return result;
+                }
+
+                private SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
+                    : base(wizard, step) { }
+
+                private async Task InitializeAsync()
+                {
+                    await Task.Run(() =>
+                    {
+                        ViewName = Wizard.XTemplate.XProject.XView.Name;
+                        ViewNameUniquifier viewNames = new ViewNameUniquifier(Wizard.Project);
+                        if (viewNames.Exists(ViewName))
+                        {
+                            ViewName = viewNames.Uniquify(ViewName);
+                        }
+                    });
                 }
 
                 protected override void GoToNextStep()
@@ -119,7 +138,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Details = new DetailsViewModel
                     {
                         { Strings.Label_Template, wizard.TemplatePath },
-                        { Strings.Label_ViewName, wizard.ViewName }
+                        { Strings.Label_View, wizard.ViewName }
                     };
                 }
 

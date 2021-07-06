@@ -5,6 +5,7 @@ using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Naming;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.Threading.Tasks;
@@ -77,20 +78,41 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     return Views.HasCurrentItem();
                 }
 
-                public override Task ContinueAsync()
+                public override async Task ContinueAsync()
                 {
                     Wizard.SourceView = Views.CurrentItem;
-                    GoToStep(new SetViewNameViewModel(Wizard, this));
-                    return Task.CompletedTask;
+                    IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                    IStep step = await progress.Run(async () =>
+                    {
+                        return await SetViewNameViewModel.CreateAsync(Wizard, this);
+                    });
+                    GoToStep(step);
                 }
             }
 
             public class SetViewNameViewModel : CreateViewViewModel.SetViewNameViewModel
             {
-                public SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
-                    : base(wizard, step)
+                public static async Task<SetViewNameViewModel> CreateAsync(CreateViewViewModel wizard, IStep antecedent)
                 {
-                    ViewName = wizard.SourceView.Name;
+                    SetViewNameViewModel result = new SetViewNameViewModel(wizard, antecedent);
+                    await result.InitializeAsync();
+                    return result;
+                }
+
+                private SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
+                    : base(wizard, step) { }
+
+                private async Task InitializeAsync()
+                {
+                    await Task.Run(() =>
+                    {
+                        ViewName = Wizard.SourceView.Name;
+                        ViewNameUniquifier viewNames = new ViewNameUniquifier(Wizard.Project);
+                        if (viewNames.Exists(ViewName))
+                        {
+                            ViewName = viewNames.Uniquify(ViewName);
+                        }
+                    });
                 }
 
                 protected override void GoToNextStep()
@@ -110,9 +132,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Label_Project, wizard.SourceView.Project.FilePath },
-                        { Strings.Label_View, wizard.SourceView.Name },
-                        { Strings.Label_ViewName, wizard.ViewName }
+                        { Strings.Label_SourceView, wizard.SourceView },
+                        { Strings.Label_TargetView, wizard.ViewName }
                     };
                 }
 

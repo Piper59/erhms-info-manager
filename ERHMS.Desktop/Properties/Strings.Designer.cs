@@ -778,7 +778,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you choose to collect worker information, the form will contain fields for the worker&apos;s name, email address, and ID. You can use these fields to associate each record with the corresponding worker..
+        ///   Looks up a localized string similar to If you choose to collect worker information, the new form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker..
         /// </summary>
         public static string Body_CreateView_SetWithWorkerInfo {
             get {
@@ -809,7 +809,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
-        ///This file is not a project-level Epi Info template..
+        ///This file is not a valid project-level Epi Info template..
         /// </summary>
         public static string Body_InvalidProjectTemplatePath {
             get {
@@ -831,7 +831,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
-        ///This file is not a form-level Epi Info template..
+        ///This file is not a valid form-level Epi Info template..
         /// </summary>
         public static string Body_InvalidViewTemplatePath {
             get {
@@ -1159,11 +1159,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new file in Epi Info..
+        ///   Looks up a localized string similar to Create a new analysis in the Epi Info Classic Analysis module..
         /// </summary>
-        public static string HelpText_CreateAsset {
+        public static string HelpText_CreateAsset_Analysis {
             get {
-                return ResourceManager.GetString("HelpText.CreateAsset", resourceCulture);
+                return ResourceManager.GetString("HelpText.CreateAsset.Analysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new dashboard in the Epi Info Visual Dashboard module..
+        /// </summary>
+        public static string HelpText_CreateAsset_AnalysisDashboard {
+            get {
+                return ResourceManager.GetString("HelpText.CreateAsset.AnalysisDashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new map in the Epi Info Maps module..
+        /// </summary>
+        public static string HelpText_CreateAsset_Mapping {
+            get {
+                return ResourceManager.GetString("HelpText.CreateAsset.Mapping", resourceCulture);
             }
         }
         
@@ -1204,11 +1222,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move the selected file to the Recycle Bin..
+        ///   Looks up a localized string similar to Move the selected analysis to the Recycle Bin..
         /// </summary>
-        public static string HelpText_DeleteAsset {
+        public static string HelpText_DeleteAsset_Analysis {
             get {
-                return ResourceManager.GetString("HelpText.DeleteAsset", resourceCulture);
+                return ResourceManager.GetString("HelpText.DeleteAsset.Analysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move the selected dashboard to the Recycle Bin..
+        /// </summary>
+        public static string HelpText_DeleteAsset_AnalysisDashboard {
+            get {
+                return ResourceManager.GetString("HelpText.DeleteAsset.AnalysisDashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move the selected map to the Recycle Bin..
+        /// </summary>
+        public static string HelpText_DeleteAsset_Mapping {
+            get {
+                return ResourceManager.GetString("HelpText.DeleteAsset.Mapping", resourceCulture);
             }
         }
         
@@ -1276,16 +1312,34 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open the selected file in Epi Info..
+        ///   Looks up a localized string similar to Open the selected analysis in the Epi Info Classic Analysis module..
         /// </summary>
-        public static string HelpText_OpenAsset {
+        public static string HelpText_OpenAsset_Analysis {
             get {
-                return ResourceManager.GetString("HelpText.OpenAsset", resourceCulture);
+                return ResourceManager.GetString("HelpText.OpenAsset.Analysis", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open the selected form to view and manage associated records..
+        ///   Looks up a localized string similar to Open the selected dashboard in the Epi Info Visual Dashboard module..
+        /// </summary>
+        public static string HelpText_OpenAsset_AnalysisDashboard {
+            get {
+                return ResourceManager.GetString("HelpText.OpenAsset.AnalysisDashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected map in the Epi Info Maps module..
+        /// </summary>
+        public static string HelpText_OpenAsset_Mapping {
+            get {
+                return ResourceManager.GetString("HelpText.OpenAsset.Mapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected form to view and manage records..
         /// </summary>
         public static string HelpText_OpenView {
             get {
@@ -1402,11 +1456,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File name:.
+        ///   Looks up a localized string similar to File:.
         /// </summary>
-        public static string Label_FileName {
+        public static string Label_File {
             get {
-                return ResourceManager.GetString("Label.FileName", resourceCulture);
+                return ResourceManager.GetString("Label.File", resourceCulture);
             }
         }
         
@@ -1456,6 +1510,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Existing form:.
+        /// </summary>
+        public static string Label_SourceView {
+            get {
+                return ResourceManager.GetString("Label.SourceView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New form:.
+        /// </summary>
+        public static string Label_TargetView {
+            get {
+                return ResourceManager.GetString("Label.TargetView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Template:.
         /// </summary>
         public static string Label_Template {
@@ -1470,15 +1542,6 @@ namespace ERHMS.Desktop.Properties {
         public static string Label_View {
             get {
                 return ResourceManager.GetString("Label.View", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Form name:.
-        /// </summary>
-        public static string Label_ViewName {
-            get {
-                return ResourceManager.GetString("Label.ViewName", resourceCulture);
             }
         }
         
@@ -1537,16 +1600,16 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a file name and location.
+        ///   Looks up a localized string similar to Choose a name and location for the new file.
         /// </summary>
-        public static string Lead_CreateAsset_SetFileInfo {
+        public static string Lead_CreateAsset_SetAssetPath {
             get {
-                return ResourceManager.GetString("Lead.CreateAsset.SetFileInfo", resourceCulture);
+                return ResourceManager.GetString("Lead.CreateAsset.SetAssetPath", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a form to analyze.
+        ///   Looks up a localized string similar to Choose a form to use as a data source.
         /// </summary>
         public static string Lead_CreateAsset_SetView {
             get {
@@ -1591,7 +1654,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a form name.
+        ///   Looks up a localized string similar to Enter a name for the new form.
         /// </summary>
         public static string Lead_CreateView_SetViewName {
             get {

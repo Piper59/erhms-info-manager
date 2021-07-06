@@ -26,7 +26,7 @@
             <Style TargetType="ContentPresenter">
                 <Style.Resources>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="1" />
+                        <Setter Property="Margin" Value="-2,1" />
                     </Style>
                 </Style.Resources>
             </Style>
@@ -38,6 +38,15 @@
     <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxBase}" />
 
     <Style x:Key="ComboBoxItemBase" TargetType="ComboBoxItem">
+        <Style.Resources>
+            <Style TargetType="ContentPresenter">
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="-3,-1" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+        </Style.Resources>
         <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}" />
@@ -79,6 +88,13 @@
 
     <Style x:Key="LabelBase" TargetType="Label">
         <Style.Resources>
+            <Style TargetType="ContentPresenter">
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
+                </Style.Resources>
+            </Style>
             <Style TargetType="TextBlock">
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>

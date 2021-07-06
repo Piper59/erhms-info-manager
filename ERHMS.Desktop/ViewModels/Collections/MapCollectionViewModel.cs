@@ -15,8 +15,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             return result;
         }
 
-        protected override Module Module => Module.Mapping;
-        protected override string FileExtension => FileExtensions.Map;
+        public override Module Module => Module.Mapping;
+        public override string FileExtension => FileExtensions.Map;
 
         private MapCollectionViewModel(Project project)
             : base(project) { }

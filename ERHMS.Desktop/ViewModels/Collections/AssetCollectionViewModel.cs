@@ -37,8 +37,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        protected abstract Module Module { get; }
-        protected abstract string FileExtension { get; }
+        public abstract Module Module { get; }
+        public abstract string FileExtension { get; }
         public Project Project { get; }
 
         public ICommand CreateCommand { get; }

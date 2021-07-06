@@ -34,7 +34,8 @@
                     </Hyperlink>
                 </TextBlock>
                 <StackPanel Grid.Column="1"
-                            Orientation="Horizontal">
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top">
                     <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{Markup:Icon Home}" />

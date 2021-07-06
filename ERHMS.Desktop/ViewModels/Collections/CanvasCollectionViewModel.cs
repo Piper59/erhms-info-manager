@@ -15,8 +15,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             return result;
         }
 
-        protected override Module Module => Module.AnalysisDashboard;
-        protected override string FileExtension => FileExtensions.Canvas;
+        public override Module Module => Module.AnalysisDashboard;
+        public override string FileExtension => FileExtensions.Canvas;
 
         private CanvasCollectionViewModel(Project project)
             : base(project) { }

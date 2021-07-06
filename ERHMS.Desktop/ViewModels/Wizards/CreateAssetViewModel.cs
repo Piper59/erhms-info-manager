@@ -9,7 +9,6 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Analytics;
-using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -66,7 +65,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             private readonly IFileDialogService fileDialog;
 
-            public override string Title => Strings.Lead_CreateAsset_SetFileInfo;
+            public override string Title => Strings.Lead_CreateAsset_SetAssetPath;
 
             private string assetPath;
             public string AssetPath
@@ -82,7 +81,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                 fileDialog.Filter = Wizard.FileFilter;
-                fileDialog.FileOk += FileDialog_FileOk;
                 BrowseCommand = new SyncCommand(Browse);
             }
 
@@ -104,29 +102,28 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 AssetPath = assetPath;
             }
 
-            private void FileDialog_FileOk(object sender, CancelEventArgs e)
-            {
-                string directoryPath = Path.GetDirectoryName(fileDialog.FileName);
-                if (Comparers.Path.Equals(directoryPath, Wizard.Project.Location))
-                {
-                    return;
-                }
-                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                dialog.Severity = DialogSeverity.Warning;
-                dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
-                dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, directoryPath);
-                dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
-                if (dialog.Show() != true)
-                {
-                    e.Cancel = true;
-                }
-            }
-
             public void Browse()
             {
-                if (fileDialog.Save() != true)
+                while (true)
                 {
-                    return;
+                    if (fileDialog.Save() != true)
+                    {
+                        return;
+                    }
+                    string directoryPath = Path.GetDirectoryName(fileDialog.FileName);
+                    if (Comparers.Path.Equals(directoryPath, Wizard.Project.Location))
+                    {
+                        break;
+                    }
+                    IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                    dialog.Severity = DialogSeverity.Warning;
+                    dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
+                    dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, directoryPath);
+                    dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
+                    if (dialog.Show() == true)
+                    {
+                        break;
+                    }
                 }
                 AssetPath = fileDialog.FileName;
             }
@@ -156,7 +153,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 Details = new DetailsViewModel
                 {
                     { Strings.Label_View, wizard.View.Name },
-                    { Strings.Label_FileName, Path.GetFileName(wizard.AssetPath) },
+                    { Strings.Label_File, Path.GetFileName(wizard.AssetPath) },
                     { Strings.Label_Location, Path.GetDirectoryName(wizard.AssetPath) }
                 };
             }

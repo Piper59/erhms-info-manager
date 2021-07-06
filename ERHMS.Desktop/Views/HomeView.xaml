@@ -71,9 +71,9 @@
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0.5,0"
                                              EndPoint="1,0">
-                            <GradientStop Color="{Binding ., Converter={StaticResource PhaseToColorConverter}, ConverterParameter=0x40}"
+                            <GradientStop Color="{Binding ., Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x40'}"
                                           Offset="0" />
-                            <GradientStop Color="{Binding ., Converter={StaticResource PhaseToColorConverter}, ConverterParameter=0x00}"
+                            <GradientStop Color="{Binding ., Converter={StaticResource PhaseToColorConverter}, ConverterParameter='0x00'}"
                                           Offset="1" />
                         </LinearGradientBrush>
                     </Border.Background>

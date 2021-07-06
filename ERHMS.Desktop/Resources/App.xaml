@@ -81,7 +81,20 @@
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
     </Style>
 
-    <!-- Controls -->
+    <!-- Other -->
+    <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
+        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    </Style>
+
+    <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="MinWidth" Value="85" />
+    </Style>
+
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
         <Style.Resources>
             <Converters:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
@@ -104,22 +117,29 @@
         <Setter Property="ToolTip">
             <Setter.Value>
                 <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
-                    <Grid>
-                        <StackPanel>
-                            <TextBlock FontWeight="{Binding HelpText, Converter={StaticResource HelpTextToAltTextFontWeightConverter}}"
-                                       Text="{Binding AltText}" />
-                            <TextBlock Text="{Binding HelpText}"
-                                       Visibility="{Binding HelpText, Converter={StaticResource NullableToVisibilityConverter}}">
-                                <TextBlock.Margin>
-                                    <Thickness Top="{StaticResource SmallSpace}" />
-                                </TextBlock.Margin>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
+                    <StackPanel>
+                        <TextBlock FontWeight="{Binding HelpText, Converter={StaticResource HelpTextToAltTextFontWeightConverter}}"
+                                   Text="{Binding AltText}" />
+                        <TextBlock Text="{Binding HelpText}"
+                                   Visibility="{Binding HelpText, Converter={StaticResource NullableToVisibilityConverter}}">
+                            <TextBlock.Margin>
+                                <Thickness Top="{StaticResource SmallSpace}" />
+                            </TextBlock.Margin>
+                        </TextBlock>
+                    </StackPanel>
                 </ToolTip>
             </Setter.Value>
         </Setter>
         <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+    </Style>
+
+    <Style x:Key="NumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">
+        <Setter Property="TextBlock.TextAlignment" Value="Right" />
+    </Style>
+
+    <Style x:Key="PlainHyperlink" TargetType="Hyperlink">
+        <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
+        <Setter Property="TextDecorations" Value="None" />
     </Style>
 
     <Style x:Key="RecordStatusComboBox" TargetType="ComboBox" BasedOn="{StaticResource ComboBoxBase}">
@@ -142,29 +162,6 @@
             </Setter.Value>
         </Setter>
         <Setter Property="MinWidth" Value="125" />
-    </Style>
-
-    <!-- Other -->
-    <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
-        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-    </Style>
-
-    <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="MinWidth" Value="85" />
-    </Style>
-
-    <Style x:Key="NumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">
-        <Setter Property="TextBlock.TextAlignment" Value="Right" />
-    </Style>
-
-    <Style x:Key="PlainHyperlink" TargetType="Hyperlink">
-        <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
-        <Setter Property="TextDecorations" Value="None" />
     </Style>
 
     <Style x:Key="Separator" TargetType="Border">

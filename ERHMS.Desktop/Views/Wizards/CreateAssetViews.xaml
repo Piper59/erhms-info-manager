@@ -42,9 +42,8 @@
             </Grid.RowDefinitions>
             <Label Grid.Column="0"
                    Grid.Row="0"
-                   Content="{Markup:String Label.FileName}" />
-            <TextBox AutomationProperties.Name="{Markup:String Label.FileName}"
-                     Grid.Column="1"
+                   Content="{Markup:String Label.File}" />
+            <TextBox Grid.Column="1"
                      Grid.Row="0"
                      IsReadOnly="True"
                      Text="{Binding AssetPath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}" />

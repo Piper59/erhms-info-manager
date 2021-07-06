@@ -15,8 +15,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             return result;
         }
 
-        protected override Module Module => Module.Analysis;
-        protected override string FileExtension => FileExtensions.Pgm;
+        public override Module Module => Module.Analysis;
+        public override string FileExtension => FileExtensions.Pgm;
 
         private PgmCollectionViewModel(Project project)
             : base(project) { }
