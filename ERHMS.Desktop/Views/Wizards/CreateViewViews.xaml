@@ -56,6 +56,7 @@
 
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+SetXTemplateViewModel}">
         <DataTemplate.Resources>
+            <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
             <Converters:PathToFileNameConverter x:Key="PathToFileNameConverter" />
         </DataTemplate.Resources>
         <Grid>
@@ -68,7 +69,13 @@
                    Content="{Markup:String Label.Template}" />
             <TextBox Grid.Column="1"
                      IsReadOnly="True"
-                     Text="{Binding TemplatePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}" />
+                     Text="{Binding TemplatePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}">
+                <TextBox.ToolTip>
+                    <ToolTip Content="{Binding TemplatePath}"
+                             MaxWidth="{StaticResource LargeToolTipWidth}"
+                             Visibility="{Binding TemplatePath, Converter={StaticResource NullableToVisibilityConverter}}" />
+                </TextBox.ToolTip>
+            </TextBox>
             <Button Grid.Column="2"
                     Command="{Binding BrowseCommand}"
                     Content="{Markup:String AccessText.Browse}" />
@@ -110,7 +117,12 @@
             <TextBox Grid.Column="1"
                      Grid.Row="0"
                      IsReadOnly="True"
-                     Text="{Binding Views.Project.Name, Mode=OneWay}" />
+                     Text="{Binding Views.Project.Name, Mode=OneWay}">
+                <TextBox.ToolTip>
+                    <ToolTip Content="{Binding Views.Project.FilePath}"
+                             MaxWidth="{StaticResource LargeToolTipWidth}" />
+                </TextBox.ToolTip>
+            </TextBox>
             <Button Grid.Column="2"
                     Grid.Row="0"
                     Command="{Binding BrowseCommand}"
