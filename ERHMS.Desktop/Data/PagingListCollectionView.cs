@@ -169,6 +169,12 @@ namespace ERHMS.Desktop.Data
             }
         }
 
+        public override void Refresh()
+        {
+            repaging = true;
+            base.Refresh();
+        }
+
         protected override void RefreshOverride()
         {
             refreshing = true;
