@@ -2,11 +2,11 @@
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class DetailsViewModel : List<KeyValuePair<string, string>>
+    public class DetailsViewModel : List<KeyValuePair<string, object>>
     {
-        public void Add(string key, string value)
+        public void Add(string key, object value)
         {
-            Add(new KeyValuePair<string, string>(key, value));
+            Add(new KeyValuePair<string, object>(key, value));
         }
     }
 }
