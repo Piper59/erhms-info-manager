@@ -95,7 +95,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             await Task.Run(() =>
             {
-                Fields = ((MetadataDbProvider)Project.Metadata).GetFieldDataTableForView(View.Id)
+                fields = ((MetadataDbProvider)Project.Metadata).GetFieldDataTableForView(View.Id)
                     .Where(field => field.Position.GetValueOrDefault() == 0 && IsDisplayable(field.FieldType))
                     .OrderBy(field => field, new FieldDataRowComparer.ByTabIndex())
                     .ToList();
@@ -108,6 +108,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                     }
                 }
             });
+            OnPropertyChanged(nameof(Fields));
             Items.Refresh();
         }
 
