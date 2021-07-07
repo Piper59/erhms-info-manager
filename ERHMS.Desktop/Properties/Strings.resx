@@ -399,10 +399,10 @@ Close anyway?</value>
 
 {0}</value>
   </data>
-  <data name="Boolean.Name.False" xml:space="preserve">
+  <data name="Boolean.False" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="Boolean.Name.True" xml:space="preserve">
+  <data name="Boolean.True" xml:space="preserve">
     <value>Yes</value>
   </data>
   <data name="CoreProject.Name.Incident" xml:space="preserve">

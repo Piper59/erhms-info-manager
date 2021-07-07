@@ -873,18 +873,18 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        public static string Boolean_Name_False {
+        public static string Boolean_False {
             get {
-                return ResourceManager.GetString("Boolean.Name.False", resourceCulture);
+                return ResourceManager.GetString("Boolean.False", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        public static string Boolean_Name_True {
+        public static string Boolean_True {
             get {
-                return ResourceManager.GetString("Boolean.Name.True", resourceCulture);
+                return ResourceManager.GetString("Boolean.True", resourceCulture);
             }
         }
         

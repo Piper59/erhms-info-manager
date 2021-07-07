@@ -10,7 +10,7 @@
     <ItemsControl.Resources>
         <Converters:StringLocalizingConverter x:Key="StringLocalizingConverter" />
         <DataTemplate DataType="{x:Type System:Boolean}">
-            <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.Name.{0}'}" />
+            <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.{0}'}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type System:String}">
             <TextBlock Text="{Binding}" />
