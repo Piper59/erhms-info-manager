@@ -80,8 +80,7 @@
                     <TextBlock Style="{StaticResource Heading}"
                                Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.Name.{0}'}" />
                 </Border>
-                <ItemsControl Grid.IsSharedSizeScope="True"
-                              IsTabStop="False"
+                <ItemsControl IsTabStop="False"
                               ItemsSource="{Binding ., Converter={StaticResource PhaseToCoreViewsConverter}}" />
             </StackPanel>
         </DataTemplate>
@@ -104,9 +103,11 @@
                                Text="{Markup:String AppTitle}"
                                VerticalAlignment="Center" />
                 </Grid>
-                <ContentPresenter Content="{x:Static Domain:Phase.PreDeployment}" />
-                <ContentPresenter Content="{x:Static Domain:Phase.Deployment}" />
-                <ContentPresenter Content="{x:Static Domain:Phase.PostDeployment}" />
+                <StackPanel Grid.IsSharedSizeScope="True">
+                    <ContentPresenter Content="{x:Static Domain:Phase.PreDeployment}" />
+                    <ContentPresenter Content="{x:Static Domain:Phase.Deployment}" />
+                    <ContentPresenter Content="{x:Static Domain:Phase.PostDeployment}" />
+                </StackPanel>
             </StackPanel>
         </Border>
     </ScrollViewer>
