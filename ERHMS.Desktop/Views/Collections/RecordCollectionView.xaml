@@ -58,7 +58,7 @@
                                      AltText="{Markup:String AltText.Copy}"
                                      Content="{Markup:Icon Clipboard}"
                                      HelpText="{Markup:String HelpText.CopyField}"
-                                     IsEnabled="{Binding HasItems, ElementName=ItemDataGrid}">
+                                     IsEnabled="{Binding HasItems, ElementName=ItemsDataGrid}">
                     <Controls:IconButton.ContextMenu>
                         <ContextMenu x:Name="CopyFieldContextMenu"
                                      Placement="Bottom"
