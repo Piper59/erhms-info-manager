@@ -9,18 +9,16 @@ namespace ERHMS.Desktop.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
-            AssociatedObject.PreviewMouseDown += AssociatedObject_MouseEvent;
-            AssociatedObject.Click += AssociatedObject_MouseEvent;
+            AssociatedObject.Click += AssociatedObject_Click;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            AssociatedObject.PreviewMouseDown -= AssociatedObject_MouseEvent;
-            AssociatedObject.Click -= AssociatedObject_MouseEvent;
+            AssociatedObject.Click -= AssociatedObject_Click;
         }
 
-        private void AssociatedObject_MouseEvent(object sender, RoutedEventArgs e)
+        private void AssociatedObject_Click(object sender, RoutedEventArgs e)
         {
             if (OpenContextMenu())
             {
@@ -30,13 +28,16 @@ namespace ERHMS.Desktop.Behaviors
 
         private bool OpenContextMenu()
         {
-            if (AssociatedObject.ContextMenu == null)
+            ContextMenu contextMenu = AssociatedObject.ContextMenu;
+            if (contextMenu == null)
             {
                 return false;
             }
             else
             {
-                AssociatedObject.ContextMenu.IsOpen = true;
+                contextMenu.PlacementTarget = AssociatedObject;
+                contextMenu.Placement = ContextMenuService.GetPlacement(AssociatedObject);
+                contextMenu.IsOpen = true;
                 return true;
             }
         }

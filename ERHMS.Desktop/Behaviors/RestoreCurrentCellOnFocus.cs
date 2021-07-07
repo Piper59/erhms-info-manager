@@ -34,7 +34,7 @@ namespace ERHMS.Desktop.Behaviors
         private void AssociatedObject_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (!restoring
-                && e.KeyboardDevice.IsKeyDown(Key.Tab)
+                && InputManager.Current.MostRecentInputDevice is KeyboardDevice
                 && !e.OldFocus.IsDescendantOf(AssociatedObject)
                 && RestoreCurrentCell())
             {

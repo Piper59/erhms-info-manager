@@ -54,16 +54,13 @@
                                      Command="{Binding EditCommand}"
                                      Content="{Markup:Icon Edit}"
                                      HelpText="{Markup:String HelpText.EditRecord}" />
-                <Controls:IconButton x:Name="CopyFieldButton"
+                <Controls:IconButton ContextMenuService.Placement="Bottom"
                                      AltText="{Markup:String AltText.Copy}"
                                      Content="{Markup:Icon Clipboard}"
                                      HelpText="{Markup:String HelpText.CopyField}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemsDataGrid}">
                     <Controls:IconButton.ContextMenu>
-                        <ContextMenu x:Name="CopyFieldContextMenu"
-                                     Placement="Bottom"
-                                     PlacementTarget="{x:Reference CopyFieldButton}">
-                        </ContextMenu>
+                        <ContextMenu x:Name="CopyFieldContextMenu" />
                     </Controls:IconButton.ContextMenu>
                     <b:Interaction.Behaviors>
                         <Behaviors:OpenContextMenuOnClick />
