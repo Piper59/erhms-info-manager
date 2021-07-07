@@ -7,19 +7,18 @@
               xmlns:System="clr-namespace:System;assembly=mscorlib"
               IsTabStop="False">
     <ItemsControl.Resources>
-        <DataTemplate DataType="{x:Type System:Boolean}">
-            <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.{0}'}" />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type System:String}">
             <TextBlock Text="{Binding}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type System:Boolean}">
+            <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.{0}'}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type Epi:View}">
             <TextBlock>
                 <Run Text="{Binding Project.Name}">
                     <Run.ToolTip>
-                        <ToolTip MaxWidth="{StaticResource LargeToolTipWidth}">
-                            <TextBlock Text="{Binding Project.FilePath}" />
-                        </ToolTip>
+                        <ToolTip Content="{Binding Project.FilePath}"
+                                 MaxWidth="{StaticResource LargeToolTipWidth}" />
                     </Run.ToolTip>
                 </Run>
                 <Run FontFamily="{StaticResource IconFontFamily}"

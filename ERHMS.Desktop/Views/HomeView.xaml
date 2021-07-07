@@ -5,60 +5,6 @@
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type Domain:CoreView}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"
-                                   SharedSizeGroup="ButtonGroup" />
-                </Grid.RowDefinitions>
-                <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
-                        AutomationProperties.Name="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
-                        Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
-                        CommandParameter="{Binding}"
-                        Style="{StaticResource WorkflowButton}">
-                    <Grid>
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextWrapping" Value="Wrap" />
-                            </Style>
-                        </Grid.Resources>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="IconGroup"
-                                              Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0"
-                                   Grid.Row="0"
-                                   Grid.RowSpan="2"
-                                   FontFamily="{StaticResource IconFontFamily}"
-                                   FontSize="{StaticResource HugeFontSize}"
-                                   Text="{Binding Name, Converter={StaticResource IconNameToInstanceConverter}, ConverterParameter='CoreView.{0}'}"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center">
-                            <TextBlock.Margin>
-                                <Thickness Right="{StaticResource LargeSpace}" />
-                            </TextBlock.Margin>
-                        </TextBlock>
-                        <TextBlock Grid.Column="1"
-                                   Grid.Row="0"
-                                   FontSize="{StaticResource MediumFontSize}"
-                                   Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}">
-                            <TextBlock.Margin>
-                                <Thickness Bottom="{StaticResource SmallSpace}" />
-                            </TextBlock.Margin>
-                        </TextBlock>
-                        <TextBlock Grid.Column="1"
-                                   Grid.Row="1"
-                                   FontSize="{StaticResource SmallFontSize}"
-                                   Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}" />
-                    </Grid>
-                </Button>
-            </Grid>
-        </DataTemplate>
         <DataTemplate DataType="{x:Type Domain:Phase}">
             <StackPanel Style="{StaticResource Section}">
                 <Border Margin="{StaticResource DefaultMargin}"
@@ -78,6 +24,48 @@
                 <ItemsControl IsTabStop="False"
                               ItemsSource="{Binding ., Converter={StaticResource PhaseToCoreViewsConverter}}" />
             </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Domain:CoreView}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"
+                                   SharedSizeGroup="ButtonGroup" />
+                </Grid.RowDefinitions>
+                <Button AutomationProperties.HelpText="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
+                        AutomationProperties.Name="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
+                        Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
+                        CommandParameter="{Binding}"
+                        Style="{StaticResource WorkflowButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="IconGroup"
+                                              Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontFamily="{StaticResource IconFontFamily}"
+                                   FontSize="{StaticResource HugeFontSize}"
+                                   Text="{Binding Name, Converter={StaticResource IconNameToInstanceConverter}, ConverterParameter='CoreView.{0}'}"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Margin>
+                                <Thickness Right="{StaticResource LargeSpace}" />
+                            </TextBlock.Margin>
+                        </TextBlock>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Style="{StaticResource Lead}"
+                                       Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}">
+                                <TextBlock.Margin>
+                                    <Thickness Bottom="{StaticResource SmallSpace}" />
+                                </TextBlock.Margin>
+                            </TextBlock>
+                            <TextBlock Margin="0"
+                                       Style="{StaticResource Small}"
+                                       Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}" />
+                        </StackPanel>
+                    </Grid>
+                </Button>
+            </Grid>
         </DataTemplate>
     </UserControl.Resources>
     <ScrollViewer>

@@ -35,33 +35,7 @@
         </Setter>
     </Style>
 
-    <!-- Text elements -->
-    <Style x:Key="BodyText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}" />
-
-    <Style x:Key="CodeText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
-    </Style>
-
-    <Style x:Key="HeadingText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
-        <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
-        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
-    </Style>
-
-    <Style x:Key="LeadText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
-        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
-    </Style>
-
-    <Style x:Key="SmallText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-    </Style>
-
-    <Style x:Key="TitleText" TargetType="TextElement" BasedOn="{StaticResource TextElementBase}">
-        <Setter Property="FontSize" Value="{StaticResource HugeFontSize}" />
-        <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
-    </Style>
-
-    <!-- Text blocks -->
+    <!-- Text -->
     <Style x:Key="Body" TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}" />
 
     <Style x:Key="Heading" TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
@@ -178,7 +152,7 @@
     </Style>
 
     <Style x:Key="WorkflowButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
     </Style>
 </ResourceDictionary>

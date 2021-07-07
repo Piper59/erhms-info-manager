@@ -184,10 +184,6 @@
     </Style>
     <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}" />
 
-    <Style x:Key="TextElementBase" TargetType="TextElement">
-        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-    </Style>
-
     <Style x:Key="ToolTipBase" TargetType="ToolTip">
         <Style.Resources>
             <Style TargetType="ContentPresenter">

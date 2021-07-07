@@ -1465,6 +1465,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incident database:.
+        /// </summary>
+        public static string Label_IncidentProject {
+            get {
+                return ResourceManager.GetString("Label.IncidentProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location:.
         /// </summary>
         public static string Label_Location {
@@ -1551,6 +1560,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Label_WithWorkerInfo {
             get {
                 return ResourceManager.GetString("Label.WithWorkerInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker database:.
+        /// </summary>
+        public static string Label_WorkerProject {
+            get {
+                return ResourceManager.GetString("Label.WorkerProject", resourceCulture);
             }
         }
         

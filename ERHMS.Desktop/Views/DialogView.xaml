@@ -51,7 +51,6 @@
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
@@ -59,7 +58,7 @@
                         Content="{Markup:String AccessText.Details}"
                         VerticalAlignment="Top"
                         Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}" />
-                <ItemsControl Grid.Column="2"
+                <ItemsControl Grid.Column="1"
                               IsTabStop="False"
                               ItemsSource="{Binding Buttons}">
                     <ItemsControl.ItemsPanel>

@@ -597,6 +597,9 @@ Close anyway?</value>
   <data name="Label.File" xml:space="preserve">
     <value>File:</value>
   </data>
+  <data name="Label.IncidentProject" xml:space="preserve">
+    <value>Incident database:</value>
+  </data>
   <data name="Label.Location" xml:space="preserve">
     <value>Location:</value>
   </data>
@@ -626,6 +629,9 @@ Close anyway?</value>
   </data>
   <data name="Label.WithWorkerInfo" xml:space="preserve">
     <value>Collect worker information?</value>
+  </data>
+  <data name="Label.WorkerProject" xml:space="preserve">
+    <value>Worker database:</value>
   </data>
   <data name="Lead.ConfirmAssetDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this file?</value>
