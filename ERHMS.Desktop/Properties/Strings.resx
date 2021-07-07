@@ -153,6 +153,18 @@
   <data name="AccessText.CopyValue" xml:space="preserve">
     <value>_Copy value to Clipboard</value>
   </data>
+  <data name="AccessText.CreateProject.Blank" xml:space="preserve">
+    <value>Create a _blank database</value>
+  </data>
+  <data name="AccessText.CreateProject.FromExisting" xml:space="preserve">
+    <value>Copy an _existing database</value>
+  </data>
+  <data name="AccessText.CreateProject.FromTemplate" xml:space="preserve">
+    <value>Create a database based on a _template</value>
+  </data>
+  <data name="AccessText.CreateProject.Standard" xml:space="preserve">
+    <value>Create a _standard database</value>
+  </data>
   <data name="AccessText.CreateView.Blank" xml:space="preserve">
     <value>Create a _blank form</value>
   </data>
@@ -504,17 +516,32 @@ Close anyway?</value>
   <data name="HelpText.CreateAsset.Mapping" xml:space="preserve">
     <value>Create a new map in the Epi Info Maps module.</value>
   </data>
+  <data name="HelpText.CreateProject.Blank" xml:space="preserve">
+    <value>Create a new database containing no forms.</value>
+  </data>
+  <data name="HelpText.CreateProject.FromExisting" xml:space="preserve">
+    <value>Create a new database containing forms copied from an existing database. Existing records will not be copied.</value>
+  </data>
+  <data name="HelpText.CreateProject.FromTemplate" xml:space="preserve">
+    <value>Create a new database containing forms defined in an Epi Info project-level template (.xml) file.</value>
+  </data>
+  <data name="HelpText.CreateProject.Standard.Incident" xml:space="preserve">
+    <value>Create a new database containing standard incident forms.</value>
+  </data>
+  <data name="HelpText.CreateProject.Standard.Worker" xml:space="preserve">
+    <value>Create a new database containing standard worker forms.</value>
+  </data>
   <data name="HelpText.CreateView" xml:space="preserve">
     <value>Create a new form in the Epi Info Form Designer module.</value>
   </data>
   <data name="HelpText.CreateView.Blank" xml:space="preserve">
-    <value>Create a new, blank form. Once the form is created, you can add fields to it.</value>
+    <value>Create a new form containing minimal fields.</value>
   </data>
   <data name="HelpText.CreateView.FromExisting" xml:space="preserve">
-    <value>Create a new form containing fields copied from an existing form. The existing form's data will not be copied. Once the form is created, you can add, edit, and remove fields.</value>
+    <value>Create a new form containing fields copied from an existing form. Existing records will not be copied.</value>
   </data>
   <data name="HelpText.CreateView.FromTemplate" xml:space="preserve">
-    <value>Create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields.</value>
+    <value>Create a new form containing fields defined in an Epi Info form-level template (.xml) file.</value>
   </data>
   <data name="HelpText.DeleteAsset.Analysis" xml:space="preserve">
     <value>Move the selected analysis to the Recycle Bin.</value>
@@ -652,7 +679,10 @@ Close anyway?</value>
     <value>Choose a name and location for the new file</value>
   </data>
   <data name="Lead.CreateAsset.SetView" xml:space="preserve">
-    <value>Choose a form to use as a data source</value>
+    <value>Choose a form to analyze</value>
+  </data>
+  <data name="Lead.CreateProject.Initialize" xml:space="preserve">
+    <value>Choose how to create the new database</value>
   </data>
   <data name="Lead.CreateView.Close" xml:space="preserve">
     <value>Form has been created</value>
@@ -661,7 +691,7 @@ Close anyway?</value>
     <value>Verify the information below</value>
   </data>
   <data name="Lead.CreateView.Initialize" xml:space="preserve">
-    <value>Choose a type of form to create</value>
+    <value>Choose how to create the new form</value>
   </data>
   <data name="Lead.CreateView.SetSourceView" xml:space="preserve">
     <value>Choose an existing form</value>

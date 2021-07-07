@@ -19,8 +19,12 @@
               BorderThickness="0,1">
             <MenuItem Header="{Markup:String AccessText.File}">
                 <MenuItem Header="{Markup:String AccessText.New}">
-                    <MenuItem Header="{Markup:String AccessText.WorkerProject}" />
-                    <MenuItem Header="{Markup:String AccessText.IncidentProject}" />
+                    <MenuItem Command="{Binding CreateProjectCommand}"
+                              CommandParameter="{x:Static Domain:CoreProject.Worker}"
+                              Header="{Markup:String AccessText.WorkerProject}" />
+                    <MenuItem Command="{Binding CreateProjectCommand}"
+                              CommandParameter="{x:Static Domain:CoreProject.Incident}"
+                              Header="{Markup:String AccessText.IncidentProject}" />
                 </MenuItem>
                 <MenuItem Header="{Markup:String AccessText.Open}">
                     <MenuItem Header="{Markup:String AccessText.WorkerProject}" />

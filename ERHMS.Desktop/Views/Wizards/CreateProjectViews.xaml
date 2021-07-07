@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+                    xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
+    <DataTemplate DataType="{x:Type ViewModels:CreateProjectViewModel+InitializeViewModel}">
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
+            </StackPanel.Resources>
+            <Button Command="{Binding CreateBlankCommand}"
+                    Content="{Markup:String AccessText.CreateProject.Blank}"
+                    ToolTip="{Markup:String HelpText.CreateProject.Blank}" />
+            <Button Command="{Binding CreateStandardCommand}"
+                    Content="{Markup:String AccessText.CreateProject.Standard}"
+                    ToolTip="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.CreateProject.Standard.{0}'}" />
+            <Button Command="{Binding CreateFromTemplateCommand}"
+                    Content="{Markup:String AccessText.CreateProject.FromTemplate}"
+                    ToolTip="{Markup:String HelpText.CreateProject.FromTemplate}" />
+            <Button Command="{Binding CreateFromExistingCommand}"
+                    Content="{Markup:String AccessText.CreateProject.FromExisting}"
+                    ToolTip="{Markup:String HelpText.CreateProject.FromExisting}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

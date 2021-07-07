@@ -5,6 +5,8 @@ using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Wizards;
+using ERHMS.Desktop.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using System;
@@ -39,6 +41,7 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand GoToHelpCommand { get; }
         public ICommand GoToCoreProjectCommand { get; }
         public ICommand GoToCoreViewCommand { get; }
+        public ICommand CreateProjectCommand { get; }
         public ICommand OpenLogFileCommand { get; }
         public ICommand OpenLogDirectoryCommand { get; }
         public ICommand ExportLogDirectoryCommand { get; }
@@ -52,6 +55,7 @@ namespace ERHMS.Desktop.ViewModels
             GoToHelpCommand = Command.Null;
             GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
             GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
+            CreateProjectCommand = new SyncCommand<CoreProject>(CreateProject);
             OpenLogFileCommand = new SyncCommand(OpenLogFile);
             OpenLogDirectoryCommand = new SyncCommand(OpenLogDirectory);
             ExportLogDirectoryCommand = new AsyncCommand(ExportLogDirectoryAsync);
@@ -102,6 +106,16 @@ namespace ERHMS.Desktop.ViewModels
                 Project project = ProjectExtensions.Open(projectPath);
                 return project.Views[coreView.Name];
             }));
+        }
+
+        public void CreateProject(CoreProject coreProject)
+        {
+            CreateProjectViewModel wizard = new CreateProjectViewModel(coreProject);
+            if (wizard.Show() != true)
+            {
+                return;
+            }
+            // TODO
         }
 
         public void OpenLogFile()

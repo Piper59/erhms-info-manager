@@ -169,6 +169,42 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a _blank database.
+        /// </summary>
+        public static string AccessText_CreateProject_Blank {
+            get {
+                return ResourceManager.GetString("AccessText.CreateProject.Blank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy an _existing database.
+        /// </summary>
+        public static string AccessText_CreateProject_FromExisting {
+            get {
+                return ResourceManager.GetString("AccessText.CreateProject.FromExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a database based on a _template.
+        /// </summary>
+        public static string AccessText_CreateProject_FromTemplate {
+            get {
+                return ResourceManager.GetString("AccessText.CreateProject.FromTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a _standard database.
+        /// </summary>
+        public static string AccessText_CreateProject_Standard {
+            get {
+                return ResourceManager.GetString("AccessText.CreateProject.Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a _blank form.
         /// </summary>
         public static string AccessText_CreateView_Blank {
@@ -1186,6 +1222,51 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a new database containing no forms..
+        /// </summary>
+        public static string HelpText_CreateProject_Blank {
+            get {
+                return ResourceManager.GetString("HelpText.CreateProject.Blank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new database containing forms copied from an existing database. Existing records will not be copied..
+        /// </summary>
+        public static string HelpText_CreateProject_FromExisting {
+            get {
+                return ResourceManager.GetString("HelpText.CreateProject.FromExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new database containing forms defined in an Epi Info project-level template (.xml) file..
+        /// </summary>
+        public static string HelpText_CreateProject_FromTemplate {
+            get {
+                return ResourceManager.GetString("HelpText.CreateProject.FromTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new database containing standard incident forms..
+        /// </summary>
+        public static string HelpText_CreateProject_Standard_Incident {
+            get {
+                return ResourceManager.GetString("HelpText.CreateProject.Standard.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new database containing standard worker forms..
+        /// </summary>
+        public static string HelpText_CreateProject_Standard_Worker {
+            get {
+                return ResourceManager.GetString("HelpText.CreateProject.Standard.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a new form in the Epi Info Form Designer module..
         /// </summary>
         public static string HelpText_CreateView {
@@ -1195,7 +1276,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new, blank form. Once the form is created, you can add fields to it..
+        ///   Looks up a localized string similar to Create a new form containing minimal fields..
         /// </summary>
         public static string HelpText_CreateView_Blank {
             get {
@@ -1204,7 +1285,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new form containing fields copied from an existing form. The existing form&apos;s data will not be copied. Once the form is created, you can add, edit, and remove fields..
+        ///   Looks up a localized string similar to Create a new form containing fields copied from an existing form. Existing records will not be copied..
         /// </summary>
         public static string HelpText_CreateView_FromExisting {
             get {
@@ -1213,7 +1294,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new form containing fields defined in an Epi Info template (.xml) file. Once the form is created, you can add, edit, and remove fields..
+        ///   Looks up a localized string similar to Create a new form containing fields defined in an Epi Info form-level template (.xml) file..
         /// </summary>
         public static string HelpText_CreateView_FromTemplate {
             get {
@@ -1627,11 +1708,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a form to use as a data source.
+        ///   Looks up a localized string similar to Choose a form to analyze.
         /// </summary>
         public static string Lead_CreateAsset_SetView {
             get {
                 return ResourceManager.GetString("Lead.CreateAsset.SetView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose how to create the new database.
+        /// </summary>
+        public static string Lead_CreateProject_Initialize {
+            get {
+                return ResourceManager.GetString("Lead.CreateProject.Initialize", resourceCulture);
             }
         }
         
@@ -1654,7 +1744,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a type of form to create.
+        ///   Looks up a localized string similar to Choose how to create the new form.
         /// </summary>
         public static string Lead_CreateView_Initialize {
             get {

@@ -203,6 +203,7 @@
     <Compile Include="ViewModels\Wizards\CreateCanvasViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateMapViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreatePgmViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.Blank.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromExisting.cs" />
@@ -356,6 +357,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Wizards\CreateAssetViews.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\CreateProjectViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
