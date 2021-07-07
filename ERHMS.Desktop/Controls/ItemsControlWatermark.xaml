@@ -2,13 +2,9 @@
              x:Name="Root"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              HorizontalAlignment="Center"
              VerticalAlignment="Center">
-    <UserControl.Resources>
-        <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
-    </UserControl.Resources>
     <UserControl.Visibility>
         <Binding Converter="{StaticResource BooleanToVisibilityInverter}"
                  ElementName="Root"

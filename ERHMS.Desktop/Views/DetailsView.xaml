@@ -3,12 +3,10 @@
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:Epi="clr-namespace:Epi;assembly=Epi.Core"
-              xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
               xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
               xmlns:System="clr-namespace:System;assembly=mscorlib"
               IsTabStop="False">
     <ItemsControl.Resources>
-        <Converters:StringLocalizingConverter x:Key="StringLocalizingConverter" />
         <DataTemplate DataType="{x:Type System:Boolean}">
             <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.{0}'}" />
         </DataTemplate>

@@ -1,7 +1,6 @@
 ﻿<Window x:Class="ERHMS.Desktop.Views.WizardView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
         AutomationProperties.HelpText="{Binding Step.Title}"
         Icon="/Resources/ERHMS.ico"
@@ -16,7 +15,6 @@
                 <ResourceDictionary Source="Wizards/CreateAssetViews.xaml" />
                 <ResourceDictionary Source="Wizards/CreateViewViews.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid>

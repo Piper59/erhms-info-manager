@@ -6,6 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="Base.xaml" />
+        <ResourceDictionary Source="Converters.xaml" />
         <ResourceDictionary Source="Templates.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -97,8 +98,6 @@
 
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
         <Style.Resources>
-            <Converters:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
-            <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
             <Converters:ConditionalConverter x:Key="HelpTextToAltTextFontWeightConverter"
                                              BaseConverter="{StaticResource NullableToBooleanConverter}"
                                              FalseValue="{StaticResource DefaultFontWeight}"

@@ -8,11 +8,9 @@ namespace ERHMS.Desktop.Converters
 {
     public class StringLocalizingConverter : IValueConverter
     {
-        public string Format { get; set; } = "{0}";
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string format = (string)parameter ?? Format;
+            string format = (string)parameter ?? "{0}";
             string resourceName = string.Format(format, value ?? "NULL");
             return Strings.ResourceManager.GetString(resourceName);
         }

@@ -4,12 +4,7 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
-             xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
-    <UserControl.Resources>
-        <Converters:ByteCountFormattingConverter x:Key="ByteCountFormattingConverter" />
-        <Converters:StringLocalizingConverter x:Key="StringLocalizingConverter" />
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

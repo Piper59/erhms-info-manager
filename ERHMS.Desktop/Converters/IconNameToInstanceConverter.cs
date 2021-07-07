@@ -7,11 +7,9 @@ namespace ERHMS.Desktop.Converters
 {
     public class IconNameToInstanceConverter : IValueConverter
     {
-        public string Format { get; set; } = "{0}";
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string format = (string)parameter ?? Format;
+            string format = (string)parameter ?? "{0}";
             string iconName = string.Format(format, value ?? "NULL");
             return Icons.GetInstance(iconName);
         }

@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
+    <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
+    <Converters:ByteCountFormattingConverter x:Key="ByteCountFormattingConverter" />
+    <Converters:IconNameToInstanceConverter x:Key="IconNameToInstanceConverter" />
+    <Converters:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
+    <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+    <Converters:PathToDirectoryNameConverter x:Key="PathToDirectoryNameConverter" />
+    <Converters:PathToFileNameConverter x:Key="PathToFileNameConverter" />
+    <Converters:PhaseToColorConverter x:Key="PhaseToColorConverter" />
+    <Converters:PhaseToCoreViewsConverter x:Key="PhaseToCoreViewsConverter" />
+    <Converters:StringCaseFormattingConverter x:Key="StringCaseFormattingConverter" />
+    <Converters:StringLocalizingConverter x:Key="StringLocalizingConverter" />
+</ResourceDictionary>

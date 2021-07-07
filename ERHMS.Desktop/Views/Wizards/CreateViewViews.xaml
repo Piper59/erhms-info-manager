@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
@@ -55,10 +54,6 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+SetXTemplateViewModel}">
-        <DataTemplate.Resources>
-            <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
-            <Converters:PathToFileNameConverter x:Key="PathToFileNameConverter" />
-        </DataTemplate.Resources>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />

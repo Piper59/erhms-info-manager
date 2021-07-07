@@ -8,12 +8,10 @@ namespace ERHMS.Desktop.Converters
 {
     public class ByteCountFormattingConverter : IValueConverter
     {
-        public string Format { get; set; } = "{0:N0}";
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             IFormatProvider formatter = new ByteCountFormatter();
-            string format = (string)parameter ?? Format;
+            string format = (string)parameter ?? "{0:N0}";
             return string.Format(formatter, format, value);
         }
 
