@@ -17,7 +17,13 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type Epi:View}">
             <TextBlock>
-                <Run Text="{Binding Project.Name}" />
+                <Run Text="{Binding Project.Name}">
+                    <Run.ToolTip>
+                        <ToolTip MaxWidth="{StaticResource LargeToolTipWidth}">
+                            <TextBlock Text="{Binding Project.FilePath}" />
+                        </ToolTip>
+                    </Run.ToolTip>
+                </Run>
                 <Run FontFamily="{StaticResource IconFontFamily}"
                      Text="{Markup:Icon Level.Separator}" />
                 <Run Text="{Binding Name}" />
