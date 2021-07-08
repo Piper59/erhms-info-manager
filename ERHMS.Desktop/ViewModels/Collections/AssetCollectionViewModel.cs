@@ -51,8 +51,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Project = project;
             Items.SortDescriptions.Add(new SortDescription(nameof(FileInfo.Name), ListSortDirection.Ascending));
             CreateCommand = new AsyncCommand(CreateAsync);
-            OpenCommand = new AsyncCommand(OpenAsync, HasCurrentItem);
-            DeleteCommand = new AsyncCommand(DeleteAsync, HasCurrentItem);
+            OpenCommand = new AsyncCommand(OpenAsync, HasCurrent);
+            DeleteCommand = new AsyncCommand(DeleteAsync, HasCurrent);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 

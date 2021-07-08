@@ -32,8 +32,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public override string Title => Strings.CreateView_Lead_SetSourceView;
 
-                private ViewCollectionView views;
-                public ViewCollectionView Views
+                private ViewListCollectionView views;
+                public ViewListCollectionView Views
                 {
                     get { return views; }
                     private set { SetProperty(ref views, value); }
@@ -52,7 +52,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 private async Task InitializeAsync()
                 {
                     fileDialog.FileName = Wizard.Project.FilePath;
-                    Views = await ViewCollectionView.CreateAsync(Wizard.Project);
+                    Views = await ViewListCollectionView.CreateAsync(Wizard.Project);
                 }
 
                 public async Task BrowseAsync()
@@ -69,13 +69,13 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         {
                             return ProjectExtensions.Open(fileDialog.FileName);
                         });
-                        return await ViewCollectionView.CreateAsync(project);
+                        return await ViewListCollectionView.CreateAsync(project);
                     });
                 }
 
                 public override bool CanContinue()
                 {
-                    return Views.HasCurrentItem();
+                    return Views.HasCurrent();
                 }
 
                 public override async Task ContinueAsync()

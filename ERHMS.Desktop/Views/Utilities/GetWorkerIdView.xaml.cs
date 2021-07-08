@@ -25,7 +25,7 @@ namespace ERHMS.Desktop.Views.Utilities
 
         public bool CanCommit()
         {
-            return DataContext?.Workers.HasCurrentItem() ?? false;
+            return DataContext?.Workers.HasCurrent() ?? false;
         }
 
         public void Commit()

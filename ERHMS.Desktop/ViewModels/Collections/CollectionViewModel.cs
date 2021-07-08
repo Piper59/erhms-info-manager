@@ -18,12 +18,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items = new PagingListCollectionView<TItem>(List);
         }
 
-        public bool HasCurrentItem()
+        public bool HasCurrent()
         {
-            return Items.HasCurrentItem();
+            return Items.HasCurrent();
         }
 
-        public bool HasSelectedItems()
+        public bool HasSelection()
         {
             return SelectedItems != null && SelectedItems.Count > 0;
         }

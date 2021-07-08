@@ -43,7 +43,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        public RecordStatusCollectionView Statuses { get; } = new RecordStatusCollectionView();
+        public RecordStatusListCollectionView Statuses { get; } = new RecordStatusListCollectionView();
 
         private WorkerCollectionViewModel(string firstName, string lastName, string emailAddress)
         {

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ERHMS.Desktop.Data
 {
-    public class RecordStatusCollectionView : ListCollectionView<RecordStatusCollectionView.Item>
+    public class RecordStatusListCollectionView : ListCollectionView<RecordStatusListCollectionView.Item>
     {
         public class Item
         {
@@ -27,7 +27,7 @@ namespace ERHMS.Desktop.Data
             }
         }
 
-        public RecordStatusCollectionView()
+        public RecordStatusListCollectionView()
             : base(Item.Instances.ToList()) { }
     }
 }

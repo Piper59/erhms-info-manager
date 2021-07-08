@@ -27,19 +27,19 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
 
             public override string Title => Strings.CreateAsset_Lead_SetView;
-            public ViewCollectionView Views { get; private set; }
+            public ViewListCollectionView Views { get; private set; }
 
             private SetViewViewModel(CreateAssetViewModel wizard)
                 : base(wizard) { }
 
             private async Task InitializeAsync()
             {
-                Views = await ViewCollectionView.CreateAsync(Wizard.Project);
+                Views = await ViewListCollectionView.CreateAsync(Wizard.Project);
             }
 
             public override bool CanContinue()
             {
-                return Views.HasCurrentItem();
+                return Views.HasCurrent();
             }
 
             public override async Task ContinueAsync()

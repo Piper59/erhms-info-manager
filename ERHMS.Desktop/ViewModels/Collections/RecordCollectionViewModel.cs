@@ -59,7 +59,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        public RecordStatusCollectionView Statuses { get; } = new RecordStatusCollectionView();
+        public RecordStatusListCollectionView Statuses { get; } = new RecordStatusListCollectionView();
 
         private IEnumerable<FieldDataRow> fields;
         public IEnumerable<FieldDataRow> Fields
@@ -83,9 +83,9 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.PageSize = 100;
             Statuses.CurrentChanged += (sender, e) => Items.Refresh();
             AddCommand = new AsyncCommand(AddAsync);
-            EditCommand = new AsyncCommand(EditAsync, HasCurrentItem);
-            DeleteCommand = new AsyncCommand(DeleteAsync, HasSelectedItems);
-            UndeleteCommand = new AsyncCommand(UndeleteAsync, HasSelectedItems);
+            EditCommand = new AsyncCommand(EditAsync, HasCurrent);
+            DeleteCommand = new AsyncCommand(DeleteAsync, HasSelection);
+            UndeleteCommand = new AsyncCommand(UndeleteAsync, HasSelection);
             ImportCommand = Command.Null;
             ExportCommand = Command.Null;
             RefreshCommand = new AsyncCommand(RefreshAsync);

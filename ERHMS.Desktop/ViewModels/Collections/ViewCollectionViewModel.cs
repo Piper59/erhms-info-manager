@@ -81,10 +81,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Project = project;
             CreateCommand = new AsyncCommand(CreateAsync);
-            OpenCommand = new AsyncCommand(OpenAsync, HasCurrentItem);
-            DeleteCommand = new AsyncCommand(DeleteAsync, HasCurrentItem);
-            DesignCommand = new AsyncCommand(DesignAsync, HasCurrentItem);
-            EnterCommand = new AsyncCommand(EnterAsync, HasCurrentItem);
+            OpenCommand = new AsyncCommand(OpenAsync, HasCurrent);
+            DeleteCommand = new AsyncCommand(DeleteAsync, HasCurrent);
+            DesignCommand = new AsyncCommand(DesignAsync, HasCurrent);
+            EnterCommand = new AsyncCommand(EnterAsync, HasCurrent);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 

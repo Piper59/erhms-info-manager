@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.Data
 {
-    public class ViewCollectionView : ListCollectionView<View>
+    public class ViewListCollectionView : ListCollectionView<View>
     {
-        public static async Task<ViewCollectionView> CreateAsync(Project project)
+        public static async Task<ViewListCollectionView> CreateAsync(Project project)
         {
-            ViewCollectionView result = new ViewCollectionView(project);
+            ViewListCollectionView result = new ViewListCollectionView(project);
             await result.InitializeAsync();
             return result;
         }
 
         public Project Project { get; }
 
-        private ViewCollectionView(Project project)
+        private ViewListCollectionView(Project project)
             : base(new List<View>())
         {
             Project = project;

@@ -105,6 +105,7 @@
     <Compile Include="Commands\ErrorBehavior.cs" />
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
+    <Compile Include="Controls\BoundComboBox.cs" />
     <Compile Include="Controls\IconButton.cs" />
     <Compile Include="Controls\ItemsControlWatermark.xaml.cs">
       <DependentUpon>ItemsControlWatermark.xaml</DependentUpon>
@@ -131,8 +132,8 @@
     <Compile Include="Data\ICollectionViewExtensions.cs" />
     <Compile Include="Data\ListCollectionView.cs" />
     <Compile Include="Data\PagingListCollectionView.cs" />
-    <Compile Include="Data\RecordStatusCollectionView.cs" />
-    <Compile Include="Data\ViewCollectionView.cs" />
+    <Compile Include="Data\RecordStatusListCollectionView.cs" />
+    <Compile Include="Data\ViewListCollectionView.cs" />
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />

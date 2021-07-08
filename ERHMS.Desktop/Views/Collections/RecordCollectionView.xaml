@@ -36,9 +36,11 @@
             </Grid.ColumnDefinitions>
             <Controls:Search Grid.Column="0"
                              Text="{Binding SearchText}" />
-            <ComboBox Grid.Column="1"
-                      ItemsSource="{Binding Statuses}"
-                      Style="{StaticResource RecordStatusComboBox}" />
+            <Controls:BoundComboBox AutomationProperties.Name="{Binding Source='Label.RecordStatus', Converter={StaticResource StringLocalizingConverter}}"
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding Statuses}"
+                                    ItemText="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.{0}'}"
+                                    MinWidth="125" />
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
