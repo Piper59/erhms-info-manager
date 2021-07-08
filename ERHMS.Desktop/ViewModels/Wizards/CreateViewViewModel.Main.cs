@@ -64,15 +64,22 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             protected SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
                 : base(wizard, step) { }
 
-            private async Task<bool> ValidateAsync(string viewName)
+            protected abstract void GoToNextStep();
+
+            public override bool CanContinue()
+            {
+                return true;
+            }
+
+            public override async Task ContinueAsync()
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                 progress.Lead = Strings.Lead_ValidatingViewName;
                 InvalidViewNameReason reason = InvalidViewNameReason.None;
-                bool result = await progress.Run(() =>
+                bool valid = await progress.Run(() =>
                 {
                     ViewNameValidator validator = new ViewNameValidator(Wizard.Project);
-                    return validator.IsValid(viewName, out reason);
+                    return validator.IsValid(ViewName, out reason);
                 });
                 if (reason != InvalidViewNameReason.None)
                 {
@@ -83,19 +90,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     dialog.Buttons = DialogButtonCollection.Close;
                     dialog.Show();
                 }
-                return result;
-            }
-
-            protected abstract void GoToNextStep();
-
-            public override bool CanContinue()
-            {
-                return true;
-            }
-
-            public override async Task ContinueAsync()
-            {
-                if (!await ValidateAsync(ViewName))
+                if (!valid)
                 {
                     return;
                 }

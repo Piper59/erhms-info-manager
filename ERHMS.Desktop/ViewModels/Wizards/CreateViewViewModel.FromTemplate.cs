@@ -42,38 +42,34 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public async Task BrowseAsync()
                 {
-                    while (true)
+                    if (fileDialog.Open() != true)
                     {
-                        if (fileDialog.Open() != true)
-                        {
-                            return;
-                        }
-                        IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                        progress.Lead = Strings.Lead_LoadingTemplate;
-                        XTemplate xTemplate = await progress.Run(() =>
-                        {
-                            try
-                            {
-                                return XTemplate.Load(fileDialog.FileName);
-                            }
-                            catch
-                            {
-                                return null;
-                            }
-                        });
-                        if (xTemplate == null || xTemplate.Level != TemplateLevel.View)
-                        {
-                            IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                            dialog.Severity = DialogSeverity.Warning;
-                            dialog.Lead = Strings.Lead_InvalidTemplatePath;
-                            dialog.Body = string.Format(Strings.Body_InvalidViewTemplatePath, fileDialog.FileName);
-                            dialog.Buttons = DialogButtonCollection.Close;
-                            dialog.Show();
-                            continue;
-                        }
-                        this.xTemplate = xTemplate;
-                        break;
+                        return;
                     }
+                    IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                    progress.Lead = Strings.Lead_LoadingTemplate;
+                    XTemplate xTemplate = await progress.Run(() =>
+                    {
+                        try
+                        {
+                            return XTemplate.Load(fileDialog.FileName);
+                        }
+                        catch
+                        {
+                            return null;
+                        }
+                    });
+                    if (xTemplate == null || xTemplate.Level != TemplateLevel.View)
+                    {
+                        IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                        dialog.Severity = DialogSeverity.Warning;
+                        dialog.Lead = Strings.Lead_InvalidTemplatePath;
+                        dialog.Body = string.Format(Strings.Body_InvalidViewTemplatePath, fileDialog.FileName);
+                        dialog.Buttons = DialogButtonCollection.Close;
+                        dialog.Show();
+                        return;
+                    }
+                    this.xTemplate = xTemplate;
                     TemplatePath = fileDialog.FileName;
                 }
 
@@ -109,14 +105,15 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 private async Task InitializeAsync()
                 {
-                    await Task.Run(() =>
+                    ViewName = await Task.Run(() =>
                     {
-                        ViewName = Wizard.XTemplate.XProject.XView.Name;
+                        string viewName = Wizard.XTemplate.XProject.XView.Name;
                         ViewNameUniquifier viewNames = new ViewNameUniquifier(Wizard.Project);
-                        if (viewNames.Exists(ViewName))
+                        if (viewNames.Exists(viewName))
                         {
-                            ViewName = viewNames.Uniquify(ViewName);
+                            viewName = viewNames.Uniquify(viewName);
                         }
+                        return viewName;
                     });
                 }
 

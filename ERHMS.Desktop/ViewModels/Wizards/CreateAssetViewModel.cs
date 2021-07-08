@@ -86,7 +86,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             private async Task InitializeAsync()
             {
-                string assetPath = await Task.Run(() =>
+                AssetPath = await Task.Run(() =>
                 {
                     string directoryPath = Wizard.Project.Location;
                     string extension = Wizard.FileExtension;
@@ -98,31 +98,26 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     }
                     return Path.Combine(directoryPath, fileName);
                 });
-                fileDialog.FileName = assetPath;
-                AssetPath = assetPath;
+                fileDialog.FileName = AssetPath;
             }
 
             public void Browse()
             {
-                while (true)
+                if (fileDialog.Save() != true)
                 {
-                    if (fileDialog.Save() != true)
-                    {
-                        return;
-                    }
-                    string directoryPath = Path.GetDirectoryName(fileDialog.FileName);
-                    if (Comparers.Path.Equals(directoryPath, Wizard.Project.Location))
-                    {
-                        break;
-                    }
+                    return;
+                }
+                string directoryPath = Path.GetDirectoryName(fileDialog.FileName);
+                if (!Comparers.Path.Equals(directoryPath, Wizard.Project.Location))
+                {
                     IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
                     dialog.Severity = DialogSeverity.Warning;
                     dialog.Lead = Strings.Lead_ConfirmOrphanAssetCreation;
                     dialog.Body = string.Format(Strings.Body_ConfirmOrphanAssetCreation, directoryPath);
                     dialog.Buttons = DialogButtonCollection.ActionOrCancel(Strings.AccessText_Continue);
-                    if (dialog.Show() == true)
+                    if (dialog.Show() != true)
                     {
-                        break;
+                        return;
                     }
                 }
                 AssetPath = fileDialog.FileName;

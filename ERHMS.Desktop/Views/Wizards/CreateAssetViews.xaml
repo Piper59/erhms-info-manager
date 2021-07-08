@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-                    xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
-    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+SetViewViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+SetViewViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -19,7 +19,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+SetAssetPathViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+SetAssetPathViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -52,11 +52,11 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateAssetViewModel+CloseViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+CloseViewModel}">
         <CheckBox Content="{Markup:String Label.OpenInEpiInfo}"
                   IsChecked="{Binding OpenInEpiInfo}" />
     </DataTemplate>

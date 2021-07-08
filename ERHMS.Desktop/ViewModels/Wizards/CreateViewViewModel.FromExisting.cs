@@ -51,8 +51,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 private async Task InitializeAsync()
                 {
-                    fileDialog.FileName = Wizard.Project.FilePath;
                     Views = await ViewListCollectionView.CreateAsync(Wizard.Project);
+                    fileDialog.FileName = Wizard.Project.FilePath;
                 }
 
                 public async Task BrowseAsync()
@@ -104,14 +104,15 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 private async Task InitializeAsync()
                 {
-                    await Task.Run(() =>
+                    ViewName = await Task.Run(() =>
                     {
-                        ViewName = Wizard.SourceView.Name;
+                        string viewName = Wizard.SourceView.Name;
                         ViewNameUniquifier viewNames = new ViewNameUniquifier(Wizard.Project);
-                        if (viewNames.Exists(ViewName))
+                        if (viewNames.Exists(viewName))
                         {
-                            ViewName = viewNames.Uniquify(ViewName);
+                            viewName = viewNames.Uniquify(viewName);
                         }
+                        return viewName;
                     });
                 }
 

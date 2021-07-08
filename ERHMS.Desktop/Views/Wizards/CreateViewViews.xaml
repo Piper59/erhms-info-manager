@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-                    xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+InitializeViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+InitializeViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
@@ -21,12 +21,12 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+CloseViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+CloseViewModel}">
         <CheckBox Content="{Markup:String Label.OpenInEpiInfo}"
                   IsChecked="{Binding OpenInEpiInfo}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetViewNameViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+Blank+SetViewNameViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -40,7 +40,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetWithWorkerInfoViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+Blank+SetWithWorkerInfoViewModel}">
         <StackPanel>
             <Label>
                 <TextBlock Text="{Markup:String CreateView.Body.SetWithWorkerInfo}" />
@@ -50,11 +50,11 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+Blank+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+SetXTemplateViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromTemplate+SetXTemplateViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -78,7 +78,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+SetViewNameViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromTemplate+SetViewNameViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -92,11 +92,11 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromTemplate+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromTemplate+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromExisting+SetSourceViewViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromExisting+SetSourceViewViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -135,7 +135,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromExisting+SetViewNameViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromExisting+SetViewNameViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -149,7 +149,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+FromExisting+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromExisting+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 </ResourceDictionary>
