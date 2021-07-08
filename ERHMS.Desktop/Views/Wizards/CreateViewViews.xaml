@@ -4,7 +4,7 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+InitializeViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />

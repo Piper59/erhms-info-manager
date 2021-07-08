@@ -486,7 +486,7 @@ Close anyway?</value>
   <data name="CreateProject.HelpText.Standard.Worker" xml:space="preserve">
     <value>Create a new database containing standard worker forms.</value>
   </data>
-  <data name="CreateProject.Lead.Initialize" xml:space="preserve">
+  <data name="CreateProject.Lead.SetStrategy" xml:space="preserve">
     <value>Choose how to create the new database</value>
   </data>
   <data name="CreateView.AccessText.Blank" xml:space="preserve">
@@ -516,11 +516,11 @@ Close anyway?</value>
   <data name="CreateView.Lead.Commit" xml:space="preserve">
     <value>Verify the information below</value>
   </data>
-  <data name="CreateView.Lead.Initialize" xml:space="preserve">
-    <value>Choose how to create the new form</value>
-  </data>
   <data name="CreateView.Lead.SetSourceView" xml:space="preserve">
     <value>Choose an existing form</value>
+  </data>
+  <data name="CreateView.Lead.SetStrategy" xml:space="preserve">
+    <value>Choose how to create the new form</value>
   </data>
   <data name="CreateView.Lead.SetViewName" xml:space="preserve">
     <value>Enter a name for the new form</value>

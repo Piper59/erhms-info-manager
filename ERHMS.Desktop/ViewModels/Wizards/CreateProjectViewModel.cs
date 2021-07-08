@@ -7,16 +7,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 {
     public partial class CreateProjectViewModel : WizardViewModel
     {
-        public class InitializeViewModel : StepViewModel<CreateProjectViewModel>
+        public class SetStrategyViewModel : StepViewModel<CreateProjectViewModel>
         {
-            public override string Title => Strings.CreateProject_Lead_Initialize;
+            public override string Title => Strings.CreateProject_Lead_SetStrategy;
 
             public ICommand CreateBlankCommand { get; }
             public ICommand CreateStandardCommand { get; }
             public ICommand CreateFromTemplateCommand { get; }
             public ICommand CreateFromExistingCommand { get; }
 
-            public InitializeViewModel(CreateProjectViewModel wizard)
+            public SetStrategyViewModel(CreateProjectViewModel wizard)
                 : base(wizard) { }
         }
 
@@ -26,7 +26,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public CreateProjectViewModel(CoreProject coreProject)
         {
             CoreProject = coreProject;
-            Step = new InitializeViewModel(this);
+            Step = new SetStrategyViewModel(this);
         }
     }
 }

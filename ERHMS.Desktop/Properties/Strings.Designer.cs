@@ -1134,9 +1134,9 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Choose how to create the new database.
         /// </summary>
-        public static string CreateProject_Lead_Initialize {
+        public static string CreateProject_Lead_SetStrategy {
             get {
-                return ResourceManager.GetString("CreateProject.Lead.Initialize", resourceCulture);
+                return ResourceManager.GetString("CreateProject.Lead.SetStrategy", resourceCulture);
             }
         }
         
@@ -1222,20 +1222,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose how to create the new form.
-        /// </summary>
-        public static string CreateView_Lead_Initialize {
-            get {
-                return ResourceManager.GetString("CreateView.Lead.Initialize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Choose an existing form.
         /// </summary>
         public static string CreateView_Lead_SetSourceView {
             get {
                 return ResourceManager.GetString("CreateView.Lead.SetSourceView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose how to create the new form.
+        /// </summary>
+        public static string CreateView_Lead_SetStrategy {
+            get {
+                return ResourceManager.GetString("CreateView.Lead.SetStrategy", resourceCulture);
             }
         }
         
