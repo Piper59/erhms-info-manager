@@ -64,6 +64,28 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             protected SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
                 : base(wizard, step) { }
 
+            private async Task<bool> ValidateAsync(string viewName)
+            {
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_ValidatingViewName;
+                InvalidViewNameReason reason = InvalidViewNameReason.None;
+                bool result = await progress.Run(() =>
+                {
+                    ViewNameValidator validator = new ViewNameValidator(Wizard.Project);
+                    return validator.IsValid(viewName, out reason);
+                });
+                if (reason != InvalidViewNameReason.None)
+                {
+                    IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+                    dialog.Severity = DialogSeverity.Warning;
+                    dialog.Lead = reason.GetLead();
+                    dialog.Body = reason.GetBody();
+                    dialog.Buttons = DialogButtonCollection.Close;
+                    dialog.Show();
+                }
+                return result;
+            }
+
             protected abstract void GoToNextStep();
 
             public override bool CanContinue()
@@ -73,7 +95,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                if (!await Wizard.ValidateAsync(ViewName))
+                if (!await ValidateAsync(ViewName))
                 {
                     return;
                 }
@@ -119,28 +141,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             Project = project;
             Step = new InitializeViewModel(this);
-        }
-
-        private async Task<bool> ValidateAsync(string viewName)
-        {
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = Strings.Lead_ValidatingViewName;
-            InvalidViewNameReason reason = InvalidViewNameReason.None;
-            bool result = await progress.Run(() =>
-            {
-                ViewNameValidator validator = new ViewNameValidator(Project);
-                return validator.IsValid(viewName, out reason);
-            });
-            if (reason != InvalidViewNameReason.None)
-            {
-                IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
-                dialog.Severity = DialogSeverity.Warning;
-                dialog.Lead = reason.GetLead();
-                dialog.Body = reason.GetBody();
-                dialog.Buttons = DialogButtonCollection.Close;
-                dialog.Show();
-            }
-            return result;
         }
     }
 }
