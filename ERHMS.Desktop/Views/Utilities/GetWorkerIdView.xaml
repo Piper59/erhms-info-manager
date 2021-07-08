@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-        xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections"
+        xmlns:ViewsCollections="clr-namespace:ERHMS.Desktop.Views.Collections"
         Height="768"
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
@@ -21,8 +21,8 @@
                 BorderThickness="0,1"
                 Style="{StaticResource FluidLayout}">
             <Grid Style="{StaticResource Container}">
-                <Collections:WorkerCollectionView CommitCommand="{Binding CommitCommand, ElementName=Root}"
-                                                  DataContext="{Binding Workers}" />
+                <ViewsCollections:WorkerCollectionView CommitCommand="{Binding CommitCommand, ElementName=Root}"
+                                                       DataContext="{Binding Workers}" />
             </Grid>
         </Border>
         <Border Grid.Row="1"

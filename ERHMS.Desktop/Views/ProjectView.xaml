@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-             xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections">
+             xmlns:ViewsCollections="clr-namespace:ERHMS.Desktop.Views.Collections">
     <Border Style="{StaticResource FluidLayout}">
         <Grid Style="{StaticResource Container}">
             <Grid.RowDefinitions>
@@ -47,28 +47,28 @@
                 <TabItem Header="{Markup:String AccessText.Views}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:ViewCollectionView DataContext="{Binding Views}" />
+                            <ViewsCollections:ViewCollectionView DataContext="{Binding Views}" />
                         </Grid>
                     </Border>
                 </TabItem>
                 <TabItem Header="{Markup:String AccessText.Canvases}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:AssetCollectionView DataContext="{Binding Canvases}" />
+                            <ViewsCollections:AssetCollectionView DataContext="{Binding Canvases}" />
                         </Grid>
                     </Border>
                 </TabItem>
                 <TabItem Header="{Markup:String AccessText.Pgms}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:AssetCollectionView DataContext="{Binding Pgms}" />
+                            <ViewsCollections:AssetCollectionView DataContext="{Binding Pgms}" />
                         </Grid>
                     </Border>
                 </TabItem>
                 <TabItem Header="{Markup:String AccessText.Maps}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:AssetCollectionView DataContext="{Binding Maps}" />
+                            <ViewsCollections:AssetCollectionView DataContext="{Binding Maps}" />
                         </Grid>
                     </Border>
                 </TabItem>

@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:ERHMS.Desktop"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-             xmlns:Collections="clr-namespace:ERHMS.Desktop.Views.Collections">
+             xmlns:ViewsCollections="clr-namespace:ERHMS.Desktop.Views.Collections">
     <Border Style="{StaticResource FluidLayout}">
         <Grid Style="{StaticResource Container}">
             <Grid.RowDefinitions>
@@ -54,7 +54,7 @@
                 <TabItem Header="{Markup:String AccessText.Records}">
                     <Border Style="{StaticResource FluidLayout}">
                         <Grid Style="{StaticResource Container}">
-                            <Collections:RecordCollectionView DataContext="{Binding Records}" />
+                            <ViewsCollections:RecordCollectionView DataContext="{Binding Records}" />
                         </Grid>
                     </Border>
                 </TabItem>
