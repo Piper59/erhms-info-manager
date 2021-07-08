@@ -19,7 +19,7 @@
                         </LinearGradientBrush>
                     </Border.Background>
                     <TextBlock Style="{StaticResource Heading}"
-                               Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.Name.{0}'}" />
+                               Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.{0}'}" />
                 </Border>
                 <ItemsControl IsTabStop="False"
                               ItemsSource="{Binding ., Converter={StaticResource PhaseToCoreViewsConverter}}" />

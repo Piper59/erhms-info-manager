@@ -9,14 +9,14 @@
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
             <Button Command="{Binding CreateBlankCommand}"
-                    Content="{Markup:String AccessText.CreateView.Blank}"
-                    ToolTip="{Markup:String HelpText.CreateView.Blank}" />
+                    Content="{Markup:String CreateView.AccessText.Blank}"
+                    ToolTip="{Markup:String CreateView.HelpText.Blank}" />
             <Button Command="{Binding CreateFromTemplateCommand}"
-                    Content="{Markup:String AccessText.CreateView.FromTemplate}"
-                    ToolTip="{Markup:String HelpText.CreateView.FromTemplate}" />
+                    Content="{Markup:String CreateView.AccessText.FromTemplate}"
+                    ToolTip="{Markup:String CreateView.HelpText.FromTemplate}" />
             <Button Command="{Binding CreateFromExistingCommand}"
-                    Content="{Markup:String AccessText.CreateView.FromExisting}"
-                    ToolTip="{Markup:String HelpText.CreateView.FromExisting}" />
+                    Content="{Markup:String CreateView.AccessText.FromExisting}"
+                    ToolTip="{Markup:String CreateView.HelpText.FromExisting}" />
         </StackPanel>
     </DataTemplate>
 
@@ -42,7 +42,7 @@
     <DataTemplate DataType="{x:Type ViewModels:CreateViewViewModel+Blank+SetWithWorkerInfoViewModel}">
         <StackPanel>
             <Label>
-                <TextBlock Text="{Markup:String Body.CreateView.SetWithWorkerInfo}" />
+                <TextBlock Text="{Markup:String CreateView.Body.SetWithWorkerInfo}" />
             </Label>
             <CheckBox Content="{Markup:String Label.WithWorkerInfo}"
                       IsChecked="{Binding WithWorkerInfo}" />

@@ -8,17 +8,17 @@
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
             <Button Command="{Binding CreateBlankCommand}"
-                    Content="{Markup:String AccessText.CreateProject.Blank}"
-                    ToolTip="{Markup:String HelpText.CreateProject.Blank}" />
+                    Content="{Markup:String CreateProject.AccessText.Blank}"
+                    ToolTip="{Markup:String CreateProject.HelpText.Blank}" />
             <Button Command="{Binding CreateStandardCommand}"
-                    Content="{Markup:String AccessText.CreateProject.Standard}"
-                    ToolTip="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.CreateProject.Standard.{0}'}" />
+                    Content="{Markup:String CreateProject.AccessText.Standard}"
+                    ToolTip="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}" />
             <Button Command="{Binding CreateFromTemplateCommand}"
-                    Content="{Markup:String AccessText.CreateProject.FromTemplate}"
-                    ToolTip="{Markup:String HelpText.CreateProject.FromTemplate}" />
+                    Content="{Markup:String CreateProject.AccessText.FromTemplate}"
+                    ToolTip="{Markup:String CreateProject.HelpText.FromTemplate}" />
             <Button Command="{Binding CreateFromExistingCommand}"
-                    Content="{Markup:String AccessText.CreateProject.FromExisting}"
-                    ToolTip="{Markup:String HelpText.CreateProject.FromExisting}" />
+                    Content="{Markup:String CreateProject.AccessText.FromExisting}"
+                    ToolTip="{Markup:String CreateProject.HelpText.FromExisting}" />
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

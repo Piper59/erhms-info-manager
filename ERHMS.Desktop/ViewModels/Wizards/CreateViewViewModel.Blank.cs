@@ -25,7 +25,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class SetWithWorkerInfoViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => Strings.Lead_CreateView_SetWithWorkerInfo;
+                public override string Title => Strings.CreateView_Lead_SetWithWorkerInfo;
 
                 private bool withWorkerInfo = true;
                 public bool WithWorkerInfo
@@ -52,7 +52,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class CommitViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => Strings.Lead_CreateView_Commit;
+                public override string Title => Strings.CreateView_Lead_Commit;
                 public override string ContinueAction => Strings.AccessText_Finish;
                 public DetailsViewModel Details { get; }
 

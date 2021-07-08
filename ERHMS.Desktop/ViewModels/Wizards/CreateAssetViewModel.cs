@@ -26,7 +26,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 return result;
             }
 
-            public override string Title => Strings.Lead_CreateAsset_SetView;
+            public override string Title => Strings.CreateAsset_Lead_SetView;
             public ViewCollectionView Views { get; private set; }
 
             private SetViewViewModel(CreateAssetViewModel wizard)
@@ -65,7 +65,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             private readonly IFileDialogService fileDialog;
 
-            public override string Title => Strings.Lead_CreateAsset_SetAssetPath;
+            public override string Title => Strings.CreateAsset_Lead_SetAssetPath;
 
             private string assetPath;
             public string AssetPath
@@ -143,7 +143,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CommitViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => Strings.Lead_CreateAsset_Commit;
+            public override string Title => Strings.CreateAsset_Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
 
@@ -182,7 +182,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CloseViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => Strings.Lead_CreateAsset_Close;
+            public override string Title => Strings.CreateAsset_Lead_Close;
             public override string ContinueAction => Strings.AccessText_Close;
 
             private bool openInEpiInfo = true;

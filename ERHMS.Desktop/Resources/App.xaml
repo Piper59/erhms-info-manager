@@ -123,14 +123,14 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBase}">
-                    <Setter Property="AutomationProperties.Name" Value="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.Name.{0}'}" />
+                    <Setter Property="AutomationProperties.Name" Value="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.{0}'}" />
                 </Style>
             </Setter.Value>
         </Setter>
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.Name.{0}'}" />
+                    <TextBlock Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.{0}'}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>

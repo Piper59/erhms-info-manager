@@ -9,7 +9,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public class InitializeViewModel : StepViewModel<CreateProjectViewModel>
         {
-            public override string Title => Strings.Lead_CreateProject_Initialize;
+            public override string Title => Strings.CreateProject_Lead_Initialize;
 
             public ICommand CreateBlankCommand { get; }
             public ICommand CreateStandardCommand { get; }

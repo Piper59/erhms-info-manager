@@ -20,7 +20,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 private readonly IFileDialogService fileDialog;
                 private XTemplate xTemplate;
 
-                public override string Title => Strings.Lead_CreateView_SetXTemplate;
+                public override string Title => Strings.CreateView_Lead_SetXTemplate;
 
                 private string templatePath;
                 public string TemplatePath
@@ -128,7 +128,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class CommitViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => Strings.Lead_CreateView_Commit;
+                public override string Title => Strings.CreateView_Lead_Commit;
                 public override string ContinueAction => Strings.AccessText_Finish;
                 public DetailsViewModel Details { get; }
 

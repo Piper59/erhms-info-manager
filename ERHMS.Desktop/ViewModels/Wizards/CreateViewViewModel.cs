@@ -15,7 +15,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public class InitializeViewModel : StepViewModel<CreateViewViewModel>
         {
-            public override string Title => Strings.Lead_CreateView_Initialize;
+            public override string Title => Strings.CreateView_Lead_Initialize;
 
             public ICommand CreateBlankCommand { get; }
             public ICommand CreateFromTemplateCommand { get; }
@@ -52,7 +52,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public abstract class SetViewNameViewModel : StepViewModel<CreateViewViewModel>
         {
-            public override string Title => Strings.Lead_CreateView_SetViewName;
+            public override string Title => Strings.CreateView_Lead_SetViewName;
 
             private string viewName;
             public string ViewName
@@ -84,7 +84,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CloseViewModel : StepViewModel<CreateViewViewModel>
         {
-            public override string Title => Strings.Lead_CreateView_Close;
+            public override string Title => Strings.CreateView_Lead_Close;
             public override string ContinueAction => Strings.AccessText_Close;
 
             private bool openInEpiInfo = true;
