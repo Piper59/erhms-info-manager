@@ -4,10 +4,10 @@ using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
 {
-    public partial class SearchTextBox : UserControl
+    public partial class Search : UserControl
     {
         public static readonly DependencyProperty TextProperty = TextBox.TextProperty.AddOwner(
-            typeof(SearchTextBox),
+            typeof(Search),
             new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Text
@@ -16,7 +16,7 @@ namespace ERHMS.Desktop.Controls
             set { SetValue(TextProperty, value); }
         }
 
-        public SearchTextBox()
+        public Search()
         {
             InitializeComponent();
             Button.Margin = Button.Margin.Scale(left: -1.0);

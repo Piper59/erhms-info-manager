@@ -34,8 +34,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Controls:SearchTextBox Grid.Column="0"
-                                    Text="{Binding SearchText}" />
+            <Controls:Search Grid.Column="0"
+                             Text="{Binding SearchText}" />
             <ComboBox Grid.Column="1"
                       ItemsSource="{Binding Statuses}"
                       Style="{StaticResource RecordStatusComboBox}" />
