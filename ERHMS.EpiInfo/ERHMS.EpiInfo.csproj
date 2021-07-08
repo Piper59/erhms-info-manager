@@ -74,8 +74,8 @@
     <Compile Include="Data\RecordExporter.cs" />
     <Compile Include="Data\RecordImporter.cs" />
     <Compile Include="Data\RecordMapper.cs" />
-    <Compile Include="Data\RecordRepository.cs" />
     <Compile Include="Data\RecordRepository.Delete.cs" />
+    <Compile Include="Data\RecordRepository.Main.cs" />
     <Compile Include="Data\RecordRepository.Save.cs" />
     <Compile Include="Data\RecordRepository.Select.cs" />
     <Compile Include="Data\RecordStatus.cs" />

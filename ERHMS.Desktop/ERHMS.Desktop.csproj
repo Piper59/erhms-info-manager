@@ -206,9 +206,9 @@
     <Compile Include="ViewModels\Wizards\CreatePgmViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateProjectViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.Blank.cs" />
-    <Compile Include="ViewModels\Wizards\CreateViewViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromExisting.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromTemplate.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModel.Main.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
     <Compile Include="Views\Collections\AssetCollectionView.xaml.cs">
       <DependentUpon>AssetCollectionView.xaml</DependentUpon>
