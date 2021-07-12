@@ -1486,6 +1486,7 @@ namespace ERHMS.Desktop
             { "Design", "tools" },
             { "Edit", "pen" },
             { "Enter", "pen" },
+            { "Expand", "caret-down" },
             { "Export", "file-export" },
             { "Help", "question" },
             { "Home", "home" },

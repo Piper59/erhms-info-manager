@@ -169,6 +169,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a _new database.
+        /// </summary>
+        public static string AccessText_CreateNewProject {
+            get {
+                return ResourceManager.GetString("AccessText.CreateNewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Data.
         /// </summary>
         public static string AccessText_Data {
@@ -286,6 +295,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View the _current database.
+        /// </summary>
+        public static string AccessText_GoToCurrentProject {
+            get {
+                return ResourceManager.GetString("AccessText.GoToCurrentProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to V_iew help.
+        /// </summary>
+        public static string AccessText_GoToHelp {
+            get {
+                return ResourceManager.GetString("AccessText.GoToHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Help.
         /// </summary>
         public static string AccessText_Help {
@@ -300,24 +327,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Home {
             get {
                 return ResourceManager.GetString("AccessText.Home", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Incident database.
-        /// </summary>
-        public static string AccessText_IncidentProject {
-            get {
-                return ResourceManager.GetString("AccessText.IncidentProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Incident report.
-        /// </summary>
-        public static string AccessText_IncidentReport {
-            get {
-                return ResourceManager.GetString("AccessText.IncidentReport", resourceCulture);
             }
         }
         
@@ -381,6 +390,24 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Open {
             get {
                 return ResourceManager.GetString("AccessText.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open an _existing database.
+        /// </summary>
+        public static string AccessText_OpenExistingProject {
+            get {
+                return ResourceManager.GetString("AccessText.OpenExistingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch to a _recent database.
+        /// </summary>
+        public static string AccessText_OpenRecentProject {
+            get {
+                return ResourceManager.GetString("AccessText.OpenRecentProject", resourceCulture);
             }
         }
         
@@ -457,15 +484,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to V_iew help.
-        /// </summary>
-        public static string AccessText_SeeHelp {
-            get {
-                return ResourceManager.GetString("AccessText.SeeHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to _Similarity.
         /// </summary>
         public static string AccessText_Similarity {
@@ -507,24 +525,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_WorkerId {
             get {
                 return ResourceManager.GetString("AccessText.WorkerId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Worker database.
-        /// </summary>
-        public static string AccessText_WorkerProject {
-            get {
-                return ResourceManager.GetString("AccessText.WorkerProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Worker report.
-        /// </summary>
-        public static string AccessText_WorkerReport {
-            get {
-                return ResourceManager.GetString("AccessText.WorkerReport", resourceCulture);
             }
         }
         
@@ -837,18 +837,90 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        public static string Boolean_False {
+        public static string Boolean_Name_False {
             get {
-                return ResourceManager.GetString("Boolean.False", resourceCulture);
+                return ResourceManager.GetString("Boolean.Name.False", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        public static string Boolean_True {
+        public static string Boolean_Name_True {
             get {
-                return ResourceManager.GetString("Boolean.True", resourceCulture);
+                return ResourceManager.GetString("Boolean.Name.True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Incident database.
+        /// </summary>
+        public static string CoreProject_AccessText_Incident {
+            get {
+                return ResourceManager.GetString("CoreProject.AccessText.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Worker database.
+        /// </summary>
+        public static string CoreProject_AccessText_Worker {
+            get {
+                return ResourceManager.GetString("CoreProject.AccessText.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incident database:.
+        /// </summary>
+        public static string CoreProject_Label_Incident {
+            get {
+                return ResourceManager.GetString("CoreProject.Label.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker database:.
+        /// </summary>
+        public static string CoreProject_Label_Worker {
+            get {
+                return ResourceManager.GetString("CoreProject.Label.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incident database.
+        /// </summary>
+        public static string CoreProject_Name_Incident {
+            get {
+                return ResourceManager.GetString("CoreProject.Name.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker database.
+        /// </summary>
+        public static string CoreProject_Name_Worker {
+            get {
+                return ResourceManager.GetString("CoreProject.Name.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Incident report.
+        /// </summary>
+        public static string CoreReport_AccessText_Incident {
+            get {
+                return ResourceManager.GetString("CoreReport.AccessText.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Worker report.
+        /// </summary>
+        public static string CoreReport_AccessText_Worker {
+            get {
+                return ResourceManager.GetString("CoreReport.AccessText.Worker", resourceCulture);
             }
         }
         
@@ -1944,54 +2016,54 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Deployment.
         /// </summary>
-        public static string Phase_Deployment {
+        public static string Phase_Name_Deployment {
             get {
-                return ResourceManager.GetString("Phase.Deployment", resourceCulture);
+                return ResourceManager.GetString("Phase.Name.Deployment", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Post-deployment.
         /// </summary>
-        public static string Phase_PostDeployment {
+        public static string Phase_Name_PostDeployment {
             get {
-                return ResourceManager.GetString("Phase.PostDeployment", resourceCulture);
+                return ResourceManager.GetString("Phase.Name.PostDeployment", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Pre-deployment.
         /// </summary>
-        public static string Phase_PreDeployment {
+        public static string Phase_Name_PreDeployment {
             get {
-                return ResourceManager.GetString("Phase.PreDeployment", resourceCulture);
+                return ResourceManager.GetString("Phase.Name.PreDeployment", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Deleted.
         /// </summary>
-        public static string RecordStatus_Deleted {
+        public static string RecordStatus_Name_Deleted {
             get {
-                return ResourceManager.GetString("RecordStatus.Deleted", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Name.Deleted", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
-        public static string RecordStatus_NULL {
+        public static string RecordStatus_Name_NULL {
             get {
-                return ResourceManager.GetString("RecordStatus.NULL", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Name.NULL", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Undeleted.
         /// </summary>
-        public static string RecordStatus_Undeleted {
+        public static string RecordStatus_Name_Undeleted {
             get {
-                return ResourceManager.GetString("RecordStatus.Undeleted", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Name.Undeleted", resourceCulture);
             }
         }
     }

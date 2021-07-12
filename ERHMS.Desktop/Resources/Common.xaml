@@ -48,4 +48,5 @@
     <System:Double x:Key="LargeLayoutWidth">1180</System:Double>
     <System:Double x:Key="SmallToolTipWidth">240</System:Double>
     <System:Double x:Key="LargeToolTipWidth">Infinity</System:Double>
+    <System:Double x:Key="MenuWidth">480</System:Double>
 </ResourceDictionary>

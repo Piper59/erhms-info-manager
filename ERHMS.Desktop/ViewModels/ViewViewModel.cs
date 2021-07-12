@@ -20,6 +20,7 @@ namespace ERHMS.Desktop.ViewModels
         public Project Project => View.Project;
         public RecordCollectionViewModel Records { get; private set; }
 
+        public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
         public ICommand GoToProjectCommand { get; }
         public ICommand OpenProjectLocationCommand { get; }
@@ -27,6 +28,7 @@ namespace ERHMS.Desktop.ViewModels
         private ViewViewModel(View view)
         {
             View = view;
+            GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = Command.Null;
             GoToProjectCommand = new AsyncCommand(GoToProjectAsync);
             OpenProjectLocationCommand = new SyncCommand(OpenProjectLocation);
@@ -35,6 +37,11 @@ namespace ERHMS.Desktop.ViewModels
         private async Task InitializeAsync()
         {
             Records = await RecordCollectionViewModel.CreateAsync(View);
+        }
+
+        public void GoToHome()
+        {
+            MainViewModel.Instance.GoToHome();
         }
 
         public async Task GoToProjectAsync()

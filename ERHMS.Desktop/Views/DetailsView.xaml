@@ -11,7 +11,7 @@
             <TextBlock Text="{Binding}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type System:Boolean}">
-            <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.{0}'}" />
+            <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.Name.{0}'}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type Epi:View}">
             <TextBlock>

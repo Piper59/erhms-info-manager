@@ -22,7 +22,7 @@
             <Controls:BoundComboBox AutomationProperties.Name="{Binding Source='Label.RecordStatus', Converter={StaticResource StringLocalizingConverter}}"
                                     Grid.Column="1"
                                     ItemsSource="{Binding Statuses}"
-                                    ItemText="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.{0}'}"
+                                    ItemText="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.Name.{0}'}"
                                     MinWidth="125" />
         </Grid>
         <Controls:Pager Grid.Row="1"

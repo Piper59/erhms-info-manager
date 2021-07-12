@@ -1,6 +1,4 @@
-﻿using ERHMS.Domain;
-using System;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace ERHMS.Desktop
 {
@@ -9,23 +7,5 @@ namespace ERHMS.Desktop
         public static Color ThemeBlue { get; } = Color.FromRgb(0x00, 0x79, 0xc1);
         public static Color ThemeRed { get; } = Color.FromRgb(0xef, 0x3e, 0x42);
         public static Color ThemeGreen { get; } = Color.FromRgb(0x6c, 0xb3, 0x3f);
-        public static Color PreDeployment => ThemeBlue;
-        public static Color Deployment => ThemeRed;
-        public static Color PostDeployment => ThemeGreen;
-
-        public static Color FromPhase(Phase phase)
-        {
-            switch (phase)
-            {
-                case Phase.PreDeployment:
-                    return PreDeployment;
-                case Phase.Deployment:
-                    return Deployment;
-                case Phase.PostDeployment:
-                    return PostDeployment;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(phase));
-            }
-        }
     }
 }

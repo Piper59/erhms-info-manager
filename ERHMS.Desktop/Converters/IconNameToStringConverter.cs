@@ -1,17 +1,17 @@
-﻿using ERHMS.Domain;
-using System;
+﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
 namespace ERHMS.Desktop.Converters
 {
-    public class PhaseToCoreViewsConverter : IValueConverter
+    public class IconNameToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return CoreView.Instances.Where(coreView => coreView.Phase == (Phase)value);
+            string format = (string)parameter ?? "{0}";
+            string iconName = string.Format(format, value ?? "NULL");
+            return Icons.GetInstance(iconName);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

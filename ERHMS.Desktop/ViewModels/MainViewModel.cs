@@ -39,9 +39,10 @@ namespace ERHMS.Desktop.ViewModels
 
         public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
-        public ICommand GoToCoreProjectCommand { get; }
-        public ICommand GoToCoreViewCommand { get; }
         public ICommand CreateProjectCommand { get; }
+        public ICommand OpenProjectCommand { get; }
+        public ICommand GoToProjectCommand { get; }
+        public ICommand GoToViewCommand { get; }
         public ICommand OpenLogFileCommand { get; }
         public ICommand OpenLogDirectoryCommand { get; }
         public ICommand ExportLogDirectoryCommand { get; }
@@ -53,9 +54,10 @@ namespace ERHMS.Desktop.ViewModels
         {
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = Command.Null;
-            GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
-            GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
             CreateProjectCommand = new SyncCommand<CoreProject>(CreateProject);
+            OpenProjectCommand = new SyncCommand<CoreProject>(OpenProject);
+            GoToProjectCommand = new AsyncCommand<CoreProject>(GoToProjectAsync);
+            GoToViewCommand = new AsyncCommand<CoreView>(GoToViewAsync);
             OpenLogFileCommand = new SyncCommand(OpenLogFile);
             OpenLogDirectoryCommand = new SyncCommand(OpenLogDirectory);
             ExportLogDirectoryCommand = new AsyncCommand(ExportLogDirectoryAsync);
@@ -69,6 +71,21 @@ namespace ERHMS.Desktop.ViewModels
             Content = new HomeViewModel();
         }
 
+        public void CreateProject(CoreProject coreProject)
+        {
+            CreateProjectViewModel wizard = new CreateProjectViewModel(coreProject);
+            if (wizard.Show() != true)
+            {
+                return;
+            }
+            // TODO
+        }
+
+        public void OpenProject(CoreProject coreProject)
+        {
+            // TODO
+        }
+
         public async Task GoToProjectAsync(Func<Task<Project>> action)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
@@ -79,7 +96,7 @@ namespace ERHMS.Desktop.ViewModels
             });
         }
 
-        public async Task GoToCoreProjectAsync(CoreProject coreProject)
+        public async Task GoToProjectAsync(CoreProject coreProject)
         {
             await GoToProjectAsync(() => Task.Run(() =>
             {
@@ -98,7 +115,7 @@ namespace ERHMS.Desktop.ViewModels
             });
         }
 
-        public async Task GoToCoreViewAsync(CoreView coreView)
+        public async Task GoToViewAsync(CoreView coreView)
         {
             await GoToViewAsync(() => Task.Run(() =>
             {
@@ -106,16 +123,6 @@ namespace ERHMS.Desktop.ViewModels
                 Project project = ProjectExtensions.Open(projectPath);
                 return project.Views[coreView.Name];
             }));
-        }
-
-        public void CreateProject(CoreProject coreProject)
-        {
-            CreateProjectViewModel wizard = new CreateProjectViewModel(coreProject);
-            if (wizard.Show() != true)
-            {
-                return;
-            }
-            // TODO
         }
 
         public void OpenLogFile()

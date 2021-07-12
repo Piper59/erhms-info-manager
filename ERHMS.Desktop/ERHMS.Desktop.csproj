@@ -91,7 +91,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AppCommands.cs" />
     <Compile Include="Behaviors\BindSelectedItems.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
@@ -120,13 +119,12 @@
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
     <Compile Include="Converters\ByteCountFormattingConverter.cs" />
     <Compile Include="Converters\ConditionalConverter.cs" />
-    <Compile Include="Converters\IconNameToInstanceConverter.cs" />
+    <Compile Include="Converters\IconNameToStringConverter.cs" />
     <Compile Include="Converters\NullableToBooleanConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PathToDirectoryNameConverter.cs" />
     <Compile Include="Converters\PathToFileNameConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
-    <Compile Include="Converters\PhaseToCoreViewsConverter.cs" />
     <Compile Include="Converters\StringCaseFormattingConverter.cs" />
     <Compile Include="Converters\StringLocalizingConverter.cs" />
     <Compile Include="Data\ICollectionViewExtensions.cs" />
@@ -143,6 +141,7 @@
     <Compile Include="Infrastructure\InvalidViewNameReasonExtensions.cs" />
     <Compile Include="Infrastructure\MenuDropAlignment.cs" />
     <Compile Include="Infrastructure\NativeMethods.cs" />
+    <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />
     <Compile Include="Infrastructure\Services\ProgressService.cs" />

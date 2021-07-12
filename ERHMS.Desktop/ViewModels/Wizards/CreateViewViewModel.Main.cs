@@ -42,9 +42,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public async Task CreateFromExistingAsync()
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                IStep step = await progress.Run(async () =>
+                IStep step = await progress.Run(() =>
                 {
-                    return await FromExisting.SetSourceViewViewModel.CreateAsync(Wizard, this);
+                    return FromExisting.SetSourceViewViewModel.CreateAsync(Wizard, this);
                 });
                 GoToStep(step);
             }

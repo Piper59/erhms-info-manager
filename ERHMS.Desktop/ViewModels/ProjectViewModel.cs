@@ -22,12 +22,14 @@ namespace ERHMS.Desktop.ViewModels
         public PgmCollectionViewModel Pgms { get; private set; }
         public MapCollectionViewModel Maps { get; private set; }
 
+        public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
         public ICommand OpenLocationCommand { get; }
 
         private ProjectViewModel(Project project)
         {
             Project = project;
+            GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = Command.Null;
             OpenLocationCommand = new SyncCommand(OpenLocation);
         }
@@ -38,6 +40,11 @@ namespace ERHMS.Desktop.ViewModels
             Canvases = await CanvasCollectionViewModel.CreateAsync(Project);
             Pgms = await PgmCollectionViewModel.CreateAsync(Project);
             Maps = await MapCollectionViewModel.CreateAsync(Project);
+        }
+
+        public void GoToHome()
+        {
+            MainViewModel.Instance.GoToHome();
         }
 
         public void OpenLocation()

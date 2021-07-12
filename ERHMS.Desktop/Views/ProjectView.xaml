@@ -36,7 +36,7 @@
                             Orientation="Horizontal"
                             VerticalAlignment="Top">
                     <Controls:IconButton AltText="{Markup:String AltText.Home}"
-                                         Command="{x:Static local:AppCommands.GoToHomeCommand}"
+                                         Command="{Binding GoToHomeCommand}"
                                          Content="{Markup:Icon Home}" />
                     <Controls:IconButton AltText="{Markup:String AltText.Help}"
                                          Command="{Binding GoToHelpCommand}"

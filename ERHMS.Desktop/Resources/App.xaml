@@ -56,21 +56,8 @@
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
     </Style>
 
-    <!-- Other -->
+    <!-- Controls -->
     <Style TargetType="Controls:BoundComboBox" BasedOn="{StaticResource ComboBoxBase}" />
-
-    <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
-        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-    </Style>
-
-    <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="MinWidth" Value="85" />
-    </Style>
 
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
         <Style.Resources>
@@ -106,6 +93,20 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+    </Style>
+
+    <!-- Other -->
+    <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
+        <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    </Style>
+
+    <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+        <Setter Property="MinWidth" Value="85" />
     </Style>
 
     <Style x:Key="NumericDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellBase}">

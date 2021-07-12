@@ -21,14 +21,18 @@
                 <MenuItem Header="{Markup:String AccessText.New}">
                     <MenuItem Command="{Binding CreateProjectCommand}"
                               CommandParameter="{x:Static Domain:CoreProject.Worker}"
-                              Header="{Markup:String AccessText.WorkerProject}" />
+                              Header="{Markup:String CoreProject.AccessText.Worker}" />
                     <MenuItem Command="{Binding CreateProjectCommand}"
                               CommandParameter="{x:Static Domain:CoreProject.Incident}"
-                              Header="{Markup:String AccessText.IncidentProject}" />
+                              Header="{Markup:String CoreProject.AccessText.Incident}" />
                 </MenuItem>
                 <MenuItem Header="{Markup:String AccessText.Open}">
-                    <MenuItem Header="{Markup:String AccessText.WorkerProject}" />
-                    <MenuItem Header="{Markup:String AccessText.IncidentProject}" />
+                    <MenuItem Command="{Binding OpenProjectCommand}"
+                              CommandParameter="{x:Static Domain:CoreProject.Worker}"
+                              Header="{Markup:String CoreProject.AccessText.Worker}" />
+                    <MenuItem Command="{Binding OpenProjectCommand}"
+                              CommandParameter="{x:Static Domain:CoreProject.Incident}"
+                              Header="{Markup:String CoreProject.AccessText.Incident}" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Command="{Binding CloseCommand, ElementName=Root}"
@@ -38,12 +42,12 @@
             <MenuItem Header="{Markup:String AccessText.See}">
                 <MenuItem Command="{Binding GoToHomeCommand}"
                           Header="{Markup:String AccessText.Home}" />
-                <MenuItem Command="{Binding GoToCoreProjectCommand}"
+                <MenuItem Command="{Binding GoToProjectCommand}"
                           CommandParameter="{x:Static Domain:CoreProject.Worker}"
-                          Header="{Markup:String AccessText.WorkerProject}" />
-                <MenuItem Command="{Binding GoToCoreProjectCommand}"
+                          Header="{Markup:String CoreProject.AccessText.Worker}" />
+                <MenuItem Command="{Binding GoToProjectCommand}"
                           CommandParameter="{x:Static Domain:CoreProject.Incident}"
-                          Header="{Markup:String AccessText.IncidentProject}" />
+                          Header="{Markup:String CoreProject.AccessText.Incident}" />
             </MenuItem>
             <MenuItem Header="{Markup:String AccessText.Tools}">
                 <MenuItem Header="{Markup:String AccessText.Data}">
@@ -52,8 +56,8 @@
                     <MenuItem Header="{Markup:String AccessText.Restore}" />
                 </MenuItem>
                 <MenuItem Header="{Markup:String AccessText.Reports}">
-                    <MenuItem Header="{Markup:String AccessText.WorkerReport}" />
-                    <MenuItem Header="{Markup:String AccessText.IncidentReport}" />
+                    <MenuItem Header="{Markup:String CoreReport.AccessText.Worker}" />
+                    <MenuItem Header="{Markup:String CoreReport.AccessText.Incident}" />
                 </MenuItem>
                 <MenuItem Header="{Markup:String AccessText.Logs}">
                     <MenuItem Command="{Binding OpenLogFileCommand}"
@@ -73,7 +77,7 @@
             </MenuItem>
             <MenuItem Header="{Markup:String AccessText.Help}">
                 <MenuItem Command="{Binding GoToHelpCommand}"
-                          Header="{Markup:String AccessText.SeeHelp}" />
+                          Header="{Markup:String AccessText.GoToHelp}" />
                 <Separator />
                 <MenuItem Header="{Markup:String AccessText.AboutApp}" />
             </MenuItem>

@@ -153,6 +153,9 @@
   <data name="AccessText.CopyValue" xml:space="preserve">
     <value>_Copy value to Clipboard</value>
   </data>
+  <data name="AccessText.CreateNewProject" xml:space="preserve">
+    <value>Create a _new database</value>
+  </data>
   <data name="AccessText.Data" xml:space="preserve">
     <value>_Data</value>
   </data>
@@ -192,17 +195,17 @@
   <data name="AccessText.FullName" xml:space="preserve">
     <value>F_ull name</value>
   </data>
+  <data name="AccessText.GoToCurrentProject" xml:space="preserve">
+    <value>View the _current database</value>
+  </data>
+  <data name="AccessText.GoToHelp" xml:space="preserve">
+    <value>V_iew help</value>
+  </data>
   <data name="AccessText.Help" xml:space="preserve">
     <value>_Help</value>
   </data>
   <data name="AccessText.Home" xml:space="preserve">
     <value>H_ome</value>
-  </data>
-  <data name="AccessText.IncidentProject" xml:space="preserve">
-    <value>_Incident database</value>
-  </data>
-  <data name="AccessText.IncidentReport" xml:space="preserve">
-    <value>_Incident report</value>
   </data>
   <data name="AccessText.Logs" xml:space="preserve">
     <value>_Logs</value>
@@ -224,6 +227,12 @@
   </data>
   <data name="AccessText.Open" xml:space="preserve">
     <value>_Open</value>
+  </data>
+  <data name="AccessText.OpenExistingProject" xml:space="preserve">
+    <value>Open an _existing database</value>
+  </data>
+  <data name="AccessText.OpenRecentProject" xml:space="preserve">
+    <value>Switch to a _recent database</value>
   </data>
   <data name="AccessText.Pages" xml:space="preserve">
     <value>_Pages</value>
@@ -249,9 +258,6 @@
   <data name="AccessText.SeeCurrent" xml:space="preserve">
     <value>View _current</value>
   </data>
-  <data name="AccessText.SeeHelp" xml:space="preserve">
-    <value>V_iew help</value>
-  </data>
   <data name="AccessText.Similarity" xml:space="preserve">
     <value>_Similarity</value>
   </data>
@@ -266,12 +272,6 @@
   </data>
   <data name="AccessText.WorkerId" xml:space="preserve">
     <value>_Worker ID</value>
-  </data>
-  <data name="AccessText.WorkerProject" xml:space="preserve">
-    <value>_Worker database</value>
-  </data>
-  <data name="AccessText.WorkerReport" xml:space="preserve">
-    <value>_Worker report</value>
   </data>
   <data name="AltText.Add" xml:space="preserve">
     <value>Add</value>
@@ -387,11 +387,35 @@ Close anyway?</value>
 
 {0}</value>
   </data>
-  <data name="Boolean.False" xml:space="preserve">
+  <data name="Boolean.Name.False" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="Boolean.True" xml:space="preserve">
+  <data name="Boolean.Name.True" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="CoreProject.AccessText.Incident" xml:space="preserve">
+    <value>_Incident database</value>
+  </data>
+  <data name="CoreProject.AccessText.Worker" xml:space="preserve">
+    <value>_Worker database</value>
+  </data>
+  <data name="CoreProject.Label.Incident" xml:space="preserve">
+    <value>Incident database:</value>
+  </data>
+  <data name="CoreProject.Label.Worker" xml:space="preserve">
+    <value>Worker database:</value>
+  </data>
+  <data name="CoreProject.Name.Incident" xml:space="preserve">
+    <value>Incident database</value>
+  </data>
+  <data name="CoreProject.Name.Worker" xml:space="preserve">
+    <value>Worker database</value>
+  </data>
+  <data name="CoreReport.AccessText.Incident" xml:space="preserve">
+    <value>_Incident report</value>
+  </data>
+  <data name="CoreReport.AccessText.Worker" xml:space="preserve">
+    <value>_Worker report</value>
   </data>
   <data name="CoreView.HelpText.AfterActionReview" xml:space="preserve">
     <value>Filled out as necessary after deployment. Captures feedback on the organization's ERHMS program.</value>
@@ -756,22 +780,22 @@ Close anyway?</value>
   <data name="Pager" xml:space="preserve">
     <value>Page {0} of {1}</value>
   </data>
-  <data name="Phase.Deployment" xml:space="preserve">
+  <data name="Phase.Name.Deployment" xml:space="preserve">
     <value>Deployment</value>
   </data>
-  <data name="Phase.PostDeployment" xml:space="preserve">
+  <data name="Phase.Name.PostDeployment" xml:space="preserve">
     <value>Post-deployment</value>
   </data>
-  <data name="Phase.PreDeployment" xml:space="preserve">
+  <data name="Phase.Name.PreDeployment" xml:space="preserve">
     <value>Pre-deployment</value>
   </data>
-  <data name="RecordStatus.Deleted" xml:space="preserve">
+  <data name="RecordStatus.Name.Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
-  <data name="RecordStatus.NULL" xml:space="preserve">
+  <data name="RecordStatus.Name.NULL" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="RecordStatus.Undeleted" xml:space="preserve">
+  <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
   </data>
 </root>

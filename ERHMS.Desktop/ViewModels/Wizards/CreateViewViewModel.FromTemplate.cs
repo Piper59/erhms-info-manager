@@ -83,9 +83,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Wizard.TemplatePath = TemplatePath;
                     Wizard.XTemplate = xTemplate;
                     IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    IStep step = await progress.Run(async () =>
+                    IStep step = await progress.Run(() =>
                     {
-                        return await SetViewNameViewModel.CreateAsync(Wizard, this);
+                        return SetViewNameViewModel.CreateAsync(Wizard, this);
                     });
                     GoToStep(step);
                 }

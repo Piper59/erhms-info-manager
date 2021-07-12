@@ -1,4 +1,5 @@
-﻿using ERHMS.Domain;
+﻿using ERHMS.Desktop.Infrastructure;
+using ERHMS.Domain;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -12,7 +13,7 @@ namespace ERHMS.Desktop.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Color color = Colors.FromPhase((Phase)value);
+            Color color = ((Phase)value).ToColor();
             if (parameter != null)
             {
                 TypeConverter converter = new ByteConverter();

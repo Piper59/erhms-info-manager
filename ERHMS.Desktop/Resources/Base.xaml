@@ -119,6 +119,8 @@
     <Style TargetType="Menu" BasedOn="{StaticResource MenuBaseBase}" />
 
     <Style x:Key="MenuItemBase" TargetType="MenuItem">
+        <Setter Property="ToolTipService.ShowDuration" Value="{x:Static System:Int32.MaxValue}" />
+        <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
         <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
         <Style.Triggers>
             <Trigger Property="Role" Value="TopLevelHeader">

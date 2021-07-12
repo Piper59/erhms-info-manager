@@ -46,9 +46,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 Wizard.View = Views.CurrentItem;
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                IStep step = await progress.Run(async () =>
+                IStep step = await progress.Run(() =>
                 {
-                    return await SetAssetPathViewModel.CreateAsync(Wizard, this);
+                    return SetAssetPathViewModel.CreateAsync(Wizard, this);
                 });
                 GoToStep(step);
             }
