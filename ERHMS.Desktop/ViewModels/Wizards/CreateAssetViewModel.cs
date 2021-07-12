@@ -48,35 +48,35 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                 IStep step = await progress.Run(() =>
                 {
-                    return SetAssetPathViewModel.CreateAsync(Wizard, this);
+                    return SetFilePathViewModel.CreateAsync(Wizard, this);
                 });
                 GoToStep(step);
             }
         }
 
-        public class SetAssetPathViewModel : StepViewModel<CreateAssetViewModel>
+        public class SetFilePathViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public static async Task<SetAssetPathViewModel> CreateAsync(CreateAssetViewModel wizard, IStep antecedent)
+            public static async Task<SetFilePathViewModel> CreateAsync(CreateAssetViewModel wizard, IStep antecedent)
             {
-                SetAssetPathViewModel result = new SetAssetPathViewModel(wizard, antecedent);
+                SetFilePathViewModel result = new SetFilePathViewModel(wizard, antecedent);
                 await result.InitializeAsync();
                 return result;
             }
 
             private readonly IFileDialogService fileDialog;
 
-            public override string Title => Strings.CreateAsset_Lead_SetAssetPath;
+            public override string Title => Strings.CreateAsset_Lead_SetFilePath;
 
-            private string assetPath;
-            public string AssetPath
+            private string filePath;
+            public string FilePath
             {
-                get { return assetPath; }
-                private set { SetProperty(ref assetPath, value); }
+                get { return filePath; }
+                private set { SetProperty(ref filePath, value); }
             }
 
             public ICommand BrowseCommand { get; }
 
-            private SetAssetPathViewModel(CreateAssetViewModel wizard, IStep antecedent)
+            private SetFilePathViewModel(CreateAssetViewModel wizard, IStep antecedent)
                 : base(wizard, antecedent)
             {
                 fileDialog = ServiceLocator.Resolve<IFileDialogService>();
@@ -86,7 +86,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             private async Task InitializeAsync()
             {
-                AssetPath = await Task.Run(() =>
+                FilePath = await Task.Run(() =>
                 {
                     string directoryPath = Wizard.Project.Location;
                     string extension = Wizard.FileExtension;
@@ -98,7 +98,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     }
                     return Path.Combine(directoryPath, fileName);
                 });
-                fileDialog.FileName = AssetPath;
+                fileDialog.FileName = FilePath;
             }
 
             public void Browse()
@@ -120,17 +120,17 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         return;
                     }
                 }
-                AssetPath = fileDialog.FileName;
+                FilePath = fileDialog.FileName;
             }
 
             public override bool CanContinue()
             {
-                return AssetPath != null;
+                return FilePath != null;
             }
 
             public override Task ContinueAsync()
             {
-                Wizard.AssetPath = AssetPath;
+                Wizard.FilePath = FilePath;
                 GoToStep(new CommitViewModel(Wizard, this));
                 return Task.CompletedTask;
             }
@@ -148,8 +148,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 Details = new DetailsViewModel
                 {
                     { Strings.Label_View, wizard.View.Name },
-                    { Strings.Label_File, Path.GetFileName(wizard.AssetPath) },
-                    { Strings.Label_Location, Path.GetDirectoryName(wizard.AssetPath) }
+                    { Strings.Label_File, Path.GetFileName(wizard.FilePath) },
+                    { Strings.Label_Location, Path.GetDirectoryName(wizard.FilePath) }
                 };
             }
 
@@ -165,7 +165,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 await progress.Run(() =>
                 {
                     Asset asset = Wizard.CreateCore();
-                    using (Stream stream = File.Open(Wizard.AssetPath, FileMode.Create, FileAccess.Write))
+                    using (Stream stream = File.Open(Wizard.FilePath, FileMode.Create, FileAccess.Write))
                     {
                         asset.Save(stream);
                     }
@@ -208,7 +208,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         protected abstract string FileFilter { get; }
         public Project Project { get; }
         public View View { get; private set; }
-        public string AssetPath { get; private set; }
+        public string FilePath { get; private set; }
         public bool OpenInEpiInfo { get; private set; }
 
         protected CreateAssetViewModel(Project project)

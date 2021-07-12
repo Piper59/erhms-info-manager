@@ -1107,14 +1107,14 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Choose a name and location for the new file.
         /// </summary>
-        public static string CreateAsset_Lead_SetAssetPath {
+        public static string CreateAsset_Lead_SetFilePath {
             get {
-                return ResourceManager.GetString("CreateAsset.Lead.SetAssetPath", resourceCulture);
+                return ResourceManager.GetString("CreateAsset.Lead.SetFilePath", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a form to analyze.
+        ///   Looks up a localized string similar to Choose a form to use as a data source.
         /// </summary>
         public static string CreateAsset_Lead_SetView {
             get {
@@ -1429,7 +1429,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new analysis in the Epi Info Classic Analysis module..
+        ///   Looks up a localized string similar to Create a new file in the Epi Info Classic Analysis module..
         /// </summary>
         public static string HelpText_CreateAsset_Analysis {
             get {
@@ -1438,7 +1438,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new dashboard in the Epi Info Visual Dashboard module..
+        ///   Looks up a localized string similar to Create a new file in the Epi Info Visual Dashboard module..
         /// </summary>
         public static string HelpText_CreateAsset_AnalysisDashboard {
             get {
@@ -1447,7 +1447,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new map in the Epi Info Maps module..
+        ///   Looks up a localized string similar to Create a new file in the Epi Info Maps module..
         /// </summary>
         public static string HelpText_CreateAsset_Mapping {
             get {
@@ -1465,29 +1465,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move the selected analysis to the Recycle Bin..
+        ///   Looks up a localized string similar to Move the selected file to the Recycle Bin..
         /// </summary>
-        public static string HelpText_DeleteAsset_Analysis {
+        public static string HelpText_DeleteAsset {
             get {
-                return ResourceManager.GetString("HelpText.DeleteAsset.Analysis", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move the selected dashboard to the Recycle Bin..
-        /// </summary>
-        public static string HelpText_DeleteAsset_AnalysisDashboard {
-            get {
-                return ResourceManager.GetString("HelpText.DeleteAsset.AnalysisDashboard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move the selected map to the Recycle Bin..
-        /// </summary>
-        public static string HelpText_DeleteAsset_Mapping {
-            get {
-                return ResourceManager.GetString("HelpText.DeleteAsset.Mapping", resourceCulture);
+                return ResourceManager.GetString("HelpText.DeleteAsset", resourceCulture);
             }
         }
         
@@ -1555,7 +1537,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open the selected analysis in the Epi Info Classic Analysis module..
+        ///   Looks up a localized string similar to Open the selected file in the Epi Info Classic Analysis module..
         /// </summary>
         public static string HelpText_OpenAsset_Analysis {
             get {
@@ -1564,7 +1546,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open the selected dashboard in the Epi Info Visual Dashboard module..
+        ///   Looks up a localized string similar to Open the selected file in the Epi Info Visual Dashboard module..
         /// </summary>
         public static string HelpText_OpenAsset_AnalysisDashboard {
             get {
@@ -1573,7 +1555,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open the selected map in the Epi Info Maps module..
+        ///   Looks up a localized string similar to Open the selected file in the Epi Info Maps module..
         /// </summary>
         public static string HelpText_OpenAsset_Mapping {
             get {

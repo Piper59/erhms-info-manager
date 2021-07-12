@@ -22,7 +22,7 @@
             <Controls:IconButton AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
                                  Content="{Markup:Icon Delete}"
-                                 HelpText="{Binding Module, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.DeleteAsset.{0}'}" />
+                                 HelpText="{Markup:String HelpText.DeleteAsset}" />
             <Border Style="{StaticResource Separator}" />
             <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"

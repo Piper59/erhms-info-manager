@@ -82,7 +82,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
             if (wizard.OpenInEpiInfo)
             {
-                await Integration.StartWithBackgroundTaskAsync(InitializeAsync, Module, wizard.AssetPath);
+                await Integration.StartWithBackgroundTaskAsync(InitializeAsync, Module, wizard.FilePath);
             }
             else
             {

@@ -477,11 +477,11 @@ Close anyway?</value>
   <data name="CreateAsset.Lead.Commit" xml:space="preserve">
     <value>Verify the information below</value>
   </data>
-  <data name="CreateAsset.Lead.SetAssetPath" xml:space="preserve">
+  <data name="CreateAsset.Lead.SetFilePath" xml:space="preserve">
     <value>Choose a name and location for the new file</value>
   </data>
   <data name="CreateAsset.Lead.SetView" xml:space="preserve">
-    <value>Choose a form to analyze</value>
+    <value>Choose a form to use as a data source</value>
   </data>
   <data name="CreateProject.AccessText.Blank" xml:space="preserve">
     <value>Create a _blank database</value>
@@ -586,25 +586,19 @@ Close anyway?</value>
     <value>Copy values to the Clipboard from one or all fields.</value>
   </data>
   <data name="HelpText.CreateAsset.Analysis" xml:space="preserve">
-    <value>Create a new analysis in the Epi Info Classic Analysis module.</value>
+    <value>Create a new file in the Epi Info Classic Analysis module.</value>
   </data>
   <data name="HelpText.CreateAsset.AnalysisDashboard" xml:space="preserve">
-    <value>Create a new dashboard in the Epi Info Visual Dashboard module.</value>
+    <value>Create a new file in the Epi Info Visual Dashboard module.</value>
   </data>
   <data name="HelpText.CreateAsset.Mapping" xml:space="preserve">
-    <value>Create a new map in the Epi Info Maps module.</value>
+    <value>Create a new file in the Epi Info Maps module.</value>
   </data>
   <data name="HelpText.CreateView" xml:space="preserve">
     <value>Create a new form in the Epi Info Form Designer module.</value>
   </data>
-  <data name="HelpText.DeleteAsset.Analysis" xml:space="preserve">
-    <value>Move the selected analysis to the Recycle Bin.</value>
-  </data>
-  <data name="HelpText.DeleteAsset.AnalysisDashboard" xml:space="preserve">
-    <value>Move the selected dashboard to the Recycle Bin.</value>
-  </data>
-  <data name="HelpText.DeleteAsset.Mapping" xml:space="preserve">
-    <value>Move the selected map to the Recycle Bin.</value>
+  <data name="HelpText.DeleteAsset" xml:space="preserve">
+    <value>Move the selected file to the Recycle Bin.</value>
   </data>
   <data name="HelpText.DeleteRecords" xml:space="preserve">
     <value>Mark the selected records as deleted (without permanently deleting them).</value>
@@ -628,13 +622,13 @@ Close anyway?</value>
     <value>Import records into the current form.</value>
   </data>
   <data name="HelpText.OpenAsset.Analysis" xml:space="preserve">
-    <value>Open the selected analysis in the Epi Info Classic Analysis module.</value>
+    <value>Open the selected file in the Epi Info Classic Analysis module.</value>
   </data>
   <data name="HelpText.OpenAsset.AnalysisDashboard" xml:space="preserve">
-    <value>Open the selected dashboard in the Epi Info Visual Dashboard module.</value>
+    <value>Open the selected file in the Epi Info Visual Dashboard module.</value>
   </data>
   <data name="HelpText.OpenAsset.Mapping" xml:space="preserve">
-    <value>Open the selected map in the Epi Info Maps module.</value>
+    <value>Open the selected file in the Epi Info Maps module.</value>
   </data>
   <data name="HelpText.OpenView" xml:space="preserve">
     <value>Open the selected form to view and manage records.</value>
