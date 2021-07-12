@@ -17,6 +17,7 @@ namespace ERHMS.EpiInfo.Data
 
         public View View { get; }
         public IEnumerable<string> Headers { get; }
+        public int RecordCount { get; private set; }
 
         private readonly ICollection<Exception> errors = new List<Exception>();
         public IEnumerable<Exception> Errors => errors;
@@ -76,6 +77,7 @@ namespace ERHMS.EpiInfo.Data
             try
             {
                 repository.Save(record);
+                RecordCount++;
             }
             catch (Exception ex)
             {
