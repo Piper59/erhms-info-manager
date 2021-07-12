@@ -1497,6 +1497,7 @@ namespace ERHMS.Desktop
             { "Page.Next", "chevron-right" },
             { "Page.Previous", "chevron-left" },
             { "Refresh", "sync" },
+            { "Success", "check-circle" },
             { "Undelete", "trash-restore" }
         };
 

@@ -23,6 +23,13 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <TextBlock FontFamily="{StaticResource IconFontFamily}"
+                   FontSize="192"
+                   HorizontalAlignment="Center"
+                   Opacity="0.1"
+                   Text="{Markup:Icon Success}"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding Committed, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Border Grid.Row="0"
                 BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1">
