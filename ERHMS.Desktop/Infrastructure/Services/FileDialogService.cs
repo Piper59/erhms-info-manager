@@ -1,6 +1,7 @@
 ﻿using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Windows;
 
@@ -8,7 +9,7 @@ namespace ERHMS.Desktop.Infrastructure.Services
 {
     public class FileDialogService : IFileDialogService
     {
-        public string InitialDirectory { get; set; }
+        public string InitialDirectory { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public string InitialFileName { get; set; }
 
         private string fileName;

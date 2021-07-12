@@ -138,7 +138,6 @@ namespace ERHMS.Desktop.ViewModels
         public async Task ExportLogDirectoryAsync()
         {
             IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-            fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             fileDialog.InitialFileName = $"Logs_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
             fileDialog.Filter = Strings.FileDialog_Filter_ZipFiles;
             if (fileDialog.Save() != true)
