@@ -5,6 +5,8 @@ using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Wizards;
+using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
@@ -87,7 +89,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             DeleteCommand = new AsyncCommand(DeleteAsync, HasSelection);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, HasSelection);
             ImportCommand = Command.Null;
-            ExportCommand = Command.Null;
+            ExportCommand = new SyncCommand(Export);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
@@ -184,6 +186,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task UndeleteAsync()
         {
             await SetDeletedAsync(Strings.Lead_UndeletingRecords, false);
+        }
+
+        public void Export()
+        {
+            ExportRecordsViewModel wizard = new ExportRecordsViewModel(View);
+            wizard.Show();
         }
 
         public async Task RefreshAsync()

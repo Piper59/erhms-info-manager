@@ -5,8 +5,7 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-             xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
-             xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain">
+             xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels">
     <UserControl.Resources>
         <Style x:Key="Icon" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />

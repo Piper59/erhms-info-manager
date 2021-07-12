@@ -13,6 +13,9 @@
         <DataTemplate DataType="{x:Type System:Boolean}">
             <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.Name.{0}'}" />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type System:Int32}">
+            <TextBlock Text="{Binding ., StringFormat='{}{0:N0}'}" />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type Epi:View}">
             <TextBlock>
                 <Run Text="{Binding Project.Name}">

@@ -241,6 +241,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Export.
+        /// </summary>
+        public static string AccessText_Export {
+            get {
+                return ResourceManager.GetString("AccessText.Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Export all.
         /// </summary>
         public static string AccessText_ExportAll {
@@ -1339,11 +1348,65 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Comma-separated values (.csv).
+        /// </summary>
+        public static string ExportRecords_AccessText_Csv {
+            get {
+                return ResourceManager.GetString("ExportRecords.AccessText.Csv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Epi Info data package (.edp7).
+        /// </summary>
+        public static string ExportRecords_AccessText_Edp7 {
+            get {
+                return ResourceManager.GetString("ExportRecords.AccessText.Edp7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Records have been exported.
+        /// </summary>
+        public static string ExportRecords_Lead_Close {
+            get {
+                return ResourceManager.GetString("ExportRecords.Lead.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a destination file.
+        /// </summary>
+        public static string ExportRecords_Lead_SetFilePath {
+            get {
+                return ResourceManager.GetString("ExportRecords.Lead.SetFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose an export format.
+        /// </summary>
+        public static string ExportRecords_Lead_SetFormat {
+            get {
+                return ResourceManager.GetString("ExportRecords.Lead.SetFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Epi Info Canvases (*.cvs7)|*.cvs7.
         /// </summary>
         public static string FileDialog_Filter_Canvases {
             get {
                 return ResourceManager.GetString("FileDialog.Filter.Canvases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comma-Separated Values (CSV) Files (*.csv)|*.csv.
+        /// </summary>
+        public static string FileDialog_Filter_CsvFiles {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.CsvFiles", resourceCulture);
             }
         }
         
@@ -1875,6 +1938,24 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_ExportingLogs {
             get {
                 return ResourceManager.GetString("Lead.ExportingLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting records.
+        /// </summary>
+        public static string Lead_ExportingRecords {
+            get {
+                return ResourceManager.GetString("Lead.ExportingRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing records.
+        /// </summary>
+        public static string Lead_ImportingRecords {
+            get {
+                return ResourceManager.GetString("Lead.ImportingRecords", resourceCulture);
             }
         }
         

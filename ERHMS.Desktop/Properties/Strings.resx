@@ -177,6 +177,9 @@
   <data name="AccessText.Exit" xml:space="preserve">
     <value>E_xit</value>
   </data>
+  <data name="AccessText.Export" xml:space="preserve">
+    <value>_Export</value>
+  </data>
   <data name="AccessText.ExportAll" xml:space="preserve">
     <value>_Export all</value>
   </data>
@@ -555,8 +558,26 @@ Close anyway?</value>
   <data name="CreateView.Lead.SetXTemplate" xml:space="preserve">
     <value>Choose a template</value>
   </data>
+  <data name="ExportRecords.AccessText.Csv" xml:space="preserve">
+    <value>_Comma-separated values (.csv)</value>
+  </data>
+  <data name="ExportRecords.AccessText.Edp7" xml:space="preserve">
+    <value>_Epi Info data package (.edp7)</value>
+  </data>
+  <data name="ExportRecords.Lead.Close" xml:space="preserve">
+    <value>Records have been exported</value>
+  </data>
+  <data name="ExportRecords.Lead.SetFilePath" xml:space="preserve">
+    <value>Choose a destination file</value>
+  </data>
+  <data name="ExportRecords.Lead.SetFormat" xml:space="preserve">
+    <value>Choose an export format</value>
+  </data>
   <data name="FileDialog.Filter.Canvases" xml:space="preserve">
     <value>Epi Info Canvases (*.cvs7)|*.cvs7</value>
+  </data>
+  <data name="FileDialog.Filter.CsvFiles" xml:space="preserve">
+    <value>Comma-Separated Values (CSV) Files (*.csv)|*.csv</value>
   </data>
   <data name="FileDialog.Filter.Maps" xml:space="preserve">
     <value>Epi Info Maps (*.map7)|*.map7</value>
@@ -734,6 +755,12 @@ Close anyway?</value>
   </data>
   <data name="Lead.ExportingLogs" xml:space="preserve">
     <value>Exporting logs</value>
+  </data>
+  <data name="Lead.ExportingRecords" xml:space="preserve">
+    <value>Exporting records</value>
+  </data>
+  <data name="Lead.ImportingRecords" xml:space="preserve">
+    <value>Importing records</value>
   </data>
   <data name="Lead.InvalidTemplatePath" xml:space="preserve">
     <value>This file is not valid</value>
