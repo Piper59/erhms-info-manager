@@ -29,7 +29,7 @@ namespace ERHMS.EpiInfo.Data
             Headers = ReadRow();
         }
 
-        public void MapField(int index, Field field)
+        public void AddMapping(int index, Field field)
         {
             Type type = field.FieldType.ToClrType();
             TypeConverter converter = TypeDescriptor.GetConverter(type);

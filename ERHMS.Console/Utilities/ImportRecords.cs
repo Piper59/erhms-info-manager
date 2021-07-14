@@ -33,7 +33,7 @@ namespace ERHMS.Console.Utilities
                 {
                     if (view.Fields.DataFields.Contains(header.Value))
                     {
-                        importer.MapField(header.Index, view.Fields[header.Value]);
+                        importer.AddMapping(header.Index, view.Fields[header.Value]);
                     }
                 }
                 importer.Import();
