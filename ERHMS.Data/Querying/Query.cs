@@ -64,7 +64,7 @@ namespace ERHMS.Data.Querying
             protected IList<object> Values { get; } = new List<object>();
             public string Sql => GetSql();
             public object Parameters => GetParameters();
-            protected int ParameterCount => ColumnNames.Count;
+            public int ParameterCount => ColumnNames.Count;
 
             public void AddParameter(string columnName, object value)
             {

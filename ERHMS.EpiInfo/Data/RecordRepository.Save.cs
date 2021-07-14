@@ -56,7 +56,7 @@ namespace ERHMS.EpiInfo.Data
                     query.AddParameter(Quote(columnName), value);
                 }
             }
-            return query;
+            return query.ParameterCount == 0 ? null : query;
         }
 
         private void InsertCore(TRecord record, string tableName, IEnumerable<string> columnNames)
@@ -90,9 +90,22 @@ namespace ERHMS.EpiInfo.Data
 
         private bool UpdateCore(TRecord record, string tableName, IEnumerable<string> columnNames)
         {
+            int count;
             Query.Update query = GetSaveQuery<Query.Update>(record, tableName, columnNames);
-            query.Clauses = GetGlobalRecordIdPredicate(record.GlobalRecordId);
-            int count = Database.Execute(query);
+            if (query == null)
+            {
+                count = Database.ExecuteScalar<int>(new Query.Select
+                {
+                    SelectList = "COUNT(*)",
+                    TableSource = Quote(tableName),
+                    Clauses = GetGlobalRecordIdPredicate(record.GlobalRecordId)
+                });
+            }
+            else
+            {
+                query.Clauses = GetGlobalRecordIdPredicate(record.GlobalRecordId);
+                count = Database.Execute(query);
+            }
             if (count != 0 && count != 1)
             {
                 throw new DataException($"Unexpected number of updated rows {count} (expected 0 or 1).");
