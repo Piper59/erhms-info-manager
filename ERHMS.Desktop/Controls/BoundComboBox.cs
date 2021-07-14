@@ -29,7 +29,7 @@ namespace ERHMS.Desktop.Controls
 
         private Style GetItemContainerStyle()
         {
-            Style style = new Style(typeof(ComboBoxItem), (Style)FindResource("ComboBoxItemBase"));
+            Style style = new Style(typeof(ComboBoxItem), (Style)FindResource(typeof(ComboBoxItem)));
             if (ItemText != null)
             {
                 style.Setters.Add(new Setter(AutomationProperties.NameProperty, ItemText));
