@@ -1,6 +1,4 @@
-﻿using ERHMS.Desktop.Data;
-using ERHMS.Desktop.ViewModels.Collections;
-using ERHMS.Domain.Data;
+﻿using ERHMS.Desktop.ViewModels.Collections;
 using ERHMS.EpiInfo.Data;
 using System.Threading.Tasks;
 
@@ -31,13 +29,8 @@ namespace ERHMS.Desktop.ViewModels.Utilities
             }
             set
             {
-                bool IsMatch(object obj)
-                {
-                    Worker worker = (Worker)obj;
-                    return Record.GlobalRecordIdComparer.Equals(worker.GlobalRecordId, value);
-                }
-
-                Workers.Items.MoveCurrentTo(IsMatch);
+                Workers.Items.MoveCurrentTo(
+                    worker => Record.GlobalRecordIdComparer.Equals(worker.GlobalRecordId, value));
             }
         }
 

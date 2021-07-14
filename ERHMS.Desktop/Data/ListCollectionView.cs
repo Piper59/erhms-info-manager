@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Data;
 
@@ -13,6 +14,20 @@ namespace ERHMS.Desktop.Data
             : base(list)
         {
             List = list;
+        }
+
+        public bool MoveCurrentTo(Predicate<TItem> predicate)
+        {
+            int position = -1;
+            foreach (TItem item in (IEnumerable<TItem>)this)
+            {
+                position++;
+                if (predicate(item))
+                {
+                    return MoveCurrentToPosition(position);
+                }
+            }
+            return false;
         }
 
         IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
