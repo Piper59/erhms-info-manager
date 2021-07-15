@@ -5,6 +5,7 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -44,7 +45,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             private readonly IFileDialogService fileDialog;
 
             public override string Title => Strings.ExportRecords_Lead_SetFilePath;
-            public override string ContinueAction => Strings.AccessText_Export;
 
             private string filePath;
             public string FilePath
@@ -77,18 +77,54 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 return FilePath != null;
             }
 
-            public override async Task ContinueAsync()
+            public override Task ContinueAsync()
             {
                 Wizard.FilePath = FilePath;
+                GoToStep(new CommitViewModel(Wizard, this));
+                return Task.CompletedTask;
+            }
+        }
+
+        public class CommitViewModel : StepViewModel<ExportRecordsViewModel>
+        {
+            private static IProgress<int> GetProgress(IProgressService progress)
+            {
+                return new Progress<int>(rowNumber =>
+                {
+                    progress.Report(string.Format(Strings.Body_ExportingRow, rowNumber));
+                });
+            }
+
+            public override string Title => Strings.Lead_Commit;
+            public override string ContinueAction => Strings.AccessText_Finish;
+            public DetailsViewModel Details { get; }
+
+            public CommitViewModel(ExportRecordsViewModel wizard, IStep antecedent)
+                : base(wizard, antecedent)
+            {
+                Details = new DetailsViewModel
+                {
+                    { Strings.Label_File, wizard.FilePath }
+                };
+            }
+
+            public override bool CanContinue()
+            {
+                return true;
+            }
+
+            public override async Task ContinueAsync()
+            {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                 progress.Lead = Strings.Lead_ExportingRecords;
                 await progress.Run(() =>
                 {
-                    using (Stream stream = File.Open(FilePath, FileMode.Create, FileAccess.Write))
+                    Wizard.View.LoadFields();
+                    using (Stream stream = File.Open(Wizard.FilePath, FileMode.Create, FileAccess.Write))
                     using (TextWriter writer = new StreamWriter(stream))
+                    using (RecordExporter exporter = new RecordExporter(Wizard.View, writer))
                     {
-                        RecordExporter exporter = new RecordExporter(Wizard.View, writer);
-                        exporter.Export();
+                        exporter.Export(GetProgress(progress));
                     }
                 });
                 Commit(true);
@@ -117,7 +153,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         }
 
         public View View { get; }
-        public string FilePath { get; private set; }
+        private string FilePath { get; set; }
 
         public ExportRecordsViewModel(View view)
         {

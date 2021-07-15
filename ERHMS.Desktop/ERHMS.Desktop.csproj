@@ -209,6 +209,7 @@
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromTemplate.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.Main.cs" />
     <Compile Include="ViewModels\Wizards\ExportRecordsViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\ImportRecordsViewModel.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
     <Compile Include="Views\Collections\AssetCollectionView.xaml.cs">
       <DependentUpon>AssetCollectionView.xaml</DependentUpon>
@@ -370,6 +371,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Wizards\ExportRecordsViews.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\ImportRecordsViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,16 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
+                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+SetFormatViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
             <Button Command="{Binding ExportToCsvCommand}"
-                    Content="{Markup:String ExportRecords.AccessText.Csv}" />
+                    Content="{Markup:String AccessText.Csv}" />
             <Button Command="{Binding ExportToEdp7Command}"
-                    Content="{Markup:String ExportRecords.AccessText.Edp7}" />
+                    Content="{Markup:String AccessText.Edp7}" />
         </StackPanel>
     </DataTemplate>
 
@@ -28,7 +29,6 @@
                      Text="{Binding FilePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}">
                 <TextBox.ToolTip>
                     <ToolTip Content="{Binding FilePath}"
-                             MaxWidth="{StaticResource LargeToolTipWidth}"
                              Visibility="{Binding FilePath, Converter={StaticResource NullableToVisibilityConverter}}" />
                 </TextBox.ToolTip>
             </TextBox>
@@ -36,6 +36,10 @@
                     Command="{Binding BrowseCommand}"
                     Content="{Markup:String AccessText.Browse}" />
         </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+CommitViewModel}">
+        <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+CloseViewModel}" />

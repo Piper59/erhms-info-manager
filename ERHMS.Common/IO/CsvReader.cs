@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ERHMS.Common.IO
 {
-    public class CsvReader
+    public class CsvReader : IDisposable
     {
         private enum Mode
         {
@@ -20,8 +20,8 @@ namespace ERHMS.Common.IO
         {
             None = 0,
             EndOfValue = 1,
-            EndOfRow = 1 << 1 | EndOfValue,
-            EndOfFile = 1 << 2 | EndOfRow
+            EndOfRow = (1 << 1) | EndOfValue,
+            EndOfFile = (1 << 2) | EndOfRow
         }
 
         private Mode mode;
@@ -29,7 +29,6 @@ namespace ERHMS.Common.IO
         public TextReader Reader { get; }
         public int FieldCount { get; private set; } = -1;
         public int RowNumber { get; private set; }
-        public IProgress<int> Progress { get; set; }
 
         public CsvReader(TextReader reader)
         {
@@ -152,8 +151,12 @@ namespace ERHMS.Common.IO
             {
                 throw GetException($"Unexpected field count {values.Count} (expected {FieldCount})");
             }
-            Progress?.Report(RowNumber);
             return values;
+        }
+
+        public void Dispose()
+        {
+            Reader.Dispose();
         }
     }
 }

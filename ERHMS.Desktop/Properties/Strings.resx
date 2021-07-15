@@ -156,6 +156,9 @@
   <data name="AccessText.CreateNewProject" xml:space="preserve">
     <value>Create a _new database</value>
   </data>
+  <data name="AccessText.Csv" xml:space="preserve">
+    <value>_Comma-separated values (.csv)</value>
+  </data>
   <data name="AccessText.Data" xml:space="preserve">
     <value>_Data</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="AccessText.Details" xml:space="preserve">
     <value>_Details</value>
+  </data>
+  <data name="AccessText.Edp7" xml:space="preserve">
+    <value>_Epi Info data package (.edp7)</value>
   </data>
   <data name="AccessText.EmailAddress" xml:space="preserve">
     <value>_Email address</value>
@@ -209,6 +215,9 @@
   </data>
   <data name="AccessText.Home" xml:space="preserve">
     <value>H_ome</value>
+  </data>
+  <data name="AccessText.Import" xml:space="preserve">
+    <value>_Import</value>
   </data>
   <data name="AccessText.Logs" xml:space="preserve">
     <value>_Logs</value>
@@ -354,6 +363,9 @@ ERHMS Info Manager will only recognize files that are in the same location as th
 
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
+  <data name="Body.ExportingRow" xml:space="preserve">
+    <value>Exporting row {0}...</value>
+  </data>
   <data name="Body.FatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error and must shut down.
 
@@ -361,6 +373,9 @@ This form, any related forms, and all associated records will be permanently del
   </data>
   <data name="Body.GetWorkerId" xml:space="preserve">
     <value>Choose a worker in ERHMS Info Manager to continue.</value>
+  </data>
+  <data name="Body.ImportingRow" xml:space="preserve">
+    <value>Importing row {0}...</value>
   </data>
   <data name="Body.InvalidProjectTemplatePath" xml:space="preserve">
     <value>File: {0}
@@ -477,9 +492,6 @@ Close anyway?</value>
   <data name="CreateAsset.Lead.Close" xml:space="preserve">
     <value>File has been created</value>
   </data>
-  <data name="CreateAsset.Lead.Commit" xml:space="preserve">
-    <value>Verify the information below</value>
-  </data>
   <data name="CreateAsset.Lead.SetFilePath" xml:space="preserve">
     <value>Choose a name and location for the new file</value>
   </data>
@@ -540,9 +552,6 @@ Close anyway?</value>
   <data name="CreateView.Lead.Close" xml:space="preserve">
     <value>Form has been created</value>
   </data>
-  <data name="CreateView.Lead.Commit" xml:space="preserve">
-    <value>Verify the information below</value>
-  </data>
   <data name="CreateView.Lead.SetSourceView" xml:space="preserve">
     <value>Choose an existing form</value>
   </data>
@@ -558,12 +567,6 @@ Close anyway?</value>
   <data name="CreateView.Lead.SetXTemplate" xml:space="preserve">
     <value>Choose a template</value>
   </data>
-  <data name="ExportRecords.AccessText.Csv" xml:space="preserve">
-    <value>_Comma-separated values (.csv)</value>
-  </data>
-  <data name="ExportRecords.AccessText.Edp7" xml:space="preserve">
-    <value>_Epi Info data package (.edp7)</value>
-  </data>
   <data name="ExportRecords.Lead.Close" xml:space="preserve">
     <value>Records have been exported</value>
   </data>
@@ -577,7 +580,7 @@ Close anyway?</value>
     <value>Epi Info Canvases (*.cvs7)|*.cvs7</value>
   </data>
   <data name="FileDialog.Filter.CsvFiles" xml:space="preserve">
-    <value>Comma-Separated Values (CSV) Files (*.csv)|*.csv</value>
+    <value>CSV Files (*.csv)|*.csv</value>
   </data>
   <data name="FileDialog.Filter.Maps" xml:space="preserve">
     <value>Epi Info Maps (*.map7)|*.map7</value>
@@ -660,6 +663,27 @@ Close anyway?</value>
   <data name="HelpText.UndeleteRecords" xml:space="preserve">
     <value>Mark the selected records as undeleted.</value>
   </data>
+  <data name="ImportRecords.Body.Close.Failure" xml:space="preserve">
+    <value>Review the errors below and try again.</value>
+  </data>
+  <data name="ImportRecords.Lead.Close.Failure" xml:space="preserve">
+    <value>Records could not be imported</value>
+  </data>
+  <data name="ImportRecords.Lead.Close.Success" xml:space="preserve">
+    <value>Records have been imported</value>
+  </data>
+  <data name="ImportRecords.Lead.SetFilePath" xml:space="preserve">
+    <value>Choose a source file</value>
+  </data>
+  <data name="ImportRecords.Lead.SetFormat" xml:space="preserve">
+    <value>Choose an import format</value>
+  </data>
+  <data name="ImportRecords.Lead.SetMappings" xml:space="preserve">
+    <value>Choose a destination field for each source column</value>
+  </data>
+  <data name="ImportRecords.Target.Empty" xml:space="preserve">
+    <value>&lt;Ignored&gt;</value>
+  </data>
   <data name="InvalidViewNameReason.Body.Empty" xml:space="preserve">
     <value>Please specify a form name.</value>
   </data>
@@ -690,14 +714,17 @@ Close anyway?</value>
   <data name="ItemsControlWatermark" xml:space="preserve">
     <value>No items found</value>
   </data>
+  <data name="Label" xml:space="preserve">
+    <value>{0}:</value>
+  </data>
   <data name="Label.File" xml:space="preserve">
     <value>File:</value>
   </data>
-  <data name="Label.IncidentProject" xml:space="preserve">
-    <value>Incident database:</value>
-  </data>
   <data name="Label.Location" xml:space="preserve">
     <value>Location:</value>
+  </data>
+  <data name="Label.Mappings" xml:space="preserve">
+    <value>Mappings:</value>
   </data>
   <data name="Label.OpenInEpiInfo" xml:space="preserve">
     <value>Open in Epi Info?</value>
@@ -714,6 +741,9 @@ Close anyway?</value>
   <data name="Label.SourceView" xml:space="preserve">
     <value>Existing form:</value>
   </data>
+  <data name="Label.Target" xml:space="preserve">
+    <value>Destination for {0}:</value>
+  </data>
   <data name="Label.TargetView" xml:space="preserve">
     <value>New form:</value>
   </data>
@@ -726,8 +756,8 @@ Close anyway?</value>
   <data name="Label.WithWorkerInfo" xml:space="preserve">
     <value>Collect worker information?</value>
   </data>
-  <data name="Label.WorkerProject" xml:space="preserve">
-    <value>Worker database:</value>
+  <data name="Lead.Commit" xml:space="preserve">
+    <value>Verify the information below</value>
   </data>
   <data name="Lead.ConfirmAssetDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this file?</value>
@@ -788,6 +818,9 @@ Close anyway?</value>
   </data>
   <data name="Lead.StartingEpiInfo" xml:space="preserve">
     <value>Starting Epi Info</value>
+  </data>
+  <data name="Lead.SynchronizingView" xml:space="preserve">
+    <value>Synchronizing data tables</value>
   </data>
   <data name="Lead.UndeletingRecords" xml:space="preserve">
     <value>Undeleting records</value>

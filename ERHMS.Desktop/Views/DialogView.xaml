@@ -82,8 +82,6 @@
                 Visibility="{Binding ShowingDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
-                         MaxHeight="250"
-                         MinHeight="50"
                          Style="{StaticResource CodeTextBox}"
                          Text="{Binding Details, Mode=OneWay}" />
             </Grid>

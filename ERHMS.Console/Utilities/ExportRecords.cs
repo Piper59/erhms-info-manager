@@ -24,8 +24,8 @@ namespace ERHMS.Console.Utilities
             View view = project.Views[ViewName];
             using (Stream stream = File.Open(OutputPath, FileMode.Create, FileAccess.Write))
             using (TextWriter writer = new StreamWriter(stream))
+            using (RecordExporter exporter = new RecordExporter(view, writer))
             {
-                RecordExporter exporter = new RecordExporter(view, writer);
                 exporter.Export();
             }
         }

@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="Wizards/CreateProjectViews.xaml" />
                 <ResourceDictionary Source="Wizards/CreateViewViews.xaml" />
                 <ResourceDictionary Source="Wizards/ExportRecordsViews.xaml" />
+                <ResourceDictionary Source="Wizards/ImportRecordsViews.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -30,7 +31,7 @@
                    Opacity="0.1"
                    Text="{Markup:Icon Success}"
                    VerticalAlignment="Center"
-                   Visibility="{Binding Committed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                   Visibility="{Binding Succeeded, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Border Grid.Row="0"
                 BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1">

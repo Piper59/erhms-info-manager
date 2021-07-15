@@ -128,7 +128,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         }
 
         public Project Project { get; }
-        public string ViewName { get; private set; }
+        private string ViewName { get; set; }
         public View View { get; private set; }
         public bool OpenInEpiInfo { get; private set; }
 

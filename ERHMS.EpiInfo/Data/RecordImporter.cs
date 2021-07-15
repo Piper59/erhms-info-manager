@@ -17,7 +17,6 @@ namespace ERHMS.EpiInfo.Data
 
         public View View { get; }
         public IEnumerable<string> Headers { get; }
-        public int RecordCount { get; private set; }
 
         private readonly ICollection<Exception> errors = new List<Exception>();
         public IEnumerable<Exception> Errors => errors;
@@ -29,7 +28,13 @@ namespace ERHMS.EpiInfo.Data
             Headers = ReadRow();
         }
 
-        public void AddMapping(int index, Field field)
+        public void Reset()
+        {
+            fieldsByIndex.Clear();
+            convertersByIndex.Clear();
+        }
+
+        public void Map(int index, Field field)
         {
             Type type = field.FieldType.ToClrType();
             TypeConverter converter = TypeDescriptor.GetConverter(type);
@@ -77,7 +82,6 @@ namespace ERHMS.EpiInfo.Data
             try
             {
                 repository.Save(record);
-                RecordCount++;
             }
             catch (Exception ex)
             {
@@ -85,7 +89,7 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public bool Import()
+        public bool Import(IProgress<int> progress = null)
         {
             if (fieldsByIndex.Count == 0)
             {
@@ -96,6 +100,7 @@ namespace ERHMS.EpiInfo.Data
             {
                 while (true)
                 {
+                    progress?.Report(RowNumber + 1);
                     try
                     {
                         Record record = ReadRecord();

@@ -90,6 +90,7 @@
     <Compile Include="Data\RecordStatus.cs" />
     <Compile Include="FileExtensions.cs" />
     <Compile Include="Metadata\FieldCollectionMasterExtensions.cs" />
+    <Compile Include="Metadata\FieldComparer.cs" />
     <Compile Include="Metadata\FieldDataRow.cs" />
     <Compile Include="Metadata\FieldDataRowComparer.cs" />
     <Compile Include="Metadata\FieldDataTable.cs" />

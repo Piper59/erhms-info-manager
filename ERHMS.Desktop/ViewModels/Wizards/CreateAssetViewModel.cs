@@ -138,7 +138,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CommitViewModel : StepViewModel<CreateAssetViewModel>
         {
-            public override string Title => Strings.CreateAsset_Lead_Commit;
+            public override string Title => Strings.Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
 
@@ -207,7 +207,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         protected abstract string FileExtension { get; }
         protected abstract string FileFilter { get; }
         public Project Project { get; }
-        public View View { get; private set; }
+        protected View View { get; set; }
         public string FilePath { get; private set; }
         public bool OpenInEpiInfo { get; private set; }
 

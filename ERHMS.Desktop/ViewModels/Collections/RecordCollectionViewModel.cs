@@ -88,8 +88,8 @@ namespace ERHMS.Desktop.ViewModels.Collections
             EditCommand = new AsyncCommand(EditAsync, HasCurrent);
             DeleteCommand = new AsyncCommand(DeleteAsync, HasSelection);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, HasSelection);
-            ImportCommand = Command.Null;
-            ExportCommand = new SyncCommand(Export);
+            ImportCommand = new AsyncCommand(ImportAsync);
+            ExportCommand = new AsyncCommand(ExportAsync);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
@@ -188,8 +188,32 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await SetDeletedAsync(Strings.Lead_UndeletingRecords, false);
         }
 
-        public void Export()
+        private async Task SynchronizeAsync()
         {
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = Strings.Lead_SynchronizingView;
+            await progress.Run(() =>
+            {
+                Project.CollectedData.SynchronizeViewTree(View);
+            });
+        }
+
+        public async Task ImportAsync()
+        {
+            await SynchronizeAsync();
+            using (ImportRecordsViewModel wizard = new ImportRecordsViewModel(View))
+            {
+                if (wizard.Show() != true)
+                {
+                    return;
+                }
+            }
+            await RefreshAsync();
+        }
+
+        public async Task ExportAsync()
+        {
+            await SynchronizeAsync();
             ExportRecordsViewModel wizard = new ExportRecordsViewModel(View);
             wizard.Show();
         }

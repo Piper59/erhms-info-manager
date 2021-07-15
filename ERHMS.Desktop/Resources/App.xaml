@@ -78,7 +78,8 @@
         </Setter>
         <Setter Property="ToolTip">
             <Setter.Value>
-                <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+                <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}"
+                         MaxWidth="{StaticResource ToolTipWidth}">
                     <StackPanel>
                         <TextBlock FontWeight="{Binding HelpText, Converter={StaticResource HelpTextToAltTextFontWeightConverter}}"
                                    Text="{Binding AltText}" />
@@ -100,6 +101,8 @@
         <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="MinHeight" Value="100" />
+        <Setter Property="MaxHeight" Value="250" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>

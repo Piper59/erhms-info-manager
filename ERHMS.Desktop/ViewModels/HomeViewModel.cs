@@ -13,27 +13,27 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class HomeViewModel
     {
-        public class ViewViewModel
+        public class CoreViewViewModel
         {
-            public CoreView CoreView { get; }
+            public CoreView Value { get; }
 
             public ICommand GoToViewCommand { get; }
 
-            public ViewViewModel(CoreView coreView)
+            public CoreViewViewModel(CoreView value)
             {
-                CoreView = coreView;
+                Value = value;
                 GoToViewCommand = new AsyncCommand(GoToViewAsync);
             }
 
             public async Task GoToViewAsync()
             {
-                await MainViewModel.Instance.GoToViewAsync(CoreView);
+                await MainViewModel.Instance.GoToViewAsync(Value);
             }
         }
 
-        public abstract class ProjectCollectionViewModel : ObservableObject
+        public abstract class CoreProjectCollectionViewModel : ObservableObject
         {
-            public abstract CoreProject CoreProject { get; }
+            public abstract CoreProject Value { get; }
 
             private ProjectInfo current;
             public ProjectInfo Current
@@ -54,7 +54,7 @@ namespace ERHMS.Desktop.ViewModels
             public ICommand GoToCurrentCommand { get; }
             public abstract ICommand MakeCurrentCommand { get; }
 
-            protected ProjectCollectionViewModel()
+            protected CoreProjectCollectionViewModel()
             {
                 CreateCommand = new SyncCommand(Create);
                 OpenCommand = new SyncCommand(Open);
@@ -63,12 +63,12 @@ namespace ERHMS.Desktop.ViewModels
 
             public void Create()
             {
-                MainViewModel.Instance.CreateProject(CoreProject);
+                MainViewModel.Instance.CreateProject(Value);
             }
 
             public void Open()
             {
-                MainViewModel.Instance.OpenProject(CoreProject);
+                MainViewModel.Instance.OpenProject(Value);
             }
 
             public async Task GoToCurrentAsync()
@@ -80,9 +80,9 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public class WorkerProjectCollectionViewModel : ProjectCollectionViewModel
+        public class WorkerProjectCollectionViewModel : CoreProjectCollectionViewModel
         {
-            public override CoreProject CoreProject => CoreProject.Worker;
+            public override CoreProject Value => CoreProject.Worker;
 
             public override ICommand MakeCurrentCommand { get; } = Command.Null;
 
@@ -92,9 +92,9 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public class IncidentProjectCollectionViewModel : ProjectCollectionViewModel
+        public class IncidentProjectCollectionViewModel : CoreProjectCollectionViewModel
         {
-            public override CoreProject CoreProject => CoreProject.Incident;
+            public override CoreProject Value => CoreProject.Incident;
 
             public override ICommand MakeCurrentCommand { get; }
 
@@ -122,9 +122,9 @@ namespace ERHMS.Desktop.ViewModels
 
         public class PhaseViewModel : ObservableObject
         {
-            private static readonly ProjectCollectionViewModel workerProjects =
+            private static readonly CoreProjectCollectionViewModel workerProjects =
                 new WorkerProjectCollectionViewModel();
-            private static readonly ProjectCollectionViewModel incidentProjects =
+            private static readonly CoreProjectCollectionViewModel incidentProjects =
                 new IncidentProjectCollectionViewModel();
 
             public static PhaseViewModel PreDeployment { get; } = new PhaseViewModel(Phase.PreDeployment);
@@ -138,7 +138,7 @@ namespace ERHMS.Desktop.ViewModels
                 PostDeployment
             };
 
-            private static ProjectCollectionViewModel GetProjects(CoreProject coreProject)
+            private static CoreProjectCollectionViewModel GetProjects(CoreProject coreProject)
             {
                 switch (coreProject)
                 {
@@ -152,16 +152,15 @@ namespace ERHMS.Desktop.ViewModels
             }
 
             public Phase Value { get; }
-            public ProjectCollectionViewModel Projects { get; }
-            public IEnumerable<ViewViewModel> Views { get; }
+            public CoreProjectCollectionViewModel Projects { get; }
+            public IEnumerable<CoreViewViewModel> Views { get; }
 
             public PhaseViewModel(Phase value)
             {
                 Value = value;
-                CoreProject coreProject = value.ToCoreProject();
-                Projects = GetProjects(coreProject);
+                Projects = GetProjects(value.ToCoreProject());
                 Views = CoreView.Instances.Where(coreView => coreView.Phase == value)
-                    .Select(coreView => new ViewViewModel(coreView))
+                    .Select(coreView => new CoreViewViewModel(coreView))
                     .ToList();
             }
         }

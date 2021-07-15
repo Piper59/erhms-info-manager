@@ -10,14 +10,26 @@
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
             <Button Command="{Binding CreateBlankCommand}"
-                    Content="{Markup:String CreateView.AccessText.Blank}"
-                    ToolTip="{Markup:String CreateView.HelpText.Blank}" />
+                    Content="{Markup:String CreateView.AccessText.Blank}">
+                <Button.ToolTip>
+                    <ToolTip Content="{Markup:String CreateView.HelpText.Blank}"
+                             MaxWidth="{StaticResource ToolTipWidth}" />
+                </Button.ToolTip>
+            </Button>
             <Button Command="{Binding CreateFromTemplateCommand}"
-                    Content="{Markup:String CreateView.AccessText.FromTemplate}"
-                    ToolTip="{Markup:String CreateView.HelpText.FromTemplate}" />
+                    Content="{Markup:String CreateView.AccessText.FromTemplate}">
+                <Button.ToolTip>
+                    <ToolTip Content="{Markup:String CreateView.HelpText.FromTemplate}"
+                             MaxWidth="{StaticResource ToolTipWidth}" />
+                </Button.ToolTip>
+            </Button>
             <Button Command="{Binding CreateFromExistingCommand}"
-                    Content="{Markup:String CreateView.AccessText.FromExisting}"
-                    ToolTip="{Markup:String CreateView.HelpText.FromExisting}" />
+                    Content="{Markup:String CreateView.AccessText.FromExisting}">
+                <Button.ToolTip>
+                    <ToolTip Content="{Markup:String CreateView.HelpText.FromExisting}"
+                             MaxWidth="{StaticResource ToolTipWidth}" />
+                </Button.ToolTip>
+            </Button>
         </StackPanel>
     </DataTemplate>
 
@@ -68,7 +80,6 @@
                      Text="{Binding TemplatePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}">
                 <TextBox.ToolTip>
                     <ToolTip Content="{Binding TemplatePath}"
-                             MaxWidth="{StaticResource LargeToolTipWidth}"
                              Visibility="{Binding TemplatePath, Converter={StaticResource NullableToVisibilityConverter}}" />
                 </TextBox.ToolTip>
             </TextBox>
@@ -113,12 +124,8 @@
             <TextBox Grid.Column="1"
                      Grid.Row="0"
                      IsReadOnly="True"
-                     Text="{Binding Views.Project.Name, Mode=OneWay}">
-                <TextBox.ToolTip>
-                    <ToolTip Content="{Binding Views.Project.FilePath}"
-                             MaxWidth="{StaticResource LargeToolTipWidth}" />
-                </TextBox.ToolTip>
-            </TextBox>
+                     Text="{Binding Views.Project.Name, Mode=OneWay}"
+                     ToolTip="{Binding Views.Project.FilePath}" />
             <Button Grid.Column="2"
                     Grid.Row="0"
                     Command="{Binding BrowseCommand}"

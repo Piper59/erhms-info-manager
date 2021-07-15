@@ -87,6 +87,19 @@
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBase}" />
 
     <Style x:Key="LabelBase" TargetType="Label">
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0,1" />
+        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Padding">
+            <Setter.Value>
+                <Thickness Top="{StaticResource SmallSpace}"
+                           Bottom="{StaticResource SmallSpace}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UnwrappedLabel" TargetType="Label" BasedOn="{StaticResource LabelBase}" />
+    <Style x:Key="WrappedLabel" TargetType="Label" BasedOn="{StaticResource LabelBase}">
         <Style.Resources>
             <Style TargetType="ContentPresenter">
                 <Style.Resources>
@@ -99,18 +112,8 @@
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
         </Style.Resources>
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0,1" />
-        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
-        <Setter Property="Padding">
-            <Setter.Value>
-                <Thickness Top="{StaticResource SmallSpace}"
-                           Bottom="{StaticResource SmallSpace}" />
-            </Setter.Value>
-        </Setter>
     </Style>
-    <Style TargetType="Label" BasedOn="{StaticResource LabelBase}" />
+    <Style TargetType="Label" BasedOn="{StaticResource WrappedLabel}" />
 
     <Style x:Key="MenuBaseBase" TargetType="MenuBase">
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
@@ -200,7 +203,6 @@
             </Style>
         </Style.Resources>
         <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-        <Setter Property="MaxWidth" Value="{StaticResource SmallToolTipWidth}" />
         <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="ToolTip" BasedOn="{StaticResource ToolTipBase}" />

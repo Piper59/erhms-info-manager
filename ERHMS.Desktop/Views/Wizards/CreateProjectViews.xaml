@@ -8,17 +8,33 @@
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
             <Button Command="{Binding CreateBlankCommand}"
-                    Content="{Markup:String CreateProject.AccessText.Blank}"
-                    ToolTip="{Markup:String CreateProject.HelpText.Blank}" />
+                    Content="{Markup:String CreateProject.AccessText.Blank}">
+                <Button.ToolTip>
+                    <ToolTip Content="{Markup:String CreateProject.HelpText.Blank}"
+                             MaxWidth="{StaticResource ToolTipWidth}" />
+                </Button.ToolTip>
+            </Button>
             <Button Command="{Binding CreateStandardCommand}"
-                    Content="{Markup:String CreateProject.AccessText.Standard}"
-                    ToolTip="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}" />
+                    Content="{Markup:String CreateProject.AccessText.Standard}">
+                <Button.ToolTip>
+                    <ToolTip Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
+                             MaxWidth="{StaticResource ToolTipWidth}" />
+                </Button.ToolTip>
+            </Button>
             <Button Command="{Binding CreateFromTemplateCommand}"
-                    Content="{Markup:String CreateProject.AccessText.FromTemplate}"
-                    ToolTip="{Markup:String CreateProject.HelpText.FromTemplate}" />
+                    Content="{Markup:String CreateProject.AccessText.FromTemplate}">
+                <Button.ToolTip>
+                    <ToolTip Content="{Markup:String CreateProject.HelpText.FromTemplate}"
+                             MaxWidth="{StaticResource ToolTipWidth}" />
+                </Button.ToolTip>
+            </Button>
             <Button Command="{Binding CreateFromExistingCommand}"
-                    Content="{Markup:String CreateProject.AccessText.FromExisting}"
-                    ToolTip="{Markup:String CreateProject.HelpText.FromExisting}" />
+                    Content="{Markup:String CreateProject.AccessText.FromExisting}">
+                <Button.ToolTip>
+                    <ToolTip Content="{Markup:String CreateProject.HelpText.FromExisting}"
+                             MaxWidth="{StaticResource ToolTipWidth}" />
+                </Button.ToolTip>
+            </Button>
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

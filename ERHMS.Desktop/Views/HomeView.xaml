@@ -33,15 +33,16 @@
                               ItemsSource="{Binding Views}" />
             </StackPanel>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+ProjectCollectionViewModel}">
+        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+CoreProjectCollectionViewModel}">
             <Button AutomationProperties.HelpText="{Binding Current.FilePath}"
                     ContextMenuService.Placement="Bottom"
-                    Style="{StaticResource WorkflowButton}">
+                    Style="{StaticResource WorkflowButton}"
+                    ToolTip="{Binding Current.FilePath}">
                 <AutomationProperties.Name>
                     <MultiBinding StringFormat="{}{0} {1}">
                         <Binding Converter="{StaticResource StringLocalizingConverter}"
                                  ConverterParameter="CoreProject.Label.{0}"
-                                 Path="CoreProject" />
+                                 Path="Value" />
                         <Binding Path="Current.Name" />
                     </MultiBinding>
                 </AutomationProperties.Name>
@@ -57,12 +58,7 @@
                                     <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
                                     <Setter Property="CommandParameter" Value="{Binding}" />
                                     <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
-                                    <Setter Property="ToolTip">
-                                        <Setter.Value>
-                                            <ToolTip Content="{Binding FilePath}"
-                                                     MaxWidth="{StaticResource LargeToolTipWidth}" />
-                                        </Setter.Value>
-                                    </Setter>
+                                    <Setter Property="ToolTip" Value="{Binding FilePath}" />
                                 </Style>
                             </MenuItem.ItemContainerStyle>
                             <MenuItem.ItemTemplate>
@@ -83,10 +79,6 @@
                                   Header="{Markup:String AccessText.OpenExistingProject}" />
                     </ContextMenu>
                 </Button.ContextMenu>
-                <Button.ToolTip>
-                    <ToolTip Content="{Binding Current.FilePath}"
-                             MaxWidth="{StaticResource LargeToolTipWidth}" />
-                </Button.ToolTip>
                 <b:Interaction.Behaviors>
                     <Behaviors:OpenContextMenuOnClick />
                 </b:Interaction.Behaviors>
@@ -101,7 +93,7 @@
                                 <Thickness Bottom="{StaticResource SmallSpace}" />
                             </TextBlock.Margin>
                             <Run FontWeight="{StaticResource ThinFontWeight}"
-                                 Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
+                                 Text="{Binding Value, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
                             <Run Text="{Binding Current.Name}" />
                         </TextBlock>
                         <TextBlock Margin="0"
@@ -121,14 +113,14 @@
                 </Grid>
             </Button>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+ViewViewModel}">
+        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+CoreViewViewModel}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"
                                    SharedSizeGroup="ButtonGroup" />
                 </Grid.RowDefinitions>
-                <Button AutomationProperties.HelpText="{Binding CoreView.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
-                        AutomationProperties.Name="{Binding CoreView.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
+                <Button AutomationProperties.HelpText="{Binding Value.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
+                        AutomationProperties.Name="{Binding Value.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
                         Command="{Binding GoToViewCommand}"
                         Style="{StaticResource WorkflowButton}">
                     <Grid>
@@ -140,21 +132,21 @@
                         <TextBlock Grid.Column="0"
                                    FontSize="{StaticResource HugeFontSize}"
                                    Style="{StaticResource Icon}"
-                                   Text="{Binding CoreView.Name, Converter={StaticResource IconNameToStringConverter}, ConverterParameter='CoreView.{0}'}">
+                                   Text="{Binding Value.Name, Converter={StaticResource IconNameToStringConverter}, ConverterParameter='CoreView.{0}'}">
                             <TextBlock.Margin>
                                 <Thickness Right="{StaticResource LargeSpace}" />
                             </TextBlock.Margin>
                         </TextBlock>
                         <StackPanel Grid.Column="1">
                             <TextBlock Style="{StaticResource Lead}"
-                                       Text="{Binding CoreView.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}">
+                                       Text="{Binding Value.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}">
                                 <TextBlock.Margin>
                                     <Thickness Bottom="{StaticResource SmallSpace}" />
                                 </TextBlock.Margin>
                             </TextBlock>
                             <TextBlock Margin="0"
                                        Style="{StaticResource Small}"
-                                       Text="{Binding CoreView.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}" />
+                                       Text="{Binding Value.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}" />
                         </StackPanel>
                     </Grid>
                 </Button>

@@ -24,12 +24,8 @@
                     <Hyperlink Command="{Binding OpenProjectLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
                         <Run FontWeight="{StaticResource DefaultFontWeight}"
-                             Text="{Binding View.Project.Name}">
-                            <Run.ToolTip>
-                                <ToolTip Content="{Binding View.Project.FilePath}"
-                                         MaxWidth="{StaticResource LargeToolTipWidth}" />
-                            </Run.ToolTip>
-                        </Run>
+                             Text="{Binding View.Project.Name}"
+                             ToolTip="{Binding View.Project.FilePath}" />
                     </Hyperlink>
                     <Run FontFamily="{StaticResource IconFontFamily}"
                          Text="{Markup:Icon Level.Separator}" />

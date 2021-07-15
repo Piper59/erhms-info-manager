@@ -24,12 +24,8 @@
                     <Hyperlink Command="{Binding OpenLocationCommand}"
                                Style="{StaticResource PlainHyperlink}">
                         <Run FontWeight="{StaticResource DefaultFontWeight}"
-                             Text="{Binding Project.Name}">
-                            <Run.ToolTip>
-                                <ToolTip Content="{Binding Project.FilePath}"
-                                         MaxWidth="{StaticResource LargeToolTipWidth}" />
-                            </Run.ToolTip>
-                        </Run>
+                             Text="{Binding Project.Name}"
+                             ToolTip="{Binding Project.FilePath}" />
                     </Hyperlink>
                 </TextBlock>
                 <StackPanel Grid.Column="1"

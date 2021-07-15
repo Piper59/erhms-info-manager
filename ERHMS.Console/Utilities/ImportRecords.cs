@@ -27,13 +27,13 @@ namespace ERHMS.Console.Utilities
             View view = project.Views[ViewName];
             using (Stream stream = File.Open(InputPath, FileMode.Open, FileAccess.Read))
             using (TextReader reader = new StreamReader(stream))
+            using (RecordImporter importer = new RecordImporter(view, reader))
             {
-                RecordImporter importer = new RecordImporter(view, reader);
                 foreach (Iterator<string> header in importer.Headers.Iterate())
                 {
                     if (view.Fields.DataFields.Contains(header.Value))
                     {
-                        importer.AddMapping(header.Index, view.Fields[header.Value]);
+                        importer.Map(header.Index, view.Fields[header.Value]);
                     }
                 }
                 importer.Import();

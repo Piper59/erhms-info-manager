@@ -14,27 +14,15 @@ namespace ERHMS.EpiInfo
 {
     public static class ViewExtensions
     {
+        public static void LoadFields(this View @this)
+        {
+            @this.MustRefreshFieldCollection = true;
+            _ = @this.Fields;
+        }
+
         public static Page GetPageByName(this View @this, string pageName)
         {
             return @this.Pages.SingleOrDefault(page => NameComparer.Default.Equals(page.Name, pageName));
-        }
-
-        public static bool ImportFromPackage(this View @this)
-        {
-            ImportEncryptedDataPackageDialog dialog = new ImportEncryptedDataPackageDialog(@this)
-            {
-                StartPosition = FormStartPosition.CenterParent
-            };
-            return dialog.ShowDialog() == DialogResult.OK;
-        }
-
-        public static void ExportToPackage(this View @this)
-        {
-            PackageForTransportDialog dialog = new PackageForTransportDialog(@this.Project.FilePath, @this)
-            {
-                StartPosition = FormStartPosition.CenterParent
-            };
-            dialog.ShowDialog();
         }
 
         public static void Unrelate(this View @this)
@@ -55,6 +43,24 @@ namespace ERHMS.EpiInfo
             }
             @this.IsRelatedView = false;
             metadata.UpdateView(@this);
+        }
+
+        public static bool ImportFromPackage(this View @this)
+        {
+            ImportEncryptedDataPackageDialog dialog = new ImportEncryptedDataPackageDialog(@this)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
+            return dialog.ShowDialog() == DialogResult.OK;
+        }
+
+        public static void ExportToPackage(this View @this)
+        {
+            PackageForTransportDialog dialog = new PackageForTransportDialog(@this.Project.FilePath, @this)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
+            dialog.ShowDialog();
         }
     }
 }

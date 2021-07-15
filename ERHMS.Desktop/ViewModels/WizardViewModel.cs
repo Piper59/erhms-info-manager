@@ -37,6 +37,11 @@ namespace ERHMS.Desktop.ViewModels
                 Wizard.Step = step;
             }
 
+            protected void SetResult(bool? result)
+            {
+                Wizard.Result = result;
+            }
+
             protected void Commit()
             {
                 Wizard.Committed = true;
@@ -44,13 +49,8 @@ namespace ERHMS.Desktop.ViewModels
 
             protected void Commit(bool? result)
             {
-                Commit();
                 SetResult(result);
-            }
-
-            protected void SetResult(bool? result)
-            {
-                Wizard.Result = result;
+                Commit();
             }
 
             protected void Close()
@@ -96,14 +96,39 @@ namespace ERHMS.Desktop.ViewModels
             protected set { SetProperty(ref step, value); }
         }
 
+        private bool? result;
+        public bool? Result
+        {
+            get
+            {
+                return result;
+            }
+            private set
+            {
+                if (SetProperty(ref result, value))
+                {
+                    OnPropertyChanged(nameof(Succeeded));
+                }
+            }
+        }
+
         private bool committed;
         public bool Committed
         {
-            get { return committed; }
-            private set { SetProperty(ref committed, value); }
+            get
+            {
+                return committed;
+            }
+            private set
+            {
+                if (SetProperty(ref committed, value))
+                {
+                    OnPropertyChanged(nameof(Succeeded));
+                }
+            }
         }
 
-        public bool? Result { get; private set; }
+        public bool Succeeded => Result.GetValueOrDefault() && Committed;
 
         public event EventHandler CloseRequested;
         protected virtual void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);

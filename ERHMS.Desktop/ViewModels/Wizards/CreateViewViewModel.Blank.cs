@@ -52,7 +52,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class CommitViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => Strings.CreateView_Lead_Commit;
+                public override string Title => Strings.Lead_Commit;
                 public override string ContinueAction => Strings.AccessText_Finish;
                 public DetailsViewModel Details { get; }
 
@@ -94,6 +94,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
-        public bool WithWorkerInfo { get; private set; }
+        private bool WithWorkerInfo { get; set; }
     }
 }

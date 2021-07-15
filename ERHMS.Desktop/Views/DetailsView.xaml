@@ -4,6 +4,7 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:Epi="clr-namespace:Epi;assembly=Epi.Core"
               xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+              xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
               xmlns:System="clr-namespace:System;assembly=mscorlib"
               IsTabStop="False">
     <ItemsControl.Resources>
@@ -18,16 +19,46 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type Epi:View}">
             <TextBlock>
-                <Run Text="{Binding Project.Name}">
-                    <Run.ToolTip>
-                        <ToolTip Content="{Binding Project.FilePath}"
-                                 MaxWidth="{StaticResource LargeToolTipWidth}" />
-                    </Run.ToolTip>
-                </Run>
+                <Run Text="{Binding Project.Name}"
+                     ToolTip="{Binding Project.FilePath}" />
                 <Run FontFamily="{StaticResource IconFontFamily}"
                      Text="{Markup:Icon Level.Separator}" />
                 <Run Text="{Binding Name}" />
             </TextBlock>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+MappingCollection}">
+            <ItemsControl IsTabStop="False"
+                          ItemsSource="{Binding}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch"
+                              Visibility="{Binding Target.IsEmpty, Converter={StaticResource BooleanToVisibilityInverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding Source}"
+                                       TextWrapping="NoWrap"
+                                       ToolTip="{Binding Source}" />
+                            <TextBlock Grid.Column="1"
+                                       FontFamily="{StaticResource IconFontFamily}"
+                                       Text="{Markup:Icon MapsTo}"
+                                       VerticalAlignment="Center">
+                                <TextBlock.Margin>
+                                    <Thickness Left="{StaticResource LargeSpace}"
+                                               Right="{StaticResource LargeSpace}" />
+                                </TextBlock.Margin>
+                            </TextBlock>
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Target.Name}"
+                                       TextWrapping="NoWrap"
+                                       ToolTip="{Binding Target.Name}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </DataTemplate>
     </ItemsControl.Resources>
     <ItemsControl.ItemsPanel>
@@ -43,8 +74,9 @@
                                       Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0"
-                       Content="{Binding Key}" />
+                <Label Grid.Column="0">
+                    <TextBlock Text="{Binding Key}" />
+                </Label>
                 <Label Grid.Column="1"
                        Content="{Binding Value}" />
             </Grid>

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ERHMS.Common.IO
 {
-    public class CsvWriter
+    public class CsvWriter : IDisposable
     {
         private static string Escape(string value)
         {
@@ -19,7 +20,6 @@ namespace ERHMS.Common.IO
         public TextWriter Writer { get; }
         public int FieldCount { get; private set; } = -1;
         public int RowNumber { get; private set; }
-        public IProgress<int> Progress { get; set; }
 
         public CsvWriter(TextWriter writer)
         {
@@ -63,7 +63,16 @@ namespace ERHMS.Common.IO
                 WriteValue(values[index]);
             }
             Writer.Write("\r\n");
-            Progress?.Report(RowNumber);
+        }
+
+        public void WriteRow(IEnumerable<string> values)
+        {
+            WriteRow(values.ToList());
+        }
+
+        public void Dispose()
+        {
+            Writer.Dispose();
         }
     }
 }

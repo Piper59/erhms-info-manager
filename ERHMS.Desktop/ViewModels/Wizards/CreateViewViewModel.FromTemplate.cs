@@ -18,7 +18,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public class SetXTemplateViewModel : StepViewModel<CreateViewViewModel>
             {
                 private readonly IFileDialogService fileDialog;
-                private XTemplate xTemplate;
 
                 public override string Title => Strings.CreateView_Lead_SetXTemplate;
 
@@ -28,6 +27,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     get { return templatePath; }
                     private set { SetProperty(ref templatePath, value); }
                 }
+
+                private XTemplate XTemplate { get; set; }
 
                 public ICommand BrowseCommand { get; }
 
@@ -69,8 +70,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         dialog.Show();
                         return;
                     }
-                    this.xTemplate = xTemplate;
                     TemplatePath = fileDialog.FileName;
+                    XTemplate = xTemplate;
                 }
 
                 public override bool CanContinue()
@@ -81,7 +82,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public override async Task ContinueAsync()
                 {
                     Wizard.TemplatePath = TemplatePath;
-                    Wizard.XTemplate = xTemplate;
+                    Wizard.XTemplate = XTemplate;
                     IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                     IStep step = await progress.Run(() =>
                     {
@@ -125,7 +126,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public class CommitViewModel : StepViewModel<CreateViewViewModel>
             {
-                public override string Title => Strings.CreateView_Lead_Commit;
+                public override string Title => Strings.Lead_Commit;
                 public override string ContinueAction => Strings.AccessText_Finish;
                 public DetailsViewModel Details { get; }
 
@@ -165,7 +166,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
-        public string TemplatePath { get; private set; }
-        public XTemplate XTemplate { get; private set; }
+        private string TemplatePath { get; set; }
+        private XTemplate XTemplate { get; set; }
     }
 }

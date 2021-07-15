@@ -178,6 +178,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Comma-separated values (.csv).
+        /// </summary>
+        public static string AccessText_Csv {
+            get {
+                return ResourceManager.GetString("AccessText.Csv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Data.
         /// </summary>
         public static string AccessText_Data {
@@ -210,6 +219,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Details {
             get {
                 return ResourceManager.GetString("AccessText.Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Epi Info data package (.edp7).
+        /// </summary>
+        public static string AccessText_Edp7 {
+            get {
+                return ResourceManager.GetString("AccessText.Edp7", resourceCulture);
             }
         }
         
@@ -336,6 +354,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Home {
             get {
                 return ResourceManager.GetString("AccessText.Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Import.
+        /// </summary>
+        public static string AccessText_Import {
+            get {
+                return ResourceManager.GetString("AccessText.Import", resourceCulture);
             }
         }
         
@@ -760,6 +787,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exporting row {0}....
+        /// </summary>
+        public static string Body_ExportingRow {
+            get {
+                return ResourceManager.GetString("Body.ExportingRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error and must shut down.
         ///
         ///{0}.
@@ -776,6 +812,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_GetWorkerId {
             get {
                 return ResourceManager.GetString("Body.GetWorkerId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing row {0}....
+        /// </summary>
+        public static string Body_ImportingRow {
+            get {
+                return ResourceManager.GetString("Body.ImportingRow", resourceCulture);
             }
         }
         
@@ -1105,15 +1150,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify the information below.
-        /// </summary>
-        public static string CreateAsset_Lead_Commit {
-            get {
-                return ResourceManager.GetString("CreateAsset.Lead.Commit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Choose a name and location for the new file.
         /// </summary>
         public static string CreateAsset_Lead_SetFilePath {
@@ -1294,15 +1330,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify the information below.
-        /// </summary>
-        public static string CreateView_Lead_Commit {
-            get {
-                return ResourceManager.GetString("CreateView.Lead.Commit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Choose an existing form.
         /// </summary>
         public static string CreateView_Lead_SetSourceView {
@@ -1348,24 +1375,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Comma-separated values (.csv).
-        /// </summary>
-        public static string ExportRecords_AccessText_Csv {
-            get {
-                return ResourceManager.GetString("ExportRecords.AccessText.Csv", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Epi Info data package (.edp7).
-        /// </summary>
-        public static string ExportRecords_AccessText_Edp7 {
-            get {
-                return ResourceManager.GetString("ExportRecords.AccessText.Edp7", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Records have been exported.
         /// </summary>
         public static string ExportRecords_Lead_Close {
@@ -1402,7 +1411,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comma-Separated Values (CSV) Files (*.csv)|*.csv.
+        ///   Looks up a localized string similar to CSV Files (*.csv)|*.csv.
         /// </summary>
         public static string FileDialog_Filter_CsvFiles {
             get {
@@ -1654,6 +1663,69 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Review the errors below and try again..
+        /// </summary>
+        public static string ImportRecords_Body_Close_Failure {
+            get {
+                return ResourceManager.GetString("ImportRecords.Body.Close.Failure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Records could not be imported.
+        /// </summary>
+        public static string ImportRecords_Lead_Close_Failure {
+            get {
+                return ResourceManager.GetString("ImportRecords.Lead.Close.Failure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Records have been imported.
+        /// </summary>
+        public static string ImportRecords_Lead_Close_Success {
+            get {
+                return ResourceManager.GetString("ImportRecords.Lead.Close.Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a source file.
+        /// </summary>
+        public static string ImportRecords_Lead_SetFilePath {
+            get {
+                return ResourceManager.GetString("ImportRecords.Lead.SetFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose an import format.
+        /// </summary>
+        public static string ImportRecords_Lead_SetFormat {
+            get {
+                return ResourceManager.GetString("ImportRecords.Lead.SetFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a destination field for each source column.
+        /// </summary>
+        public static string ImportRecords_Lead_SetMappings {
+            get {
+                return ResourceManager.GetString("ImportRecords.Lead.SetMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Ignored&gt;.
+        /// </summary>
+        public static string ImportRecords_Target_Empty {
+            get {
+                return ResourceManager.GetString("ImportRecords.Target.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please specify a form name..
         /// </summary>
         public static string InvalidViewNameReason_Body_Empty {
@@ -1744,6 +1816,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}:.
+        /// </summary>
+        public static string Label {
+            get {
+                return ResourceManager.GetString("Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File:.
         /// </summary>
         public static string Label_File {
@@ -1753,20 +1834,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incident database:.
-        /// </summary>
-        public static string Label_IncidentProject {
-            get {
-                return ResourceManager.GetString("Label.IncidentProject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Location:.
         /// </summary>
         public static string Label_Location {
             get {
                 return ResourceManager.GetString("Label.Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mappings:.
+        /// </summary>
+        public static string Label_Mappings {
+            get {
+                return ResourceManager.GetString("Label.Mappings", resourceCulture);
             }
         }
         
@@ -1816,6 +1897,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Destination for {0}:.
+        /// </summary>
+        public static string Label_Target {
+            get {
+                return ResourceManager.GetString("Label.Target", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New form:.
         /// </summary>
         public static string Label_TargetView {
@@ -1852,11 +1942,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker database:.
+        ///   Looks up a localized string similar to Verify the information below.
         /// </summary>
-        public static string Label_WorkerProject {
+        public static string Lead_Commit {
             get {
-                return ResourceManager.GetString("Label.WorkerProject", resourceCulture);
+                return ResourceManager.GetString("Lead.Commit", resourceCulture);
             }
         }
         
@@ -2037,6 +2127,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_StartingEpiInfo {
             get {
                 return ResourceManager.GetString("Lead.StartingEpiInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronizing data tables.
+        /// </summary>
+        public static string Lead_SynchronizingView {
+            get {
+                return ResourceManager.GetString("Lead.SynchronizingView", resourceCulture);
             }
         }
         
