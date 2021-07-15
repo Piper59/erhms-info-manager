@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
+             xmlns:EpiInfo="clr-namespace:ERHMS.EpiInfo;assembly=ERHMS.EpiInfo"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels">
     <UserControl.Resources>
@@ -34,7 +35,7 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+CoreProjectCollectionViewModel}">
-            <Button AutomationProperties.HelpText="{Binding Current.FilePath}"
+            <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
                     ContextMenuService.Placement="Bottom"
                     Style="{StaticResource WorkflowButton}"
                     ToolTip="{Binding Current.FilePath}">
@@ -43,16 +44,30 @@
                         <Binding Converter="{StaticResource StringLocalizingConverter}"
                                  ConverterParameter="CoreProject.Label.{0}"
                                  Path="Value" />
-                        <Binding Path="Current.Name" />
+                        <Binding FallbackValue="{Markup:String ProjectInfo.Current.Empty}"
+                                 Path="Current.Name" />
                     </MultiBinding>
                 </AutomationProperties.Name>
                 <Button.ContextMenu>
                     <ContextMenu>
+                        <ContextMenu.Resources>
+                            <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+EmptyProjectInfo}">
+                                <TextBlock Text="{Markup:String ProjectInfo.Recents.Empty}" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type EpiInfo:ProjectInfo}">
+                                <StackPanel>
+                                    <TextBlock FontWeight="{StaticResource ThickFontWeight}"
+                                               Text="{Binding Name}" />
+                                    <TextBlock Text="{Binding FilePath}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ContextMenu.Resources>
                         <MenuItem Command="{Binding GoToCurrentCommand}"
                                   Header="{Markup:String AccessText.GoToCurrentProject}" />
                         <MenuItem Header="{Markup:String AccessText.OpenRecentProject}"
                                   ItemsSource="{Binding Recents}"
-                                  Visibility="{Binding Recents, Converter={StaticResource NullableToVisibilityConverter}}">
+                                  Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <MenuItem.ItemContainerStyle>
                                 <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}">
                                     <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
@@ -61,16 +76,6 @@
                                     <Setter Property="ToolTip" Value="{Binding FilePath}" />
                                 </Style>
                             </MenuItem.ItemContainerStyle>
-                            <MenuItem.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock FontWeight="{StaticResource ThickFontWeight}"
-                                                   Text="{Binding Name}" />
-                                        <TextBlock Text="{Binding FilePath}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </MenuItem.ItemTemplate>
                         </MenuItem>
                         <Separator />
                         <MenuItem Command="{Binding CreateCommand}"
@@ -94,11 +99,11 @@
                             </TextBlock.Margin>
                             <Run FontWeight="{StaticResource ThinFontWeight}"
                                  Text="{Binding Value, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
-                            <Run Text="{Binding Current.Name}" />
+                            <Run Text="{Binding Current.Name, FallbackValue={Markup:String ProjectInfo.Current.Empty}}" />
                         </TextBlock>
                         <TextBlock Margin="0"
                                    Style="{StaticResource Small}"
-                                   Text="{Binding Current.FilePath}"
+                                   Text="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
                                    TextTrimming="CharacterEllipsis"
                                    TextWrapping="NoWrap" />
                     </StackPanel>

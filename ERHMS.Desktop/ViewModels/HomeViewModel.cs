@@ -13,6 +13,8 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class HomeViewModel
     {
+        public class EmptyProjectInfo : ProjectInfo { }
+
         public class CoreViewViewModel
         {
             public CoreView Value { get; }
@@ -41,6 +43,8 @@ namespace ERHMS.Desktop.ViewModels
                 get { return current; }
                 protected set { SetProperty(ref current, value); }
             }
+
+            public abstract bool CanHaveRecents { get; }
 
             private IEnumerable<ProjectInfo> recents;
             public IEnumerable<ProjectInfo> Recents
@@ -73,43 +77,60 @@ namespace ERHMS.Desktop.ViewModels
 
             public async Task GoToCurrentAsync()
             {
-                await MainViewModel.Instance.GoToProjectAsync(() => Task.Run(() =>
-                {
-                    return ProjectExtensions.Open(Current.FilePath);
-                }));
+                await MainViewModel.Instance.GoToProjectAsync(Value);
             }
         }
 
         public class WorkerProjectCollectionViewModel : CoreProjectCollectionViewModel
         {
             public override CoreProject Value => CoreProject.Worker;
+            public override bool CanHaveRecents => false;
 
             public override ICommand MakeCurrentCommand { get; } = Command.Null;
 
             public WorkerProjectCollectionViewModel()
             {
-                Current = new ProjectInfo(Settings.Default.WorkerProjectPath);
+                if (Settings.Default.HasWorkerProjectPath)
+                {
+                    Current = new ProjectInfo(Settings.Default.WorkerProjectPath);
+                }
             }
         }
 
         public class IncidentProjectCollectionViewModel : CoreProjectCollectionViewModel
         {
             public override CoreProject Value => CoreProject.Incident;
+            public override bool CanHaveRecents => true;
 
             public override ICommand MakeCurrentCommand { get; }
 
             public IncidentProjectCollectionViewModel()
             {
                 Initialize();
-                MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent);
+                MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent, CanMakeCurrent);
             }
 
             private void Initialize()
             {
-                Current = new ProjectInfo(Settings.Default.IncidentProjectPath);
-                Recents = Settings.Default.IncidentProjectPaths.Cast<string>()
-                    .Select(path => new ProjectInfo(path))
-                    .ToList();
+                if (Settings.Default.HasIncidentProjectPaths)
+                {
+                    Current = new ProjectInfo(Settings.Default.IncidentProjectPath);
+                    Recents = Settings.Default.IncidentProjectPaths.Cast<string>()
+                        .Select(path => new ProjectInfo(path))
+                        .ToList();
+                }
+                else
+                {
+                    Recents = new ProjectInfo[]
+                    {
+                        new EmptyProjectInfo()
+                    };
+                }
+            }
+
+            public bool CanMakeCurrent(ProjectInfo projectInfo)
+            {
+                return !(projectInfo is EmptyProjectInfo);
             }
 
             public void MakeCurrent(ProjectInfo projectInfo)

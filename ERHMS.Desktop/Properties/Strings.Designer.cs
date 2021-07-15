@@ -1528,6 +1528,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click here to create or open a database..
+        /// </summary>
+        public static string HelpText_CreateOrOpenProject {
+            get {
+                return ResourceManager.GetString("HelpText.CreateOrOpenProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a new form in the Epi Info Form Designer module..
         /// </summary>
         public static string HelpText_CreateView {
@@ -2199,6 +2208,24 @@ namespace ERHMS.Desktop.Properties {
         public static string Phase_Name_PreDeployment {
             get {
                 return ResourceManager.GetString("Phase.Name.PreDeployment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No database found.
+        /// </summary>
+        public static string ProjectInfo_Current_Empty {
+            get {
+                return ResourceManager.GetString("ProjectInfo.Current.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No databases found.
+        /// </summary>
+        public static string ProjectInfo_Recents_Empty {
+            get {
+                return ResourceManager.GetString("ProjectInfo.Recents.Empty", resourceCulture);
             }
         }
         

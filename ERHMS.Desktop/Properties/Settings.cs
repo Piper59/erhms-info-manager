@@ -5,11 +5,14 @@ namespace ERHMS.Desktop.Properties
 {
     partial class Settings
     {
+        public bool HasWorkerProjectPath => !string.IsNullOrEmpty(WorkerProjectPath);
+        public bool HasIncidentProjectPaths => IncidentProjectPaths.Count > 0;
+
         public string IncidentProjectPath
         {
             get
             {
-                return IncidentProjectPaths.Count == 0 ? null : IncidentProjectPaths[0];
+                return IncidentProjectPaths[0];
             }
             set
             {
@@ -28,14 +31,27 @@ namespace ERHMS.Desktop.Properties
             }
         }
 
+        public bool HasProjectPath(CoreProject coreProject)
+        {
+            switch (coreProject)
+            {
+                case CoreProject.Worker:
+                    return HasWorkerProjectPath;
+                case CoreProject.Incident:
+                    return HasIncidentProjectPaths;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(coreProject));
+            }
+        }
+
         public string GetProjectPath(CoreProject coreProject)
         {
             switch (coreProject)
             {
                 case CoreProject.Worker:
-                    return WorkerProjectPath;
+                    return HasWorkerProjectPath ? WorkerProjectPath : null;
                 case CoreProject.Incident:
-                    return IncidentProjectPath;
+                    return HasIncidentProjectPaths ? IncidentProjectPath : null;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(coreProject));
             }

@@ -618,6 +618,9 @@ Close anyway?</value>
   <data name="HelpText.CreateAsset.Mapping" xml:space="preserve">
     <value>Create a new file in the Epi Info Maps module.</value>
   </data>
+  <data name="HelpText.CreateOrOpenProject" xml:space="preserve">
+    <value>Click here to create or open a database.</value>
+  </data>
   <data name="HelpText.CreateView" xml:space="preserve">
     <value>Create a new form in the Epi Info Form Designer module.</value>
   </data>
@@ -842,6 +845,12 @@ Close anyway?</value>
   </data>
   <data name="Phase.Name.PreDeployment" xml:space="preserve">
     <value>Pre-deployment</value>
+  </data>
+  <data name="ProjectInfo.Current.Empty" xml:space="preserve">
+    <value>No database found</value>
+  </data>
+  <data name="ProjectInfo.Recents.Empty" xml:space="preserve">
+    <value>No databases found</value>
   </data>
   <data name="RecordStatus.Name.Deleted" xml:space="preserve">
     <value>Deleted</value>

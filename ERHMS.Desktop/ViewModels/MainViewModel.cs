@@ -78,12 +78,12 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            // TODO
+            // TODO: Implement
         }
 
         public void OpenProject(CoreProject coreProject)
         {
-            // TODO
+            // TODO: Implement
         }
 
         public async Task GoToProjectAsync(Func<Task<Project>> action)
@@ -98,6 +98,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToProjectAsync(CoreProject coreProject)
         {
+            // TODO: Handle errors
             await GoToProjectAsync(() => Task.Run(() =>
             {
                 string projectPath = Settings.Default.GetProjectPath(coreProject);
@@ -117,6 +118,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToViewAsync(CoreView coreView)
         {
+            // TODO: Handle errors
             await GoToViewAsync(() => Task.Run(() =>
             {
                 string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
