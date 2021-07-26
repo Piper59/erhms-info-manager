@@ -13,7 +13,12 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class HomeViewModel
     {
-        public class EmptyProjectInfo : ProjectInfo { }
+        public class EmptyProjectInfo : ProjectInfo
+        {
+            public static EmptyProjectInfo Instance { get; } = new EmptyProjectInfo();
+
+            private EmptyProjectInfo() { }
+        }
 
         public class CoreViewViewModel
         {
@@ -123,14 +128,14 @@ namespace ERHMS.Desktop.ViewModels
                 {
                     Recents = new ProjectInfo[]
                     {
-                        new EmptyProjectInfo()
+                        EmptyProjectInfo.Instance
                     };
                 }
             }
 
             public bool CanMakeCurrent(ProjectInfo projectInfo)
             {
-                return !(projectInfo is EmptyProjectInfo);
+                return projectInfo != EmptyProjectInfo.Instance;
             }
 
             public void MakeCurrent(ProjectInfo projectInfo)
