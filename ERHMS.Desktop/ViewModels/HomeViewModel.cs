@@ -112,7 +112,7 @@ namespace ERHMS.Desktop.ViewModels
 
             private void Initialize()
             {
-                if (Settings.Default.HasIncidentProjectPaths)
+                if (Settings.Default.HasIncidentProjectPath)
                 {
                     Current = new ProjectInfo(Settings.Default.IncidentProjectPath);
                     Recents = Settings.Default.IncidentProjectPaths.Cast<string>()
