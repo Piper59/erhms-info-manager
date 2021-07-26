@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-        xmlns:Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
+        xmlns:ERHMS_Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
@@ -20,18 +20,18 @@
             <MenuItem Header="{Markup:String AccessText.File}">
                 <MenuItem Header="{Markup:String AccessText.New}">
                     <MenuItem Command="{Binding CreateProjectCommand}"
-                              CommandParameter="{x:Static Domain:CoreProject.Worker}"
+                              CommandParameter="{x:Static ERHMS_Domain:CoreProject.Worker}"
                               Header="{Markup:String CoreProject.AccessText.Worker}" />
                     <MenuItem Command="{Binding CreateProjectCommand}"
-                              CommandParameter="{x:Static Domain:CoreProject.Incident}"
+                              CommandParameter="{x:Static ERHMS_Domain:CoreProject.Incident}"
                               Header="{Markup:String CoreProject.AccessText.Incident}" />
                 </MenuItem>
                 <MenuItem Header="{Markup:String AccessText.Open}">
                     <MenuItem Command="{Binding OpenProjectCommand}"
-                              CommandParameter="{x:Static Domain:CoreProject.Worker}"
+                              CommandParameter="{x:Static ERHMS_Domain:CoreProject.Worker}"
                               Header="{Markup:String CoreProject.AccessText.Worker}" />
                     <MenuItem Command="{Binding OpenProjectCommand}"
-                              CommandParameter="{x:Static Domain:CoreProject.Incident}"
+                              CommandParameter="{x:Static ERHMS_Domain:CoreProject.Incident}"
                               Header="{Markup:String CoreProject.AccessText.Incident}" />
                 </MenuItem>
                 <Separator />
@@ -43,10 +43,10 @@
                 <MenuItem Command="{Binding GoToHomeCommand}"
                           Header="{Markup:String AccessText.Home}" />
                 <MenuItem Command="{Binding GoToProjectCommand}"
-                          CommandParameter="{x:Static Domain:CoreProject.Worker}"
+                          CommandParameter="{x:Static ERHMS_Domain:CoreProject.Worker}"
                           Header="{Markup:String CoreProject.AccessText.Worker}" />
                 <MenuItem Command="{Binding GoToProjectCommand}"
-                          CommandParameter="{x:Static Domain:CoreProject.Incident}"
+                          CommandParameter="{x:Static ERHMS_Domain:CoreProject.Incident}"
                           Header="{Markup:String CoreProject.AccessText.Incident}" />
             </MenuItem>
             <MenuItem Header="{Markup:String AccessText.Tools}">

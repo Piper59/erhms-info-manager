@@ -4,9 +4,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
-             xmlns:EpiInfo="clr-namespace:ERHMS.EpiInfo;assembly=ERHMS.EpiInfo"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-             xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels">
+             xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
+             xmlns:ERHMS_EpiInfo="clr-namespace:ERHMS.EpiInfo;assembly=ERHMS.EpiInfo">
     <UserControl.Resources>
         <Style x:Key="Icon" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
@@ -54,7 +54,7 @@
                             <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+EmptyProjectInfo}">
                                 <TextBlock Text="{Markup:String ProjectInfo.Recents.Empty}" />
                             </DataTemplate>
-                            <DataTemplate DataType="{x:Type EpiInfo:ProjectInfo}">
+                            <DataTemplate DataType="{x:Type ERHMS_EpiInfo:ProjectInfo}">
                                 <StackPanel>
                                     <TextBlock FontWeight="{StaticResource ThickFontWeight}"
                                                Text="{Binding Name}" />
