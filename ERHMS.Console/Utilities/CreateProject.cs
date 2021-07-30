@@ -38,18 +38,18 @@ namespace ERHMS.Console.Utilities
 
         public void Run()
         {
-            ProjectCreationInfo creationInfo = new ProjectCreationInfo
+            ProjectCreationInfo projectCreationInfo = new ProjectCreationInfo
             {
                 Name = ProjectName,
                 Description = ProjectDescription,
                 Location = ProjectLocation,
                 Database = DatabaseProvider.ToDatabase(ConnectionString)
             };
-            if (File.Exists(creationInfo.FilePath))
+            if (File.Exists(projectCreationInfo.FilePath))
             {
                 throw new InvalidOperationException("Project already exists.");
             }
-            ProjectExtensions.Create(creationInfo);
+            ProjectExtensions.Create(projectCreationInfo);
         }
     }
 }
