@@ -33,12 +33,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+CloseViewModel}">
-        <CheckBox Content="{Markup:String Label.OpenInEpiInfo}"
-                  IsChecked="{Binding OpenInEpiInfo}" />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+Blank+SetViewNameViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+SetViewNameViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -50,6 +45,11 @@
                      Grid.Column="1"
                      Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+CloseViewModel}">
+        <CheckBox Content="{Markup:String Label.OpenInEpiInfo}"
+                  IsChecked="{Binding OpenInEpiInfo}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+Blank+SetWithWorkerInfoViewModel}">
@@ -89,20 +89,6 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromTemplate+SetViewNameViewModel}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0"
-                   Content="{Markup:String Label.View}" />
-            <TextBox AutomationProperties.Name="{Markup:String Label.View}"
-                     Grid.Column="1"
-                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
-        </Grid>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromTemplate+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
@@ -139,20 +125,6 @@
                                     Grid.Row="1"
                                     ItemsSource="{Binding Views}"
                                     ItemText="{Binding Name}" />
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromExisting+SetViewNameViewModel}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0"
-                   Content="{Markup:String Label.View}" />
-            <TextBox AutomationProperties.Name="{Markup:String Label.View}"
-                     Grid.Column="1"
-                     Text="{Binding ViewName, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </DataTemplate>
 
