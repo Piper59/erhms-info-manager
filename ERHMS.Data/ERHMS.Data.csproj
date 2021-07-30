@@ -75,6 +75,7 @@
     <Compile Include="Querying\ParameterCollection.cs" />
     <Compile Include="Querying\Query.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="SqlServer\AuthenticationMode.cs" />
     <Compile Include="SqlServer\SqlServerDatabase.cs" />
     <Compile Include="SqlServer\SqlServerMasterDatabase.cs" />
     <Compile Include="SqlServer\SqlServerUserDatabase.cs" />
