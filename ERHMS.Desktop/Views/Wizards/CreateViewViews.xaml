@@ -98,7 +98,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -107,21 +106,25 @@
             <Label Grid.Column="0"
                    Grid.Row="0"
                    Content="{Markup:String Label.Project}" />
-            <TextBox Grid.Column="1"
-                     Grid.Row="0"
-                     IsReadOnly="True"
-                     Text="{Binding Views.Project.Name, Mode=OneWay}"
-                     ToolTip="{Binding Views.Project.FilePath}" />
-            <Button Grid.Column="2"
-                    Grid.Row="0"
-                    Command="{Binding BrowseCommand}"
-                    Content="{Markup:String AccessText.Browse}" />
+            <Grid Grid.Column="1"
+                  Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         IsReadOnly="True"
+                         Text="{Binding Views.Project.Name, Mode=OneWay}"
+                         ToolTip="{Binding Views.Project.FilePath}" />
+                <Button Grid.Column="1"
+                        Command="{Binding BrowseCommand}"
+                        Content="{Markup:String AccessText.Browse}" />
+            </Grid>
             <Label Grid.Column="0"
                    Grid.Row="1"
                    Content="{Markup:String Label.View}" />
             <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.View}"
                                     Grid.Column="1"
-                                    Grid.ColumnSpan="2"
                                     Grid.Row="1"
                                     ItemsSource="{Binding Views}"
                                     ItemText="{Binding Name}" />
