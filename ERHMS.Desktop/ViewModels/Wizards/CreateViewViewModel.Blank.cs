@@ -14,8 +14,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public class SetViewNameViewModel : CreateViewViewModel.SetViewNameViewModel
             {
-                public SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
-                    : base(wizard, step) { }
+                public SetViewNameViewModel(CreateViewViewModel wizard, IStep antecedent)
+                    : base(wizard, antecedent) { }
 
                 protected override void GoToNextStep()
                 {

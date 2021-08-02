@@ -99,8 +99,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     return result;
                 }
 
-                private SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
-                    : base(wizard, step) { }
+                private SetViewNameViewModel(CreateViewViewModel wizard, IStep antecedent)
+                    : base(wizard, antecedent) { }
 
                 private async Task InitializeAsync()
                 {

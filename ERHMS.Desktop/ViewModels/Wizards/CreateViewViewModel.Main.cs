@@ -61,8 +61,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 set { SetProperty(ref viewName, value); }
             }
 
-            protected SetViewNameViewModel(CreateViewViewModel wizard, IStep step)
-                : base(wizard, step) { }
+            protected SetViewNameViewModel(CreateViewViewModel wizard, IStep antecedent)
+                : base(wizard, antecedent) { }
 
             protected abstract void GoToNextStep();
 
