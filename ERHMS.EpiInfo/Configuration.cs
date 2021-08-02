@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.DataSets;
+using ERHMS.Common.IO;
 using ERHMS.Data;
 using System;
 using System.IO;
@@ -40,6 +41,16 @@ namespace ERHMS
                 default:
                     throw new ArgumentOutOfRangeException(nameof(driver));
             }
+        }
+
+        public static string GetProjectsDirectory(this Epi.Configuration @this)
+        {
+            return PathExtensions.TrimEnd(@this.Directories.Project);
+        }
+
+        public static string GetTemplatesDirectory(this Epi.Configuration @this)
+        {
+            return PathExtensions.TrimEnd(@this.Directories.Templates);
         }
 
         public static void SetTextEncryptionModule(this Epi.Configuration @this, bool fipsCompliant)

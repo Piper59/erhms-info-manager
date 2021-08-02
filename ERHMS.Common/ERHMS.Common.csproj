@@ -57,6 +57,7 @@
     <Compile Include="IO\CsvReader.cs" />
     <Compile Include="IO\CsvWriter.cs" />
     <Compile Include="IO\FileSystemExtensions.cs" />
+    <Compile Include="IO\PathExtensions.cs" />
     <Compile Include="Linq\IEnumerableExtensions.cs" />
     <Compile Include="Linq\IEnumeratorExtensions.cs" />
     <Compile Include="Linq\Iterator.cs" />

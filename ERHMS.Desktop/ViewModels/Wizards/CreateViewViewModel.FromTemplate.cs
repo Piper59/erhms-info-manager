@@ -36,7 +36,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     : base(wizard, antecedent)
                 {
                     fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                    fileDialog.InitialDirectory = Configuration.Instance.Directories.Templates;
+                    fileDialog.InitialDirectory = Configuration.Instance.GetTemplatesDirectory();
                     fileDialog.Filter = Strings.FileDialog_Filter_Templates;
                     BrowseCommand = new AsyncCommand(BrowseAsync);
                 }
