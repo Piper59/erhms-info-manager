@@ -1735,83 +1735,155 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a form name..
+        ///   Looks up a localized string similar to Please specify a database name..
         /// </summary>
-        public static string InvalidViewNameReason_Body_Empty {
+        public static string InvalidNameReason_Project_Body_Empty {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Body.Empty", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Project.Body.Empty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A form or table with this name already exists in the current database. Please specify a different form name..
+        ///   Looks up a localized string similar to A database with this name already exists. Please specify a different database name..
         /// </summary>
-        public static string InvalidViewNameReason_Body_Identical {
+        public static string InvalidNameReason_Project_Body_Identical {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Body.Identical", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Project.Body.Identical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a database name that contains only letters, numbers, and underscores..
+        /// </summary>
+        public static string InvalidNameReason_Project_Body_InvalidChar {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.Project.Body.InvalidChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a database name that begins with a letter..
+        /// </summary>
+        public static string InvalidNameReason_Project_Body_InvalidStartChar {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.Project.Body.InvalidStartChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a database name that is no longer than {0} characters..
+        /// </summary>
+        public static string InvalidNameReason_Project_Body_TooLong {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.Project.Body.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This database name is not valid.
+        /// </summary>
+        public static string InvalidNameReason_Project_Lead_Default {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.Project.Lead.Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No database name was specified.
+        /// </summary>
+        public static string InvalidNameReason_Project_Lead_Empty {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.Project.Lead.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This database name is too long.
+        /// </summary>
+        public static string InvalidNameReason_Project_Lead_TooLong {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.Project.Lead.TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a form name..
+        /// </summary>
+        public static string InvalidNameReason_View_Body_Empty {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.View.Body.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A form or table with this name already exists. Please specify a different form name..
+        /// </summary>
+        public static string InvalidNameReason_View_Body_Identical {
+            get {
+                return ResourceManager.GetString("InvalidNameReason.View.Body.Identical", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please specify a form name that contains only letters, numbers, and underscores..
         /// </summary>
-        public static string InvalidViewNameReason_Body_InvalidChar {
+        public static string InvalidNameReason_View_Body_InvalidChar {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Body.InvalidChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.View.Body.InvalidChar", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please specify a form name that begins with a letter..
         /// </summary>
-        public static string InvalidViewNameReason_Body_InvalidStartChar {
+        public static string InvalidNameReason_View_Body_InvalidStartChar {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Body.InvalidStartChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.View.Body.InvalidStartChar", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A form with a similar name already exists in the current database. To avoid a possible conflict, please specify a different form name..
+        ///   Looks up a localized string similar to A form with a similar name already exists. To avoid a possible conflict, please specify a different form name..
         /// </summary>
-        public static string InvalidViewNameReason_Body_Similar {
+        public static string InvalidNameReason_View_Body_Similar {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Body.Similar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.View.Body.Similar", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please specify a form name that is no longer than {0} characters..
         /// </summary>
-        public static string InvalidViewNameReason_Body_TooLong {
+        public static string InvalidNameReason_View_Body_TooLong {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Body.TooLong", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.View.Body.TooLong", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to This form name is not valid.
         /// </summary>
-        public static string InvalidViewNameReason_Lead_Default {
+        public static string InvalidNameReason_View_Lead_Default {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Lead.Default", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.View.Lead.Default", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to No form name was specified.
         /// </summary>
-        public static string InvalidViewNameReason_Lead_Empty {
+        public static string InvalidNameReason_View_Lead_Empty {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Lead.Empty", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.View.Lead.Empty", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to This form name is too long.
         /// </summary>
-        public static string InvalidViewNameReason_Lead_TooLong {
+        public static string InvalidNameReason_View_Lead_TooLong {
             get {
-                return ResourceManager.GetString("InvalidViewNameReason.Lead.TooLong", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.View.Lead.TooLong", resourceCulture);
             }
         }
         

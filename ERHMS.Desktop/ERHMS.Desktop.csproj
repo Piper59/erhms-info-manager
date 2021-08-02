@@ -138,7 +138,7 @@
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
-    <Compile Include="Infrastructure\InvalidViewNameReasonExtensions.cs" />
+    <Compile Include="Infrastructure\InvalidNameReasonExtensions.cs" />
     <Compile Include="Infrastructure\MenuDropAlignment.cs" />
     <Compile Include="Infrastructure\NativeMethods.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />

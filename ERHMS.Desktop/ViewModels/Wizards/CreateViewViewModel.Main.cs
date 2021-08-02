@@ -75,18 +75,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                 progress.Lead = Strings.Lead_ValidatingViewName;
-                InvalidViewNameReason reason = InvalidViewNameReason.None;
+                InvalidNameReason reason = InvalidNameReason.None;
                 bool valid = await progress.Run(() =>
                 {
                     ViewNameValidator validator = new ViewNameValidator(Wizard.Project);
                     return validator.IsValid(ViewName, out reason);
                 });
-                if (reason != InvalidViewNameReason.None)
+                if (reason != InvalidNameReason.None)
                 {
                     IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
                     dialog.Severity = DialogSeverity.Warning;
-                    dialog.Lead = reason.GetLead();
-                    dialog.Body = reason.GetBody();
+                    dialog.Lead = reason.GetViewLead();
+                    dialog.Body = reason.GetViewBody();
                     dialog.Buttons = DialogButtonCollection.Close;
                     dialog.Show();
                 }

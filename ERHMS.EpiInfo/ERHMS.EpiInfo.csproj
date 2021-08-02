@@ -101,9 +101,11 @@
     <Compile Include="Metadata\MetaFieldTypeExtensions.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Naming\FieldNameUniquifier.cs" />
-    <Compile Include="Naming\InvalidViewNameReason.cs" />
+    <Compile Include="Naming\InvalidNameReason.cs" />
     <Compile Include="Naming\NameComparer.cs" />
+    <Compile Include="Naming\NameValidator.cs" />
     <Compile Include="Naming\PageNameUniquifier.cs" />
+    <Compile Include="Naming\ProjectNameValidator.cs" />
     <Compile Include="Naming\TableNameUniquifier.cs" />
     <Compile Include="Naming\ViewNameUniquifier.cs" />
     <Compile Include="Naming\ViewNameValidator.cs" />

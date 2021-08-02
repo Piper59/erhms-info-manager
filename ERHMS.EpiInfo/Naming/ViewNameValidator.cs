@@ -4,11 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace ERHMS.EpiInfo.Naming
 {
-    public class ViewNameValidator
+    public class ViewNameValidator : NameValidator
     {
-        private static readonly Regex invalidCharRegex = new Regex(@"[^A-Z0-9_]", RegexOptions.IgnoreCase);
-        private static readonly Regex invalidStartCharRegex = new Regex(@"^[^A-Z]", RegexOptions.IgnoreCase);
-
         public static int MaxLength => 40;
 
         private static Regex GetPageTableNameRegex(string viewTableName)
@@ -23,14 +20,19 @@ namespace ERHMS.EpiInfo.Naming
             Project = project;
         }
 
-        public bool IsIdentical(string viewName)
+        protected override int GetMaxLength()
         {
-            return Project.GetTableNames(TableTypes.All).Contains(viewName, NameComparer.Default);
+            return MaxLength;
         }
 
-        public bool IsSimilar(string viewName)
+        public bool IsIdentical(string name)
         {
-            Regex pageTableNameRegex = GetPageTableNameRegex(viewName);
+            return Project.GetTableNames(TableTypes.All).Contains(name, NameComparer.Default);
+        }
+
+        public bool IsSimilar(string name)
+        {
+            Regex pageTableNameRegex = GetPageTableNameRegex(name);
             foreach (string tableName in Project.GetTableNames(TableTypes.All))
             {
                 if (pageTableNameRegex.IsMatch(tableName))
@@ -40,7 +42,7 @@ namespace ERHMS.EpiInfo.Naming
             }
             foreach (View view in Project.Views)
             {
-                if (GetPageTableNameRegex(view.TableName).IsMatch(viewName))
+                if (GetPageTableNameRegex(view.TableName).IsMatch(name))
                 {
                     return true;
                 }
@@ -48,39 +50,23 @@ namespace ERHMS.EpiInfo.Naming
             return false;
         }
 
-        public bool IsValid(string viewName, out InvalidViewNameReason reason)
+        public override bool IsValid(string name, out InvalidNameReason reason)
         {
-            if (string.IsNullOrEmpty(viewName))
+            if (!base.IsValid(name, out reason))
             {
-                reason = InvalidViewNameReason.Empty;
                 return false;
             }
-            if (viewName.Length > MaxLength)
+            if (IsIdentical(name))
             {
-                reason = InvalidViewNameReason.TooLong;
+                reason = InvalidNameReason.Identical;
                 return false;
             }
-            if (invalidCharRegex.IsMatch(viewName))
+            if (IsSimilar(name))
             {
-                reason = InvalidViewNameReason.InvalidChar;
+                reason = InvalidNameReason.Similar;
                 return false;
             }
-            if (invalidStartCharRegex.IsMatch(viewName))
-            {
-                reason = InvalidViewNameReason.InvalidStartChar;
-                return false;
-            }
-            if (IsIdentical(viewName))
-            {
-                reason = InvalidViewNameReason.Identical;
-                return false;
-            }
-            if (IsSimilar(viewName))
-            {
-                reason = InvalidViewNameReason.Similar;
-                return false;
-            }
-            reason = InvalidViewNameReason.None;
+            reason = InvalidNameReason.None;
             return true;
         }
     }

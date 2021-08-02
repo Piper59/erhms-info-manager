@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.EpiInfo.Naming
 {
-    public enum InvalidViewNameReason
+    public enum InvalidNameReason
     {
         None,
         Empty,
