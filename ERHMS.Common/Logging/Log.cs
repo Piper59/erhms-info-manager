@@ -5,6 +5,7 @@ using log4net.Repository.Hierarchy;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using System.Security.Principal;
 
 namespace ERHMS.Common.Logging
@@ -22,28 +23,33 @@ namespace ERHMS.Common.Logging
         public static ILog Instance => LogManager.GetLogger(typeof(Log));
         public static IProgress<string> Progress { get; } = new ProgressImpl();
 
-        static Log()
+        private static string GetUser()
         {
             try
             {
                 using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
                 {
-                    GlobalContext.Properties["user"] = identity.Name;
+                    return identity.Name;
                 }
             }
-            catch { }
-            try
+            catch (SecurityException)
             {
-                using (Process process = Process.GetCurrentProcess())
-                {
-                    GlobalContext.Properties["process"] = process.Id;
-                }
+                return "?";
             }
-            catch { }
+        }
+
+        private static string GetProcess()
+        {
+            using (Process process = Process.GetCurrentProcess())
+            {
+                return process.Id.ToString();
+            }
         }
 
         public static void Initialize(params IAppender[] appenders)
         {
+            GlobalContext.Properties["user"] = GetUser();
+            GlobalContext.Properties["process"] = GetProcess();
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             foreach (IAppender appender in appenders)
             {
