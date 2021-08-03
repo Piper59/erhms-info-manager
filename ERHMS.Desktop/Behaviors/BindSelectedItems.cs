@@ -1,26 +1,17 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace ERHMS.Desktop.Behaviors
 {
-    public class BindSelectedItems : Behavior<MultiSelector>
+    public class BindSelectedItems : BindProperty<MultiSelector>
     {
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
             nameof(SelectedItems),
             typeof(IList),
             typeof(BindSelectedItems),
-            new FrameworkPropertyMetadata(SelectedItems_PropertyChanged));
-
-        private static void SelectedItems_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            ((BindSelectedItems)sender).VerifyUpdating();
-        }
-
-        private bool updating;
+            new FrameworkPropertyMetadata(OnPropertyChanged));
 
         public IList SelectedItems
         {
@@ -42,23 +33,12 @@ namespace ERHMS.Desktop.Behaviors
 
         private void AssociatedObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            updating = true;
-            try
-            {
-                SelectedItems = AssociatedObject.SelectedItems;
-            }
-            finally
-            {
-                updating = false;
-            }
+            Pull();
         }
 
-        private void VerifyUpdating()
+        protected override void PullCore()
         {
-            if (!updating)
-            {
-                throw new NotSupportedException("Cannot update selected items programmatically.");
-            }
+            SelectedItems = AssociatedObject.SelectedItems;
         }
     }
 }
