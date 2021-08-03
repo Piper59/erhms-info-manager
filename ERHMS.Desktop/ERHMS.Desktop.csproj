@@ -91,6 +91,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behaviors\BindPassword.cs" />
     <Compile Include="Behaviors\BindProperty.cs" />
     <Compile Include="Behaviors\BindSelectedItems.cs" />
     <Compile Include="Behaviors\EnhanceKeyboardNavigation.cs" />

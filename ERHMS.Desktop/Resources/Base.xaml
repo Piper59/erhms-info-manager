@@ -136,6 +136,13 @@
     </Style>
     <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}" />
 
+    <Style x:Key="PasswordBoxBase" TargetType="PasswordBox">
+        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Padding" Value="{StaticResource SmallThickness}" />
+    </Style>
+    <Style TargetType="PasswordBox" BasedOn="{StaticResource PasswordBoxBase}" />
+
     <Style x:Key="ProgressBarBase" TargetType="ProgressBar">
         <Setter Property="Height" Value="{StaticResource HugeSpace}" />
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
