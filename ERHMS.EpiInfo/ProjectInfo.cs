@@ -28,11 +28,5 @@ namespace ERHMS.EpiInfo
         {
             FilePath = filePath;
         }
-
-        public ProjectInfo(string locationRoot, string name)
-        {
-            Name = name;
-            Location = Path.Combine(locationRoot, name);
-        }
     }
 }

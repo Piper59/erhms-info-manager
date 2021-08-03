@@ -20,7 +20,11 @@ namespace ERHMS.EpiInfo.Naming
 
         public bool IsIdentical(string name)
         {
-            ProjectInfo projectInfo = new ProjectInfo(LocationRoot, name);
+            ProjectInfo projectInfo = new ProjectInfo
+            {
+                Name = name,
+                Location = Path.Combine(LocationRoot, name)
+            };
             return File.Exists(projectInfo.FilePath);
         }
 
