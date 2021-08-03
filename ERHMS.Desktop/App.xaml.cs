@@ -32,6 +32,7 @@ namespace ERHMS.Desktop
         private void InitializeServices()
         {
             ServiceLocator.Install<IDialogService>(() => new DialogService());
+            ServiceLocator.Install<IDirectoryDialogService>(() => new DirectoryDialogService());
             ServiceLocator.Install<IFileDialogService>(() => new FileDialogService());
             ServiceLocator.Install<IProgressService>(() => new ProgressService());
             ServiceLocator.Install<IWizardService>(() => new WizardService());

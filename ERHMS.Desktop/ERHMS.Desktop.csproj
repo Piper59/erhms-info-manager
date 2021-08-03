@@ -143,6 +143,7 @@
     <Compile Include="Infrastructure\NativeMethods.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
+    <Compile Include="Infrastructure\Services\DirectoryDialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />
     <Compile Include="Infrastructure\Services\ProgressService.cs" />
     <Compile Include="Infrastructure\Services\WizardService.cs" />
@@ -169,6 +170,7 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\IDirectoryDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IProgressService.cs" />
     <Compile Include="Services\IWizardService.cs" />
