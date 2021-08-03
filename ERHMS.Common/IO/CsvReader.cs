@@ -7,7 +7,7 @@ namespace ERHMS.Common.IO
 {
     public class CsvReader : IDisposable
     {
-        private enum Mode
+        private enum State
         {
             Initial,
             Unquoted,
@@ -24,7 +24,8 @@ namespace ERHMS.Common.IO
             EndOfFile = (1 << 2) | EndOfRow
         }
 
-        private Mode mode;
+        private State state;
+        private Flags flags;
 
         public TextReader Reader { get; }
         public int FieldCount { get; private set; } = -1;
@@ -40,16 +41,16 @@ namespace ERHMS.Common.IO
             return new IOException($"{reason} in row {RowNumber}.", innerException);
         }
 
-        private int ReadChar(out Flags flags)
+        private int ReadChar()
         {
             flags = Flags.None;
             int ch = Reader.Read();
             switch (ch)
             {
                 case -1:
-                    switch (mode)
+                    switch (state)
                     {
-                        case Mode.Quoted:
+                        case State.Quoted:
                             throw GetException("Unexpected end of file");
                         default:
                             flags = Flags.EndOfFile;
@@ -57,9 +58,9 @@ namespace ERHMS.Common.IO
                     }
                 case '\r':
                 case '\n':
-                    switch (mode)
+                    switch (state)
                     {
-                        case Mode.Quoted:
+                        case State.Quoted:
                             return ch;
                         default:
                             if (ch == '\r' && Reader.Peek() == '\n')
@@ -70,38 +71,38 @@ namespace ERHMS.Common.IO
                             return -1;
                     }
                 case ',':
-                    switch (mode)
+                    switch (state)
                     {
-                        case Mode.Quoted:
+                        case State.Quoted:
                             return ch;
                         default:
                             flags = Flags.EndOfValue;
                             return -1;
                     }
                 case '"':
-                    switch (mode)
+                    switch (state)
                     {
-                        case Mode.Initial:
-                            mode = Mode.Quoted;
+                        case State.Initial:
+                            state = State.Quoted;
                             return -1;
-                        case Mode.Unquoted:
+                        case State.Unquoted:
                             throw GetException("Unexpected quote");
-                        case Mode.Quoted:
-                            mode = Mode.Escaping;
+                        case State.Quoted:
+                            state = State.Escaping;
                             return -1;
-                        case Mode.Escaping:
-                            mode = Mode.Quoted;
+                        case State.Escaping:
+                            state = State.Quoted;
                             return ch;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(mode));
+                            throw new ArgumentOutOfRangeException(nameof(state));
                     }
                 default:
-                    switch (mode)
+                    switch (state)
                     {
-                        case Mode.Initial:
-                            mode = Mode.Unquoted;
+                        case State.Initial:
+                            state = State.Unquoted;
                             goto default;
-                        case Mode.Escaping:
+                        case State.Escaping:
                             throw GetException("Unexpected quote");
                         default:
                             return ch;
@@ -109,13 +110,13 @@ namespace ERHMS.Common.IO
             }
         }
 
-        private string ReadValue(out Flags flags)
+        private string ReadValue()
         {
-            mode = Mode.Initial;
+            state = State.Initial;
             StringBuilder value = new StringBuilder();
             while (true)
             {
-                int ch = ReadChar(out flags);
+                int ch = ReadChar();
                 if (ch != -1)
                 {
                     value.Append((char)ch);
@@ -129,7 +130,7 @@ namespace ERHMS.Common.IO
 
         public IList<string> ReadRow()
         {
-            string value = ReadValue(out Flags flags);
+            string value = ReadValue();
             if (value == "" && flags.HasFlag(Flags.EndOfFile))
             {
                 return null;
@@ -141,7 +142,7 @@ namespace ERHMS.Common.IO
             };
             while (!flags.HasFlag(Flags.EndOfRow))
             {
-                values.Add(ReadValue(out flags));
+                values.Add(ReadValue());
             }
             if (FieldCount == -1)
             {
