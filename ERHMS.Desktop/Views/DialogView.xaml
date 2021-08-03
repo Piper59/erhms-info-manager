@@ -54,7 +54,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
-                        Command="{Binding ToggleShowingDetailsCommand}"
+                        Command="{Binding ToggleCommand}"
                         Content="{Markup:String AccessText.Details}"
                         VerticalAlignment="Top"
                         Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}" />
@@ -79,7 +79,7 @@
         </Border>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1,0,0"
-                Visibility="{Binding ShowingDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid Style="{StaticResource Container}">
                 <TextBox IsReadOnly="True"
                          Style="{StaticResource CodeTextBox}"

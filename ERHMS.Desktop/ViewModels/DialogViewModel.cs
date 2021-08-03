@@ -20,14 +20,14 @@ namespace ERHMS.Desktop.ViewModels
         public DialogButtonCollection Buttons { get; }
         public bool? Result { get; set; }
 
-        private bool showingDetails;
-        public bool ShowingDetails
+        private bool expanded;
+        public bool Expanded
         {
-            get { return showingDetails; }
-            set { SetProperty(ref showingDetails, value); }
+            get { return expanded; }
+            set { SetProperty(ref expanded, value); }
         }
 
-        public ICommand ToggleShowingDetailsCommand { get; }
+        public ICommand ToggleCommand { get; }
 
         public DialogViewModel(
             DialogSeverity severity,
@@ -49,12 +49,12 @@ namespace ERHMS.Desktop.ViewModels
             Body = body;
             Details = details;
             Buttons = buttons;
-            ToggleShowingDetailsCommand = new SyncCommand(ToggleShowingDetails);
+            ToggleCommand = new SyncCommand(Toggle);
         }
 
-        public void ToggleShowingDetails()
+        public void Toggle()
         {
-            ShowingDetails = !showingDetails;
+            Expanded = !expanded;
         }
     }
 }
