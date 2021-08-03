@@ -26,7 +26,7 @@ call :update_view BlankFormWithWorkerInfo || exit /b 1
 call :set_project Workers
 call :update_view Worker\WorkerRosteringForm || exit /b 1
 call :update_view Worker\PreDeploymentHealthSurvey || exit /b 1
-call :set_project Incidents\SampleIncident
+call :set_project Incident
 call :update_view Incident\WorkerDeploymentRecord || exit /b 1
 call :update_view Incident\WorkerInProcessingForm || exit /b 1
 call :update_view Incident\WorkerActivityReport || exit /b 1

@@ -31,7 +31,7 @@ call :create_view BlankFormWithWorkerInfo || exit /b 1
 call :create_project Workers || exit /b 1
 call :create_view Worker\WorkerRosteringForm || exit /b 1
 call :create_view Worker\PreDeploymentHealthSurvey || exit /b 1
-call :create_project Incidents\SampleIncident || exit /b 1
+call :create_project Incident || exit /b 1
 call :create_view Incident\WorkerDeploymentRecord || exit /b 1
 call :create_view Incident\WorkerInProcessingForm || exit /b 1
 call :create_view Incident\WorkerActivityReport || exit /b 1
