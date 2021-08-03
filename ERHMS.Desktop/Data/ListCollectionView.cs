@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Data;
 
 namespace ERHMS.Desktop.Data
@@ -15,6 +16,12 @@ namespace ERHMS.Desktop.Data
         {
             List = list;
         }
+
+        public ListCollectionView(IEnumerable<TItem> items)
+            : this(items.ToList()) { }
+
+        public ListCollectionView(params TItem[] items)
+            : this(items.ToList()) { }
 
         public bool MoveCurrentTo(Predicate<TItem> predicate)
         {

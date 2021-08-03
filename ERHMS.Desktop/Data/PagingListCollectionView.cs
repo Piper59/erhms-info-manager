@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.Data
@@ -96,6 +97,12 @@ namespace ERHMS.Desktop.Data
             GoToNextPageCommand = new SyncCommand(GoToNextPageCore, CanGoToNextPage);
             GoToLastPageCommand = new SyncCommand(GoToLastPageCore, CanGoToLastPage);
         }
+
+        public PagingListCollectionView(IEnumerable<TItem> items)
+            : this(items.ToList()) { }
+
+        public PagingListCollectionView(params TItem[] items)
+            : this(items.ToList()) { }
 
         private void Descriptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

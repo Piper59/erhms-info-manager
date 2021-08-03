@@ -1,5 +1,4 @@
 ﻿using Epi;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ namespace ERHMS.Desktop.Data
         public Project Project { get; }
 
         private ViewListCollectionView(Project project)
-            : base(new List<View>())
+            : base()
         {
             Project = project;
         }

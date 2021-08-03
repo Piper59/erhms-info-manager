@@ -28,6 +28,6 @@ namespace ERHMS.Desktop.Data
         }
 
         public RecordStatusListCollectionView()
-            : base(Item.Instances.ToList()) { }
+            : base(Item.Instances) { }
     }
 }

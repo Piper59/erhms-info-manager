@@ -51,7 +51,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 Index = index;
                 Source = source;
-                Targets = new ListCollectionView<Target>(targets.ToList());
+                Targets = new ListCollectionView<Target>(targets);
                 Targets.MoveCurrentTo(target => !target.IsEmpty && NameComparer.Default.Equals(target.Name, source));
             }
         }
