@@ -19,10 +19,10 @@
             </Grid.ColumnDefinitions>
             <Controls:Search Grid.Column="0"
                              Text="{Binding SearchText}" />
-            <Controls:BoundComboBox AutomationProperties.Name="{Binding Source='Label.RecordStatus', Converter={StaticResource StringLocalizingConverter}}"
+            <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.RecordStatus}"
                                     Grid.Column="1"
+                                    Binding="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.Name.{0}'}"
                                     ItemsSource="{Binding Statuses}"
-                                    ItemText="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.Name.{0}'}"
                                     MinWidth="125" />
         </Grid>
         <Controls:Pager Grid.Row="1"

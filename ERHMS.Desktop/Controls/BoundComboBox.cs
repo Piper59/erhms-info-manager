@@ -7,32 +7,27 @@ namespace ERHMS.Desktop.Controls
 {
     public class BoundComboBox : ComboBox
     {
-        private BindingBase itemText;
-        public BindingBase ItemText
+        private BindingBase binding;
+        public BindingBase Binding
         {
             get
             {
-                return itemText;
+                return binding;
             }
             set
             {
-                itemText = value;
-                OnItemTextChanged();
+                binding = value;
+                ItemContainerStyle = GetItemContainerStyle();
+                ItemTemplate = GetItemTemplate();
             }
-        }
-
-        private void OnItemTextChanged()
-        {
-            ItemContainerStyle = GetItemContainerStyle();
-            ItemTemplate = GetItemTemplate();
         }
 
         private Style GetItemContainerStyle()
         {
             Style style = new Style(typeof(ComboBoxItem), (Style)FindResource(typeof(ComboBoxItem)));
-            if (ItemText != null)
+            if (Binding != null)
             {
-                style.Setters.Add(new Setter(AutomationProperties.NameProperty, ItemText));
+                style.Setters.Add(new Setter(AutomationProperties.NameProperty, Binding));
             }
             return style;
         }
@@ -40,9 +35,9 @@ namespace ERHMS.Desktop.Controls
         private DataTemplate GetItemTemplate()
         {
             FrameworkElementFactory factory = new FrameworkElementFactory(typeof(TextBlock));
-            if (ItemText != null)
+            if (Binding != null)
             {
-                factory.SetBinding(TextBlock.TextProperty, ItemText);
+                factory.SetBinding(TextBlock.TextProperty, Binding);
             }
             return new DataTemplate
             {

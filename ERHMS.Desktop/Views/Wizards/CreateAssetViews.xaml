@@ -14,8 +14,8 @@
                    Content="{Markup:String Label.View}" />
             <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.View}"
                                     Grid.Column="1"
-                                    ItemsSource="{Binding Views}"
-                                    ItemText="{Binding Name}" />
+                                    Binding="{Binding Name}"
+                                    ItemsSource="{Binding Views}" />
         </Grid>
     </DataTemplate>
 
