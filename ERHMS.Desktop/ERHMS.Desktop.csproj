@@ -120,9 +120,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
     <Compile Include="Converters\ByteCountFormattingConverter.cs" />
-    <Compile Include="Converters\ConditionalConverter.cs" />
     <Compile Include="Converters\IconNameToStringConverter.cs" />
-    <Compile Include="Converters\NullableToBooleanConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PathToDirectoryNameConverter.cs" />
     <Compile Include="Converters\PathToFileNameConverter.cs" />

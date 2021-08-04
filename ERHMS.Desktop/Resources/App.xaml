@@ -60,12 +60,6 @@
     <Style TargetType="Controls:BoundComboBox" BasedOn="{StaticResource ComboBoxBase}" />
 
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
-        <Style.Resources>
-            <Converters:ConditionalConverter x:Key="HelpTextToAltTextFontWeightConverter"
-                                             BaseConverter="{StaticResource NullableToBooleanConverter}"
-                                             FalseValue="{StaticResource DefaultFontWeight}"
-                                             TrueValue="{StaticResource ThickFontWeight}" />
-        </Style.Resources>
         <Setter Property="AutomationProperties.HelpText" Value="{Binding HelpText, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding AltText, RelativeSource={RelativeSource Self},TargetNullValue=''}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
@@ -81,8 +75,18 @@
                 <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}"
                          MaxWidth="{StaticResource ToolTipWidth}">
                     <StackPanel>
-                        <TextBlock FontWeight="{Binding HelpText, Converter={StaticResource HelpTextToAltTextFontWeightConverter}}"
-                                   Text="{Binding AltText}" />
+                        <TextBlock Text="{Binding AltText}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HelpText}" Value="{x:Null}">
+                                            <Setter Property="FontWeight" Value="{StaticResource DefaultFontWeight}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                         <TextBlock Text="{Binding HelpText}"
                                    Visibility="{Binding HelpText, Converter={StaticResource NullableToVisibilityConverter}}">
                             <TextBlock.Margin>
