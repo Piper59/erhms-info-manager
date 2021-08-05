@@ -436,31 +436,31 @@ Close anyway?</value>
     <value>_Worker report</value>
   </data>
   <data name="CoreView.HelpText.AfterActionReview" xml:space="preserve">
-    <value>Filled out as necessary after deployment. Captures feedback on the organization's ERHMS program.</value>
+    <value>Filled out as necessary after deployment. Collects feedback on the organization's ERHMS program.</value>
   </data>
   <data name="CoreView.HelpText.DeploymentHealthSurvey" xml:space="preserve">
-    <value>Filled out at least weekly during deployment for each worker. Captures information on acute health effects.</value>
+    <value>Filled out at least weekly during deployment for each worker. Collects information on acute health effects.</value>
   </data>
   <data name="CoreView.HelpText.PostDeploymentHealthSurvey" xml:space="preserve">
-    <value>Filled out as necessary after deployment. Captures information on chronic health effects.</value>
+    <value>Filled out as necessary after deployment. Collects information on chronic health effects.</value>
   </data>
   <data name="CoreView.HelpText.PreDeploymentHealthSurvey" xml:space="preserve">
-    <value>Filled out annually for each worker. Captures information on baseline health status.</value>
+    <value>Filled out annually for each worker. Collects information on baseline health status.</value>
   </data>
   <data name="CoreView.HelpText.WorkerActivityReport" xml:space="preserve">
-    <value>Filled out daily during deployment for each worker. Captures information on work location and activity.</value>
+    <value>Filled out daily during deployment for each worker. Collects information on work location and activity.</value>
   </data>
   <data name="CoreView.HelpText.WorkerDeploymentRecord" xml:space="preserve">
-    <value>Filled out once per deployment for each worker. Captures basic accountability information.</value>
+    <value>Filled out once per deployment for each worker. Collects basic accountability information.</value>
   </data>
   <data name="CoreView.HelpText.WorkerInProcessingForm" xml:space="preserve">
-    <value>Filled out once per deployment during mobilization for each worker. Captures information on current health status and training/PPE distribution.</value>
+    <value>Filled out once per deployment during mobilization for each worker. Collects information on current health status and training/PPE distribution.</value>
   </data>
   <data name="CoreView.HelpText.WorkerOutProcessingForm" xml:space="preserve">
-    <value>Filled out once per deployment during demobilization for each worker. Captures information on training/PPE effectiveness.</value>
+    <value>Filled out once per deployment during demobilization for each worker. Collects information on training/PPE effectiveness.</value>
   </data>
   <data name="CoreView.HelpText.WorkerRosteringForm" xml:space="preserve">
-    <value>Filled out once for each worker and reviewed annually. Captures rostering and credentialing information.</value>
+    <value>Filled out once for each worker and reviewed annually. Collects rostering and credentialing information.</value>
   </data>
   <data name="CoreView.Title.AfterActionReview" xml:space="preserve">
     <value>After-Action Review</value>

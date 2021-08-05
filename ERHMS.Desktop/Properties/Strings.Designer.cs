@@ -979,7 +979,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out as necessary after deployment. Captures feedback on the organization&apos;s ERHMS program..
+        ///   Looks up a localized string similar to Filled out as necessary after deployment. Collects feedback on the organization&apos;s ERHMS program..
         /// </summary>
         public static string CoreView_HelpText_AfterActionReview {
             get {
@@ -988,7 +988,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out at least weekly during deployment for each worker. Captures information on acute health effects..
+        ///   Looks up a localized string similar to Filled out at least weekly during deployment for each worker. Collects information on acute health effects..
         /// </summary>
         public static string CoreView_HelpText_DeploymentHealthSurvey {
             get {
@@ -997,7 +997,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out as necessary after deployment. Captures information on chronic health effects..
+        ///   Looks up a localized string similar to Filled out as necessary after deployment. Collects information on chronic health effects..
         /// </summary>
         public static string CoreView_HelpText_PostDeploymentHealthSurvey {
             get {
@@ -1006,7 +1006,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out annually for each worker. Captures information on baseline health status..
+        ///   Looks up a localized string similar to Filled out annually for each worker. Collects information on baseline health status..
         /// </summary>
         public static string CoreView_HelpText_PreDeploymentHealthSurvey {
             get {
@@ -1015,7 +1015,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out daily during deployment for each worker. Captures information on work location and activity..
+        ///   Looks up a localized string similar to Filled out daily during deployment for each worker. Collects information on work location and activity..
         /// </summary>
         public static string CoreView_HelpText_WorkerActivityReport {
             get {
@@ -1024,7 +1024,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out once per deployment for each worker. Captures basic accountability information..
+        ///   Looks up a localized string similar to Filled out once per deployment for each worker. Collects basic accountability information..
         /// </summary>
         public static string CoreView_HelpText_WorkerDeploymentRecord {
             get {
@@ -1033,7 +1033,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out once per deployment during mobilization for each worker. Captures information on current health status and training/PPE distribution..
+        ///   Looks up a localized string similar to Filled out once per deployment during mobilization for each worker. Collects information on current health status and training/PPE distribution..
         /// </summary>
         public static string CoreView_HelpText_WorkerInProcessingForm {
             get {
@@ -1042,7 +1042,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out once per deployment during demobilization for each worker. Captures information on training/PPE effectiveness..
+        ///   Looks up a localized string similar to Filled out once per deployment during demobilization for each worker. Collects information on training/PPE effectiveness..
         /// </summary>
         public static string CoreView_HelpText_WorkerOutProcessingForm {
             get {
@@ -1051,7 +1051,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filled out once for each worker and reviewed annually. Captures rostering and credentialing information..
+        ///   Looks up a localized string similar to Filled out once for each worker and reviewed annually. Collects rostering and credentialing information..
         /// </summary>
         public static string CoreView_HelpText_WorkerRosteringForm {
             get {
