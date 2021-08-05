@@ -55,9 +55,28 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
                         Command="{Binding ToggleCommand}"
-                        Content="{Markup:String AccessText.Details}"
                         VerticalAlignment="Top"
-                        Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}" />
+                        Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <AccessText Text="{Markup:String AccessText.Details}" />
+                        <TextBlock FontFamily="{StaticResource IconFontFamily}"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Margin>
+                                <Thickness Left="{StaticResource SmallSpace}" />
+                            </TextBlock.Margin>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding Source='Expand', Converter={StaticResource IconNameToStringConverter}}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Expanded}" Value="True">
+                                            <Setter Property="Text" Value="{Binding Source='Collapse', Converter={StaticResource IconNameToStringConverter}}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
                 <ItemsControl Grid.Column="1"
                               IsTabStop="False"
                               ItemsSource="{Binding Buttons}">

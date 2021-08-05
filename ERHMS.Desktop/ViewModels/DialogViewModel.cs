@@ -54,7 +54,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void Toggle()
         {
-            Expanded = !expanded;
+            Expanded = !Expanded;
         }
     }
 }
