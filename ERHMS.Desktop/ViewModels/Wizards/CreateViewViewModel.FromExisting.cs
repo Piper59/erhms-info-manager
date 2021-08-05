@@ -133,8 +133,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Label_SourceView, wizard.SourceView },
-                        { Strings.Label_TargetView, wizard.ViewName }
+                        { Strings.Label_Project, wizard.SourceView.Project.FilePath },
+                        { Strings.Label_View, wizard.SourceView.Name },
+                        { Strings.Label_Name, wizard.ViewName }
                     };
                 }
 

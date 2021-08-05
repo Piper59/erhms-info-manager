@@ -56,5 +56,20 @@ namespace ERHMS.Desktop.Properties
                     throw new ArgumentOutOfRangeException(nameof(coreProject));
             }
         }
+
+        public void SetProjectPath(CoreProject coreProject, string path)
+        {
+            switch (coreProject)
+            {
+                case CoreProject.Worker:
+                    WorkerProjectPath = path;
+                    break;
+                case CoreProject.Incident:
+                    IncidentProjectPath = path;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(coreProject));
+            }
+        }
     }
 }

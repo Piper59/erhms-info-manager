@@ -9,25 +9,12 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
 
 namespace ERHMS.EpiInfo
 {
     public static class ProjectExtensions
     {
-        private static DbDriverInfo GetDbDriverInfo(IDatabase database)
-        {
-            DbProviderFactory providerFactory = database.Provider.ToProviderFactory();
-            DbConnectionStringBuilder connectionStringBuilder = providerFactory.CreateConnectionStringBuilder();
-            connectionStringBuilder.ConnectionString = database.ConnectionString;
-            return new DbDriverInfo
-            {
-                DBCnnStringBuilder = connectionStringBuilder,
-                DBName = database.Name
-            };
-        }
-
         public static Project Create(ProjectCreationInfo creationInfo)
         {
             Log.Instance.Debug($"Creating project: {creationInfo.FilePath}");
@@ -40,7 +27,11 @@ namespace ERHMS.EpiInfo
                 Location = creationInfo.Location,
                 CollectedDataDriver = Configuration.GetDatabaseDriver(creationInfo.Database.Provider),
                 CollectedDataConnectionString = creationInfo.Database.ConnectionString,
-                CollectedDataDbInfo = GetDbDriverInfo(creationInfo.Database),
+                CollectedDataDbInfo = new DbDriverInfo
+                {
+                    DBCnnStringBuilder = creationInfo.Database.GetConnectionStringBuilder(),
+                    DBName = creationInfo.Database.Name
+                },
                 MetadataSource = MetadataSource.SameDb
             };
             project.CollectedData.Initialize(project.CollectedDataDbInfo, project.CollectedDataDriver, false);
@@ -57,7 +48,7 @@ namespace ERHMS.EpiInfo
 
         public static bool IsInitialized(this Project @this)
         {
-            return @this.Metadata.TableExists("metaDbInfo");
+            return @this.Metadata.TableExists(TableNames.DbInfo);
         }
 
         public static void Initialize(this Project @this)

@@ -108,7 +108,6 @@
                                    TextWrapping="NoWrap" />
                     </StackPanel>
                     <TextBlock Grid.Column="1"
-                               FontSize="{StaticResource MediumFontSize}"
                                Style="{StaticResource Icon}"
                                Text="{Markup:Icon Expand}">
                         <TextBlock.Margin>

@@ -73,17 +73,21 @@ namespace ERHMS.Desktop.ViewModels
             public void Create()
             {
                 MainViewModel.Instance.CreateProject(Value);
+                Refresh();
             }
 
             public void Open()
             {
                 MainViewModel.Instance.OpenProject(Value);
+                Refresh();
             }
 
             public async Task GoToCurrentAsync()
             {
                 await MainViewModel.Instance.GoToProjectAsync(Value);
             }
+
+            protected abstract void Refresh();
         }
 
         public class WorkerProjectCollectionViewModel : CoreProjectCollectionViewModel
@@ -95,10 +99,20 @@ namespace ERHMS.Desktop.ViewModels
 
             public WorkerProjectCollectionViewModel()
             {
+                Initialize();
+            }
+
+            private void Initialize()
+            {
                 if (Settings.Default.HasWorkerProjectPath)
                 {
                     Current = new ProjectInfo(Settings.Default.WorkerProjectPath);
                 }
+            }
+
+            protected override void Refresh()
+            {
+                Initialize();
             }
         }
 
@@ -142,6 +156,11 @@ namespace ERHMS.Desktop.ViewModels
             {
                 Settings.Default.IncidentProjectPath = projectInfo.FilePath;
                 Settings.Default.Save();
+                Initialize();
+            }
+
+            protected override void Refresh()
+            {
                 Initialize();
             }
         }

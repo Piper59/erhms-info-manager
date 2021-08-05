@@ -1,5 +1,6 @@
 ﻿using ERHMS.Data.Querying;
 using System.Data;
+using System.Data.Common;
 
 namespace ERHMS.Data
 {
@@ -9,6 +10,7 @@ namespace ERHMS.Data
         string Name { get; }
         string ConnectionString { get; }
 
+        DbConnectionStringBuilder GetConnectionStringBuilder();
         string Quote(string identifier);
         bool Exists();
         void Create();
@@ -18,6 +20,7 @@ namespace ERHMS.Data
         int Execute(IQuery query);
         TResult ExecuteScalar<TResult>(IQuery query);
         IDataReader ExecuteReader(IQuery query);
+        bool TableExists(string tableName);
         int GetLastId();
     }
 }

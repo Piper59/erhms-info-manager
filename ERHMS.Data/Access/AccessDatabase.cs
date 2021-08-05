@@ -5,20 +5,6 @@ namespace ERHMS.Data.Access
 {
     public abstract class AccessDatabase : Database
     {
-        public static string GetConnectionString(string provider = "", string dataSource = "")
-        {
-            OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
-            if (!string.IsNullOrEmpty(provider))
-            {
-                builder.Provider = provider;
-            }
-            if (!string.IsNullOrEmpty(dataSource))
-            {
-                builder.DataSource = dataSource;
-            }
-            return builder.ConnectionString;
-        }
-
         protected new OleDbConnectionStringBuilder ConnectionStringBuilder =>
             (OleDbConnectionStringBuilder)base.ConnectionStringBuilder;
         public string FilePath => ConnectionStringBuilder.DataSource;

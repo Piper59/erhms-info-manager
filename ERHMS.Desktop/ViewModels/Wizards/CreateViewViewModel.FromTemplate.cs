@@ -136,7 +136,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Details = new DetailsViewModel
                     {
                         { Strings.Label_Template, wizard.TemplatePath },
-                        { Strings.Label_View, wizard.ViewName }
+                        { Strings.Label_Name, wizard.ViewName }
                     };
                 }
 

@@ -199,13 +199,15 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
+    <Compile Include="ViewModels\Shared\ConnectionInfoViewModel.cs" />
     <Compile Include="ViewModels\Utilities\GetWorkerIdViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateAssetViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateCanvasViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateMapViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreatePgmViewModel.cs" />
-    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.Blank.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.Main.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.Blank.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromExisting.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromTemplate.cs" />
@@ -242,6 +244,9 @@
     </Compile>
     <Compile Include="Views\ProjectView.xaml.cs">
       <DependentUpon>ProjectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Shared\ConnectionInfoView.xaml.cs">
+      <DependentUpon>ConnectionInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Utilities\GetWorkerIdView.xaml.cs">
       <DependentUpon>GetWorkerIdView.xaml</DependentUpon>
@@ -349,6 +354,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Shared\ConnectionInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

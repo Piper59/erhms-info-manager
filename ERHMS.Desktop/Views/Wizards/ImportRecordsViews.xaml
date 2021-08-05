@@ -56,7 +56,7 @@
                         </Label>
                         <Controls:BoundComboBox AutomationProperties.Name="{Binding Source, StringFormat={Markup:String Label.Target}}"
                                                 Grid.Column="1"
-                                                Binding="{Binding Name, TargetNullValue={Markup:String ImportRecords.Target.Empty}}"
+                                                Binding="{Binding Name, TargetNullValue={Markup:String Placeholder.Ignored}}"
                                                 ItemsSource="{Binding Targets}" />
                     </Grid>
                 </DataTemplate>

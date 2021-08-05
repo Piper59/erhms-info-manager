@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Views.Shared.ConnectionInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               Content="{Markup:String Label.DataSource}" />
+        <TextBox Grid.Column="1"
+                 Grid.Row="0"
+                 Text="{Binding DataSource, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Column="0"
+               Grid.Row="1"
+               Content="{Markup:String Label.InitialCatalog}" />
+        <TextBox Grid.Column="1"
+                 Grid.Row="1"
+                 Text="{Binding InitialCatalog, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox Grid.Column="1"
+                  Grid.Row="2"
+                  Content="{Markup:String Label.Encrypt}"
+                  IsChecked="{Binding Encrypt}" />
+        <Label Grid.Column="0"
+               Grid.Row="3"
+               Content="{Markup:String Label.AuthenticationMode}" />
+        <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.AuthenticationMode}"
+                                Grid.Column="1"
+                                Grid.Row="3"
+                                Binding="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AuthenticationMode.Name.{0}'}"
+                                ItemsSource="{Binding AuthenticationModes}" />
+        <Label Grid.Column="0"
+               Grid.Row="4"
+               Content="{Markup:String Label.UserID}" />
+        <TextBox Grid.Column="1"
+                 Grid.Row="4"
+                 IsEnabled="{Binding CanHaveCredentials}"
+                 Text="{Binding UserID, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Column="0"
+               Grid.Row="5"
+               Content="{Markup:String Label.Password}" />
+        <PasswordBox Grid.Column="1"
+                     Grid.Row="5"
+                     IsEnabled="{Binding CanHaveCredentials}">
+            <b:Interaction.Behaviors>
+                <Behaviors:BindPassword Password="{Binding Password}" />
+            </b:Interaction.Behaviors>
+        </PasswordBox>
+    </Grid>
+</UserControl>

@@ -23,7 +23,7 @@ namespace ERHMS.EpiInfo.Naming
             ProjectInfo projectInfo = new ProjectInfo
             {
                 Name = name,
-                Location = Path.Combine(LocationRoot, name)
+                LocationRoot = LocationRoot
             };
             return File.Exists(projectInfo.FilePath);
         }

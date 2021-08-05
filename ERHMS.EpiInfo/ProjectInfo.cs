@@ -5,7 +5,20 @@ namespace ERHMS.EpiInfo
     public class ProjectInfo
     {
         public string Name { get; set; }
-        public string Location { get; set; }
+
+        private string location;
+        public string Location
+        {
+            get { return location ?? Path.Combine(locationRoot, Name); }
+            set { location = value; }
+        }
+
+        private string locationRoot;
+        public string LocationRoot
+        {
+            get { return locationRoot ?? Path.GetDirectoryName(location); }
+            set { locationRoot = value; }
+        }
 
         private string filePath;
         public string FilePath

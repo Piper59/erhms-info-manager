@@ -78,7 +78,8 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            // TODO: Implement
+            Settings.Default.SetProjectPath(coreProject, wizard.Project.FilePath);
+            Settings.Default.Save();
         }
 
         public void OpenProject(CoreProject coreProject)
@@ -90,9 +91,9 @@ namespace ERHMS.Desktop.ViewModels
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_LoadingProject;
-            Content = await progress.Run(async () =>
+            await progress.Run(async () =>
             {
-                return await ProjectViewModel.CreateAsync(await action());
+                Content = await ProjectViewModel.CreateAsync(await action());
             });
         }
 
@@ -110,9 +111,9 @@ namespace ERHMS.Desktop.ViewModels
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_LoadingView;
-            Content = await progress.Run(async () =>
+            await progress.Run(async () =>
             {
-                return await ViewViewModel.CreateAsync(await action());
+                Content = await ViewViewModel.CreateAsync(await action());
             });
         }
 

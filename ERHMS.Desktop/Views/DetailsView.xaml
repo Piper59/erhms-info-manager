@@ -2,37 +2,90 @@
               x:Name="Root"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:Epi="clr-namespace:Epi;assembly=Epi.Core"
+              xmlns:ERHMS_Data="clr-namespace:ERHMS.Data;assembly=ERHMS.Data"
               xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
               xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+              xmlns:System_Data_Common="clr-namespace:System.Data.Common;assembly=System.Data"
               xmlns:System="clr-namespace:System;assembly=mscorlib"
+              Grid.IsSharedSizeScope="True"
               IsTabStop="False">
     <ItemsControl.Resources>
         <DataTemplate DataType="{x:Type System:String}">
-            <TextBlock Text="{Binding}" />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type System:Boolean}">
-            <TextBlock Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.Name.{0}'}" />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type System:Int32}">
-            <TextBlock Text="{Binding ., StringFormat='{}{0:N0}'}" />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type Epi:View}">
             <TextBlock>
-                <Run Text="{Binding Project.Name}"
-                     ToolTip="{Binding Project.FilePath}" />
-                <Run FontFamily="{StaticResource IconFontFamily}"
-                     Text="{Markup:Icon Level.Separator}" />
-                <Run Text="{Binding Name}" />
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource Body}">
+                        <Setter Property="Text" Value="{Binding}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding}" Value="">
+                                <Setter Property="Text" Value="{Markup:String Placeholder.Empty}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
             </TextBlock>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+MappingCollection}">
+        <DataTemplate DataType="{x:Type System:Boolean}">
+            <TextBlock Style="{StaticResource Body}"
+                       Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.Name.{0}'}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type System:Int32}">
+            <TextBlock Style="{StaticResource Body}"
+                       Text="{Binding ., StringFormat='{}{0:N0}'}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type System_Data_Common:DbConnectionStringBuilder}">
+            <DataTemplate.Resources>
+                <DataTemplate DataType="{x:Type System:String}">
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </DataTemplate.Resources>
             <ItemsControl IsTabStop="False"
-                          ItemsSource="{Binding}">
+                          ItemsSource="{Binding}"
+                          Margin="{StaticResource DefaultMargin}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch"
-                              Visibility="{Binding Target.IsEmpty, Converter={StaticResource BooleanToVisibilityInverter}}">
+                        <TextBlock FontSize="{StaticResource DefaultFontSize}">
+                            <Run Text="{Binding Key, Mode=OneWay}" />
+                            <Run>=</Run>
+                            <Run>
+                                <Run.Style>
+                                    <Style TargetType="Run">
+                                        <Setter Property="Text" Value="{Binding Value, Mode=OneWay}" />
+                                        <Setter Property="ToolTip" Value="{Binding Value, Mode=OneWay}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Key}" Value="Password">
+                                                <Setter Property="Text" Value="{Markup:String Placeholder.Hidden}" />
+                                                <Setter Property="ToolTip" Value="{x:Null}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Run.Style>
+                            </Run>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ERHMS_Data:DatabaseProvider}">
+            <TextBlock Style="{StaticResource Body}"
+                       Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Name.{0}'}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+MappingCollection}">
+            <DataTemplate.Resources>
+                <DataTemplate DataType="{x:Type System:String}">
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </DataTemplate.Resources>
+            <ItemsControl IsTabStop="False"
+                          ItemsSource="{Binding}"
+                          Margin="{StaticResource DefaultMargin}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DataTemplate.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+                            </Style>
+                        </DataTemplate.Resources>
+                        <Grid Visibility="{Binding Target.IsEmpty, Converter={StaticResource BooleanToVisibilityInverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
@@ -40,7 +93,6 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        Text="{Binding Source}"
-                                       TextWrapping="NoWrap"
                                        ToolTip="{Binding Source}" />
                             <TextBlock Grid.Column="1"
                                        FontFamily="{StaticResource IconFontFamily}"
@@ -53,7 +105,6 @@
                             </TextBlock>
                             <TextBlock Grid.Column="2"
                                        Text="{Binding Target.Name}"
-                                       TextWrapping="NoWrap"
                                        ToolTip="{Binding Target.Name}" />
                         </Grid>
                     </DataTemplate>
@@ -61,24 +112,19 @@
             </ItemsControl>
         </DataTemplate>
     </ItemsControl.Resources>
-    <ItemsControl.ItemsPanel>
-        <ItemsPanelTemplate>
-            <StackPanel Grid.IsSharedSizeScope="True" />
-        </ItemsPanelTemplate>
-    </ItemsControl.ItemsPanel>
     <ItemsControl.ItemTemplate>
         <DataTemplate>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="{Binding SharedSizeGroup, ElementName=Root}"
+                    <ColumnDefinition SharedSizeGroup="{Binding KeyGroup, ElementName=Root}"
                                       Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0">
-                    <TextBlock Text="{Binding Key}" />
-                </Label>
-                <Label Grid.Column="1"
-                       Content="{Binding Value}" />
+                <TextBlock Grid.Column="0"
+                           Style="{StaticResource Body}"
+                           Text="{Binding Key}" />
+                <ContentPresenter Grid.Column="1"
+                                  Content="{Binding Value}" />
             </Grid>
         </DataTemplate>
     </ItemsControl.ItemTemplate>

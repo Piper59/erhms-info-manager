@@ -24,7 +24,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
     {
         public class Target
         {
-            public static Target Empty { get; } = new Target(null, Strings.ImportRecords_Target_Empty);
+            public static Target Empty { get; } = new Target(null, Strings.Placeholder_Ignored);
 
             public Field Field { get; }
             public string Name { get; }

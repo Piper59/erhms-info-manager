@@ -74,7 +74,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override async Task ContinueAsync()
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                progress.Lead = Strings.Lead_ValidatingViewName;
+                progress.Lead = Strings.Lead_ValidatingName;
                 InvalidNameReason reason = InvalidNameReason.None;
                 bool valid = await progress.Run(() =>
                 {
@@ -85,7 +85,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
                     dialog.Severity = DialogSeverity.Warning;
-                    dialog.Lead = reason.GetViewLead();
+                    dialog.Lead = reason.GetLead();
                     dialog.Body = reason.GetViewBody();
                     dialog.Buttons = DialogButtonCollection.Close;
                     dialog.Show();

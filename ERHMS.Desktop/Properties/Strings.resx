@@ -348,6 +348,12 @@
   <data name="AppTitle" xml:space="preserve">
     <value>ERHMS Info Manager</value>
   </data>
+  <data name="AuthenticationMode.Name.SqlServer" xml:space="preserve">
+    <value>SQL Server Authentication</value>
+  </data>
+  <data name="AuthenticationMode.Name.Windows" xml:space="preserve">
+    <value>Windows Authentication</value>
+  </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
     <value>File: {0}
 
@@ -376,6 +382,9 @@ This form, any related forms, and all associated records will be permanently del
   </data>
   <data name="Body.ImportingRow" xml:space="preserve">
     <value>Importing row {0}...</value>
+  </data>
+  <data name="Body.InvalidConnectionInfo.SqlServer" xml:space="preserve">
+    <value>Please specify a server and database to connect to.</value>
   </data>
   <data name="Body.InvalidProjectTemplatePath" xml:space="preserve">
     <value>File: {0}
@@ -525,6 +534,12 @@ Close anyway?</value>
   <data name="CreateProject.HelpText.Standard.Worker" xml:space="preserve">
     <value>Create a new database containing standard worker forms.</value>
   </data>
+  <data name="CreateProject.Lead.Close" xml:space="preserve">
+    <value>Database has been created</value>
+  </data>
+  <data name="CreateProject.Lead.SetProjectCreationInfo" xml:space="preserve">
+    <value>Enter details for the new database</value>
+  </data>
   <data name="CreateProject.Lead.SetStrategy" xml:space="preserve">
     <value>Choose how to create the new database</value>
   </data>
@@ -566,6 +581,12 @@ Close anyway?</value>
   </data>
   <data name="CreateView.Lead.SetXTemplate" xml:space="preserve">
     <value>Choose a template</value>
+  </data>
+  <data name="DatabaseProvider.Name.Access2003" xml:space="preserve">
+    <value>Microsoft Access</value>
+  </data>
+  <data name="DatabaseProvider.Name.SqlServer" xml:space="preserve">
+    <value>Microsoft SQL Server</value>
   </data>
   <data name="ExportRecords.Lead.Close" xml:space="preserve">
     <value>Records have been exported</value>
@@ -684,59 +705,47 @@ Close anyway?</value>
   <data name="ImportRecords.Lead.SetMappings" xml:space="preserve">
     <value>Choose a destination field for each source column</value>
   </data>
-  <data name="ImportRecords.Target.Empty" xml:space="preserve">
-    <value>&lt;Ignored&gt;</value>
+  <data name="InvalidNameReason.Body.Project.Empty" xml:space="preserve">
+    <value>Please specify a name.</value>
   </data>
-  <data name="InvalidNameReason.Project.Body.Empty" xml:space="preserve">
-    <value>Please specify a database name.</value>
+  <data name="InvalidNameReason.Body.Project.Identical" xml:space="preserve">
+    <value>An Epi Info project (.prj) file with this name already exists in the specified location. Please specify a different name or location.</value>
   </data>
-  <data name="InvalidNameReason.Project.Body.Identical" xml:space="preserve">
-    <value>A database with this name already exists. Please specify a different database name.</value>
+  <data name="InvalidNameReason.Body.Project.InvalidChar" xml:space="preserve">
+    <value>Please specify a name that contains only letters, numbers, and underscores.</value>
   </data>
-  <data name="InvalidNameReason.Project.Body.InvalidChar" xml:space="preserve">
-    <value>Please specify a database name that contains only letters, numbers, and underscores.</value>
+  <data name="InvalidNameReason.Body.Project.InvalidStartChar" xml:space="preserve">
+    <value>Please specify a name that begins with a letter.</value>
   </data>
-  <data name="InvalidNameReason.Project.Body.InvalidStartChar" xml:space="preserve">
-    <value>Please specify a database name that begins with a letter.</value>
+  <data name="InvalidNameReason.Body.Project.TooLong" xml:space="preserve">
+    <value>Please specify a name that is no longer than {0} characters.</value>
   </data>
-  <data name="InvalidNameReason.Project.Body.TooLong" xml:space="preserve">
-    <value>Please specify a database name that is no longer than {0} characters.</value>
+  <data name="InvalidNameReason.Body.View.Empty" xml:space="preserve">
+    <value>Please specify a name.</value>
   </data>
-  <data name="InvalidNameReason.Project.Lead.Default" xml:space="preserve">
-    <value>This database name is not valid</value>
+  <data name="InvalidNameReason.Body.View.Identical" xml:space="preserve">
+    <value>A form or table with this name already exists in the current database. Please specify a different name.</value>
   </data>
-  <data name="InvalidNameReason.Project.Lead.Empty" xml:space="preserve">
-    <value>No database name was specified</value>
+  <data name="InvalidNameReason.Body.View.InvalidChar" xml:space="preserve">
+    <value>Please specify a name that contains only letters, numbers, and underscores.</value>
   </data>
-  <data name="InvalidNameReason.Project.Lead.TooLong" xml:space="preserve">
-    <value>This database name is too long</value>
+  <data name="InvalidNameReason.Body.View.InvalidStartChar" xml:space="preserve">
+    <value>Please specify a name that begins with a letter.</value>
   </data>
-  <data name="InvalidNameReason.View.Body.Empty" xml:space="preserve">
-    <value>Please specify a form name.</value>
+  <data name="InvalidNameReason.Body.View.Similar" xml:space="preserve">
+    <value>A form with a similar name already exists in the current database. To avoid a possible conflict, please specify a different name.</value>
   </data>
-  <data name="InvalidNameReason.View.Body.Identical" xml:space="preserve">
-    <value>A form or table with this name already exists. Please specify a different form name.</value>
+  <data name="InvalidNameReason.Body.View.TooLong" xml:space="preserve">
+    <value>Please specify a name that is no longer than {0} characters.</value>
   </data>
-  <data name="InvalidNameReason.View.Body.InvalidChar" xml:space="preserve">
-    <value>Please specify a form name that contains only letters, numbers, and underscores.</value>
+  <data name="InvalidNameReason.Lead.Default" xml:space="preserve">
+    <value>This name is not valid</value>
   </data>
-  <data name="InvalidNameReason.View.Body.InvalidStartChar" xml:space="preserve">
-    <value>Please specify a form name that begins with a letter.</value>
+  <data name="InvalidNameReason.Lead.Empty" xml:space="preserve">
+    <value>No name was specified</value>
   </data>
-  <data name="InvalidNameReason.View.Body.Similar" xml:space="preserve">
-    <value>A form with a similar name already exists. To avoid a possible conflict, please specify a different form name.</value>
-  </data>
-  <data name="InvalidNameReason.View.Body.TooLong" xml:space="preserve">
-    <value>Please specify a form name that is no longer than {0} characters.</value>
-  </data>
-  <data name="InvalidNameReason.View.Lead.Default" xml:space="preserve">
-    <value>This form name is not valid</value>
-  </data>
-  <data name="InvalidNameReason.View.Lead.Empty" xml:space="preserve">
-    <value>No form name was specified</value>
-  </data>
-  <data name="InvalidNameReason.View.Lead.TooLong" xml:space="preserve">
-    <value>This form name is too long</value>
+  <data name="InvalidNameReason.Lead.TooLong" xml:space="preserve">
+    <value>This name is too long</value>
   </data>
   <data name="ItemsControlWatermark" xml:space="preserve">
     <value>No items found</value>
@@ -744,17 +753,47 @@ Close anyway?</value>
   <data name="Label" xml:space="preserve">
     <value>{0}:</value>
   </data>
+  <data name="Label.AuthenticationMode" xml:space="preserve">
+    <value>Authentication:</value>
+  </data>
+  <data name="Label.ConnectionInfo" xml:space="preserve">
+    <value>Connection details:</value>
+  </data>
+  <data name="Label.DatabaseProvider" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="Label.DataSource" xml:space="preserve">
+    <value>Server name:</value>
+  </data>
+  <data name="Label.Description" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="Label.Encrypt" xml:space="preserve">
+    <value>Encrypt connection?</value>
+  </data>
   <data name="Label.File" xml:space="preserve">
     <value>File:</value>
   </data>
+  <data name="Label.InitialCatalog" xml:space="preserve">
+    <value>Connect to database:</value>
+  </data>
   <data name="Label.Location" xml:space="preserve">
+    <value>Location:</value>
+  </data>
+  <data name="Label.LocationRoot" xml:space="preserve">
     <value>Location:</value>
   </data>
   <data name="Label.Mappings" xml:space="preserve">
     <value>Mappings:</value>
   </data>
+  <data name="Label.Name" xml:space="preserve">
+    <value>Name:</value>
+  </data>
   <data name="Label.OpenInEpiInfo" xml:space="preserve">
     <value>Open in Epi Info?</value>
+  </data>
+  <data name="Label.Password" xml:space="preserve">
+    <value>Password:</value>
   </data>
   <data name="Label.Project" xml:space="preserve">
     <value>Database:</value>
@@ -765,17 +804,14 @@ Close anyway?</value>
   <data name="Label.Search" xml:space="preserve">
     <value>Search:</value>
   </data>
-  <data name="Label.SourceView" xml:space="preserve">
-    <value>Existing form:</value>
-  </data>
   <data name="Label.Target" xml:space="preserve">
     <value>Destination for {0}:</value>
   </data>
-  <data name="Label.TargetView" xml:space="preserve">
-    <value>New form:</value>
-  </data>
   <data name="Label.Template" xml:space="preserve">
     <value>Template:</value>
+  </data>
+  <data name="Label.UserID" xml:space="preserve">
+    <value>Login:</value>
   </data>
   <data name="Label.View" xml:space="preserve">
     <value>Form:</value>
@@ -795,8 +831,14 @@ Close anyway?</value>
   <data name="Lead.ConfirmViewDeletion" xml:space="preserve">
     <value>Are you sure you want to delete this form?</value>
   </data>
+  <data name="Lead.ConnectionInfo" xml:space="preserve">
+    <value>Connection details</value>
+  </data>
   <data name="Lead.CreatingAsset" xml:space="preserve">
     <value>Creating file</value>
+  </data>
+  <data name="Lead.CreatingProject" xml:space="preserve">
+    <value>Creating database</value>
   </data>
   <data name="Lead.CreatingView" xml:space="preserve">
     <value>Creating form</value>
@@ -818,6 +860,9 @@ Close anyway?</value>
   </data>
   <data name="Lead.ImportingRecords" xml:space="preserve">
     <value>Importing records</value>
+  </data>
+  <data name="Lead.InvalidConnectionInfo" xml:space="preserve">
+    <value>Connection details are not valid</value>
   </data>
   <data name="Lead.InvalidTemplatePath" xml:space="preserve">
     <value>This file is not valid</value>
@@ -852,8 +897,8 @@ Close anyway?</value>
   <data name="Lead.UndeletingRecords" xml:space="preserve">
     <value>Undeleting records</value>
   </data>
-  <data name="Lead.ValidatingViewName" xml:space="preserve">
-    <value>Validating form name</value>
+  <data name="Lead.ValidatingName" xml:space="preserve">
+    <value>Validating name</value>
   </data>
   <data name="Lead.Working" xml:space="preserve">
     <value>Working...</value>
@@ -869,6 +914,15 @@ Close anyway?</value>
   </data>
   <data name="Phase.Name.PreDeployment" xml:space="preserve">
     <value>Pre-deployment</value>
+  </data>
+  <data name="Placeholder.Empty" xml:space="preserve">
+    <value>&lt;Empty&gt;</value>
+  </data>
+  <data name="Placeholder.Hidden" xml:space="preserve">
+    <value>&lt;Hidden&gt;</value>
+  </data>
+  <data name="Placeholder.Ignored" xml:space="preserve">
+    <value>&lt;Ignored&gt;</value>
   </data>
   <data name="ProjectInfo.Current.Empty" xml:space="preserve">
     <value>No database found</value>

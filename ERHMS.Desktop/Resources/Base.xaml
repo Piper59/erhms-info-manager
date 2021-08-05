@@ -86,6 +86,39 @@
     </Style>
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBase}" />
 
+    <Style x:Key="GroupBoxBase" TargetType="GroupBox">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <AccessText FontSize="{StaticResource MediumFontSize}"
+                                FontWeight="{StaticResource ThinFontWeight}"
+                                Foreground="{x:Static SystemColors.ControlTextBrush}"
+                                Text="{Binding}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Border BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <Border Background="{x:Static SystemColors.ControlBrush}"
+                                    BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
+                                    BorderThickness="0,0,0,1">
+                                <ContentPresenter ContentSource="Header"
+                                                  Margin="{StaticResource DefaultPadding}" />
+                            </Border>
+                            <ContentPresenter Margin="{StaticResource DefaultMargin}" />
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="GroupBox" BasedOn="{StaticResource GroupBoxBase}" />
+
     <Style x:Key="LabelBase" TargetType="Label">
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0,1" />

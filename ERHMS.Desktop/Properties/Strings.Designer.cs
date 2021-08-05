@@ -754,6 +754,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SQL Server Authentication.
+        /// </summary>
+        public static string AuthenticationMode_Name_SqlServer {
+            get {
+                return ResourceManager.GetString("AuthenticationMode.Name.SqlServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Authentication.
+        /// </summary>
+        public static string AuthenticationMode_Name_Windows {
+            get {
+                return ResourceManager.GetString("AuthenticationMode.Name.Windows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
         ///This file will be moved to the Recycle Bin..
@@ -821,6 +839,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Body_ImportingRow {
             get {
                 return ResourceManager.GetString("Body.ImportingRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify a server and database to connect to..
+        /// </summary>
+        public static string Body_InvalidConnectionInfo_SqlServer {
+            get {
+                return ResourceManager.GetString("Body.InvalidConnectionInfo.SqlServer", resourceCulture);
             }
         }
         
@@ -1249,6 +1276,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database has been created.
+        /// </summary>
+        public static string CreateProject_Lead_Close {
+            get {
+                return ResourceManager.GetString("CreateProject.Lead.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter details for the new database.
+        /// </summary>
+        public static string CreateProject_Lead_SetProjectCreationInfo {
+            get {
+                return ResourceManager.GetString("CreateProject.Lead.SetProjectCreationInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose how to create the new database.
         /// </summary>
         public static string CreateProject_Lead_SetStrategy {
@@ -1371,6 +1416,24 @@ namespace ERHMS.Desktop.Properties {
         public static string CreateView_Lead_SetXTemplate {
             get {
                 return ResourceManager.GetString("CreateView.Lead.SetXTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Access.
+        /// </summary>
+        public static string DatabaseProvider_Name_Access2003 {
+            get {
+                return ResourceManager.GetString("DatabaseProvider.Name.Access2003", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft SQL Server.
+        /// </summary>
+        public static string DatabaseProvider_Name_SqlServer {
+            get {
+                return ResourceManager.GetString("DatabaseProvider.Name.SqlServer", resourceCulture);
             }
         }
         
@@ -1726,164 +1789,128 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;Ignored&gt;.
+        ///   Looks up a localized string similar to Please specify a name..
         /// </summary>
-        public static string ImportRecords_Target_Empty {
+        public static string InvalidNameReason_Body_Project_Empty {
             get {
-                return ResourceManager.GetString("ImportRecords.Target.Empty", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Project.Empty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a database name..
+        ///   Looks up a localized string similar to An Epi Info project (.prj) file with this name already exists in the specified location. Please specify a different name or location..
         /// </summary>
-        public static string InvalidNameReason_Project_Body_Empty {
+        public static string InvalidNameReason_Body_Project_Identical {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Body.Empty", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Project.Identical", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A database with this name already exists. Please specify a different database name..
+        ///   Looks up a localized string similar to Please specify a name that contains only letters, numbers, and underscores..
         /// </summary>
-        public static string InvalidNameReason_Project_Body_Identical {
+        public static string InvalidNameReason_Body_Project_InvalidChar {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Body.Identical", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Project.InvalidChar", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a database name that contains only letters, numbers, and underscores..
+        ///   Looks up a localized string similar to Please specify a name that begins with a letter..
         /// </summary>
-        public static string InvalidNameReason_Project_Body_InvalidChar {
+        public static string InvalidNameReason_Body_Project_InvalidStartChar {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Body.InvalidChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Project.InvalidStartChar", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a database name that begins with a letter..
+        ///   Looks up a localized string similar to Please specify a name that is no longer than {0} characters..
         /// </summary>
-        public static string InvalidNameReason_Project_Body_InvalidStartChar {
+        public static string InvalidNameReason_Body_Project_TooLong {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Body.InvalidStartChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Project.TooLong", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a database name that is no longer than {0} characters..
+        ///   Looks up a localized string similar to Please specify a name..
         /// </summary>
-        public static string InvalidNameReason_Project_Body_TooLong {
+        public static string InvalidNameReason_Body_View_Empty {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Body.TooLong", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.View.Empty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This database name is not valid.
+        ///   Looks up a localized string similar to A form or table with this name already exists in the current database. Please specify a different name..
         /// </summary>
-        public static string InvalidNameReason_Project_Lead_Default {
+        public static string InvalidNameReason_Body_View_Identical {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Lead.Default", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.View.Identical", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No database name was specified.
+        ///   Looks up a localized string similar to Please specify a name that contains only letters, numbers, and underscores..
         /// </summary>
-        public static string InvalidNameReason_Project_Lead_Empty {
+        public static string InvalidNameReason_Body_View_InvalidChar {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Lead.Empty", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.View.InvalidChar", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This database name is too long.
+        ///   Looks up a localized string similar to Please specify a name that begins with a letter..
         /// </summary>
-        public static string InvalidNameReason_Project_Lead_TooLong {
+        public static string InvalidNameReason_Body_View_InvalidStartChar {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Project.Lead.TooLong", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.View.InvalidStartChar", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a form name..
+        ///   Looks up a localized string similar to A form with a similar name already exists in the current database. To avoid a possible conflict, please specify a different name..
         /// </summary>
-        public static string InvalidNameReason_View_Body_Empty {
+        public static string InvalidNameReason_Body_View_Similar {
             get {
-                return ResourceManager.GetString("InvalidNameReason.View.Body.Empty", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.View.Similar", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A form or table with this name already exists. Please specify a different form name..
+        ///   Looks up a localized string similar to Please specify a name that is no longer than {0} characters..
         /// </summary>
-        public static string InvalidNameReason_View_Body_Identical {
+        public static string InvalidNameReason_Body_View_TooLong {
             get {
-                return ResourceManager.GetString("InvalidNameReason.View.Body.Identical", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.View.TooLong", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a form name that contains only letters, numbers, and underscores..
+        ///   Looks up a localized string similar to This name is not valid.
         /// </summary>
-        public static string InvalidNameReason_View_Body_InvalidChar {
+        public static string InvalidNameReason_Lead_Default {
             get {
-                return ResourceManager.GetString("InvalidNameReason.View.Body.InvalidChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Lead.Default", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a form name that begins with a letter..
+        ///   Looks up a localized string similar to No name was specified.
         /// </summary>
-        public static string InvalidNameReason_View_Body_InvalidStartChar {
+        public static string InvalidNameReason_Lead_Empty {
             get {
-                return ResourceManager.GetString("InvalidNameReason.View.Body.InvalidStartChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Lead.Empty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A form with a similar name already exists. To avoid a possible conflict, please specify a different form name..
+        ///   Looks up a localized string similar to This name is too long.
         /// </summary>
-        public static string InvalidNameReason_View_Body_Similar {
+        public static string InvalidNameReason_Lead_TooLong {
             get {
-                return ResourceManager.GetString("InvalidNameReason.View.Body.Similar", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please specify a form name that is no longer than {0} characters..
-        /// </summary>
-        public static string InvalidNameReason_View_Body_TooLong {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.View.Body.TooLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This form name is not valid.
-        /// </summary>
-        public static string InvalidNameReason_View_Lead_Default {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.View.Lead.Default", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No form name was specified.
-        /// </summary>
-        public static string InvalidNameReason_View_Lead_Empty {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.View.Lead.Empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This form name is too long.
-        /// </summary>
-        public static string InvalidNameReason_View_Lead_TooLong {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.View.Lead.TooLong", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Lead.TooLong", resourceCulture);
             }
         }
         
@@ -1906,11 +1933,74 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication:.
+        /// </summary>
+        public static string Label_AuthenticationMode {
+            get {
+                return ResourceManager.GetString("Label.AuthenticationMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection details:.
+        /// </summary>
+        public static string Label_ConnectionInfo {
+            get {
+                return ResourceManager.GetString("Label.ConnectionInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format:.
+        /// </summary>
+        public static string Label_DatabaseProvider {
+            get {
+                return ResourceManager.GetString("Label.DatabaseProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server name:.
+        /// </summary>
+        public static string Label_DataSource {
+            get {
+                return ResourceManager.GetString("Label.DataSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description:.
+        /// </summary>
+        public static string Label_Description {
+            get {
+                return ResourceManager.GetString("Label.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encrypt connection?.
+        /// </summary>
+        public static string Label_Encrypt {
+            get {
+                return ResourceManager.GetString("Label.Encrypt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File:.
         /// </summary>
         public static string Label_File {
             get {
                 return ResourceManager.GetString("Label.File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to database:.
+        /// </summary>
+        public static string Label_InitialCatalog {
+            get {
+                return ResourceManager.GetString("Label.InitialCatalog", resourceCulture);
             }
         }
         
@@ -1924,6 +2014,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location:.
+        /// </summary>
+        public static string Label_LocationRoot {
+            get {
+                return ResourceManager.GetString("Label.LocationRoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mappings:.
         /// </summary>
         public static string Label_Mappings {
@@ -1933,11 +2032,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name:.
+        /// </summary>
+        public static string Label_Name {
+            get {
+                return ResourceManager.GetString("Label.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open in Epi Info?.
         /// </summary>
         public static string Label_OpenInEpiInfo {
             get {
                 return ResourceManager.GetString("Label.OpenInEpiInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password:.
+        /// </summary>
+        public static string Label_Password {
+            get {
+                return ResourceManager.GetString("Label.Password", resourceCulture);
             }
         }
         
@@ -1969,15 +2086,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Existing form:.
-        /// </summary>
-        public static string Label_SourceView {
-            get {
-                return ResourceManager.GetString("Label.SourceView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Destination for {0}:.
         /// </summary>
         public static string Label_Target {
@@ -1987,20 +2095,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New form:.
-        /// </summary>
-        public static string Label_TargetView {
-            get {
-                return ResourceManager.GetString("Label.TargetView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Template:.
         /// </summary>
         public static string Label_Template {
             get {
                 return ResourceManager.GetString("Label.Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login:.
+        /// </summary>
+        public static string Label_UserID {
+            get {
+                return ResourceManager.GetString("Label.UserID", resourceCulture);
             }
         }
         
@@ -2059,11 +2167,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection details.
+        /// </summary>
+        public static string Lead_ConnectionInfo {
+            get {
+                return ResourceManager.GetString("Lead.ConnectionInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating file.
         /// </summary>
         public static string Lead_CreatingAsset {
             get {
                 return ResourceManager.GetString("Lead.CreatingAsset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating database.
+        /// </summary>
+        public static string Lead_CreatingProject {
+            get {
+                return ResourceManager.GetString("Lead.CreatingProject", resourceCulture);
             }
         }
         
@@ -2127,6 +2253,15 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_ImportingRecords {
             get {
                 return ResourceManager.GetString("Lead.ImportingRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection details are not valid.
+        /// </summary>
+        public static string Lead_InvalidConnectionInfo {
+            get {
+                return ResourceManager.GetString("Lead.InvalidConnectionInfo", resourceCulture);
             }
         }
         
@@ -2230,11 +2365,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validating form name.
+        ///   Looks up a localized string similar to Validating name.
         /// </summary>
-        public static string Lead_ValidatingViewName {
+        public static string Lead_ValidatingName {
             get {
-                return ResourceManager.GetString("Lead.ValidatingViewName", resourceCulture);
+                return ResourceManager.GetString("Lead.ValidatingName", resourceCulture);
             }
         }
         
@@ -2280,6 +2415,33 @@ namespace ERHMS.Desktop.Properties {
         public static string Phase_Name_PreDeployment {
             get {
                 return ResourceManager.GetString("Phase.Name.PreDeployment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Empty&gt;.
+        /// </summary>
+        public static string Placeholder_Empty {
+            get {
+                return ResourceManager.GetString("Placeholder.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Hidden&gt;.
+        /// </summary>
+        public static string Placeholder_Hidden {
+            get {
+                return ResourceManager.GetString("Placeholder.Hidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Ignored&gt;.
+        /// </summary>
+        public static string Placeholder_Ignored {
+            get {
+                return ResourceManager.GetString("Placeholder.Ignored", resourceCulture);
             }
         }
         

@@ -94,6 +94,13 @@ namespace ERHMS.Data
             ConnectionStringBuilder.ConnectionString = connectionString;
         }
 
+        public DbConnectionStringBuilder GetConnectionStringBuilder()
+        {
+            DbConnectionStringBuilder connectionStringBuilder = ProviderFactory.CreateConnectionStringBuilder();
+            connectionStringBuilder.ConnectionString = ConnectionString;
+            return connectionStringBuilder;
+        }
+
         private string Escape(string identifier)
         {
             return identifier.Replace("]", "]]");
@@ -120,9 +127,9 @@ namespace ERHMS.Data
             DeleteCore();
         }
 
-        private IDbConnection GetBaseConnection()
+        private DbConnection GetBaseConnection()
         {
-            IDbConnection connection = ProviderFactory.CreateConnection();
+            DbConnection connection = ProviderFactory.CreateConnection();
             connection.ConnectionString = ConnectionString;
             return connection;
         }
@@ -163,6 +170,21 @@ namespace ERHMS.Data
         public IDataReader ExecuteReader(IQuery query)
         {
             return Connection.ExecuteReader(query.Sql, query.Parameters, Transaction);
+        }
+
+        public bool TableExists(string tableName)
+        {
+            using (DbConnection connection = GetBaseConnection())
+            {
+                connection.Open();
+                DataTable schema = connection.GetSchema("Tables", new string[]
+                {
+                    null,
+                    null,
+                    tableName
+                });
+                return schema.Rows.Count > 0;
+            }
         }
 
         public virtual int GetLastId()

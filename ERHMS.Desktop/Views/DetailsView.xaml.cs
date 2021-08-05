@@ -12,7 +12,7 @@ namespace ERHMS.Desktop.Views
             set { base.DataContext = value; }
         }
 
-        public string SharedSizeGroup { get; } = $"Group_{Guid.NewGuid():N}";
+        public string KeyGroup { get; } = $"Group_{Guid.NewGuid():N}";
 
         public DetailsView()
         {

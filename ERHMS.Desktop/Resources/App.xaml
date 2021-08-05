@@ -1,8 +1,7 @@
 ﻿<ResourceDictionary x:Class="ERHMS.Desktop.Resources.App"
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
-                    xmlns:Converters="clr-namespace:ERHMS.Desktop.Converters">
+                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="Base.xaml" />

@@ -1,7 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards">
+                    xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
+    <!-- TODO: Default to standard -->
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
@@ -36,5 +39,75 @@
                 </Button.ToolTip>
             </Button>
         </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+SetProjectCreationInfoViewModel}">
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0"
+                       Grid.Row="0"
+                       Content="{Markup:String Label.Name}" />
+                <TextBox AutomationProperties.Name="{Markup:String Label.Name}"
+                         Grid.Column="1"
+                         Grid.Row="0"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Grid.Column="0"
+                       Grid.Row="1"
+                       Content="{Markup:String Label.Description}" />
+                <TextBox AutomationProperties.Name="{Markup:String Label.Description}"
+                         Grid.Column="1"
+                         Grid.Row="1"
+                         AcceptsReturn="True"
+                         Height="100"
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                         TextWrapping="Wrap" />
+                <Label Grid.Column="0"
+                       Grid.Row="2"
+                       Content="{Markup:String Label.LocationRoot}" />
+                <Grid Grid.Column="1"
+                      Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0"
+                             IsReadOnly="True"
+                             Text="{Binding LocationRoot, Mode=OneWay}"
+                             ToolTip="{Binding LocationRoot}" />
+                    <Button Grid.Column="1"
+                            Command="{Binding BrowseCommand}"
+                            Content="{Markup:String AccessText.Browse}" />
+                </Grid>
+                <Label Grid.Column="0"
+                       Grid.Row="3"
+                       Content="{Markup:String Label.DatabaseProvider}" />
+                <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.DatabaseProvider}"
+                                        Grid.Column="1"
+                                        Grid.Row="3"
+                                        Binding="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Name.{0}'}"
+                                        ItemsSource="{Binding DatabaseProviders}" />
+            </Grid>
+            <GroupBox DataContext="{Binding ConnectionInfo}"
+                      Header="{Markup:String Lead.ConnectionInfo}"
+                      Visibility="{Binding Editable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ContentPresenter Content="{Binding}" />
+            </GroupBox>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+CloseViewModel}" />
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+Blank+CommitViewModel}">
+        <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 </ResourceDictionary>

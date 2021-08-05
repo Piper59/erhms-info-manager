@@ -77,6 +77,7 @@
     <Compile Include="Analytics\Pgm.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Data\CollectedDataProviderExtensions.cs" />
+    <Compile Include="Data\IDatabaseExtensions.cs" />
     <Compile Include="Data\IDbDriverExtensions.cs" />
     <Compile Include="Data\Record.cs" />
     <Compile Include="Data\RecordCollection.cs" />
@@ -118,6 +119,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="TableNames.cs" />
     <Compile Include="TableTypes.cs" />
     <Compile Include="Templating\Mapping\DateFieldMapper.cs" />
     <Compile Include="Templating\Mapping\DDLFieldOfCodesMapper.cs" />

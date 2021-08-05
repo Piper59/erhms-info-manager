@@ -80,7 +80,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 : base(wizard, antecedent)
             {
                 fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                fileDialog.Filter = Wizard.FileFilter;
+                fileDialog.Filter = wizard.FileFilter;
                 BrowseCommand = new SyncCommand(Browse);
             }
 
