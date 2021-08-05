@@ -84,7 +84,15 @@ namespace ERHMS.Desktop.ViewModels
 
         public void OpenProject(CoreProject coreProject)
         {
-            // TODO: Implement
+            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+            fileDialog.InitialDirectory = Configuration.Instance.GetProjectsDirectory();
+            fileDialog.Filter = Strings.FileDialog_Filter_Projects;
+            if (fileDialog.Open() != true)
+            {
+                return;
+            }
+            Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
+            Settings.Default.Save();
         }
 
         public async Task GoToProjectAsync(Func<Task<Project>> action)
