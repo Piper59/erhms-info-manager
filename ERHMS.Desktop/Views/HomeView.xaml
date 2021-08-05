@@ -66,8 +66,7 @@
                                         <TextBlock FontWeight="{StaticResource ThickFontWeight}"
                                                    Text="{Binding Name}" />
                                         <TextBlock Text="{Binding FilePath}"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   ToolTip="{Binding FilePath}" />
+                                                   TextTrimming="CharacterEllipsis" />
                                     </StackPanel>
                                     <Controls:IconButton Grid.Column="1"
                                                          AltText="{Markup:String AltText.RemoveFromList}"
@@ -77,11 +76,23 @@
                                                          CommandParameter="{Binding}"
                                                          Content="{Markup:Icon Close}"
                                                          FontSize="{StaticResource SmallFontSize}"
-                                                         VerticalAlignment="Center"
-                                                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                        <Button.Margin>
+                                                         VerticalAlignment="Center">
+                                        <Controls:IconButton.Margin>
                                             <Thickness Left="{StaticResource LargeSpace}" />
-                                        </Button.Margin>
+                                        </Controls:IconButton.Margin>
+                                        <Controls:IconButton.Style>
+                                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource {x:Type Controls:IconButton}}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Controls:IconButton.Style>
                                     </Controls:IconButton>
                                 </Grid>
                             </DataTemplate>

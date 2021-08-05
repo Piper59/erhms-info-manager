@@ -1,5 +1,4 @@
 ﻿using ERHMS.Common.ComponentModel;
-using ERHMS.Common.Text;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
@@ -130,8 +129,8 @@ namespace ERHMS.Desktop.ViewModels
             public IncidentProjectCollectionViewModel()
             {
                 Initialize();
-                MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent, CanMakeCurrent);
-                RemoveRecentCommand = new SyncCommand<ProjectInfo>(RemoveRecent, CanRemoveRecent);
+                MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent, IsNotEmpty);
+                RemoveRecentCommand = new SyncCommand<ProjectInfo>(RemoveRecent, IsNotEmpty);
             }
 
             private void Initialize()
@@ -139,21 +138,15 @@ namespace ERHMS.Desktop.ViewModels
                 if (Settings.Default.HasIncidentProjectPath)
                 {
                     Current = new ProjectInfo(Settings.Default.IncidentProjectPath);
-                    // TODO: Skip first (current)
-                    Recents = Settings.Default.IncidentProjectPaths.Cast<string>()
-                        .Select(path => new ProjectInfo(path))
-                        .ToList();
                 }
-                else
-                {
-                    Recents = new ProjectInfo[]
-                    {
-                        EmptyProjectInfo.Instance
-                    };
-                }
+                Recents = Settings.Default.IncidentProjectPaths.Cast<string>()
+                    .Skip(1)
+                    .Select(path => new ProjectInfo(path))
+                    .DefaultIfEmpty(EmptyProjectInfo.Instance)
+                    .ToList();
             }
 
-            public bool CanMakeCurrent(ProjectInfo projectInfo)
+            public bool IsNotEmpty(ProjectInfo projectInfo)
             {
                 return projectInfo != EmptyProjectInfo.Instance;
             }
@@ -163,12 +156,6 @@ namespace ERHMS.Desktop.ViewModels
                 Settings.Default.IncidentProjectPath = projectInfo.FilePath;
                 Settings.Default.Save();
                 Initialize();
-            }
-
-            public bool CanRemoveRecent(ProjectInfo projectInfo)
-            {
-                return projectInfo != EmptyProjectInfo.Instance
-                    && !Comparers.Path.Equals(projectInfo.FilePath, Settings.Default.IncidentProjectPath);
             }
 
             public void RemoveRecent(ProjectInfo projectInfo)
