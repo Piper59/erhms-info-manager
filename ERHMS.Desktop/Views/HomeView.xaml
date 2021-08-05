@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
              xmlns:ERHMS_EpiInfo="clr-namespace:ERHMS.EpiInfo;assembly=ERHMS.EpiInfo">
@@ -35,6 +36,7 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+CoreProjectCollectionViewModel}">
+            <!-- TODO: Split into view vs. create/open -->
             <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
                     ContextMenuService.Placement="Bottom"
                     Style="{StaticResource WorkflowButton}"
@@ -55,12 +57,33 @@
                                 <TextBlock Text="{Markup:String ProjectInfo.Recents.Empty}" />
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type ERHMS_EpiInfo:ProjectInfo}">
-                                <StackPanel>
-                                    <TextBlock FontWeight="{StaticResource ThickFontWeight}"
-                                               Text="{Binding Name}" />
-                                    <TextBlock Text="{Binding FilePath}"
-                                               TextTrimming="CharacterEllipsis" />
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock FontWeight="{StaticResource ThickFontWeight}"
+                                                   Text="{Binding Name}" />
+                                        <TextBlock Text="{Binding FilePath}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   ToolTip="{Binding FilePath}" />
+                                    </StackPanel>
+                                    <Controls:IconButton Grid.Column="1"
+                                                         AltText="{Markup:String AltText.RemoveFromList}"
+                                                         Background="Transparent"
+                                                         BorderThickness="0"
+                                                         Command="{Binding DataContext.RemoveRecentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem, AncestorLevel=2}}"
+                                                         CommandParameter="{Binding}"
+                                                         Content="{Markup:Icon Close}"
+                                                         FontSize="{StaticResource SmallFontSize}"
+                                                         VerticalAlignment="Center"
+                                                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Button.Margin>
+                                            <Thickness Left="{StaticResource LargeSpace}" />
+                                        </Button.Margin>
+                                    </Controls:IconButton>
+                                </Grid>
                             </DataTemplate>
                         </ContextMenu.Resources>
                         <MenuItem Command="{Binding GoToCurrentCommand}"
@@ -70,10 +93,11 @@
                                   Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <MenuItem.ItemContainerStyle>
                                 <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}">
+                                    <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                                    <Setter Property="AutomationProperties.HelpText" Value="{Binding FilePath}" />
                                     <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
                                     <Setter Property="CommandParameter" Value="{Binding}" />
                                     <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
-                                    <Setter Property="ToolTip" Value="{Binding FilePath}" />
                                 </Style>
                             </MenuItem.ItemContainerStyle>
                         </MenuItem>

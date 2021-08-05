@@ -1,4 +1,5 @@
 ﻿using ERHMS.Common.ComponentModel;
+using ERHMS.Common.Text;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
@@ -38,7 +39,6 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        // TODO: Allow removing recents
         public abstract class CoreProjectCollectionViewModel : ObservableObject
         {
             public abstract CoreProject Value { get; }
@@ -63,6 +63,7 @@ namespace ERHMS.Desktop.ViewModels
             public ICommand OpenCommand { get; }
             public ICommand GoToCurrentCommand { get; }
             public abstract ICommand MakeCurrentCommand { get; }
+            public abstract ICommand RemoveRecentCommand { get; }
 
             protected CoreProjectCollectionViewModel()
             {
@@ -96,7 +97,8 @@ namespace ERHMS.Desktop.ViewModels
             public override CoreProject Value => CoreProject.Worker;
             public override bool CanHaveRecents => false;
 
-            public override ICommand MakeCurrentCommand { get; } = Command.Null;
+            public override ICommand MakeCurrentCommand => Command.Null;
+            public override ICommand RemoveRecentCommand => Command.Null;
 
             public WorkerProjectCollectionViewModel()
             {
@@ -123,11 +125,13 @@ namespace ERHMS.Desktop.ViewModels
             public override bool CanHaveRecents => true;
 
             public override ICommand MakeCurrentCommand { get; }
+            public override ICommand RemoveRecentCommand { get; }
 
             public IncidentProjectCollectionViewModel()
             {
                 Initialize();
                 MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent, CanMakeCurrent);
+                RemoveRecentCommand = new SyncCommand<ProjectInfo>(RemoveRecent, CanRemoveRecent);
             }
 
             private void Initialize()
@@ -135,6 +139,7 @@ namespace ERHMS.Desktop.ViewModels
                 if (Settings.Default.HasIncidentProjectPath)
                 {
                     Current = new ProjectInfo(Settings.Default.IncidentProjectPath);
+                    // TODO: Skip first (current)
                     Recents = Settings.Default.IncidentProjectPaths.Cast<string>()
                         .Select(path => new ProjectInfo(path))
                         .ToList();
@@ -156,6 +161,19 @@ namespace ERHMS.Desktop.ViewModels
             public void MakeCurrent(ProjectInfo projectInfo)
             {
                 Settings.Default.IncidentProjectPath = projectInfo.FilePath;
+                Settings.Default.Save();
+                Initialize();
+            }
+
+            public bool CanRemoveRecent(ProjectInfo projectInfo)
+            {
+                return projectInfo != EmptyProjectInfo.Instance
+                    && !Comparers.Path.Equals(projectInfo.FilePath, Settings.Default.IncidentProjectPath);
+            }
+
+            public void RemoveRecent(ProjectInfo projectInfo)
+            {
+                Settings.Default.IncidentProjectPaths.Remove(projectInfo.FilePath);
                 Settings.Default.Save();
                 Initialize();
             }
