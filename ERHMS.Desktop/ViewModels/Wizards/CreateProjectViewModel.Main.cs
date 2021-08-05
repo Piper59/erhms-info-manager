@@ -13,6 +13,7 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Naming;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -24,9 +25,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string Title => Strings.CreateProject_Lead_SetStrategy;
             public CoreProject CoreProject => Wizard.CoreProject;
+            public IEnumerable<CoreView> CoreViews => CoreView.Instances
+                .Where(coreView => coreView.CoreProject == CoreProject);
 
-            public ICommand CreateBlankCommand { get; }
             public ICommand CreateStandardCommand { get; }
+            public ICommand CreateBlankCommand { get; }
             public ICommand CreateFromTemplateCommand { get; }
             public ICommand CreateFromExistingCommand { get; }
 

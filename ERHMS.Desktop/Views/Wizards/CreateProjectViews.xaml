@@ -4,23 +4,40 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
-    <!-- TODO: Default to standard -->
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
+            <Button Command="{Binding CreateStandardCommand}"
+                    Content="{Markup:String CreateProject.AccessText.Standard}">
+                <Button.ToolTip>
+                    <ToolTip MaxWidth="{StaticResource ToolTipWidth}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}" />
+                            <ItemsControl IsTabStop="False"
+                                          ItemsSource="{Binding CoreViews}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextWrapping="NoWrap">
+                                            <Run>&#x2022;</Run>
+                                            <Run Text="{Binding Name, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.Margin>
+                                    <Thickness Left="{StaticResource SmallFontSize}"
+                                               Top="{StaticResource SmallFontSize}" />
+                                </ItemsControl.Margin>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
             <Button Command="{Binding CreateBlankCommand}"
                     Content="{Markup:String CreateProject.AccessText.Blank}">
                 <Button.ToolTip>
                     <ToolTip Content="{Markup:String CreateProject.HelpText.Blank}"
-                             MaxWidth="{StaticResource ToolTipWidth}" />
-                </Button.ToolTip>
-            </Button>
-            <Button Command="{Binding CreateStandardCommand}"
-                    Content="{Markup:String CreateProject.AccessText.Standard}">
-                <Button.ToolTip>
-                    <ToolTip Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
                              MaxWidth="{StaticResource ToolTipWidth}" />
                 </Button.ToolTip>
             </Button>

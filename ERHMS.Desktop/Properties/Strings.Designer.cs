@@ -1222,7 +1222,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a _standard database.
+        ///   Looks up a localized string similar to Create a _standard database (recommended).
         /// </summary>
         public static string CreateProject_AccessText_Standard {
             get {
@@ -1258,7 +1258,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new database containing standard incident forms..
+        ///   Looks up a localized string similar to Create a new database containing the following standard incident forms:.
         /// </summary>
         public static string CreateProject_HelpText_Standard_Incident {
             get {
@@ -1267,7 +1267,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new database containing standard worker forms..
+        ///   Looks up a localized string similar to Create a new database containing the following standard worker forms:.
         /// </summary>
         public static string CreateProject_HelpText_Standard_Worker {
             get {

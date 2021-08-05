@@ -517,7 +517,7 @@ Close anyway?</value>
     <value>Create a database based on a _template</value>
   </data>
   <data name="CreateProject.AccessText.Standard" xml:space="preserve">
-    <value>Create a _standard database</value>
+    <value>Create a _standard database (recommended)</value>
   </data>
   <data name="CreateProject.HelpText.Blank" xml:space="preserve">
     <value>Create a new database containing no forms.</value>
@@ -529,10 +529,10 @@ Close anyway?</value>
     <value>Create a new database containing forms defined in an Epi Info project-level template (.xml) file.</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Incident" xml:space="preserve">
-    <value>Create a new database containing standard incident forms.</value>
+    <value>Create a new database containing the following standard incident forms:</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Worker" xml:space="preserve">
-    <value>Create a new database containing standard worker forms.</value>
+    <value>Create a new database containing the following standard worker forms:</value>
   </data>
   <data name="CreateProject.Lead.Close" xml:space="preserve">
     <value>Database has been created</value>
