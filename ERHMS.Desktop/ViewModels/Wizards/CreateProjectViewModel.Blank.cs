@@ -23,6 +23,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
             }
 
+            // TODO: Create base class
             public class CommitViewModel : StepViewModel<CreateProjectViewModel>
             {
                 public override string Title => Strings.Lead_Commit;
@@ -61,10 +62,12 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                             if (Wizard.ProjectCreationInfo.Database.IsInitialized())
                             {
                                 // TODO: Offer to open
+                                // TODO: Check for core views
                             }
                             else
                             {
                                 // TODO: Offer to initialize and open
+                                // TODO: Check for core views
                             }
                         }
                         else

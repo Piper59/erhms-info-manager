@@ -73,6 +73,11 @@ namespace ERHMS.Desktop.ViewModels
 
         public void CreateProject(CoreProject coreProject)
         {
+            // TODO: Handle errors
+            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
+            {
+                // TODO: Confirm
+            }
             CreateProjectViewModel wizard = new CreateProjectViewModel(coreProject);
             if (wizard.Show() != true)
             {
@@ -84,6 +89,11 @@ namespace ERHMS.Desktop.ViewModels
 
         public void OpenProject(CoreProject coreProject)
         {
+            // TODO: Handle errors
+            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
+            {
+                // TODO: Confirm
+            }
             IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
             fileDialog.InitialDirectory = Configuration.Instance.GetProjectsDirectory();
             fileDialog.Filter = Strings.FileDialog_Filter_Projects;
@@ -91,6 +101,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
+            // TODO: Check for core views
             Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
             Settings.Default.Save();
         }

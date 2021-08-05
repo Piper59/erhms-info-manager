@@ -6,6 +6,8 @@ namespace ERHMS.Desktop.Behaviors
 {
     public class OpenContextMenuOnClick : Behavior<Button>
     {
+        private bool isOpen;
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -26,18 +28,26 @@ namespace ERHMS.Desktop.Behaviors
             }
         }
 
+        private void ContextMenu_Closed(object sender, RoutedEventArgs e)
+        {
+            AssociatedObject.ContextMenu.Closed -= ContextMenu_Closed;
+            isOpen = false;
+        }
+
         private bool OpenContextMenu()
         {
             ContextMenu contextMenu = AssociatedObject.ContextMenu;
-            if (contextMenu == null)
+            if (contextMenu == null || isOpen)
             {
                 return false;
             }
             else
             {
+                contextMenu.Closed += ContextMenu_Closed;
                 contextMenu.PlacementTarget = AssociatedObject;
                 contextMenu.Placement = ContextMenuService.GetPlacement(AssociatedObject);
                 contextMenu.IsOpen = true;
+                isOpen = true;
                 return true;
             }
         }

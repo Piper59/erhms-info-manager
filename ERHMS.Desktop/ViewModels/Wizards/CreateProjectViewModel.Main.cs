@@ -130,6 +130,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 if (reason == InvalidNameReason.Identical)
                 {
                     // TODO: Offer to open
+                    // TODO: Check for core views
                 }
                 if (reason != InvalidNameReason.None)
                 {

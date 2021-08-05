@@ -38,6 +38,7 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
+        // TODO: Allow removing recents
         public abstract class CoreProjectCollectionViewModel : ObservableObject
         {
             public abstract CoreProject Value { get; }
