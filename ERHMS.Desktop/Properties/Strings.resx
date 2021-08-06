@@ -600,6 +600,9 @@ Close anyway?</value>
   <data name="ExportRecords.Lead.SetFormat" xml:space="preserve">
     <value>Choose an export format</value>
   </data>
+  <data name="FileDialog.Filter.AllFiles" xml:space="preserve">
+    <value>All Files (*.*)|*.*</value>
+  </data>
   <data name="FileDialog.Filter.Canvases" xml:space="preserve">
     <value>Epi Info Canvases (*.cvs7)|*.cvs7</value>
   </data>

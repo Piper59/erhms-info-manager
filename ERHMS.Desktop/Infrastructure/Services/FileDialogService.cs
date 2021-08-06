@@ -1,6 +1,7 @@
 ﻿using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using Microsoft.Win32;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
@@ -27,6 +28,11 @@ namespace ERHMS.Desktop.Infrastructure.Services
         }
 
         public string Filter { get; set; }
+
+        public IEnumerable<string> Filters
+        {
+            set { Filter = string.Join("|", value); }
+        }
 
         private bool? Show(FileDialog dialog)
         {

@@ -123,7 +123,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 : base(wizard, antecedent)
             {
                 fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-                fileDialog.Filter = Strings.FileDialog_Filter_CsvFiles;
+                fileDialog.Filters = new string[]
+                {
+                    Strings.FileDialog_Filter_CsvFiles,
+                    Strings.FileDialog_Filter_AllFiles
+                };
                 BrowseCommand = new SyncCommand(Browse);
             }
 

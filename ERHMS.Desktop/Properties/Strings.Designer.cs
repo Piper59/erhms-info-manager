@@ -1474,6 +1474,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Files (*.*)|*.*.
+        /// </summary>
+        public static string FileDialog_Filter_AllFiles {
+            get {
+                return ResourceManager.GetString("FileDialog.Filter.AllFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Epi Info Canvases (*.cvs7)|*.cvs7.
         /// </summary>
         public static string FileDialog_Filter_Canvases {
