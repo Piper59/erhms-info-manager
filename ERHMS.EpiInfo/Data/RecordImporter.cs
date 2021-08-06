@@ -26,6 +26,10 @@ namespace ERHMS.EpiInfo.Data
         {
             View = view;
             Headers = ReadRow();
+            if (Headers == null)
+            {
+                throw GetException("No headers found", 1);
+            }
         }
 
         public void Reset()
