@@ -169,7 +169,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a _new database.
+        ///   Looks up a localized string similar to Create a _new project.
         /// </summary>
         public static string AccessText_CreateNewProject {
             get {
@@ -322,7 +322,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View the _current database.
+        ///   Looks up a localized string similar to View the _current project.
         /// </summary>
         public static string AccessText_GoToCurrentProject {
             get {
@@ -430,7 +430,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open an _existing database.
+        ///   Looks up a localized string similar to Open an _existing project.
         /// </summary>
         public static string AccessText_OpenExistingProject {
             get {
@@ -439,7 +439,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch to a _recent database.
+        ///   Looks up a localized string similar to Switch to a _recent project.
         /// </summary>
         public static string AccessText_OpenRecentProject {
             get {
@@ -745,7 +745,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Up to database.
+        ///   Looks up a localized string similar to Up to project.
         /// </summary>
         public static string AltText_UpToProject {
             get {
@@ -794,7 +794,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Location: {0}
         ///
-        ///ERHMS Info Manager will only recognize files that are in the same location as the current Epi Info project (.prj) file. Continue with this location anyway?.
+        ///ERHMS Info Manager will only recognize files that are in the same location as the current project. Continue with this location anyway?.
         /// </summary>
         public static string Body_ConfirmOrphanAssetCreation {
             get {
@@ -863,7 +863,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
-        ///This file is not a valid project-level Epi Info template..
+        ///This file is not a valid project-level template..
         /// </summary>
         public static string Body_InvalidProjectTemplatePath {
             get {
@@ -874,18 +874,7 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to File: {0}
         ///
-        ///This file is not a valid Epi Info template..
-        /// </summary>
-        public static string Body_InvalidTemplatePath {
-            get {
-                return ResourceManager.GetString("Body.InvalidTemplatePath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File: {0}
-        ///
-        ///This file is not a valid form-level Epi Info template..
+        ///This file is not a valid form-level template..
         /// </summary>
         public static string Body_InvalidViewTemplatePath {
             get {
@@ -943,7 +932,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Incident database.
+        ///   Looks up a localized string similar to _Incident project.
         /// </summary>
         public static string CoreProject_AccessText_Incident {
             get {
@@ -952,7 +941,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Worker database.
+        ///   Looks up a localized string similar to _Worker project.
         /// </summary>
         public static string CoreProject_AccessText_Worker {
             get {
@@ -961,7 +950,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incident database:.
+        ///   Looks up a localized string similar to Incident project:.
         /// </summary>
         public static string CoreProject_Label_Incident {
             get {
@@ -970,7 +959,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker database:.
+        ///   Looks up a localized string similar to Worker project:.
         /// </summary>
         public static string CoreProject_Label_Worker {
             get {
@@ -979,7 +968,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incident database.
+        ///   Looks up a localized string similar to Incident project.
         /// </summary>
         public static string CoreProject_Name_Incident {
             get {
@@ -988,7 +977,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Worker database.
+        ///   Looks up a localized string similar to Worker project.
         /// </summary>
         public static string CoreProject_Name_Worker {
             get {
@@ -1204,7 +1193,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a _blank database.
+        ///   Looks up a localized string similar to Create a _blank project.
         /// </summary>
         public static string CreateProject_AccessText_Blank {
             get {
@@ -1213,7 +1202,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy an _existing database.
+        ///   Looks up a localized string similar to Copy an _existing project.
         /// </summary>
         public static string CreateProject_AccessText_FromExisting {
             get {
@@ -1222,7 +1211,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a database based on a _template.
+        ///   Looks up a localized string similar to Create a project based on a _template.
         /// </summary>
         public static string CreateProject_AccessText_FromTemplate {
             get {
@@ -1231,7 +1220,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a _standard database (recommended).
+        ///   Looks up a localized string similar to Create a _standard project (recommended).
         /// </summary>
         public static string CreateProject_AccessText_Standard {
             get {
@@ -1240,7 +1229,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new database containing no forms..
+        ///   Looks up a localized string similar to Create a new project containing no forms..
         /// </summary>
         public static string CreateProject_HelpText_Blank {
             get {
@@ -1249,7 +1238,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new database containing forms copied from an existing database. Existing records will not be copied..
+        ///   Looks up a localized string similar to Create a new project containing forms copied from an existing project. Existing records will not be copied..
         /// </summary>
         public static string CreateProject_HelpText_FromExisting {
             get {
@@ -1258,7 +1247,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new database containing forms defined in an Epi Info project-level template (.xml) file..
+        ///   Looks up a localized string similar to Create a new project containing forms defined in a project-level template..
         /// </summary>
         public static string CreateProject_HelpText_FromTemplate {
             get {
@@ -1267,7 +1256,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new database containing the following standard incident forms:.
+        ///   Looks up a localized string similar to Create a new project containing the following standard incident forms:.
         /// </summary>
         public static string CreateProject_HelpText_Standard_Incident {
             get {
@@ -1276,7 +1265,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new database containing the following standard worker forms:.
+        ///   Looks up a localized string similar to Create a new project containing the following standard worker forms:.
         /// </summary>
         public static string CreateProject_HelpText_Standard_Worker {
             get {
@@ -1285,7 +1274,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database has been created.
+        ///   Looks up a localized string similar to Project has been created.
         /// </summary>
         public static string CreateProject_Lead_Close {
             get {
@@ -1294,7 +1283,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter details for the new database.
+        ///   Looks up a localized string similar to Enter details for the new project.
         /// </summary>
         public static string CreateProject_Lead_SetProjectCreationInfo {
             get {
@@ -1303,7 +1292,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose how to create the new database.
+        ///   Looks up a localized string similar to Choose how to create the new project.
         /// </summary>
         public static string CreateProject_Lead_SetStrategy {
             get {
@@ -1366,7 +1355,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new form containing fields defined in an Epi Info form-level template (.xml) file..
+        ///   Looks up a localized string similar to Create a new form containing fields defined in a form-level template..
         /// </summary>
         public static string CreateView_HelpText_FromTemplate {
             get {
@@ -1609,7 +1598,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click here to create or open a database..
+        ///   Looks up a localized string similar to Click here to create or open a project..
         /// </summary>
         public static string HelpText_CreateOrOpenProject {
             get {
@@ -1933,7 +1922,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Format:.
+        ///   Looks up a localized string similar to Database type:.
         /// </summary>
         public static string Label_DatabaseProvider {
             get {
@@ -2041,7 +2030,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database:.
+        ///   Looks up a localized string similar to Project:.
         /// </summary>
         public static string Label_Project {
             get {
@@ -2167,7 +2156,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating database.
+        ///   Looks up a localized string similar to Creating project.
         /// </summary>
         public static string Lead_CreatingProject {
             get {
@@ -2257,7 +2246,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading database.
+        ///   Looks up a localized string similar to Loading project.
         /// </summary>
         public static string Lead_LoadingProject {
             get {
@@ -2428,7 +2417,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No database found.
+        ///   Looks up a localized string similar to No project found.
         /// </summary>
         public static string ProjectInfo_Current_Empty {
             get {
@@ -2437,7 +2426,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No databases found.
+        ///   Looks up a localized string similar to No projects found.
         /// </summary>
         public static string ProjectInfo_Recents_Empty {
             get {

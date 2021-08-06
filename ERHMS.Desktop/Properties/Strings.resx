@@ -154,7 +154,7 @@
     <value>_Copy value to Clipboard</value>
   </data>
   <data name="AccessText.CreateNewProject" xml:space="preserve">
-    <value>Create a _new database</value>
+    <value>Create a _new project</value>
   </data>
   <data name="AccessText.Csv" xml:space="preserve">
     <value>_Comma-separated values (.csv)</value>
@@ -205,7 +205,7 @@
     <value>F_ull name</value>
   </data>
   <data name="AccessText.GoToCurrentProject" xml:space="preserve">
-    <value>View the _current database</value>
+    <value>View the _current project</value>
   </data>
   <data name="AccessText.GoToHelp" xml:space="preserve">
     <value>V_iew help</value>
@@ -241,10 +241,10 @@
     <value>_Open</value>
   </data>
   <data name="AccessText.OpenExistingProject" xml:space="preserve">
-    <value>Open an _existing database</value>
+    <value>Open an _existing project</value>
   </data>
   <data name="AccessText.OpenRecentProject" xml:space="preserve">
-    <value>Switch to a _recent database</value>
+    <value>Switch to a _recent project</value>
   </data>
   <data name="AccessText.Pages" xml:space="preserve">
     <value>_Pages</value>
@@ -346,7 +346,7 @@
     <value>Undelete</value>
   </data>
   <data name="AltText.UpToProject" xml:space="preserve">
-    <value>Up to database</value>
+    <value>Up to project</value>
   </data>
   <data name="AppTitle" xml:space="preserve">
     <value>ERHMS Info Manager</value>
@@ -365,7 +365,7 @@ This file will be moved to the Recycle Bin.</value>
   <data name="Body.ConfirmOrphanAssetCreation" xml:space="preserve">
     <value>Location: {0}
 
-ERHMS Info Manager will only recognize files that are in the same location as the current Epi Info project (.prj) file. Continue with this location anyway?</value>
+ERHMS Info Manager will only recognize files that are in the same location as the current project. Continue with this location anyway?</value>
   </data>
   <data name="Body.ConfirmViewDeletion" xml:space="preserve">
     <value>Form: {0}
@@ -392,17 +392,12 @@ This form, any related forms, and all associated records will be permanently del
   <data name="Body.InvalidProjectTemplatePath" xml:space="preserve">
     <value>File: {0}
 
-This file is not a valid project-level Epi Info template.</value>
-  </data>
-  <data name="Body.InvalidTemplatePath" xml:space="preserve">
-    <value>File: {0}
-
-This file is not a valid Epi Info template.</value>
+This file is not a valid project-level template.</value>
   </data>
   <data name="Body.InvalidViewTemplatePath" xml:space="preserve">
     <value>File: {0}
 
-This file is not a valid form-level Epi Info template.</value>
+This file is not a valid form-level template.</value>
   </data>
   <data name="Body.SettingsReset" xml:space="preserve">
     <value>Settings have been reset.</value>
@@ -424,22 +419,22 @@ Close anyway?</value>
     <value>Yes</value>
   </data>
   <data name="CoreProject.AccessText.Incident" xml:space="preserve">
-    <value>_Incident database</value>
+    <value>_Incident project</value>
   </data>
   <data name="CoreProject.AccessText.Worker" xml:space="preserve">
-    <value>_Worker database</value>
+    <value>_Worker project</value>
   </data>
   <data name="CoreProject.Label.Incident" xml:space="preserve">
-    <value>Incident database:</value>
+    <value>Incident project:</value>
   </data>
   <data name="CoreProject.Label.Worker" xml:space="preserve">
-    <value>Worker database:</value>
+    <value>Worker project:</value>
   </data>
   <data name="CoreProject.Name.Incident" xml:space="preserve">
-    <value>Incident database</value>
+    <value>Incident project</value>
   </data>
   <data name="CoreProject.Name.Worker" xml:space="preserve">
-    <value>Worker database</value>
+    <value>Worker project</value>
   </data>
   <data name="CoreReport.AccessText.Incident" xml:space="preserve">
     <value>_Incident report</value>
@@ -511,40 +506,40 @@ Close anyway?</value>
     <value>Choose a form to use as a data source</value>
   </data>
   <data name="CreateProject.AccessText.Blank" xml:space="preserve">
-    <value>Create a _blank database</value>
+    <value>Create a _blank project</value>
   </data>
   <data name="CreateProject.AccessText.FromExisting" xml:space="preserve">
-    <value>Copy an _existing database</value>
+    <value>Copy an _existing project</value>
   </data>
   <data name="CreateProject.AccessText.FromTemplate" xml:space="preserve">
-    <value>Create a database based on a _template</value>
+    <value>Create a project based on a _template</value>
   </data>
   <data name="CreateProject.AccessText.Standard" xml:space="preserve">
-    <value>Create a _standard database (recommended)</value>
+    <value>Create a _standard project (recommended)</value>
   </data>
   <data name="CreateProject.HelpText.Blank" xml:space="preserve">
-    <value>Create a new database containing no forms.</value>
+    <value>Create a new project containing no forms.</value>
   </data>
   <data name="CreateProject.HelpText.FromExisting" xml:space="preserve">
-    <value>Create a new database containing forms copied from an existing database. Existing records will not be copied.</value>
+    <value>Create a new project containing forms copied from an existing project. Existing records will not be copied.</value>
   </data>
   <data name="CreateProject.HelpText.FromTemplate" xml:space="preserve">
-    <value>Create a new database containing forms defined in an Epi Info project-level template (.xml) file.</value>
+    <value>Create a new project containing forms defined in a project-level template.</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Incident" xml:space="preserve">
-    <value>Create a new database containing the following standard incident forms:</value>
+    <value>Create a new project containing the following standard incident forms:</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Worker" xml:space="preserve">
-    <value>Create a new database containing the following standard worker forms:</value>
+    <value>Create a new project containing the following standard worker forms:</value>
   </data>
   <data name="CreateProject.Lead.Close" xml:space="preserve">
-    <value>Database has been created</value>
+    <value>Project has been created</value>
   </data>
   <data name="CreateProject.Lead.SetProjectCreationInfo" xml:space="preserve">
-    <value>Enter details for the new database</value>
+    <value>Enter details for the new project</value>
   </data>
   <data name="CreateProject.Lead.SetStrategy" xml:space="preserve">
-    <value>Choose how to create the new database</value>
+    <value>Choose how to create the new project</value>
   </data>
   <data name="CreateView.AccessText.Blank" xml:space="preserve">
     <value>Create a _blank form</value>
@@ -565,7 +560,7 @@ Close anyway?</value>
     <value>Create a new form containing fields copied from an existing form. Existing records will not be copied.</value>
   </data>
   <data name="CreateView.HelpText.FromTemplate" xml:space="preserve">
-    <value>Create a new form containing fields defined in an Epi Info form-level template (.xml) file.</value>
+    <value>Create a new form containing fields defined in a form-level template.</value>
   </data>
   <data name="CreateView.Lead.Close" xml:space="preserve">
     <value>Form has been created</value>
@@ -646,7 +641,7 @@ Close anyway?</value>
     <value>Create a new file in the Epi Info Maps module.</value>
   </data>
   <data name="HelpText.CreateOrOpenProject" xml:space="preserve">
-    <value>Click here to create or open a database.</value>
+    <value>Click here to create or open a project.</value>
   </data>
   <data name="HelpText.CreateView" xml:space="preserve">
     <value>Create a new form in the Epi Info Form Designer module.</value>
@@ -754,7 +749,7 @@ Close anyway?</value>
     <value>Connection details:</value>
   </data>
   <data name="Label.DatabaseProvider" xml:space="preserve">
-    <value>Format:</value>
+    <value>Database type:</value>
   </data>
   <data name="Label.DataSource" xml:space="preserve">
     <value>Server name:</value>
@@ -790,7 +785,7 @@ Close anyway?</value>
     <value>Password:</value>
   </data>
   <data name="Label.Project" xml:space="preserve">
-    <value>Database:</value>
+    <value>Project:</value>
   </data>
   <data name="Label.RecordStatus" xml:space="preserve">
     <value>Record status:</value>
@@ -832,7 +827,7 @@ Close anyway?</value>
     <value>Creating file</value>
   </data>
   <data name="Lead.CreatingProject" xml:space="preserve">
-    <value>Creating database</value>
+    <value>Creating project</value>
   </data>
   <data name="Lead.CreatingView" xml:space="preserve">
     <value>Creating form</value>
@@ -862,7 +857,7 @@ Close anyway?</value>
     <value>This file is not valid</value>
   </data>
   <data name="Lead.LoadingProject" xml:space="preserve">
-    <value>Loading database</value>
+    <value>Loading project</value>
   </data>
   <data name="Lead.LoadingTemplate" xml:space="preserve">
     <value>Loading template</value>
@@ -919,10 +914,10 @@ Close anyway?</value>
     <value>&lt;Ignored&gt;</value>
   </data>
   <data name="ProjectInfo.Current.Empty" xml:space="preserve">
-    <value>No database found</value>
+    <value>No project found</value>
   </data>
   <data name="ProjectInfo.Recents.Empty" xml:space="preserve">
-    <value>No databases found</value>
+    <value>No projects found</value>
   </data>
   <data name="RecordStatus.Name.Deleted" xml:space="preserve">
     <value>Deleted</value>
