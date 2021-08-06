@@ -127,4 +127,8 @@
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+Blank+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+Standard+CommitViewModel}">
+        <Views:DetailsView ItemsSource="{Binding Details}" />
+    </DataTemplate>
 </ResourceDictionary>

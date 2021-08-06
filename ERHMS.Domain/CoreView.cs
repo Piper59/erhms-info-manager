@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace ERHMS.Domain
@@ -27,6 +28,16 @@ namespace ERHMS.Domain
             PostDeploymentHealthSurvey,
             AfterActionReview
         };
+
+        public static IEnumerable<CoreView> GetInstances(CoreProject coreProject)
+        {
+            return Instances.Where(instance => instance.CoreProject == coreProject);
+        }
+
+        public static IEnumerable<CoreView> GetInstances(Phase phase)
+        {
+            return Instances.Where(instance => instance.Phase == phase);
+        }
 
         public CoreProject CoreProject => Phase.ToCoreProject();
         public Phase Phase { get; }

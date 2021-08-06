@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Properties;
@@ -152,13 +153,13 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     {
                         ViewTemplateCreator creator = new ViewTemplateCreator(Wizard.SourceView)
                         {
-                            Progress = progress
+                            Progress = Log.Progress
                         };
                         XTemplate xTemplate = creator.Create();
                         xTemplate.XProject.XView.Name = Wizard.ViewName;
                         ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
                         {
-                            Progress = progress
+                            Progress = Log.Progress
                         };
                         instantiator.Instantiate();
                         return instantiator.View;

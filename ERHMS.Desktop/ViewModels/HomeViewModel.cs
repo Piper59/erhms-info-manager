@@ -210,7 +210,7 @@ namespace ERHMS.Desktop.ViewModels
             {
                 Value = value;
                 Projects = GetProjects(value.ToCoreProject());
-                Views = CoreView.Instances.Where(coreView => coreView.Phase == value)
+                Views = CoreView.GetInstances(value)
                     .Select(coreView => new CoreViewViewModel(coreView))
                     .ToList();
             }

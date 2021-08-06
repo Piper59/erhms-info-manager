@@ -110,9 +110,9 @@ namespace ERHMS.Desktop.ViewModels
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_LoadingProject;
-            await progress.Run(async () =>
+            Content = await progress.Run(async () =>
             {
-                Content = await ProjectViewModel.CreateAsync(await action());
+                return await ProjectViewModel.CreateAsync(await action());
             });
         }
 
@@ -130,9 +130,9 @@ namespace ERHMS.Desktop.ViewModels
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_LoadingView;
-            await progress.Run(async () =>
+            Content = await progress.Run(async () =>
             {
-                Content = await ViewViewModel.CreateAsync(await action());
+                return await ViewViewModel.CreateAsync(await action());
             });
         }
 

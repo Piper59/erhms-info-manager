@@ -823,6 +823,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating form: {0}....
+        /// </summary>
+        public static string Body_CreatingView {
+            get {
+                return ResourceManager.GetString("Body.CreatingView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exporting row {0}....
         /// </summary>
         public static string Body_ExportingRow {

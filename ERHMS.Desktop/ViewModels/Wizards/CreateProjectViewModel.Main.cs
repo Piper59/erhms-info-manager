@@ -14,7 +14,6 @@ using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Naming;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -26,8 +25,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string Title => Strings.CreateProject_Lead_SetStrategy;
             public CoreProject CoreProject => Wizard.CoreProject;
-            public IEnumerable<CoreView> CoreViews => CoreView.Instances
-                .Where(coreView => coreView.CoreProject == CoreProject);
+            public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(CoreProject);
 
             public ICommand CreateStandardCommand { get; }
             public ICommand CreateBlankCommand { get; }
@@ -37,7 +35,13 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public SetStrategyViewModel(CreateProjectViewModel wizard)
                 : base(wizard)
             {
+                CreateStandardCommand = new SyncCommand(CreateStandard);
                 CreateBlankCommand = new SyncCommand(CreateBlank);
+            }
+
+            public void CreateStandard()
+            {
+                GoToStep(new Standard.SetProjectCreationInfoViewModel(Wizard, this));
             }
 
             public void CreateBlank()

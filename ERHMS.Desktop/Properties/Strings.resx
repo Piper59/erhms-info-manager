@@ -375,6 +375,9 @@ ERHMS Info Manager will only recognize files that are in the same location as th
 
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
+  <data name="Body.CreatingView" xml:space="preserve">
+    <value>Creating form: {0}...</value>
+  </data>
   <data name="Body.ExportingRow" xml:space="preserve">
     <value>Exporting row {0}...</value>
   </data>

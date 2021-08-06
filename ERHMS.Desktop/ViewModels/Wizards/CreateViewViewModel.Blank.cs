@@ -1,4 +1,5 @@
-﻿using ERHMS.Desktop.Properties;
+﻿using ERHMS.Common.Logging;
+using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Templating;
@@ -83,7 +84,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         xTemplate.XProject.XView.Name = Wizard.ViewName;
                         ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
                         {
-                            Progress = progress
+                            Progress = Log.Progress
                         };
                         instantiator.Instantiate();
                         return instantiator.View;
