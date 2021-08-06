@@ -26,9 +26,10 @@ namespace ERHMS.Console.Utilities
                 foreach (Page page in view.Pages)
                 {
                     Out.WriteLine($"  {page.Name}");
-                    FieldDataTable fields = ((MetadataDbProvider)project.Metadata).GetFieldDataTableForPage(page.Id);
-                    IComparer<FieldDataRow> comparer = new FieldDataRowComparer.ByEffectiveTabIndex(fields);
-                    foreach (FieldDataRow field in fields.OrderBy(field => field, comparer))
+                    IEnumerable<FieldDataRow> fields = ((MetadataDbProvider)project.Metadata)
+                        .GetFieldDataTableForPage(page.Id)
+                        .OrderBy(field => field, new FieldDataRowComparer.ByTabIndex());
+                    foreach (FieldDataRow field in fields)
                     {
                         Out.WriteLine($"    {field.Name}");
                     }

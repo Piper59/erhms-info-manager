@@ -1,4 +1,5 @@
 ﻿using Epi.Fields;
+using ERHMS.EpiInfo.Naming;
 using System.Collections.Generic;
 
 namespace ERHMS.EpiInfo.Metadata
@@ -10,6 +11,19 @@ namespace ERHMS.EpiInfo.Metadata
             public int Compare(Field field1, Field field2)
             {
                 return Comparer<int>.Default.Compare(field1.Id, field2.Id);
+            }
+        }
+
+        public class ByName : IComparer<Field>
+        {
+            public int Compare(Field field1, Field field2)
+            {
+                int result = NameComparer.Default.Compare(field1.Name, field2.Name);
+                if (result == 0)
+                {
+                    result = Default.Compare(field1, field2);
+                }
+                return result;
             }
         }
 

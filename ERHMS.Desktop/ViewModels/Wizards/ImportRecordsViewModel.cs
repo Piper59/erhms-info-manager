@@ -61,7 +61,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public static MappingCollection FromImporter(RecordImporter importer)
             {
                 IEnumerable<Field> fields = importer.View.Fields.DataFields.Cast<Field>()
-                    .OrderBy(field => field, new FieldComparer.ByTabIndex());
+                    .OrderBy(field => field, new FieldComparer.ByName());
                 return new MappingCollection(importer.Headers, fields);
             }
 
