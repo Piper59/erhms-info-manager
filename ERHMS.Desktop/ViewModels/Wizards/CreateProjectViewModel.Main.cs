@@ -10,6 +10,7 @@ using ERHMS.Desktop.ViewModels.Shared;
 using ERHMS.Desktop.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Naming;
 using System;
 using System.Collections.Generic;
@@ -155,6 +156,68 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 projectCreationInfo.Database = DatabaseProviders.CurrentItem.ToDatabase(connectionString);
                 Wizard.ProjectCreationInfo = projectCreationInfo;
                 GoToNextStep();
+            }
+        }
+
+        public abstract class CommitViewModel : StepViewModel<CreateProjectViewModel>
+        {
+            public override string Title => Strings.Lead_Commit;
+            public override string ContinueAction => Strings.AccessText_Finish;
+            public DetailsViewModel Details { get; }
+
+            public CommitViewModel(CreateProjectViewModel wizard, IStep antecedent)
+                : base(wizard, antecedent)
+            {
+                Details = new DetailsViewModel
+                {
+                    { Strings.Label_Name, wizard.ProjectCreationInfo.Name },
+                    { Strings.Label_Description, wizard.ProjectCreationInfo.Description },
+                    { Strings.Label_LocationRoot, wizard.ProjectCreationInfo.LocationRoot },
+                    { Strings.Label_DatabaseProvider, wizard.ProjectCreationInfo.Database.Provider },
+                    {
+                        Strings.Label_ConnectionInfo,
+                        wizard.ProjectCreationInfo.Database.GetConnectionStringBuilder()
+                    }
+                };
+            }
+
+            protected abstract void CreateViews(Project project, IProgress<string> progress);
+
+            public override bool CanContinue()
+            {
+                return true;
+            }
+
+            public override async Task ContinueAsync()
+            {
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_CreatingProject;
+                Wizard.Project = await progress.Run(() =>
+                {
+                    if (Wizard.ProjectCreationInfo.Database.Exists())
+                    {
+                        if (Wizard.ProjectCreationInfo.Database.IsInitialized())
+                        {
+                            // TODO: Offer to open
+                            // TODO: Check for core views
+                        }
+                        else
+                        {
+                            // TODO: Offer to initialize and open
+                            // TODO: Check for core views
+                        }
+                    }
+                    else
+                    {
+                        Wizard.ProjectCreationInfo.Database.Create();
+                    }
+                    Project project = ProjectExtensions.Create(Wizard.ProjectCreationInfo);
+                    project.Initialize();
+                    CreateViews(project, progress);
+                    return project;
+                });
+                Commit(true);
+                GoToStep(new CloseViewModel(Wizard, this));
             }
         }
 
