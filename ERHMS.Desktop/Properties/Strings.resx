@@ -532,6 +532,12 @@ Close anyway?</value>
   <data name="CreateProject.HelpText.FromTemplate" xml:space="preserve">
     <value>Create a new project containing forms defined in a project-level template.</value>
   </data>
+  <data name="CreateProject.HelpText.Name.Incident" xml:space="preserve">
+    <value>Use a name that uniquely identifies this incident.</value>
+  </data>
+  <data name="CreateProject.HelpText.Name.Worker" xml:space="preserve">
+    <value>Use your organization's name or simply "Workers."</value>
+  </data>
   <data name="CreateProject.HelpText.Standard.Incident" xml:space="preserve">
     <value>Create a new project containing the following standard incident forms:</value>
   </data>

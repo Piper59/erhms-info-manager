@@ -1274,6 +1274,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a name that uniquely identifies this incident..
+        /// </summary>
+        public static string CreateProject_HelpText_Name_Incident {
+            get {
+                return ResourceManager.GetString("CreateProject.HelpText.Name.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use your organization&apos;s name or simply &quot;Workers.&quot;.
+        /// </summary>
+        public static string CreateProject_HelpText_Name_Worker {
+            get {
+                return ResourceManager.GetString("CreateProject.HelpText.Name.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a new project containing the following standard incident forms:.
         /// </summary>
         public static string CreateProject_HelpText_Standard_Incident {

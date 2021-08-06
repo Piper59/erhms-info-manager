@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Controls.HelpPopup"
+             x:Name="Root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Popup IsOpen="{Binding Element.IsKeyboardFocused, ElementName=Root, Mode=OneWay}"
+           Placement="Bottom"
+           PlacementTarget="{Binding Element, ElementName=Root}">
+        <Border Background="{x:Static SystemColors.ControlBrush}"
+                BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
+                BorderThickness="1"
+                Padding="{StaticResource DefaultPadding}">
+            <TextBlock FontSize="{StaticResource SmallFontSize}"
+                       Foreground="{x:Static SystemColors.ControlTextBrush}"
+                       Text="{Binding Element.(AutomationProperties.HelpText), ElementName=Root}" />
+        </Border>
+    </Popup>
+</UserControl>

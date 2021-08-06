@@ -107,6 +107,9 @@
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\BoundComboBox.cs" />
+    <Compile Include="Controls\HelpPopup.xaml.cs">
+      <DependentUpon>HelpPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\IconButton.cs" />
     <Compile Include="Controls\ItemsControlWatermark.xaml.cs">
       <DependentUpon>ItemsControlWatermark.xaml</DependentUpon>
@@ -282,6 +285,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\HelpPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

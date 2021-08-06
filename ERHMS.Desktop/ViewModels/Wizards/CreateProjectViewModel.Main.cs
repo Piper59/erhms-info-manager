@@ -24,8 +24,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public class SetStrategyViewModel : StepViewModel<CreateProjectViewModel>
         {
             public override string Title => Strings.CreateProject_Lead_SetStrategy;
-            public CoreProject CoreProject => Wizard.CoreProject;
-            public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(CoreProject);
+            public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(Wizard.CoreProject);
 
             public ICommand CreateStandardCommand { get; }
             public ICommand CreateBlankCommand { get; }
