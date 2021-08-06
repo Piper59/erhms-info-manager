@@ -709,6 +709,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        public static string AltText_Options {
+            get {
+                return ResourceManager.GetString("AltText.Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previous page.
         /// </summary>
         public static string AltText_PreviousPage {

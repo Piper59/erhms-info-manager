@@ -1,5 +1,4 @@
-﻿using ERHMS.Desktop.Infrastructure;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
@@ -19,7 +18,6 @@ namespace ERHMS.Desktop.Controls
         public Search()
         {
             InitializeComponent();
-            Button.Margin = Button.Margin.Scale(left: -1.0);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

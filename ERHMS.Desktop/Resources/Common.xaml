@@ -14,6 +14,7 @@
     <FontFamily x:Key="IconFontFamily">pack://application:,,,/Resources/#Font Awesome 5 Free Solid</FontFamily>
 
     <!-- Spacing -->
+    <System:Double x:Key="NegativeSmallSpace">-5</System:Double>
     <System:Double x:Key="SmallSpace">5</System:Double>
     <System:Double x:Key="LargeSpace">10</System:Double>
     <System:Double x:Key="HugeSpace">25</System:Double>

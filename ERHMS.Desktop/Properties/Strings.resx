@@ -333,6 +333,9 @@
   <data name="AltText.Open" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="AltText.Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
   <data name="AltText.PreviousPage" xml:space="preserve">
     <value>Previous page</value>
   </data>

@@ -9,11 +9,6 @@
              xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
              xmlns:ERHMS_EpiInfo="clr-namespace:ERHMS.EpiInfo;assembly=ERHMS.EpiInfo">
     <UserControl.Resources>
-        <Style x:Key="Icon" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
         <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+PhaseViewModel}">
             <StackPanel Style="{StaticResource Section}">
                 <Border Margin="{StaticResource DefaultMargin}"
@@ -36,98 +31,26 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+CoreProjectCollectionViewModel}">
-            <!-- TODO: Split into view vs. create/open -->
-            <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
-                    ContextMenuService.Placement="Bottom"
-                    Style="{StaticResource WorkflowButton}"
-                    ToolTip="{Binding Current.FilePath}">
-                <AutomationProperties.Name>
-                    <MultiBinding StringFormat="{}{0} {1}">
-                        <Binding Converter="{StaticResource StringLocalizingConverter}"
-                                 ConverterParameter="CoreProject.Label.{0}"
-                                 Path="Value" />
-                        <Binding FallbackValue="{Markup:String ProjectInfo.Current.Empty}"
-                                 Path="Current.Name" />
-                    </MultiBinding>
-                </AutomationProperties.Name>
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <ContextMenu.Resources>
-                            <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+EmptyProjectInfo}">
-                                <TextBlock Text="{Markup:String ProjectInfo.Recents.Empty}" />
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type ERHMS_EpiInfo:ProjectInfo}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock FontWeight="{StaticResource ThickFontWeight}"
-                                                   Text="{Binding Name}" />
-                                        <TextBlock Text="{Binding FilePath}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                    <Controls:IconButton Grid.Column="1"
-                                                         AltText="{Markup:String AltText.RemoveFromList}"
-                                                         Background="Transparent"
-                                                         BorderThickness="0"
-                                                         Command="{Binding DataContext.RemoveRecentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem, AncestorLevel=2}}"
-                                                         CommandParameter="{Binding}"
-                                                         Content="{Markup:Icon Close}"
-                                                         FontSize="{StaticResource SmallFontSize}"
-                                                         VerticalAlignment="Center">
-                                        <Controls:IconButton.Margin>
-                                            <Thickness Left="{StaticResource LargeSpace}" />
-                                        </Controls:IconButton.Margin>
-                                        <Controls:IconButton.Style>
-                                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource {x:Type Controls:IconButton}}">
-                                                <Setter Property="Visibility" Value="Hidden" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Controls:IconButton.Style>
-                                    </Controls:IconButton>
-                                </Grid>
-                            </DataTemplate>
-                        </ContextMenu.Resources>
-                        <MenuItem Command="{Binding GoToCurrentCommand}"
-                                  Header="{Markup:String AccessText.GoToCurrentProject}" />
-                        <MenuItem Header="{Markup:String AccessText.OpenRecentProject}"
-                                  ItemsSource="{Binding Recents}"
-                                  Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <MenuItem.ItemContainerStyle>
-                                <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}">
-                                    <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
-                                    <Setter Property="AutomationProperties.HelpText" Value="{Binding FilePath}" />
-                                    <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
-                                    <Setter Property="CommandParameter" Value="{Binding}" />
-                                    <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
-                                </Style>
-                            </MenuItem.ItemContainerStyle>
-                        </MenuItem>
-                        <Separator />
-                        <MenuItem Command="{Binding CreateCommand}"
-                                  Header="{Markup:String AccessText.CreateNewProject}" />
-                        <MenuItem Command="{Binding OpenCommand}"
-                                  Header="{Markup:String AccessText.OpenExistingProject}" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-                <b:Interaction.Behaviors>
-                    <Behaviors:OpenContextMenuOnClick />
-                </b:Interaction.Behaviors>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
+                        Grid.Column="0"
+                        Command="{Binding GoToCurrentCommand}"
+                        Style="{StaticResource WorkflowButton}"
+                        ToolTip="{Binding Current.FilePath}">
+                    <AutomationProperties.Name>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Converter="{StaticResource StringLocalizingConverter}"
+                                     ConverterParameter="CoreProject.Label.{0}"
+                                     Path="Value" />
+                            <Binding FallbackValue="{Markup:String ProjectInfo.Current.Empty}"
+                                     Path="Current.Name" />
+                        </MultiBinding>
+                    </AutomationProperties.Name>
+                    <StackPanel>
                         <TextBlock Style="{StaticResource Lead}">
                             <TextBlock.Margin>
                                 <Thickness Bottom="{StaticResource SmallSpace}" />
@@ -142,16 +65,94 @@
                                    TextTrimming="CharacterEllipsis"
                                    TextWrapping="NoWrap" />
                     </StackPanel>
-                    <TextBlock Grid.Column="1"
-                               FontSize="{StaticResource MediumFontSize}"
-                               Style="{StaticResource Icon}"
-                               Text="{Markup:Icon Expand}">
-                        <TextBlock.Margin>
-                            <Thickness Left="{StaticResource LargeSpace}" />
-                        </TextBlock.Margin>
-                    </TextBlock>
-                </Grid>
-            </Button>
+                </Button>
+                <Button AutomationProperties.Name="{Markup:String AltText.Options}"
+                        ContextMenuService.Placement="Bottom"
+                        Grid.Column="1"
+                        Content="{Markup:Icon Expand}"
+                        FontFamily="{StaticResource IconFontFamily}"
+                        FontSize="{StaticResource MediumFontSize}"
+                        Padding="{StaticResource LargeThickness}">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <ContextMenu.Resources>
+                                <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+EmptyProjectInfo}">
+                                    <TextBlock Text="{Markup:String ProjectInfo.Recents.Empty}" />
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type ERHMS_EpiInfo:ProjectInfo}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock FontWeight="{StaticResource ThickFontWeight}"
+                                                       Text="{Binding Name}" />
+                                            <TextBlock Text="{Binding FilePath}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                        <Controls:IconButton Grid.Column="1"
+                                                             AltText="{Markup:String AltText.RemoveFromList}"
+                                                             Background="Transparent"
+                                                             BorderThickness="0"
+                                                             Command="{Binding DataContext.RemoveRecentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem, AncestorLevel=2}}"
+                                                             CommandParameter="{Binding}"
+                                                             Content="{Markup:Icon Close}"
+                                                             FontSize="{StaticResource SmallFontSize}"
+                                                             VerticalAlignment="Center">
+                                            <Controls:IconButton.Margin>
+                                                <Thickness Left="{StaticResource LargeSpace}" />
+                                            </Controls:IconButton.Margin>
+                                            <Controls:IconButton.Style>
+                                                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource {x:Type Controls:IconButton}}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Controls:IconButton.Style>
+                                        </Controls:IconButton>
+                                    </Grid>
+                                </DataTemplate>
+                            </ContextMenu.Resources>
+                            <MenuItem Command="{Binding GoToCurrentCommand}"
+                                      Header="{Markup:String AccessText.GoToCurrentProject}" />
+                            <MenuItem Header="{Markup:String AccessText.OpenRecentProject}"
+                                      ItemsSource="{Binding Recents}"
+                                      Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <MenuItem.ItemContainerStyle>
+                                    <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}">
+                                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                                        <Setter Property="AutomationProperties.HelpText" Value="{Binding FilePath}" />
+                                        <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
+                                        <Setter Property="CommandParameter" Value="{Binding}" />
+                                        <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
+                                    </Style>
+                                </MenuItem.ItemContainerStyle>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Command="{Binding CreateCommand}"
+                                      Header="{Markup:String AccessText.CreateNewProject}" />
+                            <MenuItem Command="{Binding OpenCommand}"
+                                      Header="{Markup:String AccessText.OpenExistingProject}" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                    <Button.Margin>
+                        <Thickness Left="{StaticResource NegativeSmallSpace}"
+                                   Top="{StaticResource SmallSpace}"
+                                   Right="{StaticResource SmallSpace}"
+                                   Bottom="{StaticResource SmallSpace}" />
+                    </Button.Margin>
+                    <b:Interaction.Behaviors>
+                        <Behaviors:OpenContextMenuOnClick />
+                    </b:Interaction.Behaviors>
+                </Button>
+            </Grid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+CoreViewViewModel}">
             <Grid>
@@ -170,9 +171,11 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
+                                   FontFamily="{StaticResource IconFontFamily}"
                                    FontSize="{StaticResource HugeFontSize}"
-                                   Style="{StaticResource Icon}"
-                                   Text="{Binding Value.Name, Converter={StaticResource IconNameToStringConverter}, ConverterParameter='CoreView.{0}'}">
+                                   HorizontalAlignment="Center"
+                                   Text="{Binding Value.Name, Converter={StaticResource IconNameToStringConverter}, ConverterParameter='CoreView.{0}'}"
+                                   VerticalAlignment="Center">
                             <TextBlock.Margin>
                                 <Thickness Right="{StaticResource LargeSpace}" />
                             </TextBlock.Margin>

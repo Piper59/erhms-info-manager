@@ -20,6 +20,13 @@
                              Grid.Column="2"
                              AltText="{Markup:String AltText.ClearSearch}"
                              Click="Button_Click"
-                             Content="{Markup:Icon Clear}" />
+                             Content="{Markup:Icon Clear}">
+            <Controls:IconButton.Margin>
+                <Thickness Left="{StaticResource NegativeSmallSpace}"
+                           Top="{StaticResource SmallSpace}"
+                           Right="{StaticResource SmallSpace}"
+                           Bottom="{StaticResource SmallSpace}" />
+            </Controls:IconButton.Margin>
+        </Controls:IconButton>
     </Grid>
 </UserControl>
