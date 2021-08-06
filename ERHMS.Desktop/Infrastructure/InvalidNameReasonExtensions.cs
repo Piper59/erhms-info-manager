@@ -30,17 +30,15 @@ namespace ERHMS.Desktop.Infrastructure
             switch (@this)
             {
                 case InvalidNameReason.Empty:
-                    return Strings.InvalidNameReason_Body_Project_Empty;
+                    return Strings.InvalidNameReason_Body_Empty;
                 case InvalidNameReason.TooLong:
-                    return string.Format(
-                        Strings.InvalidNameReason_Body_Project_TooLong,
-                        ProjectNameValidator.MaxLength);
+                    return string.Format(Strings.InvalidNameReason_Body_TooLong, ProjectNameValidator.MaxLength);
                 case InvalidNameReason.InvalidChar:
-                    return Strings.InvalidNameReason_Body_Project_InvalidChar;
+                    return Strings.InvalidNameReason_Body_InvalidChar;
                 case InvalidNameReason.InvalidStartChar:
-                    return Strings.InvalidNameReason_Body_Project_InvalidStartChar;
+                    return Strings.InvalidNameReason_Body_InvalidStartChar;
                 case InvalidNameReason.Identical:
-                    return Strings.InvalidNameReason_Body_Project_Identical;
+                    return Strings.InvalidNameReason_Body_Identical_Project;
                 case InvalidNameReason.Similar:
                 case InvalidNameReason.None:
                 default:
@@ -53,17 +51,17 @@ namespace ERHMS.Desktop.Infrastructure
             switch (@this)
             {
                 case InvalidNameReason.Empty:
-                    return Strings.InvalidNameReason_Body_View_Empty;
+                    return Strings.InvalidNameReason_Body_Empty;
                 case InvalidNameReason.TooLong:
-                    return string.Format(Strings.InvalidNameReason_Body_View_TooLong, ViewNameValidator.MaxLength);
+                    return string.Format(Strings.InvalidNameReason_Body_TooLong, ViewNameValidator.MaxLength);
                 case InvalidNameReason.InvalidChar:
-                    return Strings.InvalidNameReason_Body_View_InvalidChar;
+                    return Strings.InvalidNameReason_Body_InvalidChar;
                 case InvalidNameReason.InvalidStartChar:
-                    return Strings.InvalidNameReason_Body_View_InvalidStartChar;
+                    return Strings.InvalidNameReason_Body_InvalidStartChar;
                 case InvalidNameReason.Identical:
-                    return Strings.InvalidNameReason_Body_View_Identical;
+                    return Strings.InvalidNameReason_Body_Identical_View;
                 case InvalidNameReason.Similar:
-                    return Strings.InvalidNameReason_Body_View_Similar;
+                    return Strings.InvalidNameReason_Body_Similar_View;
                 case InvalidNameReason.None:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(@this));

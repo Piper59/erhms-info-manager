@@ -1800,99 +1800,63 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Please specify a name..
         /// </summary>
-        public static string InvalidNameReason_Body_Project_Empty {
+        public static string InvalidNameReason_Body_Empty {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Body.Project.Empty", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Empty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An Epi Info project (.prj) file with this name already exists in the specified location. Please specify a different name or location..
+        ///   Looks up a localized string similar to A project with this name already exists in the specified location. Please specify a different name or location..
         /// </summary>
-        public static string InvalidNameReason_Body_Project_Identical {
+        public static string InvalidNameReason_Body_Identical_Project {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Body.Project.Identical", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Identical.Project", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify a name that contains only letters, numbers, and underscores..
+        ///   Looks up a localized string similar to A form or table with this name already exists in the current project. Please specify a different name..
         /// </summary>
-        public static string InvalidNameReason_Body_Project_InvalidChar {
+        public static string InvalidNameReason_Body_Identical_View {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Body.Project.InvalidChar", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please specify a name that begins with a letter..
-        /// </summary>
-        public static string InvalidNameReason_Body_Project_InvalidStartChar {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.Body.Project.InvalidStartChar", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please specify a name that is no longer than {0} characters..
-        /// </summary>
-        public static string InvalidNameReason_Body_Project_TooLong {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.Body.Project.TooLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please specify a name..
-        /// </summary>
-        public static string InvalidNameReason_Body_View_Empty {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.Body.View.Empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A form or table with this name already exists in the current database. Please specify a different name..
-        /// </summary>
-        public static string InvalidNameReason_Body_View_Identical {
-            get {
-                return ResourceManager.GetString("InvalidNameReason.Body.View.Identical", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Identical.View", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please specify a name that contains only letters, numbers, and underscores..
         /// </summary>
-        public static string InvalidNameReason_Body_View_InvalidChar {
+        public static string InvalidNameReason_Body_InvalidChar {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Body.View.InvalidChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.InvalidChar", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please specify a name that begins with a letter..
         /// </summary>
-        public static string InvalidNameReason_Body_View_InvalidStartChar {
+        public static string InvalidNameReason_Body_InvalidStartChar {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Body.View.InvalidStartChar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.InvalidStartChar", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A form with a similar name already exists in the current database. To avoid a possible conflict, please specify a different name..
+        ///   Looks up a localized string similar to A form with a similar name already exists in the current project. To avoid a possible conflict, please specify a different name..
         /// </summary>
-        public static string InvalidNameReason_Body_View_Similar {
+        public static string InvalidNameReason_Body_Similar_View {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Body.View.Similar", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.Similar.View", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please specify a name that is no longer than {0} characters..
         /// </summary>
-        public static string InvalidNameReason_Body_View_TooLong {
+        public static string InvalidNameReason_Body_TooLong {
             get {
-                return ResourceManager.GetString("InvalidNameReason.Body.View.TooLong", resourceCulture);
+                return ResourceManager.GetString("InvalidNameReason.Body.TooLong", resourceCulture);
             }
         }
         

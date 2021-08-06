@@ -708,37 +708,25 @@ Close anyway?</value>
   <data name="ImportRecords.Lead.SetMappings" xml:space="preserve">
     <value>Choose a destination field for each source column</value>
   </data>
-  <data name="InvalidNameReason.Body.Project.Empty" xml:space="preserve">
+  <data name="InvalidNameReason.Body.Empty" xml:space="preserve">
     <value>Please specify a name.</value>
   </data>
-  <data name="InvalidNameReason.Body.Project.Identical" xml:space="preserve">
-    <value>An Epi Info project (.prj) file with this name already exists in the specified location. Please specify a different name or location.</value>
+  <data name="InvalidNameReason.Body.Identical.Project" xml:space="preserve">
+    <value>A project with this name already exists in the specified location. Please specify a different name or location.</value>
   </data>
-  <data name="InvalidNameReason.Body.Project.InvalidChar" xml:space="preserve">
+  <data name="InvalidNameReason.Body.Identical.View" xml:space="preserve">
+    <value>A form or table with this name already exists in the current project. Please specify a different name.</value>
+  </data>
+  <data name="InvalidNameReason.Body.InvalidChar" xml:space="preserve">
     <value>Please specify a name that contains only letters, numbers, and underscores.</value>
   </data>
-  <data name="InvalidNameReason.Body.Project.InvalidStartChar" xml:space="preserve">
+  <data name="InvalidNameReason.Body.InvalidStartChar" xml:space="preserve">
     <value>Please specify a name that begins with a letter.</value>
   </data>
-  <data name="InvalidNameReason.Body.Project.TooLong" xml:space="preserve">
-    <value>Please specify a name that is no longer than {0} characters.</value>
+  <data name="InvalidNameReason.Body.Similar.View" xml:space="preserve">
+    <value>A form with a similar name already exists in the current project. To avoid a possible conflict, please specify a different name.</value>
   </data>
-  <data name="InvalidNameReason.Body.View.Empty" xml:space="preserve">
-    <value>Please specify a name.</value>
-  </data>
-  <data name="InvalidNameReason.Body.View.Identical" xml:space="preserve">
-    <value>A form or table with this name already exists in the current database. Please specify a different name.</value>
-  </data>
-  <data name="InvalidNameReason.Body.View.InvalidChar" xml:space="preserve">
-    <value>Please specify a name that contains only letters, numbers, and underscores.</value>
-  </data>
-  <data name="InvalidNameReason.Body.View.InvalidStartChar" xml:space="preserve">
-    <value>Please specify a name that begins with a letter.</value>
-  </data>
-  <data name="InvalidNameReason.Body.View.Similar" xml:space="preserve">
-    <value>A form with a similar name already exists in the current database. To avoid a possible conflict, please specify a different name.</value>
-  </data>
-  <data name="InvalidNameReason.Body.View.TooLong" xml:space="preserve">
+  <data name="InvalidNameReason.Body.TooLong" xml:space="preserve">
     <value>Please specify a name that is no longer than {0} characters.</value>
   </data>
   <data name="InvalidNameReason.Lead.Default" xml:space="preserve">
