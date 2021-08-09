@@ -8,5 +8,10 @@ namespace ERHMS.Desktop.ViewModels
         {
             Add(new KeyValuePair<string, object>(key, value));
         }
+
+        public void Insert(int index, string key, object value)
+        {
+            Insert(index, new KeyValuePair<string, object>(key, value));
+        }
     }
 }

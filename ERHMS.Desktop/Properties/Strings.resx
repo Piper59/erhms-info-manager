@@ -384,6 +384,9 @@ ERHMS Info Manager will only recognize files that are in the same location as th
 
 This form, any related forms, and all associated records will be permanently deleted. This action cannot be undone.</value>
   </data>
+  <data name="Body.CreatingTemplate" xml:space="preserve">
+    <value>Creating template...</value>
+  </data>
   <data name="Body.CreatingView" xml:space="preserve">
     <value>Creating form: {0}...</value>
   </data>
@@ -562,8 +565,14 @@ Close anyway?</value>
   <data name="CreateProject.Lead.SetProjectCreationInfo" xml:space="preserve">
     <value>Enter details for the new project</value>
   </data>
+  <data name="CreateProject.Lead.SetSourceProject" xml:space="preserve">
+    <value>Choose an existing project</value>
+  </data>
   <data name="CreateProject.Lead.SetStrategy" xml:space="preserve">
     <value>Choose how to create the new project</value>
+  </data>
+  <data name="CreateProject.Lead.SetXTemplate" xml:space="preserve">
+    <value>Choose a template</value>
   </data>
   <data name="CreateView.AccessText.Blank" xml:space="preserve">
     <value>Create a _blank form</value>

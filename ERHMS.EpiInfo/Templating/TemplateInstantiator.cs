@@ -139,6 +139,11 @@ namespace ERHMS.EpiInfo.Templating
             Metadata = metadata;
         }
 
+        public event EventHandler<InstantiatingEventArgs> Instantiating;
+        protected virtual void OnInstantiating(InstantiatingEventArgs e) => Instantiating?.Invoke(this, e);
+        protected void OnInstantiating(TemplateLevel level, string name) =>
+            OnInstantiating(new InstantiatingEventArgs(level, name));
+
         protected abstract void InstantiateCore();
 
         public void Instantiate()
@@ -160,6 +165,7 @@ namespace ERHMS.EpiInfo.Templating
         protected View InstantiateViewCore(Project project, XView xView)
         {
             Progress?.Report($"Adding view: {xView.Name}");
+            OnInstantiating(TemplateLevel.View, xView.Name);
             View view = xView.Instantiate(project);
             if (Context.ViewNames.Exists(view.Name))
             {
@@ -186,6 +192,7 @@ namespace ERHMS.EpiInfo.Templating
         protected Page InstantiatePage(View view, XPage xPage)
         {
             Progress?.Report($"Adding page: {xPage.Name}");
+            OnInstantiating(TemplateLevel.Page, xPage.Name);
             Page page = xPage.Instantiate(view);
             if (Context.PageNames.Exists(page.Name))
             {
@@ -204,6 +211,7 @@ namespace ERHMS.EpiInfo.Templating
         private Field InstantiateField(Page page, XField xField)
         {
             Progress?.Report($"Adding field: {xField.Name}");
+            OnInstantiating(TemplateLevel.Field, xField.Name);
             Field field = xField.Instantiate(page);
             if (Context.FieldNames.Exists(field.Name))
             {

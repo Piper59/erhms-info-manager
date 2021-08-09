@@ -103,13 +103,56 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+CloseViewModel}" />
-
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+Blank+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+CommitViewModel}">
         <Views:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+Standard+CommitViewModel}">
-        <Views:DetailsView ItemsSource="{Binding Details}" />
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+CloseViewModel}" />
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+FromTemplate+SetXTemplateViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"
+                   Content="{Markup:String Label.Template}" />
+            <TextBox Grid.Column="1"
+                     IsReadOnly="True"
+                     Text="{Binding TemplatePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}">
+                <TextBox.ToolTip>
+                    <ToolTip Content="{Binding TemplatePath}"
+                             Visibility="{Binding TemplatePath, Converter={StaticResource NullableToVisibilityConverter}}" />
+                </TextBox.ToolTip>
+            </TextBox>
+            <Button Grid.Column="2"
+                    Command="{Binding BrowseCommand}"
+                    Content="{Markup:String AccessText.Browse}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+FromExisting+SetSourceProjectViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"
+                   Content="{Markup:String Label.Project}" />
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         IsReadOnly="True"
+                         Text="{Binding Project.Name, Mode=OneWay}"
+                         ToolTip="{Binding Project.FilePath}" />
+                <Button Grid.Column="1"
+                        Command="{Binding BrowseCommand}"
+                        Content="{Markup:String AccessText.Browse}" />
+            </Grid>
+        </Grid>
     </DataTemplate>
 </ResourceDictionary>

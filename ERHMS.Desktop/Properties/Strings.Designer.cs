@@ -850,6 +850,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating template....
+        /// </summary>
+        public static string Body_CreatingTemplate {
+            get {
+                return ResourceManager.GetString("Body.CreatingTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating form: {0}....
         /// </summary>
         public static string Body_CreatingView {
@@ -1364,11 +1373,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose an existing project.
+        /// </summary>
+        public static string CreateProject_Lead_SetSourceProject {
+            get {
+                return ResourceManager.GetString("CreateProject.Lead.SetSourceProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose how to create the new project.
         /// </summary>
         public static string CreateProject_Lead_SetStrategy {
             get {
                 return ResourceManager.GetString("CreateProject.Lead.SetStrategy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a template.
+        /// </summary>
+        public static string CreateProject_Lead_SetXTemplate {
+            get {
+                return ResourceManager.GetString("CreateProject.Lead.SetXTemplate", resourceCulture);
             }
         }
         

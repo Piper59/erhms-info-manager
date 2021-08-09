@@ -45,6 +45,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 ToggleCommand = new SyncCommand(Toggle);
                 CreateStandardCommand = new SyncCommand(CreateStandard);
                 CreateBlankCommand = new SyncCommand(CreateBlank);
+                CreateFromTemplateCommand = new SyncCommand(CreateFromTemplate);
+                CreateFromExistingCommand = new SyncCommand(CreateFromExisting);
             }
 
             public void Toggle()
@@ -60,6 +62,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public void CreateBlank()
             {
                 GoToStep(new Blank.SetProjectCreationInfoViewModel(Wizard, this));
+            }
+
+            public void CreateFromTemplate()
+            {
+                GoToStep(new FromTemplate.SetXTemplateViewModel(Wizard, this));
+            }
+
+            public void CreateFromExisting()
+            {
+                GoToStep(new FromExisting.SetSourceProjectViewModel(Wizard, this));
             }
         }
 

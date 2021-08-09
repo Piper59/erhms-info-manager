@@ -33,9 +33,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     foreach (CoreView coreView in CoreView.GetInstances(Wizard.CoreProject))
                     {
-                        progress.Report(string.Format(
-                            Strings.Body_CreatingView,
-                            Strings.ResourceManager.GetString($"CoreView.Title.{coreView.Name}")));
+                        progress.Report(string.Format(Strings.Body_CreatingView, coreView.Name));
                         ViewTemplateInstantiator instantiator =
                             new ViewTemplateInstantiator(ResourceManager.GetXTemplate(coreView), project)
                             {

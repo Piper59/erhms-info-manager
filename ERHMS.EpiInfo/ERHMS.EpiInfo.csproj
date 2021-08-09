@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="TableNames.cs" />
     <Compile Include="TableTypes.cs" />
+    <Compile Include="Templating\InstantiatingEventArgs.cs" />
     <Compile Include="Templating\Mapping\DateFieldMapper.cs" />
     <Compile Include="Templating\Mapping\DDLFieldOfCodesMapper.cs" />
     <Compile Include="Templating\Mapping\FieldMapper.cs" />

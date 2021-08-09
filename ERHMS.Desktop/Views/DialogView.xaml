@@ -56,7 +56,8 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0"
                             Orientation="Horizontal"
-                            VerticalAlignment="Top">
+                            VerticalAlignment="Top"
+                            Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}">
                     <Controls:IconButton x:Name="ToggleButton"
                                          AltText="{Markup:String AltText.Details}"
                                          Command="{Binding ToggleCommand}"
