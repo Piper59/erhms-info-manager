@@ -56,9 +56,10 @@
     </Style>
 
     <!-- Controls -->
-    <Style TargetType="Controls:BoundComboBox" BasedOn="{StaticResource ComboBoxBase}" />
+    <Style x:Key="BoundComboBoxBase" TargetType="Controls:BoundComboBox" BasedOn="{StaticResource ComboBoxBase}" />
+    <Style TargetType="Controls:BoundComboBox" BasedOn="{StaticResource BoundComboBoxBase}" />
 
-    <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
+    <Style x:Key="IconButtonBase" TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="AutomationProperties.HelpText" Value="{Binding HelpText, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
         <Setter Property="AutomationProperties.Name" Value="{Binding AltText, RelativeSource={RelativeSource Self},TargetNullValue=''}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
@@ -98,6 +99,7 @@
         </Setter>
         <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
     </Style>
+    <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}" />
 
     <!-- Other -->
     <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">

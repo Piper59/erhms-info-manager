@@ -104,7 +104,7 @@
                                                 <Thickness Left="{StaticResource LargeSpace}" />
                                             </Controls:IconButton.Margin>
                                             <Controls:IconButton.Style>
-                                                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource {x:Type Controls:IconButton}}">
+                                                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}">
                                                     <Setter Property="Visibility" Value="Hidden" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">
@@ -132,6 +132,7 @@
                                         <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
                                         <Setter Property="CommandParameter" Value="{Binding}" />
                                         <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
+                                        <Setter Property="ToolTip" Value="{Binding FilePath}" />
                                     </Style>
                                 </MenuItem.ItemContainerStyle>
                             </MenuItem>
