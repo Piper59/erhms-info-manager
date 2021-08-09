@@ -11,20 +11,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
-            <Controls:IconButton AltText="{Markup:String AltText.Create}"
+            <Controls:IconButton AccessKey="1"
+                                 AltText="{Markup:String AltText.Create}"
                                  Command="{Binding CreateCommand}"
                                  Content="{Markup:Icon Create}"
                                  HelpText="{Binding Module, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.CreateAsset.{0}'}" />
-            <Controls:IconButton AltText="{Markup:String AltText.Open}"
+            <Controls:IconButton AccessKey="2"
+                                 AltText="{Markup:String AltText.Open}"
                                  Command="{Binding OpenCommand}"
                                  Content="{Markup:Icon Open}"
                                  HelpText="{Binding Module, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.OpenAsset.{0}'}" />
-            <Controls:IconButton AltText="{Markup:String AltText.Delete}"
+            <Controls:IconButton AccessKey="3"
+                                 AltText="{Markup:String AltText.Delete}"
                                  Command="{Binding DeleteCommand}"
                                  Content="{Markup:Icon Delete}"
                                  HelpText="{Markup:String HelpText.DeleteAsset}" />
             <Border Style="{StaticResource Separator}" />
-            <Controls:IconButton AltText="{Markup:String AltText.Refresh}"
+            <Controls:IconButton AccessKey="4"
+                                 AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"
                                  Content="{Markup:Icon Refresh}"
                                  HelpText="{Markup:String HelpText.Refresh}" />
