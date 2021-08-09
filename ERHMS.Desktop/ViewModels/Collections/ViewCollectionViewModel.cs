@@ -33,6 +33,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 Value = value;
             }
 
+            // TODO: Improve performance
             private void Initialize()
             {
                 PageCount = Value.Pages.Count;

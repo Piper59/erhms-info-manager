@@ -3,6 +3,7 @@ using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
 {
+    // TODO: Allow access key
     public class IconButton : Button
     {
         public static readonly DependencyProperty AltTextProperty = DependencyProperty.Register(
