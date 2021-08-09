@@ -164,7 +164,8 @@
                 <Button AutomationProperties.HelpText="{Binding Value.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.HelpText.{0}'}"
                         AutomationProperties.Name="{Binding Value.Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
                         Command="{Binding GoToViewCommand}"
-                        Style="{StaticResource WorkflowButton}">
+                        Style="{StaticResource WorkflowButton}"
+                        ToolTip="{x:Null}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="IconGroup"

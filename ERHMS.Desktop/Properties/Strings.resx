@@ -270,6 +270,9 @@
   <data name="AccessText.SeeCurrent" xml:space="preserve">
     <value>View _current</value>
   </data>
+  <data name="AccessText.ShowOtherOptions" xml:space="preserve">
+    <value>Show _other options</value>
+  </data>
   <data name="AccessText.Similarity" xml:space="preserve">
     <value>_Similarity</value>
   </data>
@@ -302,6 +305,9 @@
   </data>
   <data name="AltText.Design" xml:space="preserve">
     <value>Design</value>
+  </data>
+  <data name="AltText.Details" xml:space="preserve">
+    <value>Details</value>
   </data>
   <data name="AltText.Edit" xml:space="preserve">
     <value>Edit</value>
@@ -344,6 +350,9 @@
   </data>
   <data name="AltText.RemoveFromList" xml:space="preserve">
     <value>Remove from this list</value>
+  </data>
+  <data name="AltText.ShowOtherOptions" xml:space="preserve">
+    <value>Show other options</value>
   </data>
   <data name="AltText.Undelete" xml:space="preserve">
     <value>Undelete</value>
@@ -542,10 +551,10 @@ Close anyway?</value>
     <value>Use your organization's name or simply "Workers."</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Incident" xml:space="preserve">
-    <value>Create a new project containing the following standard incident forms:</value>
+    <value>Create a new project containing standard incident forms.</value>
   </data>
   <data name="CreateProject.HelpText.Standard.Worker" xml:space="preserve">
-    <value>Create a new project containing the following standard worker forms:</value>
+    <value>Create a new project containing standard worker forms.</value>
   </data>
   <data name="CreateProject.Lead.Close" xml:space="preserve">
     <value>Project has been created</value>

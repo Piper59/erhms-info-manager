@@ -520,6 +520,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show _other options.
+        /// </summary>
+        public static string AccessText_ShowOtherOptions {
+            get {
+                return ResourceManager.GetString("AccessText.ShowOtherOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Similarity.
         /// </summary>
         public static string AccessText_Similarity {
@@ -615,6 +624,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AltText_Design {
             get {
                 return ResourceManager.GetString("AltText.Design", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string AltText_Details {
+            get {
+                return ResourceManager.GetString("AltText.Details", resourceCulture);
             }
         }
         
@@ -741,6 +759,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AltText_RemoveFromList {
             get {
                 return ResourceManager.GetString("AltText.RemoveFromList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show other options.
+        /// </summary>
+        public static string AltText_ShowOtherOptions {
+            get {
+                return ResourceManager.GetString("AltText.ShowOtherOptions", resourceCulture);
             }
         }
         
@@ -1301,7 +1328,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new project containing the following standard incident forms:.
+        ///   Looks up a localized string similar to Create a new project containing standard incident forms..
         /// </summary>
         public static string CreateProject_HelpText_Standard_Incident {
             get {
@@ -1310,7 +1337,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new project containing the following standard worker forms:.
+        ///   Looks up a localized string similar to Create a new project containing standard worker forms..
         /// </summary>
         public static string CreateProject_HelpText_Standard_Worker {
             get {

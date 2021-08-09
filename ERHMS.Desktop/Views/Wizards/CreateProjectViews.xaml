@@ -9,52 +9,30 @@
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
-            <Button Command="{Binding CreateStandardCommand}"
-                    Content="{Markup:String CreateProject.AccessText.Standard}">
-                <Button.ToolTip>
-                    <ToolTip MaxWidth="{StaticResource ToolTipWidth}">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}" />
-                            <ItemsControl IsTabStop="False"
-                                          ItemsSource="{Binding CoreViews}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock TextWrapping="NoWrap">
-                                            <Run>&#x2022;</Run>
-                                            <Run Text="{Binding Name, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}" />
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.Margin>
-                                    <Thickness Left="{StaticResource SmallFontSize}"
-                                               Top="{StaticResource SmallFontSize}" />
-                                </ItemsControl.Margin>
-                            </ItemsControl>
-                        </StackPanel>
-                    </ToolTip>
-                </Button.ToolTip>
-            </Button>
-            <Button Command="{Binding CreateBlankCommand}"
-                    Content="{Markup:String CreateProject.AccessText.Blank}">
-                <Button.ToolTip>
-                    <ToolTip Content="{Markup:String CreateProject.HelpText.Blank}"
-                             MaxWidth="{StaticResource ToolTipWidth}" />
-                </Button.ToolTip>
-            </Button>
-            <Button Command="{Binding CreateFromTemplateCommand}"
-                    Content="{Markup:String CreateProject.AccessText.FromTemplate}">
-                <Button.ToolTip>
-                    <ToolTip Content="{Markup:String CreateProject.HelpText.FromTemplate}"
-                             MaxWidth="{StaticResource ToolTipWidth}" />
-                </Button.ToolTip>
-            </Button>
-            <Button Command="{Binding CreateFromExistingCommand}"
-                    Content="{Markup:String CreateProject.AccessText.FromExisting}">
-                <Button.ToolTip>
-                    <ToolTip Content="{Markup:String CreateProject.HelpText.FromExisting}"
-                             MaxWidth="{StaticResource ToolTipWidth}" />
-                </Button.ToolTip>
-            </Button>
+            <Button AutomationProperties.HelpText="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
+                    Command="{Binding CreateStandardCommand}"
+                    Content="{Markup:String CreateProject.AccessText.Standard}" />
+            <StackPanel Orientation="Horizontal"
+                        Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityInverter}}">
+                <Controls:IconButton x:Name="ToggleButton"
+                                     AltText="{Markup:String AltText.ShowOtherOptions}"
+                                     Command="{Binding ToggleCommand}"
+                                     Content="{Markup:Icon Expand}"
+                                     Style="{StaticResource RoundedIconButton}" />
+                <Label Content="{Markup:String AccessText.ShowOtherOptions}"
+                       Target="{x:Reference ToggleButton}" />
+            </StackPanel>
+            <StackPanel Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.Blank}"
+                        Command="{Binding CreateBlankCommand}"
+                        Content="{Markup:String CreateProject.AccessText.Blank}" />
+                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.FromTemplate}"
+                        Command="{Binding CreateFromTemplateCommand}"
+                        Content="{Markup:String CreateProject.AccessText.FromTemplate}" />
+                <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.FromExisting}"
+                        Command="{Binding CreateFromExistingCommand}"
+                        Content="{Markup:String CreateProject.AccessText.FromExisting}" />
+            </StackPanel>
         </StackPanel>
     </DataTemplate>
 
@@ -74,13 +52,13 @@
                 <Label Grid.Column="0"
                        Grid.Row="0"
                        Content="{Markup:String Label.Name}" />
-                <TextBox x:Name="Name"
+                <TextBox x:Name="NameTextBox"
                          AutomationProperties.Name="{Markup:String Label.Name}"
                          AutomationProperties.HelpText="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Name.{0}'}"
                          Grid.Column="1"
                          Grid.Row="0"
                          Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-                <Controls:HelpPopup Element="{x:Reference Name}" />
+                <Controls:HelpPopup Element="{x:Reference NameTextBox}" />
                 <Label Grid.Column="0"
                        Grid.Row="1"
                        Content="{Markup:String Label.Description}" />

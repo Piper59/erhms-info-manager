@@ -26,6 +26,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override string Title => Strings.CreateProject_Lead_SetStrategy;
             public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(Wizard.CoreProject);
 
+            private bool expanded;
+            public bool Expanded
+            {
+                get { return expanded; }
+                set { SetProperty(ref expanded, value); }
+            }
+
+            public ICommand ToggleCommand { get; }
             public ICommand CreateStandardCommand { get; }
             public ICommand CreateBlankCommand { get; }
             public ICommand CreateFromTemplateCommand { get; }
@@ -34,8 +42,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public SetStrategyViewModel(CreateProjectViewModel wizard)
                 : base(wizard)
             {
+                ToggleCommand = new SyncCommand(Toggle);
                 CreateStandardCommand = new SyncCommand(CreateStandard);
                 CreateBlankCommand = new SyncCommand(CreateBlank);
+            }
+
+            public void Toggle()
+            {
+                Expanded = !Expanded;
             }
 
             public void CreateStandard()
