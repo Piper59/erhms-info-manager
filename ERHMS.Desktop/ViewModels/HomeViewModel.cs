@@ -3,7 +3,6 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -154,38 +153,33 @@ namespace ERHMS.Desktop.ViewModels
 
         public class PhaseViewModel : ObservableObject
         {
-            private static CoreProjectCollectionViewModel GetProjects(CoreProject coreProject)
-            {
-                switch (coreProject)
-                {
-                    case CoreProject.Worker:
-                        return new WorkerProjectCollectionViewModel();
-                    case CoreProject.Incident:
-                        return new IncidentProjectCollectionViewModel();
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(coreProject));
-                }
-            }
-
             public Phase Value { get; }
             public CoreProjectCollectionViewModel Projects { get; }
             public IEnumerable<CoreViewViewModel> Views { get; }
 
-            public PhaseViewModel(Phase value)
+            public PhaseViewModel(Phase value, CoreProjectCollectionViewModel projects)
             {
                 Value = value;
-                Projects = GetProjects(value.ToCoreProject());
+                Projects = projects;
                 Views = CoreView.GetInstances(value)
                     .Select(coreView => new CoreViewViewModel(coreView))
                     .ToList();
             }
         }
 
-        public IEnumerable<PhaseViewModel> Phases { get; } = new PhaseViewModel[]
+        private readonly CoreProjectCollectionViewModel workerProjects = new WorkerProjectCollectionViewModel();
+        private readonly CoreProjectCollectionViewModel incidentProjects = new IncidentProjectCollectionViewModel();
+
+        public IEnumerable<PhaseViewModel> Phases { get; }
+
+        public HomeViewModel()
         {
-            new PhaseViewModel(Phase.PreDeployment),
-            new PhaseViewModel(Phase.Deployment),
-            new PhaseViewModel(Phase.PostDeployment)
-        };
+            Phases = new PhaseViewModel[]
+            {
+                new PhaseViewModel(Phase.PreDeployment, workerProjects),
+                new PhaseViewModel(Phase.Deployment, incidentProjects),
+                new PhaseViewModel(Phase.PostDeployment, incidentProjects)
+            };
+        }
     }
 }
