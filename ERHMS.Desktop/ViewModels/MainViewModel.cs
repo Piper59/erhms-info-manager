@@ -39,10 +39,10 @@ namespace ERHMS.Desktop.ViewModels
 
         public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
-        public ICommand CreateProjectCommand { get; }
-        public ICommand OpenProjectCommand { get; }
         public ICommand GoToProjectCommand { get; }
         public ICommand GoToViewCommand { get; }
+        public ICommand CreateProjectCommand { get; }
+        public ICommand OpenProjectCommand { get; }
         public ICommand OpenLogFileCommand { get; }
         public ICommand OpenLogDirectoryCommand { get; }
         public ICommand ExportLogDirectoryCommand { get; }
@@ -54,10 +54,10 @@ namespace ERHMS.Desktop.ViewModels
         {
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = Command.Null;
-            CreateProjectCommand = new SyncCommand<CoreProject>(CreateProject);
-            OpenProjectCommand = new SyncCommand<CoreProject>(OpenProject);
             GoToProjectCommand = new AsyncCommand<CoreProject>(GoToProjectAsync);
             GoToViewCommand = new AsyncCommand<CoreView>(GoToViewAsync);
+            CreateProjectCommand = new AsyncCommand<CoreProject>(CreateProjectAsync);
+            OpenProjectCommand = new AsyncCommand<CoreProject>(OpenProjectAsync);
             OpenLogFileCommand = new SyncCommand(OpenLogFile);
             OpenLogDirectoryCommand = new SyncCommand(OpenLogDirectory);
             ExportLogDirectoryCommand = new AsyncCommand(ExportLogDirectoryAsync);
@@ -69,41 +69,6 @@ namespace ERHMS.Desktop.ViewModels
         public void GoToHome()
         {
             Content = new HomeViewModel();
-        }
-
-        public void CreateProject(CoreProject coreProject)
-        {
-            // TODO: Handle errors
-            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
-            {
-                // TODO: Confirm
-            }
-            CreateProjectViewModel wizard = new CreateProjectViewModel(coreProject);
-            if (wizard.Show() != true)
-            {
-                return;
-            }
-            Settings.Default.SetProjectPath(coreProject, wizard.Project.FilePath);
-            Settings.Default.Save();
-        }
-
-        public void OpenProject(CoreProject coreProject)
-        {
-            // TODO: Handle errors
-            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
-            {
-                // TODO: Confirm
-            }
-            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
-            fileDialog.InitialDirectory = Configuration.Instance.GetProjectsDirectory();
-            fileDialog.Filter = Strings.FileDialog_Filter_Projects;
-            if (fileDialog.Open() != true)
-            {
-                return;
-            }
-            // TODO: Check for core views
-            Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
-            Settings.Default.Save();
         }
 
         public async Task GoToProjectAsync(Func<Task<Project>> action)
@@ -145,6 +110,48 @@ namespace ERHMS.Desktop.ViewModels
                 Project project = ProjectExtensions.Open(projectPath);
                 return project.Views[coreView.Name];
             }));
+        }
+
+        public async Task CreateProjectAsync(CoreProject coreProject)
+        {
+            // TODO: Handle errors
+            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
+            {
+                // TODO: Confirm
+            }
+            CreateProjectViewModel wizard = new CreateProjectViewModel(coreProject);
+            if (wizard.Show() != true)
+            {
+                return;
+            }
+            Settings.Default.SetProjectPath(coreProject, wizard.Project.FilePath);
+            Settings.Default.Save();
+            await GoToProjectAsync(() => Task.FromResult(wizard.Project));
+        }
+
+        public async Task OpenProjectAsync(CoreProject coreProject)
+        {
+            // TODO: Handle errors
+            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
+            {
+                // TODO: Confirm
+            }
+            IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
+            fileDialog.InitialDirectory = Configuration.Instance.GetProjectsDirectory();
+            fileDialog.Filter = Strings.FileDialog_Filter_Projects;
+            if (fileDialog.Open() != true)
+            {
+                return;
+            }
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = Strings.Lead_LoadingProject;
+            await GoToProjectAsync(() => Task.Run(() =>
+            {
+                // TODO: Check for core views
+                return ProjectExtensions.Open(fileDialog.FileName);
+            }));
+            Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
+            Settings.Default.Save();
         }
 
         public void OpenLogFile()

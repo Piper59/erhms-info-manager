@@ -66,29 +66,25 @@ namespace ERHMS.Desktop.ViewModels
 
             protected CoreProjectCollectionViewModel()
             {
-                CreateCommand = new SyncCommand(Create);
-                OpenCommand = new SyncCommand(Open);
+                CreateCommand = new AsyncCommand(CreateAsync);
+                OpenCommand = new AsyncCommand(OpenAsync);
                 GoToCurrentCommand = new AsyncCommand(GoToCurrentAsync);
             }
 
-            public void Create()
+            public async Task CreateAsync()
             {
-                MainViewModel.Instance.CreateProject(Value);
-                Refresh();
+                await MainViewModel.Instance.CreateProjectAsync(Value);
             }
 
-            public void Open()
+            public async Task OpenAsync()
             {
-                MainViewModel.Instance.OpenProject(Value);
-                Refresh();
+                await MainViewModel.Instance.OpenProjectAsync(Value);
             }
 
             public async Task GoToCurrentAsync()
             {
                 await MainViewModel.Instance.GoToProjectAsync(Value);
             }
-
-            protected abstract void Refresh();
         }
 
         public class WorkerProjectCollectionViewModel : CoreProjectCollectionViewModel
@@ -101,20 +97,10 @@ namespace ERHMS.Desktop.ViewModels
 
             public WorkerProjectCollectionViewModel()
             {
-                Initialize();
-            }
-
-            private void Initialize()
-            {
                 if (Settings.Default.HasWorkerProjectPath)
                 {
                     Current = new ProjectInfo(Settings.Default.WorkerProjectPath);
                 }
-            }
-
-            protected override void Refresh()
-            {
-                Initialize();
             }
         }
 
@@ -164,39 +150,18 @@ namespace ERHMS.Desktop.ViewModels
                 Settings.Default.Save();
                 Initialize();
             }
-
-            protected override void Refresh()
-            {
-                Initialize();
-            }
         }
 
         public class PhaseViewModel : ObservableObject
         {
-            private static readonly CoreProjectCollectionViewModel workerProjects =
-                new WorkerProjectCollectionViewModel();
-            private static readonly CoreProjectCollectionViewModel incidentProjects =
-                new IncidentProjectCollectionViewModel();
-
-            public static PhaseViewModel PreDeployment { get; } = new PhaseViewModel(Phase.PreDeployment);
-            public static PhaseViewModel Deployment { get; } = new PhaseViewModel(Phase.Deployment);
-            public static PhaseViewModel PostDeployment { get; } = new PhaseViewModel(Phase.PostDeployment);
-
-            public static IEnumerable<PhaseViewModel> Instances { get; } = new PhaseViewModel[]
-            {
-                PreDeployment,
-                Deployment,
-                PostDeployment
-            };
-
             private static CoreProjectCollectionViewModel GetProjects(CoreProject coreProject)
             {
                 switch (coreProject)
                 {
                     case CoreProject.Worker:
-                        return workerProjects;
+                        return new WorkerProjectCollectionViewModel();
                     case CoreProject.Incident:
-                        return incidentProjects;
+                        return new IncidentProjectCollectionViewModel();
                     default:
                         throw new ArgumentOutOfRangeException(nameof(coreProject));
                 }
@@ -216,6 +181,11 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public IEnumerable<PhaseViewModel> Phases => PhaseViewModel.Instances;
+        public IEnumerable<PhaseViewModel> Phases { get; } = new PhaseViewModel[]
+        {
+            new PhaseViewModel(Phase.PreDeployment),
+            new PhaseViewModel(Phase.Deployment),
+            new PhaseViewModel(Phase.PostDeployment)
+        };
     }
 }

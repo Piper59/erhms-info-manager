@@ -9,15 +9,43 @@ namespace ERHMS.EpiInfo
         private string location;
         public string Location
         {
-            get { return location ?? Path.Combine(locationRoot, Name); }
-            set { location = value; }
+            get
+            {
+                if (location != null)
+                {
+                    return location;
+                }
+                if (locationRoot != null)
+                {
+                    return Path.Combine(locationRoot, Name);
+                }
+                return null;
+            }
+            set
+            {
+                location = value;
+            }
         }
 
         private string locationRoot;
         public string LocationRoot
         {
-            get { return locationRoot ?? Path.GetDirectoryName(location); }
-            set { locationRoot = value; }
+            get
+            {
+                if (locationRoot != null)
+                {
+                    return locationRoot;
+                }
+                if (location != null)
+                {
+                    return Path.GetDirectoryName(location);
+                }
+                return null;
+            }
+            set
+            {
+                locationRoot = value;
+            }
         }
 
         private string filePath;
@@ -25,7 +53,15 @@ namespace ERHMS.EpiInfo
         {
             get
             {
-                return filePath ?? Path.Combine(Location, $"{Name}{FileExtensions.Project}");
+                if (filePath != null)
+                {
+                    return filePath;
+                }
+                if (Location != null)
+                {
+                    return Path.Combine(Location, $"{Name}{FileExtensions.Project}");
+                }
+                return null;
             }
             set
             {

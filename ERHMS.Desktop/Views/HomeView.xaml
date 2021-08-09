@@ -127,8 +127,8 @@
                                       Visibility="{Binding CanHaveRecents, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <MenuItem.ItemContainerStyle>
                                     <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBase}">
-                                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
-                                        <Setter Property="AutomationProperties.HelpText" Value="{Binding FilePath}" />
+                                        <Setter Property="AutomationProperties.Name" Value="{Binding Name, TargetNullValue=''}" />
+                                        <Setter Property="AutomationProperties.HelpText" Value="{Binding FilePath, TargetNullValue=''}" />
                                         <Setter Property="Command" Value="{Binding DataContext.MakeCurrentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" />
                                         <Setter Property="CommandParameter" Value="{Binding}" />
                                         <Setter Property="MaxWidth" Value="{StaticResource MenuWidth}" />
