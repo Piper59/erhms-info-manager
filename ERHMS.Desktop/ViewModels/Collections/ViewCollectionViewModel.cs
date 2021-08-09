@@ -7,6 +7,7 @@ using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,10 +17,10 @@ namespace ERHMS.Desktop.ViewModels.Collections
     {
         public class Item
         {
-            public static Item Create(View value)
+            public static async Task<Item> CreateAsync(View value)
             {
                 Item result = new Item(value);
-                result.Initialize();
+                await result.InitializeAsync();
                 return result;
             }
 
@@ -33,22 +34,24 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 Value = value;
             }
 
-            // TODO: Improve performance
-            private void Initialize()
+            private async Task InitializeAsync()
             {
-                PageCount = Value.Pages.Count;
-                FieldCount = Value.Fields.InputFields.Count;
-                if (Value.Project.CollectedData.TableExists(Value.TableName))
+                await Task.Run(() =>
                 {
-                    using (RecordRepository repository = new RecordRepository(Value))
+                    PageCount = Value.Pages.Count;
+                    FieldCount = Value.Fields.InputFields.Count;
+                    if (Value.Project.CollectedData.TableExists(Value.TableName))
                     {
-                        RecordCount = repository.CountByDeleted(false);
+                        using (RecordRepository repository = new RecordRepository(Value))
+                        {
+                            RecordCount = repository.CountByDeleted(false);
+                        }
                     }
-                }
-                else
-                {
-                    RecordCount = 0;
-                }
+                    else
+                    {
+                        RecordCount = 0;
+                    }
+                });
             }
 
             public override int GetHashCode()
@@ -95,9 +98,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 List.Clear();
                 Project.LoadViews();
-                foreach (View value in Project.Views)
+                Task<Item>[] tasks = Project.Views.Cast<View>()
+                    .Select(value => Item.CreateAsync(value))
+                    .ToArray();
+                Task.WaitAll(tasks);
+                foreach (Task<Item> task in tasks)
                 {
-                    List.Add(Item.Create(value));
+                    List.Add(task.Result);
                 }
             });
             Items.Refresh();
