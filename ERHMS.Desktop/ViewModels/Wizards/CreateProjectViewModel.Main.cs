@@ -215,6 +215,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         Wizard.ProjectCreationInfo.Database.Create();
                     }
                     Project project = ProjectExtensions.Create(Wizard.ProjectCreationInfo);
+                    progress.Report(Strings.Body_Initializing);
                     project.Initialize();
                     CreateViews(project, progress);
                     return project;

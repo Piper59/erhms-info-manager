@@ -870,6 +870,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initializing....
+        /// </summary>
+        public static string Body_Initializing {
+            get {
+                return ResourceManager.GetString("Body.Initializing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please specify a server and database to connect to..
         /// </summary>
         public static string Body_InvalidConnectionInfo_SqlServer {

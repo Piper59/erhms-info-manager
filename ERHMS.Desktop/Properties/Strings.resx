@@ -392,6 +392,9 @@ This form, any related forms, and all associated records will be permanently del
   <data name="Body.ImportingRow" xml:space="preserve">
     <value>Importing row {0}...</value>
   </data>
+  <data name="Body.Initializing" xml:space="preserve">
+    <value>Initializing...</value>
+  </data>
   <data name="Body.InvalidConnectionInfo.SqlServer" xml:space="preserve">
     <value>Please specify a server and database to connect to.</value>
   </data>

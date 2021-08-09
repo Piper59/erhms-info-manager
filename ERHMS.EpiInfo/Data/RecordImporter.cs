@@ -1,7 +1,9 @@
 ﻿using Epi;
 using Epi.Fields;
 using ERHMS.Common.IO;
+using ERHMS.Common.Logging;
 using ERHMS.Data;
+using ERHMS.Data.Logging;
 using ERHMS.EpiInfo.Metadata;
 using System;
 using System.Collections.Generic;
@@ -99,9 +101,14 @@ namespace ERHMS.EpiInfo.Data
             {
                 throw new InvalidOperationException("No fields to import.");
             }
+            Log.Instance.Debug("Importing records");
             using (RecordRepository repository = new RecordRepository(View))
             using (ITransactor transactor = repository.Transact())
             {
+                if (transactor.Connection is LoggingConnection connection)
+                {
+                    connection.Level = null;
+                }
                 while (true)
                 {
                     progress?.Report(RowNumber + 1);

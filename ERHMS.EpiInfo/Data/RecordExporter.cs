@@ -1,6 +1,7 @@
 ﻿using Epi;
 using Epi.Fields;
 using ERHMS.Common.IO;
+using ERHMS.Common.Logging;
 using ERHMS.EpiInfo.Metadata;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,7 @@ namespace ERHMS.EpiInfo.Data
 
         public void Export(IProgress<int> progress = null)
         {
+            Log.Instance.Debug("Exporting records");
             WriteRow(GetHeaders());
             using (RecordRepository repository = new RecordRepository(View))
             {

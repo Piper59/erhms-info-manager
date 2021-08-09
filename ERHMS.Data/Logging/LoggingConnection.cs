@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using log4net.Core;
+using System.Data;
 
 namespace ERHMS.Data.Logging
 {
@@ -15,6 +16,7 @@ namespace ERHMS.Data.Logging
         public int ConnectionTimeout => BaseConnection.ConnectionTimeout;
         public string Database => BaseConnection.Database;
         public ConnectionState State => BaseConnection.State;
+        public Level Level { get; set; } = Level.Debug;
 
         public LoggingConnection(IDbConnection connection)
         {
@@ -43,7 +45,7 @@ namespace ERHMS.Data.Logging
 
         public IDbCommand CreateCommand()
         {
-            return new LoggingCommand(BaseConnection.CreateCommand());
+            return new LoggingCommand(BaseConnection.CreateCommand(), Level);
         }
 
         public void Dispose()

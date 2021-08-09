@@ -63,6 +63,7 @@
     <Compile Include="Linq\Iterator.cs" />
     <Compile Include="Logging\ConsoleAppender.cs" />
     <Compile Include="Logging\FileAppender.cs" />
+    <Compile Include="Logging\ILogExtensions.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="MathExtensions.cs" />
     <Compile Include="Naming\FileNameUniquifier.cs" />

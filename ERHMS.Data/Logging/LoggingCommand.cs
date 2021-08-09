@@ -1,4 +1,5 @@
 ﻿using ERHMS.Common.Logging;
+using log4net.Core;
 using System.Data;
 using System.Text.RegularExpressions;
 
@@ -50,9 +51,12 @@ namespace ERHMS.Data.Logging
             set { BaseCommand.UpdatedRowSource = value; }
         }
 
-        public LoggingCommand(IDbCommand command)
+        public Level Level { get; }
+
+        public LoggingCommand(IDbCommand command, Level level)
         {
             BaseCommand = command;
+            Level = level;
         }
 
         public void Cancel()
@@ -72,7 +76,7 @@ namespace ERHMS.Data.Logging
 
         private void OnExecuting()
         {
-            Log.Instance.Debug($"Executing database command: {CommandLogText}");
+            Log.Instance.Log(Level, $"Executing database command: {CommandLogText}");
         }
 
         public int ExecuteNonQuery()

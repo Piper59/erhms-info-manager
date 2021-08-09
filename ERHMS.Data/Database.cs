@@ -15,12 +15,18 @@ namespace ERHMS.Data
 
             public Database Database { get; }
 
+            public IDbConnection Connection
+            {
+                get { return Database.Connection; }
+                private set { Database.Connection = value; }
+            }
+
             public Connector(Database database)
             {
                 Database = database;
-                if (database.Connection == null)
+                if (Connection == null)
                 {
-                    database.Connection = database.ConnectCore();
+                    Connection = database.ConnectCore();
                     isOwner = true;
                 }
             }
@@ -29,27 +35,34 @@ namespace ERHMS.Data
             {
                 if (isOwner)
                 {
-                    Database.Connection.Dispose();
-                    Database.Connection = null;
+                    Connection.Dispose();
+                    Connection = null;
                 }
             }
         }
 
         private class Transactor : ITransactor
         {
-            private readonly Connector connector;
+            private readonly IConnector connector;
             private readonly bool isOwner;
             private bool committed;
 
             public Database Database { get; }
+            public IDbConnection Connection => Database.Connection;
+
+            public IDbTransaction Transaction
+            {
+                get { return Database.Transaction; }
+                private set { Database.Transaction = value; }
+            }
 
             public Transactor(Database database)
             {
                 Database = database;
                 connector = new Connector(database);
-                if (database.Transaction == null)
+                if (Transaction == null)
                 {
-                    database.Transaction = database.Connection.BeginTransaction();
+                    Transaction = Connection.BeginTransaction();
                     isOwner = true;
                 }
             }
@@ -58,7 +71,7 @@ namespace ERHMS.Data
             {
                 if (isOwner)
                 {
-                    Database.Transaction.Commit();
+                    Transaction.Commit();
                     committed = true;
                 }
             }
@@ -69,10 +82,10 @@ namespace ERHMS.Data
                 {
                     if (!committed)
                     {
-                        Database.Transaction.Rollback();
+                        Transaction.Rollback();
                     }
-                    Database.Transaction.Dispose();
-                    Database.Transaction = null;
+                    Transaction.Dispose();
+                    Transaction = null;
                 }
                 connector.Dispose();
             }
