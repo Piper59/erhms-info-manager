@@ -32,7 +32,7 @@ namespace ERHMS.Common.Logging
                     return identity.Name;
                 }
             }
-            catch (SecurityException)
+            catch
             {
                 return "?";
             }

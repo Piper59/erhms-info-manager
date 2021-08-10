@@ -15,8 +15,18 @@ namespace ERHMS.Desktop.Infrastructure
 
         public static bool Value
         {
-            get { return SystemParameters.MenuDropAlignment; }
-            set { field.SetValue(null, value); }
+            get
+            {
+                return SystemParameters.MenuDropAlignment;
+            }
+            set
+            {
+                try
+                {
+                    field.SetValue(null, value);
+                }
+                catch { }
+            }
         }
     }
 }
