@@ -3,22 +3,22 @@ using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
 {
-    public partial class ToggleButton : UserControl
+    public partial class ExpandButton : UserControl
     {
         public static readonly DependencyProperty AccessTextProperty = DependencyProperty.Register(
             nameof(AccessText),
             typeof(string),
-            typeof(ToggleButton));
+            typeof(ExpandButton));
 
         public static readonly DependencyProperty AltTextProperty = DependencyProperty.Register(
             nameof(AltText),
             typeof(string),
-            typeof(ToggleButton));
+            typeof(ExpandButton));
 
         public static readonly DependencyProperty ExpandedProperty = DependencyProperty.Register(
             nameof(Expanded),
             typeof(bool),
-            typeof(ToggleButton),
+            typeof(ExpandButton),
             new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string AccessText
@@ -39,7 +39,7 @@ namespace ERHMS.Desktop.Controls
             set { SetValue(ExpandedProperty, value); }
         }
 
-        public ToggleButton()
+        public ExpandButton()
         {
             InitializeComponent();
         }

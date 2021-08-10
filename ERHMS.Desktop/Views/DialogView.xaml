@@ -54,7 +54,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Controls:ToggleButton AccessText="{Markup:String AccessText.Details}"
+                <Controls:ExpandButton AccessText="{Markup:String AccessText.Details}"
                                        AltText="{Markup:String AltText.Details}"
                                        Expanded="{Binding Expanded}"
                                        FontSize="{StaticResource SmallFontSize}"

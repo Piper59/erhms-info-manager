@@ -34,8 +34,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Controls:Search Grid.Column="0"
-                             Text="{Binding SearchText}" />
+            <Controls:SearchBox Grid.Column="0"
+                                Text="{Binding SearchText}" />
             <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.RecordStatus}"
                                     Grid.Column="1"
                                     Binding="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='RecordStatus.Name.{0}'}"
@@ -114,7 +114,7 @@
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>
         </DataGrid>
-        <Controls:ItemsControlWatermark Grid.Row="2"
-                                        ItemsControl="{x:Reference ItemsDataGrid}" />
+        <Controls:Watermark Grid.Row="2"
+                            ItemsControl="{x:Reference ItemsDataGrid}" />
     </Grid>
 </UserControl>

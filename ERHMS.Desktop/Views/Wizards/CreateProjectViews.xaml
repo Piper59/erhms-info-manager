@@ -12,7 +12,7 @@
             <Button AutomationProperties.HelpText="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
                     Command="{Binding CreateStandardCommand}"
                     Content="{Markup:String CreateProject.AccessText.Standard}" />
-            <Controls:ToggleButton AccessText="{Markup:String AccessText.ShowOtherOptions}"
+            <Controls:ExpandButton AccessText="{Markup:String AccessText.ShowOtherOptions}"
                                    AltText="{Markup:String AltText.ShowOtherOptions}"
                                    Expanded="{Binding Expanded}"
                                    Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityInverter}}" />

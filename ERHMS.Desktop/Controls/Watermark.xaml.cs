@@ -3,12 +3,12 @@ using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
 {
-    public partial class ItemsControlWatermark : UserControl
+    public partial class Watermark : UserControl
     {
         public static readonly DependencyProperty ItemsControlProperty = DependencyProperty.Register(
             nameof(ItemsControl),
             typeof(ItemsControl),
-            typeof(ItemsControlWatermark));
+            typeof(Watermark));
 
         public ItemsControl ItemsControl
         {
@@ -16,7 +16,7 @@ namespace ERHMS.Desktop.Controls
             set { SetValue(ItemsControlProperty, value); }
         }
 
-        public ItemsControlWatermark()
+        public Watermark()
         {
             InitializeComponent();
         }

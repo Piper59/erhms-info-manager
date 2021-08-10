@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary x:Class="ERHMS.Desktop.Resources.App"
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="Base.xaml" />
@@ -54,52 +53,6 @@
         <Setter Property="FontSize" Value="{StaticResource HugeFontSize}" />
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
     </Style>
-
-    <!-- Controls -->
-    <Style x:Key="BoundComboBoxBase" TargetType="Controls:BoundComboBox" BasedOn="{StaticResource ComboBoxBase}" />
-    <Style TargetType="Controls:BoundComboBox" BasedOn="{StaticResource BoundComboBoxBase}" />
-
-    <Style x:Key="IconButtonBase" TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="AutomationProperties.HelpText" Value="{Binding HelpText, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
-        <Setter Property="AutomationProperties.Name" Value="{Binding AltText, RelativeSource={RelativeSource Self},TargetNullValue=''}" />
-        <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
-        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
-        <Setter Property="Padding">
-            <Setter.Value>
-                <Thickness Top="{StaticResource SmallSpace}"
-                           Bottom="{StaticResource SmallSpace}" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="ToolTip">
-            <Setter.Value>
-                <ToolTip DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}"
-                         MaxWidth="{StaticResource ToolTipWidth}">
-                    <StackPanel>
-                        <TextBlock Text="{Binding AltText}">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HelpText}" Value="{x:Null}">
-                                            <Setter Property="FontWeight" Value="{StaticResource DefaultFontWeight}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock Text="{Binding HelpText}"
-                                   Visibility="{Binding HelpText, Converter={StaticResource NullableToVisibilityConverter}}">
-                            <TextBlock.Margin>
-                                <Thickness Top="{StaticResource SmallSpace}" />
-                            </TextBlock.Margin>
-                        </TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
-    </Style>
-    <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}" />
 
     <!-- Other -->
     <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">

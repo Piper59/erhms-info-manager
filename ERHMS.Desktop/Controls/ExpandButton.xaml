@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Controls.ExpandButton"
+             x:Name="Root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls">
+    <StackPanel Orientation="Horizontal">
+        <Controls:IconButton Click="Button_Click"
+                             FontSize="{Binding FontSize, ElementName=Root}"
+                             IsTabStop="False">
+            <Controls:IconButton.Margin>
+                <Thickness Left="{StaticResource SmallSpace}"
+                           Top="{StaticResource SmallSpace}"
+                           Bottom="{StaticResource SmallSpace}" />
+            </Controls:IconButton.Margin>
+            <Controls:IconButton.Style>
+                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}">
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:IconButton}}" />
+                        </Style>
+                    </Style.Resources>
+                    <Setter Property="AltText" Value="{Binding Source='AltText.Expand', Converter={StaticResource StringLocalizingConverter}}" />
+                    <Setter Property="Content" Value="{Binding Source='Expand', Converter={StaticResource IconNameToStringConverter}}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Expanded, ElementName=Root}" Value="True">
+                            <Setter Property="AltText" Value="{Binding Source='AltText.Collapse', Converter={StaticResource StringLocalizingConverter}}" />
+                            <Setter Property="Content" Value="{Binding Source='Collapse', Converter={StaticResource IconNameToStringConverter}}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Controls:IconButton.Style>
+        </Controls:IconButton>
+        <ToggleButton AutomationProperties.Name="{Binding AltText, ElementName=Root}"
+                      Click="Button_Click">
+            <ToggleButton.Template>
+                <ControlTemplate>
+                    <Label Content="{Binding AccessText, ElementName=Root}"
+                           FontSize="{Binding FontSize, ElementName=Root}" />
+                </ControlTemplate>
+            </ToggleButton.Template>
+        </ToggleButton>
+    </StackPanel>
+</UserControl>

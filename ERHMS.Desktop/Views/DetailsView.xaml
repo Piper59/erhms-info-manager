@@ -17,7 +17,7 @@
                         <Setter Property="Text" Value="{Binding}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding}" Value="">
-                                <Setter Property="Text" Value="{Markup:String Placeholder.Empty}" />
+                                <Setter Property="Text" Value="{Binding Source='Placeholder.Empty', Mode=OneWay, Converter={StaticResource StringLocalizingConverter}}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -53,7 +53,7 @@
                                         <Setter Property="ToolTip" Value="{Binding Value, Mode=OneWay}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Key}" Value="Password">
-                                                <Setter Property="Text" Value="{Markup:String Placeholder.Hidden}" />
+                                                <Setter Property="Text" Value="{Binding Source='Placeholder.Hidden', Mode=OneWay, Converter={StaticResource StringLocalizingConverter}}" />
                                                 <Setter Property="ToolTip" Value="{x:Null}" />
                                             </DataTrigger>
                                         </Style.Triggers>

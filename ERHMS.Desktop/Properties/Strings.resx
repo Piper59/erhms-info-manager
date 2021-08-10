@@ -297,6 +297,9 @@
   <data name="AltText.ClearSearch" xml:space="preserve">
     <value>Clear search</value>
   </data>
+  <data name="AltText.Collapse" xml:space="preserve">
+    <value>Collapse</value>
+  </data>
   <data name="AltText.Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
@@ -317,6 +320,9 @@
   </data>
   <data name="AltText.Enter" xml:space="preserve">
     <value>Enter</value>
+  </data>
+  <data name="AltText.Expand" xml:space="preserve">
+    <value>Expand</value>
   </data>
   <data name="AltText.Export" xml:space="preserve">
     <value>Export</value>
@@ -772,9 +778,6 @@ Close anyway?</value>
   <data name="InvalidNameReason.Lead.TooLong" xml:space="preserve">
     <value>This name is too long</value>
   </data>
-  <data name="ItemsControlWatermark" xml:space="preserve">
-    <value>No items found</value>
-  </data>
   <data name="Label" xml:space="preserve">
     <value>{0}:</value>
   </data>
@@ -963,5 +966,8 @@ Close anyway?</value>
   </data>
   <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
+  </data>
+  <data name="Watermark" xml:space="preserve">
+    <value>No items found</value>
   </data>
 </root>

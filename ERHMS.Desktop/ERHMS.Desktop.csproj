@@ -107,21 +107,21 @@
     <Compile Include="Commands\ErrorEventArgs.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Controls\BoundComboBox.cs" />
+    <Compile Include="Controls\ExpandButton.xaml.cs">
+      <DependentUpon>ExpandButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HelpPopup.xaml.cs">
       <DependentUpon>HelpPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\IconButton.cs" />
-    <Compile Include="Controls\ItemsControlWatermark.xaml.cs">
-      <DependentUpon>ItemsControlWatermark.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Pager.xaml.cs">
       <DependentUpon>Pager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Search.xaml.cs">
-      <DependentUpon>Search.xaml</DependentUpon>
+    <Compile Include="Controls\SearchBox.xaml.cs">
+      <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ToggleButton.xaml.cs">
-      <DependentUpon>ToggleButton.xaml</DependentUpon>
+    <Compile Include="Controls\Watermark.xaml.cs">
+      <DependentUpon>Watermark.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
@@ -293,11 +293,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\HelpPopup.xaml">
+    <Page Include="Controls\ExpandButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ItemsControlWatermark.xaml">
+    <Page Include="Controls\HelpPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -305,11 +305,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Search.xaml">
+    <Page Include="Controls\SearchBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ToggleButton.xaml">
+    <Page Include="Controls\Watermark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -3,10 +3,12 @@ using System.Windows.Controls;
 
 namespace ERHMS.Desktop.Controls
 {
-    public partial class Search : UserControl
+    public partial class SearchBox : UserControl
     {
-        public static readonly DependencyProperty TextProperty = TextBox.TextProperty.AddOwner(
-            typeof(Search),
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
+            nameof(Text),
+            typeof(string),
+            typeof(SearchBox),
             new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Text
@@ -15,7 +17,7 @@ namespace ERHMS.Desktop.Controls
             set { SetValue(TextProperty, value); }
         }
 
-        public Search()
+        public SearchBox()
         {
             InitializeComponent();
         }

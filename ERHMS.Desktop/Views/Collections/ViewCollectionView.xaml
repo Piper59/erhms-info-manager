@@ -73,7 +73,7 @@
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>
         </DataGrid>
-        <Controls:ItemsControlWatermark Grid.Row="1"
-                                        ItemsControl="{x:Reference ItemsDataGrid}" />
+        <Controls:Watermark Grid.Row="1"
+                            ItemsControl="{x:Reference ItemsDataGrid}" />
     </Grid>
 </UserControl>

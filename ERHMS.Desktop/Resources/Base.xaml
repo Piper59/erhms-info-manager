@@ -1,10 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:System="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
+        <ResourceDictionary Source="Converters.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- Framework -->
     <Style x:Key="ButtonBase" TargetType="Button">
         <Setter Property="ToolTipService.ShowDuration" Value="{x:Static System:Int32.MaxValue}" />
         <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
@@ -246,4 +249,54 @@
         <Setter Property="Padding" Value="{StaticResource DefaultPadding}" />
     </Style>
     <Style TargetType="ToolTip" BasedOn="{StaticResource ToolTipBase}" />
+
+    <!-- Custom -->
+    <Style x:Key="BoundComboBoxBase" TargetType="Controls:BoundComboBox" BasedOn="{StaticResource ComboBoxBase}" />
+    <Style TargetType="Controls:BoundComboBox" BasedOn="{StaticResource BoundComboBoxBase}" />
+
+    <Style x:Key="ExpandButtonBase" TargetType="Controls:ExpandButton">
+        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+    </Style>
+    <Style TargetType="Controls:ExpandButton" BasedOn="{StaticResource ExpandButtonBase}" />
+
+    <Style x:Key="IconButtonBase" TargetType="Controls:IconButton" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="AutomationProperties.HelpText" Value="{Binding HelpText, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
+        <Setter Property="AutomationProperties.Name" Value="{Binding AltText, RelativeSource={RelativeSource Self}, TargetNullValue=''}" />
+        <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+        <Setter Property="Padding">
+            <Setter.Value>
+                <Thickness Top="{StaticResource SmallSpace}"
+                           Bottom="{StaticResource SmallSpace}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ToolTip">
+            <Setter.Value>
+                <ToolTip MaxWidth="{StaticResource ToolTipWidth}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding PlacementTarget.AltText, RelativeSource={RelativeSource FindAncestor, AncestorType=ToolTip}}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PlacementTarget.HelpText, RelativeSource={RelativeSource FindAncestor, AncestorType=ToolTip}}" Value="{x:Null}">
+                                            <Setter Property="FontWeight" Value="{StaticResource DefaultFontWeight}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Text="{Binding PlacementTarget.HelpText, RelativeSource={RelativeSource FindAncestor, AncestorType=ToolTip}}"
+                                   Visibility="{Binding PlacementTarget.HelpText, RelativeSource={RelativeSource FindAncestor, AncestorType=ToolTip}, Converter={StaticResource NullableToVisibilityConverter}}">
+                            <TextBlock.Margin>
+                                <Thickness Top="{StaticResource SmallSpace}" />
+                            </TextBlock.Margin>
+                        </TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+    </Style>
+    <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}" />
 </ResourceDictionary>

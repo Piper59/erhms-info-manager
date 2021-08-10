@@ -601,6 +601,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collapse.
+        /// </summary>
+        public static string AltText_Collapse {
+            get {
+                return ResourceManager.GetString("AltText.Collapse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string AltText_Copy {
@@ -660,6 +669,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AltText_Enter {
             get {
                 return ResourceManager.GetString("AltText.Enter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expand.
+        /// </summary>
+        public static string AltText_Expand {
+            get {
+                return ResourceManager.GetString("AltText.Expand", resourceCulture);
             }
         }
         
@@ -1994,15 +2012,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No items found.
-        /// </summary>
-        public static string ItemsControlWatermark {
-            get {
-                return ResourceManager.GetString("ItemsControlWatermark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}:.
         /// </summary>
         public static string Label {
@@ -2566,6 +2575,15 @@ namespace ERHMS.Desktop.Properties {
         public static string RecordStatus_Name_Undeleted {
             get {
                 return ResourceManager.GetString("RecordStatus.Name.Undeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No items found.
+        /// </summary>
+        public static string Watermark {
+            get {
+                return ResourceManager.GetString("Watermark", resourceCulture);
             }
         }
     }
