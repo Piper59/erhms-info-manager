@@ -120,6 +120,9 @@
     <Compile Include="Controls\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ToggleButton.xaml.cs">
+      <DependentUpon>ToggleButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
     <Compile Include="Converters\ByteCountFormattingConverter.cs" />
@@ -303,6 +306,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Search.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ToggleButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

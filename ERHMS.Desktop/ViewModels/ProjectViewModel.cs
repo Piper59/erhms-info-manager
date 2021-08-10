@@ -30,7 +30,6 @@ namespace ERHMS.Desktop.ViewModels
         {
             Project = project;
             GoToHomeCommand = new SyncCommand(GoToHome);
-            GoToHelpCommand = Command.Null;
             OpenLocationCommand = new SyncCommand(OpenLocation);
         }
 

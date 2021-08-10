@@ -101,14 +101,6 @@
     </Style>
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}" />
 
-    <Style x:Key="RoundedIconButton" TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}">
-        <Style.Resources>
-            <Style TargetType="Border">
-                <Setter Property="CornerRadius" Value="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:IconButton}}" />
-            </Style>
-        </Style.Resources>
-    </Style>
-
     <!-- Other -->
     <Style x:Key="CodeTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBase}">
         <Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}" />

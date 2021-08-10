@@ -53,7 +53,7 @@ namespace ERHMS.Desktop.ViewModels
         private MainViewModel()
         {
             GoToHomeCommand = new SyncCommand(GoToHome);
-            GoToHelpCommand = Command.Null;
+            GoToHelpCommand = new SyncCommand(GoToHelp);
             GoToProjectCommand = new AsyncCommand<CoreProject>(GoToProjectAsync);
             GoToViewCommand = new AsyncCommand<CoreView>(GoToViewAsync);
             CreateProjectCommand = new AsyncCommand<CoreProject>(CreateProjectAsync);
@@ -69,6 +69,11 @@ namespace ERHMS.Desktop.ViewModels
         public void GoToHome()
         {
             Content = new HomeViewModel();
+        }
+
+        public void GoToHelp()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task GoToProjectAsync(Func<Task<Project>> action)

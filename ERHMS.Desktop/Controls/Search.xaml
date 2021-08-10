@@ -11,8 +11,10 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0"
-               Content="{Markup:String Label.Search}" />
-        <TextBox AutomationProperties.Name="{Markup:String Label.Search}"
+               Content="{Markup:String AccessText.SearchLabel}"
+               Target="{x:Reference TextBox}" />
+        <TextBox x:Name="TextBox"
+                 AutomationProperties.Name="{Markup:String Label.Search}"
                  Grid.Column="1"
                  Text="{Binding Text, ElementName=Root, UpdateSourceTrigger=PropertyChanged, Delay=500}">
         </TextBox>

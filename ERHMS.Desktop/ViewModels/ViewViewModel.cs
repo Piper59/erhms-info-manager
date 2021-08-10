@@ -29,7 +29,6 @@ namespace ERHMS.Desktop.ViewModels
         {
             View = view;
             GoToHomeCommand = new SyncCommand(GoToHome);
-            GoToHelpCommand = Command.Null;
             GoToProjectCommand = new AsyncCommand(GoToProjectAsync);
             OpenProjectLocationCommand = new SyncCommand(OpenProjectLocation);
         }

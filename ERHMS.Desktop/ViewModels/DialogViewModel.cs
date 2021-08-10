@@ -1,9 +1,7 @@
 ﻿using ERHMS.Common.ComponentModel;
-using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using System.Drawing;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -27,8 +25,6 @@ namespace ERHMS.Desktop.ViewModels
             set { SetProperty(ref expanded, value); }
         }
 
-        public ICommand ToggleCommand { get; }
-
         public DialogViewModel(
             DialogSeverity severity,
             string lead,
@@ -49,12 +45,6 @@ namespace ERHMS.Desktop.ViewModels
             Body = body;
             Details = details;
             Buttons = buttons;
-            ToggleCommand = new SyncCommand(Toggle);
-        }
-
-        public void Toggle()
-        {
-            Expanded = !Expanded;
         }
     }
 }

@@ -54,29 +54,11 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Top"
-                            Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}">
-                    <Controls:IconButton x:Name="ToggleButton"
-                                         AltText="{Markup:String AltText.Details}"
-                                         Command="{Binding ToggleCommand}"
-                                         FontSize="{StaticResource SmallFontSize}">
-                        <Controls:IconButton.Style>
-                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource RoundedIconButton}">
-                                <Setter Property="Content" Value="{Markup:Icon Expand}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Expanded}" Value="True">
-                                        <Setter Property="Content" Value="{Markup:Icon Collapse}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Controls:IconButton.Style>
-                    </Controls:IconButton>
-                    <Label Content="{Markup:String AccessText.Details}"
-                           FontSize="{StaticResource SmallFontSize}"
-                           Target="{x:Reference ToggleButton}" />
-                </StackPanel>
+                <Controls:ToggleButton AccessText="{Markup:String AccessText.Details}"
+                                       AltText="{Markup:String AltText.Details}"
+                                       Expanded="{Binding Expanded}"
+                                       FontSize="{StaticResource SmallFontSize}"
+                                       Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}" />
                 <ItemsControl Grid.Column="1"
                               IsTabStop="False"
                               ItemsSource="{Binding Buttons}">

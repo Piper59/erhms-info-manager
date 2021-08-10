@@ -33,7 +33,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 set { SetProperty(ref expanded, value); }
             }
 
-            public ICommand ToggleCommand { get; }
             public ICommand CreateStandardCommand { get; }
             public ICommand CreateBlankCommand { get; }
             public ICommand CreateFromTemplateCommand { get; }
@@ -42,16 +41,10 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public SetStrategyViewModel(CreateProjectViewModel wizard)
                 : base(wizard)
             {
-                ToggleCommand = new SyncCommand(Toggle);
                 CreateStandardCommand = new SyncCommand(CreateStandard);
                 CreateBlankCommand = new SyncCommand(CreateBlank);
                 CreateFromTemplateCommand = new SyncCommand(CreateFromTemplate);
                 CreateFromExistingCommand = new SyncCommand(CreateFromExisting);
-            }
-
-            public void Toggle()
-            {
-                Expanded = !Expanded;
             }
 
             public void CreateStandard()

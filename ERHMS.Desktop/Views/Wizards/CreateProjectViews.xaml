@@ -12,16 +12,10 @@
             <Button AutomationProperties.HelpText="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
                     Command="{Binding CreateStandardCommand}"
                     Content="{Markup:String CreateProject.AccessText.Standard}" />
-            <StackPanel Orientation="Horizontal"
-                        Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityInverter}}">
-                <Controls:IconButton x:Name="ToggleButton"
-                                     AltText="{Markup:String AltText.ShowOtherOptions}"
-                                     Command="{Binding ToggleCommand}"
-                                     Content="{Markup:Icon Expand}"
-                                     Style="{StaticResource RoundedIconButton}" />
-                <Label Content="{Markup:String AccessText.ShowOtherOptions}"
-                       Target="{x:Reference ToggleButton}" />
-            </StackPanel>
+            <Controls:ToggleButton AccessText="{Markup:String AccessText.ShowOtherOptions}"
+                                   AltText="{Markup:String AltText.ShowOtherOptions}"
+                                   Expanded="{Binding Expanded}"
+                                   Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityInverter}}" />
             <StackPanel Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.Blank}"
                         Command="{Binding CreateBlankCommand}"

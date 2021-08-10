@@ -261,6 +261,9 @@
   <data name="AccessText.Restore" xml:space="preserve">
     <value>_Restore</value>
   </data>
+  <data name="AccessText.SearchLabel" xml:space="preserve">
+    <value>_Search:</value>
+  </data>
   <data name="AccessText.See" xml:space="preserve">
     <value>_View</value>
   </data>

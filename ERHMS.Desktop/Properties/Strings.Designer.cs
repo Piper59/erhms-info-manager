@@ -493,6 +493,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Search:.
+        /// </summary>
+        public static string AccessText_SearchLabel {
+            get {
+                return ResourceManager.GetString("AccessText.SearchLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _View.
         /// </summary>
         public static string AccessText_See {
