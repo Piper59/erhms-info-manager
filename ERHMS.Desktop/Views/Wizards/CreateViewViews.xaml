@@ -102,7 +102,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBox Grid.Column="0"
                          IsReadOnly="True"
-                         Text="{Binding Views.Project.Name, Mode=OneWay}"
+                         Text="{Binding Views.Project.FilePath, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}"
                          ToolTip="{Binding Views.Project.FilePath}" />
                 <Button Grid.Column="1"
                         Command="{Binding BrowseCommand}"
