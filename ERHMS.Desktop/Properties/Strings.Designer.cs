@@ -835,29 +835,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ERHMS Info Manager.
-        /// </summary>
-        public static string AppTitle {
-            get {
-                return ResourceManager.GetString("AppTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to SQL Server Authentication.
         /// </summary>
-        public static string AuthenticationMode_Name_SqlServer {
+        public static string AuthenticationMode_Value_SqlServer {
             get {
-                return ResourceManager.GetString("AuthenticationMode.Name.SqlServer", resourceCulture);
+                return ResourceManager.GetString("AuthenticationMode.Value.SqlServer", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Windows Authentication.
         /// </summary>
-        public static string AuthenticationMode_Name_Windows {
+        public static string AuthenticationMode_Value_Windows {
             get {
-                return ResourceManager.GetString("AuthenticationMode.Name.Windows", resourceCulture);
+                return ResourceManager.GetString("AuthenticationMode.Value.Windows", resourceCulture);
             }
         }
         
@@ -1024,18 +1015,18 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        public static string Boolean_Name_False {
+        public static string Boolean_Value_False {
             get {
-                return ResourceManager.GetString("Boolean.Name.False", resourceCulture);
+                return ResourceManager.GetString("Boolean.Value.False", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        public static string Boolean_Name_True {
+        public static string Boolean_Value_True {
             get {
-                return ResourceManager.GetString("Boolean.Name.True", resourceCulture);
+                return ResourceManager.GetString("Boolean.Value.True", resourceCulture);
             }
         }
         
@@ -1072,24 +1063,6 @@ namespace ERHMS.Desktop.Properties {
         public static string CoreProject_Label_Worker {
             get {
                 return ResourceManager.GetString("CoreProject.Label.Worker", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Incident project.
-        /// </summary>
-        public static string CoreProject_Name_Incident {
-            get {
-                return ResourceManager.GetString("CoreProject.Name.Incident", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Worker project.
-        /// </summary>
-        public static string CoreProject_Name_Worker {
-            get {
-                return ResourceManager.GetString("CoreProject.Name.Worker", resourceCulture);
             }
         }
         
@@ -1564,18 +1537,18 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Microsoft Access.
         /// </summary>
-        public static string DatabaseProvider_Name_Access2003 {
+        public static string DatabaseProvider_Value_Access2003 {
             get {
-                return ResourceManager.GetString("DatabaseProvider.Name.Access2003", resourceCulture);
+                return ResourceManager.GetString("DatabaseProvider.Value.Access2003", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Microsoft SQL Server.
         /// </summary>
-        public static string DatabaseProvider_Name_SqlServer {
+        public static string DatabaseProvider_Value_SqlServer {
             get {
-                return ResourceManager.GetString("DatabaseProvider.Name.SqlServer", resourceCulture);
+                return ResourceManager.GetString("DatabaseProvider.Value.SqlServer", resourceCulture);
             }
         }
         
@@ -2500,27 +2473,27 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Deployment.
         /// </summary>
-        public static string Phase_Name_Deployment {
+        public static string Phase_Heading_Deployment {
             get {
-                return ResourceManager.GetString("Phase.Name.Deployment", resourceCulture);
+                return ResourceManager.GetString("Phase.Heading.Deployment", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Post-deployment.
         /// </summary>
-        public static string Phase_Name_PostDeployment {
+        public static string Phase_Heading_PostDeployment {
             get {
-                return ResourceManager.GetString("Phase.Name.PostDeployment", resourceCulture);
+                return ResourceManager.GetString("Phase.Heading.PostDeployment", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Pre-deployment.
         /// </summary>
-        public static string Phase_Name_PreDeployment {
+        public static string Phase_Heading_PreDeployment {
             get {
-                return ResourceManager.GetString("Phase.Name.PreDeployment", resourceCulture);
+                return ResourceManager.GetString("Phase.Heading.PreDeployment", resourceCulture);
             }
         }
         
@@ -2572,27 +2545,36 @@ namespace ERHMS.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Deleted.
         /// </summary>
-        public static string RecordStatus_Name_Deleted {
+        public static string RecordStatus_Value_Deleted {
             get {
-                return ResourceManager.GetString("RecordStatus.Name.Deleted", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Value.Deleted", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
-        public static string RecordStatus_Name_NULL {
+        public static string RecordStatus_Value_NULL {
             get {
-                return ResourceManager.GetString("RecordStatus.Name.NULL", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Value.NULL", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Undeleted.
         /// </summary>
-        public static string RecordStatus_Name_Undeleted {
+        public static string RecordStatus_Value_Undeleted {
             get {
-                return ResourceManager.GetString("RecordStatus.Name.Undeleted", resourceCulture);
+                return ResourceManager.GetString("RecordStatus.Value.Undeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERHMS Info Manager.
+        /// </summary>
+        public static string Title_App {
+            get {
+                return ResourceManager.GetString("Title.App", resourceCulture);
             }
         }
         

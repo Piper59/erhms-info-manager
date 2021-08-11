@@ -375,13 +375,10 @@
   <data name="AltText.UpToProject" xml:space="preserve">
     <value>Up to project</value>
   </data>
-  <data name="AppTitle" xml:space="preserve">
-    <value>ERHMS Info Manager</value>
-  </data>
-  <data name="AuthenticationMode.Name.SqlServer" xml:space="preserve">
+  <data name="AuthenticationMode.Value.SqlServer" xml:space="preserve">
     <value>SQL Server Authentication</value>
   </data>
-  <data name="AuthenticationMode.Name.Windows" xml:space="preserve">
+  <data name="AuthenticationMode.Value.Windows" xml:space="preserve">
     <value>Windows Authentication</value>
   </data>
   <data name="Body.ConfirmAssetDeletion" xml:space="preserve">
@@ -448,10 +445,10 @@ Close anyway?</value>
 
 {0}</value>
   </data>
-  <data name="Boolean.Name.False" xml:space="preserve">
+  <data name="Boolean.Value.False" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="Boolean.Name.True" xml:space="preserve">
+  <data name="Boolean.Value.True" xml:space="preserve">
     <value>Yes</value>
   </data>
   <data name="CoreProject.AccessText.Incident" xml:space="preserve">
@@ -465,12 +462,6 @@ Close anyway?</value>
   </data>
   <data name="CoreProject.Label.Worker" xml:space="preserve">
     <value>Worker project:</value>
-  </data>
-  <data name="CoreProject.Name.Incident" xml:space="preserve">
-    <value>Incident project</value>
-  </data>
-  <data name="CoreProject.Name.Worker" xml:space="preserve">
-    <value>Worker project</value>
   </data>
   <data name="CoreReport.AccessText.Incident" xml:space="preserve">
     <value>_Incident report</value>
@@ -628,10 +619,10 @@ Close anyway?</value>
   <data name="CreateView.Lead.SetXTemplate" xml:space="preserve">
     <value>Choose a template</value>
   </data>
-  <data name="DatabaseProvider.Name.Access2003" xml:space="preserve">
+  <data name="DatabaseProvider.Value.Access2003" xml:space="preserve">
     <value>Microsoft Access</value>
   </data>
-  <data name="DatabaseProvider.Name.SqlServer" xml:space="preserve">
+  <data name="DatabaseProvider.Value.SqlServer" xml:space="preserve">
     <value>Microsoft SQL Server</value>
   </data>
   <data name="ExportRecords.Lead.Close" xml:space="preserve">
@@ -940,13 +931,13 @@ Close anyway?</value>
   <data name="Pager" xml:space="preserve">
     <value>Page {0} of {1}</value>
   </data>
-  <data name="Phase.Name.Deployment" xml:space="preserve">
+  <data name="Phase.Heading.Deployment" xml:space="preserve">
     <value>Deployment</value>
   </data>
-  <data name="Phase.Name.PostDeployment" xml:space="preserve">
+  <data name="Phase.Heading.PostDeployment" xml:space="preserve">
     <value>Post-deployment</value>
   </data>
-  <data name="Phase.Name.PreDeployment" xml:space="preserve">
+  <data name="Phase.Heading.PreDeployment" xml:space="preserve">
     <value>Pre-deployment</value>
   </data>
   <data name="Placeholder.Empty" xml:space="preserve">
@@ -964,14 +955,17 @@ Close anyway?</value>
   <data name="ProjectInfo.Recents.Empty" xml:space="preserve">
     <value>No projects found</value>
   </data>
-  <data name="RecordStatus.Name.Deleted" xml:space="preserve">
+  <data name="RecordStatus.Value.Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
-  <data name="RecordStatus.Name.NULL" xml:space="preserve">
+  <data name="RecordStatus.Value.NULL" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="RecordStatus.Name.Undeleted" xml:space="preserve">
+  <data name="RecordStatus.Value.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
+  </data>
+  <data name="Title.App" xml:space="preserve">
+    <value>ERHMS Info Manager</value>
   </data>
   <data name="Watermark" xml:space="preserve">
     <value>No items found</value>

@@ -23,7 +23,7 @@
                         </LinearGradientBrush>
                     </Border.Background>
                     <TextBlock Style="{StaticResource Heading}"
-                               Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.Name.{0}'}" />
+                               Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Phase.Heading.{0}'}" />
                 </Border>
                 <ContentPresenter Content="{Binding Projects}" />
                 <ItemsControl IsTabStop="False"
@@ -210,7 +210,7 @@
                     </Image>
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
-                               Text="{Markup:String AppTitle}"
+                               Text="{Markup:String Title.App}"
                                VerticalAlignment="Center" />
                 </Grid>
                 <ItemsControl Grid.IsSharedSizeScope="True"

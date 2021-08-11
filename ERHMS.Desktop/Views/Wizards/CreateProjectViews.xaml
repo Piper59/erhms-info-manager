@@ -86,7 +86,7 @@
                 <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.DatabaseProvider}"
                                         Grid.Column="1"
                                         Grid.Row="3"
-                                        Binding="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Name.{0}'}"
+                                        Binding="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Value.{0}'}"
                                         ItemsSource="{Binding DatabaseProviders}" />
             </Grid>
             <GroupBox DataContext="{Binding ConnectionInfo}"

@@ -35,7 +35,7 @@ namespace ERHMS.Desktop.Utilities
                 Log.Instance.Error(exception);
                 MessageBox.Show(
                     string.Format(Strings.Body_UtilityError, exception.Message),
-                    Strings.AppTitle,
+                    Strings.Title_App,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }

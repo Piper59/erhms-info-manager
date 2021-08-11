@@ -9,7 +9,7 @@
         MinWidth="320"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        Title="{Markup:String AppTitle}"
+        Title="{Markup:String Title.App}"
         UseLayoutRounding="True">
     <StackPanel>
         <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"

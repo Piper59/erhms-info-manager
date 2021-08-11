@@ -26,7 +26,7 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type System:Boolean}">
             <TextBlock Style="{StaticResource Body}"
-                       Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.Name.{0}'}" />
+                       Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Boolean.Value.{0}'}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type System:Int32}">
             <TextBlock Style="{StaticResource Body}"
@@ -67,7 +67,7 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type ERHMS_Data:DatabaseProvider}">
             <TextBlock Style="{StaticResource Body}"
-                       Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Name.{0}'}" />
+                       Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Value.{0}'}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+MappingCollection}">
             <DataTemplate.Resources>

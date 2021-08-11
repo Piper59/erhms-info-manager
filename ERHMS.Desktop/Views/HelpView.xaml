@@ -7,7 +7,7 @@
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
-        Title="{Markup:String AppTitle}"
+        Title="{Markup:String Title.App}"
         UseLayoutRounding="True"
         Width="1024">
     <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"

@@ -30,7 +30,7 @@ namespace ERHMS.Desktop.Utilities
             Settings.Default.Reset();
             if (Verbose)
             {
-                MessageBox.Show(Strings.Body_SettingsReset, Strings.AppTitle);
+                MessageBox.Show(Strings.Body_SettingsReset, Strings.Title_App);
             }
             return Task.FromResult((string)null);
         }

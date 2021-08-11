@@ -40,7 +40,7 @@
         <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.AuthenticationMode}"
                                 Grid.Column="1"
                                 Grid.Row="3"
-                                Binding="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AuthenticationMode.Name.{0}'}"
+                                Binding="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AuthenticationMode.Value.{0}'}"
                                 ItemsSource="{Binding AuthenticationModes}" />
         <Label Grid.Column="0"
                Grid.Row="4"
