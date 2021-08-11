@@ -210,6 +210,9 @@
   <data name="AccessText.GoToHelp" xml:space="preserve">
     <value>V_iew help</value>
   </data>
+  <data name="AccessText.GoToStart" xml:space="preserve">
+    <value>V_iew quick start</value>
+  </data>
   <data name="AccessText.Help" xml:space="preserve">
     <value>_Help</value>
   </data>

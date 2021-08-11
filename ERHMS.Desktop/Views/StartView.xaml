@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="ERHMS.Desktop.Views.StartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+             xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+             Background="{x:Static SystemColors.WindowBrush}"
+             BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
+             BorderThickness="1"
+             Width="320">
+    <ScrollViewer>
+        <Border Style="{StaticResource FluidLayout}">
+            <StackPanel Style="{StaticResource Container}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Style="{StaticResource Heading}">
+                        Quick start
+                    </TextBlock>
+                    <Controls:IconButton Grid.Column="1"
+                                         AltText="Close"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Content="{Markup:Icon Close}"
+                                         FontSize="{StaticResource DefaultFontSize}"
+                                         VerticalAlignment="Center">
+                        <Controls:IconButton.Margin>
+                            <Thickness Left="{StaticResource LargeSpace}" />
+                        </Controls:IconButton.Margin>
+                    </Controls:IconButton>
+                </Grid>
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
+                            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+                            <Setter Property="ToolTip" Value="{x:Null}" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <StackPanel Style="{StaticResource Section}">
+                        <TextBlock Style="{StaticResource Lead}">Initial setup</TextBlock>
+                        <Button>Set up the worker project</Button>
+                        <Button>Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization</Button>
+                        <Button>Explore and use other worker forms</Button>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource Section}">
+                        <TextBlock Style="{StaticResource Lead}">When an incident occurs</TextBlock>
+                        <Button>Set up the incident project</Button>
+                        <Button>Use the Worker Deployment Record to collect basic accountability information for each worker deployed to the incident</Button>
+                        <Button>Explore and use other incident forms</Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

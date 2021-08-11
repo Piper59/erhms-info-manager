@@ -260,6 +260,9 @@
     <Compile Include="Views\Shared\ConnectionInfoView.xaml.cs">
       <DependentUpon>ConnectionInfoView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\StartView.xaml.cs">
+      <DependentUpon>StartView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Utilities\GetWorkerIdView.xaml.cs">
       <DependentUpon>GetWorkerIdView.xaml</DependentUpon>
     </Compile>
@@ -386,6 +389,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Shared\ConnectionInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -340,6 +340,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to V_iew quick start.
+        /// </summary>
+        public static string AccessText_GoToStart {
+            get {
+                return ResourceManager.GetString("AccessText.GoToStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Help.
         /// </summary>
         public static string AccessText_Help {

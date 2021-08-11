@@ -3,6 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+        xmlns:Views="clr-namespace:ERHMS.Desktop.Views"
         xmlns:ERHMS_Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
@@ -78,11 +79,17 @@
             <MenuItem Header="{Markup:String AccessText.Help}">
                 <MenuItem Command="{Binding GoToHelpCommand}"
                           Header="{Markup:String AccessText.GoToHelp}" />
+                <MenuItem Command="{Binding GoToStartCommand}"
+                          Header="{Markup:String AccessText.GoToStart}" />
                 <Separator />
                 <MenuItem Header="{Markup:String AccessText.AboutApp}" />
             </MenuItem>
         </Menu>
-        <ContentPresenter Grid.Row="1"
-                          Content="{Binding Content}" />
+        <Grid Grid.Row="1">
+            <ContentPresenter Content="{Binding Content}" />
+            <Views:StartView HorizontalAlignment="Right"
+                             Margin="{StaticResource HugeThickness}"
+                             VerticalAlignment="Bottom" />
+        </Grid>
     </Grid>
 </Window>

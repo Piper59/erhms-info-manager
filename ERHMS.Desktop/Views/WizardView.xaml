@@ -35,7 +35,7 @@
         <Border Grid.Row="0"
                 BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer>
                 <Border Style="{StaticResource FluidLayout}">
                     <StackPanel Style="{StaticResource Container}">
                         <TextBlock Style="{StaticResource Lead}"

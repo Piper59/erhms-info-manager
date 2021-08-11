@@ -28,7 +28,7 @@
     <Style x:Key="Section" TargetType="Panel">
         <Setter Property="Margin">
             <Setter.Value>
-                <Thickness Bottom="{StaticResource HugeSpace}" />
+                <Thickness Top="{StaticResource HugeSpace}" />
             </Setter.Value>
         </Setter>
     </Style>
@@ -93,6 +93,18 @@
     </Style>
 
     <Style x:Key="WorkflowButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
+        <Style.Resources>
+            <Style TargetType="ContentPresenter">
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+        </Style.Resources>
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="{StaticResource LargeThickness}" />
         <Setter Property="ToolTip">

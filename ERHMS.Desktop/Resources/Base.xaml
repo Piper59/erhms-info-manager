@@ -185,6 +185,11 @@
     </Style>
     <Style TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarBase}" />
 
+    <Style x:Key="ScrollViewerBase" TargetType="ScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    </Style>
+    <Style TargetType="ScrollViewer" BasedOn="{StaticResource ScrollViewerBase}" />
+
     <Style x:Key="TabControlBase" TargetType="TabControl">
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="Padding" Value="0" />
