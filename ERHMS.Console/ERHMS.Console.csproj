@@ -68,9 +68,17 @@
       <Project>{f0080890-84e8-48f2-8b0e-2cece4706cb2}</Project>
       <Name>ERHMS.Desktop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Domain\ERHMS.Domain.csproj">
+      <Project>{181048FB-DAE4-4875-9A58-461F81C4131A}</Project>
+      <Name>ERHMS.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ERHMS.EpiInfo\ERHMS.EpiInfo.csproj">
       <Project>{7a651824-b969-478f-9609-c4d2cbddace2}</Project>
       <Name>ERHMS.EpiInfo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ERHMS.Resources\ERHMS.Resources.csproj">
+      <Project>{A7F8931B-DBE9-41E8-8D9F-86E7635C83C3}</Project>
+      <Name>ERHMS.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +88,7 @@
     <Compile Include="Utilities\CanonizeTemplate.cs" />
     <Compile Include="Utilities\CreateAsset.cs" />
     <Compile Include="Utilities\CreateCanvas.cs" />
+    <Compile Include="Utilities\CreateCoreViews.cs" />
     <Compile Include="Utilities\CreateDatabase.cs" />
     <Compile Include="Utilities\CreateMap.cs" />
     <Compile Include="Utilities\CreatePage.cs" />
