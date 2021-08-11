@@ -72,11 +72,13 @@ namespace ERHMS.Desktop.ViewModels
 
             public async Task CreateAsync()
             {
+                // TODO: Stay in home view
                 await MainViewModel.Instance.CreateProjectAsync(Value);
             }
 
             public async Task OpenAsync()
             {
+                // TODO: Stay in home view
                 await MainViewModel.Instance.OpenProjectAsync(Value);
             }
 
@@ -138,6 +140,7 @@ namespace ERHMS.Desktop.ViewModels
 
             public async Task MakeCurrentAsync(ProjectInfo projectInfo)
             {
+                // TODO: Stay in home view
                 Settings.Default.IncidentProjectPath = projectInfo.FilePath;
                 Settings.Default.Save();
                 Initialize();
@@ -149,6 +152,7 @@ namespace ERHMS.Desktop.ViewModels
 
             public void RemoveRecent(ProjectInfo projectInfo)
             {
+                // TODO: Confirm
                 Settings.Default.IncidentProjectPaths.Remove(projectInfo.FilePath);
                 Settings.Default.Save();
                 Initialize();

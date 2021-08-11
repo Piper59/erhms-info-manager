@@ -77,6 +77,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void GoToHelp()
         {
+            // TODO: Implement
             throw new NotImplementedException();
         }
 
