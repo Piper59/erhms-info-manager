@@ -1,0 +1,105 @@
+﻿<Window x:Class="ERHMS.Desktop.Views.HelpView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
+        xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
+        Height="768"
+        Icon="/Resources/ERHMS.ico"
+        MinHeight="480"
+        MinWidth="640"
+        Title="{Markup:String AppTitle}"
+        UseLayoutRounding="True"
+        Width="1024">
+    <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
+            BorderThickness="0,1,0,0">
+        <Grid MaxWidth="{StaticResource LargeLayoutWidth}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.Column="0">
+                <Border Background="{x:Static SystemColors.ControlBrush}"
+                        Style="{StaticResource FluidLayout}">
+                    <StackPanel Style="{StaticResource Container}">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource Body}" />
+                        </StackPanel.Resources>
+                        <TextBlock>
+                            <Hyperlink>Introduction</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Phases</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Projects</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Forms</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Records</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Dashboards</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Analyses</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Maps</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink>Security</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+            <FlowDocumentScrollViewer Grid.Column="1">
+                <FlowDocumentScrollViewer.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="/Resources/Documents.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </FlowDocumentScrollViewer.Resources>
+                <FlowDocument>
+                    <Paragraph Style="{StaticResource Title}">
+                        Introduction
+                    </Paragraph>
+                    <Paragraph>
+                        ERHMS Info Manager provides data collection and analysis tools designed to help emergency response organizations implement the Emergency Responder Health Monitoring and Surveillance (ERHMS) framework.
+                        To accomplish this, ERHMS Info Manager leverages the capabilities of the Epi Info software suite.
+                    </Paragraph>
+                    <Paragraph Style="{StaticResource Heading}">
+                        What is ERHMS?
+                    </Paragraph>
+                    <Paragraph>
+                        ERHMS is a health monitoring and surveillance framework that provides recommendations and tools for protecting workers throughout the three phases of an emergency response: pre-deployment, deployment, and post-deployment.
+                    </Paragraph>
+                    <Paragraph Style="{StaticResource Heading}">
+                        What is Epi Info?
+                    </Paragraph>
+                    <Paragraph>
+                        Epi Info is a public-domain suite of interoperable software tools designed for the global community of public health practitioners and researchers.
+                        It allows users to create data entry forms; collect data in desktop, mobile, and web environments; and analyze data using statistics, charts, and maps.
+                    </Paragraph>
+                    <Paragraph Style="{StaticResource Heading}">
+                        Learn more
+                    </Paragraph>
+                    <List>
+                        <ListItem>
+                            <Paragraph>
+                                <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/niosh/erhms/">ERHMS</Controls:WebHyperlink>
+                            </Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>
+                                <Controls:WebHyperlink NavigateUri="https://www.cdc.gov/epiinfo/">Epi Info</Controls:WebHyperlink>
+                            </Paragraph>
+                        </ListItem>
+                    </List>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
+        </Grid>
+    </Border>
+</Window>
