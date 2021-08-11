@@ -71,7 +71,6 @@
                         Grid.Column="1"
                         Content="{Markup:Icon Expand}"
                         FontFamily="{StaticResource IconFontFamily}"
-                        FontSize="{StaticResource MediumFontSize}"
                         Padding="{StaticResource LargeThickness}">
                     <Button.ContextMenu>
                         <ContextMenu>
