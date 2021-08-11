@@ -114,7 +114,7 @@ namespace ERHMS.Desktop.ViewModels
             public IncidentProjectCollectionViewModel()
             {
                 Initialize();
-                MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent, IsNotEmpty);
+                MakeCurrentCommand = new AsyncCommand<ProjectInfo>(MakeCurrentAsync, IsNotEmpty);
                 RemoveRecentCommand = new SyncCommand<ProjectInfo>(RemoveRecent, IsNotEmpty);
             }
 
@@ -136,11 +136,15 @@ namespace ERHMS.Desktop.ViewModels
                 return projectInfo != EmptyProjectInfo.Instance;
             }
 
-            public void MakeCurrent(ProjectInfo projectInfo)
+            public async Task MakeCurrentAsync(ProjectInfo projectInfo)
             {
                 Settings.Default.IncidentProjectPath = projectInfo.FilePath;
                 Settings.Default.Save();
                 Initialize();
+                await MainViewModel.Instance.GoToProjectAsync(() => Task.Run(() =>
+                {
+                    return ProjectExtensions.Open(projectInfo.FilePath);
+                }));
             }
 
             public void RemoveRecent(ProjectInfo projectInfo)
