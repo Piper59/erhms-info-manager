@@ -16,9 +16,8 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Style="{StaticResource Heading}">
-                        Quick start
-                    </TextBlock>
+                               Style="{StaticResource Heading}"
+                               Text="{Markup:String Heading.Start}" />
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center">
@@ -42,16 +41,18 @@
                         </Style>
                     </StackPanel.Resources>
                     <StackPanel Style="{StaticResource Section}">
-                        <TextBlock Style="{StaticResource Lead}">Initial setup</TextBlock>
-                        <Button>Set up the worker project</Button>
-                        <Button>Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization</Button>
-                        <Button>Explore and use other worker forms</Button>
+                        <TextBlock Style="{StaticResource Lead}"
+                                   Text="{Markup:String Lead.Start.Worker}" />
+                        <Button Content="{Markup:String AccessText.SetUpProject.Worker}" />
+                        <Button Content="{Markup:String AccessText.UseView.WorkerRosteringForm}" />
+                        <Button Content="{Markup:String AccessText.ExploreViews.Worker}" />
                     </StackPanel>
                     <StackPanel Style="{StaticResource Section}">
-                        <TextBlock Style="{StaticResource Lead}">When an incident occurs</TextBlock>
-                        <Button>Set up the incident project</Button>
-                        <Button>Use the Worker Deployment Record to collect basic accountability information for each worker deployed to the incident</Button>
-                        <Button>Explore and use other incident forms</Button>
+                        <TextBlock Style="{StaticResource Lead}"
+                                   Text="{Markup:String Lead.Start.Incident}" />
+                        <Button Content="{Markup:String AccessText.SetUpProject.Incident}" />
+                        <Button Content="{Markup:String AccessText.UseView.WorkerDeploymentRecord}" />
+                        <Button Content="{Markup:String AccessText.ExploreViews.Incident}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

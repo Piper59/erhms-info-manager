@@ -183,6 +183,12 @@
   <data name="AccessText.Exit" xml:space="preserve">
     <value>E_xit</value>
   </data>
+  <data name="AccessText.ExploreViews.Incident" xml:space="preserve">
+    <value>_Explore and use other incident forms</value>
+  </data>
+  <data name="AccessText.ExploreViews.Worker" xml:space="preserve">
+    <value>_Explore and use other worker forms</value>
+  </data>
   <data name="AccessText.Export" xml:space="preserve">
     <value>_Export</value>
   </data>
@@ -276,6 +282,12 @@
   <data name="AccessText.SeeCurrent" xml:space="preserve">
     <value>View _current</value>
   </data>
+  <data name="AccessText.SetUpProject.Incident" xml:space="preserve">
+    <value>_Set up an incident project</value>
+  </data>
+  <data name="AccessText.SetUpProject.Worker" xml:space="preserve">
+    <value>_Set up the worker project</value>
+  </data>
   <data name="AccessText.ShowOtherOptions" xml:space="preserve">
     <value>Show _other options</value>
   </data>
@@ -287,6 +299,12 @@
   </data>
   <data name="AccessText.Tools" xml:space="preserve">
     <value>_Tools</value>
+  </data>
+  <data name="AccessText.UseView.WorkerDeploymentRecord" xml:space="preserve">
+    <value>Use the Worker Deployment Record to collect basic accountability information for each worker deployed to the incident</value>
+  </data>
+  <data name="AccessText.UseView.WorkerRosteringForm" xml:space="preserve">
+    <value>Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization</value>
   </data>
   <data name="AccessText.Views" xml:space="preserve">
     <value>F_orms</value>
@@ -664,6 +682,9 @@ Close anyway?</value>
   <data name="FileDialog.Title.Save" xml:space="preserve">
     <value>Save As</value>
   </data>
+  <data name="Heading.Start" xml:space="preserve">
+    <value>Quick start</value>
+  </data>
   <data name="HelpText.AddRecord" xml:space="preserve">
     <value>Add a new record in the Epi Info Enter Data module.</value>
   </data>
@@ -912,6 +933,12 @@ Close anyway?</value>
   </data>
   <data name="Lead.RefreshingViews" xml:space="preserve">
     <value>Refreshing forms</value>
+  </data>
+  <data name="Lead.Start.Incident" xml:space="preserve">
+    <value>When an incident occurs</value>
+  </data>
+  <data name="Lead.Start.Worker" xml:space="preserve">
+    <value>On initial setup</value>
   </data>
   <data name="Lead.StartingEpiInfo" xml:space="preserve">
     <value>Starting Epi Info</value>

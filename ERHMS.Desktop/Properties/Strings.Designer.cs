@@ -259,6 +259,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Explore and use other incident forms.
+        /// </summary>
+        public static string AccessText_ExploreViews_Incident {
+            get {
+                return ResourceManager.GetString("AccessText.ExploreViews.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Explore and use other worker forms.
+        /// </summary>
+        public static string AccessText_ExploreViews_Worker {
+            get {
+                return ResourceManager.GetString("AccessText.ExploreViews.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Export.
         /// </summary>
         public static string AccessText_Export {
@@ -538,6 +556,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Set up an incident project.
+        /// </summary>
+        public static string AccessText_SetUpProject_Incident {
+            get {
+                return ResourceManager.GetString("AccessText.SetUpProject.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Set up the worker project.
+        /// </summary>
+        public static string AccessText_SetUpProject_Worker {
+            get {
+                return ResourceManager.GetString("AccessText.SetUpProject.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show _other options.
         /// </summary>
         public static string AccessText_ShowOtherOptions {
@@ -570,6 +606,24 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Tools {
             get {
                 return ResourceManager.GetString("AccessText.Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the Worker Deployment Record to collect basic accountability information for each worker deployed to the incident.
+        /// </summary>
+        public static string AccessText_UseView_WorkerDeploymentRecord {
+            get {
+                return ResourceManager.GetString("AccessText.UseView.WorkerDeploymentRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization.
+        /// </summary>
+        public static string AccessText_UseView_WorkerRosteringForm {
+            get {
+                return ResourceManager.GetString("AccessText.UseView.WorkerRosteringForm", resourceCulture);
             }
         }
         
@@ -1670,6 +1724,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quick start.
+        /// </summary>
+        public static string Heading_Start {
+            get {
+                return ResourceManager.GetString("Heading.Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a new record in the Epi Info Enter Data module..
         /// </summary>
         public static string HelpText_AddRecord {
@@ -2413,6 +2476,24 @@ namespace ERHMS.Desktop.Properties {
         public static string Lead_RefreshingViews {
             get {
                 return ResourceManager.GetString("Lead.RefreshingViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When an incident occurs.
+        /// </summary>
+        public static string Lead_Start_Incident {
+            get {
+                return ResourceManager.GetString("Lead.Start.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On initial setup.
+        /// </summary>
+        public static string Lead_Start_Worker {
+            get {
+                return ResourceManager.GetString("Lead.Start.Worker", resourceCulture);
             }
         }
         
