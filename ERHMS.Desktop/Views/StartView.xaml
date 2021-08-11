@@ -19,17 +19,20 @@
                                Style="{StaticResource Heading}">
                         Quick start
                     </TextBlock>
-                    <Controls:IconButton Grid.Column="1"
-                                         AltText="Close"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         Content="{Markup:Icon Close}"
-                                         FontSize="{StaticResource DefaultFontSize}"
-                                         VerticalAlignment="Center">
-                        <Controls:IconButton.Margin>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <StackPanel.Resources>
+                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}" />
+                        </StackPanel.Resources>
+                        <StackPanel.Margin>
                             <Thickness Left="{StaticResource LargeSpace}" />
-                        </Controls:IconButton.Margin>
-                    </Controls:IconButton>
+                        </StackPanel.Margin>
+                        <Controls:IconButton AltText="{Markup:String AltText.Help}"
+                                             Content="{Markup:Icon Help}" />
+                        <Controls:IconButton AltText="{Markup:String AltText.Close}"
+                                             Content="{Markup:Icon Close}" />
+                    </StackPanel>
                 </Grid>
                 <StackPanel>
                     <StackPanel.Resources>

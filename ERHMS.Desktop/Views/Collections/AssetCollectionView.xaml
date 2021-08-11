@@ -26,7 +26,7 @@
                                  Command="{Binding DeleteCommand}"
                                  Content="{Markup:Icon Delete}"
                                  HelpText="{Markup:String HelpText.DeleteAsset}" />
-            <Border Style="{StaticResource Separator}" />
+            <Border Style="{StaticResource IconButtonSeparator}" />
             <Controls:IconButton AccessKey="4"
                                  AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"

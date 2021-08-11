@@ -300,6 +300,9 @@
   <data name="AltText.ClearSearch" xml:space="preserve">
     <value>Clear search</value>
   </data>
+  <data name="AltText.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
   <data name="AltText.Collapse" xml:space="preserve">
     <value>Collapse</value>
   </data>

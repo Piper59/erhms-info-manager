@@ -85,6 +85,9 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0">
+                                            <StackPanel.Margin>
+                                                <Thickness Right="{StaticResource LargeSpace}" />
+                                            </StackPanel.Margin>
                                             <TextBlock FontWeight="{StaticResource ThickFontWeight}"
                                                        Text="{Binding Name}" />
                                             <TextBlock Text="{Binding FilePath}"
@@ -92,18 +95,12 @@
                                         </StackPanel>
                                         <Controls:IconButton Grid.Column="1"
                                                              AltText="{Markup:String AltText.RemoveFromList}"
-                                                             Background="Transparent"
-                                                             BorderThickness="0"
                                                              Command="{Binding DataContext.RemoveRecentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem, AncestorLevel=2}}"
                                                              CommandParameter="{Binding}"
                                                              Content="{Markup:Icon Close}"
-                                                             FontSize="{StaticResource SmallFontSize}"
                                                              VerticalAlignment="Center">
-                                            <Controls:IconButton.Margin>
-                                                <Thickness Left="{StaticResource LargeSpace}" />
-                                            </Controls:IconButton.Margin>
                                             <Controls:IconButton.Style>
-                                                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}">
+                                                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
                                                     <Setter Property="Visibility" Value="Hidden" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem}}" Value="True">

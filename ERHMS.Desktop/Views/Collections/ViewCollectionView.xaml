@@ -26,7 +26,7 @@
                                  Command="{Binding DeleteCommand}"
                                  Content="{Markup:Icon Delete}"
                                  HelpText="{Markup:String HelpText.DeleteView}" />
-            <Border Style="{StaticResource Separator}" />
+            <Border Style="{StaticResource IconButtonSeparator}" />
             <Controls:IconButton AccessKey="4"
                                  AltText="{Markup:String AltText.Design}"
                                  Command="{Binding DesignCommand}"
@@ -37,7 +37,7 @@
                                  Command="{Binding EnterCommand}"
                                  Content="{Markup:Icon Enter}"
                                  HelpText="{Markup:String HelpText.EnterView}" />
-            <Border Style="{StaticResource Separator}" />
+            <Border Style="{StaticResource IconButtonSeparator}" />
             <Controls:IconButton AccessKey="6"
                                  AltText="{Markup:String AltText.Refresh}"
                                  Command="{Binding RefreshCommand}"

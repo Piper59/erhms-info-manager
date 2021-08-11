@@ -71,7 +71,7 @@
                         <Behaviors:OpenContextMenuOnClick />
                     </b:Interaction.Behaviors>
                 </Controls:IconButton>
-                <Border Style="{StaticResource Separator}" />
+                <Border Style="{StaticResource IconButtonSeparator}" />
                 <Controls:IconButton AccessKey="4"
                                      AltText="{Markup:String AltText.Delete}"
                                      Command="{Binding DeleteCommand}"
@@ -82,7 +82,7 @@
                                      Command="{Binding UndeleteCommand}"
                                      Content="{Markup:Icon Undelete}"
                                      HelpText="{Markup:String HelpText.UndeleteRecords}" />
-                <Border Style="{StaticResource Separator}" />
+                <Border Style="{StaticResource IconButtonSeparator}" />
                 <Controls:IconButton AccessKey="6"
                                      AltText="{Markup:String AltText.Import}"
                                      Command="{Binding ImportCommand}"
@@ -93,7 +93,7 @@
                                      Command="{Binding ExportCommand}"
                                      Content="{Markup:Icon Export}"
                                      HelpText="{Markup:String HelpText.ExportRecords}" />
-                <Border Style="{StaticResource Separator}" />
+                <Border Style="{StaticResource IconButtonSeparator}" />
                 <Controls:IconButton AccessKey="8"
                                      AltText="{Markup:String AltText.Refresh}"
                                      Command="{Binding RefreshCommand}"
