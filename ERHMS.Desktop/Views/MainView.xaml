@@ -3,7 +3,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-        xmlns:Views="clr-namespace:ERHMS.Desktop.Views"
         xmlns:ERHMS_Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
@@ -87,9 +86,10 @@
         </Menu>
         <Grid Grid.Row="1">
             <ContentPresenter Content="{Binding Content}" />
-            <Views:StartView HorizontalAlignment="Right"
-                             Margin="{StaticResource HugeThickness}"
-                             VerticalAlignment="Bottom" />
+            <ContentPresenter Content="{Binding Start}"
+                              HorizontalAlignment="Right"
+                              Margin="{StaticResource HugeThickness}"
+                              VerticalAlignment="Bottom" />
         </Grid>
     </Grid>
 </Window>

@@ -37,8 +37,11 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
+        public StartViewModel Start { get; } = new StartViewModel();
+
         public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
+        public ICommand GoToStartCommand { get; }
         public ICommand GoToProjectCommand { get; }
         public ICommand GoToViewCommand { get; }
         public ICommand CreateProjectCommand { get; }
@@ -54,6 +57,7 @@ namespace ERHMS.Desktop.ViewModels
         {
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = new SyncCommand(GoToHelp);
+            GoToStartCommand = new SyncCommand(GoToStart);
             GoToProjectCommand = new AsyncCommand<CoreProject>(GoToProjectAsync);
             GoToViewCommand = new AsyncCommand<CoreView>(GoToViewAsync);
             CreateProjectCommand = new AsyncCommand<CoreProject>(CreateProjectAsync);
@@ -74,6 +78,12 @@ namespace ERHMS.Desktop.ViewModels
         public void GoToHelp()
         {
             throw new NotImplementedException();
+        }
+
+        public void GoToStart()
+        {
+            Start.Minimized = false;
+            Start.Closed = false;
         }
 
         public async Task GoToProjectAsync(Func<Task<Project>> action)

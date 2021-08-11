@@ -70,12 +70,15 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="Margin">
-            <Setter.Value>
-                <Thickness Top="{StaticResource SmallSpace}"
-                           Bottom="{StaticResource SmallSpace}" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <Style x:Key="ControlIconButtonGroup" TargetType="Panel">
+        <Style.Resources>
+            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}" />
+        </Style.Resources>
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
+        <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
     <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">

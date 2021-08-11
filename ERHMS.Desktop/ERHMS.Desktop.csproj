@@ -206,6 +206,7 @@
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\Shared\ConnectionInfoViewModel.cs" />
+    <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\Utilities\GetWorkerIdViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
     <Compile Include="ViewModels\Wizards\CreateAssetViewModel.cs" />

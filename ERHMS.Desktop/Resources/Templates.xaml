@@ -16,6 +16,10 @@
         <Views:ProjectView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type ViewModels:StartViewModel}">
+        <Views:StartView />
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type ViewModels:ViewViewModel}">
         <Views:ViewView />
     </DataTemplate>

@@ -259,7 +259,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Explore and use other incident forms.
+        ///   Looks up a localized string similar to _Explore other incident forms.
         /// </summary>
         public static string AccessText_ExploreViews_Incident {
             get {
@@ -268,7 +268,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Explore and use other worker forms.
+        ///   Looks up a localized string similar to _Explore other worker forms.
         /// </summary>
         public static string AccessText_ExploreViews_Worker {
             get {
@@ -808,6 +808,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string AltText_Minimize {
+            get {
+                return ResourceManager.GetString("AltText.Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next page.
         /// </summary>
         public static string AltText_NextPage {
@@ -858,6 +867,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AltText_RemoveFromList {
             get {
                 return ResourceManager.GetString("AltText.RemoveFromList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string AltText_Restore {
+            get {
+                return ResourceManager.GetString("AltText.Restore", resourceCulture);
             }
         }
         

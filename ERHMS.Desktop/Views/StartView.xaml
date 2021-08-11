@@ -6,7 +6,8 @@
              Background="{x:Static SystemColors.WindowBrush}"
              BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
              BorderThickness="1"
-             Width="320">
+             Width="320"
+             Visibility="{Binding Closed, Converter={StaticResource BooleanToVisibilityInverter}}">
     <ScrollViewer>
         <Border Style="{StaticResource FluidLayout}">
             <StackPanel Style="{StaticResource Container}">
@@ -20,20 +21,27 @@
                                Text="{Markup:String Heading.Start}" />
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
-                                VerticalAlignment="Center">
-                        <StackPanel.Resources>
-                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}" />
-                        </StackPanel.Resources>
-                        <StackPanel.Margin>
-                            <Thickness Left="{StaticResource LargeSpace}" />
-                        </StackPanel.Margin>
-                        <Controls:IconButton AltText="{Markup:String AltText.Help}"
-                                             Content="{Markup:Icon Help}" />
+                                Style="{StaticResource ControlIconButtonGroup}">
+                        <Controls:IconButton Command="{Binding ToggleCommand}">
+                            <Controls:IconButton.Style>
+                                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
+                                    <Setter Property="AltText" Value="{Binding Source='AltText.Minimize', Converter={StaticResource StringLocalizingConverter}}" />
+                                    <Setter Property="Content" Value="{Binding Source='Minimize', Converter={StaticResource IconNameToStringConverter}}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Minimized}" Value="True">
+                                            <Setter Property="AltText" Value="{Binding Source='AltText.Restore', Converter={StaticResource StringLocalizingConverter}}" />
+                                            <Setter Property="Content" Value="{Binding Source='Restore', Converter={StaticResource IconNameToStringConverter}}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Controls:IconButton.Style>
+                        </Controls:IconButton>
                         <Controls:IconButton AltText="{Markup:String AltText.Close}"
+                                             Command="{Binding CloseCommand}"
                                              Content="{Markup:Icon Close}" />
                     </StackPanel>
                 </Grid>
-                <StackPanel>
+                <StackPanel Visibility="{Binding Minimized, Converter={StaticResource BooleanToVisibilityInverter}}">
                     <StackPanel.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
                             <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
