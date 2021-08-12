@@ -70,6 +70,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             private set { SetProperty(ref fields, value); }
         }
 
+        public ICommand DesignCommand { get; }
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -84,6 +85,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.Filter = IsMatch;
             Items.PageSize = 100;
             Statuses.CurrentChanged += (sender, e) => Items.Refresh();
+            DesignCommand = new AsyncCommand(DesignAsync);
             AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, HasCurrent);
             DeleteCommand = new AsyncCommand(DeleteAsync, HasSelection);
@@ -141,6 +143,11 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Record record = (Record)item;
             return IsStatusMatch(record) && IsSearchMatch(record);
+        }
+
+        public async Task DesignAsync()
+        {
+            await Integration.StartAsync(Module.MakeView, $"/project:{Project.FilePath}", $"/view:{View.Name}");
         }
 
         public async Task AddAsync()

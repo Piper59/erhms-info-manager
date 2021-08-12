@@ -33,7 +33,7 @@
                                  AltText="{Markup:String AltText.Design}"
                                  Command="{Binding DesignCommand}"
                                  Content="{Markup:Icon Design}"
-                                 HelpText="{Markup:String HelpText.DesignView}" />
+                                 HelpText="{Markup:String HelpText.DesignSelectedView}" />
             <Controls:IconButton AccessKey="5"
                                  AltText="{Markup:String AltText.Enter}"
                                  Command="{Binding EnterCommand}"
