@@ -73,11 +73,11 @@
                     <MenuItem Command="{Binding OpenPathCommand}"
                               CommandParameter="{x:Static ERHMS_Common_Logging:FileAppender.Directory}"
                               Header="{Markup:String AccessText.SeeAll}" />
-                    <MenuItem Command="{Binding ExportLogDirectoryCommand}"
+                    <MenuItem Command="{Binding ExportLogsCommand}"
                               Header="{Markup:String AccessText.ExportAll}" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Command="{Binding StartEpiInfoMenuCommand}"
+                <MenuItem Command="{Binding StartEpiInfoCommand}"
                           Header="{Markup:String AccessText.EpiInfo}" />
                 <MenuItem Command="{Binding OpenPathCommand}"
                           CommandParameter="{Binding BaseDirectory, Source={x:Static System:AppDomain.CurrentDomain}}"

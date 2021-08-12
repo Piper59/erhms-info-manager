@@ -73,8 +73,7 @@
                         ContextMenuService.Placement="Bottom"
                         Grid.Column="1"
                         Content="{Markup:Icon Expand}"
-                        FontFamily="{StaticResource IconFontFamily}"
-                        Padding="{StaticResource LargeThickness}">
+                        FontFamily="{StaticResource IconFontFamily}">
                     <Button.ContextMenu>
                         <ContextMenu>
                             <ContextMenu.Resources>
