@@ -3,7 +3,7 @@
                     xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
-                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
+                    xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
@@ -51,7 +51,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+Blank+CommitViewModel}">
-        <Views:DetailsView ItemsSource="{Binding Details}" />
+        <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromTemplate+SetXTemplateViewModel}">
@@ -78,7 +78,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromTemplate+CommitViewModel}">
-        <Views:DetailsView ItemsSource="{Binding Details}" />
+        <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromExisting+SetSourceViewViewModel}">
@@ -120,6 +120,6 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModel+FromExisting+CommitViewModel}">
-        <Views:DetailsView ItemsSource="{Binding Details}" />
+        <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 </ResourceDictionary>

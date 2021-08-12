@@ -1,8 +1,8 @@
-﻿using ERHMS.Desktop.ViewModels;
+﻿using ERHMS.Desktop.ViewModels.Shared;
 using System;
 using System.Windows.Controls;
 
-namespace ERHMS.Desktop.Views
+namespace ERHMS.Desktop.Views.Shared
 {
     public partial class DetailsView : ItemsControl
     {

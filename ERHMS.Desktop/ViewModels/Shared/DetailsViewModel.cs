@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ERHMS.Desktop.ViewModels
+namespace ERHMS.Desktop.ViewModels.Shared
 {
     public class DetailsViewModel : List<KeyValuePair<string, object>>
     {

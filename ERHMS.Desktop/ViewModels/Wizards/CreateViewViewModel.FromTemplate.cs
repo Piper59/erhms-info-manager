@@ -3,6 +3,7 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Shared;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Naming;
 using ERHMS.EpiInfo.Templating;

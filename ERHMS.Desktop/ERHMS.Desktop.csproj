@@ -199,7 +199,6 @@
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\WorkerCollectionViewModel.cs" />
-    <Compile Include="ViewModels\DetailsViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
@@ -207,6 +206,7 @@
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\Shared\ConnectionInfoViewModel.cs" />
+    <Compile Include="ViewModels\Shared\DetailsViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="ViewModels\Utilities\GetWorkerIdViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
@@ -238,9 +238,6 @@
     <Compile Include="Views\Collections\WorkerCollectionView.xaml.cs">
       <DependentUpon>WorkerCollectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DetailsView.xaml.cs">
-      <DependentUpon>DetailsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
@@ -261,6 +258,9 @@
     </Compile>
     <Compile Include="Views\Shared\ConnectionInfoView.xaml.cs">
       <DependentUpon>ConnectionInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Shared\DetailsView.xaml.cs">
+      <DependentUpon>DetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StartView.xaml.cs">
       <DependentUpon>StartView.xaml</DependentUpon>
@@ -362,10 +362,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DetailsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\DialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -391,6 +387,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Shared\ConnectionInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Shared\DetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

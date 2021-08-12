@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
-                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
+                    xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+SetFormatViewModel}">
         <StackPanel>
             <StackPanel.Resources>
@@ -39,7 +39,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+CommitViewModel}">
-        <Views:DetailsView ItemsSource="{Binding Details}" />
+        <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+CloseViewModel}" />

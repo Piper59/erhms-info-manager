@@ -3,7 +3,7 @@
                     xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
-                    xmlns:Views="clr-namespace:ERHMS.Desktop.Views">
+                    xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+SetFormatViewModel}">
         <StackPanel>
             <StackPanel.Resources>
@@ -65,7 +65,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+CommitViewModel}">
-        <Views:DetailsView ItemsSource="{Binding Details}" />
+        <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+CloseViewModel}">
