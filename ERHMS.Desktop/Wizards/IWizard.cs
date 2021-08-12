@@ -10,9 +10,11 @@ namespace ERHMS.Desktop.Wizards
 
     public static class IWizardExtensions
     {
-        public static bool? Show(this IWizard @this)
+        public static bool? Run(this IWizard @this)
         {
-            return ServiceLocator.Resolve<IWizardService>().Show(@this);
+            IWindowService window = ServiceLocator.Resolve<IWindowService>();
+            window.ShowDialog(@this);
+            return @this.Result;
         }
     }
 }

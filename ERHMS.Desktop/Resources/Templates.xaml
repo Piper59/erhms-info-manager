@@ -1,9 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ERHMS_Common_Collections="clr-namespace:ERHMS.Common.Collections;assembly=ERHMS.Common"
                     xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
                     xmlns:ViewModels_Shared="clr-namespace:ERHMS.Desktop.ViewModels.Shared"
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
+    <ERHMS_Common_Collections:TypeMap x:Key="WindowTypeMap">
+        <x:Type x:Key="{x:Type ViewModels:HelpViewModel}" Type="Views:HelpView" />
+        <x:Type x:Key="{x:Type ViewModels:WizardViewModel}" Type="Views:WizardView" />
+    </ERHMS_Common_Collections:TypeMap>
+
     <DataTemplate DataType="{x:Type ViewModels_Shared:ConnectionInfoViewModel}">
         <Views_Shared:ConnectionInfoView />
     </DataTemplate>

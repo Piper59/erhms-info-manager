@@ -153,7 +153,7 @@
     <Compile Include="Infrastructure\Services\DirectoryDialogService.cs" />
     <Compile Include="Infrastructure\Services\FileDialogService.cs" />
     <Compile Include="Infrastructure\Services\ProgressService.cs" />
-    <Compile Include="Infrastructure\Services\WizardService.cs" />
+    <Compile Include="Infrastructure\Services\WindowService.cs" />
     <Compile Include="Infrastructure\StringExtensions.cs" />
     <Compile Include="Infrastructure\WindowDisabler.cs" />
     <Compile Include="Infrastructure\WindowExtensions.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="Services\IDirectoryDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IProgressService.cs" />
-    <Compile Include="Services\IWizardService.cs" />
+    <Compile Include="Services\IWindowService.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Utilities\GetWorkerId.cs" />
     <Compile Include="Utilities\IUtility.cs" />

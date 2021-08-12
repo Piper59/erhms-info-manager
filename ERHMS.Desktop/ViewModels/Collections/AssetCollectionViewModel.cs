@@ -76,7 +76,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             CreateAssetViewModel wizard = await progress.Run(GetCreateWizardAsync);
-            if (wizard.Show() != true)
+            if (wizard.Run() != true)
             {
                 return;
             }

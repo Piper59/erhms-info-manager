@@ -47,6 +47,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\TypeMap.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="ComponentModel\ObservableObject.cs" />
     <Compile Include="Compression\ZipFileExtensions.cs" />

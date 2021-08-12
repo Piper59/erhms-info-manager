@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-        Height="768"
+        Height="600"
         Icon="/Resources/ERHMS.ico"
         MinHeight="480"
         MinWidth="640"
         Title="{Markup:String Title.App}"
         UseLayoutRounding="True"
-        Width="1024">
+        Width="800">
     <Border BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
             BorderThickness="0,1,0,0">
         <Grid MaxWidth="{StaticResource LargeLayoutWidth}">

@@ -113,7 +113,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public async Task CreateAsync()
         {
             CreateViewViewModel wizard = new CreateViewViewModel(Project);
-            if (wizard.Show() != true)
+            if (wizard.Run() != true)
             {
                 return;
             }

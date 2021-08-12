@@ -203,7 +203,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await SynchronizeAsync();
             using (ImportRecordsViewModel wizard = new ImportRecordsViewModel(View))
             {
-                if (wizard.Show() != true)
+                if (wizard.Run() != true)
                 {
                     return;
                 }
@@ -215,7 +215,7 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             await SynchronizeAsync();
             ExportRecordsViewModel wizard = new ExportRecordsViewModel(View);
-            wizard.Show();
+            wizard.Run();
         }
 
         public async Task RefreshAsync()

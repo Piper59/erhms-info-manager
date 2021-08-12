@@ -37,6 +37,7 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
+        public HelpViewModel Help { get; } = new HelpViewModel();
         public StartViewModel Start { get; } = new StartViewModel();
 
         public ICommand GoToHomeCommand { get; }
@@ -77,8 +78,8 @@ namespace ERHMS.Desktop.ViewModels
 
         public void GoToHelp()
         {
-            // TODO: Implement
-            throw new NotImplementedException();
+            IWindowService window = ServiceLocator.Resolve<IWindowService>();
+            window.Show(Help);
         }
 
         public void GoToStart()
@@ -136,7 +137,7 @@ namespace ERHMS.Desktop.ViewModels
                 // TODO: Confirm
             }
             CreateProjectViewModel wizard = new CreateProjectViewModel(coreProject);
-            if (wizard.Show() != true)
+            if (wizard.Run() != true)
             {
                 return;
             }
