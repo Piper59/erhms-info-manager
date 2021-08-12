@@ -14,17 +14,13 @@ namespace ERHMS.Desktop
 {
     public partial class App : Application
     {
-        public new MainView MainWindow
-        {
-            get { return (MainView)base.MainWindow; }
-            set { base.MainWindow = value; }
-        }
+        public MainViewModel Main { get; } = new MainViewModel();
 
         public App()
         {
             InitializeComponent();
             InitializeServices();
-            Command.GlobalError += Command_GlobalError;
+            InitializeCommands();
         }
 
         private void InitializeServices()
@@ -34,6 +30,12 @@ namespace ERHMS.Desktop
             ServiceLocator.Install<IFileDialogService>(() => new FileDialogService());
             ServiceLocator.Install<IProgressService>(() => new ProgressService());
             ServiceLocator.Install<IWindowService>(() => new WindowService());
+        }
+
+        private void InitializeCommands()
+        {
+            AppCommands.Instance = Main;
+            Command.GlobalError += Command_GlobalError;
         }
 
         private void Command_GlobalError(object sender, ErrorEventArgs e)
@@ -71,7 +73,7 @@ namespace ERHMS.Desktop
                 ShutdownMode = ShutdownMode.OnMainWindowClose;
                 MainWindow = new MainView
                 {
-                    DataContext = MainViewModel.Instance
+                    DataContext = Main
                 };
                 MainWindow.Show();
             }

@@ -91,6 +91,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AppCommands.cs" />
     <Compile Include="Behaviors\BindPassword.cs" />
     <Compile Include="Behaviors\BindProperty.cs" />
     <Compile Include="Behaviors\BindSelectedItems.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />
+    <Compile Include="IAppCommands.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />

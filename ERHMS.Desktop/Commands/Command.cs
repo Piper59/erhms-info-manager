@@ -29,9 +29,6 @@ namespace ERHMS.Desktop.Commands
 
         public static event EventHandler<ErrorEventArgs> GlobalError;
 
-        protected static bool Always() => true;
-        protected static bool Always<TParameter>(TParameter _) => true;
-
         public static void OnCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();

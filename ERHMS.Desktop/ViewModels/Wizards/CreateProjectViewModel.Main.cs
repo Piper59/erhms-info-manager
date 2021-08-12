@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
@@ -239,6 +240,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     ContinueCore(project, progress);
                     return project;
                 });
+                Settings.Default.SetProjectPath(Wizard.CoreProject, Wizard.Project.FilePath);
+                Settings.Default.Save();
                 Commit(true);
                 GoToStep(new CloseViewModel(Wizard, this));
             }

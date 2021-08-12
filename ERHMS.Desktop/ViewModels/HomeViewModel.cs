@@ -4,8 +4,8 @@ using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
@@ -17,24 +17,6 @@ namespace ERHMS.Desktop.ViewModels
             public static EmptyProjectInfo Instance { get; } = new EmptyProjectInfo();
 
             private EmptyProjectInfo() { }
-        }
-
-        public class CoreViewViewModel
-        {
-            public CoreView Value { get; }
-
-            public ICommand GoToViewCommand { get; }
-
-            public CoreViewViewModel(CoreView value)
-            {
-                Value = value;
-                GoToViewCommand = new AsyncCommand(GoToViewAsync);
-            }
-
-            public async Task GoToViewAsync()
-            {
-                await MainViewModel.Instance.GoToViewAsync(Value);
-            }
         }
 
         public abstract class CoreProjectCollectionViewModel : ObservableObject
@@ -57,35 +39,20 @@ namespace ERHMS.Desktop.ViewModels
                 protected set { SetProperty(ref recents, value); }
             }
 
-            public ICommand CreateCommand { get; }
-            public ICommand OpenCommand { get; }
-            public ICommand GoToCurrentCommand { get; }
             public abstract ICommand MakeCurrentCommand { get; }
             public abstract ICommand RemoveRecentCommand { get; }
 
             protected CoreProjectCollectionViewModel()
             {
-                CreateCommand = new AsyncCommand(CreateAsync);
-                OpenCommand = new AsyncCommand(OpenAsync);
-                GoToCurrentCommand = new AsyncCommand(GoToCurrentAsync);
+                Settings.Default.SettingsSaving += Default_SettingsSaving;
             }
 
-            public async Task CreateAsync()
+            private void Default_SettingsSaving(object sender, CancelEventArgs e)
             {
-                // TODO: Stay in home view
-                await MainViewModel.Instance.CreateProjectAsync(Value);
+                Refresh();
             }
 
-            public async Task OpenAsync()
-            {
-                // TODO: Stay in home view
-                await MainViewModel.Instance.OpenProjectAsync(Value);
-            }
-
-            public async Task GoToCurrentAsync()
-            {
-                await MainViewModel.Instance.GoToProjectAsync(Value);
-            }
+            protected abstract void Refresh();
         }
 
         public class WorkerProjectCollectionViewModel : CoreProjectCollectionViewModel
@@ -98,10 +65,20 @@ namespace ERHMS.Desktop.ViewModels
 
             public WorkerProjectCollectionViewModel()
             {
+                Initialize();
+            }
+
+            private void Initialize()
+            {
                 if (Settings.Default.HasWorkerProjectPath)
                 {
                     Current = new ProjectInfo(Settings.Default.WorkerProjectPath);
                 }
+            }
+
+            protected override void Refresh()
+            {
+                Initialize();
             }
         }
 
@@ -116,7 +93,7 @@ namespace ERHMS.Desktop.ViewModels
             public IncidentProjectCollectionViewModel()
             {
                 Initialize();
-                MakeCurrentCommand = new AsyncCommand<ProjectInfo>(MakeCurrentAsync, IsNotEmpty);
+                MakeCurrentCommand = new SyncCommand<ProjectInfo>(MakeCurrent, IsNotEmpty);
                 RemoveRecentCommand = new SyncCommand<ProjectInfo>(RemoveRecent, IsNotEmpty);
             }
 
@@ -138,16 +115,10 @@ namespace ERHMS.Desktop.ViewModels
                 return projectInfo != EmptyProjectInfo.Instance;
             }
 
-            public async Task MakeCurrentAsync(ProjectInfo projectInfo)
+            public void MakeCurrent(ProjectInfo projectInfo)
             {
-                // TODO: Stay in home view
                 Settings.Default.IncidentProjectPath = projectInfo.FilePath;
                 Settings.Default.Save();
-                Initialize();
-                await MainViewModel.Instance.GoToProjectAsync(() => Task.Run(() =>
-                {
-                    return ProjectExtensions.Open(projectInfo.FilePath);
-                }));
             }
 
             public void RemoveRecent(ProjectInfo projectInfo)
@@ -155,6 +126,10 @@ namespace ERHMS.Desktop.ViewModels
                 // TODO: Confirm
                 Settings.Default.IncidentProjectPaths.Remove(projectInfo.FilePath);
                 Settings.Default.Save();
+            }
+
+            protected override void Refresh()
+            {
                 Initialize();
             }
         }
@@ -163,15 +138,13 @@ namespace ERHMS.Desktop.ViewModels
         {
             public Phase Value { get; }
             public CoreProjectCollectionViewModel Projects { get; }
-            public IEnumerable<CoreViewViewModel> Views { get; }
+            public IEnumerable<CoreView> Views { get; }
 
             public PhaseViewModel(Phase value, CoreProjectCollectionViewModel projects)
             {
                 Value = value;
                 Projects = projects;
-                Views = CoreView.GetInstances(value)
-                    .Select(coreView => new CoreViewViewModel(coreView))
-                    .ToList();
+                Views = CoreView.GetInstances(value).ToList();
             }
         }
 

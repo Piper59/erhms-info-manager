@@ -59,7 +59,8 @@
                     </Grid>
                 </Border>
             </ScrollViewer>
-            <FlowDocumentScrollViewer Grid.Column="1">
+            <FlowDocumentScrollViewer Grid.Column="1"
+                                      VerticalScrollBarVisibility="Auto">
                 <FlowDocumentScrollViewer.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>

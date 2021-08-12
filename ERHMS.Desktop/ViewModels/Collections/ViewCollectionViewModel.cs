@@ -75,7 +75,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public Project Project { get; }
 
         public ICommand CreateCommand { get; }
-        public ICommand OpenCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand DesignCommand { get; }
         public ICommand EnterCommand { get; }
@@ -85,7 +84,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Project = project;
             CreateCommand = new AsyncCommand(CreateAsync);
-            OpenCommand = new AsyncCommand(OpenAsync, HasCurrent);
             DeleteCommand = new AsyncCommand(DeleteAsync, HasCurrent);
             DesignCommand = new AsyncCommand(DesignAsync, HasCurrent);
             EnterCommand = new AsyncCommand(EnterAsync, HasCurrent);
@@ -129,11 +127,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
             {
                 await RefreshAsync();
             }
-        }
-
-        public async Task OpenAsync()
-        {
-            await MainViewModel.Instance.GoToViewAsync(() => Task.FromResult(CurrentItem.Value));
         }
 
         public async Task DeleteAsync()

@@ -1,9 +1,6 @@
 ﻿using Epi;
-using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.ViewModels.Collections;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -20,37 +17,14 @@ namespace ERHMS.Desktop.ViewModels
         public Project Project => View.Project;
         public RecordCollectionViewModel Records { get; private set; }
 
-        public ICommand GoToHomeCommand { get; }
-        public ICommand GoToHelpCommand { get; }
-        public ICommand GoToProjectCommand { get; }
-        public ICommand OpenProjectLocationCommand { get; }
-
         private ViewViewModel(View view)
         {
             View = view;
-            GoToHomeCommand = new SyncCommand(GoToHome);
-            GoToProjectCommand = new AsyncCommand(GoToProjectAsync);
-            OpenProjectLocationCommand = new SyncCommand(OpenProjectLocation);
         }
 
         private async Task InitializeAsync()
         {
             Records = await RecordCollectionViewModel.CreateAsync(View);
-        }
-
-        public void GoToHome()
-        {
-            MainViewModel.Instance.GoToHome();
-        }
-
-        public async Task GoToProjectAsync()
-        {
-            await MainViewModel.Instance.GoToProjectAsync(() => Task.FromResult(Project));
-        }
-
-        public void OpenProjectLocation()
-        {
-            Process.Start(Project.Location)?.Dispose();
         }
     }
 }

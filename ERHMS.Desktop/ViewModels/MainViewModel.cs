@@ -19,10 +19,8 @@ using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public class MainViewModel : ObservableObject
+    public class MainViewModel : ObservableObject, IAppCommands
     {
-        public static MainViewModel Instance { get; } = new MainViewModel();
-
         private object content = new HomeViewModel();
         public object Content
         {
@@ -44,35 +42,39 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand GoToHelpCommand { get; }
         public ICommand GoToStartCommand { get; }
         public ICommand GoToProjectCommand { get; }
+        public ICommand GoToCoreProjectCommand { get; }
         public ICommand GoToViewCommand { get; }
-        public ICommand CreateProjectCommand { get; }
-        public ICommand OpenProjectCommand { get; }
-        public ICommand OpenLogFileCommand { get; }
-        public ICommand OpenLogDirectoryCommand { get; }
-        public ICommand ExportLogDirectoryCommand { get; }
-        public ICommand StartEpiInfoMenuCommand { get; }
-        public ICommand StartFileExplorerCommand { get; }
+        public ICommand GoToCoreViewCommand { get; }
+        public ICommand CreateCoreProjectCommand { get; }
+        public ICommand OpenCoreProjectCommand { get; }
+        public ICommand OpenPathCommand { get; }
+        public ICommand ExportLogsCommand { get; }
+        public ICommand StartEpiInfoCommand { get; }
         public ICommand StartCommandPromptCommand { get; }
 
-        private MainViewModel()
+        public MainViewModel()
         {
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = new SyncCommand(GoToHelp);
             GoToStartCommand = new SyncCommand(GoToStart);
-            GoToProjectCommand = new AsyncCommand<CoreProject>(GoToProjectAsync);
-            GoToViewCommand = new AsyncCommand<CoreView>(GoToViewAsync);
-            CreateProjectCommand = new AsyncCommand<CoreProject>(CreateProjectAsync);
-            OpenProjectCommand = new AsyncCommand<CoreProject>(OpenProjectAsync);
-            OpenLogFileCommand = new SyncCommand(OpenLogFile);
-            OpenLogDirectoryCommand = new SyncCommand(OpenLogDirectory);
-            ExportLogDirectoryCommand = new AsyncCommand(ExportLogDirectoryAsync);
-            StartEpiInfoMenuCommand = new SyncCommand(StartEpiInfoMenu);
-            StartFileExplorerCommand = new SyncCommand(StartFileExplorer);
+            GoToProjectCommand = new AsyncCommand<Project>(GoToProjectAsync, CanGoToProject);
+            GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
+            GoToViewCommand = new AsyncCommand<View>(GoToViewAsync, CanGoToView);
+            GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
+            CreateCoreProjectCommand = new SyncCommand<CoreProject>(CreateCoreProject);
+            OpenCoreProjectCommand = new SyncCommand<CoreProject>(OpenCoreProject);
+            OpenPathCommand = new SyncCommand<string>(OpenPath);
+            ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
+            StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
         }
 
         public void GoToHome()
         {
+            if (Content is HomeViewModel)
+            {
+                return;
+            }
             Content = new HomeViewModel();
         }
 
@@ -88,40 +90,60 @@ namespace ERHMS.Desktop.ViewModels
             Start.Closed = false;
         }
 
-        public async Task GoToProjectAsync(Func<Task<Project>> action)
+        private async Task GoToProjectAsync(Task<Project> task)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_LoadingProject;
             Content = await progress.Run(async () =>
             {
-                return await ProjectViewModel.CreateAsync(await action());
+                return await ProjectViewModel.CreateAsync(await task);
             });
         }
 
-        public async Task GoToProjectAsync(CoreProject coreProject)
+        public bool CanGoToProject(Project project)
+        {
+            return project != null;
+        }
+
+        public async Task GoToProjectAsync(Project project)
+        {
+            await GoToProjectAsync(Task.FromResult(project));
+        }
+
+        public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
             // TODO: Handle errors
-            await GoToProjectAsync(() => Task.Run(() =>
+            await GoToProjectAsync(Task.Run(() =>
             {
                 string projectPath = Settings.Default.GetProjectPath(coreProject);
                 return ProjectExtensions.Open(projectPath);
             }));
         }
 
-        public async Task GoToViewAsync(Func<Task<View>> action)
+        private async Task GoToViewAsync(Task<View> task)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_LoadingView;
             Content = await progress.Run(async () =>
             {
-                return await ViewViewModel.CreateAsync(await action());
+                return await ViewViewModel.CreateAsync(await task);
             });
         }
 
-        public async Task GoToViewAsync(CoreView coreView)
+        public bool CanGoToView(View view)
+        {
+            return view != null;
+        }
+
+        public async Task GoToViewAsync(View view)
+        {
+            await GoToViewAsync(Task.FromResult(view));
+        }
+
+        public async Task GoToCoreViewAsync(CoreView coreView)
         {
             // TODO: Handle errors
-            await GoToViewAsync(() => Task.Run(() =>
+            await GoToViewAsync(Task.Run(() =>
             {
                 string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
                 Project project = ProjectExtensions.Open(projectPath);
@@ -129,7 +151,7 @@ namespace ERHMS.Desktop.ViewModels
             }));
         }
 
-        public async Task CreateProjectAsync(CoreProject coreProject)
+        public void CreateCoreProject(CoreProject coreProject)
         {
             // TODO: Handle errors
             if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
@@ -141,12 +163,10 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            Settings.Default.SetProjectPath(coreProject, wizard.Project.FilePath);
-            Settings.Default.Save();
-            await GoToProjectAsync(() => Task.FromResult(wizard.Project));
+            GoToHome();
         }
 
-        public async Task OpenProjectAsync(CoreProject coreProject)
+        public void OpenCoreProject(CoreProject coreProject)
         {
             // TODO: Handle errors
             if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
@@ -160,28 +180,18 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = Strings.Lead_LoadingProject;
-            await GoToProjectAsync(() => Task.Run(() =>
-            {
-                // TODO: Check for core views
-                return ProjectExtensions.Open(fileDialog.FileName);
-            }));
+            // TODO: Check for core views
             Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
             Settings.Default.Save();
+            GoToHome();
         }
 
-        public void OpenLogFile()
+        public void OpenPath(string path)
         {
-            Process.Start(Log.Instance.GetFile())?.Dispose();
+            Process.Start(path)?.Dispose();
         }
 
-        public void OpenLogDirectory()
-        {
-            Process.Start(FileAppender.Directory)?.Dispose();
-        }
-
-        public async Task ExportLogDirectoryAsync()
+        public async Task ExportLogsAsync()
         {
             IFileDialogService fileDialog = ServiceLocator.Resolve<IFileDialogService>();
             fileDialog.InitialFileName = $"Logs_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
@@ -203,14 +213,9 @@ namespace ERHMS.Desktop.ViewModels
             });
         }
 
-        public void StartEpiInfoMenu()
+        public void StartEpiInfo()
         {
             Module.Menu.Start()?.Dispose();
-        }
-
-        public void StartFileExplorer()
-        {
-            Process.Start(AppDomain.CurrentDomain.BaseDirectory)?.Dispose();
         }
 
         public void StartCommandPrompt()

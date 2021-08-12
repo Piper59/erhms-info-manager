@@ -12,12 +12,12 @@ namespace ERHMS.Desktop.Commands
             : base(action.Method)
         {
             this.action = action;
-            this.predicate = predicate ?? Always;
+            this.predicate = predicate;
         }
 
         public override bool CanExecute(object parameter)
         {
-            return predicate();
+            return predicate == null || predicate();
         }
 
         public override Task ExecuteCore(object parameter)
@@ -36,12 +36,12 @@ namespace ERHMS.Desktop.Commands
             : base(action.Method)
         {
             this.action = action;
-            this.predicate = predicate ?? Always;
+            this.predicate = predicate;
         }
 
         public override bool CanExecute(object parameter)
         {
-            return predicate((TParameter)parameter);
+            return predicate == null || predicate((TParameter)parameter);
         }
 
         public override Task ExecuteCore(object parameter)

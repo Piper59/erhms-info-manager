@@ -1,9 +1,6 @@
 ﻿using Epi;
-using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.ViewModels.Collections;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
@@ -22,15 +19,9 @@ namespace ERHMS.Desktop.ViewModels
         public PgmCollectionViewModel Pgms { get; private set; }
         public MapCollectionViewModel Maps { get; private set; }
 
-        public ICommand GoToHomeCommand { get; }
-        public ICommand GoToHelpCommand { get; }
-        public ICommand OpenLocationCommand { get; }
-
         private ProjectViewModel(Project project)
         {
             Project = project;
-            GoToHomeCommand = new SyncCommand(GoToHome);
-            OpenLocationCommand = new SyncCommand(OpenLocation);
         }
 
         private async Task InitializeAsync()
@@ -39,16 +30,6 @@ namespace ERHMS.Desktop.ViewModels
             Canvases = await CanvasCollectionViewModel.CreateAsync(Project);
             Pgms = await PgmCollectionViewModel.CreateAsync(Project);
             Maps = await MapCollectionViewModel.CreateAsync(Project);
-        }
-
-        public void GoToHome()
-        {
-            MainViewModel.Instance.GoToHome();
-        }
-
-        public void OpenLocation()
-        {
-            Process.Start(Project.Location)?.Dispose();
         }
     }
 }
