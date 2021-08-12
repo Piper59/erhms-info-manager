@@ -203,7 +203,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 };
             }
 
-            protected abstract void CreateViews(Project project, IProgress<string> progress);
+            protected abstract void ContinueCore(Project project, IProgress<string> progress);
 
             public override bool CanContinue()
             {
@@ -236,7 +236,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Project project = ProjectExtensions.Create(Wizard.ProjectCreationInfo);
                     progress.Report(Strings.Body_Initializing);
                     project.Initialize();
-                    CreateViews(project, progress);
+                    ContinueCore(project, progress);
                     return project;
                 });
                 Commit(true);

@@ -88,7 +88,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Details.Insert(0, Strings.Label_Project, Wizard.SourceProject.FilePath);
                 }
 
-                protected override void CreateViews(Project project, IProgress<string> progress)
+                protected override void ContinueCore(Project project, IProgress<string> progress)
                 {
                     progress.Report(Strings.Body_CreatingTemplate);
                     ProjectTemplateCreator creator = new ProjectTemplateCreator(Wizard.SourceProject)

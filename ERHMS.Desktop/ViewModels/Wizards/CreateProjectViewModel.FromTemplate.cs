@@ -109,7 +109,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Details.Insert(0, Strings.Label_Template, wizard.TemplatePath);
                 }
 
-                protected override void CreateViews(Project project, IProgress<string> progress)
+                protected override void ContinueCore(Project project, IProgress<string> progress)
                 {
                     ProjectTemplateInstantiator instantiator =
                         new ProjectTemplateInstantiator(Wizard.XTemplate, project)
