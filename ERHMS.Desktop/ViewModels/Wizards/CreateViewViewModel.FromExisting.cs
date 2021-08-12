@@ -124,12 +124,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
             }
 
-            public class CommitViewModel : StepViewModel<CreateViewViewModel>
+            public class CommitViewModel : CreateViewViewModel.CommitViewModel
             {
-                public override string Title => Strings.Lead_Commit;
-                public override string ContinueAction => Strings.AccessText_Finish;
-                public DetailsViewModel Details { get; }
-
                 public CommitViewModel(CreateViewViewModel wizard, IStep antecedent)
                     : base(wizard, antecedent)
                 {
@@ -141,32 +137,20 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     };
                 }
 
-                public override bool CanContinue()
+                protected override View ContinueCore()
                 {
-                    return true;
-                }
-
-                public override async Task ContinueAsync()
-                {
-                    IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    progress.Lead = Strings.Lead_CreatingView;
-                    Wizard.View = await progress.Run(() =>
+                    ViewTemplateCreator creator = new ViewTemplateCreator(Wizard.SourceView)
                     {
-                        ViewTemplateCreator creator = new ViewTemplateCreator(Wizard.SourceView)
-                        {
-                            Progress = Log.Progress
-                        };
-                        XTemplate xTemplate = creator.Create();
-                        xTemplate.XProject.XView.Name = Wizard.ViewName;
-                        ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
-                        {
-                            Progress = Log.Progress
-                        };
-                        instantiator.Instantiate();
-                        return instantiator.View;
-                    });
-                    Commit(true);
-                    GoToStep(new CloseViewModel(Wizard, this));
+                        Progress = Log.Progress
+                    };
+                    XTemplate xTemplate = creator.Create();
+                    xTemplate.XProject.XView.Name = Wizard.ViewName;
+                    ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
+                    {
+                        Progress = Log.Progress
+                    };
+                    instantiator.Instantiate();
+                    return instantiator.View;
                 }
             }
         }

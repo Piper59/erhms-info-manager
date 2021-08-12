@@ -4,6 +4,7 @@ using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
+using ERHMS.Desktop.ViewModels.Shared;
 using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Naming;
 using System.Threading.Tasks;
@@ -96,6 +97,32 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
                 Wizard.ViewName = ViewName;
                 GoToNextStep();
+            }
+        }
+
+        public abstract class CommitViewModel : StepViewModel<CreateViewViewModel>
+        {
+            public override string Title => Strings.Lead_Commit;
+            public override string ContinueAction => Strings.AccessText_Finish;
+            public DetailsViewModel Details { get; protected set; }
+
+            public CommitViewModel(CreateViewViewModel wizard, IStep antecedent)
+                : base(wizard, antecedent) { }
+
+            protected abstract View ContinueCore();
+
+            public override bool CanContinue()
+            {
+                return true;
+            }
+
+            public override async Task ContinueAsync()
+            {
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_CreatingView;
+                Wizard.View = await progress.Run(ContinueCore);
+                Commit(true);
+                GoToStep(new CloseViewModel(Wizard, this));
             }
         }
 

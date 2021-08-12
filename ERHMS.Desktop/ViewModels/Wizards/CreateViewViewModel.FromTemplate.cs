@@ -1,4 +1,5 @@
-﻿using ERHMS.Common.Logging;
+﻿using Epi;
+using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
@@ -126,12 +127,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
             }
 
-            public class CommitViewModel : StepViewModel<CreateViewViewModel>
+            public class CommitViewModel : CreateViewViewModel.CommitViewModel
             {
-                public override string Title => Strings.Lead_Commit;
-                public override string ContinueAction => Strings.AccessText_Finish;
-                public DetailsViewModel Details { get; }
-
                 public CommitViewModel(CreateViewViewModel wizard, IStep antecedent)
                     : base(wizard, antecedent)
                 {
@@ -142,28 +139,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     };
                 }
 
-                public override bool CanContinue()
+                protected override View ContinueCore()
                 {
-                    return true;
-                }
-
-                public override async Task ContinueAsync()
-                {
-                    IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    progress.Lead = Strings.Lead_CreatingView;
-                    Wizard.View = await progress.Run(() =>
-                    {
-                        Wizard.XTemplate.XProject.XView.Name = Wizard.ViewName;
-                        ViewTemplateInstantiator instantiator =
-                            new ViewTemplateInstantiator(Wizard.XTemplate, Wizard.Project)
-                            {
-                                Progress = Log.Progress
-                            };
-                        instantiator.Instantiate();
-                        return instantiator.View;
-                    });
-                    Commit(true);
-                    GoToStep(new CloseViewModel(Wizard, this));
+                    Wizard.XTemplate.XProject.XView.Name = Wizard.ViewName;
+                    ViewTemplateInstantiator instantiator =
+                        new ViewTemplateInstantiator(Wizard.XTemplate, Wizard.Project)
+                        {
+                            Progress = Log.Progress
+                        };
+                    instantiator.Instantiate();
+                    return instantiator.View;
                 }
             }
         }

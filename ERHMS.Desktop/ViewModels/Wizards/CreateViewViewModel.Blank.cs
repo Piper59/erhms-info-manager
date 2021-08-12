@@ -1,4 +1,5 @@
-﻿using ERHMS.Common.Logging;
+﻿using Epi;
+using ERHMS.Common.Logging;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
@@ -52,12 +53,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
             }
 
-            public class CommitViewModel : StepViewModel<CreateViewViewModel>
+            public class CommitViewModel : CreateViewViewModel.CommitViewModel
             {
-                public override string Title => Strings.Lead_Commit;
-                public override string ContinueAction => Strings.AccessText_Finish;
-                public DetailsViewModel Details { get; }
-
                 public CommitViewModel(CreateViewViewModel wizard, IStep antecedent)
                     : base(wizard, antecedent)
                 {
@@ -68,30 +65,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     };
                 }
 
-                public override bool CanContinue()
+                protected override View ContinueCore()
                 {
-                    return true;
-                }
-
-                public override async Task ContinueAsync()
-                {
-                    IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    progress.Lead = Strings.Lead_CreatingView;
-                    Wizard.View = await progress.Run(() =>
+                    string conjunction = Wizard.WithWorkerInfo ? "With" : "Without";
+                    string resourceName = $"Templates.Forms.BlankForm{conjunction}WorkerInfo.xml";
+                    XTemplate xTemplate = ResourceManager.GetXTemplate(resourceName);
+                    xTemplate.XProject.XView.Name = Wizard.ViewName;
+                    ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
                     {
-                        string conjunction = Wizard.WithWorkerInfo ? "With" : "Without";
-                        string resourceName = $"Templates.Forms.BlankForm{conjunction}WorkerInfo.xml";
-                        XTemplate xTemplate = ResourceManager.GetXTemplate(resourceName);
-                        xTemplate.XProject.XView.Name = Wizard.ViewName;
-                        ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
-                        {
-                            Progress = Log.Progress
-                        };
-                        instantiator.Instantiate();
-                        return instantiator.View;
-                    });
-                    Commit(true);
-                    GoToStep(new CloseViewModel(Wizard, this));
+                        Progress = Log.Progress
+                    };
+                    instantiator.Instantiate();
+                    return instantiator.View;
                 }
             }
         }
