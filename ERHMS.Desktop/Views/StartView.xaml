@@ -6,64 +6,78 @@
              Background="{x:Static SystemColors.WindowBrush}"
              BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
              BorderThickness="1"
-             Width="320"
              Visibility="{Binding Closed, Converter={StaticResource BooleanToVisibilityInverter}}">
-    <ScrollViewer>
-        <Border Style="{StaticResource FluidLayout}">
-            <StackPanel Style="{StaticResource Container}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               Style="{StaticResource Heading}"
-                               Text="{Markup:String Heading.Start}" />
-                    <StackPanel Grid.Column="1"
-                                Orientation="Horizontal"
-                                Style="{StaticResource ControlIconButtonGroup}">
-                        <Controls:IconButton Command="{Binding ToggleCommand}">
-                            <Controls:IconButton.Style>
-                                <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
-                                    <Setter Property="AltText" Value="{Binding Source='AltText.Minimize', Converter={StaticResource StringLocalizingConverter}}" />
-                                    <Setter Property="Content" Value="{Binding Source='Minimize', Converter={StaticResource IconNameToStringConverter}}" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Minimized}" Value="True">
-                                            <Setter Property="AltText" Value="{Binding Source='AltText.Restore', Converter={StaticResource StringLocalizingConverter}}" />
-                                            <Setter Property="Content" Value="{Binding Source='Restore', Converter={StaticResource IconNameToStringConverter}}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Controls:IconButton.Style>
-                        </Controls:IconButton>
-                        <Controls:IconButton AltText="{Markup:String AltText.Close}"
-                                             Command="{Binding CloseCommand}"
-                                             Content="{Markup:Icon Close}" />
-                    </StackPanel>
-                </Grid>
-                <StackPanel Visibility="{Binding Minimized, Converter={StaticResource BooleanToVisibilityInverter}}">
-                    <StackPanel.Resources>
-                        <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
-                            <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-                            <Setter Property="ToolTip" Value="{x:Null}" />
-                        </Style>
-                    </StackPanel.Resources>
-                    <StackPanel Style="{StaticResource Section}">
-                        <TextBlock Style="{StaticResource Lead}"
-                                   Text="{Markup:String Lead.Start.Worker}" />
-                        <Button Content="{Markup:String AccessText.SetUpProject.Worker}" />
-                        <Button Content="{Markup:String AccessText.UseView.WorkerRosteringForm}" />
-                        <Button Content="{Markup:String AccessText.ExploreViews.Worker}" />
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource Section}">
-                        <TextBlock Style="{StaticResource Lead}"
-                                   Text="{Markup:String Lead.Start.Incident}" />
-                        <Button Content="{Markup:String AccessText.SetUpProject.Incident}" />
-                        <Button Content="{Markup:String AccessText.UseView.WorkerDeploymentRecord}" />
-                        <Button Content="{Markup:String AccessText.ExploreViews.Incident}" />
-                    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"
+                Background="{x:Static SystemColors.ControlBrush}"
+                Padding="{StaticResource DefaultPadding}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Foreground="{x:Static SystemColors.ControlTextBrush}"
+                           Style="{StaticResource Heading}"
+                           Text="{Markup:String Heading.Start}" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            Style="{StaticResource ControlIconButtonGroup}">
+                    <Controls:IconButton Command="{Binding ToggleCommand}"
+                                         Foreground="{x:Static SystemColors.ControlTextBrush}">
+                        <Controls:IconButton.Style>
+                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
+                                <Setter Property="AltText" Value="{Binding Source='AltText.Minimize', Converter={StaticResource StringLocalizingConverter}}" />
+                                <Setter Property="Content" Value="{Binding Source='Minimize', Converter={StaticResource IconNameToStringConverter}}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Minimized}" Value="True">
+                                        <Setter Property="AltText" Value="{Binding Source='AltText.Restore', Converter={StaticResource StringLocalizingConverter}}" />
+                                        <Setter Property="Content" Value="{Binding Source='Restore', Converter={StaticResource IconNameToStringConverter}}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Controls:IconButton.Style>
+                    </Controls:IconButton>
+                    <Controls:IconButton AltText="{Markup:String AltText.Close}"
+                                         Command="{Binding CloseCommand}"
+                                         Content="{Markup:Icon Close}" />
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </Border>
-    </ScrollViewer>
+        <Border Grid.Row="1"
+                BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
+                BorderThickness="0,1,0,0"
+                Visibility="{Binding Minimized, Converter={StaticResource BooleanToVisibilityInverter}}">
+            <ScrollViewer>
+                <ScrollViewer.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
+                        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+                        <Setter Property="ToolTip" Value="{x:Null}" />
+                    </Style>
+                </ScrollViewer.Resources>
+                <Border Style="{StaticResource FluidLayout}">
+                    <StackPanel Style="{StaticResource Container}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Lead}"
+                                       Text="{Markup:String Lead.Start.Worker}" />
+                            <Button Content="{Markup:String AccessText.SetUpProject.Worker}" />
+                            <Button Content="{Markup:String AccessText.UseView.WorkerRosteringForm}" />
+                            <Button Content="{Markup:String AccessText.ExploreViews.Worker}" />
+                        </StackPanel>
+                        <StackPanel Style="{StaticResource Section}">
+                            <TextBlock Style="{StaticResource Lead}"
+                                       Text="{Markup:String Lead.Start.Incident}" />
+                            <Button Content="{Markup:String AccessText.SetUpProject.Incident}" />
+                            <Button Content="{Markup:String AccessText.UseView.WorkerDeploymentRecord}" />
+                            <Button Content="{Markup:String AccessText.ExploreViews.Incident}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </Border>
+    </Grid>
 </UserControl>

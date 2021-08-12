@@ -78,7 +78,7 @@
             <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}" />
         </Style.Resources>
         <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
-        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">

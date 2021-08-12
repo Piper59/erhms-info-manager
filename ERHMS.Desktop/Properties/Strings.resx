@@ -184,10 +184,10 @@
     <value>E_xit</value>
   </data>
   <data name="AccessText.ExploreViews.Incident" xml:space="preserve">
-    <value>_Explore other incident forms</value>
+    <value>_Explore and use other incident forms</value>
   </data>
   <data name="AccessText.ExploreViews.Worker" xml:space="preserve">
-    <value>_Explore other worker forms</value>
+    <value>_Explore and use other worker forms</value>
   </data>
   <data name="AccessText.Export" xml:space="preserve">
     <value>_Export</value>

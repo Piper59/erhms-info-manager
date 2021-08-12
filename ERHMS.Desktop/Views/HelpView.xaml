@@ -20,38 +20,43 @@
             <ScrollViewer Grid.Column="0">
                 <Border Background="{x:Static SystemColors.ControlBrush}"
                         Style="{StaticResource FluidLayout}">
-                    <StackPanel Style="{StaticResource Container}">
-                        <StackPanel.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource Body}" />
-                        </StackPanel.Resources>
-                        <TextBlock>
-                            <Hyperlink>Introduction</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Phases</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Projects</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Forms</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Records</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Dashboards</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Analyses</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Maps</Hyperlink>
-                        </TextBlock>
-                        <TextBlock>
-                            <Hyperlink>Security</Hyperlink>
-                        </TextBlock>
-                    </StackPanel>
+                    <Grid Style="{StaticResource Container}">
+                        <StackPanel>
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource Body}" />
+                            </StackPanel.Resources>
+                            <StackPanel.Margin>
+                                <Thickness Right="{StaticResource HugeSpace}" />
+                            </StackPanel.Margin>
+                            <TextBlock>
+                                <Hyperlink>Introduction</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Phases</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Projects</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Forms</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Records</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Dashboards</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Analyses</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Maps</Hyperlink>
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink>Security</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
                 </Border>
             </ScrollViewer>
             <FlowDocumentScrollViewer Grid.Column="1">

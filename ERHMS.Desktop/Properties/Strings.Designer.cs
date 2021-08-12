@@ -259,7 +259,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Explore other incident forms.
+        ///   Looks up a localized string similar to _Explore and use other incident forms.
         /// </summary>
         public static string AccessText_ExploreViews_Incident {
             get {
@@ -268,7 +268,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Explore other worker forms.
+        ///   Looks up a localized string similar to _Explore and use other worker forms.
         /// </summary>
         public static string AccessText_ExploreViews_Worker {
             get {
