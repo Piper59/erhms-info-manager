@@ -2588,6 +2588,94 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Canvases {
+            get {
+                return ResourceManager.GetString("Markdown.Canvases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # Introduction
+        ///
+        ///ERHMS Info Manager provides data collection and analysis tools designed to help emergency response organizations implement the Emergency Responder Health Monitoring and Surveillance (ERHMS) framework.
+        ///To accomplish this, ERHMS Info Manager leverages the capabilities of the Epi Info software suite.
+        ///
+        ///## What is ERHMS?
+        ///
+        ///ERHMS is a health monitoring and surveillance framework that provides recommendations and tools for protecting workers throughout the three phases of an emergency respons [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Markdown_Introduction {
+            get {
+                return ResourceManager.GetString("Markdown.Introduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Maps {
+            get {
+                return ResourceManager.GetString("Markdown.Maps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Pgms {
+            get {
+                return ResourceManager.GetString("Markdown.Pgms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Phases {
+            get {
+                return ResourceManager.GetString("Markdown.Phases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Projects {
+            get {
+                return ResourceManager.GetString("Markdown.Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Records {
+            get {
+                return ResourceManager.GetString("Markdown.Records", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Security {
+            get {
+                return ResourceManager.GetString("Markdown.Security", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TODO.
+        /// </summary>
+        public static string Markdown_Views {
+            get {
+                return ResourceManager.GetString("Markdown.Views", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Page {0} of {1}.
         /// </summary>
         public static string Pager {
@@ -2701,6 +2789,87 @@ namespace ERHMS.Desktop.Properties {
         public static string Title_App {
             get {
                 return ResourceManager.GetString("Title.App", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dashboards.
+        /// </summary>
+        public static string Title_Canvases {
+            get {
+                return ResourceManager.GetString("Title.Canvases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Introduction.
+        /// </summary>
+        public static string Title_Introduction {
+            get {
+                return ResourceManager.GetString("Title.Introduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string Title_Maps {
+            get {
+                return ResourceManager.GetString("Title.Maps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyses.
+        /// </summary>
+        public static string Title_Pgms {
+            get {
+                return ResourceManager.GetString("Title.Pgms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phases.
+        /// </summary>
+        public static string Title_Phases {
+            get {
+                return ResourceManager.GetString("Title.Phases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Projects.
+        /// </summary>
+        public static string Title_Projects {
+            get {
+                return ResourceManager.GetString("Title.Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Records.
+        /// </summary>
+        public static string Title_Records {
+            get {
+                return ResourceManager.GetString("Title.Records", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Security.
+        /// </summary>
+        public static string Title_Security {
+            get {
+                return ResourceManager.GetString("Title.Security", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forms.
+        /// </summary>
+        public static string Title_Views {
+            get {
+                return ResourceManager.GetString("Title.Views", resourceCulture);
             }
         }
         

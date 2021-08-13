@@ -5,6 +5,7 @@
     <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
     <Converters:ByteCountFormattingConverter x:Key="ByteCountFormattingConverter" />
     <Converters:IconNameToStringConverter x:Key="IconNameToStringConverter" />
+    <Converters:MarkdownToFlowDocumentConverter x:Key="MarkdownToFlowDocumentConverter" />
     <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
     <Converters:PathToDirectoryNameConverter x:Key="PathToDirectoryNameConverter" />
     <Converters:PathToFileNameConverter x:Key="PathToFileNameConverter" />
