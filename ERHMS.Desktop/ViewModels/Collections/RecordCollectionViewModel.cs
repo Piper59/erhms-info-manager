@@ -200,9 +200,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
             });
         }
 
-        public async Task ImportAsync()
+        public async Task ImportAsync(bool synchronize)
         {
-            await SynchronizeAsync();
+            if (synchronize)
+            {
+                await SynchronizeAsync();
+            }
             using (ImportRecordsViewModel wizard = new ImportRecordsViewModel(View))
             {
                 if (wizard.Run() != true)
@@ -211,6 +214,11 @@ namespace ERHMS.Desktop.ViewModels.Collections
                 }
             }
             await RefreshAsync();
+        }
+
+        public async Task ImportAsync()
+        {
+            await ImportAsync(true);
         }
 
         public async Task ExportAsync()

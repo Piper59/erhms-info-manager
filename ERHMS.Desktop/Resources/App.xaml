@@ -29,7 +29,7 @@
     <Style x:Key="Section" TargetType="Panel">
         <Setter Property="Margin">
             <Setter.Value>
-                <Thickness Top="{StaticResource HugeSpace}" />
+                <Thickness Bottom="{StaticResource HugeSpace}" />
             </Setter.Value>
         </Setter>
     </Style>
@@ -69,7 +69,7 @@
     <Style x:Key="ControlIconButton" TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
         <Setter Property="Margin" Value="0" />
     </Style>
 
@@ -122,5 +122,10 @@
                          MaxWidth="{StaticResource ToolTipWidth}" />
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding (AutomationProperties.HelpText), RelativeSource={RelativeSource Self}}" Value="">
+                <Setter Property="ToolTip" Value="{x:Null}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

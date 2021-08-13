@@ -180,6 +180,9 @@
   <data name="AccessText.EmailAddress" xml:space="preserve">
     <value>_Email address</value>
   </data>
+  <data name="AccessText.EnterRecords" xml:space="preserve">
+    <value>_Enter records manually</value>
+  </data>
   <data name="AccessText.EpiInfo" xml:space="preserve">
     <value>_Epi Info</value>
   </data>
@@ -230,6 +233,9 @@
   </data>
   <data name="AccessText.Import" xml:space="preserve">
     <value>_Import</value>
+  </data>
+  <data name="AccessText.ImportRecords" xml:space="preserve">
+    <value>_Import records from file</value>
   </data>
   <data name="AccessText.Logs" xml:space="preserve">
     <value>_Logs</value>
@@ -300,10 +306,10 @@
   <data name="AccessText.Tools" xml:space="preserve">
     <value>_Tools</value>
   </data>
-  <data name="AccessText.UseView.WorkerDeploymentRecord" xml:space="preserve">
-    <value>Use the Worker Deployment Record to collect basic accountability information for each worker deployed to the incident</value>
+  <data name="AccessText.UseMainView.Incident" xml:space="preserve">
+    <value>Use the Worker Deployment Record to collect basic accountability information each time a worker is deployed to the incident</value>
   </data>
-  <data name="AccessText.UseView.WorkerRosteringForm" xml:space="preserve">
+  <data name="AccessText.UseMainView.Worker" xml:space="preserve">
     <value>Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization</value>
   </data>
   <data name="AccessText.Views" xml:space="preserve">

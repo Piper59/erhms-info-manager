@@ -10,6 +10,17 @@ namespace ERHMS.Desktop
 {
     public static class Integration
     {
+        public static async Task StartCoreAsync(Module module, params string[] args)
+        {
+            await Task.Run(() =>
+            {
+                using (Process process = module.Start(args))
+                {
+                    process.WaitForExit(3000);
+                }
+            });
+        }
+
         public static async Task StartWithBackgroundTaskAsync(Func<Task> action, Module module, params string[] args)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
@@ -18,13 +29,7 @@ namespace ERHMS.Desktop
             await progress.Run(async () =>
             {
                 Task task = action();
-                await Task.Run(() =>
-                {
-                    using (Process process = module.Start(args))
-                    {
-                        process.WaitForExit(3000);
-                    }
-                });
+                await StartCoreAsync(module, args);
                 if (!task.IsCompleted)
                 {
                     progress.Lead = Strings.Lead_Working;

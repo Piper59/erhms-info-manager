@@ -9,6 +9,7 @@ using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.Desktop.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Data;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -47,6 +48,8 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand GoToCoreViewCommand { get; }
         public ICommand CreateCoreProjectCommand { get; }
         public ICommand OpenCoreProjectCommand { get; }
+        public ICommand ImportCoreViewRecordsCommand { get; }
+        public ICommand EnterCoreViewRecordsCommand { get; }
         public ICommand OpenPathCommand { get; }
         public ICommand ExportLogsCommand { get; }
         public ICommand StartEpiInfoCommand { get; }
@@ -63,10 +66,42 @@ namespace ERHMS.Desktop.ViewModels
             GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
             CreateCoreProjectCommand = new SyncCommand<CoreProject>(CreateCoreProject);
             OpenCoreProjectCommand = new SyncCommand<CoreProject>(OpenCoreProject);
+            ImportCoreViewRecordsCommand = new AsyncCommand<CoreView>(ImportCoreViewRecordsAsync);
+            EnterCoreViewRecordsCommand = new AsyncCommand<CoreView>(EnterCoreViewRecordsAsync);
             OpenPathCommand = new SyncCommand<string>(OpenPath);
             ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
             StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
+        }
+
+        private async Task GoToProjectAsync(Task<Project> task)
+        {
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = Strings.Lead_LoadingProject;
+            Content = await progress.Run(async () =>
+            {
+                return await ProjectViewModel.CreateAsync(await task);
+            });
+        }
+
+        private async Task GoToViewAsync(Task<View> task)
+        {
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = Strings.Lead_LoadingView;
+            Content = await progress.Run(async () =>
+            {
+                return await ViewViewModel.CreateAsync(await task);
+            });
+        }
+
+        private async Task<View> GetViewAsync(CoreView coreView)
+        {
+            return await Task.Run(() =>
+            {
+                string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
+                Project project = ProjectExtensions.Open(projectPath);
+                return project.Views[coreView.Name];
+            });
         }
 
         public void GoToHome()
@@ -90,16 +125,6 @@ namespace ERHMS.Desktop.ViewModels
             Start.Closed = false;
         }
 
-        private async Task GoToProjectAsync(Task<Project> task)
-        {
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = Strings.Lead_LoadingProject;
-            Content = await progress.Run(async () =>
-            {
-                return await ProjectViewModel.CreateAsync(await task);
-            });
-        }
-
         public bool CanGoToProject(Project project)
         {
             return project != null;
@@ -120,16 +145,6 @@ namespace ERHMS.Desktop.ViewModels
             }));
         }
 
-        private async Task GoToViewAsync(Task<View> task)
-        {
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = Strings.Lead_LoadingView;
-            Content = await progress.Run(async () =>
-            {
-                return await ViewViewModel.CreateAsync(await task);
-            });
-        }
-
         public bool CanGoToView(View view)
         {
             return view != null;
@@ -143,12 +158,7 @@ namespace ERHMS.Desktop.ViewModels
         public async Task GoToCoreViewAsync(CoreView coreView)
         {
             // TODO: Handle errors
-            await GoToViewAsync(Task.Run(() =>
-            {
-                string projectPath = Settings.Default.GetProjectPath(coreView.CoreProject);
-                Project project = ProjectExtensions.Open(projectPath);
-                return project.Views[coreView.Name];
-            }));
+            await GoToViewAsync(GetViewAsync(coreView));
         }
 
         public void CreateCoreProject(CoreProject coreProject)
@@ -184,6 +194,42 @@ namespace ERHMS.Desktop.ViewModels
             Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
             Settings.Default.Save();
             GoToHome();
+        }
+
+        public async Task ImportCoreViewRecordsAsync(CoreView coreView)
+        {
+            // TODO: Handle errors
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = Strings.Lead_LoadingView;
+            await progress.Run(async () =>
+            {
+                View view = await GetViewAsync(coreView);
+                Content = await ViewViewModel.CreateAsync(view);
+                progress.Lead = Strings.Lead_SynchronizingView;
+                await Task.Run(() =>
+                {
+                    view.Project.CollectedData.SynchronizeViewTree(view);
+                });
+            });
+            await ((ViewViewModel)Content).Records.ImportAsync(false);
+        }
+
+        public async Task EnterCoreViewRecordsAsync(CoreView coreView)
+        {
+            // TODO: Handle errors
+            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+            progress.Lead = Strings.Lead_LoadingView;
+            await progress.Run(async () =>
+            {
+                View view = await GetViewAsync(coreView);
+                Content = await ViewViewModel.CreateAsync(view);
+                progress.Lead = Strings.Lead_StartingEpiInfo;
+                await Integration.StartCoreAsync(
+                    Module.Enter,
+                    $"/project:{view.Project.FilePath}",
+                    $"/view:{view.Name}",
+                    "/record:*");
+            });
         }
 
         public void OpenPath(string path)

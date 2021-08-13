@@ -250,6 +250,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Enter records manually.
+        /// </summary>
+        public static string AccessText_EnterRecords {
+            get {
+                return ResourceManager.GetString("AccessText.EnterRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Epi Info.
         /// </summary>
         public static string AccessText_EpiInfo {
@@ -399,6 +408,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Import {
             get {
                 return ResourceManager.GetString("AccessText.Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Import records from file.
+        /// </summary>
+        public static string AccessText_ImportRecords {
+            get {
+                return ResourceManager.GetString("AccessText.ImportRecords", resourceCulture);
             }
         }
         
@@ -610,20 +628,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the Worker Deployment Record to collect basic accountability information for each worker deployed to the incident.
+        ///   Looks up a localized string similar to Use the Worker Deployment Record to collect basic accountability information each time a worker is deployed to the incident.
         /// </summary>
-        public static string AccessText_UseView_WorkerDeploymentRecord {
+        public static string AccessText_UseMainView_Incident {
             get {
-                return ResourceManager.GetString("AccessText.UseView.WorkerDeploymentRecord", resourceCulture);
+                return ResourceManager.GetString("AccessText.UseMainView.Incident", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization.
         /// </summary>
-        public static string AccessText_UseView_WorkerRosteringForm {
+        public static string AccessText_UseMainView_Worker {
             get {
-                return ResourceManager.GetString("AccessText.UseView.WorkerRosteringForm", resourceCulture);
+                return ResourceManager.GetString("AccessText.UseMainView.Worker", resourceCulture);
             }
         }
         

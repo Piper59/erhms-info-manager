@@ -97,7 +97,8 @@
                                             <Controls:IconButton AltText="{Markup:String AltText.RemoveFromList}"
                                                                  Command="{Binding DataContext.RemoveRecentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=MenuItem, AncestorLevel=2}}"
                                                                  CommandParameter="{Binding}"
-                                                                 Content="{Markup:Icon Close}">
+                                                                 Content="{Markup:Icon Close}"
+                                                                 Foreground="{x:Static SystemColors.MenuTextBrush}">
                                                 <Controls:IconButton.Style>
                                                     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
                                                         <Setter Property="Visibility" Value="Hidden" />
@@ -165,8 +166,7 @@
                         AutomationProperties.Name="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
                         Command="{x:Static local:AppCommands.GoToCoreViewCommand}"
                         CommandParameter="{Binding}"
-                        Style="{StaticResource WorkflowButton}"
-                        ToolTip="{x:Null}">
+                        Style="{StaticResource WorkflowButton}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="IconGroup"
@@ -202,7 +202,7 @@
     <ScrollViewer>
         <Border Style="{StaticResource SmallLayout}">
             <StackPanel Style="{StaticResource Container}">
-                <Grid>
+                <Grid Style="{StaticResource Section}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
