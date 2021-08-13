@@ -70,6 +70,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Advanced.
+        /// </summary>
+        public static string AccessText_Advanced {
+            get {
+                return ResourceManager.GetString("AccessText.Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _All fields.
         /// </summary>
         public static string AccessText_AllFields {
@@ -574,15 +583,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show _other options.
-        /// </summary>
-        public static string AccessText_ShowOtherOptions {
-            get {
-                return ResourceManager.GetString("AccessText.ShowOtherOptions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to _Similarity.
         /// </summary>
         public static string AccessText_Similarity {
@@ -651,6 +651,15 @@ namespace ERHMS.Desktop.Properties {
         public static string AltText_Add {
             get {
                 return ResourceManager.GetString("AltText.Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced.
+        /// </summary>
+        public static string AltText_Advanced {
+            get {
+                return ResourceManager.GetString("AltText.Advanced", resourceCulture);
             }
         }
         
@@ -876,15 +885,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AltText_Restore {
             get {
                 return ResourceManager.GetString("AltText.Restore", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show other options.
-        /// </summary>
-        public static string AltText_ShowOtherOptions {
-            get {
-                return ResourceManager.GetString("AltText.ShowOtherOptions", resourceCulture);
             }
         }
         

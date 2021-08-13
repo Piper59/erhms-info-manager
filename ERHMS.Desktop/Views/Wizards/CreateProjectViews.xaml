@@ -12,10 +12,9 @@
             <Button AutomationProperties.HelpText="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
                     Command="{Binding CreateStandardCommand}"
                     Content="{Markup:String CreateProject.AccessText.Standard}" />
-            <Controls:ExpandButton AccessText="{Markup:String AccessText.ShowOtherOptions}"
-                                   AltText="{Markup:String AltText.ShowOtherOptions}"
-                                   Expanded="{Binding Expanded}"
-                                   Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityInverter}}" />
+            <Controls:ExpandButton AccessText="{Markup:String AccessText.Advanced}"
+                                   AltText="{Markup:String AltText.Advanced}"
+                                   Expanded="{Binding Expanded}" />
             <StackPanel Visibility="{Binding Expanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button AutomationProperties.HelpText="{Markup:String CreateProject.HelpText.Blank}"
                         Command="{Binding CreateBlankCommand}"

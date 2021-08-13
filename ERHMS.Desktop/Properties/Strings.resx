@@ -120,6 +120,9 @@
   <data name="AccessText.AboutApp" xml:space="preserve">
     <value>_About ERHMS Info Manager</value>
   </data>
+  <data name="AccessText.Advanced" xml:space="preserve">
+    <value>_Advanced</value>
+  </data>
   <data name="AccessText.AllFields" xml:space="preserve">
     <value>_All fields</value>
   </data>
@@ -288,9 +291,6 @@
   <data name="AccessText.SetUpProject.Worker" xml:space="preserve">
     <value>_Set up the worker project</value>
   </data>
-  <data name="AccessText.ShowOtherOptions" xml:space="preserve">
-    <value>Show _other options</value>
-  </data>
   <data name="AccessText.Similarity" xml:space="preserve">
     <value>_Similarity</value>
   </data>
@@ -314,6 +314,9 @@
   </data>
   <data name="AltText.Add" xml:space="preserve">
     <value>Add</value>
+  </data>
+  <data name="AltText.Advanced" xml:space="preserve">
+    <value>Advanced</value>
   </data>
   <data name="AltText.ClearSearch" xml:space="preserve">
     <value>Clear search</value>
@@ -389,9 +392,6 @@
   </data>
   <data name="AltText.Restore" xml:space="preserve">
     <value>Restore</value>
-  </data>
-  <data name="AltText.ShowOtherOptions" xml:space="preserve">
-    <value>Show other options</value>
   </data>
   <data name="AltText.Undelete" xml:space="preserve">
     <value>Undelete</value>
