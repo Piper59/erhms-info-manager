@@ -88,14 +88,7 @@
 
     <Style x:Key="IconButtonSeparator" TargetType="Border">
         <Setter Property="Background" Value="{x:Static SystemColors.ControlDarkBrush}" />
-        <Setter Property="Margin">
-            <Setter.Value>
-                <Thickness Left="{StaticResource LargeSpace}"
-                           Top="{StaticResource SmallSpace}"
-                           Right="{StaticResource LargeSpace}"
-                           Bottom="{StaticResource SmallSpace}" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
         <Setter Property="Width" Value="1" />
     </Style>
 

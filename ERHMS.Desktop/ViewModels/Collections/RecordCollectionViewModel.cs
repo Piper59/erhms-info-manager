@@ -70,13 +70,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             private set { SetProperty(ref fields, value); }
         }
 
-        public ICommand DesignCommand { get; }
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UndeleteCommand { get; }
         public ICommand ImportCommand { get; }
         public ICommand ExportCommand { get; }
+        public ICommand DesignCommand { get; }
         public ICommand RefreshCommand { get; }
 
         private RecordCollectionViewModel(View view)
@@ -85,13 +85,13 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.Filter = IsMatch;
             Items.PageSize = 100;
             Statuses.CurrentChanged += (sender, e) => Items.Refresh();
-            DesignCommand = new AsyncCommand(DesignAsync);
             AddCommand = new AsyncCommand(AddAsync);
             EditCommand = new AsyncCommand(EditAsync, HasCurrent);
             DeleteCommand = new AsyncCommand(DeleteAsync, HasSelection);
             UndeleteCommand = new AsyncCommand(UndeleteAsync, HasSelection);
             ImportCommand = new AsyncCommand(ImportAsync);
             ExportCommand = new AsyncCommand(ExportAsync);
+            DesignCommand = new AsyncCommand(DesignAsync);
             RefreshCommand = new AsyncCommand(RefreshAsync);
         }
 
@@ -143,11 +143,6 @@ namespace ERHMS.Desktop.ViewModels.Collections
         {
             Record record = (Record)item;
             return IsStatusMatch(record) && IsSearchMatch(record);
-        }
-
-        public async Task DesignAsync()
-        {
-            await Integration.StartAsync(Module.MakeView, $"/project:{Project.FilePath}", $"/view:{View.Name}");
         }
 
         public async Task AddAsync()
@@ -223,6 +218,11 @@ namespace ERHMS.Desktop.ViewModels.Collections
             await SynchronizeAsync();
             ExportRecordsViewModel wizard = new ExportRecordsViewModel(View);
             wizard.Run();
+        }
+
+        public async Task DesignAsync()
+        {
+            await Integration.StartAsync(Module.MakeView, $"/project:{Project.FilePath}", $"/view:{View.Name}");
         }
 
         public async Task RefreshAsync()
