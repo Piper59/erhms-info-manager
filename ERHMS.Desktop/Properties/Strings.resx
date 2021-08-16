@@ -237,6 +237,9 @@
   <data name="AccessText.ImportRecords" xml:space="preserve">
     <value>_Import records from file</value>
   </data>
+  <data name="AccessText.Learn.App" xml:space="preserve">
+    <value>_Learn about ERHMS Info Manager</value>
+  </data>
   <data name="AccessText.Learn.EpiInfo" xml:space="preserve">
     <value>_Learn about Epi Info</value>
   </data>

@@ -122,6 +122,8 @@
                             <Button Command="{Binding LearnCommand}"
                                     CommandParameter="{Markup:String Uri.EpiInfo}"
                                     Content="{Markup:String AccessText.Learn.EpiInfo}" />
+                            <Button Command="{x:Static local:AppCommands.GoToHelpCommand}"
+                                    Content="{Markup:String AccessText.Learn.App}" />
                         </StackPanel>
                         <ContentPresenter Content="{Binding WorkerProject}" />
                         <ContentPresenter Content="{Binding IncidentProject}" />

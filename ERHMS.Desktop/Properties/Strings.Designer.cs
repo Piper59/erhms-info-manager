@@ -421,6 +421,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Learn about ERHMS Info Manager.
+        /// </summary>
+        public static string AccessText_Learn_App {
+            get {
+                return ResourceManager.GetString("AccessText.Learn.App", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Learn about Epi Info.
         /// </summary>
         public static string AccessText_Learn_EpiInfo {
