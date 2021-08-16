@@ -31,6 +31,10 @@ namespace ERHMS.Desktop.Infrastructure.Services
         {
             if (TryGet(dataContext, out Window window))
             {
+                if (window.WindowState == WindowState.Minimized)
+                {
+                    window.WindowState = WindowState.Normal;
+                }
                 window.Activate();
             }
             else
