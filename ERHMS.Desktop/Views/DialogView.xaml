@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
         xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
-        AutomationProperties.HelpText="{Binding Lead}"
+        AutomationProperties.HelpText="{Binding Lead, TargetNullValue=''}"
         Icon="/Resources/ERHMS.ico"
         MaxWidth="560"
         MinWidth="320"
@@ -26,7 +26,7 @@
                            Margin="{StaticResource DefaultMargin}"
                            Source="{Binding Image}"
                            VerticalAlignment="Top"
-                           Visibility="{Binding Icon, Converter={StaticResource NullableToVisibilityConverter}}">
+                           Visibility="{Binding Image, Converter={StaticResource NullableToVisibilityConverter}}">
                     </Image>
                     <StackPanel Grid.Column="1">
                         <TextBlock Style="{StaticResource Lead}"

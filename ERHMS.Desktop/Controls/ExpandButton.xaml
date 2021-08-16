@@ -30,7 +30,7 @@
                 </Style>
             </Controls:IconButton.Style>
         </Controls:IconButton>
-        <ToggleButton AutomationProperties.Name="{Binding AltText, ElementName=Root}"
+        <ToggleButton AutomationProperties.Name="{Binding AltText, ElementName=Root, TargetNullValue=''}"
                       Click="Button_Click">
             <ToggleButton.Template>
                 <ControlTemplate>
