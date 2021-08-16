@@ -64,12 +64,12 @@
                                      Content="{Markup:Icon Clipboard}"
                                      HelpText="{Markup:String HelpText.CopyField}"
                                      IsEnabled="{Binding HasItems, ElementName=ItemsDataGrid}">
-                    <Controls:IconButton.ContextMenu>
-                        <ContextMenu x:Name="CopyFieldContextMenu" />
-                    </Controls:IconButton.ContextMenu>
                     <b:Interaction.Behaviors>
                         <Behaviors:OpenContextMenuOnClick />
                     </b:Interaction.Behaviors>
+                    <Controls:IconButton.ContextMenu>
+                        <ContextMenu x:Name="CopyFieldContextMenu" />
+                    </Controls:IconButton.ContextMenu>
                 </Controls:IconButton>
                 <Border Style="{StaticResource IconButtonSeparator}" />
                 <Controls:IconButton AccessKey="4"

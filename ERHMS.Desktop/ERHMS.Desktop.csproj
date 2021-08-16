@@ -99,6 +99,7 @@
     <Compile Include="Behaviors\MoveFocusExternallyOnTab.cs" />
     <Compile Include="Behaviors\MoveFocusInternallyOnControlArrow.cs" />
     <Compile Include="Behaviors\OpenContextMenuOnClick.cs" />
+    <Compile Include="Behaviors\ResetSelectedIndexOnDataContextChanged.cs" />
     <Compile Include="Behaviors\RestoreCurrentCellOnFocus.cs" />
     <Compile Include="Behaviors\SetMenuDropAlignment.cs" />
     <Compile Include="Behaviors\ToggleSelectionOnSpace.cs" />

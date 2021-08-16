@@ -17,6 +17,9 @@
                 <TextBlock Style="{StaticResource Lead}"
                            Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
                 <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}">
+                    <b:Interaction.Behaviors>
+                        <Behaviors:OpenContextMenuOnClick />
+                    </b:Interaction.Behaviors>
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="{x:Static local:AppCommands.CreateCoreProjectCommand}"
@@ -27,12 +30,12 @@
                                       Header="{Markup:String AccessText.OpenExistingProject}" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                    <b:Interaction.Behaviors>
-                        <Behaviors:OpenContextMenuOnClick />
-                    </b:Interaction.Behaviors>
                 </Button>
                 <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
                         IsEnabled="{Binding HasPath}">
+                    <b:Interaction.Behaviors>
+                        <Behaviors:OpenContextMenuOnClick />
+                    </b:Interaction.Behaviors>
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="{x:Static local:AppCommands.ImportCoreViewRecordsCommand}"
@@ -43,9 +46,6 @@
                                       Header="{Markup:String AccessText.EnterRecords}" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                    <b:Interaction.Behaviors>
-                        <Behaviors:OpenContextMenuOnClick />
-                    </b:Interaction.Behaviors>
                 </Button>
                 <Button Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
                         CommandParameter="{Binding Value}"

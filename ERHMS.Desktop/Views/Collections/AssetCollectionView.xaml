@@ -37,6 +37,9 @@
                   Grid.Row="1"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
+            <b:Interaction.Behaviors>
+                <Behaviors:EnhanceKeyboardNavigation />
+            </b:Interaction.Behaviors>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Value.Name}"
                                     Header="{Markup:String AccessText.Name}"
@@ -55,9 +58,6 @@
                 <MouseBinding Command="{Binding OpenCommand}"
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
-            <b:Interaction.Behaviors>
-                <Behaviors:EnhanceKeyboardNavigation />
-            </b:Interaction.Behaviors>
         </DataGrid>
         <Controls:Watermark Grid.Row="1"
                             ItemsControl="{x:Reference ItemsDataGrid}" />

@@ -74,6 +74,9 @@
                         Grid.Column="1"
                         Content="{Markup:Icon Expand}"
                         FontFamily="{StaticResource IconFontFamily}">
+                    <b:Interaction.Behaviors>
+                        <Behaviors:OpenContextMenuOnClick />
+                    </b:Interaction.Behaviors>
                     <Button.ContextMenu>
                         <ContextMenu>
                             <ContextMenu.Resources>
@@ -150,9 +153,6 @@
                                    Right="{StaticResource SmallSpace}"
                                    Bottom="{StaticResource SmallSpace}" />
                     </Button.Margin>
-                    <b:Interaction.Behaviors>
-                        <Behaviors:OpenContextMenuOnClick />
-                    </b:Interaction.Behaviors>
                 </Button>
             </Grid>
         </DataTemplate>
