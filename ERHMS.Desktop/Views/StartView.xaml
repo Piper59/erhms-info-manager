@@ -14,12 +14,6 @@
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type ViewModels:StartViewModel+CoreProjectViewModel}">
             <StackPanel Style="{StaticResource Section}">
-                <StackPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
-                        <Setter Property="ContextMenuService.Placement" Value="Bottom" />
-                        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-                    </Style>
-                </StackPanel.Resources>
                 <TextBlock Style="{StaticResource Lead}"
                            Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
                 <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}">
@@ -112,14 +106,26 @@
                 Visibility="{Binding Minimized, Converter={StaticResource BooleanToVisibilityInverter}}">
             <ScrollViewer>
                 <Border Style="{StaticResource FluidLayout}">
-                    <ItemsControl IsTabStop="False"
-                                  ItemsSource="{Binding CoreProjects}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Style="{StaticResource Container}" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
+                    <StackPanel Style="{StaticResource Container}">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
+                                <Setter Property="ContextMenuService.Placement" Value="Bottom" />
+                                <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <StackPanel Style="{StaticResource Section}">
+                            <TextBlock Style="{StaticResource Lead}"
+                                       Text="{Markup:String Lead.Start}" />
+                            <Button Command="{Binding LearnCommand}"
+                                    CommandParameter="{Markup:String Uri.ERHMS}"
+                                    Content="{Markup:String AccessText.Learn.ERHMS}" />
+                            <Button Command="{Binding LearnCommand}"
+                                    CommandParameter="{Markup:String Uri.EpiInfo}"
+                                    Content="{Markup:String AccessText.Learn.EpiInfo}" />
+                        </StackPanel>
+                        <ContentPresenter Content="{Binding WorkerProject}" />
+                        <ContentPresenter Content="{Binding IncidentProject}" />
+                    </StackPanel>
                 </Border>
             </ScrollViewer>
         </Border>

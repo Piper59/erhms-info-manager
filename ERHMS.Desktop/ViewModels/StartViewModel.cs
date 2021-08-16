@@ -2,8 +2,8 @@
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -41,7 +41,8 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public IEnumerable<CoreProjectViewModel> CoreProjects { get; }
+        public CoreProjectViewModel WorkerProject { get; } = new CoreProjectViewModel(CoreProject.Worker);
+        public CoreProjectViewModel IncidentProject { get; } = new CoreProjectViewModel(CoreProject.Incident);
 
         private bool minimized;
         public bool Minimized
@@ -57,19 +58,21 @@ namespace ERHMS.Desktop.ViewModels
             set { SetProperty(ref closed, value); }
         }
 
+        public ICommand LearnCommand { get; }
         public ICommand ToggleCommand { get; }
         public ICommand CloseCommand { get; }
 
         public StartViewModel()
         {
-            CoreProjects = new CoreProjectViewModel[]
-            {
-                new CoreProjectViewModel(CoreProject.Worker),
-                new CoreProjectViewModel(CoreProject.Incident)
-            };
-            Closed = CoreProjects.All(coreProject => coreProject.HasPath);
+            Closed = WorkerProject.HasPath && IncidentProject.HasPath;
+            LearnCommand = new SyncCommand<string>(Learn);
             ToggleCommand = new SyncCommand(Toggle);
             CloseCommand = new SyncCommand(Close);
+        }
+
+        public void Learn(string uri)
+        {
+            Process.Start(uri)?.Dispose();
         }
 
         public void Toggle()

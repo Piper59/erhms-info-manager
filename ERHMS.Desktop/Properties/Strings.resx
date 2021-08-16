@@ -237,6 +237,12 @@
   <data name="AccessText.ImportRecords" xml:space="preserve">
     <value>_Import records from file</value>
   </data>
+  <data name="AccessText.Learn.EpiInfo" xml:space="preserve">
+    <value>_Learn about Epi Info</value>
+  </data>
+  <data name="AccessText.Learn.ERHMS" xml:space="preserve">
+    <value>_Learn about ERHMS</value>
+  </data>
   <data name="AccessText.Logs" xml:space="preserve">
     <value>_Logs</value>
   </data>
@@ -952,11 +958,14 @@ Close anyway?</value>
   <data name="Lead.RefreshingViews" xml:space="preserve">
     <value>Refreshing forms</value>
   </data>
+  <data name="Lead.Start" xml:space="preserve">
+    <value>Before you begin</value>
+  </data>
   <data name="Lead.Start.Incident" xml:space="preserve">
     <value>When an incident occurs</value>
   </data>
   <data name="Lead.Start.Worker" xml:space="preserve">
-    <value>On initial setup</value>
+    <value>During initial setup</value>
   </data>
   <data name="Lead.StartingEpiInfo" xml:space="preserve">
     <value>Starting Epi Info</value>
@@ -1082,6 +1091,12 @@ It allows users to create data entry forms; collect data in desktop, mobile, and
   </data>
   <data name="Title.Views" xml:space="preserve">
     <value>Forms</value>
+  </data>
+  <data name="Uri.EpiInfo" xml:space="preserve">
+    <value>https://www.cdc.gov/epiinfo/</value>
+  </data>
+  <data name="Uri.ERHMS" xml:space="preserve">
+    <value>https://www.cdc.gov/niosh/erhms/</value>
   </data>
   <data name="Watermark" xml:space="preserve">
     <value>No items found</value>

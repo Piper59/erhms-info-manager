@@ -421,6 +421,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Learn about Epi Info.
+        /// </summary>
+        public static string AccessText_Learn_EpiInfo {
+            get {
+                return ResourceManager.GetString("AccessText.Learn.EpiInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Learn about ERHMS.
+        /// </summary>
+        public static string AccessText_Learn_ERHMS {
+            get {
+                return ResourceManager.GetString("AccessText.Learn.ERHMS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Logs.
         /// </summary>
         public static string AccessText_Logs {
@@ -2534,6 +2552,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Before you begin.
+        /// </summary>
+        public static string Lead_Start {
+            get {
+                return ResourceManager.GetString("Lead.Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When an incident occurs.
         /// </summary>
         public static string Lead_Start_Incident {
@@ -2543,7 +2570,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On initial setup.
+        ///   Looks up a localized string similar to During initial setup.
         /// </summary>
         public static string Lead_Start_Worker {
             get {
@@ -2879,6 +2906,24 @@ namespace ERHMS.Desktop.Properties {
         public static string Title_Views {
             get {
                 return ResourceManager.GetString("Title.Views", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.cdc.gov/epiinfo/.
+        /// </summary>
+        public static string Uri_EpiInfo {
+            get {
+                return ResourceManager.GetString("Uri.EpiInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.cdc.gov/niosh/erhms/.
+        /// </summary>
+        public static string Uri_ERHMS {
+            get {
+                return ResourceManager.GetString("Uri.ERHMS", resourceCulture);
             }
         }
         
