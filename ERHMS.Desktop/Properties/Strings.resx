@@ -316,10 +316,10 @@
     <value>_Tools</value>
   </data>
   <data name="AccessText.UseMainView.Incident" xml:space="preserve">
-    <value>Use the Worker Deployment Record to collect basic accountability information each time a worker is deployed to the incident</value>
+    <value>_Use the Worker Deployment Record to collect basic accountability information each time a worker is deployed to the incident</value>
   </data>
   <data name="AccessText.UseMainView.Worker" xml:space="preserve">
-    <value>Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization</value>
+    <value>_Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization</value>
   </data>
   <data name="AccessText.Views" xml:space="preserve">
     <value>F_orms</value>

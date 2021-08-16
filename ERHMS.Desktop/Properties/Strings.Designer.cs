@@ -655,7 +655,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the Worker Deployment Record to collect basic accountability information each time a worker is deployed to the incident.
+        ///   Looks up a localized string similar to _Use the Worker Deployment Record to collect basic accountability information each time a worker is deployed to the incident.
         /// </summary>
         public static string AccessText_UseMainView_Incident {
             get {
@@ -664,7 +664,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization.
+        ///   Looks up a localized string similar to _Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization.
         /// </summary>
         public static string AccessText_UseMainView_Worker {
             get {

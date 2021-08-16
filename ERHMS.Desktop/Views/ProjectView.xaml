@@ -23,12 +23,13 @@
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap">
                     <Run Text="{Markup:String Label.Project}" />
-                    <Hyperlink Command="{x:Static local:AppCommands.OpenPathCommand}"
+                    <Hyperlink AutomationProperties.HelpText="{Binding Project.FilePath}"
+                               Command="{x:Static local:AppCommands.OpenPathCommand}"
                                CommandParameter="{Binding Project.Location}"
-                               Style="{StaticResource PlainHyperlink}">
-                        <Run FontWeight="{StaticResource DefaultFontWeight}"
-                             Text="{Binding Project.Name}"
-                             ToolTip="{Binding Project.FilePath}" />
+                               FontWeight="{StaticResource DefaultFontWeight}"
+                               Style="{StaticResource PlainHyperlink}"
+                               ToolTip="{Binding Project.FilePath}">
+                        <Run Text="{Binding Project.Name}" />
                     </Hyperlink>
                 </TextBlock>
                 <StackPanel Grid.Column="1"
