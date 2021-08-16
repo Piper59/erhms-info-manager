@@ -270,6 +270,9 @@
   <data name="AccessText.Pgms" xml:space="preserve">
     <value>_Analyses</value>
   </data>
+  <data name="AccessText.Prj" xml:space="preserve">
+    <value>_Epi Info project (.prj)</value>
+  </data>
   <data name="AccessText.Records" xml:space="preserve">
     <value>_Records</value>
   </data>

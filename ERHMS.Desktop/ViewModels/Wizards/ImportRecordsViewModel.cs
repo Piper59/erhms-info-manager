@@ -84,12 +84,14 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public ICommand ImportFromCsvCommand { get; }
             public ICommand ImportFromEdp7Command { get; }
+            public ICommand ImportFromPrjCommand { get; }
 
             public SetFormatViewModel(ImportRecordsViewModel wizard)
                 : base(wizard)
             {
                 ImportFromCsvCommand = new SyncCommand(ImportFromCsv);
                 ImportFromEdp7Command = new SyncCommand(ImportFromEdp7);
+                ImportFromPrjCommand = new SyncCommand(ImportFromPrj);
             }
 
             public void ImportFromCsv()
@@ -101,6 +103,13 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 Close();
                 Wizard.View.ImportFromPackage();
+                SetResult(true);
+            }
+
+            public void ImportFromPrj()
+            {
+                Close();
+                Wizard.View.ImportFromProject();
                 SetResult(true);
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.Data.Services;
+using Epi.Enter.Forms;
 using Epi.Fields;
 using Epi.Windows.ImportExport.Dialogs;
 using ERHMS.Common.Logging;
@@ -45,22 +46,34 @@ namespace ERHMS.EpiInfo
             metadata.UpdateView(@this);
         }
 
-        public static bool ImportFromPackage(this View @this)
+        private static void ShowDialog(Form form)
         {
-            ImportEncryptedDataPackageDialog dialog = new ImportEncryptedDataPackageDialog(@this)
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowDialog();
+        }
+
+        public static void ImportFromPackage(this View @this)
+        {
+            using (Form form = new ImportEncryptedDataPackageDialog(@this))
             {
-                StartPosition = FormStartPosition.CenterParent
-            };
-            return dialog.ShowDialog() == DialogResult.OK;
+                ShowDialog(form);
+            }
+        }
+
+        public static void ImportFromProject(this View @this)
+        {
+            using (Form form = new ImportDataForm(@this))
+            {
+                ShowDialog(form);
+            }
         }
 
         public static void ExportToPackage(this View @this)
         {
-            PackageForTransportDialog dialog = new PackageForTransportDialog(@this.Project.FilePath, @this)
+            using (Form form = new PackageForTransportDialog(@this.Project.FilePath, @this))
             {
-                StartPosition = FormStartPosition.CenterParent
-            };
-            dialog.ShowDialog();
+                ShowDialog(form);
+            }
         }
     }
 }

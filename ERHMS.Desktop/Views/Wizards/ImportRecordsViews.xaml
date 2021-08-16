@@ -13,6 +13,8 @@
                     Content="{Markup:String AccessText.Csv}" />
             <Button Command="{Binding ImportFromEdp7Command}"
                     Content="{Markup:String AccessText.Edp7}" />
+            <Button Command="{Binding ImportFromPrjCommand}"
+                    Content="{Markup:String AccessText.Prj}" />
         </StackPanel>
     </DataTemplate>
 

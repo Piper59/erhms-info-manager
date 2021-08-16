@@ -520,6 +520,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Epi Info project (.prj).
+        /// </summary>
+        public static string AccessText_Prj {
+            get {
+                return ResourceManager.GetString("AccessText.Prj", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Records.
         /// </summary>
         public static string AccessText_Records {
