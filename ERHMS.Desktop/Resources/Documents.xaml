@@ -12,22 +12,14 @@
     </Style>
     <Style TargetType="FlowDocument" BasedOn="{StaticResource FlowDocumentBase}" />
 
-    <!-- Paragraphs -->
-    <Style x:Key="Heading" TargetType="Paragraph">
-        <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
-        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
-    </Style>
-
-    <Style x:Key="Lead" TargetType="Paragraph">
-        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
-    </Style>
-
-    <Style x:Key="Small" TargetType="Paragraph">
-        <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
-    </Style>
-
-    <Style x:Key="Title" TargetType="Paragraph">
+    <!-- Blocks -->
+    <Style x:Key="Heading1" TargetType="Block">
         <Setter Property="FontSize" Value="{StaticResource HugeFontSize}" />
         <Setter Property="FontWeight" Value="{StaticResource ThickFontWeight}" />
+    </Style>
+
+    <Style x:Key="Heading2" TargetType="Block">
+        <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
+        <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
     </Style>
 </ResourceDictionary>

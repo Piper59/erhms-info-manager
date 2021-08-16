@@ -150,6 +150,7 @@
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\InvalidNameReasonExtensions.cs" />
+    <Compile Include="Infrastructure\MarkdownParser.cs" />
     <Compile Include="Infrastructure\NativeMethods.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />

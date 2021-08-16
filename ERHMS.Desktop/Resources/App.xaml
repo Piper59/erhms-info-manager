@@ -5,6 +5,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="Base.xaml" />
+        <ResourceDictionary Source="Documents.xaml" />
         <ResourceDictionary Source="Converters.xaml" />
         <ResourceDictionary Source="Templates.xaml" />
     </ResourceDictionary.MergedDictionaries>
