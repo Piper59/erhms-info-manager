@@ -24,8 +24,8 @@ namespace ERHMS.Desktop
         public static async Task StartWithBackgroundTaskAsync(Func<Task> action, Module module, params string[] args)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Delay = TimeSpan.Zero;
             progress.Lead = Strings.Lead_StartingEpiInfo;
+            progress.Delay = TimeSpan.Zero;
             await progress.Run(async () =>
             {
                 Task task = action();

@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.Services
 {
     public interface IProgressService : IProgress<string>
     {
-        TimeSpan Delay { get; set; }
         string Lead { get; set; }
+        bool CanBeCanceled { get; set; }
+        CancellationToken CancellationToken { get; }
+        TimeSpan Delay { get; set; }
 
         Task Run(Func<Task> action);
         Task<TResult> Run<TResult>(Func<Task<TResult>> action);

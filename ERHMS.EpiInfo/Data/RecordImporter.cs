@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 
 namespace ERHMS.EpiInfo.Data
 {
@@ -19,6 +20,7 @@ namespace ERHMS.EpiInfo.Data
 
         public View View { get; }
         public IEnumerable<string> Headers { get; }
+        public IProgress<int> Progress { get; set; }
 
         private readonly ICollection<Exception> errors = new List<Exception>();
         public IEnumerable<Exception> Errors => errors;
@@ -95,7 +97,7 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public bool Import(IProgress<int> progress = null)
+        public bool Import(CancellationToken cancellationToken)
         {
             if (fieldsByIndex.Count == 0)
             {
@@ -111,7 +113,7 @@ namespace ERHMS.EpiInfo.Data
                 }
                 while (true)
                 {
-                    progress?.Report(RowNumber + 1);
+                    cancellationToken.ThrowIfCancellationRequested();
                     try
                     {
                         Record record = ReadRecord();
@@ -119,6 +121,7 @@ namespace ERHMS.EpiInfo.Data
                         {
                             break;
                         }
+                        Progress?.Report(RowNumber + 1);
                         SaveRecord(repository, record);
                     }
                     catch (Exception ex)
@@ -136,6 +139,11 @@ namespace ERHMS.EpiInfo.Data
                     return false;
                 }
             }
+        }
+
+        public bool Import()
+        {
+            return Import(CancellationToken.None);
         }
     }
 }

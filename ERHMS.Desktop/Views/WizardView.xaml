@@ -29,9 +29,20 @@
                    FontSize="192"
                    HorizontalAlignment="Center"
                    Opacity="0.1"
-                   Text="{Markup:Icon Success}"
-                   VerticalAlignment="Center"
-                   Visibility="{Binding Succeeded, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                   VerticalAlignment="Center">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Result}" Value="True">
+                            <Setter Property="Text" Value="{Binding Source='Success', Converter={StaticResource IconNameToStringConverter}}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Result}" Value="False">
+                            <Setter Property="Text" Value="{Binding Source='Failure', Converter={StaticResource IconNameToStringConverter}}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
         <Border Grid.Row="0"
                 BorderBrush="{x:Static SystemColors.WindowFrameBrush}"
                 BorderThickness="0,1">
@@ -66,10 +77,9 @@
                         Content="{Binding Step.ContinueAction}"
                         IsDefault="True" />
                 <Button Command="{Binding Step.CancelCommand}"
+                        Content="{Markup:String AccessText.Cancel}"
                         IsCancel="True"
-                        Visibility="{Binding Committed, Converter={StaticResource BooleanToVisibilityInverter}}">
-                    _Cancel
-                </Button>
+                        Visibility="{Binding Committed, Converter={StaticResource BooleanToVisibilityInverter}}" />
             </WrapPanel>
         </Border>
     </Grid>

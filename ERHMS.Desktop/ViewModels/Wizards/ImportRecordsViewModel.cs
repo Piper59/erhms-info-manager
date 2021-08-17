@@ -1,5 +1,6 @@
 ﻿using Epi;
 using Epi.Fields;
+using ERHMS.Common;
 using ERHMS.Common.Linq;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
@@ -230,14 +231,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CommitViewModel : StepViewModel<ImportRecordsViewModel>
         {
-            private static IProgress<int> GetProgress(IProgressService progress)
-            {
-                return new Progress<int>(rowNumber =>
-                {
-                    progress.Report(string.Format(Strings.Body_ImportingRow, rowNumber));
-                });
-            }
-
             public override string Title => Strings.Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
@@ -261,27 +254,36 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                 progress.Lead = Strings.Lead_ImportingRecords;
-                bool result = await progress.Run(() =>
+                progress.CanBeCanceled = true;
+                try
                 {
-                    Wizard.Importer.Reset();
-                    foreach (Mapping mapping in Wizard.Mappings)
+                    bool result = await progress.Run(() =>
                     {
-                        if (mapping.Target.IsEmpty)
+                        Wizard.Importer.Reset();
+                        foreach (Mapping mapping in Wizard.Mappings)
                         {
-                            continue;
+                            if (mapping.Target.IsEmpty)
+                            {
+                                continue;
+                            }
+                            Wizard.Importer.Map(mapping.Index, mapping.Target.Field);
                         }
-                        Wizard.Importer.Map(mapping.Index, mapping.Target.Field);
-                    }
-                    try
-                    {
-                        return Wizard.Importer.Import(GetProgress(progress));
-                    }
-                    finally
-                    {
-                        Wizard.Importer.Dispose();
-                    }
-                });
-                Commit(result);
+                        Wizard.Importer.Progress = new FormattingProgress<int>(progress, Strings.Body_ImportingRow);
+                        try
+                        {
+                            return Wizard.Importer.Import(progress.CancellationToken);
+                        }
+                        finally
+                        {
+                            Wizard.Importer.Dispose();
+                        }
+                    });
+                    Commit(result);
+                }
+                catch (OperationCanceledException)
+                {
+                    Commit(false);
+                }
                 GoToStep(new CloseViewModel(Wizard, this));
             }
         }
@@ -289,7 +291,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public class CloseViewModel : StepViewModel<ImportRecordsViewModel>
         {
             public override string Title =>
-                Wizard.Succeeded
+                Wizard.Result == true
                 ? Strings.ImportRecords_Lead_Close_Success
                 : Strings.ImportRecords_Lead_Close_Failure;
             public override string ContinueAction => Strings.AccessText_Close;
@@ -298,19 +300,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public CloseViewModel(ImportRecordsViewModel wizard, IStep antecedent)
                 : base(wizard, antecedent)
             {
-                StringBuilder errors = new StringBuilder();
-                foreach (Exception error in wizard.Importer.Errors)
+                if (wizard.Importer.Errors.Count() > 0)
                 {
-                    errors.AppendLine(error.Message);
-                    if (error.InnerException != null)
+                    StringBuilder errors = new StringBuilder();
+                    foreach (Exception error in wizard.Importer.Errors)
                     {
-                        errors.AppendLine($"  {error.InnerException.Message}");
+                        errors.AppendLine(error.Message);
+                        if (error.InnerException != null)
+                        {
+                            errors.AppendLine($"  {error.InnerException.Message}");
+                        }
                     }
-                }
-                Errors = errors.ToString().Trim();
-                if (Errors.Length == 0)
-                {
-                    Errors = null;
+                    Errors = errors.ToString().Trim();
                 }
             }
 

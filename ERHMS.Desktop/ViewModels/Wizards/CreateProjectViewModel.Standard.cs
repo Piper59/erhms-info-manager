@@ -5,7 +5,6 @@ using ERHMS.Desktop.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.Resources;
-using System;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
@@ -29,11 +28,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public CommitViewModel(CreateProjectViewModel wizard, IStep antecedent)
                     : base(wizard, antecedent) { }
 
-                protected override void ContinueCore(Project project, IProgress<string> progress)
+                protected override void ContinueCore(Project project)
                 {
                     foreach (CoreView coreView in CoreView.GetInstances(Wizard.CoreProject))
                     {
-                        progress.Report(string.Format(Strings.Body_CreatingView, coreView.Name));
+                        Progress.Report(string.Format(Strings.Body_CreatingView, coreView.Name));
                         ViewTemplateInstantiator instantiator =
                             new ViewTemplateInstantiator(ResourceManager.GetXTemplate(coreView), project)
                             {

@@ -13,13 +13,20 @@ namespace ERHMS.Desktop.Infrastructure.Services
     {
         private readonly ProgressViewModel dataContext;
 
-        public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
-
         public string Lead
         {
             get { return dataContext.Lead; }
             set { dataContext.Lead = value; }
         }
+
+        public bool CanBeCanceled
+        {
+            get { return dataContext.CanBeCanceled; }
+            set { dataContext.CanBeCanceled = value; }
+        }
+
+        public CancellationToken CancellationToken => dataContext.CancellationToken;
+        public TimeSpan Delay { get; set; } = TimeSpan.FromSeconds(1.0);
 
         public ProgressService()
         {

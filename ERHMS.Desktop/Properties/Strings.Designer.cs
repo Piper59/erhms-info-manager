@@ -1346,7 +1346,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File has been created.
+        ///   Looks up a localized string similar to File creation was successful.
         /// </summary>
         public static string CreateAsset_Lead_Close {
             get {
@@ -1472,7 +1472,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project has been created.
+        ///   Looks up a localized string similar to Project creation was successful.
         /// </summary>
         public static string CreateProject_Lead_Close {
             get {
@@ -1580,7 +1580,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Form has been created.
+        ///   Looks up a localized string similar to Form creation was successful.
         /// </summary>
         public static string CreateView_Lead_Close {
             get {
@@ -1670,11 +1670,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Records have been exported.
+        ///   Looks up a localized string similar to Record export was not successful.
         /// </summary>
-        public static string ExportRecords_Lead_Close {
+        public static string ExportRecords_Lead_Close_Failure {
             get {
-                return ResourceManager.GetString("ExportRecords.Lead.Close", resourceCulture);
+                return ResourceManager.GetString("ExportRecords.Lead.Close.Failure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record export was successful.
+        /// </summary>
+        public static string ExportRecords_Lead_Close_Success {
+            get {
+                return ResourceManager.GetString("ExportRecords.Lead.Close.Success", resourceCulture);
             }
         }
         
@@ -2030,7 +2039,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Records could not be imported.
+        ///   Looks up a localized string similar to Record import was not successful.
         /// </summary>
         public static string ImportRecords_Lead_Close_Failure {
             get {
@@ -2039,7 +2048,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Records have been imported.
+        ///   Looks up a localized string similar to Record import was successful.
         /// </summary>
         public static string ImportRecords_Lead_Close_Success {
             get {

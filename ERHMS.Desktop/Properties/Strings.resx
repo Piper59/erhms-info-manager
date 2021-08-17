@@ -557,7 +557,7 @@ Close anyway?</value>
     <value>Worker Rostering Form</value>
   </data>
   <data name="CreateAsset.Lead.Close" xml:space="preserve">
-    <value>File has been created</value>
+    <value>File creation was successful</value>
   </data>
   <data name="CreateAsset.Lead.SetFilePath" xml:space="preserve">
     <value>Choose a name and location for the new file</value>
@@ -599,7 +599,7 @@ Close anyway?</value>
     <value>Create a new project containing standard worker forms.</value>
   </data>
   <data name="CreateProject.Lead.Close" xml:space="preserve">
-    <value>Project has been created</value>
+    <value>Project creation was successful</value>
   </data>
   <data name="CreateProject.Lead.SetProjectCreationInfo" xml:space="preserve">
     <value>Enter details for the new project</value>
@@ -635,7 +635,7 @@ Close anyway?</value>
     <value>Create a new form containing fields defined in a form-level template.</value>
   </data>
   <data name="CreateView.Lead.Close" xml:space="preserve">
-    <value>Form has been created</value>
+    <value>Form creation was successful</value>
   </data>
   <data name="CreateView.Lead.SetSourceView" xml:space="preserve">
     <value>Choose an existing form</value>
@@ -664,8 +664,11 @@ Close anyway?</value>
   <data name="ExportRecords.AccessText.ExportToPackage" xml:space="preserve">
     <value>Export to an Epi Info _data package</value>
   </data>
-  <data name="ExportRecords.Lead.Close" xml:space="preserve">
-    <value>Records have been exported</value>
+  <data name="ExportRecords.Lead.Close.Failure" xml:space="preserve">
+    <value>Record export was not successful</value>
+  </data>
+  <data name="ExportRecords.Lead.Close.Success" xml:space="preserve">
+    <value>Record export was successful</value>
   </data>
   <data name="ExportRecords.Lead.SetFilePath" xml:space="preserve">
     <value>Choose a destination file</value>
@@ -785,10 +788,10 @@ Close anyway?</value>
     <value>Review the errors below and try again.</value>
   </data>
   <data name="ImportRecords.Lead.Close.Failure" xml:space="preserve">
-    <value>Records could not be imported</value>
+    <value>Record import was not successful</value>
   </data>
   <data name="ImportRecords.Lead.Close.Success" xml:space="preserve">
-    <value>Records have been imported</value>
+    <value>Record import was successful</value>
   </data>
   <data name="ImportRecords.Lead.SetFilePath" xml:space="preserve">
     <value>Choose a source file</value>

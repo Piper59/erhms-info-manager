@@ -99,36 +99,16 @@ namespace ERHMS.Desktop.ViewModels
         private bool? result;
         public bool? Result
         {
-            get
-            {
-                return result;
-            }
-            private set
-            {
-                if (SetProperty(ref result, value))
-                {
-                    OnPropertyChanged(nameof(Succeeded));
-                }
-            }
+            get { return result; }
+            private set { SetProperty(ref result, value); }
         }
 
         private bool committed;
         public bool Committed
         {
-            get
-            {
-                return committed;
-            }
-            private set
-            {
-                if (SetProperty(ref committed, value))
-                {
-                    OnPropertyChanged(nameof(Succeeded));
-                }
-            }
+            get { return committed; }
+            private set { SetProperty(ref committed, value); }
         }
-
-        public bool Succeeded => Result.GetValueOrDefault() && Committed;
 
         public event EventHandler CloseRequested;
         protected virtual void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);

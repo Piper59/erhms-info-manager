@@ -1,6 +1,5 @@
 ﻿using Epi;
 using ERHMS.Desktop.Wizards;
-using System;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
@@ -24,7 +23,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 public CommitViewModel(CreateProjectViewModel wizard, IStep antecedent)
                     : base(wizard, antecedent) { }
 
-                protected override void ContinueCore(Project project, IProgress<string> progress) { }
+                protected override void ContinueCore(Project project) { }
             }
         }
     }

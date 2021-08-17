@@ -1,4 +1,5 @@
 ﻿using Epi;
+using ERHMS.Common;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -88,14 +89,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
         public class CommitViewModel : StepViewModel<ExportRecordsViewModel>
         {
-            private static IProgress<int> GetProgress(IProgressService progress)
-            {
-                return new Progress<int>(rowNumber =>
-                {
-                    progress.Report(string.Format(Strings.Body_ExportingRow, rowNumber));
-                });
-            }
-
             public override string Title => Strings.Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
@@ -118,24 +111,36 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                 progress.Lead = Strings.Lead_ExportingRecords;
-                await progress.Run(() =>
+                progress.CanBeCanceled = true;
+                try
                 {
-                    Wizard.View.LoadFields();
-                    using (Stream stream = File.Open(Wizard.FilePath, FileMode.Create, FileAccess.Write))
-                    using (TextWriter writer = new StreamWriter(stream))
-                    using (RecordExporter exporter = new RecordExporter(Wizard.View, writer))
+                    await progress.Run(() =>
                     {
-                        exporter.Export(GetProgress(progress));
-                    }
-                });
-                Commit(true);
+                        Wizard.View.LoadFields();
+                        using (Stream stream = File.Open(Wizard.FilePath, FileMode.Create, FileAccess.Write))
+                        using (TextWriter writer = new StreamWriter(stream))
+                        using (RecordExporter exporter = new RecordExporter(Wizard.View, writer))
+                        {
+                            exporter.Progress = new FormattingProgress<int>(progress, Strings.Body_ExportingRow);
+                            exporter.Export(progress.CancellationToken);
+                        }
+                    });
+                    Commit(true);
+                }
+                catch (OperationCanceledException)
+                {
+                    Commit(false);
+                }
                 GoToStep(new CloseViewModel(Wizard, this));
             }
         }
 
         public class CloseViewModel : StepViewModel<ExportRecordsViewModel>
         {
-            public override string Title => Strings.ExportRecords_Lead_Close;
+            public override string Title =>
+                Wizard.Result == true
+                ? Strings.ExportRecords_Lead_Close_Success
+                : Strings.ExportRecords_Lead_Close_Failure;
             public override string ContinueAction => Strings.AccessText_Close;
 
             public CloseViewModel(ExportRecordsViewModel wizard, IStep antecedent)

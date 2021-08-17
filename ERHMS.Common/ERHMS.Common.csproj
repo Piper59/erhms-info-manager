@@ -54,6 +54,7 @@
     <Compile Include="Data\DataTableExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="FormattingProgress.cs" />
     <Compile Include="HashCodeCalculator.cs" />
     <Compile Include="IO\CsvReader.cs" />
     <Compile Include="IO\CsvWriter.cs" />

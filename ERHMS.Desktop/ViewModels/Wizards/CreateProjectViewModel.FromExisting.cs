@@ -7,7 +7,6 @@ using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
-using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -88,9 +87,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Details.Insert(0, Strings.Label_Project, Wizard.SourceProject.FilePath);
                 }
 
-                protected override void ContinueCore(Project project, IProgress<string> progress)
+                protected override void ContinueCore(Project project)
                 {
-                    progress.Report(Strings.Body_CreatingTemplate);
+                    Progress.Report(Strings.Body_CreatingTemplate);
                     ProjectTemplateCreator creator = new ProjectTemplateCreator(Wizard.SourceProject)
                     {
                         Progress = Log.Progress
@@ -104,7 +103,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     {
                         if (e.Level == TemplateLevel.View)
                         {
-                            progress.Report(string.Format(Strings.Body_CreatingView, e.Name));
+                            Progress.Report(string.Format(Strings.Body_CreatingView, e.Name));
                         }
                     };
                     instantiator.Instantiate();

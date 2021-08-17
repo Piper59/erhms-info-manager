@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace ERHMS.EpiInfo.Data
 {
@@ -15,6 +16,7 @@ namespace ERHMS.EpiInfo.Data
         private readonly IEnumerable<Field> fields;
 
         public View View { get; }
+        public IProgress<int> Progress { get; set; }
 
         public RecordExporter(View view, TextWriter writer)
             : base(writer)
@@ -38,7 +40,7 @@ namespace ERHMS.EpiInfo.Data
             }
         }
 
-        public void Export(IProgress<int> progress = null)
+        public void Export(CancellationToken cancellationToken)
         {
             Log.Instance.Debug("Exporting records");
             WriteRow(GetHeaders());
@@ -46,10 +48,16 @@ namespace ERHMS.EpiInfo.Data
             {
                 foreach (Record record in repository.Select())
                 {
-                    progress.Report(RowNumber + 1);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    Progress?.Report(RowNumber + 1);
                     WriteRow(GetValues(record));
                 }
             }
+        }
+
+        public void Export()
+        {
+            Export(CancellationToken.None);
         }
     }
 }

@@ -187,6 +187,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override string Title => Strings.Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
+            protected IProgress<string> Progress { get; private set; }
 
             public CommitViewModel(CreateProjectViewModel wizard, IStep antecedent)
                 : base(wizard, antecedent)
@@ -204,7 +205,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 };
             }
 
-            protected abstract void ContinueCore(Project project, IProgress<string> progress);
+            protected abstract void ContinueCore(Project project);
 
             public override bool CanContinue()
             {
@@ -237,7 +238,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Project project = ProjectExtensions.Create(Wizard.ProjectCreationInfo);
                     progress.Report(Strings.Body_Initializing);
                     project.Initialize();
-                    ContinueCore(project, progress);
+                    Progress = progress;
+                    ContinueCore(project);
                     return project;
                 });
                 Settings.Default.SetProjectPath(Wizard.CoreProject, Wizard.Project.FilePath);
