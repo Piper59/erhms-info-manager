@@ -58,6 +58,7 @@
                                        AltText="{Markup:String AltText.Details}"
                                        Expanded="{Binding Expanded}"
                                        FontSize="{StaticResource SmallFontSize}"
+                                       Foreground="{x:Static SystemColors.MenuTextBrush}"
                                        Visibility="{Binding Details, Converter={StaticResource NullableToVisibilityConverter}}" />
                 <ItemsControl Grid.Column="1"
                               IsTabStop="False"

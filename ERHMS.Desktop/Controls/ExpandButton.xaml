@@ -35,7 +35,8 @@
             <ToggleButton.Template>
                 <ControlTemplate>
                     <Label Content="{Binding AccessText, ElementName=Root}"
-                           FontSize="{Binding FontSize, ElementName=Root}" />
+                           FontSize="{Binding FontSize, ElementName=Root}"
+                           Foreground="{Binding Foreground, ElementName=Root}" />
                 </ControlTemplate>
             </ToggleButton.Template>
         </ToggleButton>

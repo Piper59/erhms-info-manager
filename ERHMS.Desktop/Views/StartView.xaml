@@ -79,10 +79,14 @@
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
                             Style="{StaticResource ControlIconButtonGroup}">
-                    <Controls:IconButton Command="{Binding ToggleCommand}"
-                                         Foreground="{x:Static SystemColors.ControlTextBrush}">
+                    <StackPanel.Resources>
+                        <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
+                            <Setter Property="Foreground" Value="{x:Static SystemColors.ControlTextBrush}" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Controls:IconButton Command="{Binding ToggleCommand}">
                         <Controls:IconButton.Style>
-                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource ControlIconButton}">
+                            <Style TargetType="Controls:IconButton" BasedOn="{StaticResource {x:Type Controls:IconButton}}">
                                 <Setter Property="AltText" Value="{Binding Source='AltText.Minimize', Converter={StaticResource StringLocalizingConverter}}" />
                                 <Setter Property="Content" Value="{Binding Source='Minimize', Converter={StaticResource IconNameToStringConverter}}" />
                                 <Style.Triggers>
