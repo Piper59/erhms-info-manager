@@ -52,17 +52,17 @@ namespace ERHMS.EpiInfo
             form.ShowDialog();
         }
 
-        public static void ImportFromPackage(this View @this)
+        public static void ImportFromView(this View @this)
         {
-            using (Form form = new ImportEncryptedDataPackageDialog(@this))
+            using (Form form = new ImportDataForm(@this))
             {
                 ShowDialog(form);
             }
         }
 
-        public static void ImportFromProject(this View @this)
+        public static void ImportFromPackage(this View @this)
         {
-            using (Form form = new ImportDataForm(@this))
+            using (Form form = new ImportEncryptedDataPackageDialog(@this))
             {
                 ShowDialog(form);
             }

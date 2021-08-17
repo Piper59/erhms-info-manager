@@ -159,9 +159,6 @@
   <data name="AccessText.CreateNewProject" xml:space="preserve">
     <value>Create a _new project</value>
   </data>
-  <data name="AccessText.Csv" xml:space="preserve">
-    <value>_Comma-separated values (.csv)</value>
-  </data>
   <data name="AccessText.Data" xml:space="preserve">
     <value>_Data</value>
   </data>
@@ -173,9 +170,6 @@
   </data>
   <data name="AccessText.Details" xml:space="preserve">
     <value>_Details</value>
-  </data>
-  <data name="AccessText.Edp7" xml:space="preserve">
-    <value>_Epi Info data package (.edp7)</value>
   </data>
   <data name="AccessText.EmailAddress" xml:space="preserve">
     <value>_Email address</value>
@@ -278,9 +272,6 @@
   </data>
   <data name="AccessText.Pgms" xml:space="preserve">
     <value>_Analyses</value>
-  </data>
-  <data name="AccessText.Prj" xml:space="preserve">
-    <value>_Epi Info project (.prj)</value>
   </data>
   <data name="AccessText.Records" xml:space="preserve">
     <value>_Records</value>
@@ -667,14 +658,20 @@ Close anyway?</value>
   <data name="DatabaseProvider.Value.SqlServer" xml:space="preserve">
     <value>Microsoft SQL Server</value>
   </data>
+  <data name="ExportRecords.AccessText.ExportToFile" xml:space="preserve">
+    <value>Export to a _comma-separated values (CSV) file</value>
+  </data>
+  <data name="ExportRecords.AccessText.ExportToPackage" xml:space="preserve">
+    <value>Export to an Epi Info _data package</value>
+  </data>
   <data name="ExportRecords.Lead.Close" xml:space="preserve">
     <value>Records have been exported</value>
   </data>
   <data name="ExportRecords.Lead.SetFilePath" xml:space="preserve">
     <value>Choose a destination file</value>
   </data>
-  <data name="ExportRecords.Lead.SetFormat" xml:space="preserve">
-    <value>Choose an export format</value>
+  <data name="ExportRecords.Lead.SetStrategy" xml:space="preserve">
+    <value>Choose how to export records</value>
   </data>
   <data name="FileDialog.Filter.AllFiles" xml:space="preserve">
     <value>All Files (*.*)|*.*</value>
@@ -775,6 +772,15 @@ Close anyway?</value>
   <data name="HelpText.UndeleteRecords" xml:space="preserve">
     <value>Mark the selected records as undeleted.</value>
   </data>
+  <data name="ImportRecords.AccessText.ImportFromFile" xml:space="preserve">
+    <value>Import from a _comma-separated values (CSV) file</value>
+  </data>
+  <data name="ImportRecords.AccessText.ImportFromPackage" xml:space="preserve">
+    <value>Import from an Epi Info _data package</value>
+  </data>
+  <data name="ImportRecords.AccessText.ImportFromView" xml:space="preserve">
+    <value>Import from another _form</value>
+  </data>
   <data name="ImportRecords.Body.Close.Failure" xml:space="preserve">
     <value>Review the errors below and try again.</value>
   </data>
@@ -787,11 +793,11 @@ Close anyway?</value>
   <data name="ImportRecords.Lead.SetFilePath" xml:space="preserve">
     <value>Choose a source file</value>
   </data>
-  <data name="ImportRecords.Lead.SetFormat" xml:space="preserve">
-    <value>Choose an import format</value>
-  </data>
   <data name="ImportRecords.Lead.SetMappings" xml:space="preserve">
     <value>Choose a destination field for each source column</value>
+  </data>
+  <data name="ImportRecords.Lead.SetStrategy" xml:space="preserve">
+    <value>Choose how to import records</value>
   </data>
   <data name="InvalidNameReason.Body.Empty" xml:space="preserve">
     <value>Please specify a name.</value>

@@ -15,26 +15,26 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 {
     public class ExportRecordsViewModel : WizardViewModel
     {
-        public class SetFormatViewModel : StepViewModel<ExportRecordsViewModel>
+        public class SetStrategyViewModel : StepViewModel<ExportRecordsViewModel>
         {
-            public override string Title => Strings.ExportRecords_Lead_SetFormat;
+            public override string Title => Strings.ExportRecords_Lead_SetStrategy;
 
-            public ICommand ExportToCsvCommand { get; }
-            public ICommand ExportToEdp7Command { get; }
+            public ICommand ExportToPackageCommand { get; }
+            public ICommand ExportToFileCommand { get; }
 
-            public SetFormatViewModel(ExportRecordsViewModel wizard)
+            public SetStrategyViewModel(ExportRecordsViewModel wizard)
                 : base(wizard)
             {
-                ExportToCsvCommand = new SyncCommand(ExportToCsv);
-                ExportToEdp7Command = new SyncCommand(ExportToEdp7);
+                ExportToPackageCommand = new SyncCommand(ExportToPackage);
+                ExportToFileCommand = new SyncCommand(ExportToFile);
             }
 
-            public void ExportToCsv()
+            public void ExportToFile()
             {
                 GoToStep(new SetFilePathViewModel(Wizard, this));
             }
 
-            public void ExportToEdp7()
+            public void ExportToPackage()
             {
                 Close();
                 Wizard.View.ExportToPackage();
@@ -159,7 +159,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public ExportRecordsViewModel(View view)
         {
             View = view;
-            Step = new SetFormatViewModel(this);
+            Step = new SetStrategyViewModel(this);
         }
     }
 }

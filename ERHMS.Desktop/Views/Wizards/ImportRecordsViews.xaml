@@ -4,17 +4,17 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+SetFormatViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
-            <Button Command="{Binding ImportFromCsvCommand}"
-                    Content="{Markup:String AccessText.Csv}" />
-            <Button Command="{Binding ImportFromEdp7Command}"
-                    Content="{Markup:String AccessText.Edp7}" />
-            <Button Command="{Binding ImportFromPrjCommand}"
-                    Content="{Markup:String AccessText.Prj}" />
+            <Button Command="{Binding ImportFromViewCommand}"
+                    Content="{Markup:String ImportRecords.AccessText.ImportFromView}" />
+            <Button Command="{Binding ImportFromPackageCommand}"
+                    Content="{Markup:String ImportRecords.AccessText.ImportFromPackage}" />
+            <Button Command="{Binding ImportFromFileCommand}"
+                    Content="{Markup:String ImportRecords.AccessText.ImportFromFile}" />
         </StackPanel>
     </DataTemplate>
 

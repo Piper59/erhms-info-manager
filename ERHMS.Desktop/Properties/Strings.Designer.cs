@@ -187,15 +187,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Comma-separated values (.csv).
-        /// </summary>
-        public static string AccessText_Csv {
-            get {
-                return ResourceManager.GetString("AccessText.Csv", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to _Data.
         /// </summary>
         public static string AccessText_Data {
@@ -228,15 +219,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Details {
             get {
                 return ResourceManager.GetString("AccessText.Details", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Epi Info data package (.edp7).
-        /// </summary>
-        public static string AccessText_Edp7 {
-            get {
-                return ResourceManager.GetString("AccessText.Edp7", resourceCulture);
             }
         }
         
@@ -543,15 +525,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Pgms {
             get {
                 return ResourceManager.GetString("AccessText.Pgms", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Epi Info project (.prj).
-        /// </summary>
-        public static string AccessText_Prj {
-            get {
-                return ResourceManager.GetString("AccessText.Prj", resourceCulture);
             }
         }
         
@@ -1679,6 +1652,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export to a _comma-separated values (CSV) file.
+        /// </summary>
+        public static string ExportRecords_AccessText_ExportToFile {
+            get {
+                return ResourceManager.GetString("ExportRecords.AccessText.ExportToFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to an Epi Info _data package.
+        /// </summary>
+        public static string ExportRecords_AccessText_ExportToPackage {
+            get {
+                return ResourceManager.GetString("ExportRecords.AccessText.ExportToPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Records have been exported.
         /// </summary>
         public static string ExportRecords_Lead_Close {
@@ -1697,11 +1688,11 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose an export format.
+        ///   Looks up a localized string similar to Choose how to export records.
         /// </summary>
-        public static string ExportRecords_Lead_SetFormat {
+        public static string ExportRecords_Lead_SetStrategy {
             get {
-                return ResourceManager.GetString("ExportRecords.Lead.SetFormat", resourceCulture);
+                return ResourceManager.GetString("ExportRecords.Lead.SetStrategy", resourceCulture);
             }
         }
         
@@ -2003,6 +1994,33 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import from a _comma-separated values (CSV) file.
+        /// </summary>
+        public static string ImportRecords_AccessText_ImportFromFile {
+            get {
+                return ResourceManager.GetString("ImportRecords.AccessText.ImportFromFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from an Epi Info _data package.
+        /// </summary>
+        public static string ImportRecords_AccessText_ImportFromPackage {
+            get {
+                return ResourceManager.GetString("ImportRecords.AccessText.ImportFromPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from another _form.
+        /// </summary>
+        public static string ImportRecords_AccessText_ImportFromView {
+            get {
+                return ResourceManager.GetString("ImportRecords.AccessText.ImportFromView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Review the errors below and try again..
         /// </summary>
         public static string ImportRecords_Body_Close_Failure {
@@ -2039,20 +2057,20 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose an import format.
-        /// </summary>
-        public static string ImportRecords_Lead_SetFormat {
-            get {
-                return ResourceManager.GetString("ImportRecords.Lead.SetFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Choose a destination field for each source column.
         /// </summary>
         public static string ImportRecords_Lead_SetMappings {
             get {
                 return ResourceManager.GetString("ImportRecords.Lead.SetMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose how to import records.
+        /// </summary>
+        public static string ImportRecords_Lead_SetStrategy {
+            get {
+                return ResourceManager.GetString("ImportRecords.Lead.SetStrategy", resourceCulture);
             }
         }
         

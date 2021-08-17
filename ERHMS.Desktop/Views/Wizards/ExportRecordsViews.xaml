@@ -3,15 +3,15 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+SetFormatViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
-            <Button Command="{Binding ExportToCsvCommand}"
-                    Content="{Markup:String AccessText.Csv}" />
-            <Button Command="{Binding ExportToEdp7Command}"
-                    Content="{Markup:String AccessText.Edp7}" />
+            <Button Command="{Binding ExportToPackageCommand}"
+                    Content="{Markup:String ExportRecords.AccessText.ExportToPackage}" />
+            <Button Command="{Binding ExportToFileCommand}"
+                    Content="{Markup:String ExportRecords.AccessText.ExportToFile}" />
         </StackPanel>
     </DataTemplate>
 

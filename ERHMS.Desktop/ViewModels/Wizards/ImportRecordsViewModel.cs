@@ -78,39 +78,39 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             }
         }
 
-        public class SetFormatViewModel : StepViewModel<ImportRecordsViewModel>
+        public class SetStrategyViewModel : StepViewModel<ImportRecordsViewModel>
         {
-            public override string Title => Strings.ImportRecords_Lead_SetFormat;
+            public override string Title => Strings.ImportRecords_Lead_SetStrategy;
 
-            public ICommand ImportFromCsvCommand { get; }
-            public ICommand ImportFromEdp7Command { get; }
-            public ICommand ImportFromPrjCommand { get; }
+            public ICommand ImportFromViewCommand { get; }
+            public ICommand ImportFromPackageCommand { get; }
+            public ICommand ImportFromFileCommand { get; }
 
-            public SetFormatViewModel(ImportRecordsViewModel wizard)
+            public SetStrategyViewModel(ImportRecordsViewModel wizard)
                 : base(wizard)
             {
-                ImportFromCsvCommand = new SyncCommand(ImportFromCsv);
-                ImportFromEdp7Command = new SyncCommand(ImportFromEdp7);
-                ImportFromPrjCommand = new SyncCommand(ImportFromPrj);
+                ImportFromViewCommand = new SyncCommand(ImportFromView);
+                ImportFromPackageCommand = new SyncCommand(ImportFromPackage);
+                ImportFromFileCommand = new SyncCommand(ImportFromFile);
             }
 
-            public void ImportFromCsv()
+            public void ImportFromView()
             {
-                GoToStep(new SetFilePathViewModel(Wizard, this));
+                Close();
+                Wizard.View.ImportFromView();
+                SetResult(true);
             }
 
-            public void ImportFromEdp7()
+            public void ImportFromPackage()
             {
                 Close();
                 Wizard.View.ImportFromPackage();
                 SetResult(true);
             }
 
-            public void ImportFromPrj()
+            public void ImportFromFile()
             {
-                Close();
-                Wizard.View.ImportFromProject();
-                SetResult(true);
+                GoToStep(new SetFilePathViewModel(Wizard, this));
             }
         }
 
@@ -334,7 +334,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         public ImportRecordsViewModel(View view)
         {
             View = view;
-            Step = new SetFormatViewModel(this);
+            Step = new SetStrategyViewModel(this);
         }
 
         public void Dispose()
