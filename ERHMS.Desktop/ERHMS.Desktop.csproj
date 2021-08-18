@@ -136,7 +136,6 @@
     <Compile Include="Converters\PathToDirectoryNameConverter.cs" />
     <Compile Include="Converters\PathToFileNameConverter.cs" />
     <Compile Include="Converters\PhaseToColorConverter.cs" />
-    <Compile Include="Converters\StringCaseFormattingConverter.cs" />
     <Compile Include="Converters\StringLocalizingConverter.cs" />
     <Compile Include="Data\ICollectionViewExtensions.cs" />
     <Compile Include="Data\ListCollectionView.cs" />

@@ -75,7 +75,6 @@
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Text\ByteCountFormatter.cs" />
     <Compile Include="Text\Comparers.cs" />
-    <Compile Include="Text\StringCaseFormatter.cs" />
     <Compile Include="Text\StringDistanceCalculator.cs" />
   </ItemGroup>
   <ItemGroup>

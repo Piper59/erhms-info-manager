@@ -10,6 +10,5 @@
     <Converters:PathToDirectoryNameConverter x:Key="PathToDirectoryNameConverter" />
     <Converters:PathToFileNameConverter x:Key="PathToFileNameConverter" />
     <Converters:PhaseToColorConverter x:Key="PhaseToColorConverter" />
-    <Converters:StringCaseFormattingConverter x:Key="StringCaseFormattingConverter" />
     <Converters:StringLocalizingConverter x:Key="StringLocalizingConverter" />
 </ResourceDictionary>
