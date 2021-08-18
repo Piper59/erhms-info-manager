@@ -709,6 +709,33 @@ Close anyway?</value>
   <data name="Heading.Start" xml:space="preserve">
     <value>Quick start</value>
   </data>
+  <data name="Help.Title.Canvases" xml:space="preserve">
+    <value>Dashboards</value>
+  </data>
+  <data name="Help.Title.Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Help.Title.Maps" xml:space="preserve">
+    <value>Maps</value>
+  </data>
+  <data name="Help.Title.Pgms" xml:space="preserve">
+    <value>Analyses</value>
+  </data>
+  <data name="Help.Title.Phases" xml:space="preserve">
+    <value>Phases</value>
+  </data>
+  <data name="Help.Title.Projects" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="Help.Title.Records" xml:space="preserve">
+    <value>Records</value>
+  </data>
+  <data name="Help.Title.Security" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="Help.Title.Views" xml:space="preserve">
+    <value>Forms</value>
+  </data>
   <data name="HelpText.AddRecord" xml:space="preserve">
     <value>Add a new record in the Epi Info Enter Data module.</value>
   </data>
@@ -774,6 +801,10 @@ Close anyway?</value>
   </data>
   <data name="HelpText.UndeleteRecords" xml:space="preserve">
     <value>Mark the selected records as undeleted.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Home" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\wiki\home.md;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ImportRecords.AccessText.ImportFromFile" xml:space="preserve">
     <value>Import from a _comma-separated values (CSV) file</value>
@@ -994,50 +1025,6 @@ Close anyway?</value>
   <data name="Lead.Working" xml:space="preserve">
     <value>Working...</value>
   </data>
-  <data name="Markdown.Canvases" xml:space="preserve">
-    <value>TODO</value>
-  </data>
-  <data name="Markdown.Introduction" xml:space="preserve">
-    <value># Introduction
-
-ERHMS Info Manager provides data collection and analysis tools designed to help emergency response organizations implement the Emergency Responder Health Monitoring and Surveillance (ERHMS) framework.
-To accomplish this, ERHMS Info Manager leverages the capabilities of the Epi Info software suite.
-
-## What is ERHMS?
-
-ERHMS is a health monitoring and surveillance framework that provides recommendations and tools for protecting workers throughout the three phases of an emergency response: pre-deployment, deployment, and post-deployment.
-
-## What is Epi Info?
-
-Epi Info is a public-domain suite of interoperable software tools designed for the global community of public health practitioners and researchers.
-It allows users to create data entry forms; collect data in desktop, mobile, and web environments; and analyze data using statistics, charts, and maps.
-
-## Learn more
-
-- [ERHMS](https://www.cdc.gov/niosh/erhms/)
-- [Epi Info](https://www.cdc.gov/epiinfo/)</value>
-  </data>
-  <data name="Markdown.Maps" xml:space="preserve">
-    <value>TODO</value>
-  </data>
-  <data name="Markdown.Pgms" xml:space="preserve">
-    <value>TODO</value>
-  </data>
-  <data name="Markdown.Phases" xml:space="preserve">
-    <value>TODO</value>
-  </data>
-  <data name="Markdown.Projects" xml:space="preserve">
-    <value>TODO</value>
-  </data>
-  <data name="Markdown.Records" xml:space="preserve">
-    <value>TODO</value>
-  </data>
-  <data name="Markdown.Security" xml:space="preserve">
-    <value>TODO</value>
-  </data>
-  <data name="Markdown.Views" xml:space="preserve">
-    <value>TODO</value>
-  </data>
   <data name="Pager" xml:space="preserve">
     <value>Page {0} of {1}</value>
   </data>
@@ -1076,33 +1063,6 @@ It allows users to create data entry forms; collect data in desktop, mobile, and
   </data>
   <data name="Title.App" xml:space="preserve">
     <value>ERHMS Info Manager</value>
-  </data>
-  <data name="Title.Canvases" xml:space="preserve">
-    <value>Dashboards</value>
-  </data>
-  <data name="Title.Introduction" xml:space="preserve">
-    <value>Introduction</value>
-  </data>
-  <data name="Title.Maps" xml:space="preserve">
-    <value>Maps</value>
-  </data>
-  <data name="Title.Pgms" xml:space="preserve">
-    <value>Analyses</value>
-  </data>
-  <data name="Title.Phases" xml:space="preserve">
-    <value>Phases</value>
-  </data>
-  <data name="Title.Projects" xml:space="preserve">
-    <value>Projects</value>
-  </data>
-  <data name="Title.Records" xml:space="preserve">
-    <value>Records</value>
-  </data>
-  <data name="Title.Security" xml:space="preserve">
-    <value>Security</value>
-  </data>
-  <data name="Title.Views" xml:space="preserve">
-    <value>Forms</value>
   </data>
   <data name="Uri.EpiInfo" xml:space="preserve">
     <value>https://www.cdc.gov/epiinfo/</value>

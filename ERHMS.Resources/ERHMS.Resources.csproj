@@ -60,7 +60,7 @@
     <Compile Include="ResourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Templates\**\*">
+    <EmbeddedResource Include="Templates\**\*.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

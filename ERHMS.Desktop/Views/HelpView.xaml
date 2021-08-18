@@ -18,13 +18,21 @@
                             TabStripPlacement="Left">
                     <TabControl.ContentTemplate>
                         <DataTemplate>
-                            <FlowDocumentScrollViewer Document="{Binding Content, Converter={StaticResource MarkdownToFlowDocumentConverter}}"
-                                                      VerticalScrollBarVisibility="Auto" />
+                            <FlowDocumentScrollViewer VerticalScrollBarVisibility="Auto">
+                                <FlowDocument>
+                                    <Paragraph Style="{StaticResource Heading1}">
+                                        <Run Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Help.Title.{0}'}" />
+                                    </Paragraph>
+                                    <Paragraph>
+                                        <Run>TODO</Run>
+                                    </Paragraph>
+                                </FlowDocument>
+                            </FlowDocumentScrollViewer>
                         </DataTemplate>
                     </TabControl.ContentTemplate>
                     <TabControl.ItemContainerStyle>
                         <Style TargetType="TabItem" BasedOn="{StaticResource TabItemBase}">
-                            <Setter Property="Header" Value="{Binding Title}" />
+                            <Setter Property="Header" Value="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Help.Title.{0}'}" />
                         </Style>
                     </TabControl.ItemContainerStyle>
                 </TabControl>
