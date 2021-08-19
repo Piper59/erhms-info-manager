@@ -38,17 +38,17 @@ namespace ERHMS.Desktop.Utilities
             // LeadLabel
             // 
             this.LeadLabel.AutoSize = true;
-            this.LeadLabel.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeadLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LeadLabel.Location = new System.Drawing.Point(20, 20);
             this.LeadLabel.Margin = new System.Windows.Forms.Padding(5);
             this.LeadLabel.Name = "LeadLabel";
-            this.LeadLabel.Size = new System.Drawing.Size(0, 28);
+            this.LeadLabel.Size = new System.Drawing.Size(0, 25);
             this.LeadLabel.TabIndex = 0;
             this.LeadLabel.UseWaitCursor = true;
             // 
             // ProgressBar
             // 
-            this.ProgressBar.Location = new System.Drawing.Point(20, 58);
+            this.ProgressBar.Location = new System.Drawing.Point(20, 55);
             this.ProgressBar.Margin = new System.Windows.Forms.Padding(5);
             this.ProgressBar.Name = "ProgressBar";
             this.ProgressBar.Size = new System.Drawing.Size(424, 25);
@@ -59,7 +59,7 @@ namespace ERHMS.Desktop.Utilities
             // BodyLabel
             // 
             this.BodyLabel.AutoSize = true;
-            this.BodyLabel.Location = new System.Drawing.Point(20, 93);
+            this.BodyLabel.Location = new System.Drawing.Point(20, 90);
             this.BodyLabel.Margin = new System.Windows.Forms.Padding(5);
             this.BodyLabel.MaximumSize = new System.Drawing.Size(424, 0);
             this.BodyLabel.Name = "BodyLabel";
@@ -74,7 +74,7 @@ namespace ERHMS.Desktop.Utilities
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(464, 134);
+            this.ClientSize = new System.Drawing.Size(464, 131);
             this.Controls.Add(this.BodyLabel);
             this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.LeadLabel);
