@@ -304,9 +304,4 @@
         <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
     </Style>
     <Style TargetType="Controls:IconButton" BasedOn="{StaticResource IconButtonBase}" />
-
-    <Style x:Key="WebHyperlinkBase" TargetType="Controls:WebHyperlink">
-        <Setter Property="ToolTip" Value="{Binding NavigateUri, RelativeSource={RelativeSource Self}}" />
-    </Style>
-    <Style TargetType="Controls:WebHyperlink" BasedOn="{StaticResource WebHyperlinkBase}" />
 </ResourceDictionary>

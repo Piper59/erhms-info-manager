@@ -126,12 +126,11 @@
     <Compile Include="Controls\Watermark.xaml.cs">
       <DependentUpon>Watermark.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WebHyperlink.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityInverter.cs" />
     <Compile Include="Converters\ByteCountFormattingConverter.cs" />
+    <Compile Include="Converters\DocumentLocalizingConverter.cs" />
     <Compile Include="Converters\IconNameToStringConverter.cs" />
-    <Compile Include="Converters\MarkdownToFlowDocumentConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\PathToDirectoryNameConverter.cs" />
     <Compile Include="Converters\PathToFileNameConverter.cs" />
@@ -150,7 +149,6 @@
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\InvalidNameReasonExtensions.cs" />
-    <Compile Include="Infrastructure\MarkdownParser.cs" />
     <Compile Include="Infrastructure\NativeMethods.cs" />
     <Compile Include="Infrastructure\PhaseExtensions.cs" />
     <Compile Include="Infrastructure\Services\DialogService.cs" />
@@ -162,6 +160,12 @@
     <Compile Include="Infrastructure\WindowDisabler.cs" />
     <Compile Include="Infrastructure\WindowExtensions.cs" />
     <Compile Include="Integration.cs" />
+    <Compile Include="Markdown\BlockRenderer.cs" />
+    <Compile Include="Markdown\InlineNode.cs" />
+    <Compile Include="Markdown\InlineRenderer.cs" />
+    <Compile Include="Markdown\Regexes.cs" />
+    <Compile Include="Markdown\RenderingContext.cs" />
+    <Compile Include="Markdown\TextElementRenderer.cs" />
     <Compile Include="Markup\IconExtension.cs" />
     <Compile Include="Markup\StringExtension.cs" />
     <Compile Include="Program.cs" />

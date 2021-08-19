@@ -1,5 +1,7 @@
 ﻿using ERHMS.Desktop.ViewModels;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace ERHMS.Desktop.Views
 {
@@ -14,6 +16,11 @@ namespace ERHMS.Desktop.Views
         public HelpView()
         {
             InitializeComponent();
+        }
+
+        private void FlowDocumentScrollViewer_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.ToString())?.Dispose();
         }
     }
 }

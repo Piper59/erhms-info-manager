@@ -4,10 +4,17 @@
         <ResourceDictionary Source="Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- Viewers -->
+    <Style x:Key="FlowDocumentScrollViewerBase" TargetType="FlowDocumentScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    </Style>
+    <Style TargetType="FlowDocumentScrollViewer" BasedOn="{StaticResource FlowDocumentScrollViewerBase}" />
+
     <!-- Documents -->
     <Style x:Key="FlowDocumentBase" TargetType="FlowDocument">
         <Setter Property="FontFamily" Value="{Binding FontFamily, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
         <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
+        <Setter Property="PagePadding" Value="{StaticResource HugeThickness}" />
         <Setter Property="TextAlignment" Value="Left" />
     </Style>
     <Style TargetType="FlowDocument" BasedOn="{StaticResource FlowDocumentBase}" />
@@ -21,5 +28,14 @@
     <Style x:Key="Heading2" TargetType="Block">
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
         <Setter Property="FontWeight" Value="{StaticResource ThinFontWeight}" />
+    </Style>
+
+    <Style x:Key="Heading3" TargetType="Block">
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+    </Style>
+
+    <!-- Inlines -->
+    <Style x:Key="Emphasis" TargetType="Run">
+        <Setter Property="FontStyle" Value="Italic" />
     </Style>
 </ResourceDictionary>

@@ -1805,6 +1805,16 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Help_Body_Home {
+            get {
+                object obj = ResourceManager.GetObject("Help.Body.Home", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboards.
         /// </summary>
         public static string Help_Title_Canvases {
@@ -2080,16 +2090,6 @@ namespace ERHMS.Desktop.Properties {
         public static string HelpText_UndeleteRecords {
             get {
                 return ResourceManager.GetString("HelpText.UndeleteRecords", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] Home {
-            get {
-                object obj = ResourceManager.GetObject("Home", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
