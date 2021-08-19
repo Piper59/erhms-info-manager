@@ -57,15 +57,6 @@
                           Header="{Markup:String CoreProject.AccessText.Incident}" />
             </MenuItem>
             <MenuItem Header="{Markup:String AccessText.Tools}">
-                <MenuItem Header="{Markup:String AccessText.Data}">
-                    <MenuItem Header="{Markup:String AccessText.CheckIntegrity}" />
-                    <MenuItem Header="{Markup:String AccessText.BackUp}" />
-                    <MenuItem Header="{Markup:String AccessText.Restore}" />
-                </MenuItem>
-                <MenuItem Header="{Markup:String AccessText.Reports}">
-                    <MenuItem Header="{Markup:String CoreReport.AccessText.Worker}" />
-                    <MenuItem Header="{Markup:String CoreReport.AccessText.Incident}" />
-                </MenuItem>
                 <MenuItem Header="{Markup:String AccessText.Logs}">
                     <MenuItem Command="{Binding OpenPathCommand}"
                               CommandParameter="{x:Static ERHMS_Common_Logging:FileAppender.File}"
