@@ -51,6 +51,7 @@
     <Compile Include="CommandLine.cs" />
     <Compile Include="ComponentModel\ObservableObject.cs" />
     <Compile Include="Compression\ZipFileExtensions.cs" />
+    <Compile Include="ConsoleExtensions.cs" />
     <Compile Include="Data\DataTableExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EnumExtensions.cs" />

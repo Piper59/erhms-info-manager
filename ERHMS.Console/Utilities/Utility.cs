@@ -1,4 +1,5 @@
-﻿using ERHMS.Common.Reflection;
+﻿using ERHMS.Common;
+using ERHMS.Common.Reflection;
 using ERHMS.Common.Text;
 using System;
 using System.Collections.Generic;
@@ -135,6 +136,12 @@ namespace ERHMS.Console.Utilities
                 Environment.Exit(ErrorCodes.InvalidCommandLine);
                 return null;
             }
+        }
+
+        protected static string GetPassword()
+        {
+            Error.Write("Password: ");
+            return ConsoleExtensions.ReadPassword();
         }
 
         public abstract void Run();

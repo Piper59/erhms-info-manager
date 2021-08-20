@@ -115,6 +115,7 @@
     <Compile Include="Utilities\ResetSettings.cs" />
     <Compile Include="Utilities\ShowProject.cs" />
     <Compile Include="Utilities\SynchronizeView.cs" />
+    <Compile Include="Utilities\UnpackageData.cs" />
     <Compile Include="Utilities\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
