@@ -27,8 +27,8 @@ namespace ERHMS.Console.Utilities
             StringBuilder usage = new StringBuilder();
             usage.AppendLine("Usage:");
             usage.AppendLine($"  {executableName} {helpArg}");
-            usage.AppendLine($"  {executableName} UTILITY {helpArg}");
-            usage.AppendLine($"  {executableName} UTILITY [ARGUMENT ...]");
+            usage.AppendLine($"  {executableName} <utility> {helpArg}");
+            usage.AppendLine($"  {executableName} <utility> [<argument> ...]");
             usage.AppendLine();
             usage.Append("Utilities:");
             foreach (Type instanceType in instanceTypes.OrderBy(instanceType => instanceType.Name, Comparers.Arg))
@@ -53,7 +53,7 @@ namespace ERHMS.Console.Utilities
                 usage.Append($"  {executableName} {instanceType.Name}");
                 foreach (ParameterInfo parameter in constructor.GetParameters())
                 {
-                    usage.Append($" {parameter.Name}");
+                    usage.Append($" <{parameter.Name}>");
                 }
             }
             return usage.ToString();
