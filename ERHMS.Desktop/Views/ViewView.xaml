@@ -46,9 +46,6 @@
                     <Controls:IconButton AltText="{Markup:String AltText.Home}"
                                          Command="{x:Static local:AppCommands.GoToHomeCommand}"
                                          Content="{Markup:Icon Home}" />
-                    <Controls:IconButton AltText="{Markup:String AltText.Help}"
-                                         Command="{x:Static local:AppCommands.GoToHelpCommand}"
-                                         Content="{Markup:Icon Help}" />
                 </StackPanel>
             </Grid>
             <TabControl Grid.Row="1">

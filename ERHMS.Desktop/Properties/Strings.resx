@@ -366,9 +366,6 @@
   <data name="AltText.FirstPage" xml:space="preserve">
     <value>First page</value>
   </data>
-  <data name="AltText.Help" xml:space="preserve">
-    <value>Help</value>
-  </data>
   <data name="AltText.Home" xml:space="preserve">
     <value>Home</value>
   </data>

@@ -808,15 +808,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help.
-        /// </summary>
-        public static string AltText_Help {
-            get {
-                return ResourceManager.GetString("AltText.Help", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string AltText_Home {

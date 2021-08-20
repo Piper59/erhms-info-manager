@@ -1490,7 +1490,6 @@ namespace ERHMS.Desktop
             { "Expand", "chevron-down" },
             { "Export", "file-export" },
             { "Failure", "times-circle" },
-            { "Help", "question-circle" },
             { "Home", "home" },
             { "Import", "file-import" },
             { "Level.Parent", "arrow-up" },
