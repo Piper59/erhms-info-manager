@@ -2859,6 +2859,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About ERHMS Info Manager.
+        /// </summary>
+        public static string Title_AboutApp {
+            get {
+                return ResourceManager.GetString("Title.AboutApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager.
         /// </summary>
         public static string Title_App {

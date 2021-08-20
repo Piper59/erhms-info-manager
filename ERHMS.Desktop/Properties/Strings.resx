@@ -1061,6 +1061,9 @@ Close anyway?</value>
   <data name="RecordStatus.Value.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
   </data>
+  <data name="Title.AboutApp" xml:space="preserve">
+    <value>About ERHMS Info Manager</value>
+  </data>
   <data name="Title.App" xml:space="preserve">
     <value>ERHMS Info Manager</value>
   </data>

@@ -211,8 +211,7 @@
                     <Image Grid.Column="0"
                            Margin="{StaticResource DefaultMargin}"
                            Source="../Resources/ERHMS.ico"
-                           Width="64">
-                    </Image>
+                           Width="64" />
                     <TextBlock Grid.Column="1"
                                Style="{StaticResource Title}"
                                Text="{Markup:String Title.App}"

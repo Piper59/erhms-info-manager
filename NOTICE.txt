@@ -11,7 +11,7 @@ Emergency Responder Health Monitoring and Surveillance, ERHMS, the ERHMS logo,
 ERHMS Info Manager, and the ERHMS Info Manager logo, either separately or in
 combination, are trademarks of NIOSH. Epi Info is a trademark of CDC.
 
-    [1]: https://www.cdc.gov/niosh/erhms/
-    [2]: https://www.cdc.gov/niosh/
-    [3]: https://www.cdc.gov/epiinfo/
-    [4]: https://www.cdc.gov/
+[1]: https://www.cdc.gov/niosh/erhms/
+[2]: https://www.cdc.gov/niosh/
+[3]: https://www.cdc.gov/epiinfo/
+[4]: https://www.cdc.gov/

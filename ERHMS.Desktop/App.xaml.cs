@@ -1,6 +1,7 @@
 ﻿using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
+using ERHMS.Desktop.EventHandlers;
 using ERHMS.Desktop.Infrastructure.Services;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
@@ -21,6 +22,7 @@ namespace ERHMS.Desktop
             InitializeComponent();
             InitializeServices();
             InitializeCommands();
+            InitializeEventHandlers();
         }
 
         private void InitializeServices()
@@ -49,6 +51,11 @@ namespace ERHMS.Desktop
             dialog.Buttons = DialogButtonCollection.Close;
             dialog.Show();
             e.Handled = true;
+        }
+
+        private void InitializeEventHandlers()
+        {
+            OpenWebBrowserOnRequestNavigate.Register();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

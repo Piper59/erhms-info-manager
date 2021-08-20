@@ -82,7 +82,8 @@
                 <MenuItem Command="{Binding GoToStartCommand}"
                           Header="{Markup:String AccessText.GoToStart}" />
                 <Separator />
-                <MenuItem Header="{Markup:String AccessText.AboutApp}" />
+                <MenuItem Command="{Binding GoToAboutCommand}"
+                          Header="{Markup:String AccessText.AboutApp}" />
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">

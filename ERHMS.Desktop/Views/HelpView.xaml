@@ -28,7 +28,6 @@
                                            Style="{StaticResource Title}"
                                            Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Help.Title.{0}'}" />
                                 <FlowDocumentScrollViewer Grid.Row="1"
-                                                          Hyperlink.RequestNavigate="FlowDocumentScrollViewer_RequestNavigate"
                                                           BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
                                                           BorderThickness="0,1,0,0"
                                                           Document="{Binding ., Converter={StaticResource DocumentLocalizingConverter}, ConverterParameter='Help.Body.{0}'}" />

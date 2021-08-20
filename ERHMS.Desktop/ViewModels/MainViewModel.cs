@@ -38,10 +38,12 @@ namespace ERHMS.Desktop.ViewModels
 
         public HelpViewModel Help { get; } = new HelpViewModel();
         public StartViewModel Start { get; } = new StartViewModel();
+        public AboutViewModel About { get; } = new AboutViewModel();
 
         public ICommand GoToHomeCommand { get; }
         public ICommand GoToHelpCommand { get; }
         public ICommand GoToStartCommand { get; }
+        public ICommand GoToAboutCommand { get; }
         public ICommand GoToProjectCommand { get; }
         public ICommand GoToCoreProjectCommand { get; }
         public ICommand GoToViewCommand { get; }
@@ -60,6 +62,7 @@ namespace ERHMS.Desktop.ViewModels
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = new SyncCommand(GoToHelp);
             GoToStartCommand = new SyncCommand(GoToStart);
+            GoToAboutCommand = new SyncCommand(GoToAbout);
             GoToProjectCommand = new AsyncCommand<Project>(GoToProjectAsync, CanGoToProject);
             GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
             GoToViewCommand = new AsyncCommand<View>(GoToViewAsync, CanGoToView);
@@ -123,6 +126,12 @@ namespace ERHMS.Desktop.ViewModels
         {
             Start.Minimized = false;
             Start.Closed = false;
+        }
+
+        public void GoToAbout()
+        {
+            IWindowService window = ServiceLocator.Resolve<IWindowService>();
+            window.ShowDialog(About);
         }
 
         public bool CanGoToProject(Project project)

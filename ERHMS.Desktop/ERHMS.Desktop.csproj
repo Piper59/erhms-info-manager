@@ -144,6 +144,7 @@
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />
+    <Compile Include="EventHandlers\OpenWebBrowserOnRequestNavigate.cs" />
     <Compile Include="IAppCommands.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Utilities\UtilityDialog.Designer.cs">
       <DependentUpon>UtilityDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\Collections\AssetCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\CanvasCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\CollectionViewModel.cs" />
@@ -234,6 +236,9 @@
     <Compile Include="ViewModels\Wizards\ExportRecordsViewModel.cs" />
     <Compile Include="ViewModels\Wizards\ImportRecordsViewModel.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
+    <Compile Include="Views\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Collections\AssetCollectionView.xaml.cs">
       <DependentUpon>AssetCollectionView.xaml</DependentUpon>
     </Compile>
@@ -286,6 +291,12 @@
     <Compile Include="Wizards\IWizard.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\LICENSE.txt">
+      <Link>Resources\LICENSE.txt</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\NOTICE.txt">
+      <Link>Resources\NOTICE.txt</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
@@ -354,6 +365,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Templates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

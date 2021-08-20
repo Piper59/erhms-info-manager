@@ -6,6 +6,7 @@
                     xmlns:Views="clr-namespace:ERHMS.Desktop.Views"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
     <ERHMS_Common_Collections:TypeMap x:Key="WindowTypeMap">
+        <x:Type x:Key="{x:Type ViewModels:AboutViewModel}" Type="Views:AboutView" />
         <x:Type x:Key="{x:Type ViewModels:HelpViewModel}" Type="Views:HelpView" />
         <x:Type x:Key="{x:Type ViewModels:WizardViewModel}" Type="Views:WizardView" />
     </ERHMS_Common_Collections:TypeMap>
