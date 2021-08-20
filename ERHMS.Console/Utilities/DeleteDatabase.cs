@@ -4,7 +4,7 @@ using System;
 
 namespace ERHMS.Console.Utilities
 {
-    public class DeleteDatabase : IUtility
+    public class DeleteDatabase : Utility
     {
         public string ProjectPath { get; }
         public DatabaseProvider DatabaseProvider { get; }
@@ -33,7 +33,7 @@ namespace ERHMS.Console.Utilities
             }
         }
 
-        public void Run()
+        public override void Run()
         {
             IDatabase database = GetDatabase();
             if (!database.Exists())

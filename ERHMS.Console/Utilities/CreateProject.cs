@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CreateProject : IUtility
+    public class CreateProject : Utility
     {
         public DatabaseProvider DatabaseProvider { get; }
         public string ConnectionString { get; }
@@ -36,7 +36,7 @@ namespace ERHMS.Console.Utilities
             ProjectDescription = projectDescription;
         }
 
-        public void Run()
+        public override void Run()
         {
             ProjectCreationInfo projectCreationInfo = new ProjectCreationInfo
             {

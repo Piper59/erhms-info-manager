@@ -3,6 +3,7 @@ using ERHMS.Common.Text;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,11 +11,15 @@ using static System.Console;
 
 namespace ERHMS.Console.Utilities
 {
-    public static class Utility
+    public abstract class Utility : IUtility
     {
         private static readonly IEnumerable<Type> instanceTypes = typeof(IUtility).GetInstanceTypes().ToList();
         private static readonly string executableName = Environment.GetCommandLineArgs()[0];
         private static readonly string helpArg = "/?";
+
+        protected static TextReader In => System.Console.In;
+        protected static TextWriter Out => System.Console.Out;
+        protected static TextWriter Error => System.Console.Error;
 
         private static string GetUsage()
         {
@@ -131,5 +136,7 @@ namespace ERHMS.Console.Utilities
                 return null;
             }
         }
+
+        public abstract void Run();
     }
 }

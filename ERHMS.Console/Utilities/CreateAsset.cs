@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
-    public abstract class CreateAsset : IUtility
+    public abstract class CreateAsset : Utility
     {
         public string AssetPath { get; }
         public string ProjectPath { get; }
@@ -20,7 +20,7 @@ namespace ERHMS.Console.Utilities
 
         protected abstract Asset GetAsset(View view);
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];

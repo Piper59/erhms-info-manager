@@ -4,7 +4,7 @@ using ERHMS.EpiInfo.Data;
 
 namespace ERHMS.Console.Utilities
 {
-    public class SynchronizeView : IUtility
+    public class SynchronizeView : Utility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
@@ -20,7 +20,7 @@ namespace ERHMS.Console.Utilities
         public SynchronizeView(string projectPath, string viewName)
             : this(projectPath, viewName, true) { }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];

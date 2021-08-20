@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
-    public class ExportRecords : IUtility
+    public class ExportRecords : Utility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
@@ -18,7 +18,7 @@ namespace ERHMS.Console.Utilities
             OutputPath = outputPath;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];

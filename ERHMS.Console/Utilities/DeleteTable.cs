@@ -3,7 +3,7 @@ using ERHMS.EpiInfo;
 
 namespace ERHMS.Console.Utilities
 {
-    public class DeleteTable : IUtility
+    public class DeleteTable : Utility
     {
         public string ProjectPath { get; }
         public string TableName { get; }
@@ -14,7 +14,7 @@ namespace ERHMS.Console.Utilities
             TableName = tableName;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             project.CollectedData.DeleteTable(TableName);

@@ -4,7 +4,7 @@ using System;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CreateView : IUtility
+    public class CreateView : Utility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
@@ -15,7 +15,7 @@ namespace ERHMS.Console.Utilities
             ViewName = viewName;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             if (project.Views.Contains(ViewName))

@@ -2,7 +2,7 @@
 
 namespace ERHMS.Console.Utilities
 {
-    public class DeleteProject : IUtility
+    public class DeleteProject : Utility
     {
         public string ProjectPath { get; }
         public bool Recursive { get; }
@@ -18,7 +18,7 @@ namespace ERHMS.Console.Utilities
             Recursive = recursive;
         }
 
-        public void Run()
+        public override void Run()
         {
             File.Delete(ProjectPath);
             Directory.Delete(Path.GetDirectoryName(ProjectPath), Recursive);

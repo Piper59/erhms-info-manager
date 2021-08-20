@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CreatePage : IUtility
+    public class CreatePage : Utility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
@@ -18,7 +18,7 @@ namespace ERHMS.Console.Utilities
             PageName = pageName;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];

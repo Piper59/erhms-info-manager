@@ -3,7 +3,7 @@ using System;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CreateDatabase : IUtility
+    public class CreateDatabase : Utility
     {
         public DatabaseProvider DatabaseProvider { get; }
         public string ConnectionString { get; }
@@ -14,7 +14,7 @@ namespace ERHMS.Console.Utilities
             ConnectionString = connectionString;
         }
 
-        public void Run()
+        public override void Run()
         {
             IDatabase database = DatabaseProvider.ToDatabase(ConnectionString);
             if (database.Exists())

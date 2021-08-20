@@ -4,7 +4,7 @@ using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
-    public class ExportLogs : IUtility
+    public class ExportLogs : Utility
     {
         public string OutputPath { get; }
 
@@ -13,7 +13,7 @@ namespace ERHMS.Console.Utilities
             OutputPath = outputPath;
         }
 
-        public void Run()
+        public override void Run()
         {
             ZipFileExtensions.CreateFromDirectory(
                 FileAppender.Directory,

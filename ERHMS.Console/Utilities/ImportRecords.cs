@@ -8,7 +8,7 @@ using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
-    public class ImportRecords : IUtility
+    public class ImportRecords : Utility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
@@ -21,7 +21,7 @@ namespace ERHMS.Console.Utilities
             InputPath = inputPath;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];

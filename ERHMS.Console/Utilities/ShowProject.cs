@@ -4,11 +4,10 @@ using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Metadata;
 using System.Collections.Generic;
 using System.Linq;
-using static System.Console;
 
 namespace ERHMS.Console.Utilities
 {
-    public class ShowProject : IUtility
+    public class ShowProject : Utility
     {
         public string ProjectPath { get; }
 
@@ -17,7 +16,7 @@ namespace ERHMS.Console.Utilities
             ProjectPath = projectPath;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             foreach (View view in project.Views)

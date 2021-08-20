@@ -1,6 +1,6 @@
 ﻿namespace ERHMS.Console.Utilities
 {
-    public class ResetConfiguration : IUtility
+    public class ResetConfiguration : Utility
     {
         public bool? FipsCompliant { get; }
 
@@ -12,7 +12,7 @@
             FipsCompliant = fipsCompliant;
         }
 
-        public void Run()
+        public override void Run()
         {
             Epi.Configuration configuration = Configuration.Create();
             if (FipsCompliant != null)

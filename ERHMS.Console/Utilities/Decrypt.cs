@@ -1,8 +1,6 @@
-﻿using static System.Console;
-
-namespace ERHMS.Console.Utilities
+﻿namespace ERHMS.Console.Utilities
 {
-    public class Decrypt : IUtility
+    public class Decrypt : Utility
     {
         public string Text { get; }
 
@@ -11,7 +9,7 @@ namespace ERHMS.Console.Utilities
             Text = text;
         }
 
-        public void Run()
+        public override void Run()
         {
             Out.WriteLine(Epi.Configuration.Decrypt(Text));
         }

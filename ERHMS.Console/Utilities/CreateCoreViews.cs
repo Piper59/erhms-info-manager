@@ -7,7 +7,7 @@ using ERHMS.Resources;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CreateCoreViews : IUtility
+    public class CreateCoreViews : Utility
     {
         public string ProjectPath { get; }
         public CoreProject CoreProject { get; }
@@ -18,7 +18,7 @@ namespace ERHMS.Console.Utilities
             CoreProject = coreProject;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             foreach (CoreView coreView in CoreView.GetInstances(CoreProject))

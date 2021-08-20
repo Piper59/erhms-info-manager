@@ -4,7 +4,7 @@ using System;
 
 namespace ERHMS.Console.Utilities
 {
-    public class InitializeProject : IUtility
+    public class InitializeProject : Utility
     {
         public string ProjectPath { get; }
 
@@ -13,7 +13,7 @@ namespace ERHMS.Console.Utilities
             ProjectPath = projectPath;
         }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             if (project.IsInitialized())

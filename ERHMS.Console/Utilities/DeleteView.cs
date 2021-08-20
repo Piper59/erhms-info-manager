@@ -3,7 +3,7 @@ using ERHMS.EpiInfo;
 
 namespace ERHMS.Console.Utilities
 {
-    public class DeleteView : IUtility
+    public class DeleteView : Utility
     {
         public string ProjectPath { get; }
         public string ViewName { get; }
@@ -19,7 +19,7 @@ namespace ERHMS.Console.Utilities
         public DeleteView(string projectPath, string viewName)
             : this(projectPath, viewName, true) { }
 
-        public void Run()
+        public override void Run()
         {
             Project project = ProjectExtensions.Open(ProjectPath);
             View view = project.Views[ViewName];

@@ -1,8 +1,8 @@
 ﻿namespace ERHMS.Console.Utilities
 {
-    public class ResetSettings : IUtility
+    public class ResetSettings : Utility
     {
-        public void Run()
+        public override void Run()
         {
             Desktop.Utilities.ResetSettings utility = new Desktop.Utilities.ResetSettings
             {

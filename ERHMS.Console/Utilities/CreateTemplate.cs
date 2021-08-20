@@ -7,7 +7,7 @@ using System.IO;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CreateTemplate : IUtility
+    public class CreateTemplate : Utility
     {
         public string TemplatePath { get; }
         public string ProjectPath { get; }
@@ -54,7 +54,7 @@ namespace ERHMS.Console.Utilities
             }
         }
 
-        public void Run()
+        public override void Run()
         {
             TemplateCreator creator = GetCreator();
             creator.Progress = Log.Progress;

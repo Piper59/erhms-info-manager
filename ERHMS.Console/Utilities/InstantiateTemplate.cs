@@ -7,7 +7,7 @@ using System;
 
 namespace ERHMS.Console.Utilities
 {
-    public class InstantiateTemplate : IUtility
+    public class InstantiateTemplate : Utility
     {
         public string TemplatePath { get; }
         public string ProjectPath { get; }
@@ -71,7 +71,7 @@ namespace ERHMS.Console.Utilities
             }
         }
 
-        public void Run()
+        public override void Run()
         {
             TemplateInstantiator instantiator = GetInstantiator();
             instantiator.Progress = Log.Progress;

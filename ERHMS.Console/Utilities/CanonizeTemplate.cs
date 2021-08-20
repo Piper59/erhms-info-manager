@@ -4,7 +4,7 @@ using ERHMS.EpiInfo.Templating.Xml;
 
 namespace ERHMS.Console.Utilities
 {
-    public class CanonizeTemplate : IUtility
+    public class CanonizeTemplate : Utility
     {
         public string InputPath { get; }
         public string OutputPath { get; }
@@ -18,7 +18,7 @@ namespace ERHMS.Console.Utilities
         public CanonizeTemplate(string templatePath)
             : this(templatePath, templatePath) { }
 
-        public void Run()
+        public override void Run()
         {
             XTemplate xTemplate = XTemplate.Load(InputPath);
             TemplateCanonizer canonizer = new TemplateCanonizer(xTemplate)
