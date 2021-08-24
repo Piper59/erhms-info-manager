@@ -1,8 +1,10 @@
 ﻿using Epi;
 using Epi.DataSets;
 using ERHMS.Common.IO;
+using ERHMS.Common.Logging;
 using ERHMS.Data;
 using System;
+using System.Data;
 using System.IO;
 using Settings = ERHMS.EpiInfo.Properties.Settings;
 
@@ -43,14 +45,28 @@ namespace ERHMS
             }
         }
 
+        private static string GetDirectory(this Epi.Configuration @this, string columnName)
+        {
+            string path = PathExtensions.TrimEnd(@this.Directories.Field<string>(columnName));
+            try
+            {
+                Directory.CreateDirectory(path);
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Warn(ex);
+            }
+            return path;
+        }
+
         public static string GetProjectsDirectory(this Epi.Configuration @this)
         {
-            return PathExtensions.TrimEnd(@this.Directories.Project);
+            return @this.GetDirectory(nameof(Config.DirectoriesRow.Project));
         }
 
         public static string GetTemplatesDirectory(this Epi.Configuration @this)
         {
-            return PathExtensions.TrimEnd(@this.Directories.Templates);
+            return @this.GetDirectory(nameof(Config.DirectoriesRow.Templates));
         }
 
         public static void SetTextEncryptionModule(this Epi.Configuration @this, bool fipsCompliant)
