@@ -24,6 +24,7 @@ namespace ERHMS.EpiInfo.Templating
             }
             foreach (KeyValuePair<XView, View> viewByXView in viewsByXView)
             {
+                OnInstantiating(TemplateLevel.View, viewByXView.Key.Name);
                 Context.View = viewByXView.Value;
                 foreach (XPage xPage in viewByXView.Key.XPages)
                 {
