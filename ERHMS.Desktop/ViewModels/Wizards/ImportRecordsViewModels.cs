@@ -7,7 +7,6 @@ using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
@@ -22,7 +21,7 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    public class ImportRecordsViewModel : WizardViewModel, IDisposable
+    public static class ImportRecordsViewModels
     {
         public class Target
         {
@@ -40,6 +39,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public Target(Field field)
                 : this(field, field.Name) { }
+
+            public bool IsMatch(string source)
+            {
+                return !IsEmpty && NameComparer.Default.Equals(Name, source);
+            }
         }
 
         public class Mapping
@@ -54,32 +58,26 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 Index = index;
                 Source = source;
                 Targets = new ListCollectionView<Target>(targets);
-                Targets.MoveCurrentTo(target => !target.IsEmpty && NameComparer.Default.Equals(target.Name, source));
+                Targets.MoveCurrentTo(target => target.IsMatch(source));
             }
         }
 
-        public class MappingCollection : List<Mapping>
+        public class MappingCollection : List<Mapping> { }
+
+        public class State
         {
-            public static MappingCollection FromImporter(RecordImporter importer)
-            {
-                IEnumerable<Field> fields = importer.View.Fields.DataFields.Cast<Field>()
-                    .OrderBy(field => field, new FieldComparer.ByName());
-                return new MappingCollection(importer.Headers, fields);
-            }
+            public View View { get; }
+            public string FilePath { get; set; }
+            public RecordImporter Importer { get; set; }
+            public MappingCollection Mappings { get; set; }
 
-            public MappingCollection(IEnumerable<string> headers, IEnumerable<Field> fields)
+            public State(View view)
             {
-                IEnumerable<Target> targets = fields.Select(field => new Target(field))
-                    .Prepend(Target.Empty)
-                    .ToList();
-                foreach (Iterator<string> header in headers.Iterate())
-                {
-                    Add(new Mapping(header.Index, header.Value, targets));
-                }
+                View = view;
             }
         }
 
-        public class SetStrategyViewModel : StepViewModel<ImportRecordsViewModel>
+        public class SetStrategyViewModel : StepViewModel<State>
         {
             public override string Title => Strings.ImportRecords_Lead_SetStrategy;
 
@@ -87,8 +85,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public ICommand ImportFromPackageCommand { get; }
             public ICommand ImportFromFileCommand { get; }
 
-            public SetStrategyViewModel(ImportRecordsViewModel wizard)
-                : base(wizard)
+            public SetStrategyViewModel(State state)
+                : base(state)
             {
                 ImportFromViewCommand = new SyncCommand(ImportFromView);
                 ImportFromPackageCommand = new SyncCommand(ImportFromPackage);
@@ -97,25 +95,25 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void ImportFromView()
             {
-                Close();
-                Wizard.View.ImportFromView();
-                SetResult(true);
+                Wizard.Close();
+                State.View.ImportFromView();
+                Wizard.Result = true;
             }
 
             public void ImportFromPackage()
             {
-                Close();
-                Wizard.View.ImportFromPackage();
-                SetResult(true);
+                Wizard.Close();
+                State.View.ImportFromPackage();
+                Wizard.Result = true;
             }
 
             public void ImportFromFile()
             {
-                GoToStep(new SetFilePathViewModel(Wizard, this));
+                Wizard.GoForward(new SetFilePathViewModel(State));
             }
         }
 
-        public class SetFilePathViewModel : StepViewModel<ImportRecordsViewModel>
+        public class SetFilePathViewModel : StepViewModel<State>
         {
             private readonly IFileDialogService fileDialog;
 
@@ -130,8 +128,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public ICommand BrowseCommand { get; }
 
-            public SetFilePathViewModel(ImportRecordsViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent)
+            public SetFilePathViewModel(State state)
+                : base(state)
             {
                 fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                 fileDialog.Filters = new string[]
@@ -158,31 +156,30 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override async Task ContinueAsync()
             {
-                Wizard.FilePath = FilePath;
+                State.FilePath = FilePath;
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                IStep step = await progress.Run(() =>
+                Wizard.GoForward(await progress.Run(() =>
                 {
-                    return SetMappingsViewModel.CreateAsync(Wizard, this);
-                });
-                GoToStep(step);
+                    return SetMappingsViewModel.CreateAsync(State);
+                }));
             }
         }
 
-        public class SetMappingsViewModel : StepViewModel<ImportRecordsViewModel>
+        public class SetMappingsViewModel : StepViewModel<State>
         {
-            public static async Task<SetMappingsViewModel> CreateAsync(ImportRecordsViewModel wizard, IStep antecedent)
+            public static async Task<SetMappingsViewModel> CreateAsync(State state)
             {
-                SetMappingsViewModel result = new SetMappingsViewModel(wizard, antecedent);
+                SetMappingsViewModel result = new SetMappingsViewModel(state);
                 await result.InitializeAsync();
                 return result;
             }
 
             public override string Title => Strings.ImportRecords_Lead_SetMappings;
-            private RecordImporter Importer { get; set; }
+            public RecordImporter Importer { get; private set; }
             public MappingCollection Mappings { get; private set; }
 
-            private SetMappingsViewModel(ImportRecordsViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent) { }
+            private SetMappingsViewModel(State state)
+                : base(state) { }
 
             private async Task InitializeAsync()
             {
@@ -193,9 +190,9 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     Importer = null;
                     try
                     {
-                        stream = File.Open(Wizard.FilePath, FileMode.Open, FileAccess.Read);
+                        stream = File.Open(State.FilePath, FileMode.Open, FileAccess.Read);
                         reader = new StreamReader(stream);
-                        Importer = new RecordImporter(Wizard.View, reader);
+                        Importer = new RecordImporter(State.View, reader);
                     }
                     catch
                     {
@@ -204,15 +201,18 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                         stream?.Dispose();
                         throw;
                     }
-                    Wizard.View.LoadFields();
-                    Mappings = MappingCollection.FromImporter(Importer);
+                    Mappings = new MappingCollection();
+                    State.View.LoadFields();
+                    IEnumerable<Target> targets = State.View.Fields.DataFields.Cast<Field>()
+                        .OrderBy(field => field, new FieldComparer.ByName())
+                        .Select(field => new Target(field))
+                        .Prepend(Target.Empty)
+                        .ToList();
+                    foreach (Iterator<string> header in Importer.Headers.Iterate())
+                    {
+                        Mappings.Add(new Mapping(header.Index, header.Value, targets));
+                    }
                 });
-            }
-
-            public override void Return()
-            {
-                Importer.Dispose();
-                base.Return();
             }
 
             public override bool CanContinue()
@@ -222,26 +222,32 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override Task ContinueAsync()
             {
-                Wizard.Importer = Importer;
-                Wizard.Mappings = Mappings;
-                GoToStep(new CommitViewModel(Wizard, this));
+                State.Importer = Importer;
+                State.Mappings = Mappings;
+                Wizard.GoForward(new CommitViewModel(State));
                 return Task.CompletedTask;
+            }
+
+            public override void Dispose()
+            {
+                Importer.Dispose();
+                base.Dispose();
             }
         }
 
-        public class CommitViewModel : StepViewModel<ImportRecordsViewModel>
+        public class CommitViewModel : StepViewModel<State>
         {
             public override string Title => Strings.Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
 
-            public CommitViewModel(ImportRecordsViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent)
+            public CommitViewModel(State state)
+                : base(state)
             {
                 Details = new DetailsViewModel
                 {
-                    { Strings.Label_File, wizard.FilePath },
-                    { Strings.Label_Mappings, wizard.Mappings }
+                    { Strings.Label_File, state.FilePath },
+                    { Strings.Label_Mappings, state.Mappings }
                 };
             }
 
@@ -259,36 +265,30 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     bool result = await progress.Run(() =>
                     {
-                        Wizard.Importer.Reset();
-                        foreach (Mapping mapping in Wizard.Mappings)
+                        State.Importer.Reset();
+                        foreach (Mapping mapping in State.Mappings)
                         {
                             if (mapping.Target.IsEmpty)
                             {
                                 continue;
                             }
-                            Wizard.Importer.Map(mapping.Index, mapping.Target.Field);
+                            State.Importer.Map(mapping.Index, mapping.Target.Field);
                         }
-                        Wizard.Importer.Progress = new FormattingProgress<int>(progress, Strings.Body_ImportingRow);
-                        try
-                        {
-                            return Wizard.Importer.Import(progress.CancellationToken);
-                        }
-                        finally
-                        {
-                            Wizard.Importer.Dispose();
-                        }
+                        State.Importer.Progress = new FormattingProgress<int>(progress, Strings.Body_ImportingRow);
+                        return State.Importer.Import(progress.CancellationToken);
                     });
-                    Commit(result);
+                    Wizard.Result = result;
                 }
                 catch (OperationCanceledException)
                 {
-                    Commit(false);
+                    Wizard.Result = false;
                 }
-                GoToStep(new CloseViewModel(Wizard, this));
+                Wizard.Committed = true;
+                Wizard.GoForward(new CloseViewModel(State));
             }
         }
 
-        public class CloseViewModel : StepViewModel<ImportRecordsViewModel>
+        public class CloseViewModel : StepViewModel<State>
         {
             public override string Title =>
                 Wizard.Result == true
@@ -297,13 +297,13 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public override string ContinueAction => Strings.AccessText_Close;
             public string Errors { get; }
 
-            public CloseViewModel(ImportRecordsViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent)
+            public CloseViewModel(State state)
+                : base(state)
             {
-                if (wizard.Importer.Errors.Count() > 0)
+                if (state.Importer.Errors.Count() > 0)
                 {
                     StringBuilder errors = new StringBuilder();
-                    foreach (Exception error in wizard.Importer.Errors)
+                    foreach (Exception error in state.Importer.Errors)
                     {
                         errors.AppendLine(error.Message);
                         if (error.InnerException != null)
@@ -322,25 +322,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override Task ContinueAsync()
             {
-                Close();
+                Wizard.Close();
                 return Task.CompletedTask;
             }
         }
 
-        public View View { get; }
-        public string FilePath { get; private set; }
-        private RecordImporter Importer { get; set; }
-        private MappingCollection Mappings { get; set; }
-
-        public ImportRecordsViewModel(View view)
+        public static WizardViewModel GetWizard(View view)
         {
-            View = view;
-            Step = new SetStrategyViewModel(this);
-        }
-
-        public void Dispose()
-        {
-            Importer?.Dispose();
+            State state = new State(view);
+            StepViewModel step = new SetStrategyViewModel(state);
+            return new WizardViewModel(step);
         }
     }
 }

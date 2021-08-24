@@ -4,7 +4,7 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+SetViewViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModels+SetViewViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -19,7 +19,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+SetFilePathViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModels+SetFilePathViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -55,11 +55,11 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModels+CommitViewModel}">
         <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModel+CloseViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateAssetViewModels+CloseViewModel}">
         <CheckBox Content="{Markup:String Label.OpenInEpiInfo}"
                   IsChecked="{Binding OpenInEpiInfo}" />
     </DataTemplate>

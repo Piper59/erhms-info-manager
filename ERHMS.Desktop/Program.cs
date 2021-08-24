@@ -13,7 +13,7 @@ namespace ERHMS.Desktop
         private static void Main()
         {
             Log.Initialize(new FileAppender());
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => Log.Instance.Fatal(e.ExceptionObject);
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Log.Instance.Debug("Starting up");
             try
             {
@@ -35,6 +35,11 @@ namespace ERHMS.Desktop
             {
                 Log.Instance.Debug("Shutting down");
             }
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log.Instance.Fatal(e.ExceptionObject);
         }
     }
 }

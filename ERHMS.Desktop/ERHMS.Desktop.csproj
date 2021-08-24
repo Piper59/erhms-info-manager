@@ -148,6 +148,7 @@
     <Compile Include="IAppCommands.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />
+    <Compile Include="Infrastructure\FileFilter.cs" />
     <Compile Include="Infrastructure\IInputElementExtensions.cs" />
     <Compile Include="Infrastructure\InvalidNameReasonExtensions.cs" />
     <Compile Include="Infrastructure\NativeMethods.cs" />
@@ -202,10 +203,7 @@
     </Compile>
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\Collections\AssetCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Collections\CanvasCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\CollectionViewModel.cs" />
-    <Compile Include="ViewModels\Collections\MapCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Collections\PgmCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\RecordCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\ViewCollectionViewModel.cs" />
     <Compile Include="ViewModels\Collections\WorkerCollectionViewModel.cs" />
@@ -218,23 +216,21 @@
     <Compile Include="ViewModels\Shared\ConnectionInfoViewModel.cs" />
     <Compile Include="ViewModels\Shared\DetailsViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
+    <Compile Include="ViewModels\StepViewModel.cs" />
     <Compile Include="ViewModels\Utilities\GetWorkerIdViewModel.cs" />
     <Compile Include="ViewModels\ViewViewModel.cs" />
-    <Compile Include="ViewModels\Wizards\CreateAssetViewModel.cs" />
-    <Compile Include="ViewModels\Wizards\CreateCanvasViewModel.cs" />
-    <Compile Include="ViewModels\Wizards\CreateMapViewModel.cs" />
-    <Compile Include="ViewModels\Wizards\CreatePgmViewModel.cs" />
-    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.Blank.cs" />
-    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.FromExisting.cs" />
-    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.FromTemplate.cs" />
-    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.Main.cs" />
-    <Compile Include="ViewModels\Wizards\CreateProjectViewModel.Standard.cs" />
-    <Compile Include="ViewModels\Wizards\CreateViewViewModel.Blank.cs" />
-    <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromExisting.cs" />
-    <Compile Include="ViewModels\Wizards\CreateViewViewModel.FromTemplate.cs" />
-    <Compile Include="ViewModels\Wizards\CreateViewViewModel.Main.cs" />
-    <Compile Include="ViewModels\Wizards\ExportRecordsViewModel.cs" />
-    <Compile Include="ViewModels\Wizards\ImportRecordsViewModel.cs" />
+    <Compile Include="ViewModels\Wizards\CreateAssetViewModels.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModels.Blank.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModels.FromExisting.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModels.FromTemplate.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModels.Main.cs" />
+    <Compile Include="ViewModels\Wizards\CreateProjectViewModels.Standard.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModels.Blank.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModels.FromExisting.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModels.FromTemplate.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModels.Main.cs" />
+    <Compile Include="ViewModels\Wizards\ExportRecordsViewModels.cs" />
+    <Compile Include="ViewModels\Wizards\ImportRecordsViewModels.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
@@ -287,8 +283,6 @@
     <Compile Include="Views\WizardView.xaml.cs">
       <DependentUpon>WizardView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizards\IStep.cs" />
-    <Compile Include="Wizards\IWizard.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\LICENSE.txt">
@@ -421,6 +415,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StepViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

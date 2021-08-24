@@ -4,7 +4,7 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+SetStrategyViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModels+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
@@ -18,7 +18,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+SetFilePathViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModels+SetFilePathViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -41,7 +41,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+SetMappingsViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModels+SetMappingsViewModel}">
         <ItemsControl IsTabStop="False"
                       ItemsSource="{Binding Mappings}">
             <ItemsControl.ItemTemplate>
@@ -58,7 +58,7 @@
                         </Label>
                         <Controls:BoundComboBox AutomationProperties.Name="{Binding Source, StringFormat={Markup:String Label.Target}}"
                                                 Grid.Column="1"
-                                                Binding="{Binding Name, TargetNullValue={Markup:String Placeholder.Ignored}}"
+                                                Binding="{Binding Name}"
                                                 ItemsSource="{Binding Targets}" />
                     </Grid>
                 </DataTemplate>
@@ -66,11 +66,11 @@
         </ItemsControl>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModels+CommitViewModel}">
         <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+CloseViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModels+CloseViewModel}">
         <Grid Visibility="{Binding Errors, Converter={StaticResource NullableToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

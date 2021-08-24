@@ -123,7 +123,6 @@ namespace ERHMS.Desktop.ViewModels
 
             public void RemoveRecent(ProjectInfo projectInfo)
             {
-                // TODO: Confirm
                 Settings.Default.IncidentProjectPaths.Remove(projectInfo.FilePath);
                 Settings.Default.Save();
             }

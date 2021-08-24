@@ -7,7 +7,6 @@ using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
-using ERHMS.Desktop.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
@@ -20,12 +19,24 @@ using Settings = ERHMS.Desktop.Properties.Settings;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    public partial class CreateProjectViewModel : WizardViewModel
+    public static partial class CreateProjectViewModels
     {
-        public class SetStrategyViewModel : StepViewModel<CreateProjectViewModel>
+        public partial class State
+        {
+            public CoreProject CoreProject { get; }
+            public Project Project { get; set; }
+            public ProjectCreationInfo ProjectCreationInfo { get; set; }
+
+            public State(CoreProject coreProject)
+            {
+                CoreProject = coreProject;
+            }
+        }
+
+        public class SetStrategyViewModel : StepViewModel<State>
         {
             public override string Title => Strings.CreateProject_Lead_SetStrategy;
-            public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(Wizard.CoreProject);
+            public IEnumerable<CoreView> CoreViews => CoreView.GetInstances(State.CoreProject);
 
             private bool expanded;
             public bool Expanded
@@ -39,8 +50,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public ICommand CreateFromTemplateCommand { get; }
             public ICommand CreateFromExistingCommand { get; }
 
-            public SetStrategyViewModel(CreateProjectViewModel wizard)
-                : base(wizard)
+            public SetStrategyViewModel(State state)
+                : base(state)
             {
                 CreateStandardCommand = new SyncCommand(CreateStandard);
                 CreateBlankCommand = new SyncCommand(CreateBlank);
@@ -50,26 +61,26 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void CreateStandard()
             {
-                GoToStep(new Standard.SetProjectCreationInfoViewModel(Wizard, this));
+                Wizard.GoForward(new Standard.SetProjectCreationInfoViewModel(State));
             }
 
             public void CreateBlank()
             {
-                GoToStep(new Blank.SetProjectCreationInfoViewModel(Wizard, this));
+                Wizard.GoForward(new Blank.SetProjectCreationInfoViewModel(State));
             }
 
             public void CreateFromTemplate()
             {
-                GoToStep(new FromTemplate.SetXTemplateViewModel(Wizard, this));
+                Wizard.GoForward(new FromTemplate.SetXTemplateViewModel(State));
             }
 
             public void CreateFromExisting()
             {
-                GoToStep(new FromExisting.SetSourceProjectViewModel(Wizard, this));
+                Wizard.GoForward(new FromExisting.SetSourceProjectViewModel(State));
             }
         }
 
-        public abstract class SetProjectCreationInfoViewModel : StepViewModel<CreateProjectViewModel>
+        public abstract class SetProjectCreationInfoViewModel : StepViewModel<State>
         {
             private readonly IDirectoryDialogService directoryDialog;
             private readonly IDictionary<DatabaseProvider, ConnectionInfoViewModel> connectionInfosByDatabaseProvider;
@@ -103,8 +114,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public ICommand BrowseCommand { get; }
 
-            protected SetProjectCreationInfoViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent)
+            protected SetProjectCreationInfoViewModel(State state)
+                : base(state)
             {
                 directoryDialog = ServiceLocator.Resolve<IDirectoryDialogService>();
                 directoryDialog.Directory = LocationRoot;
@@ -134,7 +145,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 LocationRoot = directoryDialog.Directory;
             }
 
-            protected abstract void GoToNextStep();
+            protected abstract StepViewModel GetSubsequent();
 
             public override bool CanContinue()
             {
@@ -177,30 +188,30 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 };
                 string connectionString = ConnectionInfo.GetConnectionString(projectCreationInfo.FilePath);
                 projectCreationInfo.Database = DatabaseProviders.CurrentItem.ToDatabase(connectionString);
-                Wizard.ProjectCreationInfo = projectCreationInfo;
-                GoToNextStep();
+                State.ProjectCreationInfo = projectCreationInfo;
+                Wizard.GoForward(GetSubsequent());
             }
         }
 
-        public abstract class CommitViewModel : StepViewModel<CreateProjectViewModel>
+        public abstract class CommitViewModel : StepViewModel<State>
         {
             public override string Title => Strings.Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
             protected IProgress<string> Progress { get; private set; }
 
-            public CommitViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent)
+            public CommitViewModel(State state)
+                : base(state)
             {
                 Details = new DetailsViewModel
                 {
-                    { Strings.Label_Name, wizard.ProjectCreationInfo.Name },
-                    { Strings.Label_Description, wizard.ProjectCreationInfo.Description },
-                    { Strings.Label_LocationRoot, wizard.ProjectCreationInfo.LocationRoot },
-                    { Strings.Label_DatabaseProvider, wizard.ProjectCreationInfo.Database.Provider },
+                    { Strings.Label_Name, state.ProjectCreationInfo.Name },
+                    { Strings.Label_Description, state.ProjectCreationInfo.Description },
+                    { Strings.Label_LocationRoot, state.ProjectCreationInfo.LocationRoot },
+                    { Strings.Label_DatabaseProvider, state.ProjectCreationInfo.Database.Provider },
                     {
                         Strings.Label_ConnectionInfo,
-                        wizard.ProjectCreationInfo.Database.GetConnectionStringBuilder()
+                        state.ProjectCreationInfo.Database.GetConnectionStringBuilder()
                     }
                 };
             }
@@ -216,11 +227,11 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             {
                 IProgressService progress = ServiceLocator.Resolve<IProgressService>();
                 progress.Lead = Strings.Lead_CreatingProject;
-                Wizard.Project = await progress.Run(() =>
+                State.Project = await progress.Run(() =>
                 {
-                    if (Wizard.ProjectCreationInfo.Database.Exists())
+                    if (State.ProjectCreationInfo.Database.Exists())
                     {
-                        if (Wizard.ProjectCreationInfo.Database.IsInitialized())
+                        if (State.ProjectCreationInfo.Database.IsInitialized())
                         {
                             // TODO: Offer to open
                             // TODO: Check for core views
@@ -233,29 +244,30 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     }
                     else
                     {
-                        Wizard.ProjectCreationInfo.Database.Create();
+                        State.ProjectCreationInfo.Database.Create();
                     }
-                    Project project = ProjectExtensions.Create(Wizard.ProjectCreationInfo);
+                    Project project = ProjectExtensions.Create(State.ProjectCreationInfo);
                     progress.Report(Strings.Body_Initializing);
                     project.Initialize();
                     Progress = progress;
                     ContinueCore(project);
                     return project;
                 });
-                Settings.Default.SetProjectPath(Wizard.CoreProject, Wizard.Project.FilePath);
+                Settings.Default.SetProjectPath(State.CoreProject, State.Project.FilePath);
                 Settings.Default.Save();
-                Commit(true);
-                GoToStep(new CloseViewModel(Wizard, this));
+                Wizard.Result = true;
+                Wizard.Committed = true;
+                Wizard.GoForward(new CloseViewModel(State));
             }
         }
 
-        public class CloseViewModel : StepViewModel<CreateProjectViewModel>
+        public class CloseViewModel : StepViewModel<State>
         {
             public override string Title => Strings.CreateProject_Lead_Close;
             public override string ContinueAction => Strings.AccessText_Close;
 
-            public CloseViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent) { }
+            public CloseViewModel(State state)
+                : base(state) { }
 
             public override bool CanContinue()
             {
@@ -264,19 +276,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override Task ContinueAsync()
             {
-                Close();
+                Wizard.Close();
                 return Task.CompletedTask;
             }
         }
 
-        public CoreProject CoreProject { get; }
-        public Project Project { get; private set; }
-        private ProjectCreationInfo ProjectCreationInfo { get; set; }
-
-        public CreateProjectViewModel(CoreProject coreProject)
+        public static WizardViewModel GetWizard(CoreProject coreProject)
         {
-            CoreProject = coreProject;
-            Step = new SetStrategyViewModel(this);
+            State state = new State(coreProject);
+            StepViewModel step = new SetStrategyViewModel(state);
+            return new WizardViewModel(step);
         }
     }
 }

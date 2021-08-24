@@ -69,7 +69,7 @@
             <TextBlock Style="{StaticResource Body}"
                        Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Value.{0}'}" />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModel+MappingCollection}">
+        <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModels+MappingCollection}">
             <DataTemplate.Resources>
                 <DataTemplate DataType="{x:Type System:String}">
                     <TextBlock Text="{Binding}" />

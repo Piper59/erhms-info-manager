@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Desktop.ViewModels.Collections;
+using ERHMS.EpiInfo;
 using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.ViewModels
@@ -15,9 +16,9 @@ namespace ERHMS.Desktop.ViewModels
 
         public Project Project { get; }
         public ViewCollectionViewModel Views { get; private set; }
-        public CanvasCollectionViewModel Canvases { get; private set; }
-        public PgmCollectionViewModel Pgms { get; private set; }
-        public MapCollectionViewModel Maps { get; private set; }
+        public AssetCollectionViewModel Canvases { get; private set; }
+        public AssetCollectionViewModel Pgms { get; private set; }
+        public AssetCollectionViewModel Maps { get; private set; }
 
         private ProjectViewModel(Project project)
         {
@@ -27,9 +28,9 @@ namespace ERHMS.Desktop.ViewModels
         private async Task InitializeAsync()
         {
             Views = await ViewCollectionViewModel.CreateAsync(Project);
-            Canvases = await CanvasCollectionViewModel.CreateAsync(Project);
-            Pgms = await PgmCollectionViewModel.CreateAsync(Project);
-            Maps = await MapCollectionViewModel.CreateAsync(Project);
+            Canvases = await AssetCollectionViewModel.CreateAsync(Module.AnalysisDashboard, Project);
+            Pgms = await AssetCollectionViewModel.CreateAsync(Module.Analysis, Project);
+            Maps = await AssetCollectionViewModel.CreateAsync(Module.Mapping, Project);
         }
     }
 }

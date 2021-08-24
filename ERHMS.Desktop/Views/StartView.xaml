@@ -1,9 +1,7 @@
 ﻿<UserControl x:Class="ERHMS.Desktop.Views.StartView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:ERHMS.Desktop"
-             xmlns:Behaviors="clr-namespace:ERHMS.Desktop.Behaviors"
              xmlns:Controls="clr-namespace:ERHMS.Desktop.Controls"
              xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
              xmlns:ViewModels="clr-namespace:ERHMS.Desktop.ViewModels"
@@ -16,40 +14,14 @@
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Lead}"
                            Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
-                <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}">
-                    <b:Interaction.Behaviors>
-                        <Behaviors:OpenContextMenuOnClick />
-                    </b:Interaction.Behaviors>
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="{x:Static local:AppCommands.CreateCoreProjectCommand}"
-                                      CommandParameter="{Binding Value}"
-                                      Header="{Markup:String AccessText.CreateNewProject}" />
-                            <MenuItem Command="{x:Static local:AppCommands.OpenCoreProjectCommand}"
-                                      CommandParameter="{Binding Value}"
-                                      Header="{Markup:String AccessText.OpenExistingProject}" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                </Button>
+                <!-- TODO: Run wizard -->
+                <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}" />
+                <!-- TODO: Go to main view -->
                 <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
-                        IsEnabled="{Binding HasPath}">
-                    <b:Interaction.Behaviors>
-                        <Behaviors:OpenContextMenuOnClick />
-                    </b:Interaction.Behaviors>
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="{x:Static local:AppCommands.ImportCoreViewRecordsCommand}"
-                                      CommandParameter="{Binding MainCoreView}"
-                                      Header="{Markup:String AccessText.ImportRecords}" />
-                            <MenuItem Command="{x:Static local:AppCommands.EnterCoreViewRecordsCommand}"
-                                      CommandParameter="{Binding MainCoreView}"
-                                      Header="{Markup:String AccessText.EnterRecords}" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                </Button>
+                        IsEnabled="{Binding HasPath}" />
                 <Button Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
                         CommandParameter="{Binding Value}"
-                        Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.ExploreViews.{0}'}"
+                        Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseViews.{0}'}"
                         IsEnabled="{Binding HasPath}" />
             </StackPanel>
         </DataTemplate>

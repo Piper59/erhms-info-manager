@@ -1,117 +1,72 @@
 ﻿using ERHMS.Common.ComponentModel;
-using ERHMS.Desktop.Commands;
-using ERHMS.Desktop.Properties;
-using ERHMS.Desktop.Wizards;
+using ERHMS.Desktop.Services;
 using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels
 {
-    public abstract class WizardViewModel : ObservableObject, IWizard
+    public class WizardViewModel : ObservableObject
     {
-        public abstract class StepViewModel<TWizard> : ObservableObject, IStep
-            where TWizard : WizardViewModel
-        {
-            public TWizard Wizard { get; }
-            IWizard IStep.Wizard => Wizard;
-            public IStep Antecedent { get; }
-            public abstract string Title { get; }
-            public virtual string ContinueAction => Strings.AccessText_Next;
-
-            public ICommand ReturnCommand { get; }
-            public ICommand ContinueCommand { get; }
-            public ICommand CancelCommand { get; }
-
-            protected StepViewModel(TWizard wizard, IStep antecedent = null)
-            {
-                Wizard = wizard;
-                Antecedent = antecedent;
-                ReturnCommand = new SyncCommand(Return, CanReturn);
-                ContinueCommand = new AsyncCommand(ContinueAsync, CanContinue);
-                CancelCommand = new SyncCommand(Cancel, CanCancel);
-            }
-
-            protected void GoToStep(IStep step)
-            {
-                Wizard.Step = step;
-            }
-
-            protected void SetResult(bool? result)
-            {
-                Wizard.Result = result;
-            }
-
-            protected void Commit()
-            {
-                Wizard.Committed = true;
-            }
-
-            protected void Commit(bool? result)
-            {
-                SetResult(result);
-                Commit();
-            }
-
-            protected void Close()
-            {
-                Wizard.OnCloseRequested();
-            }
-
-            public virtual bool CanReturn()
-            {
-                return Antecedent != null && !Wizard.Committed;
-            }
-
-            public virtual void Return()
-            {
-                Wizard.Step = Antecedent;
-            }
-
-            public virtual bool CanContinue()
-            {
-                return false;
-            }
-
-            public virtual Task ContinueAsync()
-            {
-                throw new NotSupportedException("Cannot continue from this step.");
-            }
-
-            public virtual bool CanCancel()
-            {
-                return !Wizard.Committed;
-            }
-
-            public virtual void Cancel()
-            {
-                Close();
-            }
-        }
-
-        private IStep step;
-        public IStep Step
+        private StepViewModel step;
+        public StepViewModel Step
         {
             get { return step; }
-            protected set { SetProperty(ref step, value); }
+            private set { SetProperty(ref step, value); }
         }
 
         private bool? result;
         public bool? Result
         {
             get { return result; }
-            private set { SetProperty(ref result, value); }
+            set { SetProperty(ref result, value); }
         }
 
         private bool committed;
         public bool Committed
         {
             get { return committed; }
-            private set { SetProperty(ref committed, value); }
+            set { SetProperty(ref committed, value); }
         }
 
         public event EventHandler CloseRequested;
-        protected virtual void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);
-        protected void OnCloseRequested() => OnCloseRequested(EventArgs.Empty);
+        private void OnCloseRequested(EventArgs e) => CloseRequested?.Invoke(this, e);
+        private void OnCloseRequested() => OnCloseRequested(EventArgs.Empty);
+
+        public WizardViewModel(StepViewModel step)
+        {
+            step.Wizard = this;
+            step.Antecedent = null;
+            Step = step;
+        }
+
+        public bool? Run()
+        {
+            IWindowService window = ServiceLocator.Resolve<IWindowService>();
+            window.ShowDialog(this);
+            StepViewModel step = Step;
+            while (step != null)
+            {
+                step.Dispose();
+                step = step.Antecedent;
+            }
+            return Result;
+        }
+
+        public void GoForward(StepViewModel step)
+        {
+            step.Wizard = this;
+            step.Antecedent = Step;
+            Step = step;
+        }
+
+        public void GoBack()
+        {
+            Step.Dispose();
+            Step = Step.Antecedent;
+        }
+
+        public void Close()
+        {
+            OnCloseRequested();
+        }
     }
 }

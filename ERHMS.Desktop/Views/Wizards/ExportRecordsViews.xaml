@@ -3,7 +3,7 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+SetStrategyViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModels+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
@@ -15,7 +15,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+SetFilePathViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModels+SetFilePathViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -38,9 +38,9 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModels+CommitViewModel}">
         <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModel+CloseViewModel}" />
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:ExportRecordsViewModels+CloseViewModel}" />
 </ResourceDictionary>

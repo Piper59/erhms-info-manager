@@ -4,7 +4,6 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System;
@@ -14,17 +13,28 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    public class ExportRecordsViewModel : WizardViewModel
+    public static class ExportRecordsViewModels
     {
-        public class SetStrategyViewModel : StepViewModel<ExportRecordsViewModel>
+        public class State
+        {
+            public View View { get; }
+            public string FilePath { get; set; }
+
+            public State(View view)
+            {
+                View = view;
+            }
+        }
+
+        public class SetStrategyViewModel : StepViewModel<State>
         {
             public override string Title => Strings.ExportRecords_Lead_SetStrategy;
 
             public ICommand ExportToPackageCommand { get; }
             public ICommand ExportToFileCommand { get; }
 
-            public SetStrategyViewModel(ExportRecordsViewModel wizard)
-                : base(wizard)
+            public SetStrategyViewModel(State state)
+                : base(state)
             {
                 ExportToPackageCommand = new SyncCommand(ExportToPackage);
                 ExportToFileCommand = new SyncCommand(ExportToFile);
@@ -32,17 +42,17 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public void ExportToFile()
             {
-                GoToStep(new SetFilePathViewModel(Wizard, this));
+                Wizard.GoForward(new SetFilePathViewModel(State));
             }
 
             public void ExportToPackage()
             {
-                Close();
-                Wizard.View.ExportToPackage();
+                Wizard.Close();
+                State.View.ExportToPackage();
             }
         }
 
-        public class SetFilePathViewModel : StepViewModel<ExportRecordsViewModel>
+        public class SetFilePathViewModel : StepViewModel<State>
         {
             private readonly IFileDialogService fileDialog;
 
@@ -57,8 +67,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public ICommand BrowseCommand { get; }
 
-            public SetFilePathViewModel(ExportRecordsViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent)
+            public SetFilePathViewModel(State state)
+                : base(state)
             {
                 fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                 fileDialog.Filter = Strings.FileDialog_Filter_CsvFiles;
@@ -81,24 +91,24 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override Task ContinueAsync()
             {
-                Wizard.FilePath = FilePath;
-                GoToStep(new CommitViewModel(Wizard, this));
+                State.FilePath = FilePath;
+                Wizard.GoForward(new CommitViewModel(State));
                 return Task.CompletedTask;
             }
         }
 
-        public class CommitViewModel : StepViewModel<ExportRecordsViewModel>
+        public class CommitViewModel : StepViewModel<State>
         {
             public override string Title => Strings.Lead_Commit;
             public override string ContinueAction => Strings.AccessText_Finish;
             public DetailsViewModel Details { get; }
 
-            public CommitViewModel(ExportRecordsViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent)
+            public CommitViewModel(State state)
+                : base(state)
             {
                 Details = new DetailsViewModel
                 {
-                    { Strings.Label_File, wizard.FilePath }
+                    { Strings.Label_File, state.FilePath }
                 };
             }
 
@@ -116,26 +126,27 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     await progress.Run(() =>
                     {
-                        Wizard.View.LoadFields();
-                        using (Stream stream = File.Open(Wizard.FilePath, FileMode.Create, FileAccess.Write))
+                        State.View.LoadFields();
+                        using (Stream stream = File.Open(State.FilePath, FileMode.Create, FileAccess.Write))
                         using (TextWriter writer = new StreamWriter(stream))
-                        using (RecordExporter exporter = new RecordExporter(Wizard.View, writer))
+                        using (RecordExporter exporter = new RecordExporter(State.View, writer))
                         {
                             exporter.Progress = new FormattingProgress<int>(progress, Strings.Body_ExportingRow);
                             exporter.Export(progress.CancellationToken);
                         }
                     });
-                    Commit(true);
+                    Wizard.Result = true;
                 }
                 catch (OperationCanceledException)
                 {
-                    Commit(false);
+                    Wizard.Result = false;
                 }
-                GoToStep(new CloseViewModel(Wizard, this));
+                Wizard.Committed = true;
+                Wizard.GoForward(new CloseViewModel(State));
             }
         }
 
-        public class CloseViewModel : StepViewModel<ExportRecordsViewModel>
+        public class CloseViewModel : StepViewModel<State>
         {
             public override string Title =>
                 Wizard.Result == true
@@ -143,8 +154,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 : Strings.ExportRecords_Lead_Close_Failure;
             public override string ContinueAction => Strings.AccessText_Close;
 
-            public CloseViewModel(ExportRecordsViewModel wizard, IStep antecedent)
-                : base(wizard, antecedent) { }
+            public CloseViewModel(State state)
+                : base(state) { }
 
             public override bool CanContinue()
             {
@@ -153,18 +164,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
             public override Task ContinueAsync()
             {
-                Close();
+                Wizard.Close();
                 return Task.CompletedTask;
             }
         }
 
-        public View View { get; }
-        private string FilePath { get; set; }
-
-        public ExportRecordsViewModel(View view)
+        public static WizardViewModel GetWizard(View view)
         {
-            View = view;
-            Step = new SetStrategyViewModel(this);
+            State state = new State(view);
+            StepViewModel step = new SetStrategyViewModel(state);
+            return new WizardViewModel(step);
         }
     }
 }

@@ -1,36 +1,35 @@
 ﻿using Epi;
 using ERHMS.Common.Logging;
 using ERHMS.Desktop.Properties;
-using ERHMS.Desktop.Wizards;
 using ERHMS.Domain;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.Resources;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    partial class CreateProjectViewModel
+    partial class CreateProjectViewModels
     {
         public static class Standard
         {
-            public class SetProjectCreationInfoViewModel : CreateProjectViewModel.SetProjectCreationInfoViewModel
+            public class SetProjectCreationInfoViewModel : CreateProjectViewModels.SetProjectCreationInfoViewModel
             {
-                public SetProjectCreationInfoViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent) { }
+                public SetProjectCreationInfoViewModel(State state)
+                    : base(state) { }
 
-                protected override void GoToNextStep()
+                protected override StepViewModel GetSubsequent()
                 {
-                    GoToStep(new CommitViewModel(Wizard, this));
+                    return new CommitViewModel(State);
                 }
             }
 
-            public class CommitViewModel : CreateProjectViewModel.CommitViewModel
+            public class CommitViewModel : CreateProjectViewModels.CommitViewModel
             {
-                public CommitViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent) { }
+                public CommitViewModel(State state)
+                    : base(state) { }
 
                 protected override void ContinueCore(Project project)
                 {
-                    foreach (CoreView coreView in CoreView.GetInstances(Wizard.CoreProject))
+                    foreach (CoreView coreView in CoreView.GetInstances(State.CoreProject))
                     {
                         Progress.Report(string.Format(Strings.Body_CreatingView, coreView.Name));
                         ViewTemplateInstantiator instantiator =

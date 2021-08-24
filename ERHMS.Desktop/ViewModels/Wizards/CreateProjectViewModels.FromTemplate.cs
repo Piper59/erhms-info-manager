@@ -4,7 +4,6 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using System.Threading.Tasks;
@@ -12,11 +11,17 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    partial class CreateProjectViewModel
+    partial class CreateProjectViewModels
     {
+        partial class State
+        {
+            public string TemplatePath { get; set; }
+            public XTemplate XTemplate { get; set; }
+        }
+
         public static class FromTemplate
         {
-            public class SetXTemplateViewModel : StepViewModel<CreateProjectViewModel>
+            public class SetXTemplateViewModel : StepViewModel<State>
             {
                 private readonly IFileDialogService fileDialog;
 
@@ -33,8 +38,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public ICommand BrowseCommand { get; }
 
-                public SetXTemplateViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent)
+                public SetXTemplateViewModel(State state)
+                    : base(state)
                 {
                     fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                     fileDialog.InitialDirectory = Configuration.Instance.GetTemplatesDirectory();
@@ -82,52 +87,51 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public override Task ContinueAsync()
                 {
-                    Wizard.TemplatePath = TemplatePath;
-                    Wizard.XTemplate = XTemplate;
-                    GoToStep(new SetProjectCreationInfoViewModel(Wizard, this));
+                    State.TemplatePath = TemplatePath;
+                    State.XTemplate = XTemplate;
+                    Wizard.GoForward(new SetProjectCreationInfoViewModel(State));
                     return Task.CompletedTask;
                 }
             }
 
-            public class SetProjectCreationInfoViewModel : CreateProjectViewModel.SetProjectCreationInfoViewModel
+            public class SetProjectCreationInfoViewModel : CreateProjectViewModels.SetProjectCreationInfoViewModel
             {
-                public SetProjectCreationInfoViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent) { }
+                public SetProjectCreationInfoViewModel(State state)
+                    : base(state) { }
 
-                protected override void GoToNextStep()
+                protected override StepViewModel GetSubsequent()
                 {
-                    GoToStep(new CommitViewModel(Wizard, this));
+                    return new CommitViewModel(State);
                 }
             }
 
-            public class CommitViewModel : CreateProjectViewModel.CommitViewModel
+            public class CommitViewModel : CreateProjectViewModels.CommitViewModel
             {
-                public CommitViewModel(CreateProjectViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent)
+                public CommitViewModel(State state)
+                    : base(state)
                 {
-                    Details.Insert(0, Strings.Label_Template, wizard.TemplatePath);
+                    Details.Insert(0, Strings.Label_Template, state.TemplatePath);
                 }
 
                 protected override void ContinueCore(Project project)
                 {
                     ProjectTemplateInstantiator instantiator =
-                        new ProjectTemplateInstantiator(Wizard.XTemplate, project)
+                        new ProjectTemplateInstantiator(State.XTemplate, project)
                         {
                             Progress = Log.Progress
                         };
-                    instantiator.Instantiating += (sender, e) =>
-                    {
-                        if (e.Level == TemplateLevel.View)
-                        {
-                            Progress.Report(string.Format(Strings.Body_CreatingView, e.Name));
-                        }
-                    };
+                    instantiator.Instantiating += Instantiator_Instantiating;
                     instantiator.Instantiate();
+                }
+
+                private void Instantiator_Instantiating(object sender, InstantiatingEventArgs e)
+                {
+                    if (e.Level == TemplateLevel.View)
+                    {
+                        Progress.Report(string.Format(Strings.Body_CreatingView, e.Name));
+                    }
                 }
             }
         }
-
-        private string TemplatePath { get; set; }
-        private XTemplate XTemplate { get; set; }
     }
 }

@@ -6,7 +6,6 @@ using ERHMS.Desktop.Infrastructure;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Metadata;
@@ -200,31 +199,21 @@ namespace ERHMS.Desktop.ViewModels.Collections
             });
         }
 
-        public async Task ImportAsync(bool synchronize)
-        {
-            if (synchronize)
-            {
-                await SynchronizeAsync();
-            }
-            using (ImportRecordsViewModel wizard = new ImportRecordsViewModel(View))
-            {
-                if (wizard.Run() != true)
-                {
-                    return;
-                }
-            }
-            await RefreshAsync();
-        }
-
         public async Task ImportAsync()
         {
-            await ImportAsync(true);
+            await SynchronizeAsync();
+            WizardViewModel wizard = ImportRecordsViewModels.GetWizard(View);
+            if (wizard.Run() != true)
+            {
+                return;
+            }
+            await RefreshAsync();
         }
 
         public async Task ExportAsync()
         {
             await SynchronizeAsync();
-            ExportRecordsViewModel wizard = new ExportRecordsViewModel(View);
+            WizardViewModel wizard = ExportRecordsViewModels.GetWizard(View);
             wizard.Run();
         }
 

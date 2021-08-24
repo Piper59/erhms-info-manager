@@ -4,12 +4,12 @@
                     xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
                     xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
                     xmlns:Views_Shared="clr-namespace:ERHMS.Desktop.Views.Shared">
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+SetStrategyViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+SetStrategyViewModel}">
         <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
-            <Button AutomationProperties.HelpText="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
+            <Button AutomationProperties.HelpText="{Binding State.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Standard.{0}'}"
                     Command="{Binding CreateStandardCommand}"
                     Content="{Markup:String CreateProject.AccessText.Standard}" />
             <Controls:ExpandButton AccessText="{Markup:String AccessText.Advanced}"
@@ -30,7 +30,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+SetProjectCreationInfoViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+SetProjectCreationInfoViewModel}">
         <StackPanel>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
                        Content="{Markup:String Label.Name}" />
                 <TextBox x:Name="NameTextBox"
                          AutomationProperties.Name="{Markup:String Label.Name}"
-                         AutomationProperties.HelpText="{Binding Wizard.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Name.{0}'}"
+                         AutomationProperties.HelpText="{Binding State.CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CreateProject.HelpText.Name.{0}'}"
                          Grid.Column="1"
                          Grid.Row="0"
                          Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
@@ -97,13 +97,13 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+CommitViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+CommitViewModel}">
         <Views_Shared:DetailsView ItemsSource="{Binding Details}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+CloseViewModel}" />
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+CloseViewModel}" />
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+FromTemplate+SetXTemplateViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+FromTemplate+SetXTemplateViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -126,7 +126,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModel+FromExisting+SetSourceProjectViewModel}">
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateProjectViewModels+FromExisting+SetSourceProjectViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />

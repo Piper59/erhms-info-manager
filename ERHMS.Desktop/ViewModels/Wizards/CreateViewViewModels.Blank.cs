@@ -1,9 +1,7 @@
 ﻿using Epi;
 using ERHMS.Common.Logging;
 using ERHMS.Desktop.Properties;
-using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
 using ERHMS.Resources;
@@ -11,22 +9,27 @@ using System.Threading.Tasks;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    partial class CreateViewViewModel
+    partial class CreateViewViewModels
     {
+        partial class State
+        {
+            public bool WithWorkerInfo { get; set; }
+        }
+
         public static class Blank
         {
-            public class SetViewNameViewModel : CreateViewViewModel.SetViewNameViewModel
+            public class SetViewNameViewModel : CreateViewViewModels.SetViewNameViewModel
             {
-                public SetViewNameViewModel(CreateViewViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent) { }
+                public SetViewNameViewModel(State state)
+                    : base(state) { }
 
-                protected override void GoToNextStep()
+                protected override StepViewModel GetSubsequent()
                 {
-                    GoToStep(new SetWithWorkerInfoViewModel(Wizard, this));
+                    return new SetWithWorkerInfoViewModel(State);
                 }
             }
 
-            public class SetWithWorkerInfoViewModel : StepViewModel<CreateViewViewModel>
+            public class SetWithWorkerInfoViewModel : StepViewModel<State>
             {
                 public override string Title => Strings.CreateView_Lead_SetWithWorkerInfo;
 
@@ -37,8 +40,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     set { SetProperty(ref withWorkerInfo, value); }
                 }
 
-                public SetWithWorkerInfoViewModel(CreateViewViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent) { }
+                public SetWithWorkerInfoViewModel(State state)
+                    : base(state) { }
 
                 public override bool CanContinue()
                 {
@@ -47,31 +50,31 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public override Task ContinueAsync()
                 {
-                    Wizard.WithWorkerInfo = WithWorkerInfo;
-                    GoToStep(new CommitViewModel(Wizard, this));
+                    State.WithWorkerInfo = WithWorkerInfo;
+                    Wizard.GoForward(new CommitViewModel(State));
                     return Task.CompletedTask;
                 }
             }
 
-            public class CommitViewModel : CreateViewViewModel.CommitViewModel
+            public class CommitViewModel : CreateViewViewModels.CommitViewModel
             {
-                public CommitViewModel(CreateViewViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent)
+                public CommitViewModel(State state)
+                    : base(state)
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Label_Name, wizard.ViewName },
-                        { Strings.Label_WithWorkerInfo, wizard.WithWorkerInfo }
+                        { Strings.Label_Name, state.ViewName },
+                        { Strings.Label_WithWorkerInfo, state.WithWorkerInfo }
                     };
                 }
 
                 protected override View ContinueCore()
                 {
-                    string conjunction = Wizard.WithWorkerInfo ? "With" : "Without";
+                    string conjunction = State.WithWorkerInfo ? "With" : "Without";
                     string resourceName = $"Templates.Forms.BlankForm{conjunction}WorkerInfo.xml";
                     XTemplate xTemplate = ResourceManager.GetXTemplate(resourceName);
-                    xTemplate.XProject.XView.Name = Wizard.ViewName;
-                    ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, Wizard.Project)
+                    xTemplate.XProject.XView.Name = State.ViewName;
+                    ViewTemplateInstantiator instantiator = new ViewTemplateInstantiator(xTemplate, State.Project)
                     {
                         Progress = Log.Progress
                     };
@@ -80,7 +83,5 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
             }
         }
-
-        private bool WithWorkerInfo { get; set; }
     }
 }

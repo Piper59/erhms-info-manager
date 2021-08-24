@@ -5,7 +5,6 @@ using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo.Naming;
 using ERHMS.EpiInfo.Templating;
 using ERHMS.EpiInfo.Templating.Xml;
@@ -14,11 +13,17 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Wizards
 {
-    partial class CreateViewViewModel
+    partial class CreateViewViewModels
     {
+        partial class State
+        {
+            public string TemplatePath { get; set; }
+            public XTemplate XTemplate { get; set; }
+        }
+
         public static class FromTemplate
         {
-            public class SetXTemplateViewModel : StepViewModel<CreateViewViewModel>
+            public class SetXTemplateViewModel : StepViewModel<State>
             {
                 private readonly IFileDialogService fileDialog;
 
@@ -35,8 +40,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public ICommand BrowseCommand { get; }
 
-                public SetXTemplateViewModel(CreateViewViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent)
+                public SetXTemplateViewModel(State state)
+                    : base(state)
                 {
                     fileDialog = ServiceLocator.Resolve<IFileDialogService>();
                     fileDialog.InitialDirectory = Configuration.Instance.GetTemplatesDirectory();
@@ -84,35 +89,34 @@ namespace ERHMS.Desktop.ViewModels.Wizards
 
                 public override async Task ContinueAsync()
                 {
-                    Wizard.TemplatePath = TemplatePath;
-                    Wizard.XTemplate = XTemplate;
+                    State.TemplatePath = TemplatePath;
+                    State.XTemplate = XTemplate;
                     IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-                    IStep step = await progress.Run(() =>
+                    Wizard.GoForward(await progress.Run(() =>
                     {
-                        return SetViewNameViewModel.CreateAsync(Wizard, this);
-                    });
-                    GoToStep(step);
+                        return SetViewNameViewModel.CreateAsync(State);
+                    }));
                 }
             }
 
-            public class SetViewNameViewModel : CreateViewViewModel.SetViewNameViewModel
+            public class SetViewNameViewModel : CreateViewViewModels.SetViewNameViewModel
             {
-                public static async Task<SetViewNameViewModel> CreateAsync(CreateViewViewModel wizard, IStep antecedent)
+                public static async Task<SetViewNameViewModel> CreateAsync(State state)
                 {
-                    SetViewNameViewModel result = new SetViewNameViewModel(wizard, antecedent);
+                    SetViewNameViewModel result = new SetViewNameViewModel(state);
                     await result.InitializeAsync();
                     return result;
                 }
 
-                private SetViewNameViewModel(CreateViewViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent) { }
+                private SetViewNameViewModel(State state)
+                    : base(state) { }
 
                 private async Task InitializeAsync()
                 {
                     ViewName = await Task.Run(() =>
                     {
-                        string viewName = Wizard.XTemplate.XProject.XView.Name;
-                        ViewNameUniquifier viewNames = new ViewNameUniquifier(Wizard.Project);
+                        string viewName = State.XTemplate.XProject.XView.Name;
+                        ViewNameUniquifier viewNames = new ViewNameUniquifier(State.Project);
                         if (viewNames.Exists(viewName))
                         {
                             viewName = viewNames.Uniquify(viewName);
@@ -121,29 +125,29 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     });
                 }
 
-                protected override void GoToNextStep()
+                protected override StepViewModel GetSubsequent()
                 {
-                    GoToStep(new CommitViewModel(Wizard, this));
+                    return new CommitViewModel(State);
                 }
             }
 
-            public class CommitViewModel : CreateViewViewModel.CommitViewModel
+            public class CommitViewModel : CreateViewViewModels.CommitViewModel
             {
-                public CommitViewModel(CreateViewViewModel wizard, IStep antecedent)
-                    : base(wizard, antecedent)
+                public CommitViewModel(State state)
+                    : base(state)
                 {
                     Details = new DetailsViewModel
                     {
-                        { Strings.Label_Template, wizard.TemplatePath },
-                        { Strings.Label_Name, wizard.ViewName }
+                        { Strings.Label_Template, state.TemplatePath },
+                        { Strings.Label_Name, state.ViewName }
                     };
                 }
 
                 protected override View ContinueCore()
                 {
-                    Wizard.XTemplate.XProject.XView.Name = Wizard.ViewName;
+                    State.XTemplate.XProject.XView.Name = State.ViewName;
                     ViewTemplateInstantiator instantiator =
-                        new ViewTemplateInstantiator(Wizard.XTemplate, Wizard.Project)
+                        new ViewTemplateInstantiator(State.XTemplate, State.Project)
                         {
                             Progress = Log.Progress
                         };
@@ -152,8 +156,5 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 }
             }
         }
-
-        private string TemplatePath { get; set; }
-        private XTemplate XTemplate { get; set; }
     }
 }

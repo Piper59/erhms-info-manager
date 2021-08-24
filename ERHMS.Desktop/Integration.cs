@@ -21,26 +21,15 @@ namespace ERHMS.Desktop
             });
         }
 
-        public static async Task StartWithBackgroundTaskAsync(Func<Task> action, Module module, params string[] args)
+        public static async Task StartAsync(Module module, params string[] args)
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
             progress.Lead = Strings.Lead_StartingEpiInfo;
             progress.Delay = TimeSpan.Zero;
-            await progress.Run(async () =>
+            await progress.Run(() =>
             {
-                Task task = action();
-                await StartCoreAsync(module, args);
-                if (!task.IsCompleted)
-                {
-                    progress.Lead = Strings.Lead_Working;
-                }
-                await task;
+                return StartCoreAsync(module, args);
             });
-        }
-
-        public static async Task StartAsync(Module module, params string[] args)
-        {
-            await StartWithBackgroundTaskAsync(() => Task.CompletedTask, module, args);
         }
 
         public static string GetWorkerId(string firstName, string lastName, string emailAddress, string workerId)

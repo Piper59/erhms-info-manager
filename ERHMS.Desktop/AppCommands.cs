@@ -15,8 +15,6 @@ namespace ERHMS.Desktop
             public ICommand GoToCoreViewCommand => Command.Null;
             public ICommand CreateCoreProjectCommand => Command.Null;
             public ICommand OpenCoreProjectCommand => Command.Null;
-            public ICommand ImportCoreViewRecordsCommand => Command.Null;
-            public ICommand EnterCoreViewRecordsCommand => Command.Null;
             public ICommand OpenPathCommand => Command.Null;
         }
 
@@ -30,8 +28,6 @@ namespace ERHMS.Desktop
         public static ICommand GoToViewCommand => Instance.GoToViewCommand;
         public static ICommand CreateCoreProjectCommand => Instance.CreateCoreProjectCommand;
         public static ICommand OpenCoreProjectCommand => Instance.OpenCoreProjectCommand;
-        public static ICommand ImportCoreViewRecordsCommand => Instance.ImportCoreViewRecordsCommand;
-        public static ICommand EnterCoreViewRecordsCommand => Instance.EnterCoreViewRecordsCommand;
         public static ICommand OpenPathCommand => Instance.OpenPathCommand;
     }
 }

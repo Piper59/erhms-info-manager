@@ -174,20 +174,11 @@
   <data name="AccessText.EmailAddress" xml:space="preserve">
     <value>_Email address</value>
   </data>
-  <data name="AccessText.EnterRecords" xml:space="preserve">
-    <value>_Enter records manually</value>
-  </data>
   <data name="AccessText.EpiInfo" xml:space="preserve">
     <value>_Epi Info</value>
   </data>
   <data name="AccessText.Exit" xml:space="preserve">
     <value>E_xit</value>
-  </data>
-  <data name="AccessText.ExploreViews.Incident" xml:space="preserve">
-    <value>_Explore and use other incident forms</value>
-  </data>
-  <data name="AccessText.ExploreViews.Worker" xml:space="preserve">
-    <value>_Explore and use other worker forms</value>
   </data>
   <data name="AccessText.Export" xml:space="preserve">
     <value>_Export</value>
@@ -227,9 +218,6 @@
   </data>
   <data name="AccessText.Import" xml:space="preserve">
     <value>_Import</value>
-  </data>
-  <data name="AccessText.ImportRecords" xml:space="preserve">
-    <value>_Import records from file</value>
   </data>
   <data name="AccessText.Learn.App" xml:space="preserve">
     <value>_Learn about ERHMS Info Manager</value>
@@ -314,6 +302,12 @@
   </data>
   <data name="AccessText.UseMainView.Worker" xml:space="preserve">
     <value>_Use the Worker Rostering Form to collect rostering and credentialing information for each worker in your organization</value>
+  </data>
+  <data name="AccessText.UseViews.Incident" xml:space="preserve">
+    <value>_Explore and use other incident forms</value>
+  </data>
+  <data name="AccessText.UseViews.Worker" xml:space="preserve">
+    <value>_Explore and use other worker forms</value>
   </data>
   <data name="AccessText.Views" xml:space="preserve">
     <value>F_orms</value>

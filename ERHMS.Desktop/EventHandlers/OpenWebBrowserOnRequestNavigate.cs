@@ -13,10 +13,10 @@ namespace ERHMS.Desktop.EventHandlers
             EventManager.RegisterClassHandler(
                 typeof(Hyperlink),
                 Hyperlink.RequestNavigateEvent,
-                new RequestNavigateEventHandler(OnRequestNavigate));
+                new RequestNavigateEventHandler(Hyperlink_RequestNavigate));
         }
 
-        private static void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        private static void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             if (e.Uri.IsWebUri())
             {

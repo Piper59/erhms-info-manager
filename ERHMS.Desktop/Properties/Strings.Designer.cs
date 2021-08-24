@@ -232,15 +232,6 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Enter records manually.
-        /// </summary>
-        public static string AccessText_EnterRecords {
-            get {
-                return ResourceManager.GetString("AccessText.EnterRecords", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to _Epi Info.
         /// </summary>
         public static string AccessText_EpiInfo {
@@ -255,24 +246,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Exit {
             get {
                 return ResourceManager.GetString("AccessText.Exit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Explore and use other incident forms.
-        /// </summary>
-        public static string AccessText_ExploreViews_Incident {
-            get {
-                return ResourceManager.GetString("AccessText.ExploreViews.Incident", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Explore and use other worker forms.
-        /// </summary>
-        public static string AccessText_ExploreViews_Worker {
-            get {
-                return ResourceManager.GetString("AccessText.ExploreViews.Worker", resourceCulture);
             }
         }
         
@@ -390,15 +363,6 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_Import {
             get {
                 return ResourceManager.GetString("AccessText.Import", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Import records from file.
-        /// </summary>
-        public static string AccessText_ImportRecords {
-            get {
-                return ResourceManager.GetString("AccessText.ImportRecords", resourceCulture);
             }
         }
         
@@ -651,6 +615,24 @@ namespace ERHMS.Desktop.Properties {
         public static string AccessText_UseMainView_Worker {
             get {
                 return ResourceManager.GetString("AccessText.UseMainView.Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Explore and use other incident forms.
+        /// </summary>
+        public static string AccessText_UseViews_Incident {
+            get {
+                return ResourceManager.GetString("AccessText.UseViews.Incident", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Explore and use other worker forms.
+        /// </summary>
+        public static string AccessText_UseViews_Worker {
+            get {
+                return ResourceManager.GetString("AccessText.UseViews.Worker", resourceCulture);
             }
         }
         

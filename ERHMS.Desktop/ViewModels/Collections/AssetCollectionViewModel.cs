@@ -6,8 +6,8 @@ using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
+using ERHMS.EpiInfo.Analytics;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace ERHMS.Desktop.ViewModels.Collections
 {
-    public abstract class AssetCollectionViewModel : CollectionViewModel<AssetCollectionViewModel.Item>
+    public class AssetCollectionViewModel : CollectionViewModel<AssetCollectionViewModel.Item>
     {
         public class Item
         {
@@ -37,8 +37,15 @@ namespace ERHMS.Desktop.ViewModels.Collections
             }
         }
 
-        public abstract Module Module { get; }
-        public abstract string FileExtension { get; }
+        public static async Task<AssetCollectionViewModel> CreateAsync(Module module, Project project)
+        {
+            AssetCollectionViewModel result = new AssetCollectionViewModel(module, project);
+            await result.InitializeAsync();
+            return result;
+        }
+
+        public Module Module { get; }
+        public string FileExtension => Asset.GetFileExtension(Module);
         public Project Project { get; }
 
         public ICommand CreateCommand { get; }
@@ -46,8 +53,9 @@ namespace ERHMS.Desktop.ViewModels.Collections
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        protected AssetCollectionViewModel(Project project)
+        private AssetCollectionViewModel(Module module, Project project)
         {
+            Module = module;
             Project = project;
             Items.SortDescriptions.Add(new SortDescription(nameof(FileInfo.Name), ListSortDirection.Ascending));
             CreateCommand = new AsyncCommand(CreateAsync);
@@ -70,24 +78,18 @@ namespace ERHMS.Desktop.ViewModels.Collections
             Items.Refresh();
         }
 
-        protected abstract Task<CreateAssetViewModel> GetCreateWizardAsync();
-
         public async Task CreateAsync()
         {
             IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            CreateAssetViewModel wizard = await progress.Run(GetCreateWizardAsync);
+            WizardViewModel wizard = await progress.Run(() =>
+            {
+                return CreateAssetViewModels.GetWizardAsync(Module, Project);
+            });
             if (wizard.Run() != true)
             {
                 return;
             }
-            if (wizard.OpenInEpiInfo)
-            {
-                await Integration.StartWithBackgroundTaskAsync(InitializeAsync, Module, wizard.FilePath);
-            }
-            else
-            {
-                await RefreshAsync();
-            }
+            await RefreshAsync();
         }
 
         public async Task OpenAsync()

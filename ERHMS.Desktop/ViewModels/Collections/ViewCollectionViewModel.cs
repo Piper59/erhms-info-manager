@@ -4,7 +4,6 @@ using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
-using ERHMS.Desktop.Wizards;
 using ERHMS.EpiInfo;
 using ERHMS.EpiInfo.Data;
 using System.Linq;
@@ -110,23 +109,12 @@ namespace ERHMS.Desktop.ViewModels.Collections
 
         public async Task CreateAsync()
         {
-            CreateViewViewModel wizard = new CreateViewViewModel(Project);
+            WizardViewModel wizard = CreateViewViewModels.GetWizard(Project);
             if (wizard.Run() != true)
             {
                 return;
             }
-            if (wizard.OpenInEpiInfo)
-            {
-                await Integration.StartWithBackgroundTaskAsync(
-                    InitializeAsync,
-                    Module.MakeView,
-                    $"/project:{wizard.View.Project.FilePath}",
-                    $"/view:{wizard.View.Name}");
-            }
-            else
-            {
-                await RefreshAsync();
-            }
+            await RefreshAsync();
         }
 
         public async Task DeleteAsync()

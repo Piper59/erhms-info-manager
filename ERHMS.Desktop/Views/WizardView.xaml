@@ -12,11 +12,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Wizards/CreateAssetViews.xaml" />
-                <ResourceDictionary Source="Wizards/CreateProjectViews.xaml" />
-                <ResourceDictionary Source="Wizards/CreateViewViews.xaml" />
-                <ResourceDictionary Source="Wizards/ExportRecordsViews.xaml" />
-                <ResourceDictionary Source="Wizards/ImportRecordsViews.xaml" />
+                <ResourceDictionary Source="StepViews.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
