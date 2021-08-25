@@ -55,7 +55,7 @@ namespace ERHMS.Desktop
 
         private void InitializeEventHandlers()
         {
-            OpenWebBrowserOnRequestNavigate.Register();
+            OpenUriOnRequestNavigate.Register();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

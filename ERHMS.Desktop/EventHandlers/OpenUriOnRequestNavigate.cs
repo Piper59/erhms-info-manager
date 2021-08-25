@@ -1,12 +1,11 @@
-﻿using ERHMS.Common;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
 
 namespace ERHMS.Desktop.EventHandlers
 {
-    public static class OpenWebBrowserOnRequestNavigate
+    public static class OpenUriOnRequestNavigate
     {
         public static void Register()
         {
@@ -18,11 +17,8 @@ namespace ERHMS.Desktop.EventHandlers
 
         private static void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            if (e.Uri.IsWebUri())
-            {
-                Process.Start(e.Uri.ToString())?.Dispose();
-                e.Handled = true;
-            }
+            Process.Start(e.Uri.ToString())?.Dispose();
+            e.Handled = true;
         }
     }
 }

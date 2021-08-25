@@ -3,7 +3,6 @@ using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
 using ERHMS.Domain;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -58,21 +57,14 @@ namespace ERHMS.Desktop.ViewModels
             set { SetProperty(ref closed, value); }
         }
 
-        public ICommand LearnCommand { get; }
         public ICommand ToggleCommand { get; }
         public ICommand CloseCommand { get; }
 
         public StartViewModel()
         {
             Closed = WorkerProject.HasPath && IncidentProject.HasPath;
-            LearnCommand = new SyncCommand<string>(Learn);
             ToggleCommand = new SyncCommand(Toggle);
             CloseCommand = new SyncCommand(Close);
-        }
-
-        public void Learn(string uri)
-        {
-            Process.Start(uri)?.Dispose();
         }
 
         public void Toggle()

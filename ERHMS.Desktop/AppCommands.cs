@@ -16,7 +16,7 @@ namespace ERHMS.Desktop
             public ICommand GoToMainCoreViewCommand => Command.Null;
             public ICommand CreateCoreProjectCommand => Command.Null;
             public ICommand OpenCoreProjectCommand => Command.Null;
-            public ICommand OpenPathCommand => Command.Null;
+            public ICommand OpenUriCommand => Command.Null;
         }
 
         public static IAppCommands Instance { get; set; } = new NullImpl();
@@ -30,6 +30,6 @@ namespace ERHMS.Desktop
         public static ICommand GoToMainCoreViewCommand => Instance.GoToMainCoreViewCommand;
         public static ICommand CreateCoreProjectCommand => Instance.CreateCoreProjectCommand;
         public static ICommand OpenCoreProjectCommand => Instance.OpenCoreProjectCommand;
-        public static ICommand OpenPathCommand => Instance.OpenPathCommand;
+        public static ICommand OpenUriCommand => Instance.OpenUriCommand;
     }
 }

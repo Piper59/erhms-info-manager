@@ -58,10 +58,10 @@
             </MenuItem>
             <MenuItem Header="{Markup:String AccessText.Tools}">
                 <MenuItem Header="{Markup:String AccessText.Logs}">
-                    <MenuItem Command="{Binding OpenPathCommand}"
+                    <MenuItem Command="{Binding OpenUriCommand}"
                               CommandParameter="{x:Static ERHMS_Common_Logging:FileAppender.File}"
                               Header="{Markup:String AccessText.SeeCurrent}" />
-                    <MenuItem Command="{Binding OpenPathCommand}"
+                    <MenuItem Command="{Binding OpenUriCommand}"
                               CommandParameter="{x:Static ERHMS_Common_Logging:FileAppender.Directory}"
                               Header="{Markup:String AccessText.SeeAll}" />
                     <MenuItem Command="{Binding ExportLogsCommand}"
@@ -70,7 +70,7 @@
                 <Separator />
                 <MenuItem Command="{Binding StartEpiInfoCommand}"
                           Header="{Markup:String AccessText.EpiInfo}" />
-                <MenuItem Command="{Binding OpenPathCommand}"
+                <MenuItem Command="{Binding OpenUriCommand}"
                           CommandParameter="{Binding BaseDirectory, Source={x:Static System:AppDomain.CurrentDomain}}"
                           Header="{Markup:String AccessText.FileExplorer}" />
                 <MenuItem Command="{Binding StartCommandPromptCommand}"

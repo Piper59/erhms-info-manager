@@ -144,7 +144,7 @@
     <Compile Include="Dialogs\DialogButton.cs" />
     <Compile Include="Dialogs\DialogButtonCollection.cs" />
     <Compile Include="Dialogs\DialogSeverity.cs" />
-    <Compile Include="EventHandlers\OpenWebBrowserOnRequestNavigate.cs" />
+    <Compile Include="EventHandlers\OpenUriOnRequestNavigate.cs" />
     <Compile Include="IAppCommands.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Infrastructure\ApplicationExtensions.cs" />

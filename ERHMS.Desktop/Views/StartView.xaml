@@ -93,10 +93,10 @@
                         <StackPanel Style="{StaticResource Section}">
                             <TextBlock Style="{StaticResource Lead}"
                                        Text="{Markup:String Lead.Start}" />
-                            <Button Command="{Binding LearnCommand}"
+                            <Button Command="{x:Static local:AppCommands.OpenUriCommand}"
                                     CommandParameter="{Markup:String Uri.ERHMS}"
                                     Content="{Markup:String AccessText.Learn.ERHMS}" />
-                            <Button Command="{Binding LearnCommand}"
+                            <Button Command="{x:Static local:AppCommands.OpenUriCommand}"
                                     CommandParameter="{Markup:String Uri.EpiInfo}"
                                     Content="{Markup:String AccessText.Learn.EpiInfo}" />
                             <Button Command="{x:Static local:AppCommands.GoToHelpCommand}"

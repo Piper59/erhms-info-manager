@@ -78,7 +78,6 @@
     <Compile Include="Text\ByteCountFormatter.cs" />
     <Compile Include="Text\Comparers.cs" />
     <Compile Include="Text\StringDistanceCalculator.cs" />
-    <Compile Include="UriExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -13,6 +13,6 @@ namespace ERHMS.Desktop
         ICommand GoToMainCoreViewCommand { get; }
         ICommand CreateCoreProjectCommand { get; }
         ICommand OpenCoreProjectCommand { get; }
-        ICommand OpenPathCommand { get; }
+        ICommand OpenUriCommand { get; }
     }
 }

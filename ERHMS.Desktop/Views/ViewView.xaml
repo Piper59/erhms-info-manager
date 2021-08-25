@@ -24,9 +24,8 @@
                            TextWrapping="NoWrap">
                     <Run Text="{Markup:String Label.View}" />
                     <Hyperlink AutomationProperties.HelpText="{Binding View.Project.FilePath}"
-                               Command="{x:Static local:AppCommands.OpenPathCommand}"
-                               CommandParameter="{Binding View.Project.Location}"
                                FontWeight="{StaticResource DefaultFontWeight}"
+                               NavigateUri="{Binding View.Project.Location}"
                                Style="{StaticResource PlainHyperlink}"
                                ToolTip="{Binding View.Project.FilePath}">
                         <Run Text="{Binding View.Project.Name}" />

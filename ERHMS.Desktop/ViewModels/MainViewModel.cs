@@ -50,7 +50,7 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand GoToMainCoreViewCommand { get; }
         public ICommand CreateCoreProjectCommand { get; }
         public ICommand OpenCoreProjectCommand { get; }
-        public ICommand OpenPathCommand { get; }
+        public ICommand OpenUriCommand { get; }
         public ICommand ExportLogsCommand { get; }
         public ICommand StartEpiInfoCommand { get; }
         public ICommand StartCommandPromptCommand { get; }
@@ -68,7 +68,7 @@ namespace ERHMS.Desktop.ViewModels
             GoToMainCoreViewCommand = new AsyncCommand<CoreProject>(GoToMainCoreViewAsync);
             CreateCoreProjectCommand = new SyncCommand<CoreProject>(CreateCoreProject);
             OpenCoreProjectCommand = new SyncCommand<CoreProject>(OpenCoreProject);
-            OpenPathCommand = new SyncCommand<string>(OpenPath);
+            OpenUriCommand = new SyncCommand<string>(OpenUri);
             ExportLogsCommand = new AsyncCommand(ExportLogsAsync);
             StartEpiInfoCommand = new SyncCommand(StartEpiInfo);
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
@@ -202,9 +202,9 @@ namespace ERHMS.Desktop.ViewModels
             GoToHome();
         }
 
-        public void OpenPath(string path)
+        public void OpenUri(string uri)
         {
-            Process.Start(path)?.Dispose();
+            Process.Start(uri)?.Dispose();
         }
 
         public async Task ExportLogsAsync()
