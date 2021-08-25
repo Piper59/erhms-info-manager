@@ -104,12 +104,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 FilePath = await Task.Run(() =>
                 {
                     string directoryPath = State.Project.Location;
-                    string fileName = $"{State.View.Name}{State.FileExtension}";
                     FileNameUniquifier fileNames = new FileNameUniquifier(directoryPath, State.FileExtension);
-                    if (fileNames.Exists(fileName))
-                    {
-                        fileName = fileNames.Uniquify(fileName);
-                    }
+                    string fileName = fileNames.UniquifyIfExists($"{State.View.Name}{State.FileExtension}");
                     return Path.Combine(directoryPath, fileName);
                 });
                 fileDialog.FileName = FilePath;

@@ -1,5 +1,6 @@
 ﻿using Epi;
 using ERHMS.Common.Logging;
+using ERHMS.Common.Naming;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Data;
 using ERHMS.Desktop.Properties;
@@ -109,13 +110,8 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 {
                     ViewName = await Task.Run(() =>
                     {
-                        string viewName = State.SourceView.Name;
                         ViewNameUniquifier viewNames = new ViewNameUniquifier(State.Project);
-                        if (viewNames.Exists(viewName))
-                        {
-                            viewName = viewNames.Uniquify(viewName);
-                        }
-                        return viewName;
+                        return viewNames.UniquifyIfExists(State.SourceView.Name);
                     });
                 }
 
