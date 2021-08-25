@@ -5,6 +5,7 @@
               xmlns:ERHMS_Data="clr-namespace:ERHMS.Data;assembly=ERHMS.Data"
               xmlns:Markup="clr-namespace:ERHMS.Desktop.Markup"
               xmlns:ViewModels_Wizards="clr-namespace:ERHMS.Desktop.ViewModels.Wizards"
+              xmlns:ERHMS_Domain="clr-namespace:ERHMS.Domain;assembly=ERHMS.Domain"
               xmlns:System_Data_Common="clr-namespace:System.Data.Common;assembly=System.Data"
               xmlns:System="clr-namespace:System;assembly=mscorlib"
               Grid.IsSharedSizeScope="True"
@@ -68,6 +69,10 @@
         <DataTemplate DataType="{x:Type ERHMS_Data:DatabaseProvider}">
             <TextBlock Style="{StaticResource Body}"
                        Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='DatabaseProvider.Value.{0}'}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ERHMS_Domain:CoreView}">
+            <TextBlock Style="{StaticResource Body}"
+                       Text="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type ViewModels_Wizards:ImportRecordsViewModels+MappingCollection}">
             <DataTemplate.Resources>

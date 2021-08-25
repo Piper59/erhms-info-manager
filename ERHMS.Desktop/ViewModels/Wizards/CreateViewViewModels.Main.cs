@@ -30,6 +30,7 @@ namespace ERHMS.Desktop.ViewModels.Wizards
         {
             public override string Title => Strings.CreateView_Lead_SetStrategy;
 
+            public ICommand CreateStandardCommand { get; }
             public ICommand CreateBlankCommand { get; }
             public ICommand CreateFromTemplateCommand { get; }
             public ICommand CreateFromExistingCommand { get; }
@@ -37,9 +38,15 @@ namespace ERHMS.Desktop.ViewModels.Wizards
             public SetStrategyViewModel(State state)
                 : base(state)
             {
+                CreateStandardCommand = new SyncCommand(CreateStandard);
                 CreateBlankCommand = new SyncCommand(CreateBlank);
                 CreateFromTemplateCommand = new SyncCommand(CreateFromTemplate);
                 CreateFromExistingCommand = new AsyncCommand(CreateFromExistingAsync);
+            }
+
+            public void CreateStandard()
+            {
+                Wizard.GoForward(new Standard.SetCoreViewViewModel(State));
             }
 
             public void CreateBlank()

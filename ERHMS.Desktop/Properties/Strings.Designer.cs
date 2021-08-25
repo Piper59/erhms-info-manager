@@ -1517,6 +1517,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a _standard form.
+        /// </summary>
+        public static string CreateView_AccessText_Standard {
+            get {
+                return ResourceManager.GetString("CreateView.AccessText.Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you choose to collect worker information, the new form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker..
         /// </summary>
         public static string CreateView_Body_SetWithWorkerInfo {
@@ -1553,11 +1562,29 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a new form containing fields defined in a standard worker or incident form..
+        /// </summary>
+        public static string CreateView_HelpText_Standard {
+            get {
+                return ResourceManager.GetString("CreateView.HelpText.Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Form creation was successful.
         /// </summary>
         public static string CreateView_Lead_Close {
             get {
                 return ResourceManager.GetString("CreateView.Lead.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a standard form.
+        /// </summary>
+        public static string CreateView_Lead_SetCoreView {
+            get {
+                return ResourceManager.GetString("CreateView.Lead.SetCoreView", resourceCulture);
             }
         }
         

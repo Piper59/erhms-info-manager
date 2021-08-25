@@ -613,6 +613,9 @@ Close anyway?</value>
   <data name="CreateView.AccessText.FromTemplate" xml:space="preserve">
     <value>Create a form based on a _template</value>
   </data>
+  <data name="CreateView.AccessText.Standard" xml:space="preserve">
+    <value>Create a _standard form</value>
+  </data>
   <data name="CreateView.Body.SetWithWorkerInfo" xml:space="preserve">
     <value>If you choose to collect worker information, the new form will contain fields for worker name, email address, and ID. You can use these fields to associate each record with the corresponding worker.</value>
   </data>
@@ -625,8 +628,14 @@ Close anyway?</value>
   <data name="CreateView.HelpText.FromTemplate" xml:space="preserve">
     <value>Create a new form containing fields defined in a form-level template.</value>
   </data>
+  <data name="CreateView.HelpText.Standard" xml:space="preserve">
+    <value>Create a new form containing fields defined in a standard worker or incident form.</value>
+  </data>
   <data name="CreateView.Lead.Close" xml:space="preserve">
     <value>Form creation was successful</value>
+  </data>
+  <data name="CreateView.Lead.SetCoreView" xml:space="preserve">
+    <value>Choose a standard form</value>
   </data>
   <data name="CreateView.Lead.SetSourceView" xml:space="preserve">
     <value>Choose an existing form</value>

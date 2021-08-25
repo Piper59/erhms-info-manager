@@ -9,6 +9,9 @@
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
+            <Button AutomationProperties.HelpText="{Markup:String CreateView.HelpText.Standard}"
+                    Command="{Binding CreateStandardCommand}"
+                    Content="{Markup:String CreateView.AccessText.Standard}" />
             <Button AutomationProperties.HelpText="{Markup:String CreateView.HelpText.Blank}"
                     Command="{Binding CreateBlankCommand}"
                     Content="{Markup:String CreateView.AccessText.Blank}" />
@@ -42,6 +45,21 @@
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModels+CloseViewModel}">
         <CheckBox Content="{Markup:String Label.OpenInEpiInfo}"
                   IsChecked="{Binding OpenInEpiInfo}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModels+Standard+SetCoreViewViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"
+                   Content="{Markup:String Label.View}" />
+            <Controls:BoundComboBox AutomationProperties.Name="{Markup:String Label.View}"
+                                    Grid.Column="1"
+                                    Binding="{Binding Name, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreView.Title.{0}'}"
+                                    ItemsSource="{Binding CoreViews}" />
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ViewModels_Wizards:CreateViewViewModels+Blank+SetWithWorkerInfoViewModel}">

@@ -229,6 +229,7 @@
     <Compile Include="ViewModels\Wizards\CreateViewViewModels.FromExisting.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModels.FromTemplate.cs" />
     <Compile Include="ViewModels\Wizards\CreateViewViewModels.Main.cs" />
+    <Compile Include="ViewModels\Wizards\CreateViewViewModels.Standard.cs" />
     <Compile Include="ViewModels\Wizards\ExportRecordsViewModels.cs" />
     <Compile Include="ViewModels\Wizards\ImportRecordsViewModels.cs" />
     <Compile Include="ViewModels\Wizards\SetUpProjectViewModels.cs" />

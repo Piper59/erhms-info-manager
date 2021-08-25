@@ -121,7 +121,7 @@
                                 </DataTemplate>
                             </ContextMenu.Resources>
                             <MenuItem Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
-                                      CommandParameter="{Binding Value}"
+                                      CommandParameter="{Binding CoreProject}"
                                       Header="{Markup:String AccessText.GoToCurrentProject}" />
                             <MenuItem Header="{Markup:String AccessText.OpenRecentProject}"
                                       ItemsSource="{Binding Recents}"
@@ -140,10 +140,10 @@
                             </MenuItem>
                             <Separator />
                             <MenuItem Command="{x:Static local:AppCommands.CreateCoreProjectCommand}"
-                                      CommandParameter="{Binding Value}"
+                                      CommandParameter="{Binding CoreProject}"
                                       Header="{Markup:String AccessText.CreateNewProject}" />
                             <MenuItem Command="{x:Static local:AppCommands.OpenCoreProjectCommand}"
-                                      CommandParameter="{Binding Value}"
+                                      CommandParameter="{Binding CoreProject}"
                                       Header="{Markup:String AccessText.OpenExistingProject}" />
                         </ContextMenu>
                     </Button.ContextMenu>
