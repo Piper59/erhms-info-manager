@@ -1,6 +1,7 @@
 ﻿using ERHMS.Common.ComponentModel;
 using ERHMS.Desktop.Commands;
 using ERHMS.Desktop.Properties;
+using ERHMS.Desktop.ViewModels.Wizards;
 using ERHMS.Domain;
 using System.ComponentModel;
 using System.Linq;
@@ -22,11 +23,16 @@ namespace ERHMS.Desktop.ViewModels
                 set { SetProperty(ref hasPath, value); }
             }
 
+            public ICommand SetUpCoreProjectCommand { get; }
+            public ICommand GoToMainCoreViewCommand { get; }
+
             public CoreProjectViewModel(CoreProject value)
             {
                 Value = value;
                 Initialize();
                 Settings.Default.SettingsSaving += Default_SettingsSaving;
+                SetUpCoreProjectCommand = new SyncCommand(SetUpCoreProject);
+                GoToMainCoreViewCommand = new SyncCommand(GoToMainCoreView, CanGoToMainCoreView);
             }
 
             private void Default_SettingsSaving(object sender, CancelEventArgs e)
@@ -37,6 +43,22 @@ namespace ERHMS.Desktop.ViewModels
             private void Initialize()
             {
                 HasPath = Settings.Default.HasProjectPath(Value);
+            }
+
+            public void SetUpCoreProject()
+            {
+                WizardViewModel wizard = SetUpProjectViewModels.GetWizard(Value);
+                wizard.Run();
+            }
+
+            public bool CanGoToMainCoreView()
+            {
+                return AppCommands.GoToCoreViewCommand.CanExecute(MainCoreView);
+            }
+
+            public void GoToMainCoreView()
+            {
+                AppCommands.GoToCoreViewCommand.Execute(MainCoreView);
             }
         }
 

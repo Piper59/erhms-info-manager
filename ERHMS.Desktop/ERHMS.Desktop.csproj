@@ -231,6 +231,7 @@
     <Compile Include="ViewModels\Wizards\CreateViewViewModels.Main.cs" />
     <Compile Include="ViewModels\Wizards\ExportRecordsViewModels.cs" />
     <Compile Include="ViewModels\Wizards\ImportRecordsViewModels.cs" />
+    <Compile Include="ViewModels\Wizards\SetUpProjectViewModels.cs" />
     <Compile Include="ViewModels\WizardViewModel.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
@@ -447,6 +448,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Wizards\ImportRecordsViews.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wizards\SetUpProjectViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -14,10 +14,9 @@
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Lead}"
                            Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
-                <!-- TODO: Run wizard -->
-                <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}" />
-                <Button Command="{x:Static local:AppCommands.GoToMainCoreViewCommand}"
-                        CommandParameter="{Binding Value}"
+                <Button Command="{Binding SetUpCoreProjectCommand}"
+                        Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}" />
+                <Button Command="{Binding GoToMainCoreViewCommand}"
                         Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
                         IsEnabled="{Binding HasPath}" />
                 <Button Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
@@ -86,7 +85,6 @@
                     <StackPanel Style="{StaticResource Container}">
                         <StackPanel.Resources>
                             <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}">
-                                <Setter Property="ContextMenuService.Placement" Value="Bottom" />
                                 <Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
                             </Style>
                         </StackPanel.Resources>

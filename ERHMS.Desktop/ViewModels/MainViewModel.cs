@@ -11,7 +11,6 @@ using ERHMS.EpiInfo;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Module = ERHMS.EpiInfo.Module;
@@ -47,7 +46,6 @@ namespace ERHMS.Desktop.ViewModels
         public ICommand GoToCoreProjectCommand { get; }
         public ICommand GoToViewCommand { get; }
         public ICommand GoToCoreViewCommand { get; }
-        public ICommand GoToMainCoreViewCommand { get; }
         public ICommand CreateCoreProjectCommand { get; }
         public ICommand OpenCoreProjectCommand { get; }
         public ICommand OpenUriCommand { get; }
@@ -65,7 +63,6 @@ namespace ERHMS.Desktop.ViewModels
             GoToCoreProjectCommand = new AsyncCommand<CoreProject>(GoToCoreProjectAsync);
             GoToViewCommand = new AsyncCommand<View>(GoToViewAsync, CanGoToView);
             GoToCoreViewCommand = new AsyncCommand<CoreView>(GoToCoreViewAsync);
-            GoToMainCoreViewCommand = new AsyncCommand<CoreProject>(GoToMainCoreViewAsync);
             CreateCoreProjectCommand = new SyncCommand<CoreProject>(CreateCoreProject);
             OpenCoreProjectCommand = new SyncCommand<CoreProject>(OpenCoreProject);
             OpenUriCommand = new SyncCommand<string>(OpenUri);
@@ -160,11 +157,6 @@ namespace ERHMS.Desktop.ViewModels
                 Project project = ProjectExtensions.Open(projectPath);
                 return project.Views[coreView.Name];
             }));
-        }
-
-        public async Task GoToMainCoreViewAsync(CoreProject coreProject)
-        {
-            await GoToCoreViewAsync(CoreView.GetInstances(coreProject).First());
         }
 
         public void CreateCoreProject(CoreProject coreProject)

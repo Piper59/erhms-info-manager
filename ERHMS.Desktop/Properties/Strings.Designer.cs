@@ -2832,6 +2832,15 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose how to set up the project.
+        /// </summary>
+        public static string SetUpProject_Lead_SetStrategy {
+            get {
+                return ResourceManager.GetString("SetUpProject.Lead.SetStrategy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About ERHMS Info Manager.
         /// </summary>
         public static string Title_AboutApp {
