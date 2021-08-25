@@ -20,7 +20,7 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class MainViewModel : ObservableObject, IAppCommands
     {
-        private object content = new HomeViewModel();
+        private object content;
         public object Content
         {
             get
@@ -34,6 +34,7 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
+        public HomeViewModel Home { get; } = new HomeViewModel();
         public HelpViewModel Help { get; } = new HelpViewModel();
         public StartViewModel Start { get; } = new StartViewModel();
         public AboutViewModel About { get; } = new AboutViewModel();
@@ -55,6 +56,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public MainViewModel()
         {
+            Content = Home;
             GoToHomeCommand = new SyncCommand(GoToHome);
             GoToHelpCommand = new SyncCommand(GoToHelp);
             GoToStartCommand = new SyncCommand(GoToStart);
@@ -93,11 +95,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void GoToHome()
         {
-            if (Content is HomeViewModel)
-            {
-                return;
-            }
-            Content = new HomeViewModel();
+            Content = Home;
         }
 
         public void GoToHelp()
