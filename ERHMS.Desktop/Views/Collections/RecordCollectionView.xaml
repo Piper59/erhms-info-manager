@@ -120,7 +120,33 @@
                 <Behaviors:EnhanceKeyboardNavigation />
             </b:Interaction.Behaviors>
         </DataGrid>
-        <Controls:Watermark Grid.Row="2"
-                            ItemsControl="{x:Reference ItemsDataGrid}" />
+        <Border Grid.Row="2"
+                Style="{StaticResource Watermark}"
+                Visibility="{Binding Items.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Style="{StaticResource Container}">
+                <TextBlock Style="{StaticResource Lead}"
+                           Text="{Markup:String Lead.NoRecordsFound}"
+                           TextAlignment="Center" />
+                <StackPanel HorizontalAlignment="Center">
+                    <StackPanel.Margin>
+                        <Thickness Top="{StaticResource LargeSpace}" />
+                    </StackPanel.Margin>
+                    <StackPanel Orientation="Horizontal">
+                        <Controls:IconButton AltText="{Markup:String AltText.Add}"
+                                             Command="{Binding AddCommand}"
+                                             Content="{Markup:Icon Add}"
+                                             HelpText="{Markup:String HelpText.AddRecord}" />
+                        <Label Content="{Markup:String AltText.Add}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Controls:IconButton AltText="{Markup:String AltText.Import}"
+                                             Command="{Binding ImportCommand}"
+                                             Content="{Markup:Icon Import}"
+                                             HelpText="{Markup:String HelpText.ImportRecords}" />
+                        <Label Content="{Markup:String AltText.Import}" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

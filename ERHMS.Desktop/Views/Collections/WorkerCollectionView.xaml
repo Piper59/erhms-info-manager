@@ -28,8 +28,7 @@
         <Controls:Pager Grid.Row="1"
                         DataContext="{Binding Items}"
                         HorizontalAlignment="Right" />
-        <DataGrid x:Name="ItemsDataGrid"
-                  Grid.Row="2"
+        <DataGrid Grid.Row="2"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <b:Interaction.Behaviors>
@@ -56,7 +55,14 @@
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
         </DataGrid>
-        <Controls:Watermark Grid.Row="2"
-                            ItemsControl="{x:Reference ItemsDataGrid}" />
+        <Border Grid.Row="2"
+                Style="{StaticResource Watermark}"
+                Visibility="{Binding Items.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Style="{StaticResource Container}">
+                <TextBlock Style="{StaticResource Lead}"
+                           Text="{Markup:String Lead.NoWorkersFound}"
+                           TextAlignment="Center" />
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

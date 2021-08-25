@@ -33,8 +33,7 @@
                                  Content="{Markup:Icon Refresh}"
                                  HelpText="{Markup:String HelpText.Refresh}" />
         </WrapPanel>
-        <DataGrid x:Name="ItemsDataGrid"
-                  Grid.Row="1"
+        <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Items}"
                   SelectionMode="Single">
             <b:Interaction.Behaviors>
@@ -59,7 +58,26 @@
                               MouseAction="LeftDoubleClick" />
             </DataGrid.InputBindings>
         </DataGrid>
-        <Controls:Watermark Grid.Row="1"
-                            ItemsControl="{x:Reference ItemsDataGrid}" />
+        <Border Grid.Row="1"
+                Style="{StaticResource Watermark}"
+                Visibility="{Binding Items.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Style="{StaticResource Container}">
+                <TextBlock Style="{StaticResource Lead}"
+                           Text="{Markup:String Lead.NoAssetsFound}"
+                           TextAlignment="Center" />
+                <StackPanel HorizontalAlignment="Center">
+                    <StackPanel.Margin>
+                        <Thickness Top="{StaticResource LargeSpace}" />
+                    </StackPanel.Margin>
+                    <StackPanel Orientation="Horizontal">
+                        <Controls:IconButton AltText="{Markup:String AltText.Create}"
+                                             Command="{Binding CreateCommand}"
+                                             Content="{Markup:Icon Create}"
+                                             HelpText="{Binding Module, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='HelpText.CreateAsset.{0}'}" />
+                        <Label Content="{Markup:String AltText.Create}" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

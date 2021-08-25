@@ -989,8 +989,20 @@ Close anyway?</value>
   <data name="Lead.LoadingView" xml:space="preserve">
     <value>Loading form</value>
   </data>
+  <data name="Lead.NoAssetsFound" xml:space="preserve">
+    <value>No files found</value>
+  </data>
   <data name="Lead.NonFatalError" xml:space="preserve">
     <value>ERHMS Info Manager has encountered an error</value>
+  </data>
+  <data name="Lead.NoRecordsFound" xml:space="preserve">
+    <value>No records found</value>
+  </data>
+  <data name="Lead.NoViewsFound" xml:space="preserve">
+    <value>No forms found</value>
+  </data>
+  <data name="Lead.NoWorkersFound" xml:space="preserve">
+    <value>No workers found</value>
   </data>
   <data name="Lead.RefreshingAssets" xml:space="preserve">
     <value>Refreshing files</value>
@@ -1075,8 +1087,5 @@ Close anyway?</value>
   </data>
   <data name="Uri.ERHMS" xml:space="preserve">
     <value>https://www.cdc.gov/niosh/erhms/</value>
-  </data>
-  <data name="Watermark" xml:space="preserve">
-    <value>No items found</value>
   </data>
 </root>

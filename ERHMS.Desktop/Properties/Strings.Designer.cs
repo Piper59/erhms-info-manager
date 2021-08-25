@@ -2643,11 +2643,47 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No files found.
+        /// </summary>
+        public static string Lead_NoAssetsFound {
+            get {
+                return ResourceManager.GetString("Lead.NoAssetsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ERHMS Info Manager has encountered an error.
         /// </summary>
         public static string Lead_NonFatalError {
             get {
                 return ResourceManager.GetString("Lead.NonFatalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No records found.
+        /// </summary>
+        public static string Lead_NoRecordsFound {
+            get {
+                return ResourceManager.GetString("Lead.NoRecordsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No forms found.
+        /// </summary>
+        public static string Lead_NoViewsFound {
+            get {
+                return ResourceManager.GetString("Lead.NoViewsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No workers found.
+        /// </summary>
+        public static string Lead_NoWorkersFound {
+            get {
+                return ResourceManager.GetString("Lead.NoWorkersFound", resourceCulture);
             }
         }
         
@@ -2900,15 +2936,6 @@ namespace ERHMS.Desktop.Properties {
         public static string Uri_ERHMS {
             get {
                 return ResourceManager.GetString("Uri.ERHMS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No items found.
-        /// </summary>
-        public static string Watermark {
-            get {
-                return ResourceManager.GetString("Watermark", resourceCulture);
             }
         }
     }
