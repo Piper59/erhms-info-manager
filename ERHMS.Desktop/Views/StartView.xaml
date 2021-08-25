@@ -10,18 +10,18 @@
              BorderThickness="1"
              Visibility="{Binding Closed, Converter={StaticResource BooleanToVisibilityInverter}}">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type ViewModels:StartViewModel+CoreProjectViewModel}">
+        <DataTemplate DataType="{x:Type ViewModels:StartViewModel+ProjectViewModel}">
             <StackPanel Style="{StaticResource Section}">
                 <TextBlock Style="{StaticResource Lead}"
-                           Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
-                <Button Command="{Binding SetUpCoreProjectCommand}"
-                        Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}" />
-                <Button Command="{Binding GoToMainCoreViewCommand}"
-                        Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
+                           Text="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
+                <Button Command="{Binding SetUpProjectCommand}"
+                        Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}" />
+                <Button Command="{Binding GoToMainViewCommand}"
+                        Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
                         IsEnabled="{Binding HasPath}" />
                 <Button Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
-                        CommandParameter="{Binding Value}"
-                        Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseViews.{0}'}"
+                        CommandParameter="{Binding CoreProject}"
+                        Content="{Binding CoreProject, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseViews.{0}'}"
                         IsEnabled="{Binding HasPath}" />
             </StackPanel>
         </DataTemplate>

@@ -19,9 +19,9 @@ namespace ERHMS.Desktop.ViewModels
             private EmptyProjectInfo() { }
         }
 
-        public abstract class CoreProjectCollectionViewModel : ObservableObject
+        public abstract class ProjectCollectionViewModel : ObservableObject
         {
-            public abstract CoreProject Value { get; }
+            public abstract CoreProject CoreProject { get; }
 
             private ProjectInfo current;
             public ProjectInfo Current
@@ -42,7 +42,7 @@ namespace ERHMS.Desktop.ViewModels
             public abstract ICommand MakeCurrentCommand { get; }
             public abstract ICommand RemoveRecentCommand { get; }
 
-            protected CoreProjectCollectionViewModel()
+            protected ProjectCollectionViewModel()
             {
                 Settings.Default.SettingsSaving += Default_SettingsSaving;
             }
@@ -55,9 +55,9 @@ namespace ERHMS.Desktop.ViewModels
             protected abstract void Refresh();
         }
 
-        public class WorkerProjectCollectionViewModel : CoreProjectCollectionViewModel
+        public class WorkerProjectCollectionViewModel : ProjectCollectionViewModel
         {
-            public override CoreProject Value => CoreProject.Worker;
+            public override CoreProject CoreProject => CoreProject.Worker;
             public override bool CanHaveRecents => false;
 
             public override ICommand MakeCurrentCommand => Command.Null;
@@ -82,9 +82,9 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        public class IncidentProjectCollectionViewModel : CoreProjectCollectionViewModel
+        public class IncidentProjectCollectionViewModel : ProjectCollectionViewModel
         {
-            public override CoreProject Value => CoreProject.Incident;
+            public override CoreProject CoreProject => CoreProject.Incident;
             public override bool CanHaveRecents => true;
 
             public override ICommand MakeCurrentCommand { get; }
@@ -136,10 +136,10 @@ namespace ERHMS.Desktop.ViewModels
         public class PhaseViewModel : ObservableObject
         {
             public Phase Value { get; }
-            public CoreProjectCollectionViewModel Projects { get; }
+            public ProjectCollectionViewModel Projects { get; }
             public IEnumerable<CoreView> Views { get; }
 
-            public PhaseViewModel(Phase value, CoreProjectCollectionViewModel projects)
+            public PhaseViewModel(Phase value, ProjectCollectionViewModel projects)
             {
                 Value = value;
                 Projects = projects;
@@ -147,8 +147,8 @@ namespace ERHMS.Desktop.ViewModels
             }
         }
 
-        private readonly CoreProjectCollectionViewModel workerProjects = new WorkerProjectCollectionViewModel();
-        private readonly CoreProjectCollectionViewModel incidentProjects = new IncidentProjectCollectionViewModel();
+        private readonly ProjectCollectionViewModel workerProjects = new WorkerProjectCollectionViewModel();
+        private readonly ProjectCollectionViewModel incidentProjects = new IncidentProjectCollectionViewModel();
 
         public IEnumerable<PhaseViewModel> Phases { get; }
 

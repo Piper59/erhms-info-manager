@@ -11,10 +11,10 @@ namespace ERHMS.Desktop.ViewModels
 {
     public class StartViewModel : ObservableObject
     {
-        public class CoreProjectViewModel : ObservableObject
+        public class ProjectViewModel : ObservableObject
         {
-            public CoreProject Value { get; }
-            public CoreView MainCoreView => CoreView.GetInstances(Value).First();
+            public CoreProject CoreProject { get; }
+            public CoreView MainCoreView => CoreView.GetInstances(CoreProject).First();
 
             private bool hasPath;
             public bool HasPath
@@ -23,16 +23,16 @@ namespace ERHMS.Desktop.ViewModels
                 set { SetProperty(ref hasPath, value); }
             }
 
-            public ICommand SetUpCoreProjectCommand { get; }
-            public ICommand GoToMainCoreViewCommand { get; }
+            public ICommand SetUpProjectCommand { get; }
+            public ICommand GoToMainViewCommand { get; }
 
-            public CoreProjectViewModel(CoreProject value)
+            public ProjectViewModel(CoreProject coreProject)
             {
-                Value = value;
+                CoreProject = coreProject;
                 Initialize();
                 Settings.Default.SettingsSaving += Default_SettingsSaving;
-                SetUpCoreProjectCommand = new SyncCommand(SetUpCoreProject);
-                GoToMainCoreViewCommand = new SyncCommand(GoToMainCoreView, CanGoToMainCoreView);
+                SetUpProjectCommand = new SyncCommand(SetUpProject);
+                GoToMainViewCommand = new SyncCommand(GoToMainView, CanGoToMainView);
             }
 
             private void Default_SettingsSaving(object sender, CancelEventArgs e)
@@ -42,28 +42,28 @@ namespace ERHMS.Desktop.ViewModels
 
             private void Initialize()
             {
-                HasPath = Settings.Default.HasProjectPath(Value);
+                HasPath = Settings.Default.HasProjectPath(CoreProject);
             }
 
-            public void SetUpCoreProject()
+            public void SetUpProject()
             {
-                WizardViewModel wizard = SetUpProjectViewModels.GetWizard(Value);
+                WizardViewModel wizard = SetUpProjectViewModels.GetWizard(CoreProject);
                 wizard.Run();
             }
 
-            public bool CanGoToMainCoreView()
+            public bool CanGoToMainView()
             {
                 return AppCommands.GoToCoreViewCommand.CanExecute(MainCoreView);
             }
 
-            public void GoToMainCoreView()
+            public void GoToMainView()
             {
                 AppCommands.GoToCoreViewCommand.Execute(MainCoreView);
             }
         }
 
-        public CoreProjectViewModel WorkerProject { get; } = new CoreProjectViewModel(CoreProject.Worker);
-        public CoreProjectViewModel IncidentProject { get; } = new CoreProjectViewModel(CoreProject.Incident);
+        public ProjectViewModel WorkerProject { get; } = new ProjectViewModel(CoreProject.Worker);
+        public ProjectViewModel IncidentProject { get; } = new ProjectViewModel(CoreProject.Incident);
 
         private bool minimized;
         public bool Minimized

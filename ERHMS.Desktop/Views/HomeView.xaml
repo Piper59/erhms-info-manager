@@ -32,7 +32,7 @@
                               ItemsSource="{Binding Views}" />
             </StackPanel>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+CoreProjectCollectionViewModel}">
+        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel+ProjectCollectionViewModel}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -41,14 +41,14 @@
                 <Button AutomationProperties.HelpText="{Binding Current.FilePath, FallbackValue={Markup:String HelpText.CreateOrOpenProject}}"
                         Grid.Column="0"
                         Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
-                        CommandParameter="{Binding Value}"
+                        CommandParameter="{Binding CoreProject}"
                         Style="{StaticResource WorkflowButton}"
                         ToolTip="{Binding Current.FilePath}">
                     <AutomationProperties.Name>
                         <MultiBinding StringFormat="{}{0} {1}">
                             <Binding Converter="{StaticResource StringLocalizingConverter}"
                                      ConverterParameter="CoreProject.Label.{0}"
-                                     Path="Value" />
+                                     Path="CoreProject" />
                             <Binding FallbackValue="{Markup:String ProjectInfo.Current.Empty}"
                                      Path="Current.Name" />
                         </MultiBinding>
@@ -59,7 +59,7 @@
                                 <Thickness Bottom="{StaticResource SmallSpace}" />
                             </TextBlock.Margin>
                             <Run FontWeight="{StaticResource ThinFontWeight}"
-                                 Text="{Binding Value, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
+                                 Text="{Binding CoreProject, Mode=OneWay, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='CoreProject.Label.{0}'}" />
                             <Run Text="{Binding Current.Name, FallbackValue={Markup:String ProjectInfo.Current.Empty}}" />
                         </TextBlock>
                         <TextBlock Margin="0"
