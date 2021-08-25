@@ -13,6 +13,7 @@ namespace ERHMS.Desktop
             public ICommand GoToCoreProjectCommand => Command.Null;
             public ICommand GoToViewCommand => Command.Null;
             public ICommand GoToCoreViewCommand => Command.Null;
+            public ICommand GoToMainCoreViewCommand => Command.Null;
             public ICommand CreateCoreProjectCommand => Command.Null;
             public ICommand OpenCoreProjectCommand => Command.Null;
             public ICommand OpenPathCommand => Command.Null;
@@ -22,10 +23,11 @@ namespace ERHMS.Desktop
 
         public static ICommand GoToHomeCommand => Instance.GoToHomeCommand;
         public static ICommand GoToHelpCommand => Instance.GoToHelpCommand;
-        public static ICommand GoToCoreProjectCommand => Instance.GoToCoreProjectCommand;
         public static ICommand GoToProjectCommand => Instance.GoToProjectCommand;
-        public static ICommand GoToCoreViewCommand => Instance.GoToCoreViewCommand;
+        public static ICommand GoToCoreProjectCommand => Instance.GoToCoreProjectCommand;
         public static ICommand GoToViewCommand => Instance.GoToViewCommand;
+        public static ICommand GoToCoreViewCommand => Instance.GoToCoreViewCommand;
+        public static ICommand GoToMainCoreViewCommand => Instance.GoToMainCoreViewCommand;
         public static ICommand CreateCoreProjectCommand => Instance.CreateCoreProjectCommand;
         public static ICommand OpenCoreProjectCommand => Instance.OpenCoreProjectCommand;
         public static ICommand OpenPathCommand => Instance.OpenPathCommand;

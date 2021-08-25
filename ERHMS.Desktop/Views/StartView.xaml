@@ -16,8 +16,9 @@
                            Text="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Lead.Start.{0}'}" />
                 <!-- TODO: Run wizard -->
                 <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.SetUpProject.{0}'}" />
-                <!-- TODO: Go to main view -->
-                <Button Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
+                <Button Command="{x:Static local:AppCommands.GoToMainCoreViewCommand}"
+                        CommandParameter="{Binding Value}"
+                        Content="{Binding Value, Converter={StaticResource StringLocalizingConverter}, ConverterParameter='AccessText.UseMainView.{0}'}"
                         IsEnabled="{Binding HasPath}" />
                 <Button Command="{x:Static local:AppCommands.GoToCoreProjectCommand}"
                         CommandParameter="{Binding Value}"
