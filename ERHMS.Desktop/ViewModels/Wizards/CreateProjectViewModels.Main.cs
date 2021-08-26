@@ -162,11 +162,6 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     ProjectNameValidator validator = new ProjectNameValidator(LocationRoot);
                     return validator.IsValid(Name, out reason);
                 });
-                if (reason == InvalidNameReason.Identical)
-                {
-                    // TODO: Offer to open
-                    // TODO: Check for core views
-                }
                 if (reason != InvalidNameReason.None)
                 {
                     IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
@@ -229,26 +224,20 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                 progress.Lead = Strings.Lead_CreatingProject;
                 State.Project = await progress.Run(() =>
                 {
-                    if (State.ProjectCreationInfo.Database.Exists())
-                    {
-                        if (State.ProjectCreationInfo.Database.IsInitialized())
-                        {
-                            // TODO: Offer to open
-                            // TODO: Check for core views
-                        }
-                        else
-                        {
-                            // TODO: Offer to initialize and open
-                            // TODO: Check for core views
-                        }
-                    }
-                    else
+                    if (!State.ProjectCreationInfo.Database.Exists())
                     {
                         State.ProjectCreationInfo.Database.Create();
                     }
                     Project project = ProjectExtensions.Create(State.ProjectCreationInfo);
                     progress.Report(Strings.Body_Initializing);
-                    project.Initialize();
+                    if (project.IsInitialized())
+                    {
+                        // TODO: Confirm
+                    }
+                    else
+                    {
+                        project.Initialize();
+                    }
                     Progress = progress;
                     ContinueCore(project);
                     return project;
