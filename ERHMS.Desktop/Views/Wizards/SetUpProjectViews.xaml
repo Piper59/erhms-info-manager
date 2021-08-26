@@ -7,10 +7,12 @@
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource WorkflowButton}" />
             </StackPanel.Resources>
-            <Button Command="{Binding CreateCommand}"
-                    Content="{Markup:String AccessText.CreateNewProject}" />
-            <Button Command="{Binding OpenCommand}"
-                    Content="{Markup:String AccessText.OpenExistingProject}" />
+            <Button AutomationProperties.HelpText="{Markup:String SetUpProject.HelpText.Create}"
+                    Command="{Binding CreateCommand}"
+                    Content="{Markup:String SetUpProject.AccessText.Create}" />
+            <Button AutomationProperties.HelpText="{Markup:String SetUpProject.HelpText.Open}"
+                    Command="{Binding OpenCommand}"
+                    Content="{Markup:String SetUpProject.AccessText.Open}" />
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

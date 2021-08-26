@@ -2895,6 +2895,42 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a _new project.
+        /// </summary>
+        public static string SetUpProject_AccessText_Create {
+            get {
+                return ResourceManager.GetString("SetUpProject.AccessText.Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open an _existing project.
+        /// </summary>
+        public static string SetUpProject_AccessText_Open {
+            get {
+                return ResourceManager.GetString("SetUpProject.AccessText.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new Epi Info project (.prj) file connected to a new or existing database..
+        /// </summary>
+        public static string SetUpProject_HelpText_Create {
+            get {
+                return ResourceManager.GetString("SetUpProject.HelpText.Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open an existing Epi Info project (.prj) file..
+        /// </summary>
+        public static string SetUpProject_HelpText_Open {
+            get {
+                return ResourceManager.GetString("SetUpProject.HelpText.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose how to set up the project.
         /// </summary>
         public static string SetUpProject_Lead_SetStrategy {

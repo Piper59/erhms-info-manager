@@ -1073,6 +1073,18 @@ Close anyway?</value>
   <data name="RecordStatus.Value.Undeleted" xml:space="preserve">
     <value>Undeleted</value>
   </data>
+  <data name="SetUpProject.AccessText.Create" xml:space="preserve">
+    <value>Create a _new project</value>
+  </data>
+  <data name="SetUpProject.AccessText.Open" xml:space="preserve">
+    <value>Open an _existing project</value>
+  </data>
+  <data name="SetUpProject.HelpText.Create" xml:space="preserve">
+    <value>Create a new Epi Info project (.prj) file connected to a new or existing database.</value>
+  </data>
+  <data name="SetUpProject.HelpText.Open" xml:space="preserve">
+    <value>Open an existing Epi Info project (.prj) file.</value>
+  </data>
   <data name="SetUpProject.Lead.SetStrategy" xml:space="preserve">
     <value>Choose how to set up the project</value>
   </data>
