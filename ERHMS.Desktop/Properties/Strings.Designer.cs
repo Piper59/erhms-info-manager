@@ -871,7 +871,7 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove from this list.
+        ///   Looks up a localized string similar to Remove from list.
         /// </summary>
         public static string AltText_RemoveFromList {
             get {

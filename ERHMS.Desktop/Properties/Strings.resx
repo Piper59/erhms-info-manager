@@ -388,7 +388,7 @@
     <value>Refresh</value>
   </data>
   <data name="AltText.RemoveFromList" xml:space="preserve">
-    <value>Remove from this list</value>
+    <value>Remove from list</value>
   </data>
   <data name="AltText.Restore" xml:space="preserve">
     <value>Restore</value>
