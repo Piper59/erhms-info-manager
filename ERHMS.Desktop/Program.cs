@@ -12,13 +12,13 @@ namespace ERHMS.Desktop
         [STAThread]
         private static void Main()
         {
-            Log.Initialize(new FileAppender());
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            Log.Instance.Debug("Starting up");
             try
             {
+                Log.Initialize(new FileAppender());
+                Log.Instance.Debug("Starting up");
                 Settings.Default.Initialize();
                 Configuration.Initialize(ExecutionEnvironment.WindowsApplication);
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 App app = new App();
                 app.Run();
             }
