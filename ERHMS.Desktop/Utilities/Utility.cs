@@ -115,8 +115,8 @@ namespace ERHMS.Desktop.Utilities
 
         public static async Task ExecuteAsync(string[] args)
         {
+            Log.Instance.Debug($"Executing utility: {args[0]}");
             Type instanceType = GetInstanceType(args[0]);
-            Log.Instance.Debug($"Executing utility: {instanceType.Name}");
             IUtility utility = (IUtility)Activator.CreateInstance(instanceType);
             utility.Parameters = args.Skip(1);
             Console.Out.Write(await utility.ExecuteAsync());

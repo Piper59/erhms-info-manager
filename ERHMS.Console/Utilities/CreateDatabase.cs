@@ -1,5 +1,4 @@
 ﻿using ERHMS.Data;
-using System;
 
 namespace ERHMS.Console.Utilities
 {
@@ -17,10 +16,6 @@ namespace ERHMS.Console.Utilities
         public override void Run()
         {
             IDatabase database = DatabaseProvider.ToDatabase(ConnectionString);
-            if (database.Exists())
-            {
-                throw new InvalidOperationException("Database already exists.");
-            }
             database.Create();
         }
     }

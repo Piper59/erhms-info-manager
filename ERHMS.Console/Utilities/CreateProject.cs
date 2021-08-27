@@ -45,10 +45,6 @@ namespace ERHMS.Console.Utilities
                 Location = ProjectLocation,
                 Database = DatabaseProvider.ToDatabase(ConnectionString)
             };
-            if (File.Exists(projectCreationInfo.FilePath))
-            {
-                throw new InvalidOperationException("Project already exists.");
-            }
             ProjectExtensions.Create(projectCreationInfo);
         }
     }

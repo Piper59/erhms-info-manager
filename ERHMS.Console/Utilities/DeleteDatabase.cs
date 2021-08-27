@@ -1,4 +1,5 @@
-﻿using ERHMS.Data;
+﻿using Epi;
+using ERHMS.Data;
 using ERHMS.EpiInfo;
 using System;
 
@@ -29,7 +30,8 @@ namespace ERHMS.Console.Utilities
             }
             else
             {
-                return ProjectExtensions.Open(ProjectPath).GetDatabase();
+                Project project = ProjectExtensions.Open(ProjectPath);
+                return project.GetDatabase();
             }
         }
 

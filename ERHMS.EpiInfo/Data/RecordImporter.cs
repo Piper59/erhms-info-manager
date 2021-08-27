@@ -99,11 +99,11 @@ namespace ERHMS.EpiInfo.Data
 
         public bool Import(CancellationToken cancellationToken)
         {
+            Log.Instance.Debug("Importing records");
             if (fieldsByIndex.Count == 0)
             {
                 throw new InvalidOperationException("No fields to import.");
             }
-            Log.Instance.Debug("Importing records");
             using (RecordRepository repository = new RecordRepository(View))
             using (ITransactor transactor = repository.Transact())
             {

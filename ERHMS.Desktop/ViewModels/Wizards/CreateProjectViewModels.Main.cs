@@ -9,7 +9,6 @@ using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Shared;
 using ERHMS.Domain;
 using ERHMS.EpiInfo;
-using ERHMS.EpiInfo.Data;
 using ERHMS.EpiInfo.Naming;
 using System;
 using System.Collections.Generic;
@@ -230,16 +229,16 @@ namespace ERHMS.Desktop.ViewModels.Wizards
                     }
                     Project project = ProjectExtensions.Create(State.ProjectCreationInfo);
                     progress.Report(Strings.Body_Initializing);
-                    if (project.IsInitialized())
-                    {
-                        // TODO: Confirm
-                    }
-                    else
-                    {
-                        project.Initialize();
-                    }
+                    project.Initialize();
                     Progress = progress;
-                    ContinueCore(project);
+                    try
+                    {
+                        ContinueCore(project);
+                    }
+                    finally
+                    {
+                        Progress = null;
+                    }
                     return project;
                 });
                 Settings.Default.SetProjectPath(State.CoreProject, State.Project.FilePath);

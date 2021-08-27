@@ -186,7 +186,6 @@ namespace ERHMS.Desktop.ViewModels
             {
                 return;
             }
-            // TODO: Check for core views
             Settings.Default.SetProjectPath(coreProject, fileDialog.FileName);
             Settings.Default.Save();
             GoToHome();

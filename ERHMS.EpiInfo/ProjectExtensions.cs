@@ -18,6 +18,10 @@ namespace ERHMS.EpiInfo
         public static Project Create(ProjectCreationInfo creationInfo)
         {
             Log.Instance.Debug($"Creating project: {creationInfo.FilePath}");
+            if (File.Exists(creationInfo.FilePath))
+            {
+                throw new InvalidOperationException("Project already exists.");
+            }
             Directory.CreateDirectory(creationInfo.Location);
             Project project = new Project
             {
@@ -54,6 +58,10 @@ namespace ERHMS.EpiInfo
         public static void Initialize(this Project @this)
         {
             Log.Instance.Debug($"Initializing project: {@this.FilePath}");
+            if (@this.IsInitialized())
+            {
+                throw new InvalidOperationException("Project is already initialized.");
+            }
             ((MetadataDbProvider)@this.Metadata).CreateMetadataTables();
         }
 
