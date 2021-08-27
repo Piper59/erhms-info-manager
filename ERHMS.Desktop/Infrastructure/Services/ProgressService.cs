@@ -45,13 +45,13 @@ namespace ERHMS.Desktop.Infrastructure.Services
             where TTask : Task
         {
             Window owner = Application.Current.GetActiveWindow();
+            ProgressView window = new ProgressView
+            {
+                DataContext = dataContext
+            };
+            window.SetOwner(owner);
             using (WindowDisabler.Begin(owner))
             {
-                ProgressView window = new ProgressView
-                {
-                    DataContext = dataContext
-                };
-                window.SetOwner(owner);
                 TTask task = action();
                 CancellationTokenSource delaying = new CancellationTokenSource();
                 Task continuation = task.ContinueWith(
