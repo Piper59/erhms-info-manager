@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Documents;
 
 namespace ERHMS.Desktop.Markdown
@@ -25,7 +26,7 @@ namespace ERHMS.Desktop.Markdown
                 if (match.Success)
                 {
                     Paragraph paragraph = new Paragraph();
-                    SetStyle(paragraph, Context.GetHeadingStyleKey(Level));
+                    paragraph.SetResourceReference(FrameworkElement.StyleProperty, Context.GetHeadingStyleKey(Level));
                     paragraph.Inlines.AddRange(Context.GetInlines(match.Groups["text"].Value));
                     block = paragraph;
                     return true;

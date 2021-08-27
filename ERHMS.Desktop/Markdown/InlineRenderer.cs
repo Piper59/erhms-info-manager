@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Documents;
 
 namespace ERHMS.Desktop.Markdown
@@ -48,7 +49,7 @@ namespace ERHMS.Desktop.Markdown
                 if (match.Success)
                 {
                     Run run = new Run(match.Groups["text"].Value);
-                    SetStyle(run, Context.EmphasisStyleKey);
+                    run.SetResourceReference(FrameworkElement.StyleProperty, Context.EmphasisStyleKey);
                     node = new InlineNode(text, match, run);
                     return true;
                 }

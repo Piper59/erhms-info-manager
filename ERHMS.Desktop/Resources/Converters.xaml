@@ -4,7 +4,7 @@
     <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <Converters:BooleanToVisibilityInverter x:Key="BooleanToVisibilityInverter" />
     <Converters:ByteCountFormattingConverter x:Key="ByteCountFormattingConverter" />
-    <Converters:DocumentLocalizingConverter x:Key="DocumentLocalizingConverter" />
+    <Converters:HelpSectionLocalizingConverter x:Key="HelpSectionLocalizingConverter" />
     <Converters:IconNameToStringConverter x:Key="IconNameToStringConverter" />
     <Converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
     <Converters:PathToDirectoryNameConverter x:Key="PathToDirectoryNameConverter" />

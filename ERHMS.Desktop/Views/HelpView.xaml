@@ -18,20 +18,7 @@
                             TabStripPlacement="Left">
                     <TabControl.ContentTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0"
-                                           Margin="{StaticResource HugeThickness}"
-                                           Style="{StaticResource Title}"
-                                           Text="{Binding ., Converter={StaticResource StringLocalizingConverter}, ConverterParameter='Help.Title.{0}'}" />
-                                <FlowDocumentScrollViewer Grid.Row="1"
-                                                          BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
-                                                          BorderThickness="0,1,0,0"
-                                                          Document="{Binding ., Converter={StaticResource DocumentLocalizingConverter}, ConverterParameter='Help.Body.{0}'}" />
-                            </Grid>
+                            <FlowDocumentScrollViewer Document="{Binding ., Converter={StaticResource HelpSectionLocalizingConverter}}" />
                         </DataTemplate>
                     </TabControl.ContentTemplate>
                     <TabControl.ItemContainerStyle>
