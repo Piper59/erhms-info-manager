@@ -41,7 +41,7 @@ namespace ERHMS.Desktop.Commands
 
         public override bool CanExecute(object parameter)
         {
-            return predicate == null || predicate((TParameter)parameter);
+            return predicate == null || predicate(Cast<TParameter>(parameter));
         }
 
         public override Task ExecuteCore(object parameter)

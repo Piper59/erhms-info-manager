@@ -29,6 +29,11 @@ namespace ERHMS.Desktop.Commands
 
         public static event EventHandler<ErrorEventArgs> GlobalError;
 
+        protected static TParameter Cast<TParameter>(object parameter)
+        {
+            return parameter == null ? default(TParameter) : (TParameter)parameter;
+        }
+
         public static void OnCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();
