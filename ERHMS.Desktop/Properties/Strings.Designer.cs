@@ -1054,6 +1054,24 @@ namespace ERHMS.Desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while loading the project..
+        /// </summary>
+        public static string Body_LoadError_Project {
+            get {
+                return ResourceManager.GetString("Body.LoadError.Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while loading the form..
+        /// </summary>
+        public static string Body_LoadError_View {
+            get {
+                return ResourceManager.GetString("Body.LoadError.View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings have been reset..
         /// </summary>
         public static string Body_SettingsReset {

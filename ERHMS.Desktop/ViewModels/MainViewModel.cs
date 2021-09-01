@@ -3,6 +3,7 @@ using ERHMS.Common.ComponentModel;
 using ERHMS.Common.Compression;
 using ERHMS.Common.Logging;
 using ERHMS.Desktop.Commands;
+using ERHMS.Desktop.Dialogs;
 using ERHMS.Desktop.Properties;
 using ERHMS.Desktop.Services;
 using ERHMS.Desktop.ViewModels.Wizards;
@@ -75,24 +76,50 @@ namespace ERHMS.Desktop.ViewModels
             StartCommandPromptCommand = new SyncCommand(StartCommandPrompt);
         }
 
+        private void OnError(Exception exception, string body = null)
+        {
+            Log.Instance.Warn(exception);
+            IDialogService dialog = ServiceLocator.Resolve<IDialogService>();
+            dialog.Severity = DialogSeverity.Error;
+            dialog.Lead = Strings.Lead_NonFatalError;
+            dialog.Body = body ?? exception.Message;
+            dialog.Details = exception.ToString();
+            dialog.Buttons = DialogButtonCollection.Close;
+            dialog.Show();
+        }
+
         private async Task GoToProjectAsync(Task<Project> task)
         {
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = Strings.Lead_LoadingProject;
-            Content = await progress.Run(async () =>
+            try
             {
-                return await ProjectViewModel.CreateAsync(await task);
-            });
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_LoadingProject;
+                Content = await progress.Run(async () =>
+                {
+                    return await ProjectViewModel.CreateAsync(await task);
+                });
+            }
+            catch (Exception ex)
+            {
+                OnError(ex, Strings.Body_LoadError_Project);
+            }
         }
 
         private async Task GoToViewAsync(Task<View> task)
         {
-            IProgressService progress = ServiceLocator.Resolve<IProgressService>();
-            progress.Lead = Strings.Lead_LoadingView;
-            Content = await progress.Run(async () =>
+            try
             {
-                return await ViewViewModel.CreateAsync(await task);
-            });
+                IProgressService progress = ServiceLocator.Resolve<IProgressService>();
+                progress.Lead = Strings.Lead_LoadingView;
+                Content = await progress.Run(async () =>
+                {
+                    return await ViewViewModel.CreateAsync(await task);
+                });
+            }
+            catch (Exception ex)
+            {
+                OnError(ex, Strings.Body_LoadError_View);
+            }
         }
 
         public void GoToHome()
@@ -135,7 +162,6 @@ namespace ERHMS.Desktop.ViewModels
 
         public async Task GoToCoreProjectAsync(CoreProject coreProject)
         {
-            // TODO: Handle errors
             await GoToProjectAsync(Task.Run(() =>
             {
                 string projectPath = Settings.Default.GetProjectPath(coreProject);
@@ -171,11 +197,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void CreateCoreProject(CoreProject coreProject)
         {
-            // TODO: Handle errors
-            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
-            {
-                // TODO: Confirm
-            }
+            // TODO: Confirm
             WizardViewModel wizard = CreateProjectViewModels.GetWizard(coreProject);
             if (wizard.Run() != true)
             {
@@ -186,11 +208,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void OpenCoreProject(CoreProject coreProject)
         {
-            // TODO: Handle errors
-            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
-            {
-                // TODO: Confirm
-            }
+            // TODO: Confirm
             if (!SetUpProjectViewModels.Open(coreProject))
             {
                 return;
@@ -200,11 +218,7 @@ namespace ERHMS.Desktop.ViewModels
 
         public void SetUpCoreProject(CoreProject coreProject)
         {
-            // TODO: Handle errors
-            if (coreProject == CoreProject.Worker && Settings.Default.HasWorkerProjectPath)
-            {
-                // TODO: Confirm
-            }
+            // TODO: Confirm
             WizardViewModel wizard = SetUpProjectViewModels.GetWizard(coreProject);
             if (wizard.Run() != true)
             {

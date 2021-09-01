@@ -456,6 +456,12 @@ This file is not a valid project-level template.</value>
 
 This file is not a valid form-level template.</value>
   </data>
+  <data name="Body.LoadError.Project" xml:space="preserve">
+    <value>An error occurred while loading the project.</value>
+  </data>
+  <data name="Body.LoadError.View" xml:space="preserve">
+    <value>An error occurred while loading the form.</value>
+  </data>
   <data name="Body.SettingsReset" xml:space="preserve">
     <value>Settings have been reset.</value>
   </data>
